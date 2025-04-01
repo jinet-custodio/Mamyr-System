@@ -1,7 +1,6 @@
 <?php
 session_start();
 require '../Config/dbcon.php';
-require 'Function/OTPdeletion.php';
 if (isset($_SESSION['formData']['email'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['formData']['email']);
     // echo "Logged-in email: " . htmlspecialchars($email);

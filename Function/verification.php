@@ -3,6 +3,7 @@
 require '../Config/dbcon.php';
 session_start();
 
+$env = parse_ini_file(__DIR__ . '/../.env');
 
 use PHPMailer\PHPMailer\PHPmailer;
 use PHPMailer\PHPMailer\Exception;
@@ -97,14 +98,15 @@ if (isset($_POST['resend_code'])) {
                     try {
                         $_SESSION['email'] = $email;
                         $mail->isSMTP();
-                        $mail->Host       = 'smtp.gmail.com;';
+                        $mail->Host       =  $env['SMTP_HOST'];
                         $mail->SMTPAuth   = true;
-                        $mail->Username   = 'sgregorio.0020@gmail.com';
-                        $mail->Password   = 'bommgsfpfkapsecp';
+                        $mail->Username   = $env['SMTP_USER'];
+                        $mail->Password   =  $env['SMTP_PASS'];
                         $mail->SMTPSecure = 'tls';
-                        $mail->Port       = 587;
+                        $mail->Port       =  $env['SMTP_PORT'];
 
-                        $mail->setFrom('sgregorio.0020@gmail.com', 'Mamyr Resort and Event Place');
+
+                        $mail->setFrom($env['SMTP_USER'], 'Mamyr Resort and Event Place');
                         $mail->addAddress($email, $firstName);
 
                         $message = "

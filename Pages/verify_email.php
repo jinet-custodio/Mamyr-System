@@ -2,8 +2,6 @@
 
 require '../Config/dbcon.php';
 session_start();
-require 'Function/OTPdeletion.php';
-
 
 if (isset($_SESSION['email'])) {
   $email = mysqli_real_escape_string($conn, $_SESSION['email']);
@@ -115,6 +113,27 @@ if (isset($_SESSION['email'])) {
 
     const urlParams = new URLSearchParams(window.location.search);
     const page = urlParams.get('page');
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const inputs = document.querySelectorAll(".form-control");
+
+      inputs.forEach((input, index) => {
+        input.addEventListener("input", (event) => {
+          if (event.inputType !== "deleteContentBackward" && input.value.length === 1) {
+            if (index < inputs.length - 1) {
+              inputs[index + 1].focus();
+            }
+          }
+        });
+
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Backspace" && input.value === "" && index > 0) {
+            inputs[index - 1].focus();
+          }
+        });
+      });
+    });
   </script>
 </body>
 

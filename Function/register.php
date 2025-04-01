@@ -56,7 +56,7 @@ if (isset($_POST['signUp'])) {
                     $mail->SMTPSecure = 'tls';
                     $mail->Port       =  $env['SMTP_PORT'];
 
-                    $mail->setFrom('sgregorio.0020@gmail.com', 'Mamyr Resort and Event Place');
+                    $mail->setFrom($env['SMTP_USER'], 'Mamyr Resort and Event Place');
                     $mail->addAddress($email, $firstName);
 
                     $message = "
