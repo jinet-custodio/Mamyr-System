@@ -1,0 +1,54 @@
+.modal {
+  margin-top: 20vh;
+}
+
+.modal-dialog {
+  position: relative;
+  width: 100%;
+  height: 400px !important;
+}
+
+.modal-content {
+  border-radius: 5vw !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}
+
+.modal-title {
+  font-family: "Poppins Black";
+  font-size: 30px;
+}
+
+.modal-body {
+  height: 300px;
+}
+
+.description {
+  font-size: 15px;
+  font-family: "Poppins";
+  text-align: center;
+}
+
+.pinContainer {
+  display: flex;
+  margin-top: 2vw;
+  gap: 1vw;
+}
+
+.form-control {
+  height: 90px;
+  text-align: center;
+  font-size: 70px !important;
+}
+
+.btn-primary {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.resendPin {
+  margin-top: 10px;
+  text-align: center;
+}
