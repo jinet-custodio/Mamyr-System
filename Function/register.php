@@ -117,7 +117,7 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $storedPassword)) {
             if ($status == 'Verified') {
                 unset($_SESSION['formData']);
-                echo 'Login Successful';
+                header("Location: ../Pages/dashboard.php");
             } else {
                 $_SESSION['error'] = 'User not verified';
                 header("Location: ../index.php");
