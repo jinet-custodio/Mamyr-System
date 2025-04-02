@@ -82,7 +82,7 @@ if (isset($_POST['changePassword'])) {
             }
         } else {
             $_SESSION['error'] = 'User not verified';
-            header("Location: ../index.php");
+            header("Location: ../Pages/register.php");
             exit;
         }
     } else {

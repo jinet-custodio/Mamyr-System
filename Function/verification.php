@@ -40,7 +40,7 @@ if (isset($_POST['verify-btn'])) {
                         $result = mysqli_query($conn, $changeStatus);
                         if ($result) {
                             $_SESSION['sucess'] = "Verified successfully!";
-                            header("Location: ../Pages/dashboard.php");
+                            header("Location: ../Pages/register.php");
                             exit;
                         }
                     } else {
