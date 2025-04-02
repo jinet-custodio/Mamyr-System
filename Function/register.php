@@ -33,7 +33,7 @@ if (isset($_POST['signUp'])) {
         if (mysqli_num_rows($check_query) > 0) {
             $_SESSION['email-message'] = 'Email already exist.';
 
-            header("Location: ../index.php?page=register");
+            header("Location: ../Pages/register.php?page=register");
             exit;
         } elseif ($password == $confirm_password) {
             $hashpassword = password_hash($password, PASSWORD_DEFAULT);
@@ -91,12 +91,12 @@ if (isset($_POST['signUp'])) {
             }
         } else {
             $_SESSION['password'] = 'Password doesn`t match';
-            header("Location: ../index.php?register");
+            header("Location: ../Pages/register.php?register");
             exit;
         }
     } else {
         $_SESSION['email-message'] = 'Invalid email format';
-        header("Location: ../index.php?register");
+        header("Location: ../Pages/register.php?register");
         exit;
     }
 }
@@ -120,17 +120,17 @@ if (isset($_POST['login'])) {
                 header("Location: ../Pages/dashboard.php");
             } else {
                 $_SESSION['error'] = 'User not verified';
-                header("Location: ../index.php");
+                header("Location: ../Pages/register.php");
                 exit;
             }
         } else {
             $_SESSION['error'] = 'Incorrect password or email';
-            header("Location: ../index.php");
+            header("Location: ../Pages/register.php");
             exit;
         }
     } else {
         $_SESSION['error'] = 'Incorrect password or email';
-        header("Location: ../index.php");
+        header("Location: ../Pages/register.php");
         exit;
     }
 } else {

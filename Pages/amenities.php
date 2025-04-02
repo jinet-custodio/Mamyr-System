@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Amenities</title>
-    <link rel="stylesheet" href="../assets/css/amenities.css">
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../Assets/CSS/amenities.css">
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -25,7 +25,7 @@
             </button>
 
             <div class="collapse navbar-collapse " id="navbarNav">
-                <img src="../assets/images/MamyrLogo.png" alt="" class="logoNav">
+                <img src="../Assets/Images/MamyrLogo.png" alt="" class="logoNav">
 
                 <ul class="navbar-nav ms-auto me-10">
                     <li class="nav-item">
@@ -42,7 +42,7 @@
                         <a class="nav-link" href="#">BE OUR PARTNER</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">BOOK NOW</a>
+                        <a class="nav-link" href="register.php">BOOK NOW</a>
                     </li>
                 </ul>
             </div>
@@ -55,7 +55,7 @@
 
         <div class="embed-responsive embed-responsive-16by9">
             <video id="mamyrVideo" autoplay muted loop controls class="embed-responsive-item">
-                <source src="../assets/videos/mamyrVideo1.mp4" type="video/mp4">
+                <source src="../Assets/Videos/mamyrVideo1.mp4" type="video/mp4">
             </video>
 
         </div>
@@ -71,11 +71,11 @@
             </div>
 
             <div class="poolPics">
-                <img src="../assets/images/amenities/poolPics/poolPic1.png" alt="Pool Picture 1" class="pic1">
-                <img src="../assets/images/amenities/pavilionPics/pav1.jpg" alt="Pool Picture 2" class="pic2">
-                <img src="../assets/images/amenities/poolPics/poolPic3.jpg" alt="Pool Picture 3" class="pic3">
-                <img src="../assets/images/amenities/poolPics/poolPic4.jpg" alt="Pool Picture 4" class="pic4">
-                <img src="../assets/images/amenities/poolPics/poolPic5.jpg" alt="Pool Picture 5" class="pic5">
+                <img src="../Assets/Images/amenities/poolPics/poolPic1.png" alt="Pool Picture 1" class="pic1">
+                <img src="../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pool Picture 2" class="pic2">
+                <img src="../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Pool Picture 3" class="pic3">
+                <img src="../Assets/Images/amenities/poolPics/poolPic4.jpg" alt="Pool Picture 4" class="pic4">
+                <img src="../Assets/Images/amenities/poolPics/poolPic5.jpg" alt="Pool Picture 5" class="pic5">
             </div>
         </div>
 
@@ -89,8 +89,8 @@
             </div>
 
             <div class="poolPics">
-                <img src="../assets/images/amenities/cottagePics/cottage1.jpg" alt="Cottage Picture 1" class="pic1">
-                <img src="../assets/images/amenities/cottagePics/cottage2.jpg" alt="Cottage Picture 2" class="pic2">
+                <img src="../Assets/Images/amenities/cottagePics/cottage1.jpg" alt="Cottage Picture 1" class="pic1">
+                <img src="../Assets/Images/amenities/cottagePics/cottage2.jpg" alt="Cottage Picture 2" class="pic2">
             </div>
         </div>
 
@@ -105,11 +105,11 @@
             </div>
 
             <div class="poolPics">
-                <img src="../assets/images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1" class="pic1">
-                <img src="../assets/images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2" class="pic2">
-                <img src="../assets/images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3" class="pic3">
-                <img src="../assets/images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4" class="pic4">
-                <img src="../assets/images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5" class="pic5">
+                <img src="../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1" class="pic1">
+                <img src="../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2" class="pic2">
+                <img src="../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3" class="pic3">
+                <img src="../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4" class="pic4">
+                <img src="../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5" class="pic5">
 
             </div>
         </div>
@@ -124,11 +124,10 @@
             </div>
 
             <div class="poolPics">
-                <img src="../assets/images/amenities/hotelPics/hotel1.jpg" alt="Hotel Picture 1" class="pic1">
-                <img src="../assets/images/amenities/hotelPics/hotel2.jpg" alt="Hotel Picture 2" class="pic1">
-                <img src="../assets/images/amenities/hotelPics/hotel3.jpg" alt="Hotel Picture 3" class="pic3">
-                <img src="../assets/images/amenities/hotelPics/hotel4.jpg" alt="Hotel Picture 4" class="pic4">
-
+                <img src="../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel Picture 1" class="pic1">
+                <img src="../Assets/Images/amenities/hotelPics/hotel2.jpg" alt="Hotel Picture 2" class="pic1">
+                <img src="../Assets/Images/amenities/hotelPics/hotel3.jpg" alt="Hotel Picture 3" class="pic3">
+                <img src="../Assets/Images/amenities/hotelPics/hotel4.jpg" alt="Hotel Picture 4" class="pic4">
 
 
 
@@ -144,8 +143,8 @@
             </div>
 
             <div class="poolPics">
-                <img src="../assets/images/amenities/parkingPics/parking1.jpg" alt="Parking Picture 1" class="pic1">
-                <img src="../assets/images/amenities/parkingPics/parking2.jpg" alt="Parking Picture 2" class="pic2">
+                <img src="../Assets/Images/amenities/parkingPics/parking1.jpg" alt="Parking Picture 1" class="pic1">
+                <img src="../Assets/Images/amenities/parkingPics/parking2.jpg" alt="Parking Picture 2" class="pic2">
             </div>
         </div>
 
@@ -170,7 +169,7 @@
     <footer class="py-1 my-2">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
 
-            <img src="../assets/images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
             <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
         </div>
@@ -200,13 +199,12 @@
 
     </footer>
 
-
     <script>
-    var video = document.getElementById("myVideo");
+        var video = document.getElementById("myVideo");
 
-    video.onplay = function() {
-        video.muted = false;
-    };
+        video.onplay = function() {
+            video.muted = false;
+        };
     </script>
 
 </body>

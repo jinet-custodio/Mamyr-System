@@ -1,207 +1,233 @@
-<?php
-
-require 'Config/dbcon.php';
-session_start();
-require 'Function/OTPdeletion.php';
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="Assets/CSS/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mamyr Resort and Events Place </title>
+    <link rel="stylesheet" href="Assets/CSS/landingPage.css">
     <link rel="stylesheet" href="Assets/CSS/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
-
-    <!-- fonts -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Alkatra:wght@400..700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
-    </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="form-box login">
-            <form action="Function/register.php" method="POST">
-                <h1>Login</h1>
-                <div class="input-box">
-                    <input type="text" class="form-control" id="login_email" name="login_email" value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>" placeholder="Email" required>
-                    <i class='bx bxs-envelope'></i>
-                </div>
-                <div class="input-box">
-                    <input type="password" class="form-control" id="login_password" name="login_password" oninput="checkLoginPassword();" placeholder="Password"
-                        required>
-                    <!-- <i class='bx bxs-low-vision'></i> -->
-                </div>
-                <div class="forgot-link">
-                    <a href="Pages/forgotPassword.php">Forgot Password?</a>
-                </div>
-                <button type="submit" class="btn" id="login" name="login">Login</button>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
 
-                <div class="errorMessageBox">
-                    <div class="errorMsg">
-                        <div class="login-error" id="passwordLValidation"></div>
-                    </div>
-                    <p class="errorMsg">
-                        <?php
-                        if (isset($_SESSION['error'])) {
-                            echo htmlspecialchars(strip_tags($_SESSION['error']));
-                            unset($_SESSION['error']);
-                        }
-                        ?>
-                    </p>
-                </div>
-            </form>
+
+            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse " id="navbarNav">
+                <ul class="navbar-nav ms-auto me-10">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/amenities.php">AMENITIES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">BLOG</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">RATES</a>
+                    </li>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">BE OUR PARTNER</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/register.php">BOOK NOW</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="custom-container">
+        <div class="titleContainer">
+            <div class="mamyrTitle">
+                <h1 class="name">M A M Y R</h1>
+            </div>
+            <div class="description">
+                <p class="descriptionText">Welcome to Mamyr Resort and Event Place!
+                    We're more than just a resort, we're a place where memories are made. Whether you're here for a
+                    relaxing
+                    getaway, a family gathering, or a special event, we’re dedicated to making your stay unforgettable.
+                </p>
+            </div>
+            <button class="btn btn-outline-light me-2">Learn More</button>
         </div>
 
+        <div class="containerBook">
+            <div class="label">
+                <h3 class="containerLabel">Check-In Date</h3>
+                <h3 class="containerLabel">Check-Out Date</h3>
+            </div>
+            <div class="formBoxes">
 
-        <div class="form-box register">
-            <form action="Function/register.php" method="POST">
-                <h1>Sign Up</h1>
-                <div class="fullName">
-                    <div class="input-box">
-                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
-                            value="<?php echo isset($_SESSION['formData']['firstName']) ? htmlspecialchars(trim($_SESSION['formData']['firstName'])) : ''; ?>" required>
-                        <i class='bx bxs-user-circle'></i>
-                    </div>
-                    <div class="input-box">
-                        <input type="text" class="form-control" id="middleInitial" name="middleInitial"
-                            placeholder="M.I. (Optional)" value="<?php echo isset($_SESSION['formData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['formData']['middleInitial'])) : ''; ?>">
-                        <i class='bx bxs-user-circle'></i>
-                    </div>
+                <input type="date" class="form-control" placeholder="MM/DD/YYY">
 
-                </div>
-                <div class="userInfo">
-                    <div class="input-box">
-                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
-                            value="<?php echo isset($_SESSION['formData']['lastName']) ? htmlspecialchars(trim($_SESSION['formData']['lastName'])) : ''; ?>" required>
-                        <i class='bx bxs-user-circle'></i>
-                    </div>
-                    <div class="input-box">
-                        <input type="text" class="form-control" id="userAddress" name="userAddress" placeholder="Address"
-                            value="<?php echo isset($_SESSION['formData']['userAddress']) ? htmlspecialchars(trim($_SESSION['formData']['userAddress'])) : ''; ?>" required>
-                        <i class='bx bxs-user'></i>
-                    </div>
-                    <div class="input-box">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                            value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>" required>
-                        <i class='bx bxs-envelope'></i>
-                    </div>
+                <input type="date" class="form-control" placeholder="MM/DD/YYY">
+                <input type="number" class="form-control" placeholder="Adults">
+                <input type="number" class="form-control" placeholder="Children">
 
-                    <div class="passwordContainer">
-                        <div class="input-box">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-                                oninput="checkPassword();" required>
-                            <!-- <i class='bx bxs-low-vision'></i> -->
-                        </div>
-                        <div class=" input-box">
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-                                placeholder="Confirm Password" oninput="checkPasswordMatch();" required>
-                            <!-- <i class='bx bxs-low-vision'></i> -->
-                        </div>
-                    </div>
-                </div>
 
-                <label for="terms">
-                    <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1" onchange="checkBox()"> I agree to the
-                    <a href="#" id="open-modal">Terms and Conditions</a>.
-                </label><br>
-                <button type="submit" class="btn" id="signUp" name="signUp" disabled>Sign Up</button>
-            </form>
 
-            <!-- error message -->
-
-            <div class="errorContainer ">
-                <!-- <div class="fullNameError">
-                    <div class="nameErrorMsg">
-                        <p class="fnameErrorMsg">Invalid First Name!</p>
-                    </div>
-                    <div class="nameErrorMsg">
-                        <p class="middleInitialErrorMsg">Invalid Middle Initial!</p>
-                    </div>
-                </div> -->
-                <div class="userInfoError">
-                    <!-- <div class="errorMsg">
-                        <p class="lastNameErrorMsg">Invalid Last Name!</p>
-                    </div>
-                    <div class="errorMsg">
-                        <p class="addressErrorMessage">Invalid Address!</p>
-                    </div> -->
-                    <div class="errorMsg">
-                        <p class="emailErrorMsg">
-                            <?php
-                            if (isset($_SESSION['email-message'])) {
-                                echo htmlspecialchars($_SESSION['email-message']);
-                                unset($_SESSION['email-message']); // aalisin after ma display
-                            }
-                            ?>
-                        </p>
-                    </div>
-
-                    <div class="passwordContainerError">
-                        <div class="errorMsg">
-                            <div class="confirmErrorMsg" id="passwordValidation"></div>
-                        </div>
-                        <div class="errorMsg">
-                            <div class="confirmErrorMsg1" id="passwordMatch"></div>
-                        </div>
-                        <div class="errorMsg">
-                            <div class="confirmErrorMsg text-center" id="termsError"></div>
-                        </div>
-                    </div>
-
-                </div>
-
+            </div>
+            <div class="availBtn">
+                <a href="#"><button type="submit" class="btn custom-btn">CHECK FOR AVAILABILITY</button></a>
             </div>
         </div>
 
-        <div class="toggle-box">
-            <div class="toggle-panel toggle-left">
-                <h1 class="welcome">Welcome to Mamyr!</h1>
-                <p>Don't have an account?</p>
-                <button class="btn register-btn">Sign Up</button>
+        <div class="welcomeSection">
+            <div class="resortPic1">
+                <img src="Assets/Images/landingPage/resortPic1.png" alt="Mamyr Resort" class="pic1">
+            </div>
+            <div class="wsText">
+                <hr class="line">
+                <h4 class="wsTitle">Welcome to Mamyr Resort and Events Place</h4>
+                <p class="wsDescription">Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable
+                    moments await you. Whether you're here for a peaceful retreat or a special celebration, we're
+                    dedicated to making your experience truly exceptional.</p>
             </div>
 
-            <div class="toggle-panel toggle-right">
-                <h1 class="welcome">Welcome Back!</h1>
-                <p>Already have an account?</p>
-                <button class="btn login-btn">Login</button>
+        </div>
+
+        <div class="contact">
+
+            <div class="contactText">
+                <hr class="line">
+                <h4 class="contactTitle">Contact Us </h4>
+
+                <div class="location">
+                    <img src="Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
+                    <h5 class="locationText">Sitio Colonia Gabihan, San Ildefonso, Bulacan</h5>
+                </div>
+
+                <div class="number">
+                    <img src="Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
+                    <h5 class="number">(0998) 962 4697</h5>
+                </div>
+
+                <div class="email">
+                    <img src="Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
+                    <h5 class="emailAddressText">mamyr@gmail.com</h5>
+                </div>
+
+
+            </div>
+
+            <div id="googleMap" style="width:40vw;height:30vw; margin-top: 5vw"></div>
+
+        </div>
+
+        <div class="gallery">
+            <hr class="line">
+            <h4 class="galleryTitle">Gallery </h4>
+
+            <div class="galleryPictures">
+
+                <img src="Assets/Images/landingPage/gallery/img1.png" alt="resort View 1" class="img1">
+                <img src="Assets/Images/landingPage/gallery/img2.png" alt="resort View 2" class="img2">
+                <img src="Assets/Images/landingPage/gallery/img3.png" alt="resort View 3" class="img3">
+                <img src="Assets/Images/landingPage/gallery/img4.png" alt="resort View 4" class="img4">
+                <img src="Assets/Images/landingPage/gallery/img5.png" alt="resort View 5" class="img5">
+                <img src="Assets/Images/landingPage/gallery/img6.png" alt="resort View 6" class="img6">
+            </div>
+
+            <div class="seeMore">
+                <a href="Pages/amenities.php" class="btn custom-btn ">See More</a>
             </div>
         </div>
+
+        <div class="announcements">
+            <div class="announcementTitleContainer">
+                <hr class="announcementLine">
+                <h4 class="announcementTitle">Announcements</h4>
+            </div>
+
+
+            <div class="post">
+                <h4 class="sorryText">Sorry We Are</h4>
+                <hr class="closeLine">
+                <h1 class="closedText">CLOSED</h1>
+                <hr class="closeLine">
+                <h2 class="tomorrowText">TOMORROW</h2>
+                <div class="dateTimeConatiner">
+                    <h3 class="date">March 25, 2025</h3>
+                    <div class="vr"></div>
+                    <h3 class="time">9:00am - 6:00pm</h3>
+                </div>
+
+
+                <p class="closedAdditionalText">Thank you for your understanding and continued support.
+                    We apologize for any delayed in response and seek your kind understanding during this period for the
+                    inconvenience caused.</p>
+            </div>
+
+
+        </div>
+
+        <footer class="py-1 my-2">
+            <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
+
+                <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+
+                <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
+            </div>
+
+            <div class="info">
+                <div class="reservation">
+                    <h4 class="reservationTitle">Reservation</h4>
+                    <h4 class="numberFooter">(0998) 962 4697 </h4>
+                    <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
+                </div>
+                <div class="locationFooter">
+                    <h4 class="locationTitle">Location</h4>
+                    <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
+
+                </div>
+            </div>
+            <hr class="footerLine">
+            <div class="socialIcons">
+                <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
+                        class='bx bxl-facebook-circle'></i></a>
+                <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
+                <a href="tel:+09989624697">
+                    <i class='bx bxs-phone'></i>
+                </a>
+
+            </div>
+
+        </footer>
     </div>
-    <script src="Assets/JS/checkbox.js"></script>
-    <script src="Assets/JS/checkPasswordMatch.js"></script>
-    <script src="Assets/JS/checkPassword.js"></script>
-    <script src="Assets/JS/checkLoginPassword.js"></script>
+
+
+
+
+
+
+
+
+
     <script>
-        const container = document.querySelector('.container');
-        const registerBtn = document.querySelector('.register-btn');
-        const loginBtn = document.querySelector('.login-btn');
-
-        registerBtn.addEventListener('click', () => {
-            container.classList.add('active');
-        })
-
-        loginBtn.addEventListener('click', () => {
-            container.classList.remove('active');
-        })
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
-
-        if (page === 'register') {
-            container.classList.add('active');
-        } else {
-            container.classList.remove('active');
+        function myMap() {
+            var mapProp = {
+                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+                zoom: 5,
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         }
     </script>
-    <script src="Assets/JS/bootstrap.bundle.min.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
+    </script>
 
 </body>
 
