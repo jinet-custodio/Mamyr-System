@@ -1,0 +1,239 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../Fonts/Prata/Prata-Regular.ttf);
+}
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+  list-style: none;
+}
+
+/* html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+} */
+
+.navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
+
+.nav-item {
+  font-family: "Plus Jakarta Sans";
+  font-weight: lighter;
+  margin-top: 15px;
+  font-size: 1.5vw;
+  margin-left: 6vw;
+}
+
+.nav-link {
+  color: #c1a534 !important;
+  &:hover {
+    border-bottom: 4px solid #c1a534 !important;
+  }
+  &.active {
+    border-bottom: 4px solid #c1a534 !important;
+  }
+}
+
+/* .nav-link:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  background: #fff;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+.nav-link:hover:after {
+  width: 50%;
+  left: 0;
+} */
+
+.logoNav {
+  /* border: 1px solid black; */
+  position: absolute;
+  margin: 2vw 0 0 -6vw;
+}
+
+footer {
+  /* border: 1px solid black; */
+  margin-top: auto !important;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.445) -50%,
+    rgb(62, 132, 158) 95%
+  );
+}
+
+.pb-1 {
+  gap: 2vw;
+  padding: 1vw 0 0 2vw;
+}
+
+.logo {
+  width: 10vw;
+  height: auto;
+}
+.mb-0 {
+  font-family: "Prata";
+  font-size: 1.5vw;
+  font-weight: bold;
+  color: #ffff;
+}
+
+.footerLine {
+  width: 80%;
+  margin: 0 auto;
+  color: #fff;
+  opacity: 1;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5vw;
+}
+.locationFooter {
+  /* border: 1px solid black; */
+  width: 30%;
+}
+
+.reservationTitle,
+.locationTitle {
+  font-family: "Plus Jakarta Sans";
+  font-weight: bold;
+  font-size: 1.5vw;
+  color: #fff;
+}
+
+.numberFooter,
+.emailAddressTextFooter,
+.addressTextFooter {
+  font-family: "Poppins ExtraLight";
+  color: #fff;
+  font-size: 1vw;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  margin: 0.3vw;
+}
+
+.socialIcons a {
+  text-decoration: none;
+  padding: 0.8vw;
+  background-color: rgb(255, 255, 255);
+  margin: 5px;
+  border-radius: 50%;
+}
+
+.socialIcons a i {
+  font-size: 2vw;
+  color: #3e849e;
+  opacity: 0.9;
+}
+
+.socialIcons a:hover {
+  background-color: white;
+  transition: 0.5s;
+}
+
+.socialIcons a:hover i {
+  color: #c1a534;
+  transition: 0.5s;
+}
+
+.amenities {
+  margin-top: 9vw;
+}
+
+.title {
+  font-family: "Agbalumo";
+  font-style: italic;
+  text-align: center;
+  color: #44b3f8;
+}
+
+.embed-responsive {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin-top: 5vw !important;
+  margin: auto;
+}
+
+.embed-responsive video {
+  width: 100%;
+  height: 100%;
+}
+
+.poolTitleContainer {
+  /* border: 1px solid black; */
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  margin-top: 5vw !important;
+}
+
+.poolLine {
+  border: none;
+  border-top: 5px solid rgba(193, 165, 52, 1);
+  width: 30%;
+  margin: 0 auto;
+}
+
+.poolTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+}
+
+.poolDescription {
+  margin-top: 2vw;
+  font-size: 1.5vw;
+}
+
+.poolPics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2vw;
+  margin-top: 2vw;
+}
+
+.pic1,
+.pic2,
+.pic3,
+.pic4,
+.pic5 {
+  height: 25vw;
+  width: auto;
+}
