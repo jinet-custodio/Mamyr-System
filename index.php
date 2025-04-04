@@ -19,33 +19,29 @@
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
+        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-
-            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse " id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10">
-                    <li class="nav-item">
-                        <a class="nav-link" href="Pages/amenities.php">AMENITIES</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">BLOG</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">RATES</a>
-                    </li>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">BE OUR PARTNER</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="Pages/register.php">BOOK NOW</a>
-                    </li>
-                </ul>
-            </div>
+        <div class="collapse navbar-collapse " id="navbarNav">
+            <ul class="navbar-nav ms-auto me-10">
+                <li class="nav-item">
+                    <a class="nav-link" href="Pages/amenities.php">AMENITIES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">BLOG</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">RATES</a>
+                </li>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">BE OUR PARTNER</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Pages/register.php">BOOK NOW</a>
+                </li>
+            </ul>
         </div>
     </nav>
 

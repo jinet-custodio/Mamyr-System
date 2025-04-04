@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../Assets/CSS/amenities.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -19,33 +18,28 @@
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse " id="navbarNav">
-                <img src="../Assets/Images/MamyrLogo.png" alt="" class="logoNav">
-
-                <ul class="navbar-nav ms-auto me-10">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="amenities.php">AMENITIES</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">BLOG</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">RATES</a>
-                    </li>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">BE OUR PARTNER</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php">BOOK NOW</a>
-                    </li>
-                </ul>
-            </div>
+        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <img src="../Assets/Images/MamyrLogo.png" alt="" class="logoNav">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto me-10">
+                <li class="nav-item">
+                    <a class="nav-link active" href="amenities.php">AMENITIES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">BLOG</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">RATES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">BE OUR PARTNER</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php">BOOK NOW</a>
+                </li>
+            </ul>
         </div>
     </nav>
 
@@ -147,23 +141,7 @@
                 <img src="../Assets/Images/amenities/parkingPics/parking2.jpg" alt="Parking Picture 2" class="pic2">
             </div>
         </div>
-
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <footer class="py-1 my-2">
@@ -206,7 +184,7 @@
             video.muted = false;
         };
     </script>
-
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
