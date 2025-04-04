@@ -40,15 +40,42 @@ body {
   font-weight: lighter;
   margin-top: 15px;
   font-size: 1.5vw;
-  margin-left: 3vw;
+  /* margin-left: 3vw; */
 }
 
 .nav-link {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px !important;
+  position: relative;
+  color: white !important;
+  letter-spacing: 0.1em;
+}
+
+.nav-link:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  border-bottom: 4px solid #ffffff !important;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link:hover:after {
+  width: 100%;
+  left: 0;
+}
+
+/* .nav-link {
   color: white !important;
   &:hover {
     color: #44b3f8 !important;
   }
-}
+} */
 
 .titleContainer {
   /* margin-top: 20vh; */

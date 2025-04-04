@@ -35,28 +35,44 @@ body {
   flex-direction: column;
 } */
 
-.navbar {
-  position: fixed;
-  width: 100%;
+nav {
+  position: absolute;
   top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  /* background-color: rgb(242, 242, 242); */
 }
 
-.nav-item {
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 15vh;
+  padding: 1rem;
+}
+
+.navbar-nav {
+  display: flex !important;
+  list-style: none;
+  margin-top: 10px !important;
+}
+
+ul {
   font-family: "Plus Jakarta Sans";
   font-weight: lighter;
-  margin-top: 15px;
-  font-size: 1.5vw;
-  margin-left: 6vw;
+  font-size: 1.3vw;
+  list-style: none;
+  display: table;
 }
 
 .nav-link {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px !important;
+  position: relative;
   color: #c1a534 !important;
-  &:hover {
-    border-bottom: 4px solid #c1a534 !important;
-  }
-  &.active {
-    border-bottom: 4px solid #c1a534 !important;
-  }
+  letter-spacing: 0.1em;
 }
 
 .nav-link:after {
@@ -67,36 +83,26 @@ body {
   height: 2px;
   left: 50%;
   position: absolute;
-  background: #fff;
+  border-bottom: 4px solid #c1a534 !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }
+
 .nav-link:hover:after {
   width: 100%;
   left: 0;
 }
 
-/* .nav-link:after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 50%;
-  position: absolute;
-  background: #fff;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-.nav-link:hover:after {
-  width: 50%;
+.nav-link.active:after {
+  width: 100%;
   left: 0;
-} */
+  background-color: #c1a534;
+}
 
 .logoNav {
   /* border: 1px solid black; */
   position: absolute;
-  margin: 2vw 0 0 -6vw;
+  margin: 2vw;
 }
 
 footer {
@@ -204,7 +210,7 @@ footer {
   width: 100%;
   max-width: 900px;
   height: auto;
-  margin-top: 5vw !important;
+  margin-top: 2vw !important;
   margin: auto;
 }
 
@@ -253,4 +259,10 @@ footer {
 .pic5 {
   height: 25vw;
   width: auto;
+}
+
+@media (max-width: 600px) {
+  .amenities {
+    margin-top: 18vw !important;
+  }
 }
