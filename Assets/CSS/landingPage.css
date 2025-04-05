@@ -154,7 +154,7 @@ body {
   background-color: #ffffff;
   border-radius: 1vw;
   width: 85%;
-  height: 45vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -255,17 +255,16 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .contact {
-  /* border: 1px solid black; */
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  margin-top: 7vh;
 }
 
 .contactText {
   /* border: 1px solid black; */
   justify-content: center;
   align-items: center;
-  margin: 12vw 10vw 0 0;
-  width: 35vw;
+  width: 45vw;
 }
 
 .location,
@@ -293,6 +292,12 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .emailAddressText {
   margin-top: 1vw;
+}
+
+.googleMap {
+  /* border: 1px solid black; */
+  width: 45%;
+  height: 60vh;
 }
 
 .gallery {
@@ -490,18 +495,20 @@ footer {
   color: #c1a534;
   transition: 0.5s;
 }
+
 @media screen and (max-width: 650px) {
   .titleContainer {
-    height: calc(100vh - 40px);
+    height: calc(100vh - 30px);
+    padding: 12vw;
   }
   .mamyrTitle {
     width: 100%;
-    margin-top: 100px;
+    margin-top: 15vh;
   }
 
   .name {
-    font-size: 12vw;
-    text-align: center;
+    font-size: 9vw;
+    text-align: left;
   }
 
   .description {
@@ -509,13 +516,13 @@ footer {
   }
   .descriptionText {
     text-align: justify;
-    font-size: 5vw;
+    font-size: 3.5vw;
   }
 
   .navbar-toggler {
     float: right;
     background-color: #ffffff !important;
-    margin: 5vw;
+    margin: 3vw;
     border: none;
 
     &:focus,
@@ -525,10 +532,179 @@ footer {
       border: none;
     }
   }
-
   .navbar-collapse {
     background-color: #c1a534;
     text-align: right;
+  }
+
+  .containerBook {
+    padding: 2vw;
+    margin-top: 10vw;
+    box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
+  }
+  .label {
+    gap: 7.5vw;
+  }
+  .containerLabel {
+    font-size: 12.5px;
+  }
+
+  .welcomeSection {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .resortPic1 {
+    margin-top: 5vw !important;
+  }
+
+  .pic1 {
+    width: 60vw;
+  }
+
+  .wsText {
+    margin-top: 8vw !important;
+    width: 80%;
+    .line {
+      width: 100%;
+    }
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0;
+  }
+
+  .contactText {
+    justify-content: center;
+    align-items: center;
+    margin: 8vw 8vw 0 0;
+    width: 80%;
+    .line {
+      width: 30%;
+    }
+  }
+
+  .emailAddressText {
+    margin-top: 0.1vw;
+  }
+
+  .googleMap {
+    height: 50vh;
+    width: 70%;
+    margin-top: 5vh;
+  }
+
+  .gallery {
+    .line {
+      width: 30%;
+    }
+  }
+
+  .galleryTitle {
+    font-size: 4vw;
+  }
+
+  .galleryImg {
+    height: 40vh;
+    width: auto;
+  }
+
+  .seeMore {
+    margin: auto;
+    margin-top: 2vh;
+  }
+
+  .announcementTitleContainer {
+    width: 80%;
+  }
+
+  .announcementLine {
+    width: 50%;
+  }
+
+  .announcementTitle {
+    margin-top: 1vw;
+    font-size: 4vw;
+  }
+
+  .post {
+    width: 70%;
+    height: 55vh;
+    margin-bottom: 10vw !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .sorryText {
+    margin-top: 2vh;
+    font-size: 3vw;
+  }
+
+  .closedText {
+    font-size: 6vw;
+    font-weight: bold;
+  }
+
+  .tomorrowText {
+    font-size: 2.8vw;
+  }
+
+  .vr {
+    height: 3.2vw;
+    margin-top: 2.5vw;
+  }
+
+  .closedAdditionalText {
+    font-size: 2vw;
+  }
+
+  .pb-1 {
+    gap: 3vw;
+  }
+
+  .mb-0 {
+    font-size: 2vw;
+  }
+
+  .locationFooter {
+    width: 50%;
+  }
+
+  .reservationTitle,
+  .locationTitle {
+    font-size: 2vw;
+  }
+
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
+    font-size: 1.5vw;
+  }
+
+  .socialIcons {
+    width: 20%;
+    display: flex;
+    margin: auto;
+    justify-content: space-between;
+  }
+
+  .socialIcons a {
+    height: 6vh;
+    padding: 1vw;
+    text-decoration: none;
+    background-color: rgb(255, 255, 255);
+    margin: 5px;
+    border-radius: 50%;
+  }
+
+  .socialIcons a i {
+    font-size: 3.5vw;
   }
 }
 
@@ -537,4 +713,7 @@ footer {
     background-color: #c1a534;
     text-align: right;
   }
+}
+
+@media screen and (max-width: 1400px) {
 }

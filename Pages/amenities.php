@@ -17,13 +17,16 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <img src="../Assets/Images/MamyrLogo.png" alt="" class="logoNav">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
+                <li class="nav-item">
+                    <a class="nav-link" href="../index.php"> Home</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="amenities.php">AMENITIES</a>
                 </li>
@@ -185,6 +188,18 @@
         };
     </script>
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const navbar = document.getElementById("navbar");
+
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add("bg-white", "shadow");
+            } else {
+                navbar.classList.remove("bg-white", "shadow");
+            }
+        });
+    </script>
 </body>
 
 </html>

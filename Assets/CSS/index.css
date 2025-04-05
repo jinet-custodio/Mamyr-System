@@ -1,3 +1,13 @@
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Alkatra";
+  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -41,6 +51,11 @@ body {
 .container p {
   font-size: 14.5px;
   margin: 15px 0;
+}
+
+.back-icon-container {
+  position: absolute;
+  margin-top: -60vh;
 }
 
 form {
