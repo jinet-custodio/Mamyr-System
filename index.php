@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="Assets/CSS/landingPage.css">
     <link rel="stylesheet" href="Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -64,17 +63,14 @@
             <div class="label">
                 <h3 class="containerLabel">Check-In Date</h3>
                 <h3 class="containerLabel">Check-Out Date</h3>
+                <h3 class="containerLabel">No. of Adults</h3>
+                <h3 class="containerLabel">No. of Children</h3>
             </div>
             <div class="formBoxes">
-
                 <input type="date" class="form-control" placeholder="MM/DD/YYY">
-
                 <input type="date" class="form-control" placeholder="MM/DD/YYY">
                 <input type="number" class="form-control" placeholder="Adults">
                 <input type="number" class="form-control" placeholder="Children">
-
-
-
             </div>
             <div class="availBtn">
                 <a href="#"><button type="submit" class="btn custom-btn">CHECK FOR AVAILABILITY</button></a>
@@ -96,7 +92,6 @@
         </div>
 
         <div class="contact">
-
             <div class="contactText">
                 <hr class="line">
                 <h4 class="contactTitle">Contact Us </h4>
@@ -118,9 +113,7 @@
 
 
             </div>
-
-            <div id="googleMap" style="width:40vw;height:30vw; margin-top: 5vw"></div>
-
+            <div class="googleMap" id="googleMap"></div>
         </div>
 
         <div class="gallery">
@@ -129,12 +122,12 @@
 
             <div class="galleryPictures">
 
-                <img src="Assets/Images/landingPage/gallery/img1.png" alt="resort View 1" class="img1">
-                <img src="Assets/Images/landingPage/gallery/img2.png" alt="resort View 2" class="img2">
-                <img src="Assets/Images/landingPage/gallery/img3.png" alt="resort View 3" class="img3">
-                <img src="Assets/Images/landingPage/gallery/img4.png" alt="resort View 4" class="img4">
-                <img src="Assets/Images/landingPage/gallery/img5.png" alt="resort View 5" class="img5">
-                <img src="Assets/Images/landingPage/gallery/img6.png" alt="resort View 6" class="img6">
+                <img src="Assets/Images/landingPage/gallery/img1.png" alt="resort View 1" class="img1 galleryImg">
+                <img src="Assets/Images/landingPage/gallery/img2.png" alt="resort View 2" class="img2 galleryImg">
+                <img src="Assets/Images/landingPage/gallery/img3.png" alt="resort View 3" class="img3 galleryImg">
+                <img src="Assets/Images/landingPage/gallery/img4.png" alt="resort View 4" class="img4 galleryImg">
+                <img src="Assets/Images/landingPage/gallery/img5.png" alt="resort View 5" class="img5 galleryImg">
+                <img src="Assets/Images/landingPage/gallery/img6.png" alt="resort View 6" class="img6 galleryImg">
             </div>
 
             <div class="seeMore">
@@ -205,13 +198,6 @@
     </div>
 
 
-
-
-
-
-
-
-
     <script>
         function myMap() {
             var mapProp = {
@@ -221,7 +207,7 @@
             var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         }
     </script>
-
+    <script src="Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
 
