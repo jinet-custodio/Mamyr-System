@@ -713,6 +713,261 @@ footer {
     background-color: #c1a534;
     text-align: right;
   }
+  .titleContainer {
+    height: calc(100vh - 20px);
+    padding: 12vw;
+  }
+  .mamyrTitle {
+    width: 100%;
+    margin-top: 15vh;
+  }
+
+  .name {
+    font-size: 10vw;
+    text-align: left;
+  }
+
+  .descriptionText {
+    text-align: justify;
+    font-size: 5vw;
+  }
+
+  .navbar-toggler {
+    float: right;
+    background-color: #ffffff !important;
+    margin: 3vw;
+    border: none;
+
+    &:focus,
+    &:active {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none;
+    }
+  }
+
+  .navbar-collapse {
+    background-color: #c1a534;
+    text-align: right;
+  }
+
+  .containerBook {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+    justify-items: center;
+    align-items: center;
+    padding: 2vw;
+    margin-top: 10vw;
+    box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .label {
+    display: flex;
+    gap: 2vh;
+  }
+
+  .formBoxes {
+    gap: 2vh;
+  }
+
+  .form-control {
+    font-size: 2vw !important;
+  }
+
+  .containerLabel {
+    font-size: 10px;
+  }
+
+  .availBtn {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .label {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .formBoxes {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .welcomeSection {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .resortPic1 {
+    margin-top: 5vw !important;
+  }
+
+  .pic1 {
+    width: 80vw;
+  }
+
+  .wsText {
+    margin-top: 8vw !important;
+    width: 80%;
+    .line {
+      width: 100%;
+    }
+  }
+
+  .wsDescription {
+    font-size: 15px;
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0;
+    h5 {
+      font-size: 15px;
+    }
+    img {
+      height: 3vh;
+    }
+  }
+
+  .contactText {
+    justify-content: center;
+    align-items: center;
+    margin: 8vw 8vw 0 0;
+    width: 80%;
+    .line {
+      width: 40%;
+    }
+  }
+
+  .emailAddressText {
+    margin-top: 0.1vw;
+  }
+
+  .googleMap {
+    height: 40vh;
+    width: 80%;
+    margin-top: 5vh;
+  }
+
+  .gallery {
+    .line {
+      width: 30%;
+    }
+  }
+
+  .galleryTitle {
+    font-size: 6vw;
+  }
+
+  .galleryImg {
+    height: 30vh;
+    width: auto;
+  }
+
+  .seeMore {
+    margin: auto;
+    margin-top: 2vh;
+    width: 30%;
+  }
+
+  .custom-btn {
+    font-size: 10px !important;
+  }
+
+  .announcementLine {
+    width: 50%;
+  }
+
+  .announcementTitle {
+    margin-top: 1.5vw;
+    font-size: 5vw;
+  }
+
+  .post {
+    width: 70%;
+    height: 55vh;
+    margin-bottom: 10vw !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .sorryText {
+    margin-top: 2vh;
+    font-size: 3vw;
+  }
+
+  .closedText {
+    font-size: 6vw;
+    font-weight: bold;
+  }
+
+  .tomorrowText {
+    font-size: 2.8vw;
+  }
+
+  .date,
+  .time {
+    font-size: 3vh;
+  }
+  .vr {
+    height: 3.5vw;
+    margin-top: 3vw;
+  }
+
+  .closedAdditionalText {
+    font-size: 2.5vw;
+  }
+
+  .pb-1 {
+    gap: 3vw;
+  }
+
+  .mb-0 {
+    font-size: 2vw;
+  }
+
+  .locationFooter {
+    width: 50%;
+  }
+
+  .reservationTitle,
+  .locationTitle {
+    font-size: 2vw;
+  }
+
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
+    font-size: 1.5vw;
+  }
+
+  .socialIcons {
+    width: 20%;
+    display: flex;
+    margin: auto;
+    justify-content: space-between;
+  }
+
+  .socialIcons a {
+    height: 6vh;
+    padding: 1vw;
+    text-decoration: none;
+    background-color: rgb(255, 255, 255);
+    margin: 5px;
+    border-radius: 50%;
+  }
+
+  .socialIcons a i {
+    font-size: 3.5vw;
+  }
 }
 
 @media screen and (max-width: 1400px) {
