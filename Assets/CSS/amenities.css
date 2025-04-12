@@ -72,7 +72,7 @@ ul {
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
-  color: #c1a534 !important;
+  color: black !important;
   letter-spacing: 0.1em;
 }
 
@@ -84,7 +84,7 @@ ul {
   height: 2px;
   left: 50%;
   position: absolute;
-  border-bottom: 4px solid #c1a534 !important;
+  border-bottom: 4px solid #43b2f7 !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }
@@ -102,6 +102,7 @@ ul {
 
 .logoNav {
   /* border: 1px solid black; */
+  width: 15vw;
   position: absolute;
   margin: 2vw;
 }
@@ -230,9 +231,10 @@ footer {
 
 .poolLine {
   border: none;
-  border-top: 5px solid rgba(193, 165, 52, 1);
+  border-top: 5px solid #d48d31;
   width: 30%;
   margin: 0 auto;
+  opacity: 1;
 }
 
 .poolTitle {
@@ -262,8 +264,146 @@ footer {
   width: auto;
 }
 
+.poolPic1,
+.poolPic2,
+.poolPic3,
+.poolPic4,
+.poolPic5 {
+  height: 20vw;
+  width: auto;
+}
+
+.carousel-container {
+  position: relative;
+  width: 80%;
+  height: 400px;
+  margin: 50px auto;
+  perspective: 1000px;
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: transform 1s ease;
+}
+
+.carousel img {
+  position: absolute;
+  transform-origin: center center;
+  transition: transform 1s ease;
+  image-rendering: crisp-edges !important;
+}
+
+.poolPic1 {
+  transform: rotateY(0deg) translateZ(300px);
+}
+.poolPic2 {
+  transform: rotateY(72deg) translateZ(300px);
+}
+.poolPic3 {
+  transform: rotateY(144deg) translateZ(300px);
+}
+.poolPic4 {
+  transform: rotateY(216deg) translateZ(300px);
+}
+.poolPic5 {
+  transform: rotateY(288deg) translateZ(300px);
+}
+
+button {
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 30px;
+  padding: 10px;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.prev-btn {
+  left: 20px;
+}
+
+.next-btn {
+  right: 20px;
+}
+
+button:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
 @media (max-width: 600px) {
   .amenities {
     margin-top: 18vw !important;
+  }
+
+  .carousel-container {
+    width: 90%;
+    height: 350px;
+  }
+
+  .carousel img {
+    width: 50%; /* Make images smaller */
+    height: auto;
+  }
+
+  .poolPic1 {
+    transform: rotateY(0deg) translateZ(350px);
+  }
+  .poolPic2 {
+    transform: rotateY(72deg) translateZ(350px);
+  }
+  .poolPic3 {
+    transform: rotateY(144deg) translateZ(350px);
+  }
+  .poolPic4 {
+    transform: rotateY(216deg) translateZ(350px);
+  }
+  .poolPic5 {
+    transform: rotateY(288deg) translateZ(350px);
+  }
+
+  button {
+    font-size: 25px; /* Smaller button size */
+  }
+}
+
+@media (max-width: 400px) {
+  .carousel-container {
+    width: 95%; /* Reduce width further */
+    height: 250px; /* Further reduce height */
+  }
+
+  .carousel img {
+    width: 40%; /* Even smaller images */
+  }
+
+  .poolPic1 {
+    transform: rotateY(0deg) translateZ(250px);
+  }
+  .poolPic2 {
+    transform: rotateY(72deg) translateZ(250px);
+  }
+  .poolPic3 {
+    transform: rotateY(144deg) translateZ(250px);
+  }
+  .poolPic4 {
+    transform: rotateY(216deg) translateZ(250px);
+  }
+  .poolPic5 {
+    transform: rotateY(288deg) translateZ(250px);
+  }
+
+  button {
+    font-size: 20px; /* Smaller buttons */
   }
 }

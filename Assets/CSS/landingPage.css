@@ -198,13 +198,13 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .custom-btn {
-  background-color: #c1a534 !important;
+  background-color: #007bff !important;
   color: #ffffff !important;
   font-size: 1.5vw !important;
   width: 100%;
 
   &:hover {
-    background-color: #dfbf3f !important;
+    background-color: #2186f3 !important;
   }
 }
 
@@ -235,8 +235,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .line {
   border: none;
-  border-top: 5px solid rgba(193, 165, 52, 1);
+  border-top: 5px solid #d48d31;
   width: 40%;
+  height: 2vw;
+  opacity: 1;
   /* margin: 20px auto; */
 }
 
@@ -258,6 +260,9 @@ input[type="number"]::-webkit-inner-spin-button {
   display: flex;
   justify-content: space-around;
   margin-top: 7vh;
+  background-color: #7dcbf2;
+  padding: 5vw;
+  height: 90vh;
 }
 
 .contactText {
@@ -327,6 +332,12 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 15vw;
 }
 
+.announcements {
+  background-color: #f7d5b0;
+  height: 130vh;
+  padding-top: 3vw;
+  margin-bottom: 10vw;
+}
 .announcementTitleContainer {
   /* border: 1px solid black; */
   width: 50%;
@@ -336,7 +347,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .announcementLine {
   border: none;
-  border-top: 5px solid rgba(193, 165, 52, 1);
+  border-top: 5px solid #d48d31;
   width: 30%;
   margin: 0 auto;
 }
@@ -348,7 +359,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .post {
   width: 40%;
-  border: 1px solid rgba(193, 165, 52, 1);
+  background-color: white;
   border-radius: 6vw;
   margin: auto;
   margin-top: 5vw !important;
@@ -492,7 +503,7 @@ footer {
 }
 
 .socialIcons a:hover i {
-  color: #c1a534;
+  color: #007bff;
   transition: 0.5s;
 }
 
@@ -533,7 +544,7 @@ footer {
     }
   }
   .navbar-collapse {
-    background-color: #c1a534;
+    background-color: #007bff;
     text-align: right;
   }
 
@@ -576,7 +587,6 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 0;
   }
 
   .contactText {
@@ -710,7 +720,7 @@ footer {
 
 @media screen and (max-width: 400px) {
   .navbar-collapse {
-    background-color: #c1a534;
+    background-color: #007bff;
     text-align: right;
   }
   .titleContainer {
@@ -747,7 +757,7 @@ footer {
   }
 
   .navbar-collapse {
-    background-color: #c1a534;
+    background-color: #007bff;
     text-align: right;
   }
 
