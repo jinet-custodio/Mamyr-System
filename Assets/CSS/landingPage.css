@@ -229,8 +229,8 @@ input[type="number"]::-webkit-inner-spin-button {
   justify-content: center;
   align-items: center;
   margin: auto;
-  margin-top: 10vw !important;
-  width: 40%;
+  margin-top: 5vw !important;
+  width: 50%;
 }
 
 .line {
@@ -269,7 +269,7 @@ input[type="number"]::-webkit-inner-spin-button {
   /* border: 1px solid black; */
   justify-content: center;
   align-items: center;
-  width: 45vw;
+  width: 45%;
 }
 
 .location,
@@ -327,8 +327,8 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .seeMore {
-  /* border: 1px solid black; */
-  margin: 2vw 0 0 2vw;
+  margin: auto;
+  margin-top: 2.5vh;
   width: 15vw;
 }
 
@@ -587,6 +587,7 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 60vh;
   }
 
   .contactText {
@@ -718,7 +719,7 @@ footer {
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (min-width: 400px) and (max-width: 550px) {
   .navbar-collapse {
     background-color: #007bff;
     text-align: right;
@@ -733,13 +734,13 @@ footer {
   }
 
   .name {
-    font-size: 10vw;
+    font-size: 7vw;
     text-align: left;
   }
 
   .descriptionText {
     text-align: justify;
-    font-size: 5vw;
+    font-size: 4vw;
   }
 
   .navbar-toggler {
@@ -837,7 +838,9 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 0;
+    margin-top: 10vh;
+    height: 80vh;
+    padding-bottom: 8vh;
     h5 {
       font-size: 15px;
     }
@@ -849,7 +852,7 @@ footer {
   .contactText {
     justify-content: center;
     align-items: center;
-    margin: 8vw 8vw 0 0;
+    margin: 1vh 3vw 0 0;
     width: 80%;
     .line {
       width: 40%;
@@ -950,13 +953,13 @@ footer {
 
   .reservationTitle,
   .locationTitle {
-    font-size: 2vw;
+    font-size: 2.5vw;
   }
 
   .numberFooter,
   .emailAddressTextFooter,
   .addressTextFooter {
-    font-size: 1.5vw;
+    font-size: 2vw;
   }
 
   .socialIcons {
@@ -976,7 +979,12 @@ footer {
   }
 
   .socialIcons a i {
-    font-size: 3.5vw;
+    font-size: 4vw;
+  }
+
+  .announcements {
+    background-color: #f7d5b0;
+    height: 72vh;
   }
 }
 
