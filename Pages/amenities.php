@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Amenities</title>
+    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/amenities.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,7 +22,8 @@
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <img src="../Assets/Images/MamyrLogo.png" alt="" class="logoNav">
+
+        <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item">
@@ -67,17 +69,21 @@
                     stay. Dive in and make the most of your resort experience!</p>
             </div>
 
-            <div class="poolPics">
-                <img src="../Assets/Images/amenities/poolPics/poolPic1.png" alt="Pool Picture 1" class="pic1">
-                <img src="../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pool Picture 2" class="pic2">
-                <img src="../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Pool Picture 3" class="pic3">
-                <img src="../Assets/Images/amenities/poolPics/poolPic4.jpg" alt="Pool Picture 4" class="pic4">
-                <img src="../Assets/Images/amenities/poolPics/poolPic5.jpg" alt="Pool Picture 5" class="pic5">
+            <div class="carousel-container">
+                <div class="carousel">
+                    <img src="../Assets/Images/amenities/poolPics/poolPic1.png" alt="Pool Picture 1" class="poolPic1">
+                    <img src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Pool Picture 2" class="poolPic2">
+                    <img src="../Assets/Images/amenities/poolPics/poolPic3.jpeg" alt="Pool Picture 3" class="poolPic3">
+                    <img src="../Assets/Images/amenities/poolPics/poolPic4.jpeg" alt="Pool Picture 4" class="poolPic4">
+                    <img src="../Assets/Images/amenities/poolPics/poolPic5.jpg" alt="Pool Picture 5" class="poolPic5">
+                </div>
+                <button class="btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn btn-primary next-btn">&#10095;</button>
             </div>
         </div>
 
-        <div class="pool">
-            <div class="poolTitleContainer">
+        <div class="pool" style="background-color:#f7d5b0; height: 120vh;">
+            <div class=" poolTitleContainer" style="padding-top: 2vw;">
                 <hr class="poolLine">
                 <h4 class="poolTitle">Cottages</h4>
                 <p class="poolDescription">Our cozy cottages offer a relaxing retreat with spacious porches, secure
@@ -85,14 +91,46 @@
                     designed for your comfort.</p>
             </div>
 
-            <div class="poolPics">
-                <img src="../Assets/Images/amenities/cottagePics/cottage1.jpg" alt="Cottage Picture 1" class="pic1">
-                <img src="../Assets/Images/amenities/cottagePics/cottage2.jpg" alt="Cottage Picture 2" class="pic2">
+
+            <div class="carousel-container">
+                <div class="carousel">
+                    <img src="../Assets/Images/amenities/cottagePics/cottage1.jpg" alt="Cottage Picture 1"
+                        class="poolPic1">
+                    <img src="../Assets/Images/amenities/cottagePics/cottage2.jpg" alt="Cottage Picture 2"
+                        class="poolPic2">
+                    <img src="../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Cottage Picture 3"
+                        class="poolPic3">
+                    <img src="../Assets/Images/amenities/cottagePics/cottage4.jpg" alt="Cottage Picture 4"
+                        class="poolPic4">
+                    <img src="../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Cottage Picture 5"
+                        class="poolPic5">
+                </div>
+                <button class="btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn btn-primary next-btn">&#10095;</button>
             </div>
+
         </div>
 
-        <div class="pool">
-            <div class="poolTitleContainer">
+        <div class="pool" style="height: 120vh;">
+            <div class=" poolTitleContainer" style="padding-top: 2vw;">
+                <hr class="poolLine">
+                <h4 class="poolTitle">Videoke Area</h4>
+                <p class="poolDescription">Enjoy nonstop fun just steps away from your cottage! Our videoke area is
+                    conveniently located beside the cottages, making it easy to sing, laugh, and bond without going far.
+                    With a great sound system and cozy setup, it’s the perfect spot for music-filled memories in the
+                    heart of the resort.</p>
+            </div>
+
+            <div class="poolPics">
+                <img src="../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Hotel Picture 1" class="pic1">
+                <img src="../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Hotel Picture 1" class="pic1">
+
+            </div>
+
+        </div>
+
+        <div class="pool" style="background-color: #7dcbf2; height: 125vh;">
+            <div class="poolTitleContainer" style="padding-top: 2vw ;">
                 <hr class="poolLine">
                 <h4 class="poolTitle">Pavilion Hall</h4>
                 <p class="poolDescription">Our Pavilion Hall offers the perfect space for events, gatherings, and
@@ -101,35 +139,77 @@
                     setting of pure sophistication.</p>
             </div>
 
-            <div class="poolPics">
-                <img src="../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1" class="pic1">
-                <img src="../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2" class="pic2">
-                <img src="../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3" class="pic3">
-                <img src="../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4" class="pic4">
-                <img src="../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5" class="pic5">
+            <div class="carousel-container">
+                <div class="carousel">
+                    <img src="../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
+                        class="poolPic1">
+                    <img src="../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
+                        class="poolPic2">
+                    <img src="../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3"
+                        class="poolPic3">
+                    <img src="../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
+                        class="poolPic4">
+                    <img src="../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
+                        class="poolPic5">
 
+                </div>
+                <button class="btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn btn-primary next-btn">&#10095;</button>
             </div>
         </div>
 
-        <div class="pool">
+        <div class="pool" style=" height: 125vh;">
             <div class="poolTitleContainer">
                 <hr class="poolLine">
+                <h4 class="poolTitle">Mini Pavilion</h4>
+                <p class="poolDescription">Our mini pavilion offers an intimate and charming space perfect for small
+                    gatherings and special occasions. Designed to comfortably accommodate up to 50 guests, it’s ideal
+                    for birthdays, reunions, meetings, or any cozy celebration. Surrounded by a refreshing resort
+                    atmosphere, it provides both functionality and a relaxing vibe.</p>
+            </div>
+
+            <div class="carousel-container">
+                <div class="carousel">
+                    <img src="../Assets/Images/amenities/miniPavPics/miniPav1.jpg" alt="Mini Pavilion Picture 1"
+                        class="poolPic1">
+                    <img src="../Assets/Images/amenities/miniPavPics/miniPav2.jpg" alt="Mini Pavilion Picture 2"
+                        class="poolPic2">
+                    <img src="../Assets/Images/amenities/miniPavPics/miniPav3.jpeg" alt="Mini Pavilion Picture 3"
+                        class="poolPic3">
+                    <img src="../Assets/Images/amenities/miniPavPics/miniPav4.jpeg" alt="Mini Pavilion Picture 4"
+                        class="poolPic4">
+                    <img src="../Assets/Images/amenities/miniPavPics/miniPav5.jpeg" alt="Mini Pavilion Picture 5"
+                        class="poolPic5">
+
+                </div>
+                <button class="btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn btn-primary next-btn">&#10095;</button>
+            </div>
+        </div>
+
+        <div class="pool" style="background-color:#f7d5b0; height: 140vh;">
+            <div class="poolTitleContainer" style="padding-top: 5vw;">
+                <hr class="poolLine">
                 <h4 class="poolTitle">Mamyr Hotel</h4>
-                <p class="poolDescription">We offer 12 thoughtfully designed hotel rooms, each providing a peaceful and
+                <p class="poolDescription">We offer 11 thoughtfully designed hotel rooms, each providing a peaceful and
                     comfortable retreat. Perfect for guests looking for a relaxing space to unwind after a day of
                     exploration, our rooms offer all the essentials for a restful stay with a touch of convenience.</p>
             </div>
 
-            <div class="poolPics">
-                <img src="../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel Picture 1" class="pic1">
-                <img src="../Assets/Images/amenities/hotelPics/hotel2.jpg" alt="Hotel Picture 2" class="pic1">
-                <img src="../Assets/Images/amenities/hotelPics/hotel3.jpg" alt="Hotel Picture 3" class="pic3">
-                <img src="../Assets/Images/amenities/hotelPics/hotel4.jpg" alt="Hotel Picture 4" class="pic4">
+            <div class="carousel-container">
+                <div class="carousel">
+                    <img src="../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel Picture 1" class="poolPic1">
+                    <img src="../Assets/Images/amenities/hotelPics/hotel2.jpg" alt="Hotel Picture 2" class="poolPic2">
+                    <img src="../Assets/Images/amenities/hotelPics/hotel3.jpg" alt="Hotel Picture 3" class="poolPic3">
+                    <img src="../Assets/Images/amenities/hotelPics/hotel4.jpg" alt="Hotel Picture 4" class="poolPic4">
+                    <img src="../Assets/Images/amenities/hotelPics/hotel5.jpeg" alt="Hotel Picture 5" class="poolPic5">
 
-
-
+                </div>
+                <button class="btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn btn-primary next-btn">&#10095;</button>
             </div>
         </div>
+
         <div class="pool">
             <div class="poolTitleContainer">
                 <hr class="poolLine">
@@ -139,9 +219,22 @@
                     of mind throughout your visit.</p>
             </div>
 
-            <div class="poolPics">
-                <img src="../Assets/Images/amenities/parkingPics/parking1.jpg" alt="Parking Picture 1" class="pic1">
-                <img src="../Assets/Images/amenities/parkingPics/parking2.jpg" alt="Parking Picture 2" class="pic2">
+            <div class="carousel-container">
+                <div class="carousel">
+                    <img src="../Assets/Images/amenities/parkingPics/parking1.jpg" alt="Parking Picture 1"
+                        class="poolPic1">
+                    <img src="../Assets/Images/amenities/parkingPics/parking2.jpg" alt="Parking Picture 2"
+                        class="poolPic2">
+                    <img src="../Assets/Images/amenities/parkingPics/parking3.jpg" alt="Parking Picture 3"
+                        class="poolPic3">
+                    <img src="../Assets/Images/amenities/parkingPics/parking4.jpg" alt="Parking Picture 4"
+                        class="poolPic4">
+                    <img src="../Assets/Images/amenities/parkingPics/parking5.jpg" alt="Parking Picture 5"
+                        class="poolPic5">
+
+                </div>
+                <button class="btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn btn-primary next-btn">&#10095;</button>
             </div>
         </div>
     </div>
@@ -149,9 +242,9 @@
 
     <footer class="py-1 my-2">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-
+            <a href="../index.php">
+                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+            </a>
             <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
         </div>
 
@@ -181,24 +274,49 @@
     </footer>
 
     <script>
-        var video = document.getElementById("myVideo");
+    var video = document.getElementById("myVideo");
 
-        video.onplay = function() {
-            video.muted = false;
-        };
+    video.onplay = function() {
+        video.muted = false;
+    };
     </script>
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script>
-        const navbar = document.getElementById("navbar");
+    const navbar = document.getElementById("navbar");
 
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 10) {
-                navbar.classList.add("bg-white", "shadow");
-            } else {
-                navbar.classList.remove("bg-white", "shadow");
-            }
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 10) {
+            navbar.classList.add("bg-white", "shadow");
+        } else {
+            navbar.classList.remove("bg-white", "shadow");
+        }
+    });
+    </script>
+
+
+    <script>
+    const carousels = document.querySelectorAll('.carousel');
+
+
+    carousels.forEach(carousel => {
+        let angle = 0;
+
+        const prevButton = carousel.closest('.carousel-container').querySelector('.prev-btn');
+        const nextButton = carousel.closest('.carousel-container').querySelector('.next-btn');
+
+
+        nextButton.addEventListener('click', () => {
+            angle -= 72;
+            carousel.style.transform = `rotateY(${angle}deg)`;
         });
+
+
+        prevButton.addEventListener('click', () => {
+            angle += 72;
+            carousel.style.transform = `rotateY(${angle}deg)`;
+        });
+    });
     </script>
 </body>
 
