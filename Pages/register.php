@@ -22,18 +22,23 @@ require '../Function/OTPdeletion.php';
 <body>
     <div class="container">
         <div class="form-box login">
-            <div class="back-icon-container">
-                <a href="../index.php"><img src="../Assets/Images/Icon/undo.png" alt="Go back" class="back-btn"></a>
-            </div>
+            <!-- <div class="back-icon-container">
+                <a href="../index.php" class="btn btn-primary">
+                    <img src="../Assets/Images/Icon/undo.png" alt="Go back" class="backArrow">
+
+                </a>
+            </div> -->
             <form action="../Function/register.php" method="POST">
                 <h1>Login</h1>
                 <div class="input-box">
-                    <input type="text" class="form-control" id="login_email" name="login_email" value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>" placeholder="Email" required>
+                    <input type="text" class="form-control" id="login_email" name="login_email"
+                        value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
+                        placeholder="Email" required>
                     <i class='bx bxs-envelope'></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" class="form-control" id="login_password" name="login_password" oninput="checkLoginPassword();" placeholder="Password"
-                        required>
+                    <input type="password" class="form-control" id="login_password" name="login_password"
+                        oninput="checkLoginPassword();" placeholder="Password" required>
                     <!-- <i class='bx bxs-low-vision'></i> -->
                 </div>
                 <div class="forgot-link">
@@ -57,20 +62,26 @@ require '../Function/OTPdeletion.php';
             </form>
         </div>
         <div class="form-box register">
-            <div class="back-icon-container">
-                <a href="../index.php"><img src="../Assets/Images/Icon/undo.png" alt="Go back" class="back-btn"></a>
-            </div>
+            <!-- <div class="back-icon-container">
+                <a href="../index.php" class="btn btn-primary">
+                    <img src="../Assets/Images/Icon/undo.png" alt="Go back" class="me-2"
+                        style="height: 4vw; vertical-align: middle;">
+
+                </a>
+            </div> -->
             <form action="../Function/register.php" method="POST">
                 <h1>Sign Up</h1>
                 <div class="fullName">
                     <div class="input-box">
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
-                            value="<?php echo isset($_SESSION['formData']['firstName']) ? htmlspecialchars(trim($_SESSION['formData']['firstName'])) : ''; ?>" required>
+                            value="<?php echo isset($_SESSION['formData']['firstName']) ? htmlspecialchars(trim($_SESSION['formData']['firstName'])) : ''; ?>"
+                            required>
                         <i class='bx bxs-user-circle'></i>
                     </div>
                     <div class="input-box">
                         <input type="text" class="form-control" id="middleInitial" name="middleInitial"
-                            placeholder="M.I. (Optional)" value="<?php echo isset($_SESSION['formData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['formData']['middleInitial'])) : ''; ?>">
+                            placeholder="M.I. (Optional)"
+                            value="<?php echo isset($_SESSION['formData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['formData']['middleInitial'])) : ''; ?>">
                         <i class='bx bxs-user-circle'></i>
                     </div>
 
@@ -78,24 +89,28 @@ require '../Function/OTPdeletion.php';
                 <div class="userInfo">
                     <div class="input-box">
                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
-                            value="<?php echo isset($_SESSION['formData']['lastName']) ? htmlspecialchars(trim($_SESSION['formData']['lastName'])) : ''; ?>" required>
+                            value="<?php echo isset($_SESSION['formData']['lastName']) ? htmlspecialchars(trim($_SESSION['formData']['lastName'])) : ''; ?>"
+                            required>
                         <i class='bx bxs-user-circle'></i>
                     </div>
                     <div class="input-box">
-                        <input type="text" class="form-control" id="userAddress" name="userAddress" placeholder="Address"
-                            value="<?php echo isset($_SESSION['formData']['userAddress']) ? htmlspecialchars(trim($_SESSION['formData']['userAddress'])) : ''; ?>" required>
+                        <input type="text" class="form-control" id="userAddress" name="userAddress"
+                            placeholder="Address"
+                            value="<?php echo isset($_SESSION['formData']['userAddress']) ? htmlspecialchars(trim($_SESSION['formData']['userAddress'])) : ''; ?>"
+                            required>
                         <i class='bx bxs-user'></i>
                     </div>
                     <div class="input-box">
                         <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                            value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>" required>
+                            value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
+                            required>
                         <i class='bx bxs-envelope'></i>
                     </div>
 
                     <div class="passwordContainer">
                         <div class="input-box">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-                                oninput="checkPassword();" required>
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Password" oninput="checkPassword();" required>
                             <!-- <i class='bx bxs-low-vision'></i> -->
                         </div>
                         <div class=" input-box">
@@ -107,7 +122,8 @@ require '../Function/OTPdeletion.php';
                 </div>
 
                 <label for="terms">
-                    <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1" onchange="checkBox()"> I agree to the
+                    <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
+                        onchange="checkBox()"> I agree to the
                     <a href="#" id="open-modal">Terms and Conditions</a>.
                 </label><br>
                 <button type="submit" class="btn" id="signUp" name="signUp" disabled>Sign Up</button>
@@ -164,12 +180,29 @@ require '../Function/OTPdeletion.php';
                 <h1 class="welcome">Welcome to Mamyr!</h1>
                 <p>Don't have an account?</p>
                 <button class="btn register-btn">Sign Up</button>
+
+                <div class="back-icon-container-login">
+                    <a href="../index.php">
+                        <img src="../Assets/Images/Icon/home.png" alt="Go back" class="backArrow">
+
+                    </a>
+                </div>
+
             </div>
+
 
             <div class="toggle-panel toggle-right">
                 <h1 class="welcome">Welcome Back!</h1>
                 <p>Already have an account?</p>
                 <button class="btn login-btn">Login</button>
+
+                <div class="back-icon-container-signup">
+                    <a href="../index.php">
+                        <img src="../Assets/Images/Icon/home.png" alt="Go back" class="backArrow">
+
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -178,26 +211,26 @@ require '../Function/OTPdeletion.php';
     <script src="../Assets/JS/checkPassword.js"></script>
     <script src="../Assets/JS/checkLoginPassword.js"></script>
     <script>
-        const container = document.querySelector('.container');
-        const registerBtn = document.querySelector('.register-btn');
-        const loginBtn = document.querySelector('.login-btn');
+    const container = document.querySelector('.container');
+    const registerBtn = document.querySelector('.register-btn');
+    const loginBtn = document.querySelector('.login-btn');
 
-        registerBtn.addEventListener('click', () => {
-            container.classList.add('active');
-        })
+    registerBtn.addEventListener('click', () => {
+        container.classList.add('active');
+    })
 
-        loginBtn.addEventListener('click', () => {
-            container.classList.remove('active');
-        })
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove('active');
+    })
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
 
-        if (page === 'register') {
-            container.classList.add('active');
-        } else {
-            container.classList.remove('active');
-        }
+    if (page === 'register') {
+        container.classList.add('active');
+    } else {
+        container.classList.remove('active');
+    }
     </script>
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 </body>

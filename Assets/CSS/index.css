@@ -53,9 +53,20 @@ body {
   margin: 15px 0;
 }
 
-.back-icon-container {
+.back-icon-container-login {
   position: absolute;
-  margin-top: -60vh;
+  left: 3vw;
+  margin-top: -70vh;
+}
+
+.back-icon-container-signup {
+  position: absolute;
+  right: 3vw;
+  margin-top: -70vh;
+}
+
+.backArrow {
+  margin-top: -1vw;
 }
 
 form {

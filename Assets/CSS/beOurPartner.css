@@ -1,0 +1,187 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../Fonts/Prata/Prata-Regular.ttf);
+}
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+  list-style: none;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  /* background-color: rgb(242, 242, 242); */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 15vh;
+  padding: 1rem;
+}
+
+.navbar-nav {
+  display: flex !important;
+  list-style: none;
+  margin-top: 10px !important;
+}
+
+ul {
+  font-family: "Plus Jakarta Sans";
+  font-weight: lighter;
+  font-size: 1.3vw;
+  list-style: none;
+  display: table;
+  text-transform: uppercase;
+}
+
+.nav-link {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px !important;
+  position: relative;
+  color: black !important;
+  letter-spacing: 0.1em;
+}
+
+.nav-link:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  border-bottom: 4px solid #43b2f7 !important;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link:hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-link.active:after {
+  width: 100%;
+  left: 0;
+  background-color: #c1a534;
+}
+
+.logoNav {
+  /* border: 1px solid black; */
+  width: 15vw;
+  position: absolute;
+  margin: 2vw;
+}
+
+footer {
+  /* border: 1px solid black; */
+  margin-top: auto !important;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.445) -50%,
+    rgb(62, 132, 158) 95%
+  );
+}
+
+.pb-1 {
+  gap: 2vw;
+  padding: 1vw 0 0 2vw;
+}
+
+.logo {
+  width: 10vw;
+  height: auto;
+}
+.mb-0 {
+  font-family: "Prata";
+  font-size: 1.5vw;
+  font-weight: bold;
+  color: #ffff;
+}
+
+.footerLine {
+  width: 80%;
+  margin: 0 auto;
+  color: #fff;
+  opacity: 1;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5vw;
+}
+.locationFooter {
+  /* border: 1px solid black; */
+  width: 30%;
+}
+
+.reservationTitle,
+.locationTitle {
+  font-family: "Plus Jakarta Sans";
+  font-weight: bold;
+  font-size: 1.5vw;
+  color: #fff;
+}
+
+.numberFooter,
+.emailAddressTextFooter,
+.addressTextFooter {
+  font-family: "Poppins ExtraLight";
+  color: #fff;
+  font-size: 1vw;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  margin: 0.3vw;
+}
+
+.socialIcons a {
+  text-decoration: none;
+  padding: 0.8vw;
+  background-color: rgb(255, 255, 255);
+  margin: 5px;
+  border-radius: 50%;
+}
+
+.socialIcons a i {
+  font-size: 2vw;
+  color: #3e849e;
+  opacity: 0.9;
+}
+
+.socialIcons a:hover {
+  background-color: white;
+  transition: 0.5s;
+}
+
+.socialIcons a:hover i {
+  color: #c1a534;
+  transition: 0.5s;
+}
