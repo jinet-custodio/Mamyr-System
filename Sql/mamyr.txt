@@ -1,116 +1,204 @@
+-- Create the database
 CREATE DATABASE mamyr;
+USE mamyr;
 
+-- =========================
+-- USER-RELATED TABLES
+-- =========================
 
-CREATE TABLE users(
-    userID int PRIMARY KEY AUTO_INCREMENT,
-    firstName varchar(50) NOT NULL,
-    middleInitial varchar(50) Null,
-    lastName varchar(50) NOT NULL,
-    email varchar(50) NOT NULL UNIQUE,
-    userAddress text NOT NULL,
-    phoneNumber varchar(20) NULL,
-    birthDate date NULL,
-    password varchar(255) NOT NULL,
-    userProfile longblob,
-    userType enum('Customer', 'Partner', 'Admin') NOT NULL DEFAULT 'Customer',
-    userOTP varchar(100) NULL,
+-- User types for normalization (replaces ENUM)
+CREATE TABLE user_types (
+    userTypeID INT PRIMARY KEY AUTO_INCREMENT,
+    typeName VARCHAR(50) UNIQUE -- 'Customer', 'Partner', 'Admin'
+);
+
+-- User status types (replaces ENUM)
+CREATE TABLE user_statuses (
+    userStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE -- 'Pending', 'Verified', 'Non-verified'
+);
+
+-- Main users table
+CREATE TABLE users (
+    userID INT PRIMARY KEY AUTO_INCREMENT,
+    firstName VARCHAR(50) NOT NULL,
+    middleInitial VARCHAR(50),
+    lastName VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    userAddress TEXT NOT NULL,
+    phoneNumber VARCHAR(20),
+    birthDate DATE,
+    password VARCHAR(255) NOT NULL,
+    userProfile LONGBLOB,
+    userTypeID INT NOT NULL DEFAULT 1, -- Default to 'Customer'
+    userOTP VARCHAR(100),
     OTP_expiration_at DATETIME,
-    userStatus enum('Pending', 'Verified', 'Non-verified') NOT NULL DEFAULT 'Pending'
-    );
+    userStatusID INT NOT NULL DEFAULT 1, -- Default to 'Pending'
 
+    FOREIGN KEY (userTypeID) REFERENCES user_types(userTypeID),
+    FOREIGN KEY (userStatusID) REFERENCES user_statuses(userStatusID)
+);
 
-CREATE TABLE partnerships(
-    partnershipID int(50) PRIMARY KEY AUTO_INCREMENT,
-    userID int(50) NOT NULL,
-    partnerAddress text NOT NULL,
-    partnerType varchar(200) NOT NULL,
-    status enum('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
-    startDate date NOT NULL,
-    endDate date NULL,
-    
-    FOREIGN KEY(userID) REFERENCES users(userID)
-    );
+-- Admins table with FK to users (1-to-1)
+CREATE TABLE admins (
+    adminID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL UNIQUE,
+    position VARCHAR(100), -- e.g. 'Manager', 'Support Staff'
 
-CREATE TABLE PartnershipBusiness(
-    partnershipBusinessID int(50) PRIMARY KEY AUTO_INCREMENT,
-    partnershipID int(50) NOT NULL,
-    PBName varchar(200) NOT NULL,
-    PBPrice decimal(10,2) NOT NULL,
-    PBDescription text NULL,
-    PBcapacity int NULL,
-    status enum('Pending', 'Approved', 'Denied') NOT NULL DEFAULT 'Pending',
-    
-     FOREIGN KEY(partnershipID) REFERENCES partnerships(partnershipID)
-    );
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
 
+-- =========================
+-- PARTNERSHIP TABLES
+-- =========================
 
-CREATE TABLE resortFacilities(
-    resortfacilityID int(50) PRIMARY KEY AUTO_INCREMENT,
-    facilityName varchar(200) NOT NULL,
-    price decimal(10,2) NOT NULL,
-    capacity int NOT NULL,
-    description text NULL  
-    );
+CREATE TABLE partnerships (
+    partnershipID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    partnerAddress TEXT NOT NULL,
+    partnerType VARCHAR(200) NOT NULL,
+    status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
+    startDate DATE NOT NULL,
+    endDate DATE,
 
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
 
-CREATE TABLE services(
-    serviceID int(50) AUTO_INCREMENT PRIMARY KEY,
-    resortfacilityID int(50) NOT NULL,
-    partnershipBusinessID int(50) NOT NULL,
-    
-    FOREIGN KEY(resortfacilityID) REFERENCES resortfacilities(resortfacilityID),
-    FOREIGN KEY(partnershipBusinessID) REFERENCES partnershipbusiness(partnershipBusinessID)
-    );
+CREATE TABLE partnershipBusiness (
+    partnershipBusinessID INT PRIMARY KEY AUTO_INCREMENT,
+    partnershipID INT NOT NULL,
+    PBName VARCHAR(200) NOT NULL,
+    PBPrice DECIMAL(10,2) NOT NULL,
+    PBDescription TEXT,
+    PBcapacity INT,
+    status ENUM('Pending', 'Approved', 'Denied') NOT NULL DEFAULT 'Pending',
 
+    FOREIGN KEY (partnershipID) REFERENCES partnerships(partnershipID)
+);
 
-CREATE TABLE packages(
-    packageID int(50) AUTO_INCREMENT PRIMARY KEY,
-    packageName varchar(100) NOT NULL,
-    price decimal(10,2) DEFAULT 0.00
-    );
+-- =========================
+-- FACILITIES AND SERVICES
+-- =========================
 
+CREATE TABLE resortFacilities (
+    resortFacilityID INT PRIMARY KEY AUTO_INCREMENT,
+    facilityName VARCHAR(200) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    capacity INT NOT NULL,
+    description TEXT
+);
 
-CREATE TABLE custompackages(
-    customPackageID int(50) AUTO_INCREMENT PRIMARY KEY,
-    userID int(50) NOT NULL,
-    totalPrice decimal(10,2) DEFAULT 0.00,
-    creationDate date NOT NULL,
-    
-    FOREIGN KEY(userID) REFERENCES users(userID)
-    );
+CREATE TABLE services (
+    serviceID INT PRIMARY KEY AUTO_INCREMENT,
+    resortFacilityID INT NOT NULL,
+    partnershipBusinessID INT NOT NULL,
 
-CREATE TABLE packages_services(
-    customPackageID int(50) NULL,
-    packageID int(50) NULL,
-    serviceID int(50) NOT NULL,
-    
-    FOREIGN KEY(customPackageID) REFERENCES custompackages(customPackageID),
-    FOREIGN KEY(packageID) REFERENCES packages(packageID),
-    FOREIGN KEY(serviceID) REFERENCES services(serviceID)
-    );
+    FOREIGN KEY (resortFacilityID) REFERENCES resortFacilities(resortFacilityID),
+    FOREIGN KEY (partnershipBusinessID) REFERENCES partnershipBusiness(partnershipBusinessID)
+);
 
+-- =========================
+-- PACKAGES
+-- =========================
 
-CREATE TABLE bookings(
-    bookingID INT(50) PRIMARY KEY AUTO_INCREMENT,
-    userID int(50) NOT NULL,
-    packageID int(50) NULL,
-    customPackageID int(50) NULL,
-    additionalRequest varchar(255) NULL,
-    bookingDate date NOT NULL,
-    totalCost decimal(10,2) NOT NULL,
-    status enum('Pending', 'Approved', 'Cancelled') NOT NULL DEFAULT 'Pending',
-    
-    FOREIGN KEY(userID) REFERENCES users(userID),
-    FOREIGN KEY(packageID) REFERENCES packages(packageID),
-    FOREIGN KEY(customPackageID) REFERENCES custompackages(customPackageID)
-    );
+CREATE TABLE packages (
+    packageID INT PRIMARY KEY AUTO_INCREMENT,
+    packageName VARCHAR(100) NOT NULL,
+    price DECIMAL(10,2) DEFAULT 0.00
+);
 
+CREATE TABLE customPackages (
+    customPackageID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    totalPrice DECIMAL(10,2) DEFAULT 0.00,
+    creationDate DATE NOT NULL,
 
-CREATE TABLE confirmed_bookings(
-    confirmed_bookingID INT(50) PRIMARY KEY AUTO_INCREMENT,
-    bookingID int(50) NOT NULL,
-    totalCost decimal(10,2) NOT NULL,
-    status enum('Pending', 'Approved', 'REJECTED') NOT NULL DEFAULT 'Pending',
-    
-    FOREIGN KEY(bookingID) REFERENCES bookings(bookingID)
-    );
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
+
+-- Table to associate services with packages and custom packages
+CREATE TABLE packages_services (
+    packageServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    customPackageID INT,
+    packageID INT,
+    serviceID INT NOT NULL,
+
+    FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
+    FOREIGN KEY (packageID) REFERENCES packages(packageID),
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID)
+);
+
+-- =========================
+-- BOOKINGS
+-- =========================
+
+CREATE TABLE bookings (
+    bookingID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    packageID INT,
+    customPackageID INT,
+    additionalRequest VARCHAR(255),
+    bookingDate DATE NOT NULL,
+    totalCost DECIMAL(10,2) NOT NULL,
+    status ENUM('Pending', 'Approved', 'Cancelled') NOT NULL DEFAULT 'Pending',
+
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (packageID) REFERENCES packages(packageID),
+    FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
+);
+
+CREATE TABLE confirmed_bookings (
+    confirmed_bookingID INT PRIMARY KEY AUTO_INCREMENT,
+    bookingID INT NOT NULL,
+    totalCost DECIMAL(10,2) NOT NULL,
+    status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
+
+    FOREIGN KEY (bookingID) REFERENCES bookings(bookingID)
+);
+
+-- =========================
+-- WEBSITE CONTENT
+-- =========================
+
+CREATE TABLE website_contents (
+    contentID INT PRIMARY KEY AUTO_INCREMENT,
+    adminID INT NOT NULL,
+    section VARCHAR(100) NOT NULL, -- e.g. 'Home', 'About Us', 'Contact'
+    title VARCHAR(255),
+    content TEXT NOT NULL,
+    image LONGBLOB,
+    lastUpdated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (adminID) REFERENCES admins(adminID)
+);
+
+-- =========================
+-- AUDIT LOGS (for tracking admin actions)
+-- =========================
+
+CREATE TABLE audit_logs (
+    logID INT PRIMARY KEY AUTO_INCREMENT,
+    adminID INT NOT NULL,
+    action VARCHAR(255) NOT NULL, -- e.g. 'Updated Website', 'Approved Booking'
+    targetTable VARCHAR(100), -- Optional: which table was affected
+    targetID INT,             -- Optional: ID of the affected record
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (adminID) REFERENCES admins(adminID)
+);
+
+-- =========================
+-- SEED INITIAL ENUM VALUES
+-- =========================
+
+-- Populate default user types
+INSERT INTO user_types (typeName) VALUES 
+('Customer'), 
+('Partner'), 
+('Admin');
+
+-- Populate default user statuses
+INSERT INTO user_statuses (statusName) VALUES 
+('Pending'), 
+('Verified'), 
+('Non-verified');
