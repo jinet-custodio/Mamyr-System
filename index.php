@@ -36,7 +36,7 @@
                 </li>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BE OUR PARTNER</a>
+                    <a class="nav-link" href="Pages/beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Pages/register.php">BOOK NOW</a>
