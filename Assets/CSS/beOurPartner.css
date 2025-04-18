@@ -24,6 +24,13 @@
   list-style: none;
 }
 
+body {
+  background-image: url(../Images/beOurPartnerPhotos/beOurPartnerbg.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 nav {
   position: absolute;
   top: 0;
@@ -39,6 +46,9 @@ nav {
   align-items: center;
   height: 15vh;
   padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.562);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .navbar-nav {
@@ -61,7 +71,7 @@ ul {
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
-  color: black !important;
+  color: rgb(0, 0, 0) !important;
   letter-spacing: 0.1em;
 }
 
@@ -184,4 +194,90 @@ footer {
 .socialIcons a:hover i {
   color: #c1a534;
   transition: 0.5s;
+}
+
+.titleContainer {
+  /* border: 1px solid black; */
+  width: 70%;
+  margin: auto;
+  text-align: center;
+  margin-top: 10vw !important;
+}
+
+.line {
+  width: 100%;
+  margin: 0 auto !important;
+}
+
+.title {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+  font-family: "Prata";
+  color: #fff;
+}
+
+.description {
+  margin-top: 4vw;
+  font-size: 1.4vw;
+  color: #fff;
+}
+
+.center-card {
+  margin-top: 5vw !important;
+}
+
+.card {
+  max-width: 100%;
+  border-radius: 2vw !important;
+  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #fff !important;
+  border-top-left-radius: 2vw !important;
+  border-top-right-radius: 2vw !important;
+  padding: 2vw !important;
+}
+
+.card-title {
+  text-align: center;
+}
+
+.titleCard {
+  font-family: "Plus Jakarta Sans";
+  font-size: 2vw;
+  font-weight: bold;
+}
+
+.titleDesc {
+  font-family: "Plus Jakarta Sans";
+  font-size: 1.3vw;
+}
+
+.card-body {
+  padding: 2vw !important;
+}
+
+.form-control {
+  margin-bottom: 2vw;
+  height: 4vw;
+}
+
+#document {
+  height: 2.8vw;
+}
+
+.busAddForm {
+  margin-top: 2vw;
+}
+
+.d-flex {
+  margin-top: 1vw;
+}
+.dropdown-toggle {
+  margin-top: 0.5vw;
+}
+
+.btn-md {
+  margin: 2vw;
 }

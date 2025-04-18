@@ -39,7 +39,7 @@
                     <a class="nav-link" href="#">RATES</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BE OUR PARTNER</a>
+                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
