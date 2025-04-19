@@ -1,4 +1,3 @@
--- Create the database
 CREATE DATABASE mamyr;
 USE mamyr;
 
@@ -6,19 +5,16 @@ USE mamyr;
 -- USER-RELATED TABLES
 -- =========================
 
--- User types for normalization (replaces ENUM)
-CREATE TABLE user_types (
+CREATE TABLE userTypes (
     userTypeID INT PRIMARY KEY AUTO_INCREMENT,
     typeName VARCHAR(50) UNIQUE -- 'Customer', 'Partner', 'Admin'
 );
 
--- User status types (replaces ENUM)
-CREATE TABLE user_statuses (
+CREATE TABLE userStatuses (
     userStatusID INT PRIMARY KEY AUTO_INCREMENT,
     statusName VARCHAR(50) UNIQUE -- 'Pending', 'Verified', 'Non-verified'
 );
 
--- Main users table
 CREATE TABLE users (
     userID INT PRIMARY KEY AUTO_INCREMENT,
     firstName VARCHAR(50) NOT NULL,
@@ -30,26 +26,25 @@ CREATE TABLE users (
     birthDate DATE,
     password VARCHAR(255) NOT NULL,
     userProfile LONGBLOB,
-    userTypeID INT NOT NULL DEFAULT 1, -- Default to 'Customer'
+    userTypeID INT NOT NULL DEFAULT 1,
     userOTP VARCHAR(100),
     OTP_expiration_at DATETIME,
-    userStatusID INT NOT NULL DEFAULT 1, -- Default to 'Pending'
+    userStatusID INT NOT NULL DEFAULT 1,
 
-    FOREIGN KEY (userTypeID) REFERENCES user_types(userTypeID),
-    FOREIGN KEY (userStatusID) REFERENCES user_statuses(userStatusID)
+    FOREIGN KEY (userTypeID) REFERENCES userTypes(userTypeID),
+    FOREIGN KEY (userStatusID) REFERENCES userStatuses(userStatusID)
 );
 
--- Admins table with FK to users (1-to-1)
 CREATE TABLE admins (
     adminID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL UNIQUE,
-    position VARCHAR(100), -- e.g. 'Manager', 'Support Staff'
+    position VARCHAR(100),
 
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
 -- =========================
--- PARTNERSHIP TABLES
+-- PARTNERSHIPS
 -- =========================
 
 CREATE TABLE partnerships (
@@ -64,7 +59,7 @@ CREATE TABLE partnerships (
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
-CREATE TABLE partnershipBusiness (
+CREATE TABLE partnershipBusinesses (
     partnershipBusinessID INT PRIMARY KEY AUTO_INCREMENT,
     partnershipID INT NOT NULL,
     PBName VARCHAR(200) NOT NULL,
@@ -77,24 +72,29 @@ CREATE TABLE partnershipBusiness (
 );
 
 -- =========================
--- FACILITIES AND SERVICES
+-- RESORT SERVICES
 -- =========================
 
-CREATE TABLE resortFacilities (
-    resortFacilityID INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE resortServices (
+    resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
     facilityName VARCHAR(200) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     capacity INT NOT NULL,
-    description TEXT
+    description TEXT,
+    imageData LONGBLOB -- One image per resort service
 );
+
+-- =========================
+-- SERVICES (joins resort services with partner businesses)
+-- =========================
 
 CREATE TABLE services (
     serviceID INT PRIMARY KEY AUTO_INCREMENT,
-    resortFacilityID INT NOT NULL,
+    resortServiceID INT NOT NULL,
     partnershipBusinessID INT NOT NULL,
 
-    FOREIGN KEY (resortFacilityID) REFERENCES resortFacilities(resortFacilityID),
-    FOREIGN KEY (partnershipBusinessID) REFERENCES partnershipBusiness(partnershipBusinessID)
+    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
+    FOREIGN KEY (partnershipBusinessID) REFERENCES partnershipBusinesses(partnershipBusinessID)
 );
 
 -- =========================
@@ -116,8 +116,7 @@ CREATE TABLE customPackages (
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
--- Table to associate services with packages and custom packages
-CREATE TABLE packages_services (
+CREATE TABLE packagesServices (
     packageServiceID INT PRIMARY KEY AUTO_INCREMENT,
     customPackageID INT,
     packageID INT,
@@ -147,8 +146,8 @@ CREATE TABLE bookings (
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
 );
 
-CREATE TABLE confirmed_bookings (
-    confirmed_bookingID INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE confirmedBookings (
+    confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
     bookingID INT NOT NULL,
     totalCost DECIMAL(10,2) NOT NULL,
     status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
@@ -160,45 +159,58 @@ CREATE TABLE confirmed_bookings (
 -- WEBSITE CONTENT
 -- =========================
 
-CREATE TABLE website_contents (
+CREATE TABLE websiteContents (
     contentID INT PRIMARY KEY AUTO_INCREMENT,
     adminID INT NOT NULL,
-    section VARCHAR(100) NOT NULL, -- e.g. 'Home', 'About Us', 'Contact'
+    sectionName VARCHAR(100) NOT NULL,
     title VARCHAR(255),
     content TEXT NOT NULL,
-    image LONGBLOB,
     lastUpdated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (adminID) REFERENCES admins(adminID)
 );
 
+-- ✅ Website Content Images (Weak Entity)
+CREATE TABLE websiteContentImages (
+    imageID INT PRIMARY KEY AUTO_INCREMENT,
+    contentID INT NOT NULL,
+    imageData LONGBLOB NOT NULL,
+    altText VARCHAR(255),
+    imageOrder INT DEFAULT 1,
+    uploadedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (contentID) REFERENCES websiteContents(contentID)
+        ON DELETE CASCADE
+);
+
 -- =========================
--- AUDIT LOGS (for tracking admin actions)
+-- AUDIT LOGS
 -- =========================
 
-CREATE TABLE audit_logs (
+CREATE TABLE auditLogs (
     logID INT PRIMARY KEY AUTO_INCREMENT,
     adminID INT NOT NULL,
-    action VARCHAR(255) NOT NULL, -- e.g. 'Updated Website', 'Approved Booking'
-    targetTable VARCHAR(100), -- Optional: which table was affected
-    targetID INT,             -- Optional: ID of the affected record
+    action VARCHAR(255) NOT NULL,
+    targetTable VARCHAR(100),
+    targetID INT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (adminID) REFERENCES admins(adminID)
 );
 
 -- =========================
--- SEED INITIAL ENUM VALUES
+-- INITIAL ENUM-LIKE DATA
 -- =========================
 
--- Populate default user types
-INSERT INTO user_types (typeName) VALUES 
+INSERT INTO userTypes (typeName) VALUES 
 ('Customer'), 
 ('Partner'), 
 ('Admin');
 
--- Populate default user statuses
-INSERT INTO user_statuses (statusName) VALUES 
+INSERT INTO userStatuses (statusName) VALUES 
 ('Pending'), 
 ('Verified'), 
 ('Non-verified');
+
+
+
