@@ -113,11 +113,26 @@ if (isset($_POST['login'])) {
     if (mysqli_num_rows($result) > 0) {
         $data = mysqli_fetch_assoc($result);
         $storedPassword = $data['password'];
-        $status = $data['userStatus'];
+        $userType = $date['userTypeID'];
+        $status = $data['userStatusID'];
         if (password_verify($password, $storedPassword)) {
-            if ($status == 'Verified') {
-                unset($_SESSION['formData']);
-                header("Location: ../Pages/dashboard.php");
+            if ($status == 1) {
+                if ($userType = 1) { //Customer
+                    unset($_SESSION['formData']);
+                    $SESSION['userID'] = $data['userID'];
+                    $SESSION['userType'] = $userType;
+                    header("Location: ../Pages/dashboard.php");
+                } elseif ($userType = 2) { //Partner
+                    unset($_SESSION['formData']);
+                    $SESSION['userID'] = $data['userID'];
+                    $SESSION['userType'] = $userType;
+                    header("Location: ../Pages/dashboard.php");
+                } elseif ($userType = 3) { //Admin
+                    unset($_SESSION['formData']);
+                    $SESSION['userID'] = $data['userID'];
+                    $SESSION['userType'] = $userType;
+                    header("Location: ../Pages/dashboard.php");
+                }
             } else {
                 $_SESSION['error'] = 'User not verified';
                 header("Location: ../Pages/register.php");
