@@ -33,6 +33,7 @@ body {
   position: fixed;
   width: 100%;
   top: 0;
+  background-color: rgba(0, 0, 0, 0.26);
 }
 
 .nav-item {
@@ -165,7 +166,7 @@ body {
 
 .label {
   display: flex;
-  gap: 13vw;
+  gap: 4vw;
   margin-top: 3vw;
 }
 
@@ -185,7 +186,8 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .containerLabel {
-  font-size: 15px;
+  width: 100%;
+  font-size: 20px;
   font-family: "Poppins";
   text-align: left !important;
 }
@@ -507,18 +509,26 @@ footer {
   transition: 0.5s;
 }
 
-@media screen and (max-width: 650px) {
+/* Tablet size */
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
   .titleContainer {
-    height: calc(100vh - 30px);
-    padding: 12vw;
+    height: calc(100vh - 15vh);
+    padding: calc(12vh - 3vh);
   }
+
+  .navbar {
+    --bs-navbar-padding-y: 0 !important;
+    height: 10vh;
+    background-color: rgb(0, 123, 255);
+  }
+
   .mamyrTitle {
     width: 100%;
-    margin-top: 15vh;
+    margin-top: clamp(15vh, 5vh, 2vh) !important;
   }
 
   .name {
-    font-size: 9vw;
+    font-size: 7vw;
     text-align: left;
   }
 
@@ -527,7 +537,7 @@ footer {
   }
   .descriptionText {
     text-align: justify;
-    font-size: 3.5vw;
+    font-size: clamp(20px, calc(2.5vw + 4px), 35px);
   }
 
   .navbar-toggler {
@@ -543,21 +553,34 @@ footer {
       border: none;
     }
   }
+
   .navbar-collapse {
     background-color: #007bff;
     text-align: right;
   }
 
   .containerBook {
+    width: 95%;
     padding: 2vw;
-    margin-top: 10vw;
+    margin-top: 7vw;
     box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
   }
+
   .label {
-    gap: 7.5vw;
+    display: flex;
+    gap: clamp(5vw, 4vw, 3vw);
+    margin-top: 3vw;
   }
+
+  .formBoxes {
+    gap: 4vw;
+    display: flex;
+    justify-content: center;
+  }
+
   .containerLabel {
-    font-size: 12.5px;
+    width: 100%;
+    font-size: clamp(12px, calc(1.5vw + 4px), 20px);
   }
 
   .welcomeSection {
@@ -587,17 +610,29 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 60vh;
+    height: 100vh;
   }
 
   .contactText {
     justify-content: center;
     align-items: center;
-    margin: 8vw 8vw 0 0;
     width: 80%;
     .line {
       width: 30%;
     }
+    h4 {
+      font-size: clamp(18px, calc(2vw + 4px), 12px) !important;
+    }
+    h5 {
+      font-size: clamp(15px, calc(1.5vw + 4px), 12px) !important;
+    }
+  }
+
+  .locationIcon,
+  .emailIcon,
+  .phoneIcon {
+    height: clamp(4vh, calc(1.5vw + 4px), 2vh) !important;
+    width: auto;
   }
 
   .emailAddressText {
@@ -605,7 +640,7 @@ footer {
   }
 
   .googleMap {
-    height: 50vh;
+    height: 80vh;
     width: 70%;
     margin-top: 5vh;
   }
@@ -625,9 +660,18 @@ footer {
     width: auto;
   }
 
+  .img5,
+  .img6 {
+    display: none;
+  }
+
   .seeMore {
     margin: auto;
     margin-top: 2vh;
+  }
+
+  .announcements {
+    height: clamp(300px, 90vh, 800px) !important;
   }
 
   .announcementTitleContainer {
@@ -645,7 +689,7 @@ footer {
 
   .post {
     width: 70%;
-    height: 55vh;
+    height: clamp(100px, 90vh, 450px) !important;
     margin-bottom: 10vw !important;
     display: flex;
     flex-direction: column;
@@ -654,16 +698,16 @@ footer {
 
   .sorryText {
     margin-top: 2vh;
-    font-size: 3vw;
+    font-size: clamp(25px, calc(1.25vw + 4px), 35px) !important;
   }
 
   .closedText {
-    font-size: 6vw;
+    font-size: clamp(35px, calc(2.5vw + 4px), 45px) !important;
     font-weight: bold;
   }
 
   .tomorrowText {
-    font-size: 2.8vw;
+    font-size: clamp(25px, calc(1.25vw + 4px), 35px) !important;
   }
 
   .vr {
@@ -672,7 +716,7 @@ footer {
   }
 
   .closedAdditionalText {
-    font-size: 2vw;
+    font-size: clamp(20px, calc(1.5vw + 4px), 30px) !important;
   }
 
   .pb-1 {
@@ -779,6 +823,7 @@ footer {
   }
 
   .formBoxes {
+    width: 8rem !important;
     gap: 2vh;
   }
 
