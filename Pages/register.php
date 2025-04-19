@@ -17,7 +17,7 @@ require '../Function/OTPdeletion.php';
     <link rel="stylesheet" href="../Assets/CSS/index.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -38,9 +38,9 @@ require '../Function/OTPdeletion.php';
                     <i class='bx bxs-envelope'></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" class="form-control" id="login_password" name="login_password"
+                    <input type="password" class="form-control" id="password" name="login_password"
                         oninput="checkLoginPassword();" placeholder="Password" required>
-                    <!-- <i class='bx bxs-low-vision'></i> -->
+                    <i id="togglePassword" class='bx bxs-hide'></i>
                 </div>
                 <div class="forgot-link">
                     <a href="Pages/forgotPassword.php">Forgot Password?</a>
@@ -110,14 +110,14 @@ require '../Function/OTPdeletion.php';
 
                     <div class="passwordContainer">
                         <div class="input-box">
-                            <input type="password" class="form-control" id="password" name="password"
+                            <input type="password" class="form-control" id="password1" name="password"
                                 placeholder="Password" oninput="checkPassword();" required>
-                            <!-- <i class='bx bxs-low-vision'></i> -->
+                            <i id="togglePassword1" class='bx bxs-hide'></i>
                         </div>
                         <div class=" input-box">
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                            <input type="password" class="form-control" id="password2" name="confirm_password"
                                 placeholder="Confirm Password" oninput="checkPasswordMatch();" required>
-                            <!-- <i class='bx bxs-low-vision'></i> -->
+                            <i id="togglePassword2" class='bx bxs-hide'></i>
                         </div>
                     </div>
                 </div>
@@ -212,27 +212,63 @@ require '../Function/OTPdeletion.php';
     <script src="../Assets/JS/checkPassword.js"></script>
     <script src="../Assets/JS/checkLoginPassword.js"></script>
     <script>
-    const container = document.querySelector('.container');
-    const registerBtn = document.querySelector('.register-btn');
-    const loginBtn = document.querySelector('.login-btn');
+        const container = document.querySelector('.container');
+        const registerBtn = document.querySelector('.register-btn');
+        const loginBtn = document.querySelector('.login-btn');
 
-    registerBtn.addEventListener('click', () => {
-        container.classList.add('active');
-    })
+        registerBtn.addEventListener('click', () => {
+            container.classList.add('active');
+        })
 
-    loginBtn.addEventListener('click', () => {
-        container.classList.remove('active');
-    })
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove('active');
+        })
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = urlParams.get('page');
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get('page');
 
-    if (page === 'register') {
-        container.classList.add('active');
-    } else {
-        container.classList.remove('active');
-    }
+        if (page === 'register') {
+            container.classList.add('active');
+        } else {
+            container.classList.remove('active');
+        }
     </script>
+    <script>
+        // Selecting password fields and toggle icons
+        const passwordField = document.getElementById('password');
+        const passwordField1 = document.getElementById('password1');
+        const passwordField2 = document.getElementById('password2');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const togglePassword2 = document.getElementById('togglePassword2');
+
+        // Function to toggle password visibility for each field
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text'; // Show the password
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt'); // Change to open eye
+            } else {
+                passwordField.type = 'password'; // Hide the password
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide'); // Change to closed eye
+            }
+        }
+
+        // Add event listeners for the eye icons
+        togglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField, togglePassword); // Toggle password visibility for the first field
+        });
+
+        togglePassword1.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField1, togglePassword1); // Toggle password visibility for the second field
+        });
+
+        togglePassword2.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField2, togglePassword2); // Toggle password visibility for the third field
+        });
+    </script>
+
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 </body>
 
