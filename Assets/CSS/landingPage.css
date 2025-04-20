@@ -159,7 +159,7 @@ body {
   flex-direction: column;
   margin: auto;
   padding: 2vw;
-  margin-top: 33vw;
+  margin-top: 31vw;
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 
@@ -517,7 +517,6 @@ footer {
 
   .navbar {
     --bs-navbar-padding-y: 0 !important;
-    height: 10vh;
   }
 
   .mamyrTitle {
@@ -526,7 +525,7 @@ footer {
   }
 
   .name {
-    font-size: 7vw;
+    font-size: clamp(40px, calc(3.5vw + 4px), 45px) !important;
     text-align: left;
   }
 
@@ -535,7 +534,7 @@ footer {
   }
   .descriptionText {
     text-align: justify;
-    font-size: clamp(20px, calc(2.5vw + 4px), 35px);
+    font-size: clamp(23px, calc(3vw + 4px), 35px);
   }
 
   .navbar-toggler {
@@ -552,15 +551,15 @@ footer {
     }
   }
 
-  .navbar-collapse {
-    background-color: #007bff;
+  /* .navbar-collapse {
     text-align: right;
-  }
+  } */
 
   .containerBook {
     width: 95%;
     padding: 2vw;
     margin-top: 7vw;
+    margin-top: 3vw;
     box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
   }
 
