@@ -1,9 +1,11 @@
 function checkLoginPassword() {
   const password = document.getElementById("login_password").value;
   const passwordValidation = document.getElementById("passwordLValidation");
+
   const passwordLetter = /[a-zA-Z]/;
   const passwordNumber = /[0-9]/;
   const passwordSpecial = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+
   if (password === "") {
     passwordValidation.innerHTML = "Please enter your password!";
   } else if (!password.match(passwordLetter)) {

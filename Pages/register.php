@@ -22,13 +22,8 @@ require '../Function/OTPdeletion.php';
 
 <body>
     <div class="container">
+        <!-- Login Form -->
         <div class="form-box login">
-            <!-- <div class="back-icon-container">
-                <a href="../index.php" class="btn btn-primary">
-                    <img src="../Assets/Images/Icon/undo.png" alt="Go back" class="backArrow">
-
-                </a>
-            </div> -->
             <form action="../Function/register.php" method="POST">
                 <h1>Login</h1>
                 <div class="input-box">
@@ -38,7 +33,7 @@ require '../Function/OTPdeletion.php';
                     <i class='bx bxs-envelope'></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" class="form-control" id="password" name="login_password"
+                    <input type="password" class="form-control" id="login_password" name="login_password"
                         oninput="checkLoginPassword();" placeholder="Password" required>
                     <i id="togglePassword" class='bx bxs-hide'></i>
                 </div>
@@ -63,13 +58,6 @@ require '../Function/OTPdeletion.php';
             </form>
         </div>
         <div class="form-box register">
-            <!-- <div class="back-icon-container">
-                <a href="../index.php" class="btn btn-primary">
-                    <img src="../Assets/Images/Icon/undo.png" alt="Go back" class="me-2"
-                        style="height: 4vw; vertical-align: middle;">
-
-                </a>
-            </div> -->
             <form action="../Function/register.php" method="POST">
                 <h1>Sign Up</h1>
                 <div class="fullName">
@@ -110,12 +98,12 @@ require '../Function/OTPdeletion.php';
 
                     <div class="passwordContainer">
                         <div class="input-box">
-                            <input type="password" class="form-control" id="password1" name="password"
+                            <input type="password" class="form-control" id="password" name="password"
                                 placeholder="Password" oninput="checkPassword();" required>
                             <i id="togglePassword1" class='bx bxs-hide'></i>
                         </div>
                         <div class=" input-box">
-                            <input type="password" class="form-control" id="password2" name="confirm_password"
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
                                 placeholder="Confirm Password" oninput="checkPasswordMatch();" required>
                             <i id="togglePassword2" class='bx bxs-hide'></i>
                         </div>
@@ -133,21 +121,7 @@ require '../Function/OTPdeletion.php';
             <!-- error message -->
 
             <div class="errorContainer ">
-                <!-- <div class="fullNameError">
-                    <div class="nameErrorMsg">
-                        <p class="fnameErrorMsg">Invalid First Name!</p>
-                    </div>
-                    <div class="nameErrorMsg">
-                        <p class="middleInitialErrorMsg">Invalid Middle Initial!</p>
-                    </div>
-                </div> -->
                 <div class="userInfoError">
-                    <!-- <div class="errorMsg">
-                        <p class="lastNameErrorMsg">Invalid Last Name!</p>
-                    </div>
-                    <div class="errorMsg">
-                        <p class="addressErrorMessage">Invalid Address!</p>
-                    </div> -->
                     <div class="errorMsg">
                         <p class="emailErrorMsg">
                             <?php
@@ -234,38 +208,35 @@ require '../Function/OTPdeletion.php';
         }
     </script>
     <script>
-        // Selecting password fields and toggle icons
-        const passwordField = document.getElementById('password');
-        const passwordField1 = document.getElementById('password1');
-        const passwordField2 = document.getElementById('password2');
+        const passwordField = document.getElementById('login_password');
+        const passwordField1 = document.getElementById('password');
+        const passwordField2 = document.getElementById('confirm_password');
         const togglePassword = document.getElementById('togglePassword');
         const togglePassword1 = document.getElementById('togglePassword1');
         const togglePassword2 = document.getElementById('togglePassword2');
 
-        // Function to toggle password visibility for each field
         function togglePasswordVisibility(passwordField, toggleIcon) {
             if (passwordField.type === 'password') {
-                passwordField.type = 'text'; // Show the password
+                passwordField.type = 'text';
                 toggleIcon.classList.remove('bxs-hide');
-                toggleIcon.classList.add('bx-show-alt'); // Change to open eye
+                toggleIcon.classList.add('bx-show-alt');
             } else {
-                passwordField.type = 'password'; // Hide the password
+                passwordField.type = 'password';
                 toggleIcon.classList.remove('bx-show-alt');
-                toggleIcon.classList.add('bxs-hide'); // Change to closed eye
+                toggleIcon.classList.add('bxs-hide');
             }
         }
 
-        // Add event listeners for the eye icons
         togglePassword.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField, togglePassword); // Toggle password visibility for the first field
+            togglePasswordVisibility(passwordField, togglePassword);
         });
 
         togglePassword1.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField1, togglePassword1); // Toggle password visibility for the second field
+            togglePasswordVisibility(passwordField1, togglePassword1);
         });
 
         togglePassword2.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField2, togglePassword2); // Toggle password visibility for the third field
+            togglePasswordVisibility(passwordField2, togglePassword2);
         });
     </script>
 

@@ -68,10 +68,10 @@
                 <h3 class="containerLabel">No. of Children</h3>
             </div>
             <div class="formBoxes">
-                <input type="date" class="form-control" placeholder="MM/DD/YYY">
-                <input type="date" class="form-control" placeholder="MM/DD/YYY">
-                <input type="number" class="form-control" placeholder="Adults">
-                <input type="number" class="form-control" placeholder="Children">
+                <input type="date" class="form-control" id="start-date" name="start-date" placeholder="MM/DD/YYY">
+                <input type="date" class="form-control" id="end-date" name="end-date" placeholder="MM/DD/YYY">
+                <input type="number" class="form-control" id="adults" name="adults" placeholder="Adults">
+                <input type="number" class="form-control" id="children" name="children" placeholder="Children">
             </div>
             <div class="availBtn">
                 <a href="#"><button type="submit" class="btn custom-btn">CHECK FOR AVAILABILITY</button></a>
