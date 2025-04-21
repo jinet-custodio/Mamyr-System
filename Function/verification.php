@@ -16,6 +16,7 @@ require '../phpmailer/src/SMTP.php';
 
 if (isset($_POST['verify-btn'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
+    $action = mysqli_real_escape_string($conn, $_SESSION['action']);
     $enteredOTP = mysqli_real_escape_string($conn, $_POST['pin1']) .
         mysqli_real_escape_string($conn, $_POST['pin2']) .
         mysqli_real_escape_string($conn, $_POST['pin3']) .
@@ -29,19 +30,25 @@ if (isset($_POST['verify-btn'])) {
         $data = mysqli_fetch_assoc($result);
         if ($data) {
             $storedOTP = $data['userOTP'];
-            $userStatus = $data['userStatus'];
+            $userStatus = $data['userStatusID'];
             $stored_expiration = $data['OTP_expiration_at'];
             date_default_timezone_set('Asia/Manila');
             $time_now = date('Y-m-d H:i:s');
             if ($storedOTP !== "") {
                 if ($stored_expiration > $time_now) {
                     if ($storedOTP == $enteredOTP) {
-                        $changeStatus = "UPDATE users SET userStatus = 'Verified', userOTP = NULL, OTP_expiration_at = NULL WHERE email = '$email'";
+                        $changeStatus = "UPDATE users SET userStatusID = '2', userOTP = NULL, OTP_expiration_at = NULL WHERE email = '$email'";
                         $result = mysqli_query($conn, $changeStatus);
                         if ($result) {
-                            $_SESSION['sucess'] = "Verified successfully!";
-                            header("Location: ../Pages/register.php");
-                            exit;
+                            if ($action === 'register') {
+                                $_SESSION['sucess'] = "Verified successfully!";
+                                header("Location: ../Pages/register.php");
+                                exit;
+                            } elseif ($action === 'forgot-password') {
+                                $_SESSION['sucess'] = "Email Verification Success!";
+                                header("Location: ../Pages/forgotPassword.php");
+                                exit;
+                            }
                         }
                     } else {
                         $_SESSION['error'] = "Invalid OTP.";
@@ -81,7 +88,7 @@ if (isset($_POST['resend_code'])) {
         if ($data) {
             $stored_expiration = $data['OTP_expiration_at'];
             $firstName = $data['firstName'];
-            $status = $data['userStatus'];
+            $status = $data['userStatusID'];
             $storedOTP = $data['userOTP'];
             date_default_timezone_set('Asia/Manila');
             $time_now = date('Y-m-d H:i:s');

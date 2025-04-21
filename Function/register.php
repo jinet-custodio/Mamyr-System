@@ -48,6 +48,7 @@ if (isset($_POST['signUp'])) {
                 $mail = new PHPmailer(true);
                 try {
                     $_SESSION['email'] = $email;
+                    $_SESSION['action'] = 'register';
                     $mail->isSMTP();
                     $mail->Host       =  $env['SMTP_HOST'];
                     $mail->SMTPAuth   = true;
@@ -116,7 +117,7 @@ if (isset($_POST['login'])) {
         $userType = $date['userTypeID'];
         $status = $data['userStatusID'];
         if (password_verify($password, $storedPassword)) {
-            if ($status == 1) {
+            if ($status == 2) {
                 if ($userType = 1) { //Customer
                     unset($_SESSION['formData']);
                     $SESSION['userID'] = $data['userID'];

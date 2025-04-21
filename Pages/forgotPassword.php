@@ -3,7 +3,6 @@ session_start();
 require '../Config/dbcon.php';
 if (isset($_SESSION['formData']['email'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['formData']['email']);
-    // echo "Logged-in email: " . htmlspecialchars($email);
 } else {
     echo 'No email in session';
 }
@@ -27,20 +26,21 @@ if (isset($_SESSION['formData']['email'])) {
     <div class="container">
 
         <div class="form-box forgotPassword">
-            <form action="../Function/changePassword.php" method="POST">
+            <form action="../Function/forgotPassword.php" method="POST">
                 <h1>Forgot Password</h1>
                 <div class="input-box">
-                    <input type="hidden" class="form-control" id="email" name="email" value="<?= $email ?>" required>
+                    <input type="email" class="form-control" id="email" name="email"
+                        value="<?= $email ?>" required>
                 </div>
                 <div class="input-box">
                     <input type="password" class="form-control" id="password" name="newPassword"
                         placeholder="New Password" oninput="checkPassword()" required>
-                    <i class='bx bxs-low-vision'></i>
+                    <i id="togglePassword1" class='bx bxs-hide'></i>
                 </div>
                 <div class="input-box">
                     <input type="password" class="form-control" id="confirm_password" name="confirmPassword"
                         placeholder="Confirm Password" oninput="checkPasswordMatch()" required>
-                    <i class='bx bxs-low-vision'></i>
+                    <i id="togglePassword2" class='bx bxs-hide'></i>
                 </div>
 
                 <button type="submit" class="btn" id="changePassword" name="changePassword">Change Password</button>
@@ -62,6 +62,34 @@ if (isset($_SESSION['formData']['email'])) {
     </div>
     <script src="../Assets/JS/checkPasswordMatch.js"></script>
     <script src="../Assets/JS/checkPassword.js"></script>
+
+    <script>
+        const passwordField1 = document.getElementById('password');
+        const passwordField2 = document.getElementById('confirm_password');
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const togglePassword2 = document.getElementById('togglePassword2');
+
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide');
+            }
+        }
+
+        togglePassword1.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField1, togglePassword1);
+        });
+
+        togglePassword2.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField2, togglePassword2);
+        });
+    </script>
+
 </body>
 
 </html>

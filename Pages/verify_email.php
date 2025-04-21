@@ -5,7 +5,6 @@ session_start();
 
 if (isset($_SESSION['email'])) {
   $email = mysqli_real_escape_string($conn, $_SESSION['email']);
-  // echo $email;
 } else {
   echo 'No email in session';
 }
@@ -38,14 +37,6 @@ if (isset($_SESSION['email'])) {
 </head>
 
 <body>
-  <!-- Button trigger modal -->
-  <!-- <button
-    type="button"
-    class="btn btn-success"
-    data-bs-toggle="modal"
-    data-bs-target="#emailVerificationBox">
-    Open Modal Box
-  </button> -->
   <div class="modal-form">
     <form action="../Function/verification.php" method="POST">
       <!-- Modal -->
