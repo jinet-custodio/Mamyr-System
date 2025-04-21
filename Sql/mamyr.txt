@@ -79,10 +79,10 @@ CREATE TABLE resortServices (
     resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
     facilityName VARCHAR(200) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
-    capacity DEFAULT 0 ,
-    duration VARCHAR  DEFAULT 0
+    capacity INT DEFAULT 0,
+    duration VARCHAR(50) DEFAULT '0',
     description TEXT NULL,
-    imageData LONGBLOB -- One image per resort service
+    imageData LONGBLOB
 );
 
 -- =========================
