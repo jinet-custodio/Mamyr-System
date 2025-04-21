@@ -4,7 +4,6 @@ USE mamyr;
 -- =========================
 -- USER-RELATED TABLES
 -- =========================
-
 CREATE TABLE userTypes (
     userTypeID INT PRIMARY KEY AUTO_INCREMENT,
     typeName VARCHAR(50) UNIQUE -- 'Customer', 'Partner', 'Admin'
@@ -212,6 +211,3 @@ INSERT INTO userStatuses (statusName) VALUES
 ('Pending'), 
 ('Verified'), 
 ('Non-verified');
-
-
-

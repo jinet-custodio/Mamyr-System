@@ -1,5 +1,5 @@
 function checkPasswordMatch() {
-  const password = document.getElementById("password").value;
+  const password = document.getElementById("password1").value;
   const confirmPassword = document.getElementById("confirm_password").value;
   const passwordMatchMessage = document.getElementById("passwordMatch");
   const signUpButton = document.getElementById("signUp");
