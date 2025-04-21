@@ -18,7 +18,7 @@
 }
 
 body {
-  background: url(../images/indexPhotos/Background\ 1.jpg) lightgray 50% / cover
+  background: url(../images/indexPhotos/Background2.png) lightgray 50% / cover
     no-repeat;
   display: flex;
   justify-content: center;
@@ -107,9 +107,9 @@ form {
 .input-box input {
   width: 100%;
   padding: 13px 50px 13px 20px;
-  background: #eee;
+  background: #ffffff;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #eee;
   outline: none;
   font-size: 16px;
   color: #333;
@@ -189,6 +189,16 @@ input[type="password"]::-webkit-search-cancel-button {
   transform: translateX(-50%);
   text-align: center;
   color: red;
+  font-size: 15px;
+}
+
+.successMsg {
+  position: absolute;
+  left: 50%;
+  bottom: 20%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: rgb(40, 166, 69);
   font-size: 15px;
 }
 

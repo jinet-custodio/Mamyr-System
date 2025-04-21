@@ -38,7 +38,7 @@ require '../Function/OTPdeletion.php';
                     <i id="togglePassword" class='bx bxs-hide'></i>
                 </div>
                 <div class="forgot-link">
-                    <a href="Pages/forgotPassword.php">Forgot Password?</a>
+                    <a href="../Pages/enterEmail.php">Forgot Password?</a>
                 </div>
                 <button type="submit" class="btn" id="login" name="login">Login</button>
 
@@ -51,6 +51,14 @@ require '../Function/OTPdeletion.php';
                         if (isset($_SESSION['error'])) {
                             echo htmlspecialchars(strip_tags($_SESSION['error']));
                             unset($_SESSION['error']);
+                        }
+                        ?>
+                    </p>
+                    <p class="successMsg">
+                        <?php
+                        if (isset($_SESSION['success'])) {
+                            echo htmlspecialchars(strip_tags($_SESSION['success']));
+                            unset($_SESSION['success']);
                         }
                         ?>
                     </p>
