@@ -63,7 +63,7 @@ CREATE TABLE partnerships (
 );
 
 CREATE TABLE partnershipServices (
-    partnershipBusinessID INT PRIMARY KEY AUTO_INCREMENT,
+    partnershipServiceID INT PRIMARY KEY AUTO_INCREMENT,
     partnershipID INT NOT NULL,
     PBName VARCHAR(200) NOT NULL,
     PBPrice DECIMAL(10,2) NOT NULL,
@@ -96,10 +96,10 @@ CREATE TABLE resortServices (
 CREATE TABLE services (
     serviceID INT PRIMARY KEY AUTO_INCREMENT,
     resortServiceID INT NOT NULL,
-    partnershipBusinessID INT NOT NULL,
+    partnershipServiceID INT NOT NULL,
     availabilityID INT DEFAULT 1, 
     FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
-    FOREIGN KEY (partnershipBusinessID) REFERENCES partnershipBusinesses(partnershipBusinessID),
+    FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
     FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID)
 );
 
