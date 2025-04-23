@@ -14,6 +14,11 @@ CREATE TABLE userStatuses (
     statusName VARCHAR(50) UNIQUE -- 'Pending', 'Verified', 'Non-verified'
 );
 
+CREATE TABLE serviceAvailability (
+    availabilityID INT PRIMARY KEY AUTO_INCREMENT,
+    availabilityName VARCHAR(50) UNIQUE -- 'Available', 'Occupied', 'Maintenance'
+);
+
 CREATE TABLE users (
     userID INT PRIMARY KEY AUTO_INCREMENT,
     firstName VARCHAR(50) NOT NULL,
@@ -92,9 +97,10 @@ CREATE TABLE services (
     serviceID INT PRIMARY KEY AUTO_INCREMENT,
     resortServiceID INT NOT NULL,
     partnershipBusinessID INT NOT NULL,
-
+    availabilityID INT DEFAULT 1, 
     FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
-    FOREIGN KEY (partnershipBusinessID) REFERENCES partnershipBusinesses(partnershipBusinessID)
+    FOREIGN KEY (partnershipBusinessID) REFERENCES partnershipBusinesses(partnershipBusinessID),
+    FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID)
 );
 
 -- =========================
@@ -135,14 +141,18 @@ CREATE TABLE bookings (
     bookingID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
     packageID INT,
+    serviceID INT,
     customPackageID INT,
     additionalRequest VARCHAR(255),
-    bookingDate DATE NOT NULL,
+    startDate DATE NOT NULL,
+    endDate DATE NOT NULL,
     totalCost DECIMAL(10,2) NOT NULL,
     status ENUM('Pending', 'Approved', 'Cancelled') NOT NULL DEFAULT 'Pending',
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (userID) REFERENCES users(userID),
     FOREIGN KEY (packageID) REFERENCES packages(packageID),
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID),
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
 );
 
@@ -211,3 +221,8 @@ INSERT INTO userStatuses (statusName) VALUES
 ('Pending'), 
 ('Verified'), 
 ('Non-verified');
+
+INSERT INTO serviceAvailability (availabilityName) Values 
+('Available'),
+('Occupied'),
+('Maintenance');
