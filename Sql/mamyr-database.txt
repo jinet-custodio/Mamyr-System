@@ -86,7 +86,8 @@ CREATE TABLE resortServices (
     capacity INT DEFAULT 0,
     duration VARCHAR(50) DEFAULT '0',
     description TEXT NULL,
-    imageData LONGBLOB
+    imageData LONGBLOB,
+    category ENUM('Room','Cottage','Entertainment') NOT NULL
 );
 
 -- =========================
