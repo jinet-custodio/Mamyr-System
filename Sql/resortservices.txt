@@ -1,8 +1,8 @@
-INSERT INTO `resortservices`( `facilityName`, `price`, `capacity`, `description`) VALUES ('Cottages','500','5',NULL);
-INSERT INTO `resortservices`( `facilityName`, `price`, `capacity`, `description`) VALUES ('Cottages','800','10',NULL);
-INSERT INTO `resortservices`( `facilityName`, `price`, `capacity`, `description`) VALUES ('Cottages','900','12',NULL);
-INSERT INTO `resortservices`( `facilityName`, `price`, `capacity`, `description`) VALUES ('Cottages','1000','15' ,NULL);
-INSERT INTO `resortservices`( `facilityName`, `price`, `capacity`, `description`) VALUES ('Cottages','2000','25',NULL);
-INSERT INTO `resortservices`( `facilityName`, `price`, `description`) VALUES ('Videoke','800',NULL);
-INSERT INTO `resortservices`( `facilityName`, `price`, `duration`, `description`) VALUES ('Billiards','200','1 hour' ,NULL);
-INSERT INTO `resortservices`( `facilityName`, `price`, `duration`, `description`) VALUES ('Massage Chair','100','40 minutes' ,NULL)
+INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Cottages','500','5', 0, 'Cottage' ,NULL);
+INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Cottages','800','10', 0,'Cottage' ,NULL);
+INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Cottages','900','12', 0,'Cottage' ,NULL);
+INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Cottages','1000','15',0, 'Cottage' ,NULL);
+INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Cottages','2000','25',0, 'Cottage' ,NULL);
+INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Videoke','800',0, 'Entertainment' ,NULL);
+INSERT INTO resortServices( facilityName, price, capacity, duration,category, description) VALUES ('Billiards','200',0,'1 hour','Entertainment' ,NULL);
+INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Massage Chair','100',0,'40 minutes','Entertainment' ,NULL)
