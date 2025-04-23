@@ -3,6 +3,6 @@ INSERT INTO resortServices( facilityName, price, capacity,duration,category, des
 INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Cottages','900','12', 0,'Cottage' ,NULL);
 INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Cottages','1000','15',0, 'Cottage' ,NULL);
 INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Cottages','2000','25',0, 'Cottage' ,NULL);
-INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Videoke','800',0, 'Entertainment' ,NULL);
+INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Videoke','800',0,0, 'Entertainment' ,NULL);
 INSERT INTO resortServices( facilityName, price, capacity, duration,category, description) VALUES ('Billiards','200',0,'1 hour','Entertainment' ,NULL);
 INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Massage Chair','100',0,'40 minutes','Entertainment' ,NULL)
