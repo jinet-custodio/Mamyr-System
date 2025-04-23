@@ -29,8 +29,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="../index.php"> Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="amenities.php">AMENITIES</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link  dropdown-toggle " href=" ../Pages/amenities.php" id="navbarDropdown"
+                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        AMENITIES
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item active" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item" href="#">HOTEL ROOMS AND RATES</a></li>
+                        <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">BLOG</a>
@@ -50,7 +58,7 @@
 
     <div class="amenities">
 
-        <h1 class="title">Our Amenities</h1>
+        <h1 class="title">OUR AMENITIES</h1>
 
         <div class="embed-responsive embed-responsive-16by9">
             <video id="mamyrVideo" autoplay muted loop controls class="embed-responsive-item">
@@ -73,7 +81,7 @@
                 <div class="carousel">
                     <img src="../Assets/Images/amenities/poolPics/poolPic1.png" alt="Pool Picture 1" class="poolPic1">
                     <img src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Pool Picture 2" class="poolPic2">
-                    <img src="../Assets/Images/amenities/poolPics/poolPic3.jpeg" alt="Pool Picture 3" class="poolPic3">
+                    <img src="../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Pool Picture 3" class="poolPic3">
                     <img src="../Assets/Images/amenities/poolPics/poolPic4.jpeg" alt="Pool Picture 4" class="poolPic4">
                     <img src="../Assets/Images/amenities/poolPics/poolPic5.jpg" alt="Pool Picture 5" class="poolPic5">
                 </div>
@@ -129,14 +137,17 @@
 
         </div>
 
-        <div class="pool" style="background-color: #7dcbf2; height: 125vh;">
+        <div class="pool" style="background-color: #7dcbf2; height: 155vh;">
             <div class="poolTitleContainer" style="padding-top: 2vw ;">
                 <hr class="poolLine">
                 <h4 class="poolTitle">Pavilion Hall</h4>
                 <p class="poolDescription">Our Pavilion Hall offers the perfect space for events, gatherings, and
-                    special occasions. With its spacious, elegant design and breathtaking views, it’s ideal for
-                    everything from weddings to corporate events. Let us help you create unforgettable memories in a
-                    setting of pure sophistication.</p>
+                    special occasions. With its spacious and elegant design, it’s ideal for everything from weddings to
+                    corporate events, comfortably accommodating up to 350 guests. Fully air-conditioned for your
+                    comfort, the hall can be rented for a maximum of 5 hours. Included with your rental is exclusive
+                    access to one private air-conditioned room and a dedicated powder room with separate comfort rooms
+                    for both male and female guests. Let us help you create unforgettable memories in a setting of pure
+                    sophistication and convenience.</p>
             </div>
 
             <div class="carousel-container">

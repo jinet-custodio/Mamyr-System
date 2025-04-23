@@ -1,0 +1,455 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../Fonts/Prata/Prata-Regular.ttf);
+}
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+  /* list-style: none; */
+}
+
+body {
+  /* background-image: url(../Images/BookNowPhotos/bookNowBg.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; */
+  background-color: #f2d8b7 !important;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  /* background-color: rgb(242, 242, 242); */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 15vh;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.562);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.navbar-nav {
+  display: flex !important;
+  list-style: none;
+  margin-top: 10px !important;
+}
+
+.navbar-nav .dropdown-toggle {
+  display: inline-block;
+  padding: 10px 15px !important;
+  line-height: 1.5;
+  vertical-align: middle;
+  position: relative;
+  top: 0.01vw; /* para ma-align yung dropdown sa ibang nav-item */
+}
+
+ul {
+  font-family: "Plus Jakarta Sans";
+  font-weight: lighter;
+  font-size: 1.3vw;
+  list-style: none;
+  display: table;
+  text-transform: uppercase;
+}
+
+.nav-link {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px !important;
+  position: relative;
+  color: rgb(0, 0, 0) !important;
+  letter-spacing: 0.1em;
+}
+
+.nav-link:not(.dropdown-toggle):after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  border-bottom: 4px solid #000000 !important;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link.active:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-link:not(.dropdown-toggle):hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  background-color: #93d4f5;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: white;
+}
+
+.dropdown-item {
+  font-size: 1.3vw;
+  font-weight: bold;
+}
+
+.logoNav {
+  /* border: 1px solid black; */
+  width: 15vw;
+  position: absolute;
+  margin: 2vw;
+}
+
+footer {
+  /* border: 1px solid black; */
+  margin-top: auto !important;
+
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.445) -50%,
+    rgb(62, 132, 158) 95%
+  );
+}
+
+.pb-1 {
+  gap: 2vw;
+  padding: 1vw 0 0 2vw;
+}
+
+.logo {
+  width: 10vw;
+  height: auto;
+}
+.mb-0 {
+  font-family: "Prata";
+  font-size: 1.5vw;
+  font-weight: bold;
+  color: #ffff;
+}
+
+.footerLine {
+  width: 80%;
+  margin: 0 auto;
+  color: #fff;
+  opacity: 1;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5vw;
+}
+.locationFooter {
+  /* border: 1px solid black; */
+  width: 30%;
+}
+
+.reservationTitle,
+.locationTitle {
+  font-family: "Plus Jakarta Sans";
+  font-weight: bold;
+  font-size: 1.5vw;
+  color: #fff;
+}
+
+.numberFooter,
+.emailAddressTextFooter,
+.addressTextFooter {
+  font-family: "Poppins ExtraLight";
+  color: #fff;
+  font-size: 1vw;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  margin: 0.3vw;
+}
+
+.socialIcons a {
+  text-decoration: none;
+  padding: 0.8vw;
+  background-color: rgb(255, 255, 255);
+  margin: 5px;
+  border-radius: 50%;
+}
+
+.socialIcons a i {
+  font-size: 2vw;
+  color: #3e849e;
+  opacity: 0.9;
+}
+
+.socialIcons a:hover {
+  background-color: white;
+  transition: 0.5s;
+}
+
+.socialIcons a:hover i {
+  color: #c1a534;
+  transition: 0.5s;
+}
+
+/* category section */
+
+.titleContainer {
+  /* border: 1px solid black; */
+  width: 70%;
+  margin: auto;
+  text-align: center;
+  margin-top: 10vw !important;
+}
+
+.title {
+  margin-top: 5vw;
+  font-size: 3vw;
+  font-family: "Poppins Black";
+  color: #e47807;
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 5vw;
+  margin-bottom: 20vw;
+}
+
+.card,
+.card-body {
+  margin: 3vw;
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  text-align: center;
+  height: 30vw !important;
+}
+
+.card {
+  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card img {
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  padding: 1vw;
+  height: 40vw !important;
+  object-fit: cover;
+}
+
+.card-title {
+  font-family: "Poppins Black";
+  font-style: italic;
+  font-weight: bold;
+  font-size: 2.5vw;
+  color: #00b3d1 !important;
+}
+
+.categoryLink {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.categoryLink .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.categoryLink:hover .card {
+  transform: translateY(-12px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* category section */
+
+/* resort booking */
+.hotelTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+  font-family: "Prata";
+  color: #000000;
+  font-weight: bold;
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card {
+  padding: 2vw;
+  height: 120vh !important;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
+
+.scheduleForm,
+.peopleForm,
+.cottagePurposeForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3vw;
+}
+
+.cottageVideokeForm {
+  display: flex;
+  gap: 6vw;
+}
+
+.form-control {
+  width: 20vw !important;
+}
+
+.schedLabel,
+.cottageLabel,
+.videokeRentalLabel,
+.noOfPeopleLabel,
+.purposeLabel {
+  text-align: center;
+  margin: 2vw 0 2vw 0;
+  font-weight: bold;
+}
+
+.ratePic {
+  height: 30vw;
+  width: auto;
+  margin-top: 4vw;
+}
+/* resort booking */
+
+/* hotel booking */
+.hotelTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+  font-family: "Prata";
+  color: #000000;
+  font-weight: bold;
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hotelIconsContainer {
+  margin-bottom: 4vw;
+}
+#hotelBookingCard {
+  padding: 2vw;
+  height: 120vh !important;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
+
+.scheduleForm,
+.peopleForm,
+.cottagePurposeForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3vw;
+}
+
+.cottageVideokeForm {
+  display: flex;
+  gap: 6vw;
+}
+
+.form-control {
+  width: 20vw !important;
+}
+
+.schedLabel,
+.cottageLabel,
+.videokeRentalLabel,
+.noOfPeopleLabel,
+.purposeLabel {
+  text-align: center;
+  margin: 2vw 0 2vw 0;
+  font-weight: bold;
+}
+
+.hotelIconContainer {
+  /* border: 1px solid black; */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2vw;
+  padding: 2vw;
+}
+
+.availabilityIcons {
+  /* border: 1px solid black; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5vw;
+}
+
+.hotelIcon {
+  /* border: 1px solid black; */
+  height: 1w;
+  width: auto;
+  margin-top: 4vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkInOutLabel {
+  display: flex;
+  gap: 11vw;
+}
+.checkInOutForm {
+  display: flex;
+  gap: 2vw;
+}
+
+.containerLabel {
+  font-size: 1.5vw;
+}
+
+/* hotel booking */
+
+/* event booking */
+/* event booking */
