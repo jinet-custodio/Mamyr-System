@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -26,10 +26,20 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item">
-                    <a class="nav-link" href="../index.php"> Home</a>
+                    <a class="nav-link" href="../index.php"> HOME</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="amenities.php">AMENITIES</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="../Pages/amenities.php" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        AMENITIES
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item " href="../Pages/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item" href="#">HOTEL ROOMS AND RATES</a></li>
+                        <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
+
+
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">BLOG</a>
@@ -38,7 +48,7 @@
                     <a class="nav-link" href="#">RATES</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">BE OUR PARTNER</a>
+                    <a class="nav-link active" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
@@ -49,7 +59,6 @@
 
 
     <div class="titleContainer">
-        <!-- <hr class="line"> -->
         <h4 class="title">BE OUR PARTNER</h4>
         <p class="description">At Mamyr Resort and Events Place, we’re looking for talented event management
             professionals to
@@ -103,36 +112,40 @@
 
                     </div>
 
-                    <h5 class="busTypeName">Type of Business</h5>
-                    <div class="d-flex">
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Business
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li id="catering-option" class="dropdown-item">Catering</li>
-                                <li id="sound-lighting-option" class="dropdown-item">Sound and Lighting</li>
-                                <li id="event-hosting-option" class="dropdown-item">Event Hosting</li>
-                                <li id="photography-option" class="dropdown-item">Photography/Videography</li>
-                                <li id="performer-option" class="dropdown-item">Perfomer</li>
-                                <li id="other-option" class="dropdown-item">Other</li>
-                            </ul>
-                        </div>
 
-                        <input type="text" id="other-input" class="form-control "
-                            style="display: none; margin-left: 1vw;" placeholder="Please specify..." />
+                    <div class="businessType">
+                        <h5 class="busTypeName">Type of Business</h5>
+
+                        <button class="btn btn-primary dropdown-toggle btn-md" type="button" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Business
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li id="catering-option" class="dropdown-item">Catering</li>
+                            <li id="sound-lighting-option" class="dropdown-item">Sound and Lighting</li>
+                            <li id="event-hosting-option" class="dropdown-item">Event Hosting</li>
+                            <li id="photography-option" class="dropdown-item">Photography/Videography</li>
+                            <li id="photobooth-option" class="dropdown-item">Photo Booth</li>
+                            <li id="performer-option" class="dropdown-item">Perfomer</li>
+                            <li id="other-option" class="dropdown-item">Other</li>
+                        </ul>
+
                     </div>
 
+                    <input type="text" id="other-input" class="form-control " style="display: none; margin-left: 1vw;"
+                        placeholder="Please specify..." />
 
 
+                    <h5 class="busAddress">Business Address</h5>
                     <div class="busAddForm">
-                        <h5 class="busAddress">Business Address</h5>
-                        <input type="text" class="form-control" id="streetAddress" name="streetAddress"
-                            placeholder="Street Address" required>
 
-                        <input type="text" class="form-control" id="address2" name="address2"
-                            placeholder="Street Address Line 2 (optional)">
+                        <div class="streetAddRow">
+                            <input type="text" class="form-control" id="streetAddress" name="streetAddress"
+                                placeholder="Street Address" required>
+
+                            <input type="text" class="form-control" id="address2" name="address2"
+                                placeholder="Street Address Line 2 (optional)">
+                        </div>
 
                         <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" required>
 
@@ -142,16 +155,61 @@
                             required>
                     </div>
 
-                    <h5 class="docuTitle">Documents for Business Verification</h5>
-                    <input class="form-control" type="file" id="document"
-                        accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, ">
+                    <h5 class="docuTitle">Documents for Verification</h5>
+                    <p>To verify your business or talent, please upload the following documents or media:</p>
+
+                    <p><strong>For Business Partners:</strong></p>
+                    <ol type="A" class="BPrequirements">
+                        <li>Business Permit</li>
+                        <li>License to Operate</li>
+                        <li>Valid ID of the Representative</li>
+                        <li>Business Operations Photos (3-5)</li>
+                        <li>Business Operations Video (Optional)</li>
+                    </ol>
+
+                    <p><strong>For Talents & Performers:</strong></p>
+                    <ol type="A" class="TPrequirements">
+                        <li>Social Media Links (Instagram, Facebook, YouTube, etc.)</li>
+                        <li>Performance Photos (3-5)</li>
+                        <li>Performance Videos (at least 1-2)</li>
+                        <li>Introduction Video (Optional)</li>
+                    </ol>
+
+                    <p><strong>Step 1: Create a Google Drive Folder</strong></p>
+                    <p>Sign in to Google Drive and create a new folder with your business or performance name. Then,
+                        upload the required documents or media to this folder.</p>
+
+                    <p><strong>Step 2: Share the Folder</strong></p>
+                    <p>Once your folder is ready, click on the folder, then right-click and select
+                        <strong>"Share"</strong>. Make sure to select <strong>"Anyone with the link"</strong> and set
+                        permissions to <strong>"Viewer" or "Editor"</strong> depending on your preference. Copy the link
+                        to your folder.
+                    </p>
+
+                    <p><strong>Step 3: Paste the Google Drive Link</strong></p>
+                    <p>Paste the link to your shared Google Drive folder in the <strong>"Google Drive Folder
+                            Link"</strong> input box below.</p>
+
+                    <h5 class="importantNotesTitle">Important Notes</h5>
+                    <ol type="1" class="BPrequirements">
+                        <li>Please ensure that all documents and media files are clear and legible.</li>
+                        <li>If you encounter any issues with uploading documents or creating the Google Drive folder,
+                            feel free to contact us at <a
+                                href="mailto:mamyresort128@gmail.com">mamyresort128@gmail.com</a>.
+                        </li>
+                        <li>The information you provide will be kept confidential and used solely for partnership
+                            verification purposes.</li>
+                        <li>Thank you for your interest in partnering with us. We look forward to the possibility of
+                            working together!</li>
+                    </ol>
+
+
+                    <input class="form-control" type="text"
+                        placeholder="Example: https://drive.google.com/drive/folders/your-folder-id-here">
                 </div>
 
                 <button type="submit" class="btn btn-success btn-md">Submit Request</button>
             </div>
-
-
-
 
         </div>
 
@@ -211,6 +269,7 @@
     const soundLightingOption = document.getElementById('sound-lighting-option');
     const eventHostingOption = document.getElementById('event-hosting-option');
     const photographyOption = document.getElementById('photography-option');
+    const photoboothOption = document.getElementById('photobooth-option');
     const performerOption = document.getElementById('performer-option');
 
 
@@ -251,6 +310,12 @@
         e.preventDefault();
         otherInput.style.display = 'none';
         updateButtonText('Photography/Videography');
+    });
+
+    photoboothOption.addEventListener('click', function(e) {
+        e.preventDefault();
+        otherInput.style.display = 'none';
+        updateButtonText('Photo Booth');
     });
 
     performerOption.addEventListener('click', function(e) {

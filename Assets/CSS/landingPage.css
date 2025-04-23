@@ -52,7 +52,7 @@ body {
   letter-spacing: 0.1em;
 }
 
-.nav-link:after {
+.nav-link:not(.dropdown-toggle):after {
   background: none repeat scroll 0 0 transparent;
   bottom: 0;
   content: "";
@@ -65,9 +65,23 @@ body {
   width: 0;
 }
 
-.nav-link:hover:after {
+.nav-link:not(.dropdown-toggle):hover:after {
   width: 100%;
   left: 0;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  background-color: #93d4f5;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: white;
+}
+
+.dropdown-item {
+  font-size: 1.3vw;
+  font-weight: bold;
 }
 
 /* .nav-link {

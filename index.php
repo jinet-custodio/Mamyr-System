@@ -25,8 +25,18 @@
 
         <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages/amenities.php">AMENITIES</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="Pages/amenities.php" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        AMENITIES
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="Pages/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item" href="#">HOTEL ROOMS AND RATES</a></li>
+                        <li><a class="dropdown-item" href="Pages/events.php">EVENTS</a></li>
+
+
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">BLOG</a>
@@ -109,7 +119,7 @@
 
                 <div class="email">
                     <img src="Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
-                    <h5 class="emailAddressText">mamyr@gmail.com</h5>
+                    <h5 class="emailAddressText">mamyresort128@gmail.com</h5>
                 </div>
 
 
@@ -200,13 +210,13 @@
 
 
     <script>
-        function myMap() {
-            var mapProp = {
-                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-                zoom: 5,
-            };
-            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-        }
+    function myMap() {
+        var mapProp = {
+            center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+            zoom: 5,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    }
     </script>
     <script src="Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
