@@ -59,7 +59,6 @@ CREATE TABLE partnerships (
     status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
     startDate DATE NOT NULL,
     endDate DATE,
-
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
@@ -85,9 +84,9 @@ CREATE TABLE resortServices (
     price DECIMAL(10,2) NOT NULL,
     capacity INT DEFAULT 0,
     duration VARCHAR(50) DEFAULT '0',
+    category ENUM('Room','Cottage','Entertainment') NOT NULL,
     description TEXT NULL,
-    imageData LONGBLOB,
-    category ENUM('Room','Cottage','Entertainment') NOT NULL
+    imageData LONGBLOB
 );
 
 -- =========================
