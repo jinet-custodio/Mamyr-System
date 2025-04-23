@@ -75,17 +75,17 @@
 
                     <h5 class="repName">Representative Name</h5>
                     <div class="name">
-                        <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="First Name"
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
                             required>
                         <input type="text" class="form-control" id="middleInitial" name="middleInitial"
                             placeholder="Middle Initial" required>
-                        <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="Last Name"
+                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
                             required>
                     </div>
 
                     <h5 class="contactInfo">Contact Info</h5>
                     <div class="contact">
-                        <input type="text" class="form-control" id="emailAddress" name="emailAddress"
+                        <input type="email" class="form-control" id="emailAddress" name="emailAddress"
                             placeholder="Email Address">
                         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
                             placeholder="Phone Number">
@@ -202,62 +202,62 @@
 
 
     <script>
-    const otherOption = document.getElementById('other-option');
-    const otherInput = document.getElementById('other-input');
-    const dropdownButton = document.getElementById('dropdownMenuButton');
+        const otherOption = document.getElementById('other-option');
+        const otherInput = document.getElementById('other-input');
+        const dropdownButton = document.getElementById('dropdownMenuButton');
 
 
-    const cateringOption = document.getElementById('catering-option');
-    const soundLightingOption = document.getElementById('sound-lighting-option');
-    const eventHostingOption = document.getElementById('event-hosting-option');
-    const photographyOption = document.getElementById('photography-option');
-    const performerOption = document.getElementById('performer-option');
+        const cateringOption = document.getElementById('catering-option');
+        const soundLightingOption = document.getElementById('sound-lighting-option');
+        const eventHostingOption = document.getElementById('event-hosting-option');
+        const photographyOption = document.getElementById('photography-option');
+        const performerOption = document.getElementById('performer-option');
 
 
-    otherInput.style.display = 'none';
-
-
-    function updateButtonText(selectedText) {
-        dropdownButton.textContent = selectedText;
-    }
-
-
-    otherOption.addEventListener('click', function(e) {
-        e.preventDefault();
-        otherInput.style.display = 'inline-block';
-        updateButtonText('Other');
-    });
-
-
-    cateringOption.addEventListener('click', function(e) {
-        e.preventDefault();
         otherInput.style.display = 'none';
-        updateButtonText('Catering');
-    });
 
-    soundLightingOption.addEventListener('click', function(e) {
-        e.preventDefault();
-        otherInput.style.display = 'none';
-        updateButtonText('Sound and Lighting');
-    });
 
-    eventHostingOption.addEventListener('click', function(e) {
-        e.preventDefault();
-        otherInput.style.display = 'none';
-        updateButtonText('Event Hosting');
-    });
+        function updateButtonText(selectedText) {
+            dropdownButton.textContent = selectedText;
+        }
 
-    photographyOption.addEventListener('click', function(e) {
-        e.preventDefault();
-        otherInput.style.display = 'none';
-        updateButtonText('Photography/Videography');
-    });
 
-    performerOption.addEventListener('click', function(e) {
-        e.preventDefault();
-        otherInput.style.display = 'none';
-        updateButtonText('Perfomer');
-    });
+        otherOption.addEventListener('click', function(e) {
+            e.preventDefault();
+            otherInput.style.display = 'inline-block';
+            updateButtonText('Other');
+        });
+
+
+        cateringOption.addEventListener('click', function(e) {
+            e.preventDefault();
+            otherInput.style.display = 'none';
+            updateButtonText('Catering');
+        });
+
+        soundLightingOption.addEventListener('click', function(e) {
+            e.preventDefault();
+            otherInput.style.display = 'none';
+            updateButtonText('Sound and Lighting');
+        });
+
+        eventHostingOption.addEventListener('click', function(e) {
+            e.preventDefault();
+            otherInput.style.display = 'none';
+            updateButtonText('Event Hosting');
+        });
+
+        photographyOption.addEventListener('click', function(e) {
+            e.preventDefault();
+            otherInput.style.display = 'none';
+            updateButtonText('Photography/Videography');
+        });
+
+        performerOption.addEventListener('click', function(e) {
+            e.preventDefault();
+            otherInput.style.display = 'none';
+            updateButtonText('Perfomer');
+        });
     </script>
 
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
