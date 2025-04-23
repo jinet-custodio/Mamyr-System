@@ -21,7 +21,7 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
   text-decoration: none;
-  list-style: none;
+  /* list-style: none; */
 }
 
 body {
@@ -57,6 +57,15 @@ nav {
   margin-top: 10px !important;
 }
 
+.navbar-nav .dropdown-toggle {
+  display: inline-block;
+  padding: 10px 15px !important;
+  line-height: 1.5;
+  vertical-align: middle;
+  position: relative;
+  top: -0.45vw; /* para ma-align yung dropdown sa ibang nav-item */
+}
+
 ul {
   font-family: "Plus Jakarta Sans";
   font-weight: lighter;
@@ -75,7 +84,7 @@ ul {
   letter-spacing: 0.1em;
 }
 
-.nav-link:after {
+.nav-link:not(.dropdown-toggle):after {
   background: none repeat scroll 0 0 transparent;
   bottom: 0;
   content: "";
@@ -83,20 +92,33 @@ ul {
   height: 2px;
   left: 50%;
   position: absolute;
-  border-bottom: 4px solid #43b2f7 !important;
+  border-bottom: 4px solid #000000 !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
-}
-
-.nav-link:hover:after {
-  width: 100%;
-  left: 0;
 }
 
 .nav-link.active:after {
   width: 100%;
   left: 0;
-  background-color: #c1a534;
+}
+
+.nav-link:not(.dropdown-toggle):hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  background-color: #93d4f5;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: white;
+}
+
+.dropdown-item {
+  font-size: 1.3vw;
+  font-weight: bold;
 }
 
 .logoNav {
@@ -204,16 +226,12 @@ footer {
   margin-top: 10vw !important;
 }
 
-.line {
-  width: 100%;
-  margin: 0 auto !important;
-}
-
 .title {
   margin-top: 1vw;
   font-size: 2.5vw;
   font-family: "Prata";
   color: #fff;
+  font-weight: bold;
 }
 
 .description {
@@ -267,17 +285,77 @@ footer {
   height: 2.8vw;
 }
 
+.busTypeName {
+  margin: 0;
+  white-space: nowrap;
+}
+
 .busAddForm {
   margin-top: 2vw;
 }
 
-.d-flex {
-  margin-top: 1vw;
-}
 .dropdown-toggle {
   margin-top: 0.5vw;
 }
 
 .btn-md {
   margin: 2vw;
+}
+
+.name,
+.contact {
+  display: flex;
+  gap: 2vw;
+}
+
+.busAddress {
+  margin-top: 2vw;
+}
+
+.businessType {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+#other-input {
+  margin-top: 1vw;
+}
+
+.btn-primary {
+  width: 100% !important;
+}
+
+.busAddForm {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-width: 800px;
+  justify-content: center;
+}
+
+.streetAddRow {
+  grid-column: span 3;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+#streetAddress {
+  grid-column: 2;
+}
+
+#address2 {
+  grid-column: 3;
+}
+#city {
+  grid-column: 1;
+}
+
+#province {
+  grid-column: 2;
+}
+
+#zip {
+  grid-column: 3;
 }
