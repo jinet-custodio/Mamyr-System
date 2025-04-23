@@ -63,7 +63,7 @@ CREATE TABLE partnerships (
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
-CREATE TABLE partnershipBusinesses (
+CREATE TABLE partnershipServices (
     partnershipBusinessID INT PRIMARY KEY AUTO_INCREMENT,
     partnershipID INT NOT NULL,
     PBName VARCHAR(200) NOT NULL,
