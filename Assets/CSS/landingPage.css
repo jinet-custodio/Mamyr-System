@@ -864,7 +864,7 @@ footer {
     height: clamp(400px, 90vh, 600px) !important;
   }
 }
-/* Tablet lanscape */
+/* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: landscape) {
   .img5,
   .img6,
@@ -879,28 +879,29 @@ footer {
   }
 }
 
-@media screen and (min-width: 400px) and (max-width: 550px) {
-  .navbar-collapse {
-    background-color: #007bff;
-    text-align: right;
-  }
+/* Phone size */
+@media screen and (min-width: 370px) and (max-width: 599px) {
   .titleContainer {
-    height: calc(100vh - 20px);
+    height: calc(100vh - 20vh);
     padding: 12vw;
   }
   .mamyrTitle {
     width: 100%;
-    margin-top: 15vh;
+    margin-top: clamp(16vh, 6vh, 2vh) !important;
   }
 
   .name {
-    font-size: 7vw;
+    font-size: clamp(35px, calc(3.5vw + 4px), 40px) !important;
     text-align: left;
   }
 
+  .description {
+    margin: auto;
+  }
+
   .descriptionText {
+    font-size: clamp(18px, calc(1.5vw + 4px), 35px) !important;
     text-align: justify;
-    font-size: 4vw;
   }
 
   .navbar-toggler {
@@ -917,38 +918,39 @@ footer {
     }
   }
 
-  .navbar-collapse {
-    background-color: #007bff;
-    text-align: right;
-  }
-
   .containerBook {
+    width: 80%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto auto;
     justify-items: center;
     align-items: center;
-    padding: 2vw;
-    margin-top: 10vw;
+    padding: 5vw;
+    margin-top: clamp(5vh, calc(2.5vh + 4px), 12vh);
     box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
   }
 
   .label {
     display: flex;
-    gap: 2vh;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 0;
   }
 
   .formBoxes {
-    width: 8rem !important;
-    gap: 2vh;
-  }
-
-  .form-control {
-    font-size: 2vw !important;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 
   .containerLabel {
-    font-size: 10px;
+    text-align: left !important;
+    width: 100%;
+    font-size: clamp(14px, calc(1.5vw + 4px), 20px) !important;
+  }
+
+  .form-control {
+    font-size: clamp(8px, calc(1.5vw + 4px), 10px) !important;
   }
 
   .availBtn {
@@ -956,16 +958,6 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  .label {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .formBoxes {
-    display: flex;
-    flex-direction: column;
   }
 
   .welcomeSection {
@@ -989,6 +981,11 @@ footer {
     .line {
       width: 100%;
     }
+  }
+
+  .img5,
+  .img6 {
+    display: none;
   }
 
   .wsDescription {
@@ -1055,18 +1052,22 @@ footer {
     font-size: 10px !important;
   }
 
+  .announcements {
+    height: calc(100vh - 40vh);
+  }
+
   .announcementLine {
-    width: 50%;
+    width: 60%;
   }
 
   .announcementTitle {
     margin-top: 1.5vw;
-    font-size: 5vw;
+    font-size: clamp(20px, calc(1.5vh + 4px), 25px);
   }
 
   .post {
     width: 70%;
-    height: 55vh;
+    height: calc(75vh - 30vh);
     margin-bottom: 10vw !important;
     display: flex;
     flex-direction: column;
@@ -1075,29 +1076,28 @@ footer {
 
   .sorryText {
     margin-top: 2vh;
-    font-size: 3vw;
+    font-size: clamp(12px, calc(1.5vh + 4px), 20px);
   }
 
   .closedText {
-    font-size: 6vw;
+    font-size: clamp(25px, calc(2.5vh + 4px), 30px);
     font-weight: bold;
   }
 
   .tomorrowText {
-    font-size: 2.8vw;
+    font-size: clamp(12px, calc(1.5vh + 4px), 20px);
   }
-
   .date,
   .time {
-    font-size: 3vh;
+    font-size: clamp(12px, calc(1.5vh + 4px), 20px);
   }
   .vr {
     height: 3.5vw;
-    margin-top: 3vw;
+    margin-top: 2.5vw;
   }
 
   .closedAdditionalText {
-    font-size: 2.5vw;
+    font-size: clamp(8px, calc(1.5vh + 4px), 12px);
   }
 
   .pb-1 {
@@ -1142,12 +1142,4 @@ footer {
   .socialIcons a i {
     font-size: 4vw;
   }
-
-  .announcements {
-    background-color: #f7d5b0;
-    height: 72vh;
-  }
-}
-
-@media screen and (max-width: 1400px) {
 }
