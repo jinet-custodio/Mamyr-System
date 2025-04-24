@@ -35,6 +35,16 @@ body {
   top: 0;
 }
 
+.navbar.scrolled {
+  background-color: white;
+  .nav-link {
+    color: black !important;
+  }
+  .nav-link:not(.dropdown-toggle):after {
+    border-bottom: 4px solid #000000 !important;
+  }
+}
+
 .nav-item {
   font-family: "Plus Jakarta Sans";
   font-weight: lighter;
@@ -48,7 +58,7 @@ body {
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
-  color: white !important;
+  color: rgb(255, 255, 255) !important;
   letter-spacing: 0.1em;
 }
 
@@ -71,7 +81,6 @@ body {
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
-  background-color: #93d4f5;
   display: block;
 }
 
@@ -83,13 +92,6 @@ body {
   font-size: 1.3vw;
   font-weight: bold;
 }
-
-/* .nav-link {
-  color: white !important;
-  &:hover {
-    color: #44b3f8 !important;
-  }
-} */
 
 .titleContainer {
   /* margin-top: 20vh; */
@@ -129,7 +131,7 @@ body {
 
 .navbar-toggler {
   float: right;
-  background-color: #ffffff !important;
+  background-color: #93d4f5 !important;
   margin: 5vw;
   border: none;
 
@@ -565,6 +567,11 @@ footer {
     }
   }
 
+  .nav-item.dropdown:hover .dropdown-menu {
+    background-color: none !important;
+    display: block;
+  }
+
   /* .navbar-collapse {
     text-align: right;
   } */
@@ -771,6 +778,104 @@ footer {
 
   .socialIcons a i {
     font-size: 3.5vw;
+  }
+}
+/* Tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+  .titleContainer {
+    height: calc(100vh - 20vh);
+    padding: calc(12vh - 3vh);
+  }
+
+  .name {
+    font-size: clamp(80px, calc(4vw + 10px), 60px) !important;
+  }
+
+  .descriptionText {
+    font-size: clamp(30px, calc(3vw + 4px), 35px);
+  }
+
+  .btn-outline-light {
+    font-size: clamp(25px, calc(2vw + 4px), 30px) !important;
+  }
+
+  .availBtn {
+    .custom-btn {
+      font-size: medium !important;
+    }
+  }
+
+  .contact {
+    height: 60vh;
+  }
+
+  .contactText {
+    h4 {
+      font-size: clamp(35px, calc(2vw + 4px), 20px) !important;
+    }
+    h5 {
+      font-size: clamp(25px, calc(1.5vw + 4px), 15px) !important;
+    }
+  }
+
+  .locationIcon,
+  .emailIcon,
+  .phoneIcon {
+    height: clamp(3vh, calc(1.5vw + 4px), 2vh) !important;
+  }
+
+  .gallery {
+    .line {
+      width: 30%;
+    }
+  }
+
+  .galleryTitle {
+    font-size: 4vw;
+  }
+
+  .galleryImg {
+    height: 40vh;
+    width: auto;
+  }
+
+  .img5,
+  .img6 {
+    display: block;
+  }
+
+  .img1,
+  .img2,
+  .img3,
+  .img4 {
+    display: none;
+  }
+
+  .seeMore {
+    margin: auto;
+    margin-top: 2vh;
+    width: 30%;
+    .custom-btn {
+      font-size: large !important;
+    }
+  }
+
+  .announcements {
+    height: clamp(400px, 90vh, 600px) !important;
+  }
+}
+/* Tablet lanscape */
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: landscape) {
+  .img5,
+  .img6,
+  .img4 {
+    display: none;
+  }
+
+  .img1,
+  .img2,
+  .img3 {
+    display: block;
   }
 }
 
