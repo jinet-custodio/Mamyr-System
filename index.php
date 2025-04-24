@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -210,15 +210,16 @@
 
 
     <script>
-    function myMap() {
-        var mapProp = {
-            center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-            zoom: 5,
-        };
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-    }
+        function myMap() {
+            var mapProp = {
+                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+                zoom: 5,
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        }
     </script>
     <script src="Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="Assets/JS/scrollNavbg.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
 
