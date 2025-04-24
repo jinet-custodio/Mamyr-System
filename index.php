@@ -34,8 +34,6 @@
                         <li><a class="dropdown-item" href="Pages/amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="#">HOTEL ROOMS AND RATES</a></li>
                         <li><a class="dropdown-item" href="Pages/events.php">EVENTS</a></li>
-
-
                     </ul>
                 </li>
                 <li class="nav-item">
