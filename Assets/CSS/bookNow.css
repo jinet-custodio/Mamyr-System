@@ -374,50 +374,6 @@ footer {
 .hotelIconsContainer {
   margin-bottom: 4vw;
 }
-#hotelBookingCard {
-  padding: 2vw;
-  height: 120vh !important;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-}
-
-.scheduleForm,
-.peopleForm,
-.cottagePurposeForm {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 3vw;
-}
-
-.cottageVideokeForm {
-  display: flex;
-  gap: 6vw;
-}
-
-.form-control {
-  width: 20vw !important;
-}
-
-.schedLabel,
-.cottageLabel,
-.videokeRentalLabel,
-.noOfPeopleLabel,
-.purposeLabel {
-  text-align: center;
-  margin: 2vw 0 2vw 0;
-  font-weight: bold;
-}
-
-.hotelIconContainer {
-  /* border: 1px solid black; */
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 2vw;
-  padding: 2vw;
-}
 
 .availabilityIcons {
   /* border: 1px solid black; */
@@ -427,19 +383,46 @@ footer {
   gap: 5vw;
 }
 
+.hotelIconContainer {
+  /* border: 1px solid black; */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 2vw;
+  padding: 2vw;
+}
+
 .hotelIcon {
   /* border: 1px solid black; */
   height: 1w;
   width: auto;
   margin-top: 4vw;
+}
+
+.hotelIconLastRow {
+  grid-column: span 4;
+  display: flex;
   justify-content: center;
-  align-items: center;
+  gap: 2vw;
+}
+
+#hotelBookingCard {
+  padding: 2vw;
+  height: 100vh !important;
+/
+}
+
+.checkInOut {
+  margin-top: 5vw;
 }
 
 .checkInOutLabel {
   display: flex;
   gap: 11vw;
+  justify-content: center;
+  align-items: center;
 }
+
 .checkInOutForm {
   display: flex;
   gap: 2vw;
@@ -447,9 +430,182 @@ footer {
 
 .containerLabel {
   font-size: 1.5vw;
+  font-weight: bold;
 }
 
+.hotelPeopleForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3vw;
+}
+
+.form-control {
+  width: 20vw !important;
+}
+
+.noOfPeopleHotelLabel,
+.roomNumber {
+  text-align: center;
+  margin: 2vw 0 2vw 0;
+  font-weight: bold;
+}
+
+.rooms {
+  margin-top: 2vw;
+}
 /* hotel booking */
 
 /* event booking */
+.eventTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+  font-family: "Prata";
+  color: #000000;
+  font-weight: bold;
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  padding: 2vw;
+  height: 145vh !important;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
+
+.eventTypeForm {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+#eventDropdownMenuButton {
+  min-width: 200px !important; 
+}
+
+.form-control {
+  width: 20vw !important;
+}
+
+
+.eventLabel,
+.noOfGuestLabel, .hourLabel, .packageLabel, .customPackageLabel,
+.dateLabel,
+.venueLabel,
+.purposeLabel {
+  margin: 2vw 0 2vw 0;
+  font-weight: bold;
+}
+
+ .dateVenue, .noHrPpl, .package{
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  gap: 1vw;
+}
+
+.dateForm, .venueForm, .hrForm, .peopleEventForm{
+  width: 100%;
+}
+
+ .package{
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  gap: 5vw;
+ 
+}
+
+.btn-info{
+  color: #ffff !important;
+}
+
+#calendar {
+  width: 45%;
+  height: 100vh; 
+  margin: 0 auto;
+  background-color: #fffefe;
+  border-radius: 5vw;
+}
+
+.fc-header-toolbar {
+  background-color: #00bbff; 
+  padding: 2vw;
+  height: 8vw;
+  border-top-left-radius: 3vw;  
+  border-top-right-radius: 3vw;
+}
+
+.fc-button {
+  background-color: #ffffff !important; 
+  color: rgb(0, 0, 0) !important; 
+  border-radius: 5px; 
+  font-weight: bold;
+}
+
+
+
+.fc .fc-toolbar-title {
+font-family: "Poppins" !important;
+font-weight: bold;
+color: #fff;
+}
+
+.fc .fc-button-primary:disabled{
+  background-color: #fdfdfd !important;
+  opacity: 1 !important;
+  }
+
+.fc .fc-button-primary:disabled:hover{
+  background-color: #f2d8b7 !important;
+opacity: 1 !important;
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child){
+  margin-left: 1vw; 
+
+  &:hover{
+      background-color: #91c6ff !important; 
+      color: #fff !important;
+ 
+  }
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child){
+  margin-left: 1vw; 
+
+  &:hover{
+      background-color: #91c6ff !important; 
+      color: #fff !important;
+ 
+  }
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #5dccf5;
+  color: #fff;
+}
+
+.fc .fc-view-harness{
+  margin-top:-1.7vw ;
+}
+
+/* di ko sure 'to test nalang pag may event na nalagay*/
+.fc-event {
+  background-color: #28a745; 
+  color: white; 
+  border-radius: 5px; 
+  padding: 5px; 
+}
+
+.fc-event:hover {
+  background-color: #218838; 
+}
+/* di ko sure 'to test nalang pag may event na nalagay*/
 /* event booking */

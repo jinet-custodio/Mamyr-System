@@ -14,6 +14,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+
 </head>
 
 <body id="body">
@@ -98,7 +99,7 @@
         <div class="resort" id="resort">
 
             <div class="titleContainer">
-                <h4 class="resortTitle">RESORT BOOKING</h4>
+                <h4 class="resortTitle" id="resortTitle">RESORT BOOKING</h4>
             </div>
 
             <div class="container-fluid">
@@ -125,7 +126,7 @@
 
                     </div>
 
-                    <h5 class="noOfPeopleLabel">People</h5>
+                    <h5 class="noOfPeopleLabel">Number of People</h5>
 
                     <div class="peopleForm">
                         <input type="number" class="form-control" placeholder="Adults" required>
@@ -178,7 +179,7 @@
                         placeholder="Optional"></textarea>
 
                     <div class="mt-auto">
-                        <button type="submit" class="btn btn-success btn-md w-100">Submit Request</button>
+                        <button type="submit" class="btn btn-success btn-md w-100">Book Now</button>
                     </div>
                 </div>
 
@@ -195,11 +196,11 @@
     <!--end ng resort div-->
 
 
-    <form action="#" method="POST">
+    <!--<form action="#" method="POST">
         <div class="hotel" id="hotel">
 
             <div class="titleContainer">
-                <h4 class="hotelTitle">HOTEL BOOKING</h4>
+                <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
             </div>
 
             <div class="container-fluid">
@@ -213,30 +214,31 @@
                     </div>
 
                     <div class="hotelIconContainer">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon3.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon4.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon5.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon6.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon7.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon8.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon8.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon10.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon11.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon12.png" alt="Rate Picture 1"
-                            class="hotelIcon">
+                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Hotel Room Icon 1"
+                            class="hotelIcon" id="hotelIcon1">
+                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Hotel Room Icon 2"
+                            class="hotelIcon" id="hotelIcon2">
+                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon3.png" alt="Hotel Room Icon 3"
+                            class="hotelIcon" id="hotelIcon3">
+                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon4.png" alt="Hotel Room Icon 4"
+                            class="hotelIcon" id="hotelIcon4">
+                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon5.png" alt="Hotel Room Icon 5"
+                            class="hotelIcon" id="hotelIcon5">
+                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon6.png" alt="Hotel Room Icon 6"
+                            class="hotelIcon" id="hotelIcon6">
+                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon7.png" alt="Hotel Room Icon 7"
+                            class="hotelIcon" id="hotelIcon7">
+                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon8.png" alt="Hotel Room Icon 8"
+                            class="hotelIcon" id="hotelIcon8">
+                        <div class="hotelIconLastRow">
+                            <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon9.png" alt="Hotel Room Icon 9"
+                                class="hotelIcon" id="hotelIcon9">
+                            <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon10.png" alt="Hotel Room Icon 10"
+                                class="hotelIcon" id="hotelIcon10">
+                            <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon11.png" alt="Hotel Room Icon 11"
+                                class="hotelIcon" id="hotelIcon11">
+                        </div>
+
                     </div>
                     <div class="mt-5">
                         <a href="#" class="btn btn-primary btn-md w-100" id="amenitiesHR"> Take me to Hotel Rooms and
@@ -258,284 +260,593 @@
                         </div>
                     </div>
 
-                    <!-- <h5 class="schedLabel">Schedule</h5>
+                    <h5 class="noOfPeopleHotelLabel">Number of People</h5>
 
-                    <div class="scheduleForm">
-                        <input type="date" class="form-control w-100" id="resortBookingDate" required>
-
-
-
-
-                        <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuButton"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            DAY/NIGHT TOUR
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li id="dayTour" class="dropdown-item">Day Tour</li>
-                            <li id="nightTour" class="dropdown-item">Night Tour</li>
-
-                        </ul>
-
-
-                    </div>
-
-                    <h5 class="noOfPeopleLabel">People</h5>
-
-                    <div class="peopleForm">
+                    <div class="hotelPeopleForm">
                         <input type="number" class="form-control" placeholder="Adults" required>
                         <input type="number" class="form-control" placeholder="Children" required>
                     </div>
 
 
-                    <div class="cottageVideokeForm">
+                    <h5 class="roomNumber">Room Number</h5>
 
-                        <div class="cottageForm">
-                            <h5 class="cottageLabel">Cottage</h5>
+                    <div class="hotelPeopleForm">
+                        <button class="btn btn-primary dropdown-toggle w-100 " type="button" id="roomDropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Please Select a Room Number
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li id="roomNo1" class="dropdown-item">Room 1</li>
+                            <li id="roomNo2" class="dropdown-item">Room 2</li>
+                            <li id="roomNo3" class="dropdown-item">Room 3</li>
+                            <li id="roomNo4" class="dropdown-item">Room 4</li>
+                            <li id="roomNo5" class="dropdown-item">Room 5</li>
+                            <li id="roomNo6" class="dropdown-item">Room 6</li>
+                            <li id="roomNo7" class="dropdown-item">Room 7</li>
+                            <li id="roomNo8" class="dropdown-item">Room 8</li>
+                            <li id="roomNo9" class="dropdown-item">Room 9</li>
+                            <li id="roomNo10" class="dropdown-item">Room 10</li>
+                            <li id="roomNo11" class="dropdown-item">Room 11</li>
+                        </ul>
+
+                    </div>
+                    <button type="submit" class="btn btn-success btn-md w-100 mt-auto">Book Now</button>
+
+                </div>
 
 
 
+
+            </div>
+           
+
+        </div>
+       
+    </form>-->
+    <!--end ng hotel div-->
+
+
+    <form action="#" method="POST">
+        <div class="event" id="event">
+
+            <div class="titleContainer">
+                <h4 class="eventTitle" id="eventTitle">EVENT BOOKING</h4>
+            </div>
+
+            <div class="container-fluid">
+                <div class="card" id="resortBookingCard" style="width: 40rem; flex-shrink: 0; ">
+
+                    <div class="eventForm">
+
+                        <h5 class="eventLabel">Type of Event</h5>
+                        <div class="eventTypeForm">
                             <button class="btn btn-primary dropdown-toggle w-100" type="button"
-                                id="cottageDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                Please Select a Cottage
+                                id="eventDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Please Select an Event
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li id="cottage1" class="dropdown-item">Php 500 - Good for 5 pax</li>
-                                <li id="cottage2" class="dropdown-item">Php 800 - Good for 10 pax</li>
-                                <li id="cottage3" class="dropdown-item">Php 900 - Good for 12 pax</li>
-                                <li id="cottage4" class="dropdown-item">Php 1,000 - Good for 15 pax</li>
-                                <li id="cottage5" class="dropdown-item">Php 2,000 - Good for 25 pax</li>
-
+                                <li id="bday" class="dropdown-item">BIRTHDAY</li>
+                                <li id="wedding" class="dropdown-item">WEDDING</li>
+                                <li id="teamBuilding" class="dropdown-item">TEAM BUILDING</li>
+                                <li id="christening" class="dropdown-item">CHRISTENING/DEDICATION</li>
+                                <li id="thanksgiving" class="dropdown-item">THANKSGIVING PARTY</li>
+                                <li id="xmas" class="dropdown-item disabled">CHRISTMAS PARTY</li>
+                                <li id="other-option" class="dropdown-item">OTHER</li>
 
                             </ul>
+
+                            <input type="text" id="other-input" class="form-control w-100"
+                                style="display: inline-block; margin-left: 1vw;" placeholder="Please specify..."
+                                disabled />
                         </div>
 
-                        <div class="videokeForm w-100">
-                            <h5 class="videokeRentalLabel">Videoke Rental</h5>
+                    </div>
 
+                    <div class="dateVenue">
+                        <div class="dateForm">
+                            <h5 class="dateLabel">Date</h5>
+                            <input type="date" class="form-control w-100" id="eventtBookingDate" required>
+                        </div>
 
+                        <div class="venueForm">
+                            <h5 class="venueLabel">Venue</h5>
                             <button class="btn btn-primary dropdown-toggle w-100" type="button"
-                                id="videokeDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                YES/NO
+                                id="venueDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Please Select a Venue
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li id="yes" class="dropdown-item">YES</li>
-                                <li id="no" class="dropdown-item">NO</li>
+                                <li id="pavHall" class="dropdown-item">PAVILION HALL (max. 300pax)</li>
+                                <li id="miniPavHall" class="dropdown-item">MINI PAVILION HALL (max. 50pax)</li>
                             </ul>
-
-
                         </div>
                     </div>
 
+                    <div class="noHrPpl">
+                        <div class="hrForm">
+                            <h5 class="hourLabel">Number of Hours</h5>
+                            <input type="number" class="form-control w-100" id="numberOfHours" required>
+                        </div>
+
+                        <div class="peopleEventForm">
+                            <h5 class="noOfGuestLabel">Number of Guests</h5>
+                            <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                                id="guestDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Estimated Number of Guests
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li id="guestNo1" class="dropdown-item">10-50 pax</li>
+                                <li id="guestNo2" class="dropdown-item">51-100 pax</li>
+                                <li id="guestNo3" class="dropdown-item">101-200 pax</li>
+                                <li id="guestNo4" class="dropdown-item">201-350 pax</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="package">
+                        <div class="packageForm w-100">
+                            <h5 class="packageLabel">Package</h5>
+                            <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                                id="packageDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Please Select a Package
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li id="p1" class="dropdown-item">Package 1</li>
+                                <li id="p2" class="dropdown-item">Package 2</li>
+                                <li id="p3" class="dropdown-item">Package 3</li>
+                                <li id="p4" class="dropdown-item">package 4</li>
+                            </ul>
+                        </div>
+
+                        <div class="customPackage w-100">
+                            <h5 class="customPackageLabel">Customize package?</h5>
+                            <a href="#" class=" btn btn-info" id="customPackageBtn">Customize my Package</a>
+                        </div>
+
+                    </div>
 
                     <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
                     <textarea class="form-control w-100" id="purpose-additionalNotes" rows="5"
                         placeholder="Optional"></textarea>
 
                     <div class="mt-auto">
-                        <button type="submit" class="btn btn-success btn-md w-100">Submit Request</button>
+                        <button type="submit" class="btn btn-success btn-md w-100">Book Now</button>
                     </div>
                 </div>
- -->
 
-                </div>
-                <!--end ng container div-->
+
+                <div id="calendar"></div>
+            </div>
+            <!--end ng container div-->
+
+        </div>
+        <!--end ng hotel div-->
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <footer class="py-1 my-2">
+        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
+            <a href="../index.php">
+                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+            </a>
+            <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
+        </div>
+
+        <div class="info">
+            <div class="reservation">
+                <h4 class="reservationTitle">Reservation</h4>
+                <h4 class="numberFooter">(0998) 962 4697 </h4>
+                <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
+            </div>
+            <div class="locationFooter">
+                <h4 class="locationTitle">Location</h4>
+                <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
 
             </div>
-            <!--end ng resort div-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <footer class="py-1 my-2">
-                <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-                    <a href="../index.php">
-                        <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-                    </a>
-                    <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
-                </div>
-
-                <div class="info">
-                    <div class="reservation">
-                        <h4 class="reservationTitle">Reservation</h4>
-                        <h4 class="numberFooter">(0998) 962 4697 </h4>
-                        <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
-                    </div>
-                    <div class="locationFooter">
-                        <h4 class="locationTitle">Location</h4>
-                        <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
-                    </div>
-                </div>
-                <hr class="footerLine">
-                <div class="socialIcons">
-                    <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                            class='bx bxl-facebook-circle'></i></a>
-                    <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-                    <a href="tel:+09989624697">
-                        <i class='bx bxs-phone'></i>
-                    </a>
-                </div>
-
-            </footer>
-
-
-
-
-            <script>
-            const dropdownButton = document.getElementById('dropdownMenuButton');
-            const dayTour = document.getElementById('dayTour');
-            const nightTour = document.getElementById('nightTour');
-
-            function tourUpdateButtonText(selectedText) {
-                dropdownButton.textContent = selectedText;
-            }
-
-            dayTour.addEventListener('click', function(e) {
-                e.preventDefault();
-                tourUpdateButtonText('DAY TOUR');
-            });
-
-            nightTour.addEventListener('click', function(e) {
-                e.preventDefault();
-                tourUpdateButtonText('NIGHT TOUR');
-            });
-            </script>
-
-            <script>
-            const cottageDropdownButton = document.getElementById('cottageDropdownMenuButton');
-            const cottage1 = document.getElementById('cottage1');
-            const cottage2 = document.getElementById('cottage2');
-            const cottage3 = document.getElementById('cottage3');
-            const cottage4 = document.getElementById('cottage4');
-            const cottage5 = document.getElementById('cottage5');
-
-
-            function cottageUpdateButtonText(selectedText) {
-                cottageDropdownButton.textContent = selectedText;
-            }
-
-            cottage1.addEventListener('click', function(e) {
-                e.preventDefault();
-                cottageUpdateButtonText('Php 500 - Good for 5 pax');
-            });
-
-            cottage2.addEventListener('click', function(e) {
-                e.preventDefault();
-                cottageUpdateButtonText('Php 800 - Good for 10 pax');
-            });
-
-            cottage3.addEventListener('click', function(e) {
-                e.preventDefault();
-                updateButtonText('Php 900 - Good for 12 pax');
-            });
-
-            cottage4.addEventListener('click', function(e) {
-                e.preventDefault();
-                cottageUottageUpdateButtonText('Php 1,000 - Good for 15 pax');
-            });
-
-            cottage5.addEventListener('click', function(e) {
-                e.preventDefault();
-                cottageUpdateButtonText('Php 2,000 - Good for 25 pax');
-            });
-            </script>
-
-            <script>
-            const videokeDropdownButton = document.getElementById('videokeDropdownMenuButton');
-            const yes = document.getElementById('yes');
-            const no = document.getElementById('no');
-
-            function videokeUpdateButtonText(selectedText) {
-                videokeDropdownButton.textContent = selectedText;
-            }
-
-            yes.addEventListener('click', function(e) {
-                e.preventDefault();
-                videokeUpdateButtonText('YES');
-            });
-
-            no.addEventListener('click', function(e) {
-                e.preventDefault();
-                videokeUpdateButtonText('NO');
-            });
-            </script>
-
-
-
-            <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
-
+        </div>
+        <hr class="footerLine">
+        <div class="socialIcons">
+            <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
+                    class='bx bxl-facebook-circle'></i></a>
+            <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
+            <a href="tel:+09989624697">
+                <i class='bx bxs-phone'></i>
+            </a>
+        </div>
+
+    </footer>
+
+
+
+    <script>
+    const dropdownButton = document.getElementById('dropdownMenuButton');
+    const dayTour = document.getElementById('dayTour');
+    const nightTour = document.getElementById('nightTour');
+
+    function tourUpdateButtonText(selectedText) {
+        dropdownButton.textContent = selectedText;
+    }
+
+    dayTour.addEventListener('click', function(e) {
+        e.preventDefault();
+        tourUpdateButtonText('DAY TOUR');
+    });
+
+    nightTour.addEventListener('click', function(e) {
+        e.preventDefault();
+        tourUpdateButtonText('NIGHT TOUR');
+    });
+    </script>
+
+    <script>
+    const cottageDropdownButton = document.getElementById('cottageDropdownMenuButton');
+    const cottage1 = document.getElementById('cottage1');
+    const cottage2 = document.getElementById('cottage2');
+    const cottage3 = document.getElementById('cottage3');
+    const cottage4 = document.getElementById('cottage4');
+    const cottage5 = document.getElementById('cottage5');
+
+
+    function cottageUpdateButtonText(selectedText) {
+        cottageDropdownButton.textContent = selectedText;
+    }
+
+    cottage1.addEventListener('click', function(e) {
+        e.preventDefault();
+        cottageUpdateButtonText('Php 500 - Good for 5 pax');
+    });
+
+    cottage2.addEventListener('click', function(e) {
+        e.preventDefault();
+        cottageUpdateButtonText('Php 800 - Good for 10 pax');
+    });
+
+    cottage3.addEventListener('click', function(e) {
+        e.preventDefault();
+        updateButtonText('Php 900 - Good for 12 pax');
+    });
+
+    cottage4.addEventListener('click', function(e) {
+        e.preventDefault();
+        cottageUottageUpdateButtonText('Php 1,000 - Good for 15 pax');
+    });
+
+    cottage5.addEventListener('click', function(e) {
+        e.preventDefault();
+        cottageUpdateButtonText('Php 2,000 - Good for 25 pax');
+    });
+    </script>
+
+    <script>
+    const videokeDropdownButton = document.getElementById('videokeDropdownMenuButton');
+    const yes = document.getElementById('yes');
+    const no = document.getElementById('no');
+
+    function videokeUpdateButtonText(selectedText) {
+        videokeDropdownButton.textContent = selectedText;
+    }
+
+    yes.addEventListener('click', function(e) {
+        e.preventDefault();
+        videokeUpdateButtonText('YES');
+    });
+
+    no.addEventListener('click', function(e) {
+        e.preventDefault();
+        videokeUpdateButtonText('NO');
+    });
+    </script>
+
+
+
+    <script>
+    const roomDropdownButton = document.getElementById('roomDropdownMenuButton');
+    const roomNo1 = document.getElementById('roomNo1');
+    const roomNo2 = document.getElementById('roomNo2');
+    const roomNo3 = document.getElementById('roomNo3');
+    const roomNo4 = document.getElementById('roomNo4');
+    const roomNo5 = document.getElementById('roomNo5');
+    const roomNo6 = document.getElementById('roomNo6');
+    const roomNo7 = document.getElementById('roomNo7');
+    const roomNo8 = document.getElementById('roomNo8');
+    const roomNo9 = document.getElementById('roomNo9');
+    const roomNo10 = document.getElementById('roomNo10');
+    const roomNo11 = document.getElementById('roomNo11');
+
+
+    function roomUpdateButtonText(selectedText) {
+        roomDropdownButton.textContent = selectedText;
+    }
+
+    roomNo1.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 1');
+    });
+
+    roomNo2.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 2');
+    });
+
+    roomNo3.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 3');
+    });
+
+    roomNo4.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 4');
+    });
+
+    roomNo5.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 5');
+    });
+
+    roomNo6.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 6');
+    });
+
+    roomNo7.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 7');
+    });
+
+    roomNo8.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 8');
+    });
+
+    roomNo9.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 9');
+    });
+
+    roomNo10.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 10');
+    });
+
+    roomNo11.addEventListener('click', function(e) {
+        e.preventDefault();
+        roomUpdateButtonText('ROOM 11');
+    });
+    </script>
+
+    <script>
+    const eventDropdownButton = document.getElementById('eventDropdownMenuButton');
+    const bday = document.getElementById('bday');
+    const wedding = document.getElementById('wedding');
+    const teamBuilding = document.getElementById('teamBuilding');
+    const christening = document.getElementById('christening');
+    const thanksgiving = document.getElementById('thanksgiving');
+    const xmas = document.getElementById('xmas');
+    const otherOption = document.getElementById('other-option');
+    const otherInput = document.getElementById('other-input');
+
+
+    function eventUpdateButtonText(selectedText) {
+        eventDropdownButton.textContent = selectedText;
+    }
+
+    bday.addEventListener('click', function(e) {
+        e.preventDefault();
+        eventUpdateButtonText('BIRTHDAY');
+        resetOtherInput();
+    });
+
+    wedding.addEventListener('click', function(e) {
+        e.preventDefault();
+        eventUpdateButtonText('WEDDING');
+        resetOtherInput();
+    });
+
+    teamBuilding.addEventListener('click', function(e) {
+        e.preventDefault();
+        eventUpdateButtonText('TEAM BUILDING');
+        resetOtherInput();
+    });
+
+    christening.addEventListener('click', function(e) {
+        e.preventDefault();
+        eventUpdateButtonText('CHRISTENING');
+        resetOtherInput();
+    });
+
+    thanksgiving.addEventListener('click', function(e) {
+        e.preventDefault();
+        eventUpdateButtonText('THANKSGIVING PARTY');
+        resetOtherInput();
+    });
+
+    xmas.addEventListener('click', function(e) {
+        e.preventDefault();
+        eventUpdateButtonText('CHRISTMAS PARTY');
+        resetOtherInput();
+    });
+
+    otherOption.addEventListener('click', function(e) {
+        e.preventDefault();
+        eventUpdateButtonText('Other');
+        otherInput.disabled = false;
+    });
+
+    function resetOtherInput() {
+        otherInput.value = ''; // Clear the input text
+        otherInput.disabled = true; // Disable the input
+    }
+    </script>
+
+    <script>
+    const venueDropdownButton = document.getElementById('venueDropdownMenuButton');
+    const pavHall = document.getElementById('pavHall');
+    const miniPavHall = document.getElementById('miniPavHall');
+
+    function venueUpdateButtonText(selectedText) {
+        venueDropdownButton.textContent = selectedText;
+    }
+
+    pavHall.addEventListener('click', function(e) {
+        e.preventDefault();
+        venueUpdateButtonText('PAVILION HALL (MAX. 300PAX)');
+    });
+
+    miniPavHall.addEventListener('click', function(e) {
+        e.preventDefault();
+        venueUpdateButtonText('MINI PAVILION HALL (MAX. 50PAX)');
+    });
+    </script>
+
+    <script>
+    const guestDropdownButton = document.getElementById('guestDropdownMenuButton');
+    const guestNo1 = document.getElementById('guestNo1');
+    const guestNo2 = document.getElementById('guestNo2');
+    const guestNo3 = document.getElementById('guestNo3');
+    const guestNo4 = document.getElementById('guestNo4');
+
+    function guestUpdateButtonText(selectedText) {
+        guestDropdownButton.textContent = selectedText;
+    }
+
+    guestNo1.addEventListener('click', function(e) {
+        e.preventDefault();
+        guestUpdateButtonText('10-50 pax');
+    });
+
+    guestNo2.addEventListener('click', function(e) {
+        e.preventDefault();
+        guestUpdateButtonText('51-100 pax');
+    });
+
+    guestNo3.addEventListener('click', function(e) {
+        e.preventDefault();
+        guestUpdateButtonText('101-200 pax');
+    });
+
+    guestNo4.addEventListener('click', function(e) {
+        e.preventDefault();
+        guestUpdateButtonText('201-350 pax');
+    });
+    </script>
+
+    <script>
+    const packageDropdownButton = document.getElementById('packageDropdownMenuButton');
+    const p1 = document.getElementById('p1');
+    const p2 = document.getElementById('p2');
+    const p3 = document.getElementById('p3');
+    const p4 = document.getElementById('p4');
+
+    function packageUpdateButtonText(selectedText) {
+        packageDropdownButton.textContent = selectedText;
+    }
+
+    p1.addEventListener('click', function(e) {
+        e.preventDefault();
+        packageUpdateButtonText('PACKAGE 1');
+    });
+
+    p2.addEventListener('click', function(e) {
+        e.preventDefault();
+        packageUpdateButtonText('PACKAGE 2');
+    });
+
+    p3.addEventListener('click', function(e) {
+        e.preventDefault();
+        packageUpdateButtonText('PACKAGE 3');
+    });
+
+    p4.addEventListener('click', function(e) {
+        e.preventDefault();
+        packageUpdateButtonText('PACKAGE 4');
+    });
+    </script>
+
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth'
+        });
+        calendar.render();
+    });
+    </script>
 
 
 
