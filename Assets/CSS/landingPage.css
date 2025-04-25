@@ -568,8 +568,12 @@ footer {
   }
 
   .nav-item.dropdown:hover .dropdown-menu {
-    background-color: none !important;
+    background-color: transparent !important;
     display: block;
+  }
+
+  .navbar.scrolled {
+    background-color: transparent !important;
   }
 
   /* .navbar-collapse {
@@ -787,6 +791,10 @@ footer {
     padding: calc(12vh - 3vh);
   }
 
+  .navbar.scrolled {
+    background-color: none !important;
+  }
+
   .name {
     font-size: clamp(80px, calc(4vw + 10px), 60px) !important;
   }
@@ -861,7 +869,15 @@ footer {
   }
 
   .announcements {
-    height: clamp(400px, 90vh, 600px) !important;
+    height: clamp(300px, 90vh, 700px) !important;
+  }
+  .post {
+    width: calc(100% - 30vw);
+    height: clamp(100px, 90vh, 450px) !important;
+    margin-bottom: 10vw !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 /* Tablet landscape */
@@ -877,6 +893,19 @@ footer {
   .img3 {
     display: block;
   }
+
+  .post {
+    width: calc(100% - 30vw);
+    height: clamp(100px, 90vh, 400px) !important;
+    margin-bottom: 10vw !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .navbar.scrolled {
+    background-color: none !important;
+  }
 }
 
 /* Phone size */
@@ -885,6 +914,7 @@ footer {
     height: calc(100vh - 20vh);
     padding: 12vw;
   }
+
   .mamyrTitle {
     width: 100%;
     margin-top: clamp(16vh, 6vh, 2vh) !important;
@@ -916,6 +946,10 @@ footer {
       box-shadow: none !important;
       border: none;
     }
+  }
+
+  .navbar.scrolled {
+    background-color: none !important;
   }
 
   .containerBook {
