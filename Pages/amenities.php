@@ -90,11 +90,11 @@
             </div>
         </div>
 
-        <div class="pool" style="background-color:#f7d5b0; height: 120vh;">
-            <div class=" poolTitleContainer" style="padding-top: 2vw;">
-                <hr class="poolLine">
-                <h4 class="poolTitle">Cottages</h4>
-                <p class="poolDescription">Our cozy cottages offer a relaxing retreat with spacious porches, secure
+        <div class="cottage" style="background-color:#f7d5b0; height: 120vh;">
+            <div class=" cottageTitleContainer" style="padding-top: 2vw;">
+                <hr class="cottageLine">
+                <h4 class="cottageTitle">Cottages</h4>
+                <p class="cottageDescription">Our cozy cottages offer a relaxing retreat with spacious porches, secure
                     surroundings, and a refreshing ambiance. Enjoy a perfect blend of nature and modern facilities
                     designed for your comfort.</p>
             </div>
@@ -119,11 +119,11 @@
 
         </div>
 
-        <div class="pool" style="height: 120vh;">
+        <div class="videoke" style="height: 120vh;">
             <div class=" poolTitleContainer" style="padding-top: 2vw;">
-                <hr class="poolLine">
-                <h4 class="poolTitle">Videoke Area</h4>
-                <p class="poolDescription">Enjoy nonstop fun just steps away from your cottage! Our videoke area is
+                <hr class="videokeLine">
+                <h4 class="videokeTitle">Videoke Area</h4>
+                <p class="videokeDescription">Enjoy nonstop fun just steps away from your cottage! Our videoke area is
                     conveniently located beside the cottages, making it easy to sing, laugh, and bond without going far.
                     With a great sound system and cozy setup, it’s the perfect spot for music-filled memories in the
                     heart of the resort.</p>
@@ -137,11 +137,11 @@
 
         </div>
 
-        <div class="pool" style="background-color: #7dcbf2; height: 155vh;">
-            <div class="poolTitleContainer" style="padding-top: 2vw ;">
-                <hr class="poolLine">
-                <h4 class="poolTitle">Pavilion Hall</h4>
-                <p class="poolDescription">Our Pavilion Hall offers the perfect space for events, gatherings, and
+        <div class="pavilion" style="background-color: #7dcbf2; height: 155vh;">
+            <div class="pavilionTitleContainer" style="padding-top: 2vw ;">
+                <hr class="pavilionLine">
+                <h4 class="pavilionTitle">Pavilion Hall</h4>
+                <p class="pavilionDescription">Our Pavilion Hall offers the perfect space for events, gatherings, and
                     special occasions. With its spacious and elegant design, it’s ideal for everything from weddings to
                     corporate events, comfortably accommodating up to 350 guests. Fully air-conditioned for your
                     comfort, the hall can be rented for a maximum of 5 hours. Included with your rental is exclusive
@@ -169,11 +169,11 @@
             </div>
         </div>
 
-        <div class="pool" style=" height: 125vh;">
-            <div class="poolTitleContainer">
-                <hr class="poolLine">
-                <h4 class="poolTitle">Mini Pavilion</h4>
-                <p class="poolDescription">Our mini pavilion offers an intimate and charming space perfect for small
+        <div class="minipavilion" style=" height: 125vh;">
+            <div class="minipavilionTitleContainer">
+                <hr class="minipavilionLine">
+                <h4 class="minipavilionTitle">Mini Pavilion</h4>
+                <p class="minipavilionDescription">Our mini pavilion offers an intimate and charming space perfect for small
                     gatherings and special occasions. Designed to comfortably accommodate up to 50 guests, it’s ideal
                     for birthdays, reunions, meetings, or any cozy celebration. Surrounded by a refreshing resort
                     atmosphere, it provides both functionality and a relaxing vibe.</p>
@@ -198,11 +198,11 @@
             </div>
         </div>
 
-        <div class="pool" style="background-color:#f7d5b0; height: 140vh;">
-            <div class="poolTitleContainer" style="padding-top: 5vw;">
-                <hr class="poolLine">
-                <h4 class="poolTitle">Mamyr Hotel</h4>
-                <p class="poolDescription">We offer 11 thoughtfully designed hotel rooms, each providing a peaceful and
+        <div class="hotel" style="background-color:#f7d5b0; height: 140vh;">
+            <div class="hotelTitleContainer" style="padding-top: 5vw;">
+                <hr class="hotelLine">
+                <h4 class="hotelTitle">Mamyr Hotel</h4>
+                <p class="hotelDescription">We offer 11 thoughtfully designed hotel rooms, each providing a peaceful and
                     comfortable retreat. Perfect for guests looking for a relaxing space to unwind after a day of
                     exploration, our rooms offer all the essentials for a restful stay with a touch of convenience.</p>
             </div>
@@ -221,11 +221,11 @@
             </div>
         </div>
 
-        <div class="pool">
-            <div class="poolTitleContainer">
-                <hr class="poolLine">
-                <h4 class="poolTitle">Parking Space</h4>
-                <p class="poolDescription">We provide ample parking spaces to ensure a hassle-free stay. Whether you’re
+        <div class="parking">
+            <div class="parkingTitleContainer">
+                <hr class="parkingLine">
+                <h4 class="parkingTitle">Parking Space</h4>
+                <p class="parkingDescription">We provide ample parking spaces to ensure a hassle-free stay. Whether you’re
                     arriving by car or with a group, our secure parking area is conveniently located, giving you peace
                     of mind throughout your visit.</p>
             </div>

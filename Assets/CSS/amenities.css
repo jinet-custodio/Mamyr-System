@@ -340,6 +340,109 @@ footer {
   transform: rotateY(288deg) translateZ(300px);
 }
 
+.cottageTitleContainer {
+  /* border: 1px solid black; */
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  margin-top: 5vw !important;
+}
+
+.cottageLine {
+  border: none;
+  border-top: 5px solid #d48d31;
+  width: 30%;
+  margin: 0 auto;
+  opacity: 1;
+}
+
+.cottageTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+}
+
+.cottageDescription {
+  margin-top: 2vw;
+  font-size: 1.5vw;
+}
+
+.videokeTitleContainer {
+  /* border: 1px solid black; */
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  margin-top: 5vw !important;
+}
+
+.videokeLine {
+  border: none;
+  border-top: 5px solid #d48d31;
+  width: 30%;
+  margin: 0 auto;
+  opacity: 1;
+}
+
+.videokeTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+}
+
+.videokeDescription {
+  margin-top: 2vw;
+  font-size: 1.5vw;
+}
+
+.pavilionTitleContainer {
+  /* border: 1px solid black; */
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  margin-top: 5vw !important;
+}
+
+.pavilionLine {
+  border: none;
+  border-top: 5px solid #d48d31;
+  width: 30%;
+  margin: 0 auto;
+  opacity: 1;
+}
+
+.pavilionTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+}
+
+.pavilionDescription {
+  margin-top: 2vw;
+  font-size: 1.5vw;
+}
+
+.minipavilionTitleContainer {
+  /* border: 1px solid black; */
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  margin-top: 5vw !important;
+}
+
+.minipavilionLine {
+  border: none;
+  border-top: 5px solid #d48d31;
+  width: 30%;
+  margin: 0 auto;
+  opacity: 1;
+}
+
+.minipavilionTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+}
+
+.minipavilionDescription {
+  margin-top: 2vw;
+  font-size: 1.5vw;
+}
 button {
   position: absolute;
   top: 50%;
@@ -429,5 +532,19 @@ button:hover {
 
   button {
     font-size: 20px; /* Smaller buttons */
+  }
+}
+
+/* Tablet size */
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+  .poolTitleContainer{
+    width: 70%;
+  }
+  .poolTitle{
+    font-size:clamp(12px, calc(1.5vh + 4px), 20px);
+  }
+  
+  .poolDescription{
+    font-size: clamp(12px, calc(1.5vh + 4px), 15px);
   }
 }
