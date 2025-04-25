@@ -17,6 +17,7 @@ require '../phpmailer/src/SMTP.php';
 if (isset($_POST['verify-btn'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
     $action = mysqli_real_escape_string($conn, $_SESSION['action']);
+    echo $action;
     $enteredOTP = mysqli_real_escape_string($conn, $_POST['pin1']) .
         mysqli_real_escape_string($conn, $_POST['pin2']) .
         mysqli_real_escape_string($conn, $_POST['pin3']) .
@@ -41,11 +42,11 @@ if (isset($_POST['verify-btn'])) {
                         $result = mysqli_query($conn, $changeStatus);
                         if ($result) {
                             if ($action === 'register') {
-                                $_SESSION['sucess'] = "Verified successfully!";
+                                $_SESSION['success'] = "Verified successfully!";
                                 header("Location: ../Pages/register.php");
                                 exit;
                             } elseif ($action === 'forgot-password') {
-                                $_SESSION['sucess'] = "Email Verification Success!";
+                                $_SESSION['success'] = "Email Verification Success!";
                                 header("Location: ../Pages/forgotPassword.php");
                                 exit;
                             }
