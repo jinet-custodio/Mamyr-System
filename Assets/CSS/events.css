@@ -15,6 +15,11 @@
   src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
 }
 
+@font-face {
+  font-family: "Galada";
+  src: url(../Fonts/Galada/Galada-Regular.ttf);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -281,11 +286,44 @@ footer {
 }
 
 .card-title {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Galada";
   font-size: 1.67vw;
 }
 
 .eventDesc {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-size: 1.2vw;
+}
+
+/* Tablet size */
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+  .titleContainer {
+    width: 80%;
+    margin-top: clamp(18vh, calc(1.25vh + 4px), 10vh) !important;
+  }
+
+  .title {
+    font-size: clamp(30px, calc(1.25vh + 4px), 35px) !important;
+  }
+
+  .description {
+    font-size: clamp(20px, calc(1.25vh + 4px), 20px) !important;
+  }
+
+  .card {
+    height: clamp(50vh, calc(1.25vh + 4px), 45vh) !important;
+  }
+
+  .card img {
+    height: 25vw;
+    object-fit: cover;
+  }
+
+  .card-title {
+    font-size: clamp(25px, calc(1.5vh + 4px), 30px);
+  }
+
+  .eventDesc {
+    font-size: clamp(15px, calc(1.5vh + 4px), 12px);
+  }
 }

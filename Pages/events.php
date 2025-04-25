@@ -71,7 +71,7 @@
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
             <img class="card-img-top" src="../assets/images/amenities/pavilionPics/pav4.jpg" alt="Wedding Event">
             <div class="card-body">
-                <h5 class="card-title">WEDDING</h5>
+                <h5 class="card-title">Wedding</h5>
                 <div class="eventDescription">
                     <p class="eventDesc">Celebrating love and lifelong memories at Mamyr Resort—where every wedding is a
                         dream come true!</p>
@@ -86,7 +86,7 @@
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
             <img class="card-img-top" src="../assets/images/EventsPhotos/birthday.jpg" alt="Birthday Event">
             <div class="card-body">
-                <h5 class="card-title">BIRTHDAY</h5>
+                <h5 class="card-title">Birthday</h5>
                 <div class="eventDescription">
                     <p class="eventDesc">Celebrating the joy of life at Mamyr Resort and Events Place—where every year
                         brings new moments to cherish!</p>
@@ -100,7 +100,7 @@
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
             <img class="card-img-top" src="../assets/images/EventsPhotos/christening.jpg" alt="Christening Event">
             <div class="card-body">
-                <h5 class="card-title">CHRISTENING/ <br> DEDICATION</h5>
+                <h5 class="card-title">Christening/Dedication</h5>
                 <div class="eventDescription">
                     <p class="eventDesc">Make lasting memories at Mamyr Resort where every celebration, from
                         christenings to dedications, is a moment to treasure.</p>
@@ -115,7 +115,7 @@
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
             <img class="card-img-top" src="../assets/images/EventsPhotos/teamBuilding.jpg" alt="Team Building Event">
             <div class="card-body">
-                <h5 class="card-title">TEAM BUILDING</h5>
+                <h5 class="card-title">Team Building</h5>
                 <div class="eventDescription">
                     <p class="eventDesc">Creating great ideas and strong bonds at Mamyr Resort—where teamwork and
                         leadership thrive in inspiring surroundings!
@@ -130,7 +130,7 @@
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
             <img class="card-img-top" src="../assets/images/EventsPhotos/thanksgiving.jpg" alt="Thanksgiving Event">
             <div class="card-body">
-                <h5 class="card-title">THANKSGIVING PARTY</h5>
+                <h5 class="card-title">Thanksgiving Party</h5>
                 <div class="eventDescription">
                     <p class="eventDesc">Celebrating gratitude and togetherness at Mamyr Resort—where good food and
                         great company make every moment unforgettable!</p>
@@ -144,7 +144,7 @@
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
             <img class="card-img-top" src="../assets/images/EventsPhotos/xmas.jpg" alt="Birthday Event">
             <div class="card-body">
-                <h5 class="card-title">CHRISTMAS PARTY</h5>
+                <h5 class="card-title">Christmas Party</h5>
                 <div class="eventDescription">
                     <p class="eventDesc">Embracing the magic of the holidays at Mamyr Resort—where grand feasts and
                         unforgettable moments bring joy to all!</p>
@@ -157,72 +157,6 @@
 
 
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -257,7 +191,6 @@
         </div>
 
     </footer>
-
 
 
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>

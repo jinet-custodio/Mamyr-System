@@ -32,7 +32,6 @@ if (isset($_POST['signUp'])) {
         $_SESSION['formData'] = $_POST;  // store the data in session that user enter
         if (mysqli_num_rows($check_query) > 0) {
             $_SESSION['email-message'] = 'Email already exist.';
-
             header("Location: ../Pages/register.php?page=register");
             exit;
         } elseif ($password == $confirm_password) {
@@ -100,6 +99,8 @@ if (isset($_POST['signUp'])) {
         header("Location: ../Pages/register.php?register");
         exit;
     }
+}else{
+    echo  'Error';
 }
 
 
