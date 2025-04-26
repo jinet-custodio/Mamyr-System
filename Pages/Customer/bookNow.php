@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Book Now</title>
-    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../Assets/CSS/bookNow.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
+    <link rel="stylesheet" href="../../Assets/CSS/bookNow.css">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -23,21 +23,21 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item">
-                    <a class="nav-link" href="../index.php"> HOME</a>
+                    <a class="nav-link" href="dashboard.php"> HOME</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="../Pages/amenities.php" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="../amenities.php" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item " href="../Pages/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item " href="../amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="../events.php">EVENTS</a></li>
 
 
                     </ul>
@@ -46,13 +46,13 @@
                     <a class="nav-link" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link " href="../beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./about.php">ABOUT</a>
+                    <a class="nav-link" href="../about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="register.php">BOOK NOW</a>
+                    <a class="nav-link active" href="#">BOOK NOW</a>
                 </li>
             </ul>
         </div>
@@ -67,7 +67,7 @@
 
         <a href="../pages/register.php" class="categoryLink">
             <div class="card" style="width: 20rem; display: flex; flex-direction: column; height: 100%;">
-                <img class="card-img-top" src="../assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
+                <img class="card-img-top" src="../../Assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
 
                 <div class="card-body">
                     <h5 class="card-title">RESORT</h5>
@@ -77,7 +77,7 @@
 
         <a href="../pages/register.php" class="categoryLink">
             <div class="card" style="width: 20rem; display: flex; flex-direction: column; height: 100%;">
-                <img class="card-img-top" src="../assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
+                <img class="card-img-top" src="../../Assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
                 <div class="card-body">
                     <h5 class="card-title">HOTEL</h5>
                 </div>
@@ -86,7 +86,7 @@
 
         <a href="../pages/register.php" class="categoryLink">
             <div class="card" style="width: 20rem; display: flex; flex-direction: column; height: 100%;">
-                <img class="card-img-top" src="../assets/images/amenities/pavilionPics/pav4.jpg" alt="Wedding Event">
+                <img class="card-img-top" src="../../Assets/images/amenities/pavilionPics/pav4.jpg" alt="Wedding Event">
                 <div class="card-body">
                     <h5 class="card-title">EVENT</h5>
                 </div>
@@ -184,9 +184,9 @@
                 </div>
 
                 <div class="pics">
-                    <img src="../Assets/Images/BookNowPhotos/ResortRates/ratePic1.jpg" alt="Rate Picture 1"
+                    <img src="../../Assets/Images/BookNowPhotos/ResortRates/ratePic1.jpg" alt="Rate Picture 1"
                         class="ratePic">
-                    <img src="../Assets/Images/BookNowPhotos/ResortRates/ratePic2.png" alt="Rate Picture 2"
+                    <img src="../../Assets/Images/BookNowPhotos/ResortRates/ratePic2.png" alt="Rate Picture 2"
                         class="ratePic">
                 </div>
             </div>
@@ -207,35 +207,35 @@
 
                 <div class="hotelIconsContainer">
                     <div class="availabilityIcons">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/availableIcon.png" alt="Rate Picture 1"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/availableIcon.png" alt="Rate Picture 1"
                             class="hotelIcon">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/notAvailableIcon.png" alt="Rate Picture 1"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/notAvailableIcon.png" alt="Rate Picture 1"
                             class="hotelIcon">
                     </div>
 
                     <div class="hotelIconContainer">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Hotel Room Icon 1"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Hotel Room Icon 1"
                             class="hotelIcon" id="hotelIcon1">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Hotel Room Icon 2"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Hotel Room Icon 2"
                             class="hotelIcon" id="hotelIcon2">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon3.png" alt="Hotel Room Icon 3"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon3.png" alt="Hotel Room Icon 3"
                             class="hotelIcon" id="hotelIcon3">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon4.png" alt="Hotel Room Icon 4"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon4.png" alt="Hotel Room Icon 4"
                             class="hotelIcon" id="hotelIcon4">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon5.png" alt="Hotel Room Icon 5"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon5.png" alt="Hotel Room Icon 5"
                             class="hotelIcon" id="hotelIcon5">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon6.png" alt="Hotel Room Icon 6"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon6.png" alt="Hotel Room Icon 6"
                             class="hotelIcon" id="hotelIcon6">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon7.png" alt="Hotel Room Icon 7"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon7.png" alt="Hotel Room Icon 7"
                             class="hotelIcon" id="hotelIcon7">
-                        <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon8.png" alt="Hotel Room Icon 8"
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon8.png" alt="Hotel Room Icon 8"
                             class="hotelIcon" id="hotelIcon8">
                         <div class="hotelIconLastRow">
-                            <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon9.png" alt="Hotel Room Icon 9"
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon9.png" alt="Hotel Room Icon 9"
                                 class="hotelIcon" id="hotelIcon9">
-                            <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon10.png" alt="Hotel Room Icon 10"
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon10.png" alt="Hotel Room Icon 10"
                                 class="hotelIcon" id="hotelIcon10">
-                            <img src="../Assets/Images/BookNowPhotos/hotelIcons/icon11.png" alt="Hotel Room Icon 11"
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon11.png" alt="Hotel Room Icon 11"
                                 class="hotelIcon" id="hotelIcon11">
                         </div>
 
@@ -499,7 +499,7 @@
     <footer class="py-1 my-2">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
-                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
             </a>
             <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
         </div>
@@ -530,12 +530,12 @@
 
 
 
-    <script src="../Assets/JS/BookNowJS/resortDropdown.js"></script>
-    <script src="../Assets/JS/BookNowJS/hotelDropdown.js"></script>
-    <script src="../Assets/JS/BookNowJS/eventDropdown.js"></script>
-    <script src="../Assets/JS/fullCalendar.js"></script>
+    <script src="../../Assets/JS/BookNowJS/resortDropdown.js"></script>
+    <script src="../../Assets/JS/BookNowJS/hotelDropdown.js"></script>
+    <script src="../../Assets/JS/BookNowJS/eventDropdown.js"></script>
+    <script src="../../Assets/JS/fullCalendar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

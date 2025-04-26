@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Home </title>
-    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../Assets/CSS/dashboard.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
+    <link rel="stylesheet" href="../../Assets/CSS/dashboard.css">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -31,9 +31,9 @@
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item" href="../amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a>
+                        <li><a class="dropdown-item" href="../events.php">EVENTS</a>
                         </li>
                     </ul>
                 </li>
@@ -42,13 +42,13 @@
                 </li>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="../beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./about.php">ABOUT</a>
+                    <a class="nav-link" href="../about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Pages/bookNow.php">BOOK NOW</a>
+                    <a class="nav-link" href="bookNow.php">BOOK NOW</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
@@ -77,7 +77,7 @@
 
         <div class="welcomeSection">
             <div class="resortPic1">
-                <img src="../Assets/Images/landingPage/resortPic1.png" alt="Mamyr Resort" class="pic1">
+                <img src="../../../Assets/Images/landingPage/resortPic1.png" alt="Mamyr Resort" class="pic1">
             </div>
             <div class="wsText">
                 <hr class="line">
@@ -95,17 +95,17 @@
                 <h4 class="contactTitle">Contact Us </h4>
 
                 <div class="location">
-                    <img src="../Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
+                    <img src="../../../Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
                     <h5 class="locationText">Sitio Colonia Gabihan, San Ildefonso, Bulacan</h5>
                 </div>
 
                 <div class="number">
-                    <img src="../Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
+                    <img src="../../../Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
                     <h5 class="number">(0998) 962 4697</h5>
                 </div>
 
                 <div class="email">
-                    <img src="../Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
+                    <img src="../../../Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
                     <h5 class="emailAddressText">mamyresort128@gmail.com</h5>
                 </div>
 
@@ -120,16 +120,16 @@
 
             <div class="galleryPictures">
 
-                <img src="../Assets/Images/landingPage/gallery/img1.png" alt="resort View 1" class="img1 galleryImg">
-                <img src="../Assets/Images/landingPage/gallery/img2.png" alt="resort View 2" class="img2 galleryImg">
-                <img src="../Assets/Images/landingPage/gallery/img3.png" alt="resort View 3" class="img3 galleryImg">
-                <img src="../Assets/Images/landingPage/gallery/img4.png" alt="resort View 4" class="img4 galleryImg">
-                <img src="../Assets/Images/landingPage/gallery/img5.png" alt="resort View 5" class="img5 galleryImg">
-                <img src="../Assets/Images/landingPage/gallery/img6.png" alt="resort View 6" class="img6 galleryImg">
+                <img src="../../Assets/Images/landingPage/gallery/img1.png" alt="resort View 1" class="img1 galleryImg">
+                <img src="../../Assets/Images/landingPage/gallery/img2.png" alt="resort View 2" class="img2 galleryImg">
+                <img src="../../Assets/Images/landingPage/gallery/img3.png" alt="resort View 3" class="img3 galleryImg">
+                <img src="../../Assets/Images/landingPage/gallery/img4.png" alt="resort View 4" class="img4 galleryImg">
+                <img src="../../Assets/Images/landingPage/gallery/img5.png" alt="resort View 5" class="img5 galleryImg">
+                <img src="../../Assets/Images/landingPage/gallery/img6.png" alt="resort View 6" class="img6 galleryImg">
             </div>
 
             <div class="seeMore">
-                <a href="../Pages/amenities.php" class="btn btn-primary w-100">See More</a>
+                <a href="../amenities.php" class="btn btn-primary w-100">See More</a>
             </div>
         </div>
 
@@ -164,7 +164,7 @@
         <footer class="py-1 my-2">
             <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
 
-                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
                 <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
             </div>
@@ -197,17 +197,17 @@
 
 
     <script>
-    function myMap() {
-        var mapProp = {
-            center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-            zoom: 5,
-        };
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-    }
+        function myMap() {
+            var mapProp = {
+                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+                zoom: 5,
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        }
     </script>
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
-    <script src="../Assets/JS/scrollNavbg.js"></script>
-    <script src="../Assets/JS/fullCalendar.js"></script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="../../Assets/JS/scrollNavbg.js"></script>
+    <script src="../../Assets/JS/fullCalendar.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
 

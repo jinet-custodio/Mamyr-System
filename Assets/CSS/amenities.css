@@ -108,13 +108,21 @@ ul {
   left: 0;
 }
 
+.dropdown-menu {
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
 .nav-item.dropdown:hover .dropdown-menu {
-  background-color: #93d4f5;
+  background-color: white !important;
   display: block;
 }
 
 .dropdown-item:hover {
-  background-color: white;
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
+
+.dropdown-item.active {
+  background-color: rgb(126, 203, 242) !important;
+  color: black !important;
 }
 
 .dropdown-item {
@@ -246,11 +254,10 @@ footer {
 }
 
 .poolTitleContainer {
-  /* border: 1px solid black; */
-  width: 50%;
+  width: 70%;
   margin: auto;
   text-align: center;
-  margin-top: 5vw !important;
+  margin-top: 3vw !important;
 }
 
 .poolLine {
@@ -340,9 +347,13 @@ footer {
   transform: rotateY(288deg) translateZ(300px);
 }
 
+.cottage {
+  height: 110vh !important;
+}
+
 .cottageTitleContainer {
   /* border: 1px solid black; */
-  width: 50%;
+  width: 70%;
   margin: auto;
   text-align: center;
   margin-top: 5vw !important;
@@ -366,9 +377,13 @@ footer {
   font-size: 1.5vw;
 }
 
+.videoke {
+  height: 90vh !important;
+}
+
 .videokeTitleContainer {
   /* border: 1px solid black; */
-  width: 50%;
+  width: 70%;
   margin: auto;
   text-align: center;
   margin-top: 5vw !important;
@@ -392,9 +407,13 @@ footer {
   font-size: 1.5vw;
 }
 
+.pavilion {
+  height: 130vh !important;
+}
+
 .pavilionTitleContainer {
   /* border: 1px solid black; */
-  width: 50%;
+  width: 70%;
   margin: auto;
   text-align: center;
   margin-top: 5vw !important;
@@ -418,12 +437,16 @@ footer {
   font-size: 1.5vw;
 }
 
+.minipavilion {
+  height: 110vh !important;
+}
+
 .minipavilionTitleContainer {
   /* border: 1px solid black; */
   width: 50%;
   margin: auto;
   text-align: center;
-  margin-top: 5vw !important;
+  margin-top: 3vw !important;
 }
 
 .minipavilionLine {
@@ -443,6 +466,60 @@ footer {
   margin-top: 2vw;
   font-size: 1.5vw;
 }
+
+.hotel {
+  height: 110vh !important;
+}
+.hotelTitleContainer {
+  width: 75%;
+  margin: auto;
+  text-align: center;
+  margin-top: 5vw !important;
+}
+
+.hotelLine {
+  border: none;
+  border-top: 5px solid #d48d31;
+  width: 30%;
+  margin: 0 auto;
+  opacity: 1;
+}
+
+.hotelTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+}
+
+.hotelDescription {
+  font-size: clamp(15px, 1.5vw, 17px);
+}
+
+.parkingTitleContainer {
+  /* border: 1px solid black; */
+  width: 75%;
+  margin: auto;
+  text-align: center;
+  margin-top: 5vw !important;
+}
+
+.parkingLine {
+  border: none;
+  border-top: 5px solid #d48d31;
+  width: 30%;
+  margin: 0 auto;
+  opacity: 1;
+}
+
+.parkingTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+}
+
+.parkingDescription {
+  margin-top: 2vw;
+  font-size: clamp(15px, 1.5vw, 17px);
+}
+
 button {
   position: absolute;
   top: 50%;
@@ -537,61 +614,33 @@ button:hover {
 
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
-  /* .poolTitleContainer{
-    width: 70%;
-  }
-  .poolTitle{
-    font-size:clamp(12px, calc(1.5vh + 4px), 20px);
-  }
-  
-  .poolDescription{
-    font-size: clamp(12px, calc(1.5vh + 4px), 15px);
-  } */
-
-
-
-  
   .title {
     margin-top: clamp(2vw, calc(1.5vh + 4px), 4vw);
   }
-  
-  
+
   .poolTitleContainer {
-    /* border: 1px solid black; */
     width: 75%;
     margin: auto;
     text-align: center;
   }
-  
-  .poolLine {
-    border: none;
-    border-top: 5px solid #d48d31;
-    width: 30%;
-    margin: 0 auto;
-    opacity: 1;
-  }
-  
-  .poolTitle {
-    margin-top: 1vw;
-    font-size: clamp(15px, 1.5vw, 17px);
-    text-align: center;
-    
-  }
-  
-  .poolDescription {
-    margin-top: 2vw;
-    font-size: clamp(15px, 1.5vw, 17px);
 
+  .poolTitle {
+    font-size: clamp(25px, calc(1.5vw + 4px), 20px);
+    text-align: center;
   }
-  
+
+  .poolDescription {
+    font-size: clamp(15px, 1.5vw, 17px);
+  }
+
   .poolPics {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 2vw;
-    margin-top: 2vw;
+    /* margin-top: 2vw; */
   }
-  
+
   .pic1,
   .pic2,
   .pic3,
@@ -600,24 +649,25 @@ button:hover {
     height: 25vw;
     width: auto;
   }
-  
+
   .poolPic1,
   .poolPic2,
   .poolPic3,
   .poolPic4,
   .poolPic5 {
-    height: 20vw;
+    height: clamp(20vh, calc(2.5vw + 10vh), 30vh);
     width: auto;
   }
-  
+
   .carousel-container {
     position: relative;
+    border: 1px solid red;
     width: 80%;
     height: 400px;
     margin: 50px auto;
-    perspective: 1000px;
+    /* perspective: 1000px; */
   }
-  
+
   .carousel {
     display: flex;
     justify-content: center;
@@ -629,14 +679,14 @@ button:hover {
     transform: rotateY(0deg);
     transition: transform 1s ease;
   }
-  
+
   .carousel img {
     position: absolute;
     transform-origin: center center;
     transition: transform 1s ease;
     image-rendering: crisp-edges !important;
   }
-  
+
   .poolPic1 {
     transform: rotateY(0deg) translateZ(300px);
   }
@@ -652,7 +702,7 @@ button:hover {
   .poolPic5 {
     transform: rotateY(288deg) translateZ(300px);
   }
-  
+
   .cottage {
     height: 90vh !important;
   }
@@ -662,9 +712,8 @@ button:hover {
     margin: auto;
     text-align: center;
     margin-top: 5vw !important;
-
   }
-  
+
   .cottageLine {
     border: none;
     border-top: 5px solid #d48d31;
@@ -672,20 +721,19 @@ button:hover {
     margin: 0 auto;
     opacity: 1;
   }
-  
+
   .cottageTitle {
     margin-top: 1vw;
     font-size: 2.5vw;
     text-align: center;
   }
-  
+
   .cottageDescription {
     margin-top: 2vw;
     font-size: clamp(15px, 1.5vw, 17px);
     text-align: center;
-    
   }
-  
+
   .videokeTitleContainer {
     /* border: 1px solid black; */
     width: 75%;
@@ -693,7 +741,7 @@ button:hover {
     text-align: center;
     margin-top: 5vw !important;
   }
-  
+
   .videokeLine {
     border: none;
     border-top: 5px solid #d48d31;
@@ -701,17 +749,17 @@ button:hover {
     margin: 0 auto;
     opacity: 1;
   }
-  
+
   .videokeTitle {
     margin-top: 1vw;
     font-size: 2.5vw;
   }
-  
+
   .videokeDescription {
     margin-top: 2vw;
     font-size: clamp(15px, 1.5vw, 17px);
   }
-  
+
   .pavilionTitleContainer {
     /* border: 1px solid black; */
     width: 75%;
@@ -719,7 +767,7 @@ button:hover {
     text-align: center;
     margin-top: 5vw !important;
   }
-  
+
   .pavilionLine {
     border: none;
     border-top: 5px solid #d48d31;
@@ -727,17 +775,17 @@ button:hover {
     margin: 0 auto;
     opacity: 1;
   }
-  
+
   .pavilionTitle {
     margin-top: 1vw;
     font-size: 2.5vw;
   }
-  
+
   .pavilionDescription {
     margin-top: 2vw;
     font-size: clamp(15px, 1.5vw, 17px);
   }
-  
+
   .minipavilionTitleContainer {
     /* border: 1px solid black; */
     width: 75%;
@@ -745,7 +793,7 @@ button:hover {
     text-align: center;
     margin-top: 5vw !important;
   }
-  
+
   .minipavilionLine {
     border: none;
     border-top: 5px solid #d48d31;
@@ -753,12 +801,12 @@ button:hover {
     margin: 0 auto;
     opacity: 1;
   }
-  
+
   .minipavilionTitle {
     margin-top: 1vw;
     font-size: 2.5vw;
   }
-  
+
   .minipavilionDescription {
     margin-top: 2vw;
     font-size: clamp(15px, 1.5vw, 17px);
@@ -775,27 +823,26 @@ button:hover {
     cursor: pointer;
     transform: translateY(-50%);
   }
-  
+
   .prev-btn {
     left: 20px;
   }
-  
+
   .next-btn {
     right: 20px;
   }
-  
+
   button:hover {
     background: rgba(0, 0, 0, 0.8);
   }
 
   .hotelTitleContainer {
-    /* border: 1px solid black; */
     width: 75%;
     margin: auto;
     text-align: center;
     margin-top: 5vw !important;
   }
-  
+
   .hotelLine {
     border: none;
     border-top: 5px solid #d48d31;
@@ -803,12 +850,12 @@ button:hover {
     margin: 0 auto;
     opacity: 1;
   }
-  
+
   .hotelTitle {
     margin-top: 1vw;
     font-size: 2.5vw;
   }
-  
+
   .hotelDescription {
     font-size: clamp(15px, 1.5vw, 17px);
   }
@@ -820,7 +867,7 @@ button:hover {
     text-align: center;
     margin-top: 5vw !important;
   }
-  
+
   .parkingLine {
     border: none;
     border-top: 5px solid #d48d31;
@@ -828,12 +875,12 @@ button:hover {
     margin: 0 auto;
     opacity: 1;
   }
-  
+
   .parkingTitle {
     margin-top: 1vw;
     font-size: 2.5vw;
   }
-  
+
   .parkingDescription {
     margin-top: 2vw;
     font-size: clamp(15px, 1.5vw, 17px);

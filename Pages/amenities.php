@@ -1,3 +1,9 @@
+<?php
+require '../Config/dbcon.php';
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,21 +36,21 @@
                     <a class="nav-link" href="../index.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href=" ../Pages/amenities.php" id="navbarDropdown"
+                    <a class="nav-link  dropdown-toggle " href=" amenities.php" id="navbarDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item active" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item active" href="amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./about.php">ABOUT</a>
@@ -103,16 +109,29 @@
 
             <div class="carousel-container">
                 <div class="carousel">
-                    <img src="../Assets/Images/amenities/cottagePics/cottage1.jpg" alt="Cottage Picture 1"
-                        class="poolPic1">
-                    <img src="../Assets/Images/amenities/cottagePics/cottage2.jpg" alt="Cottage Picture 2"
-                        class="poolPic2">
-                    <img src="../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Cottage Picture 3"
-                        class="poolPic3">
-                    <img src="../Assets/Images/amenities/cottagePics/cottage4.jpg" alt="Cottage Picture 4"
-                        class="poolPic4">
-                    <img src="../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Cottage Picture 5"
-                        class="poolPic5">
+
+                    <?php
+                    $serviceCategory = 'Cottage';
+                    $query = "SELECT * FROM resortServices WHERE category = '$serviceCategory' ";
+                    $result = mysqli_query($conn, $query);
+                    if (mysqli_num_rows($result) > 0) {
+                        $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                        $counter = 1;
+                        foreach ($cottages as $cottage) {
+                            $imageData = $cottage['imageData'];
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                            $mimeType = finfo_buffer($finfo, $imageData);
+                            finfo_close($finfo);
+                            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                    ?>
+                            <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
+                    <?php
+                            $counter++;
+                        }
+                    } else {
+                        echo 'No Cottages';
+                    }
+                    ?>
                 </div>
                 <button class="btn btn-primary prev-btn">&#10094;</button>
                 <button class="btn btn-primary next-btn">&#10095;</button>
@@ -288,49 +307,49 @@
     </footer>
 
     <script>
-    var video = document.getElementById("myVideo");
+        var video = document.getElementById("myVideo");
 
-    video.onplay = function() {
-        video.muted = false;
-    };
+        video.onplay = function() {
+            video.muted = false;
+        };
     </script>
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script>
-    const navbar = document.getElementById("navbar");
+        const navbar = document.getElementById("navbar");
 
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > 10) {
-            navbar.classList.add("bg-white", "shadow");
-        } else {
-            navbar.classList.remove("bg-white", "shadow");
-        }
-    });
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add("bg-white", "shadow");
+            } else {
+                navbar.classList.remove("bg-white", "shadow");
+            }
+        });
     </script>
 
 
     <script>
-    const carousels = document.querySelectorAll('.carousel');
+        const carousels = document.querySelectorAll('.carousel');
 
 
-    carousels.forEach(carousel => {
-        let angle = 0;
+        carousels.forEach(carousel => {
+            let angle = 0;
 
-        const prevButton = carousel.closest('.carousel-container').querySelector('.prev-btn');
-        const nextButton = carousel.closest('.carousel-container').querySelector('.next-btn');
+            const prevButton = carousel.closest('.carousel-container').querySelector('.prev-btn');
+            const nextButton = carousel.closest('.carousel-container').querySelector('.next-btn');
 
 
-        nextButton.addEventListener('click', () => {
-            angle -= 72;
-            carousel.style.transform = `rotateY(${angle}deg)`;
+            nextButton.addEventListener('click', () => {
+                angle -= 72;
+                carousel.style.transform = `rotateY(${angle}deg)`;
+            });
+
+
+            prevButton.addEventListener('click', () => {
+                angle += 72;
+                carousel.style.transform = `rotateY(${angle}deg)`;
+            });
         });
-
-
-        prevButton.addEventListener('click', () => {
-            angle += 72;
-            carousel.style.transform = `rotateY(${angle}deg)`;
-        });
-    });
     </script>
 </body>
 
