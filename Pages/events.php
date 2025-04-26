@@ -42,9 +42,6 @@
                     <a class="nav-link" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href=".beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
@@ -203,7 +200,7 @@
             button.addEventListener('click', function() {
                 Swal.fire({
                     title: 'Are you ready to book?',
-                    text: 'You need to register before booking an event.',
+                    text: 'You must have an existing account before booking our services.',
                     icon: 'info',
                     confirmButtonText: 'Go'
                 }).then((result) => {
