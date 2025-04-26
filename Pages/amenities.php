@@ -36,7 +36,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item active" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="#">HOTEL ROOMS AND RATES</a></li>
+                        <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
                         <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
                     </ul>
                 </li>
@@ -44,14 +44,15 @@
                     <a class="nav-link" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">RATES</a>
+                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="./about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
                 </li>
+
             </ul>
         </div>
     </nav>
@@ -173,7 +174,8 @@
             <div class="minipavilionTitleContainer">
                 <hr class="minipavilionLine">
                 <h4 class="minipavilionTitle">Mini Pavilion</h4>
-                <p class="minipavilionDescription">Our mini pavilion offers an intimate and charming space perfect for small
+                <p class="minipavilionDescription">Our mini pavilion offers an intimate and charming space perfect for
+                    small
                     gatherings and special occasions. Designed to comfortably accommodate up to 50 guests, it’s ideal
                     for birthdays, reunions, meetings, or any cozy celebration. Surrounded by a refreshing resort
                     atmosphere, it provides both functionality and a relaxing vibe.</p>
@@ -225,7 +227,8 @@
             <div class="parkingTitleContainer">
                 <hr class="parkingLine">
                 <h4 class="parkingTitle">Parking Space</h4>
-                <p class="parkingDescription">We provide ample parking spaces to ensure a hassle-free stay. Whether you’re
+                <p class="parkingDescription">We provide ample parking spaces to ensure a hassle-free stay. Whether
+                    you’re
                     arriving by car or with a group, our secure parking area is conveniently located, giving you peace
                     of mind throughout your visit.</p>
             </div>

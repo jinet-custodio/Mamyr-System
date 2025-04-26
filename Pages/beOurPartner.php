@@ -36,18 +36,16 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item " href="../Pages/amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
-
-
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">RATES</a>
+                    <a class="nav-link active" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="./about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Pages/register.php">About</a>
@@ -255,52 +253,52 @@
 
 
     <script>
-        const otherOption = document.getElementById('other-option');
-        const otherInput = document.getElementById('other-input');
-        const dropdownButton = document.getElementById('dropdownMenuButton');
+    const otherOption = document.getElementById('other-option');
+    const otherInput = document.getElementById('other-input');
+    const dropdownButton = document.getElementById('dropdownMenuButton');
+    otherInput.style.display = 'none';
+
+    function updateButtonText(selectedText) {
+        dropdownButton.textContent = selectedText;
+    }
+
+
+    otherOption.addEventListener('click', function(e) {
+        e.preventDefault();
+        otherInput.style.display = 'inline-block';
+        updateButtonText('Other');
+    });
+
+
+    cateringOption.addEventListener('click', function(e) {
+        e.preventDefault();
         otherInput.style.display = 'none';
+        updateButtonText('Catering');
+    });
 
-        function updateButtonText(selectedText) {
-            dropdownButton.textContent = selectedText;
-        }
+    soundLightingOption.addEventListener('click', function(e) {
+        e.preventDefault();
+        otherInput.style.display = 'none';
+        updateButtonText('Sound and Lighting');
+    });
 
+    eventHostingOption.addEventListener('click', function(e) {
+        e.preventDefault();
+        otherInput.style.display = 'none';
+        updateButtonText('Event Hosting');
+    });
 
-        otherOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'inline-block';
-            updateButtonText('Other');
-        });
+    photographyOption.addEventListener('click', function(e) {
+        e.preventDefault();
+        otherInput.style.display = 'none';
+        updateButtonText('Photography/Videography');
+    });
 
-
-        cateringOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Catering');
-        });
-
-        soundLightingOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Sound and Lighting');
-        });
-
-        eventHostingOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Event Hosting');
-        });
-
-        photographyOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Photography/Videography');
-        });
-
-        performerOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Perfomer');
-        });
+    performerOption.addEventListener('click', function(e) {
+        e.preventDefault();
+        otherInput.style.display = 'none';
+        updateButtonText('Perfomer');
+    });
     </script>
 
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>

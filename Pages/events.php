@@ -36,15 +36,13 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item active" href="#">EVENTS</a></li>
-
-
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">RATES</a>
+                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href=".beOurPartner.php">BE OUR PARTNER</a>
