@@ -10,6 +10,10 @@
   font-family: "Prata";
   src: url(../Fonts/Prata/Prata-Regular.ttf);
 }
+@font-face {
+  font-family: "Galada";
+  src: url(../Fonts/Galada/Galada-Regular.ttf);
+}
 
 * {
   margin: 0;
@@ -22,12 +26,28 @@
 
 body {
   background-image: url(../images/landingPage/landingPageBg.png);
+  /* background-image: url(../images/BookNowPhotos/bookNowBg.jpg); */
   background-repeat: no-repeat;
   background-position: fixed;
   background-size: cover;
   display: flex;
   max-height: 100vh;
 }
+
+/* body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: inherit;
+  background-repeat: inherit;
+  background-position: inherit;
+  background-size: inherit;
+  filter: blur(7px);
+  z-index: -1;
+} */
 
 .navbar {
   position: fixed;
@@ -43,6 +63,10 @@ body {
   .nav-link:not(.dropdown-toggle):after {
     border-bottom: 4px solid #000000 !important;
   }
+
+  #logOutBtn {
+    color: #000000 !important;
+  }
 }
 
 .nav-item {
@@ -53,13 +77,21 @@ body {
   /* margin-left: 3vw; */
 }
 
-.nav-link {
+.nav-link,
+#logOutBtn {
   text-decoration: none;
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
-  color: rgb(255, 255, 255) !important;
+  color: white !important;
   letter-spacing: 0.1em;
+}
+
+#logOutBtn {
+  font-family: "Plus Jakarta Sans";
+  font-size: 1.45vw;
+  margin-right: 2vw;
+  border: none;
 }
 
 .nav-link:not(.dropdown-toggle):after {
@@ -100,32 +132,38 @@ body {
   width: 100%;
   height: 50vh;
   padding: 12vw;
+  /* margin-top: 1vw; */
   /* margin: auto; */
 }
 
 .mamyrTitle {
   /* border: 1px solid black; */
-  width: 50%;
+  width: 100%;
 }
-.name {
-  color: #fff;
-  text-align: left;
-  font-family: Prata;
-  font-size: 7vw;
+
+.welcome {
+  /* color: #c9995b; */
+  color: #65f2f2;
+  /* color: #1201ff; */
+  text-align: center;
+  font-family: Galada;
+  font-size: 8vw;
   font-style: normal;
   line-height: normal;
 }
 
-.description {
-  width: 90%;
+.nameOfUserContainer {
+  width: 100%;
+  margin-top: -4vw;
+  /* margin-left: 10vw; */
   /* border: 1px solid black; */
 }
 
-.descriptionText {
-  color: #fff;
-  font-family: "Plus Jakarta Sans";
-  font-size: 2vw;
-  font-style: normal;
+.nameOfUser {
+  color: #ffffff;
+  font-family: "Galada";
+  font-size: 10vw;
+  text-align: center;
   font-weight: 400;
   line-height: normal;
 }
@@ -167,68 +205,104 @@ body {
   }
 }
 
-.containerBook {
-  background-color: #ffffff;
-  border-radius: 1vw;
-  width: 85%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  margin: auto;
+.calendarContainer {
+  /* border: 1px solid black; */
+  margin-top: 40vw;
+  padding: 5vw;
+  background-color: #f2d9b8;
+}
+
+.calendarTitle {
+  text-align: center;
+  font-size: 4vw;
+  margin-bottom: 3vw;
+  font-family: agbalumo;
+  font-weight: bold;
+  color: #395523;
+}
+
+#calendar {
+  width: 80%;
+  height: 100vh;
+  margin: 0 auto;
+  background-color: #fffefe;
+  border-radius: 5vw;
+}
+
+.fc-header-toolbar {
+  background-color: #00bbff;
   padding: 2vw;
-  margin-top: 31vw;
-  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+  height: 8vw;
+  border-top-left-radius: 3vw;
+  border-top-right-radius: 3vw;
 }
 
-.label {
-  display: flex;
-  gap: 4vw;
-  margin-top: 3vw;
+.fc-button {
+  background-color: #ffffff !important;
+  color: rgb(0, 0, 0) !important;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
-.formBoxes {
-  width: 100%;
-  gap: 4vw;
-  display: flex;
-  justify-content: center;
+.fc .fc-toolbar-title {
+  font-family: "Poppins" !important;
+  font-weight: bold;
+  color: #fff;
 }
 
-input[type="number"]::-webkit-inner-spin-button {
-  opacity: 1;
+.fc .fc-button-primary:disabled {
+  background-color: #fdfdfd !important;
+  opacity: 1 !important;
 }
 
-.form-control {
-  font-size: 1.5vw !important;
+.fc .fc-button-primary:disabled:hover {
+  background-color: #f2d8b7 !important;
+  opacity: 1 !important;
 }
 
-.containerLabel {
-  width: 100%;
-  font-size: 20px;
-  font-family: "Poppins";
-  text-align: left !important;
-}
-
-.availBtn {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 3vw;
-}
-
-.custom-btn {
-  background-color: #007bff !important;
-  color: #ffffff !important;
-  font-size: 1.5vw !important;
-  width: 100%;
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+  margin-left: 1vw;
 
   &:hover {
-    background-color: #2186f3 !important;
+    background-color: #91c6ff !important;
+    color: #fff !important;
   }
 }
 
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+  margin-left: 1vw;
+
+  &:hover {
+    background-color: #91c6ff !important;
+    color: #fff !important;
+  }
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #5dccf5;
+  color: #fff;
+}
+
+.fc .fc-view-harness {
+  margin-top: -1.7vw;
+}
+
+/* di ko sure 'to test nalang pag may event na nalagay*/
+.fc-event {
+  background-color: #28a745;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.fc-event:hover {
+  background-color: #218838;
+}
+/* di ko sure 'to test nalang pag may event na nalagay*/
+
 .welcomeSection {
   display: flex;
-  margin: 0 auto;
+  /* margin-top: 40vw; */
   /* border: 1px solid black; */
   width: 100%;
 }
