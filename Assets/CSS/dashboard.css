@@ -1,0 +1,1053 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../Fonts/Prata/Prata-Regular.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  background-image: url(../images/landingPage/landingPageBg.png);
+  background-repeat: no-repeat;
+  background-position: fixed;
+  background-size: cover;
+  display: flex;
+  max-height: 100vh;
+}
+
+.navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
+
+.nav-item {
+  font-family: "Plus Jakarta Sans";
+  font-weight: lighter;
+  margin-top: 15px;
+  font-size: 1.5vw;
+  /* margin-left: 3vw; */
+}
+
+.nav-link,
+#logOutBtn {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px !important;
+  position: relative;
+  color: white !important;
+  letter-spacing: 0.1em;
+}
+
+#logOutBtn {
+  margin-right: 2vw;
+}
+
+.nav-link:not(.dropdown-toggle):after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  border-bottom: 4px solid #ffffff !important;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link:not(.dropdown-toggle):hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  background-color: #93d4f5;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: white;
+}
+
+.dropdown-item {
+  font-size: 1.3vw;
+  font-weight: bold;
+}
+
+/* .nav-link {
+    color: white !important;
+    &:hover {
+      color: #44b3f8 !important;
+    }
+  } */
+
+.titleContainer {
+  /* margin-top: 20vh; */
+  /* border: 1px solid black; */
+  width: 100%;
+  height: 50vh;
+  padding: 12vw;
+  /* margin: auto; */
+}
+
+.mamyrTitle {
+  /* border: 1px solid black; */
+  width: 50%;
+}
+.name {
+  color: #fff;
+  text-align: left;
+  font-family: Prata;
+  font-size: 7vw;
+  font-style: normal;
+  line-height: normal;
+}
+
+.description {
+  width: 90%;
+  /* border: 1px solid black; */
+}
+
+.descriptionText {
+  color: #fff;
+  font-family: "Plus Jakarta Sans";
+  font-size: 2vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.navbar-toggler {
+  float: right;
+  background-color: #ffffff !important;
+  margin: 5vw;
+  border: none;
+
+  &:focus,
+  &:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none;
+  }
+}
+
+.navbar-collapse {
+  text-align: right;
+}
+
+.navbar-toggler {
+  float: right;
+  background-color: #ffffff !important;
+  margin: 5vw;
+  border: none;
+
+  &:focus,
+  &:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none;
+  }
+
+  .custom-btn {
+    width: 2vw !important;
+    font-size: 1.5vw !important;
+  }
+}
+
+.containerBook {
+  background-color: #ffffff;
+  border-radius: 1vw;
+  width: 85%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 2vw;
+  margin-top: 31vw;
+  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  display: flex;
+  gap: 4vw;
+  margin-top: 3vw;
+}
+
+.formBoxes {
+  width: 100%;
+  gap: 4vw;
+  display: flex;
+  justify-content: center;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 1;
+}
+
+.form-control {
+  font-size: 1.5vw !important;
+}
+
+.containerLabel {
+  width: 100%;
+  font-size: 20px;
+  font-family: "Poppins";
+  text-align: left !important;
+}
+
+.availBtn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 3vw;
+}
+
+.custom-btn {
+  background-color: #007bff !important;
+  color: #ffffff !important;
+  font-size: 1.5vw !important;
+  width: 100%;
+
+  &:hover {
+    background-color: #2186f3 !important;
+  }
+}
+
+.welcomeSection {
+  display: flex;
+  margin: 0 auto;
+  /* border: 1px solid black; */
+  width: 100%;
+}
+
+.resortPic1 {
+  margin-top: 5vw !important;
+  margin: auto;
+}
+
+.pic1 {
+  width: 40vw;
+  height: auto;
+}
+
+.wsText {
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-top: 5vw !important;
+  width: 50%;
+}
+
+.line {
+  border: none;
+  border-top: 5px solid #d48d31;
+  width: 40%;
+  height: 2vw;
+  opacity: 1;
+  /* margin: 20px auto; */
+}
+
+.wsTitle {
+  font-family: "Plus Jakarta sans";
+  font-size: 25px;
+  text-align: center;
+  color: rgb(0, 0, 0);
+}
+
+.wsDescription {
+  font-family: "Plus Jakarta Sans";
+  text-align: justify;
+  margin-top: 30px;
+  font-size: 20px;
+}
+
+.contact {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 7vh;
+  background-color: #7dcbf2;
+  padding: 5vw;
+  height: 90vh;
+}
+
+.contactText {
+  /* border: 1px solid black; */
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+}
+
+.location,
+.number,
+.email {
+  display: flex;
+  gap: 3vw;
+  margin-top: 1vw;
+}
+
+.locationIcon,
+.emailIcon,
+.phoneIcon {
+  height: 4vw;
+  width: auto;
+}
+
+.contactTitle {
+  margin-bottom: 2vw;
+  font-family: "Plus Jakarta Sans";
+}
+.locationText {
+  margin-top: 0.1vw;
+}
+
+.emailAddressText {
+  margin-top: 1vw;
+}
+
+.googleMap {
+  /* border: 1px solid black; */
+  width: 45%;
+  height: 60vh;
+}
+
+.gallery {
+  /* border: 1px solid black; */
+  margin: 2vw;
+  padding: 2vw;
+}
+
+.galleryTitle {
+  font-family: "Plus Jakarta Sans";
+  font-size: 2vw;
+}
+
+.galleryPictures {
+  /* border: 1px solid black; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw;
+  margin-top: 2vw;
+}
+
+.seeMore {
+  margin: auto;
+  margin-top: 2.5vh;
+  width: 15vw;
+}
+
+.announcements {
+  background-color: #f7d5b0;
+  height: 130vh;
+  padding-top: 3vw;
+  margin-bottom: 10vw;
+}
+.announcementTitleContainer {
+  /* border: 1px solid black; */
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+.announcementLine {
+  border: none;
+  border-top: 5px solid #d48d31;
+  width: 30%;
+  margin: 0 auto;
+}
+
+.announcementTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+}
+
+.post {
+  width: 40%;
+  background-color: white;
+  border-radius: 6vw;
+  margin: auto;
+  margin-top: 5vw !important;
+  text-align: center;
+  padding: 2vw;
+  margin-bottom: 20vw !important;
+}
+
+.sorryText {
+  margin-bottom: 2vw;
+  font-size: 2.2vw;
+  font-family: "Plus Jakarta Sans";
+}
+
+.closeLine {
+  font-family: "Plus Jakarta Sans";
+  border: none;
+  border-top: 5px solid rgba(193, 165, 52, 1);
+  width: 50%;
+  margin: 0 auto;
+}
+
+.closedText {
+  font-family: "Plus Jakarta Sans";
+  font-size: 5vw;
+  font-weight: bold;
+}
+
+.tomorrowText {
+  font-size: 2.5vw;
+  margin-top: 2vw;
+}
+
+.dateTimeConatiner {
+  display: flex;
+  justify-content: center;
+  gap: 1vw;
+}
+
+.date,
+.time {
+  margin-top: 2vw;
+  font-family: "Plus Jakarta Sans ExtraLight";
+}
+
+.vr {
+  height: 2vw;
+  width: 0.12vw !important;
+  margin-top: 2.2vw;
+  opacity: 1 !important;
+}
+
+.closedAdditionalText {
+  margin-top: 2vw;
+  font-size: 1.5vw;
+}
+
+footer {
+  /* border: 1px solid black; */
+
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.445) -50%,
+    rgb(62, 132, 158) 95%
+  );
+}
+
+.pb-1 {
+  gap: 2vw;
+  padding: 1vw 0 0 2vw;
+}
+
+.logo {
+  width: 10vw;
+  height: auto;
+}
+.mb-0 {
+  font-family: "Prata";
+  font-size: 1.5vw;
+  font-weight: bold;
+  color: #ffff;
+}
+
+.footerLine {
+  width: 80%;
+  margin: 0 auto;
+  color: #fff;
+  opacity: 1;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5vw;
+}
+.locationFooter {
+  /* border: 1px solid black; */
+  width: 30%;
+}
+
+.reservationTitle,
+.locationTitle {
+  font-family: "Plus Jakarta Sans";
+  font-weight: bold;
+  font-size: 1.5vw;
+  color: #fff;
+}
+
+.numberFooter,
+.emailAddressTextFooter,
+.addressTextFooter {
+  font-family: "Poppins ExtraLight";
+  color: #fff;
+  font-size: 1vw;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  margin: 0.3vw;
+}
+
+.socialIcons a {
+  text-decoration: none;
+  padding: 0.8vw;
+  background-color: rgb(255, 255, 255);
+  margin: 5px;
+  border-radius: 50%;
+}
+
+.socialIcons a i {
+  font-size: 2vw;
+  color: #3e849e;
+  opacity: 0.9;
+}
+
+.socialIcons a:hover {
+  background-color: white;
+  transition: 0.5s;
+}
+
+.socialIcons a:hover i {
+  color: #007bff;
+  transition: 0.5s;
+}
+
+/* Tablet size */
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+  .titleContainer {
+    height: calc(100vh - 15vh);
+    padding: calc(12vh - 3vh);
+  }
+
+  .navbar {
+    --bs-navbar-padding-y: 0 !important;
+  }
+
+  .mamyrTitle {
+    width: 100%;
+    margin-top: clamp(15vh, 5vh, 2vh) !important;
+  }
+
+  .name {
+    font-size: clamp(40px, calc(3.5vw + 4px), 45px) !important;
+    text-align: left;
+  }
+
+  .description {
+    margin: auto;
+  }
+  .descriptionText {
+    text-align: justify;
+    font-size: clamp(23px, calc(3vw + 4px), 35px);
+  }
+
+  .navbar-toggler {
+    float: right;
+    background-color: #ffffff !important;
+    margin: 3vw;
+    border: none;
+
+    &:focus,
+    &:active {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none;
+    }
+  }
+
+  /* .navbar-collapse {
+      text-align: right;
+    } */
+
+  .containerBook {
+    width: 95%;
+    padding: 2vw;
+    margin-top: 7vw;
+    margin-top: 3vw;
+    box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .label {
+    display: flex;
+    gap: clamp(5vw, 4vw, 3vw);
+    margin-top: 3vw;
+  }
+
+  .formBoxes {
+    gap: 4vw;
+    display: flex;
+    justify-content: center;
+  }
+
+  .containerLabel {
+    width: 100%;
+    font-size: clamp(12px, calc(1.5vw + 4px), 20px);
+  }
+
+  .welcomeSection {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .resortPic1 {
+    margin-top: 5vw !important;
+  }
+
+  .pic1 {
+    width: 60vw;
+  }
+
+  .wsText {
+    margin-top: 8vw !important;
+    width: 80%;
+    .line {
+      width: 100%;
+    }
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .contactText {
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    .line {
+      width: 30%;
+    }
+    h4 {
+      font-size: clamp(18px, calc(2vw + 4px), 12px) !important;
+    }
+    h5 {
+      font-size: clamp(15px, calc(1.5vw + 4px), 12px) !important;
+    }
+  }
+
+  .locationIcon,
+  .emailIcon,
+  .phoneIcon {
+    height: clamp(4vh, calc(1.5vw + 4px), 2vh) !important;
+    width: auto;
+  }
+
+  .emailAddressText {
+    margin-top: 0.1vw;
+  }
+
+  .googleMap {
+    height: 80vh;
+    width: 70%;
+    margin-top: 5vh;
+  }
+
+  .gallery {
+    .line {
+      width: 30%;
+    }
+  }
+
+  .galleryTitle {
+    font-size: 4vw;
+  }
+
+  .galleryImg {
+    height: 40vh;
+    width: auto;
+  }
+
+  .img5,
+  .img6 {
+    display: none;
+  }
+
+  .seeMore {
+    margin: auto;
+    margin-top: 2vh;
+  }
+
+  .announcements {
+    height: clamp(300px, 90vh, 800px) !important;
+  }
+
+  .announcementTitleContainer {
+    width: 80%;
+  }
+
+  .announcementLine {
+    width: 50%;
+  }
+
+  .announcementTitle {
+    margin-top: 1vw;
+    font-size: 4vw;
+  }
+
+  .post {
+    width: 70%;
+    height: clamp(100px, 90vh, 450px) !important;
+    margin-bottom: 10vw !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .sorryText {
+    margin-top: 2vh;
+    font-size: clamp(25px, calc(1.25vw + 4px), 35px) !important;
+  }
+
+  .closedText {
+    font-size: clamp(35px, calc(2.5vw + 4px), 45px) !important;
+    font-weight: bold;
+  }
+
+  .tomorrowText {
+    font-size: clamp(25px, calc(1.25vw + 4px), 35px) !important;
+  }
+
+  .vr {
+    height: 3.2vw;
+    margin-top: 2.5vw;
+  }
+
+  .closedAdditionalText {
+    font-size: clamp(20px, calc(1.5vw + 4px), 30px) !important;
+  }
+
+  .pb-1 {
+    gap: 3vw;
+  }
+
+  .mb-0 {
+    font-size: 2vw;
+  }
+
+  .locationFooter {
+    width: 50%;
+  }
+
+  .reservationTitle,
+  .locationTitle {
+    font-size: 2vw;
+  }
+
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
+    font-size: 1.5vw;
+  }
+
+  .socialIcons {
+    width: 20%;
+    display: flex;
+    margin: auto;
+    justify-content: space-between;
+  }
+
+  .socialIcons a {
+    height: 6vh;
+    padding: 1vw;
+    text-decoration: none;
+    background-color: rgb(255, 255, 255);
+    margin: 5px;
+    border-radius: 50%;
+  }
+
+  .socialIcons a i {
+    font-size: 3.5vw;
+  }
+}
+
+@media screen and (min-width: 400px) and (max-width: 550px) {
+  .navbar-collapse {
+    background-color: #007bff;
+    text-align: right;
+  }
+  .titleContainer {
+    height: calc(100vh - 20px);
+    padding: 12vw;
+  }
+  .mamyrTitle {
+    width: 100%;
+    margin-top: 15vh;
+  }
+
+  .name {
+    font-size: 7vw;
+    text-align: left;
+  }
+
+  .descriptionText {
+    text-align: justify;
+    font-size: 4vw;
+  }
+
+  .navbar-toggler {
+    float: right;
+    background-color: #ffffff !important;
+    margin: 3vw;
+    border: none;
+
+    &:focus,
+    &:active {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none;
+    }
+  }
+
+  .navbar-collapse {
+    background-color: #007bff;
+    text-align: right;
+  }
+
+  .containerBook {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+    justify-items: center;
+    align-items: center;
+    padding: 2vw;
+    margin-top: 10vw;
+    box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .label {
+    display: flex;
+    gap: 2vh;
+  }
+
+  .formBoxes {
+    width: 8rem !important;
+    gap: 2vh;
+  }
+
+  .form-control {
+    font-size: 2vw !important;
+  }
+
+  .containerLabel {
+    font-size: 10px;
+  }
+
+  .availBtn {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .label {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .formBoxes {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .welcomeSection {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .resortPic1 {
+    margin-top: 5vw !important;
+  }
+
+  .pic1 {
+    width: 80vw;
+  }
+
+  .wsText {
+    margin-top: 8vw !important;
+    width: 80%;
+    .line {
+      width: 100%;
+    }
+  }
+
+  .wsDescription {
+    font-size: 15px;
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10vh;
+    height: 80vh;
+    padding-bottom: 8vh;
+    h5 {
+      font-size: 15px;
+    }
+    img {
+      height: 3vh;
+    }
+  }
+
+  .contactText {
+    justify-content: center;
+    align-items: center;
+    margin: 1vh 3vw 0 0;
+    width: 80%;
+    .line {
+      width: 40%;
+    }
+  }
+
+  .emailAddressText {
+    margin-top: 0.1vw;
+  }
+
+  .googleMap {
+    height: 40vh;
+    width: 80%;
+    margin-top: 5vh;
+  }
+
+  .gallery {
+    .line {
+      width: 30%;
+    }
+  }
+
+  .galleryTitle {
+    font-size: 6vw;
+  }
+
+  .galleryImg {
+    height: 30vh;
+    width: auto;
+  }
+
+  .seeMore {
+    margin: auto;
+    margin-top: 2vh;
+    width: 30%;
+  }
+
+  .custom-btn {
+    font-size: 10px !important;
+  }
+
+  .announcementLine {
+    width: 50%;
+  }
+
+  .announcementTitle {
+    margin-top: 1.5vw;
+    font-size: 5vw;
+  }
+
+  .post {
+    width: 70%;
+    height: 55vh;
+    margin-bottom: 10vw !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .sorryText {
+    margin-top: 2vh;
+    font-size: 3vw;
+  }
+
+  .closedText {
+    font-size: 6vw;
+    font-weight: bold;
+  }
+
+  .tomorrowText {
+    font-size: 2.8vw;
+  }
+
+  .date,
+  .time {
+    font-size: 3vh;
+  }
+  .vr {
+    height: 3.5vw;
+    margin-top: 3vw;
+  }
+
+  .closedAdditionalText {
+    font-size: 2.5vw;
+  }
+
+  .pb-1 {
+    gap: 3vw;
+  }
+
+  .mb-0 {
+    font-size: 2vw;
+  }
+
+  .locationFooter {
+    width: 50%;
+  }
+
+  .reservationTitle,
+  .locationTitle {
+    font-size: 2.5vw;
+  }
+
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
+    font-size: 2vw;
+  }
+
+  .socialIcons {
+    width: 20%;
+    display: flex;
+    margin: auto;
+    justify-content: space-between;
+  }
+
+  .socialIcons a {
+    height: 6vh;
+    padding: 1vw;
+    text-decoration: none;
+    background-color: rgb(255, 255, 255);
+    margin: 5px;
+    border-radius: 50%;
+  }
+
+  .socialIcons a i {
+    font-size: 4vw;
+  }
+
+  .announcements {
+    background-color: #f7d5b0;
+    height: 72vh;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+}
