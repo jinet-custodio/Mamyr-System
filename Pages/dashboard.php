@@ -31,9 +31,9 @@
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="Pages/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="Pages/events.php">EVENTS</a>
+                        <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a>
                         </li>
                     </ul>
                 </li>
@@ -42,13 +42,13 @@
                 </li>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">ABOUT</a>
+                    <a class="nav-link" href="./about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/register.php">BOOK NOW</a>
+                    <a class="nav-link" href="../Pages/bookNow.php">BOOK NOW</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>

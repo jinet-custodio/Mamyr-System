@@ -49,7 +49,7 @@
                     <a class="nav-link " href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">ABOUT</a>
+                    <a class="nav-link" href="./about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="register.php">BOOK NOW</a>

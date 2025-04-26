@@ -65,108 +65,112 @@ $_SESSION['userID'] =  $userID;
                 $dateObj = DateTime::createFromFormat('d/m/Y', $dateStr);
                 $isoDate = $dateObj ? $dateObj->format('Y-m-d') : '';
         ?>
-                <form name="form" id="myForm" class="userInfo" action="../Function/editAccount.php" method="POST" enctype="multipart/form-data">
-                    <div class="contents">
-                        <input type="hidden" value="<?= htmlspecialchars($user['userTypeID']) ?>" name="userType">
-                        <input type="hidden" value="<?= htmlspecialchars($user['userID'])  ?>" name="userID">
+        <form name="form" id="myForm" class="userInfo" action="../Function/editAccount.php" method="POST"
+            enctype="multipart/form-data">
+            <div class="contents">
+                <input type="hidden" value="<?= htmlspecialchars($user['userTypeID']) ?>" name="userType">
+                <input type="hidden" value="<?= htmlspecialchars($user['userID'])  ?>" name="userID">
 
-                        <div class="profile-image">
-                            <?php
+                <div class="profile-image">
+                    <?php
                             $imgSrc = '../Assets/Images/userProfile/no pfp.png';
                             if (!empty($user['userProfile'])) {
                                 $imgData = base64_encode($user['userProfile']);
                                 $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                             }
                             ?>
-                            <img src="<?= $imgSrc ?>" alt="User Image" class="user-image" id="displayPhoto">
+                    <img src="<?= $imgSrc ?>" alt="User Image" class="user-image" id="displayPhoto">
 
 
-                            <button class="add-image hidden" id="btn" type="button">
-                                <img src="../Assets/Images/Icon/camera.png" alt="Camera" class="camera" id="camera">
-                            </button>
-                            <input type="file" id="fileInput" style="display: none;" class="text-field" accept=".jpg, .jpeg, .png" name="userProfile">
-                            <div class="details">
-                                <input type="text" id="nameBox" name="name" class="text-field"
-                                    value="<?= $user['firstName'] . ' ' . $user['middleInitial'] . '. ' . $user['lastName'] ?>"
-                                    readonly>
-                            </div>
-                        </div>
-
-                        <div class="information">
-                            <div class="details">
-                                <img src="../Assets/Images/Icon/email.png" alt="email icon">
-                                <input type="email" name="email" class="text-field" value="<?= $user['email'] ?>" readonly>
-                            </div>
-                            <div class="details">
-                                <img src="../Assets/Images/Icon/phone.png" alt="phone icon">
-                                <input type="tel" name="phoneNumber" class="text-field" value="<?= $user['phoneNumber'] ?>"
-                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" pattern="[0-9]{11}"
-                                    placeholder="Click 'Edit' to add (optional)" readonly>
-                            </div>
-                            <div class="details">
-                                <img src="../Assets/Images/Icon/address.png" alt="address icon">
-                                <input type="text" name="userAddress" class="text-field" value="<?= $user['userAddress'] ?>" readonly>
-                            </div>
-                            <div class="details">
-                                <img src="../Assets/Images/Icon/birthday.png" alt="birthday icon">
-                                <input type="date" name="birthDate" id="birthDate" class="text-field"
-                                    value="<?= htmlspecialchars($user['birthDate'])  ?>" readonly>
-                            </div>
-                        </div>
-
-                        <div class="editBtn">
-                            <button class="btn btn-primary" id="editBtn" type="submit" onclick="enableEdit(event)" name="edit">Edit your information</button>
-                        </div>
+                    <button class="add-image hidden" id="btn" type="button">
+                        <img src="../Assets/Images/Icon/camera.png" alt="Camera" class="camera" id="camera">
+                    </button>
+                    <input type="file" id="fileInput" style="display: none;" class="text-field"
+                        accept=".jpg, .jpeg, .png" name="userProfile">
+                    <div class="details">
+                        <input type="text" id="nameBox" name="name" class="text-field"
+                            value="<?= $user['firstName'] . ' ' . $user['middleInitial'] . '. ' . $user['lastName'] ?>"
+                            readonly>
                     </div>
-                </form>
+                </div>
 
-                <script>
-                    function enableEdit(event) {
-                        const form = document.getElementById('myForm');
-                        const inputs = form.querySelectorAll('.text-field');
-                        const editButton = document.getElementById('editBtn');
-                        const imageBtn = document.getElementById('btn'); // Your image edit button
-                        const fileInput = document.getElementById('fileInput');
-                        const displayPhoto = document.getElementById('displayPhoto');
+                <div class="information">
+                    <div class="details">
+                        <img src="../Assets/Images/Icon/email.png" alt="email icon">
+                        <input type="email" name="email" class="text-field" value="<?= $user['email'] ?>" readonly>
+                    </div>
+                    <div class="details">
+                        <img src="../Assets/Images/Icon/phone.png" alt="phone icon">
+                        <input type="tel" name="phoneNumber" class="text-field" value="<?= $user['phoneNumber'] ?>"
+                            oninput="this.value=this.value.replace(/[^0-9]/g,'');" pattern="[0-9]{11}"
+                            placeholder="Click 'Edit' to add (optional)" readonly>
+                    </div>
+                    <div class="details">
+                        <img src="../Assets/Images/Icon/address.png" alt="address icon">
+                        <input type="text" name="userAddress" class="text-field" value="<?= $user['userAddress'] ?>"
+                            readonly>
+                    </div>
+                    <div class="details">
+                        <img src="../Assets/Images/Icon/birthday.png" alt="birthday icon">
+                        <input type="date" name="birthDate" id="birthDate" class="text-field"
+                            value="<?= htmlspecialchars($user['birthDate'])  ?>" readonly>
+                    </div>
+                </div>
 
-                        const isEditing = editButton.textContent === "Edit your information";
+                <div class="editBtn">
+                    <button class="btn btn-primary" id="editBtn" type="submit" onclick="enableEdit(event)"
+                        name="edit">Edit your information</button>
+                </div>
+            </div>
+        </form>
 
-                        if (isEditing) {
-                            // Enable editing
-                            inputs.forEach(input => {
-                                input.removeAttribute('readonly');
-                                input.classList.add('edit-mode');
-                            });
+        <script>
+        function enableEdit(event) {
+            const form = document.getElementById('myForm');
+            const inputs = form.querySelectorAll('.text-field');
+            const editButton = document.getElementById('editBtn');
+            const imageBtn = document.getElementById('btn'); // Your image edit button
+            const fileInput = document.getElementById('fileInput');
+            const displayPhoto = document.getElementById('displayPhoto');
 
-                            // Show the add-image button
-                            imageBtn.classList.remove('hidden'); // instead of setting style
+            const isEditing = editButton.textContent === "Edit your information";
 
-                            // Show the file input and handle image changes
-                            imageBtn.addEventListener('click', function(e) {
-                                e.preventDefault(); // Prevent any default behavior from clicking the button
-                                fileInput.click();
-                            });
+            if (isEditing) {
+                // Enable editing
+                inputs.forEach(input => {
+                    input.removeAttribute('readonly');
+                    input.classList.add('edit-mode');
+                });
 
-                            fileInput.addEventListener('change', (event) => {
-                                const file = event.target.files[0];
-                                if (file) {
-                                    const reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        displayPhoto.src = e.target.result; // Preview the uploaded image
-                                    };
-                                    reader.readAsDataURL(file);
-                                }
-                            });
+                // Show the add-image button
+                imageBtn.classList.remove('hidden'); // instead of setting style
 
-                            // Change button text to "Save Changes"
-                            editButton.textContent = "Save Changes";
-                            event.preventDefault();
-                        } else {
-                            // If we're not in editing mode, submit the form
-                            form.submit();
-                        }
+                // Show the file input and handle image changes
+                imageBtn.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent any default behavior from clicking the button
+                    fileInput.click();
+                });
+
+                fileInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            displayPhoto.src = e.target.result; // Preview the uploaded image
+                        };
+                        reader.readAsDataURL(file);
                     }
-                </script>
+                });
+
+                // Change button text to "Save Changes"
+                editButton.textContent = "Save Changes";
+                event.preventDefault();
+            } else {
+                // If we're not in editing mode, submit the form
+                form.submit();
+            }
+        }
+        </script>
 
 
         <?php
