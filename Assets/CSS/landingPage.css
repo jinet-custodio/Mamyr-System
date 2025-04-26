@@ -81,6 +81,7 @@ body {
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
+  background-color: #93d4f5;
   display: block;
 }
 
