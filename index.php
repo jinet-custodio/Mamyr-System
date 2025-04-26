@@ -19,7 +19,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class=" navbar-toggler ms-auto" id="bg-nav-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -28,26 +28,28 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="Pages/amenities.php" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        AMENITIES
+                        Amenities
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="Pages/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="#">HOTEL ROOMS AND RATES</a></li>
-                        <li><a class="dropdown-item" href="Pages/events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="Pages/amenities.php">Resort Amenities</a></li>
+                        <li><a class="dropdown-item" href="Pages/events.php">Events</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link" href="#">Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">RATES</a>
+                    <a class="nav-link" href="#">Rates</a>
                 </li>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="Pages/beOurPartner.php">Be Our Partner</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/register.php">BOOK NOW</a>
+                    <a class="nav-link" href="Pages/register.php">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Pages/register.php">Book Now</a>
                 </li>
             </ul>
         </div>
@@ -163,7 +165,6 @@
                     <h3 class="time">9:00am - 6:00pm</h3>
                 </div>
 
-
                 <p class="closedAdditionalText">Thank you for your understanding and continued support.
                     We apologize for any delayed in response and seek your kind understanding during this period for the
                     inconvenience caused.</p>
@@ -206,7 +207,6 @@
         </footer>
     </div>
 
-
     <script>
         function myMap() {
             var mapProp = {
@@ -215,6 +215,15 @@
             };
             var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         }
+    </script>
+
+    <script>
+        const toggleButton = document.getElementById('bg-nav-toggler');
+        const navbar = document.querySelector('.navbar');
+
+        toggleButton.addEventListener('click', () => {
+            navbar.classList.toggle('white-bg');
+        });
     </script>
     <script src="Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="Assets/JS/scrollNavbg.js"></script>
