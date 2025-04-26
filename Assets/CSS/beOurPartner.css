@@ -46,9 +46,9 @@ nav {
   align-items: center;
   height: 15vh;
   padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.562);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /* background-color: rgba(255, 255, 255, 0.562); */
+  /* backdrop-filter: blur(8px); */
+  /* -webkit-backdrop-filter: blur(8px); */
 }
 
 .navbar-nav {
@@ -66,6 +66,16 @@ nav {
   top: -0.45vw; /* para ma-align yung dropdown sa ibang nav-item */
 }
 
+.navbar.scrolled {
+  background-color: white;
+  .nav-link {
+    color: black !important;
+  }
+  .nav-link:not(.dropdown-toggle):after {
+    border-bottom: 4px solid rgb(126, 203, 242) !important;
+  }
+}
+
 ul {
   font-family: "Plus Jakarta Sans";
   font-weight: lighter;
@@ -80,7 +90,7 @@ ul {
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
-  color: rgb(0, 0, 0) !important;
+  color: rgb(255, 255, 255) !important;
   letter-spacing: 0.1em;
 }
 
@@ -92,7 +102,7 @@ ul {
   height: 2px;
   left: 50%;
   position: absolute;
-  border-bottom: 4px solid #000000 !important;
+  border-bottom: 4px solid rgb(255, 255, 255) !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }
@@ -108,12 +118,16 @@ ul {
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
-  background-color: #93d4f5;
+  background-color: white !important;
   display: block;
 }
 
+.dropdown-menu {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
 .dropdown-item:hover {
-  background-color: white;
+  background-color: rgb(126, 203, 242, 0.5) !important;
 }
 
 .dropdown-item {

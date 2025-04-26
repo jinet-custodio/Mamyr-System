@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -29,14 +29,13 @@
                     <a class="nav-link" href="../index.php"> HOME</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="../Pages/amenities.php" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="amenities.php" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="#">HOTEL ROOMS AND RATES</a></li>
-                        <li><a class="dropdown-item active" href="../Pages/events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item active" href="#">EVENTS</a></li>
 
 
                     </ul>
@@ -48,7 +47,10 @@
                     <a class="nav-link" href="#">RATES</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href=".beOurPartner.php">BE OUR PARTNER</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
@@ -69,7 +71,7 @@
 
     <div class="categories">
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
-            <img class="card-img-top" src="../assets/images/amenities/pavilionPics/pav4.jpg" alt="Wedding Event">
+            <img class="card-img-top" src="../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Wedding Event">
             <div class="card-body">
                 <h5 class="card-title">Wedding</h5>
                 <div class="eventDescription">
@@ -77,21 +79,21 @@
                         dream come true!</p>
                 </div>
 
-                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK NOW</button>
+                <button type="button" class="btn btn-primary" id="bookBtn" style="margin-top: auto;">BOOK NOW</button>
             </div>
 
         </div>
 
 
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
-            <img class="card-img-top" src="../assets/images/EventsPhotos/birthday.jpg" alt="Birthday Event">
+            <img class="card-img-top" src="../Assets/Images/EventsPhotos/birthday.jpg" alt="Birthday Event">
             <div class="card-body">
                 <h5 class="card-title">Birthday</h5>
                 <div class="eventDescription">
                     <p class="eventDesc">Celebrating the joy of life at Mamyr Resort and Events Place—where every year
                         brings new moments to cherish!</p>
                 </div>
-                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK NOW</button>
+                <button type="button" class="btn btn-primary" id="bookBtn" style="margin-top: auto;">BOOK NOW</button>
 
 
             </div>
@@ -106,7 +108,7 @@
                         christenings to dedications, is a moment to treasure.</p>
                 </div>
 
-                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK NOW</button>
+                <button type="button" class="btn btn-primary" id="bookBtn" style="margin-top: auto;">BOOK NOW</button>
 
 
             </div>
@@ -121,7 +123,7 @@
                         leadership thrive in inspiring surroundings!
                     </p>
                 </div>
-                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK NOW</button>
+                <button type="button" class="btn btn-primary" id="bookBtn" style="margin-top: auto;">BOOK NOW</button>
 
 
             </div>
@@ -135,7 +137,7 @@
                     <p class="eventDesc">Celebrating gratitude and togetherness at Mamyr Resort—where good food and
                         great company make every moment unforgettable!</p>
                 </div>
-                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK NOW</button>
+                <button type="button" class="btn btn-primary" id="bookBtn" style="margin-top: auto;">BOOK NOW</button>
 
 
             </div>
@@ -149,9 +151,7 @@
                     <p class="eventDesc">Embracing the magic of the holidays at Mamyr Resort—where grand feasts and
                         unforgettable moments bring joy to all!</p>
                 </div>
-                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK NOW</button>
-
-
+                <button type="button" class="btn btn-primary" id="bookBtn" style="margin-top: auto;">BOOK NOW</button>
             </div>
         </div>
 
@@ -191,8 +191,29 @@
         </div>
 
     </footer>
-
-
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Bootstrap JS -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- Scroll Nav BG -->
+    <script src="../Assets/JS/scrollNavbg.js"></script>
+    <!-- Sweet Alert -->
+    <script>
+        const bookButtons = document.querySelectorAll('#bookBtn');
 
+        bookButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Are you ready to book?',
+                    text: 'You need to register before booking an event.',
+                    icon: 'info',
+                    confirmButtonText: 'Go'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'register.php';
+                    }
+                });
+            });
+        });
+    </script>
 </body>

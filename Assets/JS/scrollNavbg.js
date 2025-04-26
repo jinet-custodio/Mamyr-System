@@ -6,3 +6,12 @@ window.addEventListener("scroll", function () {
     navbar.classList.remove("scrolled");
   }
 });
+
+window.addEventListener("scroll", function () {
+  const navbar = document.getElementById("navbar-half");
+  if (window.scrollY > window.innerHeight / 2) {
+    navbar.classList.add("scrolled");
+  } else {
+    navbar.classList.remove("scrolled");
+  }
+});

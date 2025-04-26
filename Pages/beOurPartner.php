@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,7 +35,6 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item " href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="#">HOTEL ROOMS AND RATES</a></li>
                         <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
 
 
@@ -49,6 +48,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Pages/register.php">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
@@ -302,6 +304,8 @@
     </script>
 
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- Scroll Nav BG -->
+    <script src="../Assets/JS/scrollNavbg.js"></script>
 </body>
 
 </html>
