@@ -1,0 +1,102 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../Fonts/Prata/Prata-Regular.ttf);
+}
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+@font-face {
+  font-family: "Playfair Display";
+  src: url(../Fonts/Playfair_Display/PlayfairDisplay-Regular.ttf);
+}
+
+body {
+  background-color: #f7f0eb !important;
+}
+.header {
+  background-color: #10807d;
+  height: 60vh;
+  padding: 6vw;
+}
+
+.backIconContainer {
+  position: absolute;
+  margin-top: -2vw;
+}
+
+.backArrow {
+  width: 3vw;
+}
+.title {
+  font-family: Prata;
+  text-align: center;
+  color: #ffff;
+}
+
+.pavilionPicContainer {
+  /* border: 1px solid black; */
+  margin-top: -13vw;
+}
+
+.pavilion {
+  width: 70vw;
+  display: block;
+  margin: 0 auto;
+}
+
+.package1 {
+  display: flex;
+  gap: 3vw;
+  width: 90%;
+  background-color: #3f8fbf;
+  margin: auto;
+  margin-top: 10vw !important;
+  padding: 3vw;
+  border-radius: 10px;
+}
+
+.p1ImgContainer {
+  /* border: 1px solid black; */
+  background-color: #ffff;
+  border-radius: 10px;
+  width: 40%;
+  padding: 1vw;
+  margin-top: -8vw;
+}
+
+.p1Img {
+  width: 30vw;
+  display: block;
+  margin: auto;
+}
+
+.p1Text {
+  /* border: 1px solid black; */
+  width: 100%;
+}
+
+.p1Title,
+.p1Inclusion,
+.p1ListOfInclusions,
+.p1Price {
+  font-family: Playfair Display;
+  color: #ffff;
+}
+
+.custom-btn {
+  background-color: #0d3a55 !important;
+  color: #ffff !important;
+
+  &:hover {
+    background-color: #104261 !important;
+  }
+}

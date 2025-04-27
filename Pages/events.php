@@ -98,6 +98,30 @@
         </div>
 
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
+            <img class="card-img-top" src="../assets/images//EventsPhotos/debut.jpg" alt="Debut Event">
+            <div class="card-body">
+                <h5 class="card-title">Debut</h5>
+                <div class="eventDescription">
+                    <p class="eventDesc">Celebrating a milestone at Mamyr Resort and Events Place—where every debut
+                        marks a new chapter of unforgettable memories!</p>
+                </div>
+                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK NOW</button>
+            </div>
+        </div>
+
+        <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
+            <img class="card-img-top" src="../assets/images//EventsPhotos/kidsParty.jpg" alt="Kids Party">
+            <div class="card-body">
+                <h5 class="card-title">Kids Party</h5>
+                <div class="eventDescription">
+                    <p class="eventDesc">Creating magical moments at Mamyr Resort and Events Place—where every kids'
+                        party is filled with joy, laughter, and unforgettable memories!</p>
+                </div>
+                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK NOW</button>
+            </div>
+        </div>
+
+        <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
             <img class="card-img-top" src="../assets/images/EventsPhotos/christening.jpg" alt="Christening Event">
             <div class="card-body">
                 <h5 class="card-title">Christening/Dedication</h5>
@@ -115,10 +139,10 @@
         <div class="card" style="width: 18rem; display: flex; flex-direction: column; height: 100%;">
             <img class="card-img-top" src="../assets/images/EventsPhotos/teamBuilding.jpg" alt="Team Building Event">
             <div class="card-body">
-                <h5 class="card-title">Team Building</h5>
+                <h5 class="card-title">Corporate Event</h5>
                 <div class="eventDescription">
-                    <p class="eventDesc">Creating great ideas and strong bonds at Mamyr Resort—where teamwork and
-                        leadership thrive in inspiring surroundings!
+                    <p class="eventDesc">Fostering innovation and strengthening partnerships at Mamyr Resort—where
+                        leadership and teamwork flourish in an inspiring setting!
                     </p>
                 </div>
                 <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK NOW</button>

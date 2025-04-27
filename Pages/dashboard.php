@@ -59,19 +59,15 @@
     </nav>
 
     <div class="custom-container">
-        <div class="titleContainer">
-            <div class="mamyrTitle">
-                <h1 class="welcome">Welcome to Mamyr,</h1>
+        <div class="topContainer">
+            <div class="titleContainer">
+                <div class="mamyrTitle">
+                    <h1 class="welcome">Welcome to Mamyr,</h1>
+                </div>
+                <div class="nameOfUserContainer">
+                    <h1 class="nameOfUser">Jannine!</h1>
+                </div>
             </div>
-            <div class="nameOfUserContainer">
-                <h1 class="nameOfUser">Jannine!</h1>
-            </div>
-
-        </div>
-
-
-        <div class="calendarContainer">
-            <h3 class="calendarTitle">My Calendar</h3>
             <div id="calendar"></div>
         </div>
 

@@ -404,11 +404,12 @@
 
                     </div>
 
-                    <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
+                    <h5 class="purposeLabel">Additional Notes</h5>
                     <textarea class="form-control w-100" id="purpose-additionalNotes" rows="5"
                         placeholder="Optional"></textarea>
 
                     <div class="mt-auto">
+                        <a href="./pacakges.php" class="btn btn-info btn-md w-100 mb-3">View Event Packages</a>
                         <button type="submit" class="btn btn-success btn-md w-100">Book Now</button>
                     </div>
                 </div>
