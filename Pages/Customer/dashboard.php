@@ -108,12 +108,6 @@ $userType = $_SESSION['userType'];
             <div class="nameOfUserContainer">
                 <h1 class="nameOfUser"><?= ucfirst($firstName) ?></h1>
             </div>
-
-        </div>
-
-
-        <div class="calendarContainer">
-            <h3 class="calendarTitle">My Calendar</h3>
             <div id="calendar"></div>
         </div>
 
