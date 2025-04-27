@@ -209,7 +209,7 @@
                         placeholder="Example: https://drive.google.com/drive/folders/your-folder-id-here">
                 </div>
 
-                <button type="submit" class="btn btn-success btn-md">Submit Request</button>
+                <button type="submit" class="btn btn-success btn-md" id="submit-request">Submit Request</button>
             </div>
 
         </div>
@@ -248,8 +248,6 @@
         </div>
 
     </footer>
-
-
 
 
 
@@ -302,9 +300,31 @@
         });
     </script>
 
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
     <!-- Scroll Nav BG -->
     <script src="../Assets/JS/scrollNavbg.js"></script>
+
+    <!-- Sweet Alert -->
+    <script>
+        const bookButtons = document.querySelectorAll('#submit-request');
+
+        bookButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Want to Become Our Business Partner?',
+                    text: 'You must have an existing account before becoming a business partner.',
+                    icon: 'info',
+                    confirmButtonText: 'Go'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'register.php';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -52,6 +52,11 @@ require '../Function/OTPdeletion.php';
                             echo htmlspecialchars(strip_tags($_SESSION['error']));
                             unset($_SESSION['error']);
                         }
+
+                        if (isset($_GET['session']) && $_GET['session'] === 'expired') {
+                            echo '<div class="alert alert-warning" style="margin-top: 1rem;">Session Expired</div>';
+                        }
+
                         ?>
                     </p>
                     <p class="successMsg">

@@ -59,11 +59,15 @@ if (isset($_SESSION['email'])) {
                   echo htmlspecialchars($_SESSION['OTP']);
                   unset($_SESSION['OTP']);
                 }
-                ?>
-                <?php
+
                 if (isset($_SESSION['time'])) {
                   echo htmlspecialchars($_SESSION['time']);
                   unset($_SESSION['time']);
+                }
+
+                if (isset($_SESSION['error'])) {
+                  echo htmlspecialchars($_SESSION['error']);
+                  unset($_SESSION['error']);
                 }
                 ?>
               </div>
