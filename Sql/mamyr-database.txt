@@ -89,6 +89,14 @@ CREATE TABLE resortServices (
     imageData LONGBLOB
 );
 
+CREATE TABLE entranceRates (
+    resortEntranceID INT PRIMARY KEY AUTO_INCREMENT,
+    session_type VARCHAR(20),   
+    time_range VARCHAR(50),    
+    category VARCHAR(10),       
+    price DECIMAL(10,2)       
+);
+
 -- =========================
 -- SERVICES (joins resort services with partner businesses)
 -- =========================
@@ -98,9 +106,11 @@ CREATE TABLE services (
     resortServiceID INT NOT NULL,
     partnershipServiceID INT NOT NULL,
     availabilityID INT DEFAULT 1, 
+    resortEntranceID INT NOT NULL,
     FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
     FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
-    FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID)
+    FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID),
+    FOREIGN KEY (resortEntranceID) REFERENCES entranceRates(resortEntranceID)
 );
 
 -- =========================
