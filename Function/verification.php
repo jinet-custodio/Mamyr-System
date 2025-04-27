@@ -68,8 +68,7 @@ if (isset($_POST['verify-btn'])) {
             exit;
         }
     } else {
-        // $_SESSION['error'] = "Not found.";
-        echo 'No Email found.';
+        $_SESSION['error'] = "Email doesn`t exist";
         header("Location: ../Pages/verify_email.php");
         exit;
     }
@@ -93,11 +92,12 @@ if (isset($_POST['resend_code'])) {
             $storedOTP = $data['userOTP'];
             date_default_timezone_set('Asia/Manila');
             $time_now = date('Y-m-d H:i:s');
-            $time_left = strtotime($time_now) - strtotime($stored_expiration);
+            $time_left = strtotime($stored_expiration) - strtotime($time_now);
             if ($time_left < 300) {
                 $minutes_left = ceil($time_remaining / 60);
                 $_SESSION['time'] = "Wait for " . $minutes_left . " more minute(s) to request again.";
                 header("Location: ../Pages/verify_email.php");
+                exit;
             } else {
                 $updateOTP = "UPDATE users SET userOTP = '$newOtp', OTP_expiration_at = '$new_time' WHERE  email = '$email'";
                 $result = mysqli_query($conn, $updateOTP);
