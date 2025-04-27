@@ -1,3 +1,15 @@
+<?php
+require '../../Config/dbcon.php';
+session_start();
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
+    header("Location: ../register.php");
+    exit();
+} else {
+    $userID = $_SESSION['userID'];
+    $userType = $_SESSION['userType'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +18,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Home </title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../../Assets/CSS/dashboard.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Customer/dashboard.css">
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -63,8 +75,17 @@
             <div class="mamyrTitle">
                 <h1 class="welcome">Welcome to Mamyr,</h1>
             </div>
+
+            <?php
+            $query = "SELECT firstName FROM users WHERE userID = '$userID'";
+            $result = mysqli_query($conn, $query);
+            if (mysqli_num_rows($result) > 0) {
+                $row = mysqli_fetch_assoc($result);
+                $firstName = $row['firstName'];
+            }
+            ?>
             <div class="nameOfUserContainer">
-                <h1 class="nameOfUser">Jannine!</h1>
+                <h1 class="nameOfUser"><?= ucfirst($firstName) ?></h1>
             </div>
 
         </div>
@@ -117,9 +138,7 @@
         <div class="gallery">
             <hr class="line">
             <h4 class="galleryTitle">Gallery </h4>
-
             <div class="galleryPictures">
-
                 <img src="../../Assets/Images/landingPage/gallery/img1.png" alt="resort View 1" class="img1 galleryImg">
                 <img src="../../Assets/Images/landingPage/gallery/img2.png" alt="resort View 2" class="img2 galleryImg">
                 <img src="../../Assets/Images/landingPage/gallery/img3.png" alt="resort View 3" class="img3 galleryImg">
