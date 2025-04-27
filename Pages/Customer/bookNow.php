@@ -426,6 +426,7 @@ $userType = $_SESSION['userType'];
                         placeholder="Optional"></textarea>
 
                     <div class="mt-auto">
+                        <a href="packages.php" class="btn btn-info btn-md w-100 mb-3">View Event Packages</a>
                         <button type="submit" class="btn btn-success btn-md w-100">Book Now</button>
                     </div>
                 </div>
@@ -438,7 +439,6 @@ $userType = $_SESSION['userType'];
         </div>
         <!--end ng event div-->
     </form>
-
 
 
     <footer class="py-1 my-2">
