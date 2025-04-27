@@ -22,4 +22,11 @@ INSERT INTO resortServices( facilityName, price, capacity,duration,category, des
 
 
 
+INSERT INTO entranceRates (session_type, time_range, category, price) VALUES
+('Day', '9:00 am - 4:00 pm', 'Adult', 150.00),
+('Day', '9:00 am - 4:00 pm', 'Kids', 100.00),
+('Night', '12:00 pm - 8:00 pm', 'Adult', 180.00),
+('Night', '12:00 pm - 8:00 pm', 'Kids', 130.00),
+('Overnight', '8:00 pm - 5:00 am', 'Adult', 250.00),
+('Overnight', '8:00 pm - 5:00 am', 'Kids', 200.00);
 
