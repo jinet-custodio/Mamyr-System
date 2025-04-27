@@ -32,7 +32,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="Pages/amenities.php">Resort Amenities</a></li>
-                        <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
+                        <li><a class="dropdown-item" href="Pages/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                         <li><a class="dropdown-item" href="Pages/events.php">Events</a></li>
                     </ul>
                 </li>
