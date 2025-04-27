@@ -29,7 +29,8 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat; */
-  background-color: #f2d8b7 !important;
+  background-color: rgb(0, 187, 255) !important;
+  transition: background-color 0.5s ease;
 }
 
 nav {
@@ -93,7 +94,7 @@ ul {
   height: 2px;
   left: 50%;
   position: absolute;
-  border-bottom: 4px solid #000000 !important;
+  border-bottom: 4px solid rgb(126, 203, 242) !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }
@@ -108,13 +109,21 @@ ul {
   left: 0;
 }
 
+.dropdown-menu {
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
 .nav-item.dropdown:hover .dropdown-menu {
-  background-color: #93d4f5;
+  background-color: white !important;
   display: block;
 }
 
 .dropdown-item:hover {
-  background-color: white;
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
+
+.dropdown-item.active {
+  background-color: rgb(126, 203, 242) !important;
+  color: black !important;
 }
 
 .dropdown-item {
@@ -243,36 +252,35 @@ footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 5vw;
-  margin-bottom: 20vw;
+  /* margin-top: 5vw; */
 }
 
-.card,
-.card-body {
-  margin: 3vw;
-  border-radius: 2vw 2vw 2vw 2vw !important;
-  text-align: center;
-  height: 30vw !important;
-}
-
-.card {
+.category-card {
+  height: 60vh !important;
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 
-.card-body {
+.category-card,
+.category-body {
+  margin: 2vw;
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  text-align: center;
+}
+
+.category-body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.card img {
+.category-card img {
   border-radius: 2vw 2vw 2vw 2vw !important;
   padding: 1vw;
-  height: 40vw !important;
+  height: 20vw !important;
   object-fit: cover;
 }
 
-.card-title {
+.category-title {
   font-family: "Poppins Black";
   font-style: italic;
   font-weight: bold;
@@ -288,11 +296,11 @@ footer {
   }
 }
 
-.categoryLink .card {
+.categoryLink .category-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.categoryLink:hover .card {
+.categoryLink:hover .category-card {
   transform: translateY(-12px);
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
 }
@@ -313,7 +321,7 @@ footer {
   justify-content: center;
   align-items: center;
 }
-.card {
+.hotel-card {
   padding: 2vw;
   height: 120vh !important;
   /* display: flex;
@@ -393,7 +401,7 @@ footer {
 }
 
 .hotelIcon {
-  /* border: 1px solid black; */
+  /* border: 1px solid black;  */
   height: 1w;
   width: auto;
   margin-top: 4vw;
@@ -409,7 +417,6 @@ footer {
 #hotelBookingCard {
   padding: 2vw;
   height: 100vh !important;
-/
 }
 
 .checkInOut {
@@ -465,15 +472,15 @@ footer {
   font-weight: bold;
 }
 
-.container-fluid {
+.event-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.card {
+.event-card {
   padding: 2vw;
-  height: 145vh !important;
+  height: 135vh !important;
   /* display: flex;
   justify-content: center;
   align-items: center; */
@@ -486,16 +493,18 @@ footer {
 }
 
 #eventDropdownMenuButton {
-  min-width: 200px !important; 
+  min-width: 200px !important;
 }
 
 .form-control {
   width: 20vw !important;
 }
 
-
 .eventLabel,
-.noOfGuestLabel, .hourLabel, .packageLabel, .customPackageLabel,
+.noOfGuestLabel,
+.hourLabel,
+.packageLabel,
+.customPackageLabel,
 .dateLabel,
 .venueLabel,
 .purposeLabel {
@@ -503,87 +512,87 @@ footer {
   font-weight: bold;
 }
 
- .dateVenue, .noHrPpl, .package{
+.dateVenue,
+.noHrPpl,
+.package {
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   gap: 1vw;
 }
 
-.dateForm, .venueForm, .hrForm, .peopleEventForm{
+.dateForm,
+.venueForm,
+.hrForm,
+.peopleEventForm {
   width: 100%;
 }
 
- .package{
+.package {
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   gap: 5vw;
- 
 }
 
-.btn-info{
+.btn-info {
   color: #ffff !important;
 }
 
 #calendar {
   width: 45%;
-  height: 100vh; 
+  height: 100vh;
   margin: 0 auto;
   background-color: #fffefe;
   border-radius: 5vw;
 }
 
 .fc-header-toolbar {
-  background-color: #00bbff; 
+  background-color: #00bbff;
   padding: 2vw;
   height: 8vw;
-  border-top-left-radius: 3vw;  
+  border-top-left-radius: 3vw;
   border-top-right-radius: 3vw;
 }
 
 .fc-button {
-  background-color: #ffffff !important; 
-  color: rgb(0, 0, 0) !important; 
-  border-radius: 5px; 
+  background-color: #ffffff !important;
+  color: rgb(0, 0, 0) !important;
+  border-radius: 5px;
   font-weight: bold;
 }
 
-
-
 .fc .fc-toolbar-title {
-font-family: "Poppins" !important;
-font-weight: bold;
-color: #fff;
+  font-family: "Poppins" !important;
+  font-weight: bold;
+  color: #fff;
 }
 
-.fc .fc-button-primary:disabled{
+.fc .fc-button-primary:disabled {
   background-color: #fdfdfd !important;
   opacity: 1 !important;
-  }
+}
 
-.fc .fc-button-primary:disabled:hover{
+.fc .fc-button-primary:disabled:hover {
   background-color: #f2d8b7 !important;
-opacity: 1 !important;
+  opacity: 1 !important;
 }
 
-.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child){
-  margin-left: 1vw; 
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+  margin-left: 1vw;
 
-  &:hover{
-      background-color: #91c6ff !important; 
-      color: #fff !important;
- 
+  &:hover {
+    background-color: #91c6ff !important;
+    color: #fff !important;
   }
 }
 
-.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child){
-  margin-left: 1vw; 
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+  margin-left: 1vw;
 
-  &:hover{
-      background-color: #91c6ff !important; 
-      color: #fff !important;
- 
+  &:hover {
+    background-color: #91c6ff !important;
+    color: #fff !important;
   }
 }
 
@@ -592,20 +601,20 @@ opacity: 1 !important;
   color: #fff;
 }
 
-.fc .fc-view-harness{
-  margin-top:-1.7vw ;
+.fc .fc-view-harness {
+  margin-top: -1.7vw;
 }
 
 /* di ko sure 'to test nalang pag may event na nalagay*/
 .fc-event {
-  background-color: #28a745; 
-  color: white; 
-  border-radius: 5px; 
-  padding: 5px; 
+  background-color: #28a745;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .fc-event:hover {
-  background-color: #218838; 
+  background-color: #218838;
 }
 /* di ko sure 'to test nalang pag may event na nalagay*/
 /* event booking */
