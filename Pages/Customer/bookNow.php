@@ -70,7 +70,7 @@ session_start();
         </div>
         <div class="categories">
             <a href="#resort-page" id="resort-link" class="categoryLink">
-                <div class="card category-card" style="width: 20rem; display: flex; flex-direction: column;">
+                <div class="card category-card resort-category" style="width: 20rem; display: flex; flex-direction: column;">
                     <img class="card-img-top" src="../../Assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
 
                     <div class="category-body">
@@ -79,7 +79,7 @@ session_start();
                 </div>
             </a>
             <a href="#hotel-page" id="hotel-link" class="categoryLink">
-                <div class="card category-card" style="width: 20rem; display: flex; flex-direction: column;">
+                <div class="card category-card hotel-category" style="width: 20rem; display: flex; flex-direction: column;">
                     <img class="card-img-top" src="../../Assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
                     <div class="category-body">
                         <h5 class="category-title">HOTEL</h5>
@@ -87,7 +87,7 @@ session_start();
                 </div>
             </a>
             <a href="#event-page" id="event-link" class="categoryLink">
-                <div class="card category-card" style="width: 20rem; display: flex; flex-direction: column;">
+                <div class="card category-card event-category" style="width: 20rem; display: flex; flex-direction: column;">
                     <img class="card-img-top" src="../../Assets/images/amenities/pavilionPics/pav4.jpg" alt="Wedding Event">
                     <div class="category-body">
                         <h5 class="category-title">EVENT</h5>
@@ -248,7 +248,7 @@ session_start();
                 </div>
 
 
-                <div class="card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
+                <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
                     <div class="checkInOut">
                         <div class="checkInOutLabel">
@@ -309,7 +309,7 @@ session_start();
             </div>
 
             <div class="container-fluid event-container">
-                <div class="card event-card" id="resortBookingCard" style="width: 40rem; flex-shrink: 0; ">
+                <div class="card event-card" id="eventBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
                     <div class="eventForm">
 
