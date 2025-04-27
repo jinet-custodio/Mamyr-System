@@ -1,0 +1,657 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../Fonts/Prata/Prata-Regular.ttf);
+}
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+/* html,
+
+
+body {
+  display: flex;
+  flex-direction: column;
+} */
+
+body {
+  background: #ffd787a0 !important;
+}
+
+/* navbar code */
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  /* background-color: rgb(242, 242, 242); */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 15vh;
+  padding: 1rem;
+}
+
+.navbar-nav {
+  display: flex !important;
+  list-style: none;
+  margin-top: 10px !important;
+}
+
+.navbar-nav .dropdown-toggle {
+  display: inline-block;
+  padding: 10px 15px !important;
+  line-height: 1.5;
+  vertical-align: middle;
+  position: relative;
+  top: 0.1vw; /* para ma-align yung dropdown sa ibang nav-item */
+}
+
+ul {
+  font-family: "Plus Jakarta Sans";
+  font-weight: lighter;
+  font-size: 1.3vw;
+  list-style: none;
+  display: table;
+  text-transform: uppercase;
+}
+
+.nav-link {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px !important;
+  position: relative;
+  color: rgb(0, 0, 0) !important;
+  letter-spacing: 0.1em;
+}
+
+.nav-link:not(.dropdown-toggle):after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  border-bottom: 4px solid #93d4f5 !important;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link.active:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-link:not(.dropdown-toggle):hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  background-color: #93d4f5;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: white;
+}
+
+.dropdown-item {
+  font-size: 1.3vw;
+  font-weight: bold;
+}
+
+.logoNav {
+  /* border: 1px solid black; */
+  width: 15vw;
+  position: absolute;
+  margin: 2vw;
+}
+
+/* end of navbar code */
+
+
+/* body css */
+.titleContainer {
+  width: 70%;
+  margin: auto;
+  text-align: center;
+  margin-top: 10vw !important;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2vw;
+  margin-bottom: 5vw;
+}
+
+.card,
+.card-body {
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  text-align: center;
+  height: 30vw !important;
+  width: 20vw;
+}
+
+.card {
+  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+  margin: 2vw;
+  background-color: whitesmoke !important;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  margin: 0 auto;
+  height: 15vw !important;
+}
+
+.card img {
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  padding: 1vw;
+  height: 30vw !important;
+  object-fit: cover;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.card-title {
+  font-family: "Poppins Black";
+  font-style: italic;
+  font-weight: bold;
+  font-size: 2.3vw;
+  color: #00b3d1 !important;
+  text-align: center;
+}
+
+.categoryLink {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.categoryLink .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.categoryLink:hover .card {
+  transform: translateY(-12px);
+  box-shadow: 0 8px 6px rgba(39, 183, 255, 0.4);
+}
+
+/* rates code */
+
+.rates {
+  margin-top: 9vw;
+}
+
+/* entrance */
+.entranceFee {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+.entranceTitleContainer {
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  margin-top: 5vw !important;
+  color: whitesmoke;
+}
+
+.entranceLine {
+  border: none;
+  border-top: 5px solid #d48d31;
+  width: 30%;
+  margin: 0 auto;
+  opacity: 1;
+}
+
+.entranceTitle {
+  margin-top: 2vw;
+  font-size: 2.8vw;
+  font-family: "Prata";
+}
+
+.entranceCard {
+  padding: 2vw;
+  font-size: 1.5vw;
+  width: 22vw !important;
+  height: 20vw !important;
+  display: grid !important;
+  align-items: center;
+}
+
+.entrance-card-title {
+  font-family: "Plus Jakarta Sans";
+  font-weight: bold;
+  font-size: 1.7vw;
+  color: #212121 !important;
+  text-align: center;
+}
+
+.entrace-card-body{
+  display: flex;
+  flex-direction: column;
+  justify-content:flex-start;
+  margin: 0 auto;
+}
+
+.entrance-card-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto;
+}
+
+.title {
+  text-align: center;
+  margin-top: 1.5vw;
+  margin-bottom: 1vw;
+  font-size: 2.5vw;
+  font-family: "Prata";
+  color: #000000;
+}
+
+/* end of entrance code */
+
+/* cottages code */
+.cottage {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    background-color: whitesmoke;
+    border-radius: 1vw;
+    padding: 1vw;
+    margin: 0 auto 1vw auto;
+    justify-content: space-around;
+}
+
+.Description {
+    display: flex;
+    flex-direction: column;
+    justify-content:  center;
+    text-align: center;
+}
+
+.Description h2 {
+  font-size: 2.1vw !important;
+  font-family: "Prata";
+}
+
+.Description p {
+    font-size: 1.5vw !important;
+    font-family: "Poppins";
+}
+
+.halfImg, .singleImg  {
+    padding: 1vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.halfImg img, .singleImg img{
+    width: 30vw;
+}
+
+/* end of cottages code */
+
+/* videoke code  */
+
+.section {
+    display: flex;
+    flex-wrap: wrap;
+    width: 95%;
+    background-color: whitesmoke;
+    border-radius: 1vw;
+    padding: 1vw;
+    margin: 0 auto 1vw auto;
+    justify-content: space-around;    
+}
+.videokeTitleContainer {
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  margin-top: 5vw !important;
+}
+
+.videokeTitle {
+  margin-top: 1vw;
+  font-size: 2.5vw;
+  font-family: "Prata";
+}
+
+#videokeDesc {
+    background-color: #ffe6b4a0;
+    border-radius: 2vw;
+    font-size: 1.5vw;
+    padding: 0.8vw;
+}
+
+#videokeDesc p {
+    font-size: 1.5vw;
+}
+
+
+
+
+/*end of videoke code */
+
+/* billiards code */
+#billiards {
+    background: none !important;
+    width: 95%;
+}
+
+
+        
+/* end of billiards code */
+
+/* massage chair code */
+#massage {
+  background-color: transparent;
+}
+
+#massageDesc {
+  background-color: whitesmoke;
+  border-radius: 2vw;
+  font-size: 1.5vw;
+  padding: 0.8vw;
+}
+/* end of massage chair  code */
+
+/* footer code */
+footer {
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.445) -50%,
+    rgb(62, 132, 158) 95%
+  );
+}
+
+.my-2 {
+  margin-bottom: 0;
+}
+
+.pb-1 {
+  gap: 2vw;
+  padding: 1vw 0 0 2vw;
+}
+
+.logo {
+  width: 10vw;
+  height: auto;
+}
+.mb-0 {
+  font-family: "Prata";
+  font-size: 1.5vw;
+  font-weight: bold;
+  color: #ffff;
+}
+
+.footerLine {
+  width: 80%;
+  margin: 0 auto;
+  color: #fff;
+  opacity: 1;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5vw;
+}
+.locationFooter {
+  /* border: 1px solid black; */
+  width: 30%;
+}
+
+.reservationTitle,
+.locationTitle {
+  font-family: "Plus Jakarta Sans";
+  font-weight: bold;
+  font-size: 1.5vw;
+  color: #fff;
+}
+
+.numberFooter,
+.emailAddressTextFooter,
+.addressTextFooter {
+  font-family: "Poppins ExtraLight";
+  color: #fff;
+  font-size: 1vw;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  margin: 0.3vw;
+}
+
+.socialIcons a {
+  text-decoration: none;
+  padding: 0.8vw;
+  background-color: rgb(255, 255, 255);
+  margin: 5px;
+  border-radius: 50%;
+}
+
+.socialIcons a i {
+  font-size: 2vw;
+  color: #3e849e;
+  opacity: 0.9;
+}
+
+.socialIcons a:hover {
+  background-color: white;
+  transition: 0.5s;
+}
+
+.socialIcons a:hover i {
+  color: #c1a534;
+  transition: 0.5s;
+}
+
+/* end of footer code */
+
+/* Tablet size */
+@media only screen and (min-width: 600px) and (max-width: 1025px) {
+
+  .selection {
+    margin-top: 5vw;
+  }
+
+  .title {
+    font-size: 4vw;
+  }
+
+  .entranceTitle {
+    font-size: 3vw;
+  }
+
+  .navbar {
+    padding: 5px 0;
+    height: 8vh !important;
+  }
+
+  .poolTitleContainer{
+    width: 70%;
+  }
+  .poolTitle{
+    font-size:clamp(12px, calc(1.5vh + 4px), 20px);
+  }
+  
+  .Description h2{
+    font-size:clamp(18px, calc(3vh + 4px), 27px);
+  }
+  
+  .Description{
+    font-size: clamp(12px, calc(1.5vh + 4px), 18px);
+  }
+
+  .singleImg img{
+    width: 75%;
+}
+
+#videokeDesc p, #massageDesc {
+  font-size: 1.8vw;
+
+}
+}
+
+@media (max-width: 600px) {
+  .entranceCard span{
+    font-size: clamp(10px, calc(1.1vh + 2px), 15px);
+  }
+
+  .entranceLine {
+    border: none;
+    border-top: 3px solid #d48d31;
+    width: 30%;
+    margin: 3vw auto 1.5vw auto;
+    opacity: 1;
+  }
+
+  .title {
+    font-size: 4vw;
+  }
+
+  .entranceTitle {
+    font-size: 3.3vw;
+  }
+
+  body {
+    height: 100vh !important;
+  }
+  .rates {
+    margin-top: 18vw !important;
+  }
+  
+  .Description h2{
+    font-size:clamp(14px, calc(2.5vh + 4px), 18px) !important;
+  }
+  
+  .Description p, #videokeDesc p{
+    font-size: clamp(10px, calc(1.1vh + 2px), 13px);
+  }
+
+.entranceFee {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  gap: 8px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.entranceCard {
+  padding: 1vw;
+  font-size: 1.5vw;
+  width: 90% !important;
+  height: 20vw !important;
+  display: grid !important;
+  align-items: center;
+}
+
+.navbar {
+  padding: 5px 0;
+  height: 6vh !important;
+}
+
+}
+
+
+
+@media (max-width: 400px) {
+  .selection {
+    margin-top: 15vw;
+  }
+
+  .cottage {
+    margin: 0 auto 2vw auto;
+  }
+
+  .Description h2{
+    font-size:clamp(11px, calc(1.2vh + 4px), 15px) !important;
+  }
+  
+  .Description p, #videokeDesc p{
+    font-size: clamp(6px, calc(0.9vh + 2px), 11px);
+  }
+
+  .entranceFee {
+    width: 100%;
+  }
+
+  .entranceCard span{
+    font-size: clamp(7px, calc(0.8vh + 2px), 11px);
+  }
+
+  .entrance-card-title .dayNight {
+    font-size:clamp(7px, calc(1.1vh + 3px), 17px) !important;
+  }
+
+  .entrance-card-title {
+    font-size:clamp(8px, calc(0.8vh + 2px), 11px) !important;
+  }
+
+  .entranceTitle {
+    font-size: 3.5vw;
+    margin-bottom: 5vw;
+  }
+
+  .categoryLink {
+    width: 40%;
+    height: auto;
+  }
+
+  .card-body {
+    width: 100%;
+    height: 25vw !important;
+    padding: 3vw !important;
+  }
+
+  .card-body h5 {
+    font-size: 4vw;
+  }
+
+  .card {
+    margin: 3vw auto;
+    width: 70% !important;
+    height: 40vw !important;
+  }
+
+}
+
