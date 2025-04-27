@@ -23,7 +23,6 @@ session_start();
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
-
 </head>
 
 <body id="body">
@@ -455,43 +454,55 @@ session_start();
     <script src="../../Assets/JS/BookNowJS/resortDropdown.js"></script>
     <script src="../../Assets/JS/BookNowJS/hotelDropdown.js"></script>
     <script src="../../Assets/JS/BookNowJS/eventDropdown.js"></script>
-    <script src="../../Assets/JS/fullCalendar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+    <script src="../../Assets/JS/fullCalendar.js"></script>
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Page switch -->
     <script>
-        const resortLink = document.getElementById("resort-link");
-        const hotelLink = document.getElementById("hotel-link");
-        const eventLink = document.getElementById("event-link");
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM fully loaded and parsed");
+            var calendarEl = document.getElementById("calendar");
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: "dayGridMonth",
+            });
 
-        const categories = document.getElementById("category-page");
-        const events = document.getElementById("event-page");
-        const hotels = document.getElementById("hotel-page");
-        const resorts = document.getElementById("resort-page");
 
-        eventLink.addEventListener('click', function(event) {
-            categories.style.display = "none";
-            events.style.display = "block";
-            resorts.style.display = "none";
-            hotels.style.display = "none";
-            document.body.style.setProperty('background-color', 'rgb(164, 241, 255)', 'important');
-        });
 
-        resortLink.addEventListener('click', function(event) {
-            categories.style.display = "none";
-            events.style.display = "none";
-            resorts.style.display = "block";
-            hotels.style.display = "none";
-            document.body.style.setProperty('background-color', 'rgb(0, 187, 255)', 'important');
-        });
+            const resortLink = document.getElementById("resort-link");
+            const hotelLink = document.getElementById("hotel-link");
+            const eventLink = document.getElementById("event-link");
 
-        hotelLink.addEventListener('click', function(event) {
-            categories.style.display = "none";
-            events.style.display = "none";
-            resorts.style.display = "none";
-            hotels.style.display = "block";
-            document.body.style.setProperty('background-color', 'rgb(242, 217, 184)', 'important');
+            const categories = document.getElementById("category-page");
+            const events = document.getElementById("event-page");
+            const hotels = document.getElementById("hotel-page");
+            const resorts = document.getElementById("resort-page");
+
+            eventLink.addEventListener('click', function(event) {
+                categories.style.display = "none";
+                events.style.display = "block";
+                resorts.style.display = "none";
+                hotels.style.display = "none";
+                document.body.style.setProperty('background-color', 'rgb(164, 241, 255)', 'important');
+                calendar.render();
+            });
+
+            resortLink.addEventListener('click', function(event) {
+                categories.style.display = "none";
+                events.style.display = "none";
+                resorts.style.display = "block";
+                hotels.style.display = "none";
+                document.body.style.setProperty('background-color', 'rgb(0, 187, 255)', 'important');
+            });
+
+            hotelLink.addEventListener('click', function(event) {
+                categories.style.display = "none";
+                events.style.display = "none";
+                resorts.style.display = "none";
+                hotels.style.display = "block";
+                document.body.style.setProperty('background-color', 'rgb(242, 217, 184)', 'important');
+            });
+
         });
     </script>
 </body>

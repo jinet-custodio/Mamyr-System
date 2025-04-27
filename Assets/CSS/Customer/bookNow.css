@@ -1,18 +1,18 @@
 @font-face {
   font-family: "Poppins";
-  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
   font-family: "Plus Jakarta Sans";
-  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
 }
 @font-face {
   font-family: "Prata";
-  src: url(../Fonts/Prata/Prata-Regular.ttf);
+  src: url(../../Fonts/Prata/Prata-Regular.ttf);
 }
 @font-face {
   font-family: "Agbalumo";
-  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+  src: url(../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
 }
 
 * {
@@ -545,6 +545,10 @@ footer {
   margin: 0 auto;
   background-color: #fffefe;
   border-radius: 5vw;
+}
+
+.fc table {
+  font-size: clamp(1vw, calc(2vh + 4px), 1.8vw) !important;
 }
 
 .fc-header-toolbar {
