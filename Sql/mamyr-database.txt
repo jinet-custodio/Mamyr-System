@@ -55,6 +55,7 @@ CREATE TABLE partnerships (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
     partnerAddress TEXT NOT NULL,
+    companyName varchar(50) not null,
     partnerType VARCHAR(200) NOT NULL,
     status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
     startDate DATE NOT NULL,
