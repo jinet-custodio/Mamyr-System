@@ -15,7 +15,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Book Now</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../../Assets/CSS/bookNow.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Customer/bookNow.css">
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -47,8 +47,6 @@ session_start();
                         <li><a class="dropdown-item " href="../amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
                         <li><a class="dropdown-item" href="../events.php">EVENTS</a></li>
-
-
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -67,44 +65,40 @@ session_start();
         </div>
     </nav>
 
-    <!-- <div class="titleContainer">
-        <h4 class="title">What are you booking for?</h4>
-    </div> -->
+    <div class="categories-page" id="category-page">
+        <div class="titleContainer">
+            <h4 class="title">What are you booking for?</h4>
+        </div>
+        <div class="categories">
+            <a href="#resort-page" id="resort-link" class="categoryLink">
+                <div class="card category-card" style="width: 20rem; display: flex; flex-direction: column;">
+                    <img class="card-img-top" src="../../Assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
 
-
-    <!-- <div class="categories">
-
-        <a href="../pages/register.php" class="categoryLink">
-            <div class="card" style="width: 20rem; display: flex; flex-direction: column; height: 100%;">
-                <img class="card-img-top" src="../../Assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
-
-                <div class="card-body">
-                    <h5 class="card-title">RESORT</h5>
+                    <div class="category-body">
+                        <h5 class="category-title">RESORT</h5>
+                    </div>
                 </div>
-            </div>
-        </a>
-
-        <a href="../pages/register.php" class="categoryLink">
-            <div class="card" style="width: 20rem; display: flex; flex-direction: column; height: 100%;">
-                <img class="card-img-top" src="../../Assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
-                <div class="card-body">
-                    <h5 class="card-title">HOTEL</h5>
+            </a>
+            <a href="#hotel-page" id="hotel-link" class="categoryLink">
+                <div class="card category-card" style="width: 20rem; display: flex; flex-direction: column;">
+                    <img class="card-img-top" src="../../Assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
+                    <div class="category-body">
+                        <h5 class="category-title">HOTEL</h5>
+                    </div>
                 </div>
-            </div>
-        </a>
-
-        <a href="../pages/register.php" class="categoryLink">
-            <div class="card" style="width: 20rem; display: flex; flex-direction: column; height: 100%;">
-                <img class="card-img-top" src="../../Assets/images/amenities/pavilionPics/pav4.jpg" alt="Wedding Event">
-                <div class="card-body">
-                    <h5 class="card-title">EVENT</h5>
+            </a>
+            <a href="#event-page" id="event-link" class="categoryLink">
+                <div class="card category-card" style="width: 20rem; display: flex; flex-direction: column;">
+                    <img class="card-img-top" src="../../Assets/images/amenities/pavilionPics/pav4.jpg" alt="Wedding Event">
+                    <div class="category-body">
+                        <h5 class="category-title">EVENT</h5>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        </div>
+    </div>
 
-    </div> -->
-
-    <!--<form action="#" method="POST">
+    <form action="#" method="POST" id="resort-page" style="display: none;">
         <div class="resort" id="resort">
 
             <div class="titleContainer">
@@ -112,14 +106,12 @@ session_start();
             </div>
 
             <div class="container-fluid">
-                <div class="card" id="resortBookingCard"style="width: 40rem; flex-shrink: 0; ">
+                <div class="card resort-card" id="resortBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
                     <h5 class="schedLabel">Schedule</h5>
 
                     <div class="scheduleForm">
                         <input type="date" class="form-control w-100" id="resortBookingDate" required>
-
-
 
 
                         <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuButton"
@@ -199,13 +191,14 @@ session_start();
                         class="ratePic">
                 </div>
             </div>
-            
 
-        </div>-->
+
+        </div>
+    </form>
     <!--end ng resort div-->
 
 
-    <!--<form action="#" method="POST">
+    <form action="#" method="POST" id="hotel-page" style="display: none;">
         <div class="hotel" id="hotel">
 
             <div class="titleContainer">
@@ -303,27 +296,21 @@ session_start();
 
                 </div>
 
-
-
-
             </div>
-           
 
         </div>
-       
-    </form>-->
-    <!--end ng hotel div-->
+    </form>
+    <!--end ng hotel div -->
 
-
-    <form action="#" method="POST">
-        <div class="event" id="event">
+    <form action="#" method="POST" id="event-page" style="display: none;">
+        <div class=" event" id="event">
 
             <div class="titleContainer">
                 <h4 class="eventTitle" id="eventTitle">EVENT BOOKING</h4>
             </div>
 
-            <div class="container-fluid">
-                <div class="card" id="resortBookingCard" style="width: 40rem; flex-shrink: 0; ">
+            <div class="container-fluid event-container">
+                <div class="card event-card" id="resortBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
                     <div class="eventForm">
 
@@ -428,80 +415,8 @@ session_start();
             <!--end ng container div-->
 
         </div>
-        <!--end ng hotel div-->
+        <!--end ng event div-->
     </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -537,14 +452,48 @@ session_start();
 
     </footer>
 
-
-
     <script src="../../Assets/JS/BookNowJS/resortDropdown.js"></script>
     <script src="../../Assets/JS/BookNowJS/hotelDropdown.js"></script>
     <script src="../../Assets/JS/BookNowJS/eventDropdown.js"></script>
     <script src="../../Assets/JS/fullCalendar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+
+    <!-- Page switch -->
+    <script>
+        const resortLink = document.getElementById("resort-link");
+        const hotelLink = document.getElementById("hotel-link");
+        const eventLink = document.getElementById("event-link");
+
+        const categories = document.getElementById("category-page");
+        const events = document.getElementById("event-page");
+        const hotels = document.getElementById("hotel-page");
+        const resorts = document.getElementById("resort-page");
+
+        eventLink.addEventListener('click', function(event) {
+            categories.style.display = "none";
+            events.style.display = "block";
+            resorts.style.display = "none";
+            hotels.style.display = "none";
+            document.body.style.setProperty('background-color', 'rgb(164, 241, 255)', 'important');
+        });
+
+        resortLink.addEventListener('click', function(event) {
+            categories.style.display = "none";
+            events.style.display = "none";
+            resorts.style.display = "block";
+            hotels.style.display = "none";
+            document.body.style.setProperty('background-color', 'rgb(0, 187, 255)', 'important');
+        });
+
+        hotelLink.addEventListener('click', function(event) {
+            categories.style.display = "none";
+            events.style.display = "none";
+            resorts.style.display = "none";
+            hotels.style.display = "block";
+            document.body.style.setProperty('background-color', 'rgb(242, 217, 184)', 'important');
+        });
+    </script>
 </body>
 
 </html>
