@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Now - Event Packages</title>
     <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../Assets/CSS/packages.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="stylesheet" href="../../Assets/CSS/packages.css">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -20,7 +22,7 @@
     <div class="header">
         <div class="backIconContainer">
             <a href=" ./bookNow.php#events">
-                <img src="../Assets/Images/Icon/whiteArrow.png" alt="Go back" class="backArrow">
+                <img src="../../Assets/Images/Icon/whiteArrow.png" alt="Go back" class="backArrow">
             </a>
         </div>
 
@@ -28,13 +30,13 @@
     </div>
 
     <div class="pavilionPicContainer">
-        <img src="../Assets/Images/PackagesPhotos/pavilion.png" alt="Mamyr Pavilion" class="pavilion">
+        <img src="../../Assets/Images/PackagesPhotos/pavilion.png" alt="Mamyr Pavilion" class="pavilion">
     </div>
 
 
     <div class="package1">
         <div class="p1ImgContainer">
-            <img src="../Assets/Images/PackagesPhotos/weddingPicture.jpg" alt="Wedding Package Picture" class="p1Img">
+            <img src="../../Assets/Images/PackagesPhotos/weddingPicture.jpg" alt="Wedding Package Picture" class="p1Img">
         </div>
 
         <div class="p1Text">
@@ -58,8 +60,6 @@
         </div>
 
     </div>
-
-
 
 
 </body>
