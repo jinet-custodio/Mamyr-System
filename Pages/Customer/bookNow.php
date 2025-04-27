@@ -1,3 +1,12 @@
+<?php
+require '../../Config/dbcon.php';
+session_start();
+// if (!isset($_SESSION['userId'])) {
+//     header("Location: ../register.php");
+//     exit();
+// }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

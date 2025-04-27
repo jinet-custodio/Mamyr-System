@@ -25,7 +25,7 @@
 }
 
 body {
-  background-image: url(../images/landingPage/landingPageBg.png);
+  background-image: url(../../Images/landingPage/landingPageBg.png);
   /* background-image: url(../images/BookNowPhotos/bookNowBg.jpg); */
   background-repeat: no-repeat;
   background-position: fixed;
@@ -61,7 +61,7 @@ body {
     color: black !important;
   }
   .nav-link:not(.dropdown-toggle):after {
-    border-bottom: 4px solid #000000 !important;
+    border-bottom: 4px solid rgb(126, 203, 242) !important;
   }
 
   #logOutBtn {
@@ -112,13 +112,21 @@ body {
   left: 0;
 }
 
+.dropdown-menu {
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
 .nav-item.dropdown:hover .dropdown-menu {
-  background-color: #93d4f5;
+  background-color: white !important;
   display: block;
 }
 
 .dropdown-item:hover {
-  background-color: white;
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
+
+.dropdown-item.active {
+  background-color: rgb(126, 203, 242) !important;
+  color: black !important;
 }
 
 .dropdown-item {

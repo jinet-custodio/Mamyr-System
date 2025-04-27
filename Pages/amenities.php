@@ -290,7 +290,6 @@ require '../Config/dbcon.php';
             <div class="locationFooter">
                 <h4 class="locationTitle">Location</h4>
                 <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
             </div>
         </div>
         <hr class="footerLine">

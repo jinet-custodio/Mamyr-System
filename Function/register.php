@@ -99,7 +99,7 @@ if (isset($_POST['signUp'])) {
         header("Location: ../Pages/register.php?register");
         exit;
     }
-}else{
+} else {
     echo  'Error';
 }
 
@@ -121,18 +121,18 @@ if (isset($_POST['login'])) {
             if ($status == 2) {
                 if ($userType = 1) { //Customer
                     unset($_SESSION['formData']);
-                    $SESSION['userID'] = $data['userID'];
-                    $SESSION['userType'] = $userType;
-                    header("Location: ../Pages/dashboard.php");
+                    $_SESSION['userID'] = $data['userID'];
+                    $_SESSION['userType'] = $userType;
+                    header("Location: ../Pages/Customer/dashboard.php");
                 } elseif ($userType = 2) { //Partner
                     unset($_SESSION['formData']);
-                    $SESSION['userID'] = $data['userID'];
-                    $SESSION['userType'] = $userType;
+                    $_SESSION['userID'] = $data['userID'];
+                    $_SESSION['userType'] = $userType;
                     header("Location: ../Pages/dashboard.php");
                 } elseif ($userType = 3) { //Admin
                     unset($_SESSION['formData']);
-                    $SESSION['userID'] = $data['userID'];
-                    $SESSION['userType'] = $userType;
+                    $_SESSION['userID'] = $data['userID'];
+                    $_SESSION['userType'] = $userType;
                     header("Location: ../Pages/dashboard.php");
                 }
             } else {
