@@ -54,11 +54,15 @@ CREATE TABLE admins (
 CREATE TABLE partnerships (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
+    companyName varchar(50) not null,
+    businessEmail VARCHAR(255) NOT NULL UNIQUE,
     partnerAddress TEXT NOT NULL,
+    documentLink VARCHAR(500) NOT NULL
     partnerType VARCHAR(200) NOT NULL,
     status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
     startDate DATE NOT NULL,
     endDate DATE,
+
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
@@ -84,9 +88,17 @@ CREATE TABLE resortServices (
     price DECIMAL(10,2) NOT NULL,
     capacity INT DEFAULT 0,
     duration VARCHAR(50) DEFAULT '0',
-    category ENUM('Room','Cottage','Entertainment') NOT NULL,
+    category ENUM('Room','Cottage','Entertainment', 'Events', 'Entrance') NOT NULL,
     description TEXT NULL,
     imageData LONGBLOB
+);
+
+CREATE TABLE entranceRates (
+    resortEntranceID INT PRIMARY KEY AUTO_INCREMENT,
+    session_type VARCHAR(20),   
+    time_range VARCHAR(50),    
+    category VARCHAR(10),       
+    price DECIMAL(10,2)       
 );
 
 -- =========================
@@ -98,9 +110,11 @@ CREATE TABLE services (
     resortServiceID INT NOT NULL,
     partnershipServiceID INT NOT NULL,
     availabilityID INT DEFAULT 1, 
+    resortEntranceID INT NOT NULL,
     FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
     FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
-    FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID)
+    FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID),
+    FOREIGN KEY (resortEntranceID) REFERENCES entranceRates(resortEntranceID)
 );
 
 -- =========================

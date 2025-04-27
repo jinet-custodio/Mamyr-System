@@ -14,6 +14,10 @@
   font-family: "Galada";
   src: url(../Fonts/Galada/Galada-Regular.ttf);
 }
+@font-face {
+  font-family: "Alkatra";
+  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
 
 * {
   margin: 0;
@@ -25,7 +29,7 @@
 }
 
 body {
-  background-image: url(../../Images/landingPage/landingPageBg.png);
+  background-image: url(../images/landingPage/landingPageBg.png);
   /* background-image: url(../images/BookNowPhotos/bookNowBg.jpg); */
   background-repeat: no-repeat;
   background-position: fixed;
@@ -61,7 +65,7 @@ body {
     color: black !important;
   }
   .nav-link:not(.dropdown-toggle):after {
-    border-bottom: 4px solid rgb(126, 203, 242) !important;
+    border-bottom: 4px solid #000000 !important;
   }
 
   #logOutBtn {
@@ -112,21 +116,13 @@ body {
   left: 0;
 }
 
-.dropdown-menu {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
 .nav-item.dropdown:hover .dropdown-menu {
-  background-color: white !important;
+  background-color: #93d4f5;
   display: block;
 }
 
 .dropdown-item:hover {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.dropdown-item.active {
-  background-color: rgb(126, 203, 242) !important;
-  color: black !important;
+  background-color: white;
 }
 
 .dropdown-item {
@@ -134,14 +130,22 @@ body {
   font-weight: bold;
 }
 
-.titleContainer {
-  /* margin-top: 20vh; */
-  /* border: 1px solid black; */
+.topContainer {
+  display: flex;
   width: 100%;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid black; */
+  padding: 2vw;
+  margin-top: 10vw;
+  gap: 2vw;
+}
+
+.titleContainer {
+  /* border: 1px solid black; */
+  width: 50%;
   height: 50vh;
-  padding: 12vw;
-  /* margin-top: 1vw; */
-  /* margin: auto; */
+  margin-left: 2vw;
 }
 
 .mamyrTitle {
@@ -150,20 +154,17 @@ body {
 }
 
 .welcome {
-  /* color: #c9995b; */
   color: #65f2f2;
-  /* color: #1201ff; */
   text-align: center;
   font-family: Galada;
-  font-size: 8vw;
+  font-size: 6vw;
   font-style: normal;
   line-height: normal;
 }
 
 .nameOfUserContainer {
   width: 100%;
-  margin-top: -4vw;
-  /* margin-left: 10vw; */
+  margin-top: -2vw;
   /* border: 1px solid black; */
 }
 
@@ -174,6 +175,7 @@ body {
   text-align: center;
   font-weight: 400;
   line-height: normal;
+  font-style: italic;
 }
 
 .navbar-toggler {
@@ -213,28 +215,12 @@ body {
   }
 }
 
-.calendarContainer {
-  /* border: 1px solid black; */
-  margin-top: 40vw;
-  padding: 5vw;
-  background-color: #f2d9b8;
-}
-
-.calendarTitle {
-  text-align: center;
-  font-size: 4vw;
-  margin-bottom: 3vw;
-  font-family: agbalumo;
-  font-weight: bold;
-  color: #395523;
-}
-
 #calendar {
-  width: 80%;
-  height: 100vh;
+  width: 40%;
+  height: 90vh;
   margin: 0 auto;
-  background-color: #fffefe;
-  border-radius: 5vw;
+  /* background-color: #fffefe; */
+  border: none;
 }
 
 .fc-header-toolbar {
@@ -293,8 +279,20 @@ body {
 
 .fc .fc-view-harness {
   margin-top: -1.7vw;
+  background-color: #fffefe;
+  border-bottom-left-radius: 5vw;
+  border-bottom-right-radius: 5vw;
 }
 
+.fc .fc-scrollgrid-section-liquid > td {
+  border: none;
+  /* border sa bottom ng calendar */
+}
+
+.fc .fc-scrollgrid-liquid {
+  border: none;
+  /* border sa bottom ng calendar */
+}
 /* di ko sure 'to test nalang pag may event na nalagay*/
 .fc-event {
   background-color: #28a745;
@@ -310,7 +308,7 @@ body {
 
 .welcomeSection {
   display: flex;
-  /* margin-top: 40vw; */
+  margin-top: 10vw;
   /* border: 1px solid black; */
   width: 100%;
 }

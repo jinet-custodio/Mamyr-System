@@ -1,10 +1,31 @@
 <?php
 require '../../Config/dbcon.php';
+
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
 session_start();
-// if (!isset($_SESSION['userId'])) {
-//     header("Location: ../register.php");
-//     exit();
-// }
+date_default_timezone_set('Asia/Manila');
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
+    header("Location: ../register.php");
+    exit();
+}
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: ../register.php?session=expired");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+
+$userID = $_SESSION['userID'];
+$userType = $_SESSION['userType'];
 ?>
 
 <!DOCTYPE html>
@@ -404,6 +425,7 @@ session_start();
                         placeholder="Optional"></textarea>
 
                     <div class="mt-auto">
+                        <a href="packages.php" class="btn btn-info btn-md w-100 mb-3">View Event Packages</a>
                         <button type="submit" class="btn btn-success btn-md w-100">Book Now</button>
                     </div>
                 </div>
@@ -416,7 +438,6 @@ session_start();
         </div>
         <!--end ng event div-->
     </form>
-
 
 
     <footer class="py-1 my-2">

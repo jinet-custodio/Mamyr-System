@@ -1,14 +1,33 @@
 <?php
 require '../../Config/dbcon.php';
+
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
 session_start();
+date_default_timezone_set('Asia/Manila');
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
     header("Location: ../register.php");
     exit();
-} else {
-    $userID = $_SESSION['userID'];
-    $userType = $_SESSION['userType'];
 }
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: ../register.php?session=expired");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+
+$userID = $_SESSION['userID'];
+$userType = $_SESSION['userType'];
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +57,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
         <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="Pages/amenities.php" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="../amenities.php" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
@@ -54,7 +73,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
                 </li>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../about.php">ABOUT</a>
@@ -63,7 +82,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
                     <a class="nav-link" href="bookNow.php">BOOK NOW</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
+                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
                 </li>
 
             </ul>
@@ -82,17 +101,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
             if (mysqli_num_rows($result) > 0) {
                 $row = mysqli_fetch_assoc($result);
                 $firstName = $row['firstName'];
+            } else {
+                $firstName = 'None';
             }
             ?>
             <div class="nameOfUserContainer">
                 <h1 class="nameOfUser"><?= ucfirst($firstName) ?></h1>
             </div>
-
-        </div>
-
-
-        <div class="calendarContainer">
-            <h3 class="calendarTitle">My Calendar</h3>
             <div id="calendar"></div>
         </div>
 

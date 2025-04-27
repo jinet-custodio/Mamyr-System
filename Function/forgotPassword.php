@@ -86,7 +86,7 @@ if (isset($_POST['verify_email'])) {
     } else {
         print $email . "wala?";
         $_SESSION['error'] = 'Email not found.';
-        header("Location:  ../Pages/forgotPassword.php");
+        header("Location:  ../Pages/enterEmail.php");
         exit;
     }
 } else {
