@@ -1,22 +1,22 @@
 @font-face {
   font-family: "Poppins";
-  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
   font-family: "Plus Jakarta Sans";
-  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
 }
 @font-face {
   font-family: "Prata";
-  src: url(../Fonts/Prata/Prata-Regular.ttf);
+  src: url(../../Fonts/Prata/Prata-Regular.ttf);
 }
 @font-face {
   font-family: "Galada";
-  src: url(../Fonts/Galada/Galada-Regular.ttf);
+  src: url(../../Fonts/Galada/Galada-Regular.ttf);
 }
 @font-face {
   font-family: "Alkatra";
-  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
 * {
@@ -29,7 +29,7 @@
 }
 
 body {
-  background-image: url(../images/landingPage/landingPageBg.png);
+  background-image: url(../../Images/landingPage/landingPageBg.png);
   /* background-image: url(../images/BookNowPhotos/bookNowBg.jpg); */
   background-repeat: no-repeat;
   background-position: fixed;
