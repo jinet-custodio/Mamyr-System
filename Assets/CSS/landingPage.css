@@ -47,7 +47,7 @@ body {
 }
 
 .nav-item {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins" !important;
   font-weight: lighter;
   margin-top: 15px;
   font-size: 1.5vw;
