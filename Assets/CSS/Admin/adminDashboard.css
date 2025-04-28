@@ -1,0 +1,78 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../../Fonts/Prata/Prata-Regular.ttf);
+}
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Plus Jakarta Sans";
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+    background: #A1C8C7 !important;
+}
+
+#dashboard {
+    font-family: "Plus Jakarta Sans";
+    font-weight: 800;
+    font-size: 2.3vw;
+    margin-left: 1vw;
+}
+
+.nav-link img {
+    width: 2.4vw;
+}
+
+.navbar-brand img {
+    width: 3.5vw;
+    margin-left: 0.7vw;
+}
+
+.nav-link {
+    margin-right: 1vw;
+}
+
+main {
+    margin-top: 7vw;
+}
+
+.selection {
+    width: 70%;
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2vw;
+    padding: 0.5vw;
+    margin: 2vw auto;
+}
+
+.selectionItem {
+    display: grid;
+    margin: 0 1vw;
+}
+
+.selectionItem img {
+    width: 2.5vw;
+    margin: 0 auto;
+}
+
+.selectionItem h5 {
+    font-size: 1.1vw !important;
+}
