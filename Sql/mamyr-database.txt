@@ -139,7 +139,6 @@ CREATE TABLE customPackages (
 CREATE TABLE packagesServices (
     packageServiceID INT PRIMARY KEY AUTO_INCREMENT,
     customPackageID INT,
-    packageID INT,
     serviceID INT NOT NULL,
 
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
@@ -218,9 +217,14 @@ CREATE TABLE auditLogs (
     targetTable VARCHAR(100),
     targetID INT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-
     FOREIGN KEY (adminID) REFERENCES admins(adminID)
 );
+
+-- =========================
+-- ALTERATIONS
+-- =========================
+ALTER TABLE `packages` ADD `packageDescription` TEXT NOT NULL AFTER `packageName`, ADD `capacity` INT NOT NULL AFTER `packageDescription`;
+
 
 -- =========================
 -- INITIAL ENUM-LIKE DATA
