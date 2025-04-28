@@ -86,11 +86,11 @@
                     <h5 class="repName">Representative Name</h5>
                     <div class="name">
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
-                            required>
+                            disabled>
                         <input type="text" class="form-control" id="middleInitial" name="middleInitial"
-                            placeholder="Middle Initial" required>
+                            placeholder="Middle Initial" disabled>
                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
-                            required>
+                            disabled>
                     </div>
 
                     <h5 class="contactInfo">Contact Info</h5>
@@ -109,7 +109,7 @@
                     <h5 class="companyName">Company Information</h5>
                     <div class="name">
                         <input type="text" class="form-control" id="comapanyName" name="companyName"
-                            placeholder="Company Name" required>
+                            placeholder="Company Name" disabled>
 
                     </div>
 
@@ -117,43 +117,41 @@
                     <div class="businessType">
                         <h5 class="busTypeName">Type of Business</h5>
 
-                        <button class="btn btn-primary dropdown-toggle btn-md" type="button" id="dropdownMenuButton"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Business
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li id="catering-option" class="dropdown-item">Catering</li>
-                            <li id="sound-lighting-option" class="dropdown-item">Sound and Lighting</li>
-                            <li id="event-hosting-option" class="dropdown-item">Event Hosting</li>
-                            <li id="photography-option" class="dropdown-item">Photography/Videography</li>
-                            <li id="photobooth-option" class="dropdown-item">Photo Booth</li>
-                            <li id="performer-option" class="dropdown-item">Perfomer</li>
-                            <li id="other-option" class="dropdown-item">Other</li>
-                        </ul>
-
+                        <select id="service" name="partnerType" class="form-select primary" required>
+                            <option value="" disabled selected>Select Service</option>
+                            <option value="catering">Catering</option>
+                            <option value="photography">Photography/Videography</option>
+                            <option value="sound-lighting">Sound and Lighting</option>
+                            <option value="event-hosting">Event Hosting</option>
+                            <option value="photo-booth">Photo Booth</option>
+                            <option value="performer">Performer</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
 
-                    <input type="text" id="other-input" class="form-control " style="display: none; margin-left: 1vw;"
-                        placeholder="Please specify..." />
-
+                    <div id="other-container" style="display: none; margin-left: 1vw;">
+                        <input type="text" id="other-input" name="other_input" class="form-control "
+                            placeholder="Please specify..." />
+                    </div>
 
                     <h5 class="busAddress">Business Address</h5>
                     <div class="busAddForm">
 
                         <div class="streetAddRow">
                             <input type="text" class="form-control" id="streetAddress" name="streetAddress"
-                                placeholder="Street Address" required>
+                                placeholder="Street Address" disabled>
 
                             <input type="text" class="form-control" id="address2" name="address2"
-                                placeholder="Street Address Line 2 (optional)">
+                                placeholder="Street Address Line 2 (optional)" disabled>
                         </div>
 
-                        <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" required>
+                        <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" disabled>
 
-                        <input type="text" class="form-control" id="province" name="province" placeholder="Province">
+                        <input type="text" class="form-control" id="province" name="province" placeholder="Province"
+                            disabled>
 
                         <input type="text" class="form-control" id="zip" name="zip" placeholder="ZIP/Postal Code"
-                            required>
+                            disabled>
                     </div>
 
                     <h5 class="docuTitle">Documents for Verification</h5>
@@ -206,7 +204,7 @@
 
 
                     <input class="form-control" type="text"
-                        placeholder="Example: https://drive.google.com/drive/folders/your-folder-id-here">
+                        placeholder="Example: https://drive.google.com/drive/folders/your-folder-id-here" disabled>
                 </div>
 
                 <button type="submit" class="btn btn-success btn-md" id="submit-request">Submit Request</button>
@@ -252,54 +250,20 @@
 
 
     <script>
-        const otherOption = document.getElementById('other-option');
-        const otherInput = document.getElementById('other-input');
-        const dropdownButton = document.getElementById('dropdownMenuButton');
-        otherInput.style.display = 'none';
+    const serviceSelect = document.getElementById('service');
+    const otherContainer = document.getElementById('other-container');
+    const otherInput = document.getElementById('other-input');
 
-        function updateButtonText(selectedText) {
-            dropdownButton.textContent = selectedText;
+    serviceSelect.addEventListener('change', () => {
+        if (serviceSelect.value === 'other') {
+            otherContainer.style.display = 'block';
+            otherInput.required = true;
+        } else {
+            otherContainer.style.display = 'none';
+            otherInput.required = false;
         }
-
-
-        otherOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'inline-block';
-            updateButtonText('Other');
-        });
-
-
-        cateringOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Catering');
-        });
-
-        soundLightingOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Sound and Lighting');
-        });
-
-        eventHostingOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Event Hosting');
-        });
-
-        photographyOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Photography/Videography');
-        });
-
-        performerOption.addEventListener('click', function(e) {
-            e.preventDefault();
-            otherInput.style.display = 'none';
-            updateButtonText('Perfomer');
-        });
+    });
     </script>
-
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
@@ -308,22 +272,22 @@
 
     <!-- Sweet Alert -->
     <script>
-        const bookButtons = document.querySelectorAll('#submit-request');
+    const bookButtons = document.querySelectorAll('#submit-request');
 
-        bookButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Want to Become Our Business Partner?',
-                    text: 'You must have an existing account before becoming a business partner.',
-                    icon: 'info',
-                    confirmButtonText: 'Go'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
-                    }
-                });
+    bookButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Want to Become Our Business Partner?',
+                text: 'You must have an existing account before becoming a business partner.',
+                icon: 'info',
+                confirmButtonText: 'Go'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'register.php';
+                }
             });
         });
+    });
     </script>
 </body>
 

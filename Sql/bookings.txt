@@ -1,0 +1,1 @@
+INSERT INTO `bookings` (`bookingID`, `userID`, `packageID`, `serviceID`, `customPackageID`, `additionalRequest`, `startDate`, `endDate`, `totalCost`, `status`, `createdAt`) VALUES (NULL, '1', '1', NULL, NULL, 'Pls make the venue child friendly', '2025-04-13', '2025-04-14', '140000.0', 'Pending', current_timestamp());

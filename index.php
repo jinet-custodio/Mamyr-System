@@ -19,7 +19,8 @@
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-        <button class=" navbar-toggler ms-auto" id="bg-nav-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class=" navbar-toggler ms-auto" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -38,9 +39,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Rates</a>
                 </li>
                 </li>
                 <li class="nav-item">
@@ -209,22 +207,22 @@
     </div>
 
     <script>
-        function myMap() {
-            var mapProp = {
-                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-                zoom: 5,
-            };
-            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-        }
+    function myMap() {
+        var mapProp = {
+            center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+            zoom: 5,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    }
     </script>
 
     <script>
-        const toggleButton = document.getElementById('bg-nav-toggler');
-        const navbar = document.querySelector('.navbar');
+    const toggleButton = document.getElementById('bg-nav-toggler');
+    const navbar = document.querySelector('.navbar');
 
-        toggleButton.addEventListener('click', () => {
-            navbar.classList.toggle('white-bg');
-        });
+    toggleButton.addEventListener('click', () => {
+        navbar.classList.toggle('white-bg');
+    });
     </script>
     <script src="Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="Assets/JS/scrollNavbg.js"></script>

@@ -72,9 +72,10 @@ body {
   width: 100%;
   left: 0;
 }
-
+ 
 .nav-link img {
     width: 2.4vw;
+    margin-left: 0.7vw;
 }
 
 

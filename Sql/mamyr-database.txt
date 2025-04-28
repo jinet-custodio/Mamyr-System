@@ -57,7 +57,7 @@ CREATE TABLE partnerships (
     companyName varchar(50) not null,
     businessEmail VARCHAR(255) NOT NULL UNIQUE,
     partnerAddress TEXT NOT NULL,
-    documentLink VARCHAR(500) NOT NULL
+    documentLink VARCHAR(500) NOT NULL,
     partnerType VARCHAR(200) NOT NULL,
     status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
     startDate DATE NOT NULL,
@@ -139,11 +139,9 @@ CREATE TABLE customPackages (
 CREATE TABLE packagesServices (
     packageServiceID INT PRIMARY KEY AUTO_INCREMENT,
     customPackageID INT,
-    packageID INT,
     serviceID INT NOT NULL,
 
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
-    FOREIGN KEY (packageID) REFERENCES packages(packageID),
     FOREIGN KEY (serviceID) REFERENCES services(serviceID)
 );
 
@@ -218,9 +216,14 @@ CREATE TABLE auditLogs (
     targetTable VARCHAR(100),
     targetID INT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-
     FOREIGN KEY (adminID) REFERENCES admins(adminID)
 );
+
+-- =========================
+-- ALTERATIONS
+-- =========================
+ALTER TABLE `packages` ADD `packageDescription` TEXT NOT NULL AFTER `packageName`, ADD `capacity` INT NOT NULL AFTER `packageDescription`;
+
 
 -- =========================
 -- INITIAL ENUM-LIKE DATA

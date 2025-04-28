@@ -12,7 +12,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
   text-decoration: none;
   list-style: none;
 }
@@ -21,6 +20,8 @@ body {
   background: url(../images/indexPhotos/Background2.png) lightgray 50% / cover
     no-repeat;
   display: flex;
+  background-color: #88858534 !important;
+  background-blend-mode: darken !important;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
