@@ -57,7 +57,7 @@ CREATE TABLE partnerships (
     companyName varchar(50) not null,
     businessEmail VARCHAR(255) NOT NULL UNIQUE,
     partnerAddress TEXT NOT NULL,
-    documentLink VARCHAR(500) NOT NULL
+    documentLink VARCHAR(500) NOT NULL,
     partnerType VARCHAR(200) NOT NULL,
     status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
     startDate DATE NOT NULL,
@@ -142,7 +142,6 @@ CREATE TABLE packagesServices (
     serviceID INT NOT NULL,
 
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
-    FOREIGN KEY (packageID) REFERENCES packages(packageID),
     FOREIGN KEY (serviceID) REFERENCES services(serviceID)
 );
 
