@@ -128,12 +128,12 @@ if (isset($_POST['login'])) {
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
                     $_SESSION['userType'] = $userType;
-                    header("Location: ../Pages/dashboard.php");
+                    header("Location: ../Pages/Customer/dashboard.php");
                 } elseif ($userType = 3) { //Admin
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
                     $_SESSION['userType'] = $userType;
-                    header("Location: ../Pages/dashboard.php");
+                    header("Location: ../Pages/Admin/dashboard.php");
                 }
             } else {
                 $_SESSION['error'] = 'User not verified';

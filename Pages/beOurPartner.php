@@ -35,7 +35,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item " href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
+                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                         <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
                     </ul>
                 </li>
@@ -96,9 +96,9 @@
                     <h5 class="contactInfo">Contact Info</h5>
                     <div class="contact">
                         <input type="email" class="form-control" id="emailAddress" name="emailAddress"
-                            placeholder="Email Address">
+                            placeholder="Email Address" disabled>
                         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                            placeholder="Phone Number">
+                            placeholder="Phone Number" disabled>
                     </div>
                 </div>
 
@@ -250,19 +250,19 @@
 
 
     <script>
-    const serviceSelect = document.getElementById('service');
-    const otherContainer = document.getElementById('other-container');
-    const otherInput = document.getElementById('other-input');
+        const serviceSelect = document.getElementById('service');
+        const otherContainer = document.getElementById('other-container');
+        const otherInput = document.getElementById('other-input');
 
-    serviceSelect.addEventListener('change', () => {
-        if (serviceSelect.value === 'other') {
-            otherContainer.style.display = 'block';
-            otherInput.required = true;
-        } else {
-            otherContainer.style.display = 'none';
-            otherInput.required = false;
-        }
-    });
+        serviceSelect.addEventListener('change', () => {
+            if (serviceSelect.value === 'other') {
+                otherContainer.style.display = 'block';
+                otherInput.required = true;
+            } else {
+                otherContainer.style.display = 'none';
+                otherInput.required = false;
+            }
+        });
     </script>
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -272,22 +272,22 @@
 
     <!-- Sweet Alert -->
     <script>
-    const bookButtons = document.querySelectorAll('#submit-request');
+        const bookButtons = document.querySelectorAll('#submit-request');
 
-    bookButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            Swal.fire({
-                title: 'Want to Become Our Business Partner?',
-                text: 'You must have an existing account before becoming a business partner.',
-                icon: 'info',
-                confirmButtonText: 'Go'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'register.php';
-                }
+        bookButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Want to Become Our Business Partner?',
+                    text: 'You must have an existing account before becoming a business partner.',
+                    icon: 'info',
+                    confirmButtonText: 'Go'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'register.php';
+                    }
+                });
             });
         });
-    });
     </script>
 </body>
 

@@ -19,7 +19,7 @@
 <body>
     <div class="header">
         <div class="backIconContainer">
-            <a href=" ./bookNow.php#events">
+            <a href=" Customer/bookNow.php#event-page">
                 <img src="../Assets/Images/Icon/whiteArrow.png" alt="Go back" class="backArrow">
             </a>
         </div>
@@ -56,11 +56,7 @@
         <div class="mt-auto">
             <button type="submit" class="btn custom-btn" id="p1AddPckg">Add Package</button>
         </div>
-
     </div>
-
-
-
 
 </body>
 

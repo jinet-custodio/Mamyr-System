@@ -110,13 +110,21 @@ ul {
   left: 0;
 }
 
+.dropdown-menu {
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
 .nav-item.dropdown:hover .dropdown-menu {
-  background-color: #93d4f5;
+  background-color: white !important;
   display: block;
 }
 
 .dropdown-item:hover {
-  background-color: white;
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
+
+.dropdown-item.active {
+  background-color: rgb(126, 203, 242) !important;
+  color: black !important;
 }
 
 .dropdown-item {
@@ -132,7 +140,6 @@ ul {
 }
 
 /* end of navbar code */
-
 
 /* body css */
 .titleContainer {
@@ -167,7 +174,7 @@ ul {
 .card-body {
   display: flex;
   flex-direction: column;
-  justify-content:center;
+  justify-content: center;
   margin: 0 auto;
   height: 15vw !important;
 }
@@ -215,11 +222,11 @@ ul {
 
 /* entrance */
 .entranceFee {
-    display: flex;
-    flex-wrap: wrap;
-    width: 90%;
-    justify-content: space-between;
-    margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  justify-content: space-between;
+  margin: 0 auto;
 }
 .entranceTitleContainer {
   width: 50%;
@@ -260,18 +267,18 @@ ul {
   text-align: center;
 }
 
-.entrace-card-body{
+.entrace-card-body {
   display: flex;
   flex-direction: column;
-  justify-content:flex-start;
+  justify-content: flex-start;
   margin: 0 auto;
 }
 
 .entrance-card-content {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin: auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: auto;
 }
 
 .title {
@@ -287,21 +294,21 @@ ul {
 
 /* cottages code */
 .cottage {
-    display: flex;
-    flex-wrap: wrap;
-    width: 90%;
-    background-color: whitesmoke;
-    border-radius: 1vw;
-    padding: 1vw;
-    margin: 0 auto 1vw auto;
-    justify-content: space-around;
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  background-color: whitesmoke;
+  border-radius: 1vw;
+  padding: 1vw;
+  margin: 0 auto 1vw auto;
+  justify-content: space-around;
 }
 
 .Description {
-    display: flex;
-    flex-direction: column;
-    justify-content:  center;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .Description h2 {
@@ -310,19 +317,21 @@ ul {
 }
 
 .Description p {
-    font-size: 1.5vw !important;
-    font-family: "Poppins";
+  font-size: 1.5vw !important;
+  font-family: "Poppins";
 }
 
-.halfImg, .singleImg  {
-    padding: 1vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.halfImg,
+.singleImg {
+  padding: 1vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.halfImg img, .singleImg img{
-    width: 30vw;
+.halfImg img,
+.singleImg img {
+  width: 30vw;
 }
 
 /* end of cottages code */
@@ -330,14 +339,14 @@ ul {
 /* videoke code  */
 
 .section {
-    display: flex;
-    flex-wrap: wrap;
-    width: 95%;
-    background-color: whitesmoke;
-    border-radius: 1vw;
-    padding: 1vw;
-    margin: 0 auto 1vw auto;
-    justify-content: space-around;    
+  display: flex;
+  flex-wrap: wrap;
+  width: 95%;
+  background-color: whitesmoke;
+  border-radius: 1vw;
+  padding: 1vw;
+  margin: 0 auto 1vw auto;
+  justify-content: space-around;
 }
 .videokeTitleContainer {
   width: 50%;
@@ -353,29 +362,24 @@ ul {
 }
 
 #videokeDesc {
-    background-color: #ffe6b4a0;
-    border-radius: 2vw;
-    font-size: 1.5vw;
-    padding: 0.8vw;
+  background-color: #ffe6b4a0;
+  border-radius: 2vw;
+  font-size: 1.5vw;
+  padding: 0.8vw;
 }
 
 #videokeDesc p {
-    font-size: 1.5vw;
+  font-size: 1.5vw;
 }
-
-
-
 
 /*end of videoke code */
 
 /* billiards code */
 #billiards {
-    background: none !important;
-    width: 95%;
+  background: none !important;
+  width: 95%;
 }
 
-
-        
 /* end of billiards code */
 
 /* massage chair code */
@@ -488,7 +492,6 @@ footer {
 
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
-
   .selection {
     margin-top: 5vw;
   }
@@ -506,33 +509,33 @@ footer {
     height: 8vh !important;
   }
 
-  .poolTitleContainer{
+  .poolTitleContainer {
     width: 70%;
   }
-  .poolTitle{
-    font-size:clamp(12px, calc(1.5vh + 4px), 20px);
+  .poolTitle {
+    font-size: clamp(12px, calc(1.5vh + 4px), 20px);
   }
-  
-  .Description h2{
-    font-size:clamp(18px, calc(3vh + 4px), 27px);
+
+  .Description h2 {
+    font-size: clamp(18px, calc(3vh + 4px), 27px);
   }
-  
-  .Description{
+
+  .Description {
     font-size: clamp(12px, calc(1.5vh + 4px), 18px);
   }
 
-  .singleImg img{
+  .singleImg img {
     width: 75%;
-}
+  }
 
-#videokeDesc p, #massageDesc {
-  font-size: 1.8vw;
-
-}
+  #videokeDesc p,
+  #massageDesc {
+    font-size: 1.8vw;
+  }
 }
 
 @media (max-width: 600px) {
-  .entranceCard span{
+  .entranceCard span {
     font-size: clamp(10px, calc(1.1vh + 2px), 15px);
   }
 
@@ -558,41 +561,39 @@ footer {
   .rates {
     margin-top: 18vw !important;
   }
-  
-  .Description h2{
-    font-size:clamp(14px, calc(2.5vh + 4px), 18px) !important;
+
+  .Description h2 {
+    font-size: clamp(14px, calc(2.5vh + 4px), 18px) !important;
   }
-  
-  .Description p, #videokeDesc p{
+
+  .Description p,
+  #videokeDesc p {
     font-size: clamp(10px, calc(1.1vh + 2px), 13px);
   }
 
-.entranceFee {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-  gap: 8px;
+  .entranceFee {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+    gap: 8px;
     width: 90%;
     margin: 0 auto;
+  }
+
+  .entranceCard {
+    padding: 1vw;
+    font-size: 1.5vw;
+    width: 90% !important;
+    height: 20vw !important;
+    display: grid !important;
+    align-items: center;
+  }
+
+  .navbar {
+    padding: 5px 0;
+    height: 6vh !important;
+  }
 }
-
-.entranceCard {
-  padding: 1vw;
-  font-size: 1.5vw;
-  width: 90% !important;
-  height: 20vw !important;
-  display: grid !important;
-  align-items: center;
-}
-
-.navbar {
-  padding: 5px 0;
-  height: 6vh !important;
-}
-
-}
-
-
 
 @media (max-width: 400px) {
   .selection {
@@ -603,11 +604,12 @@ footer {
     margin: 0 auto 2vw auto;
   }
 
-  .Description h2{
-    font-size:clamp(11px, calc(1.2vh + 4px), 15px) !important;
+  .Description h2 {
+    font-size: clamp(11px, calc(1.2vh + 4px), 15px) !important;
   }
-  
-  .Description p, #videokeDesc p{
+
+  .Description p,
+  #videokeDesc p {
     font-size: clamp(6px, calc(0.9vh + 2px), 11px);
   }
 
@@ -615,16 +617,16 @@ footer {
     width: 100%;
   }
 
-  .entranceCard span{
+  .entranceCard span {
     font-size: clamp(7px, calc(0.8vh + 2px), 11px);
   }
 
   .entrance-card-title .dayNight {
-    font-size:clamp(7px, calc(1.1vh + 3px), 17px) !important;
+    font-size: clamp(7px, calc(1.1vh + 3px), 17px) !important;
   }
 
   .entrance-card-title {
-    font-size:clamp(8px, calc(0.8vh + 2px), 11px) !important;
+    font-size: clamp(8px, calc(0.8vh + 2px), 11px) !important;
   }
 
   .entranceTitle {
@@ -652,6 +654,4 @@ footer {
     width: 70% !important;
     height: 40vw !important;
   }
-
 }
-
