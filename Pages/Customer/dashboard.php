@@ -90,26 +90,29 @@ $userType = $_SESSION['userType'];
     </nav>
 
     <div class="custom-container">
-        <div class="titleContainer">
-            <div class="mamyrTitle">
-                <h1 class="welcome">Welcome to Mamyr,</h1>
-            </div>
+        <div class="topContainer">
+            <div class="titleContainer">
+                <div class="mamyrTitle">
+                    <h1 class="welcome">Welcome to Mamyr,</h1>
+                </div>
 
-            <?php
-            $query = "SELECT firstName FROM users WHERE userID = '$userID'";
-            $result = mysqli_query($conn, $query);
-            if (mysqli_num_rows($result) > 0) {
-                $row = mysqli_fetch_assoc($result);
-                $firstName = $row['firstName'];
-            } else {
-                $firstName = 'None';
-            }
-            ?>
-            <div class="nameOfUserContainer">
-                <h1 class="nameOfUser"><?= ucfirst($firstName) ?></h1>
+                <?php
+                $query = "SELECT firstName FROM users WHERE userID = '$userID'";
+                $result = mysqli_query($conn, $query);
+                if (mysqli_num_rows($result) > 0) {
+                    $row = mysqli_fetch_assoc($result);
+                    $firstName = $row['firstName'];
+                } else {
+                    $firstName = 'None';
+                }
+                ?>
+                <div class="nameOfUserContainer">
+                    <h1 class="nameOfUser"><?= ucfirst($firstName) ?></h1>
+                </div>
             </div>
             <div id="calendar"></div>
         </div>
+
 
         <div class="welcomeSection">
             <div class="resortPic1">

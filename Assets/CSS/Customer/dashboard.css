@@ -116,13 +116,16 @@ body {
   left: 0;
 }
 
+.dropdown-menu {
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
 .nav-item.dropdown:hover .dropdown-menu {
-  background-color: #93d4f5;
+  background-color: white !important;
   display: block;
 }
 
 .dropdown-item:hover {
-  background-color: white;
+  background-color: rgb(126, 203, 242, 0.5) !important;
 }
 
 .dropdown-item {
@@ -137,7 +140,7 @@ body {
   align-items: center;
   /* border: 1px solid black; */
   padding: 2vw;
-  margin-top: 10vw;
+  margin-top: 7vw;
   gap: 2vw;
 }
 
@@ -157,7 +160,7 @@ body {
   color: #65f2f2;
   text-align: center;
   font-family: Galada;
-  font-size: 6vw;
+  font-size: 5vw;
   font-style: normal;
   line-height: normal;
 }
@@ -171,7 +174,7 @@ body {
 .nameOfUser {
   color: #ffffff;
   font-family: "Galada";
-  font-size: 10vw;
+  font-size: 8vw;
   text-align: center;
   font-weight: 400;
   line-height: normal;
@@ -216,8 +219,8 @@ body {
 }
 
 #calendar {
-  width: 40%;
-  height: 90vh;
+  width: 45%;
+  height: 80vh;
   margin: 0 auto;
   /* background-color: #fffefe; */
   border: none;
@@ -226,7 +229,7 @@ body {
 .fc-header-toolbar {
   background-color: #00bbff;
   padding: 2vw;
-  height: 8vw;
+  height: 7.5vw;
   border-top-left-radius: 3vw;
   border-top-right-radius: 3vw;
 }
@@ -236,6 +239,10 @@ body {
   color: rgb(0, 0, 0) !important;
   border-radius: 5px;
   font-weight: bold;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 0;
 }
 
 .fc .fc-toolbar-title {

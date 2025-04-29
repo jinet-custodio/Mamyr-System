@@ -492,12 +492,24 @@ footer {
   flex-wrap: nowrap;
 }
 
+.form-select {
+  width: 100% !important;
+}
+
+select option {
+  background-color: rgb(190, 228, 247);
+}
+
 #eventDropdownMenuButton {
   min-width: 200px !important;
 }
 
 .form-control {
   width: 20vw !important;
+}
+
+#other-container {
+  margin-left: 1vw;
 }
 
 .eventLabel,

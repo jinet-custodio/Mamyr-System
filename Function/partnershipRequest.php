@@ -5,6 +5,7 @@ session_start();
 
 if (isset($_POST['submit_request'])) {
     $userID = mysqli_real_escape_string($conn, $_POST['userID']);
+    $userType = mysqli_real_escape_string($conn, $_POST['userType']);
     $middleInitial = mysqli_real_escape_string($conn, $_POST['middleInitial']);
     $businessEmail = mysqli_real_escape_string($conn, $_POST['emailAddress']);
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
@@ -28,7 +29,7 @@ if (isset($_POST['submit_request'])) {
 
     $documentLink = mysqli_real_escape_string($conn, $_POST['documentLink']);
 
-    $query = "SELECT * from users WHERE userID = '$userID' AND email = '$email'";
+    $query = "SELECT * from users WHERE userID = '$userID'";
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
         $data = mysqli_fetch_assoc($result);
@@ -66,7 +67,7 @@ if (isset($_POST['submit_request'])) {
             exit;
         }
     } else {
-        echo "<script>alert('Error');</script>";
+        echo "<script>alert('Error1');</script>";
     }
 } else {
     echo "<script>alert('Error');</script>";

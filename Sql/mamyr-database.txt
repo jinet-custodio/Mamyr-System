@@ -124,6 +124,8 @@ CREATE TABLE services (
 CREATE TABLE packages (
     packageID INT PRIMARY KEY AUTO_INCREMENT,
     packageName VARCHAR(100) NOT NULL,
+    packageDescription TEXT NOT NULL,
+    capacity INT(100) NOT NULL,
     price DECIMAL(10,2) DEFAULT 0.00
 );
 
@@ -218,11 +220,6 @@ CREATE TABLE auditLogs (
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (adminID) REFERENCES admins(adminID)
 );
-
--- =========================
--- ALTERATIONS
--- =========================
-ALTER TABLE `packages` ADD `packageDescription` TEXT NOT NULL AFTER `packageName`, ADD `capacity` INT NOT NULL AFTER `packageDescription`;
 
 
 -- =========================
