@@ -21,3 +21,15 @@ window.addEventListener("scroll", function () {
     }
   }
 });
+
+window.addEventListener("scroll", function () {
+  const navbarHalf2 = document.getElementById("navbar-half2");
+  if (navbarHalf2) {
+    // Check if navbar-half2 exists
+    if (window.scrollY > window.innerHeight * 0.2) {
+      navbarHalf2.classList.add("scrolled");
+    } else {
+      navbarHalf2.classList.remove("scrolled");
+    }
+  }
+});
