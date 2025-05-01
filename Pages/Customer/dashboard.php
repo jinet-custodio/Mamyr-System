@@ -49,7 +49,7 @@ $userType = $_SESSION['userType'];
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -64,7 +64,7 @@ $userType = $_SESSION['userType'];
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="../amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="../ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="../events.php">EVENTS</a>
+                        <li><a class="dropdown-item" href="events.php">EVENTS</a>
                         </li>
                     </ul>
                 </li>
