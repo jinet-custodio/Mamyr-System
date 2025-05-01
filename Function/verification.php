@@ -118,7 +118,7 @@ if (isset($_POST['resend_code'])) {
                         $mail->addAddress($email, $firstName);
 
                         $message = "
-                                        <h2 style='color: #333;'>Your New OTP Code for Account Verification</h2>
+                                        <h2 style='color: #333;'>Your New OTP Code</h2>
                                         <p>Hello,</p>
                                         <p>Your One-Time Password (OTP) for account verification is:</p>
                                         <h2 style='color:rgb(12, 6, 5); font-size: 24px; margin-left:120px;'> $newOtp </h2>

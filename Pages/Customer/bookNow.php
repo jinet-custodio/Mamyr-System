@@ -47,6 +47,17 @@ $userType = $_SESSION['userType'];
 </head>
 
 <body id="body">
+
+    <?php
+    $emailQuery = "SELECT email FROM users WHERE userID = '$userID' and userTypeID = '$userType'";
+    $emailResult = mysqli_query($conn, $emailQuery);
+    if (mysqli_num_rows($emailResult) > 0) {
+        $data = mysqli_fetch_row($emailResult);
+        $email = $data['email'];
+    } else {
+        echo 'No Email Found';
+    }
+    ?>
     <nav class="navbar navbar-expand-lg fixed-top">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -73,13 +84,16 @@ $userType = $_SESSION['userType'];
                     <a class="nav-link" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="../beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link " href="partnerApplication.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../about.php">ABOUT</a>
+                    <a class="nav-link" href="about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#">BOOK NOW</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
                 </li>
             </ul>
         </div>
@@ -134,15 +148,20 @@ $userType = $_SESSION['userType'];
                         <input type="date" class="form-control w-100" id="resortBookingDate" required>
 
 
-                        <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuButton"
+                        <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuButton"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             DAY/NIGHT TOUR
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li id="dayTour" class="dropdown-item">Day Tour</li>
                             <li id="nightTour" class="dropdown-item">Night Tour</li>
+                        </ul> -->
 
-                        </ul>
+                        <select id="tourSelections" name="tourSelections" class="form-select" required>
+                            <option value="DTour">Day Tour</option>
+                            <option value="NTour">Night Tour</option>
+                            <option value="ONTour">Overnight Tour</option>
+                        </select>
 
 
                     </div>
@@ -162,7 +181,7 @@ $userType = $_SESSION['userType'];
 
 
 
-                            <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
                                 id="cottageDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 Please Select a Cottage
                             </button>
@@ -174,22 +193,40 @@ $userType = $_SESSION['userType'];
                                 <li id="cottage5" class="dropdown-item">Php 2,000 - Good for 25 pax</li>
 
 
-                            </ul>
+                            </ul> -->
+                            <select id="cottageSelections" name="cottageSelections" class="form-select" required>
+                                <option value="" disabled selected>Please Select a Cottage</option>
+                                <?php
+                                $cottageQuery = "SELECT * FROM resortservices WHERE category = 'Cottage'";
+                                $result = mysqli_query($conn, $cottageQuery);
+                                if (mysqli_num_rows($result) > 0) {
+                                    $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                                    foreach ($cottages as $cottage) {
+                                        echo "<option value='" . $cottage['facilityName'] . "'>Php " . $cottage['price'] . " - Good for " . $cottage['capacity'] . " pax " . "</option>";
+                                    }
+                                } else {
+                                    echo "<option value='' disabled>No cottages available</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
 
                         <div class="videokeForm w-100">
                             <h5 class="videokeRentalLabel">Videoke Rental</h5>
 
 
-                            <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
                                 id="videokeDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 YES/NO
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li id="yes" class="dropdown-item">YES</li>
                                 <li id="no" class="dropdown-item">NO</li>
-                            </ul>
-
+                            </ul> -->
+                            <select id="booleanSelections" name="booleanSelections" class="form-select" required>
+                                <option value="yesChoice">Yes</option>
+                                <option value="noChoice">No</option>
+                            </select>
 
                         </div>
                     </div>
@@ -200,7 +237,7 @@ $userType = $_SESSION['userType'];
                         placeholder="Optional"></textarea>
 
                     <div class="mt-auto">
-                        <button type="submit" class="btn btn-success btn-md w-100">Book Now</button>
+                        <button type="submit" class="btn btn-success btn-md w-100" name="bookRates">Book Now</button>
                     </div>
                 </div>
 
@@ -322,9 +359,8 @@ $userType = $_SESSION['userType'];
     </form>
     <!--end ng hotel div -->
 
-    <form action="#" method="POST" id="event-page" style="display: none;">
+    <form action="../../Function/Booking/eventBooking.php" method="POST" id="event-page" style="display: none;">
         <div class=" event" id="event">
-
             <div class="titleContainer">
                 <h4 class="eventTitle" id="eventTitle">EVENT BOOKING</h4>
             </div>
@@ -336,7 +372,7 @@ $userType = $_SESSION['userType'];
 
                         <h5 class="eventLabel">Type of Event</h5>
                         <div class="eventTypeForm">
-                            <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
                                 id="eventDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 Please Select an Event
                             </button>
@@ -349,11 +385,23 @@ $userType = $_SESSION['userType'];
                                 <li id="xmas" class="dropdown-item disabled">CHRISTMAS PARTY</li>
                                 <li id="other-option" class="dropdown-item">OTHER</li>
 
-                            </ul>
+                            </ul> -->
 
-                            <input type="text" id="other-input" class="form-control w-100"
-                                style="display: inline-block; margin-left: 1vw;" placeholder="Please specify..."
-                                disabled />
+                            <select id="eventType" name="eventType" class="form-select" required>
+                                <option value="" disabled selected>Please Select an Event</option>
+                                <option value="bday">Birthday</option>
+                                <option value="wedding">Wedding</option>
+                                <option value="teamBuilding">Team Building</option>
+                                <option value="christening">Christening/Dedication</option>
+                                <option value="thanksgiving">Thanksgiving Party</option>
+                                <option value="christmas">Christmas Party</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <input type="hidden" name="selectedEventValue" id="selectedEventValue">
+                            <div id="other-container" style="display: none; margin-left: 1vw;">
+                                <input type="text" id="other-input" name="other_input" class="form-control "
+                                    placeholder="Please specify..." />
+                            </div>
                         </div>
 
                     </div>
@@ -361,19 +409,24 @@ $userType = $_SESSION['userType'];
                     <div class="dateVenue">
                         <div class="dateForm">
                             <h5 class="dateLabel">Date</h5>
-                            <input type="date" class="form-control w-100" id="eventtBookingDate" required>
+                            <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" required>
                         </div>
 
                         <div class="venueForm">
                             <h5 class="venueLabel">Venue</h5>
-                            <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
                                 id="venueDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 Please Select a Venue
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li id="pavHall" class="dropdown-item">PAVILION HALL (max. 300pax)</li>
                                 <li id="miniPavHall" class="dropdown-item">MINI PAVILION HALL (max. 50pax)</li>
-                            </ul>
+                            </ul> -->
+                            <select id="venue-hall" name="eventVenue" class="form-select" required>
+                                <option value="" disabled selected>Please Select a Venue</option>
+                                <option value="pavHall">Pavilion Hall (max. 300pax)</option>
+                                <option value="miniPavHall">Mini Pavilion Hall (max. 50pax)</option>
+                            </select>
                         </div>
                     </div>
 
@@ -385,7 +438,7 @@ $userType = $_SESSION['userType'];
 
                         <div class="peopleEventForm">
                             <h5 class="noOfGuestLabel">Number of Guests</h5>
-                            <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
                                 id="guestDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 Estimated Number of Guests
                             </button>
@@ -394,14 +447,21 @@ $userType = $_SESSION['userType'];
                                 <li id="guestNo2" class="dropdown-item">51-100 pax</li>
                                 <li id="guestNo3" class="dropdown-item">101-200 pax</li>
                                 <li id="guestNo4" class="dropdown-item">201-350 pax</li>
-                            </ul>
+                            </ul> -->
+                            <select id="guest-number" name="eventPax" class="form-select" required>
+                                <option value="" disabled selected>Estimated Number of Guests</option>
+                                <option value="guestC1">10-50 pax</option>
+                                <option value="guestC2">51-100 pax</option>
+                                <option value="guestC3">101-200 pax</option>
+                                <option value="guestC4">201-350 pax</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="package">
                         <div class="packageForm w-100">
                             <h5 class="packageLabel">Package</h5>
-                            <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
                                 id="packageDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 Please Select a Package
                             </button>
@@ -410,7 +470,18 @@ $userType = $_SESSION['userType'];
                                 <li id="p2" class="dropdown-item">Package 2</li>
                                 <li id="p3" class="dropdown-item">Package 3</li>
                                 <li id="p4" class="dropdown-item">package 4</li>
-                            </ul>
+                            </ul> -->
+
+                            <?php
+                            $packageQuery = "SELECT * FROM packages";
+                            ?>
+                            <select id="package" name="eventPackage" class="form-select" required>
+                                <option value="" disabled selected>Please Select a Package</option>
+                                <!-- <option value="pack1">Package 1</option>
+                                <option value="pack2">Package 2</option>
+                                <option value="pack3">Package 3</option>
+                                <option value="pack4">Package 4</option> -->
+                            </select>
                         </div>
 
                         <div class="customPackage w-100">
@@ -422,11 +493,11 @@ $userType = $_SESSION['userType'];
 
                     <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
                     <textarea class="form-control w-100" id="purpose-additionalNotes" rows="5"
-                        placeholder="Optional"></textarea>
+                        name="additionalNotes" placeholder="Optional"></textarea>
 
                     <div class="mt-auto">
                         <a href="packages.php" class="btn btn-info btn-md w-100 mb-3">View Event Packages</a>
-                        <button type="submit" class="btn btn-success btn-md w-100">Book Now</button>
+                        <button type="submit" class="btn btn-success btn-md w-100" name="eventBook">Book Now</button>
                     </div>
                 </div>
 
@@ -526,6 +597,35 @@ $userType = $_SESSION['userType'];
 
         });
     </script>
+
+
+    <!-- Select Option -->
+    <script>
+        // Events
+        const eventSelect = document.getElementById('eventType');
+        const otherContainer = document.getElementById('other-container');
+        const other_input = document.getElementById('other-input');
+
+        eventSelect.addEventListener('change', () => {
+            if (eventSelect.value === 'other') {
+                otherContainer.style.display = 'block';
+                other_input.required = true;
+            } else {
+                otherContainer.style.display = 'none';
+                other_input.required = false;
+            }
+        });
+    </script>
+
+    <!-- Get the value of event type -->
+    <script>
+        document.getElementById('eventType').addEventListener('change', function() {
+            const selectedValue = this.value;
+            document.getElementById('selectedEventValue').value = selectedValue;
+        });
+    </script>
+
+
 </body>
 
 </html>

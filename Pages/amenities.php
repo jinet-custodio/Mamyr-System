@@ -42,7 +42,7 @@ require '../Config/dbcon.php';
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item active" href="amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
+                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                         <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                     </ul>
                 </li>

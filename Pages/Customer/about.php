@@ -1,3 +1,33 @@
+<?php
+require '../../Config/dbcon.php';
+
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
+session_start();
+date_default_timezone_set('Asia/Manila');
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
+    header("Location: ../register.php");
+    exit();
+}
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: ../register.php?session=expired");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+
+$userID = $_SESSION['userID'];
+$userType = $_SESSION['userType'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,9 +35,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - About</title>
-    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../Assets/CSS/about.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
+    <link rel="stylesheet" href="../../Assets/CSS/about.css">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -24,34 +54,34 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item">
-                    <a class="nav-link" href="../index.php"> Home</a>
+                    <a class="nav-link" href="dashboard.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href=" ../Pages/amenities.php" id="navbarDropdown"
+                    <a class="nav-link  dropdown-toggle " href=" ../amenities.php" id="navbarDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item active" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item active" href="../amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="../events.php">EVENTS</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="./about.php">ABOUT</a>
+                    <a class="nav-link active" href="#">ABOUT</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="register.php">BOOK NOW</a>
+                    <a class="nav-link" href="bookNow.php">BOOK NOW</a>
                 </li>
 
             </ul>
@@ -71,7 +101,7 @@
             </div>
             <div class="col-md-6">
                 <div class="illustration">
-                    <img src="../Assets/Images/websiteMaintenancePhoto/underconstruction.png"
+                    <img src="../../Assets/Images/websiteMaintenancePhoto/underconstruction.png"
                         alt="Under Construction Illustration" class="construction-image">
                 </div>
             </div>

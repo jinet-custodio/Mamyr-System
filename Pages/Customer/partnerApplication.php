@@ -146,6 +146,8 @@ $userType = $_SESSION['userType'];
                 </div>
                 <input type="hidden" class="form-control" id="userdID" name="userID" value="<?= htmlspecialchars_decode($userID) ?>" placeholder="First Name"
                     required>
+                <input type="hidden" class="form-control" id="userdID" name="userType" value="<?= htmlspecialchars_decode($userType) ?>" placeholder="First Name"
+                    required>
                 <div class="card-body">
                     <h5 class="repName">Representative Name</h5>
                     <div class="name">
