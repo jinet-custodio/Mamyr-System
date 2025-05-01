@@ -125,8 +125,12 @@ CREATE TABLE packages (
     packageID INT PRIMARY KEY AUTO_INCREMENT,
     packageName VARCHAR(100) NOT NULL,
     packageDescription TEXT NOT NULL,
+    duration DECIMAL(10,2) 
     capacity INT(100) NOT NULL,
-    price DECIMAL(10,2) DEFAULT 0.00
+    price DECIMAL(10,2) DEFAULT 0.00,
+    categoryID INT NOT NULL,
+
+    FOREIGN KEY (categoryID) REFERENCES eventCategories(categoryID);
 );
 
 CREATE TABLE eventCategories (
@@ -134,10 +138,8 @@ CREATE TABLE eventCategories (
     categoryName VARCHAR(200) NOT NULL
 );
 
-ALTER TABLE packages
-ADD COLUMN categoryID INT,
-ADD CONSTRAINT fk_category
-FOREIGN KEY (categoryID) REFERENCES eventCategories(categoryID);
+
+
 
 
 CREATE TABLE customPackages (
