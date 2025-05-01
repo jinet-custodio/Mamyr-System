@@ -129,6 +129,17 @@ CREATE TABLE packages (
     price DECIMAL(10,2) DEFAULT 0.00
 );
 
+CREATE TABLE eventCategories (
+    categoryID INT PRIMARY KEY AUTO_INCREMENT,
+    categoryName VARCHAR(200) NOT NULL
+);
+
+ALTER TABLE packages
+ADD COLUMN categoryID INT,
+ADD CONSTRAINT fk_category
+FOREIGN KEY (categoryID) REFERENCES eventCategories(categoryID);
+
+
 CREATE TABLE customPackages (
     customPackageID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
