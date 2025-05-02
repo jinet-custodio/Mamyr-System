@@ -125,7 +125,7 @@ CREATE TABLE packages (
     packageID INT PRIMARY KEY AUTO_INCREMENT,
     packageName VARCHAR(100) NOT NULL,
     packageDescription TEXT NOT NULL,
-    duration DECIMAL(10,2) 
+    duration DECIMAL(10,2), 
     capacity INT(100) NOT NULL,
     price DECIMAL(10,2) DEFAULT 0.00,
     categoryID INT NOT NULL,
