@@ -71,6 +71,9 @@ $userType = $_SESSION['userType'];
                 <li class="nav-item">
                     <a class="nav-link" href="#">BLOG</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="account.php">ACCOUNT</a>
+                </li>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>

@@ -44,7 +44,7 @@ if (isset($_POST['edit'])) {
         $userProfile_tmp_name = $_FILES['userProfile']['tmp_name'];
 
         if ($userProfile_size > 2000000) {
-            header("Location: ../Pages/account.php?message[]=Image%20is%20too%20large%20(max%202MB)");
+            header("Location: ../Pages/Customer/account.php?message[]=Image%20is%20too%20large%20(max%202MB)");
             exit(0);
         }
 
@@ -70,7 +70,7 @@ if (isset($_POST['edit'])) {
 
     if ($result) {
         echo "Update successful"; // Debugging statement
-        header("Location: ../Pages/account.php?id=$userID&role=$userType&message[]=Changes%20Applied!");
+        header("Location: ../Pages/Customer/account.php?id=$userID&role=$userType&message[]=Changes%20Applied!");
         exit(0);
     } else {
         echo "Error: " . mysqli_error($conn);
