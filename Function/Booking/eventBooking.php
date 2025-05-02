@@ -3,7 +3,6 @@
 require '../../Config/dbcon.php';
 session_start();
 
-// Made only for event booking, hotel and  resort booking still to follow
 
 if (isset($_POST['eventBook'])) {
     $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
