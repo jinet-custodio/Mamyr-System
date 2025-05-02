@@ -25,6 +25,15 @@ if (isset($_POST['signUp'])) {
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
     $extensions = ['@gmail.com', '@yahoo.com', '@outlook.com', '@protonmail.com', '@icloud.com'];
 
+    $defaultImage = '../Assets/Images/defaultProfile.png';
+
+    if (file_exists($defaultImage)) {
+        $imageData = file_get_contents($_FILES['image']['tmp_name']);
+        $imageData = mysqli_real_escape_string($conn, $imageData);
+    } else {
+        $imageData = null;
+    }
+
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && array_filter($extensions, fn($ext) => str_ends_with($email, $ext))) {
 
         $check_email = "SELECT email FROM users WHERE email = '$email' LIMIT 1";
@@ -40,8 +49,8 @@ if (isset($_POST['signUp'])) {
             date_default_timezone_set('Asia/Manila');
             $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes'));
             unset($_SESSION['formData']);
-            $storeData = "INSERT INTO users(firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at) 
-                VALUES('$firstName','$middleInitial','$lastName','$email','$userAddress','$hashpassword','$otp', '$OTP_expiration_at')";
+            $storeData = "INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at) 
+                VALUES('$imageData','$firstName','$middleInitial','$lastName','$email','$userAddress','$hashpassword','$otp', '$OTP_expiration_at')";
             $result = mysqli_query($conn, $storeData);
             if ($result) {
                 $mail = new PHPmailer(true);
@@ -115,25 +124,25 @@ if (isset($_POST['login'])) {
     if (mysqli_num_rows($result) > 0) {
         $data = mysqli_fetch_assoc($result);
         $storedPassword = $data['password'];
-        $userType = $date['userTypeID'];
+        $userType = $data['userTypeID'];
         $status = $data['userStatusID'];
         if (password_verify($password, $storedPassword)) {
             if ($status == 2) {
-                if ($userType = 1) { //Customer
+                if ($userType == 1) { //Customer
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
                     $_SESSION['userType'] = $userType;
                     header("Location: ../Pages/Customer/dashboard.php");
-                } elseif ($userType = 2) { //Partner
+                } elseif ($userType == 2) { //Partner
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
                     $_SESSION['userType'] = $userType;
                     header("Location: ../Pages/Customer/dashboard.php");
-                } elseif ($userType = 3) { //Admin
+                } elseif ($userType == 3) { //Admin
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
                     $_SESSION['userType'] = $userType;
-                    header("Location: ../Pages/Admin/dashboard.php");
+                    header("Location: ../Pages/Admin/adminDashboard.php");
                 }
             } else {
                 $_SESSION['error'] = 'User not verified';
