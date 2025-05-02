@@ -125,9 +125,22 @@ CREATE TABLE packages (
     packageID INT PRIMARY KEY AUTO_INCREMENT,
     packageName VARCHAR(100) NOT NULL,
     packageDescription TEXT NOT NULL,
+    duration DECIMAL(10,2), 
     capacity INT(100) NOT NULL,
-    price DECIMAL(10,2) DEFAULT 0.00
+    price DECIMAL(10,2) DEFAULT 0.00,
+    categoryID INT NOT NULL,
+
+    FOREIGN KEY (categoryID) REFERENCES eventCategories(categoryID)
 );
+
+CREATE TABLE eventCategories (
+    categoryID INT PRIMARY KEY AUTO_INCREMENT,
+    categoryName VARCHAR(200) NOT NULL
+);
+
+
+
+
 
 CREATE TABLE customPackages (
     customPackageID INT PRIMARY KEY AUTO_INCREMENT,

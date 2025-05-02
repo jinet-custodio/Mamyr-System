@@ -67,7 +67,7 @@ $userType = $_SESSION['userType'];
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item " href="../amenities.php">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="../events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
