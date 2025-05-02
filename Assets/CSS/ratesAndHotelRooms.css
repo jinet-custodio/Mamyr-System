@@ -146,7 +146,6 @@ ul {
   width: 70%;
   margin: auto;
   text-align: center;
-  margin-top: 10vw !important;
 }
 
 .categories {
@@ -155,6 +154,17 @@ ul {
   justify-content: center;
   margin-top: 2vw;
   margin-bottom: 5vw;
+}
+
+.backToSelection {
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 auto;
+}
+
+.backToSelection img {
+  width: 3vw;
 }
 
 .card,

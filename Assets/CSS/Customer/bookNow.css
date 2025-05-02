@@ -551,16 +551,21 @@ select option {
   color: #ffff !important;
 }
 
+.secondrow {
+  display: grid;
+  width: 50%;
+}
+
 #calendar {
-  width: 45%;
-  height: 100vh;
-  margin: 0 auto;
+  width: 70%;
+  height: 70vh;
+  margin: -5vw auto 1vw auto;
   background-color: #fffefe;
   border-radius: 5vw;
 }
 
 .fc table {
-  font-size: clamp(1vw, calc(2vh + 4px), 1.8vw) !important;
+  font-size: clamp(1vw, calc(1.5vh + 2px), 1.7vw) !important;
 }
 
 .fc-header-toolbar {
@@ -634,3 +639,21 @@ select option {
 }
 /* di ko sure 'to test nalang pag may event na nalagay*/
 /* event booking */
+
+
+/* code for the packages display */
+
+.shadow-sm {
+  width: 30%;
+  margin: 0.5vw;
+}
+
+#packageCardsContainer {
+  display: flex;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.562);
+  width: 95%;
+  padding: 1vw;
+  border-radius: 1vw;
+}
+/* end of code for the packages display */

@@ -85,6 +85,9 @@
         </div>
     </div>
     <div class="rates" id="rates" style="display: none;">
+        <div class="backToSelection">
+            <img src="../Assets/Images/Icon/back-button.png" alt="back button">
+        </div>
         <div class="titleContainer">
             <h4 class="title">Our Rates</h4>
         </div>
@@ -282,8 +285,16 @@
         </div>
     </div>
 
-    <div class="hotelRooms" id="hotelRooms">
-
+    <div class="hotelRooms" id="hotelRooms" style="display: none;">
+        <div class="titleContainer">
+            <h4 class="title">Hotel Rooms</h4>
+            <p class="description">At Mamyr Resort and Events Place, we celebrate life’s most meaningful moments—weddings,
+                birthdays, reunions, corporate events, and more—that can be celebrated in our Pavilion, which can occupy
+                up to 350 guests, and our Mini Pavilion, perfect for more intimate gatherings of up to 50
+                guests. Whether grand or small, each event is made memorable in a beautiful and comfortable setting
+                designed to suit your occasion.
+            </p>
+        </div>
     </div>
 
     </div>

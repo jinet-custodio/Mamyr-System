@@ -52,7 +52,7 @@ $userType = $_SESSION['userType'];
     $emailQuery = "SELECT email FROM users WHERE userID = '$userID' and userTypeID = '$userType'";
     $emailResult = mysqli_query($conn, $emailQuery);
     if (mysqli_num_rows($emailResult) > 0) {
-        $data = mysqli_fetch_row($emailResult);
+        $data = mysqli_fetch_assoc($emailResult);
         $email = $data['email'];
     } else {
         echo 'No Email Found';
@@ -372,31 +372,26 @@ $userType = $_SESSION['userType'];
 
                         <h5 class="eventLabel">Type of Event</h5>
                         <div class="eventTypeForm">
-                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
-                                id="eventDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                Please Select an Event
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li id="bday" class="dropdown-item">BIRTHDAY</li>
-                                <li id="wedding" class="dropdown-item">WEDDING</li>
-                                <li id="teamBuilding" class="dropdown-item">TEAM BUILDING</li>
-                                <li id="christening" class="dropdown-item">CHRISTENING/DEDICATION</li>
-                                <li id="thanksgiving" class="dropdown-item">THANKSGIVING PARTY</li>
-                                <li id="xmas" class="dropdown-item disabled">CHRISTMAS PARTY</li>
-                                <li id="other-option" class="dropdown-item">OTHER</li>
-
-                            </ul> -->
-
                             <select id="eventType" name="eventType" class="form-select" required>
                                 <option value="" disabled selected>Please Select an Event</option>
-                                <option value="bday">Birthday</option>
-                                <option value="wedding">Wedding</option>
-                                <option value="teamBuilding">Team Building</option>
-                                <option value="christening">Christening/Dedication</option>
-                                <option value="thanksgiving">Thanksgiving Party</option>
-                                <option value="christmas">Christmas Party</option>
-                                <option value="other">Other</option>
+
+                                <?php
+                                $sql = "SELECT categoryID, categoryName FROM eventCategories";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        // categoryID will be submitted as eventType
+                                        echo '<option value="' . $row["categoryID"] . '">' . htmlspecialchars($row["categoryName"]) . '</option>';
+                                    }
+                                } else {
+                                    echo '<option disabled>No categories available</option>';
+                                }
+
+                                $conn->close();
+                                ?>
                             </select>
+
                             <input type="hidden" name="selectedEventValue" id="selectedEventValue">
                             <div id="other-container" style="display: none; margin-left: 1vw;">
                                 <input type="text" id="other-input" name="other_input" class="form-control "
@@ -409,7 +404,7 @@ $userType = $_SESSION['userType'];
                     <div class="dateVenue">
                         <div class="dateForm">
                             <h5 class="dateLabel">Date</h5>
-                            <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" required>
+                            <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" disabled required>
                         </div>
 
                         <div class="venueForm">
@@ -422,10 +417,8 @@ $userType = $_SESSION['userType'];
                                 <li id="pavHall" class="dropdown-item">PAVILION HALL (max. 300pax)</li>
                                 <li id="miniPavHall" class="dropdown-item">MINI PAVILION HALL (max. 50pax)</li>
                             </ul> -->
-                            <select id="venue-hall" name="eventVenue" class="form-select" required>
+                            <select id="venue-hall" name="eventVenue" class="form-select" disabled required>
                                 <option value="" disabled selected>Please Select a Venue</option>
-                                <option value="pavHall">Pavilion Hall (max. 300pax)</option>
-                                <option value="miniPavHall">Mini Pavilion Hall (max. 50pax)</option>
                             </select>
                         </div>
                     </div>
@@ -433,7 +426,8 @@ $userType = $_SESSION['userType'];
                     <div class="noHrPpl">
                         <div class="hrForm">
                             <h5 class="hourLabel">Number of Hours</h5>
-                            <input type="number" class="form-control w-100" id="numberOfHours" required>
+                            <input type="number" class="form-control w-100" id="numberOfHours" readonly required>
+                            <input type="hidden" id="eventDuration" name="eventDuration">
                         </div>
 
                         <div class="peopleEventForm">
@@ -448,52 +442,39 @@ $userType = $_SESSION['userType'];
                                 <li id="guestNo3" class="dropdown-item">101-200 pax</li>
                                 <li id="guestNo4" class="dropdown-item">201-350 pax</li>
                             </ul> -->
-                            <select id="guest-number" name="eventPax" class="form-select" required>
+                            <select id="guest-number" class="form-select" disabled required>
                                 <option value="" disabled selected>Estimated Number of Guests</option>
                                 <option value="guestC1">10-50 pax</option>
                                 <option value="guestC2">51-100 pax</option>
                                 <option value="guestC3">101-200 pax</option>
                                 <option value="guestC4">201-350 pax</option>
                             </select>
+                            <input type="hidden" name="eventPax" id="hiddenGuestValue">
+
                         </div>
                     </div>
 
                     <div class="package">
                         <div class="packageForm w-100">
                             <h5 class="packageLabel">Package</h5>
-                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
-                                id="packageDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                Please Select a Package
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li id="p1" class="dropdown-item">Package 1</li>
-                                <li id="p2" class="dropdown-item">Package 2</li>
-                                <li id="p3" class="dropdown-item">Package 3</li>
-                                <li id="p4" class="dropdown-item">package 4</li>
-                            </ul> -->
-
                             <?php
                             $packageQuery = "SELECT * FROM packages";
                             ?>
-                            <select id="package" name="eventPackage" class="form-select" required>
+                            <select id="package" name="eventPackage" class="form-select" disabled required>
                                 <option value="" disabled selected>Please Select a Package</option>
-                                <!-- <option value="pack1">Package 1</option>
-                                <option value="pack2">Package 2</option>
-                                <option value="pack3">Package 3</option>
-                                <option value="pack4">Package 4</option> -->
                             </select>
                         </div>
 
                         <div class="customPackage w-100">
-                            <h5 class="customPackageLabel">Customize package?</h5>
+                            <h5 class="customPackageLabel">Can't find a package?</h5>
                             <a href="#" class=" btn btn-info" id="customPackageBtn">Customize my Package</a>
                         </div>
 
                     </div>
 
                     <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
-                    <textarea class="form-control w-100" id="purpose-additionalNotes" rows="5"
-                        name="additionalNotes" placeholder="Optional"></textarea>
+                    <textarea class="form-control w-100" id="additionalNotes" rows="5"
+                        name="additionalNotes" placeholder="Optional" disabled></textarea>
 
                     <div class="mt-auto">
                         <a href="packages.php" class="btn btn-info btn-md w-100 mb-3">View Event Packages</a>
@@ -501,8 +482,16 @@ $userType = $_SESSION['userType'];
                     </div>
                 </div>
 
+                <div class="secondrow">
+                    <div id="calendar"></div>
+                    <div class="packageDisplay" style="display: none;">
+                        <div id="packageCardsContainer" class="container mt-4 d-flex flex-wrap gap-3">
+                            <!-- Cards will be inserted here -->
+                        </div>
+                    </div>
 
-                <div id="calendar"></div>
+                </div>
+
             </div>
             <!--end ng container div-->
 
@@ -543,15 +532,151 @@ $userType = $_SESSION['userType'];
 
     </footer>
 
-    <script src="../../Assets/JS/BookNowJS/resortDropdown.js"></script>
+    <!-- <script src="../../Assets/JS/BookNowJS/resortDropdown.js"></script>
     <script src="../../Assets/JS/BookNowJS/hotelDropdown.js"></script>
-    <script src="../../Assets/JS/BookNowJS/eventDropdown.js"></script>
+    <script src="../../Assets/JS/BookNowJS/eventDropdown.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script src="../../Assets/JS/fullCalendar.js"></script>
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Page switch -->
     <script>
+        document.getElementById('eventType').addEventListener('change', function() {
+            const categoryID = this.value; // categoryID is now defined inside the event listener
+            const packagesDropdown = document.getElementById('package');
+            const packageDisplay = document.querySelector('.packageDisplay');
+            const packageCardsContainer = document.getElementById('packageCardsContainer');
+            const venueDropdown = document.getElementById('venue-hall'); // Assuming venue select has this ID
+
+            // Enable dropdown
+            packagesDropdown.disabled = false;
+
+            // Clear dropdown and card container
+            packagesDropdown.innerHTML = '<option value="">Loading packages...</option>';
+            packageCardsContainer.innerHTML = ''; // Clear any previous cards
+
+            // Fetch packages
+            fetch('../../Function/Booking/getPackages.php?categoryID=' + categoryID)
+                .then(response => response.json())
+                .then(data => {
+                    packagesDropdown.innerHTML = ''; // Clear again
+                    packageDisplay.style.display = 'block'; // Show the package display
+
+                    if (data.length > 0) {
+                        packagesDropdown.innerHTML = '<option value="" disabled selected>Select a package</option>';
+
+                        data.forEach(pkg => {
+                            // Populate dropdown
+                            const option = document.createElement('option');
+                            option.value = pkg.packageID;
+                            option.text = pkg.packageName + ' - ₱' + parseFloat(pkg.price).toFixed(2);
+                            packagesDropdown.appendChild(option);
+
+                            // Build card
+                            const card = `
+                        <div class="card h-100 shadow-sm" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">${pkg.packageName}</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><strong>Duration:</strong> ${pkg.duration} hours</li>
+                                    <li class="list-group-item"><strong>Capacity:</strong> Up to ${pkg.capacity} guests</li>
+                                    <li class="list-group-item"><strong>Price:</strong> ₱${parseFloat(pkg.price).toFixed(2)}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                            packageCardsContainer.insertAdjacentHTML('beforeend', card);
+                        });
+                    } else {
+                        packagesDropdown.innerHTML = '<option value="" disabled>No packages available</option>';
+                        packageCardsContainer.innerHTML = '<p>No packages found for this event type.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching packages:', error);
+                    packagesDropdown.innerHTML = '<option value="" disabled>Error loading packages</option>';
+                    packageCardsContainer.innerHTML = '<p>Error loading packages.</p>';
+                });
+
+            // Fetch venues for the selected event category
+            fetch('../../Function/Booking/getVenues.php?categoryID=' + categoryID)
+                .then(response => response.json())
+                .then(data => {
+                    venueDropdown.innerHTML = '<option value="" disabled selected>Please Select a Venue</option>';
+                    if (data.length > 0) {
+                        data.forEach(venue => {
+                            const option = document.createElement('option');
+                            option.value = venue.resortServiceID;
+                            option.text = venue.facilityName; // Facility name from the database
+                            venueDropdown.appendChild(option);
+                        });
+                    } else {
+                        venueDropdown.innerHTML = '<option value="" disabled>No venues available</option>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching venues:', error);
+                    venueDropdown.innerHTML = '<option value="" disabled>Error loading venues</option>';
+                });
+        });
+
+
+        document.getElementById('package').addEventListener('change', function() {
+            const packageID = this.value;
+            const eventtBookingDate = document.getElementById('eventtBookingDate');
+            const additionalNotes = document.getElementById('additionalNotes');
+
+            eventtBookingDate.disabled = false;
+            additionalNotes.disabled = false;
+
+            // Fetch the selected package's details
+            fetch('../../Function/Booking/getPackageDetails.php?packageID=' + packageID)
+                .then(response => response.json())
+                .then(pkg => {
+                    // Set duration
+                    const numberOfHoursInput = document.getElementById('numberOfHours');
+                    numberOfHoursInput.value = pkg.duration;
+                    document.getElementById('eventDuration').value = pkg.duration;
+
+
+                    // Set guest capacity
+                    const guestSelect = document.getElementById('guest-number');
+                    guestSelect.disabled = true;
+
+                    const hiddenGuestInput = document.getElementById('hiddenGuestValue');
+                    const capacity = parseInt(pkg.capacity);
+                    let selectedValue = '';
+
+                    if (capacity <= 50) selectedValue = 'guestC1';
+                    else if (capacity <= 100) selectedValue = 'guestC2';
+                    else if (capacity <= 200) selectedValue = 'guestC3';
+                    else selectedValue = 'guestC4';
+
+                    guestSelect.value = selectedValue;
+                    hiddenGuestInput.value = selectedValue;
+
+                    const venueSelect = document.getElementById('venue-hall');
+                    if (pkg.resortServiceID) {
+                        venueSelect.value = pkg.resortServiceID;
+                    }
+
+                    venueSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error fetching package details:', error);
+                });
+        });
+
+        function showPackageCards() {
+            const container = document.getElementById('packageCardsContainer');
+            container.style.display = 'block';
+            // Optionally scroll to it
+            container.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+
         document.addEventListener("DOMContentLoaded", function() {
             console.log("DOM fully loaded and parsed");
             var calendarEl = document.getElementById("calendar");
