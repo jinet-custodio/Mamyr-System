@@ -93,7 +93,7 @@
                    <?= $applicants['startDate'] ?>
                  </td>
                  <td scope="row">
-                   <form action="partnership.php" method="POST" style="display:inline;">
+                   <form action="partnership.php?container=1" method="POST" style="display:inline;">
                      <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
                      <button type="submit" class="btn btn-info">View</button>
                    </form>
@@ -154,7 +154,7 @@
                    <?= $applicants['status'] ?>
                  </td>
                  <td scope="row">
-                   <form action="partnership.php" method="POST" style="display:inline;">
+                   <form action="partnership.php?container=2" method="POST" style="display:inline;">
                      <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
                      <button type="submit" class="btn btn-info">View</button>
                    </form>
@@ -213,6 +213,31 @@
          requestContainer.style.display = "none";
        });
      });
+   </script>
+   <!-- Search URL -->
+   <script>
+     const params = new URLSearchParams(window.location.search);
+     const paramValue = params.get('container');
+
+     const choices = document.getElementById("choice-container");
+     const partnerContainer = document.getElementById("partner-container");
+     const requestContainer = document.getElementById("request-container");
+
+     if (paramValue == 2) {
+       choices.style.display = "none";
+       partnerContainer.style.display = "block";
+       requestContainer.style.display = "none";
+     } else if (paramValue == 3) {
+       choices.style.display = "none";
+       partnerContainer.style.display = "none";
+       requestContainer.style.display = "block";
+     }
+
+     if (paramValue) {
+       const url = new URL(window.location);
+       url.search = '';
+       history.replaceState({}, document.title, url.toString());
+     };
    </script>
  </body>
 
