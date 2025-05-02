@@ -35,9 +35,9 @@ $userType = $_SESSION['userType'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr Resort and Events Place </title>
-    <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../Assets/CSS/account.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
+    <link rel="stylesheet" href="../../Assets/CSS/account.css">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -53,17 +53,17 @@ $userType = $_SESSION['userType'];
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php">
-                        <img src="../Assets/Images/Icon/home2.png" alt="home icon">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="home icon">
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        <img src="../Assets/Images/Icon/notification.png" alt="home icon">
+                        <img src="../../Assets/Images/Icon/notification.png" alt="home icon">
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        <img src="../Assets/Images/Icon/setting.png" alt="home icon">
+                        <img src="../../Assets/Images/Icon/setting.png" alt="home icon">
                     </a>
                 </li>
                 </li>
@@ -87,7 +87,7 @@ $userType = $_SESSION['userType'];
                 $dateObj = DateTime::createFromFormat('d/m/Y', $dateStr);
                 $isoDate = $dateObj ? $dateObj->format('Y-m-d') : '';
         ?>
-                <form name="form" id="myForm" class="userInfo" action="../Function/editAccount.php" method="POST"
+                <form name="form" id="myForm" class="userInfo" action="../../Function/editAccount.php" method="POST"
                     enctype="multipart/form-data">
                     <div class="contents">
                         <input type="hidden" value="<?= htmlspecialchars($user['userTypeID']) ?>" name="userType">
@@ -95,7 +95,7 @@ $userType = $_SESSION['userType'];
 
                         <div class="profile-image">
                             <?php
-                            $imgSrc = '../Assets/Images/userProfile/no pfp.png';
+                            $imgSrc = '../../Assets/Images/userProfile/no pfp.png';
                             if (!empty($user['userProfile'])) {
                                 $imgData = base64_encode($user['userProfile']);
                                 $imgSrc = 'data:image/jpeg;base64,' . $imgData;
@@ -105,7 +105,7 @@ $userType = $_SESSION['userType'];
 
 
                             <button class="add-image hidden" id="btn" type="button">
-                                <img src="../Assets/Images/Icon/camera.png" alt="Camera" class="camera" id="camera">
+                                <img src="../../Assets/Images/Icon/camera.png" alt="Camera" class="camera" id="camera">
                             </button>
                             <input type="file" id="fileInput" style="display: none;" class="text-field"
                                 accept=".jpg, .jpeg, .png" name="userProfile">
@@ -118,22 +118,22 @@ $userType = $_SESSION['userType'];
 
                         <div class="information">
                             <div class="details">
-                                <img src="../Assets/Images/Icon/email.png" alt="email icon">
+                                <img src="../../Assets/Images/Icon/email.png" alt="email icon">
                                 <input type="email" name="email" class="text-field" value="<?= $user['email'] ?>" readonly>
                             </div>
                             <div class="details">
-                                <img src="../Assets/Images/Icon/phone.png" alt="phone icon">
+                                <img src="../../Assets/Images/Icon/phone.png" alt="phone icon">
                                 <input type="tel" name="phoneNumber" class="text-field" value="<?= $user['phoneNumber'] ?>"
                                     oninput="this.value=this.value.replace(/[^0-9]/g,'');" pattern="[0-9]{11}"
                                     placeholder="Click 'Edit' to add (optional)" readonly>
                             </div>
                             <div class="details">
-                                <img src="../Assets/Images/Icon/address.png" alt="address icon">
+                                <img src="../../Assets/Images/Icon/address.png" alt="address icon">
                                 <input type="text" name="userAddress" class="text-field" value="<?= $user['userAddress'] ?>"
                                     readonly>
                             </div>
                             <div class="details">
-                                <img src="../Assets/Images/Icon/birthday.png" alt="birthday icon">
+                                <img src="../../Assets/Images/Icon/birthday.png" alt="birthday icon">
                                 <input type="date" name="birthDate" id="birthDate" class="text-field"
                                     value="<?= htmlspecialchars($user['birthDate'])  ?>" readonly>
                             </div>
@@ -206,7 +206,7 @@ $userType = $_SESSION['userType'];
 
 
 
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
 </body>
