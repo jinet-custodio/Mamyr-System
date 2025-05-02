@@ -131,9 +131,7 @@ CREATE TABLE packages (
     price DECIMAL(10,2) DEFAULT 0.00,
     categoryID INT NOT NULL,
 
-    FOREIGN KEY (categoryID) REFERENCES eventCategories(categoryID),
-    FOREIGN KEY (resortserviceID) REFERENCES resortservices(resortserviceID)
-
+    FOREIGN KEY (categoryID) REFERENCES eventCategories(categoryID)
 );
 
 CREATE TABLE eventCategories (
