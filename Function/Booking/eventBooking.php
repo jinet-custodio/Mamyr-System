@@ -29,8 +29,6 @@ if (isset($_POST['eventBook'])) {
     // $endDateStr = $endDateTime->format('Y-m-d H:i:s');
 
 
-
-
     if ($eventPackage != '' || $additionalNotes != '') {
         $booking = "INSERT INTO bookings( `userID`, `packageID`, `additionalRequest`, `startDate`, `endDate`)
         VALUES('$userID', '$eventPackage', '$additionalNotes', '$eventDate', '$endDate')";
@@ -44,8 +42,6 @@ if (isset($_POST['eventBook'])) {
         }
     }
 }
-
-
 
 //Get all the services
 function getServices($conn)
