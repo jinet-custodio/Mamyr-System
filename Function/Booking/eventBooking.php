@@ -3,32 +3,47 @@
 require '../../Config/dbcon.php';
 session_start();
 
+// Made only for event booking, hotel and  resort booking still to follow
+
+// Made only for event booking, hotel and  resort booking still to follow
+
 if (isset($_POST['eventBook'])) {
     $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
-    $other_input = mysqli_real_escape_string($conn, $_POST['other_input']);
-    $eventDate = mysqli_real_escape_string($conn, $_POST['eventDate']);
-    $eventVenue = mysqli_real_escape_string($conn, $_POST['eventVenue']);
-    $numberOfHours = mysqli_real_escape_string($conn, $_POST['numberOfHours']);
-    $eventPax = mysqli_real_escape_string($conn, $_POST['eventPax']);
     $eventPackage = mysqli_real_escape_string($conn, $_POST['eventPackage']);
     $additionalNotes = mysqli_real_escape_string($conn, $_POST['additionalNotes']);
-    $services = getServices($conn);
-    $packages = getPackages($conn);
-    $customPackages = getPackages($conn);
+    $other_input = mysqli_real_escape_string($conn, $_POST['other_input']);
+    $eventDate = mysqli_real_escape_string($conn, $_POST['eventDate']);
+    $userID =  $_SESSION['userID'];
+    $eventDuration = mysqli_real_escape_string($conn, $_POST['eventDuration']);
 
-    if (($eventType !== '' && $other_input === '') || ($eventType === '' && $other_input !== '')) {
-        if ($eventType === 'Birthday') {
-        } elseif ($eventType === 'Wedding') {
-        } elseif ($eventType === 'Team Building') {
-        } elseif ($eventType === 'Christening/Dedication') {
-        } elseif ($eventType === 'Thanksgiving Party') {
-        } elseif ($eventType === 'Christmas Party') {
+    $duration = floatval($eventDuration);
+
+    $startDateTime = new DateTime($eventDate);
+    $intervalSpec = 'PT' . (int)round($duration * 60) . 'M'; // Convert hours to minutes
+    $endDateTime = clone $startDateTime;
+    $endDateTime->add(new DateInterval($intervalSpec));
+
+    $startDateStr = $startDateTime->format('Y-m-d');
+    $endDate = $endDateTime->format('Y-m-d');
+
+    //if  babaguhin yung data type ng dates to datetime, ito magiging code 
+    // $startDateStr = $startDateTime->format('Y-m-d H:i:s');
+    // $endDateStr = $endDateTime->format('Y-m-d H:i:s');
+
+
+    if ($eventPackage != '' || $additionalNotes != '') {
+        $booking = "INSERT INTO bookings( `userID`, `packageID`, `additionalRequest`, `startDate`, `endDate`)
+        VALUES('$userID', '$eventPackage', '$additionalNotes', '$eventDate', '$endDate')";
+
+        $bookingResult = mysqli_query($conn, $booking);
+
+        if ($bookingResult) {
+            header("Location: ../../../../Pages/Customer/dashboard.php");
         } else {
+            echo "Ahahha male";
         }
     }
 }
-
-
 
 //Get all the services
 function getServices($conn)
