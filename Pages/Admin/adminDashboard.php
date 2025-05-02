@@ -48,62 +48,155 @@ $userType = $_SESSION['userType'];
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <a href="#" class="navbar-brand" id="dashboard">DASHBOARD</a>
-        <div class="collapse navbar-collapse " id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
-                <li class="nav-item">
-                    <a class="nav-link" href="../Pages/dashboard.php">
-                        <img src="../../Assets/Images/Icon/notification.png" alt="home icon">
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <img src="../../Assets/Images/Icon/chat.png" alt="home icon">
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="navbar-brand" href="#">
-                        Mamyr Admin
-                        <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
-                    </a>
-                </li>
-                </li>
-            </ul>
+
+    <div class="topSection">
+        <div class="dashTitleContainer">
+            <a href="#" class="dashboardTitle" id="dashboard"><img src="../../Assets/images/MamyrLogo.png" alt=""
+                    class="logo"></a>
+        </div>
+
+        <div class="menus">
+            <a href="#" class="notifs">
+                <img src="../../Assets/Images/Icon/notification.png" alt="Notification Icon">
+            </a>
+            <a href="#" class="chat">
+                <img src="../../Assets/Images/Icon/chat.png" alt="home icon">
+            </a>
+
+            <h5 class="adminTitle">Mamyr Admin</h5>
+            <a href="#" class="admin">
+                <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
+            </a>
+        </div>
+    </div>
+
+    <nav class="navbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+
+            <a class="nav-link" href="../Pages/dashboard.php">
+                <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
+                <h5>Dashboard</h5>
+            </a>
+
+            <a class="nav-link" href="#">
+                <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
+                <h5>Bookings</h5>
+            </a>
+
+
+            <a class="nav-link" href="#">
+                <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
+                <h5>Rooms</h5>
+            </a>
+
+
+
+            <a class="nav-link" href="#">
+                <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
+                <h5>Payments</h5>
+            </a>
+
+
+            <a class="nav-link" href="#">
+                <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
+                <h5>Revenue</h5>
+            </a>
+
+
+            <a class="nav-link" href="#">
+                <img src="../../Assets/Images/Icon/Friend request.png" alt="Requests">
+                <h5>Requests</h5>
+            </a>
+
+            <a class="nav-link" href="#">
+                <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
+                <h5>Edit Website</h5>
+            </a>
+
+        </div>
+
+        <div class="logout-btn">
+            <form class="container-fluid justify-content-start">
+                <button class="btn btn-outline-primary me-2" type="submit" id="logOut" value="logOut" name="logOut">
+                    Log Out
+                </button>
+            </form>
         </div>
     </nav>
-    <main>
-        <div class="selection">
-            <div class="selectionItem">
-                <img src="../../Assets/Images/Icon/Dashboard.png" alt="">
-                <h5>Dashboard</h5>
+
+    <div class="container-fluid" id="contentsCF">
+        <div class="leftSection">
+
+            <div class="bookingSummary">
+
+                <div class="card" id="newBookings" style="width: 15rem; ">
+                    <div class="card-header">
+                        New Bookings
+                    </div>
+
+                </div>
+
+                <div class="card" id="checkIn" style="width: 15rem; ">
+                    <div class="card-header">
+                        Check In
+                    </div>
+
+                </div>
+
+                <div class="card" id="checkOut" style="width: 15rem; ">
+                    <div class="card-header">
+                        Check Out
+                    </div>
+
+                </div>
+
+                <div class="card" id="revenue" style="width: 15rem; ">
+                    <div class="card-header">
+                        Revenue
+                    </div>
+
+                </div>
+
             </div>
-            <div class="selectionItem">
-                <img src="../../Assets/Images/Icon/uim-schedule.png" alt="">
-                <h5>Bookings</h5>
-            </div>
-            <div class="selectionItem">
-                <img src="../../Assets/Images/Icon/Hotel.png" alt="">
-                <h5>Rooms</h5>
-            </div>
-            <div class="selectionItem">
-                <img src="../../Assets/Images/Icon/Credit card.png" alt="">
-                <h5>Payments</h5>
-            </div>
-            <div class="selectionItem">
-                <img src="../../Assets/Images/Icon/Profits.png" alt="">
-                <h5>Revenue</h5>
-            </div>
-            <div class="selectionItem">
-                <img src="../../Assets/Images/Icon/Friend request.png" alt="">
-                <h5>Requests</h5>
-            </div>
-            <div class="selectionItem">
-                <img src="../../Assets/Images/Icon/Edit Button.png" alt="">
-                <h5>Edit Website</h5>
+
+
+            <div class="ReservationTrendsContainer">
+
+
+                <div class="card" id="sched" style="width: 20rem; height: 30rem;">
+                    <div class="card-header">
+                        Upcoming Schedules
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">9:30 A.M - Executives' Meeting</li>
+                        <li class="list-group-item">10:00 A.M - New Sale Record</li>
+                        <li class="list-group-item">12:00 A.M - Shipment</li>
+                        <li class="list-group-item">1:00 P.M - New Arrival Record</li>
+                        <li class="list-group-item">2:00 P.M - New Policy Meeting</li>
+                        <li class="list-group-item">2:30 P.M - Logistics Review</li>
+                        <li class="list-group-item">4:00 P.M - Documentation</li>
+                        <li class="list-group-item">4:30 P.M - Final Meeting</li>
+
+                    </ul>
+                </div>
             </div>
         </div>
-    </main>
+
+        <div class="rightSection">
+
+
+            <div class="card revenueCard" id="revenueGraphContainer">
+                <div class="revenueTitleContainer">
+                    <h5 class="mb-0 fw-bold revTitle" style="text-align: left;">REVENUE</h5>
+                </div>
+
+                <div class="graphImg">
+                    <img src="../../Assets/Images/AdminImages/DashboardImages/graph.png" alt="" class="revenueGraph">
+                </div>
+            </div>
+        </div>
+
+    </div>
 </body>
 
 </html>
