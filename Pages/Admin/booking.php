@@ -74,7 +74,7 @@ $userType = $_SESSION['userType'];
                 <h5>Dashboard</h5>
             </a>
 
-            <a class="nav-link" href="booking.php">
+            <a class="nav-link" href="#">
                 <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
                 <h5>Bookings</h5>
             </a>
@@ -94,7 +94,7 @@ $userType = $_SESSION['userType'];
                 <h5>Revenue</h5>
             </a>
 
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="displayPartnership.php">
                 <img src="../../Assets/Images/Icon/Friend request.png" alt="Requests">
                 <h5>Requests</h5>
             </a>
@@ -132,7 +132,7 @@ $userType = $_SESSION['userType'];
                 <tbody>
                     <!-- Select booking info -->
                     <?php
-                $selectQuery = "SELECT u.firstName, u.lastName, ps.PBName, rs.category , ec.categoryName, b.* 
+                    $selectQuery = "SELECT u.firstName, u.lastName, ps.PBName, rs.category , ec.categoryName, b.* 
                 FROM bookings b
                 INNER JOIN users u ON b.userID = u.userID
                 LEFT JOIN packages p ON b.packageID = p.packageID
@@ -141,65 +141,65 @@ $userType = $_SESSION['userType'];
                 LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID
                 LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
                 ";
-                $result = mysqli_query($conn, $selectQuery);
-                if (mysqli_num_rows($result) > 0) {
-                    foreach ($result as $bookings) {
-                        $bookingID = $bookings['bookingID'];
-                        $name = ucfirst($bookings['firstName']) . " " . ucfirst($bookings['lastName'])
-                ?>
-                    <tr>
-                        <td><?= $name ?></td>
-                        <?php
-                            if ($bookings['serviceID'] != "") {
-                            ?>
-                        <td><?= $bookings['category'] ?></td>
-                        <?php
-                            } elseif ($bookings['packageID'] != "") {
-                            ?>
-                        <td><?= $bookings['categoryName'] ?></td>
-                        <?php
-                            } elseif ($bookings['customePackageID'] != "") {
-                            ?>
-                        <td>Customized Package</td>
-                        <?php
-                            }
-                            ?>
-                        <td><?= $bookings['startDate'] ?></td>
-                        <td>
-                            <?php
-                                if ($bookings['status'] == "Pending") {
+                    $result = mysqli_query($conn, $selectQuery);
+                    if (mysqli_num_rows($result) > 0) {
+                        foreach ($result as $bookings) {
+                            $bookingID = $bookings['bookingID'];
+                            $name = ucfirst($bookings['firstName']) . " " . ucfirst($bookings['lastName'])
+                    ?>
+                            <tr>
+                                <td><?= $name ?></td>
+                                <?php
+                                if ($bookings['serviceID'] != "") {
                                 ?>
-                            <button class="btn btn-warning w-75">
-                                <?= $bookings['status'] ?>
-                            </button>
-                            <?php
-                                } elseif ($bookings['status'] == "Approved") {
+                                    <td><?= $bookings['category'] ?></td>
+                                <?php
+                                } elseif ($bookings['packageID'] != "") {
                                 ?>
-                            <button class="btn btn-success w-75">
-                                <?= $bookings['status'] ?>
-                            </button>
-                            <?php
-                                } elseif ($bookings['status'] == "Cancelled") {
+                                    <td><?= $bookings['categoryName'] ?></td>
+                                <?php
+                                } elseif ($bookings['customePackageID'] != "") {
                                 ?>
-                            <button class="btn btn-danger w-75">
-                                <?= $bookings['status'] ?>
-                            </button>
-                            <?php
+                                    <td>Customized Package</td>
+                                <?php
                                 }
                                 ?>
-                        </td>
-                        <td>
-                            <form action="viewBooking.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                                <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                <button type="submit" class="btn btn-info w-75">View</button>
-                            </form>
-                        </td>
-                    </tr>
+                                <td><?= $bookings['startDate'] ?></td>
+                                <td>
+                                    <?php
+                                    if ($bookings['status'] == "Pending") {
+                                    ?>
+                                        <button class="btn btn-warning w-75">
+                                            <?= $bookings['status'] ?>
+                                        </button>
+                                    <?php
+                                    } elseif ($bookings['status'] == "Approved") {
+                                    ?>
+                                        <button class="btn btn-success w-75">
+                                            <?= $bookings['status'] ?>
+                                        </button>
+                                    <?php
+                                    } elseif ($bookings['status'] == "Cancelled") {
+                                    ?>
+                                        <button class="btn btn-danger w-75">
+                                            <?= $bookings['status'] ?>
+                                        </button>
+                                    <?php
+                                    }
+                                    ?>
+                                </td>
+                                <td>
+                                    <form action="viewBooking.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
+                                        <button type="submit" class="btn btn-info w-75">View</button>
+                                    </form>
+                                </td>
+                            </tr>
                     <?php
+                        }
                     }
-                }
-                ?>
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -214,9 +214,9 @@ $userType = $_SESSION['userType'];
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#bookingTable').DataTable();
-    });
+        $(document).ready(function() {
+            $('#bookingTable').DataTable();
+        });
     </script>
 </body>
 

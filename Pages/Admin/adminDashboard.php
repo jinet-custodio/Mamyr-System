@@ -64,7 +64,7 @@ $userType = $_SESSION['userType'];
             </a>
 
             <h5 class="adminTitle">Mamyr Admin</h5>
-            <a href="#" class="admin">
+            <a href="account.php" class="admin">
                 <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
             </a>
         </div>
@@ -103,7 +103,7 @@ $userType = $_SESSION['userType'];
             </a>
 
 
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="displayPartnership.php">
                 <img src="../../Assets/Images/Icon/Friend request.png" alt="Requests">
                 <h5>Requests</h5>
             </a>
