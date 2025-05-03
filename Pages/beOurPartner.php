@@ -49,9 +49,6 @@
                     <a class="nav-link" href="./about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/register.php">About</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
                 </li>
             </ul>

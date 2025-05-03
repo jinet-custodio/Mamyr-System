@@ -68,7 +68,7 @@ nav {
 }
 
 ul {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: lighter;
   font-size: 1.3vw;
   list-style: none;
@@ -108,13 +108,21 @@ ul {
   left: 0;
 }
 
+.dropdown-menu {
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
 .nav-item.dropdown:hover .dropdown-menu {
-  background-color: #93d4f5;
+  background-color: white !important;
   display: block;
 }
 
 .dropdown-item:hover {
-  background-color: white;
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
+
+.dropdown-item.active {
+  background-color: rgb(126, 203, 242) !important;
+  color: black !important;
 }
 
 .dropdown-item {
@@ -219,25 +227,23 @@ footer {
   transition: 0.5s;
 }
 
-.construction-wrapper{
-    margin-top: 8vw;
-    margin-bottom: 20vw;
+.construction-wrapper {
+  margin-top: 8vw;
+  margin-bottom: 20vw;
 }
 
 .construction-header {
-    font-size: 2vw;
-    font-weight: bold;
-  }
+  font-size: 2vw;
+  font-weight: bold;
+}
 
-  .construction-text {
-    color: #6c757d;
-    margin-bottom: 20px;
-    text-align: justify;
-  }
+.construction-text {
+  color: #6c757d;
+  margin-bottom: 20px;
+  text-align: justify;
+}
 
 .construction-image {
   width: 40vw;
   height: auto;
 }
-
-
