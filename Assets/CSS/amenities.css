@@ -67,13 +67,13 @@ nav {
   top: 0.1vw; /* para ma-align yung dropdown sa ibang nav-item */
 }
 
-ul {
-  font-family: "Plus Jakarta Sans";
-  font-weight: lighter;
-  font-size: 1.3vw;
-  list-style: none;
-  display: table;
+.nav-item {
   text-transform: uppercase;
+  font-family: "Poppins" !important;
+  font-weight: lighter;
+  margin-top: 15px;
+  font-size: 1.3vw;
+  /* margin-left: 3vw; */
 }
 
 .nav-link {

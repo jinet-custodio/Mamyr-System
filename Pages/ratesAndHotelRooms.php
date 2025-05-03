@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -334,7 +334,7 @@
 
 
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
-
+    <script src="../Assets/JS/scrollNavbg.js"></script>
     <script>
         function showRates(event) {
             event.preventDefault();
@@ -352,15 +352,15 @@
             document.getElementById("footer").style.marginTop = "1vw";
         }
 
-        const navbar = document.getElementById("navbar");
+        // const navbar = document.getElementById("navbar");
 
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 10) {
-                navbar.classList.add("bg-white", "shadow");
-            } else {
-                navbar.classList.remove("bg-white", "shadow");
-            }
-        });
+        // window.addEventListener("scroll", () => {
+        //     if (window.scrollY > 10) {
+        //         navbar.classList.add("bg-white", "shadow");
+        //     } else {
+        //         navbar.classList.remove("bg-white", "shadow");
+        //     }
+        // });
     </script>
 </body>
 
