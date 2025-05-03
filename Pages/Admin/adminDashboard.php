@@ -185,12 +185,11 @@ $userType = $_SESSION['userType'];
         <div class="rightSection">
 
 
-            <div class="card revenueCard" id="revenueGraphContainer">
-                <div class="revenueTitleContainer">
-                    <h5 class="mb-0 fw-bold revTitle" style="text-align: left;">REVENUE</h5>
-                </div>
+            <div class="card" id="revenueGraphCard">
+                <div class="revenueGraphContainer">
+                    <h5 class="fw-bold revTitle">REVENUE</h5>
 
-                <div class="graphImg">
+
                     <img src="../../Assets/Images/AdminImages/DashboardImages/graph.png" alt="" class="revenueGraph">
                 </div>
             </div>
