@@ -110,29 +110,40 @@ body {
 }
 
 .nav-link img {
-  height: 2.4vw;
+  height: 2vw;
   width: auto;
   object-fit: contain;
 }
 
 #contentsCF {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   width: 100%;
   display: flex;
   justify-content: center;
   padding: 2vw;
 }
 
+.card-header {
+  font-size: 1.3vw;
+}
+
 .leftSection {
-  border: 1px solid black;
   width: 50%;
-  /* margin-left: 3vw; */
-  /* display: flex;
-  justify-content: center;
-  flex-wrap: wrap; */
+}
+
+h6 {
+  text-align: right;
+  padding-right: 2vw;
 }
 
 .bookingSummary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1vw;
+}
+/* .bookingSummary {
   border: 1px solid black;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -147,11 +158,14 @@ body {
 
 #revenue {
   grid-row-start: 2;
+} */
+
+.ReservationTrendsGraph {
+  width: 35vw;
+  display: block;
+  margin: auto;
 }
 
-/* .rightSection {
-  margin-right: 3vw;
-} */
 #revenueGraphCard {
   display: flex !important;
   flex-wrap: nowrap !important;
@@ -178,4 +192,85 @@ body {
   border: 1px;
   word-wrap: break-word;
   width: 1vw;
+}
+
+.rightSectionBottom {
+  display: flex;
+  gap: 1.2vw;
+  margin-top: 2vw;
+}
+
+.roomAvailabilityGraph {
+  margin-top: 2vw;
+}
+
+.graphRA {
+  display: block;
+  margin: auto;
+  width: 15vw;
+}
+.roomAvailabilityLegend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 4vw;
+  gap: 2vw;
+}
+
+.occupied,
+.available,
+.maintenance {
+  /* background-color: rgb(222, 255, 242);
+  color: rgb(82, 209, 160); */
+  border-radius: 15px;
+  padding: 5px 10px;
+  color: #ffff;
+}
+
+.totalRating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+  padding-left: 1vw;
+}
+.totalRatingSpan {
+  border-radius: 15px;
+  padding: 5px 10px;
+  color: #fbe3c3;
+  font-size: 1.6vw;
+}
+.ratingLabelContainer {
+  margin-top: 3vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.facilitiesRating,
+.cleanlinessRating,
+.servicesRating,
+.comfortRating {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ratingLabel {
+  font-size: 1.3vw;
+  text-align: left;
+  flex-shrink: 0;
+  width: 40%;
+}
+
+.progress {
+  flex-grow: 1;
+  margin-right: 1vw;
+}
+
+.facilityRatingNumber,
+.cleanlinessRatingNumber,
+.servicesRatingNumber,
+.comfortRatingNumber {
+  font-size: 1.3vw;
 }
