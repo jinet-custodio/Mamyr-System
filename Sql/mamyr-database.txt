@@ -106,11 +106,11 @@ CREATE TABLE entranceRates (
 -- =========================
 
 CREATE TABLE services (
-    serviceID INT PRIMARY KEY AUTO_INCREMENT,
-    resortServiceID INT NOT NULL,
-    partnershipServiceID INT NOT NULL,
-    availabilityID INT DEFAULT 1, 
-    resortEntranceID INT NOT NULL,
+  serviceID int(11) NOT NULL,
+  resortServiceID int(11) DEFAULT NULL,
+  partnershipServiceID int(11) DEFAULT NULL,
+  availabilityID int(11) DEFAULT 1,
+  resortEntranceID int(11) DEFAULT NULL,
     FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
     FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
     FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID),
