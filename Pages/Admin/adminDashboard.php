@@ -129,55 +129,64 @@ $userType = $_SESSION['userType'];
 
             <div class="bookingSummary">
 
-                <div class="card" id="newBookings" style="width: 15rem; ">
-                    <div class="card-header">
+                <div class="card" id="newBookings" style="width: 17rem; height:10rem;">
+                    <div class="card-header fw-bold">
                         New Bookings
                     </div>
 
+                    <div class="card-body">
+                        <h2 class="newBookingTotal">15</h2>
+                    </div>
+
+                    <h6 class="newBookingDate">This Week</h6>
                 </div>
 
-                <div class="card" id="checkIn" style="width: 15rem; ">
-                    <div class="card-header">
+                <div class="card" id="checkIn" style="width: 17rem; height:10rem; ">
+                    <div class="card-header fw-bold">
                         Check In
                     </div>
 
+                    <div class="card-body">
+                        <h2 class="checkInTotal">15</h2>
+                    </div>
+
+                    <h6 class="checkInDate">This Week</h6>
                 </div>
 
-                <div class="card" id="checkOut" style="width: 15rem; ">
-                    <div class="card-header">
+                <div class="card" id="checkOut" style="width: 17rem; height:10rem;">
+                    <div class="card-header fw-bold">
                         Check Out
                     </div>
 
+                    <div class="card-body">
+                        <h2 class="checkOutTotal">15</h2>
+                    </div>
+
+                    <h6 class="checkOutDate">This Week</h6>
                 </div>
 
-                <div class="card" id="revenue" style="width: 15rem; ">
-                    <div class="card-header">
+                <div class="card" id="revenue" style="width: 17rem; height:10rem;">
+                    <div class="card-header fw-bold">
                         Revenue
                     </div>
 
+                    <div class="card-body">
+                        <h2 class="revenueTotal">&#8369;200,000</h2>
+                    </div>
+
+                    <h6 class="checkOutDate">This Week</h6>
                 </div>
 
-            </div>
-
-
-            <div class="ReservationTrendsContainer">
-
-
-                <div class="card" id="sched" style="width: 20rem; height: 30rem;">
-                    <div class="card-header">
-                        Upcoming Schedules
+                <div class="ReservationTrendsContainer">
+                    <div class="card" id="sched" style="width: 35rem; height: 25rem;">
+                        <div class="card-header fw-bold">
+                            Reservation Trends
+                        </div>
+                        <div class="card-body">
+                            <img src="../../Assets/Images/AdminImages/DashboardImages/graph.png" alt=""
+                                class="ReservationTrendsGraph">
+                        </div>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">9:30 A.M - Executives' Meeting</li>
-                        <li class="list-group-item">10:00 A.M - New Sale Record</li>
-                        <li class="list-group-item">12:00 A.M - Shipment</li>
-                        <li class="list-group-item">1:00 P.M - New Arrival Record</li>
-                        <li class="list-group-item">2:00 P.M - New Policy Meeting</li>
-                        <li class="list-group-item">2:30 P.M - Logistics Review</li>
-                        <li class="list-group-item">4:00 P.M - Documentation</li>
-                        <li class="list-group-item">4:30 P.M - Final Meeting</li>
-
-                    </ul>
                 </div>
             </div>
         </div>
@@ -188,13 +197,89 @@ $userType = $_SESSION['userType'];
             <div class="card" id="revenueGraphCard">
                 <div class="revenueGraphContainer">
                     <h5 class="fw-bold revTitle">REVENUE</h5>
-
-
                     <img src="../../Assets/Images/AdminImages/DashboardImages/graph.png" alt="" class="revenueGraph">
                 </div>
             </div>
-        </div>
 
+            <div class="rightSectionBottom">
+                <div class="card" id="sched" style="width: 20.5rem; height: 20rem;">
+                    <div class="card-header fw-bold">
+                        Room Availability
+                    </div>
+                    <div class="card-body">
+                        <div class="roomAvailabilityGraph">
+                            <img src="../../Assets/Images/AdminImages/DashboardImages/roomAvailabilityGraph.png" alt=""
+                                class="graphRA">
+                        </div>
+
+                        <div class="roomAvailabilityLegend">
+
+                            <span class="occupied bg-danger">Occupied</span>
+                            <span class="available bg-success">Available</span>
+                            <span class="maintenance bg-warning">Maintenance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" id="sched" style="width: 20.5rem; height: 20rem;">
+                    <div class="card-header fw-bold">
+                        Overall Rating
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="totalRating">
+                            <span class="totalRatingSpan bg-primary">4.3/5</span>
+                            <h5 class="fw-bold">Reviews</h5>
+                        </div>
+
+
+                        <div class="ratingLabelContainer">
+
+                            <div class="facilitiesRating">
+                                <h5 class="ratingLabel">Facilities</h5>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" id="facilitiesRating" role="progressbar"
+                                        style="width: 70%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <h5 class="facilityRatingNumber">4.6</h5>
+                            </div>
+
+                            <div class="cleanlinessRating">
+                                <h5 class="ratingLabel">Cleanliness</h5>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" id="cleanlinessRating" role="progressbar"
+                                        style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <h5 class="cleanlinessRatingNumber">4.5</h5>
+                            </div>
+
+                            <div class="servicesRating">
+                                <h5 class="ratingLabel">Services</h5>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" id="servicesRating" role="progressbar"
+                                        style="width: 95%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <h5 class="servicesRatingNumber">4.8</h5>
+                            </div>
+
+                            <div class="comfortRating">
+                                <h5 class="ratingLabel">Comfort</h5>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" id="comfortRating" role="progressbar"
+                                        style="width: 45%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <h5 class="comfortRatingNumber">4.2</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
