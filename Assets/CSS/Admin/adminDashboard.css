@@ -119,20 +119,17 @@ body {
   border: 1px solid black;
   width: 100%;
   display: flex;
+  justify-content: center;
+  padding: 2vw;
 }
 
 .leftSection {
   border: 1px solid black;
   width: 50%;
+  /* margin-left: 3vw; */
   /* display: flex;
   justify-content: center;
   flex-wrap: wrap; */
-}
-
-.rightSection {
-  border: 1px solid black;
-  width: 100%;
-  display: flex !important;
 }
 
 .bookingSummary {
@@ -152,34 +149,33 @@ body {
   grid-row-start: 2;
 }
 
-.revenueCard {
-  border-radius: 15px !important;
-  width: 100% !important;
+/* .rightSection {
+  margin-right: 3vw;
+} */
+#revenueGraphCard {
   display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 5vw;
+  width: 42rem;
+  height: 25rem;
+  padding: 5px;
 }
 
-.revenueTitleContainer {
+.revenueGraphContainer {
+  /* border: 1px solid black; */
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
+.revenueGraph {
+  /* border: 1px solid black; */
+  width: 45vw !important;
 }
 
 .revTitle {
-  border: 1px solid black !important;
-  position: absolute;
-  margin-left: 2vw;
   display: inline-block;
   border: 1px;
   word-wrap: break-word;
   width: 1vw;
-}
-
-.graphImg {
-  border: 1px solid black !important;
-  width: 40%;
-}
-
-.revenueGraph {
-  width: 20vw;
 }
