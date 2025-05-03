@@ -78,7 +78,7 @@ $userType = $_SESSION['userType'];
                 <h5>Dashboard</h5>
             </a>
 
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="booking.php">
                 <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
                 <h5>Bookings</h5>
             </a>
