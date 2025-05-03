@@ -55,7 +55,7 @@ nav {
 .navbar-nav {
   display: flex !important;
   list-style: none;
-  margin-top: 10px !important;
+  margin-top: 5px !important;
 }
 
 .navbar-nav .dropdown-toggle {
@@ -67,22 +67,30 @@ nav {
   top: 0.1vw; /* para ma-align yung dropdown sa ibang nav-item */
 }
 
-ul {
-  font-family: "Plus Jakarta Sans";
-  font-weight: lighter;
-  font-size: 1.3vw;
-  list-style: none;
-  display: table;
+.nav-item {
   text-transform: uppercase;
+  font-family: "Poppins" !important;
+  font-weight: lighter;
+  margin-top: 15px;
+  font-size: 1.3vw;
+  /* margin-left: 3vw; */
 }
 
-.nav-link {
+.nav-link,
+#logOutBtn {
   text-decoration: none;
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
-  color: rgb(0, 0, 0) !important;
+  color: rgb(2, 2, 2) !important;
   letter-spacing: 0.1em;
+}
+
+#logOutBtn {
+  font-family: "Poppins";
+  font-size: 1.3vw;
+  margin-right: 2vw;
+  border: none;
 }
 
 .nav-link:not(.dropdown-toggle):after {
@@ -128,6 +136,27 @@ ul {
 .dropdown-item {
   font-size: 1.3vw;
   font-weight: bold;
+}
+
+.account-nav {
+  margin: 1px;
+  margin-left: 1rem;
+  border: 1px solid white;
+  border-radius: 2rem;
+  img {
+    .account-nav {
+      margin: 1px;
+      margin-left: 1rem;
+      border: 1px solid white;
+      border-radius: 2rem;
+      img {
+        height: 8vh;
+        border-radius: 2rem;
+      }
+    }
+    height: 8vh;
+    border-radius: 2rem;
+  }
 }
 
 .logoNav {

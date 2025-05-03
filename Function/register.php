@@ -25,10 +25,10 @@ if (isset($_POST['signUp'])) {
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
     $extensions = ['@gmail.com', '@yahoo.com', '@outlook.com', '@protonmail.com', '@icloud.com'];
 
-    $defaultImage = '../Assets/Images/defaultProfile.png';
+    // $defaultImage = ;
 
     if (file_exists($defaultImage)) {
-        $imageData = file_get_contents($_FILES['image']['tmp_name']);
+        $imageData = file_get_contents($_FILES['../Assets/Images/defaultProfile.png']);
         $imageData = mysqli_real_escape_string($conn, $imageData);
     } else {
         $imageData = null;

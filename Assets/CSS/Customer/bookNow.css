@@ -77,15 +77,22 @@ ul {
   text-transform: uppercase;
 }
 
-.nav-link {
+.nav-link,
+#logOutBtn {
   text-decoration: none;
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
-  color: rgb(0, 0, 0) !important;
+  color: rgb(2, 2, 2) !important;
   letter-spacing: 0.1em;
 }
 
+#logOutBtn {
+  font-family: "Poppins";
+  font-size: 1.3vw;
+  margin-right: 2vw;
+  border: none;
+}
 .nav-link:not(.dropdown-toggle):after {
   background: none repeat scroll 0 0 transparent;
   bottom: 0;
@@ -94,7 +101,7 @@ ul {
   height: 2px;
   left: 50%;
   position: absolute;
-  border-bottom: 4px solid rgb(126, 203, 242) !important;
+  border-bottom: 4px solid rgb(255, 255, 255) !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }
@@ -129,6 +136,17 @@ ul {
 .dropdown-item {
   font-size: 1.3vw;
   font-weight: bold;
+}
+
+.account-nav {
+  margin: 1px;
+  margin-left: 1rem;
+  border: 1px solid white;
+  border-radius: 2rem;
+  img {
+    height: 8vh;
+    border-radius: 2rem;
+  }
 }
 
 .logoNav {
@@ -639,7 +657,6 @@ select option {
 }
 /* di ko sure 'to test nalang pag may event na nalagay*/
 /* event booking */
-
 
 /* code for the packages display */
 

@@ -59,25 +59,46 @@ $userType = $_SESSION['userType'];
     }
     ?>
     <nav class="navbar navbar-expand-lg fixed-top">
+        <!-- Account Icon on the Left -->
+        <ul class="navbar-nav">
+            <?php
+            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userTypeID = '$userType'";
+            $result = mysqli_query($conn, $query);
+            if (mysqli_num_rows($result) > 0) {
+                $data = mysqli_fetch_assoc($result);
+                $imageData = $data['userProfile'];
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $imageData);
+                finfo_close($finfo);
+                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+            }
+            ?>
+            <li class="nav-item account-nav">
+                <a href="account.php">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                </a>
+            </li>
+        </ul>
+
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+        <!-- <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"> -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php"> HOME</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="../amenities.php" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item " href="../amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="#">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="../events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item " href="amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                        <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

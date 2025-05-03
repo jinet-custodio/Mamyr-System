@@ -74,10 +74,10 @@ body {
 }
 
 .nav-item {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: lighter;
   margin-top: 15px;
-  font-size: 1.5vw;
+  font-size: 1.3vw;
   /* margin-left: 3vw; */
 }
 
@@ -92,8 +92,8 @@ body {
 }
 
 #logOutBtn {
-  font-family: "Plus Jakarta Sans";
-  font-size: 1.45vw;
+  font-family: "Poppins";
+  font-size: 1.3vw;
   margin-right: 2vw;
   border: none;
 }
@@ -131,6 +131,17 @@ body {
 .dropdown-item {
   font-size: 1.3vw;
   font-weight: bold;
+}
+
+.account-nav {
+  margin: 1px;
+  margin-left: 1rem;
+  border: 1px solid white;
+  border-radius: 2rem;
+  img {
+    height: 8vh;
+    border-radius: 2rem;
+  }
 }
 
 .topContainer {

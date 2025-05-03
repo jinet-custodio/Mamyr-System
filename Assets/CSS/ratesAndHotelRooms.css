@@ -47,35 +47,28 @@ nav {
 }
 
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 15vh;
-  padding: 1rem;
-}
-
-.navbar-nav {
-  display: flex !important;
-  list-style: none;
-  margin-top: 10px !important;
-}
-
-.navbar-nav .dropdown-toggle {
-  display: inline-block;
-  padding: 10px 15px !important;
-  line-height: 1.5;
-  vertical-align: middle;
-  position: relative;
-  top: 0.1vw; /* para ma-align yung dropdown sa ibang nav-item */
-}
-
-ul {
-  font-family: "Plus Jakarta Sans";
-  font-weight: lighter;
-  font-size: 1.3vw;
-  list-style: none;
-  display: table;
+  position: fixed;
+  width: 100%;
+  top: 0;
   text-transform: uppercase;
+}
+
+.navbar.scrolled {
+  background-color: white;
+  .nav-link {
+    color: black !important;
+  }
+  .nav-link:not(.dropdown-toggle):after {
+    border-bottom: 4px solid rgb(126, 203, 242) !important;
+  }
+}
+
+.nav-item {
+  font-family: "Poppins" !important;
+  font-weight: lighter;
+  margin-top: 15px;
+  font-size: 1.3vw;
+  /* margin-left: 3vw; */
 }
 
 .nav-link {
@@ -95,14 +88,9 @@ ul {
   height: 2px;
   left: 50%;
   position: absolute;
-  border-bottom: 4px solid #93d4f5 !important;
+  border-bottom: 4px solid rgb(0, 178, 209) !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
-}
-
-.nav-link.active:after {
-  width: 100%;
-  left: 0;
 }
 
 .nav-link:not(.dropdown-toggle):hover:after {
@@ -129,7 +117,30 @@ ul {
 
 .dropdown-item {
   font-size: 1.3vw;
-  font-weight: bold;
+}
+
+.navbar-collapse {
+  text-align: center;
+  padding-bottom: 0.5rem;
+}
+
+.navbar-toggler {
+  float: right;
+  background-color: #ffffff !important;
+  margin: 5vw;
+  border: none;
+
+  &:focus,
+  &:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none;
+  }
+
+  .custom-btn {
+    width: 2vw !important;
+    font-size: 1.5vw !important;
+  }
 }
 
 .logoNav {
@@ -141,6 +152,10 @@ ul {
 
 /* end of navbar code */
 
+.selection {
+  margin-top: 20vh;
+  height: 100vh;
+}
 /* body css */
 .titleContainer {
   width: 70%;
