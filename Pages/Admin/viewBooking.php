@@ -183,6 +183,14 @@ $userType = $_SESSION['userType'];
                     </div>
                 </div>
             </div>
+            <div class="button-container">
+                <form action="../../Function/Admin/bookingApproval.php" method="post">
+                    <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                    <input type="hidden" name="bookingStatus" value="<?= $status ?>">
+                    <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+                    <button type="submit" class="btn btn-danger" name="declineBtn">Reject</button>
+                </form>
+            </div>
         </div>
     </div>
 
