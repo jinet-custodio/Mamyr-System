@@ -148,6 +148,10 @@ ul {
   text-align: center;
 }
 
+#mainTitle {
+  margin-top: 10vw !important;
+}
+
 .categories {
   display: flex;
   flex-wrap: wrap;
@@ -164,7 +168,7 @@ ul {
 }
 
 .backToSelection img {
-  width: 3vw;
+  width: 3.5vw;
 }
 
 .card,
@@ -226,7 +230,7 @@ ul {
 
 /* rates code */
 
-.rates {
+.rates, .hotelRooms {
   margin-top: 9vw;
 }
 
@@ -295,7 +299,7 @@ ul {
   text-align: center;
   margin-top: 1.5vw;
   margin-bottom: 1vw;
-  font-size: 2.5vw;
+  font-size: 2.8vw;
   font-family: "Prata";
   color: #000000;
 }
@@ -327,7 +331,7 @@ ul {
 }
 
 .Description p {
-  font-size: 1.5vw !important;
+  font-size: 1.5vw ;
   font-family: "Poppins";
 }
 
@@ -404,6 +408,78 @@ ul {
   padding: 0.8vw;
 }
 /* end of massage chair  code */
+/* end of rates code */
+
+
+/* start of hotel code */
+.hotelDescription {
+  margin-top: 1vw;
+  font-size: 1.5vw;
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 80%;
+  background: whitesmoke !important;
+  padding-bottom: 1vw;
+}
+
+.hotelIconContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5vw;
+  padding: 2vw;
+}
+
+.hotelIcon {
+  width: 6vw;
+}
+
+.availabilityIcons {
+  margin: 1vw auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.roomCaption {
+  font-size: 1.2vw;
+  font-family: "Prata";
+}
+
+.avail {
+  width: 3vw;
+}
+
+.availabilityIcons p {
+  font-size: 1.3vw;
+  font-weight: 700;
+  font-family: "Prata";
+  margin: 0 2vw 0 1vw;
+}
+
+.hotel {
+  display: flex;
+  width: 80%;
+  background-color: whitesmoke;
+  padding: 1vw;
+  margin: 0 auto 1vw auto;
+  justify-content: space-around;
+  border-radius: 0;
+  border: 1px solid black;
+}
+
+#hotelTitle {
+  margin-bottom: 4vw;
+}
+.ourRooms {
+  margin-top: 2vw;
+}
+
+/* end of hotel  code */
 
 /* footer code */
 footer {
@@ -506,6 +582,11 @@ footer {
     margin-top: 5vw;
   }
 
+  .backToSelection img {
+    width: 4vw;
+    border-radius: 50%;
+  }
+
   .title {
     font-size: 4vw;
   }
@@ -542,6 +623,21 @@ footer {
   #massageDesc {
     font-size: 1.8vw;
   }
+
+  .hotelIconsContainer {
+    width: 45%;
+  }
+
+  .hotelIcon {
+    width: 7vw;
+  }
+  .roomCaption {
+    font-size: clamp(13px, calc(1.2vh + 2px), 18px);
+  }
+  
+  .hotelDescription {
+    font-size: 2vw;
+  }
 }
 
 @media (max-width: 600px) {
@@ -560,6 +656,9 @@ footer {
   .title {
     font-size: 4vw;
   }
+  .backToSelection img {
+    width: 4.5vw;
+  }
 
   .entranceTitle {
     font-size: 3.3vw;
@@ -569,16 +668,16 @@ footer {
     height: 100vh !important;
   }
   .rates {
-    margin-top: 18vw !important;
+    margin-top: 14vw !important;
   }
 
   .Description h2 {
-    font-size: clamp(14px, calc(2.5vh + 4px), 18px) !important;
+    font-size: clamp(12px, calc(2.5vh + 4px), 14px) !important;
   }
 
   .Description p,
   #videokeDesc p {
-    font-size: clamp(10px, calc(1.1vh + 2px), 13px);
+    font-size: clamp(8px, calc(0.9vh + 2px), 12px);
   }
 
   .entranceFee {
@@ -603,6 +702,28 @@ footer {
     padding: 5px 0;
     height: 6vh !important;
   }
+  .hotelIconsContainer {
+    width: 55%;
+  }
+
+  .hotelDescription {
+    font-size: 2.1vw;
+  }
+
+  .hotelIcon {
+    width: 7vw;
+  }
+
+  .roomCaption {
+    font-size: clamp(8px, calc(0.9vh + 2px), 15px);
+  }
+
+  .availabilityIcons p {
+    font-size: 1.9vw;
+    font-weight: 700;
+    font-family: "Prata";
+    margin: 0 2vw 0 1vw;
+  }
 }
 
 @media (max-width: 400px) {
@@ -614,8 +735,12 @@ footer {
     margin: 0 auto 2vw auto;
   }
 
+  .backToSelection img {
+    width: 4.8vw;
+  }
+
   .Description h2 {
-    font-size: clamp(11px, calc(1.2vh + 4px), 15px) !important;
+    font-size: clamp(9px, calc(1vh + 2px), 12px) !important;
   }
 
   .Description p,
@@ -663,5 +788,11 @@ footer {
     margin: 3vw auto;
     width: 70% !important;
     height: 40vw !important;
+  }
+  .availabilityIcons p {
+    font-size: 2.3vw;
+    font-weight: 700;
+    font-family: "Prata";
+    margin: 0 2vw 0 1vw;
   }
 }
