@@ -58,6 +58,20 @@ nav {
   margin-top: 10px !important;
 }
 
+.navbar.scrolled {
+  background-color: rgb(255, 255, 255);
+  .nav-link {
+    color: black !important;
+  }
+  .nav-link:not(.dropdown-toggle):after {
+    border-bottom: 4px solid #000000 !important;
+  }
+
+  #logOutBtn {
+    color: #000000 !important;
+  }
+}
+
 .navbar-nav .dropdown-toggle {
   display: inline-block;
   padding: 10px 15px !important;
@@ -76,15 +90,22 @@ ul {
   text-transform: uppercase;
 }
 
-.nav-link {
+.nav-link,
+#logOutBtn {
   text-decoration: none;
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
-  color: rgb(0, 0, 0) !important;
+  color: rgb(2, 2, 2) !important;
   letter-spacing: 0.1em;
 }
 
+#logOutBtn {
+  font-family: "Poppins";
+  font-size: 1.3vw;
+  margin-right: 2vw;
+  border: none;
+}
 .nav-link:not(.dropdown-toggle):after {
   background: none repeat scroll 0 0 transparent;
   bottom: 0;
@@ -128,6 +149,17 @@ ul {
 .dropdown-item {
   font-size: 1.3vw;
   font-weight: bold;
+}
+
+.account-nav {
+  margin: 1px;
+  margin-left: 1rem;
+  border: 1px solid white;
+  border-radius: 2rem;
+  img {
+    height: 8vh;
+    border-radius: 2rem;
+  }
 }
 
 .logoNav {
