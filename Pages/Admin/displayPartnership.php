@@ -32,51 +32,49 @@
  <html lang="en">
 
  <head>
-   <meta charset="UTF-8" />
-   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>Mamyr Resort and Events Place</title>
-   <link
-     rel="icon"
-     type="image/x-icon"
-     href="../../Assets/Images/Icon/favicon.png " />
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>Mamyr Resort and Events Place</title>
+     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
 
-   <!-- Bootstrap Link -->
-   <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+     <!-- Bootstrap Link -->
+     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
  </head>
 
  <body>
 
-   <!-- Button choice -->
-   <div class="button-container" id="choice-container">
-     <a href="#" id="request-link" class="btn btn-primary">Request</a>
-     <a href="#" id="partner-link" class="btn btn-primary">Partners</a>
-   </div>
-
-   <!-- Display when Partner is Click -->
-   <div class="partner-container" id="partner-container" style="display: none;">
-     <!-- Back Button -->
-     <div>
-       <a href="#" id="choice1-link" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
-       <h4>Partners</h4>
+     <!-- Button choice -->
+     <div class="button-container" id="choice-container">
+         <a href="#" id="request-link" class="btn btn-primary">Request</a>
+         <a href="#" id="partner-link" class="btn btn-primary">Partners</a>
      </div>
-     <!-- Partners Table  -->
-     <div class="partnership-table">
-       <table class="table">
-         <thead>
-           <tr>
-             <th scope="col">Name</th>
-             <th scope="col">Partner Type</th>
-             <th scope="col">Start Date</th>
-             <th scope="col">Action</th>
-           </tr>
-         </thead>
-         <tbody>
-           <!-- Select to display all the applicants  -->
-           <?php
-            $selectQuery = "SELECT u.firstName, u.lastName, p.partnerType, p.startDate, p.partnershipID 
+
+     <!-- Display when Partner is Click -->
+     <div class="partner-container" id="partner-container" style="display: none;">
+         <!-- Back Button -->
+         <div>
+             <a href="#" id="choice1-link" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png"
+                     alt="Back Button"></a>
+             <h4>Partners</h4>
+         </div>
+         <!-- Partners Table  -->
+         <div class="partnership-table">
+             <table class="table">
+                 <thead>
+                     <tr>
+                         <th scope="col">Name</th>
+                         <th scope="col">Partner Type</th>
+                         <th scope="col">Status</th>
+                         <th scope="col">Action</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <!-- Select to display all the applicants  -->
+                     <?php
+            $selectQuery = "SELECT u.firstName, u.lastName, p.partnerType, p.status, p.partnershipID 
         FROM partnerships p
         INNER JOIN users u ON p.userID = u.userID
-        WHERE status = 'Approved'
+        WHERE status = 'Pending' OR status = 'Rejected'
         ";
             $result = mysqli_query($conn, $selectQuery);
             if (mysqli_num_rows($result) > 0) {
@@ -84,56 +82,69 @@
                 $name = $applicants['firstName'] . " " . $applicants['lastName'];
                 $partnerID = $applicants['partnershipID'];
             ?>
-               <tr>
-                 <td scope="row"><?= $name ?></td>
+                     <tr>
+                         <td scope="row"><?= $name ?></td>
 
-                 <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
-
-                 <td scope="row">
-                   <?= $applicants['startDate'] ?>
-                 </td>
-                 <td scope="row">
-                   <form action="partnership.php?container=1" method="POST" style="display:inline;">
-                     <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                     <button type="submit" class="btn btn-info">View</button>
-                   </form>
-                 </td>
-               <?php
+                         <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
+                         <?php
+                  if ($applicants['status'] == "Pending") {
+                  ?>
+                         <td scope="row" class="btn btn-warning">
+                             <?= $applicants['status'] ?>
+                         </td>
+                         <?php
+                  } else if ($applicants['status'] == "Rejected") {
+                  ?>
+                         <td scope="row" class="btn btn-danger">
+                             <?= $applicants['status'] ?>
+                         </td>
+                         <?php
+                  }
+                  ?>
+                         <td scope="row">
+                             <form action="partnership.php?container=2" method="POST" style="display:inline;">
+                                 <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                 <button type="submit" class="btn btn-info">View</button>
+                             </form>
+                         </td>
+                         </td>
+                         <?php
               }
             } else {
                 ?>
-               <td colspan="5">
-                 <h5 scope="row" class="text-center">No record Found!</h5>
-               </td>
-             <?php
+                         <td colspan="5">
+                             <h5 scope="row" class="text-center">No record Found!</h5>
+                         </td>
+                         <?php
             } ?>
-         </tbody>
-       </table>
+                 </tbody>
+             </table>
+         </div>
      </div>
-   </div>
 
 
-   <!-- Display when Request is Click -->
-   <div class="request-container" id="request-container" style="display: none;">
-     <!-- Back Button -->
-     <div>
-       <a href="#" id="choice2-link" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
-       <h4>Applicant Request</h4>
-     </div>
-     <!-- Partnership Request Table  -->
-     <div class="partnership-request-table">
-       <table class="table">
-         <thead>
-           <tr>
-             <th scope="col">Name</th>
-             <th scope="col">Partner Type</th>
-             <th scope="col">Status</th>
-             <th scope="col">Action</th>
-           </tr>
-         </thead>
-         <tbody>
-           <!-- Select to display all the applicants  -->
-           <?php
+     <!-- Display when Request is Click -->
+     <div class="request-container" id="request-container" style="display: none;">
+         <!-- Back Button -->
+         <div>
+             <a href="#" id="choice2-link" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png"
+                     alt="Back Button"></a>
+             <h4>Applicant Request</h4>
+         </div>
+         <!-- Partnership Request Table  -->
+         <div class="partnership-request-table">
+             <table class="table">
+                 <thead>
+                     <tr>
+                         <th scope="col">Name</th>
+                         <th scope="col">Partner Type</th>
+                         <th scope="col">Status</th>
+                         <th scope="col">Action</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <!-- Select to display all the applicants  -->
+                     <?php
             $selectQuery = "SELECT u.firstName, u.lastName, p.partnerType, p.status, p.partnershipID 
         FROM partnerships p
         INNER JOIN users u ON p.userID = u.userID
@@ -145,77 +156,77 @@
                 $name = $applicants['firstName'] . " " . $applicants['lastName'];
                 $partnerID = $applicants['partnershipID'];
             ?>
-               <tr>
-                 <td scope="row"><?= $name ?></td>
+                     <tr>
+                         <td scope="row"><?= $name ?></td>
 
-                 <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
+                         <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
 
-                 <td scope="row" class="btn btn-danger">
-                   <?= $applicants['status'] ?>
-                 </td>
-                 <td scope="row">
-                   <form action="partnership.php?container=2" method="POST" style="display:inline;">
-                     <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                     <button type="submit" class="btn btn-info">View</button>
-                   </form>
-                 </td>
-                 </td>
-               <?php
+                         <td scope="row" class="btn btn-danger">
+                             <?= $applicants['status'] ?>
+                         </td>
+                         <td scope="row">
+                             <form action="partnership.php?container=2" method="POST" style="display:inline;">
+                                 <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                 <button type="submit" class="btn btn-info">View</button>
+                             </form>
+                         </td>
+                         </td>
+                         <?php
               }
             } else {
                 ?>
-               <td colspan="5">
-                 <h5 scope="row" class="text-center">No record Found!</h5>
-               </td>
-             <?php
+                         <td colspan="5">
+                             <h5 scope="row" class="text-center">No record Found!</h5>
+                         </td>
+                         <?php
             } ?>
-         </tbody>
-       </table>
+                 </tbody>
+             </table>
+         </div>
      </div>
-   </div>
-   <!-- Bootstrap Link -->
-   <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+     <!-- Bootstrap Link -->
+     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
-   <!-- Pages hide/show -->
-   <script>
+     <!-- Pages hide/show -->
+     <script>
      document.addEventListener("DOMContentLoaded", function() {
 
-       const requestLink = document.getElementById("request-link");
-       const partnerLink = document.getElementById("partner-link");
-       const choice1Link = document.getElementById("choice1-link");
-       const choice2Link = document.getElementById("choice2-link");
+         const requestLink = document.getElementById("request-link");
+         const partnerLink = document.getElementById("partner-link");
+         const choice1Link = document.getElementById("choice1-link");
+         const choice2Link = document.getElementById("choice2-link");
 
-       const choices = document.getElementById("choice-container");
-       const partnerContainer = document.getElementById("partner-container");
-       const requestContainer = document.getElementById("request-container");
+         const choices = document.getElementById("choice-container");
+         const partnerContainer = document.getElementById("partner-container");
+         const requestContainer = document.getElementById("request-container");
 
-       choice1Link.addEventListener('click', function(event) {
-         choices.style.display = "block";
-         partnerContainer.style.display = "none";
-         requestContainer.style.display = "none";
-       });
+         choice1Link.addEventListener('click', function(event) {
+             choices.style.display = "block";
+             partnerContainer.style.display = "none";
+             requestContainer.style.display = "none";
+         });
 
-       choice2Link.addEventListener('click', function(event) {
-         choices.style.display = "block";
-         partnerContainer.style.display = "none";
-         requestContainer.style.display = "none";
-       });
+         choice2Link.addEventListener('click', function(event) {
+             choices.style.display = "block";
+             partnerContainer.style.display = "none";
+             requestContainer.style.display = "none";
+         });
 
-       requestLink.addEventListener('click', function(event) {
-         choices.style.display = "none";
-         partnerContainer.style.display = "none";
-         requestContainer.style.display = "block";
-       });
+         requestLink.addEventListener('click', function(event) {
+             choices.style.display = "none";
+             partnerContainer.style.display = "none";
+             requestContainer.style.display = "block";
+         });
 
-       partnerLink.addEventListener('click', function(event) {
-         choices.style.display = "none";
-         partnerContainer.style.display = "block";
-         requestContainer.style.display = "none";
-       });
+         partnerLink.addEventListener('click', function(event) {
+             choices.style.display = "none";
+             partnerContainer.style.display = "block";
+             requestContainer.style.display = "none";
+         });
      });
-   </script>
-   <!-- Search URL -->
-   <script>
+     </script>
+     <!-- Search URL -->
+     <script>
      const params = new URLSearchParams(window.location.search);
      const paramValue = params.get('container');
 
@@ -224,21 +235,21 @@
      const requestContainer = document.getElementById("request-container");
 
      if (paramValue == 2) {
-       choices.style.display = "none";
-       partnerContainer.style.display = "block";
-       requestContainer.style.display = "none";
+         choices.style.display = "none";
+         partnerContainer.style.display = "block";
+         requestContainer.style.display = "none";
      } else if (paramValue == 3) {
-       choices.style.display = "none";
-       partnerContainer.style.display = "none";
-       requestContainer.style.display = "block";
+         choices.style.display = "none";
+         partnerContainer.style.display = "none";
+         requestContainer.style.display = "block";
      }
 
      if (paramValue) {
-       const url = new URL(window.location);
-       url.search = '';
-       history.replaceState({}, document.title, url.toString());
+         const url = new URL(window.location);
+         url.search = '';
+         history.replaceState({}, document.title, url.toString());
      };
-   </script>
+     </script>
  </body>
 
  </html>
