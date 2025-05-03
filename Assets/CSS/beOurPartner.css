@@ -74,6 +74,10 @@ nav {
   .nav-link:not(.dropdown-toggle):after {
     border-bottom: 4px solid rgb(126, 203, 242) !important;
   }
+
+  #logOutBtn {
+    color: #000000 !important;
+  }
 }
 
 ul {
@@ -85,13 +89,21 @@ ul {
   text-transform: uppercase;
 }
 
-.nav-link {
+.nav-link,
+#logOutBtn {
   text-decoration: none;
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
   color: rgb(255, 255, 255) !important;
   letter-spacing: 0.1em;
+}
+
+#logOutBtn {
+  font-family: "Poppins";
+  font-size: 1.3vw;
+  margin-right: 2vw;
+  border: none;
 }
 
 .nav-link:not(.dropdown-toggle):after {
@@ -133,6 +145,16 @@ ul {
 .dropdown-item {
   font-size: 1.3vw;
   font-weight: bold;
+}
+.account-nav {
+  margin: 1px;
+  margin-left: 1rem;
+  border: 1px solid white;
+  border-radius: 2rem;
+  img {
+    height: 8vh;
+    border-radius: 2rem;
+  }
 }
 
 .logoNav {
