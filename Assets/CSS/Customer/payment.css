@@ -1,0 +1,162 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../../Fonts/Prata/Prata-Regular.ttf);
+}
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+  /* list-style: none; */
+}
+
+body {
+  background-image: url(../../Images/BookNowPhotos/bookNowBg.jpg);
+  /* background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; */
+}
+
+.backBtn {
+  padding: 3vw;
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  padding: 2vw;
+}
+
+.note {
+  text-align: center;
+  color: #ff0000;
+}
+
+.topSection {
+  display: flex;
+  gap: 10vw;
+}
+
+.event-schedule {
+  display: flex;
+  gap: 0.5vw;
+}
+
+.price {
+  padding: 1rem;
+}
+
+.totalBillContainer,
+.dpContainer,
+.tdpContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1vw;
+  gap: 0.5vw;
+}
+
+h6 {
+  margin: 0; /* Removes extra margin from h6 elements */
+}
+
+.totalBill,
+.dp,
+.tdp {
+  text-align: right; /* Ensures text is aligned to the right */
+}
+
+.text-muted {
+  font-size: 1rem; /* Keeps consistent font size */
+}
+
+.gcashContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 2vw;
+  gap: 10vw;
+}
+.qr-pic {
+  width: 20vw;
+}
+
+.mb-5 {
+  margin-top: 2vw;
+}
+
+/* html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.centered-wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+}
+
+.summary-box {
+  width: 75vw;
+  height: 75vh;
+  padding: 2rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden; 
+}
+
+.event-line {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+}
+
+.alert-msg {
+  font-size: 0.8rem;
+  color: #dc3545;
+  font-weight: 500;
+}
+
+
+.payment-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-info {
+  width: 45%; 
+}
+
+.right-info {
+  width: 45%; 
+  text-align: right; 
+}
+
+.qr-pic {
+  max-width: 120px; 
+  height: auto;
+} */
