@@ -36,12 +36,85 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <title>Mamyr Resort and Events Place</title>
      <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
-
+     <!-- CSS Link -->
+     <link rel="stylesheet" href="../../Assets/CSS/Admin/displayPartnership.css">
      <!-- Bootstrap Link -->
      <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
  </head>
 
  <body>
+
+     <div class="topSection">
+         <div class="dashTitleContainer">
+             <a href="#" class="dashboardTitle" id="dashboard"><img src="../../Assets/images/MamyrLogo.png" alt=""
+                     class="logo"></a>
+         </div>
+
+         <div class="menus">
+             <a href="#" class="notifs">
+                 <img src="../../Assets/Images/Icon/notification.png" alt="Notification Icon">
+             </a>
+             <a href="#" class="chat">
+                 <img src="../../Assets/Images/Icon/chat.png" alt="home icon">
+             </a>
+
+             <h5 class="adminTitle">Mamyr Admin</h5>
+             <a href="#" class="admin">
+                 <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
+             </a>
+         </div>
+     </div>
+
+     <nav class="navbar d-flex justify-content-between align-items-center">
+         <div class="d-flex align-items-center">
+
+             <a class="nav-link" href="../Pages/dashboard.php">
+                 <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
+                 <h5>Dashboard</h5>
+             </a>
+
+             <a class="nav-link" href="booking.php">
+                 <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
+                 <h5>Bookings</h5>
+             </a>
+
+             <a class="nav-link" href="#">
+                 <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
+                 <h5>Rooms</h5>
+             </a>
+
+             <a class="nav-link" href="#">
+                 <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
+                 <h5>Payments</h5>
+             </a>
+
+             <a class="nav-link" href="#">
+                 <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
+                 <h5>Revenue</h5>
+             </a>
+
+             <a class="nav-link" href="#">
+                 <img src="../../Assets/Images/Icon/Friend request.png" alt="Requests">
+                 <h5>Requests</h5>
+             </a>
+
+             <a class="nav-link" href="#">
+                 <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
+                 <h5>Edit Website</h5>
+             </a>
+
+         </div>
+
+         <div class="logout-btn">
+             <form class="container-fluid justify-content-start">
+                 <button class="btn btn-outline-primary me-2" type="submit" id="logOut" value="logOut" name="logOut">
+                     Log Out
+                 </button>
+             </form>
+         </div>
+     </nav>
 
      <!-- Button choice -->
      <div class="button-container" id="choice-container">
@@ -82,29 +155,29 @@
                                 $name = $applicants['firstName'] . " " . $applicants['lastName'];
                                 $partnerID = $applicants['partnershipID'];
                         ?>
-                             <tr>
-                                 <td scope="row"><?= $name ?></td>
+                     <tr>
+                         <td scope="row"><?= $name ?></td>
 
-                                 <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
+                         <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
 
-                                 <td scope="row">
-                                     <?= $applicants['startDate'] ?>
-                                 </td>
+                         <td scope="row">
+                             <?= $applicants['startDate'] ?>
+                         </td>
 
-                                 <td scope="row">
-                                     <form action="partnership.php?container=2" method="POST" style="display:inline;">
-                                         <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                         <button type="submit" class="btn btn-info">View</button>
-                                     </form>
-                                 </td>
-                                 </td>
-                             <?php
+                         <td scope="row">
+                             <form action="partnership.php?container=2" method="POST" style="display:inline;">
+                                 <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                 <button type="submit" class="btn btn-info">View</button>
+                             </form>
+                         </td>
+                         </td>
+                         <?php
                             }
                         } else {
                                 ?>
-                             <td colspan="5">
-                                 <h5 scope="row" class="text-center">No record Found!</h5>
-                             </td>
+                         <td colspan="5">
+                             <h5 scope="row" class="text-center">No record Found!</h5>
+                         </td>
                          <?php
                         } ?>
                  </tbody>
@@ -146,39 +219,39 @@
                                 $name = $applicants['firstName'] . " " . $applicants['lastName'];
                                 $partnerID = $applicants['partnershipID'];
                         ?>
-                             <tr>
-                                 <td scope="row"><?= $name ?></td>
+                     <tr>
+                         <td scope="row"><?= $name ?></td>
 
-                                 <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
-                                 <?php
+                         <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
+                         <?php
                                     if ($applicants['status'] == "Pending") {
                                     ?>
-                                     <td scope="row" class="btn btn-warning">
-                                         <?= $applicants['status'] ?>
-                                     </td>
-                                 <?php
+                         <td scope="row" class="btn btn-warning">
+                             <?= $applicants['status'] ?>
+                         </td>
+                         <?php
                                     } else if ($applicants['status'] == "Rejected") {
                                     ?>
-                                     <td scope="row" class="btn btn-danger">
-                                         <?= $applicants['status'] ?>
-                                     </td>
-                                 <?php
+                         <td scope="row" class="btn btn-danger">
+                             <?= $applicants['status'] ?>
+                         </td>
+                         <?php
                                     }
                                     ?>
-                                 <td scope="row">
-                                     <form action="partnership.php?container=2" method="POST" style="display:inline;">
-                                         <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                         <button type="submit" class="btn btn-info">View</button>
-                                     </form>
-                                 </td>
-                                 </td>
-                             <?php
+                         <td scope="row">
+                             <form action="partnership.php?container=2" method="POST" style="display:inline;">
+                                 <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                 <button type="submit" class="btn btn-info">View</button>
+                             </form>
+                         </td>
+                         </td>
+                         <?php
                             }
                         } else {
                                 ?>
-                             <td colspan="5">
-                                 <h5 scope="row" class="text-center">No record Found!</h5>
-                             </td>
+                         <td colspan="5">
+                             <h5 scope="row" class="text-center">No record Found!</h5>
+                         </td>
                          <?php
                         } ?>
                  </tbody>
@@ -190,66 +263,66 @@
 
      <!-- Pages hide/show -->
      <script>
-         document.addEventListener("DOMContentLoaded", function() {
+     document.addEventListener("DOMContentLoaded", function() {
 
-             const requestLink = document.getElementById("request-link");
-             const partnerLink = document.getElementById("partner-link");
-             const choice1Link = document.getElementById("choice1-link");
-             const choice2Link = document.getElementById("choice2-link");
-
-             const choices = document.getElementById("choice-container");
-             const partnerContainer = document.getElementById("partner-container");
-             const requestContainer = document.getElementById("request-container");
-
-             choice1Link.addEventListener('click', function(event) {
-                 choices.style.display = "block";
-                 partnerContainer.style.display = "none";
-                 requestContainer.style.display = "none";
-             });
-
-             choice2Link.addEventListener('click', function(event) {
-                 choices.style.display = "block";
-                 partnerContainer.style.display = "none";
-                 requestContainer.style.display = "none";
-             });
-
-             requestLink.addEventListener('click', function(event) {
-                 choices.style.display = "none";
-                 partnerContainer.style.display = "none";
-                 requestContainer.style.display = "block";
-             });
-
-             partnerLink.addEventListener('click', function(event) {
-                 choices.style.display = "none";
-                 partnerContainer.style.display = "block";
-                 requestContainer.style.display = "none";
-             });
-         });
-     </script>
-     <!-- Search URL -->
-     <script>
-         const params = new URLSearchParams(window.location.search);
-         const paramValue = params.get('container');
+         const requestLink = document.getElementById("request-link");
+         const partnerLink = document.getElementById("partner-link");
+         const choice1Link = document.getElementById("choice1-link");
+         const choice2Link = document.getElementById("choice2-link");
 
          const choices = document.getElementById("choice-container");
          const partnerContainer = document.getElementById("partner-container");
          const requestContainer = document.getElementById("request-container");
 
-         if (paramValue == 2) {
-             choices.style.display = "none";
-             partnerContainer.style.display = "block";
+         choice1Link.addEventListener('click', function(event) {
+             choices.style.display = "block";
+             partnerContainer.style.display = "none";
              requestContainer.style.display = "none";
-         } else if (paramValue == 3) {
+         });
+
+         choice2Link.addEventListener('click', function(event) {
+             choices.style.display = "block";
+             partnerContainer.style.display = "none";
+             requestContainer.style.display = "none";
+         });
+
+         requestLink.addEventListener('click', function(event) {
              choices.style.display = "none";
              partnerContainer.style.display = "none";
              requestContainer.style.display = "block";
-         }
+         });
 
-         if (paramValue) {
-             const url = new URL(window.location);
-             url.search = '';
-             history.replaceState({}, document.title, url.toString());
-         };
+         partnerLink.addEventListener('click', function(event) {
+             choices.style.display = "none";
+             partnerContainer.style.display = "block";
+             requestContainer.style.display = "none";
+         });
+     });
+     </script>
+     <!-- Search URL -->
+     <script>
+     const params = new URLSearchParams(window.location.search);
+     const paramValue = params.get('container');
+
+     const choices = document.getElementById("choice-container");
+     const partnerContainer = document.getElementById("partner-container");
+     const requestContainer = document.getElementById("request-container");
+
+     if (paramValue == 2) {
+         choices.style.display = "none";
+         partnerContainer.style.display = "block";
+         requestContainer.style.display = "none";
+     } else if (paramValue == 3) {
+         choices.style.display = "none";
+         partnerContainer.style.display = "none";
+         requestContainer.style.display = "block";
+     }
+
+     if (paramValue) {
+         const url = new URL(window.location);
+         url.search = '';
+         history.replaceState({}, document.title, url.toString());
+     };
      </script>
  </body>
 
