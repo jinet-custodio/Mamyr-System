@@ -254,3 +254,8 @@ INSERT INTO serviceAvailability (availabilityName) Values
 ('Available'),
 ('Occupied'),
 ('Maintenance');
+
+ALTER TABLE packages
+ADD COLUMN availabilityID INT NOT NULL DEFAULT 1,
+ADD CONSTRAINT fk_packages_availability
+FOREIGN KEY (availabilityID) REFERENCES serviceavailability(availabilityID);
