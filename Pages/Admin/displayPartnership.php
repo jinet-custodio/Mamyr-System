@@ -48,8 +48,8 @@
 
      <div class="topSection">
          <div class="dashTitleContainer">
-             <a href="#" class="dashboardTitle" id="dashboard"><img src="../../Assets/images/MamyrLogo.png" alt=""
-                     class="logo"></a>
+             <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
+                     src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
          </div>
 
          <div class="menus">
@@ -70,7 +70,7 @@
      <nav class="navbar d-flex justify-content-between align-items-center">
          <div class="d-flex align-items-center">
 
-             <a class="nav-link" href="../Pages/dashboard.php">
+             <a class="nav-link" href="adminDashboard.php">
                  <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
                  <h5>Dashboard</h5>
              </a>
@@ -95,9 +95,9 @@
                  <h5>Revenue</h5>
              </a>
 
-             <a class="nav-link" href="#">
-                 <img src="../../Assets/Images/Icon/Friend request.png" alt="Requests">
-                 <h5>Requests</h5>
+             <a class="nav-link active" href="displayPartnership.php">
+                 <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
+                 <h5>Partnerships</h5>
              </a>
 
              <a class="nav-link" href="#">
@@ -116,34 +116,58 @@
          </div>
      </nav>
 
-     <!-- Button choice -->
-     <div class="button-container" id="choice-container">
-         <a href="#" id="request-link" class="btn btn-primary">Request</a>
-         <a href="#" id="partner-link" class="btn btn-primary">Partners</a>
+     <div class="categories" id="choice-container">
+
+         <a href="#" id="request-link" class="categoryLink">
+             <div class="card category-card " style="width: 20rem; display: flex; flex-direction: column;">
+                 <img class="card-img-top" src="../../Assets/images/AdminImages/DisplayPartnershipImages/request.jpg"
+                     alt="Requests">
+
+                 <div class="category-body m-auto">
+                     <h5 class="category-title m-auto">REQUESTS</h5>
+                 </div>
+             </div>
+         </a>
+
+         <a href="#" id="partner-link" class="categoryLink">
+             <div class="card category-card " style="width: 20rem; display: flex; flex-direction: column;">
+                 <img class="card-img-top" src="../../Assets/images/AdminImages/DisplayPartnershipImages/partners.jpg"
+                     alt="Partners">
+
+                 <div class="category-body m-auto">
+                     <h5 class="category-title m-auto">PARTNERS</h5>
+                 </div>
+             </div>
+     </div>
+     </a>
      </div>
 
      <!-- Display when Partner is Click -->
-     <div class="partner-container" id="partner-container" style="display: none;">
-         <!-- Back Button -->
-         <div>
-             <a href="#" id="choice1-link" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png"
-                     alt="Back Button"></a>
-             <h4>Partners</h4>
-         </div>
-         <!-- Partners Table  -->
-         <div class="partnership-table">
-             <table class="table">
-                 <thead>
-                     <tr>
-                         <th scope="col">Name</th>
-                         <th scope="col">Partner Type</th>
-                         <th scope="col">Date Applied</th>
-                         <th scope="col">Action</th>
-                     </tr>
-                 </thead>
-                 <tbody>
-                     <!-- Select to display all the applicants  -->
-                     <?php
+
+     <!-- Partners Table  -->
+     <div class="partnership-table">
+
+         <div class="card" id="partner-card" style="width: 80rem;">
+             <div class="partner-container" id="partner-container" style="display: none;">
+                 <!-- Back Button -->
+                 <div>
+                     <a href="#" id="choice1-link" class="btn btn-primary"><img
+                             src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+
+                 </div>
+                 <h4 class="fw-bold">Partners</h4>
+                 <table class="table table-striped">
+                     <thead>
+                         <tr>
+                             <th scope="col">Name</th>
+                             <th scope="col">Partner Type</th>
+                             <th scope="col">Date Applied</th>
+                             <th scope="col">Action</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <!-- Select to display all the applicants  -->
+                         <?php
                         $selectQuery = "SELECT u.firstName, u.lastName, p.* 
                         FROM partnerships p
                         INNER JOIN users u ON p.userID = u.userID
@@ -155,59 +179,63 @@
                                 $name = $applicants['firstName'] . " " . $applicants['lastName'];
                                 $partnerID = $applicants['partnershipID'];
                         ?>
-                     <tr>
-                         <td scope="row"><?= $name ?></td>
+                         <tr>
+                             <td scope="row"><?= $name ?></td>
 
-                         <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
+                             <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
 
-                         <td scope="row">
-                             <?= $applicants['startDate'] ?>
-                         </td>
+                             <td scope="row">
+                                 <?= $applicants['startDate'] ?>
+                             </td>
 
-                         <td scope="row">
-                             <form action="partnership.php?container=2" method="POST" style="display:inline;">
-                                 <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                 <button type="submit" class="btn btn-info">View</button>
-                             </form>
-                         </td>
-                         </td>
-                         <?php
+                             <td scope="row">
+                                 <form action="partnership.php?container=2" method="POST" style="display:inline;">
+                                     <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                     <button type="submit" class="btn btn-info">View</button>
+                                 </form>
+                             </td>
+                             </td>
+                             <?php
                             }
                         } else {
                                 ?>
-                         <td colspan="5">
-                             <h5 scope="row" class="text-center">No record Found!</h5>
-                         </td>
-                         <?php
+                             <td colspan="5">
+                                 <h5 scope="row" class="text-center">No record Found!</h5>
+                             </td>
+                             <?php
                         } ?>
-                 </tbody>
-             </table>
+                     </tbody>
+                 </table>
+             </div>
          </div>
      </div>
-
 
      <!-- Display when Request is Click -->
      <div class="request-container" id="request-container" style="display: none;">
          <!-- Back Button -->
-         <div>
-             <a href="#" id="choice2-link" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png"
-                     alt="Back Button"></a>
-             <h4>Applicant Request</h4>
-         </div>
+
          <!-- Partnership Request Table  -->
          <div class="partnership-request-table">
-             <table class="table">
-                 <thead>
-                     <tr>
-                         <th scope="col">Name</th>
-                         <th scope="col">Partner Type</th>
-                         <th scope="col">Status</th>
-                         <th scope="col">Action</th>
-                     </tr>
-                 </thead>
-                 <tbody>
-                     <!-- Select to display all the applicants  -->
-                     <?php
+
+             <div class="card" id="request-card" style="width: 80rem;">
+                 <div class="buttonContainer">
+                     <a href="#" id="choice2-link" class="btn btn-primary "><img
+                             src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+
+                 </div>
+                 <h4 class="fw-bold">Applicant Request</h4>
+                 <table class="table table-striped">
+                     <thead>
+                         <tr>
+                             <th scope="col">Name</th>
+                             <th scope="col">Partner Type</th>
+                             <th scope="col">Status</th>
+                             <th scope="col">Action</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <!-- Select to display all the applicants  -->
+                         <?php
                         $selectQuery = "SELECT u.firstName, u.lastName, p.partnerType, p.status, p.partnershipID 
         FROM partnerships p
         INNER JOIN users u ON p.userID = u.userID
@@ -219,43 +247,46 @@
                                 $name = $applicants['firstName'] . " " . $applicants['lastName'];
                                 $partnerID = $applicants['partnershipID'];
                         ?>
-                     <tr>
-                         <td scope="row"><?= $name ?></td>
+                         <tr>
+                             <td scope="row"><?= $name ?></td>
 
-                         <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
-                         <?php
+                             <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
+                             <?php
                                     if ($applicants['status'] == "Pending") {
                                     ?>
-                         <td scope="row" class="btn btn-warning">
-                             <?= $applicants['status'] ?>
-                         </td>
-                         <?php
+                             <td scope="row" class="btn btn-warning w-75 d-block m-auto mt-1"
+                                 style="background-color:#ffc108 ;">
+                                 <?= $applicants['status'] ?>
+                             </td>
+                             <?php
                                     } else if ($applicants['status'] == "Rejected") {
                                     ?>
-                         <td scope="row" class="btn btn-danger">
-                             <?= $applicants['status'] ?>
-                         </td>
-                         <?php
+                             <td scope="row" class="btn btn-danger w-75 d-block m-auto mt-1"
+                                 style="background-color:#FF0000; color:#ffff ;">
+                                 <?= $applicants['status'] ?>
+                             </td>
+                             <?php
                                     }
                                     ?>
-                         <td scope="row">
-                             <form action="partnership.php?container=2" method="POST" style="display:inline;">
-                                 <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                 <button type="submit" class="btn btn-info">View</button>
-                             </form>
-                         </td>
-                         </td>
-                         <?php
+                             <td scope="row">
+                                 <form action="partnership.php?container=2" method="POST" style="display:inline;">
+                                     <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                     <button type="submit" class="btn btn-info w-75">View</button>
+                                 </form>
+                             </td>
+                             </td>
+                             <?php
                             }
                         } else {
                                 ?>
-                         <td colspan="5">
-                             <h5 scope="row" class="text-center">No record Found!</h5>
-                         </td>
-                         <?php
+                             <td colspan="5">
+                                 <h5 scope="row" class="text-center">No record Found!</h5>
+                             </td>
+                             <?php
                         } ?>
-                 </tbody>
-             </table>
+                     </tbody>
+                 </table>
+             </div>
          </div>
      </div>
      <!-- Bootstrap Link -->
@@ -273,29 +304,38 @@
          const choices = document.getElementById("choice-container");
          const partnerContainer = document.getElementById("partner-container");
          const requestContainer = document.getElementById("request-container");
+         const partnerCard = document.getElementById("partner-card");
+         const requestCard = document.getElementById("request-card");
 
          choice1Link.addEventListener('click', function(event) {
-             choices.style.display = "block";
+             choices.style.display = "flex";
              partnerContainer.style.display = "none";
              requestContainer.style.display = "none";
+             partnerCard.style.display = "none";
+             requestCard.style.display = "none";
          });
 
          choice2Link.addEventListener('click', function(event) {
-             choices.style.display = "block";
+             choices.style.display = "flex";
              partnerContainer.style.display = "none";
              requestContainer.style.display = "none";
+
          });
 
          requestLink.addEventListener('click', function(event) {
              choices.style.display = "none";
              partnerContainer.style.display = "none";
              requestContainer.style.display = "block";
+             partnerCard.style.display = "none";
+             requestCard.style.display = "block";
          });
 
          partnerLink.addEventListener('click', function(event) {
              choices.style.display = "none";
              partnerContainer.style.display = "block";
              requestContainer.style.display = "none";
+             partnerCard.style.display = "block";
+             requestCard.style.display = "none";
          });
      });
      </script>
@@ -307,15 +347,21 @@
      const choices = document.getElementById("choice-container");
      const partnerContainer = document.getElementById("partner-container");
      const requestContainer = document.getElementById("request-container");
+     const partnerCard = document.getElementById("partner-card");
+     const requestCard = document.getElementById("request-card");
 
      if (paramValue == 2) {
          choices.style.display = "none";
          partnerContainer.style.display = "block";
          requestContainer.style.display = "none";
+         partnerCard.style.display = "block";
+         requestCard.style.display = "none";
      } else if (paramValue == 3) {
          choices.style.display = "none";
          partnerContainer.style.display = "none";
          requestContainer.style.display = "block";
+         partnerCard.style.display = "none";
+         requestCard.style.display = "block";
      }
 
      if (paramValue) {
