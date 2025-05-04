@@ -114,13 +114,14 @@ $userType = $_SESSION['userType'];
                 $startDate = $data['startDate'];
                 $endDate = $data['endDate'];
                 $AddRequest = $data['additionalRequest'];
+                $bookingID = $data['bookingID'];
             }
             ?>
             <!-- Display the information -->
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start" alt="<?= htmlspecialchars($applicantName) ?> ">
+                        <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
@@ -188,7 +189,7 @@ $userType = $_SESSION['userType'];
                     <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                     <input type="hidden" name="bookingStatus" value="<?= $status ?>">
                     <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
-                    <button type="submit" class="btn btn-danger" name="declineBtn">Reject</button>
+                    <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
                 </form>
             </div>
         </div>
