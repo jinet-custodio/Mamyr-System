@@ -25,7 +25,7 @@ $partnerID = $_POST['partnerID'];
     <div class="partner" id="partner-info" style="display: none;">
         <!-- Back Button -->
         <div>
-            <a href="displayPartnership.php?container=2" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
+            <a href="displayPartnership.php?container=1" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
         </div>
         <!-- Get the information to the database -->
         <?php
@@ -106,7 +106,7 @@ $partnerID = $_POST['partnerID'];
     <div class="applicant" id="applicant-request" style="display: none;">
         <!-- Back Button -->
         <div>
-            <a href="displayPartnership.php?container=3" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
+            <a href="displayPartnership.php?container=2" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
         </div>
         <!-- Get the information to the database -->
         <?php
@@ -199,10 +199,10 @@ $partnerID = $_POST['partnerID'];
         const partnerContainer = document.getElementById("partner-info");
         const requestContainer = document.getElementById("applicant-request");
 
-        if (paramValue == 1) {
+        if (paramValue == 3) {
             partnerContainer.style.display = "block";
             requestContainer.style.display = "none";
-        } else if (paramValue == 2) {
+        } else if (paramValue == 4) {
             partnerContainer.style.display = "none";
             requestContainer.style.display = "block";
         }

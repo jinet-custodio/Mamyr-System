@@ -51,7 +51,7 @@ if (isset($_POST['approveBtn'])) {
             $insertConfirmedResult = mysqli_query($conn, $insertConfirmed);
             if ($insertConfirmedResult) {
                 $_SESSION['success'] = 'Booking Approved Successfully';
-                header('Location: ../../Pages/Admin/viewBooking.php');
+                header('Location: ../../Pages/Admin/booking.php');
                 exit();
             } else {
                 $_SESSION['error'] = 'The booking request could not be approved. Please try again later.';
@@ -79,16 +79,16 @@ if (isset($_POST['rejectBtn'])) {
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
         $updateStatus = "UPDATE bookings 
-        SET status = 'Rejected'
+        SET status = 'Cancelled'
         WHERE bookingID ='$bookingID'";
         $result = mysqli_query($conn, $updateStatus);
         if ($result) {
-            $_SESSION['success'] = 'The request has been rejectd successfully.';
-            header('Location: ../../Pages/Admin/displaybooking.php');
+            $_SESSION['success'] = 'The request has been cancelled successfully.';
+            header('Location: ../../Pages/Admin/booking.php');
             exit();
         } else {
-            $_SESSION['error'] = 'The request could not be rejected. Please try again later.';
-            header('Location: ../../Pages/Admin/displaybooking.php');
+            $_SESSION['error'] = 'The request could not be cancelled. Please try again later.';
+            header('Location: ../../Pages/Admin/booking.php');
             exit();
         }
     }
