@@ -70,9 +70,9 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.me-2 {
+/* .me-2 {
   margin-left: 2vw;
-}
+} */
 .nav-link {
   display: flex !important;
   flex-direction: column;
@@ -85,10 +85,9 @@ body {
   padding: 5px 10px;
 }
 
-.nav-link.active {
-  background-color: rgb(2, 129, 214);
-  color: white;
-  padding: 0.3vw;
+.nav-link.active:after {
+  width: 100%;
+  left: 0;
 }
 
 .nav-link:after {
@@ -113,4 +112,103 @@ body {
   height: 2vw;
   width: auto;
   object-fit: contain;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* margin-top: 5vw; */
+}
+
+.category-card {
+  height: 60vh !important;
+  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+}
+
+.category-card,
+.category-body {
+  margin: 2vw;
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  text-align: center;
+}
+
+.category-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.category-card img {
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  padding: 1vw;
+  height: 18vw !important;
+  object-fit: cover;
+}
+
+.category-title {
+  font-family: "Poppins Black";
+  font-style: italic;
+  font-weight: bold;
+  font-size: 2.5vw;
+  color: #00b3d1 !important;
+}
+
+.categoryLink {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.categoryLink .category-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.categoryLink:hover .category-card {
+  transform: translateY(-12px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+}
+
+.partnership-request-table,
+.partnership-table {
+  /* border: 1px solid black; */
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  padding: 2vw;
+}
+
+.card-header {
+  display: flex;
+
+  border: 1px solid black;
+}
+
+.table-striped {
+  margin-top: 2vw;
+}
+td,
+th {
+  text-align: center !important;
+  font-size: 1.5vw;
+}
+
+th {
+  background-color: #91d2f2 !important;
+}
+.text-center {
+  color: rgb(255, 0, 0) !important;
+}
+
+h4 {
+  text-align: center;
+  margin-top: -3vw !important;
+}
+
+.buttonContainer {
+  z-index: 1;
 }
