@@ -2,6 +2,7 @@
 require '../../Config/dbcon.php';
 session_start();
 $partnerID = $_POST['partnerID'];
+
 ?>
 
 <!DOCTYPE html>
@@ -18,14 +19,17 @@ $partnerID = $_POST['partnerID'];
 
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/partnership.css">
 </head>
 
 <body>
     <!-- View Individual Partner -->
     <div class="partner" id="partner-info" style="display: none;">
         <!-- Back Button -->
-        <div>
-            <a href="displayPartnership.php?container=1" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
+        <div class="page-container">
+            <a href="displayPartnership.php?container=1" class="btn btn-primary back"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
+            <h3 class="card-title page-title">Partner</h3>
         </div>
         <!-- Get the information to the database -->
         <?php
@@ -58,43 +62,32 @@ $partnerID = $_POST['partnerID'];
         }
         ?>
         <!-- Display the information -->
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start" alt="<?= htmlspecialchars($applicantName) ?> ">
+        <div class="card mb-3">
+            <div class="partner-info-name-pic">
+                <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start" alt="<?= htmlspecialchars($applicantName) ?> ">
+                <div class="partner-info-contact">
+                    <!-- <h4 class="card-title name">Name</h4> -->
+                    <p class="card-text name"><?= $applicantName ?></p>
+                    <p class="card-text sub-name"><?= $businessEmail ?> | <?= $phoneNumber ?> </p>
                 </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h3 class="card-title">Partner</h3>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Name</h4>
-                            <p class="card-text"><?= $applicantName ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Company Name</h4>
-                            <p class="card-text"><?= $companyName ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Business Email</h4>
-                            <p class="card-text"><?= $businessEmail ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Partner Type</h4>
-                            <p class="card-text"><?= ucfirst($partnerType) ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Business Address</h4>
-                            <p class="card-text"><?= $address ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Phone Number</h4>
-                            <p class="card-text"><?= $phoneNumber ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Document Link</h4>
-                            <a href="<?= $link ?>"><?= $link ?></a>
-                        </div>
-                    </div>
+            </div>
+
+            <div class="card-body">
+                <div class="partner-info">
+                    <h4 class="card-title">Company Name</h4>
+                    <p class="card-text"><?= $companyName ?></p>
+                </div>
+                <div class="partner-info">
+                    <h4 class="card-title">Business Address</h4>
+                    <p class="card-text"><?= $address ?></p>
+                </div>
+                <div class="partner-info">
+                    <h4 class="card-title">Document Link</h4>
+                    <a class="stretched-link" href="<?= $link ?>"><?= $link ?></a>
+                </div>
+                <div class="partner-info">
+                    <h4 class="card-title">Partner Type</h4>
+                    <p class="card-text"><?= ucfirst($partnerType) ?></p>
                 </div>
             </div>
         </div>
@@ -105,8 +98,9 @@ $partnerID = $_POST['partnerID'];
     <!-- View Individual Applicant -->
     <div class="applicant" id="applicant-request" style="display: none;">
         <!-- Back Button -->
-        <div>
-            <a href="displayPartnership.php?container=2" class="btn btn-primary"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
+        <div class="page-container">
+            <a href="displayPartnership.php?container=2" class="btn btn-primary back"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
+            <h3 class="card-title page-title">Applicant</h3>
         </div>
         <!-- Get the information to the database -->
         <?php
@@ -139,53 +133,44 @@ $partnerID = $_POST['partnerID'];
         }
         ?>
         <!-- Display the information -->
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start" alt="<?= htmlspecialchars($applicantName) ?> ">
+        <div class="card mb-3">
+
+            <div class="applicant-info-name-pic">
+                <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start" alt="<?= htmlspecialchars($applicantName) ?> ">
+                <div class="applicant-info-contact">
+                    <!-- <h4 class="card-title name">Name</h4> -->
+                    <p class="card-text name"><?= $applicantName ?></p>
+                    <p class="card-text sub-name"><?= $businessEmail ?> | <?= $phoneNumber ?> </p>
                 </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h3 class="card-title">Applicant</h3>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Name</h4>
-                            <p class="card-text"><?= $applicantName ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Company Name</h4>
-                            <p class="card-text"><?= $companyName ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Business Email</h4>
-                            <p class="card-text"><?= $businessEmail ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Partner Type</h4>
-                            <p class="card-text"><?= ucfirst($partnerType) ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Business Address</h4>
-                            <p class="card-text"><?= $address ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Phone Number</h4>
-                            <p class="card-text"><?= $phoneNumber ?></p>
-                        </div>
-                        <div class="applicant-info">
-                            <h4 class="card-title">Document Link</h4>
-                            <a href="<?= $link ?>"><?= $link ?></a>
-                        </div>
-                        <div class="button-container">
-                            <form action="../../Function/Admin/partnerApproval.php" method="post">
-                                <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                <input type="hidden" name="partnerStatus" value="<?= $status ?>">
-                                <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
-                                <button type="submit" class="btn btn-danger" name="declineBtn">Decline</button>
-                            </form>
-                        </div>
-                    </div>
+                <div class="button-container">
+                    <form action="../../Function/Admin/partnerApproval.php" method="POST">
+                        <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                        <input type="hidden" name="partnerStatus" value="<?= $status ?>">
+                        <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+                        <button type="submit" class="btn btn-danger" name="declineBtn">Decline</button>
+                    </form>
                 </div>
             </div>
+
+            <div class="card-body">
+                <div class="applicant-info">
+                    <h4 class="card-title">Company Name</h4>
+                    <p class="card-text"><?= $companyName ?></p>
+                </div>
+                <div class="applicant-info">
+                    <h4 class="card-title">Partner Type</h4>
+                    <p class="card-text"><?= ucfirst($partnerType) ?></p>
+                </div>
+                <div class="applicant-info">
+                    <h4 class="card-title">Business Address</h4>
+                    <p class="card-text"><?= $address ?></p>
+                </div>
+                <div class="applicant-info">
+                    <h4 class="card-title">Document Link</h4>
+                    <a href="<?= $link ?>"><?= $link ?></a>
+                </div>
+            </div>
+
         </div>
     </div>
 
