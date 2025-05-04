@@ -18,7 +18,9 @@ INSERT INTO resortServices( facilityName, price, capacity,duration,category, des
 INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Room 9','3500',0,0, 'Room' , 'Barkada Room');
 INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Room 10','3500',0,0, 'Room' ,NULL);
 INSERT INTO resortServices( facilityName, price, capacity,duration,category, description) VALUES ('Room 11','3500',0,0, 'Room' ,NULL);
-
+INSERT INTO `resortservices` (`resortServiceID`, `facilityName`, `price`, `capacity`, `duration`, `category`, `description`, `imageData`) VALUES
+(21, 'Pavilion Hall', 20000.00, 350, '0', 'Events', 'Our Pavilion Hall offers the perfect space for events, gatherings, and special occasions. With its spacious and elegant design, it’s ideal for everything from weddings to corporate events, comfortably accommodating up to 350 guests. Fully air-conditioned for your comfort, the hall can be rented for a maximum of 5 hours. Included with your rental is exclusive access to one private air-conditioned room and a dedicated powder room with separate comfort rooms for both male and female guests. Let us help you create unforgettable memories in a setting of pure sophistication and convenience.', NULL),
+(22, 'Mini Pavilion Hall', 10000.00, 50, '0', 'Events', 'Our mini pavilion offers an intimate and charming space perfect for small gatherings and special occasions. Designed to comfortably accommodate up to 50 guests, it’s ideal for birthdays, reunions, meetings, or any cozy celebration. Surrounded by a refreshing resort atmosphere, it provides both functionality and a relaxing vibe.', NULL);
 
 
 
