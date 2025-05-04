@@ -24,7 +24,7 @@ if (isset($_POST['approveBtn'])) {
             exit();
         } else {
             $_SESSION['error'] = 'The request could not be approved. Please try again later.';
-            header('Location: ../../Pages/Admin/displayPartnership.php');
+            header('Location: ../../Pages/Admin/partnership.php');
             exit();
         }
     }
@@ -52,7 +52,7 @@ if (isset($_POST['declineBtn'])) {
             exit();
         } else {
             $_SESSION['error'] = 'The request could not be declined. Please try again later.';
-            header('Location: ../../Pages/Admin/displayPartnership.php');
+            header('Location: ../../Pages/Admin/partnership.php');
             exit();
         }
     }

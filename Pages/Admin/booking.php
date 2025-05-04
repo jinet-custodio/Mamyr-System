@@ -26,6 +26,20 @@ $_SESSION['last_activity'] = time();
 
 $userID = $_SESSION['userID'];
 $userType = $_SESSION['userType'];
+
+
+$message = '';
+$status = '';
+
+if (isset($_SESSION['error'])) {
+    $message = htmlspecialchars(strip_tags($_SESSION['error']));
+    $status = 'error';
+    unset($_SESSION['error']);
+} elseif (isset($_SESSION['success'])) {
+    $message = htmlspecialchars(strip_tags($_SESSION['success']));
+    $status = 'success';
+    unset($_SESSION['success']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -217,6 +231,18 @@ $userType = $_SESSION['userType'];
         $(document).ready(function() {
             $('#bookingTable').DataTable();
         });
+    </script>
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Sweetalert Popup -->
+    <script>
+        <?php if (!empty($message)): ?>
+            Swal.fire({
+                icon: '<?= $status ?>',
+                title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
+                text: '<?= $message ?>'
+            });
+        <?php endif; ?>
     </script>
 </body>
 
