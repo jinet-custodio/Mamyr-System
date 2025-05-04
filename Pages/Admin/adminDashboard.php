@@ -51,8 +51,8 @@ $userType = $_SESSION['userType'];
 
     <div class="topSection">
         <div class="dashTitleContainer">
-            <a href="#" class="dashboardTitle" id="dashboard"><img src="../../Assets/images/MamyrLogo.png" alt=""
-                    class="logo"></a>
+            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
+                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -73,7 +73,7 @@ $userType = $_SESSION['userType'];
     <nav class="navbar d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
 
-            <a class="nav-link" href="../Pages/dashboard.php">
+            <a class="nav-link active" href="adminDashboard.php">
                 <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
                 <h5>Dashboard</h5>
             </a>
@@ -104,8 +104,8 @@ $userType = $_SESSION['userType'];
 
 
             <a class="nav-link" href="displayPartnership.php">
-                <img src="../../Assets/Images/Icon/Friend request.png" alt="Requests">
-                <h5>Requests</h5>
+                <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
+                <h5>Partnerships</h5>
             </a>
 
             <a class="nav-link" href="#">
