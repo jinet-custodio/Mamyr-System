@@ -51,6 +51,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Pages/register.php">Sign Up</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -218,22 +221,22 @@
     <script src="../Assets/JS/scrollNavbg.js"></script>
     <!-- Sweet Alert -->
     <script>
-        const bookButtons = document.querySelectorAll('#bookBtn');
+    const bookButtons = document.querySelectorAll('#bookBtn');
 
-        bookButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Are you ready to book?',
-                    text: 'You must have an existing account before booking our services.',
-                    icon: 'info',
-                    confirmButtonText: 'Go'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
-                    }
-                });
+    bookButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Are you ready to book?',
+                text: 'You must have an existing account before booking our services.',
+                icon: 'info',
+                confirmButtonText: 'Go'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'register.php';
+                }
             });
         });
+    });
     </script>
 </body>
 
