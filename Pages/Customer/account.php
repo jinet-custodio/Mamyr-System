@@ -1,3 +1,4 @@
+
 <?php
 require '../../Config/dbcon.php';
 
@@ -112,7 +113,7 @@ $userType = $_SESSION['userType'];
                         accept=".jpg, .jpeg, .png" name="userProfile">
                     <div class="details">
                         <input type="text" id="nameBox" name="name" class="text-field"
-                            value="<?= $user['firstName'] . ' ' . $user['middleInitial'] . '. ' . $user['lastName'] ?>"
+                            value="<?= $user['firstName'] . ' ' . $user['middleInitial'] . ' ' . $user['lastName'] ?>"
                             readonly>
                     </div>
                 </div>
