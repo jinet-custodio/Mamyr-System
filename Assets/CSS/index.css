@@ -186,7 +186,7 @@ input[type="password"]::-webkit-search-cancel-button {
 .errorMsg {
   position: absolute;
   left: 50%;
-  bottom: 20%;
+  bottom: 17.9%;
   transform: translateX(-50%);
   text-align: center;
   color: red;
