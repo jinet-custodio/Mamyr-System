@@ -48,14 +48,14 @@ require '../Function/OTPdeletion.php';
                     </div>
                     <p class="errorMsg">
                         <?php
-                        if (isset($_SESSION['error'])) {
-                            echo htmlspecialchars(strip_tags($_SESSION['error']));
-                            unset($_SESSION['error']);
-                        }
+                        // if (isset($_SESSION['error'])) {
+                        //     echo htmlspecialchars(strip_tags($_SESSION['error']));
+                        //     unset($_SESSION['error']);
+                        // }
 
-                        if (isset($_GET['session']) && $_GET['session'] === 'expired') {
-                            echo '<div class="alert alert-warning" style="margin-top: 1rem;">Session Expired</div>';
-                        }
+                        // if (isset($_GET['session']) && $_GET['session'] === 'expired') {
+                        //     echo '<div class="alert alert-warning" style="margin-top: 1rem;">Session Expired</div>';
+                        // }
 
                         ?>
                     </p>
@@ -199,58 +199,58 @@ require '../Function/OTPdeletion.php';
     <script src="../Assets/JS/checkPassword.js"></script>
     <script src="../Assets/JS/checkLoginPassword.js"></script>
     <script>
-        const container = document.querySelector('.container');
-        const registerBtn = document.querySelector('.register-btn');
-        const loginBtn = document.querySelector('.login-btn');
+    const container = document.querySelector('.container');
+    const registerBtn = document.querySelector('.register-btn');
+    const loginBtn = document.querySelector('.login-btn');
 
-        registerBtn.addEventListener('click', () => {
-            container.classList.add('active');
-        })
+    registerBtn.addEventListener('click', () => {
+        container.classList.add('active');
+    })
 
-        loginBtn.addEventListener('click', () => {
-            container.classList.remove('active');
-        })
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove('active');
+    })
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
 
-        if (page === 'register') {
-            container.classList.add('active');
-        } else {
-            container.classList.remove('active');
-        }
+    if (page === 'register') {
+        container.classList.add('active');
+    } else {
+        container.classList.remove('active');
+    }
     </script>
     <script>
-        const passwordField = document.getElementById('login_password');
-        const passwordField1 = document.getElementById('password');
-        const passwordField2 = document.getElementById('confirm_password');
-        const togglePassword = document.getElementById('togglePassword');
-        const togglePassword1 = document.getElementById('togglePassword1');
-        const togglePassword2 = document.getElementById('togglePassword2');
+    const passwordField = document.getElementById('login_password');
+    const passwordField1 = document.getElementById('password');
+    const passwordField2 = document.getElementById('confirm_password');
+    const togglePassword = document.getElementById('togglePassword');
+    const togglePassword1 = document.getElementById('togglePassword1');
+    const togglePassword2 = document.getElementById('togglePassword2');
 
-        function togglePasswordVisibility(passwordField, toggleIcon) {
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('bxs-hide');
-                toggleIcon.classList.add('bx-show-alt');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('bx-show-alt');
-                toggleIcon.classList.add('bxs-hide');
-            }
+    function togglePasswordVisibility(passwordField, toggleIcon) {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('bxs-hide');
+            toggleIcon.classList.add('bx-show-alt');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('bx-show-alt');
+            toggleIcon.classList.add('bxs-hide');
         }
+    }
 
-        togglePassword.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField, togglePassword);
-        });
+    togglePassword.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField, togglePassword);
+    });
 
-        togglePassword1.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField1, togglePassword1);
-        });
+    togglePassword1.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField1, togglePassword1);
+    });
 
-        togglePassword2.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField2, togglePassword2);
-        });
+    togglePassword2.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField2, togglePassword2);
+    });
     </script>
 
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>

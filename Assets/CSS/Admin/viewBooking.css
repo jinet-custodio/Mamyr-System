@@ -15,9 +15,9 @@
 }
 
 .card {
-  /* border: 1px solid red; */
   width: 80% !important;
   margin: auto;
+  border: none;
 }
 
 .card-title {
@@ -26,11 +26,14 @@
 }
 
 .name {
-  font-size: 2.35rem !important;
+  font-size: 2rem !important;
 }
 
-.partner-info-name-pic,
-.applicant-info-name-pic {
+.sub-name {
+  font-size: 1.3rem !important;
+}
+
+.booking-info-name-pic {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -43,30 +46,28 @@
   object-fit: cover;
 }
 
+.card-title {
+  font-family: "Poppins";
+  font-size: 1rem;
+}
+
 .card-text {
   font-family: "Poppins";
   font-size: 1.3rem;
 }
 
 .card-body {
-  /* border: 1px solid red; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-.applicant-info,
-.partner-info {
-  /* width: 100%; */
+.guest-info {
+  width: 100%;
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 8px;
   background-color: #f9f9f9;
-}
-
-.stretched-link {
-  text-decoration: underline;
-  word-break: break-word;
 }
 
 .page-container {
@@ -76,7 +77,6 @@
   justify-content: center;
   position: relative;
 }
-
 .page-title {
   font-family: "Agbalumo";
   font-size: 2rem;
@@ -91,6 +91,10 @@
   left: 0;
 }
 
+/* .back:hover {
+  background-color: transparent;
+} */
+
 .button-container {
   /* border: 1px solid red; */
   display: flex;
@@ -103,4 +107,9 @@ form {
     width: 100% !important;
     margin: 0.5rem !important;
   }
+}
+
+.description {
+  white-space: pre-wrap;
+  word-break: break-word;
 }

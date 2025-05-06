@@ -51,6 +51,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php">Sign Up</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -247,19 +250,19 @@
 
 
     <script>
-        const serviceSelect = document.getElementById('service');
-        const otherContainer = document.getElementById('other-container');
-        const otherInput = document.getElementById('other-input');
+    const serviceSelect = document.getElementById('service');
+    const otherContainer = document.getElementById('other-container');
+    const otherInput = document.getElementById('other-input');
 
-        serviceSelect.addEventListener('change', () => {
-            if (serviceSelect.value === 'other') {
-                otherContainer.style.display = 'block';
-                otherInput.required = true;
-            } else {
-                otherContainer.style.display = 'none';
-                otherInput.required = false;
-            }
-        });
+    serviceSelect.addEventListener('change', () => {
+        if (serviceSelect.value === 'other') {
+            otherContainer.style.display = 'block';
+            otherInput.required = true;
+        } else {
+            otherContainer.style.display = 'none';
+            otherInput.required = false;
+        }
+    });
     </script>
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -269,22 +272,22 @@
 
     <!-- Sweet Alert -->
     <script>
-        const bookButtons = document.querySelectorAll('#submit-request');
+    const bookButtons = document.querySelectorAll('#submit-request');
 
-        bookButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Want to Become Our Business Partner?',
-                    text: 'You must have an existing account before becoming a business partner.',
-                    icon: 'info',
-                    confirmButtonText: 'Go'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
-                    }
-                });
+    bookButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Want to Become Our Business Partner?',
+                text: 'You must have an existing account before becoming a business partner.',
+                icon: 'info',
+                confirmButtonText: 'Go'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'register.php';
+                }
             });
         });
+    });
     </script>
 </body>
 

@@ -36,8 +36,8 @@ require '../Config/dbcon.php';
                     <a class="nav-link" href="../index.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href=" amenities.php" id="navbarDropdown"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link  dropdown-toggle " href=" amenities.php" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -58,7 +58,9 @@ require '../Config/dbcon.php';
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php">Sign Up</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -124,7 +126,7 @@ require '../Config/dbcon.php';
                             finfo_close($finfo);
                             $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                     ?>
-                            <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
                     <?php
                             $counter++;
                         }
@@ -306,49 +308,49 @@ require '../Config/dbcon.php';
     </footer>
 
     <script>
-        var video = document.getElementById("myVideo");
+    var video = document.getElementById("myVideo");
 
-        video.onplay = function() {
-            video.muted = false;
-        };
+    video.onplay = function() {
+        video.muted = false;
+    };
     </script>
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script>
-        const navbar = document.getElementById("navbar");
+    const navbar = document.getElementById("navbar");
 
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 10) {
-                navbar.classList.add("bg-white", "shadow");
-            } else {
-                navbar.classList.remove("bg-white", "shadow");
-            }
-        });
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 10) {
+            navbar.classList.add("bg-white", "shadow");
+        } else {
+            navbar.classList.remove("bg-white", "shadow");
+        }
+    });
     </script>
 
 
     <script>
-        const carousels = document.querySelectorAll('.carousel');
+    const carousels = document.querySelectorAll('.carousel');
 
 
-        carousels.forEach(carousel => {
-            let angle = 0;
+    carousels.forEach(carousel => {
+        let angle = 0;
 
-            const prevButton = carousel.closest('.carousel-container').querySelector('.prev-btn');
-            const nextButton = carousel.closest('.carousel-container').querySelector('.next-btn');
-
-
-            nextButton.addEventListener('click', () => {
-                angle -= 72;
-                carousel.style.transform = `rotateY(${angle}deg)`;
-            });
+        const prevButton = carousel.closest('.carousel-container').querySelector('.prev-btn');
+        const nextButton = carousel.closest('.carousel-container').querySelector('.next-btn');
 
 
-            prevButton.addEventListener('click', () => {
-                angle += 72;
-                carousel.style.transform = `rotateY(${angle}deg)`;
-            });
+        nextButton.addEventListener('click', () => {
+            angle -= 72;
+            carousel.style.transform = `rotateY(${angle}deg)`;
         });
+
+
+        prevButton.addEventListener('click', () => {
+            angle += 72;
+            carousel.style.transform = `rotateY(${angle}deg)`;
+        });
+    });
     </script>
 </body>
 
