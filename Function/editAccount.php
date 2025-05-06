@@ -2,12 +2,6 @@
 require '../config/dbcon.php';
 session_start();
 
-// Enable error reporting (only for development)
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-echo "Reached before form processing"; // Debugging statement
-
 if (isset($_POST['edit'])) {
     echo "Edit form detected"; // Debugging statement
 
@@ -17,25 +11,44 @@ if (isset($_POST['edit'])) {
 
     $userID = mysqli_real_escape_string($conn, $_POST['userID']);
     $userType = mysqli_real_escape_string($conn, $_POST['userType']);
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $nameParts = explode(" ", $name);
+    $fullName = mysqli_real_escape_string($conn, $_POST['name']);
     $birthDate = mysqli_real_escape_string($conn, $_POST['birthDate']);
     $userAddress = mysqli_real_escape_string($conn, $_POST['userAddress']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
 
-    // Parse full name
-    if (count($nameParts) == 1) {
+    $nameParts = explode(" ", trim($fullName));
+    $numParts = count($nameParts);
+
+    if ($numParts <= 2) {
         $firstName = $nameParts[0];
-    } elseif (count($nameParts) == 2) {
-        $firstName = $nameParts[0];
-        $lastName = $nameParts[1];
-    } elseif (count($nameParts) > 2) {
-        $firstName = $nameParts[0];
-        $lastName = array_pop($nameParts);
-        $middleInitial = substr($nameParts[1], 0, 1);
+        $lastName = $nameParts[1] ?? '';
+    } elseif ($numParts == 3) {
+        $firstName = $nameParts[0] . ' ' . $nameParts[1];
+        $lastName = $nameParts[2];
+    } elseif ($numParts >= 4) {
+        // First 2 words = first name
+        $firstName = $nameParts[0] . ' ' . $nameParts[1];
+
+        // Last 2 words = last name
+        $lastName = $nameParts[$numParts - 2] . ' ' . $nameParts[$numParts - 1];
+
+        // Middle parts between index 2 and numParts - 2
+        $middleInitials = [];
+        for ($i = 2; $i < $numParts - 2; $i++) {
+            $middle = trim($nameParts[$i]);
+            if (substr($middle, -1) === '.' && strlen($middle) <= 3) { // e.g., C.
+                $middleInitials[] = $middle;
+            }
+        }
+
+        $middleInitial = implode(' ', $middleInitials);
     }
 
+    echo "Parsed:<br>";
+    echo "First: $firstName<br>";
+    echo "Middle: $middleInitial<br>";
+    echo "Last: $lastName<br>";
     // Check if an image was uploaded
     if (!empty($_FILES['userProfile']['tmp_name']) && $_FILES['userProfile']['error'] === 0) {
         echo "Image detected"; // Debugging statement
@@ -70,7 +83,7 @@ if (isset($_POST['edit'])) {
 
     if ($result) {
         echo "Update successful"; // Debugging statement
-        header("Location: ../Pages/Customer/account.php?id=$userID&role=$userType&message[]=Changes%20Applied!");
+        header("Location: ../Pages/Customer/account.php?");
         exit(0);
     } else {
         echo "Error: " . mysqli_error($conn);
