@@ -28,7 +28,7 @@ $partnerID = $_POST['partnerID'];
     <div class="partner" id="partner-info" style="display: none;">
         <!-- Back Button -->
         <div class="page-container">
-            <a href="displayPartnership.php?container=1" class="btn btn-primary back"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
+            <a href="displayPartnership.php?container=1" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
             <h3 class="card-title page-title">Partner</h3>
         </div>
         <!-- Get the information to the database -->
