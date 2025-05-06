@@ -286,44 +286,50 @@ $userType = $_SESSION['userType'];
             <div class="titleContainer">
                 <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
             </div>
+            <?php
+            $availsql = "SELECT s.availabilityID, rs.facilityName 
+            FROM services s
+            JOIN resortServices rs ON s.resortServiceID = rs.resortServiceID
+            WHERE rs.category = 'Room'";
 
+            $result = mysqli_query($conn, $availsql);
+            ?>
             <div class="container-fluid">
-
                 <div class="hotelIconsContainer">
                     <div class="availabilityIcons">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/availableIcon.png" alt="Rate Picture 1"
-                            class="hotelIcon">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/notAvailableIcon.png" alt="Rate Picture 1"
-                            class="hotelIcon">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
+                            class="avail">
+                        <p>Available</p>
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 1"
+                            class="avail">
+                        <p>Not Available</p>
                     </div>
+
 
                     <div class="hotelIconContainer">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Hotel Room Icon 1"
-                            class="hotelIcon" id="hotelIcon1">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Hotel Room Icon 2"
-                            class="hotelIcon" id="hotelIcon2">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon3.png" alt="Hotel Room Icon 3"
-                            class="hotelIcon" id="hotelIcon3">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon4.png" alt="Hotel Room Icon 4"
-                            class="hotelIcon" id="hotelIcon4">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon5.png" alt="Hotel Room Icon 5"
-                            class="hotelIcon" id="hotelIcon5">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon6.png" alt="Hotel Room Icon 6"
-                            class="hotelIcon" id="hotelIcon6">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon7.png" alt="Hotel Room Icon 7"
-                            class="hotelIcon" id="hotelIcon7">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon8.png" alt="Hotel Room Icon 8"
-                            class="hotelIcon" id="hotelIcon8">
-                        <div class="hotelIconLastRow">
-                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon9.png" alt="Hotel Room Icon 9"
-                                class="hotelIcon" id="hotelIcon9">
-                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon10.png" alt="Hotel Room Icon 10"
-                                class="hotelIcon" id="hotelIcon10">
-                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon11.png" alt="Hotel Room Icon 11"
-                                class="hotelIcon" id="hotelIcon11">
-                        </div>
+                        <?php
+                        if ($result->num_rows > 0) {
+                            $i = 1;
+                            while ($row = $result->fetch_assoc()) {
+                                //ternary operator to check availability
+                                $iconPath = ($row['availabilityID'] == 1)
+                                    ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
+                                    : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
+                                $roomName = htmlspecialchars($row['facilityName']);
 
+                                echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;">';
+                                echo '  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '">';
+                                echo '  <p class="roomCaption">' . $roomName . '</p>';
+                                echo '</div>';
+
+                                $i++;
+                            }
+                        } else {
+                            echo "<p>No room services found.</p>";
+                        }
+                        ?>
                     </div>
+
                     <div class="mt-5">
                         <a href="#" class="btn btn-primary btn-md w-100" id="amenitiesHR"> Take me to Hotel Rooms and
                             Rates</a>
@@ -513,7 +519,7 @@ $userType = $_SESSION['userType'];
                 <div class="secondrow">
                     <div id="calendar"></div>
                     <div class="packageDisplay" style="display: none;">
-                        <div id="packageCardsContainer" class="container mt-4 d-flex flex-wrap gap-3">
+                        <div id="packageCardsContainer" class="container d-flex flex-wrap gap-3">
                             <!-- Cards will be inserted here -->
                         </div>
                     </div>
@@ -528,7 +534,7 @@ $userType = $_SESSION['userType'];
     </form>
 
 
-    <footer class="py-1 my-2" id="footer">
+    <footer class="py-1 " id="footer">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -584,8 +590,8 @@ $userType = $_SESSION['userType'];
             events.style.display = 'none';
             resorts.style.display = 'none';
             hotels.style.display = 'none';
-            document.getElementById("footer").style.marginTop = "100vh";
-            document.body.style.setProperty('background-color', 'rgb(0, 187, 255)');
+            document.getElementById("footer").style.marginTop = "10vh";
+            document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
         };
 
 
@@ -731,15 +737,16 @@ $userType = $_SESSION['userType'];
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: "dayGridMonth",
             });
-            document.body.style.setProperty('background-color', 'rgb(0, 187, 255)');
 
             eventLink.addEventListener('click', function(event) {
                 categories.style.display = "none";
                 events.style.display = "block";
                 resorts.style.display = "none";
                 hotels.style.display = "none";
+                document.body.style.setProperty('background', 'none');
                 document.body.style.setProperty('background-color', 'rgb(164, 241, 255)');
                 calendar.render();
+                document.getElementById("footer").style.marginTop = "2vw";
             });
 
             resortLink.addEventListener('click', function(event) {
@@ -748,6 +755,7 @@ $userType = $_SESSION['userType'];
                 resorts.style.display = "block";
                 hotels.style.display = "none";
                 document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
+                document.getElementById("footer").style.marginTop = "2vw";
             });
 
             hotelLink.addEventListener('click', function(event) {
@@ -755,7 +763,9 @@ $userType = $_SESSION['userType'];
                 events.style.display = "none";
                 resorts.style.display = "none";
                 hotels.style.display = "block";
+                document.body.style.setProperty('background', 'none');
                 document.body.style.setProperty('background-color', 'rgb(255, 220, 174)');
+                document.getElementById("footer").style.marginTop = "2vw";
             });
 
         });

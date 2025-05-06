@@ -25,11 +25,10 @@
 }
 
 body {
-  /* background-image: url(../Images/BookNowPhotos/bookNowBg.jpg);
+  background-image: url(../../Images/BookNowPhotos/bookNowBg.jpg);
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat; */
-  background-color: rgb(0, 187, 255);
+  background-repeat: no-repeat;
   transition: background-color 0.5s ease;
 }
 
@@ -158,7 +157,6 @@ ul {
 
 footer {
   /* border: 1px solid black; */
-  margin-top: auto !important;
 
   background: linear-gradient(
     to top,
@@ -342,6 +340,7 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 3vw;
 }
 .hotel-card {
   padding: 2vw;
@@ -406,28 +405,39 @@ footer {
 }
 
 .availabilityIcons {
-  /* border: 1px solid black; */
+  margin: 1vw auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5vw;
+}
+
+.roomCaption {
+  font-size: 1.2vw;
+  font-family: "Prata";
+}
+
+.avail {
+  width: 3vw;
+}
+
+.availabilityIcons p {
+  font-size: 1.3vw;
+  font-weight: 700;
+  font-family: "Prata";
+  margin: 0 2vw 0 1vw;
 }
 
 .hotelIconContainer {
-  /* border: 1px solid black; */
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-
-  gap: 2vw;
+  gap: 1.5vw;
   padding: 2vw;
 }
 
 .hotelIcon {
-  /* border: 1px solid black;  */
-  height: 1w;
-  width: auto;
-  margin-top: 4vw;
+  width: 6vw;
 }
+
 
 .hotelIconLastRow {
   grid-column: span 4;
@@ -591,8 +601,8 @@ select option {
 }
 
 #calendar {
-  width: 70%;
-  height: 80vh;
+  width: 75%;
+  height: 85vh;
   margin: -5vw auto 1vw auto;
   background-color: #fffefe;
   border-radius: 5vw;
