@@ -86,7 +86,7 @@ body {
 
 aside {
     background-color: #0f7dc133;
-    width: 28%;
+    width: 30% !important;
     height: 100vh;
     border-radius: 1vw;
     margin-left: -0.5vw;
@@ -181,3 +181,32 @@ aside {
   color: whitesmoke;
   margin: 2vw auto;
 } 
+
+.editBtn .btn {
+  width: 10vw;
+}
+
+main {
+  width: 70%;
+}
+
+th {
+  font-size: 1.3vw;
+}
+
+.btn {
+  width: 5vw !important;
+}
+
+table {
+  border: 1px solid black;
+}
+
+th, td, tr {
+  padding: 0.3vw;
+}
+
+#bookingTable {
+  margin: 15vw auto 0 auto;
+  width: 95%;
+}

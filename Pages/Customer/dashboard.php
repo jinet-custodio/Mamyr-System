@@ -92,7 +92,7 @@ $userType = $_SESSION['userType'];
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
                 </li>
                 <li class="nav-item">
@@ -264,10 +264,23 @@ $userType = $_SESSION['userType'];
             };
             var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '../../Function/fetchUserBookings.php', // the PHP file above
+                eventClick: function(info) {
+                    alert('Booked by: ' + info.event.extendedProps.description);
+                }
+            });
+
+            calendar.render();
+        });
     </script>
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
-    <script src="../../Assets/JS/fullCalendar.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
 

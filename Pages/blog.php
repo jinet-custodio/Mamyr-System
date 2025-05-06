@@ -42,7 +42,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Pages/blog.php">BLOG</a>
+                    <a class="nav-link" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
@@ -63,7 +63,7 @@
             <div class="col-md-6">
                 <h1 class="construction-header">Website is Under Construction</h1>
                 <p class="construction-text">
-                    Our 'About' page is coming soon! We're excited to share more about who we are, what we do, and
+                    Our 'Blog' page is coming soon! We're excited to share more about who we are, what we do, and
                     why we do it. This section is still under development, but we look forward to telling our story here
                     in the near future. Stay tuned!
                 </p>

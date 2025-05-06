@@ -47,7 +47,7 @@ require '../Config/dbcon.php';
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link" href="/Pages/blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="beOurPartner.php">BE OUR PARTNER</a>

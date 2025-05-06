@@ -44,6 +44,7 @@ $userType = $_SESSION['userType'];
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <!-- <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css"> -->
 </head>
 
 <body>
@@ -141,73 +142,162 @@ $userType = $_SESSION['userType'];
 
                         <div class="editBtn">
                             <button class="btn btn-primary" id="editBtn" type="submit" onclick="enableEdit(event)"
-                                name="edit">Edit your information</button>
+                                name="edit">Edit</button>
                         </div>
                     </div>
                 </form>
-
-                <script>
-                    function enableEdit(event) {
-                        const form = document.getElementById('myForm');
-                        const inputs = form.querySelectorAll('.text-field');
-                        const editButton = document.getElementById('editBtn');
-                        const imageBtn = document.getElementById('btn'); // Your image edit button
-                        const fileInput = document.getElementById('fileInput');
-                        const displayPhoto = document.getElementById('displayPhoto');
-
-                        const isEditing = editButton.textContent === "Edit your information";
-
-                        if (isEditing) {
-                            // Enable editing
-                            inputs.forEach(input => {
-                                input.removeAttribute('readonly');
-                                input.classList.add('edit-mode');
-                            });
-
-                            // Show the add-image button
-                            imageBtn.classList.remove('hidden'); // instead of setting style
-
-                            // Show the file input and handle image changes
-                            imageBtn.addEventListener('click', function(e) {
-                                e.preventDefault(); // Prevent any default behavior from clicking the button
-                                fileInput.click();
-                            });
-
-                            fileInput.addEventListener('change', (event) => {
-                                const file = event.target.files[0];
-                                if (file) {
-                                    const reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        displayPhoto.src = e.target.result; // Preview the uploaded image
-                                    };
-                                    reader.readAsDataURL(file);
-                                }
-                            });
-
-                            // Change button text to "Save Changes"
-                            editButton.textContent = "Save Changes";
-                            event.preventDefault();
-                        } else {
-                            // If we're not in editing mode, submit the form
-                            form.submit();
-                        }
-                    }
-                </script>
 
 
         <?php
             } else {
                 echo "<h4>Invalid ID</h4>";
             }
-        } // End of isset($userID)
+        }
         ?>
 
     </aside>
+    <main>
+        <div class="bookings">
+            <table class="table table-striped " id="bookingTable">
 
+                <thead>
+                    <th scope="col">Check In Date</th>
+                    <th scope="col">Check Out Date</th>
+                    <th scope="col">Booking Type</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">Review</th>
+                </thead>
+                <tbody>
+                    <!-- Select booking info -->
+                    <?php
+                    $selectQuery = "SELECT ps.PBName, rs.category , ec.categoryName, b.* 
+                FROM bookings b
+                LEFT JOIN packages p ON b.packageID = p.packageID
+                LEFT JOIN eventcategories ec ON p.categoryID = ec.categoryID
+                LEFT JOIN services s ON b.serviceID = s.serviceID
+                LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID
+                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
+                WHERE userID = '$userID'";
+                    $result = mysqli_query($conn, $selectQuery);
+                    if (mysqli_num_rows($result) > 0) {
+                        foreach ($result as $bookings) {
+                            $bookingID = $bookings['bookingID'];
+                    ?>
+                            <tr>
+                                <td><?= $bookings['startDate'] ?></td>
+                                <td><?= $bookings['endDate'] ?></td>
+                                <?php
+                                if ($bookings['serviceID'] != "") {
+                                ?>
+                                    <td><?= $bookings['category'] ?></td>
+                                <?php
+                                } elseif ($bookings['packageID'] != "") {
+                                ?>
+                                    <td><?= $bookings['categoryName'] ?></td>
+                                <?php
+                                } elseif ($bookings['customePackageID'] != "") {
+                                ?>
+                                    <td>Customized Package</td>
+                                <?php
+                                }
+                                ?>
 
+                                <td>
+                                    <?php
+                                    if ($bookings['status'] == "Pending") {
+                                    ?>
+                                        <button class="btn btn-warning w-75">
+                                            <?= $bookings['status'] ?>
+                                        </button>
+                                    <?php
+                                    } elseif ($bookings['status'] == "Approved") {
+                                    ?>
+                                        <button class="btn btn-success w-75">
+                                            <?= $bookings['status'] ?>
+                                        </button>
+                                    <?php
+                                    } elseif ($bookings['status'] == "Cancelled") {
+                                    ?>
+                                        <button class="btn btn-danger w-75">
+                                            <?= $bookings['status'] ?>
+                                        </button>
+                                    <?php
+                                    }
+                                    ?>
+                                </td>
+                                <td>
+                                    <a href="" class="btn btn-primary">Pay</a>
+                                </td>
+                                <td>
+                                    <a href="" class="btn btn-outline-primary"> Rate</a>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </main>
 
+    <!-- <script src="../../Assets/JS/datatables.min.js"></script> -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script>
+        function enableEdit(event) {
+            const form = document.getElementById('myForm');
+            const inputs = form.querySelectorAll('.text-field');
+            const editButton = document.getElementById('editBtn');
+            const imageBtn = document.getElementById('btn'); // Your image edit button
+            const fileInput = document.getElementById('fileInput');
+            const displayPhoto = document.getElementById('displayPhoto');
 
+            const isEditing = editButton.textContent === "Edit";
+
+            if (isEditing) {
+                // Enable editing
+                inputs.forEach(input => {
+                    input.removeAttribute('readonly');
+                    input.classList.add('edit-mode');
+                });
+
+                // Show the add-image button
+                imageBtn.classList.remove('hidden'); // instead of setting style
+
+                // Show the file input and handle image changes
+                imageBtn.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent any default behavior from clicking the button
+                    fileInput.click();
+                });
+
+                fileInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            displayPhoto.src = e.target.result; // Preview the uploaded image
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                // Change button text to "Save Changes"
+                editButton.textContent = "Save Changes";
+                event.preventDefault();
+            } else {
+                // If we're not in editing mode, submit the form
+                form.submit();
+            }
+        }
+    </script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            $('#bookingTable').DataTable();
+        });
+    </script> -->
 
 </body>
 

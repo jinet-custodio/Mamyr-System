@@ -93,7 +93,7 @@ $userType = $_SESSION['userType'];
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#">BE OUR PARTNER</a>

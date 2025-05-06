@@ -231,11 +231,12 @@ body {
 
 #calendar {
   width: 45%;
-  height: 80vh;
   margin: 0 auto;
   /* background-color: #fffefe; */
   border: none;
+  height: 40vw;
 }
+
 
 .fc-header-toolbar {
   background-color: #00bbff;
@@ -260,16 +261,26 @@ body {
   font-family: "Poppins" !important;
   font-weight: bold;
   color: #fff;
+  font-size: clamp(2vw, calc(2.2vw + 2px), 2.4vw);
 }
 
 .fc .fc-button-primary:disabled {
   background-color: #fdfdfd !important;
   opacity: 1 !important;
+  font-size: clamp(1vw, 1.3vw, 1.5vw);
 }
 
 .fc .fc-button-primary:disabled:hover {
   background-color: #f2d8b7 !important;
   opacity: 1 !important;
+}
+
+.fc-button-group {
+  font-size: clamp(0.9vw, 1vw, 1.3vw);
+}
+
+.fc-button-primary {
+  height: 3vw;
 }
 
 .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
@@ -293,6 +304,15 @@ body {
 .fc .fc-daygrid-day.fc-day-today {
   background-color: #5dccf5;
   color: #fff;
+
+}
+
+.fc-daygrid-day-top a{
+  font-size: 1.1vw !important;
+}
+
+.fc .fc-daygrid-day-frame {
+  padding: 0.4vw;
 }
 
 .fc .fc-view-harness {
@@ -313,14 +333,34 @@ body {
 }
 /* di ko sure 'to test nalang pag may event na nalagay*/
 .fc-event {
-  background-color: #28a745;
+  background-color: #2ec852;
   color: white;
   border-radius: 5px;
   padding: 5px;
 }
 
+.fc-bg-event {
+  opacity: 1 !important;
+}
+
+.fc .fc-bg-event .fc-event-title {
+  height: 90%;
+  font-family: "Poppins";
+  margin: 0;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  justify-content: center;
+  text-align: center;
+  font-style: normal;
+  font-size: 1.1vw}
+
 .fc-event:hover {
   background-color: #218838;
+}
+
+thead {
+  font-size: 1.3vw;
 }
 /* di ko sure 'to test nalang pag may event na nalagay*/
 
@@ -840,6 +880,19 @@ footer {
     font-size: clamp(20px, calc(1.5vw + 4px), 30px) !important;
   }
 
+
+  #calendar {
+    width: 48%;
+    margin: 0 auto;
+    /* background-color: #fffefe; */
+    border: none;
+    height: 53vw;
+  }
+
+  .fc .fc-daygrid-day-frame { 
+    height: 3vw;
+  }
+
   .pb-1 {
     gap: 3vw;
   }
@@ -1005,18 +1058,89 @@ footer {
   .navbar.scrolled {
     background-color: none !important;
   }
+  
+  #calendar {
+    width: 48%;
+    margin: 0 auto;
+    /* background-color: #fffefe; */
+    border: none;
+    height: 53vw;
+  }
+  
+  .fc .fc-daygrid-day-frame { 
+    height: 3vw;
+  }
 }
 
 /* Phone size */
 @media screen and (min-width: 370px) and (max-width: 599px) {
-  .titleContainer {
-    height: calc(100vh - 20vh);
-    padding: 12vw;
+
+  .topContainer {
+    display: grid;
+    justify-content: start;
   }
 
+
+  .titleContainer {
+    height: calc(50vh - 20vh);
+    padding: 0;
+    width: 150%;
+    display: grid;
+    justify-content: start;
+    margin-left: 10vw;
+  }
+
+  #calendar {
+    width: 150%;
+    margin: 0 auto 5vw 10vw;
+    /* background-color: #fffefe; */
+    border: none;
+    height: 70vw;
+    overflow-y: hidden;
+  }
+
+  .fc .fc-button-primary:disabled {
+    font-size: clamp(1.9vw, calc(2.1vw + 4px), 2.5vw);
+    padding: 0.2vw;
+    height: 4vw;
+    width: 10vw;
+    margin-left: -5vw;
+  }
+
+  .fc .fc-daygrid-day-frame { 
+    height: 3vw;
+    padding: 0;
+  }
+
+  .fc-daygrid-day-top a { 
+    font-size: clamp(1.7vw, calc(1.9vw + 4px), 2.1vw) !important;
+  }
+
+  .fc .fc-bg-event .fc-event-title { 
+    font-size: 1.5vw;
+  }
+
+  thead {
+    font-size: clamp(1.6vw, calc(1.8vw + 2px), 2.1vw);
+  }
+
+.fc-header-toolbar {
+padding: 1vw;
+height: 10vw;
+}
+
+.fc .fc-toolbar-title { 
+  font-size: clamp(2.4vw, calc(2.6vw + 2px), 2.9vw)
+}
+
+.fc-button-group {
+  font-size: clamp(1.9vw, calc(2.1vw + 4px), 2.5vw);
+  height: 4vw;
+  padding: 0.2vw;
+}
   .mamyrTitle {
     width: 100%;
-    margin-top: clamp(16vh, 6vh, 2vh) !important;
+    margin-top: clamp(10vh, 6vh, 2vh) !important;
   }
 
   .name {
@@ -1024,6 +1148,9 @@ footer {
     text-align: left;
   }
 
+  .nameOfUser {
+    margin-top: -7vw;
+  }
   .description {
     margin: auto;
   }

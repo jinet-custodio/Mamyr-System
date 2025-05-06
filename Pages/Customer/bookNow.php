@@ -102,7 +102,7 @@ $userType = $_SESSION['userType'];
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="partnerApplication.php">BE OUR PARTNER</a>
@@ -111,7 +111,7 @@ $userType = $_SESSION['userType'];
                     <a class="nav-link" href="about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">BOOK NOW</a>
+                    <a class="nav-link active" href="bookNow.php">BOOK NOW</a>
                 </li>
                 <li class="nav-item">
                     <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>

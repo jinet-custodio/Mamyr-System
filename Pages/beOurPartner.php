@@ -40,7 +40,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link" href="/Pages/blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>

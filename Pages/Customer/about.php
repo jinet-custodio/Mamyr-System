@@ -92,13 +92,13 @@ $userType = $_SESSION['userType'];
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link" href="/Pages/Customer/blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">ABOUT</a>
+                    <a class="nav-link active" href="/Pages/Customer/about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="bookNow.php">BOOK NOW</a>

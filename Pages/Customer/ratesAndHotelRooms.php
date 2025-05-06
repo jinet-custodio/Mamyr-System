@@ -1,5 +1,31 @@
 <?php
-require '../Config/dbcon.php';
+require '../../Config/dbcon.php';
+
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
+session_start();
+date_default_timezone_set('Asia/Manila');
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
+    header("Location: ../register.php");
+    exit();
+}
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: ../register.php?session=expired");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+
+$userID = $_SESSION['userID'];
+$userType = $_SESSION['userType'];
 ?>
 
 <!DOCTYPE html>
@@ -10,8 +36,8 @@ require '../Config/dbcon.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Rates and Hotel Rooms</title>
     <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../Assets/CSS/ratesAndHotelRooms.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="stylesheet" href="../../Assets/CSS/ratesAndHotelRooms.css">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -27,34 +53,34 @@ require '../Config/dbcon.php';
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item">
-                    <a class="nav-link" href="../index.php"> Home</a>
+                    <a class="nav-link" href="../../index.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href=" ../Pages/amenities.php" id="navbarDropdown"
+                    <a class="nav-link  dropdown-toggle " href=" ../../Pages/amenities.php" id="navbarDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item active" href="#">HOTEL ROOMS AND RATES</a></li>
-                        <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="/Pages/Customer/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item active" href="/Pages/Customer/ratesAndHotelRooms.php">HOTEL ROOMS AND RATES</a></li>
+                        <li><a class="dropdown-item" href="/Pages/Customer/events.php">EVENTS</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">RATES</a>
+                    <a class="nav-link" href="ratesAndHotelRooms.php">RATES</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Pages/beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="beOurPartner.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="register.php">BOOK NOW</a>
+                    <a class="nav-link" href="bookNow.php">BOOK NOW</a>
                 </li>
             </ul>
         </div>
@@ -69,7 +95,7 @@ require '../Config/dbcon.php';
 
             <a class="categoryLink" onclick="showRates(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
+                    <img class="card-img-top" src="../../assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
 
                     <div class="card-body">
                         <h5 class="card-title">Resort Rates</h5>
@@ -79,7 +105,7 @@ require '../Config/dbcon.php';
 
             <a class="categoryLink" onclick="showHotels(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
+                    <img class="card-img-top" src="../../assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
                     <div class="card-body">
                         <h5 class="card-title">Hotel Rooms</h5>
                     </div>
@@ -90,7 +116,7 @@ require '../Config/dbcon.php';
     </div>
     <div class="rates" id="rates" style="display: none;">
         <div class="backToSelection" id="backToSelection">
-            <img src="../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+            <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
         </div>
         <div class="titleContainer">
             <h4 class="title">Our Rates</h4>
@@ -316,7 +342,7 @@ require '../Config/dbcon.php';
 
     <div class="hotelRooms" id="hotelRooms" style="display: none;">
         <div class="backToSelection" id="backToSelection">
-            <img src="../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+            <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
         </div>
         <div class="titleContainer" id="hotelTitle">
             <h4 class="title">Hotel Rooms</h4>
@@ -424,8 +450,8 @@ require '../Config/dbcon.php';
     </div>
     <footer class="py-1" id="footer" style="margin-top: 100vh;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-            <a href="../index.php">
-                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+            <a href="../../index.php">
+                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
             </a>
             <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
         </div>
@@ -457,8 +483,8 @@ require '../Config/dbcon.php';
 
 
 
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
-    <script src="../Assets/JS/scrollNavbg.js"></script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script>
         const backbtn = document.getElementById("backToSelection");
 
