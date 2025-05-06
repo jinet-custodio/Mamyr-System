@@ -121,7 +121,7 @@ $userType = $_SESSION['userType'];
     </nav>
 
     <div class="categories-page" id="category-page">
-        <div class="titleContainer">
+        <div class="titleContainer" style="margin-top: 10vw !important;">
             <h4 class="title">What are you booking for?</h4>
         </div>
         <div class="categories">
@@ -155,7 +155,9 @@ $userType = $_SESSION['userType'];
 
     <form action="#" method="POST" id="resort-page" style="display: none;">
         <div class="resort" id="resort">
-
+            <div class="backToSelection" id="backToSelection">
+                <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+            </div>
             <div class="titleContainer">
                 <h4 class="resortTitle" id="resortTitle">RESORT BOOKING</h4>
             </div>
@@ -278,7 +280,9 @@ $userType = $_SESSION['userType'];
 
     <form action="#" method="POST" id="hotel-page" style="display: none;">
         <div class="hotel" id="hotel">
-
+            <div class="backToSelection" id="backToSelection">
+                <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+            </div>
             <div class="titleContainer">
                 <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
             </div>
@@ -382,6 +386,9 @@ $userType = $_SESSION['userType'];
 
     <form action="../../Function/Booking/eventBooking.php" method="POST" id="event-page" style="display: none;">
         <div class=" event" id="event">
+            <div class="backToSelection" id="backToSelection">
+                <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+            </div>
             <div class="titleContainer">
                 <h4 class="eventTitle" id="eventTitle">EVENT BOOKING</h4>
             </div>
@@ -521,7 +528,7 @@ $userType = $_SESSION['userType'];
     </form>
 
 
-    <footer class="py-1 my-2">
+    <footer class="py-1 my-2" id="footer">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -562,6 +569,27 @@ $userType = $_SESSION['userType'];
 
     <!-- Page switch -->
     <script>
+        const resortLink = document.getElementById("resort-link");
+        const hotelLink = document.getElementById("hotel-link");
+        const eventLink = document.getElementById("event-link");
+
+        const categories = document.getElementById("category-page");
+        const events = document.getElementById("event-page");
+        const hotels = document.getElementById("hotel-page");
+        const resorts = document.getElementById("resort-page");
+        const backbtn = document.getElementById("backToSelection");
+
+        function backToSelection() {
+            categories.style.display = 'block';
+            events.style.display = 'none';
+            resorts.style.display = 'none';
+            hotels.style.display = 'none';
+            document.getElementById("footer").style.marginTop = "100vh";
+            document.body.style.setProperty('background-color', 'rgb(0, 187, 255)');
+        };
+
+
+
         document.getElementById('eventType').addEventListener('change', function() {
             const categoryID = this.value; // categoryID is now defined inside the event listener
             const packagesDropdown = document.getElementById('package');
@@ -697,31 +725,20 @@ $userType = $_SESSION['userType'];
             });
         }
 
-
         document.addEventListener("DOMContentLoaded", function() {
             console.log("DOM fully loaded and parsed");
             var calendarEl = document.getElementById("calendar");
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: "dayGridMonth",
             });
-
-
-
-            const resortLink = document.getElementById("resort-link");
-            const hotelLink = document.getElementById("hotel-link");
-            const eventLink = document.getElementById("event-link");
-
-            const categories = document.getElementById("category-page");
-            const events = document.getElementById("event-page");
-            const hotels = document.getElementById("hotel-page");
-            const resorts = document.getElementById("resort-page");
+            document.body.style.setProperty('background-color', 'rgb(0, 187, 255)');
 
             eventLink.addEventListener('click', function(event) {
                 categories.style.display = "none";
                 events.style.display = "block";
                 resorts.style.display = "none";
                 hotels.style.display = "none";
-                document.body.style.setProperty('background-color', 'rgb(164, 241, 255)', 'important');
+                document.body.style.setProperty('background-color', 'rgb(164, 241, 255)');
                 calendar.render();
             });
 
@@ -730,7 +747,7 @@ $userType = $_SESSION['userType'];
                 events.style.display = "none";
                 resorts.style.display = "block";
                 hotels.style.display = "none";
-                document.body.style.setProperty('background-color', 'rgb(0, 187, 255)', 'important');
+                document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
             });
 
             hotelLink.addEventListener('click', function(event) {
@@ -738,7 +755,7 @@ $userType = $_SESSION['userType'];
                 events.style.display = "none";
                 resorts.style.display = "none";
                 hotels.style.display = "block";
-                document.body.style.setProperty('background-color', 'rgb(242, 217, 184)', 'important');
+                document.body.style.setProperty('background-color', 'rgb(255, 220, 174)');
             });
 
         });

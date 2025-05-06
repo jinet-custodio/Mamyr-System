@@ -29,7 +29,7 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat; */
-  background-color: rgb(0, 187, 255) !important;
+  background-color: rgb(0, 187, 255);
   transition: background-color 0.5s ease;
 }
 
@@ -254,7 +254,7 @@ footer {
   width: 70%;
   margin: auto;
   text-align: center;
-  margin-top: 10vw !important;
+  margin-top: 2vw !important;
 }
 
 .title {
@@ -289,6 +289,10 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.resort-card, .hotel-card, .event-card {
+  border-radius: 2vw !important;
 }
 
 .category-card img {
@@ -326,7 +330,7 @@ footer {
 /* category section */
 
 /* resort booking */
-.hotelTitle {
+.resortTitle {
   margin-top: 1vw;
   font-size: 2.5vw;
   font-family: "Prata";
@@ -393,7 +397,7 @@ footer {
 
 .container-fluid {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
@@ -551,6 +555,18 @@ select option {
   gap: 1vw;
 }
 
+.backToSelection {
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+  margin: 10vw auto 0 auto;
+}
+
+.backToSelection img {
+  width: 3.5vw;
+}
+
+
 .dateForm,
 .venueForm,
 .hrForm,
@@ -576,7 +592,7 @@ select option {
 
 #calendar {
   width: 70%;
-  height: 70vh;
+  height: 80vh;
   margin: -5vw auto 1vw auto;
   background-color: #fffefe;
   border-radius: 5vw;
