@@ -1,0 +1,115 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.card {
+  width: 80% !important;
+  margin: auto;
+  border: none;
+}
+
+.card-title {
+  font-family: "Poppins";
+  font-size: 1rem;
+}
+
+.name {
+  font-size: 2rem !important;
+}
+
+.sub-name {
+  font-size: 1.3rem !important;
+}
+
+.booking-info-name-pic {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.img-fluid {
+  height: 30vh;
+  width: 30vh;
+  object-fit: cover;
+}
+
+.card-title {
+  font-family: "Poppins";
+  font-size: 1rem;
+}
+
+.card-text {
+  font-family: "Poppins";
+  font-size: 1.3rem;
+}
+
+.card-body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.guest-info {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.page-container {
+  display: flex;
+  margin: 2rem;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.page-title {
+  font-family: "Agbalumo";
+  font-size: 2rem;
+  margin-left: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.back {
+  border: none;
+  height: 7vh;
+  position: absolute;
+  left: 0;
+}
+
+/* .back:hover {
+  background-color: transparent;
+} */
+
+.button-container {
+  /* border: 1px solid red; */
+  display: flex;
+  margin: auto;
+}
+
+form {
+  display: inline-block;
+  .btn {
+    width: 100% !important;
+    margin: 0.5rem !important;
+  }
+}
+
+.description {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
