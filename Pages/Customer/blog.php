@@ -81,8 +81,8 @@ $userType = $_SESSION['userType'];
                     <a class="nav-link" href="dashboard.php">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -92,16 +92,16 @@ $userType = $_SESSION['userType'];
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link active" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">ABOUT</a>
+                    <a class="nav-link " href="#">ABOUT</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="bookNow.php">BOOK NOW</a>
+                    <a class="nav-link " href="bookNow.php">BOOK NOW</a>
                 </li>
                 <li class="nav-item">
                     <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
