@@ -72,7 +72,11 @@
 .page-container {
   display: flex;
   margin: 2rem;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
+
 .page-title {
   font-family: "Agbalumo";
   font-size: 2rem;
@@ -82,12 +86,9 @@
 
 .back {
   border: none;
-  background-color: transparent;
-  height: 8vh;
-}
-
-.back:hover {
-  background-color: transparent;
+  height: 7vh;
+  position: absolute;
+  left: 0;
 }
 
 .button-container {
