@@ -50,6 +50,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="Pages/register.php">Book Now</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Pages/register.php">Sign Up</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -207,22 +210,22 @@
     </div>
 
     <script>
-        function myMap() {
-            var mapProp = {
-                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-                zoom: 5,
-            };
-            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-        }
+    function myMap() {
+        var mapProp = {
+            center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+            zoom: 5,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    }
     </script>
 
     <script>
-        const toggleButton = document.getElementById('bg-nav-toggler');
-        const navbar = document.querySelector('.navbar');
+    const toggleButton = document.getElementById('bg-nav-toggler');
+    const navbar = document.querySelector('.navbar');
 
-        toggleButton.addEventListener('click', () => {
-            navbar.classList.toggle('white-bg');
-        });
+    toggleButton.addEventListener('click', () => {
+        navbar.classList.toggle('white-bg');
+    });
     </script>
     <script src="Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="Assets/JS/scrollNavbg.js"></script>
