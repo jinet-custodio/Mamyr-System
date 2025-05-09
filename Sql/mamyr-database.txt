@@ -1,41 +1,117 @@
 CREATE DATABASE mamyr;
 USE mamyr;
 
--- =========================
--- USER-RELATED TABLES
--- =========================
+
+
+
+CREATE EVENT cleanup_users
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+  -- Clear expired OTPs (older than 5 mins)
+  UPDATE users
+  SET userOTP = NULL, OTP_expiration_at = NULL
+  WHERE OTP_expiration_at IS NOT NULL
+    AND OTP_expiration_at < NOW() - INTERVAL 5 MINUTE;
+
+  -- Mark accounts as Not-verified if 1 day old and still pending
+  UPDATE users
+  SET userStatusID = 3  -- Not-verified
+  WHERE userStatusID = 1  -- Pending
+    AND createdAt < NOW() - INTERVAL 1 DAY;
+
+  -- Delete accounts if still pending after 30 days
+  DELETE FROM users
+  WHERE userStatusID = 1
+    AND createdAt < NOW() - INTERVAL 30 DAY;
+END;
+
 CREATE TABLE userTypes (
     userTypeID INT PRIMARY KEY AUTO_INCREMENT,
     typeName VARCHAR(50) UNIQUE -- 'Customer', 'Partner', 'Admin'
 );
 
+INSERT INTO userTypes (typeName) VALUES 
+('Customer'), 
+('Partner'), 
+('Admin');
+
 CREATE TABLE userStatuses (
     userStatusID INT PRIMARY KEY AUTO_INCREMENT,
-    statusName VARCHAR(50) UNIQUE -- 'Pending', 'Verified', 'Non-verified'
+    statusName VARCHAR(50) UNIQUE --'Pending', 'Verified', 'Non-verified'
 );
+
+INSERT INTO userStatuses (statusName) VALUES 
+('Pending'), 
+('Verified'), 
+('Not-verified');
 
 CREATE TABLE serviceAvailability (
     availabilityID INT PRIMARY KEY AUTO_INCREMENT,
     availabilityName VARCHAR(50) UNIQUE -- 'Available', 'Occupied', 'Maintenance'
 );
 
+INSERT INTO serviceAvailability (availabilityName) Values 
+('Available'),
+('Occupied'),
+('Maintenance');
+
+Create Table Statuses (
+    statusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE --'Pending', 'Approved', 'Rejected'
+);
+
+INSERT INTO Statuses (statusName) Values 
+('Pending'),
+('Approved'),
+('Rejected');
+
+
+Create Table serviceStatuses (
+    serviceStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    serviceStatusName VARCHAR(50) UNIQUE --'Pending', 'Approved', 'Denied'
+);
+
+INSERT INTO serviceStatuses (serviceStatusName) Values 
+('Pending'),
+('Approved'),
+('Denied');
+
+
+CREATE TABLE eventCategories (
+    categoryID INT PRIMARY KEY AUTO_INCREMENT,
+    categoryName VARCHAR(200) NOT NULL
+);
+
+INSERT INTO `eventcategories` (`categoryID`, `categoryName`) VALUES 
+(NULL, 'Birthday'), 
+(NULL, 'Wedding'), 
+(NULL, 'Team Building'), 
+(NULL, 'Christening/Dedication'), 
+(NULL, 'Thanksgiving Party'), 
+(NULL, 'Christmas Party'), 
+(NULL, 'Other');
+
+
+
 CREATE TABLE users (
     userID INT PRIMARY KEY AUTO_INCREMENT,
     firstName VARCHAR(50) NOT NULL,
-    middleInitial VARCHAR(50),
+    middleInitial VARCHAR(50) DEFAULT NULL,
     lastName VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     userAddress TEXT NOT NULL,
-    phoneNumber VARCHAR(20),
-    birthDate DATE,
-    password VARCHAR(255) NOT NULL,
+    phoneNumber VARCHAR(20) DEFAULT NULL,
+    birthDate DATE DEFAULT NULL,
     userProfile LONGBLOB,
-    userTypeID INT NOT NULL DEFAULT 1,
+    password VARCHAR(255) NOT NULL,
+    userRole INT NOT NULL DEFAULT 1,
     userOTP VARCHAR(100),
     OTP_expiration_at DATETIME,
     userStatusID INT NOT NULL DEFAULT 1,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (userTypeID) REFERENCES userTypes(userTypeID),
+    FOREIGN KEY (userRole) REFERENCES userTypes(userTypeID),
     FOREIGN KEY (userStatusID) REFERENCES userStatuses(userStatusID)
 );
 
@@ -47,9 +123,7 @@ CREATE TABLE admins (
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
--- =========================
--- PARTNERSHIPS
--- =========================
+
 
 CREATE TABLE partnerships (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,
@@ -59,11 +133,13 @@ CREATE TABLE partnerships (
     partnerAddress TEXT NOT NULL,
     documentLink VARCHAR(500) NOT NULL,
     partnerType VARCHAR(200) NOT NULL,
-    status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
-    startDate DATE NOT NULL,
-    endDate DATE,
+    status INT NOT NULL DEFAULT 1,
+    requestDate DATE NOT NULL,
+    startDate DATE DEFAULT NULL,
+    endDate DATE DEFAULT NULL,
 
-    FOREIGN KEY (userID) REFERENCES users(userID)
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (status) REFERENCES Statuses(statusID)
 );
 
 CREATE TABLE partnershipServices (
@@ -78,9 +154,6 @@ CREATE TABLE partnershipServices (
     FOREIGN KEY (partnershipID) REFERENCES partnerships(partnershipID)
 );
 
--- =========================
--- RESORT SERVICES
--- =========================
 
 CREATE TABLE resortServices (
     resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
@@ -133,13 +206,6 @@ CREATE TABLE packages (
 
     FOREIGN KEY (categoryID) REFERENCES eventCategories(categoryID)
 );
-
-CREATE TABLE eventCategories (
-    categoryID INT PRIMARY KEY AUTO_INCREMENT,
-    categoryName VARCHAR(200) NOT NULL
-);
-
-
 
 
 
@@ -236,24 +302,6 @@ CREATE TABLE auditLogs (
 );
 
 
--- =========================
--- INITIAL ENUM-LIKE DATA
--- =========================
-
-INSERT INTO userTypes (typeName) VALUES 
-('Customer'), 
-('Partner'), 
-('Admin');
-
-INSERT INTO userStatuses (statusName) VALUES 
-('Pending'), 
-('Verified'), 
-('Non-verified');
-
-INSERT INTO serviceAvailability (availabilityName) Values 
-('Available'),
-('Occupied'),
-('Maintenance');
 
 ALTER TABLE packages
 ADD COLUMN availabilityID INT NOT NULL DEFAULT 1,
