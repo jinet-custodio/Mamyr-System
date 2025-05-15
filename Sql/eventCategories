@@ -1,1 +1,0 @@
-INSERT INTO `eventcategories` (`categoryID`, `categoryName`) VALUES (NULL, 'Birthday'), (NULL, 'Wedding'), (NULL, 'Team Building'), (NULL, 'Christening/Dedication'), (NULL, 'Thanksgiving Party'), (NULL, 'Christmas Party'), (NULL, 'Other');

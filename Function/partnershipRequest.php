@@ -58,7 +58,7 @@ if (isset($_POST['submit_request'])) {
                 }
             }
 
-            $userTypeID = $data['userTypeID'];
+            $userTypeID = $data['userRole'];
             if ($userTypeID == '1') {
                 $insertQuery = "INSERT INTO 
                     partnerships(userID, partnerAddress, companyName, partnerType, businessEmail, documentLink) 

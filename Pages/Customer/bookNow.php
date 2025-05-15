@@ -1,31 +1,31 @@
 <?php
 require '../../Config/dbcon.php';
 
-$session_timeout = 3600;
+// $session_timeout = 3600;
 
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
-date_default_timezone_set('Asia/Manila');
+// ini_set('session.gc_maxlifetime', $session_timeout);
+// session_set_cookie_params($session_timeout);
+// session_start();
+// date_default_timezone_set('Asia/Manila');
 
-if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
-    header("Location: ../register.php");
-    exit();
-}
+// if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
+//     header("Location: ../register.php");
+//     exit();
+// }
 
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
+// if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+//     $_SESSION['error'] = 'Session Expired';
 
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
+//     session_unset();
+//     session_destroy();
+//     header("Location: ../register.php?session=expired");
+//     exit();
+// }
 
-$_SESSION['last_activity'] = time();
+// $_SESSION['last_activity'] = time();
 
-$userID = $_SESSION['userID'];
-$userType = $_SESSION['userType'];
+$userID = 1;
+$userType = 2;
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +49,7 @@ $userType = $_SESSION['userType'];
 <body id="body">
 
     <?php
-    $emailQuery = "SELECT email FROM users WHERE userID = '$userID' and userTypeID = '$userType'";
+    $emailQuery = "SELECT email FROM users WHERE userID = '$userID' and userRole = '$userType'";
     $emailResult = mysqli_query($conn, $emailQuery);
     if (mysqli_num_rows($emailResult) > 0) {
         $data = mysqli_fetch_assoc($emailResult);
@@ -62,7 +62,7 @@ $userType = $_SESSION['userType'];
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userTypeID = '$userType'";
+            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userType'";
             $result = mysqli_query($conn, $query);
             if (mysqli_num_rows($result) > 0) {
                 $data = mysqli_fetch_assoc($result);
