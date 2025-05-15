@@ -1,1 +1,0 @@
-INSERT INTO `packages` (`packageName`, `packageDescription`, `capacity`, `price`) VALUES ('Wedding Event', '- 4 dishes\r\n- With styling for presidential table,stage and entrance\r\n- Basic sounds and lights\r\n- 1 airconditioned function hall good for 5hours maximum up to 350 pax\r\n- With 1 free Room', '200', '140000.00');

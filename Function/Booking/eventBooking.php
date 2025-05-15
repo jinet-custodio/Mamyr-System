@@ -38,7 +38,7 @@ if (isset($_POST['eventBook'])) {
         $bookingResult = mysqli_query($conn, $booking);
 
         if ($bookingResult) {
-            header("Location: ../../../../Pages/Customer/dashboard.php");
+            header("Location: ../../Pages/Customer/dashboard.php");
         } else {
             echo "Ahahha male";
         }
@@ -46,47 +46,47 @@ if (isset($_POST['eventBook'])) {
 }
 
 //Get all the services
-function getServices($conn)
-{
-    $selectServices = "SELECT * FROM services";
-    $resultServices = mysqli_query($conn, $selectServices);
-    if (mysqli_num_rows($resultServices) > 0) {
-        $servicesData = mysqli_fetch_assoc($resultServices);
-        while ($servicesData) {
-            $services[] = $servicesData;
-        }
-    }
+// function getServices($conn)
+// {
+//     $selectServices = "SELECT * FROM services";
+//     $resultServices = mysqli_query($conn, $selectServices);
+//     if (mysqli_num_rows($resultServices) > 0) {
+//         $servicesData = mysqli_fetch_assoc($resultServices);
+//         while ($servicesData) {
+//             $services[] = $servicesData;
+//         }
+//     }
 
-    return $services;
-}
+//     return $services;
+// }
 
 //Get all the packages
-function getPackages($conn)
-{
-    $selectPackages = "SELECT * FROM packages";
-    $resultPackages = mysqli_query($conn, $selectPackages);
-    if (mysqli_num_rows($resultPackages) > 0) {
-        $packagesData = mysqli_fetch_assoc($resultPackages);
-        while ($packagesData) {
-            $packages[] = $packagesData;
-        }
-    }
+// function getPackages($conn)
+// {
+//     $selectPackages = "SELECT * FROM packages";
+//     $resultPackages = mysqli_query($conn, $selectPackages);
+//     if (mysqli_num_rows($resultPackages) > 0) {
+//         $packagesData = mysqli_fetch_assoc($resultPackages);
+//         while ($packagesData) {
+//             $packages[] = $packagesData;
+//         }
+//     }
 
-    return $packages;
-}
+//     return $packages;
+// }
 
 
 //Get all the custom packages
-function getCustomPackages($conn)
-{
-    $selectCustomPackages = "SELECT * FROM custompackages";
-    $resultCustomPackages = mysqli_query($conn, $selectCustomPackages);
-    if (mysqli_num_rows($resultCustomPackages) > 0) {
-        $custompackagesData = mysqli_fetch_assoc($resultCustomPackages);
-        while ($custompackagesData) {
-            $customPackages[] = $custompackagesData;
-        }
-    }
+// function getCustomPackages($conn)
+// {
+//     $selectCustomPackages = "SELECT * FROM custompackages";
+//     $resultCustomPackages = mysqli_query($conn, $selectCustomPackages);
+//     if (mysqli_num_rows($resultCustomPackages) > 0) {
+//         $custompackagesData = mysqli_fetch_assoc($resultCustomPackages);
+//         while ($custompackagesData) {
+//             $customPackages[] = $custompackagesData;
+//         }
+//     }
 
-    return $customPackages;
-}
+//     return $customPackages;
+// }

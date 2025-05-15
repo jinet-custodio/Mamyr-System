@@ -20,9 +20,9 @@ BEGIN
   WHERE userStatusID = 1  -- Pending
     AND createdAt < NOW() - INTERVAL 1 DAY;
 
-  -- Delete accounts if still pending after 30 days
+  -- Delete accounts if still pending or Not-verified after 30 days
   DELETE FROM users
-  WHERE userStatusID = 1
+  WHERE userStatusID = 1 OR userStatusID = 3
     AND createdAt < NOW() - INTERVAL 30 DAY;
 END;
 
@@ -56,26 +56,16 @@ INSERT INTO serviceAvailability (availabilityName) Values
 ('Occupied'),
 ('Maintenance');
 
-Create Table Statuses (
+-- Booking, Partners, Partner service 
+Create Table statuses (
     statusID INT PRIMARY KEY AUTO_INCREMENT,
     statusName VARCHAR(50) UNIQUE --'Pending', 'Approved', 'Rejected'
 );
 
-INSERT INTO Statuses (statusName) Values 
+INSERT INTO statuses (statusName) Values 
 ('Pending'),
 ('Approved'),
 ('Rejected');
-
-
-Create Table serviceStatuses (
-    serviceStatusID INT PRIMARY KEY AUTO_INCREMENT,
-    serviceStatusName VARCHAR(50) UNIQUE --'Pending', 'Approved', 'Denied'
-);
-
-INSERT INTO serviceStatuses (serviceStatusName) Values 
-('Pending'),
-('Approved'),
-('Denied');
 
 
 CREATE TABLE eventCategories (
@@ -124,7 +114,6 @@ CREATE TABLE admins (
 );
 
 
-
 CREATE TABLE partnerships (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
@@ -133,13 +122,13 @@ CREATE TABLE partnerships (
     partnerAddress TEXT NOT NULL,
     documentLink VARCHAR(500) NOT NULL,
     partnerType VARCHAR(200) NOT NULL,
-    status INT NOT NULL DEFAULT 1,
+    partnerStatus INT NOT NULL DEFAULT 1,
     requestDate DATE NOT NULL,
     startDate DATE DEFAULT NULL,
     endDate DATE DEFAULT NULL,
 
     FOREIGN KEY (userID) REFERENCES users(userID),
-    FOREIGN KEY (status) REFERENCES Statuses(statusID)
+    FOREIGN KEY (partnerStatus) REFERENCES statuses(statusID)
 );
 
 CREATE TABLE partnershipServices (
@@ -149,30 +138,50 @@ CREATE TABLE partnershipServices (
     PBPrice DECIMAL(10,2) NOT NULL,
     PBDescription TEXT,
     PBcapacity INT,
-    status ENUM('Pending', 'Approved', 'Denied') NOT NULL DEFAULT 'Pending',
+    PSStatus INT,
+    PSAvailabilityID INT,
 
-    FOREIGN KEY (partnershipID) REFERENCES partnerships(partnershipID)
+    FOREIGN KEY (partnershipID) REFERENCES partnerships(partnershipID),
+    FOREIGN KEY (PSAvailabilityID) REFERENCES serviceAvailability(availabilityID),
+    FOREIGN KEY (PSStatus) REFERENCES statuses(statusID)
 );
 
 
 CREATE TABLE resortServices (
     resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
-    facilityName VARCHAR(200) NOT NULL,
+    RserviceName VARCHAR(200) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     capacity INT DEFAULT 0,
     duration VARCHAR(50) DEFAULT '0',
-    category ENUM('Room','Cottage','Entertainment', 'Events', 'Entrance') NOT NULL,
+    category INT NOT NULL,
     description TEXT NULL,
-    imageData LONGBLOB
+    imageData LONGBLOB,
+    RSAvailabilityID INT,
+
+   FOREIGN KEY (RSAvailabilityID) REFERENCES serviceAvailability(availabilityID),
+   FOREIGN KEY (category) REFERENCES  eventCategories(categoryID) 
 );
 
 CREATE TABLE entranceRates (
-    resortEntranceID INT PRIMARY KEY AUTO_INCREMENT,
-    session_type VARCHAR(20),   
-    time_range VARCHAR(50),    
-    category VARCHAR(10),       
-    price DECIMAL(10,2)       
+    resortEntranceID INT(11) PRIMARY KEY AUTO_INCREMENT,
+    session_type VARCHAR(20),  -- Day, Night, Overnight
+    time_range VARCHAR(50),  --  start time to end time
+    category VARCHAR(10),   -- Adult, Kids   
+    price DECIMAL(10,2)   -- entrance rates   
 );
+
+INSERT INTO entranceRates(
+    session_type,
+    time_range,
+    category,
+    price
+)VALUES
+('Day', '9:00 am - 4:00 pm', 'Adult', 150.00),
+('Day', '9:00 am - 4:00 pm', 'Kids', 100.00),
+('Night', '12:00 pm - 8:00 pm', 'Adult', 180.00),
+('Night', '12:00 pm - 8:00 pm', 'Kids', 130.00),
+('Overnight', '8:00 pm - 5:00 am', 'Adult', 250.00),
+('Overnight', '8:00 pm - 5:00 am', 'Kids', 200.00);
 
 -- =========================
 -- SERVICES (joins resort services with partner businesses)
@@ -182,11 +191,9 @@ CREATE TABLE services (
   serviceID int(11) NOT NULL,
   resortServiceID int(11) DEFAULT NULL,
   partnershipServiceID int(11) DEFAULT NULL,
-  availabilityID int(11) DEFAULT 1,
   resortEntranceID int(11) DEFAULT NULL,
-    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
     FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
-    FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID),
+    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
     FOREIGN KEY (resortEntranceID) REFERENCES entranceRates(resortEntranceID)
 );
 
@@ -200,18 +207,38 @@ CREATE TABLE packages (
     packageDescription TEXT NOT NULL,
     duration DECIMAL(10,2), 
     capacity INT(100) NOT NULL,
-    resortserviceID INT NOT NULL,
+    resortServiceID INT NOT NULL,
     price DECIMAL(10,2) DEFAULT 0.00,
     categoryID INT NOT NULL,
+    packageAvailability INT NOT NULL,
 
+    FOREIGN KEY (packageAvailability) REFERENCES serviceAvailability(availabilityID), 
+
+    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
     FOREIGN KEY (categoryID) REFERENCES eventCategories(categoryID)
 );
 
 
+INSERT INTO packages 
+(packageName, packageDescription, duration, capacity, resortserviceID, price, categoryID)
+VALUES (
+  'Wedding Event',
+  CONCAT('- 4 dishes', '\n',
+         '- With styling for presidential table, stage and entrance', '\n',
+         '- Basic sounds and lights', '\n',
+         '- 1 airconditioned function hall good for 5 hours (max 350 pax)', '\n',
+         '- With 1 free Room'),
+  5.00,
+  200,
+  1,
+  140000.00,
+  2
+);
+
 
 CREATE TABLE customPackages (
-    customPackageID INT PRIMARY KEY AUTO_INCREMENT,
-    userID INT NOT NULL,
+    customPackageID INT PRIMARY KEY AUTO_INCREMENT, 
+    userID INT NOT NULL, 
     totalPrice DECIMAL(10,2) DEFAULT 0.00,
     creationDate DATE NOT NULL,
 
@@ -220,10 +247,12 @@ CREATE TABLE customPackages (
 
 CREATE TABLE packagesServices (
     packageServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    packageID INT,
     customPackageID INT,
     serviceID INT NOT NULL,
 
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
+    FOREIGN KEY (packageID) REFERENCES packages(packageID),
     FOREIGN KEY (serviceID) REFERENCES services(serviceID)
 );
 
@@ -234,30 +263,45 @@ CREATE TABLE packagesServices (
 CREATE TABLE bookings (
     bookingID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
-    packageID INT,
-    serviceID INT,
-    customPackageID INT,
+    packageID INT DEFAULT NULL,
+    serviceID INT DEFAULT NULL,
+    customPackageID INT DEFAULT NULL,
+    CHECK (
+    packageID IS NOT NULL OR 
+    serviceID IS NOT NULL OR 
+    customPackageID IS NOT NULL
+    ),
     additionalRequest VARCHAR(255),
     startDate DATE NOT NULL,
     endDate DATE NOT NULL,
     totalCost DECIMAL(10,2) NOT NULL,
-    status ENUM('Pending', 'Approved', 'Cancelled') NOT NULL DEFAULT 'Pending',
+    downpayment DECIMAL(10,2) NOT NULL,
+    bookingStatus INT NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (bookingStatus) REFERENCES statuses(statusID),
     FOREIGN KEY (packageID) REFERENCES packages(packageID),
     FOREIGN KEY (serviceID) REFERENCES services(serviceID),
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
 );
 
 CREATE TABLE confirmedBookings (
+    userID INT NOT NULL,
     confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
     bookingID INT NOT NULL,
+    downpayment DECIMAL(10,2) NOT NULL,
+    downpaymentImage LONGBLOB NOT NULL,
     totalCost DECIMAL(10,2) NOT NULL,
-    status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
-
-    FOREIGN KEY (bookingID) REFERENCES bookings(bookingID)
+    confirmedBookingStatus INT,
+    paymentStatus ENUM ('No Payment', 'Partially Paid', 'Fully Paid',) DEFAULT 'No Payment';
+    
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (bookingID) REFERENCES bookings(bookingID),
+    FOREIGN KEY (confirmedBookingStatus) REFERENCES statuses(statusID),
 );
+
+
 
 -- =========================
 -- WEBSITE CONTENT
@@ -303,7 +347,3 @@ CREATE TABLE auditLogs (
 
 
 
-ALTER TABLE packages
-ADD COLUMN availabilityID INT NOT NULL DEFAULT 1,
-ADD CONSTRAINT fk_packages_availability
-FOREIGN KEY (availabilityID) REFERENCES serviceavailability(availabilityID);

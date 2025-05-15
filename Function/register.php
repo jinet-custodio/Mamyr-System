@@ -124,7 +124,7 @@ if (isset($_POST['login'])) {
     if (mysqli_num_rows($result) > 0) {
         $data = mysqli_fetch_assoc($result);
         $storedPassword = $data['password'];
-        $userType = $data['userTypeID'];
+        $userType = $data['userRole'];
         $status = $data['userStatusID'];
         if (password_verify($password, $storedPassword)) {
             if ($status == 2) {
