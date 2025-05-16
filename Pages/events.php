@@ -43,7 +43,7 @@
                     <a class="nav-link" href="/Pages/blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href=".beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="#" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
@@ -230,6 +230,29 @@
                 text: 'You must have an existing account before booking our services.',
                 icon: 'info',
                 confirmButtonText: 'Go'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'register.php';
+                }
+            });
+        });
+    });
+    </script>
+
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Sweet Alert -->
+    <script>
+    const bopButtons = document.querySelectorAll('#bopNav');
+
+    bopButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Want to Become Our Business Partner?',
+                text: 'You must have an existing account before becoming a business partner.',
+                icon: 'info',
+                confirmButtonText: 'Sign Up'
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = 'register.php';

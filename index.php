@@ -42,7 +42,7 @@
                 </li>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/beOurPartner.php">Be Our Partner</a>
+                    <a class="nav-link" href="#" id="bopNav">Be Our Partner</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Pages/about.php">About</a>
@@ -232,6 +232,28 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
 
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Sweet Alert -->
+    <script>
+    const bookButtons = document.querySelectorAll('#bopNav');
+
+    bookButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Want to Become Our Business Partner?',
+                text: 'You must have an existing account before becoming a business partner.',
+                icon: 'info',
+                confirmButtonText: 'Sign Up'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'pages/register.php';
+                }
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>
