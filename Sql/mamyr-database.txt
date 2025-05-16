@@ -128,14 +128,14 @@ CREATE TABLE partnerships (
     endDate DATE DEFAULT NULL,
 
     FOREIGN KEY (userID) REFERENCES users(userID),
-    FOREIGN KEY (partnerStatus) REFERENCES statuses(statusID)
+    FOREIGN KEY (partnerStatus) REFERENCES userStatuses(userStatusID)
 );
 
 CREATE TABLE partnershipServices (
     partnershipServiceID INT PRIMARY KEY AUTO_INCREMENT,
     partnershipID INT NOT NULL,
     PBName VARCHAR(200) NOT NULL,
-    PBPrice DECIMAL(10,2) NOT NULL,
+    PBPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     PBDescription TEXT,
     PBcapacity INT,
     PSStatus INT,
@@ -150,7 +150,7 @@ CREATE TABLE partnershipServices (
 CREATE TABLE resortServices (
     resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
     RserviceName VARCHAR(200) NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     capacity INT DEFAULT 0,
     duration VARCHAR(50) DEFAULT '0',
     category INT NOT NULL,
@@ -167,7 +167,7 @@ CREATE TABLE entranceRates (
     session_type VARCHAR(20),  -- Day, Night, Overnight
     time_range VARCHAR(50),  --  start time to end time
     category VARCHAR(10),   -- Adult, Kids   
-    price DECIMAL(10,2)   -- entrance rates   
+    price DECIMAL(10,2) DEFAULT 0.00  -- entrance rates   
 );
 
 INSERT INTO entranceRates(
@@ -245,7 +245,7 @@ CREATE TABLE customPackages (
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
-CREATE TABLE packagesServices (
+CREATE TABLE allServices (
     packageServiceID INT PRIMARY KEY AUTO_INCREMENT,
     packageID INT,
     customPackageID INT,
@@ -263,14 +263,7 @@ CREATE TABLE packagesServices (
 CREATE TABLE bookings (
     bookingID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
-    packageID INT DEFAULT NULL,
-    serviceID INT DEFAULT NULL,
-    customPackageID INT DEFAULT NULL,
-    CHECK (
-    packageID IS NOT NULL OR 
-    serviceID IS NOT NULL OR 
-    customPackageID IS NOT NULL
-    ),
+    packageServiceID INT NOT NULL,
     additionalRequest VARCHAR(255),
     startDate DATE NOT NULL,
     endDate DATE NOT NULL,
@@ -281,24 +274,33 @@ CREATE TABLE bookings (
 
     FOREIGN KEY (userID) REFERENCES users(userID),
     FOREIGN KEY (bookingStatus) REFERENCES statuses(statusID),
-    FOREIGN KEY (packageID) REFERENCES packages(packageID),
-    FOREIGN KEY (serviceID) REFERENCES services(serviceID),
-    FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
+    FOREIGN KEY (packageServiceID) REFERENCES allServices(packageServiceID),
+   
 );
 
+Create Table bookingPaymentStatus (
+    paymentStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE --'No Payment', 'Patially Paid', 'Fully Paid'
+);
+
+INSERT INTO bookingPaymentStatus (statusName) Values 
+('No Payment'),
+('Partially Paid'),
+('Fully Paid');
+
+
 CREATE TABLE confirmedBookings (
-    userID INT NOT NULL,
     confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
     bookingID INT NOT NULL,
     downpayment DECIMAL(10,2) NOT NULL,
     downpaymentImage LONGBLOB NOT NULL,
     totalCost DECIMAL(10,2) NOT NULL,
-    confirmedBookingStatus INT,
-    paymentStatus ENUM ('No Payment', 'Partially Paid', 'Fully Paid',) DEFAULT 'No Payment';
+    confirmedBookingStatus INT NOT NULL,
+    paymentStatus INT DEFAULT 1;
     
-    FOREIGN KEY (userID) REFERENCES users(userID),
     FOREIGN KEY (bookingID) REFERENCES bookings(bookingID),
     FOREIGN KEY (confirmedBookingStatus) REFERENCES statuses(statusID),
+    FOREIGN KEY (paymentStatus) REFERENCES bookingPaymentStatus(paymentStatusID)
 );
 
 
@@ -320,7 +322,7 @@ CREATE TABLE websiteContents (
 
 -- ✅ Website Content Images (Weak Entity)
 CREATE TABLE websiteContentImages (
-    imageID INT PRIMARY KEY AUTO_INCREMENT,
+    WCImageID INT PRIMARY KEY AUTO_INCREMENT,
     contentID INT NOT NULL,
     imageData LONGBLOB NOT NULL,
     altText VARCHAR(255),
