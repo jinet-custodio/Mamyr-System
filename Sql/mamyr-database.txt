@@ -116,7 +116,7 @@ CREATE TABLE admins (
 
 CREATE TABLE partnerships (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,
-    userID INT DEFAULT NULL
+    userID INT DEFAULT NULL,
     companyName varchar(50) not null,
     businessEmail VARCHAR(255) NOT NULL UNIQUE,
     partnerAddress TEXT NOT NULL,
@@ -296,7 +296,7 @@ CREATE TABLE confirmedBookings (
     downpaymentImage LONGBLOB NOT NULL,
     totalCost DECIMAL(10,2) NOT NULL,
     confirmedBookingStatus INT NOT NULL,
-    paymentStatus INT DEFAULT 1;
+    paymentStatus INT DEFAULT 1,
     
     FOREIGN KEY (bookingID) REFERENCES bookings(bookingID),
     FOREIGN KEY (confirmedBookingStatus) REFERENCES statuses(statusID),
