@@ -22,7 +22,7 @@ BEGIN
 
   -- Delete accounts if still pending or Not-verified after 30 days
   DELETE FROM users
-  WHERE userStatusID = 1 OR userStatusID = 3
+    WHERE (userStatusID = 1 OR userStatusID = 3)
     AND createdAt < NOW() - INTERVAL 30 DAY;
 END;
 
