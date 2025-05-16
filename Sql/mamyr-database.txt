@@ -188,7 +188,7 @@ INSERT INTO entranceRates(
 -- =========================
 
 CREATE TABLE services (
-  serviceID int(11) NOT NULL,
+  serviceID INT PRIMARY KEY AUTO_INCREMENT,
   resortServiceID int(11) DEFAULT NULL,
   partnershipServiceID int(11) DEFAULT NULL,
   resortEntranceID int(11) DEFAULT NULL,
