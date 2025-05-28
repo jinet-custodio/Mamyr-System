@@ -2,7 +2,7 @@ function checkPasswordMatch() {
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirm_password").value;
   const passwordMatchMessage = document.getElementById("passwordMatch");
-  const signUpButton = document.getElementById("signUp");
+  // const signUpButton = document.getElementById("signUp");
   if (confirmPassword === "") {
     passwordMatchMessage.innerHTML = "";
   } else if (password !== confirmPassword) {

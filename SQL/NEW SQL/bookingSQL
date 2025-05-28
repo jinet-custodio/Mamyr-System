@@ -1,0 +1,31 @@
+CREATE TABLE bookings (
+    bookingID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    packageServiceID INT NOT NULL,
+    additionalRequest VARCHAR(255),
+    startDate DATE NOT NULL,
+    endDate DATE NOT NULL,
+    totalCost DECIMAL(10,2) NOT NULL,
+    downpayment DECIMAL(10,2) NOT NULL,
+    bookingStatus INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (bookingStatus) REFERENCES statuses(statusID),
+    FOREIGN KEY (packageServiceID) REFERENCES allServices(packageServiceID)
+);
+
+CREATE TABLE confirmedBookings (
+    confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
+    bookingID INT NOT NULL,
+    downpayment DECIMAL(10,2) NOT NULL, -- calculated 30%
+    downpaymentImage LONGBLOB NOT NULL, 
+    totalCost DECIMAL(10,2) NOT NULL, -- total booking cost  
+    userBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00,  -- balance after payment
+    confirmedBookingStatus INT DEFAULT 1,
+    paymentStatus INT DEFAULT 1,
+    
+    FOREIGN KEY (bookingID) REFERENCES bookings(bookingID),
+    FOREIGN KEY (confirmedBookingStatus) REFERENCES statuses(statusID),
+    FOREIGN KEY (paymentStatus) REFERENCES bookingPaymentStatus(paymentStatusID)
+);

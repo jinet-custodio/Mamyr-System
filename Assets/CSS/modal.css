@@ -1,3 +1,13 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Medium.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
 .modal {
   margin-top: 20vh;
 }
@@ -17,7 +27,7 @@
 }
 
 .modal-title {
-  font-family: "Poppins Black";
+  font-family: "Poppins";
   font-size: 30px;
 }
 
@@ -26,8 +36,8 @@
 }
 
 .description {
+  font-family: "Lora";
   font-size: 15px;
-  font-family: "Poppins";
   text-align: center;
 }
 
@@ -44,11 +54,24 @@
 }
 
 .btn-primary {
+  font-family: "Lora";
+  font-size: 15px;
+  letter-spacing: 3px;
   width: 100%;
   margin-top: 30px;
 }
 
 .resendPin {
+  font-family: "Lora";
+  font-size: 15px;
   margin-top: 10px;
   text-align: center;
+}
+
+.errorMsg {
+  font-family: "Lora";
+  font-size: 15px;
+  text-align: center;
+  color: red;
+  margin-bottom: 1px !important;
 }

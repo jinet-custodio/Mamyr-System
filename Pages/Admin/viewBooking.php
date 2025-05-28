@@ -8,7 +8,7 @@ session_set_cookie_params($session_timeout);
 session_start();
 date_default_timezone_set('Asia/Manila');
 
-if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
@@ -25,7 +25,7 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 $_SESSION['last_activity'] = time();
 $bookingID = $_POST['bookingID'];
 $userID = $_SESSION['userID'];
-$userType = $_SESSION['userType'];
+$userRole = $_SESSION['userRole'];
 ?>
 <!DOCTYPE html>
 <html lang="en">

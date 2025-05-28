@@ -1,0 +1,136 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  background: url(../images/indexPhotos/Background2.png) lightgray 50% / cover
+    no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  position: relative;
+  width: 650px !important;
+  height: 400px;
+  background: #fff;
+  margin: 20px;
+  border-radius: 30px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.container-title {
+  font-family: "Poppins";
+  font-weight: bold;
+  font-size: 36px;
+  margin-bottom: 1rem;
+}
+
+form {
+  width: 100%;
+}
+
+.form-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: #333;
+  text-align: center;
+}
+
+.errorMessageBox {
+  position: absolute;
+  left: 40%;
+  color: red;
+  font-family: "Lora";
+}
+
+.input-box {
+  position: relative;
+  margin: 55px 10px 20px 10px;
+}
+
+.input-box input {
+  font-family: "Lora";
+  width: 100%;
+  padding: 13px 50px 13px 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  outline: none;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.input-box input::placeholder {
+  color: #888;
+  font-weight: 400;
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+}
+
+.btn {
+  font-family: "Lora";
+  letter-spacing: 2px;
+  width: 97%;
+  height: 48px;
+  background: #44b3f8;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+}
+.back-icon-container {
+  position: absolute;
+  width: 10%;
+  padding: 1rem;
+}
+
+.backArrow {
+  display: flex;
+  margin: auto;
+}
+@media screen and (max-width: 650px) {
+  .container {
+    height: calc(55vh - 40px);
+  }
+  .form-box {
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .form-box {
+    padding: 20px;
+  }
+}

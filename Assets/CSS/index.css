@@ -1,11 +1,16 @@
 @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
 }
 
 @font-face {
   font-family: "Alkatra";
   src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
 * {
@@ -39,10 +44,10 @@ body {
 }
 
 .container h1 {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 36px;
-  margin: -10px 0;
+  margin: 10px 0;
 }
 
 .welcome {
@@ -75,6 +80,7 @@ form {
 }
 
 .form-box {
+  font-family: "Lora";
   position: absolute;
   right: 0;
   width: 50%;
@@ -168,66 +174,6 @@ input[type="password"]::-webkit-search-cancel-button {
   width: 100%;
 }
 
-.errorContainer {
-  position: absolute;
-  pointer-events: none;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  padding: 40px;
-  z-index: 1;
-}
-
-.userInfoError {
-  margin-top: 22.5vw;
-  text-align: left;
-}
-
-.errorMsg {
-  position: absolute;
-  left: 50%;
-  bottom: 17.9%;
-  transform: translateX(-50%);
-  text-align: center;
-  color: red;
-  font-size: 15px;
-}
-
-.successMsg {
-  position: absolute;
-  left: 50%;
-  bottom: 20%;
-  transform: translateX(-50%);
-  text-align: center;
-  color: rgb(40, 166, 69);
-  font-size: 15px;
-}
-
-.fullNameError {
-  padding: 0 !important;
-  width: 100%;
-  display: flex !important;
-  gap: 10vw;
-}
-
-.passwordContainerError {
-  padding: 0 !important;
-  width: 100%;
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center;
-  /* gap: 1vw; */
-  margin-top: 24.3vw;
-}
-
-.login-error {
-  margin-top: -5vh;
-}
-
-.nameErrorMsg {
-  color: red;
-}
-
 .forgot-link {
   margin: -15px 0 15px;
 }
@@ -237,6 +183,7 @@ input[type="password"]::-webkit-search-cancel-button {
 }
 
 .btn {
+  font-family: "Lora";
   width: 100%;
   height: 48px;
   background: #44b3f8;
@@ -303,6 +250,7 @@ input[type="password"]::-webkit-search-cancel-button {
 
 .toggle-panel p {
   margin-bottom: 20px;
+  font-family: "Poppins";
 }
 
 .toggle-panel .btn {
@@ -311,6 +259,37 @@ input[type="password"]::-webkit-search-cancel-button {
   background: transparent;
   border: 2px solid #fff;
   box-shadow: none;
+}
+
+.loginMessageBox {
+  color: red;
+  width: 100%;
+  /* border: 1px solid red; */
+  height: 5vh;
+  position: absolute;
+  left: 50%;
+  bottom: 15.9%;
+  transform: translateX(-50%);
+  .successMsg {
+    color: green;
+  }
+}
+
+.passwordContainerError {
+  position: absolute;
+  left: 50%;
+  bottom: 15.5%;
+  transform: translateX(-50%);
+  width: 80%;
+  color: red;
+  padding: 0;
+}
+
+.emailErrorMsg {
+  position: absolute;
+  bottom: 27.5%;
+  width: 80%;
+  color: red;
 }
 
 @media screen and (max-width: 650px) {

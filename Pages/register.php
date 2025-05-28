@@ -16,7 +16,6 @@ require '../Function/OTPdeletion.php';
     <link rel="shortcut icon" href="../Assets/Images/Icon/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../Assets/CSS/index.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -42,21 +41,23 @@ require '../Function/OTPdeletion.php';
                 </div>
                 <button type="submit" class="btn" id="login" name="login">Login</button>
 
-                <div class="errorMessageBox">
+                <div class="loginMessageBox">
                     <div class="errorMsg">
+                        <!-- (Show under Login Button) -->
                         <div class="login-error" id="passwordLValidation"></div>
                     </div>
                     <p class="errorMsg">
+                        <!-- (Show under Login Button) -->
                         <?php
-                        // if (isset($_SESSION['error'])) {
-                        //     echo htmlspecialchars(strip_tags($_SESSION['error']));
-                        //     unset($_SESSION['error']);
-                        // }
-
-                        // if (isset($_GET['session']) && $_GET['session'] === 'expired') {
-                        //     echo '<div class="alert alert-warning" style="margin-top: 1rem;">Session Expired</div>';
-                        // }
-
+                        //Error Message 
+                        if (isset($_SESSION['error'])) {
+                            echo htmlspecialchars(strip_tags($_SESSION['error']));
+                            unset($_SESSION['error']);
+                        }
+                        //Alert Message 
+                        if (isset($_GET['session']) && $_GET['session'] === 'expired') {
+                            echo '<div class="alert alert-warning" >Session Expired</div>';
+                        }
                         ?>
                     </p>
                     <p class="successMsg">
@@ -70,6 +71,7 @@ require '../Function/OTPdeletion.php';
                 </div>
             </form>
         </div>
+
         <div class="form-box register">
             <form action="../Function/register.php" method="POST">
                 <h1>Sign Up</h1>
@@ -131,36 +133,34 @@ require '../Function/OTPdeletion.php';
                 <button type="submit" class="btn" id="signUp" name="signUp" disabled>Sign Up</button>
             </form>
 
+
             <!-- error message -->
 
-            <div class="errorContainer ">
-                <div class="userInfoError">
-                    <div class="errorMsg">
-                        <p class="emailErrorMsg">
-                            <?php
-                            if (isset($_SESSION['email-message'])) {
-                                echo htmlspecialchars($_SESSION['email-message']);
-                                unset($_SESSION['email-message']); // aalisin after ma display
-                            }
-                            ?>
-                        </p>
-                    </div>
 
-                    <div class="passwordContainerError">
-                        <div class="errorMsg">
-                            <div class="confirmErrorMsg" id="passwordValidation"></div>
-                        </div>
-                        <div class="errorMsg">
-                            <div class="confirmErrorMsg1" id="passwordMatch"></div>
-                        </div>
-                        <div class="errorMsg">
-                            <div class="confirmErrorMsg text-center" id="termsError"></div>
-                        </div>
-                    </div>
 
-                </div>
-
+            <div class="emailErrorMsg">
+                <p>
+                    <?php
+                    if (isset($_SESSION['email-message'])) {
+                        echo htmlspecialchars($_SESSION['email-message']);
+                        unset($_SESSION['email-message']); // aalisin after ma display
+                    }
+                    ?>
+                </p>
             </div>
+
+            <div class="passwordContainerError">
+                <div class="errorMsg">
+                    <div class="confirmErrorMsg" id="passwordValidation"></div>
+                </div>
+                <div class="errorMsg">
+                    <div class="confirmErrorMsg1" id="passwordMatch"></div>
+                </div>
+                <div class="errorMsg">
+                    <div class="confirmErrorMsg text-center" id="termsError"></div>
+                </div>
+            </div>
+
         </div>
 
         <div class="toggle-box">
@@ -194,65 +194,75 @@ require '../Function/OTPdeletion.php';
             </div>
         </div>
     </div>
+    <!-- Check if user agree to the terms and condition -->
     <script src="../Assets/JS/checkbox.js"></script>
+    <!-- Password Match JS-->
     <script src="../Assets/JS/checkPasswordMatch.js"></script>
+    <!-- Register Password Validation JS -->
     <script src="../Assets/JS/checkPassword.js"></script>
+    <!-- Login Password Validation JS -->
     <script src="../Assets/JS/checkLoginPassword.js"></script>
     <script>
-    const container = document.querySelector('.container');
-    const registerBtn = document.querySelector('.register-btn');
-    const loginBtn = document.querySelector('.login-btn');
+        const container = document.querySelector('.container');
+        const registerBtn = document.querySelector('.register-btn');
+        const loginBtn = document.querySelector('.login-btn');
 
-    registerBtn.addEventListener('click', () => {
-        container.classList.add('active');
-    })
+        registerBtn.addEventListener('click', () => {
+            container.classList.add('active');
+        });
 
-    loginBtn.addEventListener('click', () => {
-        container.classList.remove('active');
-    })
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove('active');
+        });
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = urlParams.get('page');
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get('page');
 
-    if (page === 'register') {
-        container.classList.add('active');
-    } else {
-        container.classList.remove('active');
-    }
-    </script>
-    <script>
-    const passwordField = document.getElementById('login_password');
-    const passwordField1 = document.getElementById('password');
-    const passwordField2 = document.getElementById('confirm_password');
-    const togglePassword = document.getElementById('togglePassword');
-    const togglePassword1 = document.getElementById('togglePassword1');
-    const togglePassword2 = document.getElementById('togglePassword2');
+        if (page === 'register') {
+            container.classList.add('active');
 
-    function togglePasswordVisibility(passwordField, toggleIcon) {
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleIcon.classList.remove('bxs-hide');
-            toggleIcon.classList.add('bx-show-alt');
+            // 🔽 Remove `?page=register` from URL after activating the form
+            const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({}, document.title, urlWithoutParam);
         } else {
-            passwordField.type = 'password';
-            toggleIcon.classList.remove('bx-show-alt');
-            toggleIcon.classList.add('bxs-hide');
+            container.classList.remove('active');
         }
-    }
-
-    togglePassword.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField, togglePassword);
-    });
-
-    togglePassword1.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField1, togglePassword1);
-    });
-
-    togglePassword2.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField2, togglePassword2);
-    });
     </script>
 
+    <!-- Eye icon of password show and hide -->
+    <script>
+        const passwordField = document.getElementById('login_password');
+        const passwordField1 = document.getElementById('password');
+        const passwordField2 = document.getElementById('confirm_password');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const togglePassword2 = document.getElementById('togglePassword2');
+
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide');
+            }
+        }
+
+        togglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField, togglePassword);
+        });
+
+        togglePassword1.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField1, togglePassword1);
+        });
+
+        togglePassword2.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField2, togglePassword2);
+        });
+    </script>
+    <!-- Bootstrap JS -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 </body>
 

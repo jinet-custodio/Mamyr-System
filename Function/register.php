@@ -25,8 +25,8 @@ if (isset($_POST['signUp'])) {
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
     $extensions = ['@gmail.com', '@yahoo.com', '@outlook.com', '@protonmail.com', '@icloud.com'];
 
+    // Set the default image when a user registered
     $defaultImage = '../Assets/Images/defaultProfile.png';
-
     if (file_exists($defaultImage)) {
         $imageData = file_get_contents('../Assets/Images/defaultProfile.png');
         $imageData = mysqli_real_escape_string($conn, $imageData);
@@ -40,14 +40,14 @@ if (isset($_POST['signUp'])) {
         $check_query = mysqli_query($conn, $check_email);
         $_SESSION['formData'] = $_POST;  // store the data in session that user enter
         if (mysqli_num_rows($check_query) > 0) {
-            $_SESSION['email-message'] = 'Email already exist.';
+            $_SESSION['email-message'] = 'Email already exist.'; //Error Message
             header("Location: ../Pages/register.php?page=register");
             exit;
         } elseif ($password == $confirm_password) {
             $hashpassword = password_hash($password, PASSWORD_DEFAULT);
             $otp = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
-            date_default_timezone_set('Asia/Manila');
-            $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+            date_default_timezone_set('Asia/Manila'); //Set default time zone 
+            $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes')); //Add a 5mins to the time of creation
             unset($_SESSION['formData']);
             $storeData = "INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at) 
                 VALUES('$imageData','$firstName','$middleInitial','$lastName','$email','$userAddress','$hashpassword','$otp', '$OTP_expiration_at')";
@@ -100,21 +100,15 @@ if (isset($_POST['signUp'])) {
             }
         } else {
             $_SESSION['password'] = 'Password doesn`t match';
-            header("Location: ../Pages/register.php?register");
+            header("Location: ../Pages/register.php?page=register");
             exit;
         }
     } else {
         $_SESSION['email-message'] = 'Invalid email format';
-        header("Location: ../Pages/register.php?register");
+        header("Location: ../Pages/register.php?page=register");
         exit;
     }
-} else {
-    echo  'Error';
-}
-
-
-
-if (isset($_POST['login'])) {
+} elseif (isset($_POST['login'])) {
     $email = mysqli_real_escape_string($conn, $_POST['login_email']);
     $password = mysqli_real_escape_string($conn, $_POST['login_password']);
 
@@ -124,41 +118,50 @@ if (isset($_POST['login'])) {
     if (mysqli_num_rows($result) > 0) {
         $data = mysqli_fetch_assoc($result);
         $storedPassword = $data['password'];
-        $userType = $data['userRole'];
-        $status = $data['userStatusID'];
+        $userRole = $data['userRole'];
+        $userStatus = $data['userStatusID'];
         if (password_verify($password, $storedPassword)) {
-            if ($status == 2) {
-                if ($userType == 1) { //Customer
+            if ($userStatus == 2) { //The user must be verified
+                if ($userRole == 1) { //Customer
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
-                    $_SESSION['userType'] = $userType;
+                    $_SESSION['userRole'] = $userRole;
                     header("Location: ../Pages/Customer/dashboard.php");
-                } elseif ($userType == 2) { //Partner
+                    exit;
+                } elseif ($userRole == 2) { //Partner
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
-                    $_SESSION['userType'] = $userType;
+                    $_SESSION['userRole'] = $userRole;
                     header("Location: ../Pages/Customer/dashboard.php");
-                } elseif ($userType == 3) { //Admin
+                    exit;
+                } elseif ($userRole == 3) { //Admin
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
-                    $_SESSION['userType'] = $userType;
+                    $_SESSION['userRole'] = $userRole;
                     header("Location: ../Pages/Admin/adminDashboard.php");
+                    exit;
+                } else {
+                    $_SESSION['error'] = 'Unauthorized User Role!';
+                    header("Location: ../Pages/register.php?page=login");
+                    exit;
                 }
             } else {
-                $_SESSION['error'] = 'User not verified';
-                header("Location: ../Pages/register.php");
+                $_SESSION['error'] = 'User is not verified!';
+                header("Location: ../Pages/register.php?page=login");
                 exit;
             }
         } else {
             $_SESSION['error'] = 'Incorrect password or email';
-            header("Location: ../Pages/register.php");
+            header("Location: ../Pages/register.php?page=login");
             exit;
         }
     } else {
         $_SESSION['error'] = 'Incorrect password or email';
-        header("Location: ../Pages/register.php");
+        header("Location: ../Pages/register.php?page=login");
         exit;
     }
 } else {
-    echo 'ITO BA ERROR';
+    $_SESSION['error'] = 'Form not submitted';
+    header("Location: ../Pages/register.php");
+    exit;
 }

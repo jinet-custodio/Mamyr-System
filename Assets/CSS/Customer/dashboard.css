@@ -234,9 +234,12 @@ body {
   margin: 0 auto;
   /* background-color: #fffefe; */
   border: none;
-  height: 40vw;
+  height: 35vw;
 }
 
+.fc-scroller {
+  overflow: hidden !important;
+}
 
 .fc-header-toolbar {
   background-color: #00bbff;
@@ -304,10 +307,9 @@ body {
 .fc .fc-daygrid-day.fc-day-today {
   background-color: #5dccf5;
   color: #fff;
-
 }
 
-.fc-daygrid-day-top a{
+.fc-daygrid-day-top a {
   font-size: 1.1vw !important;
 }
 
@@ -353,7 +355,8 @@ body {
   justify-content: center;
   text-align: center;
   font-style: normal;
-  font-size: 1.1vw}
+  font-size: 1.1vw;
+}
 
 .fc-event:hover {
   background-color: #218838;
@@ -880,7 +883,6 @@ footer {
     font-size: clamp(20px, calc(1.5vw + 4px), 30px) !important;
   }
 
-
   #calendar {
     width: 48%;
     margin: 0 auto;
@@ -889,7 +891,7 @@ footer {
     height: 53vw;
   }
 
-  .fc .fc-daygrid-day-frame { 
+  .fc .fc-daygrid-day-frame {
     height: 3vw;
   }
 
@@ -1058,7 +1060,7 @@ footer {
   .navbar.scrolled {
     background-color: none !important;
   }
-  
+
   #calendar {
     width: 48%;
     margin: 0 auto;
@@ -1066,20 +1068,18 @@ footer {
     border: none;
     height: 53vw;
   }
-  
-  .fc .fc-daygrid-day-frame { 
+
+  .fc .fc-daygrid-day-frame {
     height: 3vw;
   }
 }
 
 /* Phone size */
 @media screen and (min-width: 370px) and (max-width: 599px) {
-
   .topContainer {
     display: grid;
     justify-content: start;
   }
-
 
   .titleContainer {
     height: calc(50vh - 20vh);
@@ -1107,16 +1107,16 @@ footer {
     margin-left: -5vw;
   }
 
-  .fc .fc-daygrid-day-frame { 
+  .fc .fc-daygrid-day-frame {
     height: 3vw;
     padding: 0;
   }
 
-  .fc-daygrid-day-top a { 
+  .fc-daygrid-day-top a {
     font-size: clamp(1.7vw, calc(1.9vw + 4px), 2.1vw) !important;
   }
 
-  .fc .fc-bg-event .fc-event-title { 
+  .fc .fc-bg-event .fc-event-title {
     font-size: 1.5vw;
   }
 
@@ -1124,20 +1124,20 @@ footer {
     font-size: clamp(1.6vw, calc(1.8vw + 2px), 2.1vw);
   }
 
-.fc-header-toolbar {
-padding: 1vw;
-height: 10vw;
-}
+  .fc-header-toolbar {
+    padding: 1vw;
+    height: 10vw;
+  }
 
-.fc .fc-toolbar-title { 
-  font-size: clamp(2.4vw, calc(2.6vw + 2px), 2.9vw)
-}
+  .fc .fc-toolbar-title {
+    font-size: clamp(2.4vw, calc(2.6vw + 2px), 2.9vw);
+  }
 
-.fc-button-group {
-  font-size: clamp(1.9vw, calc(2.1vw + 4px), 2.5vw);
-  height: 4vw;
-  padding: 0.2vw;
-}
+  .fc-button-group {
+    font-size: clamp(1.9vw, calc(2.1vw + 4px), 2.5vw);
+    height: 4vw;
+    padding: 0.2vw;
+  }
   .mamyrTitle {
     width: 100%;
     margin-top: clamp(10vh, 6vh, 2vh) !important;
