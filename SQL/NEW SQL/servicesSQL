@@ -1,0 +1,87 @@
+CREATE TABLE partnershipServices (
+    partnershipServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    partnershipID INT NOT NULL,
+    PBName VARCHAR(200) NOT NULL,
+    PBPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    PBDescription TEXT,
+    PBcapacity INT,
+    PSStatus INT,
+    PSAvailabilityID INT,
+
+    FOREIGN KEY (partnershipID) REFERENCES partnerships(partnershipID),
+    FOREIGN KEY (PSAvailabilityID) REFERENCES serviceAvailability(availabilityID),
+    FOREIGN KEY (PSStatus) REFERENCES statuses(statusID)
+);
+
+
+CREATE TABLE resortServices (
+    resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    RServiceName VARCHAR(200) NOT NULL,
+    RSprice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    RScapacity INT DEFAULT 0,
+    RSduration VARCHAR(50) DEFAULT '0',
+    RScategoryID INT NOT NULL,
+    RSdescription TEXT NULL,
+    RSimageData LONGBLOB,
+    RSAvailabilityID INT,
+
+   FOREIGN KEY (RSAvailabilityID) REFERENCES serviceAvailability(availabilityID),
+   FOREIGN KEY (RScategoryID) REFERENCES  resortServicesCategories(categoryID) 
+);
+
+CREATE TABLE entranceRates (
+    resortEntranceID INT(11) PRIMARY KEY AUTO_INCREMENT,
+    session_type VARCHAR(20),  -- Day, Night, Overnight
+    time_range VARCHAR(50),  --  start time to end time
+    ERcategory VARCHAR(10),   -- Adult, Kids   
+    ERprice DECIMAL(10,2) DEFAULT 0.00  -- entrance rates   
+);
+
+
+CREATE TABLE services (
+  serviceID INT PRIMARY KEY AUTO_INCREMENT,
+  resortServiceID int(11) DEFAULT NULL,
+  partnershipServiceID int(11) DEFAULT NULL,
+  resortEntranceID int(11) DEFAULT NULL,
+    FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
+    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
+    FOREIGN KEY (resortEntranceID) REFERENCES entranceRates(resortEntranceID)
+);
+
+
+CREATE TABLE packages (
+    packageID INT PRIMARY KEY AUTO_INCREMENT,
+    packageName VARCHAR(100) NOT NULL,
+    packageDescription TEXT NOT NULL,
+    Pduration DECIMAL(10,2), 
+    Pcapacity INT(100) NOT NULL,
+    resortServiceID INT NOT NULL,
+    Pprice DECIMAL(10,2) DEFAULT 0.00,
+    PcategoryID INT NOT NULL,
+    packageAvailability INT NOT NULL,
+
+    FOREIGN KEY (packageAvailability) REFERENCES serviceAvailability(availabilityID), 
+    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
+    FOREIGN KEY (PcategoryID) REFERENCES eventCategories(categoryID)
+);
+
+CREATE TABLE customPackages (
+    customPackageID INT PRIMARY KEY AUTO_INCREMENT, 
+    userID INT NOT NULL, 
+    CPtotalPrice DECIMAL(10,2) DEFAULT 0.00,
+    creationDate DATE NOT NULL,
+
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
+
+
+CREATE TABLE allServices (
+    packageServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    packageID INT,
+    customPackageID INT,
+    serviceID INT NOT NULL,
+
+    FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
+    FOREIGN KEY (packageID) REFERENCES packages(packageID),
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID)
+);

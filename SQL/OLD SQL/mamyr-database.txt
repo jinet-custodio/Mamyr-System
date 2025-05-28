@@ -1,0 +1,349 @@
+CREATE DATABASE mamyr;
+USE mamyr;
+
+
+
+
+CREATE EVENT cleanup_users
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+  -- Clear expired OTPs (older than 5 mins)
+  UPDATE users
+  SET userOTP = NULL, OTP_expiration_at = NULL
+  WHERE OTP_expiration_at IS NOT NULL
+    AND OTP_expiration_at < NOW() - INTERVAL 5 MINUTE;
+
+  -- Mark accounts as Not-verified if 1 day old and still pending
+  UPDATE users
+  SET userStatusID = 3  -- Not-verified
+  WHERE userStatusID = 1  -- Pending
+    AND createdAt < NOW() - INTERVAL 1 DAY;
+
+  -- Delete accounts if still pending or Not-verified after 30 days
+  DELETE FROM users
+  WHERE userStatusID = 1 OR userStatusID = 3
+    AND createdAt < NOW() - INTERVAL 30 DAY;
+END;
+
+CREATE TABLE userTypes (
+    userTypeID INT PRIMARY KEY AUTO_INCREMENT,
+    typeName VARCHAR(50) UNIQUE -- 'Customer', 'Partner', 'Admin'
+);
+
+INSERT INTO userTypes (typeName) VALUES 
+('Customer'), 
+('Partner'), 
+('Admin');
+
+CREATE TABLE userStatuses (
+    userStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE --'Pending', 'Verified', 'Non-verified'
+);
+
+INSERT INTO userStatuses (statusName) VALUES 
+('Pending'), 
+('Verified'), 
+('Not-verified');
+
+CREATE TABLE serviceAvailability (
+    availabilityID INT PRIMARY KEY AUTO_INCREMENT,
+    availabilityName VARCHAR(50) UNIQUE -- 'Available', 'Occupied', 'Maintenance'
+);
+
+INSERT INTO serviceAvailability (availabilityName) Values 
+('Available'),
+('Occupied'),
+('Maintenance');
+
+-- Booking, Partners, Partner service 
+Create Table statuses (
+    statusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE --'Pending', 'Approved', 'Rejected'
+);
+
+INSERT INTO statuses (statusName) Values 
+('Pending'),
+('Approved'),
+('Rejected');
+
+
+CREATE TABLE eventCategories (
+    categoryID INT PRIMARY KEY AUTO_INCREMENT,
+    categoryName VARCHAR(200) NOT NULL
+);
+
+INSERT INTO `eventcategories` (`categoryID`, `categoryName`) VALUES 
+(NULL, 'Birthday'), 
+(NULL, 'Wedding'), 
+(NULL, 'Team Building'), 
+(NULL, 'Christening/Dedication'), 
+(NULL, 'Thanksgiving Party'), 
+(NULL, 'Christmas Party'), 
+(NULL, 'Other');
+
+
+
+CREATE TABLE users (
+    userID INT PRIMARY KEY AUTO_INCREMENT,
+    firstName VARCHAR(50) NOT NULL,
+    middleInitial VARCHAR(50) DEFAULT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    userAddress TEXT NOT NULL,
+    phoneNumber VARCHAR(20) DEFAULT NULL,
+    birthDate DATE DEFAULT NULL,
+    userProfile LONGBLOB,
+    password VARCHAR(255) NOT NULL,
+    userRole INT NOT NULL DEFAULT 1,
+    userOTP VARCHAR(100),
+    OTP_expiration_at DATETIME,
+    userStatusID INT NOT NULL DEFAULT 1,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (userRole) REFERENCES userTypes(userTypeID),
+    FOREIGN KEY (userStatusID) REFERENCES userStatuses(userStatusID)
+);
+
+CREATE TABLE admins (
+    adminID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL UNIQUE,
+    position VARCHAR(100),
+
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
+
+
+CREATE TABLE partnerships (
+    partnershipID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    companyName varchar(50) not null,
+    businessEmail VARCHAR(255) NOT NULL UNIQUE,
+    partnerAddress TEXT NOT NULL,
+    documentLink VARCHAR(500) NOT NULL,
+    partnerType VARCHAR(200) NOT NULL,
+    partnerStatus INT NOT NULL DEFAULT 1,
+    requestDate DATE NOT NULL,
+    startDate DATE DEFAULT NULL,
+    endDate DATE DEFAULT NULL,
+
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (partnerStatus) REFERENCES statuses(statusID)
+);
+
+CREATE TABLE partnershipServices (
+    partnershipServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    partnershipID INT NOT NULL,
+    PBName VARCHAR(200) NOT NULL,
+    PBPrice DECIMAL(10,2) NOT NULL,
+    PBDescription TEXT,
+    PBcapacity INT,
+    PSStatus INT,
+    PSAvailabilityID INT,
+
+    FOREIGN KEY (partnershipID) REFERENCES partnerships(partnershipID),
+    FOREIGN KEY (PSAvailabilityID) REFERENCES serviceAvailability(availabilityID),
+    FOREIGN KEY (PSStatus) REFERENCES statuses(statusID)
+);
+
+
+CREATE TABLE resortServices (
+    resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    RserviceName VARCHAR(200) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    capacity INT DEFAULT 0,
+    duration VARCHAR(50) DEFAULT '0',
+    category INT NOT NULL,
+    description TEXT NULL,
+    imageData LONGBLOB,
+    RSAvailabilityID INT,
+
+   FOREIGN KEY (RSAvailabilityID) REFERENCES serviceAvailability(availabilityID),
+   FOREIGN KEY (category) REFERENCES  eventCategories(categoryID) 
+);
+
+CREATE TABLE entranceRates (
+    resortEntranceID INT(11) PRIMARY KEY AUTO_INCREMENT,
+    session_type VARCHAR(20),  -- Day, Night, Overnight
+    time_range VARCHAR(50),  --  start time to end time
+    category VARCHAR(10),   -- Adult, Kids   
+    price DECIMAL(10,2)   -- entrance rates   
+);
+
+INSERT INTO entranceRates(
+    session_type,
+    time_range,
+    category,
+    price
+)VALUES
+('Day', '9:00 am - 4:00 pm', 'Adult', 150.00),
+('Day', '9:00 am - 4:00 pm', 'Kids', 100.00),
+('Night', '12:00 pm - 8:00 pm', 'Adult', 180.00),
+('Night', '12:00 pm - 8:00 pm', 'Kids', 130.00),
+('Overnight', '8:00 pm - 5:00 am', 'Adult', 250.00),
+('Overnight', '8:00 pm - 5:00 am', 'Kids', 200.00);
+
+-- =========================
+-- SERVICES (joins resort services with partner businesses)
+-- =========================
+
+CREATE TABLE services (
+  serviceID int(11) NOT NULL,
+  resortServiceID int(11) DEFAULT NULL,
+  partnershipServiceID int(11) DEFAULT NULL,
+  resortEntranceID int(11) DEFAULT NULL,
+    FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
+    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
+    FOREIGN KEY (resortEntranceID) REFERENCES entranceRates(resortEntranceID)
+);
+
+-- =========================
+-- PACKAGES
+-- =========================
+
+CREATE TABLE packages (
+    packageID INT PRIMARY KEY AUTO_INCREMENT,
+    packageName VARCHAR(100) NOT NULL,
+    packageDescription TEXT NOT NULL,
+    duration DECIMAL(10,2), 
+    capacity INT(100) NOT NULL,
+    resortServiceID INT NOT NULL,
+    price DECIMAL(10,2) DEFAULT 0.00,
+    categoryID INT NOT NULL,
+    packageAvailability INT NOT NULL,
+
+    FOREIGN KEY (packageAvailability) REFERENCES serviceAvailability(availabilityID), 
+
+    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
+    FOREIGN KEY (categoryID) REFERENCES eventCategories(categoryID)
+);
+
+
+INSERT INTO packages 
+(packageName, packageDescription, duration, capacity, resortserviceID, price, categoryID)
+VALUES (
+  'Wedding Event',
+  CONCAT('- 4 dishes', '\n',
+         '- With styling for presidential table, stage and entrance', '\n',
+         '- Basic sounds and lights', '\n',
+         '- 1 airconditioned function hall good for 5 hours (max 350 pax)', '\n',
+         '- With 1 free Room'),
+  5.00,
+  200,
+  1,
+  140000.00,
+  2
+);
+
+
+CREATE TABLE customPackages (
+    customPackageID INT PRIMARY KEY AUTO_INCREMENT, 
+    userID INT NOT NULL, 
+    totalPrice DECIMAL(10,2) DEFAULT 0.00,
+    creationDate DATE NOT NULL,
+
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
+
+CREATE TABLE packagesServices (
+    packageServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    packageID INT,
+    customPackageID INT,
+    serviceID INT NOT NULL,
+
+    FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
+    FOREIGN KEY (packageID) REFERENCES packages(packageID),
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID)
+);
+
+-- =========================
+-- BOOKINGS
+-- =========================
+
+CREATE TABLE bookings (
+    bookingID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    packageID INT DEFAULT NULL,
+    serviceID INT DEFAULT NULL,
+    customPackageID INT DEFAULT NULL,
+    CHECK (
+    packageID IS NOT NULL OR 
+    serviceID IS NOT NULL OR 
+    customPackageID IS NOT NULL
+    ),
+    additionalRequest VARCHAR(255),
+    startDate DATE NOT NULL,
+    endDate DATE NOT NULL,
+    totalCost DECIMAL(10,2) NOT NULL,
+    downpayment DECIMAL(10,2) NOT NULL,
+    bookingStatus INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (bookingStatus) REFERENCES statuses(statusID),
+    FOREIGN KEY (packageID) REFERENCES packages(packageID),
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID),
+    FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
+);
+
+CREATE TABLE confirmedBookings (
+    userID INT NOT NULL,
+    confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
+    bookingID INT NOT NULL,
+    downpayment DECIMAL(10,2) NOT NULL,
+    downpaymentImage LONGBLOB NOT NULL,
+    totalCost DECIMAL(10,2) NOT NULL,
+    confirmedBookingStatus INT,
+    paymentStatus ENUM ('No Payment', 'Partially Paid', 'Fully Paid',) DEFAULT 'No Payment';
+    
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (bookingID) REFERENCES bookings(bookingID),
+    FOREIGN KEY (confirmedBookingStatus) REFERENCES statuses(statusID),
+);
+
+
+
+-- =========================
+-- WEBSITE CONTENT
+-- =========================
+
+CREATE TABLE websiteContents (
+    contentID INT PRIMARY KEY AUTO_INCREMENT,
+    adminID INT NOT NULL,
+    sectionName VARCHAR(100) NOT NULL,
+    title VARCHAR(255),
+    content TEXT NOT NULL,
+    lastUpdated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (adminID) REFERENCES admins(adminID)
+);
+
+-- ✅ Website Content Images (Weak Entity)
+CREATE TABLE websiteContentImages (
+    imageID INT PRIMARY KEY AUTO_INCREMENT,
+    contentID INT NOT NULL,
+    imageData LONGBLOB NOT NULL,
+    altText VARCHAR(255),
+    imageOrder INT DEFAULT 1,
+    uploadedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (contentID) REFERENCES websiteContents(contentID)
+        ON DELETE CASCADE
+);
+
+-- =========================
+-- AUDIT LOGS
+-- =========================
+
+CREATE TABLE auditLogs (
+    logID INT PRIMARY KEY AUTO_INCREMENT,
+    adminID INT NOT NULL,
+    action VARCHAR(255) NOT NULL,
+    targetTable VARCHAR(100),
+    targetID INT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (adminID) REFERENCES admins(adminID)
+);
+
+
+

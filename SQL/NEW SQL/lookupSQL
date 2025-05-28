@@ -1,0 +1,75 @@
+CREATE TABLE userTypes (
+    userTypeID INT PRIMARY KEY AUTO_INCREMENT,
+    typeName VARCHAR(50) UNIQUE -- 'Customer', 'Partner', 'Admin'
+);
+
+INSERT INTO userTypes (typeName) VALUES 
+('Customer'), 
+('Partner'), 
+('Admin');
+
+CREATE TABLE userStatuses (
+    userStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE -- 'Pending', 'Verified', 'Non-verified'
+);
+
+INSERT INTO userStatuses (statusName) VALUES 
+('Pending'), 
+('Verified'), 
+('Not-verified');
+
+CREATE TABLE serviceAvailability (
+    availabilityID INT PRIMARY KEY AUTO_INCREMENT,
+    availabilityName VARCHAR(50) UNIQUE -- 'Available', 'Occupied', 'Maintenance'
+);
+
+INSERT INTO serviceAvailability (availabilityName) Values 
+('Available'),
+('Occupied'),
+('Maintenance');
+
+Create Table statuses (
+    statusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE -- 'Pending', 'Approved', 'Rejected'
+);
+
+INSERT INTO statuses (statusName) Values 
+('Pending'),
+('Approved'),
+('Rejected');
+
+CREATE TABLE eventCategories (
+    categoryID INT PRIMARY KEY AUTO_INCREMENT,
+    categoryName VARCHAR(200) NOT NULL
+);
+
+INSERT INTO `eventcategories` (`categoryID`, `categoryName`) VALUES 
+(NULL, 'Birthday'), 
+(NULL, 'Wedding'), 
+(NULL, 'Team Building'), 
+(NULL, 'Christening/Dedication'), 
+(NULL, 'Thanksgiving Party'), 
+(NULL, 'Christmas Party'), 
+(NULL, 'Other');
+
+
+Create Table bookingPaymentStatus (
+    paymentStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE -- 'No Payment', 'Patially Paid', 'Fully Paid'
+);
+
+INSERT INTO bookingPaymentStatus (statusName) Values 
+('No Payment'),
+('Partially Paid'),
+('Fully Paid');
+
+CREATE TABLE resortServicesCategories (
+    categoryID INT PRIMARY KEY AUTO_INCREMENT,
+    categoryName VARCHAR(200) NOT NULL
+);
+
+INSERT INTO resortServicesCategories (`categoryID`, `categoryName`) VALUES 
+(NULL, 'Hotel'), 
+(NULL, 'Cottage'), 
+(NULL, 'Entertainment'), 
+(NULL, 'Food');

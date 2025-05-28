@@ -8,7 +8,7 @@ session_set_cookie_params($session_timeout);
 session_start();
 date_default_timezone_set('Asia/Manila');
 
-if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
@@ -25,7 +25,7 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 $_SESSION['last_activity'] = time();
 
 $userID = $_SESSION['userID'];
-$userType = $_SESSION['userType'];
+$userRole = $_SESSION['userRole'];
 ?>
 
 
@@ -52,7 +52,7 @@ $userType = $_SESSION['userType'];
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userTypeID = '$userType'";
+            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
             $result = mysqli_query($conn, $query);
             if (mysqli_num_rows($result) > 0) {
                 $data = mysqli_fetch_assoc($result);

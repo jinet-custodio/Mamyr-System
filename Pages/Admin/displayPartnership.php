@@ -8,7 +8,7 @@
     session_start();
     date_default_timezone_set('Asia/Manila');
 
-    if (!isset($_SESSION['userID']) || !isset($_SESSION['userType'])) {
+    if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         header("Location: ../register.php");
         exit();
     }
@@ -25,7 +25,7 @@
     $_SESSION['last_activity'] = time();
 
     $userID = $_SESSION['userID'];
-    $userType = $_SESSION['userType'];
+    $userRole = $_SESSION['userRole'];
 
 
     $message = '';

@@ -27,7 +27,19 @@ if (isset($_SESSION['formData']['email'])) {
 
         <div class="form-box forgotPassword">
             <form action="../Function/forgotPassword.php" method="POST">
-                <h1>Forgot Password</h1>
+                <h1 class="container-title">Forgot Password</h1>
+                <div class="errorMessageBox">
+                    <div class="errorMsg">
+                        <?php
+                        if (isset($_SESSION['error'])) {
+                            echo htmlspecialchars($_SESSION['error']);
+                            unset($_SESSION['error']);
+                        }
+                        ?>
+                    </div>
+                    <div class="errorMsg" id="passwordValidation"></div>
+                    <div class="errorMsg" id="passwordMatch"></div>
+                </div>
                 <div class="input-box">
                     <input type="email" class="form-control" id="email" name="email"
                         value="<?= $email ?>" required>
@@ -44,22 +56,11 @@ if (isset($_SESSION['formData']['email'])) {
                 </div>
 
                 <button type="submit" class="btn" id="changePassword" name="changePassword">Change Password</button>
-
-                <div class="errorMessageBox">
-                    <div class="errorMsg">
-                        <?php
-                        if (isset($_SESSION['error'])) {
-                            echo htmlspecialchars($_SESSION['error']);
-                            unset($_SESSION['error']);
-                        }
-                        ?>
-                    </div>
-                    <div class="errorMsg" id="passwordValidation"></div>
-                    <div class="errorMsg" id="passwordMatch"></div>
-                </div>
             </form>
         </div>
     </div>
+
+
     <script src="../Assets/JS/checkPasswordMatch.js"></script>
     <script src="../Assets/JS/checkPassword.js"></script>
 

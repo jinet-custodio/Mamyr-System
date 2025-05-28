@@ -1,0 +1,48 @@
+CREATE TABLE users (
+    userID INT PRIMARY KEY AUTO_INCREMENT,
+    firstName VARCHAR(50) NOT NULL,
+    middleInitial VARCHAR(50) DEFAULT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    userAddress TEXT NOT NULL,
+    phoneNumber VARCHAR(20) DEFAULT NULL,
+    birthDate DATE DEFAULT NULL,
+    userProfile LONGBLOB,
+    password VARCHAR(255) NOT NULL,
+    userRole INT NOT NULL DEFAULT 1,
+    userOTP VARCHAR(100),
+    OTP_expiration_at DATETIME,
+    userStatusID INT NOT NULL DEFAULT 1,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (userRole) REFERENCES userTypes(userTypeID),
+    FOREIGN KEY (userStatusID) REFERENCES userStatuses(userStatusID)
+);
+
+
+CREATE TABLE admins (
+    adminID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL UNIQUE,
+    position VARCHAR(100),
+
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
+
+
+
+CREATE TABLE partnerships (
+    partnershipID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT DEFAULT NULL,
+    companyName varchar(50) not null,
+    businessEmail VARCHAR(255) NOT NULL UNIQUE,
+    partnerAddress TEXT NOT NULL,
+    documentLink VARCHAR(500) NOT NULL,
+    partnerType VARCHAR(200) NOT NULL,
+    partnerStatus INT NOT NULL DEFAULT 1,
+    requestDate DATE NOT NULL,
+    startDate DATE DEFAULT NULL,
+    endDate DATE DEFAULT NULL,
+
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (partnerStatus) REFERENCES userStatuses(userStatusID)
+);

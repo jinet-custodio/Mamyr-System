@@ -96,19 +96,26 @@ if (isset($_POST['verify_email'])) {
 if (isset($_POST['changePassword'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['newPassword']);
+    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirmPassword']);
 
     $emailQuery = "SELECT * FROM users WHERE email = '$email'";
     $result = mysqli_query($conn, $emailQuery);
     if (mysqli_num_rows($result) > 0) {
-        $hashpassword = password_hash($password, PASSWORD_DEFAULT);
-        $newPass = "UPDATE users SET password = '$hashpassword' WHERE email = '$email'";
-        $passwordResult = mysqli_query($conn, $newPass);
-        if ($passwordResult) {
-            $_SESSION['success'] = 'Password Updated';
-            header("Location: ../Pages/register.php");
-            exit;
+        if ($password == $confirm_password) {
+            $hashpassword = password_hash($password, PASSWORD_DEFAULT);
+            $newPass = "UPDATE users SET password = '$hashpassword' WHERE email = '$email'";
+            $passwordResult = mysqli_query($conn, $newPass);
+            if ($passwordResult) {
+                $_SESSION['success'] = 'Password Updated';
+                header("Location: ../Pages/register.php");
+                exit;
+            } else {
+                $_SESSION['error'] = 'Password Update Failed';
+                header("Location: ../Pages/register.php");
+                exit;
+            }
         } else {
-            $_SESSION['error'] = 'Password Update Failed';
+            $_SESSION['error'] = 'Password doesn`t match';
             header("Location: ../Pages/register.php");
             exit;
         }
