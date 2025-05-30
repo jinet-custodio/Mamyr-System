@@ -1,18 +1,18 @@
 @font-face {
   font-family: "Poppins";
-  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
   font-family: "Plus Jakarta Sans";
-  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
 }
 @font-face {
   font-family: "Prata";
-  src: url(../Fonts/Prata/Prata-Regular.ttf);
+  src: url(../../Fonts/Prata/Prata-Regular.ttf);
 }
 @font-face {
   font-family: "Playfair Display";
-  src: url(../Fonts/Playfair_Display/PlayfairDisplay-Regular.ttf);
+  src: url(../../Fonts/Playfair_Display/PlayfairDisplay-Regular.ttf);
 }
 
 * {

@@ -33,9 +33,10 @@ $partnerID = $_POST['partnerID'];
         </div>
         <!-- Get the information to the database -->
         <?php
-        $query = "SELECT u.firstName, u.lastName, u.userProfile, u.phoneNumber, p.* 
+        $query = "SELECT u.firstName, u.lastName, u.userProfile, u.phoneNumber, p.*, s.statusName 
                FROM partnerships p
                INNER JOIN users u ON p.userID = u.userID 
+               INNER JOIN statuses s ON s.statusID = p.partnerStatus
                WHERE partnershipID = '$partnerID'";
         $result = mysqli_query($conn, $query);
         if (mysqli_num_rows($result) > 0) {
@@ -52,7 +53,7 @@ $partnerID = $_POST['partnerID'];
             }
             $address = $data['partnerAddress'];
             $link = $data['documentLink'];
-            $status = $data['status'];
+            $status = $data['statusName'];
 
             $profile = $data['userProfile'];
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -104,9 +105,10 @@ $partnerID = $_POST['partnerID'];
         </div>
         <!-- Get the information to the database -->
         <?php
-        $query = "SELECT u.firstName, u.lastName, u.userProfile, u.phoneNumber, p.* 
+        $query = "SELECT u.firstName, u.lastName, u.userProfile, u.phoneNumber, p.*, s.statusName
                FROM partnerships p
                INNER JOIN users u ON p.userID = u.userID 
+               INNER JOIN statuses s ON s.statusID = p.partnerStatus
                WHERE partnershipID = '$partnerID'";
         $result = mysqli_query($conn, $query);
         if (mysqli_num_rows($result) > 0) {
@@ -123,8 +125,7 @@ $partnerID = $_POST['partnerID'];
             }
             $address = $data['partnerAddress'];
             $link = $data['documentLink'];
-            $status = $data['status'];
-
+            $status = $data['statusName'];
             $profile = $data['userProfile'];
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimeType = finfo_buffer($finfo, $profile);
@@ -145,7 +146,7 @@ $partnerID = $_POST['partnerID'];
                 <div class="button-container">
                     <form action="../../Function/Admin/partnerApproval.php" method="POST">
                         <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                        <input type="hidden" name="partnerStatus" value="<?= $status ?>">
+                        <input type="hidden" name="partnerStatus" value="<?= $data['partnerStatus'] ?>">
                         <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
                         <button type="submit" class="btn btn-danger" name="declineBtn">Decline</button>
                     </form>
