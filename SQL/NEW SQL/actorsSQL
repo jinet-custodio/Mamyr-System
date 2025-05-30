@@ -39,7 +39,7 @@ CREATE TABLE partnerships (
     documentLink VARCHAR(500) NOT NULL,
     partnerType VARCHAR(200) NOT NULL,
     partnerStatus INT NOT NULL DEFAULT 1,
-    requestDate DATE NOT NULL,
+    requestDate DATE NOT NULL CURRENT_TIMESTAMP,
     startDate DATE DEFAULT NULL,
     endDate DATE DEFAULT NULL,
 

@@ -23,192 +23,166 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 }
 
 $_SESSION['last_activity'] = time();
-
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mamyr Resort and Events Place </title>
-    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../../Assets/CSS/account.css">
-    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <title>Mamyr Resort and Events Place</title>
+    <link
+        rel="icon"
+        type="image/x-icon"
+        href="../../Assets/Images/Icon/favicon.png " />
+
+    <!-- Bootstrap Link -->
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/viewBooking.css" />
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
-
-        <div class="collapse navbar-collapse " id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
-                <li class="nav-item">
-                    <a class="nav-link" href="adminDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="home icon">
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <img src="../../Assets/Images/Icon/notification.png" alt="home icon">
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <img src="../../Assets/Images/Icon/setting.png" alt="home icon">
-                    </a>
-                </li>
-                </li>
-            </ul>
+    <!-- Admin Information Container -->
+    <div class="guest-container">
+        <!-- Back Button -->
+        <div class="page-container">
+            <a href="adminDashboard.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+            <h5 class="page-title">Admin</h5>
         </div>
-    </nav>
+        <!-- Information -->
 
-    <aside>
-        <div class="headerText">
-            <h2>My Account</h2>
-        </div>
+        <!-- Get the information to the database -->
         <?php
-        if (isset($userID)) {
-            $query = "SELECT * FROM users WHERE userID= '$userID'";
-            $run_query = mysqli_query($conn, $query);
-            if (mysqli_num_rows($run_query) > 0) {
-                $user = mysqli_fetch_array($run_query);
+        if ($userRole == 3) {
+            $admin = "Admin";
+        } else {
+            $_SESSION['error'] = "Unauthorized Access eh!";
+            session_destroy();
+            header("Location: ../register.php");
+            exit();
+        }
 
-                // Convert birthday to ISO format
-                $dateStr = $user['birthDate']; // e.g., "04/07/2021"
-                $dateObj = DateTime::createFromFormat('d/m/Y', $dateStr);
-                $isoDate = $dateObj ? $dateObj->format('Y-m-d') : '';
-        ?>
-                <form name="form" id="myForm" class="userInfo" action="../../Function/editAccount.php" method="POST"
-                    enctype="multipart/form-data">
-                    <div class="contents">
-                        <input type="hidden" value="<?= htmlspecialchars($user['userRoleID']) ?>" name="userRole">
-                        <input type="hidden" value="<?= htmlspecialchars($user['userID'])  ?>" name="userID">
+        if ($admin === "Admin") {
+            $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
+            $result = mysqli_query($conn, $query);
+            if (mysqli_num_rows($result) > 0) {
+                $data = mysqli_fetch_assoc($result);
+                $name = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
+                $email = $data['email'];
+                $phoneNumber = $data['phoneNumber'];
+                if ($phoneNumber === NULL || $phoneNumber === "") {
+                    $phoneNumber = "--";
+                } else {
+                    $phoneNumber;
+                }
+                // $birthday = $data['birthDate'];
+                // if ($birthday === NULL || $birthday === "") {
+                //     $birthday = "--";
+                // } else {
+                //     $birthday;
+                // }
+                $address = $data['userAddress'];
+                $profile = $data['userProfile'];
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $profile);
+                finfo_close($finfo);
+                $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
 
-                        <div class="profile-image">
-                            <?php
-                            $imgSrc = '../../Assets/Images/userProfile/no pfp.png';
-                            if (!empty($user['userProfile'])) {
-                                $imgData = base64_encode($user['userProfile']);
-                                $imgSrc = 'data:image/jpeg;base64,' . $imgData;
-                            }
-                            ?>
-                            <img src="<?= $imgSrc ?>" alt="User Image" class="user-image" id="displayPhoto">
+                $status = $data['status'];
+                $service = $data['category'];
+                $package = $data['categoryName'];
+                $customPackage = $data['customPackageID'];
 
-
-                            <button class="add-image hidden" id="btn" type="button">
-                                <img src="../../Assets/Images/Icon/camera.png" alt="Camera" class="camera" id="camera">
-                            </button>
-                            <input type="file" id="fileInput" style="display: none;" class="text-field"
-                                accept=".jpg, .jpeg, .png" name="userProfile">
-                            <div class="details">
-                                <input type="text" id="nameBox" name="name" class="text-field"
-                                    value="<?= $user['firstName'] . ' ' . $user['middleInitial'] . '. ' . $user['lastName'] ?>"
-                                    readonly>
-                            </div>
-                        </div>
-
-                        <div class="information">
-                            <div class="details">
-                                <img src="../../Assets/Images/Icon/email.png" alt="email icon">
-                                <input type="email" name="email" class="text-field" value="<?= $user['email'] ?>" readonly>
-                            </div>
-                            <div class="details">
-                                <img src="../../Assets/Images/Icon/phone.png" alt="phone icon">
-                                <input type="tel" name="phoneNumber" class="text-field" value="<?= $user['phoneNumber'] ?>"
-                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" pattern="[0-9]{11}"
-                                    placeholder="Click 'Edit' to add (optional)" readonly>
-                            </div>
-                            <div class="details">
-                                <img src="../../Assets/Images/Icon/address.png" alt="address icon">
-                                <input type="text" name="userAddress" class="text-field" value="<?= $user['userAddress'] ?>"
-                                    readonly>
-                            </div>
-                            <div class="details">
-                                <img src="../../Assets/Images/Icon/birthday.png" alt="birthday icon">
-                                <input type="date" name="birthDate" id="birthDate" class="text-field"
-                                    value="<?= htmlspecialchars($user['birthDate'])  ?>" readonly>
-                            </div>
-                        </div>
-
-                        <div class="editBtn">
-                            <button class="btn btn-primary" id="editBtn" type="submit" onclick="enableEdit(event)"
-                                name="edit">Edit your information</button>
-                        </div>
-                    </div>
-                </form>
-
-                <script>
-                    function enableEdit(event) {
-                        const form = document.getElementById('myForm');
-                        const inputs = form.querySelectorAll('.text-field');
-                        const editButton = document.getElementById('editBtn');
-                        const imageBtn = document.getElementById('btn'); // Your image edit button
-                        const fileInput = document.getElementById('fileInput');
-                        const displayPhoto = document.getElementById('displayPhoto');
-
-                        const isEditing = editButton.textContent === "Edit your information";
-
-                        if (isEditing) {
-                            // Enable editing
-                            inputs.forEach(input => {
-                                input.removeAttribute('readonly');
-                                input.classList.add('edit-mode');
-                            });
-
-                            // Show the add-image button
-                            imageBtn.classList.remove('hidden'); // instead of setting style
-
-                            // Show the file input and handle image changes
-                            imageBtn.addEventListener('click', function(e) {
-                                e.preventDefault(); // Prevent any default behavior from clicking the button
-                                fileInput.click();
-                            });
-
-                            fileInput.addEventListener('change', (event) => {
-                                const file = event.target.files[0];
-                                if (file) {
-                                    const reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        displayPhoto.src = e.target.result; // Preview the uploaded image
-                                    };
-                                    reader.readAsDataURL(file);
-                                }
-                            });
-
-                            // Change button text to "Save Changes"
-                            editButton.textContent = "Save Changes";
-                            event.preventDefault();
-                        } else {
-                            // If we're not in editing mode, submit the form
-                            form.submit();
-                        }
-                    }
-                </script>
-
-
-        <?php
-            } else {
-                echo "<h4>Invalid ID</h4>";
+                if ($service != "") {
+                    $booking = $service;
+                    $pax = $data['capacity'];
+                    $serviceName = $data['facilityName'];
+                    $description = $data['description'];
+                } elseif ($package != "") {
+                    $booking = $package;
+                    $pax = $data['p_capacity'];
+                    $serviceName = $data['packageName'];
+                    $description = $data['packageDescription'];
+                } elseif ($customPackage != "") {
+                    $booking = $customPackage;
+                }
+                $cost = $data['totalCost'];
+                $startDate = $data['startDate'];
+                $endDate = $data['endDate'];
+                $AddRequest = $data['additionalRequest'];
+                $bookingID = $data['bookingID'];
             }
-        } // End of isset($userID)
+        } else {
+            $_SESSION['error'] = "Unauthorized Access!";
+            header("Location: ../register.php");
+            exit();
+        }
         ?>
+        <!-- Display the information -->
+        <div class="card">
+            <div class="booking-info-name-pic">
+                <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start">
+                <div class="booking-info-contact">
+                    <p class="card-text name"><?= $name ?></p>
+                    <p class="card-text sub-name"><?= $email ?> | <?= $phoneNumber ?> </p>
+                    <p class="card-text sub-name"><?= $address ?></p>
+                </div>
 
-    </aside>
+                <div class="button-container">
+                    <form action="../../Function/Admin/bookingApproval.php" method="post">
+                        <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                        <input type="hidden" name="bookingStatus" value="<?= $status ?>">
+                        <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+                        <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Display the information -->
+            <div class="card-body">
+                <div class="guest-info">
+                    <h4 class="card-title">Booking Type</h4>
+                    <p class="card-text"><?= ucfirst($booking) ?></p>
+                </div>
+                <div class="guest-info">
+                    <h4 class="card-title">Service Name</h4>
+                    <p class="card-text"><?= ucwords($serviceName) ?></p>
+                </div>
+
+                <div class="guest-info">
+                    <h4 class="card-title">Number of People</h4>
+                    <p class="card-text"><?= !empty($pax) ? $pax : 'Not Available' ?></p>
+                </div>
+                <div class="guest-info">
+                    <h4 class="card-title">Total Price</h4>
+                    <p class="card-text"><?= $cost ?></p>
+                </div>
+                <div class="guest-info">
+                    <h4 class="card-title">Schedule</h4>
+                    <p class="card-text"> <?= $startDate . " " ?> until <?= " " . $endDate ?> </p>
+                </div>
+                <div class="guest-info">
+                    <h4 class="card-title">Additional Request</h4>
+                    <p class="card-text"><?= !empty($AddRequest) ? $AddRequest : 'Not Available' ?> </p>
+                </div>
+
+                <div class="guest-info">
+                    <h4 class="card-title">Description</h4>
+                    <pre class="card-text description"><?= !empty($description) ? htmlspecialchars($description) : 'Not Available' ?></pre>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
+
+    <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
-
-
 </body>
 
 </html>

@@ -11,19 +11,19 @@ if (isset($_POST['approveBtn'])) {
     $startDate = date('Y-m-d');
 
     $query = "SELECT * FROM partnerships 
-    WHERE partnershipID = '$partnerID' AND status ='$partnerStatus'";
+    WHERE partnershipID = '$partnerID' AND partnerStatus ='$partnerStatus'";
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
         $updateStatus = "UPDATE partnerships 
-        SET status = 'Approved', startDate = '$startDate'
+        SET partnerStatus = '2', startDate = '$startDate'
         WHERE partnershipID ='$partnerID'";
         $result = mysqli_query($conn, $updateStatus);
         if ($result) {
-            $_SESSION['success'] = 'Request Approved Successfully';
+            $_SESSION['success-partnership'] = 'Request Approved Successfully';
             header('Location: ../../Pages/Admin/displayPartnership.php');
             exit();
         } else {
-            $_SESSION['error'] = 'The request could not be approved. Please try again later.';
+            $_SESSION['error-partnership'] = 'The request could not be approved. Please try again later.';
             header('Location: ../../Pages/Admin/partnership.php');
             exit();
         }
@@ -39,19 +39,19 @@ if (isset($_POST['declineBtn'])) {
     $startDate = date('d-m-Y');;
 
     $query = "SELECT * FROM partnerships 
-    WHERE partnershipID = '$partnerID' AND status ='$partnerStatus'";
+    WHERE partnershipID = '$partnerID' AND partnerStatus ='$partnerStatus'";
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
         $updateStatus = "UPDATE partnerships 
-        SET status = 'Rejected'
+        SET partnerStatus = '3'
         WHERE partnershipID ='$partnerID'";
         $result = mysqli_query($conn, $updateStatus);
         if ($result) {
-            $_SESSION['success'] = 'The request has been declined successfully.';
+            $_SESSION['success-partnership'] = 'The request has been declined successfully.';
             header('Location: ../../Pages/Admin/displayPartnership.php');
             exit();
         } else {
-            $_SESSION['error'] = 'The request could not be declined. Please try again later.';
+            $_SESSION['error-partnership'] = 'The request could not be declined. Please try again later.';
             header('Location: ../../Pages/Admin/partnership.php');
             exit();
         }
