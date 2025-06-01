@@ -5,10 +5,12 @@ session_start();
 
 //Approve Button is Click
 if (isset($_POST['approveBtn'])) {
-    $partnerID = mysqli_real_escape_string($conn, $_POST['partnerID']);
+    $_SESSION['partnerID'] = mysqli_real_escape_string($conn, $_POST['partnerID']);
     $partnerStatus = mysqli_real_escape_string($conn, $_POST['partnerStatus']);
     date_default_timezone_set('Asia/Manila');
     $startDate = date('Y-m-d');
+
+    $partnerID = $_SESSION['partnerID'];
 
     $query = "SELECT * FROM partnerships 
     WHERE partnershipID = '$partnerID' AND partnerStatus ='$partnerStatus'";
@@ -21,10 +23,12 @@ if (isset($_POST['approveBtn'])) {
         if ($result) {
             $_SESSION['success-partnership'] = 'Request Approved Successfully';
             header('Location: ../../Pages/Admin/displayPartnership.php');
+            unset($_SESSION['partnerID']);
             exit();
         } else {
             $_SESSION['error-partnership'] = 'The request could not be approved. Please try again later.';
             header('Location: ../../Pages/Admin/partnership.php');
+            unset($_SESSION['partnerID']);
             exit();
         }
     }
@@ -33,10 +37,12 @@ if (isset($_POST['approveBtn'])) {
 
 //Decline Button is Click
 if (isset($_POST['declineBtn'])) {
-    $partnerID = mysqli_real_escape_string($conn, $_POST['partnerID']);
+    $_SESSION['partnerID'] = mysqli_real_escape_string($conn, $_POST['partnerID']);
     $partnerStatus = mysqli_real_escape_string($conn, $_POST['partnerStatus']);
     date_default_timezone_set('Asia/Manila');
-    $startDate = date('d-m-Y');;
+    $startDate = date('Y-m-d');
+
+    $partnerID = $_SESSION['partnerID'];
 
     $query = "SELECT * FROM partnerships 
     WHERE partnershipID = '$partnerID' AND partnerStatus ='$partnerStatus'";
@@ -49,10 +55,12 @@ if (isset($_POST['declineBtn'])) {
         if ($result) {
             $_SESSION['success-partnership'] = 'The request has been declined successfully.';
             header('Location: ../../Pages/Admin/displayPartnership.php');
+            unset($_SESSION['partnerID']);
             exit();
         } else {
             $_SESSION['error-partnership'] = 'The request could not be declined. Please try again later.';
             header('Location: ../../Pages/Admin/partnership.php');
+            unset($_SESSION['partnerID']);
             exit();
         }
     }

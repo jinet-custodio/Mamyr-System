@@ -10,10 +10,10 @@ session_start();
 $categoryID = isset($_GET['categoryID']) ? intval($_GET['categoryID']) : 0;
 
 $sql = "
-    SELECT DISTINCT rs.resortServiceID, rs.facilityName
+    SELECT DISTINCT rs.*
     FROM resortServices rs
     INNER JOIN packages p ON rs.resortServiceID = p.resortServiceID
-    WHERE p.categoryID = ?
+    WHERE p.PcategoryID = ?
 ";
 
 $stmt = $conn->prepare($sql);

@@ -1,7 +1,8 @@
 CREATE TABLE bookings (
     bookingID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
-    packageServiceID INT NOT NULL,
+    packageServiceID INT NULL,
+    customPackageID INT NULL,
     additionalRequest VARCHAR(255),
     startDate DATE NOT NULL,
     endDate DATE NOT NULL,
@@ -12,7 +13,9 @@ CREATE TABLE bookings (
 
     FOREIGN KEY (userID) REFERENCES users(userID),
     FOREIGN KEY (bookingStatus) REFERENCES statuses(statusID),
-    FOREIGN KEY (packageServiceID) REFERENCES allServices(packageServiceID)
+    FOREIGN KEY (packageServiceID) REFERENCES allServices(packageServiceID),
+    FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
+
 );
 
 CREATE TABLE confirmedBookings (

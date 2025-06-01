@@ -1,8 +1,42 @@
 <?php
 require '../../Config/dbcon.php';
-session_start();
-$partnerID = $_POST['partnerID'];
 
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
+session_start();
+date_default_timezone_set('Asia/Manila');
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
+    header("Location: ../register.php");
+    exit();
+}
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: ../register.php?session=expired");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
+
+if (isset($_POST['view-btn'])) {
+    $_SESSION['partnerID'] = mysqli_real_escape_string($conn, $_POST['partnerID']);
+}
+
+$partnerID = $_SESSION['partnerID']  ?? null;
+
+if (!$partnerID) {
+    echo "<script>console.log('PHP says: " . addslashes($partnerID) . "');</script>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -180,7 +214,8 @@ $partnerID = $_POST['partnerID'];
     <!-- Search URL -->
     <script>
         const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('container');
+        const encodedParamValue = params.get('container');
+        const paramValue = atob(encodedParamValue);
 
         const partnerContainer = document.getElementById("partner-info");
         const requestContainer = document.getElementById("applicant-request");
@@ -193,11 +228,11 @@ $partnerID = $_POST['partnerID'];
             requestContainer.style.display = "block";
         }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+        // if (paramValue) {
+        //     const url = new URL(window.location);
+        //     url.search = '';
+        //     history.replaceState({}, document.title, url.toString());
+        // };
     </script>
 </body>
 

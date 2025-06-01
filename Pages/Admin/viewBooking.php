@@ -52,22 +52,24 @@ $userRole = $_SESSION['userRole'];
         <!-- Back Button -->
         <div class="page-container">
             <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
-            <h5 class="page-title">Guest Information</h5>
+            <h5 class="page-title">Guest Booking Information</h5>
         </div>
         <!-- Information -->
 
         <!-- Get the information to the database -->
         <?php
         $query = "SELECT 
-                u.* , s.*, p.*, ec.categoryName, rs.*, ps.*, cp.*, b.*,
-                p.capacity  as p_capacity
+                u.* , s.*, p.*, ec.categoryName AS eventName, rs.*, ps.*, b.*,
+                p.Pcapacity  as p_capacity, rsc.categoryName AS serviceName, st.*
             FROM bookings b
-                INNER JOIN users u ON b.userID = u.userID 
-                LEFT JOIN packages p ON b.packageID = p.packageID
-                LEFT JOIN eventcategories ec ON p.categoryID = ec.categoryID
-                LEFT JOIN services s ON b.serviceID = s.serviceID
-                LEFT JOIN customPackages cp ON b.customPackageID = cp.customPackageID
+                 INNER JOIN users u ON b.userID = u.userID
+                LEFT JOIN statuses st ON st.statusID = b.bookingStatus
+                LEFT JOIN allservices a ON b.packageServiceID = a.packageServiceID
+                LEFT JOIN packages p ON a.packageID = p.packageID
+                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
+                LEFT JOIN services s ON a.serviceID = s.serviceID
                 LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID
+                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID
                 LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
             WHERE bookingID = '$bookingID'";
         $result = mysqli_query($conn, $query);
@@ -94,9 +96,9 @@ $userRole = $_SESSION['userRole'];
             finfo_close($finfo);
             $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
 
-            $status = $data['status'];
-            $service = $data['category'];
-            $package = $data['categoryName'];
+            $status = $data['statusName'];
+            $service = $data['serviceName'];
+            $package = $data['eventName'];
             $customPackage = $data['customPackageID'];
 
             if ($service != "") {

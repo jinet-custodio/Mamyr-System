@@ -216,15 +216,18 @@ $userRole = $_SESSION['userRole'];
 
 
                             </ul> -->
+
                             <select id="cottageSelections" name="cottageSelections" class="form-select" required>
                                 <option value="" disabled selected>Please Select a Cottage</option>
                                 <?php
-                                $cottageQuery = "SELECT * FROM resortservices WHERE category = 'Cottage'";
+                                $cottageQuery = "SELECT rs.*, rsc.categoryName FROM resortservices rs
+                                INNER JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID
+                                WHERE RScategoryID = '2'";
                                 $result = mysqli_query($conn, $cottageQuery);
                                 if (mysqli_num_rows($result) > 0) {
                                     $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                     foreach ($cottages as $cottage) {
-                                        echo "<option value='" . $cottage['facilityName'] . "'>Php " . $cottage['price'] . " - Good for " . $cottage['capacity'] . " pax " . "</option>";
+                                        echo "<option value='" . $cottage['RServiceName'] . "'>Php " . $cottage['RSprice'] . " - Good for " . $cottage['RScapacity'] . " pax " . "</option>";
                                     }
                                 } else {
                                     echo "<option value='' disabled>No cottages available</option>";
@@ -286,10 +289,11 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
             </div>
             <?php
-            $availsql = "SELECT s.availabilityID, rs.facilityName 
+            $availsql = "SELECT s.RSavailabilityID, rs.RServiceName 
             FROM services s
             JOIN resortServices rs ON s.resortServiceID = rs.resortServiceID
-            WHERE rs.category = 'Room'";
+            INNER JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID
+            WHERE rs.RScategoryID = '1'";
 
             $result = mysqli_query($conn, $availsql);
             ?>
@@ -311,10 +315,10 @@ $userRole = $_SESSION['userRole'];
                             $i = 1;
                             while ($row = $result->fetch_assoc()) {
                                 //ternary operator to check availability
-                                $iconPath = ($row['availabilityID'] == 1)
+                                $iconPath = ($row['RSavailabilityID'] == 1)
                                     ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
                                     : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
-                                $roomName = htmlspecialchars($row['facilityName']);
+                                $roomName = htmlspecialchars($row['RServiceName']);
 
                                 echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;">';
                                 echo '  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '">';
@@ -623,7 +627,7 @@ $userRole = $_SESSION['userRole'];
                             // Populate dropdown
                             const option = document.createElement('option');
                             option.value = pkg.packageID;
-                            option.text = pkg.packageName + ' - ₱' + parseFloat(pkg.price).toFixed(2);
+                            option.text = pkg.packageName + ' - ₱' + parseFloat(pkg.Pprice).toFixed(2);
                             packagesDropdown.appendChild(option);
 
                             // Build card
@@ -632,9 +636,9 @@ $userRole = $_SESSION['userRole'];
                             <div class="card-body">
                                 <h5 class="card-title">${pkg.packageName}</h5>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><strong>Duration:</strong> ${pkg.duration} hours</li>
-                                    <li class="list-group-item"><strong>Capacity:</strong> Up to ${pkg.capacity} guests</li>
-                                    <li class="list-group-item"><strong>Price:</strong> ₱${parseFloat(pkg.price).toFixed(2)}</li>
+                                    <li class="list-group-item"><strong>Duration:</strong> ${pkg.Pduration} hours</li>
+                                    <li class="list-group-item"><strong>Capacity:</strong> Up to ${pkg.Pcapacity} guests</li>
+                                    <li class="list-group-item"><strong>Price:</strong> ₱${parseFloat(pkg.Pprice).toFixed(2)}</li>
                                 </ul>
                             </div>
                         </div>
@@ -661,7 +665,7 @@ $userRole = $_SESSION['userRole'];
                         data.forEach(venue => {
                             const option = document.createElement('option');
                             option.value = venue.resortServiceID;
-                            option.text = venue.facilityName; // Facility name from the database
+                            option.text = venue.RServiceName; // Facility name from the database
                             venueDropdown.appendChild(option);
                         });
                     } else {
@@ -689,8 +693,8 @@ $userRole = $_SESSION['userRole'];
                 .then(pkg => {
                     // Set duration
                     const numberOfHoursInput = document.getElementById('numberOfHours');
-                    numberOfHoursInput.value = pkg.duration;
-                    document.getElementById('eventDuration').value = pkg.duration;
+                    numberOfHoursInput.value = pkg.Pduration;
+                    document.getElementById('eventDuration').value = pkg.Pduration;
 
 
                     // Set guest capacity
@@ -698,7 +702,7 @@ $userRole = $_SESSION['userRole'];
                     guestSelect.disabled = true;
 
                     const hiddenGuestInput = document.getElementById('hiddenGuestValue');
-                    const capacity = parseInt(pkg.capacity);
+                    const capacity = parseInt(pkg.Pcapacity);
                     let selectedValue = '';
 
                     if (capacity <= 50) selectedValue = 'guestC1';

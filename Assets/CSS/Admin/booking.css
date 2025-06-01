@@ -143,7 +143,7 @@ thead {
 }
 
 tbody {
-  font-family: "Lora";
+  font-family: "Poppins";
 }
 
 td,
@@ -164,6 +164,8 @@ th {
   width: 2vw !important;
 }
 
-.dt-info {
+.dt-info,
+.dt-layout-row {
   font-family: "Lora";
+  text-transform: capitalize;
 }

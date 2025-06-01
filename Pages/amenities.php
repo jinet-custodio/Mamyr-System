@@ -114,24 +114,27 @@ require '../Config/dbcon.php';
 
                     <?php
                     $serviceCategory = 'Cottage';
-                    $query = "SELECT * FROM resortServices WHERE category = '$serviceCategory' ";
+                    $query = "SELECT rs.*, rsc.*
+                    FROM resortServices rs
+                    INNER JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID 
+                    WHERE categoryName = '$serviceCategory' ";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
                         $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         $counter = 1;
                         foreach ($cottages as $cottage) {
-                            $imageData = $cottage['imageData'];
+                            $imageData = $cottage['RSimageData'];
                             $finfo = finfo_open(FILEINFO_MIME_TYPE);
                             $mimeType = finfo_buffer($finfo, $imageData);
                             finfo_close($finfo);
                             $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                     ?>
-                    <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
+                            <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
                     <?php
                             $counter++;
                         }
                     } else {
-                        echo 'No Cottages';
+                        echo '<h5 class="cottageTitle">No Cottages</h5>';
                     }
                     ?>
                 </div>
@@ -152,8 +155,36 @@ require '../Config/dbcon.php';
             </div>
 
             <div class="poolPics">
-                <img src="../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Hotel Picture 1" class="pic1">
-                <img src="../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Hotel Picture 1" class="pic1">
+                <?php
+                $serviceCategory = 'Entertainment';
+                $serviceName = 'Videoke 1';
+                $serviceName1 = 'Videoke 2';
+                $query = "SELECT rs.*, rsc.*
+                    FROM resortServices rs
+                    INNER JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID 
+                    WHERE categoryName = '$serviceCategory' 
+                    AND  RServiceName = '$serviceName' OR  RServiceName = '$serviceName1'";
+                $result = mysqli_query($conn, $query);
+                if (mysqli_num_rows($result) > 0) {
+                    $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                    $counter = 1;
+                    foreach ($cottages as $cottage) {
+                        $imageData = $cottage['RSimageData'];
+                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                        $mimeType = finfo_buffer($finfo, $imageData);
+                        finfo_close($finfo);
+                        $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                ?>
+                        <img src="<?= htmlspecialchars($image) ?>" alt="Videoke Picture" class="pic1">
+                <?php
+
+                    }
+                } else {
+                    echo '<h5 class="cottageTitle" style="padding-top: 5rem;">No Videoke Pics</h5>';
+                }
+                ?>
+                <!-- <img src="../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Hotel Picture 1" class="pic1">
+                <img src="../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Hotel Picture 1" class="pic1"> -->
 
             </div>
 
@@ -308,49 +339,49 @@ require '../Config/dbcon.php';
     </footer>
 
     <script>
-    var video = document.getElementById("myVideo");
+        var video = document.getElementById("myVideo");
 
-    video.onplay = function() {
-        video.muted = false;
-    };
+        video.onplay = function() {
+            video.muted = false;
+        };
     </script>
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script>
-    const navbar = document.getElementById("navbar");
+        const navbar = document.getElementById("navbar");
 
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > 10) {
-            navbar.classList.add("bg-white", "shadow");
-        } else {
-            navbar.classList.remove("bg-white", "shadow");
-        }
-    });
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add("bg-white", "shadow");
+            } else {
+                navbar.classList.remove("bg-white", "shadow");
+            }
+        });
     </script>
 
 
     <script>
-    const carousels = document.querySelectorAll('.carousel');
+        const carousels = document.querySelectorAll('.carousel');
 
 
-    carousels.forEach(carousel => {
-        let angle = 0;
+        carousels.forEach(carousel => {
+            let angle = 0;
 
-        const prevButton = carousel.closest('.carousel-container').querySelector('.prev-btn');
-        const nextButton = carousel.closest('.carousel-container').querySelector('.next-btn');
+            const prevButton = carousel.closest('.carousel-container').querySelector('.prev-btn');
+            const nextButton = carousel.closest('.carousel-container').querySelector('.next-btn');
 
 
-        nextButton.addEventListener('click', () => {
-            angle -= 72;
-            carousel.style.transform = `rotateY(${angle}deg)`;
+            nextButton.addEventListener('click', () => {
+                angle -= 72;
+                carousel.style.transform = `rotateY(${angle}deg)`;
+            });
+
+
+            prevButton.addEventListener('click', () => {
+                angle += 72;
+                carousel.style.transform = `rotateY(${angle}deg)`;
+            });
         });
-
-
-        prevButton.addEventListener('click', () => {
-            angle += 72;
-            carousel.style.transform = `rotateY(${angle}deg)`;
-        });
-    });
     </script>
 
     <!-- Sweetalert JS -->
@@ -358,22 +389,22 @@ require '../Config/dbcon.php';
 
     <!-- Sweet Alert -->
     <script>
-    const bookButtons = document.querySelectorAll('#bopNav');
+        const bookButtons = document.querySelectorAll('#bopNav');
 
-    bookButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            Swal.fire({
-                title: 'Want to Become Our Business Partner?',
-                text: 'You must have an existing account before becoming a business partner.',
-                icon: 'info',
-                confirmButtonText: 'Sign Up'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'register.php';
-                }
+        bookButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Want to Become Our Business Partner?',
+                    text: 'You must have an existing account before becoming a business partner.',
+                    icon: 'info',
+                    confirmButtonText: 'Sign Up'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'register.php';
+                    }
+                });
             });
         });
-    });
     </script>
 </body>
 
