@@ -61,7 +61,7 @@ if (isset($_SESSION['error'])) {
 <body>
     <div class="topSection">
         <div class="dashTitleContainer">
-            <a href="#" class="dashboardTitle" id="dashboard"><img src="../../Assets/images/MamyrLogo.png" alt=""
+            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img src="../../Assets/images/MamyrLogo.png" alt=""
                     class="logo"></a>
         </div>
 
@@ -100,7 +100,7 @@ if (isset($_SESSION['error'])) {
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="#" class="admin">
+            <a href="account.php" class="admin">
                 <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
             </a>
         </div>
@@ -169,30 +169,34 @@ if (isset($_SESSION['error'])) {
                 <tbody>
                     <!-- Select booking info -->
                     <?php
-                    $selectQuery = "SELECT u.firstName, u.lastName, ps.PBName, rs.RScategoryID , ec.categoryName, b.* 
+                    $selectQuery = "SELECT u.firstName, u.lastName, ps.PBName, 
+                    rs.*, rsc.categoryName AS resortCategoryName , ec.categoryName AS eventCategoryName, b.*, st.*, a.* 
                 FROM bookings b
                 INNER JOIN users u ON b.userID = u.userID
+                LEFT JOIN statuses st ON st.statusID = b.bookingStatus
                 LEFT JOIN allservices a ON b.packageServiceID = a.packageServiceID
                 LEFT JOIN packages p ON a.packageID = p.packageID
                 LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
                 LEFT JOIN services s ON a.serviceID = s.serviceID
                 LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID
+                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID
                 LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
                 ";
                     $result = mysqli_query($conn, $selectQuery);
                     if (mysqli_num_rows($result) > 0) {
                         foreach ($result as $bookings) {
                             $bookingID = $bookings['bookingID'];
-                            $name = ucfirst($bookings['firstName']) . " " . ucfirst($bookings['lastName'])
+                            $name = ucfirst($bookings['firstName']) . " " . ucfirst($bookings['lastName']);
+                            $status = $bookings['statusName'];
                     ?>
                             <tr>
                                 <td><?= $name ?></td>
                                 <?php
                                 if ($bookings['serviceID'] != "") {
                                 ?>
-                                    <td><?= $bookings['category'] ?></td>
+                                    <td><?= $bookings['resortCategoryName'] ?></td>
                                 <?php
-                                } elseif ($bookings['packageID'] != "") {
+                                } elseif ($bookings['eventCategoryName'] != "") {
                                 ?>
                                     <td><?= $bookings['categoryName'] ?></td>
                                 <?php
@@ -205,22 +209,22 @@ if (isset($_SESSION['error'])) {
                                 <td><?= $bookings['startDate'] ?></td>
                                 <td>
                                     <?php
-                                    if ($bookings['status'] == "Pending") {
+                                    if ($status == "Pending") {
                                     ?>
                                         <button class="btn btn-warning w-75">
-                                            <?= $bookings['status'] ?>
+                                            <?= $status ?>
                                         </button>
                                     <?php
-                                    } elseif ($bookings['status'] == "Approved") {
+                                    } elseif ($status == "Approved") {
                                     ?>
                                         <button class="btn btn-success w-75">
-                                            <?= $bookings['status'] ?>
+                                            <?= $status ?>
                                         </button>
                                     <?php
-                                    } elseif ($bookings['status'] == "Cancelled") {
+                                    } elseif ($status == "Cancelled") {
                                     ?>
                                         <button class="btn btn-danger w-75">
-                                            <?= $bookings['status'] ?>
+                                            <?= $status ?>
                                         </button>
                                     <?php
                                     }

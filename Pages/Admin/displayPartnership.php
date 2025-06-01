@@ -110,51 +110,46 @@ if (isset($_SESSION['error-partnership'])) {
         </div>
     </div>
 
-    <nav class="navbar d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
+    <nav class="navbar">
+        <a class="nav-link" href="adminDashboard.php">
+            <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
+            <h5>Dashboard</h5>
+        </a>
 
-            <a class="nav-link" href="adminDashboard.php">
-                <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
-                <h5>Dashboard</h5>
-            </a>
+        <a class="nav-link" href="booking.php">
+            <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
+            <h5>Bookings</h5>
+        </a>
 
-            <a class="nav-link" href="booking.php">
-                <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
-                <h5>Bookings</h5>
-            </a>
+        <a class="nav-link" href="#">
+            <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
+            <h5>Rooms</h5>
+        </a>
 
-            <a class="nav-link" href="#">
-                <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
-                <h5>Rooms</h5>
-            </a>
+        <a class="nav-link" href="#">
+            <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
+            <h5>Payments</h5>
+        </a>
 
-            <a class="nav-link" href="#">
-                <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
-                <h5>Payments</h5>
-            </a>
-
-            <!-- <a class="nav-link" href="#">
+        <!-- <a class="nav-link" href="#">
                 <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
                 <h5>Revenue</h5>
             </a> -->
 
-            <a class="nav-link active" href="displayPartnership.php">
-                <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
-                <h5>Partnerships</h5>
-            </a>
+        <a class="nav-link active" href="displayPartnership.php">
+            <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
+            <h5>Partnerships</h5>
+        </a>
 
-            <a class="nav-link" href="#">
-                <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
-                <h5>Edit Website</h5>
+        <a class="nav-link" href="#">
+            <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
+            <h5>Edit Website</h5>
+        </a>
+        <div class="nav-link">
+            <a href="../../Function/Admin/logout.php" class="btn btn-danger">
+                Log Out
             </a>
-            <div class="nav-link">
-                <a href="../../Function/Admin/logout.php" class="btn btn-danger">
-                    Log Out
-                </a>
-            </div>
         </div>
-
-
     </nav>
 
     <div class="categories" id="choice-container">
@@ -197,17 +192,17 @@ if (isset($_SESSION['error-partnership'])) {
                             src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
 
                 </div>
-                <h4 class="fw-bold">Partners</h4>
+                <h4 class="fw-bold page-title">Partners</h4>
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Partner Type</th>
-                            <th scope="col">Date Applied</th>
-                            <th scope="col">Action</th>
+                            <th class="table-header" scope="col">Name</th>
+                            <th class="table-header" scope="col">Partner Type</th>
+                            <th class="table-header" scope="col">Date Applied</th>
+                            <th class="table-header" scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-body">
                         <!-- Select to display all the applicants  -->
                         <?php
                         $selectQuery = "SELECT u.firstName, u.lastName, p.*, s.statusName
@@ -233,9 +228,13 @@ if (isset($_SESSION['error-partnership'])) {
                                     </td>
 
                                     <td scope="row">
-                                        <form action="partnership.php?container=3" method="POST" style="display:inline;">
+                                        <?php
+                                        $partner = 3;
+                                        $partnerContainer = base64_encode($partner);
+                                        ?>
+                                        <form action="partnership.php?container=<?= $partnerContainer ?>" method="POST" style="display:inline;">
                                             <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                            <button type="submit" class="btn btn-info">View</button>
+                                            <button type="submit" class="btn btn-info" name="view-btn">View</button>
                                         </form>
                                     </td>
                                     </td>
@@ -244,7 +243,7 @@ if (isset($_SESSION['error-partnership'])) {
                         } else {
                                 ?>
                                 <td colspan="5">
-                                    <h5 scope="row" class="text-center">No record Found!</h5>
+                                    <h5 scope="row" class="text-center">No Record Found!</h5>
                                 </td>
                             <?php
                         } ?>
@@ -267,17 +266,17 @@ if (isset($_SESSION['error-partnership'])) {
                             src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
 
                 </div>
-                <h4 class="fw-bold">Applicant Request</h4>
+                <h4 class="fw-bold page-title">Applicant Request</h4>
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Partner Type</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <th class="table-header" scope="col">Name</th>
+                            <th class="table-header" scope="col">Partner Type</th>
+                            <th class="table-header" scope="col">Status</th>
+                            <th class="table-header" scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-body">
                         <!-- Select to display all the applicants  -->
                         <?php
                         $selectQuery = "SELECT u.firstName, u.lastName, p.*, s.statusName
@@ -315,10 +314,15 @@ if (isset($_SESSION['error-partnership'])) {
                                     }
                                     ?>
                                     <td scope="row">
-                                        <form action="partnership.php?container=4" method="POST" style="display:inline;">
+                                        <?php
+                                        $applicant = 4;
+                                        $applicantContainer = base64_encode($applicant);
+                                        ?>
+                                        <form action="partnership.php?container=<?= $applicantContainer ?>" method="POST" style="display:inline;">
                                             <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
                                             <button type="submit" class="btn btn-info w-75">View</button>
                                         </form>
+
                                     </td>
                                     </td>
                                 <?php
@@ -326,7 +330,7 @@ if (isset($_SESSION['error-partnership'])) {
                         } else {
                                 ?>
                                 <td colspan="5">
-                                    <h5 scope="row" class="text-center">No record Found!</h5>
+                                    <h5 scope="row" class="text-center">No Record Found!</h5>
                                 </td>
                             <?php
                         } ?>
@@ -420,11 +424,11 @@ if (isset($_SESSION['error-partnership'])) {
             requestCard.style.display = "block";
         }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+        // if (paramValue) {
+        //     const url = new URL(window.location);
+        //     url.search = '';
+        //     history.replaceState({}, document.title, url.toString());
+        // };
     </script>
 
 

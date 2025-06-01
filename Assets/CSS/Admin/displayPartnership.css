@@ -2,24 +2,20 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
-@font-face {
+/* @font-face {
   font-family: "Plus Jakarta Sans";
   src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-}
+} */
+
 @font-face {
-  font-family: "Prata";
-  src: url(../../Fonts/Prata/Prata-Regular.ttf);
-}
-@font-face {
-  font-family: "Agbalumo";
-  src: url(../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Plus Jakarta Sans";
   text-decoration: none;
   list-style: none;
 }
@@ -52,37 +48,38 @@ body {
 .logo {
   width: 15vw;
 }
+
 #dashboard {
-  font-family: "Plus Jakarta Sans";
   text-decoration: none;
-  color: black;
-  font-weight: 800;
-  font-size: 2.3vw;
   margin-left: 1vw;
 }
 
+.adminTitle {
+  margin-top: 1rem;
+  font-family: "Lora" !important;
+  /* font-weight: bold; */
+  font-size: 24px;
+}
 .navbar {
+  font-family: "Lora";
   border-radius: 15px;
-  max-width: 80vw;
+  max-width: 75vw;
   margin: 20px auto;
-  padding: 5px 15px;
+  padding: 1rem !important;
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  h5 {
+    font-size: 20px !important;
+  }
 }
 
-/* .me-2 {
-  margin-left: 2vw;
-} */
 .nav-link {
   display: flex !important;
+  margin: auto;
   flex-direction: column;
   align-items: center;
-  margin: 0 0 0 3vw;
   color: black;
   text-decoration: none;
-  font-size: 1.5vw !important;
-  border-radius: 10px;
-  padding: 5px 10px;
 }
 
 .nav-link.active:after {
@@ -147,9 +144,9 @@ body {
 }
 
 .category-title {
-  font-family: "Poppins Black";
+  font-family: "Poppins Black" !important;
   font-style: italic;
-  font-weight: bold;
+  font-weight: bolder;
   font-size: 2.5vw;
   color: #00b3d1 !important;
 }
@@ -200,9 +197,6 @@ th {
 th {
   background-color: #91d2f2 !important;
 }
-.text-center {
-  color: rgb(255, 0, 0) !important;
-}
 
 h4 {
   text-align: center;
@@ -211,4 +205,17 @@ h4 {
 
 .buttonContainer {
   z-index: 1;
+}
+
+.page-title {
+  font-family: "Lora";
+}
+
+.table-body {
+  font-family: "Poppins";
+  color: black;
+}
+
+.table-header {
+  font-family: "Lora";
 }

@@ -1,0 +1,66 @@
+<!-- Trigger for Services -->
+
+DELIMITER $$
+
+CREATE TRIGGER after_insert_resort_service
+AFTER INSERT ON resortServices
+FOR EACH ROW
+BEGIN
+INSERT INTO services (resortServiceID)
+VALUES (NEW.resortServiceID);
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER after_insert_entranceRates
+AFTER INSERT ON entrancerates
+FOR EACH ROW
+BEGIN
+INSERT INTO services (resortEntranceID)
+VALUES (NEW.resortEntranceID);
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_insert_partnership_service
+AFTER INSERT ON partnershipservices
+FOR EACH ROW
+BEGIN
+INSERT INTO services (partnershipServiceID)
+VALUES (NEW.partnershipServiceID);
+END$$
+
+DELIMITER ;
+
+<!-- End Trigger for Services -->
+
+<!-- Trigger for allservices -->
+DELIMITER $$
+
+CREATE TRIGGER after_insert_service
+AFTER INSERT ON services
+FOR EACH ROW
+BEGIN
+INSERT INTO allservices (serviceID)
+VALUES (NEW.serviceID);
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_insert_package
+AFTER INSERT ON packages
+FOR EACH ROW
+BEGIN
+INSERT INTO allservices (packageID)
+VALUES (NEW.packageID);
+END$$
+
+DELIMITER ;
