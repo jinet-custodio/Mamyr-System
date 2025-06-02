@@ -45,7 +45,7 @@ require '../Config/dbcon.php';
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">BLOG</a>
+                    <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">RATES</a>
@@ -81,7 +81,7 @@ require '../Config/dbcon.php';
                 </div>
             </a>
 
-            <a class="categoryLink" onclick="showHotels(event)">
+            <a class="categoryLink" onclick="showHotels()">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
                     <img class="card-img-top" src="../assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
                     <div class="card-body">
@@ -96,6 +96,7 @@ require '../Config/dbcon.php';
         <div class="backToSelection" id="backToSelection">
             <img src="../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
         </div>
+
         <div class="titleContainer">
             <h4 class="title">Our Rates</h4>
         </div>
@@ -111,7 +112,7 @@ require '../Config/dbcon.php';
                 // DB query
                 $rateSql = "SELECT * FROM entrancerates ORDER BY 
                     FIELD(session_type, 'Day', 'Night', 'Overnight'), 
-                    FIELD(category, 'Adult', 'Kids')";
+                    FIELD(ERcategory, 'Adult', 'Kids')";
                 $rateResult = mysqli_query($conn, $rateSql);
 
                 // Organize data into sessions
@@ -122,27 +123,27 @@ require '../Config/dbcon.php';
                         if (!isset($sessions[$session])) {
                             $sessions[$session] = [
                                 'time_range' => $row['time_range'],
-                                'rates' => []
+                                'ERprice' => []
                             ];
                         }
-                        $sessions[$session]['rates'][$row['category']] = $row['price'];
+                        $sessions[$session]['ERprice'][$row['ERcategory']] = $row['ERprice'];
                     }
 
                     // Display cards
                     foreach ($sessions as $session => $data) {
                 ?>
-                <div class="entranceCard card">
-                    <div class="entrace-card-body">
-                        <h5 class="entrance-card-title">
-                            <span class="dayNight"><?= strtoupper($session) ?></span><br>
-                            <?= $data['time_range'] ?>
-                        </h5>
-                        <div class="entrance-card-content">
-                            <span class="age">ADULT - PHP<?= number_format($data['rates']['Adult'], 2) ?></span>
-                            <span class="age">KIDS - PHP<?= number_format($data['rates']['Kids'], 2) ?></span>
+                        <div class="entranceCard card">
+                            <div class="entrace-card-body">
+                                <h5 class="entrance-card-title">
+                                    <span class="dayNight"><?= strtoupper($session) ?></span><br>
+                                    <?= $data['time_range'] ?>
+                                </h5>
+                                <div class="entrance-card-content">
+                                    <span class="age">ADULT - PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
+                                    <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
                 <?php
                     }
                 } else {
@@ -162,35 +163,35 @@ require '../Config/dbcon.php';
 
             <div class="cottages">
                 <?php
-                $cottagesql = "SELECT * FROM resortServices WHERE category = 'Cottage'";
+                $cottagesql = "SELECT * FROM resortServices WHERE RSCategoryID = 2";
                 $cottresult = mysqli_query($conn, $cottagesql);
                 if (mysqli_num_rows($cottresult) > 0) {
                     foreach ($cottresult as $cottage) {
                 ?>
-                <div class="cottage">
-                    <div class="Description" style="width: 40%;">
-                        <h2> Good for <?= $cottage['capacity'] ?> pax </h2>
-                        <p>
-                            <?= $cottage['description'] ?>
-                        </p>
-                        <p class="font-weight-bold">
-                            Price: PHP <?= $cottage['price'] ?>
-                        </p>
-                    </div>
-                    <div class="halfImg" style="width: 40%;">
-                        <?php
+                        <div class="cottage">
+                            <div class="Description" style="width: 40%;">
+                                <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
+                                <p>
+                                    <?= $cottage['RSdescription'] ?>
+                                </p>
+                                <p class="font-weight-bold">
+                                    Price: PHP <?= $cottage['RSprice'] ?>
+                                </p>
+                            </div>
+                            <div class="halfImg" style="width: 40%;">
+                                <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
                                 if (!empty($cottage['imageData'])) {
-                                    $imgData = base64_encode($cottage['imageData']);
+                                    $imgData = base64_encode($cottage['RSimageData']);
                                     $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                 }
                                 ?>
-                        <img src="<?= $imgSrc ?>" alt="Cottage Image" class="rounded" id="displayPhoto">
+                                <img src="<?= $imgSrc ?>" alt="Cottage Image" class="rounded" id="displayPhoto">
 
-                    </div>
+                            </div>
 
 
-                </div>
+                        </div>
                 <?php
                     }
                 } else {
@@ -208,32 +209,32 @@ require '../Config/dbcon.php';
                 <h4 class="entranceTitle">Videoke for Rent</h4>
             </div>
             <?php
-            $vidsql = "SELECT * FROM resortServices WHERE facilityName = 'Videoke 1'";
+            $vidsql = "SELECT * FROM resortServices WHERE RServiceName = 'Videoke 1'";
             $vidresult = mysqli_query($conn, $vidsql);
             if (mysqli_num_rows($vidresult) > 0) {
                 foreach ($vidresult as $videoke) {
             ?>
-            <div class="section">
-                <div class="singleImg" style="width: 40%;">
-                    <?php
+                    <div class="section">
+                        <div class="singleImg" style="width: 40%;">
+                            <?php
                             $imgSrc = '../../Assets/Images/no-picture.jpg';
-                            if (!empty($videoke['imageData'])) {
-                                $imgData = base64_encode($videoke['imageData']);
+                            if (!empty($videoke['RSimageData'])) {
+                                $imgData = base64_encode($videoke['RSimageData']);
                                 $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                             }
                             ?>
-                    <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="displayPhoto">
+                            <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="displayPhoto">
 
-                </div>
-                <div class="Description" id="videokeDesc" style="width: 40%;">
-                    <h2 style="font-size: 3vw;"> PHP <?= $videoke['price'] ?> per Rent </h2>
-                    <p>
-                        <?= $videoke['description'] ?>
-                    </p>
-                </div>
+                        </div>
+                        <div class="Description" id="videokeDesc" style="width: 40%;">
+                            <h2 style="font-size: 3vw;"> PHP <?= $videoke['RSprice'] ?> per Rent </h2>
+                            <p>
+                                <?= $videoke['RSdescription'] ?>
+                            </p>
+                        </div>
 
 
-            </div>
+                    </div>
             <?php
                 }
             } else {
@@ -247,30 +248,30 @@ require '../Config/dbcon.php';
         </div>
         <div class="cottage " id="billiards">
             <?php
-            $bilsql = "SELECT * FROM resortServices WHERE facilityName = 'Billiard'";
+            $bilsql = "SELECT * FROM resortServices WHERE RServiceName = 'Billiard'";
             $bilresult = mysqli_query($conn, $bilsql);
             if (mysqli_num_rows($bilresult) > 0) {
                 foreach ($bilresult as $bill) {
             ?>
-            <div class="Description" style="width: 40%;">
-                <p>
-                    <?= $bill['description'] ?>
-                </p>
-                <p class="font-weight-bold">
-                    Price: PHP<?= $bill['price'] ?> per Hour
-                </p>
-            </div>
-            <div class="singleImg" style="width: 50%;">
-                <?php
+                    <div class="Description" style="width: 40%;">
+                        <p>
+                            <?= $bill['RSdescription'] ?>
+                        </p>
+                        <p class="font-weight-bold">
+                            Price: PHP<?= $bill['RSprice'] ?> per Hour
+                        </p>
+                    </div>
+                    <div class="singleImg" style="width: 50%;">
+                        <?php
                         $imgSrc = '../../Assets/Images/no-picture.jpg';
-                        if (!empty($bill['imageData'])) {
-                            $imgData = base64_encode($bill['imageData']);
+                        if (!empty($bill['RSimageData'])) {
+                            $imgData = base64_encode($bill['RSimageData']);
                             $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                         }
                         ?>
-                <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="displayPhoto">
+                        <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="displayPhoto">
 
-            </div>
+                    </div>
             <?php
                 }
             } else {
@@ -285,30 +286,30 @@ require '../Config/dbcon.php';
                 <h4 class="entranceTitle">Massage Chair</h4>
             </div>
             <?php
-            $massagesql = "SELECT * FROM resortServices WHERE facilityName = 'Massage Chair'";
+            $massagesql = "SELECT * FROM resortServices WHERE RServiceName = 'Massage Chair'";
             $massageresult = mysqli_query($conn, $massagesql);
             if (mysqli_num_rows($massageresult) > 0) {
                 foreach ($massageresult as $massage) {
             ?>
-            <div class="section" id="massage">
-                <div class="singleImg" style="width: 50%;">
-                    <?php
+                    <div class="section" id="massage">
+                        <div class="singleImg" style="width: 50%;">
+                            <?php
                             $imgSrc = '../../Assets/Images/no-picture.jpg';
-                            if (!empty($massage['imageData'])) {
-                                $imgData = base64_encode($massage['imageData']);
+                            if (!empty($massage['RSimageData'])) {
+                                $imgData = base64_encode($massage['RSimageData']);
                                 $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                             }
                             ?>
-                    <img src="<?= $imgSrc ?>" alt="Massage Chair Image" class="rounded" id="displayPhoto">
+                            <img src="<?= $imgSrc ?>" alt="Massage Chair Image" class="rounded" id="displayPhoto">
 
-                </div>
-                <div class="Description" id="massageDesc" style="width: 40%;">
-                    <h2 style="font-size: 3vw;"> <?= $massage['price'] ?> pesos for <?= $massage['duration'] ?> </h2>
-                    <p>
-                        <?= $massage['description'] ?>
-                    </p>
-                </div>
-            </div>
+                        </div>
+                        <div class="Description" id="massageDesc" style="width: 40%;">
+                            <h2 style="font-size: 3vw;"> <?= $massage['RSprice'] ?> pesos for <?= $massage['RSduration'] ?> </h2>
+                            <p>
+                                <?= $massage['RSdescription'] ?>
+                            </p>
+                        </div>
+                    </div>
             <?php
                 }
             } else {
@@ -339,10 +340,9 @@ require '../Config/dbcon.php';
             </div>
 
             <?php
-            $availsql = "SELECT s.availabilityID, rs.facilityName 
-            FROM services s
-            JOIN resortServices rs ON s.resortServiceID = rs.resortServiceID
-            WHERE rs.category = 'Room'";
+            $availsql = "SELECT RSAvailabilityID, RServiceName 
+            FROM resortServices
+            WHERE RSCategoryID = 1";
 
             $result = mysqli_query($conn, $availsql);
             ?>
@@ -362,10 +362,10 @@ require '../Config/dbcon.php';
                         $i = 1;
                         while ($row = $result->fetch_assoc()) {
                             //ternary operator to check availability
-                            $iconPath = ($row['availabilityID'] == 1)
+                            $iconPath = ($row['RSAvailabilityID'] == 1)
                                 ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
                                 : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
-                            $roomName = htmlspecialchars($row['facilityName']);
+                            $roomName = htmlspecialchars($row['RServiceName']);
 
                             echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;">';
                             echo '  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '">';
@@ -388,35 +388,35 @@ require '../Config/dbcon.php';
             </div>
             <div class="hotelRoomList">
                 <?php
-                $roomsql = "SELECT * FROM resortServices WHERE category = 'Room'";
+                $roomsql = "SELECT * FROM resortServices WHERE RScategoryID = 1";
                 $roomresult = mysqli_query($conn, $roomsql);
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {
                 ?>
-                <div class="hotel">
-                    <div class="halfImg">
-                        <?php
+                        <div class="hotel">
+                            <div class="halfImg">
+                                <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
                                 if (!empty($hotel['imageData'])) {
-                                    $imgData = base64_encode($hotel['imageData']);
+                                    $imgData = base64_encode($hotel['RSimageData']);
                                     $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                 }
                                 ?>
-                        <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
+                                <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
 
-                    </div>
+                            </div>
 
-                    <div class="Description">
-                        <h2 class="text bold"> <?= $hotel['facilityName'] ?> </h2>
-                        <p>
-                            <?= $hotel['description'] ?>
-                        </p>
-                        <p class="font-weight-bold">
-                            Price: PHP <?= $hotel['price'] ?>
-                        </p>
-                    </div>
+                            <div class="Description">
+                                <h2 class="text bold"> <?= $hotel['RServiceName'] ?> </h2>
+                                <p>
+                                    <?= $hotel['RSdescription'] ?>
+                                </p>
+                                <p class="font-weight-bold">
+                                    Price: PHP <?= $hotel['RSprice'] ?>
+                                </p>
+                            </div>
 
-                </div>
+                        </div>
                 <?php
                     }
                 } else {
@@ -427,7 +427,7 @@ require '../Config/dbcon.php';
             </div>
         </div>
     </div>
-    <footer class="py-1" id="footer" style="margin-top: 100vh;">
+    <footer class="py-1" id="footer" style="margin-top: none;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -465,42 +465,43 @@ require '../Config/dbcon.php';
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="../Assets/JS/scrollNavbg.js"></script>
     <script>
-    const backbtn = document.getElementById("backToSelection");
+        const backbtn = document.getElementById("backToSelection");
 
-    function backToSelection() {
-        document.getElementById('selection').style.display = 'block';
-        document.getElementById('hotelRooms').style.display = 'none';
-        document.getElementById('rates').style.display = 'none';
-        document.getElementById("footer").style.marginTop = "100vh";
-    };
+        function backToSelection() {
+            document.getElementById('selection').style.display = 'block';
+            document.getElementById('hotelRooms').style.display = 'none';
+            document.getElementById('rates').style.display = 'none';
+            document.getElementById("footer").style.marginTop = "100vh";
+        };
 
-    function showRates(event) {
-        event.preventDefault();
-        document.getElementById('selection').style.display = 'none';
-        document.getElementById('hotelRooms').style.display = 'none';
-        document.getElementById('rates').style.display = 'block';
-        document.getElementById("footer").style.marginTop = "3vw";
+        function showRates(event) {
+
+            event.preventDefault();
+            document.getElementById('selection').style.display = 'none';
+            document.getElementById('hotelRooms').style.display = 'none';
+            document.getElementById('rates').style.display = 'block';
+            document.getElementById("footer").style.marginTop = "3vw";
 
 
-    }
+        }
 
-    function showHotels(event) {
-        event.preventDefault();
-        document.getElementById('selection').style.display = 'none';
-        document.getElementById('hotelRooms').style.display = 'block';
-        document.getElementById('rates').style.display = 'none';
-        document.getElementById("footer").style.marginTop = "3vw";
-    }
+        function showHotels(event) {
 
-    // const navbar = document.getElementById("navbar");
+            document.getElementById('selection').style.display = 'none';
+            document.getElementById('hotelRooms').style.display = 'block';
+            document.getElementById('rates').style.display = 'none';
+            document.getElementById("footer").style.marginTop = "3vw";
+        }
 
-    // window.addEventListener("scroll", () => {
-    //     if (window.scrollY > 10) {
-    //         navbar.classList.add("bg-white", "shadow");
-    //     } else {
-    //         navbar.classList.remove("bg-white", "shadow");
-    //     }
-    // });
+        // const navbar = document.getElementById("navbar");
+
+        // window.addEventListener("scroll", () => {
+        //     if (window.scrollY > 10) {
+        //         navbar.classList.add("bg-white", "shadow");
+        //     } else {
+        //         navbar.classList.remove("bg-white", "shadow");
+        //     }
+        // });
     </script>
 
     <!-- Sweetalert JS -->
@@ -508,22 +509,22 @@ require '../Config/dbcon.php';
 
     <!-- Sweet Alert -->
     <script>
-    const bookButtons = document.querySelectorAll('#bopNav');
+        const bookButtons = document.querySelectorAll('#bopNav');
 
-    bookButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            Swal.fire({
-                title: 'Want to Become Our Business Partner?',
-                text: 'You must have an existing account before becoming a business partner.',
-                icon: 'info',
-                confirmButtonText: 'Sign Up'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'register.php';
-                }
+        bookButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Want to Become Our Business Partner?',
+                    text: 'You must have an existing account before becoming a business partner.',
+                    icon: 'info',
+                    confirmButtonText: 'Sign Up'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'register.php';
+                    }
+                });
             });
         });
-    });
     </script>
 </body>
 

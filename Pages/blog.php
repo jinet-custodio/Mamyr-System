@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mamyr - About</title>
+    <title>Mamyr - Blog</title>
     <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../Assets/CSS/about.css">
+    <link rel="stylesheet" href="../Assets/CSS/blog.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -60,25 +60,11 @@
         </div>
     </nav>
 
-    <div class="container construction-wrapper">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1 class="construction-header">Website is Under Construction</h1>
-                <p class="construction-text">
-                    Our 'Blog' page is coming soon! We're excited to share more about who we are, what we do, and
-                    why we do it. This section is still under development, but we look forward to telling our story here
-                    in the near future. Stay tuned!
-                </p>
-
-            </div>
-            <div class="col-md-6">
-                <div class="illustration">
-                    <img src="../Assets/Images/websiteMaintenancePhoto/underconstruction.png"
-                        alt="Under Construction Illustration" class="construction-image">
-                </div>
-            </div>
+    <main>
+        <div class="titleContainer">
+            <h4 class="title">Our Blog</h4>
         </div>
-    </div>
+    </main>
 
     <footer class="py-1 my-2">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
@@ -119,22 +105,22 @@
 
     <!-- Sweet Alert -->
     <script>
-    const bookButtons = document.querySelectorAll('#bopNav');
+        const bookButtons = document.querySelectorAll('#bopNav');
 
-    bookButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            Swal.fire({
-                title: 'Want to Become Our Business Partner?',
-                text: 'You must have an existing account before becoming a business partner.',
-                icon: 'info',
-                confirmButtonText: 'Sign Up'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'register.php';
-                }
+        bookButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Want to Become Our Business Partner?',
+                    text: 'You must have an existing account before becoming a business partner.',
+                    icon: 'info',
+                    confirmButtonText: 'Sign Up'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'register.php';
+                    }
+                });
             });
         });
-    });
     </script>
 </body>
 
