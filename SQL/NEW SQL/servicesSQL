@@ -75,12 +75,4 @@ CREATE TABLE customPackages (
 );
 
 
-CREATE TABLE allServices (
-    packageServiceID INT PRIMARY KEY AUTO_INCREMENT,
-    packageID INT DEFAULT NULL,
-    serviceID INT DEFAULT NULL,
-
-    FOREIGN KEY (packageID) REFERENCES packages(packageID),
-    FOREIGN KEY (serviceID) REFERENCES services(serviceID)
-);
 

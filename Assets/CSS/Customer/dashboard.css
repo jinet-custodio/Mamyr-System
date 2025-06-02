@@ -71,6 +71,10 @@ body {
   #logOutBtn {
     color: #000000 !important;
   }
+
+  .profile-pic {
+    border: 2px solid black;
+  }
 }
 
 .nav-item {
@@ -138,7 +142,7 @@ body {
   margin-left: 1rem;
   border: 1px solid white;
   border-radius: 2rem;
-  img {
+  .profile-pic {
     height: 8vh;
     border-radius: 2rem;
   }
