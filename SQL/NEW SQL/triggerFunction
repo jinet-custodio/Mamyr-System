@@ -1,4 +1,4 @@
-<!-- Trigger for Services -->
+ 
 
 DELIMITER $$
 
@@ -37,30 +37,5 @@ END$$
 
 DELIMITER ;
 
-<!-- End Trigger for Services -->
-
-<!-- Trigger for allservices -->
-DELIMITER $$
-
-CREATE TRIGGER after_insert_service
-AFTER INSERT ON services
-FOR EACH ROW
-BEGIN
-INSERT INTO allservices (serviceID)
-VALUES (NEW.serviceID);
-END$$
-
-DELIMITER ;
 
 
-DELIMITER $$
-
-CREATE TRIGGER after_insert_package
-AFTER INSERT ON packages
-FOR EACH ROW
-BEGIN
-INSERT INTO allservices (packageID)
-VALUES (NEW.packageID);
-END$$
-
-DELIMITER ;

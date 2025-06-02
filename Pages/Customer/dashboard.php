@@ -68,7 +68,7 @@ $userRole = $_SESSION['userRole'];
             ?>
             <li class="nav-item account-nav">
                 <a href="account.php">
-                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                 </a>
             </li>
         </ul>

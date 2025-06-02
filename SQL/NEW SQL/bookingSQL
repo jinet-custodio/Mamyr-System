@@ -1,9 +1,12 @@
 CREATE TABLE bookings (
     bookingID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
-    packageServiceID INT NULL,
+    serviceID INT NULL,
+    packageID INT NULL,
     customPackageID INT NULL,
     additionalRequest VARCHAR(255),
+    paxNum INT NULL,
+    hoursNum INT NULL,
     startDate DATE NOT NULL,
     endDate DATE NOT NULL,
     totalCost DECIMAL(10,2) NOT NULL,
@@ -13,7 +16,8 @@ CREATE TABLE bookings (
 
     FOREIGN KEY (userID) REFERENCES users(userID),
     FOREIGN KEY (bookingStatus) REFERENCES statuses(statusID),
-    FOREIGN KEY (packageServiceID) REFERENCES allServices(packageServiceID),
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID),
+    FOREIGN KEY (packageID) REFERENCES packages(packageID),
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
 
 );
