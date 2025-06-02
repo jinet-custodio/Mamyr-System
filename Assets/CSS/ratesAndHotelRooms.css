@@ -154,7 +154,7 @@ nav {
 
 .selection {
   margin-top: 20vh;
-  height: 100vh;
+
 }
 /* body css */
 .titleContainer {
@@ -595,6 +595,7 @@ footer {
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
   .selection {
     margin-top: 5vw;
+    height: 100vh;
   }
 
   .backToSelection img {
@@ -659,6 +660,12 @@ footer {
   .entranceCard span {
     font-size: clamp(10px, calc(1.1vh + 2px), 15px);
   }
+
+    .selection {
+    margin-top: 15vw;
+    height: 100vh;
+  }
+
 
   .entranceLine {
     border: none;
@@ -744,7 +751,9 @@ footer {
 @media (max-width: 400px) {
   .selection {
     margin-top: 15vw;
+    height: 100vh;
   }
+  
 
   .cottage {
     margin: 0 auto 2vw auto;

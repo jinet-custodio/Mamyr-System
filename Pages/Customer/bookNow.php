@@ -118,8 +118,8 @@ $userRole = $_SESSION['userRole'];
             </ul>
         </div>
     </nav>
-
-    <div class="categories-page" id="category-page">
+    <!-- Made every section visible except for the selection section to see the errors -->
+    <div class="categories-page" id="category-page" style="display: none;">
         <div class="titleContainer" style="margin-top: 10vw !important;">
             <h4 class="title">What are you booking for?</h4>
         </div>
@@ -152,7 +152,7 @@ $userRole = $_SESSION['userRole'];
         </div>
     </div>
 
-    <form action="#" method="POST" id="resort-page" style="display: none;">
+    <form action="#" method="POST" id="resort-page" style="display: block;">
         <div class="resort" id="resort">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
@@ -216,13 +216,10 @@ $userRole = $_SESSION['userRole'];
 
 
                             </ul> -->
-
                             <select id="cottageSelections" name="cottageSelections" class="form-select" required>
                                 <option value="" disabled selected>Please Select a Cottage</option>
                                 <?php
-                                $cottageQuery = "SELECT rs.*, rsc.categoryName FROM resortservices rs
-                                INNER JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID
-                                WHERE RScategoryID = '2'";
+                                $cottageQuery = "SELECT * FROM resortservices WHERE RScategoryID = 2";
                                 $result = mysqli_query($conn, $cottageQuery);
                                 if (mysqli_num_rows($result) > 0) {
                                     $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -280,7 +277,7 @@ $userRole = $_SESSION['userRole'];
     <!--end ng resort div-->
 
 
-    <form action="#" method="POST" id="hotel-page" style="display: none;">
+    <form action="#" method="POST" id="hotel-page" style="display: block;">
         <div class="hotel" id="hotel">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
@@ -289,11 +286,10 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
             </div>
             <?php
-            $availsql = "SELECT s.RSavailabilityID, rs.RServiceName 
+            $availsql = "SELECT s.availabilityID, rs.facilityName 
             FROM services s
             JOIN resortServices rs ON s.resortServiceID = rs.resortServiceID
-            INNER JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID
-            WHERE rs.RScategoryID = '1'";
+            WHERE rs.category = 'Room'";
 
             $result = mysqli_query($conn, $availsql);
             ?>
@@ -315,10 +311,10 @@ $userRole = $_SESSION['userRole'];
                             $i = 1;
                             while ($row = $result->fetch_assoc()) {
                                 //ternary operator to check availability
-                                $iconPath = ($row['RSavailabilityID'] == 1)
+                                $iconPath = ($row['availabilityID'] == 1)
                                     ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
                                     : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
-                                $roomName = htmlspecialchars($row['RServiceName']);
+                                $roomName = htmlspecialchars($row['facilityName']);
 
                                 echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;">';
                                 echo '  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '">';
@@ -393,7 +389,7 @@ $userRole = $_SESSION['userRole'];
     </form>
     <!--end ng hotel div -->
 
-    <form action="../../Function/Booking/eventBooking.php" method="POST" id="event-page" style="display: none;">
+    <form action="../../Function/Booking/eventBooking.php" method="POST" id="event-page" style="display: block;">
         <div class=" event" id="event">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
