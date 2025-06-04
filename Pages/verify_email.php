@@ -18,7 +18,8 @@ if (isset($_SESSION['email'])) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up</title>
+  <title>OTP Verification</title>
+  <link rel="shortcut icon" href="../Assets/Images/Icon/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="../Assets/CSS/modal.css" />
   <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css" />
   <link

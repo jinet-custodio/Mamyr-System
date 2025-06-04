@@ -23,7 +23,7 @@ require '../Function/OTPdeletion.php';
     <div class="container">
         <!-- Login Form -->
         <div class="form-box login">
-            <form action="../Function/register.php" method="POST">
+            <form action="../Function/register.php" id="login-form" method="POST">
                 <h1>Login</h1>
                 <div class="input-box">
                     <input type="text" class="form-control" id="login_email" name="login_email"
@@ -39,7 +39,7 @@ require '../Function/OTPdeletion.php';
                 <div class="forgot-link">
                     <a href="../Pages/enterEmail.php">Forgot Password?</a>
                 </div>
-                <button type="submit" class="btn" id="login" name="login">Login</button>
+                <button type="submit" class="btn" id="login" name="login" disabled>Login</button>
 
                 <div class="loginMessageBox">
                     <div class="errorMsg">
@@ -194,6 +194,10 @@ require '../Function/OTPdeletion.php';
             </div>
         </div>
     </div>
+    <div id="loaderOverlay" style="display: none;">
+        <div class="loader" id="loader"></div>
+    </div>
+
     <!-- Check if user agree to the terms and condition -->
     <script src="../Assets/JS/checkbox.js"></script>
     <!-- Password Match JS-->
@@ -202,6 +206,36 @@ require '../Function/OTPdeletion.php';
     <script src="../Assets/JS/checkPassword.js"></script>
     <!-- Login Password Validation JS -->
     <script src="../Assets/JS/checkLoginPassword.js"></script>
+    <!-- Loader function -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const signUpBtn = document.getElementById('signUp');
+            const loginBtn = document.getElementById('login');
+            const loginEmail = document.getElementById('login_email');
+            const loginPassword = document.getElementById('login_password');
+            const loader = document.getElementById('loader');
+
+            function validateLoginFields() {
+                const emailFilled = loginEmail.value.trim() !== '';
+                const passwordFilled = loginPassword.value.trim() !== '';
+                loginBtn.disabled = !(emailFilled && passwordFilled);
+            }
+            loginEmail.addEventListener('input', validateLoginFields);
+            loginPassword.addEventListener('input', validateLoginFields);
+            validateLoginFields();
+
+
+            // Click event on the button
+            signUpBtn.addEventListener('click', function(e) {
+                document.getElementById('loaderOverlay').style.display = 'flex';
+            });
+            loginBtn.addEventListener('click', function(e) {
+                document.getElementById('loaderOverlay').style.display = 'flex';
+            });
+        });
+    </script>
+
+
     <script>
         const container = document.querySelector('.container');
         const registerBtn = document.querySelector('.register-btn');
