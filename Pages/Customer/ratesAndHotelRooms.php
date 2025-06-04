@@ -133,7 +133,7 @@ $userRole = $_SESSION['userRole'];
                 // DB query
                 $rateSql = "SELECT * FROM entrancerates ORDER BY 
                     FIELD(session_type, 'Day', 'Night', 'Overnight'), 
-                    FIELD(category, 'Adult', 'Kids')";
+                    FIELD(ERcategory, 'Adult', 'Kids')";
                 $rateResult = mysqli_query($conn, $rateSql);
 
                 // Organize data into sessions
@@ -144,10 +144,10 @@ $userRole = $_SESSION['userRole'];
                         if (!isset($sessions[$session])) {
                             $sessions[$session] = [
                                 'time_range' => $row['time_range'],
-                                'rates' => []
+                                'ERprice' => []
                             ];
                         }
-                        $sessions[$session]['rates'][$row['category']] = $row['price'];
+                        $sessions[$session]['ERprice'][$row['ERcategory']] = $row['ERprice'];
                     }
 
                     // Display cards
@@ -160,8 +160,8 @@ $userRole = $_SESSION['userRole'];
                                     <?= $data['time_range'] ?>
                                 </h5>
                                 <div class="entrance-card-content">
-                                    <span class="age">ADULT - PHP<?= number_format($data['rates']['Adult'], 2) ?></span>
-                                    <span class="age">KIDS - PHP<?= number_format($data['rates']['Kids'], 2) ?></span>
+                                    <span class="age">ADULT - PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
+                                    <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +172,6 @@ $userRole = $_SESSION['userRole'];
                 }
                 ?>
             </div>
-
         </div>
 
 
@@ -184,26 +183,26 @@ $userRole = $_SESSION['userRole'];
 
             <div class="cottages">
                 <?php
-                $cottagesql = "SELECT * FROM resortServices WHERE category = 'Cottage'";
+                $cottagesql = "SELECT * FROM resortServices WHERE RSCategoryID = 2";
                 $cottresult = mysqli_query($conn, $cottagesql);
                 if (mysqli_num_rows($cottresult) > 0) {
                     foreach ($cottresult as $cottage) {
                 ?>
                         <div class="cottage">
                             <div class="Description" style="width: 40%;">
-                                <h2> Good for <?= $cottage['capacity'] ?> pax </h2>
+                                <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
                                 <p>
-                                    <?= $cottage['description'] ?>
+                                    <?= $cottage['RSdescription'] ?>
                                 </p>
                                 <p class="font-weight-bold">
-                                    Price: PHP <?= $cottage['price'] ?>
+                                    Price: PHP <?= $cottage['RSprice'] ?>
                                 </p>
                             </div>
                             <div class="halfImg" style="width: 40%;">
                                 <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
                                 if (!empty($cottage['imageData'])) {
-                                    $imgData = base64_encode($cottage['imageData']);
+                                    $imgData = base64_encode($cottage['RSimageData']);
                                     $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                 }
                                 ?>
@@ -230,7 +229,7 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="entranceTitle">Videoke for Rent</h4>
             </div>
             <?php
-            $vidsql = "SELECT * FROM resortServices WHERE facilityName = 'Videoke 1'";
+            $vidsql = "SELECT * FROM resortServices WHERE RServiceName = 'Videoke 1'";
             $vidresult = mysqli_query($conn, $vidsql);
             if (mysqli_num_rows($vidresult) > 0) {
                 foreach ($vidresult as $videoke) {
@@ -239,8 +238,8 @@ $userRole = $_SESSION['userRole'];
                         <div class="singleImg" style="width: 40%;">
                             <?php
                             $imgSrc = '../../Assets/Images/no-picture.jpg';
-                            if (!empty($videoke['imageData'])) {
-                                $imgData = base64_encode($videoke['imageData']);
+                            if (!empty($videoke['RSimageData'])) {
+                                $imgData = base64_encode($videoke['RSimageData']);
                                 $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                             }
                             ?>
@@ -248,9 +247,9 @@ $userRole = $_SESSION['userRole'];
 
                         </div>
                         <div class="Description" id="videokeDesc" style="width: 40%;">
-                            <h2 style="font-size: 3vw;"> PHP <?= $videoke['price'] ?> per Rent </h2>
+                            <h2 style="font-size: 3vw;"> PHP <?= $videoke['RSprice'] ?> per Rent </h2>
                             <p>
-                                <?= $videoke['description'] ?>
+                                <?= $videoke['RSdescription'] ?>
                             </p>
                         </div>
 
@@ -269,24 +268,24 @@ $userRole = $_SESSION['userRole'];
         </div>
         <div class="cottage " id="billiards">
             <?php
-            $bilsql = "SELECT * FROM resortServices WHERE facilityName = 'Billiard'";
+            $bilsql = "SELECT * FROM resortServices WHERE RServiceName = 'Billiard'";
             $bilresult = mysqli_query($conn, $bilsql);
             if (mysqli_num_rows($bilresult) > 0) {
                 foreach ($bilresult as $bill) {
             ?>
                     <div class="Description" style="width: 40%;">
                         <p>
-                            <?= $bill['description'] ?>
+                            <?= $bill['RSdescription'] ?>
                         </p>
                         <p class="font-weight-bold">
-                            Price: PHP<?= $bill['price'] ?> per Hour
+                            Price: PHP<?= $bill['RSprice'] ?> per Hour
                         </p>
                     </div>
                     <div class="singleImg" style="width: 50%;">
                         <?php
                         $imgSrc = '../../Assets/Images/no-picture.jpg';
-                        if (!empty($bill['imageData'])) {
-                            $imgData = base64_encode($bill['imageData']);
+                        if (!empty($bill['RSimageData'])) {
+                            $imgData = base64_encode($bill['RSimageData']);
                             $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                         }
                         ?>
@@ -307,7 +306,7 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="entranceTitle">Massage Chair</h4>
             </div>
             <?php
-            $massagesql = "SELECT * FROM resortServices WHERE facilityName = 'Massage Chair'";
+            $massagesql = "SELECT * FROM resortServices WHERE RServiceName = 'Massage Chair'";
             $massageresult = mysqli_query($conn, $massagesql);
             if (mysqli_num_rows($massageresult) > 0) {
                 foreach ($massageresult as $massage) {
@@ -316,8 +315,8 @@ $userRole = $_SESSION['userRole'];
                         <div class="singleImg" style="width: 50%;">
                             <?php
                             $imgSrc = '../../Assets/Images/no-picture.jpg';
-                            if (!empty($massage['imageData'])) {
-                                $imgData = base64_encode($massage['imageData']);
+                            if (!empty($massage['RSimageData'])) {
+                                $imgData = base64_encode($massage['RSimageData']);
                                 $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                             }
                             ?>
@@ -325,9 +324,9 @@ $userRole = $_SESSION['userRole'];
 
                         </div>
                         <div class="Description" id="massageDesc" style="width: 40%;">
-                            <h2 style="font-size: 3vw;"> <?= $massage['price'] ?> pesos for <?= $massage['duration'] ?> </h2>
+                            <h2 style="font-size: 3vw;"> <?= $massage['RSprice'] ?> pesos for <?= $massage['RSduration'] ?> </h2>
                             <p>
-                                <?= $massage['description'] ?>
+                                <?= $massage['RSdescription'] ?>
                             </p>
                         </div>
                     </div>
@@ -360,10 +359,9 @@ $userRole = $_SESSION['userRole'];
             </div>
 
             <?php
-            $availsql = "SELECT s.availabilityID, rs.facilityName 
-            FROM services s
-            JOIN resortServices rs ON s.resortServiceID = rs.resortServiceID
-            WHERE rs.category = 'Room'";
+            $availsql = "SELECT RSAvailabilityID, RServiceName 
+            FROM resortServices
+            WHERE RSCategoryID = 1";
 
             $result = mysqli_query($conn, $availsql);
             ?>
@@ -383,10 +381,10 @@ $userRole = $_SESSION['userRole'];
                         $i = 1;
                         while ($row = $result->fetch_assoc()) {
                             //ternary operator to check availability
-                            $iconPath = ($row['availabilityID'] == 1)
+                            $iconPath = ($row['RSAvailabilityID'] == 1)
                                 ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
                                 : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
-                            $roomName = htmlspecialchars($row['facilityName']);
+                            $roomName = htmlspecialchars($row['RServiceName']);
 
                             echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;">';
                             echo '  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '">';
@@ -409,7 +407,7 @@ $userRole = $_SESSION['userRole'];
             </div>
             <div class="hotelRoomList">
                 <?php
-                $roomsql = "SELECT * FROM resortServices WHERE category = 'Room'";
+                $roomsql = "SELECT * FROM resortServices WHERE RScategoryID = 1";
                 $roomresult = mysqli_query($conn, $roomsql);
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {
@@ -419,7 +417,7 @@ $userRole = $_SESSION['userRole'];
                                 <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
                                 if (!empty($hotel['imageData'])) {
-                                    $imgData = base64_encode($hotel['imageData']);
+                                    $imgData = base64_encode($hotel['RSimageData']);
                                     $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                 }
                                 ?>
@@ -428,12 +426,12 @@ $userRole = $_SESSION['userRole'];
                             </div>
 
                             <div class="Description">
-                                <h2 class="text bold"> <?= $hotel['facilityName'] ?> </h2>
+                                <h2 class="text bold"> <?= $hotel['RServiceName'] ?> </h2>
                                 <p>
-                                    <?= $hotel['description'] ?>
+                                    <?= $hotel['RSdescription'] ?>
                                 </p>
                                 <p class="font-weight-bold">
-                                    Price: PHP <?= $hotel['price'] ?>
+                                    Price: PHP <?= $hotel['RSprice'] ?>
                                 </p>
                             </div>
 
