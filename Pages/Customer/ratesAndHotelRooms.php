@@ -57,17 +57,17 @@ $userRole = $_SESSION['userRole'];
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item">
-                    <a class="nav-link" href="../../index.php"> Home</a>
+                    <a class="nav-link" href="dashboard.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href=" ../../Pages/amenities.php" id="navbarDropdown"
+                    <a class="nav-link  dropdown-toggle " href="amenities.php" id="navbarDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/Pages/Customer/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item active" href="/Pages/Customer/ratesAndHotelRooms.php">HOTEL ROOMS AND RATES</a></li>
-                        <li><a class="dropdown-item" href="/Pages/Customer/events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">HOTEL ROOMS AND RATES</a></li>
+                        <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -77,7 +77,7 @@ $userRole = $_SESSION['userRole'];
                     <a class="nav-link" href="ratesAndHotelRooms.php">RATES</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="beOurPartner.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="bookNow.php">BOOK NOW</a>

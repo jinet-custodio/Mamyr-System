@@ -173,13 +173,13 @@ $userRole = $_SESSION['userRole'];
                     <?php
                     $selectQuery = "SELECT ps.PBName, rs.RScategoryID , ec.categoryName, b.* 
                 FROM bookings b
-                LEFT JOIN allservices a ON b.packageServiceID = a.packageServiceID
-                LEFT JOIN packages p ON a.packageID = p.packageID
+                LEFT JOIN packages p ON b.packageID = p.packageID
                 LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
-                LEFT JOIN services s ON a.serviceID = s.serviceID
+                LEFT JOIN services s ON b.serviceID = s.serviceID
                 LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID
                 LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
-                WHERE userID = '$userID'";
+                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
+                WHERE b.userID = '$userID'";
                     $result = mysqli_query($conn, $selectQuery);
                     if (mysqli_num_rows($result) > 0) {
                         foreach ($result as $bookings) {

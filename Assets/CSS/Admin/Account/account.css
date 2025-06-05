@@ -1,0 +1,243 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 20vw;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 2px solid rgb(185, 185, 185);
+  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  color: black !important;
+  padding: 1rem;
+  margin: 1.5rem 0.5rem 1.5rem 0.5rem;
+  h5 {
+    font-family: "Lora" !important;
+    margin: 0;
+    font-size: 25px;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.sidebar .list-group-item {
+  font-family: "Lora";
+  font-size: 18px;
+  border: none;
+}
+
+.list-group-item.active {
+  background-color: rgb(11, 144, 227) !important;
+  color: white !important;
+}
+
+.sidebar a {
+  color: black !important;
+  text-decoration: none;
+}
+
+.sidebar li:hover {
+  background-color: rgb(11, 144, 227);
+  color: white;
+  cursor: pointer;
+}
+
+.sidebar-icon {
+  height: 25px;
+  width: 25px;
+}
+
+.home-button {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  right: 3vw;
+  margin-top: -5%;
+}
+
+.admin-account-container {
+  /* border: 1px solid red; */
+  margin-left: 23vw;
+  margin-top: 6rem;
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.card {
+  font-family: "Poppins";
+  width: 95%;
+  padding: 1rem;
+  border: 2px solid rgb(255, 255, 255);
+  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 2rem;
+}
+
+.account-info {
+  display: flex;
+  align-items: center;
+}
+
+.profile-image {
+  display: flex;
+  flex-direction: column !important;
+  align-items: center;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column !important;
+  margin-left: 1rem;
+  margin-top: -0.5rem;
+}
+
+.changePfpBtn {
+  font-family: "Lora" !important;
+  font-size: 15px;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  text-align: center;
+  margin-top: 0.5rem;
+  /* background-color: rgb(33, 148, 209); */
+  color: rgb(255, 255, 255);
+  img {
+    height: 35px;
+  }
+}
+
+.btn-close {
+  height: 6vh;
+  width: 40px;
+  border-radius: 3rem;
+}
+
+.modal-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.custom-file-button {
+  font-family: "Lora" !important;
+  font-size: 18px;
+  width: 150px;
+  color: black;
+}
+
+.modal-button {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0.5rem;
+}
+
+.account-name {
+  font-size: 20px !important;
+}
+.account-contact {
+  font-size: 18px !important;
+}
+
+.profile-pic {
+  height: 120px;
+  width: 120px;
+  border-radius: 4rem;
+}
+
+/* .page-title {
+  margin: 1.5rem 0 0.5rem 0;
+  font-size: 30px;
+} */
+
+.admin-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.info {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.info input {
+  padding: 0.5rem;
+  padding-top: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 18px !important;
+  background-color: #fff;
+  text-indent: 1rem;
+  width: 100%;
+  color: black !important;
+}
+
+.info label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: #aaa;
+  pointer-events: none;
+  transition: 0.3s ease all;
+}
+
+.info input:focus + label,
+.info input:not(:placeholder-shown) + label {
+  top: 1rem;
+  left: 1rem;
+  font-size: 15px;
+  color: #796565;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.edit {
+  width: 25%;
+  padding: 0.5rem;
+  font-size: 20px;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit:hover {
+  background-color: #0056b3;
+}
+
+.change-info {
+  width: 150px;
+}

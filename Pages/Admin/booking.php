@@ -100,7 +100,7 @@ if (isset($_SESSION['error'])) {
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="account.php" class="admin">
+            <a href="Account/account.php" class="admin">
                 <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
             </a>
         </div>
@@ -169,18 +169,22 @@ if (isset($_SESSION['error'])) {
                 <tbody>
                     <!-- Select booking info -->
                     <?php
-                    $selectQuery = "SELECT u.firstName, u.lastName, ps.PBName, 
-                    rs.*, rsc.categoryName AS resortCategoryName , ec.categoryName AS eventCategoryName, b.*, st.*, a.* 
+                    $selectQuery = "SELECT u.firstName, u.lastName, 
+                    ps.*, rs.*, cp.*,
+                    rsc.categoryName AS resortCategoryName , 
+                    ec.categoryName AS eventCategoryName,
+                    st.statusName,
+                    b.*
                 FROM bookings b
-                INNER JOIN users u ON b.userID = u.userID
-                LEFT JOIN statuses st ON st.statusID = b.bookingStatus
-                LEFT JOIN allservices a ON b.packageServiceID = a.packageServiceID
-                LEFT JOIN packages p ON a.packageID = p.packageID
-                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
-                LEFT JOIN services s ON a.serviceID = s.serviceID
-                LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID
-                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID
-                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
+                INNER JOIN users u ON b.userID = u.userID   -- to get  the firstname and lastname 
+                LEFT JOIN statuses st ON st.statusID = b.bookingStatus  -- to get the status name
+                LEFT JOIN packages p ON b.packageID = p.packageID  -- to get the info of the package na binook 
+                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
+                LEFT JOIN services s ON b.serviceID = s.serviceID   -- to get the info of the service na binook 
+                LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID  -- information of service
+                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
+                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
+                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
                 ";
                     $result = mysqli_query($conn, $selectQuery);
                     if (mysqli_num_rows($result) > 0) {
