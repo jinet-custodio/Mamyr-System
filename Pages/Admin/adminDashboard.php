@@ -89,7 +89,7 @@ $userRole = $_SESSION['userRole'];
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="account.php" class="admin">
+            <a href="Account/account.php" class="admin">
                 <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
             </a>
         </div>
