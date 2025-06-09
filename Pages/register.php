@@ -72,7 +72,7 @@ require '../Function/OTPdeletion.php';
             </form>
         </div>
 
-        <div class="form-box register">
+        <div class="form-box register" id="register">
             <form action="../Function/register.php" method="POST">
                 <h1>Sign Up</h1>
                 <div class="fullName">
@@ -167,7 +167,8 @@ require '../Function/OTPdeletion.php';
             <div class="toggle-panel toggle-left">
                 <h1 class="welcome">Welcome to Mamyr!</h1>
                 <p>Don't have an account?</p>
-                <button class="btn register-btn">Sign Up</button>
+                <button class="btn register-btn"> <a href="userType.php" class="signUpLink">Sign Up
+                    </a></button>
 
                 <div class="back-icon-container-login">
                     <a href="../index.php">
@@ -237,64 +238,64 @@ require '../Function/OTPdeletion.php';
 
 
     <script>
-        const container = document.querySelector('.container');
-        const registerBtn = document.querySelector('.register-btn');
-        const loginBtn = document.querySelector('.login-btn');
+    const container = document.querySelector('.container');
+    const registerBtn = document.querySelector('.register-btn');
+    const loginBtn = document.querySelector('.login-btn');
 
-        registerBtn.addEventListener('click', () => {
-            container.classList.add('active');
-        });
+    // registerBtn.addEventListener('click', () => {
+    //     container.classList.add('active');
+    // });
 
-        loginBtn.addEventListener('click', () => {
-            container.classList.remove('active');
-        });
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove('active');
+    });
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
 
-        if (page === 'register') {
-            container.classList.add('active');
+    if (page === 'register') {
+        container.classList.add('active');
 
-            // 🔽 Remove `?page=register` from URL after activating the form
-            const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({}, document.title, urlWithoutParam);
-        } else {
-            container.classList.remove('active');
-        }
+        // 🔽 Remove `?page=register` from URL after activating the form
+        const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({}, document.title, urlWithoutParam);
+    } else {
+        container.classList.remove('active');
+    }
     </script>
 
     <!-- Eye icon of password show and hide -->
     <script>
-        const passwordField = document.getElementById('login_password');
-        const passwordField1 = document.getElementById('password');
-        const passwordField2 = document.getElementById('confirm_password');
-        const togglePassword = document.getElementById('togglePassword');
-        const togglePassword1 = document.getElementById('togglePassword1');
-        const togglePassword2 = document.getElementById('togglePassword2');
+    const passwordField = document.getElementById('login_password');
+    const passwordField1 = document.getElementById('password');
+    const passwordField2 = document.getElementById('confirm_password');
+    const togglePassword = document.getElementById('togglePassword');
+    const togglePassword1 = document.getElementById('togglePassword1');
+    const togglePassword2 = document.getElementById('togglePassword2');
 
-        function togglePasswordVisibility(passwordField, toggleIcon) {
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('bxs-hide');
-                toggleIcon.classList.add('bx-show-alt');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('bx-show-alt');
-                toggleIcon.classList.add('bxs-hide');
-            }
+    function togglePasswordVisibility(passwordField, toggleIcon) {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('bxs-hide');
+            toggleIcon.classList.add('bx-show-alt');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('bx-show-alt');
+            toggleIcon.classList.add('bxs-hide');
         }
+    }
 
-        togglePassword.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField, togglePassword);
-        });
+    togglePassword.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField, togglePassword);
+    });
 
-        togglePassword1.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField1, togglePassword1);
-        });
+    togglePassword1.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField1, togglePassword1);
+    });
 
-        togglePassword2.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField2, togglePassword2);
-        });
+    togglePassword2.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField2, togglePassword2);
+    });
     </script>
     <!-- Bootstrap JS -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
