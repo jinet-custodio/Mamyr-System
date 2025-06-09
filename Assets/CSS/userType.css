@@ -1,0 +1,135 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../Fonts/Prata/Prata-Regular.ttf);
+}
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+  list-style: none;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  /* background-color: rgb(242, 242, 242); */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 15vh;
+  padding: 1rem;
+}
+
+.logoNav {
+  /* border: 1px solid black; */
+  width: 15vw;
+  position: absolute;
+  margin: 2vw;
+}
+
+.titleContainer {
+  /* border: 1px solid red; */
+  margin-top: 7vw;
+  text-align: center;
+}
+
+.title {
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.container {
+  /* border: 1px solid red; */
+  margin-top: 1vw;
+  border-radius: 50px;
+  width: 70vw;
+  height: 40vw;
+  background-color: #43b2f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.categories {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-top: 5vw; */
+}
+
+.category-card {
+  height: 70vh !important;
+  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+}
+
+.category-card,
+.category-body {
+  margin: 2vw;
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  text-align: center;
+}
+
+.category-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1vw;
+}
+
+.category-card img {
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  padding: 1vw;
+  height: 18vw !important;
+  object-fit: cover;
+}
+
+.category-title {
+  font-family: "Poppins Black" !important;
+  font-style: italic;
+  font-weight: bolder;
+  font-size: 2vw;
+  color: #0865b1 !important;
+}
+
+.card-text {
+  color: black;
+}
+
+.categoryLink {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.categoryLink .category-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.categoryLink:hover .category-card {
+  transform: translateY(-12px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+}
