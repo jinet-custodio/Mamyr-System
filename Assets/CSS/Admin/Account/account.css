@@ -41,26 +41,35 @@
   }
 }
 
-.sidebar .list-group-item {
+.list-group {
   font-family: "Lora";
   font-size: 18px;
   border: none;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 }
-
-.list-group-item.active {
-  background-color: rgb(11, 144, 227) !important;
-  color: white !important;
+.list-group-item {
+  border: none;
 }
-
-.sidebar a {
-  color: black !important;
-  text-decoration: none;
-}
-
-.sidebar li:hover {
-  background-color: rgb(11, 144, 227);
+.sidebar li:hover a,
+.list-group-item.active a {
   color: white;
-  cursor: pointer;
+  background-color: #007bff;
+}
+
+#logoutBtn {
+  display: flex;
+  margin: auto;
+  margin-top: 1rem;
+  text-align: center;
+  color: black;
+}
+
+#logoutBtn:hover {
+  background-color: rgb(219, 53, 69);
+  color: white;
 }
 
 .sidebar-icon {
@@ -73,13 +82,13 @@
   background-color: transparent;
   border: none;
   right: 3vw;
-  margin-top: -5%;
+  z-index: 1000;
 }
 
 .admin-account-container {
   /* border: 1px solid red; */
   margin-left: 23vw;
-  margin-top: 6rem;
+  margin-top: 4rem;
   flex-grow: 1;
   padding: 1rem;
   overflow-y: auto;
@@ -89,8 +98,9 @@
   font-family: "Poppins";
   width: 95%;
   padding: 1rem;
-  border: 2px solid rgb(255, 255, 255);
-  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2);
+  /* border: 2px solid rgb(255, 255, 255);
+  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2); */
+  border: none;
   border-radius: 2rem;
 }
 
@@ -117,7 +127,7 @@
   font-size: 15px;
   border: none;
   padding: 0.5rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   text-align: center;
   margin-top: 0.5rem;
   /* background-color: rgb(33, 148, 209); */
@@ -174,12 +184,17 @@
 
 .admin-details {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
   width: 100%;
   margin-top: 1rem;
 }
 
+#userRole {
+  grid-column: 1 / span 2;
+  display: flex;
+  justify-content: center;
+}
 .info {
   position: relative;
   margin-bottom: 0.5rem;
