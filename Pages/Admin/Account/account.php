@@ -100,36 +100,46 @@ $userRole = $_SESSION['userRole'];
         <div class="sidebar-header">
             <h5>Account Settings</h5>
         </div>
-        <ul class="list-group ">
-            <li class="list-group-item active">
-                <a href="#">
+        <ul class="list-group">
+            <li>
+                <a href="account.php" class="list-group-item active">
                     <img src="../../../Assets/Images/Icon/user.png" alt="" class="sidebar-icon">
                     Profile Information
                 </a>
             </li>
-            <li class="list-group-item">
-                <img src="../../../Assets/Images/Icon/login_security.png" alt="" class="sidebar-icon">
-                Login & Security
+            <li>
+                <a href="loginSecurity.php" class="list-group-item">
+                    <img src="../../../Assets/Images/Icon/login_security.png" alt="" class="sidebar-icon">
+                    Login & Security
+                </a>
             </li>
-            <li class="list-group-item">
-                <img src="../../../Assets/Images/Icon/usermanagement.png" alt="" class="sidebar-icon">
-                User Management
+            <li>
+                <a href="userManagement.php" class="list-group-item">
+                    <img src="../../../Assets/Images/Icon/usermanagement.png" alt="" class="sidebar-icon">
+                    User Management
+                </a>
             </li>
-            <li class="list-group-item">
-                <img src="../../../Assets/Images/Icon/systempreferences.png" alt="" class="sidebar-icon">
-                System Preferences
+            <!-- <li>
+                <a href="" class="list-group-item">
+                    <img src="../../../Assets/Images/Icon/systempreferences.png" alt="" class="sidebar-icon">
+                    System Preferences
+                </a>
+            </li> -->
+            <li>
+                <a href="" class="list-group-item">
+                    <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
+                    Revenue
+                </a>
             </li>
-            <li class="list-group-item">
-                <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
-                Revenue
+            <li>
+                <a href="deleteAccount.php" class="list-group-item">
+                    <img src="../../../Assets/Images/Icon/delete-user.png" alt="" class="sidebar-icon">
+                    Delete Account
+                </a>
             </li>
-            <li class="list-group-item">
-                <img src="../../../Assets/Images/Icon/delete-user.png" alt="" class="sidebar-icon">
-                Delete Account
-            </li>
-            <li class="list-group-item">
-                <img src="../../../Assets/Images/Icon/logout.png" alt="" class="sidebar-icon">
-                Logout
+            <li>
+                <button type="button" class="btn btn-outline-danger" id="logoutBtn"> <img src="../../../Assets/Images/Icon/logout.png" alt="" class="sidebar-icon">
+                    Logout</button>
             </li>
         </ul>
     </div>
@@ -141,6 +151,8 @@ $userRole = $_SESSION['userRole'];
         <form action="../../../Function/Admin/Account/editProfile.php" method="POST" enctype="multipart/form-data">
             <div class="card">
                 <div class="account-info">
+                    <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
+                    <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
                     <div class="profile-image">
                         <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($data['firstName']) ?> Picture" class="profile-pic">
                         <button type="button" class="changePfpBtn btn btn-primary" id="changePfp">
@@ -246,6 +258,7 @@ $userRole = $_SESSION['userRole'];
     </script>
 
     <script>
+        //All the disbaled input box will be removed
         function enableEditing() {
             document.getElementById("fullName").removeAttribute("disabled");
             document.getElementById("address").removeAttribute("disabled");

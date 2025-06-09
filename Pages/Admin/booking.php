@@ -157,7 +157,7 @@ if (isset($_SESSION['error'])) {
     <div class="booking-container">
 
         <div class="card " style="width: 80rem;">
-            <table class="table table-striped " id="bookingTable">
+            <table class="table table-striped" id="bookingTable">
 
                 <thead>
                     <th scope="col">Guest</th>

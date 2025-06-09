@@ -78,6 +78,11 @@ $userRole = $_SESSION['userRole'];
                 if (mysqli_num_rows($result) > 0) {
                     $row = mysqli_fetch_assoc($result);
                     $firstName = $row['firstName'];
+                    $profile = $row['userProfile'];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_buffer($finfo, $profile);
+                    finfo_close($finfo);
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
                 } else {
                     $firstName = 'None';
                 }
@@ -90,7 +95,7 @@ $userRole = $_SESSION['userRole'];
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
             <a href="Account/account.php" class="admin">
-                <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
+                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
             </a>
         </div>
     </div>

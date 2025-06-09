@@ -1,0 +1,106 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 20vw;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 2px solid rgb(185, 185, 185);
+  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  color: black !important;
+  padding: 1rem;
+  margin: 1.5rem 0.5rem 1.5rem 0.5rem;
+  h5 {
+    font-family: "Lora" !important;
+    margin: 0;
+    font-size: 25px;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.list-group {
+  font-family: "Lora";
+  font-size: 18px;
+  border: none;
+  a {
+    text-decoration: none;
+    color: black;
+  }
+}
+
+.list-group-item {
+  border: none;
+}
+
+#logoutBtn {
+  display: flex;
+  margin: auto;
+  margin-top: 1rem;
+  text-align: center;
+  color: black;
+}
+
+#logoutBtn:hover {
+  background-color: rgb(219, 53, 69);
+  color: white;
+}
+
+.sidebar li:hover a,
+.list-group-item.active a {
+  color: white;
+  background-color: #007bff;
+}
+
+.sidebar-icon {
+  height: 25px;
+  width: 25px;
+}
+
+.home-button {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  right: 3vw;
+  margin-top: -5%;
+}
+
+.card {
+  display: flex;
+  width: 60%;
+  margin: auto;
+  margin-top: 7rem;
+  margin-left: 23rem;
+}
+
+.card-header {
+  text-transform: capitalize;
+  font-family: "Poppins Black";
+}
