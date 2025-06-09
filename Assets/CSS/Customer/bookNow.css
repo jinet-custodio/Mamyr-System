@@ -342,6 +342,14 @@ footer {
   align-items: center;
   margin-top: 3vw;
 }
+
+.pics {
+  width: 50%;
+}
+
+.resort-card {
+  padding: 2vw;
+}
 .hotel-card {
   padding: 2vw;
   height: 120vh !important;
@@ -381,7 +389,7 @@ footer {
 .ratePic {
   height: 30vw;
   width: auto;
-  margin-top: 4vw;
+  margin: 2vw auto;
 }
 /* resort booking */
 

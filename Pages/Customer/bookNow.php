@@ -119,7 +119,7 @@ $userRole = $_SESSION['userRole'];
         </div>
     </nav>
     <!-- Made every section visible except for the selection section to see the errors -->
-    <div class="categories-page" id="category-page" style="display: none;">
+    <div class="categories-page" id="category-page">
         <div class="titleContainer" style="margin-top: 10vw !important;">
             <h4 class="title">What are you booking for?</h4>
         </div>
@@ -152,7 +152,7 @@ $userRole = $_SESSION['userRole'];
         </div>
     </div>
 
-    <form action="#" method="POST" id="resort-page" style="display: block;">
+    <form action="#" method="POST" id="resort-page" style="display: none;">
         <div class="resort" id="resort">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
@@ -162,7 +162,7 @@ $userRole = $_SESSION['userRole'];
             </div>
 
             <div class="container-fluid">
-                <div class="card resort-card" id="resortBookingCard" style="width: 40rem; flex-shrink: 0; ">
+                <div class="card resort-card" id="resortBookingCard" style="flex-shrink: 0; ">
 
                     <h5 class="schedLabel">Schedule</h5>
 
@@ -277,7 +277,7 @@ $userRole = $_SESSION['userRole'];
     <!--end ng resort div-->
 
 
-    <form action="#" method="POST" id="hotel-page" style="display: block;">
+    <form action="#" method="POST" id="hotel-page" style="display: none;">
         <div class="hotel" id="hotel">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
@@ -286,10 +286,9 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
             </div>
             <?php
-            $availsql = "SELECT s.availabilityID, rs.facilityName 
-            FROM services s
-            JOIN resortServices rs ON s.resortServiceID = rs.resortServiceID
-            WHERE rs.category = 'Room'";
+            $availsql = "SELECT RSAvailabilityID, RServiceName
+            FROM resortservices 
+            WHERE RScategoryID = '1'";
 
             $result = mysqli_query($conn, $availsql);
             ?>
@@ -311,10 +310,10 @@ $userRole = $_SESSION['userRole'];
                             $i = 1;
                             while ($row = $result->fetch_assoc()) {
                                 //ternary operator to check availability
-                                $iconPath = ($row['availabilityID'] == 1)
+                                $iconPath = ($row['RSAvailabilityID'] == 1)
                                     ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
                                     : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
-                                $roomName = htmlspecialchars($row['facilityName']);
+                                $roomName = htmlspecialchars($row['RServiceName']);
 
                                 echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;">';
                                 echo '  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '">';
@@ -389,7 +388,7 @@ $userRole = $_SESSION['userRole'];
     </form>
     <!--end ng hotel div -->
 
-    <form action="../../Function/Booking/eventBooking.php" method="POST" id="event-page" style="display: block;">
+    <form action="../../Function/Booking/eventBooking.php" method="POST" id="event-page" style="display: none;">
         <div class=" event" id="event">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
@@ -754,6 +753,9 @@ $userRole = $_SESSION['userRole'];
                 resorts.style.display = "block";
                 hotels.style.display = "none";
                 document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
+                document.body.style.setProperty('background-repeat', 'no-repeat');
+                document.body.style.setProperty('background-size', 'cover');
+                document.body.style.setProperty('background-position', 'center');
                 document.getElementById("footer").style.marginTop = "2vw";
             });
 
