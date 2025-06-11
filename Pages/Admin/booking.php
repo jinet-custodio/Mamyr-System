@@ -52,8 +52,8 @@ if (isset($_SESSION['error'])) {
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/booking.css">
     <!-- Bootstrap Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
 </head>
@@ -89,6 +89,11 @@ if (isset($_SESSION['error'])) {
                 if (mysqli_num_rows($result) > 0) {
                     $row = mysqli_fetch_assoc($result);
                     $firstName = $row['firstName'];
+                    $profile = $row['userProfile'];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_buffer($finfo, $profile);
+                    finfo_close($finfo);
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
                 } else {
                     $firstName = 'None';
                 }
@@ -101,7 +106,7 @@ if (isset($_SESSION['error'])) {
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
             <a href="Account/account.php" class="admin">
-                <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
+                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
             </a>
         </div>
     </div>
@@ -252,7 +257,8 @@ if (isset($_SESSION['error'])) {
     </div>
 
     <!-- Bootstrap Link -->
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

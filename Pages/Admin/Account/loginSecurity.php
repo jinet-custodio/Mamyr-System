@@ -39,7 +39,8 @@ $userRole = $_SESSION['userRole'];
         href="../../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../../Assets/CSS/Admin/Account/loginSecurity.css" />
@@ -76,18 +77,18 @@ $userRole = $_SESSION['userRole'];
                     Login & Security
                 </a>
             </li>
-            <!-- <li>
+            <li>
                 <a href="userManagement.php" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/usermanagement.png" alt="" class="sidebar-icon">
                     User Management
                 </a>
-            </li> -->
-            <li>
+            </li>
+            <!-- <li>
                 <a href="" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/systempreferences.png" alt="" class="sidebar-icon">
                     System Preferences
                 </a>
-            </li>
+            </li> -->
             <li>
                 <a href="" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
@@ -144,9 +145,7 @@ $userRole = $_SESSION['userRole'];
                             <div class="modal-header">
                                 <h5 class="modal-title text-center" id="emailModalLabel">Your current email is <br> <strong><?= htmlspecialchars($data['email']) ?></strong></h5>
                                 <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
-                                <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal" aria-label="Close"> </button>
                             </div>
                             <div class="modal-body">
                                 <p class="modal-text">Please enter your password</p>
@@ -170,7 +169,6 @@ $userRole = $_SESSION['userRole'];
                                 <h5 class="modal-title text-center" id="email2ModalLabel">Your current email is <br> <strong><?= htmlspecialchars($data['email']) ?></strong></h5>
                                 <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
                                 <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
@@ -201,7 +199,6 @@ $userRole = $_SESSION['userRole'];
                                 <h5 class="modal-title text-center" id="email3ModalLabel">Your current email is <br> <strong><?= htmlspecialchars($data['email']) ?></strong></h5>
                                 <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
                                 <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
@@ -283,7 +280,8 @@ $userRole = $_SESSION['userRole'];
     </div>
 
     <!-- Bootstrap Link -->
-    <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 
 
     <!-- Password Validation -->
@@ -402,6 +400,30 @@ $userRole = $_SESSION['userRole'];
         togglePassword3.addEventListener('click', () => {
             togglePasswordVisibility(passwordField3, togglePassword3);
         });
+    </script>
+
+    <script>
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/Admin/logout.php";
+                }
+            });
+        })
     </script>
 </body>
 

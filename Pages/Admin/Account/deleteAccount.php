@@ -39,7 +39,9 @@ $userRole = $_SESSION['userRole'];
         href="../../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../../Assets/CSS/Admin/Account/deleteAccount.css" />
@@ -110,115 +112,110 @@ $userRole = $_SESSION['userRole'];
 
     <a href="../adminDashboard.php" class="home-button btn btn-primary"><img src="../../../Assets/Images/Icon/home2.png" alt=""></a>
 
-    <div class="card">
-        <div class="card-header">
-            <h5 class="card-title">Account Deletion</h5>
-        </div>
-        <div class="card-body">
-            <p class="card-text">You can permanently delete your account here. This action cannot be undone.</p>
-            <!-- <div class="input-container">
-                <label for="password">Enter your password:</label>
-                <input type="password" name="passwordEntered" id="passwordEntered">
-            </div> -->
-            <div class="button-container">
-                <button type="button" class="btn btn-danger" name="deleteAccount" id="deleteAccount">Delete Account</button>
+    <div class="wrapper">
+        <div class="card">
+            <div class="header">
+                <h5 class="card-title">Account Deletion</h5>
             </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Deleting your account is permanent.
+                    When you delete your account, your main profile and everything else that you've added will be permanently deleted.
+                    You won't be able to retrieve anything that you've added. All additional profiles, and all of your messages will also be deleted.
+                </p>
+                <div class="button-container">
+                    <button type="button" class="btn btn-danger" name="confirmationBtn" id="confirmationBtn">Delete Account</button>
+                </div>
+                <?php
+                if (isset($_SESSION['deleteAccountMessage'])) {
+                    echo '<div class="message-container alert alert-danger text-center">' . htmlspecialchars($_SESSION['deleteAccountMessage']) . '</div>';
+                    unset($_SESSION['deleteAccountMessage']);
+                }
+                ?>
 
-            <!-- Email Change Modal -->
-            <form action="../../../Function/Admin/Account/loginSecurity.php" method="POST">
-                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-center" id="deleteModalLabel">Your current email is <br> <strong><?= htmlspecialchars($data['email']) ?></strong></h5>
-                                <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
-                                <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <?php
-                                if (isset($_SESSION['modal-error'])) {
-                                    echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
-                                    unset($_SESSION['modal-error']);
-                                }
-                                ?>
-                                <input type="hidden" name="newEmail" value="<?= htmlspecialchars($newEmail) ?>">
-                                <p class="modal-text">Please enter the verification code</p>
-                                <input type="text" name="enteredOTP" id="enteredOTP" placeholder="6 digit security code" required>
-                                <div class="button-container">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" name="verifyCode">Submit</button>
+                <!-- Confirmation Modal -->
+                <form action="../../../Function/Admin/Account/deleteAccount.php" method="POST">
+                    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="image w-100 text-center">
+                                    <img src="../../../Assets/Images/Icon/warning.png" alt="warning icon" class="warning-image">
+
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                    <p class="modal-title text-center mb-2">Are you sure?</p>
+                                    <p class="modal-text text-center mb-2">You won't be able to revert this!</p>
+                                    <div class="button-container">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                        <button type="submit" class="btn btn-primary" name="yesDelete" id="yesDelete">Yes</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+
+                <!-- Verification Modal -->
+                <form action="../../../Function/Admin/Account/deleteAccount.php" method="POST">
+                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="w-100 text-center">
+                                        <h5 class="modal-title">This action cannot be undone</h5>
+                                        <h6 class="modal-text" id="deleteModalLabel">
+                                            This will permanently delete your current email <br>
+                                            <strong><?= htmlspecialchars($data['email']) ?></strong>
+                                        </h6>
+                                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                    </div>
+                                    <button type="button" class="btn-close btn btn-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <?php
+                                    if (isset($_SESSION['modal-error'])) {
+                                        echo '<div class="message-container alert alert-danger text-center">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
+                                        unset($_SESSION['modal-error']);
+                                    }
+                                    ?>
+
+                                    <input type="hidden" name="newEmail" value="<?= htmlspecialchars($newEmail) ?>">
+
+                                    <p class="modal-text text-center mb-2">Please enter the verification code</p>
+
+                                    <div class="text-center">
+                                        <input type="text" name="enteredOTP" id="enteredOTP" class="form-control d-inline-block w-50 text-center" placeholder="6 digit security code" required>
+                                    </div>
+
+                                    <div class="button-container">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary" name="verifyCode">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- Email Change Modal -->
-    <!-- <form action="../../../Function/Admin/logout.php" method="POST">
-        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title text-center" id="logoutModalLabel">Your current email is <br> <strong><?= htmlspecialchars($data['email']) ?></strong></h5>
-                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
-                        <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <?php
-                        if (isset($_SESSION['modal-error'])) {
-                            echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
-                            unset($_SESSION['modal-error']);
-                        }
-                        ?>
-                        <input type="hidden" name="newEmail" value="<?= htmlspecialchars($newEmail) ?>">
-                        <p class="modal-text">Please enter the verification code</p>
-                        <input type="text" name="enteredOTP" id="enteredOTP" placeholder="6 digit security code" required>
-                        <div class="button-container">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" name="verifyCode">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form> -->
-
-
     <!-- Bootstrap Link -->
-    <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <!-- Show -->
     <script>
-        const deleteAccBtn = document.getElementById("deleteAccount");
+        const params = new URLSearchParams(window.location.search);
+        const paramsValue = params.get('action')
+        const confirmationBtn = document.getElementById("confirmationBtn");
+        const confirmationModal = document.getElementById("confirmationModal");
         const deleteModal = document.getElementById('deleteModal');
         const logoutBtn = document.getElementById('logoutBtn');
-        const logoutModal = document.getElementById('logoutModal');
-
-        deleteAccBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const myModal = new bootstrap.Modal(deleteModal);
-                    myModal.show();
-                }
-            });
-        });
 
         logoutBtn.addEventListener("click", function() {
             Swal.fire({
@@ -228,13 +225,33 @@ $userRole = $_SESSION['userRole'];
                 showCancelButton: true,
                 // confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!"
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = "../../../Function/Admin/logout.php";
                 }
             });
-        })
+        });
+
+        confirmationBtn.addEventListener("click", function() {
+            const myconfirmationModal = new bootstrap.Modal(confirmationModal);
+            myconfirmationModal.show();
+        });
+
+        if (paramsValue === 'success') {
+            const myModal = new bootstrap.Modal(deleteModal);
+            myModal.show();
+        };
+
+        if (paramsValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 </body>
 
