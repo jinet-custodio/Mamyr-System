@@ -73,9 +73,10 @@
 }
 
 .sidebar li:hover a,
-.list-group-item.active a {
+.list-group-item.active {
   color: white;
-  background-color: #007bff;
+  /* background-color: #007bff; */
+  background-color: rgb(50, 181, 247);
 }
 
 .sidebar-icon {
@@ -88,8 +89,8 @@
   background-color: transparent;
   border: none;
   right: 3vw;
-  margin-top: -8%;
-  /* border: 1px solid red; */
+  z-index: 1000;
+  margin-top: -5%;
 }
 
 .card {
@@ -176,8 +177,9 @@
 }
 
 .modal-title {
-  font-size: 18px;
-  margin-left: 27%;
+  text-align: center;
+  font-size: 16px;
+  margin-left: 5rem;
 }
 
 .modal-body {
@@ -289,4 +291,15 @@ input[type="password"]::-webkit-search-cancel-button {
   color: red;
   font-size: 15px;
   padding: 3px;
+}
+
+.swal-custom-title {
+  font-family: "Poppins";
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.swal-custom-text {
+  font-family: "Poppins";
+  font-size: 16px;
 }

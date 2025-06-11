@@ -39,7 +39,8 @@ $userRole = $_SESSION['userRole'];
         href="../../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../../Assets/CSS/Admin/Account/account.css" />
@@ -77,8 +78,10 @@ $userRole = $_SESSION['userRole'];
             }
             $birthday = $data['birthDate'];
             if ($birthday === NULL || $birthday === "") {
+                $type = "text";
                 $birthday = "--";
             } else {
+                $type = "date";
                 $birthday;
             }
             $address = $data['userAddress'];
@@ -164,7 +167,7 @@ $userRole = $_SESSION['userRole'];
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="picModalLabel">Change Profile Picture</h5>
-                                        <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span></button>
+                                        <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($data['firstName']) ?> Picture" id="preview" class="profile-pic">
@@ -183,6 +186,7 @@ $userRole = $_SESSION['userRole'];
                     <div class="profile-info">
                         <h5 class="account-name"> <?= htmlspecialchars($data['firstName']) ?></h5>
                         <h6 class="account-contact"> <?= htmlspecialchars($email) ?> | <?= htmlspecialchars($phoneNumber) ?></h6>
+                        <h6 class="roleName"><?= htmlspecialchars($data['roleName']) ?></h6>
                     </div>
                 </div>
 
@@ -197,7 +201,7 @@ $userRole = $_SESSION['userRole'];
                     <label for="fullName">Full Name</label>
                 </div>
                 <div class="info">
-                    <input type="date" name="birthday" id="birthday" value="<?= htmlspecialchars($birthday) ?>" disabled>
+                    <input type="<?= htmlspecialchars($type) ?>" name="birthday" id="birthday" value="<?= htmlspecialchars($birthday) ?>" disabled>
                     <label for="birthday">Birthday</label>
                 </div>
                 <div class="info">
@@ -206,11 +210,7 @@ $userRole = $_SESSION['userRole'];
                 </div>
                 <div class="info">
                     <input type="text" name="phoneNumber" id="phoneNumber" value="<?= htmlspecialchars($phoneNumber) ?>" disabled required>
-                    <label for="phoneNumber">phoneNumber</label>
-                </div>
-                <div class="info">
-                    <input type="text" name="userRole" id="userRole" value="<?= htmlspecialchars($data['roleName']) ?>" disabled>
-                    <label for="userRole">Role</label>
+                    <label for="phoneNumber">Phone Number</label>
                 </div>
             </div>
             <div class="button-container">
@@ -218,14 +218,14 @@ $userRole = $_SESSION['userRole'];
                 <button type="submit" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger" style="display: none;">Cancel</button>
                 <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary" style="display: none;">Save</button>
             </div>
-
         </form>
     </div>
 
 
 
     <!-- Bootstrap Link -->
-    <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -309,6 +309,31 @@ $userRole = $_SESSION['userRole'];
             url.search = '';
             history.replaceState({}, document.title, url.toString());
         };
+    </script>
+
+    <script>
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
+
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/Admin/logout.php";
+                }
+            });
+        })
     </script>
 
 

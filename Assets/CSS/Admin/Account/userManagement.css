@@ -58,10 +58,12 @@
 .list-group-item {
   border: none;
 }
+
 .sidebar li:hover a,
-.list-group-item.active a {
+.list-group-item.active {
   color: white;
-  background-color: #007bff;
+  /* background-color: #007bff; */
+  background-color: rgb(50, 181, 247);
 }
 
 #logoutBtn {
@@ -152,9 +154,48 @@ table {
   text-transform: capitalize;
 }
 
-.badge {
+/* .badge {
   margin-top: 0.3rem;
   letter-spacing: 2px;
   font-family: "Lora";
   font-size: 14px;
+} */
+
+.status-image {
+  padding-left: 3px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  button {
+    margin: 3px;
+  }
+}
+
+.swal-custom-title {
+  font-family: "Poppins";
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.swal-custom-text {
+  font-family: "Poppins";
+  font-size: 16px;
+}
+
+.image {
+  padding: 1rem !important;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.modal-text {
+  width: 80%;
+  margin: auto;
+  line-height: 2;
+  font-size: 16px;
 }
