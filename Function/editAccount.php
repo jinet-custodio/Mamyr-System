@@ -44,11 +44,6 @@ if (isset($_POST['edit'])) {
 
         $middleInitial = implode(' ', $middleInitials);
     }
-
-    echo "Parsed:<br>";
-    echo "First: $firstName<br>";
-    echo "Middle: $middleInitial<br>";
-    echo "Last: $lastName<br>";
     // Check if an image was uploaded
     if (!empty($_FILES['userProfile']['tmp_name']) && $_FILES['userProfile']['error'] === 0) {
         echo "Image detected"; // Debugging statement

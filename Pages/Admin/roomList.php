@@ -50,10 +50,10 @@ if (isset($_SESSION['error'])) {
     <title>Mamyr Resort and Events Place</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/Admin/booking.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/roomList.css">
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
 </head>
@@ -89,11 +89,6 @@ if (isset($_SESSION['error'])) {
                 if (mysqli_num_rows($result) > 0) {
                     $row = mysqli_fetch_assoc($result);
                     $firstName = $row['firstName'];
-                    $profile = $row['userProfile'];
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $profile);
-                    finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
                 } else {
                     $firstName = 'None';
                 }
@@ -106,7 +101,7 @@ if (isset($_SESSION['error'])) {
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
             <a href="Account/account.php" class="admin">
-                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
+                <img src="../../Assets/Images/Icon/profile.png" alt="home icon">
             </a>
         </div>
     </div>
@@ -118,13 +113,13 @@ if (isset($_SESSION['error'])) {
             <h5>Dashboard</h5>
         </a>
 
-        <a class="nav-link active" href="booking.php">
+        <a class="nav-link" href="booking.php">
             <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
             <h5>Bookings</h5>
         </a>
 
 
-        <a class="nav-link" href="roomList.php">
+        <a class="nav-link active" href="#">
             <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
             <h5>Rooms</h5>
         </a>
@@ -161,89 +156,48 @@ if (isset($_SESSION['error'])) {
 
     <div class="booking-container">
 
-        <div class="card " style="width: 80rem;">
-            <table class="table table-striped" id="bookingTable">
+        <div class="card " style="width: 80%;">
+            <table class="table table-striped" id="roomsTable">
 
                 <thead>
-                    <th scope="col">Guest</th>
-                    <th scope="col">Service Type</th>
-                    <th scope="col">Check-in</th>
+                    <th scope="col">Room No.</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Rates</th>
                     <th scope="col">Action</th>
                 </thead>
                 <tbody>
                     <!-- Select booking info -->
                     <?php
-                    $selectQuery = "SELECT u.firstName, u.lastName, 
-                    ps.*, rs.*, cp.*,
-                    rsc.categoryName AS resortCategoryName , 
-                    ec.categoryName AS eventCategoryName,
-                    st.statusName,
-                    b.*
-                FROM bookings b
-                INNER JOIN users u ON b.userID = u.userID   -- to get  the firstname and lastname 
-                LEFT JOIN statuses st ON st.statusID = b.bookingStatus  -- to get the status name
-                LEFT JOIN packages p ON b.packageID = p.packageID  -- to get the info of the package na binook 
-                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
-                LEFT JOIN services s ON b.serviceID = s.serviceID   -- to get the info of the service na binook 
-                LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID  -- information of service
-                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
-                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
-                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
-                ";
+                    $selectQuery = "SELECT rs.*, sa.availabilityName AS roomStatus
+                    FROM resortServices rs 
+                    LEFT JOIN serviceAvailability sa ON rs.RSAvailabilityID = sa.availabilityID
+                    WHERE RScategoryID = 1
+                    ORDER  BY resortServiceID";
                     $result = mysqli_query($conn, $selectQuery);
                     if (mysqli_num_rows($result) > 0) {
-                        foreach ($result as $bookings) {
-                            $bookingID = $bookings['bookingID'];
-                            $name = ucfirst($bookings['firstName']) . " " . ucfirst($bookings['lastName']);
-                            $status = $bookings['statusName'];
+                        foreach ($result as $roomInfo) {
+                            $roomID = $roomInfo['resortServiceID'];
+                            $statColor = $roomInfo['roomStatus'];
                     ?>
                             <tr>
-                                <td><?= $name ?></td>
-                                <?php
-                                if ($bookings['serviceID'] != "") {
-                                ?>
-                                    <td><?= $bookings['resortCategoryName'] ?></td>
-                                <?php
-                                } elseif ($bookings['eventCategoryName'] != "") {
-                                ?>
-                                    <td><?= $bookings['categoryName'] ?></td>
-                                <?php
-                                } elseif ($bookings['customePackageID'] != "") {
-                                ?>
-                                    <td>Customized Package</td>
-                                <?php
-                                }
-                                ?>
-                                <td><?= $bookings['startDate'] ?></td>
                                 <td>
-                                    <?php
-                                    if ($status == "Pending") {
-                                    ?>
-                                        <button class="btn btn-warning w-75">
-                                            <?= $status ?>
-                                        </button>
-                                    <?php
-                                    } elseif ($status == "Approved") {
-                                    ?>
-                                        <button class="btn btn-success w-75">
-                                            <?= $status ?>
-                                        </button>
-                                    <?php
-                                    } elseif ($status == "Cancelled") {
-                                    ?>
-                                        <button class="btn btn-danger w-75">
-                                            <?= $status ?>
-                                        </button>
-                                    <?php
-                                    }
-                                    ?>
+                                    <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p> <?= $roomInfo['RServiceName'] ?>
+                                </td>
+                                <td><button type="button" href="#" class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
+                                <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
                                 </td>
                                 <td>
-                                    <form action="viewBooking.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                    <form action="roomInfo.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                        <input type="hidden" name="actionType" value="edit">
                                         <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                        <button type="submit" class="btn btn-info w-75">View</button>
+                                        <button type="submit" class="btn btn-secondary w-20">Edit</button>
+                                    </form>
+                                    <form action="roomInfo.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                        <input type="hidden" name="actionType" value="view">
+                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
+                                        <button type="submit" class="btn btn-secondary w-20">View</button>
                                     </form>
                                 </td>
                             </tr>
@@ -257,8 +211,7 @@ if (isset($_SESSION['error'])) {
     </div>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -269,18 +222,6 @@ if (isset($_SESSION['error'])) {
         $(document).ready(function() {
             $('#bookingTable').DataTable();
         });
-    </script>
-    <!-- Sweetalert Link -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Sweetalert Popup -->
-    <script>
-        <?php if (!empty($message)): ?>
-            Swal.fire({
-                icon: '<?= $status ?>',
-                title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
-                text: '<?= $message ?>'
-            });
-        <?php endif; ?>
     </script>
 </body>
 
