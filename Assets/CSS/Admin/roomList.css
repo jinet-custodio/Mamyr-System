@@ -1,0 +1,197 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+/* @font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+} */
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: "Plus Jakarta Sans"; */
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  background: #a1c8c7 !important;
+}
+
+.topSection {
+  /* border: 1px solid black; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5vw;
+}
+
+.menus {
+  /* border: 1px solid black; */
+  padding: 0.5vw;
+  margin-right: 2vw;
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+
+.dashTitleContainer {
+  margin-left: 1vw;
+}
+
+.logo {
+  width: 15vw;
+}
+/* #dashboard {
+  font-family: "Plus Jakarta Sans";
+  text-decoration: none;
+  color: black;
+  font-weight: 800;
+  font-size: 2.3vw;
+  margin-left: 1vw;
+} */
+
+#dashboard {
+  text-decoration: none;
+  margin-left: 1vw;
+}
+
+.adminTitle {
+  margin-top: 1rem;
+  font-family: "Lora" !important;
+  /* font-weight: bold; */
+  font-size: 24px;
+}
+.navbar {
+  font-family: "Lora";
+  border-radius: 15px;
+  max-width: 75vw;
+  margin: 20px auto;
+  padding: 1rem !important;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  h5 {
+    font-size: 20px !important;
+  }
+}
+
+.nav-link {
+  display: flex !important;
+  margin: auto;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+  text-decoration: none;
+}
+
+.me-2 {
+  margin-left: 2vw;
+}
+
+.nav-link.active:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-link:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 100%;
+  /* position: absolute; */
+  border-bottom: 4px solid rgb(126, 203, 242) !important;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link:hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-link img {
+  height: 2vw;
+  width: auto;
+  object-fit: contain;
+}
+
+.booking-container {
+  /* border: 1px solid black; */
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  padding: 2vw;
+}
+
+label {
+  margin-left: 1vw;
+}
+
+#roomsTable {
+    width: 100%;
+}
+
+thead {
+  font-family: "Lora";
+}
+
+tbody {
+  font-family: "Poppins";
+}
+
+td,
+th {
+  text-align: center !important;
+}
+
+th {
+  background-color: #91d2f2 !important;
+}
+
+.text-center {
+  color: rgb(255, 0, 0) !important;
+}
+
+.dt-column-title {
+  display: inline-block;
+  width: 2vw !important;
+}
+
+.dt-info,
+.dt-layout-row {
+  font-family: "Lora";
+  text-transform: capitalize;
+}
+
+.status-btn {
+    width: 50%;
+    color: whitesmoke !important;
+    font-size: 1.2vw !important;
+}
+
+.Available {
+    background-color: #28A745 !important;
+}
+
+.Occupied {
+    background-color:#17A2B8 !important;
+}
+
+.Maintenance {
+    background-color: #DC3545 !important;
+}
+
+.btn-secondary {
+  margin-left: 2vw;
+}

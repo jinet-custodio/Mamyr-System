@@ -113,7 +113,7 @@ $userRole = $_SESSION['userRole'];
         </a>
 
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="roomList.php">
             <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
             <h5>Rooms</h5>
         </a>
