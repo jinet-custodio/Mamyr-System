@@ -13,7 +13,7 @@ if (isset($_POST['yesDelete'])) {
         $result = mysqli_query($conn, $selectQuery);
         if (mysqli_num_rows($result) > 0) {
             $updateStatus = "UPDATE users SET
-            userStatusID = '4'";
+            userStatusID = '4' WHERE userID = '$selectedUserID'";
             $result = mysqli_query($conn, $updateStatus);
             if ($result) {
                 header("Location: ../../../Pages/Admin/Account/userManagement.php?status=deleted");
