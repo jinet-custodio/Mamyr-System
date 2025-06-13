@@ -92,7 +92,7 @@ $userRole = $_SESSION['userRole'];
                 </a>
             </li> -->
             <li>
-                <a href="" class="list-group-item">
+                <a href="revenue.php" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
                     Revenue
                 </a>
@@ -117,7 +117,7 @@ $userRole = $_SESSION['userRole'];
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">User Management</h5>
-                <a href="" class="btn btn-light add-button"><img src="../../../Assets/Images/Icon/addUser.png" alt=""> Add an Account</a>
+                <a href="addAccount.php" class="btn btn-light add-button"><img src="../../../Assets/Images/Icon/addUser.png" alt=""> Add an Account</a>
             </div>
             <div class="card-body">
                 <table class="table" id="usertable">
@@ -286,6 +286,12 @@ $userRole = $_SESSION['userRole'];
                 title: "Action Failed",
                 text: "We were unable to delete the account. Please try again later.",
                 icon: "error"
+            });
+        } else if (paramValue === "added") {
+            Swal.fire({
+                title: "Confirmed",
+                text: "New Account Created Successfully.",
+                icon: "success"
             });
         }
 

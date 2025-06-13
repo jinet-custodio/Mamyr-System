@@ -91,7 +91,7 @@ $userRole = $_SESSION['userRole'];
                 </a>
             </li> -->
             <li>
-                <a href="" class="list-group-item">
+                <a href="revenue.php" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
                     Revenue
                 </a>

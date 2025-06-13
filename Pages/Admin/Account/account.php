@@ -129,7 +129,7 @@ $userRole = $_SESSION['userRole'];
                 </a>
             </li> -->
             <li>
-                <a href="" class="list-group-item">
+                <a href="revenue.php" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
                     Revenue
                 </a>
@@ -161,7 +161,7 @@ $userRole = $_SESSION['userRole'];
                         <button type="button" class="changePfpBtn btn btn-primary" id="changePfp">
                             Change Profile
                         </button>
-                        <!-- Modal -->
+                        <!-- Profile Picture Modal -->
                         <div class="modal" id="picModal" tabindex="-1" aria-labelledby="picModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
