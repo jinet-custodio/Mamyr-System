@@ -35,6 +35,12 @@
     flex-direction: column;
   } */
 
+body {
+  background-image: url(../Images/AboutImages/aboutbg.jpg);
+  background-repeat: no-repeat;
+  background-position: -5vw -5vw;
+}
+
 nav {
   position: absolute;
   top: 0;
@@ -50,6 +56,7 @@ nav {
   align-items: center;
   height: 15vh;
   padding: 1rem;
+  background: rgba(255, 255, 255, 0.69);
 }
 
 .navbar-nav {
@@ -167,6 +174,256 @@ ul {
   width: 15vw;
   position: absolute;
   margin: 2vw;
+}
+
+.titleContainer {
+  /* border: 1px solid red; */
+  width: 100%;
+  margin-top: 15vw;
+}
+
+.title {
+  color: #fff;
+  text-align: center;
+  font-family: Prata;
+  font-size: 45px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.aboutTopContainer {
+  /* border: 1px solid red; */
+  padding: 5vw;
+  display: flex;
+  justify-content: center;
+  gap: 3vw;
+  margin-top: 30vh;
+}
+
+.resortPic {
+  width: 40vw;
+  border-radius: 64px;
+}
+
+.topTextContainer {
+  margin-top: 2vw;
+}
+
+.hook {
+  font-family: Poppins;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.aboutDescription {
+  margin-top: 2vw;
+  text-align: justify;
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+}
+
+.btn-primary {
+  margin-top: 1vw;
+}
+
+.ourServicesContainer {
+  /* border: 1px solid red; */
+  border-radius: 20px;
+  width: 98%;
+  margin: 0 auto;
+  background: #f5f5f5;
+  margin-top: 2vw;
+  padding-top: 5vw;
+}
+
+.servicesTitleContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+  justify-content: center;
+  margin: auto;
+  width: 70%;
+}
+
+.servicesTitle {
+  font-family: "Poppins";
+  font-size: 36px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.servicesDescription {
+  font-family: "Poppins";
+  text-align: center;
+  font-size: 18px;
+}
+
+.servicesIconContainer {
+  /* border: 1px solid red; */
+  margin-top: 3vw;
+  display: flex;
+  justify-content: center;
+  gap: 5vw;
+}
+
+.resortContainer,
+.eventContainer,
+.hotelContainer {
+  /* border: 1px solid red; */
+  width: 27%;
+  text-align: center;
+  padding: 2vw;
+  /* display: flex;
+  flex-wrap: wrap; */
+}
+
+.resortIcon,
+.eventIcon,
+.hotelIcon {
+  width: 8vw;
+}
+
+.resortIconTitle,
+.eventIconTitle,
+.hotelIconTitle {
+  font-weight: bold;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 32px;
+  margin-top: 2.5vw;
+}
+
+.resortIconDescription,
+.eventIconDescription,
+.hotelIconDescription {
+  text-align: center;
+  font-family: Poppins;
+  font-size: 16.5px;
+  margin-top: 2vw;
+}
+
+.videoContainer {
+  margin-top: 7vw !important;
+  background-color: #4a93d4;
+  padding: 4vw;
+  border-radius: 20px;
+  width: 98%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3vw;
+}
+
+.videoTextContainer {
+  margin-top: 2vw;
+  width: 75%;
+}
+
+.videoTitle {
+  color: #fff;
+  font-family: Poppins;
+  font-size: 36px;
+  font-style: normal;
+  text-align: center;
+}
+
+.videoDescription {
+  margin-top: 2vw;
+  text-align: justify;
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+  color: #fff;
+}
+
+.embed-responsive {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin-top: 4vw !important;
+  margin: auto;
+}
+
+.embed-responsive video {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+.backArrowContainer {
+  /* border: 1px solid red; */
+  position: absolute;
+  top: 20%;
+  left: 3%;
+}
+.mamyrHistoryContainer {
+  /* border: 1px solid red; */
+  margin-top: 35vh;
+}
+
+.firstParagraphContainer {
+  /* border: 1px solid red; */
+  padding: 3vw;
+  width: 90%;
+  margin: auto;
+  display: flex;
+  gap: 5vw;
+}
+
+.thirdParagraphContainer {
+  /* border: 1px solid red; */
+  padding: 3vw;
+  width: 90%;
+  margin: auto;
+  margin-top: -3.5vw !important;
+  display: flex;
+  align-items: center;
+  gap: 5vw;
+}
+
+.firstParagraphPhoto {
+  width: 30vw;
+  border-radius: 64px;
+}
+
+.thirdParagraphPhoto {
+  width: 40vw;
+  border-radius: 64px;
+}
+
+.firstParagraph,
+.secondParagraph,
+.thirdParagraph {
+  text-align: justify;
+  font-size: 20px;
+  font-family: "Poppins";
+}
+
+.firstParagraph {
+  margin-top: 2vw;
+}
+
+.secondParagraph {
+  margin-top: 2vw;
+}
+
+.fourthParagraph {
+  text-align: justify;
+  font-size: 20.5px;
+  font-family: "Poppins";
+  margin-top: 2vw;
+}
+
+.fourthParagraphContainer {
+  /* border: 1px solid red; */
+  padding: 0 3vw 0 3vw;
+  width: 90%;
+  margin: auto;
+  margin-top: -3vw !important;
 }
 
 footer {
