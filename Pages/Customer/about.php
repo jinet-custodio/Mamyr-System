@@ -81,8 +81,8 @@ $userRole = $_SESSION['userRole'];
                     <a class="nav-link" href="dashboard.php">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -110,27 +110,149 @@ $userRole = $_SESSION['userRole'];
         </div>
     </nav>
 
-    <div class="container construction-wrapper">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1 class="construction-header">Website is Under Construction</h1>
-                <p class="construction-text">
-                    Our 'About' page is coming soon! We're excited to share more about who we are, what we do, and
-                    why we do it. This section is still under development, but we look forward to telling our story here
-                    in the near future. Stay tuned!
-                </p>
+    <div class="titleContainer">
+        <h1 class="title" id="title">ABOUT US</h1>
+    </div>
 
+    <div class="aboutTopContainer" id="aboutTopContainer">
+        <div class="topPicContainer">
+            <img src="../../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Pool Picture" class="resortPic">
+        </div>
+
+        <div class="topTextContainer">
+            <h3 class="hook">Compassionate Service, Unforgettable Family Moments</h3>
+
+            <p class="aboutDescription">Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San
+                Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the
+                land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz
+                and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family but
+                also bring joy to others.</p>
+
+            <a href="#"><button class="btn btn-primary" onclick="readMore()">Read More</button></a>
+
+        </div>
+    </div>
+
+    <div class="ourServicesContainer" id="ourServicesContainer">
+        <div class="servicesTitleContainer">
+            <h3 class="servicesTitle">Our Services</h3>
+            <p class="servicesDescription">Mamyr isn’t just a resort; it’s a family-oriented getaway with comfortable
+                rooms and a versatile event venue for gatherings and celebrations. It offers a relaxed, fun environment
+                for all ages to enjoy.</p>
+        </div>
+
+        <div class="servicesIconContainer">
+
+            <div class="resortContainer">
+                <img src="../../Assets/Images/AboutImages/resort.png" alt="Resort Icon" class="resortIcon">
+                <h4 class="resortIconTitle">Resort</h4>
+                <p class="resortIconDescription">Mamyr features three refreshing pools, providing the perfect spots for
+                    family fun, relaxation, and leisurely swims.</p>
             </div>
-            <div class="col-md-6">
-                <div class="illustration">
-                    <img src="../../Assets/Images/websiteMaintenancePhoto/underconstruction.png"
-                        alt="Under Construction Illustration" class="construction-image">
-                </div>
+
+            <div class="eventContainer">
+                <img src="../../Assets/Images/AboutImages/events.png" alt="Event Icon" class="eventIcon">
+                <h4 class="eventIconTitle">Events Place</h4>
+                <p class="eventIconDescription">Mamyr’s versatile event venue offers a spacious and welcoming setting,
+                    ideal for family gatherings, reunions, and celebrations of all kinds.</p>
+            </div>
+
+            <div class="hotelContainer">
+                <img src="../../Assets/Images/AboutImages/hotel.png" alt="Hotel Icon" class="hotelIcon">
+                <h4 class="hotelIconTitle">Hotel</h4>
+                <p class="hotelIconDescription">Mamyr’s cozy hotel features 11 comfortable rooms, perfect for a relaxing
+                    stay with family and friends.</p>
             </div>
         </div>
     </div>
 
-    <footer class="py-1 my-2">
+
+    <div class="videoContainer" id="videoContainer">
+        <div class="videoTextContainer">
+            <h3 class="videoTitle">Explore Mamyr Resort and Events Place</h3>
+
+            <p class="videoDescription">At Mamyr Resort, we treat every guest like family, offering an experience that
+                goes beyond just comfort. From our humble beginnings to the thriving retreat we are today, we've poured
+                our heart and soul into creating a sanctuary where nature and relaxation meet. Our story is built on
+                passion, growth, and a deep commitment to providing an unforgettable experience. When you visit, you’ll
+                discover not just stunning surroundings and luxurious comfort, but the warm, welcoming spirit that
+                defines us. Come join us and see firsthand what makes Mamyr Resort a place where memories are made, and
+                guests feel right at home.</p>
+        </div>
+
+        <div class="embed-responsive embed-responsive-16by9">
+            <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
+                poster="../Assets/Videos/thumbnail2.jpg">
+                <source src="../../Assets/Videos/mamyrVideo2.mp4" type="video/mp4">
+
+            </video>
+        </div>
+    </div>
+
+
+    <div class="backArrowContainer" id="backArrowContainer">
+        <a href="about.php"><img src="../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
+    </div>
+
+    <div class="mamyrHistoryContainer" id="mamyrHistoryContainer">
+        <div class="firstParagraphContainer">
+            <div class="firstParagraphtextContainer">
+                <p class="firstParagraph">Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San
+                    Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the
+                    land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela
+                    Cruz
+                    and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family
+                    but
+                    also bring joy to others.</p>
+
+                <p class="secondParagraph">With faith and hard work, they transformed the land into a relaxing resort
+                    that people could enjoy. Their vision and dedication shaped the
+                    landscape into a serene retreat where visitors could unwind and create lasting memories.
+                    The name "Mamyr" came from their own names—Mamerto and Myrna—a symbol of the spirit of unity that
+                    brought
+                    the resort to life, making it not just a place to stay, but a reflection of their dreams and the
+                    love they poured into every corner of the property.
+                </p>
+            </div>
+
+
+            <div class="firstImageContainer">
+                <img src="../../Assets/Images/AboutImages/aboutImage.jpg" alt="Mamyr Picture"
+                    class="firstParagraphPhoto">
+            </div>
+        </div>
+
+        <div class="thirdParagraphContainer">
+            <div class="thirdImageContainer">
+                <img src="../../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Mamyr Picture"
+                    class="thirdParagraphPhoto">
+
+            </div>
+
+            <div class="thirdParagraphtextContainer">
+                <p class="thirdParagraph">Opened in 2022, Mamyr Resort has become a popular and welcoming place
+                    for people looking to relax and enjoy nature. The resort is known for its clean swimming pools,
+                    spacious function areas, beautiful surroundings, and warm hospitality. Guests
+                    can enjoy the resort's three refreshing swimming pools, two elegant pavilions, cozy cottages to stay
+                    in, as well as 11 comfortable
+                    hotel rooms for those who prefer a more private stay, and a spacious parking lot to accommodate all
+                    guests conveniently.
+                </p>
+            </div>
+        </div>
+
+        <div class="fourthParagraphContainer">
+            <p class="fourthParagraph">
+                At Mamyr Resort, we treat every guest like family, making sure your stay is special and enjoyable.
+                Whether you're celebrating an important event, spending time with loved ones, or just looking for a
+                peaceful break, we have everything you need to feel comfortable and relaxed. Our team works hard to
+                create a warm and welcoming atmosphere where you can make lasting memories. Visit us and see for
+                yourself why we're so proud of how much we've grown.
+            </p>
+        </div>
+    </div>
+
+    <footer class="py-1 my-2" id="footer">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -158,10 +280,48 @@ $userRole = $_SESSION['userRole'];
             <a href="tel:+09989624697">
                 <i class='bx bxs-phone'></i>
             </a>
+
         </div>
     </footer>
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
-    <script src="../../Assets/JS/scrollNavbg.js"></script>
+
+
+    <script>
+    const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
+    const backArrowContainer = document.getElementById("backArrowContainer")
+    const aboutTopContainer = document.getElementById("aboutTopContainer")
+    const ourServicesContainer = document.getElementById("ourServicesContainer")
+    const videoContainer = document.getElementById("videoContainer")
+
+    mamyrHistoryContainer.style.display = "none"
+    backArrowContainer.style.display = "none"
+
+
+    function readMore() {
+        if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
+
+            mamyrHistoryContainer.style.display = "block";
+            backArrowContainer.style.display = "block"
+            aboutTopContainer.style.display = "none"
+            ourServicesContainer.style.display = "none"
+            videoContainer.style.display = "none"
+            document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
+
+        } else {
+            mamyrHistoryContainer.style.display = "block"
+            backArrowContainer.style.display = "block"
+        }
+    }
+    </script>
+
+
+
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="../Assets/JS/scrollNavbg.js"></script>
+
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </body>
 
 </html>
