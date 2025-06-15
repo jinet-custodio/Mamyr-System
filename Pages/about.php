@@ -141,7 +141,7 @@
 
 
     <div class="backArrowContainer" id="backArrowContainer">
-        <a href="about.php"><img src="../Assets/Images/Icon/whiteArrow.png" alt="" class="backArrow"> </a>
+        <a href="about.php"><img src="../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
     </div>
 
     <div class="mamyrHistoryContainer" id="mamyrHistoryContainer">
@@ -167,13 +167,14 @@
 
 
             <div class="firstImageContainer">
-                <img src="../Assets/Images/AboutImages/aboutImage.jpg" alt="" class="firstParagraphPhoto">
+                <img src="../Assets/Images/AboutImages/aboutImage.jpg" alt="Mamyr Picture" class="firstParagraphPhoto">
             </div>
         </div>
 
         <div class="thirdParagraphContainer">
             <div class="thirdImageContainer">
-                <img src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="" class="thirdParagraphPhoto">
+                <img src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Mamyr Picture"
+                    class="thirdParagraphPhoto">
 
             </div>
 
