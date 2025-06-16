@@ -35,8 +35,10 @@ $userRole = $_SESSION['userRole'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Book Now</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
+    <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Customer/bookNow.css">
-    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
+    <!-- Bootstrap Link -->
+    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -152,7 +154,7 @@ $userRole = $_SESSION['userRole'];
         </div>
     </div>
 
-    <form action="#" method="POST" id="resort-page" style="display: none;">
+    <form action="../../Function/Booking/entranceBooking.php" method="POST" id="resort-page" style="display: none;">
         <div class="resort" id="resort">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
@@ -165,61 +167,28 @@ $userRole = $_SESSION['userRole'];
                 <div class="card resort-card" id="resortBookingCard" style="flex-shrink: 0; ">
 
                     <h5 class="schedLabel">Schedule</h5>
-
                     <div class="scheduleForm">
-                        <input type="date" class="form-control w-100" id="resortBookingDate" required>
-
-
-                        <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button" id="dropdownMenuButton"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            DAY/NIGHT TOUR
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li id="dayTour" class="dropdown-item">Day Tour</li>
-                            <li id="nightTour" class="dropdown-item">Night Tour</li>
-                        </ul> -->
-
+                        <input type="date" class="form-control w-100" id="resortBookingDate" name="resortBookingDate" required>
                         <select id="tourSelections" name="tourSelections" class="form-select" required>
-                            <option value="DTour">Day Tour</option>
-                            <option value="NTour">Night Tour</option>
-                            <option value="ONTour">Overnight Tour</option>
+                            <option value="Day">Day Tour</option>
+                            <option value="Night">Night Tour</option>
+                            <option value="Overnight">Overnight Tour</option>
                         </select>
-
-
                     </div>
 
                     <h5 class="noOfPeopleLabel">Number of People</h5>
-
                     <div class="peopleForm">
-                        <input type="number" class="form-control" placeholder="Adults" required>
-                        <input type="number" class="form-control" placeholder="Children" required>
+                        <input type="number" class="form-control" placeholder="Adults" name="adultCount">
+                        <input type="number" class="form-control" placeholder="Children" name="childrenCount">
                     </div>
 
-
                     <div class="cottageVideokeForm">
-
                         <div class="cottageForm">
                             <h5 class="cottageLabel">Cottage</h5>
-
-
-
-                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
-                                id="cottageDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                Please Select a Cottage
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li id="cottage1" class="dropdown-item">Php 500 - Good for 5 pax</li>
-                                <li id="cottage2" class="dropdown-item">Php 800 - Good for 10 pax</li>
-                                <li id="cottage3" class="dropdown-item">Php 900 - Good for 12 pax</li>
-                                <li id="cottage4" class="dropdown-item">Php 1,000 - Good for 15 pax</li>
-                                <li id="cottage5" class="dropdown-item">Php 2,000 - Good for 25 pax</li>
-
-
-                            </ul> -->
                             <select id="cottageSelections" name="cottageSelections" class="form-select" required>
                                 <option value="" disabled selected>Please Select a Cottage</option>
                                 <?php
-                                $cottageQuery = "SELECT * FROM resortservices WHERE RScategoryID = 2";
+                                $cottageQuery = "SELECT * FROM resortservices WHERE RScategoryID = 2 AND RSAvailabilityID = 1";
                                 $result = mysqli_query($conn, $cottageQuery);
                                 if (mysqli_num_rows($result) > 0) {
                                     $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -232,34 +201,22 @@ $userRole = $_SESSION['userRole'];
                                 ?>
                             </select>
                         </div>
-
-                        <div class="videokeForm w-100">
+                        <div class="videokeForm">
                             <h5 class="videokeRentalLabel">Videoke Rental</h5>
-
-
-                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
-                                id="videokeDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                YES/NO
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li id="yes" class="dropdown-item">YES</li>
-                                <li id="no" class="dropdown-item">NO</li>
-                            </ul> -->
-                            <select id="booleanSelections" name="booleanSelections" class="form-select" required>
+                            <select id="booleanSelections" name="videokeChoice" class="form-select" required>
                                 <option value="yesChoice">Yes</option>
                                 <option value="noChoice">No</option>
                             </select>
-
                         </div>
                     </div>
 
 
                     <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
-                    <textarea class="form-control w-100" id="purpose-additionalNotes" rows="5"
+                    <textarea class="form-control w-100" id="purpose-additionalNotes" name="additionalRequest" rows="5"
                         placeholder="Optional"></textarea>
 
-                    <div class="mt-auto">
-                        <button type="submit" class="btn btn-success btn-md w-100" name="bookRates">Book Now</button>
+                    <div class="mt-auto button-container">
+                        <button type="submit" class="btn btn-primary btn-md w-100" name="bookRates">Book Now</button>
                     </div>
                 </div>
 
@@ -277,7 +234,7 @@ $userRole = $_SESSION['userRole'];
     <!--end ng resort div-->
 
 
-    <form action="#" method="POST" id="hotel-page" style="display: none;">
+    <form action="../../Function/Booking/hotelBooking.php" method="POST" id="hotel-page" style="display: none;">
         <div class="hotel" id="hotel">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
@@ -295,16 +252,19 @@ $userRole = $_SESSION['userRole'];
             <div class="container-fluid">
                 <div class="hotelIconsContainer">
                     <div class="availabilityIcons">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
-                            class="avail">
-                        <p>Available</p>
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 1"
-                            class="avail">
-                        <p>Not Available</p>
+                        <div class="icons-container">
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Available Icon"
+                                class="avail">
+                            <p class="avail-text">Available</p>
+                        </div>
+                        <div class="icons-container"> <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Not Available Icon"
+                                class="avail">
+                            <p class="avail-text">Not Available</p>
+                        </div>
                     </div>
 
 
-                    <div class="hotelIconContainer">
+                    <div class="hotelIconContainer mt-3">
                         <?php
                         if ($result->num_rows > 0) {
                             $i = 1;
@@ -328,8 +288,8 @@ $userRole = $_SESSION['userRole'];
                         ?>
                     </div>
 
-                    <div class="mt-5">
-                        <a href="#" class="btn btn-primary btn-md w-100" id="amenitiesHR"> Take me to Hotel Rooms and
+                    <div>
+                        <a href="ratesAndHotelRooms.php" class="btn btn-primary btn-md w-100" id="amenitiesHR"> Take me to Hotel Rooms and
                             Rates</a>
                     </div>
                 </div>
@@ -338,47 +298,49 @@ $userRole = $_SESSION['userRole'];
                 <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
                     <div class="checkInOut">
-                        <div class="checkInOutLabel">
-                            <h3 class="containerLabel">Check-In Date</h3>
-                            <h3 class="containerLabel">Check-Out Date</h3>
+                        <div class="checkIn-container">
+                            <h5 class="containerLabel">Check-In Date</h5>
+                            <input type="datetime-local" class="form-control" id="checkInDate" required>
                         </div>
-                        <div class="checkInOutForm">
-                            <input type="date" class="form-control w-100" id="checkInDate" required>
-                            <input type="date" class="form-control w-100" id="checkOutDate" required>
+                        <div class="checkOut-container">
+                            <h5 class="containerLabel">Check-Out Date</h5>
+                            <input type="datetime-local" class="form-control" id="checkOutDate" required>
                         </div>
                     </div>
 
-                    <h5 class="noOfPeopleHotelLabel">Number of People</h5>
-
-                    <div class="hotelPeopleForm">
-                        <input type="number" class="form-control" placeholder="Adults" required>
-                        <input type="number" class="form-control" placeholder="Children" required>
+                    <div class="hotelPax">
+                        <h5 class="noOfPeopleHotelLabel">Number of People</h5>
+                        <div class="hotelPeopleForm">
+                            <input type="number" class="form-control" placeholder="Adults" required>
+                            <input type="number" class="form-control" placeholder="Children" required>
+                        </div>
                     </div>
 
 
-                    <h5 class="roomNumber">Room Number</h5>
-
-                    <div class="hotelPeopleForm">
-                        <button class="btn btn-primary dropdown-toggle w-100 " type="button" id="roomDropdownMenuButton"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Please Select a Room Number
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li id="roomNo1" class="dropdown-item">Room 1</li>
-                            <li id="roomNo2" class="dropdown-item">Room 2</li>
-                            <li id="roomNo3" class="dropdown-item">Room 3</li>
-                            <li id="roomNo4" class="dropdown-item">Room 4</li>
-                            <li id="roomNo5" class="dropdown-item">Room 5</li>
-                            <li id="roomNo6" class="dropdown-item">Room 6</li>
-                            <li id="roomNo7" class="dropdown-item">Room 7</li>
-                            <li id="roomNo8" class="dropdown-item">Room 8</li>
-                            <li id="roomNo9" class="dropdown-item">Room 9</li>
-                            <li id="roomNo10" class="dropdown-item">Room 10</li>
-                            <li id="roomNo11" class="dropdown-item">Room 11</li>
-                        </ul>
-
+                    <div class="roomNumbers">
+                        <h5 class="roomNumber-title">Room Number</h5>
+                        <div class="input-group">
+                            <select class="form-select" id="inputGroupSelect01">
+                                <option selected>Choose...</option>
+                                <?php
+                                $category = 'Hotel';
+                                $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortServices rs
+                            JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
+                            WHERE rsc.categoryName = '$category' AND RSAvailabilityID = 1";
+                                $result = mysqli_query($conn, $selectHotel);
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                ?>
+                                        <option value="<?= $row['RServiceName'] ?>"><?= $row['RServiceName'] ?></option>
+                                <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <input type="hidden" name="eventPax" id="hiddenGuestValue">
                     </div>
-                    <button type="submit" class="btn btn-success btn-md w-100 mt-auto">Book Now</button>
+                    <button type="submit" class="btn btn-primary" name="hotelBooking" id="hotelBooking">Book Now</button>
 
                 </div>
 
@@ -569,7 +531,9 @@ $userRole = $_SESSION['userRole'];
     <script src="../../Assets/JS/BookNowJS/eventDropdown.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script src="../../Assets/JS/fullCalendar.js"></script>
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap Link -->
+    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
 
     <!-- Page switch -->
     <script>
@@ -789,6 +753,34 @@ $userRole = $_SESSION['userRole'];
                 other_input.required = false;
             }
         });
+    </script>
+
+
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Sweetalert Popup -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
+
+        if (paramValue === 'success') {
+            Swal.fire({
+                title: "Successful Booking!",
+                text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info.",
+                icon: "success",
+                confirmButtonText: 'Okay'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'Account/account.php';
+                }
+            });
+        }
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 
     <!-- Get the value of event type -->

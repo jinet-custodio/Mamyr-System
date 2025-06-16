@@ -1,15 +1,22 @@
+INSERT INTO entranceTimeRange
+    (session_type, time_range) 
+    VALUES('Day', '9:00 am - 4:00 pm'), 
+    ('Night', '12:00 pm - 8:00 pm'), 
+    ('Overnight', '8:00 pm - 5:00 am');
+
+
 INSERT INTO entranceRates(
-    session_type,
-    time_range,
+    sessionType,
+    timeRangeID,
     ERcategory,
     ERprice
 )VALUES
-('Day', '9:00 am - 4:00 pm', 'Adult', 150.00),
-('Day', '9:00 am - 4:00 pm', 'Kids', 100.00),
-('Night', '12:00 pm - 8:00 pm', 'Adult', 180.00),
-('Night', '12:00 pm - 8:00 pm', 'Kids', 130.00),
-('Overnight', '8:00 pm - 5:00 am', 'Adult', 250.00),
-('Overnight', '8:00 pm - 5:00 am', 'Kids', 200.00);
+('Day', 1, 'Adult', 150.00),
+('Day', 1, 'Kids', 100.00),
+('Night', 2, 'Adult', 180.00),
+('Night', 2, 'Kids', 130.00),
+('Overnight', 3, 'Adult', 250.00),
+('Overnight', 3, 'Kids', 200.00);
 
 
 
@@ -71,6 +78,5 @@ VALUES (
   2,
    1
 );
-
 
 

@@ -65,7 +65,7 @@ $userRole = $_SESSION['userRole'];
             }
             ?>
             <li class="nav-item account-nav">
-                <a href="account.php">
+                <a href="Account/account.php">
                     <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
                 </a>
             </li>
@@ -286,31 +286,31 @@ $userRole = $_SESSION['userRole'];
 
 
     <script>
-    const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
-    const backArrowContainer = document.getElementById("backArrowContainer")
-    const aboutTopContainer = document.getElementById("aboutTopContainer")
-    const ourServicesContainer = document.getElementById("ourServicesContainer")
-    const videoContainer = document.getElementById("videoContainer")
+        const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
+        const backArrowContainer = document.getElementById("backArrowContainer")
+        const aboutTopContainer = document.getElementById("aboutTopContainer")
+        const ourServicesContainer = document.getElementById("ourServicesContainer")
+        const videoContainer = document.getElementById("videoContainer")
 
-    mamyrHistoryContainer.style.display = "none"
-    backArrowContainer.style.display = "none"
+        mamyrHistoryContainer.style.display = "none"
+        backArrowContainer.style.display = "none"
 
 
-    function readMore() {
-        if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
+        function readMore() {
+            if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
 
-            mamyrHistoryContainer.style.display = "block";
-            backArrowContainer.style.display = "block"
-            aboutTopContainer.style.display = "none"
-            ourServicesContainer.style.display = "none"
-            videoContainer.style.display = "none"
-            document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
+                mamyrHistoryContainer.style.display = "block";
+                backArrowContainer.style.display = "block"
+                aboutTopContainer.style.display = "none"
+                ourServicesContainer.style.display = "none"
+                videoContainer.style.display = "none"
+                document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
 
-        } else {
-            mamyrHistoryContainer.style.display = "block"
-            backArrowContainer.style.display = "block"
+            } else {
+                mamyrHistoryContainer.style.display = "block"
+                backArrowContainer.style.display = "block"
+            }
         }
-    }
     </script>
 
 

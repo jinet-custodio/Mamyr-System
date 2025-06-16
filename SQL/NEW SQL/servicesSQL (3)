@@ -30,22 +30,25 @@ CREATE TABLE resortServices (
 );
 
 CREATE TABLE entranceRates (
-    resortEntranceID INT(11) PRIMARY KEY AUTO_INCREMENT,
-    session_type VARCHAR(20),  -- Day, Night, Overnight
-    time_range VARCHAR(50),  --  start time to end time
-    ERcategory VARCHAR(10),   -- Adult, Kids   
-    ERprice DECIMAL(10,2) DEFAULT 0.00  -- entrance rates   
+    entranceRateID INT PRIMARY KEY AUTO_INCREMENT,
+    sessionType VARCHAR(20),               
+    timeRangeID INT,                         
+    ERcategory VARCHAR(20),                 
+    ERprice DECIMAL(10,2) DEFAULT 0.00,      
+
+    FOREIGN KEY (timeRangeID) REFERENCES entranceTimeRange(timeRangeID)
 );
+
 
 
 CREATE TABLE services (
   serviceID INT PRIMARY KEY AUTO_INCREMENT,
   resortServiceID int(11) DEFAULT NULL,
   partnershipServiceID int(11) DEFAULT NULL,
-  resortEntranceID int(11) DEFAULT NULL,
+  swimmingID int(11) DEFAULT NULL,
     FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
     FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
-    FOREIGN KEY (resortEntranceID) REFERENCES entranceRates(resortEntranceID)
+    FOREIGN KEY (swimmingID) REFERENCES entranceTimeRange(timeRangeID)
 );
 
 
