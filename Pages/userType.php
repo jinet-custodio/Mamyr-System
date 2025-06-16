@@ -6,19 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Type - Sign Up</title>
     <link rel="shortcut icon" href="../Assets/Images/Icon/favicon.png" type="image/x-icon">
+    <!-- CSS Link -->
     <link rel="stylesheet" href="../Assets/CSS/userType.css">
+    <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+
+    <!-- Boxicon Link -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-
-
+    <!-- <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
         <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
-
-    </nav>
+    </nav> -->
 
 
     <div class="titleContainer">
@@ -59,13 +60,6 @@
 
 
     </div>
-
-
-
-
-
-
-
 
 
     </script>

@@ -7,8 +7,8 @@
   src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
 }
 @font-face {
-  font-family: "Prata";
-  src: url(../../Fonts/Prata/Prata-Regular.ttf);
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 @font-face {
   font-family: "Agbalumo";
@@ -19,7 +19,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins";
   text-decoration: none;
   /* list-style: none; */
 }
@@ -100,7 +100,7 @@ ul {
   height: 2px;
   left: 50%;
   position: absolute;
-  border-bottom: 4px solid rgb(255, 255, 255) !important;
+  border-bottom: 4px solid rgb(147, 212, 245) !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }
@@ -175,7 +175,7 @@ footer {
   height: auto;
 }
 .mb-0 {
-  font-family: "Prata";
+  font-family: "Lora";
   font-size: 1.5vw;
   font-weight: bold;
   color: #ffff;
@@ -289,7 +289,9 @@ footer {
   justify-content: space-between;
 }
 
-.resort-card, .hotel-card, .event-card {
+.resort-card,
+.hotel-card,
+.event-card {
   border-radius: 2vw !important;
 }
 
@@ -327,35 +329,111 @@ footer {
 
 /* category section */
 
-/* resort booking */
-.resortTitle {
-  margin-top: 1vw;
-  font-size: 2.5vw;
-  font-family: "Prata";
-  color: #000000;
-  font-weight: bold;
+/* .backToSelection {
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+  margin: 10vw auto 0 auto;
 }
 
-.container-fluid {
+.backToSelection img {
+  width: 3.5vw;
+} */
+/* resort booking */
+
+#resort-page {
+  .resortTitle {
+    padding-top: 7rem;
+    font-size: 2.5vw;
+    font-family: "Lora";
+    color: #000000;
+    font-weight: bold;
+  }
+  .backToSelection {
+    /* border: 1px solid red; */
+    position: absolute;
+    margin: 7rem 0 0 3rem;
+  }
+
+  .container-fluid {
+    /* border: 1px solid yellow; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+
+  .card {
+    /* border: 1px solid yellow; */
+    padding: 2rem;
+    font-family: "Poppins";
+    margin: 3rem 0 0 3rem;
+  }
+
+  .scheduleForm,
+  .peopleForm,
+  .cottageVideokeForm,
+  .purposeForm {
+    /* border: 1px solid yellow; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .peopleForm input {
+    height: 2.5rem;
+  }
+
+  .cottageForm {
+    width: 60%;
+  }
+
+  .videokeForm {
+    width: 40%;
+  }
+
+  .pics {
+    /* border: 1px solid rgb(41, 10, 129); */
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    img {
+      margin: 0.5rem;
+      height: 300px;
+      width: 500px;
+    }
+  }
+
+  .schedLabel,
+  .cottageLabel,
+  .videokeRentalLabel,
+  .noOfPeopleLabel,
+  .purposeLabel {
+    text-align: center;
+    margin: 0.5rem 0 0.5rem 0;
+    font-weight: bold;
+  }
+
+  .button-container {
+    padding: 1rem;
+  }
+}
+
+/* .container-fluid {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 3vw;
-}
+} */
 
-.pics {
-  width: 50%;
-}
+/*
 
 .resort-card {
   padding: 2vw;
-}
-.hotel-card {
-  padding: 2vw;
-  height: 120vh !important;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
 }
 
 .scheduleForm,
@@ -390,14 +468,119 @@ footer {
   height: 30vw;
   width: auto;
   margin: 2vw auto;
-}
+} */
 /* resort booking */
 
 /* hotel booking */
-.hotelTitle {
+
+#hotel-page {
+  .hotelTitle {
+    padding-top: 6rem;
+    font-size: 2.5vw;
+    font-family: "Lora";
+    color: #000000;
+    font-weight: bold;
+  }
+
+  .backToSelection {
+    /* border: 1px solid red; */
+    position: absolute;
+    margin: 7rem 0 0 3rem;
+  }
+  .container-fluid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .hotelIconsContainer {
+    width: 50%;
+  }
+
+  .availabilityIcons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .icons-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .avail {
+    width: 50px;
+    height: auto;
+    margin-bottom: 8px;
+  }
+
+  .hotelIconContainer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    img {
+      width: 60px;
+      height: auto;
+      margin-bottom: 8px;
+    }
+  }
+
+  .hotel-card {
+    width: 50% !important;
+    padding: 2rem;
+  }
+
+  .checkInOut,
+  .hotelPeopleForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .checkInOut,
+  .hotelPax,
+  .roomNumbers {
+    margin: 1rem;
+  }
+
+  .checkIn-container,
+  .checkOut-container {
+    width: 100%;
+  }
+
+  h5 {
+    font-size: 20px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .roomNumbers {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .input-group {
+    width: 65%;
+  }
+
+  .btn {
+    width: 50%;
+    margin: auto;
+    margin-top: 1.5rem;
+  }
+}
+/* .hotelTitle {
   margin-top: 1vw;
   font-size: 2.5vw;
-  font-family: "Prata";
+  font-family: "Lora";
   color: #000000;
   font-weight: bold;
 }
@@ -421,7 +604,7 @@ footer {
 
 .roomCaption {
   font-size: 1.2vw;
-  font-family: "Prata";
+  font-family: "Lora";
 }
 
 .avail {
@@ -431,7 +614,7 @@ footer {
 .availabilityIcons p {
   font-size: 1.3vw;
   font-weight: 700;
-  font-family: "Prata";
+  font-family: "Lora";
   margin: 0 2vw 0 1vw;
 }
 
@@ -445,7 +628,6 @@ footer {
 .hotelIcon {
   width: 6vw;
 }
-
 
 .hotelIconLastRow {
   grid-column: span 4;
@@ -500,14 +682,14 @@ footer {
 
 .rooms {
   margin-top: 2vw;
-}
+} */
 /* hotel booking */
 
 /* event booking */
 .eventTitle {
   margin-top: 1vw;
   font-size: 2.5vw;
-  font-family: "Prata";
+  font-family: "Lora";
   color: #000000;
   font-weight: bold;
 }
@@ -572,18 +754,6 @@ select option {
   align-items: center;
   gap: 1vw;
 }
-
-.backToSelection {
-  width: 90%;
-  display: flex;
-  justify-content: flex-end;
-  margin: 10vw auto 0 auto;
-}
-
-.backToSelection img {
-  width: 3.5vw;
-}
-
 
 .dateForm,
 .venueForm,

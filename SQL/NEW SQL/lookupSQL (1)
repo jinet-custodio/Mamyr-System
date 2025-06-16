@@ -37,6 +37,7 @@ INSERT INTO statuses (statusName) Values
 ('Pending'),
 ('Approved'),
 ('Rejected');
+('Cancelled');
 
 CREATE TABLE eventCategories (
     categoryID INT PRIMARY KEY AUTO_INCREMENT,
@@ -73,3 +74,9 @@ INSERT INTO resortServicesCategories (`categoryID`, `categoryName`) VALUES
 (NULL, 'Cottage'), 
 (NULL, 'Entertainment'), 
 (NULL, 'Food');
+
+CREATE TABLE entranceTimeRange(
+    timeRangeID INT PRIMARY KEY AUTO_INCREMENT,
+    session_type VARCHAR(20),
+    time_range VARCHAR(50)
+    );

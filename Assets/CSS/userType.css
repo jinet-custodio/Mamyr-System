@@ -19,7 +19,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins";
   text-decoration: none;
   list-style: none;
 }
@@ -40,29 +40,30 @@ nav {
   height: 15vh;
   padding: 1rem;
 }
-
+/*
 .logoNav {
-  /* border: 1px solid black; */
+ border: 1px solid black; 
   width: 15vw;
   position: absolute;
   margin: 2vw;
-}
+}*/
 
 .titleContainer {
   /* border: 1px solid red; */
-  margin-top: 7vw;
+  margin: 2rem 0 2rem 0;
   text-align: center;
 }
 
 .title {
+  font-family: "Poppins Black";
   font-size: 30px;
-  font-style: normal;
+  /* font-style: normal; */
   font-weight: 500;
 }
 
 .container {
   /* border: 1px solid red; */
-  margin-top: 1vw;
+  /* margin-top: 1vw; */
   border-radius: 50px;
   width: 70vw;
   height: 40vw;
@@ -80,7 +81,8 @@ nav {
 }
 
 .category-card {
-  height: 70vh !important;
+  height: 65vh !important;
+  width: 50vh !important;
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 

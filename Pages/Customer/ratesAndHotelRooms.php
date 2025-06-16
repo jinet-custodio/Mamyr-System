@@ -131,8 +131,10 @@ $userRole = $_SESSION['userRole'];
             <div class="entranceFee">
                 <?php
                 // DB query
-                $rateSql = "SELECT * FROM entrancerates ORDER BY 
-                    FIELD(session_type, 'Day', 'Night', 'Overnight'), 
+                $rateSql = "SELECT er.*, etr.time_range  FROM entrancerates  er
+                LEFT JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID
+                 ORDER BY 
+                    FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
                     FIELD(ERcategory, 'Adult', 'Kids')";
                 $rateResult = mysqli_query($conn, $rateSql);
 
@@ -140,7 +142,7 @@ $userRole = $_SESSION['userRole'];
                 $sessions = [];
                 if (mysqli_num_rows($rateResult) > 0) {
                     while ($row = mysqli_fetch_assoc($rateResult)) {
-                        $session = $row['session_type'];
+                        $session = $row['sessionType'];
                         if (!isset($sessions[$session])) {
                             $sessions[$session] = [
                                 'time_range' => $row['time_range'],

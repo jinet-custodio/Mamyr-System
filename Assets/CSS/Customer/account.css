@@ -197,6 +197,7 @@ th {
 
 table {
   border: 1px solid black;
+  text-align: center;
 }
 
 th,
@@ -208,4 +209,11 @@ tr {
 #bookingTable {
   margin: 15vw auto 0 auto;
   width: 95%;
+}
+
+.badge {
+  padding: 0.5rem !important;
+  width: 100px !important;
+  height: 30px !important;
+  font-size: 16px !important;
 }
