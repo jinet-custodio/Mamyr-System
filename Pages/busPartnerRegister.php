@@ -17,7 +17,7 @@
     <h2 class="title">Business Partner Sign Up </h2>
 
 
-    <form action="#" method="POST">
+    <form action="../Function/register.php" method="POST">
 
         <div class="container" id="basicInfo">
             <div class="row">
@@ -43,11 +43,10 @@
 
                     <div class="busInfoFormContainer">
                         <!--purpose of this div: going to put margin top para pumantay sa left and right column-->
-                        <input type="text" class="form-control" id="busName" name="busName" placeholder="Business Name">
+                        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Business Name">
 
-                        <select id="service" name="partnerType" class="form-select primary" required>
+                        <select id="service" name="partnerType" class="form-select primary">
                             <option value="" disabled selected>Type of Business</option>
-
                             <option value="photography">Photography/Videography</option>
                             <option value="sound-lighting">Sound and Lighting</option>
                             <option value="event-hosting">Event Hosting</option>
@@ -109,7 +108,6 @@
             <div class="emailPassForm">
                 <div class="input-box">
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                        value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
                         required>
                     <i class='bx bxs-envelope'></i>
                 </div>
@@ -123,6 +121,9 @@
                     <div class=" input-box">
                         <input type="password" class="form-control" id="confirm_password" name="confirm_password"
                             placeholder="Confirm Password" oninput="checkPasswordMatch();" required>
+                        <input type="hidden" name="userRole" value="2"> <!-- 2 = partner -->
+                        <input type="hidden" name="registerStatus" value="partner">
+
                         <i id="togglePassword2" class='bx bxs-hide'></i>
                     </div>
 
@@ -254,26 +255,36 @@
     <!-- Register Password Validation JS -->
     <script src="../Assets/JS/checkPassword.js"></script>
 
-
     <script>
-    const emailPassContainer = document.getElementById("emailPassContainer");
-    const basicInfo = document.getElementById("basicInfo")
-
-    emailPassContainer.style.display = "none";
-
-    function openEmailPass() {
-
-        if (emailPassContainer.style.display == "none") {
-            emailPassContainer.style.display = "block";
-            basicInfo.style.display = "none"
-
-        } else {
-            emailPassContainer.style.display = "block"
+        function validateStepOne() {
+            const partnerType = document.getElementById('service').value;
+            if (!partnerType) {
+                alert("Please select a business type.");
+                return false;
+            }
+            return true;
         }
-
-
-    }
     </script>
+    <script>
+        const emailPassContainer = document.getElementById("emailPassContainer");
+        const basicInfo = document.getElementById("basicInfo")
+
+        emailPassContainer.style.display = "none";
+
+        function openEmailPass() {
+
+            if (emailPassContainer.style.display == "none") {
+                emailPassContainer.style.display = "block";
+                basicInfo.style.display = "none"
+
+            } else {
+                emailPassContainer.style.display = "block"
+            }
+
+
+        }
+    </script>
+
 </body>
 
 </html>

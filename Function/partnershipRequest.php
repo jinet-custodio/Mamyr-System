@@ -10,11 +10,7 @@ if (isset($_POST['submit_request'])) {
     $businessEmail = mysqli_real_escape_string($conn, $_POST['emailAddress']);
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
     $companyName = mysqli_real_escape_string($conn, $_POST['companyName']);
-
     $partnerType = mysqli_real_escape_string($conn, $_POST['partnerType']);
-    if ($partnerType === 'other') {
-        $partnerType = mysqli_real_escape_string($conn, $_POST['other_input']);
-    }
 
     $streetAddress = mysqli_real_escape_string($conn, $_POST['streetAddress']);
     $address2 = mysqli_real_escape_string($conn, $_POST['address2']);
