@@ -45,6 +45,47 @@ if (isset($_POST['verify-btn'])) {
                                 $_SESSION['success'] = "Verified successfully!";
                                 header("Location: ../Pages/register.php");
                                 exit;
+                            } elseif ($action === 'partner') {
+                                // Fetch the user ID
+                                $getUserID = mysqli_query($conn, "SELECT userID FROM users WHERE email = '$email'");
+                                if (mysqli_num_rows($getUserID) > 0) {
+                                    $userData = mysqli_fetch_assoc($getUserID);
+                                    $userID = $userData['userID'];
+
+                                    // Get partner data from session
+                                    $p = $_SESSION['partnerData'];
+                                    $companyName = mysqli_real_escape_string($conn, $p['companyName']);
+                                    $partnerType = mysqli_real_escape_string($conn, $p['partnerType']);
+                                    $partnerAddress = mysqli_real_escape_string($conn, $p['partnerAddress']);
+                                    $proofLink = mysqli_real_escape_string($conn, $p['proofLink']);
+                                    $phoneNumber = mysqli_real_escape_string($conn, $p['phoneNumber']);
+                                    $p = $_SESSION['partnerData'] ?? null;
+                                    if (!$p) {
+                                        $_SESSION['error'] = "Partner information missing from session.";
+                                        header("Location: ../Pages/register.php");
+                                        exit;
+                                    }
+
+                                    // Update user role to Partner (role = 2)
+                                    $updateUser = "UPDATE users SET userRole = 2, phoneNumber = '$phoneNumber' WHERE userID = '$userID'";
+                                    mysqli_query($conn, $updateUser);
+
+                                    // Insert into partnerships table
+                                    $insertPartner = "INSERT INTO partnerships(userID, partnerAddress, companyName, partnerType, businessEmail, documentLink)
+                          VALUES ('$userID', '$partnerAddress', '$companyName', '$partnerType', '$email', '$proofLink')";
+                                    mysqli_query($conn, $insertPartner);
+
+                                    // Cleanup
+                                    unset($_SESSION['partnerData']);
+
+                                    $_SESSION['success'] = "Partner registered and verified successfully!";
+                                    header("Location: ../Pages/register.php");
+                                    exit;
+                                } else {
+                                    $_SESSION['error'] = "User not found after verification.";
+                                    header("Location: ../Pages/verify_email.php");
+                                    exit;
+                                }
                             } elseif ($action === 'forgot-password') {
                                 $_SESSION['success'] = "Email Verification Success!";
                                 header("Location: ../Pages/forgotPassword.php");
@@ -75,6 +116,7 @@ if (isset($_POST['verify-btn'])) {
 }
 
 
+
 if (isset($_POST['resend_code'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
     $newOtp = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
@@ -84,7 +126,7 @@ if (isset($_POST['resend_code'])) {
     $storeData = "SELECT * FROM users WHERE email = '$email'";
     $result = mysqli_query($conn, $storeData);
     if (mysqli_num_rows($result) > 0) {
-        $data = mysqli_fetch_row($result);
+        $data = mysqli_fetch_assoc($result);;
         if ($data) {
             $stored_expiration = $data['OTP_expiration_at'];
             $firstName = $data['firstName'];
@@ -94,7 +136,7 @@ if (isset($_POST['resend_code'])) {
             $time_now = date('Y-m-d H:i:s');
             $time_left = strtotime($stored_expiration) - strtotime($time_now);
             if ($time_left < 300) {
-                $minutes_left = ceil($time_remaining / 60);
+                $minutes_left = ceil($time_left / 60);
                 $_SESSION['time'] = "Wait for " . $minutes_left . " more minute(s) to request again.";
                 header("Location: ../Pages/verify_email.php");
                 exit;

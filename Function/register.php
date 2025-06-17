@@ -12,18 +12,39 @@ require '../phpmailer/src/PHPMailer.php';
 require '../phpmailer/src/Exception.php';
 require '../phpmailer/src/SMTP.php';
 
+function assembleFullAddress($post)
+{
+    $street = $post['streetAddress'] ?? '';
+    $address2 = $post['address2'] ?? '';
+    $city = $post['city'] ?? '';
+    $province = $post['province'] ?? '';
+    $zip = $post['zip'] ?? '';
+
+    return trim("$street $address2, $city, $province, $zip");
+}
+
+
 
 if (isset($_POST['signUp'])) {
     $terms = mysqli_real_escape_string($conn, $_POST['terms']);
     echo $terms;
+    $userRole = isset($_POST['userRole']) ? intval($_POST['userRole']) : 1;
+    $registerStatus = $_POST['registerStatus'];
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
     $middleInitial = mysqli_real_escape_string($conn, $_POST['middleInitial']);
     $lastName = mysqli_real_escape_string($conn, $_POST['lastName']);
-    $userAddress = mysqli_real_escape_string($conn, $_POST['userAddress']);
+    //If the user is directly signing up as business partner, their personal address will not be provided
+    if ($registerStatus == "partner") {
+        $userAddress = "Personal address not provided";
+    } else {
+        $userAddress = mysqli_real_escape_string($conn, $_POST['userAddress']);
+    }
+    $partnerType = mysqli_real_escape_string($conn, $_POST['partnerType']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
     $extensions = ['@gmail.com', '@yahoo.com', '@outlook.com', '@protonmail.com', '@icloud.com'];
+
 
     // Set the default image when a user registered
     $defaultImage = '../Assets/Images/defaultProfile.png';
@@ -49,14 +70,25 @@ if (isset($_POST['signUp'])) {
             date_default_timezone_set('Asia/Manila'); //Set default time zone 
             $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes')); //Add a 5mins to the time of creation
             unset($_SESSION['formData']);
-            $storeData = "INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at) 
-                VALUES('$imageData','$firstName','$middleInitial','$lastName','$email','$userAddress','$hashpassword','$otp', '$OTP_expiration_at')";
+            $storeData = "INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at, userRole) 
+            VALUES('$imageData','$firstName','$middleInitial','$lastName','$email','$userAddress','$hashpassword','$otp', '$OTP_expiration_at', '$userRole')";
             $result = mysqli_query($conn, $storeData);
+            if ($result && $registerStatus == "partner") {
+                // Save business partner info into session temporarily
+                $_SESSION['partnerData'] = [
+                    'companyName' => $_POST['companyName'],
+                    'partnerType' => $_POST['partnerType'],
+                    'phoneNumber' => $_POST['phoneNumber'],
+                    'partnerAddress' => $_POST['streetAddress'] . ' ' . $_POST['address2'] . ', ' . $_POST['city'] . ', ' . $_POST['province'] . ', ' . $_POST['zip'],
+                    'proofLink' => $_POST['proofLink']
+                ];
+            }
+
             if ($result) {
                 $mail = new PHPmailer(true);
                 try {
                     $_SESSION['email'] = $email;
-                    $_SESSION['action'] = 'register';
+                    $_SESSION['action'] = ($registerStatus === 'partner') ? 'partner' : 'register';
                     $mail->isSMTP();
                     $mail->Host       =  $env['SMTP_HOST'];
                     $mail->SMTPAuth   = true;
@@ -104,8 +136,8 @@ if (isset($_POST['signUp'])) {
             exit;
         }
     } else {
-        $_SESSION['email-message'] = 'Invalid email format';
-        header("Location: ../Pages/register.php?page=register");
+        $_SESSION['email-message'] =  $email . 'Invalid email format';
+        header("Location: ../Pages/register.php?page=register&email = $email");
         exit;
     }
 } elseif (isset($_POST['login'])) {

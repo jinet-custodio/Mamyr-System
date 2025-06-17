@@ -108,6 +108,9 @@ require '../Function/OTPdeletion.php';
                         <input type="email" class="form-control" id="email" name="email" placeholder="Email"
                             value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
                             required>
+                        <input type="hidden" name="userRole" value="1"> <!-- 1 = customer -->
+                        <input type="hidden" name="registerStatus" value="customer">
+
                         <i class='bx bxs-envelope'></i>
                     </div>
 
