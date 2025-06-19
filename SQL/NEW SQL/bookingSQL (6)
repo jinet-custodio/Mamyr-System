@@ -28,6 +28,7 @@ CREATE TABLE confirmedBookings (
     downpayment DECIMAL(10,2) NOT NULL, -- calculated 30%
     downpaymentImage LONGBLOB NOT NULL, 
     totalCost DECIMAL(10,2) NOT NULL, -- total booking cost  
+    amountPaid DECIMAL(10,2) NOT NULL DEFAULT 0.00,  -- admin will input how much the user pay
     userBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00,  -- balance after payment
     confirmedBookingStatus INT DEFAULT 1,
     paymentStatus INT DEFAULT 1,
