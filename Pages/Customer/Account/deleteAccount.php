@@ -1,3 +1,33 @@
+<?php
+require '../../../Config/dbcon.php';
+
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
+session_start();
+date_default_timezone_set('Asia/Manila');
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
+    header("Location: ../../register.php");
+    exit();
+}
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: ../../register.php?session=expired");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,6 +48,16 @@
 </head>
 
 <body>
+
+    <!-- Get User Info -->
+
+    <?php
+    $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
+    $result = mysqli_query($conn, $query);
+    if (mysqli_num_rows($result) > 0) {
+        $data = mysqli_fetch_assoc($result);
+    }
+    ?>
     <!-- Side Bar -->
     <div class="sidebar">
 
@@ -30,7 +70,7 @@
         </div>
         <ul class="list-group">
             <li>
-                <a href="new_account.php" class="list-group-item ">
+                <a href="account.php" class="list-group-item ">
                     <img src="../../../Assets/Images/Icon/user.png" alt="Profile Information" class="sidebar-icon">
                     Profile Information
                 </a>
@@ -92,7 +132,7 @@
                 ?>
 
                 <!-- Confirmation Modal -->
-                <form action="../../../Function/Admin/Account/deleteAccount.php" method="POST">
+                <form action="../../../Function/Customer/Account/deleteAccount.php" method="POST">
                     <div class="modal fade" id="confirmationModal" tabindex="-1"
                         aria-labelledby="confirmationModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -119,7 +159,7 @@
                 </form>
 
                 <!-- Verification Modal -->
-                <form action="../../../Function/Admin/Account/deleteAccount.php" method="POST">
+                <form action="../../../Function/Customer/Account/deleteAccount.php" method="POST">
                     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -180,48 +220,48 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Show -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramsValue = params.get('action')
-    const confirmationBtn = document.getElementById("confirmationBtn");
-    const confirmationModal = document.getElementById("confirmationModal");
-    const deleteModal = document.getElementById('deleteModal');
-    const logoutBtn = document.getElementById('logoutBtn');
+        const params = new URLSearchParams(window.location.search);
+        const paramsValue = params.get('action')
+        const confirmationBtn = document.getElementById("confirmationBtn");
+        const confirmationModal = document.getElementById("confirmationModal");
+        const deleteModal = document.getElementById('deleteModal');
+        const logoutBtn = document.getElementById('logoutBtn');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/Admin/logout.php";
-            }
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/Customer/logout.php";
+                }
+            });
         });
-    });
 
-    confirmationBtn.addEventListener("click", function() {
-        const myconfirmationModal = new bootstrap.Modal(confirmationModal);
-        myconfirmationModal.show();
-    });
+        confirmationBtn.addEventListener("click", function() {
+            const myconfirmationModal = new bootstrap.Modal(confirmationModal);
+            myconfirmationModal.show();
+        });
 
-    if (paramsValue === 'success') {
-        const myModal = new bootstrap.Modal(deleteModal);
-        myModal.show();
-    };
+        if (paramsValue === 'success') {
+            const myModal = new bootstrap.Modal(deleteModal);
+            myModal.show();
+        };
 
-    if (paramsValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    };
+        if (paramsValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 </body>
 

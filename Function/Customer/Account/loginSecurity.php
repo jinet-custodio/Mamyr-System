@@ -28,11 +28,11 @@ if (isset($_POST['validatePassword'])) {
         $data = mysqli_fetch_assoc($result);
         $storedPassword = $data['password'];
         if (password_verify($passwordEntered, $storedPassword)) {
-            header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=2");
+            header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=2");
             exit;
         } else {
             $_SESSION['email-change'] = "Incorrect Password";
-            header("Location: ../../../Pages/Admin/Account/loginSecurity.php");
+            header("Location: ../../../Pages/Customer/Account/loginSecurity.php");
             exit;
         }
     }
@@ -92,10 +92,10 @@ if (isset($_POST['validatePassword'])) {
                         // $mail->AltBody = 'Body in plain text for non-HTML mail clients';
                         if (!$mail->send()) {
                             $_SESSION['modal-error'] = "Unable to send verification code.";
-                            header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=3");
+                            header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=3");
                             exit;
                         } else {
-                            header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=3");
+                            header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=3");
                             exit;
                         }
                     } catch (Exception $e) {
@@ -103,19 +103,19 @@ if (isset($_POST['validatePassword'])) {
                     }
                 } else {
                     $_SESSION['modal-error'] = "Unable to generate OTP. Please try again later";
-                    header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=2");
+                    header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=2");
                     exit;
                 }
             } else {
                 $_SESSION['newEmail'] = $newEmail;
                 $_SESSION['modal-error'] = "The new email address cannot be the same as the existing email address.";
-                header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=2");
+                header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=2");
                 exit;
             }
         }
     } else {
         $_SESSION['modal-error'] = "Invalid Email Format";
-        header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=2");
+        header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=2");
         exit;
     }
 } elseif (isset($_POST['verifyCode'])) {
@@ -138,22 +138,22 @@ if (isset($_POST['validatePassword'])) {
                     OTP_expiration_at = NULL WHERE email = '$email' AND userID = '$userID'";
                     $result = mysqli_query($conn, $updateEmail);
                     if ($result) {
-                        header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=success");
+                        header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=success");
                         exit;
                     }
                 } else {
                     $_SESSION['modal-error'] = "The OTP you entered is incorrect. Please try again.";
-                    header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=3");
+                    header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=3");
                     exit;
                 }
             } else {
                 $_SESSION['modal-error'] = "The OTP has expired. Please request a new one.";
-                header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=3");
+                header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=3");
                 exit;
             }
         } else {
             $_SESSION['modal-error'] = "Please enter the OTP sent to your email.";
-            header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=3");
+            header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=3");
             exit;
         }
     }
@@ -176,17 +176,17 @@ if (isset($_POST['validatePassword'])) {
                 ";
                 $result = mysqli_query($conn, $updatePassword);
                 if ($result) {
-                    header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=success-password");
+                    header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=success-password");
                     exit;
                 }
             } else {
                 $_SESSION['password-error'] = "The new password must be different from the current password.";
-                header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=4");
+                header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=4");
                 exit;
             }
         } else {
             $_SESSION['password-error'] = "The current password is incorrect.";
-            header("Location: ../../../Pages/Admin/Account/loginSecurity.php?step=4");
+            header("Location: ../../../Pages/Customer/Account/loginSecurity.php?step=4");
             exit;
         }
     }

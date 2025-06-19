@@ -65,10 +65,10 @@ if (isset($_POST['yesDelete'])) {
                 // $mail->AltBody = 'Body in plain text for non-HTML mail clients';
                 if (!$mail->send()) {
                     $_SESSION['deleteAccountMessage'] = 'Failed to send OTP. Try again.';
-                    header("Location: ../../../Pages/Admin/Account/deleteAccount.php");
+                    header("Location: ../../../Pages/Customer/Account/deleteAccount.php");
                     exit;
                 } else {
-                    header("Location: ../../../Pages/Admin/Account/deleteAccount.php?action=success");
+                    header("Location: ../../../Pages/Customer/Account/deleteAccount.php?action=success");
                     exit;
                 }
             } catch (Exception $e) {
@@ -79,7 +79,7 @@ if (isset($_POST['yesDelete'])) {
         }
     } else {
         $_SESSION['deleteAccountMessage'] = 'User Not Found';
-        header("Location: ../../../Pages/Admin/Account/deleteAccount.php");
+        header("Location: ../../../Pages/Customer/Account/deleteAccount.php");
         exit;
     }
 }
@@ -99,10 +99,13 @@ elseif (isset($_POST['verifyCode'])) {
             $storedTime = $data['OTP_expiration_at'];
             date_default_timezone_set('Asia/Manila');
             $timeNow = date('Y-m-d H:i:s', strtotime('+5 minutes'));
-            if ($timeNow > strtotime($OTP_expiration_at)) {
+            if ($timeNow > strtotime($storedTime)) {
                 if ($enteredOTP ===  $storedOTP) {
                     $deleteQuery = "DELETE FROM users WHERE userID = '$userID' and email = '$email'";
                     $deleteResult = mysqli_query($conn, $deleteQuery);
+                    // $deleteQuery = "UPDATE users SET
+                    //             userStatusID = '4' WHERE userID = '$userID' and email = '$email'";
+                    // $result = mysqli_query($conn, $deleteQuery);
                     if ($deleteQuery) {
                         header("Location: ../../../Pages/register.php?action=deleted");
                         exit;
@@ -110,7 +113,7 @@ elseif (isset($_POST['verifyCode'])) {
                 }
             } else {
                 $_SESSION['deleteAccountMessage'] = 'Expired OTP.';
-                header("Location: ../../../Pages/Admin/Account/deleteAccount.php");
+                header("Location: ../../../Pages/Customer/Account/deleteAccount.php");
                 exit;
             }
         }

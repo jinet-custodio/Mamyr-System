@@ -1,3 +1,33 @@
+<?php
+require '../../../Config/dbcon.php';
+
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
+session_start();
+date_default_timezone_set('Asia/Manila');
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
+    header("Location: ../../register.php");
+    exit();
+}
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: ../../register.php?session=expired");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,9 +44,22 @@
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../../Assets/CSS/Customer/Account/loginSecurity.css" />
+
+    <!-- Boxicon Link -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
+
+    <!-- Get User Info -->
+
+    <?php
+    $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
+    $result = mysqli_query($conn, $query);
+    if (mysqli_num_rows($result) > 0) {
+        $data = mysqli_fetch_assoc($result);
+    }
+    ?>
     <!-- Side Bar -->
     <div class="sidebar">
 
@@ -29,7 +72,7 @@
         </div>
         <ul class="list-group">
             <li>
-                <a href="new_account.php" class="list-group-item ">
+                <a href="account.php" class="list-group-item ">
                     <img src="../../../Assets/Images/Icon/user.png" alt="Profile Information" class="sidebar-icon">
                     Profile Information
                 </a>
@@ -44,14 +87,14 @@
             </li>
 
             <li>
-                <a href="loginSecurity.php" class="list-group-item">
+                <a href="loginSecurity.php" class="list-group-item active">
                     <img src="../../../Assets/Images/Icon/login_security.png" alt="Login Security" class="sidebar-icon">
                     Login & Security
                 </a>
             </li>
 
 
-            <a href="deleteAccount.php" class="list-group-item active">
+            <a href="deleteAccount.php" class="list-group-item">
                 <img src="../../../Assets/Images/Icon/delete-user.png" alt="Delete Account" class="sidebar-icon">
                 Delete Account
             </a>
@@ -87,6 +130,12 @@
                     <button type="button" class="btn btn-primary" id="changePasswordBtn">Change</button>
                 </div>
 
+                <?php
+                if (isset($_SESSION['email-change'])) {
+                    echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['email-change']) . '</div>';
+                    unset($_SESSION['email-change']);
+                }
+                ?>
 
             </div>
             <!-- Email Change Modal -->
@@ -97,9 +146,9 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title text-center" id="emailModalLabel">Your current email is <br>
-                                    <strong>louisebartolome.basc@gmail.com</strong>
+                                    <strong><strong><?= htmlspecialchars($data['email']) ?></strong>
                                 </h5>
-                                <!-- <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>"> -->
+                                <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
                                 <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
                                     aria-label="Close"> </button>
                             </div>
@@ -127,20 +176,20 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title text-center" id="email2ModalLabel">Your current email is <br>
-                                    <strong>louisebartolome.basc@gmail.com</strong>
+                                    <strong><strong><?= htmlspecialchars($data['email']) ?></strong>
                                 </h5>
-                                <!-- <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>"> -->
+                                <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
                                 <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
                                     aria-label="Close">
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <!-- <?php
+                                <?php
                                 if (isset($_SESSION['modal-error'])) {
                                     echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
                                     unset($_SESSION['modal-error']);
                                 }
-                                ?> -->
+                                ?>
                                 <p class="modal-text">Please enter your new email</p>
                                 <input type="email" name="newEmail" id="newEmail" placeholder="Email" required>
                                 <div class="button-container">
@@ -267,22 +316,140 @@
 
 
     <script>
-    //Show Modal
-    document.addEventListener("DOMContentLoaded", function() {
-        const changeEmailBtn = document.getElementById("changeEmailBtn");
-        const changePasswordBtn = document.getElementById("changePasswordBtn");
-        const emailModal = document.getElementById("emailModal");
+        //Show Modal
+        document.addEventListener("DOMContentLoaded", function() {
+            const changeEmailBtn = document.getElementById("changeEmailBtn");
+            const changePasswordBtn = document.getElementById("changePasswordBtn");
+            const emailModal = document.getElementById("emailModal");
+            const passwordModal = document.getElementById("passwordModal");
+
+            changeEmailBtn.addEventListener("click", function() {
+                const myEmailModal = new bootstrap.Modal(emailModal);
+                myEmailModal.show();
+            });
+            changePasswordBtn.addEventListener("click", function() {
+                const myPasswordModal = new bootstrap.Modal(passwordModal);
+                myPasswordModal.show();
+            });
+        });
+    </script>
+
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('step');
+        const email2Modal = document.getElementById("email2Modal");
+        const email3Modal = document.getElementById("email3Modal");
         const passwordModal = document.getElementById("passwordModal");
 
-        changeEmailBtn.addEventListener("click", function() {
-            const myEmailModal = new bootstrap.Modal(emailModal);
-            myEmailModal.show();
-        });
-        changePasswordBtn.addEventListener("click", function() {
+        if (paramValue === '2') {
+            const myEmail2Modal = new bootstrap.Modal(email2Modal);
+            myEmail2Modal.show();
+            if (paramValue) {
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+            };
+        } else if (paramValue === '3') {
+            const myEmail3Modal = new bootstrap.Modal(email3Modal);
+            myEmail3Modal.show();
+            if (paramValue) {
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+            };
+        } else if (paramValue === 'success') {
+            Swal.fire({
+                title: "Success",
+                text: "Your email has been updated successfully.",
+                icon: "success"
+            });
+        } else if (paramValue === 'success-password') {
+            Swal.fire({
+                title: "Success",
+                text: "Your password has been updated successfully.",
+                icon: "success"
+            });
+        } else if (paramValue === '4') {
             const myPasswordModal = new bootstrap.Modal(passwordModal);
             myPasswordModal.show();
+            if (paramValue) {
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+            };
+        }
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
+    </script>
+
+    <!-- Eye icon of password show and hide -->
+    <script>
+        const passwordField = document.getElementById('passwordEntered');
+        const passwordField1 = document.getElementById('currentPassword');
+        const passwordField2 = document.getElementById('newPassword');
+        const passwordField3 = document.getElementById('confirmPassword');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePassword1 = document.getElementById('togglePassword2');
+        const togglePassword2 = document.getElementById('togglePassword3');
+        const togglePassword3 = document.getElementById('togglePassword4');
+
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide');
+            }
+        }
+
+        togglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField, togglePassword);
         });
-    });
+
+        togglePassword1.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField1, togglePassword1);
+        });
+
+        togglePassword2.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField2, togglePassword2);
+        });
+
+        togglePassword3.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField3, togglePassword3);
+        });
+    </script>
+
+    <script>
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/Admin/logout.php";
+                }
+            });
+        })
     </script>
 
 
