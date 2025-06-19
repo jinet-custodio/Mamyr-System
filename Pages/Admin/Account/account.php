@@ -189,8 +189,8 @@ $userRole = $_SESSION['userRole'];
                         <h6 class="roleName"><?= htmlspecialchars($data['roleName']) ?></h6>
                     </div>
                 </div>
-
         </form>
+
         <form action="../../../Function/Admin/Account/editAccount.php" method="POST">
             <!-- <h6 class="page-title">Personal Details</h6> -->
             <div class="admin-details">
