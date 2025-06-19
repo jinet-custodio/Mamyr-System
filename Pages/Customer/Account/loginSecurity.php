@@ -139,7 +139,7 @@ $userRole = $_SESSION['userRole'];
 
             </div>
             <!-- Email Change Modal -->
-            <form action="#" method="POST">
+            <form action="../../../Function/Customer/Account/loginSecurity.php" method="POST">
                 <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -169,7 +169,7 @@ $userRole = $_SESSION['userRole'];
             </form>
 
             <!-- Email Change Modal -->
-            <form action="#" method="POST">
+            <form action="../../../Function/Customer/Account/loginSecurity.php" method="POST">
                 <div class="modal fade" id="email2Modal" tabindex="-1" aria-labelledby="email2ModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -204,7 +204,7 @@ $userRole = $_SESSION['userRole'];
             </form>
 
             <!-- Email Change Modal -->
-            <form action="../../../Function/Admin/Account/loginSecurity.php" method="POST">
+            <form action="../../../Function/Customer/Account/loginSecurity.php" method="POST">
                 <div class="modal fade" id="email3Modal" tabindex="-1" aria-labelledby="email3ModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -242,7 +242,7 @@ $userRole = $_SESSION['userRole'];
             </form>
 
             <!-- Password Change Modal -->
-            <form action="../../../Function/Admin/Account/loginSecurity.php" method="POST">
+            <form action="../../../Function/Customer/Account/loginSecurity.php" method="POST">
                 <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -446,7 +446,7 @@ $userRole = $_SESSION['userRole'];
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "../../../Function/Admin/logout.php";
+                    window.location.href = "../../../Function/Customer/logout.php";
                 }
             });
         })
