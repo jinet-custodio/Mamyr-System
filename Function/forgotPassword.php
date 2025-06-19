@@ -3,14 +3,15 @@ require '../Config/dbcon.php';
 session_start();
 
 $env = parse_ini_file(__DIR__ . '/../.env');
+require '../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPmailer;
 use PHPMailer\PHPMailer\Exception;
 
 
-require '../phpmailer/src/PHPMailer.php';
-require '../phpmailer/src/Exception.php';
-require '../phpmailer/src/SMTP.php';
+// require '../phpmailer/src/PHPMailer.php';
+// require '../phpmailer/src/Exception.php';
+// require '../phpmailer/src/SMTP.php';
 
 
 if (isset($_POST['verify_email'])) {

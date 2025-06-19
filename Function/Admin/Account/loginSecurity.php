@@ -4,14 +4,15 @@ require '../../../Config/dbcon.php';
 
 session_start();
 $env = parse_ini_file(__DIR__ . '/../../../.env');
+require '../../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPmailer;
 use PHPMailer\PHPMailer\Exception;
 
 
-require '../../../phpmailer/src/PHPMailer.php';
-require '../../../phpmailer/src/Exception.php';
-require '../../../phpmailer/src/SMTP.php';
+// require '../../../phpmailer/src/PHPMailer.php';
+// require '../../../phpmailer/src/Exception.php';
+// require '../../../phpmailer/src/SMTP.php';
 
 $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
 $userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
