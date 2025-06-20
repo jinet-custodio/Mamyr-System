@@ -62,7 +62,37 @@
 
     <main>
         <div class="titleContainer">
-            <h4 class="title">Our Blog</h4>
+            <h4 class="title">The Mamyr Resort Blog: Stay Informed, Stay Inspired</h4>
+            <h4> Inspiration, Updates, and Insights Straight from Mamyr Resort</h4>
+        </div>
+
+        <div class="blogmain">
+            <div class="title">
+                <h5>Recent blog posts</h5>
+            </div>
+            <div class="posts">
+                <div class="featured">
+                    <div class="featuredpost">
+                        <img src="../Assets/Images/blogposts/image.png" alt="">
+                        <div class="desc">
+                            <div class="eventType">
+                                <p style="color: gray;;">Private Event • 1 June 2025</p>
+                            </div>
+                            <div class="blogHeading">
+                                <h4>Mamyr Resort is Closed for a Private Event</h4>
+                            </div>
+                            <div class="blogDescription">We are sorry, but we will be closed on Sunday, June 1, 2025, due to a private event.
+                                Invitation-only guests will be allowed, and we will not be accepting walk-ins on this date. Thank you for your
+                                understanding.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="others">
+                    <div class="posts">
+
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 

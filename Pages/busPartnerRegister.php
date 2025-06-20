@@ -16,7 +16,12 @@
 
     <h2 class="title">Business Partner Sign Up </h2>
 
+    <div class="back-icon-container">
+        <a href="../index.php">
+            <img src="../Assets/Images/Icon/backbtn_black.png" alt="Go back" class="backArrow" style="width: 3vw;">
 
+        </a>
+    </div>
     <form action="../Function/register.php" method="POST">
 
         <div class="container" id="basicInfo">
