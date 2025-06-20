@@ -320,7 +320,7 @@ if (isset($_SESSION['error-partnership'])) {
                                         ?>
                                         <form action="partnership.php?container=<?= $applicantContainer ?>" method="POST" style="display:inline;">
                                             <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                            <button type="submit" class="btn btn-info w-75">View</button>
+                                            <button type="submit" class="btn btn-info w-75" name="view-partner">View</button>
                                         </form>
 
                                     </td>

@@ -154,7 +154,7 @@ if (isset($_SESSION['error'])) {
                     </div>
                     <div class="end">
                         <label for="others"> Others: </label>
-                        <textarea type="text" rows="4" name="others" style="padding: 0.5vw; font-size: 1.5vw;" class="others form-control" id="others"> </textarea>
+                        <input type="text" name="others" style="padding: 0.5vw; font-size: 1.5vw;" class="others form-control" id="others">
                     </div>
                 </div>
                 <!-- <input type="text" name="roomImage" class="roomImage" id="roomImage"> -->

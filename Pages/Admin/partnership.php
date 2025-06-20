@@ -32,10 +32,14 @@ if (isset($_POST['view-btn'])) {
     $_SESSION['partnerID'] = mysqli_real_escape_string($conn, $_POST['partnerID']);
 }
 
+if (isset($_POST['view-partner'])) {
+    $_SESSION['partnerID'] = mysqli_real_escape_string($conn, $_POST['partnerID']);
+}
+
 $partnerID = $_SESSION['partnerID']  ?? null;
 
 if (!$partnerID) {
-    echo "<script>console.log('PHP says: " . addslashes($partnerID) . "');</script>";
+    echo "<script>console.log('PHP says: " . addslashes($partnerID) . "'); </script>";
 }
 ?>
 
@@ -88,12 +92,15 @@ if (!$partnerID) {
             $address = $data['partnerAddress'];
             $link = $data['documentLink'];
             $status = $data['statusName'];
-
             $profile = $data['userProfile'];
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_buffer($finfo, $profile);
-            finfo_close($finfo);
-            $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+            if ($profile) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $profile);
+                finfo_close($finfo);
+                $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+            } else {
+                $image = '../../Assets/Images/defaultProfile.png';
+            }
         }
         ?>
         <!-- Display the information -->
@@ -161,10 +168,14 @@ if (!$partnerID) {
             $link = $data['documentLink'];
             $status = $data['statusName'];
             $profile = $data['userProfile'];
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_buffer($finfo, $profile);
-            finfo_close($finfo);
-            $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+            if ($profile) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $profile);
+                finfo_close($finfo);
+                $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+            } else {
+                $image = '../../Assets/Images/defaultProfile.png';
+            }
         }
         ?>
         <!-- Display the information -->
