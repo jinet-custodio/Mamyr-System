@@ -118,6 +118,11 @@ body {
   margin-top: 2vw;
 }
 
+#nextBtn {
+  width: 75%;
+  margin: 2vw auto;
+}
+
 .busProofFormContainer {
   margin-top: 4vw;
   display: flex;
@@ -128,6 +133,8 @@ body {
 
 .moreDetails {
   text-decoration: none;
+  width: 100%;
+  text-align: center;
 }
 
 .btn-primary {
@@ -186,6 +193,13 @@ body {
   position: relative;
   margin: 20px 0;
 }
+
+.back-icon-container {
+  position: absolute;
+  right: 8vw;
+  top: 4vw;
+}
+
 
 .input-box input {
   width: 100%;

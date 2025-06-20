@@ -144,6 +144,7 @@ body {
   border-radius: 2rem;
   .profile-pic {
     height: 8vh;
+    aspect-ratio: 1;
     border-radius: 2rem;
   }
 }

@@ -173,9 +173,50 @@ ul {
 
 .titleContainer {
   width: 70%;
-  margin: 8vw auto 2vw auto;
+  margin: 10vw auto 2vw auto;
   text-align: center;
 }
+
+.title {
+  font-size: 2.5vw !important;
+}
+
+.title {
+  margin-left: 3vw;
+}
+
+.posts {
+  width: 95%;
+  border: 1px solid black;
+  margin: 1vw auto;
+  display: flex;
+}
+
+.blogHeading h4{
+  font-weight: 800 !important;
+}
+
+.featured {
+  width: 50%;
+}
+
+.featuredpost {
+  display: grid;
+  width: 100%;
+  padding: 1vw;
+}
+
+.others {
+  display: grid;
+  width: 50%;
+}
+.featuredpost img {
+  width: 45vw;
+}
+
+
+
+
 /* end of code for body */
 
 
