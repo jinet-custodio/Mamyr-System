@@ -79,7 +79,7 @@ $userRole = $_SESSION['userRole'];
             </li>
 
             <li>
-                <a href="userManagement.php" class="list-group-item">
+                <a href="bookingHistory.php" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
                     Booking History
@@ -316,140 +316,140 @@ $userRole = $_SESSION['userRole'];
 
 
     <script>
-        //Show Modal
-        document.addEventListener("DOMContentLoaded", function() {
-            const changeEmailBtn = document.getElementById("changeEmailBtn");
-            const changePasswordBtn = document.getElementById("changePasswordBtn");
-            const emailModal = document.getElementById("emailModal");
-            const passwordModal = document.getElementById("passwordModal");
+    //Show Modal
+    document.addEventListener("DOMContentLoaded", function() {
+        const changeEmailBtn = document.getElementById("changeEmailBtn");
+        const changePasswordBtn = document.getElementById("changePasswordBtn");
+        const emailModal = document.getElementById("emailModal");
+        const passwordModal = document.getElementById("passwordModal");
 
-            changeEmailBtn.addEventListener("click", function() {
-                const myEmailModal = new bootstrap.Modal(emailModal);
-                myEmailModal.show();
-            });
-            changePasswordBtn.addEventListener("click", function() {
-                const myPasswordModal = new bootstrap.Modal(passwordModal);
-                myPasswordModal.show();
-            });
+        changeEmailBtn.addEventListener("click", function() {
+            const myEmailModal = new bootstrap.Modal(emailModal);
+            myEmailModal.show();
         });
+        changePasswordBtn.addEventListener("click", function() {
+            const myPasswordModal = new bootstrap.Modal(passwordModal);
+            myPasswordModal.show();
+        });
+    });
     </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('step');
-        const email2Modal = document.getElementById("email2Modal");
-        const email3Modal = document.getElementById("email3Modal");
-        const passwordModal = document.getElementById("passwordModal");
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('step');
+    const email2Modal = document.getElementById("email2Modal");
+    const email3Modal = document.getElementById("email3Modal");
+    const passwordModal = document.getElementById("passwordModal");
 
-        if (paramValue === '2') {
-            const myEmail2Modal = new bootstrap.Modal(email2Modal);
-            myEmail2Modal.show();
-            if (paramValue) {
-                const url = new URL(window.location);
-                url.search = '';
-                history.replaceState({}, document.title, url.toString());
-            };
-        } else if (paramValue === '3') {
-            const myEmail3Modal = new bootstrap.Modal(email3Modal);
-            myEmail3Modal.show();
-            if (paramValue) {
-                const url = new URL(window.location);
-                url.search = '';
-                history.replaceState({}, document.title, url.toString());
-            };
-        } else if (paramValue === 'success') {
-            Swal.fire({
-                title: "Success",
-                text: "Your email has been updated successfully.",
-                icon: "success"
-            });
-        } else if (paramValue === 'success-password') {
-            Swal.fire({
-                title: "Success",
-                text: "Your password has been updated successfully.",
-                icon: "success"
-            });
-        } else if (paramValue === '4') {
-            const myPasswordModal = new bootstrap.Modal(passwordModal);
-            myPasswordModal.show();
-            if (paramValue) {
-                const url = new URL(window.location);
-                url.search = '';
-                history.replaceState({}, document.title, url.toString());
-            };
-        }
+    if (paramValue === '2') {
+        const myEmail2Modal = new bootstrap.Modal(email2Modal);
+        myEmail2Modal.show();
         if (paramValue) {
             const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url.toString());
         };
+    } else if (paramValue === '3') {
+        const myEmail3Modal = new bootstrap.Modal(email3Modal);
+        myEmail3Modal.show();
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
+    } else if (paramValue === 'success') {
+        Swal.fire({
+            title: "Success",
+            text: "Your email has been updated successfully.",
+            icon: "success"
+        });
+    } else if (paramValue === 'success-password') {
+        Swal.fire({
+            title: "Success",
+            text: "Your password has been updated successfully.",
+            icon: "success"
+        });
+    } else if (paramValue === '4') {
+        const myPasswordModal = new bootstrap.Modal(passwordModal);
+        myPasswordModal.show();
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
+    }
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 
     <!-- Eye icon of password show and hide -->
     <script>
-        const passwordField = document.getElementById('passwordEntered');
-        const passwordField1 = document.getElementById('currentPassword');
-        const passwordField2 = document.getElementById('newPassword');
-        const passwordField3 = document.getElementById('confirmPassword');
-        const togglePassword = document.getElementById('togglePassword');
-        const togglePassword1 = document.getElementById('togglePassword2');
-        const togglePassword2 = document.getElementById('togglePassword3');
-        const togglePassword3 = document.getElementById('togglePassword4');
+    const passwordField = document.getElementById('passwordEntered');
+    const passwordField1 = document.getElementById('currentPassword');
+    const passwordField2 = document.getElementById('newPassword');
+    const passwordField3 = document.getElementById('confirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const togglePassword1 = document.getElementById('togglePassword2');
+    const togglePassword2 = document.getElementById('togglePassword3');
+    const togglePassword3 = document.getElementById('togglePassword4');
 
-        function togglePasswordVisibility(passwordField, toggleIcon) {
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('bxs-hide');
-                toggleIcon.classList.add('bx-show-alt');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('bx-show-alt');
-                toggleIcon.classList.add('bxs-hide');
-            }
+    function togglePasswordVisibility(passwordField, toggleIcon) {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('bxs-hide');
+            toggleIcon.classList.add('bx-show-alt');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('bx-show-alt');
+            toggleIcon.classList.add('bxs-hide');
         }
+    }
 
-        togglePassword.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField, togglePassword);
-        });
+    togglePassword.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField, togglePassword);
+    });
 
-        togglePassword1.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField1, togglePassword1);
-        });
+    togglePassword1.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField1, togglePassword1);
+    });
 
-        togglePassword2.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField2, togglePassword2);
-        });
+    togglePassword2.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField2, togglePassword2);
+    });
 
-        togglePassword3.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField3, togglePassword3);
-        });
+    togglePassword3.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField3, togglePassword3);
+    });
     </script>
 
     <script>
-        const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../../Function/Customer/logout.php";
-                }
-            });
-        })
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../../Function/logout.php";
+            }
+        });
+    })
     </script>
 
 

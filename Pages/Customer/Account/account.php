@@ -117,7 +117,7 @@ $userRole = $_SESSION['userRole'];
             </li>
 
             <li>
-                <a href="userManagement.php" class="list-group-item">
+                <a href="bookingHistory.php" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
                     Booking History
@@ -155,26 +155,33 @@ $userRole = $_SESSION['userRole'];
                     <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
                     <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
                     <div class="profile-image">
-                        <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($data['firstName']) ?> Picture" class="profile-pic">
+                        <img src="<?= htmlspecialchars($image) ?>"
+                            alt="<?= htmlspecialchars($data['firstName']) ?> Picture" class="profile-pic">
                         <button type="button" class="changePfpBtn btn btn-primary" id="changePfp">
                             Change Profile
                         </button>
                         <!-- Profile Picture Modal -->
-                        <div class="modal" id="picModal" tabindex="-1" aria-labelledby="picModalLabel" aria-hidden="true">
+                        <div class="modal" id="picModal" tabindex="-1" aria-labelledby="picModalLabel"
+                            aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="picModalLabel">Change Profile Picture</h5>
-                                        <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($data['firstName']) ?> Picture" id="preview" class="profile-pic">
+                                        <img src="<?= htmlspecialchars($image) ?>"
+                                            alt="<?= htmlspecialchars($data['firstName']) ?> Picture" id="preview"
+                                            class="profile-pic">
                                         <input type="file" name="profilePic" id="profilePic" hidden>
-                                        <label for="profilePic" class="custom-file-button btn btn-outline-primary">Choose Image</label>
+                                        <label for="profilePic"
+                                            class="custom-file-button btn btn-outline-primary">Choose Image</label>
                                     </div>
                                     <div class="modal-button">
                                         <button type="submit" class="btn btn-danger" name="cancelPfp">Cancel</button>
-                                        <button type="submit" class="btn btn-success" name="changePfpBtn">Save Changes</button>
+                                        <button type="submit" class="btn btn-success" name="changePfpBtn">Save
+                                            Changes</button>
                                     </div>
                                 </div>
                             </div>
@@ -183,7 +190,8 @@ $userRole = $_SESSION['userRole'];
 
                     <div class="profile-info">
                         <h5 class="account-name"> <?= htmlspecialchars($data['firstName']) ?></h5>
-                        <h6 class="account-contact"> <?= htmlspecialchars($email) ?> | <?= htmlspecialchars($phoneNumber) ?></h6>
+                        <h6 class="account-contact"> <?= htmlspecialchars($email) ?> |
+                            <?= htmlspecialchars($phoneNumber) ?></h6>
                         <h6 class="roleName"><?= htmlspecialchars($data['roleName']) ?></h6>
                     </div>
                 </div>
@@ -194,26 +202,33 @@ $userRole = $_SESSION['userRole'];
                 <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
                 <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
                 <div class="info">
-                    <input type="text" name="fullName" id="fullName" value="<?= htmlspecialchars($name) ?>" disabled required>
+                    <input type="text" name="fullName" id="fullName" value="<?= htmlspecialchars($name) ?>" disabled
+                        required>
                     <label for="fullName">Full Name</label>
                 </div>
                 <div class="info">
-                    <input type="<?= htmlspecialchars($type) ?>" name="birthday" id="birthday" value="<?= htmlspecialchars($birthday) ?>" disabled>
+                    <input type="<?= htmlspecialchars($type) ?>" name="birthday" id="birthday"
+                        value="<?= htmlspecialchars($birthday) ?>" disabled>
                     <label for="birthday">Birthday</label>
                 </div>
                 <div class="info">
-                    <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>" disabled required>
+                    <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>" disabled
+                        required>
                     <label for="address">Address</label>
                 </div>
                 <div class="info">
-                    <input type="text" name="phoneNumber" id="phoneNumber" value="<?= htmlspecialchars($phoneNumber) ?>" disabled required>
+                    <input type="text" name="phoneNumber" id="phoneNumber" value="<?= htmlspecialchars($phoneNumber) ?>"
+                        disabled required>
                     <label for="phoneNumber">Phone Number</label>
                 </div>
             </div>
             <div class="button-container">
-                <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn" onclick="enableEditing()">Edit</button>
-                <button type="submit" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger" style="display: none;">Cancel</button>
-                <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary" style="display: none;">Save</button>
+                <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
+                    onclick="enableEditing()">Edit</button>
+                <button type="submit" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
+                    style="display: none;">Cancel</button>
+                <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
+                    style="display: none;">Save</button>
             </div>
         </form>
     </div>
@@ -230,108 +245,108 @@ $userRole = $_SESSION['userRole'];
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <script>
-        //Show the image preview
-        document.querySelector("input[type='file']").addEventListener("change", function(event) {
-            let reader = new FileReader();
-            reader.onload = function() {
-                let preview = document.getElementById("preview");
-                preview.src = reader.result;
-                preview.style.display = "block";
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        });
+    //Show the image preview
+    document.querySelector("input[type='file']").addEventListener("change", function(event) {
+        let reader = new FileReader();
+        reader.onload = function() {
+            let preview = document.getElementById("preview");
+            preview.src = reader.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
     </script>
 
     <script>
-        //Show Modal
-        document.addEventListener("DOMContentLoaded", function() {
-            const changeBtn = document.getElementById("changePfp");
-            const modalElement = document.getElementById("picModal");
+    //Show Modal
+    document.addEventListener("DOMContentLoaded", function() {
+        const changeBtn = document.getElementById("changePfp");
+        const modalElement = document.getElementById("picModal");
 
-            changeBtn.addEventListener("click", function() {
-                const myModal = new bootstrap.Modal(modalElement);
-                myModal.show();
-            });
+        changeBtn.addEventListener("click", function() {
+            const myModal = new bootstrap.Modal(modalElement);
+            myModal.show();
         });
+    });
     </script>
 
     <script>
-        //All the disbaled input box will be removed
-        function enableEditing() {
-            document.getElementById("fullName").removeAttribute("disabled");
-            document.getElementById("address").removeAttribute("disabled");
-            document.getElementById("phoneNumber").removeAttribute("disabled");
-            document.getElementById("birthday").removeAttribute("disabled");
+    //All the disbaled input box will be removed
+    function enableEditing() {
+        document.getElementById("fullName").removeAttribute("disabled");
+        document.getElementById("address").removeAttribute("disabled");
+        document.getElementById("phoneNumber").removeAttribute("disabled");
+        document.getElementById("birthday").removeAttribute("disabled");
 
-            document.getElementById("saveBtn").style.display = "inline-block";
-            document.getElementById("cancelBtn").style.display = "inline-block";
-            document.getElementById("editBtn").style.display = "none";
-        }
+        document.getElementById("saveBtn").style.display = "inline-block";
+        document.getElementById("cancelBtn").style.display = "inline-block";
+        document.getElementById("editBtn").style.display = "none";
+    }
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('message');
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('message');
 
-        if (paramValue === 'success-image') {
-            Swal.fire({
-                title: "Success!",
-                text: "Profile Change Successfully!",
-                icon: "success"
-            });
-        } else if (paramValue === 'error-image') {
-            Swal.fire({
-                title: "Info!",
-                text: "No Image Selected",
-                icon: "info"
-            });
-        } else if (paramValue === 'success-change') {
-            Swal.fire({
-                title: "Success!",
-                text: "Updated Successfully!",
-                icon: "success"
-            });
-        } else if (paramValue === 'error-change') {
-            Swal.fire({
-                title: "Error!",
-                text: "Updating Information Failed!",
-                icon: "error"
-            });
-        }
+    if (paramValue === 'success-image') {
+        Swal.fire({
+            title: "Success!",
+            text: "Profile Change Successfully!",
+            icon: "success"
+        });
+    } else if (paramValue === 'error-image') {
+        Swal.fire({
+            title: "Info!",
+            text: "No Image Selected",
+            icon: "info"
+        });
+    } else if (paramValue === 'success-change') {
+        Swal.fire({
+            title: "Success!",
+            text: "Updated Successfully!",
+            icon: "success"
+        });
+    } else if (paramValue === 'error-change') {
+        Swal.fire({
+            title: "Error!",
+            text: "Updating Information Failed!",
+            icon: "error"
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 
     <script>
-        const logoutBtn = document.getElementById('logoutBtn');
-        const logoutModal = document.getElementById('logoutModal');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../../Function/logout.php";
-                }
-            });
-        })
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../../Function/logout.php";
+            }
+        });
+    })
     </script>
 
 </body>
