@@ -235,7 +235,7 @@ $userRole = $_SESSION['userRole'];
 
 
 
-    <footer class="py-1 my-2">
+    <footer class="py-1" style="margin-top: 5vh;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">

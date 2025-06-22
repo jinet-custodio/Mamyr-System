@@ -1,3 +1,20 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf) ;
+}
+@font-face {
+  font-family: "Prata";
+  src: url(../../../Fonts/Prata/Prata-Regular.ttf);
+}
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
 .sidebar {
   width: 23vw;
   background-color: #cee4f2;
@@ -259,4 +276,14 @@
 .swal-custom-text {
   font-family: "Poppins";
   font-size: 16px;
+}
+
+.swal2-actions{
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.swal2-confirm {
+  margin-right: 2vw !important;
 }
