@@ -77,7 +77,7 @@ $userRole = $_SESSION['userRole'];
             </li>
 
             <li>
-                <a href="userManagement.php" class="list-group-item">
+                <a href="bookingHistory.php" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
                     Booking History
@@ -220,48 +220,48 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Show -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramsValue = params.get('action')
-        const confirmationBtn = document.getElementById("confirmationBtn");
-        const confirmationModal = document.getElementById("confirmationModal");
-        const deleteModal = document.getElementById('deleteModal');
-        const logoutBtn = document.getElementById('logoutBtn');
+    const params = new URLSearchParams(window.location.search);
+    const paramsValue = params.get('action')
+    const confirmationBtn = document.getElementById("confirmationBtn");
+    const confirmationModal = document.getElementById("confirmationModal");
+    const deleteModal = document.getElementById('deleteModal');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../../Function/Customer/logout.php";
-                }
-            });
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../../Function/logout.php";
+            }
         });
+    });
 
-        confirmationBtn.addEventListener("click", function() {
-            const myconfirmationModal = new bootstrap.Modal(confirmationModal);
-            myconfirmationModal.show();
-        });
+    confirmationBtn.addEventListener("click", function() {
+        const myconfirmationModal = new bootstrap.Modal(confirmationModal);
+        myconfirmationModal.show();
+    });
 
-        if (paramsValue === 'success') {
-            const myModal = new bootstrap.Modal(deleteModal);
-            myModal.show();
-        };
+    if (paramsValue === 'success') {
+        const myModal = new bootstrap.Modal(deleteModal);
+        myModal.show();
+    };
 
-        if (paramsValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramsValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 </body>
 
