@@ -36,7 +36,7 @@ $userRole = $_SESSION['userRole'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - About</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../../Assets/CSS/about.css">
+    <link rel="stylesheet" href="../../Assets/CSS/blog.css">
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -110,27 +110,43 @@ $userRole = $_SESSION['userRole'];
         </div>
     </nav>
 
-    <div class="container construction-wrapper">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1 class="construction-header">Website is Under Construction</h1>
-                <p class="construction-text">
-                    Our 'About' page is coming soon! We're excited to share more about who we are, what we do, and
-                    why we do it. This section is still under development, but we look forward to telling our story here
-                    in the near future. Stay tuned!
-                </p>
+    <main>
+        <div class="titleContainer">
+            <h4 class="title">The Mamyr Resort Blog: Stay Informed, Stay Inspired</h4>
+            <h4> Inspiration, Updates, and Insights Straight from Mamyr Resort</h4>
+        </div>
 
+        <div class="blogmain">
+            <div class="title">
+                <h5>Recent blog posts</h5>
             </div>
-            <div class="col-md-6">
-                <div class="illustration">
-                    <img src="../../Assets/Images/websiteMaintenancePhoto/underconstruction.png"
-                        alt="Under Construction Illustration" class="construction-image">
+            <div class="posts">
+                <div class="featured">
+                    <div class="featuredpost">
+                        <img src="../Assets/Images/blogposts/image.png" alt="">
+                        <div class="desc">
+                            <div class="eventType">
+                                <p style="color: gray;;">Private Event • 1 June 2025</p>
+                            </div>
+                            <div class="blogHeading">
+                                <h4>Mamyr Resort is Closed for a Private Event</h4>
+                            </div>
+                            <div class="blogDescription">We are sorry, but we will be closed on Sunday, June 1, 2025, due to a private event.
+                                Invitation-only guests will be allowed, and we will not be accepting walk-ins on this date. Thank you for your
+                                understanding.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="others">
+                    <div class="posts">
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <footer class="py-1 my-2">
+    <footer class="py-1" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">

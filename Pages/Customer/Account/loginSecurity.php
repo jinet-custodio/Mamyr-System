@@ -120,7 +120,7 @@ $userRole = $_SESSION['userRole'];
             <div class="form-container">
                 <div class="input-box">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" value="louisebartolome.basc@gmail.com" disabled>
+                    <input type="email" name="email" id="email" value="<?= $data['email'] ?>" disabled>
                     <button type="button" class="btn btn-primary" id="changeEmailBtn" data-toggle="modal"
                         data-target="#emailModal">Change</button>
                 </div>

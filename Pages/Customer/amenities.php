@@ -163,19 +163,24 @@ $userRole = $_SESSION['userRole'];
                 <div class="carousel">
 
                     <?php
-                    $serviceCategory = 'Cottage';
-                    $query = "SELECT * FROM resortServices WHERE category = '$serviceCategory' ";
+                    $serviceCategory = 2;
+                    $query = "SELECT * FROM resortServices WHERE RScategoryID = $serviceCategory ";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
                         $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         $counter = 1;
                         foreach ($cottages as $cottage) {
-                            $imageData = $cottage['imageData'];
-                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                            $mimeType = finfo_buffer($finfo, $imageData);
-                            finfo_close($finfo);
-                            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                            $imageData = $cottage['RSimageData'];
+                            if ($imageData) {
+                                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                                $mimeType = finfo_buffer($finfo, $imageData);
+                                finfo_close($finfo);
+                                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                            } else {
+                                $image = '../../Assets/Images/no-picture.jpg';
+                            }
                     ?>
+
                             <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
                     <?php
                             $counter++;
@@ -325,7 +330,7 @@ $userRole = $_SESSION['userRole'];
     </div>
 
 
-    <footer class="py-1 my-2">
+    <footer class="py-1" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">

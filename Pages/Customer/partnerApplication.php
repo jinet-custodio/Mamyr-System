@@ -501,7 +501,7 @@ $userRole = $_SESSION['userRole'];
     </form>
 
 
-    <footer class="py-1 my-2">
+    <footer class="py-1" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
             <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>

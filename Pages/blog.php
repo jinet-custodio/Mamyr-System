@@ -96,7 +96,7 @@
         </div>
     </main>
 
-    <footer class="py-1 my-2">
+    <footer class="py-1" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -134,7 +134,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Sweet Alert -->
-    <script>
+    <!-- <script>
         const bookButtons = document.querySelectorAll('#bopNav');
 
         bookButtons.forEach(button => {
@@ -151,7 +151,7 @@
                 });
             });
         });
-    </script>
+    </script> -->
 </body>
 
 </html>
