@@ -145,12 +145,12 @@
   }
 
   .button-container {
-    margin-top: 1rem;
+    margin: 1vw auto;
+    width: 70%;
     display: flex;
-    justify-content: center;
-    gap: 1rem;
+    justify-content: space-around;
     button {
-      width: 100px;
+      width: 7vw;
     }
   }
 }
@@ -200,4 +200,14 @@
 .swal-custom-text {
   font-family: "Poppins";
   font-size: 16px;
+}
+
+.swal2-actions{
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.swal2-confirm {
+  margin-right: 2vw !important;
 }

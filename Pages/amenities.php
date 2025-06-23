@@ -50,7 +50,7 @@ require '../Config/dbcon.php';
                     <a class="nav-link" href="/Pages/blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="./about.php">ABOUT</a>
@@ -306,7 +306,7 @@ require '../Config/dbcon.php';
     </div>
 
 
-    <footer class="py-1 my-2">
+    <footer class="py-1" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -388,7 +388,7 @@ require '../Config/dbcon.php';
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Sweet Alert -->
-    <script>
+    <!-- <script>
         const bookButtons = document.querySelectorAll('#bopNav');
 
         bookButtons.forEach(button => {
@@ -405,7 +405,7 @@ require '../Config/dbcon.php';
                 });
             });
         });
-    </script>
+    </script> -->
 </body>
 
 </html>

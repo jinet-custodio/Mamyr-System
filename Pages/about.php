@@ -45,7 +45,7 @@
                     <a class="nav-link" href="/Pages/blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="./about.php">ABOUT</a>
@@ -201,7 +201,7 @@
         </div>
     </div>
 
-    <footer class="py-1 my-2" id="footer">
+    <footer class="py-1" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -235,31 +235,31 @@
 
 
     <script>
-    const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
-    const backArrowContainer = document.getElementById("backArrowContainer")
-    const aboutTopContainer = document.getElementById("aboutTopContainer")
-    const ourServicesContainer = document.getElementById("ourServicesContainer")
-    const videoContainer = document.getElementById("videoContainer")
+        const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
+        const backArrowContainer = document.getElementById("backArrowContainer")
+        const aboutTopContainer = document.getElementById("aboutTopContainer")
+        const ourServicesContainer = document.getElementById("ourServicesContainer")
+        const videoContainer = document.getElementById("videoContainer")
 
-    mamyrHistoryContainer.style.display = "none"
-    backArrowContainer.style.display = "none"
+        mamyrHistoryContainer.style.display = "none"
+        backArrowContainer.style.display = "none"
 
 
-    function readMore() {
-        if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
+        function readMore() {
+            if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
 
-            mamyrHistoryContainer.style.display = "block";
-            backArrowContainer.style.display = "block"
-            aboutTopContainer.style.display = "none"
-            ourServicesContainer.style.display = "none"
-            videoContainer.style.display = "none"
-            document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
+                mamyrHistoryContainer.style.display = "block";
+                backArrowContainer.style.display = "block"
+                aboutTopContainer.style.display = "none"
+                ourServicesContainer.style.display = "none"
+                videoContainer.style.display = "none"
+                document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
 
-        } else {
-            mamyrHistoryContainer.style.display = "block"
-            backArrowContainer.style.display = "block"
+            } else {
+                mamyrHistoryContainer.style.display = "block"
+                backArrowContainer.style.display = "block"
+            }
         }
-    }
     </script>
 
 
@@ -268,27 +268,27 @@
     <script src="../Assets/JS/scrollNavbg.js"></script>
 
     <!-- Sweetalert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 
     <!-- Sweet Alert -->
-    <script>
-    const bookButtons = document.querySelectorAll('#bopNav');
+    <!-- <script>
+        const bookButtons = document.querySelectorAll('#bopNav');
 
-    bookButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            Swal.fire({
-                title: 'Want to Become Our Business Partner?',
-                text: 'You must have an existing account before becoming a business partner.',
-                icon: 'info',
-                confirmButtonText: 'Sign Up'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'register.php';
-                }
+        bookButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Want to Become Our Business Partner?',
+                    text: 'You must have an existing account before becoming a business partner.',
+                    icon: 'info',
+                    confirmButtonText: 'Sign Up'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'register.php';
+                    }
+                });
             });
         });
-    });
-    </script>
+    </script> -->
 </body>
 
 </html>

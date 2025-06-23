@@ -9,7 +9,7 @@ require '../Config/dbcon.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Rates and Hotel Rooms</title>
-    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
+    <link rel="icon" type="image/x-icon" href="/Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/ratesAndHotelRooms.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@ require '../Config/dbcon.php';
                     <a class="nav-link" href="#">RATES</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
@@ -508,7 +508,7 @@ require '../Config/dbcon.php';
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Sweet Alert -->
-    <script>
+    <!-- <script>
         const bookButtons = document.querySelectorAll('#bopNav');
 
         bookButtons.forEach(button => {
@@ -525,7 +525,7 @@ require '../Config/dbcon.php';
                 });
             });
         });
-    </script>
+    </script> -->
 </body>
 
 </html>

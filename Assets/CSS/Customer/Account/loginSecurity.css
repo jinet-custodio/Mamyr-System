@@ -310,3 +310,13 @@ input[type="password"]::-webkit-search-cancel-button {
   font-family: "Poppins";
   font-size: 16px;
 }
+
+.swal2-actions{
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.swal2-confirm {
+  margin-right: 2vw !important;
+}

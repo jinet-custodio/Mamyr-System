@@ -45,7 +45,7 @@
                     <a class="nav-link active" href="#">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="./about.php">ABOUT</a>

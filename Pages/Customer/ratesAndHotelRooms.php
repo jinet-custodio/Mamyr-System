@@ -35,7 +35,7 @@ $userRole = $_SESSION['userRole'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Rates and Hotel Rooms</title>
-    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
+    <link rel="icon" type="image/x-icon" href="../../assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/ratesAndHotelRooms.css">
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -48,14 +48,36 @@ $userRole = $_SESSION['userRole'];
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+
+        <!-- Account Icon on the Left -->
+        <ul class="navbar-nav">
+            <?php
+            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
+            $result = mysqli_query($conn, $query);
+            if (mysqli_num_rows($result) > 0) {
+                $data = mysqli_fetch_assoc($result);
+                $imageData = $data['userProfile'];
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $imageData);
+                finfo_close($finfo);
+                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+            }
+            ?>
+            <li class="nav-item account-nav">
+                <a href="Account/account.php">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                </a>
+            </li>
+        </ul>
+
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
+
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php"> Home</a>
                 </li>

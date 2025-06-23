@@ -48,7 +48,6 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 15vh;
   padding: 1rem;
 }
 
@@ -144,18 +143,10 @@ nav {
   border: 1px solid white;
   border-radius: 2rem;
   img {
-    .account-nav {
-      margin: 1px;
-      margin-left: 1rem;
-      border: 1px solid white;
-      border-radius: 2rem;
-      img {
-        height: 8vh;
-        border-radius: 2rem;
-      }
-    }
-    height: 8vh;
-    border-radius: 2rem;
+    height: 5vw;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
   }
 }
 

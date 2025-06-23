@@ -81,7 +81,7 @@ body {
   font-family: "Poppins";
   font-weight: lighter;
   margin-top: 15px;
-  font-size: 1.3vw;
+  font-size: 1.3vw !important;
   /* margin-left: 3vw; */
 }
 
@@ -141,11 +141,12 @@ body {
   margin: 1px;
   margin-left: 1rem;
   border: 1px solid white;
-  border-radius: 2rem;
+  border-radius: 50%;
   .profile-pic {
-    height: 8vh;
+    height: 5vw;
     aspect-ratio: 1;
-    border-radius: 2rem;
+    border-radius: 50%;
+    object-fit: cover;
   }
 }
 

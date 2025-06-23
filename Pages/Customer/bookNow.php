@@ -75,7 +75,7 @@ $userRole = $_SESSION['userRole'];
             }
             ?>
             <li class="nav-item account-nav">
-                <a href="account.php">
+                <a href="Account/account.php">
                     <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
                 </a>
             </li>
@@ -157,7 +157,7 @@ $userRole = $_SESSION['userRole'];
     <form action="../../Function/Booking/entranceBooking.php" method="POST" id="resort-page" style="display: none;">
         <div class="resort" id="resort">
             <div class="backToSelection" id="backToSelection">
-                <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+                <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
             </div>
             <div class="titleContainer">
                 <h4 class="resortTitle" id="resortTitle">RESORT BOOKING</h4>
@@ -237,7 +237,7 @@ $userRole = $_SESSION['userRole'];
     <form action="../../Function/Booking/hotelBooking.php" method="POST" id="hotel-page" style="display: none;">
         <div class="hotel" id="hotel">
             <div class="backToSelection" id="backToSelection">
-                <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+                <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
             </div>
             <div class="titleContainer">
                 <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
@@ -353,7 +353,7 @@ $userRole = $_SESSION['userRole'];
     <form action="../../Function/Booking/eventBooking.php" method="POST" id="event-page" style="display: none;">
         <div class=" event" id="event">
             <div class="backToSelection" id="backToSelection">
-                <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+                <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
             </div>
             <div class="titleContainer">
                 <h4 class="eventTitle" id="eventTitle">EVENT BOOKING</h4>
