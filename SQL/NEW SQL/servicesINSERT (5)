@@ -20,46 +20,46 @@ INSERT INTO entranceRates(
 
 
 
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
-VALUES ('Cottage 1','500','5', 0, 2 , NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
-VALUES ('Cottage 2','800','10', 0, 2, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
-VALUES ('Cottage 3','900','12', 0, 2, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
-VALUES ('Cottage 4','1000','15',0, 2, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
-VALUES ('Cottage 5','2000','25',0, 2, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+VALUES ('Cottage 1','500','5', 0, 2 , 'Good for 5 pax', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+VALUES ('Cottage 2','800','10', 0, 2, 'Good for 10 pax', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+VALUES ('Cottage 3','900','12', 0, 2,'Good for 12 pax', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+VALUES ('Cottage 4','1000','15',0, 2, 'Good for 15 pax', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+VALUES ('Cottage 5','2000','25',0, 2, 'Good for 25 pax', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
 VALUES ('Videoke 1','800',0 , 0, 3, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
 VALUES ('Videoke 2','800',0 , 0, 3, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
 VALUES ('Billiard','200',0,'1 hour', 3, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
 VALUES ('Massage Chair','100',0,'40 minutes', 3, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
-VALUES ('Room 1','2500','2', 0, 1, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
-VALUES ('Room 2','2500','2',0, 1, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
-VALUES ('Room 3','2500','2', 0, 1, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
-VALUES ('Room 4','2500','2', 0, 1, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
-VALUES ('Room 5','3500', 0, 0, 1, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
-VALUES ('Room 6','3500', 0, 0, 1, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
-VALUES ('Room 7','3500', 0, 0, 1, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
-VALUES ('Room 8','3500', 0, 0, 1, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+VALUES ('Room 1','2500','5', '22 hours', 1,'Good for 2, free access to swimming pool, Double Size Bed, Maximum of 5 persons', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+VALUES ('Room 2','2500','5', '22 hours', 1, 'Good for 2, free access to swimming pool, Double Size Bed, Maximum of 5 persons', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+VALUES ('Room 3','2500','5', '22 hours', 1, 'Good for 2, free access to swimming pool, Double Size Bed, Maximum of 5 persons', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+VALUES ('Room 4','2500','5', '22 hours', 1,'Good for 2, free access to swimming pool, Double Size Bed, Maximum of 5 persons', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+VALUES ('Room 5','3500', '7', '22 hours', 1, 'Good for 3, free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 7 persons', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+VALUES ('Room 6','3500', '7', '22 hours', 1, 'Good for 3, free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 7 persons', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+VALUES ('Room 7','3500', '7', '22 hours', 1, 'Good for 3, free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 7 persons', NULL, 4);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+VALUES ('Room 8','3500', '7', '22 hours', 1, 'Good for 3, free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 7 persons', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
 VALUES ('Room 9','3500', 0, 0, 1, 'Barkada Room', NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
-VALUES ('Room 10','3500', 0, 0, 1, NULL, NULL, 1);
-INSERT INTO resortServices( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
-VALUES ('Room 11','3500', 0, 0, 1, NULL, NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+VALUES ('Room 10','3500', '7', '22 hours', 1, 'Good for 3, free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 7 persons', NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID)
+VALUES ('Room 11','3500', '7', '22 hours', 1, 'Good for 3, free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 7 persons', NULL, 1);
 
 
 INSERT INTO packages 

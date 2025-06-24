@@ -1,3 +1,8 @@
+CREATE DATABASE mamyr;
+
+USE mamyr;
+
+
 CREATE TABLE userTypes (
     userTypeID INT PRIMARY KEY AUTO_INCREMENT,
     typeName VARCHAR(50) UNIQUE -- 'Customer', 'Partner', 'Admin'
@@ -16,7 +21,8 @@ CREATE TABLE userStatuses (
 INSERT INTO userStatuses (statusName) VALUES 
 ('Pending'), 
 ('Verified'), 
-('Not-verified');
+('Not-verified'),
+('Deleted');
 
 CREATE TABLE serviceAvailability (
     availabilityID INT PRIMARY KEY AUTO_INCREMENT,
@@ -36,7 +42,7 @@ Create Table statuses (
 INSERT INTO statuses (statusName) Values 
 ('Pending'),
 ('Approved'),
-('Rejected');
+('Rejected'),
 ('Cancelled');
 
 CREATE TABLE eventCategories (
@@ -80,3 +86,9 @@ CREATE TABLE entranceTimeRange(
     session_type VARCHAR(20),
     time_range VARCHAR(50)
     );
+
+INSERT INTO entranceTimeRange
+    (session_type, time_range) 
+    VALUES('Day', '9:00 am - 4:00 pm'), 
+    ('Night', '12:00 pm - 8:00 pm'), 
+    ('Overnight', '8:00 pm - 5:00 am');

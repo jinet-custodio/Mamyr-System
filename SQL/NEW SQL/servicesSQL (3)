@@ -13,8 +13,7 @@ CREATE TABLE partnershipServices (
     FOREIGN KEY (PSStatus) REFERENCES statuses(statusID)
 );
 
-
-CREATE TABLE resortServices (
+CREATE TABLE resortAmenities (
     resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
     RServiceName VARCHAR(200) NOT NULL,
     RSprice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -40,15 +39,15 @@ CREATE TABLE entranceRates (
 );
 
 
-
 CREATE TABLE services (
-  serviceID INT PRIMARY KEY AUTO_INCREMENT,
-  resortServiceID int(11) DEFAULT NULL,
-  partnershipServiceID int(11) DEFAULT NULL,
-  swimmingID int(11) DEFAULT NULL,
+    serviceID INT PRIMARY KEY AUTO_INCREMENT,
+    resortServiceID int(11) DEFAULT NULL,
+    partnershipServiceID int(11) DEFAULT NULL,
+    entranceRateID int(11) DEFAULT NULL,
+
     FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
-    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
-    FOREIGN KEY (swimmingID) REFERENCES entranceTimeRange(timeRangeID)
+    FOREIGN KEY (resortServiceID) REFERENCES resortAmenities(resortServiceID),
+    FOREIGN KEY (entranceRateID) REFERENCES entranceRates(entranceRateID)
 );
 
 
@@ -64,18 +63,41 @@ CREATE TABLE packages (
     packageAvailability INT NOT NULL,
 
     FOREIGN KEY (packageAvailability) REFERENCES serviceAvailability(availabilityID), 
-    FOREIGN KEY (resortServiceID) REFERENCES resortServices(resortServiceID),
+    FOREIGN KEY (resortServiceID) REFERENCES resortAmenities(resortServiceID),
     FOREIGN KEY (PcategoryID) REFERENCES eventCategories(categoryID)
 );
 
+-- CREATE TABLE customPackages (
+--     customPackageID INT PRIMARY KEY AUTO_INCREMENT, 
+--     userID INT NOT NULL, 
+--     CPtotalPrice DECIMAL(10,2) DEFAULT 0.00,
+--     creationDate DATE NOT NULL,
+
+--     FOREIGN KEY (userID) REFERENCES users(userID)
+-- );
+
+
+
 CREATE TABLE customPackages (
-    customPackageID INT PRIMARY KEY AUTO_INCREMENT, 
-    userID INT NOT NULL, 
-    CPtotalPrice DECIMAL(10,2) DEFAULT 0.00,
-    creationDate DATE NOT NULL,
+    customPackageID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    customPackagePrice DECIMAL(10,2) NOT NULL,
+    notes VARCHAR(255),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
+CREATE TABLE customPackageItems (
+    customPackageItemID INT PRIMARY KEY AUTO_INCREMENT,
+    customPackageID INT NOT NULL,
+    serviceID INT NOT NULL,
+    packageID INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    servicePrice DECIMAL(10,2) NOT NULL,
 
+    FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID),
+    FOREIGN KEY (packageID) REFERENCES packages(packageID)
+);
 
