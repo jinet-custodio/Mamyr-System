@@ -164,7 +164,7 @@ $userRole = $_SESSION['userRole'];
 
                     <?php
                     $serviceCategory = 2;
-                    $query = "SELECT * FROM resortServices WHERE RScategoryID = $serviceCategory ";
+                    $query = "SELECT * FROM resortAmenities WHERE RScategoryID = $serviceCategory ";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
                         $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);

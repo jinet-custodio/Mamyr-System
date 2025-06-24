@@ -8,66 +8,15 @@
   src: url(../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
 }
 
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-.card {
-  width: 80% !important;
-  margin: auto;
-  border: none;
-}
-
-.card-title {
-  font-family: "Poppins";
-  font-size: 1rem;
-}
-
-.name {
-  font-size: 2rem !important;
-}
-
-.sub-name {
-  font-size: 1.3rem !important;
-}
-
-.booking-info-name-pic {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-}
-
-.img-fluid {
-  height: 30vh;
-  width: 30vh;
-  object-fit: cover;
-}
-
-.card-title {
-  font-family: "Poppins";
-  font-size: 1rem;
-}
-
-.card-text {
-  font-family: "Poppins";
-  font-size: 1.3rem;
-}
-
-.card-body {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
-.guest-info {
-  width: 100%;
-  border: 1px solid #ddd;
-  padding: 1rem;
-  border-radius: 8px;
-  background-color: #f9f9f9;
 }
 
 .page-container {
@@ -77,9 +26,10 @@
   justify-content: center;
   position: relative;
 }
+
 .page-title {
   font-family: "Agbalumo";
-  font-size: 2rem;
+  font-size: 25px;
   margin-left: 0.5rem;
   margin-top: 0.3rem;
 }
@@ -91,21 +41,99 @@
   left: 0;
 }
 
+.card {
+  /* border: 1px solid red !important; */
+  width: 80% !important;
+  margin: auto;
+  margin-bottom: 3rem;
+  border: none;
+}
+
+.card-title {
+  font-family: "Poppins";
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.important-title {
+  font-size: 18px !important;
+}
+
+.important-sub-title {
+  font-size: 20px !important;
+}
+
+.name {
+  font-size: 20px !important;
+}
+
+.sub-name {
+  font-size: 16px !important;
+}
+
+.booking-info-name-pic-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.img-fluid {
+  height: 130px;
+  width: 130px;
+  object-fit: cover;
+  border-radius: 4rem;
+}
+
+.card-text {
+  text-indent: 0.5rem;
+  font-family: "Poppins";
+  font-size: 18px;
+}
+
+.card-body {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.fullWidth {
+  grid-column: span 2;
+}
+
+.two-item-row {
+  grid-column: span 3;
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr;
+  gap: 1rem;
+}
+
+.guest-info {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
 /* .back:hover {
   background-color: transparent;
 } */
 
 .button-container {
   /* border: 1px solid red; */
-  display: flex;
-  margin: auto;
-}
-
-form {
-  display: inline-block;
+  display: grid;
+  font-family: "Lora";
+  width: 20%;
+  gap: 2rem;
   .btn {
     width: 100% !important;
-    margin: 0.5rem !important;
   }
 }
 

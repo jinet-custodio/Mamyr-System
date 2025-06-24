@@ -48,7 +48,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 15vh;
+  /* height: 15vh; */
   padding: 1rem;
 }
 
@@ -194,7 +194,7 @@ ul {
   display: flex;
 }
 
-.blogHeading h4{
+.blogHeading h4 {
   font-weight: 800 !important;
 }
 
@@ -216,11 +216,7 @@ ul {
   width: 45vw;
 }
 
-
-
-
 /* end of code for body */
-
 
 footer {
   /* border: 1px solid black; */

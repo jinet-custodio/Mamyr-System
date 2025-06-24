@@ -11,8 +11,8 @@ if (isset($_POST['saveChanges'])) {
     $userRole = mysqli_real_escape_string($conn, $_POST['userRole']);
     $fullName = mysqli_real_escape_string($conn, $_POST['fullName']);
     $birthday = mysqli_real_escape_string($conn, $_POST['birthday']);
-    $birthDate = date('Y-m-d', strtotime($birthday));
-    var_dump($birthday);
+    // $birthDate = date('Y-m-d', strtotime($birthday));
+    // var_dump($birthday);
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
 
@@ -50,17 +50,35 @@ if (isset($_POST['saveChanges'])) {
         }
     }
 
-    $query = "UPDATE users SET 
-    firstName = '$firstName', 
-    middleInitial = '$middleInitial',  
-    lastName = '$lastName',
-    userAddress ='$address',
-    phoneNumber = '$phoneNumber', 
-    birthDate = '$birthDate' 
-    WHERE userID ='$userID' AND userRole = '$userRole'
-    ";
-    $result = mysqli_query($conn, $query);
-    if ($result) {
+    if (!empty($birthday) && strtotime($birthday)) {
+        $birthDate = date('Y-m-d', strtotime($birthday));
+    } else {
+        $birthDate = NULL;
+    }
+
+
+
+    $updateUser = $conn->prepare("UPDATE users SET 
+    firstName = ?, 
+    middleInitial = ?,  
+    lastName = ?,
+    userAddress =?,
+    phoneNumber = ?, 
+    birthDate = ?   
+    WHERE userID =? AND userRole = ?");
+
+    $updateUser->bind_param(
+        "ssssssii",
+        $firstName,
+        $middleInitial,
+        $lastName,
+        $address,
+        $phoneNumber,
+        $birthDate,
+        $userID,
+        $userRole
+    );
+    if ($updateUser->execute()) {
         header("Location: ../../../Pages/Admin/Account/account.php?message=success-change");
         exit;
     } else {

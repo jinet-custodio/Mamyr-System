@@ -1,5 +1,7 @@
 <?php
 
+use Dom\ChildNode;
+
 require '../../Config/dbcon.php';
 
 
@@ -13,8 +15,10 @@ if (isset($_POST['bookRates'])) {
     $adultCount = mysqli_real_escape_string($conn, $_POST['adultCount']);
     $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
     $cottageChoice = mysqli_real_escape_string($conn, $_POST['cottageSelections']);
+    $roomChoice = mysqli_real_escape_string($conn, $_POST['roomSelections']);
     $videokeChoice = mysqli_real_escape_string($conn, $_POST['videokeChoice']);
     $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
+
 
     if ($adultCount !== "" && $childrenCount !== "") {
         $adultCount;
@@ -37,40 +41,50 @@ if (isset($_POST['bookRates'])) {
     $childRate = 0;
 
     //Get the rates
-    $query = "SELECT * FROM entranceRates WHERE sessionType = '$tourSelections'";
+    $query = "SELECT er.*, s.serviceID 
+    FROM entranceRates er
+    JOIN services s ON s.entranceRateID = er.entranceRateID
+    WHERE er.sessionType = '$tourSelections'";
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
         while ($rates = mysqli_fetch_assoc($result)) {
             if ($rates['ERcategory'] === 'Adult') {
                 $adultRate = $rates['ERprice'];
-            } elseif ($rates['ERcategory'] === 'Child') {
+                $adultServiceID = $rates['serviceID'];
+            } elseif ($rates['ERcategory'] === 'Kids') {
                 $childRate = $rates['ERprice'];
+                $childServiceID = $rates['serviceID'];
             }
         }
     }
 
-
+    //Set Date and Time
     if ($tourSelections === 'Overnight') {
-        $endDateObj = new DateTime($scheduledDate);
-        $endDateObj->modify('+1 day');
-
-        $startDate = $scheduledDate;
-        $endDate = $endDateObj->format('Y-m-d H:i:s');
+        $startDateObj = new DateTime($scheduledDate . ' 20:00:00');
+        $endDateObj = clone $startDateObj;
+        $endDateObj->modify('+1 day')->setTime(5, 0, 0);
+    } elseif ($tourSelections === 'Day') {
+        $startDateObj = new DateTime($scheduledDate . ' 9:00:00');
+        $endDateObj = clone $startDateObj;
+        $endDateObj->setTime(16, 0, 0);
+    } elseif ($tourSelections === 'Night') {
+        $startDateObj = new DateTime($scheduledDate . ' 20:00:00');
+        $endDateObj = clone $startDateObj;
+        $endDateObj->setTime(5, 0, 0);
     } else {
-        $startDate = $scheduledDate;
-        $endDate =  $scheduledDate;
+        $startDateObj = new DateTime($scheduledDate);
+        $endDateObj = clone $startDateObj;
     }
 
+    $startDate = $startDateObj->format('Y-m-d H:i:s');
+    $endDate = $endDateObj->format('Y-m-d H:i:s');
 
-
-    //Get the serviceID
-    $serviceQuery = "SELECT s.*, etr.* FROM services s
-    INNER JOIN entrancetimerange etr ON s.swimmingID = etr.timeRangeID
+    //Get the number of hours
+    $serviceQuery = "SELECT * FROM entrancetimerange
     WHERE session_type = '$tourSelections'";
     $serviceResult = mysqli_query($conn, $serviceQuery);
     if (mysqli_num_rows($serviceResult) > 0) {
         $data = mysqli_fetch_assoc($serviceResult);
-        $serviceID = $data['serviceID'];
         $tourType = $data['session_type'];
         if ($tourType === "Day") {
             $hours = 7;
@@ -81,21 +95,60 @@ if (isset($_POST['bookRates'])) {
         }
     }
 
+    if (!empty($cottageChoice)) {
+        $getServiceChoice = $cottageChoice;
+    } elseif (!empty($roomChoice)) {
+        $getServiceChoice = $roomChoice;
+    } else {
+        $getServiceChoice = "";
+    }
+
+
+    $getServiceChoiceQuery = "SELECT s.*, rs.* FROM services s
+    INNER JOIN resortAmenities rs ON s.resortServiceID = rs.resortServiceID 
+    WHERE RServiceName = '$getServiceChoice'";
+    $getServiceChoiceResult = mysqli_query($conn, $getServiceChoiceQuery);
+    if (mysqli_num_rows($getServiceChoiceResult) > 0) {
+        $data = mysqli_fetch_assoc($getServiceChoiceResult);
+        $serviceID = $data['serviceID'];  //Makukuha nito is cottage or hotel 
+        $servicePrice = $data['RSprice'];
+        $serviceCapacity = $data['RScapacity'];
+    } else {
+        echo "Service not found. MySQL error: " . mysqli_error($conn);
+        echo "<br>Query: $getServiceChoiceQuery";
+        exit();
+    }
+
+
+    if ($videokeChoice === "Yes") {
+        $videokeFee = 800;
+        $videoke = "Videoke";
+    } elseif ($videokeChoice === "No") {
+        $videokeFee = 0;
+    }
+
+
     if ($adultCount !== "" && $childrenCount !== "" && $additionalRequest !== "") {
-        $totalCost = ($adultRate * $adultCount) + ($childRate * $childrenCount);
-        $totalPax = $adultCount + $childrenCount;
+        $totalPax = (int)$adultCount + (int)$childrenCount;
+        $totalAdultFee = ($adultRate * $adultCount);
+        $totalChildFee = ($childRate * $childrenCount);
+        $totalEntrance = $totalAdultFee + $totalChildFee;
+        $totalCost = $totalEntrance + $servicePrice + $videokeFee;
         $downPayment = $totalCost * 0.3;
         $bookingStatus = 1;
+        $addOns = $videoke ?: NULL;
+        // $notes =  $videoke . " " . $tourSelections . " tour (" . $childrenCount . " Kids & " .  $adultCount . "Adults)";
+
         $insertBooking = $conn->prepare("INSERT INTO 
-        bookings(userID, serviceID, additionalRequest,  paxNum, hoursNum, 
+        bookings(userID, additionalRequest,  paxNum, hoursNum, 
         startDate, endDate, 
         totalCost, downpayment, 
-        bookingStatus) 
+        bookingStatus, addOns) 
         VALUES(?,?,?,?,?,?,?,?,?,?) ");
         $insertBooking->bind_param(
-            "iisiissddi",
+            "isiissddis",
             $userID,
-            $serviceID,
+            // $serviceID,
             $additionalRequest,
             $totalPax,
             $hours,
@@ -103,17 +156,39 @@ if (isset($_POST['bookRates'])) {
             $endDate,
             $totalCost,
             $downPayment,
-            $bookingStatus
+            $bookingStatus,
+            $addOns
         );
         if ($insertBooking->execute()) {
+            $bookingID = $conn->insert_id;
+
+            $insertBookingServices = $conn->prepare("INSERT INTO 
+            bookingsServices(bookingID, serviceID, guest, Total)
+            VALUES(?,?,?,?)");
+
+            if ($adultCount > 0 && isset($adultServiceID)) {
+                $insertBookingServices->bind_param("iiis", $bookingID, $adultServiceID, $adultCount, $totalAdultFee);
+                $insertBookingServices->execute();
+            }
+
+            if ($childrenCount > 0 && isset($childServiceID)) {
+                $insertBookingServices->bind_param("iiis", $bookingID, $childServiceID, $childCount, $totalChildFee);
+                $insertBookingServices->execute();
+            }
+
+            if (!empty($serviceID)) {
+                $insertBookingServices->bind_param("iiis", $bookingID, $serviceID, $serviceCapacity, $servicePrice);
+                $insertBookingServices->execute();
+            }
+
             header('Location: ../../Pages/Customer/bookNow.php?action=success');
             exit();
         } else {
             echo "Booking failed: " . $insertBooking->error;
         }
     } else {
-        echo 'or Dito ba error';
+        echo 'Empty Bai';
     }
 } else {
-    echo 'or Dito or error';
+    echo 'sa button error, di pumapasok pag pinindot bookRates';
 }

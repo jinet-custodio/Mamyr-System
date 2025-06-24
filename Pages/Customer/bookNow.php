@@ -120,6 +120,7 @@ $userRole = $_SESSION['userRole'];
             </ul>
         </div>
     </nav>
+
     <!-- Made every section visible except for the selection section to see the errors -->
     <div class="categories-page" id="category-page">
         <div class="titleContainer" style="margin-top: 10vw !important;">
@@ -154,6 +155,7 @@ $userRole = $_SESSION['userRole'];
         </div>
     </div>
 
+
     <form action="../../Function/Booking/entranceBooking.php" method="POST" id="resort-page" style="display: none;">
         <div class="resort" id="resort">
             <div class="backToSelection" id="backToSelection">
@@ -170,9 +172,10 @@ $userRole = $_SESSION['userRole'];
                     <div class="scheduleForm">
                         <input type="date" class="form-control w-100" id="resortBookingDate" name="resortBookingDate" required>
                         <select id="tourSelections" name="tourSelections" class="form-select" required>
-                            <option value="Day">Day Tour</option>
-                            <option value="Night">Night Tour</option>
-                            <option value="Overnight">Overnight Tour</option>
+                            <option value="" disabled selected>Select Preferred Tour</option>
+                            <option value="Day" id="dayTour">Day Tour</option>
+                            <option value="Night" id="nightTour">Night Tour</option>
+                            <option value="Overnight" id="overnightTour">Overnight Tour</option>
                         </select>
                     </div>
 
@@ -182,18 +185,18 @@ $userRole = $_SESSION['userRole'];
                         <input type="number" class="form-control" placeholder="Children" name="childrenCount">
                     </div>
 
-                    <div class="cottageVideokeForm">
-                        <div class="cottageForm">
+                    <div class="cottageRoomVideokeForm">
+                        <div class="cottageForm" id="cottage">
                             <h5 class="cottageLabel">Cottage</h5>
-                            <select id="cottageSelections" name="cottageSelections" class="form-select" required>
+                            <select id="cottageSelections" name="cottageSelections" class="form-select">
                                 <option value="" disabled selected>Please Select a Cottage</option>
                                 <?php
-                                $cottageQuery = "SELECT * FROM resortservices WHERE RScategoryID = 2 AND RSAvailabilityID = 1";
+                                $cottageQuery = "SELECT * FROM resortAmenities WHERE RScategoryID = 2 AND RSAvailabilityID = 1";
                                 $result = mysqli_query($conn, $cottageQuery);
                                 if (mysqli_num_rows($result) > 0) {
                                     $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                     foreach ($cottages as $cottage) {
-                                        echo "<option value='" . $cottage['RServiceName'] . "'>Php " . $cottage['RSprice'] . " - Good for " . $cottage['RScapacity'] . " pax " . "</option>";
+                                        echo "<option value='" . $cottage['RServiceName'] . "'>₱" . $cottage['RSprice'] . " - Good for " . $cottage['RScapacity'] . " pax " . "</option>";
                                     }
                                 } else {
                                     echo "<option value='' disabled>No cottages available</option>";
@@ -201,11 +204,37 @@ $userRole = $_SESSION['userRole'];
                                 ?>
                             </select>
                         </div>
+
+                        <div class="roomNumbers" style="display: none;" id="rooms">
+                            <h5 class="roomLabel">Room Number</h5>
+                            <select class="form-select" id="roomSelect" name="roomSelections">
+                                <option value="" selected disabled>Choose a room</option>
+
+                                <?php
+                                $category = 'Hotel';
+                                $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortAmenities rs
+                            JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
+                            WHERE rsc.categoryName = '$category' AND RSAvailabilityID = 1";
+                                $result = mysqli_query($conn, $selectHotel);
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                ?>
+                                        <option value="<?= $row['RServiceName'] ?>">
+                                            <?= $row['RServiceName'] ?> —> <?= $row['RScapacity'] ?> guests for ₱<?= $row['RSprice'] ?>
+                                        </option>
+                                <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+
                         <div class="videokeForm">
                             <h5 class="videokeRentalLabel">Videoke Rental</h5>
                             <select id="booleanSelections" name="videokeChoice" class="form-select" required>
-                                <option value="yesChoice">Yes</option>
-                                <option value="noChoice">No</option>
+                                <option value="" selected disabled></option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
                             </select>
                         </div>
                     </div>
@@ -244,7 +273,7 @@ $userRole = $_SESSION['userRole'];
             </div>
             <?php
             $availsql = "SELECT RSAvailabilityID, RServiceName
-            FROM resortservices 
+            FROM resortAmenities 
             WHERE RScategoryID = '1'";
 
             $result = mysqli_query($conn, $availsql);
@@ -324,7 +353,7 @@ $userRole = $_SESSION['userRole'];
                                 <option selected>Choose...</option>
                                 <?php
                                 $category = 'Hotel';
-                                $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortServices rs
+                                $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortAmenities rs
                             JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
                             WHERE rsc.categoryName = '$category' AND RSAvailabilityID = 1";
                                 $result = mysqli_query($conn, $selectHotel);
@@ -444,12 +473,11 @@ $userRole = $_SESSION['userRole'];
                                 <option value="guestC4">201-350 pax</option>
                             </select>
                             <input type="hidden" name="eventPax" id="hiddenGuestValue">
-
                         </div>
                     </div>
 
                     <div class="package">
-                        <div class="packageForm w-100">
+                        <div class="packageForm">
                             <h5 class="packageLabel">Package</h5>
                             <?php
                             $packageQuery = "SELECT * FROM packages";
@@ -459,7 +487,7 @@ $userRole = $_SESSION['userRole'];
                             </select>
                         </div>
 
-                        <div class="customPackage w-100">
+                        <div class="customPackage">
                             <h5 class="customPackageLabel">Can't find a package?</h5>
                             <a href="#" class=" btn btn-info" id="customPackageBtn">Customize my Package</a>
                         </div>
@@ -470,9 +498,9 @@ $userRole = $_SESSION['userRole'];
                     <textarea class="form-control w-100" id="additionalNotes" rows="5"
                         name="additionalNotes" placeholder="Optional" disabled></textarea>
 
-                    <div class="mt-auto">
-                        <a href="packages.php" class="btn btn-info btn-md w-100 mb-3">View Event Packages</a>
-                        <button type="submit" class="btn btn-success btn-md w-100" name="eventBook">Book Now</button>
+                    <div class="button-container">
+                        <a href="packages.php" class="btn btn-info btn-md">View Event Packages</a>
+                        <button type="submit" class="btn btn-success btn-md" name="eventBook">Book Now</button>
                     </div>
                 </div>
 
@@ -744,6 +772,7 @@ $userRole = $_SESSION['userRole'];
         const otherContainer = document.getElementById('other-container');
         const other_input = document.getElementById('other-input');
 
+
         eventSelect.addEventListener('change', () => {
             if (eventSelect.value === 'other') {
                 otherContainer.style.display = 'block';
@@ -771,7 +800,7 @@ $userRole = $_SESSION['userRole'];
                 confirmButtonText: 'Okay'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'Account/account.php';
+                    window.location.href = 'Account/bookingHistory.php';
                 }
             });
         }
@@ -788,6 +817,33 @@ $userRole = $_SESSION['userRole'];
         document.getElementById('eventType').addEventListener('change', function() {
             const selectedValue = this.value;
             document.getElementById('selectedEventValue').value = selectedValue;
+        });
+    </script>
+
+    <!-- Show the cottages if overnight -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tourSelect = document.getElementById("tourSelections");
+            const rooms = document.getElementById("rooms");
+            const roomSelect = document.getElementById("roomSelect");
+            const cottages = document.getElementById("cottage");
+
+            tourSelect.addEventListener("change", function() {
+                if (tourSelect.value === "Overnight") {
+                    rooms.style.display = "block";
+                    roomSelect.setAttribute("required", "required");
+                    cottages.style.display = "none";
+                } else if (tourSelect.value === "Day") {
+                    rooms.style.display = "none";
+                    roomSelect.setAttribute("required", "required");
+                    cottages.style.display = "block";
+                } else {
+                    cottages.style.display = "block";
+                    rooms.style.display = "none";
+                    roomSelect.removeAttribute("required");
+                    roomSelect.value = "";
+                }
+            });
         });
     </script>
 

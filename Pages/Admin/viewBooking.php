@@ -24,6 +24,7 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 
 $_SESSION['last_activity'] = time();
 $bookingID = $_POST['bookingID'];
+$bookingType = $_POST['bookingType'];
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 ?>
@@ -40,7 +41,8 @@ $userRole = $_SESSION['userRole'];
         href="../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/viewBooking.css" />
@@ -56,132 +58,248 @@ $userRole = $_SESSION['userRole'];
         </div>
         <!-- Information -->
 
-        <!-- Get the information to the database -->
+        <!-- Get the user and booking information to the database -->
         <?php
-        $query = "SELECT 
-                u.* , s.*, p.*, ec.categoryName AS eventName, rs.*, ps.*, b.*,
-                p.Pcapacity  as p_capacity, rsc.categoryName AS serviceName, st.*
-            FROM bookings b
-                 INNER JOIN users u ON b.userID = u.userID
-                LEFT JOIN statuses st ON st.statusID = b.bookingStatus
-                LEFT JOIN allservices a ON b.packageServiceID = a.packageServiceID
-                LEFT JOIN packages p ON a.packageID = p.packageID
-                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
-                LEFT JOIN services s ON a.serviceID = s.serviceID
-                LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID
-                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID
-                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
-            WHERE bookingID = '$bookingID'";
-        $result = mysqli_query($conn, $query);
-        if (mysqli_num_rows($result) > 0) {
-            $data = mysqli_fetch_assoc($result);
-            $name = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
-            $email = $data['email'];
-            $phoneNumber = $data['phoneNumber'];
+        $user_query = "SELECT 
+                u.* , b.*
+                FROM bookings b
+                LEFT JOIN users u ON b.userID = u.userID             
+                LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+            WHERE b.bookingID = '$bookingID'";
+        $user_result = mysqli_query($conn, $user_query);
+        if (mysqli_num_rows($user_result) > 0) {
+            $bookingInfo = mysqli_fetch_assoc($user_result);
+            $name = ucfirst($bookingInfo['firstName']) . " " . ucfirst($bookingInfo['lastName']);
+            $email = $bookingInfo['email'];
+            $phoneNumber = $bookingInfo['phoneNumber'];
             if ($phoneNumber === NULL || $phoneNumber === "") {
                 $phoneNumber = "--";
             } else {
                 $phoneNumber;
             }
-            // $birthday = $data['birthDate'];
-            // if ($birthday === NULL || $birthday === "") {
-            //     $birthday = "--";
-            // } else {
-            //     $birthday;
-            // }
-            $address = $data['userAddress'];
-            $profile = $data['userProfile'];
+            $address = $bookingInfo['userAddress'];
+            $profile = $bookingInfo['userProfile'];
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimeType = finfo_buffer($finfo, $profile);
             finfo_close($finfo);
             $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+            $bookingID = $bookingInfo['bookingID'];
+            $cost = $bookingInfo['totalCost'];
+            $startDate = $bookingInfo['startDate'];
+            $endDate = $bookingInfo['endDate'];
 
-            $status = $data['statusName'];
-            $service = $data['serviceName'];
-            $package = $data['eventName'];
-            $customPackage = $data['customPackageID'];
+            $pax = $bookingInfo['paxNum'];
+            $hoursNum = $bookingInfo['hoursNum'];
 
-            if ($service != "") {
-                $booking = $service;
-                $pax = $data['capacity'];
-                $serviceName = $data['facilityName'];
-                $description = $data['description'];
-            } elseif ($package != "") {
-                $booking = $package;
-                $pax = $data['p_capacity'];
-                $serviceName = $data['packageName'];
-                $description = $data['packageDescription'];
-            } elseif ($customPackage != "") {
-                $booking = $customPackage;
+            $addOns = explode(",", $bookingInfo['addOns']);
+
+            if (in_array("Videoke", $addOns)) {
+                $videoke = "Videoke";
+            } else {
+                $addOns = NULL;
             }
-            $cost = $data['totalCost'];
-            $startDate = $data['startDate'];
-            $endDate = $data['endDate'];
-            $AddRequest = $data['additionalRequest'];
-            $bookingID = $data['bookingID'];
+
+            $paymentMethod = $bookingInfo['paymentMethod'];
+        }
+
+
+
+        $query = "SELECT 
+                    b.*, st.*,
+                    p.*, ec.categoryName AS eventName, 
+                    cp.*, cpi.*,
+                    bs.*, s.*,
+                    ra.*, rsc.categoryName AS serviceName,
+                    er.*, ps.*   
+                FROM bookingsservices bs
+                LEFT JOIN bookings b ON bs.bookingID = b.bookingID
+                LEFT JOIN statuses st ON st.statusID = b.bookingStatus
+
+                LEFT JOIN packages p ON b.packageID = p.packageID
+                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
+
+                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
+                LEFT JOIN custompackageitems cpi ON cp.customPackageID = cp.customPackageID
+
+                -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+                LEFT JOIN services s ON bs.serviceID = s.serviceID
+
+                LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
+                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
+
+                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
+
+                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
+            WHERE bs.bookingID = '$bookingID'";
+        $result = mysqli_query($conn, $query);
+
+        if (mysqli_num_rows($result) > 0) {
+            $services = [];
+            $adultCount = 0;
+            $kidsCount = 0;
+            $package = "";
+            $customPackage = "";
+            $status = "";
+            $AddRequest = "";
+            $description = [];
+            while ($data = mysqli_fetch_assoc($result)) {
+                // echo "<pre>";
+                // print_r($data);
+                // echo "</pre>";
+                if (!empty($data['serviceID'])) {
+                    if (!empty($data['entranceRateID'])) {
+                        $services[] = $data['sessionType'] . " Swimming";
+                        if ($data['ERcategory'] === "Kids") {
+                            $kidsCount = $data['guests'];
+                        } elseif ($data['ERcategory'] === "Adult") {
+                            $adultCount = $data['guests'];
+                        }
+                        $guest = "Adult: " . $adultCount . " | Kid:  " . $kidsCount;
+                    }
+                    if (!empty($data['partnershipServiceID'])) {
+                        $services[] = $data['PBName'];
+                    }
+                    if (!empty($data['resortServiceID'])) {
+                        $services[] = $data['RServiceName'];
+                        $description[] = $data['RSdescription'];
+                    }
+                }
+                $status = $data['statusName'];
+                $package = $data['eventName'];
+                $customPackageID = $data['customPackageID'];
+                $AddRequest = $data['additionalRequest'];
+
+                if (!empty($package)) {
+                    $pax = $data['paxNum'];
+                    $serviceName = $data['packageName'];
+                    $description[] = $data['packageDescription'];
+                }
+
+                if (!empty($customPackageID)) {
+                    $guest = $data['paxNum'];
+                }
+            }
         }
         ?>
+
         <!-- Display the information -->
         <div class="card">
-            <div class="booking-info-name-pic">
-                <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start">
-                <div class="booking-info-contact">
-                    <p class="card-text name"><?= $name ?></p>
-                    <p class="card-text sub-name"><?= $email ?> | <?= $phoneNumber ?> </p>
-                    <p class="card-text sub-name"><?= $address ?></p>
-                </div>
+            <form action="../../Function/Admin/bookingApproval.php" method="post">
+                <input type="hidden" id="videoke" value="<?= htmlspecialchars($videoke) ?>">
+                <!-- <input type="hidden" id="serviceType" value="<?= $serviceType ?>" name="servicetype"> -->
+                <div class="booking-info-name-pic-btn">
+                    <div class="user-info">
+                        <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start">
+                        <div class="booking-info-contact">
+                            <p class="card-text name"><?= $name ?></p>
+                            <p class="card-text sub-name"><?= $email ?> | <?= $phoneNumber ?> </p>
+                            <p class="card-text sub-name"><?= $address ?></p>
+                        </div>
+                    </div>
 
-                <div class="button-container">
-                    <form action="../../Function/Admin/bookingApproval.php" method="post">
+                    <div class="button-container">
                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                         <input type="hidden" name="bookingStatus" value="<?= $status ?>">
                         <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
                         <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Display the information -->
-            <div class="card-body">
-                <div class="guest-info">
-                    <h4 class="card-title">Booking Type</h4>
-                    <p class="card-text"><?= ucfirst($booking) ?></p>
-                </div>
-                <div class="guest-info">
-                    <h4 class="card-title">Service Name</h4>
-                    <p class="card-text"><?= ucwords($serviceName) ?></p>
+                    </div>
                 </div>
 
-                <div class="guest-info">
-                    <h4 class="card-title">Number of People</h4>
-                    <p class="card-text"><?= !empty($pax) ? $pax : 'Not Available' ?></p>
-                </div>
-                <div class="guest-info">
-                    <h4 class="card-title">Total Price</h4>
-                    <p class="card-text"><?= $cost ?></p>
-                </div>
-                <div class="guest-info">
-                    <h4 class="card-title">Schedule</h4>
-                    <p class="card-text"> <?= $startDate . " " ?> until <?= " " . $endDate ?> </p>
-                </div>
-                <div class="guest-info">
-                    <h4 class="card-title">Additional Request</h4>
-                    <p class="card-text"><?= !empty($AddRequest) ? $AddRequest : 'Not Available' ?> </p>
-                </div>
+                <!-- Display the information -->
+                <div class="card-body">
+                    <div class="guest-info">
+                        <h4 class="card-title important-title">Booking Type</h4>
+                        <p class="card-text important-sub-title"><?= ucfirst($bookingType) ?></p>
+                    </div>
+                    <div class="guest-info fullWidth">
+                        <h4 class="card-title important-title">Service/s</h4>
+                        <p class="card-text important-sub-title">
+                            <?= !empty($services) ? implode(" | ", array_unique($services)) : 'Not Available' ?>
+                        </p>
+                    </div>
 
-                <div class="guest-info">
-                    <h4 class="card-title">Description</h4>
-                    <pre class="card-text description"><?= !empty($description) ? htmlspecialchars($description) : 'Not Available' ?></pre>
+                    <div class="guest-info">
+                        <h4 class="card-title">Guest</h4>
+                        <p class="card-text"> <?= $guest ?></p>
+                    </div>
+
+                    <div class="guest-info">
+                        <h4 class="card-title">Number of People</h4>
+                        <p class="card-text"><?= !empty($pax) ? $pax : 'Not Available' ?></p>
+                    </div>
+
+                    <div class="guest-info">
+                        <h4 class="card-title">Total Price</h4>
+                        <p class="card-text"><?= $cost ?></p>
+                    </div>
+                    <div class="guest-info fullWidth">
+                        <h4 class="card-title">Schedule</h4>
+                        <p class="card-text"> <?= $startDate . " " ?> until <?= " " . $endDate ?> </p>
+                    </div>
+
+                    <div class="guest-info">
+                        <h4 class="card-title">Number of Hours</h4>
+                        <p class="card-text"><?= !empty($hoursNum) ? $hoursNum . ' hours' : 'Not Available' ?></p>
+                    </div>
+
+                    <div class="guest-info">
+                        <h4 class="card-title">Add Ons</h4>
+                        <p class="card-text"><?= !empty($addOns) ? implode(", ", $addOns) : 'None' ?> </p>
+                    </div>
+
+                    <div class="guest-info" id="videokeSelectionContainer" style="display: none;">
+                        <h4 class="card-title">Videoke</h4>
+                        <select class="form-select" name="videokeChoice" required>
+                            <option value="" selected disabled>Assign a videoke</option>
+                            <?php
+                            $selectHotel = "SELECT * FROM resortAmenities WHERE RServiceName = 'Videoke 1' OR RServiceName = 'Videoke 2' AND RSAvailabilityID = 1";
+                            $result = mysqli_query($conn, $selectHotel);
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                            ?>
+                                    <option value="<?= $row['RServiceName'] ?>">
+                                        <?= $row['RServiceName'] ?> — ₱<?= $row['RSprice'] ?>
+                                    </option>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="guest-info">
+                        <h4 class="card-title">Payment Method</h4>
+                        <p class="card-text"><?= htmlspecialchars($paymentMethod) ?> </p>
+                    </div>
+
+                    <div class="two-item-row">
+                        <div class="guest-info">
+                            <h4 class="card-title">Additional Request</h4>
+                            <p class="card-text"><?= !empty($AddRequest) ? $AddRequest : 'None' ?> </p>
+                        </div>
+
+                        <div class="guest-info">
+                            <h4 class="card-title">Description</h4>
+                            <pre class="card-text description"> <?= !empty($description) ? implode("/n", $description) : 'None' ?></pre>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
-
-
-
     <!-- Bootstrap Link -->
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+    <script>
+        const videoke = document.getElementById("videoke").value;
+        const videokeSelectionContainer = document.getElementById("videokeSelectionContainer");
+        if (videoke === 'Videoke') {
+            videokeSelectionContainer.style.display = "block";
+        }
+    </script>
 </body>
 
 </html>

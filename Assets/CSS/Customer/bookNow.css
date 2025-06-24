@@ -45,6 +45,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* height: 15vh; */
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.562);
   backdrop-filter: blur(8px);
@@ -344,7 +345,7 @@ footer {
 
 #resort-page {
   .resortTitle {
-    padding-top: 7rem;
+    padding-top: 6rem;
     font-size: 2.5vw;
     font-family: "Lora";
     color: #000000;
@@ -373,7 +374,7 @@ footer {
 
   .scheduleForm,
   .peopleForm,
-  .cottageVideokeForm,
+  .cottageRoomVideokeForm,
   .purposeForm {
     /* border: 1px solid yellow; */
     display: flex;
@@ -383,6 +384,19 @@ footer {
     margin-bottom: 0.5rem;
   }
 
+  /* .roomNumbers {
+    margin: 1rem;
+  }
+
+  .input-group {
+    width: 65%;
+  } */
+
+  /* .room-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px !important;
+  } */
   .peopleForm input {
     height: 2.5rem;
   }
@@ -413,7 +427,8 @@ footer {
   .cottageLabel,
   .videokeRentalLabel,
   .noOfPeopleLabel,
-  .purposeLabel {
+  .purposeLabel,
+  .roomLabel {
     text-align: center;
     margin: 0.5rem 0 0.5rem 0;
     font-weight: bold;
@@ -476,7 +491,7 @@ footer {
 
 #hotel-page {
   .hotelTitle {
-    padding-top: 6rem;
+    padding-top: 7rem;
     font-size: 2.5vw;
     font-family: "Lora";
     color: #000000;
@@ -488,6 +503,7 @@ footer {
     position: absolute;
     margin: 7rem 0 0 3rem;
   }
+
   .container-fluid {
     display: flex;
     justify-content: space-around;
@@ -531,7 +547,7 @@ footer {
   }
 
   .hotel-card {
-    width: 50% !important;
+    width: 45% !important;
     padding: 2rem;
   }
 
@@ -687,29 +703,208 @@ footer {
 /* hotel booking */
 
 /* event booking */
-.eventTitle {
+
+#event-page {
+  .eventTitle {
+    padding-top: 7rem;
+    font-size: 2.5vw;
+    font-family: "Lora";
+    color: #000000;
+    font-weight: bold;
+  }
+
+  .backToSelection {
+    /* border: 1px solid red; */
+    position: absolute;
+    margin: 7rem 0 0 3rem;
+  }
+
+  .container-fluid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1.5rem;
+    width: 95%;
+  }
+
+  .card {
+    margin-top: 1rem;
+    padding: 2rem;
+  }
+
+  h5 {
+    font-weight: bold;
+    margin: 1rem 0 0.5rem 0;
+  }
+
+  .dateVenue,
+  .noHrPpl,
+  .package {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dateForm,
+  .venueForm,
+  .hrForm,
+  .peopleEventForm,
+  .packageForm,
+  .customPackage {
+    width: 100%;
+  }
+
+  .button-container {
+    display: flex;
+    margin-top: 1rem;
+    gap: 1rem;
+    .btn {
+      width: 100%;
+    }
+  }
+
+  .secondrow {
+    display: grid;
+    width: 100%;
+  }
+
+  #calendar {
+    width: 85%;
+    height: 67vh;
+    margin: auto;
+    margin-top: -8vw;
+    background-color: #fffefe;
+    border-radius: 2.5rem;
+  }
+
+  .fc table {
+    font-size: 18px;
+  }
+
+  .fc-scrollgrid,
+  td {
+    /* border: 1px solid red !important; */
+    border: none;
+  }
+  .fc a {
+    text-decoration: none !important;
+    color: black;
+  }
+
+  .fc-header-toolbar {
+    /* margin-top: 1rem; */
+    height: 5rem !important;
+    padding: 2rem;
+    border-top-left-radius: 3vw;
+    border-top-right-radius: 3vw;
+    margin-bottom: 0;
+    background-color: #00bbff;
+  }
+
+  .fc-button {
+    background-color: #ffffff !important;
+    color: rgb(0, 0, 0) !important;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+
+  .fc-toolbar-title {
+    color: #fff;
+  }
+
+  .fc-daygrid-day-events {
+    display: none;
+  }
+
+  .fc .fc-button-primary:disabled {
+    background-color: #fdfdfd !important;
+    opacity: 1 !important;
+  }
+
+  .fc .fc-button-primary:disabled:hover {
+    background-color: #f2d8b7 !important;
+    opacity: 1 !important;
+  }
+
+  .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+    margin-left: 1vw;
+
+    &:hover {
+      background-color: #91c6ff !important;
+      color: #fff !important;
+    }
+  }
+
+  .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+    margin-left: 1vw;
+
+    &:hover {
+      background-color: #91c6ff !important;
+      color: #fff !important;
+    }
+  }
+
+  .fc .fc-daygrid-day.fc-day-today {
+    background-color: #5dccf5 !important;
+    .fc-daygrid-day-number {
+      color: #fff !important;
+    }
+  }
+
+  /* di ko sure 'to test nalang pag may event na nalagay*/
+  .fc-event {
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  .fc-event:hover {
+    background-color: #218838;
+  }
+  /* di ko sure 'to test nalang pag may event na nalagay*/
+
+  /* code for the packages display */
+
+  .shadow-sm {
+    width: 30%;
+    margin: 0.5vw;
+  }
+
+  #packageCardsContainer {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.562);
+    width: 95%;
+    padding: 1vw;
+    border-radius: 1vw;
+  }
+  /* end of code for the packages display */
+}
+/* .eventTitle {
   margin-top: 1vw;
   font-size: 2.5vw;
   font-family: "Lora";
   color: #000000;
   font-weight: bold;
-}
+} */
 
-.event-container {
+/* .event-container {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
-.event-card {
+/*.event-card {
   padding: 2vw;
   height: 135vh !important;
-  /* display: flex;
+   display: flex;
   justify-content: center;
-  align-items: center; */
-}
+  align-items: center; 
+}*/
 
-.eventTypeForm {
+/* .eventTypeForm {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
@@ -847,35 +1042,6 @@ select option {
 
 .fc .fc-view-harness {
   margin-top: -1.7vw;
-}
+} */
 
-/* di ko sure 'to test nalang pag may event na nalagay*/
-.fc-event {
-  background-color: #28a745;
-  color: white;
-  border-radius: 5px;
-  padding: 5px;
-}
-
-.fc-event:hover {
-  background-color: #218838;
-}
-/* di ko sure 'to test nalang pag may event na nalagay*/
 /* event booking */
-
-/* code for the packages display */
-
-.shadow-sm {
-  width: 30%;
-  margin: 0.5vw;
-}
-
-#packageCardsContainer {
-  display: flex;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.562);
-  width: 95%;
-  padding: 1vw;
-  border-radius: 1vw;
-}
-/* end of code for the packages display */

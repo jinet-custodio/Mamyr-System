@@ -166,7 +166,7 @@ if (isset($_SESSION['error'])) {
 
                 <thead>
                     <th scope="col">Guest</th>
-                    <th scope="col">Service Type</th>
+                    <th scope="col">Booking Type</th>
                     <th scope="col">Check-in</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -174,21 +174,25 @@ if (isset($_SESSION['error'])) {
                 <tbody>
                     <!-- Select booking info -->
                     <?php
+                    //  $selectQuery = "SELECT u.firstName, u.lastName, 
+                    //     ps.*, rs.*, cp.*,
+                    //     rsc.categoryName AS resortCategoryName , 
+                    //      ec.categoryName AS eventCategoryName,
+                    //      st.statusName,bs.*,
+                    //      b.*
                     $selectQuery = "SELECT u.firstName, u.lastName, 
-                    ps.*, rs.*, cp.*,
-                    rsc.categoryName AS resortCategoryName , 
-                    ec.categoryName AS eventCategoryName,
-                    st.statusName,
+                    cp.*,st.statusName, ec.categoryName AS eventCategoryName,
                     b.*
                 FROM bookings b
                 INNER JOIN users u ON b.userID = u.userID   -- to get  the firstname and lastname 
                 LEFT JOIN statuses st ON st.statusID = b.bookingStatus  -- to get the status name
                 LEFT JOIN packages p ON b.packageID = p.packageID  -- to get the info of the package na binook 
-                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
-                LEFT JOIN services s ON b.serviceID = s.serviceID   -- to get the info of the service na binook 
-                LEFT JOIN resortservices rs ON s.resortServiceID = rs.resortServiceID  -- information of service
-                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
-                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
+                 LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
+                -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+                -- LEFT JOIN services s ON bs.serviceID = s.serviceID   -- to get the info of the service na binook 
+                -- LEFT JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID  -- information of service
+                -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
+                -- LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
                 LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
                 ";
                     $result = mysqli_query($conn, $selectQuery);
@@ -197,21 +201,35 @@ if (isset($_SESSION['error'])) {
                             $bookingID = $bookings['bookingID'];
                             $name = ucfirst($bookings['firstName']) . " " . ucfirst($bookings['lastName']);
                             $status = $bookings['statusName'];
+                            if ($bookings['eventCategoryName'] != "") {
+                                $bookingType = "Event Booking";
+                            } elseif ($bookings['customPackageID'] != "") {
+                                $bookingType = "Customized Package";
+                            } else {
+                                $bookingType = "Resort Booking";
+                            }
+
                     ?>
                             <tr>
                                 <td><?= $name ?></td>
                                 <?php
-                                if ($bookings['serviceID'] != "") {
+                                // if ($bookings['serviceID'] === "") {
+                                // 
                                 ?>
-                                    <td><?= $bookings['resortCategoryName'] ?></td>
+                                <!-- <td><?= $bookings['resortCategoryName'] ?></td> -->
+                                <!-- <td>Resort Booking</td> -->
                                 <?php
-                                } elseif ($bookings['eventCategoryName'] != "") {
+                                if ($bookings['eventCategoryName'] != "") {
                                 ?>
                                     <td><?= $bookings['categoryName'] ?></td>
                                 <?php
-                                } elseif ($bookings['customePackageID'] != "") {
+                                } elseif ($bookings['customPackageID'] != "") {
                                 ?>
                                     <td>Customized Package</td>
+                                <?php
+                                } else {
+                                ?>
+                                    <td>Resort Booking</td>
                                 <?php
                                 }
                                 ?>
@@ -241,6 +259,7 @@ if (isset($_SESSION['error'])) {
                                 </td>
                                 <td>
                                     <form action="viewBooking.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
                                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                                         <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
                                         <button type="submit" class="btn btn-info w-75">View</button>

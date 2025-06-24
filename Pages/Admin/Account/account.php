@@ -76,14 +76,15 @@ $userRole = $_SESSION['userRole'];
             } else {
                 $phoneNumber;
             }
-            $birthday = $data['birthDate'];
-            if ($birthday === NULL || $birthday === "") {
-                $type = "text";
-                $birthday = "--";
-            } else {
-                $type = "date";
-                $birthday;
-            }
+            // $birthday = $data['birthDate'];
+            // if ($birthday === NULL || $birthday === "") {
+            //     $type = "text";
+            //     $birthDate = "--";
+            // } else {
+            //     $type = "date";
+            //     $birthDate = $birthday;
+            // }
+
             $address = $data['userAddress'];
             $profile = $data['userProfile'];
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -201,7 +202,11 @@ $userRole = $_SESSION['userRole'];
                     <label for="fullName">Full Name</label>
                 </div>
                 <div class="info">
-                    <input type="<?= htmlspecialchars($type) ?>" name="birthday" id="birthday" value="<?= htmlspecialchars($birthday) ?>" disabled>
+                    <?php if (!empty($data['birthDate'])) : ?>
+                        <input type="date" name="birthday" id="birthday" value="<?= htmlspecialchars($data['birthDate']) ?>" disabled>
+                    <?php else : ?>
+                        <input type="text" name="birthday" id="birthday" value="--" disabled>
+                    <?php endif; ?>
                     <label for="birthday">Birthday</label>
                 </div>
                 <div class="info">

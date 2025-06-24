@@ -3,7 +3,7 @@
 DELIMITER $$
 
 CREATE TRIGGER after_insert_resort_service
-AFTER INSERT ON resortServices
+AFTER INSERT ON resortAmenities
 FOR EACH ROW
 BEGIN
 INSERT INTO services (resortServiceID)
@@ -15,11 +15,11 @@ DELIMITER ;
 DELIMITER $$
 
 CREATE TRIGGER after_insert_entranceRates
-AFTER INSERT ON entranceTimeRange
+AFTER INSERT ON entranceRates
 FOR EACH ROW
 BEGIN
-INSERT INTO services (swimmingID)
-VALUES (NEW.timeRangeID);
+INSERT INTO services (entranceRateID)
+VALUES (NEW.entranceRateID);
 END$$
 
 DELIMITER ;
