@@ -19,7 +19,7 @@
   box-sizing: border-box;
 }
 
-/* .sidebar {
+.sidebar {
   width: 23vw;
   background-color: #cee4f2;
   position: fixed;
@@ -72,6 +72,11 @@
   margin-top: 1vw;
 }
 
+#paymentBookingHist {
+  text-align: center;
+  margin-left: -1.5vw;
+}
+
 .sidebar li:hover a,
 .list-group-item.active {
   color: #0000;
@@ -95,21 +100,13 @@
 .sidebar-icon {
   height: 30px;
   padding-right: 1vw;
-} */
-
-/* .container-fluid {
-  border: 1px solid red !important;
-} */
-
-.backButtonContainer {
-  /* border: 1px solid red; */
-  position: absolute;
-  top: 5%;
-  left: 3%;
 }
 
-.titleContainer {
-  margin-top: 7vw;
+.bookingHistContainer {
+  /* border: 1px solid red; */
+  width: 75%;
+  margin-left: 24vw;
+  margin-top: 3vw;
 }
 
 .title {
@@ -117,6 +114,7 @@
   font-size: 36px;
   font-family: "Poppins";
   font-weight: bold;
+  margin-bottom: 2vw;
 }
 
 a {
@@ -125,7 +123,7 @@ a {
 
 .table-striped {
   text-align: center;
-  width: 90%;
+  width: 100%;
   margin: auto;
   margin-top: 3vw !important;
 }
@@ -137,4 +135,12 @@ th {
 th,
 td {
   font-size: 18px;
+}
+
+.dt-column-title {
+  text-align: center;
+}
+
+label {
+  margin-left: 1vw;
 }

@@ -148,32 +148,7 @@
             </div>
         </div>
 
-        <div class="announcements">
-            <div class="announcementTitleContainer">
-                <hr class="announcementLine">
-                <h4 class="announcementTitle">Announcements</h4>
-            </div>
 
-
-            <div class="post">
-                <h4 class="sorryText">Sorry We Are</h4>
-                <hr class="closeLine">
-                <h1 class="closedText">CLOSED</h1>
-                <hr class="closeLine">
-                <h2 class="tomorrowText">TOMORROW</h2>
-                <div class="dateTimeConatiner">
-                    <h3 class="date">March 25, 2025</h3>
-                    <div class="vr"></div>
-                    <h3 class="time">9:00am - 6:00pm</h3>
-                </div>
-
-                <p class="closedAdditionalText">Thank you for your understanding and continued support.
-                    We apologize for any delayed in response and seek your kind understanding during this period for the
-                    inconvenience caused.</p>
-            </div>
-
-
-        </div>
 
         <footer class="py-1 my-2">
             <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
@@ -210,22 +185,22 @@
     </div>
 
     <script>
-        function myMap() {
-            var mapProp = {
-                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-                zoom: 5,
-            };
-            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-        }
+    function myMap() {
+        var mapProp = {
+            center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+            zoom: 5,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    }
     </script>
 
     <script>
-        const toggleButton = document.getElementById('bg-nav-toggler');
-        const navbar = document.querySelector('.navbar');
+    const toggleButton = document.getElementById('bg-nav-toggler');
+    const navbar = document.querySelector('.navbar');
 
-        toggleButton.addEventListener('click', () => {
-            navbar.classList.toggle('white-bg');
-        });
+    toggleButton.addEventListener('click', () => {
+        navbar.classList.toggle('white-bg');
+    });
     </script>
     <script src="Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="Assets/JS/scrollNavbg.js"></script>

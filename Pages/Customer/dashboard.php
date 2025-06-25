@@ -157,7 +157,8 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="contactTitle">Contact Us </h4>
 
                 <div class="location">
-                    <img src="../../../Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
+                    <img src="../../../Assets/Images/landingPage/icons/location.png" alt="locationPin"
+                        class="locationIcon">
                     <h5 class="locationText">Sitio Colonia Gabihan, San Ildefonso, Bulacan</h5>
                 </div>
 
@@ -193,33 +194,7 @@ $userRole = $_SESSION['userRole'];
             </div>
         </div>
 
-        <div class="announcements">
-            <div class="announcementTitleContainer">
-                <hr class="announcementLine">
-                <h4 class="announcementTitle">Announcements</h4>
-            </div>
 
-
-            <div class="post">
-                <h4 class="sorryText">Sorry We Are</h4>
-                <hr class="closeLine">
-                <h1 class="closedText">CLOSED</h1>
-                <hr class="closeLine">
-                <h2 class="tomorrowText">TOMORROW</h2>
-                <div class="dateTimeConatiner">
-                    <h3 class="date">March 25, 2025</h3>
-                    <div class="vr"></div>
-                    <h3 class="time">9:00am - 6:00pm</h3>
-                </div>
-
-
-                <p class="closedAdditionalText">Thank you for your understanding and continued support.
-                    We apologize for any delayed in response and seek your kind understanding during this period for the
-                    inconvenience caused.</p>
-            </div>
-
-
-        </div>
 
         <footer class="py-1 my-2">
             <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
@@ -257,27 +232,27 @@ $userRole = $_SESSION['userRole'];
 
 
     <script>
-        function myMap() {
-            var mapProp = {
-                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-                zoom: 5,
-            };
-            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-        }
+    function myMap() {
+        var mapProp = {
+            center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+            zoom: 5,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: '../../Function/fetchUserBookings.php', // the PHP file above
-                eventClick: function(info) {
-                    alert('Booked by: ' + info.event.extendedProps.description);
-                }
-            });
-
-            calendar.render();
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '../../Function/fetchUserBookings.php', // the PHP file above
+            eventClick: function(info) {
+                alert('Booked by: ' + info.event.extendedProps.description);
+            }
         });
+
+        calendar.render();
+    });
     </script>
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>

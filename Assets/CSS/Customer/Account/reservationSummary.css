@@ -1,0 +1,87 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #e3e3e3;
+}
+
+.container {
+  border: 1px solid red;
+  width: 65vw;
+  height: 92vh;
+  background-color: #ffff;
+  border-radius: 63px;
+  margin-top: 2vw;
+}
+
+.backButtonContainer {
+  /* border: 1px solid red; */
+  position: absolute;
+  top: 7%;
+  left: 18%;
+}
+
+.PendingContainer {
+  border: 1px solid red;
+  display: flex;
+  gap: 2vw;
+  align-items: center;
+  height: 92vh;
+}
+
+.leftPendingContainer {
+  /* border: 1px solid red; */
+  width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5vw;
+  margin-top: 2vw;
+  padding: 1.5vw;
+}
+
+.pendingTitle {
+  color: #000;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.pendingSubtitle {
+  color: #000;
+  text-align: center;
+  font-family: "Plus Jakarta Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.rightPendingContainer {
+  /* border: 1px solid red; */
+  background-color: #f5f5f5 !important;
+  height: 88vh;
+  width: 50%;
+  border-radius: 21px !important;
+  margin-right: 1vw;
+}

@@ -73,6 +73,11 @@
   margin-top: 1vw;
 }
 
+#paymentBookingHist {
+  text-align: center;
+  margin-left: -1.5vw;
+}
+
 .sidebar li:hover a,
 .list-group-item.active {
   color: #0000;
