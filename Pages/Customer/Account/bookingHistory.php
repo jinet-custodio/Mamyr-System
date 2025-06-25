@@ -14,12 +14,13 @@
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../../Assets/CSS/Customer/Account/bookingHistory.css" />
-
+    <!-- DataTables Link -->
+    <link rel="stylesheet" href="../../../Assets/CSS/datatables.min.css" />
 </head>
 
 <body>
 
-    <!-- <div class="sidebar">
+    <div class="sidebar">
 
         <div class="home">
             <a href="../dashboard.php"><img src="../../../Assets/Images/Icon/home2.png" alt="home icon"
@@ -37,10 +38,10 @@
             </li>
 
             <li>
-                <a href="userManagement.php" class="list-group-item active">
+                <a href="bookingHistory.php" class="list-group-item active" id="paymentBookingHist">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
-                    Booking History
+                    Payment & Booking History
                 </a>
             </li>
 
@@ -63,14 +64,9 @@
                     Logout</button>
             </li>
         </ul>
-    </div> -->
+    </div>
 
-    <div class="container-fluid">
-        <div class="backButtonContainer">
-            <a href="account.php" class="backButtonLink"><img src="../../../Assets/Images/Icon/arrow.png"
-                    alt="BackButton" class="backbutton">
-            </a>
-        </div>
+    <div class="bookingHistContainer">
 
         <div class="titleContainer">
             <h2 class="title">Booking History</h2>
@@ -79,7 +75,7 @@
 
         <div class="tableContainer">
 
-            <table class=" table table-striped">
+            <table class=" table table-striped" id="bookingHistory">
                 <thead>
                     <th scope="col">Check In Date</th>
                     <th scope="col">Check Out Date</th>
@@ -152,8 +148,17 @@
 
 
 
-
-
+    <!-- Jquery Link -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- DataTables Link -->
+    <script src="../../../Assets/JS/datatables.min.js"></script>
+    <!-- Table JS -->
+    <script>
+    $(document).ready(function() {
+        $('#bookingHistory').DataTable();
+    });
+    </script>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -192,6 +197,8 @@
         });
     });
     </script>
+
+
 </body>
 
 

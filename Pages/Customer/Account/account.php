@@ -117,10 +117,10 @@ $userRole = $_SESSION['userRole'];
             </li>
 
             <li>
-                <a href="bookingHistory.php" class="list-group-item">
+                <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
-                    Booking History
+                    Payment & Booking History
                 </a>
             </li>
 
