@@ -110,8 +110,10 @@ require '../Config/dbcon.php';
             <div class="entranceFee">
                 <?php
                 // DB query
-                $rateSql = "SELECT * FROM entrancerates ORDER BY 
-                    FIELD(session_type, 'Day', 'Night', 'Overnight'), 
+                $rateSql = "SELECT er.*, etr.time_range  FROM entrancerates  er
+                LEFT JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID
+                 ORDER BY 
+                    FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
                     FIELD(ERcategory, 'Adult', 'Kids')";
                 $rateResult = mysqli_query($conn, $rateSql);
 
@@ -119,7 +121,7 @@ require '../Config/dbcon.php';
                 $sessions = [];
                 if (mysqli_num_rows($rateResult) > 0) {
                     while ($row = mysqli_fetch_assoc($rateResult)) {
-                        $session = $row['session_type'];
+                        $session = $row['sessionType'];
                         if (!isset($sessions[$session])) {
                             $sessions[$session] = [
                                 'time_range' => $row['time_range'],
@@ -151,7 +153,6 @@ require '../Config/dbcon.php';
                 }
                 ?>
             </div>
-
         </div>
 
 
@@ -163,7 +164,7 @@ require '../Config/dbcon.php';
 
             <div class="cottages">
                 <?php
-                $cottagesql = "SELECT * FROM resortServices WHERE RSCategoryID = 2";
+                $cottagesql = "SELECT * FROM resortAmenities WHERE RSCategoryID = 2";
                 $cottresult = mysqli_query($conn, $cottagesql);
                 if (mysqli_num_rows($cottresult) > 0) {
                     foreach ($cottresult as $cottage) {
@@ -209,7 +210,7 @@ require '../Config/dbcon.php';
                 <h4 class="entranceTitle">Videoke for Rent</h4>
             </div>
             <?php
-            $vidsql = "SELECT * FROM resortServices WHERE RServiceName = 'Videoke 1'";
+            $vidsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Videoke 1'";
             $vidresult = mysqli_query($conn, $vidsql);
             if (mysqli_num_rows($vidresult) > 0) {
                 foreach ($vidresult as $videoke) {
@@ -248,7 +249,7 @@ require '../Config/dbcon.php';
         </div>
         <div class="cottage " id="billiards">
             <?php
-            $bilsql = "SELECT * FROM resortServices WHERE RServiceName = 'Billiard'";
+            $bilsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Billiard'";
             $bilresult = mysqli_query($conn, $bilsql);
             if (mysqli_num_rows($bilresult) > 0) {
                 foreach ($bilresult as $bill) {
@@ -286,7 +287,7 @@ require '../Config/dbcon.php';
                 <h4 class="entranceTitle">Massage Chair</h4>
             </div>
             <?php
-            $massagesql = "SELECT * FROM resortServices WHERE RServiceName = 'Massage Chair'";
+            $massagesql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Massage Chair'";
             $massageresult = mysqli_query($conn, $massagesql);
             if (mysqli_num_rows($massageresult) > 0) {
                 foreach ($massageresult as $massage) {
@@ -325,12 +326,12 @@ require '../Config/dbcon.php';
         </div>
         <div class="titleContainer" id="hotelTitle">
             <h4 class="title">Hotel Rooms</h4>
-            <p class="hotelDescription">At Mamyr Resort and Events Place, we celebrate life’s most meaningful
-                moments—weddings,
-                birthdays, reunions, corporate events, and more—that can be celebrated in our Pavilion, which can occupy
-                up to 350 guests, and our Mini Pavilion, perfect for more intimate gatherings of up to 50
-                guests. Whether grand or small, each event is made memorable in a beautiful and comfortable setting
-                designed to suit your occasion.
+            <p class="hotelDescription">Mamyr Resort and Events Place is not only a venue for unforgettable celebrations
+                but also a relaxing retreat, offering 11 air-conditioned hotel rooms for guests seeking comfort and convenience.
+                Every booking at the hotel includes complimentary access to the resort's pool, allowing guests to unwind and
+                enjoy their stay to the fullest. Whether you're here for a grand occasion or a quiet getaway, Mamyr Resort
+                offers a beautiful and welcoming environment for all.
+
             </p>
         </div>
         <div class="container-fluid">
@@ -341,33 +342,42 @@ require '../Config/dbcon.php';
 
             <?php
             $availsql = "SELECT RSAvailabilityID, RServiceName 
-            FROM resortServices
+            FROM resortAmenities
             WHERE RSCategoryID = 1";
 
             $result = mysqli_query($conn, $availsql);
             ?>
             <div class="hotelIconsContainer">
                 <div class="availabilityIcons">
-                    <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
-                        class="avail">
-                    <p>Available</p>
-                    <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 1"
-                        class="avail">
-                    <p>Not Available</p>
+                    <div class="availabilityIcon" id="allRooms" onclick="filterRooms('all')">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1" class="avail">
+                        <p>All Rooms</p>
+                    </div>
+                    <div class="availabilityIcon" id="availableRooms" onclick="filterRooms('available')">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2" class="avail">
+                        <p>Available</p>
+                    </div>
+                    <div class="availabilityIcon" id="unavailableRooms" onclick="filterRooms('unavailable')">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3" class="avail">
+                        <p>Not Available</p>
+                    </div>
                 </div>
+
+
 
                 <div class="hotelIconContainer">
                     <?php
                     if ($result->num_rows > 0) {
                         $i = 1;
                         while ($row = $result->fetch_assoc()) {
-                            //ternary operator to check availability
-                            $iconPath = ($row['RSAvailabilityID'] == 1)
+                            $isAvailable = ($row['RSAvailabilityID'] == 1);
+                            $iconPath = $isAvailable
                                 ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
                                 : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
                             $roomName = htmlspecialchars($row['RServiceName']);
+                            $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
 
-                            echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;">';
+                            echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;" data-availability="' . $availabilityStatus . '">';
                             echo '  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '">';
                             echo '  <p class="roomCaption">' . $roomName . '</p>';
                             echo '</div>';
@@ -378,6 +388,7 @@ require '../Config/dbcon.php';
                         echo "<p>No room services found.</p>";
                     }
                     ?>
+
                 </div>
             </div>
         </div>
@@ -388,7 +399,7 @@ require '../Config/dbcon.php';
             </div>
             <div class="hotelRoomList">
                 <?php
-                $roomsql = "SELECT * FROM resortServices WHERE RScategoryID = 1";
+                $roomsql = "SELECT * FROM resortAmenities WHERE RScategoryID = 1";
                 $roomresult = mysqli_query($conn, $roomsql);
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {
@@ -407,10 +418,14 @@ require '../Config/dbcon.php';
                             </div>
 
                             <div class="Description">
-                                <h2 class="text bold"> <?= $hotel['RServiceName'] ?> </h2>
-                                <p>
-                                    <?= $hotel['RSdescription'] ?>
-                                </p>
+                                <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName'] ?> </h2>
+                                <?php $descriptions = explode(',', $hotel['RSdescription']);
+                                foreach ($descriptions as $description) {
+                                ?>
+                                    <p>
+                                        <?= "- " . trim($description) ?> <br>
+                                    </p>
+                                <?php } ?>
                                 <p class="font-weight-bold">
                                     Price: PHP <?= $hotel['RSprice'] ?>
                                 </p>
@@ -427,7 +442,7 @@ require '../Config/dbcon.php';
             </div>
         </div>
     </div>
-    <footer class="py-1" id="footer" style="margin-top: none;">
+    <footer class="py-1" id="footer" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
                 <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -493,6 +508,22 @@ require '../Config/dbcon.php';
             document.getElementById("footer").style.marginTop = "3vw";
         }
 
+
+        function filterRooms(filterType) {
+            const allRooms = document.querySelectorAll('.hotelIconWithCaption');
+
+            allRooms.forEach(room => {
+                const availability = room.getAttribute('data-availability');
+
+                if (filterType === 'all') {
+                    room.style.display = 'inline-block'; // show all rooms
+                } else if (filterType === availability) {
+                    room.style.display = 'inline-block'; // show matching availability
+                } else {
+                    room.style.display = 'none'; // hide others
+                }
+            });
+        }
         // const navbar = document.getElementById("navbar");
 
         // window.addEventListener("scroll", () => {

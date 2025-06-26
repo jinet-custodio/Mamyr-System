@@ -235,8 +235,28 @@ body {
   }
 }
 
+.legends {
+  width: 90%;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0.8vw auto;
+}
+
+.legend {
+  background-color: whitesmoke !important;
+  color: rgb(22, 22, 22);
+}
+
+.legend:hover {
+  color: #151515 !important;
+}
+
+.calendar-container {
+  width: 48% !important;
+}
+
 #calendar {
-  width: 45%;
+  width: 95%;
   margin: 0 auto;
   /* background-color: #fffefe; */
   border: none;
@@ -361,7 +381,7 @@ body {
   justify-content: center;
   text-align: center;
   font-style: normal;
-  font-size: 1.1vw;
+  font-size: 0.9vw;
 }
 
 .fc-event:hover {
@@ -804,10 +824,10 @@ footer {
     font-size: clamp(20px, calc(1.5vw + 4px), 30px) !important;
   }
 
+  
   #calendar {
-    width: 48%;
+    width: 90%;
     margin: 0 auto;
-    /* background-color: #fffefe; */
     border: none;
     height: 53vw;
   }

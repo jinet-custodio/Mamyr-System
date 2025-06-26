@@ -113,28 +113,30 @@ require '../Config/dbcon.php';
                 <div class="carousel">
 
                     <?php
-                    $serviceCategory = 'Cottage';
-                    $query = "SELECT rs.*, rsc.*
-                    FROM resortServices rs
-                    INNER JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID 
-                    WHERE categoryName = '$serviceCategory' ";
+                    $serviceCategory = 2;
+                    $query = "SELECT * FROM resortAmenities WHERE RScategoryID = $serviceCategory ";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
                         $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         $counter = 1;
                         foreach ($cottages as $cottage) {
                             $imageData = $cottage['RSimageData'];
-                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                            $mimeType = finfo_buffer($finfo, $imageData);
-                            finfo_close($finfo);
-                            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                            if ($imageData) {
+                                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                                $mimeType = finfo_buffer($finfo, $imageData);
+                                finfo_close($finfo);
+                                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                            } else {
+                                $image = '../../Assets/Images/no-picture.jpg';
+                            }
                     ?>
+
                             <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
                     <?php
                             $counter++;
                         }
                     } else {
-                        echo '<h5 class="cottageTitle">No Cottages</h5>';
+                        echo 'No Cottages';
                     }
                     ?>
                 </div>
@@ -156,35 +158,37 @@ require '../Config/dbcon.php';
 
             <div class="poolPics">
                 <?php
-                $serviceCategory = 'Entertainment';
-                $serviceName = 'Videoke 1';
-                $serviceName1 = 'Videoke 2';
-                $query = "SELECT rs.*, rsc.*
-                    FROM resortServices rs
-                    INNER JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID 
-                    WHERE categoryName = '$serviceCategory' 
-                    AND  RServiceName = '$serviceName' OR  RServiceName = '$serviceName1'";
+                $serviceCategory = 3;
+                $RServiceName = 'Videoke 1';
+                $RServiceName1 = 'Videoke 2';
+                $query = "SELECT ra.*, rsc.*
+                    FROM resortAmenities ra
+                    INNER JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID 
+                    WHERE RSCategoryID = '$serviceCategory' 
+                    AND (RServiceName = '$RServiceName' OR RServiceName = '$RServiceName1')";
+
                 $result = mysqli_query($conn, $query);
                 if (mysqli_num_rows($result) > 0) {
                     $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                    $counter = 1;
+
                     foreach ($cottages as $cottage) {
-                        $imageData = $cottage['RSimageData'];
-                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                        $mimeType = finfo_buffer($finfo, $imageData);
-                        finfo_close($finfo);
-                        $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                        if (!empty($cottage['RSimageData'])) {
+                            $imageData = $cottage['RSimageData'];
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                            $mimeType = finfo_buffer($finfo, $imageData);
+                            finfo_close($finfo);
+                            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                        } else {
+                            $image = '../Assets/Images/amenities/videokePics/videoke1.jpg';
+                        }
                 ?>
                         <img src="<?= htmlspecialchars($image) ?>" alt="Videoke Picture" class="pic1">
                 <?php
-
                     }
                 } else {
                     echo '<h5 class="cottageTitle" style="padding-top: 5rem;">No Videoke Pics</h5>';
                 }
                 ?>
-                <!-- <img src="../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Hotel Picture 1" class="pic1">
-                <img src="../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Hotel Picture 1" class="pic1"> -->
 
             </div>
 

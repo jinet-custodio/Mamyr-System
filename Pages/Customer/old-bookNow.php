@@ -398,7 +398,33 @@ $userRole = $_SESSION['userRole'];
                     <div class="eventForm">
 
                         <h5 class="eventLabel">Type of Event</h5>
+                        <div class="eventTypeForm">
+                            <select id="eventType" name="eventType" class="form-select" required>
+                                <option value="" disabled selected>Please Select an Event</option>
 
+                                <?php
+                                $sql = "SELECT categoryID, categoryName FROM eventCategories";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        // categoryID will be submitted as eventType
+                                        echo '<option value="' . $row["categoryID"] . '">' . htmlspecialchars($row["categoryName"]) . '</option>';
+                                    }
+                                } else {
+                                    echo '<option disabled>No categories available</option>';
+                                }
+
+                                $conn->close();
+                                ?>
+                            </select>
+
+                            <input type="hidden" name="selectedEventValue" id="selectedEventValue">
+                            <div id="other-container" style="display: none; margin-left: 1vw;">
+                                <input type="text" id="other-input" name="other_input" class="form-control "
+                                    placeholder="Please specify..." />
+                            </div>
+                        </div>
 
                     </div>
 
@@ -408,16 +434,67 @@ $userRole = $_SESSION['userRole'];
                             <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" disabled required>
                         </div>
 
-
+                        <div class="venueForm">
+                            <h5 class="venueLabel">Venue</h5>
+                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                                id="venueDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Please Select a Venue
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li id="pavHall" class="dropdown-item">PAVILION HALL (max. 300pax)</li>
+                                <li id="miniPavHall" class="dropdown-item">MINI PAVILION HALL (max. 50pax)</li>
+                            </ul> -->
+                            <select id="venue-hall" name="eventVenue" class="form-select" disabled required>
+                                <option value="" disabled selected>Please Select a Venue</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="noHrPpl">
+                        <div class="hrForm">
+                            <h5 class="hourLabel">Number of Hours</h5>
+                            <input type="number" class="form-control w-100" id="numberOfHours" readonly required>
+                            <input type="hidden" id="eventDuration" name="eventDuration">
+                        </div>
 
-
+                        <div class="peopleEventForm">
+                            <h5 class="noOfGuestLabel">Number of Guests</h5>
+                            <!-- <button class="btn btn-primary dropdown-toggle w-100" type="button"
+                                id="guestDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Estimated Number of Guests
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li id="guestNo1" class="dropdown-item">10-50 pax</li>
+                                <li id="guestNo2" class="dropdown-item">51-100 pax</li>
+                                <li id="guestNo3" class="dropdown-item">101-200 pax</li>
+                                <li id="guestNo4" class="dropdown-item">201-350 pax</li>
+                            </ul> -->
+                            <select id="guest-number" class="form-select" disabled required>
+                                <option value="" disabled selected>Estimated Number of Guests</option>
+                                <option value="guestC1">10-50 pax</option>
+                                <option value="guestC2">51-100 pax</option>
+                                <option value="guestC3">101-200 pax</option>
+                                <option value="guestC4">201-350 pax</option>
+                            </select>
+                            <input type="hidden" name="eventPax" id="hiddenGuestValue">
+                        </div>
                     </div>
 
                     <div class="package">
+                        <div class="packageForm">
+                            <h5 class="packageLabel">Package</h5>
+                            <?php
+                            $packageQuery = "SELECT * FROM packages";
+                            ?>
+                            <select id="package" name="eventPackage" class="form-select" disabled required>
+                                <option value="" disabled selected>Please Select a Package</option>
+                            </select>
+                        </div>
 
+                        <div class="customPackage">
+                            <h5 class="customPackageLabel">Can't find a package?</h5>
+                            <a href="#" class=" btn btn-info" id="customPackageBtn">Customize my Package</a>
+                        </div>
 
                     </div>
 
@@ -502,22 +579,6 @@ $userRole = $_SESSION['userRole'];
         const resorts = document.getElementById("resort-page");
         const backbtn = document.getElementById("backToSelection");
 
-        function filterRooms(filterType) {
-            const allRooms = document.querySelectorAll('.hotelIconWithCaption');
-
-            allRooms.forEach(room => {
-                const availability = room.getAttribute('data-availability');
-
-                if (filterType === 'all') {
-                    room.style.display = 'inline-block'; // show all rooms
-                } else if (filterType === availability) {
-                    room.style.display = 'inline-block'; // show matching availability
-                } else {
-                    room.style.display = 'none'; // hide others
-                }
-            });
-        }
-
         function backToSelection() {
             categories.style.display = 'block';
             events.style.display = 'none';
@@ -526,6 +587,152 @@ $userRole = $_SESSION['userRole'];
             document.getElementById("footer").style.marginTop = "5vw";
             document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
         };
+
+
+
+        document.getElementById('eventType').addEventListener('change', function() {
+            const categoryID = this.value; // categoryID is now defined inside the event listener
+            const packagesDropdown = document.getElementById('package');
+            const packageDisplay = document.querySelector('.packageDisplay');
+            const packageCardsContainer = document.getElementById('packageCardsContainer');
+            const venueDropdown = document.getElementById('venue-hall'); // Assuming venue select has this ID
+
+
+            function filterRooms(filterType) {
+                const allRooms = document.querySelectorAll('.hotelIconWithCaption');
+
+                allRooms.forEach(room => {
+                    const availability = room.getAttribute('data-availability');
+
+                    if (filterType === 'all') {
+                        room.style.display = 'inline-block'; // show all rooms
+                    } else if (filterType === availability) {
+                        room.style.display = 'inline-block'; // show matching availability
+                    } else {
+                        room.style.display = 'none'; // hide others
+                    }
+                });
+            }
+
+
+            // Enable dropdown
+            packagesDropdown.disabled = false;
+
+            // Clear dropdown and card container
+            packagesDropdown.innerHTML = '<option value="">Loading packages...</option>';
+            packageCardsContainer.innerHTML = ''; // Clear any previous cards
+
+            // Fetch packages
+            fetch('../../Function/Booking/getPackages.php?categoryID=' + categoryID)
+                .then(response => response.json())
+                .then(data => {
+                    packagesDropdown.innerHTML = ''; // Clear again
+                    packageDisplay.style.display = 'block'; // Show the package display
+
+                    if (data.length > 0) {
+                        packagesDropdown.innerHTML = '<option value="" disabled selected>Select a package</option>';
+
+                        data.forEach(pkg => {
+                            // Populate dropdown
+                            const option = document.createElement('option');
+                            option.value = pkg.packageID;
+                            option.text = pkg.packageName + ' - ₱' + parseFloat(pkg.Pprice).toFixed(2);
+                            packagesDropdown.appendChild(option);
+
+                            // Build card
+                            const card = `
+                        <div class="card h-100 shadow-sm" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">${pkg.packageName}</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><strong>Duration:</strong> ${pkg.Pduration} hours</li>
+                                    <li class="list-group-item"><strong>Capacity:</strong> Up to ${pkg.Pcapacity} guests</li>
+                                    <li class="list-group-item"><strong>Price:</strong> ₱${parseFloat(pkg.Pprice).toFixed(2)}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                            packageCardsContainer.insertAdjacentHTML('beforeend', card);
+                        });
+                    } else {
+                        packagesDropdown.innerHTML = '<option value="" disabled>No packages available</option>';
+                        packageCardsContainer.innerHTML = '<p>No packages found for this event type.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching packages:', error);
+                    packagesDropdown.innerHTML = '<option value="" disabled>Error loading packages</option>';
+                    packageCardsContainer.innerHTML = '<p>Error loading packages.</p>';
+                });
+
+            // Fetch venues for the selected event category
+            fetch('../../Function/Booking/getVenues.php?categoryID=' + categoryID)
+                .then(response => response.json())
+                .then(data => {
+                    venueDropdown.innerHTML = '<option value="" disabled selected>Please Select a Venue</option>';
+                    if (data.length > 0) {
+                        data.forEach(venue => {
+                            const option = document.createElement('option');
+                            option.value = venue.resortServiceID;
+                            option.text = venue.RServiceName; // Facility name from the database
+                            venueDropdown.appendChild(option);
+                        });
+                    } else {
+                        venueDropdown.innerHTML = '<option value="" disabled>No venues available</option>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching venues:', error);
+                    venueDropdown.innerHTML = '<option value="" disabled>Error loading venues</option>';
+                });
+        });
+
+
+        document.getElementById('package').addEventListener('change', function() {
+            const packageID = this.value;
+            const eventtBookingDate = document.getElementById('eventtBookingDate');
+            const additionalNotes = document.getElementById('additionalNotes');
+
+            eventtBookingDate.disabled = false;
+            additionalNotes.disabled = false;
+
+            // Fetch the selected package's details
+            fetch('../../Function/Booking/getPackageDetails.php?packageID=' + packageID)
+                .then(response => response.json())
+                .then(pkg => {
+                    // Set duration
+                    const numberOfHoursInput = document.getElementById('numberOfHours');
+                    numberOfHoursInput.value = pkg.Pduration;
+                    document.getElementById('eventDuration').value = pkg.Pduration;
+
+
+                    // Set guest capacity
+                    const guestSelect = document.getElementById('guest-number');
+                    guestSelect.disabled = true;
+
+                    const hiddenGuestInput = document.getElementById('hiddenGuestValue');
+                    const capacity = parseInt(pkg.Pcapacity);
+                    let selectedValue = '';
+
+                    if (capacity <= 50) selectedValue = 'guestC1';
+                    else if (capacity <= 100) selectedValue = 'guestC2';
+                    else if (capacity <= 200) selectedValue = 'guestC3';
+                    else selectedValue = 'guestC4';
+
+                    guestSelect.value = selectedValue;
+                    hiddenGuestInput.value = selectedValue;
+
+                    const venueSelect = document.getElementById('venue-hall');
+                    if (pkg.resortServiceID) {
+                        venueSelect.value = pkg.resortServiceID;
+                    }
+
+                    venueSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error fetching package details:', error);
+                });
+        });
 
         function showPackageCards() {
             const container = document.getElementById('packageCardsContainer');
@@ -580,6 +787,26 @@ $userRole = $_SESSION['userRole'];
     </script>
 
 
+    <!-- Select Option -->
+    <script>
+        // Events
+        const eventSelect = document.getElementById('eventType');
+        const otherContainer = document.getElementById('other-container');
+        const other_input = document.getElementById('other-input');
+
+
+        eventSelect.addEventListener('change', () => {
+            if (eventSelect.value === 'other') {
+                otherContainer.style.display = 'block';
+                other_input.required = true;
+            } else {
+                otherContainer.style.display = 'none';
+                other_input.required = false;
+            }
+        });
+    </script>
+
+
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
@@ -605,6 +832,14 @@ $userRole = $_SESSION['userRole'];
             url.search = '';
             history.replaceState({}, document.title, url.toString());
         };
+    </script>
+
+    <!-- Get the value of event type -->
+    <script>
+        document.getElementById('eventType').addEventListener('change', function() {
+            const selectedValue = this.value;
+            document.getElementById('selectedEventValue').value = selectedValue;
+        });
     </script>
 
     <!-- Show the cottages if overnight -->

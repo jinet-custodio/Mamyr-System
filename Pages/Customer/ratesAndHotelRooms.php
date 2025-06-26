@@ -42,7 +42,6 @@ $userRole = $_SESSION['userRole'];
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
@@ -77,18 +76,17 @@ $userRole = $_SESSION['userRole'];
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
-
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href="amenities.php" id="navbarDropdown"
+                    <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">HOTEL ROOMS AND RATES</a></li>
+                        <li><a class="dropdown-item " href="amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                         <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                     </ul>
                 </li>
@@ -96,14 +94,19 @@ $userRole = $_SESSION['userRole'];
                     <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="ratesAndHotelRooms.php">RATES</a>
+                    <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
+                    <a class="nav-link" href="about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="bookNow.php">BOOK NOW</a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
+                </li>
+
             </ul>
         </div>
     </nav>
@@ -207,7 +210,7 @@ $userRole = $_SESSION['userRole'];
 
             <div class="cottages">
                 <?php
-                $cottagesql = "SELECT * FROM resortServices WHERE RSCategoryID = 2";
+                $cottagesql = "SELECT * FROM resortAmenities WHERE RSCategoryID = 2";
                 $cottresult = mysqli_query($conn, $cottagesql);
                 if (mysqli_num_rows($cottresult) > 0) {
                     foreach ($cottresult as $cottage) {
@@ -253,7 +256,7 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="entranceTitle">Videoke for Rent</h4>
             </div>
             <?php
-            $vidsql = "SELECT * FROM resortServices WHERE RServiceName = 'Videoke 1'";
+            $vidsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Videoke 1'";
             $vidresult = mysqli_query($conn, $vidsql);
             if (mysqli_num_rows($vidresult) > 0) {
                 foreach ($vidresult as $videoke) {
@@ -292,7 +295,7 @@ $userRole = $_SESSION['userRole'];
         </div>
         <div class="cottage " id="billiards">
             <?php
-            $bilsql = "SELECT * FROM resortServices WHERE RServiceName = 'Billiard'";
+            $bilsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Billiard'";
             $bilresult = mysqli_query($conn, $bilsql);
             if (mysqli_num_rows($bilresult) > 0) {
                 foreach ($bilresult as $bill) {
@@ -330,7 +333,7 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="entranceTitle">Massage Chair</h4>
             </div>
             <?php
-            $massagesql = "SELECT * FROM resortServices WHERE RServiceName = 'Massage Chair'";
+            $massagesql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Massage Chair'";
             $massageresult = mysqli_query($conn, $massagesql);
             if (mysqli_num_rows($massageresult) > 0) {
                 foreach ($massageresult as $massage) {
@@ -369,11 +372,12 @@ $userRole = $_SESSION['userRole'];
         </div>
         <div class="titleContainer" id="hotelTitle">
             <h4 class="title">Hotel Rooms</h4>
-            <p class="hotelDescription">At Mamyr Resort and Events Place, we celebrate life’s most meaningful moments—weddings,
-                birthdays, reunions, corporate events, and more—that can be celebrated in our Pavilion, which can occupy
-                up to 350 guests, and our Mini Pavilion, perfect for more intimate gatherings of up to 50
-                guests. Whether grand or small, each event is made memorable in a beautiful and comfortable setting
-                designed to suit your occasion.
+            <p class="hotelDescription">Mamyr Resort and Events Place is not only a venue for unforgettable celebrations
+                but also a relaxing retreat, offering 11 air-conditioned hotel rooms for guests seeking comfort and convenience.
+                Every booking at the hotel includes complimentary access to the resort's pool, allowing guests to unwind and
+                enjoy their stay to the fullest. Whether you're here for a grand occasion or a quiet getaway, Mamyr Resort
+                offers a beautiful and welcoming environment for all.
+
             </p>
         </div>
         <div class="container-fluid">
@@ -384,34 +388,43 @@ $userRole = $_SESSION['userRole'];
 
             <?php
             $availsql = "SELECT RSAvailabilityID, RServiceName 
-            FROM resortServices
+            FROM resortAmenities
             WHERE RSCategoryID = 1";
 
             $result = mysqli_query($conn, $availsql);
             ?>
             <div class="hotelIconsContainer">
                 <div class="availabilityIcons">
-                    <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
-                        class="avail">
-                    <p>Available</p>
-                    <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 1"
-                        class="avail">
-                    <p>Not Available</p>
+                    <div class="availabilityIcon" id="allRooms" onclick="filterRooms('all')">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1" class="avail" id="allrooms">
+                        <p>All Rooms</p>
+                    </div>
+                    <div class="availabilityIcon" id="availableRooms" onclick="filterRooms('available')">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2" class="avail">
+                        <p>Available</p>
+                    </div>
+                    <div class="availabilityIcon" id="unavailableRooms" onclick="filterRooms('unavailable')">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3" class="avail">
+                        <p>Not Available</p>
+                    </div>
                 </div>
+
+
 
                 <div class="hotelIconContainer">
                     <?php
                     if ($result->num_rows > 0) {
                         $i = 1;
                         while ($row = $result->fetch_assoc()) {
-                            //ternary operator to check availability
-                            $iconPath = ($row['RSAvailabilityID'] == 1)
+                            $isAvailable = ($row['RSAvailabilityID'] == 1);
+                            $iconPath = $isAvailable
                                 ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
                                 : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
                             $roomName = htmlspecialchars($row['RServiceName']);
+                            $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
 
-                            echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;">';
-                            echo '  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '">';
+                            echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;" data-availability="' . $availabilityStatus . '">';
+                            echo '<a href="#' . trim($row['RServiceName']) . '">  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '"> </a>';
                             echo '  <p class="roomCaption">' . $roomName . '</p>';
                             echo '</div>';
 
@@ -421,6 +434,7 @@ $userRole = $_SESSION['userRole'];
                         echo "<p>No room services found.</p>";
                     }
                     ?>
+
                 </div>
             </div>
         </div>
@@ -431,12 +445,12 @@ $userRole = $_SESSION['userRole'];
             </div>
             <div class="hotelRoomList">
                 <?php
-                $roomsql = "SELECT * FROM resortServices WHERE RScategoryID = 1";
+                $roomsql = "SELECT * FROM resortAmenities WHERE RScategoryID = 1";
                 $roomresult = mysqli_query($conn, $roomsql);
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {
                 ?>
-                        <div class="hotel">
+                        <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>">
                             <div class="halfImg">
                                 <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
@@ -450,10 +464,14 @@ $userRole = $_SESSION['userRole'];
                             </div>
 
                             <div class="Description">
-                                <h2 class="text bold"> <?= $hotel['RServiceName'] ?> </h2>
-                                <p>
-                                    <?= $hotel['RSdescription'] ?>
-                                </p>
+                                <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName'] ?> </h2>
+                                <?php $descriptions = explode(',', $hotel['RSdescription']);
+                                foreach ($descriptions as $description) {
+                                ?>
+                                    <p>
+                                        <?= "- " . trim($description) ?> <br>
+                                    </p>
+                                <?php } ?>
                                 <p class="font-weight-bold">
                                     Price: PHP <?= $hotel['RSprice'] ?>
                                 </p>
@@ -470,7 +488,12 @@ $userRole = $_SESSION['userRole'];
             </div>
         </div>
     </div>
-    <footer class="py-1" id="footer" style="margin-top: 100vh;">
+    <!-- Back to Top Button -->
+    <a href="#" id="backToTopBtn" title="Back to Top">
+        <i class="fas fa-chevron-up"></i>
+    </a>
+
+    <footer class="py-1" id="footer" style="margin-top: 5vw;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../../index.php">
                 <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -514,7 +537,7 @@ $userRole = $_SESSION['userRole'];
             document.getElementById('selection').style.display = 'block';
             document.getElementById('hotelRooms').style.display = 'none';
             document.getElementById('rates').style.display = 'none';
-            document.getElementById("footer").style.marginTop = "100vh";
+            document.getElementById("footer").style.marginTop = "5vw";
         };
 
         function showRates(event) {
@@ -535,15 +558,39 @@ $userRole = $_SESSION['userRole'];
             document.getElementById("footer").style.marginTop = "3vw";
         }
 
-        // const navbar = document.getElementById("navbar");
+        function filterRooms(filterType) {
+            const allRooms = document.querySelectorAll('.hotelIconWithCaption');
 
-        // window.addEventListener("scroll", () => {
-        //     if (window.scrollY > 10) {
-        //         navbar.classList.add("bg-white", "shadow");
-        //     } else {
-        //         navbar.classList.remove("bg-white", "shadow");
-        //     }
-        // });
+            allRooms.forEach(room => {
+                const availability = room.getAttribute('data-availability');
+
+                if (filterType === 'all') {
+                    room.style.display = 'inline-block'; // show all rooms
+                } else if (filterType === availability) {
+                    room.style.display = 'inline-block'; // show matching availability
+                } else {
+                    room.style.display = 'none'; // hide others
+                }
+            });
+        }
+
+        window.onscroll = function() {
+            const btn = document.getElementById("backToTopBtn");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+
+        // Scroll to top
+        document.getElementById("backToTopBtn").addEventListener("click", function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     </script>
 </body>
 
