@@ -46,6 +46,7 @@ $userRole = $_SESSION['userRole'];
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -133,7 +134,20 @@ $userRole = $_SESSION['userRole'];
                     <h1 class="nameOfUser"><?= ucfirst($firstName) ?></h1>
                 </div>
             </div>
-            <div id="calendar"></div>
+            <div class="calendar-container">
+                <div class="legends">
+                    <div class="legend btn btn-outline-dark">
+                        <i class="fa-solid fa-circle" style="color: #dc3545;"></i> Event
+                    </div>
+                    <div class="legend btn btn-outline-dark">
+                        <i class="fa-solid fa-circle" style="color: #ffc107;"></i> Resort/Hotel
+                    </div>
+                    <div class="legend btn btn-outline-dark">
+                        <i class="fa-solid fa-circle" style="color: #007bff;"></i> Resort Entrance
+                    </div>
+                </div>
+                <div id="calendar"></div>
+            </div>
         </div>
 
 
@@ -232,27 +246,27 @@ $userRole = $_SESSION['userRole'];
 
 
     <script>
-    function myMap() {
-        var mapProp = {
-            center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-            zoom: 5,
-        };
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-    }
+        function myMap() {
+            var mapProp = {
+                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+                zoom: 5,
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: '../../Function/fetchUserBookings.php', // the PHP file above
-            eventClick: function(info) {
-                alert('Booked by: ' + info.event.extendedProps.description);
-            }
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '../../Function/fetchUserBookings.php', // the PHP file above
+                eventClick: function(info) {
+                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+                }
+            });
+
+            calendar.render();
         });
-
-        calendar.render();
-    });
     </script>
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
