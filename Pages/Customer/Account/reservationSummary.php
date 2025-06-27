@@ -1,3 +1,34 @@
+<?php
+require '../../../Config/dbcon.php';
+
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
+session_start();
+date_default_timezone_set('Asia/Manila');
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
+    header("Location: ../../register.php");
+    exit();
+}
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: ../../register.php?session=expired");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,85 +67,253 @@
                     data-bs-target="#modeofPaymentModal">Make a Down Payment</button> -->
                 <a href="../bookNow.php" class="btn btn-primary w-100">Make Another Reservation</a>
             </div>
+
+            <!-- Get user data -->
+            <?php
+            $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
+            $confirmedBookingID = mysqli_real_escape_string($conn, $_POST['confirmedBookingID']);
+            $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
+            $status = mysqli_real_escape_string($conn, $_POST['status']);
+            $getData = "SELECT bookings.*, users.* FROM bookings 
+            JOIN users ON bookings.userID = users.userID
+            WHERE bookings.userID = '$userID' AND bookings.bookingID = '$bookingID'";
+            $resultData = mysqli_query($conn, $getData);
+            if (mysqli_num_rows($resultData) > 0) {
+                $clientInfo = mysqli_fetch_assoc($resultData);
+                $middleInitial = trim($clientInfo['middleInitial']);
+                $name = ucfirst($clientInfo['firstName']) . " " . ucfirst($clientInfo['middleInitial']) . " "  . ucfirst($clientInfo['lastName']);
+            }
+            ?>
             <div class="rightPendingContainer">
-                <h3 class="rightContainerTitle">Reservation Summary
-                </h3>
+                <h3 class="rightContainerTitle">Reservation Summary</h3>
 
                 <div class="firstRow">
                     <div class="clientContainer">
                         <h6 class="header">Client</h6>
-                        <h6 class="content" id="clientName">Juan Dela Cruz</h6>
+                        <h6 class="content" id="clientName"><?= htmlspecialchars($name) ?></h6>
                     </div>
 
                     <div class="contactNumContainer">
                         <h6 class="header">Contact Number</h6>
-                        <h6 class="content" id="contactNumber">0912-345-6789</h6>
+                        <h6 class="content" id="contactNumber"><?= $clientInfo['phoneNumber'] ? $clientInfo['phoneNumber'] : 'Not Available' ?></h6>
                     </div>
                 </div>
 
                 <div class="secondRow">
                     <div class="reservationTypeContainer">
                         <h6 class="header">Reservation Type</h6>
-                        <h6 class="content" id="reservation">Event</h6>
+                        <h6 class="content" id="reservation"><?= $bookingType ?></h6>
                     </div>
 
                     <div class="contactNumContainer">
                         <h6 class="header">Address</h6>
-                        <h6 class="content" id="address">Poblacion, San Idefonso, Bulacan</h6>
+                        <h6 class="content" id="address"><?= $clientInfo['userAddress'] ? $clientInfo['userAddress'] : 'Not Available' ?></h6>
                     </div>
                 </div>
 
                 <div class="card" id="summaryDetails" style="width: 25.6rem;">
                     <ul class="list-group list-group-flush">
+
+                        <?php
+                        $getBookingInfo = "SELECT 
+                                    b.*, b.totalCost AS bookingCost , st.*,
+                                    p.*, cp.*, cpi.*, 
+                                    bs.*, s.*, 
+                                    ra.*, rsc.categoryName AS serviceName, ec.categoryName AS eventName,
+                                    er.*, ps.*  
+                                    
+                                FROM bookings b
+
+                                LEFT JOIN packages p ON b.packageID = p.packageID
+                                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
+
+                                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
+                                LEFT JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
+
+                                LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+                                LEFT JOIN statuses st ON st.statusID = b.bookingStatus
+
+                                -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+                                LEFT JOIN services s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+
+                                LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
+                                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
+
+                                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
+
+                                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
+                            WHERE b.bookingID = '$bookingID'";
+                        $getBookingInfoResult = mysqli_query($conn, $getBookingInfo);
+                        if (mysqli_num_rows($getBookingInfoResult) > 0) {
+                            $services = [];
+                            $adultCount = 0;
+                            $kidsCount = 0;
+                            $package = "";
+                            $customPackage = "";
+                            $status = "";
+                            $AddRequest = "";
+                            $allDescriptions = [];
+                            $addOns = [];
+                            while ($data = mysqli_fetch_assoc($getBookingInfoResult)) {
+                                // echo "<pre>";
+                                // print_r($data);
+                                // echo "</pre>";
+                                $startDate = date("j F Y", strtotime($data['startDate']));
+                                $time = date("g:i A", strtotime($data['startDate'])) . " - " . date("g:i A", strtotime($data['endDate']));
+                                $duration = $data['hoursNum'] . " hours";
+                                $totalCost = $data['bookingCost'];
+                                $addOns[] = $data['addOns'];
+                                $pax = $data['paxNum'];
+                                $downpayment = $totalCost * 0.3;
+                                if (!empty($data['serviceID'])) {
+                                    if (!empty($data['entranceRateID'])) {
+                                        $services[] = $data['sessionType'] . " Swimming";
+                                        $cardHeader = "Type of Tour";
+                                        if ($data['ERcategory'] === "Kids") {
+                                            $kidsCount = $data['guests'];
+                                        } elseif ($data['ERcategory'] === "Adult") {
+                                            $adultCount = $data['guests'];
+                                        }
+                                        $guest = "Adult: " . $adultCount . " | Kid:  " . $kidsCount;
+                                    }
+                                    if (!empty($data['partnershipServiceID'])) {
+                                        $services[] = $data['PBName'];
+                                    }
+                                    if (!empty($data['resortServiceID'])) {
+                                        $services[] = $data['RServiceName'];
+                                        $items = array_map('trim', explode(',', $data['RSdescription']));
+                                        $allDescriptions = array_merge($allDescriptions, $items);
+                                        $allDescriptions = array_unique($allDescriptions);
+                                    }
+                                }
+                                $status = $data['statusName'];
+                                $package = $data['eventName'];
+                                $customPackageID = $data['customPackageID'];
+                                $AddRequest = $data['additionalRequest'];
+
+                                if (!empty($package)) {
+                                    $pax = $data['paxNum'];
+                                    $serviceName = $data['packageName'];
+                                    $items = array_map('trim', explode(',', $data['packageDescription']));
+                                    $allDescriptions = array_merge($allDescriptions, $items);
+                                    $allDescriptions = array_unique($allDescriptions);
+                                }
+
+                                if (!empty($customPackageID)) {
+                                    $pax = $data['paxNum'];
+                                    if (!empty($data['serviceID'])) {
+                                        if (!empty($data['entranceRateID'])) {
+                                            $services[] = $data['sessionType'] . " Swimming";
+                                            if ($data['ERcategory'] === "Kids") {
+                                                $kidsCount = $data['guests'];
+                                            } elseif ($data['ERcategory'] === "Adult") {
+                                                $adultCount = $data['guests'];
+                                            }
+                                        }
+                                        if (!empty($data['partnershipServiceID'])) {
+                                            $services[] = $data['PBName'];
+                                        }
+                                        if (!empty($data['resortServiceID'])) {
+                                            $services[] = $data['RServiceName'];
+                                            $items = array_map('trim', explode(',', $data['RSdescription']));
+                                            $allDescriptions = array_merge($allDescriptions, $items);
+                                            $allDescriptions = array_unique($allDescriptions);
+                                        }
+                                    }
+                                }
+                            }
+
+                            //Get the room or cottage
+                            $cottageRoom = [];
+
+                            foreach ($services as $service) {
+                                if (stripos($service, 'cottage') !== false) {
+                                    $serviceVenue = "Cottage";
+                                    $cottageRoom[] = $service;
+                                } elseif (stripos($service, 'room') !== false) {
+                                    $serviceVenue = "Room";
+                                    $cottageRoom[] = $service;
+                                }
+                                if (stripos($service, 'Day') !== false) {
+                                    $tourType = "Day";
+                                } elseif (stripos($service, 'Night') !== false) {
+                                    $tourType = "Night";
+                                } elseif (stripos($service, 'Overnight') !== false) {
+                                    $tourType = "Overnight";
+                                }
+                            }
+
+                            if (!empty($kidsCount) || !empty($adultCount)) {
+                                $guest = $kidsCount . " Kids & " . $adultCount . " Adults";
+                            } else {
+                                $guest = $pax;
+                            }
+                        }
+                        ?>
+
+                        <!-- <li class=" list-group-item">
+                            <h6 class="cardHeader"><?= $cardHeader  ?></h6>
+                            <h6 class="cardContent" id="eventDate"><?= $tourType ?></h6>
+                        </li> -->
+
                         <li class=" list-group-item">
-                            <h6 class="cardHeader">Event Date</h6>
-                            <h6 class="cardContent" id="eventDate">20 May 2025</h6>
+                            <h6 class="cardHeader">Date</h6>
+                            <h6 class="cardContent" id="eventDate"><?= $startDate ?></h6>
                         </li>
                         <li class=" list-group-item">
-                            <h6 class="cardHeader">Venue</h6>
-                            <h6 class="cardContent" id="venue">Pavilion Hall</h6>
+                            <h6 class="cardHeader">Time</h6>
+                            <h6 class="cardContent" id="eventTime"><?= $time ?></h6>
                         </li>
                         <li class=" list-group-item">
-                            <h6 class="cardHeader">Event Duration</h6>
-                            <h6 class="cardContent" id="eventDuration">4 Hours</h6>
+                            <h6 class="cardHeader"><?= $serviceVenue ?></h6>
+                            <h6 class="cardContent" id="venue"><?= implode(', ', $cottageRoom) ?></h6>
+                        </li>
+                        <li class=" list-group-item">
+                            <h6 class="cardHeader">Duration</h6>
+                            <h6 class="cardContent" id="eventDuration"><?= $duration ?></h6>
                         </li>
                         <li class=" list-group-item">
                             <h6 class="cardHeader">Number of Guests</h6>
-                            <h6 class="cardContent" id="guestNo">200</h6>
+                            <h6 class="cardContent" id="guestNo"><?= $guest ?></h6>
                         </li>
+
                         <li class=" list-group-item">
+                            <h6 class="cardHeader">Add Ons</h6>
+                            <h6 class="cardContent" id="addOns">
+                                <?= !empty($addOns) ? implode(", ", array_unique($addOns)) : "None" ?>
+                            </h6>
+                        </li>
+                        <!-- <li class=" list-group-item">
                             <h6 class="cardHeader">Package Type</h6>
                             <h6 class="cardContent" id="packageType">Wedding <img
                                     src="../../../Assets/Images/Icon/information.png" alt="More Details"
                                     class="infoIcon">
                             </h6>
-                        </li>
+                        </li> -->
                         <li class=" list-group-item" id="totalAmountSection">
                             <h6 class="cardHeader">Total Amount:</h6>
-                            <h6 class="cardContent" id="totalAmount">145,000 Php
-                            </h6>
+                            <h6 class="cardContentBill" id="totalAmount">₱ <?= number_format($totalCost, 2) ?></h6>
                         </li>
-                        <li class=" list-group-item" id="promoSection">
+                        <!-- <li class=" list-group-item" id="promoSection">
                             <h6 class="cardHeader">Promo/Discount:</h6>
-                            <h6 class="cardContent" id="promoDiscount">- 5,000 Php
+                            <h6 class="cardContentBill" id="promoDiscount">- 5,000 Php
                             </h6>
-                        </li>
-                        <li class=" list-group-item" id="totalBillSection">
+                        </li> -->
+                        <!-- <li class=" list-group-item" id="totalBillSection">
                             <h6 class="cardHeader">Total Bill:</h6>
-                            <h6 class="cardContent" id="totalBill">140,000 Php
-                            </h6>
-                        </li>
+                            <h6 class="cardContentBill" id="totalBill">140,000 Php
+                            </h6>  
+                        </li> -->
                     </ul>
                 </div>
 
                 <div class="downPaymentContainer">
                     <h6 class="header">Down Payment Amount (30%):</h6>
-                    <h6 class="content" id="downPaymentAmount">42,000 Php</h6>
+                    <h6 class="content" id="downPaymentAmount">₱ <?= number_format($downpayment, 2) ?></h6>
                 </div>
                 <div class="noteContainer">
                     <h6 class="note">Note: Please pay for the down payment amount for the approval of your booking
-                        within
-                        seven (7) business days.</h6>
+                        withinseven (7) business days.</h6>
                 </div>
             </div>
         </div>
@@ -175,14 +374,7 @@
                 </div>
             </div>
         </div> -->
-
-
     </div>
-
-
-
-
-
 
 
 
@@ -208,6 +400,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
     </script>
+
+
 </body>
 
 </html>
