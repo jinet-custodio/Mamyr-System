@@ -109,9 +109,10 @@ $userRole = $_SESSION['userRole'];
                     <th scope="col">Check In</th>
                     <th scope="col">Check Out</th>
                     <th scope="col">Booking Type</th>
-                    <th scope="col">Details</th>
+                    <!-- <th scope="col">Details</th> -->
                     <th scope="col">Status</th>
                     <th scope="col">Review</th>
+                    <th scope="col">Action</th>
                 </thead>
 
                 <tbody>
@@ -126,10 +127,12 @@ $userRole = $_SESSION['userRole'];
                     $resultGetBooking = mysqli_query($conn, $getBooking);
                     if (mysqli_num_rows($resultGetBooking) > 0) {
                         foreach ($resultGetBooking as $booking) {
+                            $confirmedBookingID = $booking['confirmedBookingID'];
+                            $bookingID = $booking['bookingID'];
                             $startDate = strtotime($booking['startDate']);
-                            $checkIn = date("F n, Y", $startDate);
+                            $checkIn = date("F j, Y", $startDate);
                             $endDate = strtotime($booking['endDate']);
-                            $checkOut = date("F n, Y", $endDate);
+                            $checkOut = date("F j, Y", $endDate);
                     ?>
                             <tr>
                                 <td><?= $checkIn ?></td>
@@ -137,18 +140,17 @@ $userRole = $_SESSION['userRole'];
 
                                 <?php
                                 if (!empty($booking['packageID'])) {
-                                    $bookingType = "Event Booking";
+                                    $bookingType = "Event";
                                 } elseif (!empty($booking['customPackageID'])) {
-                                    $bookingType = "Customized Booking";
+                                    $bookingType = "Customized";
                                 } else {
-                                    $bookingType = "Resort/Hotel Booking";
+                                    $bookingType = "Resort/Hotel";
                                 }
                                 ?>
                                 <td><?= htmlspecialchars($bookingType) ?></a></td>
-                                <td><a href="#" class="btn btn-success w-75">View</a></td>
                                 <?php if (!empty($booking['confirmedBookingID'])) {
                                     if ($booking['confirmedStatus'] === "Pending") {
-                                        $status = "Need Downpayment";
+                                        $status = "Downpayment"; //Papalitan na lang ng mas magandang term
                                     } else {
                                         $status = $booking['confirmedStatus'];
                                     }
@@ -159,11 +161,28 @@ $userRole = $_SESSION['userRole'];
 
                                 <td><?= $status ?></td>
                                 <td><a href="" class="btn btn-outline-primary">Rate</a></td>
+
+                                <td>
+                                    <div class="button-container gap-2 md-auto" style="display: flex;  width: 100%; justify-content: center;">
+                                        <form action="reservationSummary.php" method="POST">
+                                            <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                                            <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
+                                            <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                            <input type="hidden" name="status" value="<?= $status ?>">
+                                            <button type="submit" name="viewBooking" class="btn btn-info w-100">View</button>
+                                        </form>
+                                        <form action="cancelBooking.php" method="POST">
+                                            <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                            <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
+                                            <input type="hidden" name="status" value="<?= $status ?>">
+                                            <button type="submit" name="cancelBooking" class="btn btn-danger w-100">Cancel</button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                     <?php
                         }
                     }
-
                     ?>
 
                     <!-- <tr>
@@ -216,7 +235,11 @@ $userRole = $_SESSION['userRole'];
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
-            $('#bookingHistory').DataTable();
+            $('#bookingHistory').DataTable({
+                language: {
+                    emptyTable: "No Bookings Made" //Pakipalitan na lang din ng magandang term
+                }
+            });
         });
     </script>
 
