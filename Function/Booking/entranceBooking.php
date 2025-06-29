@@ -18,7 +18,7 @@ if (isset($_POST['bookRates'])) {
     $roomChoice = mysqli_real_escape_string($conn, $_POST['roomSelections']);
     $videokeChoice = mysqli_real_escape_string($conn, $_POST['videokeChoice']);
     $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
-
+    $paymentMethod = mysqli_real_escape_string($conn, $_POST['PaymentMethod']);
 
     if ($adultCount !== "" && $childrenCount !== "") {
         $adultCount;
@@ -143,10 +143,10 @@ if (isset($_POST['bookRates'])) {
         bookings(userID, additionalRequest,  paxNum, hoursNum, 
         startDate, endDate, 
         totalCost, downpayment, 
-        bookingStatus, addOns) 
-        VALUES(?,?,?,?,?,?,?,?,?,?) ");
+        bookingStatus, addOns, paymentMethod) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?) ");
         $insertBooking->bind_param(
-            "isiissddis",
+            "isiissddiss",
             $userID,
             // $serviceID,
             $additionalRequest,
@@ -157,13 +157,14 @@ if (isset($_POST['bookRates'])) {
             $totalCost,
             $downPayment,
             $bookingStatus,
-            $addOns
+            $addOns,
+            $paymentMethod
         );
         if ($insertBooking->execute()) {
             $bookingID = $conn->insert_id;
 
             $insertBookingServices = $conn->prepare("INSERT INTO 
-            bookingsServices(bookingID, serviceID, guest, Total)
+            bookingsservices(bookingID, serviceID, guests, Total)
             VALUES(?,?,?,?)");
 
             if ($adultCount > 0 && isset($adultServiceID)) {

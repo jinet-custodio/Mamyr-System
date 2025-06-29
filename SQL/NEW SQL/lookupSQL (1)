@@ -24,22 +24,38 @@ INSERT INTO userStatuses (statusName) VALUES
 ('Not-verified'),
 ('Deleted');
 
+
+CREATE TABLE partnerStatuses (
+    partnerStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE NOT NULL
+);
+
+INSERT INTO partnerStatuses (statusName) VALUES 
+('Pending'),
+('Approved'),
+('Rejected'),
+('Terminated'),
+('Expired'),
+('Suspended');
+
+
 CREATE TABLE serviceAvailability (
     availabilityID INT PRIMARY KEY AUTO_INCREMENT,
     availabilityName VARCHAR(50) UNIQUE -- 'Available', 'Occupied', 'Maintenance'
 );
 
-INSERT INTO serviceAvailability (availabilityName) Values 
+INSERT INTO serviceAvailability (availabilityName) VALUES 
 ('Available'),
 ('Occupied'),
-('Maintenance');
+('Maintenance'),
+('Private');
 
 Create Table statuses (
     statusID INT PRIMARY KEY AUTO_INCREMENT,
     statusName VARCHAR(50) UNIQUE -- 'Pending', 'Approved', 'Rejected'
 );
 
-INSERT INTO statuses (statusName) Values 
+INSERT INTO statuses (statusName) VALUES 
 ('Pending'),
 ('Approved'),
 ('Rejected'),
@@ -62,7 +78,7 @@ INSERT INTO `eventcategories` (`categoryID`, `categoryName`) VALUES
 
 Create Table bookingPaymentStatus (
     paymentStatusID INT PRIMARY KEY AUTO_INCREMENT,
-    statusName VARCHAR(50) UNIQUE -- 'No Payment', 'Patially Paid', 'Fully Paid'
+    statusName VARCHAR(50) UNIQUE 
 );
 
 INSERT INTO bookingPaymentStatus (statusName) Values 
@@ -75,19 +91,21 @@ CREATE TABLE resortServicesCategories (
     categoryName VARCHAR(200) NOT NULL
 );
 
-INSERT INTO resortServicesCategories (`categoryID`, `categoryName`) VALUES 
-(NULL, 'Hotel'), 
-(NULL, 'Cottage'), 
-(NULL, 'Entertainment'), 
-(NULL, 'Food');
+INSERT INTO resortServicesCategories (categoryName) VALUES 
+('Hotel'), 
+('Cottage'), 
+('Videoke'), 
+('Massage'),
+('Billiard'),
+('Event Hall');
 
-CREATE TABLE entranceTimeRange(
+CREATE TABLE entranceTimeRanges(
     timeRangeID INT PRIMARY KEY AUTO_INCREMENT,
     session_type VARCHAR(20),
     time_range VARCHAR(50)
     );
 
-INSERT INTO entranceTimeRange
+INSERT INTO entranceTimeRanges
     (session_type, time_range) 
     VALUES('Day', '9:00 am - 4:00 pm'), 
     ('Night', '12:00 pm - 8:00 pm'), 

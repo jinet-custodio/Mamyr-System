@@ -85,8 +85,20 @@ $userRole = $_SESSION['userRole'];
             $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
             $bookingID = $bookingInfo['bookingID'];
             $cost = $bookingInfo['totalCost'];
-            $startDate = $bookingInfo['startDate'];
-            $endDate = $bookingInfo['endDate'];
+            $startDate = strtotime($bookingInfo['startDate']);
+            $checkIn = date("M d, Y g:i A", $startDate);
+            $startDay = date("l", $startDate);
+            $endDate = strtotime($bookingInfo['endDate']);
+            $checkOut = date("M d, Y g:i A", $endDate);
+            $endDay = date("l", $endDate);
+
+
+            if ($startDay === $endDay) {
+                $Day = $startDay;
+            } else {
+                $Day = $startDay . " - " . $endDay;
+            }
+
 
             $pax = $bookingInfo['paxNum'];
             $hoursNum = $bookingInfo['hoursNum'];
@@ -106,23 +118,24 @@ $userRole = $_SESSION['userRole'];
 
         $query = "SELECT 
                     b.*, st.*,
-                    p.*, ec.categoryName AS eventName, 
-                    cp.*, cpi.*,
-                    bs.*, s.*,
-                    ra.*, rsc.categoryName AS serviceName,
+                    p.*, cp.*, cpi.*, 
+                    bs.*, s.*, 
+                    ra.*, rsc.categoryName AS serviceName, ec.categoryName AS eventName,
                     er.*, ps.*   
-                FROM bookingsservices bs
-                LEFT JOIN bookings b ON bs.bookingID = b.bookingID
-                LEFT JOIN statuses st ON st.statusID = b.bookingStatus
+                    
+                FROM bookings b
 
                 LEFT JOIN packages p ON b.packageID = p.packageID
                 LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
 
                 LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
-                LEFT JOIN custompackageitems cpi ON cp.customPackageID = cp.customPackageID
+                LEFT JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
+
+                LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+                LEFT JOIN statuses st ON st.statusID = b.bookingStatus
 
                 -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
-                LEFT JOIN services s ON bs.serviceID = s.serviceID
+                LEFT JOIN services s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
 
                 LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
                 LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
@@ -130,7 +143,7 @@ $userRole = $_SESSION['userRole'];
                 LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
 
                 LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
-            WHERE bs.bookingID = '$bookingID'";
+            WHERE b.bookingID = '$bookingID'";
         $result = mysqli_query($conn, $query);
 
         if (mysqli_num_rows($result) > 0) {
@@ -141,7 +154,7 @@ $userRole = $_SESSION['userRole'];
             $customPackage = "";
             $status = "";
             $AddRequest = "";
-            $description = [];
+            $allDescriptions = [];
             while ($data = mysqli_fetch_assoc($result)) {
                 // echo "<pre>";
                 // print_r($data);
@@ -161,7 +174,9 @@ $userRole = $_SESSION['userRole'];
                     }
                     if (!empty($data['resortServiceID'])) {
                         $services[] = $data['RServiceName'];
-                        $description[] = $data['RSdescription'];
+                        $items = array_map('trim', explode(',', $data['RSdescription']));
+                        $allDescriptions = array_merge($allDescriptions, $items);
+                        $allDescriptions = array_unique($allDescriptions);
                     }
                 }
                 $status = $data['statusName'];
@@ -172,11 +187,34 @@ $userRole = $_SESSION['userRole'];
                 if (!empty($package)) {
                     $pax = $data['paxNum'];
                     $serviceName = $data['packageName'];
-                    $description[] = $data['packageDescription'];
+                    $items = array_map('trim', explode(',', $data['packageDescription']));
+                    $allDescriptions = array_merge($allDescriptions, $items);
+                    $allDescriptions = array_unique($allDescriptions);
                 }
 
                 if (!empty($customPackageID)) {
                     $guest = $data['paxNum'];
+                    if (!empty($data['serviceID'])) {
+                        if (!empty($data['entranceRateID'])) {
+                            $services[] = $data['sessionType'] . " Swimming";
+                            if ($data['ERcategory'] === "Kids") {
+                                $kidsCount = $data['guests'];
+                            } elseif ($data['ERcategory'] === "Adult") {
+                                $adultCount = $data['guests'];
+                            }
+                            $guest = "Adult: " . $adultCount . " | Kid:  " . $kidsCount;
+                        }
+                        if (!empty($data['partnershipServiceID'])) {
+                            $services[] = $data['PBName'];
+                        }
+                        if (!empty($data['resortServiceID'])) {
+                            $services[] = $data['RServiceName'];
+                            $items = array_map('trim', explode(',', $data['RSdescription']));
+                            $allDescriptions = array_merge($allDescriptions, $items);
+                            $allDescriptions = array_unique($allDescriptions);
+                        }
+                    }
+                    // $services[] = $
                 }
             }
         }
@@ -185,6 +223,7 @@ $userRole = $_SESSION['userRole'];
         <!-- Display the information -->
         <div class="card">
             <form action="../../Function/Admin/bookingApproval.php" method="post">
+                <input type="hidden" id="status" value="<?= htmlspecialchars($status) ?>">
                 <input type="hidden" id="videoke" value="<?= htmlspecialchars($videoke) ?>">
                 <!-- <input type="hidden" id="serviceType" value="<?= $serviceType ?>" name="servicetype"> -->
                 <div class="booking-info-name-pic-btn">
@@ -197,9 +236,10 @@ $userRole = $_SESSION['userRole'];
                         </div>
                     </div>
 
-                    <div class="button-container">
-                        <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                        <input type="hidden" name="bookingStatus" value="<?= $status ?>">
+                    <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                    <input type="hidden" name="bookingStatus" value="<?= $status ?>">
+
+                    <div class="button-container" id="button-container">
                         <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
                         <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
                     </div>
@@ -220,7 +260,7 @@ $userRole = $_SESSION['userRole'];
 
                     <div class="guest-info">
                         <h4 class="card-title">Guest</h4>
-                        <p class="card-text"> <?= $guest ?></p>
+                        <p class="card-text"> <?= !empty($guest) ? $guest : $pax ?></p>
                     </div>
 
                     <div class="guest-info">
@@ -232,27 +272,32 @@ $userRole = $_SESSION['userRole'];
                         <h4 class="card-title">Total Price</h4>
                         <p class="card-text"><?= $cost ?></p>
                     </div>
+
                     <div class="guest-info fullWidth">
                         <h4 class="card-title">Schedule</h4>
-                        <p class="card-text"> <?= $startDate . " " ?> until <?= " " . $endDate ?> </p>
+                        <p class="card-text"> <?= $checkIn . " " ?> - <?= " " . $checkOut ?> </p>
                     </div>
 
                     <div class="guest-info">
-                        <h4 class="card-title">Number of Hours</h4>
-                        <p class="card-text"><?= !empty($hoursNum) ? $hoursNum . ' hours' : 'Not Available' ?></p>
+                        <h4 class="card-title">Day & Number of Hours</h4>
+                        <p class="card-text"><?= $Day ?> <?= !empty($hoursNum) ? $hoursNum . ' hours' : 'Not Available' ?></p>
                     </div>
 
-                    <div class="guest-info">
+
+
+                    <div class="guest-info addOns">
                         <h4 class="card-title">Add Ons</h4>
-                        <p class="card-text"><?= !empty($addOns) ? implode(", ", $addOns) : 'None' ?> </p>
+                        <p class="card-text" id="addOns"><?= !empty($addOns) ? implode(", ", $addOns) : 'None' ?> </p>
                     </div>
 
                     <div class="guest-info" id="videokeSelectionContainer" style="display: none;">
                         <h4 class="card-title">Videoke</h4>
-                        <select class="form-select" name="videokeChoice" required>
+                        <select class="form-select" name="videokeChoice">
                             <option value="" selected disabled>Assign a videoke</option>
                             <?php
-                            $selectHotel = "SELECT * FROM resortAmenities WHERE RServiceName = 'Videoke 1' OR RServiceName = 'Videoke 2' AND RSAvailabilityID = 1";
+                            $selectHotel = "SELECT * FROM resortAmenities WHERE 
+                            (RServiceName = 'Videoke 1' OR RServiceName = 'Videoke 2') AND RSAvailabilityID = 1";
+
                             $result = mysqli_query($conn, $selectHotel);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = $result->fetch_assoc()) {
@@ -274,19 +319,19 @@ $userRole = $_SESSION['userRole'];
 
                     <div class="two-item-row">
                         <div class="guest-info">
+                            <h4 class="card-title">Service Description</h4>
+                            <pre class="card-text description"><?= !empty($allDescriptions) ? implode("<br>", $allDescriptions) : 'None' ?></pre>
+                        </div>
+                        <div class="guest-info">
                             <h4 class="card-title">Additional Request</h4>
                             <p class="card-text"><?= !empty($AddRequest) ? $AddRequest : 'None' ?> </p>
                         </div>
-
-                        <div class="guest-info">
-                            <h4 class="card-title">Description</h4>
-                            <pre class="card-text description"> <?= !empty($description) ? implode("/n", $description) : 'None' ?></pre>
-                        </div>
                     </div>
-
                 </div>
             </form>
+
         </div>
+
     </div>
 
     <!-- Bootstrap Link -->
@@ -295,11 +340,27 @@ $userRole = $_SESSION['userRole'];
 
     <script>
         const videoke = document.getElementById("videoke").value;
+        const status = document.getElementById("status").value;
+        const addOns = document.getElementById("addOns").textContent.trim();
+
+        const buttonContainer = document.getElementById("button-container")
         const videokeSelectionContainer = document.getElementById("videokeSelectionContainer");
+
         if (videoke === 'Videoke') {
             videokeSelectionContainer.style.display = "block";
+            videokeSelectionContainer.required = true;
+        }
+
+        if (status === "Approved") {
+            buttonContainer.style.display = "none";
+            videokeSelectionContainer.style.display = "none";
+            document.querySelector(".guest-info.addOns").classList.add("fullWidth");
+        } else if (addOns === "None") {
+            document.querySelector(".guest-info.addOns").classList.add("fullWidth");
         }
     </script>
+
+
 </body>
 
 </html>

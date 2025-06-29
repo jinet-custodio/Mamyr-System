@@ -169,7 +169,7 @@ if (isset($_SESSION['error'])) {
                     <!-- Select booking info -->
                     <?php
                     $selectQuery = "SELECT rs.*, sa.availabilityName AS roomStatus
-                    FROM resortServices rs 
+                    FROM resortamenities rs 
                     LEFT JOIN serviceAvailability sa ON rs.RSAvailabilityID = sa.availabilityID
                     WHERE RScategoryID = 1
                     ORDER  BY resortServiceID";

@@ -199,6 +199,8 @@ if (isset($_SESSION['error'])) {
                     if (mysqli_num_rows($result) > 0) {
                         foreach ($result as $bookings) {
                             $bookingID = $bookings['bookingID'];
+                            $startDate = strtotime($bookings['startDate']);
+                            $checkIn = date("F d, Y g:i a", $startDate);
                             $name = ucfirst($bookings['firstName']) . " " . ucfirst($bookings['lastName']);
                             $status = $bookings['statusName'];
                             if ($bookings['eventCategoryName'] != "") {
@@ -233,7 +235,7 @@ if (isset($_SESSION['error'])) {
                                 <?php
                                 }
                                 ?>
-                                <td><?= $bookings['startDate'] ?></td>
+                                <td><?= $checkIn ?></td>
                                 <td>
                                     <?php
                                     if ($status == "Pending") {
@@ -250,6 +252,12 @@ if (isset($_SESSION['error'])) {
                                     <?php
                                     } elseif ($status == "Cancelled") {
                                     ?>
+                                        <button class="btn btn-secondary w-75">
+                                            <?= $status ?>
+                                        </button>
+                                    <?php
+                                    } elseif ($status == "Rejected") {
+                                    ?>
                                         <button class="btn btn-danger w-75">
                                             <?= $status ?>
                                         </button>
@@ -260,6 +268,7 @@ if (isset($_SESSION['error'])) {
                                 <td>
                                     <form action="viewBooking.php" method="POST" style="display:inline;">
                                         <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                                        <input type="hidden" name="bookingStatus" value="<?= $status ?>">
                                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                                         <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
                                         <button type="submit" class="btn btn-info w-75">View</button>

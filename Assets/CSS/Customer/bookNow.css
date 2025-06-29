@@ -21,7 +21,6 @@
   box-sizing: border-box;
   font-family: "Poppins";
   text-decoration: none;
-  /* list-style: none; */
 }
 
 body {
@@ -374,8 +373,9 @@ footer {
 
   .scheduleForm,
   .peopleForm,
-  .cottageRoomVideokeForm,
-  .purposeForm {
+  .cottageRoomForm,
+  .purposeForm,
+  .paymentVideokeForm {
     /* border: 1px solid yellow; */
     display: flex;
     align-items: center;
@@ -384,29 +384,15 @@ footer {
     margin-bottom: 0.5rem;
   }
 
-  /* .roomNumbers {
-    margin: 1rem;
-  }
-
-  .input-group {
-    width: 65%;
-  } */
-
-  /* .room-title {
-    text-align: center;
-    font-weight: bold;
-    font-size: 20px !important;
-  } */
   .peopleForm input {
     height: 2.5rem;
   }
 
-  .cottageForm {
-    width: 60%;
-  }
-
+  .cottageForm,
+  .roomNumbers,
+  .paymentMethod,
   .videokeForm {
-    width: 40%;
+    width: 100%;
   }
 
   .pics {
@@ -428,7 +414,8 @@ footer {
   .videokeRentalLabel,
   .noOfPeopleLabel,
   .purposeLabel,
-  .roomLabel {
+  .roomLabel,
+  .paymentLabel {
     text-align: center;
     margin: 0.5rem 0 0.5rem 0;
     font-weight: bold;
@@ -501,7 +488,7 @@ footer {
 
 #hotel-page {
   .hotelTitle {
-    padding-top: 7rem;
+    padding-top: 5.8rem;
     font-size: 2.5vw;
     font-family: "Lora";
     color: #000000;
@@ -558,11 +545,14 @@ footer {
 
   .hotel-card {
     width: 45% !important;
-    padding: 2rem;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
   }
 
   .checkInOut,
-  .hotelPeopleForm {
+  .hotelPeopleForm,
+  .paymentVideokeForm,
+  .hoursRoom {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -572,38 +562,53 @@ footer {
 
   .checkInOut,
   .hotelPax,
-  .roomNumbers {
-    margin: 1rem;
-  }
-
-  .checkIn-container,
-  .checkOut-container {
-    width: 100%;
+  .roomNumbers,
+  .paymentMethod {
+    margin: 0.5rem;
   }
 
   h5 {
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
     font-weight: 600;
   }
 
-  .roomNumbers {
+  .roomNumbers,
+  .NumberOfHours {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    gap: 2rem;
   }
 
-  .input-group {
+  .roomNumbers {
     width: 65%;
   }
 
+  .NumberOfHours {
+    width: 30%;
+  }
+
   .btn {
-    width: 50%;
+    width: 100%;
     margin: auto;
-    margin-top: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .additional-info-container {
+    margin: 0;
+    margin-top: 0.5rem;
+    /* ul {
+      border: 1px solid red;
+    } */
+    li {
+      text-transform: none !important;
+      font-size: 13px;
+      margin: 2px;
+    }
   }
 }
+
 /* .hotelTitle {
   margin-top: 1vw;
   font-size: 2.5vw;

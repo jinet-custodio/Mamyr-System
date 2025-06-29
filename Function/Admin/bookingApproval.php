@@ -9,7 +9,7 @@ if (isset($_POST['approveBtn'])) {
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
     $bookingStatus = mysqli_real_escape_string($conn, $_POST['bookingStatus']);
     $availabilityID = 2;
-    $confirmedBookingStatus = 2;
+    $confirmedBookingStatus = 1;
     date_default_timezone_set('Asia/Manila');
     $startDate = date('Y-m-d');
 
@@ -110,7 +110,7 @@ if (isset($_POST['approveBtn'])) {
     if (!empty($videokeChoice)) {
         $insertBooking = $conn->prepare("INSERT INTO bookingsservices(bookingID, serviceID, total)
         VALUES(?,?,?)");
-        $insertBooking->bind_param("iis", $bookingID, $serviceID, $price);
+        $insertBooking->bind_param("iid", $bookingID, $serviceID, $price);
         $insertBooking->execute();
         $insertBooking->close();
 
@@ -119,6 +119,7 @@ if (isset($_POST['approveBtn'])) {
         $updateAvailability->bind_param("ii", $availabilityID, $resortServiceID);
         $updateAvailability->execute();
         $updateAvailability->close();
+    } else {
     }
 
 
@@ -168,15 +169,14 @@ if (isset($_POST['approveBtn'])) {
 if (isset($_POST['rejectBtn'])) {
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
     $bookingStatus = mysqli_real_escape_string($conn, $_POST['bookingStatus']);
-    date_default_timezone_set('Asia/Manila');
-    $startDate = date('d-m-Y');;
 
-    $query = "SELECT * FROM bookings 
-    WHERE bookingID = '$bookingID' AND status ='$bookingStatus'";
+    $query = "SELECT bookings.*, statuses.statusName FROM bookings 
+    JOIN statuses ON bookings.bookingStatus = statuses.statusID
+    WHERE bookingID = '$bookingID' AND statusName ='$bookingStatus'";
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
         $updateStatus = "UPDATE bookings 
-        SET status = 'Rejected'
+        SET bookingStatus = '3'
         WHERE bookingID ='$bookingID'";
         $result = mysqli_query($conn, $updateStatus);
         if ($result) {
@@ -188,8 +188,21 @@ if (isset($_POST['rejectBtn'])) {
             header('Location: ../../Pages/Admin/booking.php');
             exit();
         }
+    } else {
+        echo "<script>
+            alert('Not existing');
+            window.location.href = '../../Pages/Admin/booking.php';
+        </script>";
+        exit();
     }
+} else {
+    echo "<script>
+            alert('Error');
+            window.location.href = '../../Pages/Admin/booking.php';
+        </script>";
+    exit();
 }
+
 
 
 
