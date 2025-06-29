@@ -165,6 +165,7 @@ if (isset($_SESSION['error'])) {
             <table class="table table-striped" id="bookingTable">
 
                 <thead>
+                    <th scope="col">Booking ID</th>
                     <th scope="col">Guest</th>
                     <th scope="col">Booking Type</th>
                     <th scope="col">Check-in</th>
@@ -174,104 +175,100 @@ if (isset($_SESSION['error'])) {
                 <tbody>
                     <!-- Select booking info -->
                     <?php
-                    //  $selectQuery = "SELECT u.firstName, u.lastName, 
-                    //     ps.*, rs.*, cp.*,
-                    //     rsc.categoryName AS resortCategoryName , 
-                    //      ec.categoryName AS eventCategoryName,
-                    //      st.statusName,bs.*,
-                    //      b.*
-                    $selectQuery = "SELECT u.firstName, u.lastName, 
-                    cp.*,st.statusName, ec.categoryName AS eventCategoryName,
-                    b.*
-                FROM bookings b
-                INNER JOIN users u ON b.userID = u.userID   -- to get  the firstname and lastname 
-                LEFT JOIN statuses st ON st.statusID = b.bookingStatus  -- to get the status name
-                LEFT JOIN packages p ON b.packageID = p.packageID  -- to get the info of the package na binook 
-                 LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
-                -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
-                -- LEFT JOIN services s ON bs.serviceID = s.serviceID   -- to get the info of the service na binook 
-                -- LEFT JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID  -- information of service
-                -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
-                -- LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
-                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
-                ";
+                    $selectQuery = "SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID, u.firstName,u.middleInitial, u.lastName, b.*,
+                    cp.*, ec.categoryName AS eventCategoryName,
+                    cb.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus
+                                    FROM bookings b
+                                    INNER JOIN users u ON b.userID = u.userID   -- to get  the firstname, M.I and lastname 
+                                    LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID 
+                                    LEFT JOIN statuses s ON cb.confirmedBookingStatus = s.statusID -- to get the status name
+                                    LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID  -- to get the status name
+                                    LEFT JOIN packages p ON b.packageID = p.packageID  -- to get the info of the package na binook 
+                                    LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
+                                    -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+                                    -- LEFT JOIN services s ON bs.serviceID = s.serviceID   -- to get the info of the service na binook 
+                                    -- LEFT JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID  -- info of service
+                                    -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
+                                    -- LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
+                                    LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
+                                    ";
                     $result = mysqli_query($conn, $selectQuery);
                     if (mysqli_num_rows($result) > 0) {
-                        foreach ($result as $bookings) {
-                            $bookingID = $bookings['bookingID'];
+                        while ($bookings = mysqli_fetch_assoc($result)) {
+                            // echo "<pre>";
+                            // print_r($bookings);
+                            // echo "</pre>";
+                            $bookingID = $bookings['formattedBookingID'];
                             $startDate = strtotime($bookings['startDate']);
-                            $checkIn = date("F d, Y g:i a", $startDate);
-                            $name = ucfirst($bookings['firstName']) . " " . ucfirst($bookings['lastName']);
-                            $status = $bookings['statusName'];
-                            if ($bookings['eventCategoryName'] != "") {
-                                $bookingType = "Event Booking";
-                            } elseif ($bookings['customPackageID'] != "") {
-                                $bookingType = "Customized Package";
+                            $checkIn = date("d F Y", $startDate);
+                            $middleInitial = trim($bookings['middleInitial']);
+                            $name = ucfirst($bookings['firstName']) . " " . ucfirst($bookings['middleInitial']) . " "  . ucfirst($bookings['lastName']);
+
+                            $bookingType = $bookings['bookingType'];
+
+                            if (!empty($bookings['confirmedBookingID'])) {
+                                if ($bookings['confirmedStatus'] === "Pending") {
+                                    if ($bookingType === 'Resort') {
+                                        $status = "Onsite payment";
+                                        $addClass = "btn btn-outline-info w-100";
+                                    } else {
+                                        $status = "Downpayment";
+                                        $addClass = "btn btn-outline-primary w-100";
+                                    }
+                                } elseif ($bookings['confirmedStatus'] === "Approved") {
+                                    $status = "Successful";
+                                    $addClass = "btn btn-outline-success w-100";
+                                } elseif ($bookings['confirmedStatus'] === "Rejected") {
+                                    $status = "Rejected";
+                                    $addClass = "btn btn-outline-danger w-100";
+                                }
                             } else {
-                                $bookingType = "Resort Booking";
+                                $confirmedBookingID = NULL;
+                                if ($bookings['bookingStatus'] === "Pending") {
+                                    $status = "Pending";
+                                    $addClass = "btn btn-outline-warning w-100";
+                                } else if ($bookings['bookingStatus'] === "Approved") {
+                                    if ($bookingType === 'Resort') {
+                                        $status = "Onsite payment";
+                                        $addClass = "btn btn-outline-info w-100";
+                                    } else {
+                                        $status = "Downpayment";
+                                        $addClass = "btn btn-outline-primary w-100";
+                                    }
+                                } elseif ($bookings['bookingStatus'] === "Cancelled") {
+                                    $status = "Cancelled";
+                                    $addClass = "btn btn-outline-dark w-100";
+                                } elseif ($bookings['bookingStatus'] === "Rejected") {
+                                    $status = "Rejected";
+                                    $addClass = "btn btn-outline-danger w-100";
+                                }
                             }
+                            // $status = $bookings['statusName'];
+                            // if ($bookings['eventCategoryName'] != "") {
+                            //     $bookingType = "Event Booking";
+                            // } elseif ($bookings['customPackageID'] != "") {
+                            //     $bookingType = "Customized Package";
+                            // } else {
+                            //     $bookingType = "Resort Booking";
+                            // }
 
                     ?>
                             <tr>
-                                <td><?= $name ?></td>
-                                <?php
-                                // if ($bookings['serviceID'] === "") {
-                                // 
-                                ?>
-                                <!-- <td><?= $bookings['resortCategoryName'] ?></td> -->
-                                <!-- <td>Resort Booking</td> -->
-                                <?php
-                                if ($bookings['eventCategoryName'] != "") {
-                                ?>
-                                    <td><?= $bookings['categoryName'] ?></td>
-                                <?php
-                                } elseif ($bookings['customPackageID'] != "") {
-                                ?>
-                                    <td>Customized Package</td>
-                                <?php
-                                } else {
-                                ?>
-                                    <td>Resort Booking</td>
-                                <?php
-                                }
-                                ?>
+                                <td><?= htmlspecialchars($bookingID) ?></td>
+                                <td><?= htmlspecialchars($name) ?></td>
+                                <td><?= htmlspecialchars($bookingType) ?>&nbsp;Booking</td>
                                 <td><?= $checkIn ?></td>
                                 <td>
-                                    <?php
-                                    if ($status == "Pending") {
-                                    ?>
-                                        <button class="btn btn-warning w-75">
-                                            <?= $status ?>
-                                        </button>
-                                    <?php
-                                    } elseif ($status == "Approved") {
-                                    ?>
-                                        <button class="btn btn-success w-75">
-                                            <?= $status ?>
-                                        </button>
-                                    <?php
-                                    } elseif ($status == "Cancelled") {
-                                    ?>
-                                        <button class="btn btn-secondary w-75">
-                                            <?= $status ?>
-                                        </button>
-                                    <?php
-                                    } elseif ($status == "Rejected") {
-                                    ?>
-                                        <button class="btn btn-danger w-75">
-                                            <?= $status ?>
-                                        </button>
-                                    <?php
-                                    }
-                                    ?>
+                                    <a class=" <?= $addClass ?>">
+                                        <?= htmlspecialchars($status) ?>
+                                    </a>
                                 </td>
                                 <td>
                                     <form action="viewBooking.php" method="POST" style="display:inline;">
                                         <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
-                                        <input type="hidden" name="bookingStatus" value="<?= $status ?>">
+                                        <input type="hidden" name="bookingStatus" value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($bookings['confirmedStatus'])  ?>">
                                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                        <button type="submit" class="btn btn-info w-75">View</button>
+                                        <button type="submit" class="btn btn-primary w-75">View</button>
                                     </form>
                                 </td>
                             </tr>
@@ -295,7 +292,21 @@ if (isset($_SESSION['error'])) {
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
-            $('#bookingTable').DataTable();
+            $('#bookingTable').DataTable({
+                columnDefs: [{
+                        width: '10%',
+                        targets: 0
+                    },
+                    {
+                        width: '15%',
+                        targets: 2
+                    },
+                    {
+                        width: '15%',
+                        targets: 4
+                    },
+                ],
+            });
         });
     </script>
     <!-- Sweetalert Link -->
@@ -309,6 +320,36 @@ if (isset($_SESSION['error'])) {
                 text: '<?= $message ?>'
             });
         <?php endif; ?>
+
+
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+
+        if (paramValue === "success") {
+            Swal.fire({
+                title: "Booking Approved!",
+                text: "The booking has been successfully approved.",
+                icon: 'success',
+            });
+        } else if (paramValue === "error") {
+            Swal.fire({
+                title: "Action Failed!",
+                text: "The booking could not be approved or rejected. Please try again later.",
+                icon: 'error',
+            });
+        } else if (paramValue === 'rejected') {
+            Swal.fire({
+                title: "Booking Rejected!",
+                text: "The booking has been successfully rejected.",
+                icon: 'success',
+            });
+        }
+
+        if (paramValue) {
+            const url = new URL(windows.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString)
+        }
     </script>
 </body>
 

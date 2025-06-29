@@ -120,7 +120,15 @@ $userRole = $_SESSION['userRole'];
                 <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
-                    Payment & Booking History
+                    Booking History
+                </a>
+            </li>
+
+            <li>
+                <a href="payment.php" class="list-group-item" id="paymentBookingHist">
+                    <img src="../../../Assets/Images/Icon/Credit card.png" alt="Booking History"
+                        class="sidebar-icon">
+                    Payment
                 </a>
             </li>
 
@@ -245,108 +253,108 @@ $userRole = $_SESSION['userRole'];
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <script>
-    //Show the image preview
-    document.querySelector("input[type='file']").addEventListener("change", function(event) {
-        let reader = new FileReader();
-        reader.onload = function() {
-            let preview = document.getElementById("preview");
-            preview.src = reader.result;
-            preview.style.display = "block";
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    });
-    </script>
-
-    <script>
-    //Show Modal
-    document.addEventListener("DOMContentLoaded", function() {
-        const changeBtn = document.getElementById("changePfp");
-        const modalElement = document.getElementById("picModal");
-
-        changeBtn.addEventListener("click", function() {
-            const myModal = new bootstrap.Modal(modalElement);
-            myModal.show();
+        //Show the image preview
+        document.querySelector("input[type='file']").addEventListener("change", function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                let preview = document.getElementById("preview");
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
         });
-    });
     </script>
 
     <script>
-    //All the disbaled input box will be removed
-    function enableEditing() {
-        document.getElementById("fullName").removeAttribute("disabled");
-        document.getElementById("address").removeAttribute("disabled");
-        document.getElementById("phoneNumber").removeAttribute("disabled");
-        document.getElementById("birthday").removeAttribute("disabled");
+        //Show Modal
+        document.addEventListener("DOMContentLoaded", function() {
+            const changeBtn = document.getElementById("changePfp");
+            const modalElement = document.getElementById("picModal");
 
-        document.getElementById("saveBtn").style.display = "inline-block";
-        document.getElementById("cancelBtn").style.display = "inline-block";
-        document.getElementById("editBtn").style.display = "none";
-    }
+            changeBtn.addEventListener("click", function() {
+                const myModal = new bootstrap.Modal(modalElement);
+                myModal.show();
+            });
+        });
+    </script>
+
+    <script>
+        //All the disbaled input box will be removed
+        function enableEditing() {
+            document.getElementById("fullName").removeAttribute("disabled");
+            document.getElementById("address").removeAttribute("disabled");
+            document.getElementById("phoneNumber").removeAttribute("disabled");
+            document.getElementById("birthday").removeAttribute("disabled");
+
+            document.getElementById("saveBtn").style.display = "inline-block";
+            document.getElementById("cancelBtn").style.display = "inline-block";
+            document.getElementById("editBtn").style.display = "none";
+        }
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('message');
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('message');
 
-    if (paramValue === 'success-image') {
-        Swal.fire({
-            title: "Success!",
-            text: "Profile Change Successfully!",
-            icon: "success"
-        });
-    } else if (paramValue === 'error-image') {
-        Swal.fire({
-            title: "Info!",
-            text: "No Image Selected",
-            icon: "info"
-        });
-    } else if (paramValue === 'success-change') {
-        Swal.fire({
-            title: "Success!",
-            text: "Updated Successfully!",
-            icon: "success"
-        });
-    } else if (paramValue === 'error-change') {
-        Swal.fire({
-            title: "Error!",
-            text: "Updating Information Failed!",
-            icon: "error"
-        });
-    }
+        if (paramValue === 'success-image') {
+            Swal.fire({
+                title: "Success!",
+                text: "Profile Change Successfully!",
+                icon: "success"
+            });
+        } else if (paramValue === 'error-image') {
+            Swal.fire({
+                title: "Info!",
+                text: "No Image Selected",
+                icon: "info"
+            });
+        } else if (paramValue === 'success-change') {
+            Swal.fire({
+                title: "Success!",
+                text: "Updated Successfully!",
+                icon: "success"
+            });
+        } else if (paramValue === 'error-change') {
+            Swal.fire({
+                title: "Error!",
+                text: "Updating Information Failed!",
+                icon: "error"
+            });
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    };
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 
     <script>
-    const logoutBtn = document.getElementById('logoutBtn');
-    const logoutModal = document.getElementById('logoutModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/logout.php";
-            }
-        });
-    })
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/logout.php";
+                }
+            });
+        })
     </script>
 
 </body>

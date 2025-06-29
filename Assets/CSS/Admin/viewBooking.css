@@ -19,6 +19,10 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: rgb(212, 208, 208, 0.5);
+}
+
 .page-container {
   display: flex;
   margin: 2rem;
@@ -47,6 +51,8 @@
   margin: auto;
   margin-bottom: 3rem;
   border: none;
+  border-radius: 3rem;
+  padding: 1rem;
 }
 
 .card-title {

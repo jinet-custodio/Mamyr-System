@@ -58,7 +58,7 @@ AFTER INSERT ON partnershipServices
 FOR EACH ROW
 BEGIN
     INSERT INTO services (partnershipServiceID, serviceType)
-    VALUES (NEW.partnershipshipServiceID, 'Partnership');
+    VALUES (NEW.partnershipServiceID, 'Partnership');
 END$$
 
 DELIMITER ;

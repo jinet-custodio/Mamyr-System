@@ -110,3 +110,4 @@ INSERT INTO entranceTimeRanges
     VALUES('Day', '9:00 am - 4:00 pm'), 
     ('Night', '12:00 pm - 8:00 pm'), 
     ('Overnight', '8:00 pm - 5:00 am');
+

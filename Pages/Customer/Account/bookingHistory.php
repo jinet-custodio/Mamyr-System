@@ -68,10 +68,18 @@ $userRole = $_SESSION['userRole'];
             </li>
 
             <li>
-                <a href="bookingHistory.php" class="list-group-item active" id="paymentBookingHist">
+                <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
-                    Payment & Booking History
+                    Booking History
+                </a>
+            </li>
+
+            <li>
+                <a href="payment.php" class="list-group-item" id="paymentBookingHist">
+                    <img src="../../../Assets/Images/Icon/Credit card.png" alt="Booking History"
+                        class="sidebar-icon">
+                    Payment
                 </a>
             </li>
 
@@ -130,37 +138,48 @@ $userRole = $_SESSION['userRole'];
                             $confirmedBookingID = $booking['confirmedBookingID'];
                             $bookingID = $booking['bookingID'];
                             $startDate = strtotime($booking['startDate']);
-                            $checkIn = date("F j, Y", $startDate);
+                            $checkIn = date("d F Y", $startDate);  //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
                             $endDate = strtotime($booking['endDate']);
-                            $checkOut = date("F j, Y", $endDate);
+                            $checkOut = date("d F Y", $endDate); //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
+                            $bookingType = $booking['bookingType'];
                     ?>
                             <tr>
                                 <td><?= $checkIn ?></td>
                                 <td><?= $checkOut ?></td>
 
-                                <?php
-                                if (!empty($booking['packageID'])) {
-                                    $bookingType = "Event";
-                                } elseif (!empty($booking['customPackageID'])) {
-                                    $bookingType = "Customized";
-                                } else {
-                                    $bookingType = "Resort/Hotel";
-                                }
-                                ?>
                                 <td><?= htmlspecialchars($bookingType) ?></a></td>
+
+                                <!-- Papalitan na lang ng mas magandang term -->
                                 <?php if (!empty($booking['confirmedBookingID'])) {
                                     if ($booking['confirmedStatus'] === "Pending") {
-                                        $status = "Downpayment"; //Papalitan na lang ng mas magandang term
-                                    } else {
-                                        $status = $booking['confirmedStatus'];
+                                        if ($bookingType === 'Resort') {
+                                            $status = "Onsite payment";
+                                        } else {
+                                            $status = "Downpayment";
+                                        }
+                                    } elseif ($booking['confirmedStatus'] === "Approved") {
+                                        $status = "Successful Booking";
+                                    } elseif ($booking['confirmedStatus'] === "Rejected") {
+                                        $status = "Rejected Booking";
                                     }
                                 } else {
-                                    $status = $booking['bookingStatus'];
+                                    $confirmedBookingID = NULL;
+                                    if ($booking['bookingStatus'] === "Pending") {
+                                        $status = "Pending";
+                                    } else if ($booking['bookingStatus'] === "Approved") {
+                                        if ($bookingType === 'Resort') {
+                                            $status = "Onsite payment";
+                                        } else {
+                                            $status = "Downpayment";
+                                        }
+                                    } elseif ($booking['bookingStatus'] === "Cancelled") {
+                                        $status = "Cancelled";
+                                    }
                                 }
                                 ?>
 
                                 <td><?= $status ?></td>
-                                <td><a href="" class="btn btn-outline-primary">Rate</a></td>
+                                <td><a href="" class=" btn btn-outline-primary">Rate</a></td>
 
                                 <td>
                                     <div class="button-container gap-2 md-auto" style="display: flex;  width: 100%; justify-content: center;">
@@ -171,12 +190,8 @@ $userRole = $_SESSION['userRole'];
                                             <input type="hidden" name="status" value="<?= $status ?>">
                                             <button type="submit" name="viewBooking" class="btn btn-info w-100">View</button>
                                         </form>
-                                        <form action="cancelBooking.php" method="POST">
-                                            <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                                            <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
-                                            <input type="hidden" name="status" value="<?= $status ?>">
-                                            <button type="submit" name="cancelBooking" class="btn btn-danger w-100">Cancel</button>
-                                        </form>
+
+                                        <button type="button" class="btn btn-danger  w-100 cancelBooking" data-bookingid="<?= $bookingID ?>" data-confirmedbookingid="<?= $confirmedBookingID ?>" data-status="<?= $status ?>">Cancel</button>
                                     </div>
                                 </td>
                             </tr>
@@ -188,36 +203,68 @@ $userRole = $_SESSION['userRole'];
                     <!-- <tr>
                         <td>January 26, 2025</td>
                         <td>January 26, 2025</td>
-                        <td><a href="#" class="fw-bold">Event Booking</a></td>
-                        <td><a href="#" class="btn btn-success w-75">View</a></td>
-                        <td><a href="" class="btn btn-outline-primary">Rate</a></td>
-                    </tr>
+                        <td><a href=" #" class="fw-bold">Event Booking</a>
+                                </td>
+                                <td><a href="#" class="btn btn-success w-75">View</a></td>
+                                <td><a href="" class="btn btn-outline-primary">Rate</a></td>
+                            </tr>
 
-                    <tr>
-                        <td>February 27, 2025</td>
-                        <td>February 27, 2025</td>
-                        <td><a href="#" class="fw-bold">Resort Booking</a></td>
-                        <td><a href="#" class="btn btn-success w-75">View</a></td>
-                        <td><a href="" class="btn btn-outline-primary">Rate</a></td>
-                    </tr>
+                            <tr>
+                                <td>February 27, 2025</td>
+                                <td>February 27, 2025</td>
+                                <td><a href="#" class="fw-bold">Resort Booking</a></td>
+                                <td><a href="#" class="btn btn-success w-75">View</a></td>
+                                <td><a href="" class="btn btn-outline-primary">Rate</a></td>
+                            </tr>
 
-                    <tr>
-                        <td>March 26, 2025</td>
-                        <td>March 26, 2025</td>
-                        <td><a href="#" class="fw-bold">Event Booking</a></td>
-                        <td><a href="#" class="btn btn-success w-75">View</a></td>
-                        <td><a href="" class="btn btn-outline-primary">Rate</a></td>
-                    </tr>
+                            <tr>
+                                <td>March 26, 2025</td>
+                                <td>March 26, 2025</td>
+                                <td><a href="#" class="fw-bold">Event Booking</a></td>
+                                <td><a href="#" class="btn btn-success w-75">View</a></td>
+                                <td><a href="" class="btn btn-outline-primary">Rate</a></td>
+                            </tr>
 
-                    <tr>
-                        <td>April 26, 2025</td>
-                        <td>April 26, 2025</td>
-                        <td><a href="#" class="fw-bold">Resort Booking</a></td>
-                        <td><a href="#" class="btn btn-success w-75">View</a></td>
-                        <td><a href="" class="btn btn-outline-primary ">Rate</a></td>
-                    </tr> -->
+                            <tr>
+                                <td>April 26, 2025</td>
+                                <td>April 26, 2025</td>
+                                <td><a href="#" class="fw-bold">Resort Booking</a></td>
+                                <td><a href="#" class="btn btn-success w-75">View</a></td>
+                                <td><a href="" class="btn btn-outline-primary ">Rate</a></td>
+                            </tr> -->
                 </tbody>
             </table>
+
+
+
+            <!-- Confirmation Modal -->
+            <form action="../../../Function/Booking/cancelBooking.php" method="POST">
+                <div class="modal fade" id="confirmationModal" tabindex="-1"
+                    aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="image w-100 text-center">
+                                <img src="../../../Assets/Images/Icon/warning.png" alt="warning icon"
+                                    class="warning-image">
+
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="bookingID" id="bookingIDModal" value="<?= $bookingID ?>">
+                                <input type="hidden" name="confirmedBookingID" id="confirmedBookingIDModal" value="<?= $confirmedBookingID ?>">
+                                <input type="hidden" name="status" id="statusModal" value="<?= $status ?>">
+                                <p class="modal-title text-center mb-2">Are you sure?</p>
+                                <p class="modal-text text-center mb-2">You are about to cancel this booking. This action cannot be undone.</p>
+                                <div class="button-container">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-primary" name="cancelBooking"
+                                        id="yesDelete">Yes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
 
         </div>
@@ -254,10 +301,8 @@ $userRole = $_SESSION['userRole'];
     <!-- Show -->
     <script>
         const params = new URLSearchParams(window.location.search);
-        const paramsValue = params.get('action')
-        const confirmationBtn = document.getElementById("confirmationBtn");
+        const paramValue = params.get('action')
         const confirmationModal = document.getElementById("confirmationModal");
-        const deleteModal = document.getElementById('deleteModal');
         const logoutBtn = document.getElementById('logoutBtn');
 
         logoutBtn.addEventListener("click", function() {
@@ -279,11 +324,47 @@ $userRole = $_SESSION['userRole'];
                 }
             });
         });
+
+        document.querySelectorAll(".cancelBooking").forEach(button => {
+            button.addEventListener("click", function() {
+
+                const bookingID = this.getAttribute("data-bookingid");
+                const confirmedBookingID = this.getAttribute("data-confirmedbookingid");
+                const status = this.getAttribute("data-status");
+
+                document.getElementById("bookingIDModal").value = bookingID;
+                document.getElementById("confirmedBookingIDModal").value = confirmedBookingID;
+                document.getElementById("statusModal").value = status;
+
+
+                const myCancelBookingModal = new bootstrap.Modal(confirmationModal);
+                myCancelBookingModal.show();
+            });
+        });
+
+        if (paramValue === "Cancelled") {
+            Swal.fire({
+                title: "Successfully Cancelled!",
+                text: "If you change your mind, feel free to book again anytime. Thank you.",
+                icon: "success",
+            });
+        } else if (paramValue === "Error") {
+            Swal.fire({
+                title: "Cancellation Failed!",
+                text: "An error occurred while cancelling.",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        };
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = "";
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 
-
 </body>
-
 
 
 </html>

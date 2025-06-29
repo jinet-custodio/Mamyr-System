@@ -156,7 +156,7 @@ $userRole = $_SESSION['userRole'];
     </div>
 
     <!-- Resort Booking -->
-    <form action="../../Function/Booking/entranceBooking.php" method="POST" id="resort-page" style="display: none;">
+    <form action="confirmBooking.php" method="POST" id="resort-page" style="display: none;">
         <div class="resort" id="resort">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
@@ -209,7 +209,6 @@ $userRole = $_SESSION['userRole'];
                             <h5 class="roomLabel">Room</h5>
                             <select class="form-select" id="roomSelect" name="roomSelections">
                                 <option value="" selected disabled>Choose a room</option>
-
                                 <?php
                                 $category = 'Hotel';
                                 $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortAmenities rs
@@ -279,7 +278,7 @@ $userRole = $_SESSION['userRole'];
     <!--end ng resort div-->
 
     <!-- Hotel Booking -->
-    <form action="../../Function/Booking/hotelBooking.php" method="POST" id="hotel-page" style="display: none;">
+    <form action="confirmBooking.php" method="POST" id="hotel-page" style="display: none;">
         <div class="hotel" id="hotel">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
@@ -352,8 +351,8 @@ $userRole = $_SESSION['userRole'];
                             <div class="input-group">
                                 <select class="form-select" name="hoursSelected" id="hoursSelected" required>
                                     <option value="" disabled selected>Choose...</option>
-                                    <option value="GCash">11 Hours</option>
-                                    <option value="Cash">22 Hours</option>
+                                    <option value="11 hours">11 Hours</option>
+                                    <option value="22 hours">22 Hours</option>
                                 </select>
                             </div>
                         </div>
@@ -371,14 +370,13 @@ $userRole = $_SESSION['userRole'];
                                     if (mysqli_num_rows($result) > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                     ?>
-                                            <option value="<?= $row['RServiceName'] ?>"><?= $row['RServiceName'] ?> - Max. of <?= $row['RScapacity'] ?> pax - ₱<?= $row['RSprice'] ?></option>
+                                            <option value="<?= $row['RServiceName'] ?>" data-duration="<?= $row['RSduration'] ?>"><?= $row['RServiceName'] ?> - Max. of <?= $row['RScapacity'] ?> pax - ₱<?= $row['RSprice'] ?></option>
                                     <?php
                                         }
                                     }
                                     ?>
                                 </select>
                             </div>
-                            <!-- <input type="hidden" name="eventPax" id="hiddenGuestValue"> -->
                         </div>
                     </div>
 
@@ -449,10 +447,7 @@ $userRole = $_SESSION['userRole'];
                 <div class="card event-card" id="eventBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
                     <div class="eventForm">
-
                         <h5 class="eventLabel">Type of Event</h5>
-
-
                     </div>
 
                     <div class="dateVenue">
@@ -460,18 +455,12 @@ $userRole = $_SESSION['userRole'];
                             <h5 class="dateLabel">Date</h5>
                             <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" disabled required>
                         </div>
-
-
                     </div>
 
                     <div class="noHrPpl">
-
-
                     </div>
 
                     <div class="package">
-
-
                     </div>
 
                     <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
@@ -534,14 +523,12 @@ $userRole = $_SESSION['userRole'];
 
     </footer>
 
-    <!-- <script src="../../Assets/JS/BookNowJS/resortDropdown.js"></script>
-    <script src="../../Assets/JS/BookNowJS/hotelDropdown.js"></script>
-    <script src="../../Assets/JS/BookNowJS/eventDropdown.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script src="../../Assets/JS/fullCalendar.js"></script>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
     <!-- Page switch -->
     <script>
@@ -632,9 +619,8 @@ $userRole = $_SESSION['userRole'];
         });
     </script>
 
-
     <!-- Select Option -->
-    <script>
+    <!-- <script>
         // Events
         const eventSelect = document.getElementById('eventType');
         const otherContainer = document.getElementById('other-container');
@@ -650,18 +636,22 @@ $userRole = $_SESSION['userRole'];
                 other_input.required = false;
             }
         });
-    </script>
+    </script> -->
 
 
     <!-- Hotel check-in check-out  -->
     <script>
+        const hoursSelected = document.getElementById('hoursSelected');
         const checkInInput = document.getElementById('checkInDate');
         const checkOutInput = document.getElementById('checkOutDate');
+        const selectedHotel = document.getElementById('selectedHotel');
 
         checkInInput.addEventListener('change', () => {
+            const selectedValue = hoursSelected.value;
             const checkInDate = new Date(checkInInput.value);
-            if (!isNaN(checkInDate)) {
-                const checkOutDate = new Date(checkInDate.getTime() + 22 * 60 * 60 * 1000);
+            const addHours = parseInt(selectedValue);
+            if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
+                const checkOutDate = new Date(checkInDate.getTime() + addHours * 60 * 60 * 1000);
 
                 const year = checkOutDate.getFullYear();
                 const month = String(checkOutDate.getMonth() + 1).padStart(2, '0');
@@ -673,8 +663,28 @@ $userRole = $_SESSION['userRole'];
                 checkOutInput.value = formattedDate;
             }
         });
-    </script>
 
+        hoursSelected.addEventListener('change', () => {
+            const selectedValue = hoursSelected.value;
+            if (checkInInput.value) {
+                checkInInput.dispatchEvent(new Event('change'));
+            }
+
+            selectedHotel.setAttribute('data-duration', selectedValue);
+
+            Array.from(selectedHotel.options).forEach(option => {
+
+                if (!option.value) {
+                    option.hidden = false;
+                    return;
+                }
+                const roomDuration = option.getAttribute('data-duration')?.trim().toLowerCase() || '';
+                option.hidden = roomDuration !== selectedValue;
+            });
+
+            selectedHotel.selectedIndex = 0;
+        });
+    </script>
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
@@ -685,7 +695,7 @@ $userRole = $_SESSION['userRole'];
         if (paramValue === 'success') {
             Swal.fire({
                 title: "Successful Booking!",
-                text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info.",
+                text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info. Thank You!",
                 icon: "success",
                 confirmButtonText: 'Okay'
             }).then((result) => {

@@ -16,6 +16,7 @@ if (isset($_POST['hotelBooking'])) {
     $selectedHotel = mysqli_real_escape_string($conn, $_POST['selectedHotel']);
     // $hotelNotes = mysqli_real_escape_string($conn, $_POST['hotelNotes']);
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['PaymentMethod']);
+    $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
 
     $excessChargePerPerson = 250;
     $totalGuest = $childrenCount + $adultCount; //Get total number of people
@@ -48,10 +49,10 @@ if (isset($_POST['hotelBooking'])) {
 
     //Insert Booking
     $insertBooking = $conn->prepare("INSERT INTO bookings(userID, paxNum, hoursNum, startDate, endDate, 
-    paymentMethod, additionalCharge, totalCost, downpayment, bookingStatus) 
-    VALUES(?,?,?,?,?,?,?,?,?,?)");
+    paymentMethod, additionalCharge, totalCost, downpayment, bookingStatus, bookingType) 
+    VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     $insertBooking->bind_param(
-        "iiissssssi",
+        "iiissssssis",
         $userID,
         $totalGuest,
         $stayDuration,
@@ -61,12 +62,13 @@ if (isset($_POST['hotelBooking'])) {
         $additionalCharge,
         $totalPrice,
         $downpayment,
-        $bookingStatus
+        $bookingStatus,
+        $bookingType
     );
     if ($insertBooking->execute()) {
         $bookingID = $conn->insert_id;
 
-        $insertBookingServices = $conn->prepare("INSERT INTO bookingsservices(bookingID, serviceID, guests, Total)
+        $insertBookingServices = $conn->prepare("INSERT INTO bookingservices(bookingID, serviceID, guests, bookingServicePrice)
         VALUES(?,?,?,?)");
         $insertBookingServices->bind_param("iiss", $bookingID, $serviceID, $totalGuest, $totalPrice);
         $insertBookingServices->execute();

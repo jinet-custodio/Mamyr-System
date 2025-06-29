@@ -353,7 +353,7 @@ footer {
   .backToSelection {
     /* border: 1px solid red; */
     position: absolute;
-    margin: 7rem 0 0 3rem;
+    margin: 5rem 0 0 3rem;
   }
 
   .container-fluid {
@@ -361,7 +361,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
+    /* padding: 2rem; */
   }
 
   .card {
@@ -476,15 +476,15 @@ footer {
 
 /* hotel booking */
 
-.availabilityIcon {
+/* .availabilityIcon {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .availabilityIcon img {
-  margin-right:0.4vw;
-}
+  margin-right: 0.4vw;
+} */
 
 #hotel-page {
   .hotelTitle {
@@ -498,7 +498,7 @@ footer {
   .backToSelection {
     /* border: 1px solid red; */
     position: absolute;
-    margin: 7rem 0 0 3rem;
+    margin: 5rem 0 0 3rem;
   }
 
   .container-fluid {
@@ -514,9 +514,20 @@ footer {
 
   .availabilityIcons {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
     gap: 20px;
     margin-top: 20px;
+  }
+
+  .availabilityIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .availabilityIcon img {
+    margin-right: 0.4vw;
   }
 
   .icons-container {
@@ -546,7 +557,7 @@ footer {
   .hotel-card {
     width: 45% !important;
     padding: 1.5rem;
-    margin-top: 1.5rem;
+    margin-top: -10rem !important;
   }
 
   .checkInOut,
