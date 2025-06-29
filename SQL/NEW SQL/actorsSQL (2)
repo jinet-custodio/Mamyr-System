@@ -1,7 +1,7 @@
 CREATE TABLE users (
     userID INT PRIMARY KEY AUTO_INCREMENT,
     firstName VARCHAR(50) NOT NULL,
-    middleInitial VARCHAR(50) DEFAULT NULL,
+    middleInitial VARCHAR(5) DEFAULT NULL,
     lastName VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     userAddress TEXT NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE admins (
 CREATE TABLE partnerships (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT DEFAULT NULL,
-    companyName varchar(50) not null,
+    companyName varchar(100) not null,
     businessEmail VARCHAR(255) NOT NULL UNIQUE,
     partnerAddress TEXT NOT NULL,
     documentLink VARCHAR(500) NOT NULL,
@@ -44,5 +44,6 @@ CREATE TABLE partnerships (
     endDate DATE DEFAULT NULL,
 
     FOREIGN KEY (userID) REFERENCES users(userID),
-    FOREIGN KEY (partnerStatus) REFERENCES userStatuses(userStatusID)
+    FOREIGN KEY (partnerStatus) REFERENCES partnerStatuses(partnerStatusID)
+    -- FOREIGN KEY (partnerStatus) REFERENCES userStatuses(userStatusID)
 );

@@ -5,8 +5,8 @@ CREATE TABLE partnershipServices (
     PBPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     PBDescription TEXT,
     PBcapacity INT,
-    PSStatus INT,
-    PSAvailabilityID INT,
+    PSStatus INT NOT NULL,
+    PSAvailabilityID INT NOT NULL,
 
     FOREIGN KEY (partnershipID) REFERENCES partnerships(partnershipID),
     FOREIGN KEY (PSAvailabilityID) REFERENCES serviceAvailability(availabilityID),
@@ -32,22 +32,35 @@ CREATE TABLE entranceRates (
     entranceRateID INT PRIMARY KEY AUTO_INCREMENT,
     sessionType VARCHAR(20),               
     timeRangeID INT,                         
-    ERcategory VARCHAR(20),                 
+    ERcategory ENUM('Adult', 'Kids') NOT NULL,                 
     ERprice DECIMAL(10,2) DEFAULT 0.00,      
 
-    FOREIGN KEY (timeRangeID) REFERENCES entranceTimeRange(timeRangeID)
+    FOREIGN KEY (timeRangeID) REFERENCES entranceTimeRanges(timeRangeID)
 );
 
 
 CREATE TABLE services (
     serviceID INT PRIMARY KEY AUTO_INCREMENT,
-    resortServiceID int(11) DEFAULT NULL,
-    partnershipServiceID int(11) DEFAULT NULL,
-    entranceRateID int(11) DEFAULT NULL,
+    resortServiceID INT DEFAULT NULL,
+    partnershipServiceID INT DEFAULT NULL,
+    entranceRateID INT DEFAULT NULL,
+    serviceType ENUM('Resort', 'Partnership', 'Entrance') NOT NULL,
 
     FOREIGN KEY (partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID),
     FOREIGN KEY (resortServiceID) REFERENCES resortAmenities(resortServiceID),
     FOREIGN KEY (entranceRateID) REFERENCES entranceRates(entranceRateID)
+);
+
+
+CREATE TABLE menuItems (
+    foodItemID INT PRIMARY KEY AUTO_INCREMENT,
+    foodName VARCHAR(200) NOT NULL,
+    foodDescription TEXT,
+    foodPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    foodCategory VARCHAR(100), 
+    availabilityID INT,
+
+    FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID)
 );
 
 
@@ -56,7 +69,7 @@ CREATE TABLE packages (
     packageName VARCHAR(100) NOT NULL,
     packageDescription TEXT NOT NULL,
     Pduration DECIMAL(10,2), 
-    Pcapacity INT(100) NOT NULL,
+    Pcapacity INT NOT NULL,
     resortServiceID INT NOT NULL,
     Pprice DECIMAL(10,2) DEFAULT 0.00,
     PcategoryID INT NOT NULL,
@@ -65,6 +78,18 @@ CREATE TABLE packages (
     FOREIGN KEY (packageAvailability) REFERENCES serviceAvailability(availabilityID), 
     FOREIGN KEY (resortServiceID) REFERENCES resortAmenities(resortServiceID),
     FOREIGN KEY (PcategoryID) REFERENCES eventCategories(categoryID)
+);
+
+
+CREATE TABLE packageFoodItems (
+    packageFoodItemID INT PRIMARY KEY AUTO_INCREMENT,
+    packageID INT NOT NULL,
+    foodItemID INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    totalPrice DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (packageID) REFERENCES packages(packageID),
+    FOREIGN KEY (foodItemID) REFERENCES menuItems(foodItemID)
 );
 
 -- CREATE TABLE customPackages (
@@ -77,12 +102,11 @@ CREATE TABLE packages (
 -- );
 
 
-
 CREATE TABLE customPackages (
     customPackageID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
-    customPackagePrice DECIMAL(10,2) NOT NULL,
-    notes VARCHAR(255),
+    customPackageTotalPrice DECIMAL(10,2) NOT NULL,
+    customPackageNotes VARCHAR(255),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (userID) REFERENCES users(userID)
@@ -97,6 +121,24 @@ CREATE TABLE customPackageItems (
     servicePrice DECIMAL(10,2) NOT NULL,
 
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID),
+    FOREIGN KEY (packageID) REFERENCES packages(packageID)
+);
+
+
+
+CREATE TABLE discounts (
+    discountID INT PRIMARY KEY AUTO_INCREMENT,
+    discountName VARCHAR(100) NOT NULL,
+    discountPercent DECIMAL(5,2) NOT NULL, 
+    discountAmount DECIMAL(10,2) DEFAULT NULL, 
+    startDate DATE NOT NULL,
+    endDate DATE NOT NULL,
+    applicableTo ENUM('Service', 'Package', 'Booking', 'All') NOT NULL DEFAULT 'All',
+    serviceID INT DEFAULT NULL,
+    packageID INT DEFAULT NULL,
+    isActive BOOLEAN DEFAULT TRUE,
+
     FOREIGN KEY (serviceID) REFERENCES services(serviceID),
     FOREIGN KEY (packageID) REFERENCES packages(packageID)
 );

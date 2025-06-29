@@ -155,8 +155,8 @@ $userRole = $_SESSION['userRole'];
         </div>
     </div>
 
-
-    <form action="../../Function/Booking/entranceBooking.php" method="POST" id="resort-page" style="display: none;">
+    <!-- Resort Booking -->
+    <form action="confirmBooking.php" method="POST" id="resort-page" style="display: none;">
         <div class="resort" id="resort">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
@@ -185,7 +185,7 @@ $userRole = $_SESSION['userRole'];
                         <input type="number" class="form-control" placeholder="Children" name="childrenCount">
                     </div>
 
-                    <div class="cottageRoomVideokeForm">
+                    <div class="cottageRoomForm">
                         <div class="cottageForm" id="cottage">
                             <h5 class="cottageLabel">Cottage</h5>
                             <select id="cottageSelections" name="cottageSelections" class="form-select">
@@ -206,10 +206,9 @@ $userRole = $_SESSION['userRole'];
                         </div>
 
                         <div class="roomNumbers" style="display: none;" id="rooms">
-                            <h5 class="roomLabel">Room Number</h5>
+                            <h5 class="roomLabel">Room</h5>
                             <select class="form-select" id="roomSelect" name="roomSelections">
                                 <option value="" selected disabled>Choose a room</option>
-
                                 <?php
                                 $category = 'Hotel';
                                 $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortAmenities rs
@@ -220,7 +219,7 @@ $userRole = $_SESSION['userRole'];
                                     while ($row = $result->fetch_assoc()) {
                                 ?>
                                         <option value="<?= $row['RServiceName'] ?>">
-                                            <?= $row['RServiceName'] ?> —> <?= $row['RScapacity'] ?> guests for ₱<?= $row['RSprice'] ?>
+                                            <?= $row['RServiceName'] ?> — <?= $row['RScapacity'] ?> guests for ₱<?= $row['RSprice'] ?>
                                         </option>
                                 <?php
                                     }
@@ -228,14 +227,30 @@ $userRole = $_SESSION['userRole'];
                                 ?>
                             </select>
                         </div>
+                    </div>
+
+                    <div class="paymentVideokeForm">
+                        <div class="paymentMethod">
+                            <h5 class="paymentLabel">Payment Method</h5>
+                            <div class="input-group">
+                                <select class="form-select" name="PaymentMethod" required>
+                                    <option value="" disabled selected>Choose...</option>
+                                    <option value="GCash">GCash</option>
+                                    <option value="Cash">Cash</option>
+                                </select>
+                            </div>
+                            <!-- <input type="hidden" name="eventPax" id="hiddenGuestValue"> -->
+                        </div>
 
                         <div class="videokeForm">
                             <h5 class="videokeRentalLabel">Videoke Rental</h5>
-                            <select id="booleanSelections" name="videokeChoice" class="form-select" required>
-                                <option value="" selected disabled></option>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
+                            <div class="input-group">
+                                <select id="booleanSelections" name="videokeChoice" class="form-select" required>
+                                    <option value="" selected disabled>Choose...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -262,8 +277,8 @@ $userRole = $_SESSION['userRole'];
     </form>
     <!--end ng resort div-->
 
-
-    <form action="../../Function/Booking/hotelBooking.php" method="POST" id="hotel-page" style="display: none;">
+    <!-- Hotel Booking -->
+    <form action="confirmBooking.php" method="POST" id="hotel-page" style="display: none;">
         <div class="hotel" id="hotel">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
@@ -330,53 +345,89 @@ $userRole = $_SESSION['userRole'];
 
                 <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
+                    <div class="hoursRoom">
+                        <div class="NumberOfHours">
+                            <h5 class="numberOfHours">Number of Hours</h5>
+                            <div class="input-group">
+                                <select class="form-select" name="hoursSelected" id="hoursSelected" required>
+                                    <option value="" disabled selected>Choose...</option>
+                                    <option value="11 hours">11 Hours</option>
+                                    <option value="22 hours">22 Hours</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="roomNumbers">
+                            <h5 class="roomNumber-title">Room Number</h5>
+                            <div class="input-group">
+                                <select class="form-select" name="selectedHotel" id="selectedHotel" required>
+                                    <option value="" disabled selected>Choose a room</option>
+                                    <?php
+                                    $category = 'Hotel';
+                                    $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortAmenities rs
+                            JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
+                            WHERE rsc.categoryName = '$category' AND RSAvailabilityID = 1";
+                                    $result = mysqli_query($conn, $selectHotel);
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                            <option value="<?= $row['RServiceName'] ?>" data-duration="<?= $row['RSduration'] ?>"><?= $row['RServiceName'] ?> - Max. of <?= $row['RScapacity'] ?> pax - ₱<?= $row['RSprice'] ?></option>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="checkInOut">
+
                         <div class="checkIn-container">
                             <h5 class="containerLabel">Check-In Date</h5>
-                            <input type="datetime-local" class="form-control" id="checkInDate" required>
+                            <input type="datetime-local" class="form-control" name="checkInDate" id="checkInDate" required>
                         </div>
                         <div class="checkOut-container">
                             <h5 class="containerLabel">Check-Out Date</h5>
-                            <input type="datetime-local" class="form-control" id="checkOutDate" required>
+                            <input type="datetime-local" class="form-control" name="checkOutDate" id="checkOutDate" required>
                         </div>
                     </div>
 
                     <div class="hotelPax">
                         <h5 class="noOfPeopleHotelLabel">Number of People</h5>
                         <div class="hotelPeopleForm">
-                            <input type="number" class="form-control" placeholder="Adults" required>
-                            <input type="number" class="form-control" placeholder="Children" required>
+                            <input type="number" class="form-control" name="adultCount" placeholder="Adults" required>
+                            <input type="number" class="form-control" name="childrenCount" placeholder="Children" required>
                         </div>
                     </div>
 
 
-                    <div class="roomNumbers">
-                        <h5 class="roomNumber-title">Room Number</h5>
+                    <div class="paymentMethod">
+                        <h5 class="payment-title">Payment Method</h5>
                         <div class="input-group">
-                            <select class="form-select" id="inputGroupSelect01">
-                                <option selected>Choose...</option>
-                                <?php
-                                $category = 'Hotel';
-                                $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortAmenities rs
-                            JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
-                            WHERE rsc.categoryName = '$category' AND RSAvailabilityID = 1";
-                                $result = mysqli_query($conn, $selectHotel);
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                ?>
-                                        <option value="<?= $row['RServiceName'] ?>"><?= $row['RServiceName'] ?></option>
-                                <?php
-                                    }
-                                }
-                                ?>
+                            <select class="form-select" name="PaymentMethod" id="PaymentMethod" required>
+                                <option value="" disabled selected>Choose...</option>
+                                <option value="GCash">GCash</option>
+                                <option value="Cash">Cash</option>
                             </select>
                         </div>
-                        <input type="hidden" name="eventPax" id="hiddenGuestValue">
+                        <!-- <input type="hidden" name="eventPax" id="hiddenGuestValue"> -->
                     </div>
-                    <button type="submit" class="btn btn-primary" name="hotelBooking" id="hotelBooking">Book Now</button>
 
+                    <!-- <div class="notes">
+                        <h5 class="purposeLabel">Request/s or Note/s</h5>
+                        <textarea class="form-control w-100" id="purpose-additionalNotes" name="hotelNotes" rows="2"
+                            placeholder="Optional"></textarea>
+                    </div> -->
+
+                    <div class="additional-info-container">
+                        <ul>
+                            <!-- <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon" class="info-icon">&nbsp;&nbsp;The ₱2,500(22hours)/₱2,000(11hours) room accommodates a maximum of 4 pax</li>
+                            <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon" class="info-icon">&nbsp;&nbsp;The ₱3,500 room acommodates a maximum of 6 pax</li> -->
+                            <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon" class="info-icon">&nbsp;&nbsp;If the maximum pax exceeded, extra guest is charged ₱250 per head</li>
+                        </ul>
+                    </div>
+                    <button type="submit" class="btn btn-success" name="hotelBooking" id="hotelBooking">Book Now</button>
                 </div>
-
             </div>
 
         </div>
@@ -396,10 +447,7 @@ $userRole = $_SESSION['userRole'];
                 <div class="card event-card" id="eventBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
                     <div class="eventForm">
-
                         <h5 class="eventLabel">Type of Event</h5>
-
-
                     </div>
 
                     <div class="dateVenue">
@@ -407,18 +455,12 @@ $userRole = $_SESSION['userRole'];
                             <h5 class="dateLabel">Date</h5>
                             <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" disabled required>
                         </div>
-
-
                     </div>
 
                     <div class="noHrPpl">
-
-
                     </div>
 
                     <div class="package">
-
-
                     </div>
 
                     <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
@@ -481,14 +523,12 @@ $userRole = $_SESSION['userRole'];
 
     </footer>
 
-    <!-- <script src="../../Assets/JS/BookNowJS/resortDropdown.js"></script>
-    <script src="../../Assets/JS/BookNowJS/hotelDropdown.js"></script>
-    <script src="../../Assets/JS/BookNowJS/eventDropdown.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script src="../../Assets/JS/fullCalendar.js"></script>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
     <!-- Page switch -->
     <script>
@@ -579,7 +619,72 @@ $userRole = $_SESSION['userRole'];
         });
     </script>
 
+    <!-- Select Option -->
+    <!-- <script>
+        // Events
+        const eventSelect = document.getElementById('eventType');
+        const otherContainer = document.getElementById('other-container');
+        const other_input = document.getElementById('other-input');
 
+
+        eventSelect.addEventListener('change', () => {
+            if (eventSelect.value === 'other') {
+                otherContainer.style.display = 'block';
+                other_input.required = true;
+            } else {
+                otherContainer.style.display = 'none';
+                other_input.required = false;
+            }
+        });
+    </script> -->
+
+
+    <!-- Hotel check-in check-out  -->
+    <script>
+        const hoursSelected = document.getElementById('hoursSelected');
+        const checkInInput = document.getElementById('checkInDate');
+        const checkOutInput = document.getElementById('checkOutDate');
+        const selectedHotel = document.getElementById('selectedHotel');
+
+        checkInInput.addEventListener('change', () => {
+            const selectedValue = hoursSelected.value;
+            const checkInDate = new Date(checkInInput.value);
+            const addHours = parseInt(selectedValue);
+            if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
+                const checkOutDate = new Date(checkInDate.getTime() + addHours * 60 * 60 * 1000);
+
+                const year = checkOutDate.getFullYear();
+                const month = String(checkOutDate.getMonth() + 1).padStart(2, '0');
+                const day = String(checkOutDate.getDate()).padStart(2, '0');
+                const hours = String(checkOutDate.getHours()).padStart(2, '0');
+                const minutes = String(checkOutDate.getMinutes()).padStart(2, '0');
+
+                const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+                checkOutInput.value = formattedDate;
+            }
+        });
+
+        hoursSelected.addEventListener('change', () => {
+            const selectedValue = hoursSelected.value;
+            if (checkInInput.value) {
+                checkInInput.dispatchEvent(new Event('change'));
+            }
+
+            selectedHotel.setAttribute('data-duration', selectedValue);
+
+            Array.from(selectedHotel.options).forEach(option => {
+
+                if (!option.value) {
+                    option.hidden = false;
+                    return;
+                }
+                const roomDuration = option.getAttribute('data-duration')?.trim().toLowerCase() || '';
+                option.hidden = roomDuration !== selectedValue;
+            });
+
+            selectedHotel.selectedIndex = 0;
+        });
+    </script>
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
@@ -590,7 +695,7 @@ $userRole = $_SESSION['userRole'];
         if (paramValue === 'success') {
             Swal.fire({
                 title: "Successful Booking!",
-                text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info.",
+                text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info. Thank You!",
                 icon: "success",
                 confirmButtonText: 'Okay'
             }).then((result) => {
@@ -618,11 +723,11 @@ $userRole = $_SESSION['userRole'];
             tourSelect.addEventListener("change", function() {
                 if (tourSelect.value === "Overnight") {
                     rooms.style.display = "block";
-                    roomSelect.setAttribute("required", "required");
+                    // roomSelect.setAttribute("required", "required");
                     cottages.style.display = "none";
                 } else if (tourSelect.value === "Day") {
                     rooms.style.display = "none";
-                    roomSelect.setAttribute("required", "required");
+                    // roomSelect.setAttribute("required", "required");
                     cottages.style.display = "block";
                 } else {
                     cottages.style.display = "block";

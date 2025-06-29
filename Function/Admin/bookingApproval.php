@@ -8,8 +8,9 @@ if (isset($_POST['approveBtn'])) {
     $videokeChoice = mysqli_real_escape_string($conn, $_POST['videokeChoice']);
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
     $bookingStatus = mysqli_real_escape_string($conn, $_POST['bookingStatus']);
+    $addOns = mysqli_real_escape_string($conn, $_POST['addOns']);
     $availabilityID = 2;
-    $confirmedBookingStatus = 2;
+    $confirmedBookingStatus = 1;
     date_default_timezone_set('Asia/Manila');
     $startDate = date('Y-m-d');
 
@@ -21,7 +22,7 @@ if (isset($_POST['approveBtn'])) {
     LEFT JOIN customPackages cp ON b.customPackageID = cp.customPackageID
     LEFT JOIN custompackageitems cpi ON cp.customPackageID = cp.customPackageID
 
-    LEFT JOIN bookingsServices bs ON b.bookingID = bs.bookingID
+    LEFT JOIN bookingServices bs ON b.bookingID = bs.bookingID
     LEFT JOIN services s ON bs.serviceID = s.serviceID
 
     LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
@@ -50,7 +51,7 @@ if (isset($_POST['approveBtn'])) {
                 if (!empty($data['resortServiceID'])) {
                     $updateAvailability = $conn->prepare("UPDATE resortamenities ra
                     JOIN services s ON ra.resortServiceID = s.resortServiceID
-                    JOIN bookingsServices bs ON s.serviceID = bs.serviceID 
+                    JOIN bookingServices bs ON s.serviceID = bs.serviceID 
                     SET ra.RSAvailabilityID = ? 
                     WHERE s.serviceID = ?");
                     $updateAvailability->bind_param("ii", $availabilityID, $serviceID);
@@ -107,10 +108,10 @@ if (isset($_POST['approveBtn'])) {
         $price = $row['RSPrice'];
     }
 
-    if (!empty($videokeChoice)) {
-        $insertBooking = $conn->prepare("INSERT INTO bookingsservices(bookingID, serviceID, total)
+    if (!empty($videokeChoice) && $addOns !== "None") {
+        $insertBooking = $conn->prepare("INSERT INTO bookingservices(bookingID, serviceID, bookingServicePrice)
         VALUES(?,?,?)");
-        $insertBooking->bind_param("iis", $bookingID, $serviceID, $price);
+        $insertBooking->bind_param("iid", $bookingID, $serviceID, $price);
         $insertBooking->execute();
         $insertBooking->close();
 
@@ -119,6 +120,10 @@ if (isset($_POST['approveBtn'])) {
         $updateAvailability->bind_param("ii", $availabilityID, $resortServiceID);
         $updateAvailability->execute();
         $updateAvailability->close();
+    } else if ($addOns !== 'None') {
+        $_SESSION['bookingID'] = $bookingID;
+        header('Location: ../../Pages/Admin/viewBooking.php?action=videoke');
+        exit();
     }
 
 
@@ -129,35 +134,39 @@ if (isset($_POST['approveBtn'])) {
     $updateStatus->execute();
 
 
-    $getData = "SELECT * FROM bookings WHERE bookingID = '$bookingID'";
-    $getDataResult = mysqli_query($conn, $getData);
-    if (mysqli_num_rows($getDataResult) > 0) {
-        $data = mysqli_fetch_assoc($getDataResult);
+    $getData = $conn->prepare("SELECT * FROM bookings WHERE bookingID = ?");
+    $getData->bind_param("i", $bookingID);
+    $getData->execute();
+    $getDataResult = $getData->get_result();
+    if ($getDataResult->num_rows > 0) {
+        $data = $getDataResult->fetch_assoc();
         $totalCost = $data['totalCost'];
         $downpayment = $data['downpayment'];
         $downpaymentImage = NULL;
         $userBalance = $totalCost;
+        $paymentMethod = $data['paymentMethod'];
     }
 
     $insertConfirmed = $conn->prepare("INSERT INTO confirmedbookings(bookingID, 
-    downpayment, downpaymentImage, totalCost, userBalance, confirmedBookingStatus)
-            VALUES(?,?,?,?,?,?)");
+    downpayment, downpaymentImage, CBtotalCost, userBalance, CBpaymentMethod, confirmedBookingStatus)
+            VALUES(?,?,?,?,?,?, ?)");
     $insertConfirmed->bind_param(
-        "issssi",
+        "isbddsi",
         $bookingID,
         $downpayment,
         $downpaymentImage,
         $totalCost,
         $userBalance,
+        $paymentMethod,
         $confirmedBookingStatus
     );
     if ($insertConfirmed->execute()) {
-        $_SESSION['success'] = 'Booking Approved Successfully';
-        header('Location: ../../Pages/Admin/booking.php');
+        unset($_SESSION['bookingID']);
+        header('Location: ../../Pages/Admin/booking.php?action=success');
         exit();
     } else {
         $_SESSION['error'] = 'The booking request could not be approved. Please try again later.';
-        header('Location: ../../Pages/Admin/viewBooking.php');
+        header('Location: ../../Pages/Admin/booking.php?action=error');
         exit();
     }
 }
@@ -168,28 +177,44 @@ if (isset($_POST['approveBtn'])) {
 if (isset($_POST['rejectBtn'])) {
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
     $bookingStatus = mysqli_real_escape_string($conn, $_POST['bookingStatus']);
-    date_default_timezone_set('Asia/Manila');
-    $startDate = date('d-m-Y');;
 
-    $query = "SELECT * FROM bookings 
-    WHERE bookingID = '$bookingID' AND status ='$bookingStatus'";
-    $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) > 0) {
-        $updateStatus = "UPDATE bookings 
-        SET status = 'Rejected'
-        WHERE bookingID ='$bookingID'";
-        $result = mysqli_query($conn, $updateStatus);
-        if ($result) {
-            $_SESSION['success'] = 'The request has been rejected successfully.';
-            header('Location: ../../Pages/Admin/booking.php');
-            exit();
+    $bookingQuery = $conn->prepare("SELECT bookings.*, statuses.statusName FROM bookings 
+    JOIN statuses ON bookings.bookingStatus = statuses.statusID
+    WHERE bookingID = ? AND statusName = ?");
+    $bookingQuery->bind_param("is", $bookingID, $bookingStatus);
+    $bookingQuery->execute();
+    $result = $bookingQuery->get_result();
+
+    if ($result->num_rows > 0) {
+        $newStatus = 3;
+
+        $updateStatus = $conn->prepare("UPDATE bookings 
+        SET bookingStatus = ?
+        WHERE bookingID = ? ");
+        $updateStatus->bind_param("ii", $newStatus, $bookingID);
+
+        if ($updateStatus->execute()) {
+            header('Location: ../../Pages/Admin/booking.php?action=rejected');
+            $updateStatus->close();
         } else {
-            $_SESSION['error'] = 'The request could not be rejected. Please try again later.';
-            header('Location: ../../Pages/Admin/booking.php');
+            header('Location: ../../Pages/Admin/booking.php?action=error');
             exit();
         }
+    } else {
+        echo "<script>
+            alert('Not existing');
+            window.location.href = '../../Pages/Admin/booking.php';
+        </script>";
+        exit();
     }
+} else {
+    echo "<script>
+            alert('Error');
+            window.location.href = '../../Pages/Admin/booking.php';
+        </script>";
+    exit();
 }
+
 
 
 

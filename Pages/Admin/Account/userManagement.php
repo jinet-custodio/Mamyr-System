@@ -82,7 +82,7 @@ $userRole = $_SESSION['userRole'];
             <li>
                 <a href="userManagement.php" class="list-group-item active">
                     <img src="../../../Assets/Images/Icon/usermanagement.png" alt="" class="sidebar-icon">
-                    User Management
+                    Manage Users
                 </a>
             </li>
             <!-- <li>

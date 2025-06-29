@@ -86,7 +86,7 @@ if (isset($_SESSION['error'])) {
 
     $selectQuery = "SELECT rs.*, 
     sa.availabilityName AS roomStatus 
-    FROM resortServices rs 
+    FROM resortamenities rs 
     LEFT JOIN serviceAvailability sa ON rs.RSAvailabilityID = sa.availabilityID 
     WHERE RScategoryID = 1 AND resortServiceID = $roomID";
     $result = mysqli_query($conn, $selectQuery);
@@ -103,13 +103,14 @@ if (isset($_SESSION['error'])) {
                     $actionType = mysqli_real_escape_string($conn, $_POST['actionType']);
 
                     $userQuery = "SELECT 
-                                b.*, 
+                                b.*, bs.*, 
                                 u.firstName, u.middleInitial, u.lastName, 
                                 rs.*, 
                                 s.resortServiceID 
                             FROM bookings b 
-                            LEFT JOIN services s ON s.serviceID = b.serviceID 
-                            LEFT JOIN resortServices rs ON rs.resortServiceID = s.resortServiceID 
+                            LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+                            LEFT JOIN services s ON bs.serviceID = s.serviceID
+                            LEFT JOIN resortamenities rs ON rs.resortServiceID = s.resortServiceID 
                             LEFT JOIN users u ON u.userID = b.userID 
                             WHERE 
                                 rs.RScategoryID = 1 
@@ -129,7 +130,7 @@ if (isset($_SESSION['error'])) {
                     ?>
                     <div class="info">
                         <label for="roomName"> Room Name: </label>
-                        <input type="text" name="roomName" class="roomName form-control" id="roomName" value="<?= $roomInfo['RServiceName'] ?>">
+                        <input type="text" name="roomName" class="roomName form-control " id="roomName" value="<?= $roomInfo['RServiceName'] ?>">
                     </div>
                     <div class="info">
                         <label for="roomStatus">Status:</label>
