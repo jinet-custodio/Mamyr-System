@@ -39,3 +39,50 @@ CREATE TABLE auditLogs (
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (adminID) REFERENCES admins(adminID)
 );
+
+INSERT INTO `websitecontents` (`contentID`, `adminID`, `sectionName`, `title`, `content`, `lastUpdated`) VALUES
+(1, 1, 'Blog', 'MainTitle', 'The Mamyr Resort Blog: Stay Infomed, Stay Inspired', '2025-07-01 00:01:44'),
+(2, 1, 'Blog', 'Sub-title', 'Inspiration, Updates, and Insights Straight from Mamyr Resort', '2025-07-01 00:01:44'),
+(3, 1, 'Blog', 'BlogPost1-EventType', 'Private Event', '2025-07-01 00:27:10'),
+(4, 1, 'Blog', 'BlogPost1-EventDate', '2025-08-01', '2025-07-01 00:27:10'),
+(5, 1, 'Blog', 'BlogPost1-EventHeader', 'Mamyr Resort is Closed for a Private Event', '2025-07-01 00:28:59'),
+(6, 1, 'Blog', 'BlogPost1-Content', 'We are sorry, but we will be closed on Sunday, June 1, 2025, due to a private event. Invitation-only guests will be allowed, and we will not be accepting walk-ins on this date. Thank you for your understanding.', '2025-07-01 00:28:59'),
+(7, 1, 'Blog', 'BlogPost2-EventType', '7th Birthday ', '2025-07-01 00:47:17'),
+(8, 1, 'Blog', 'BlogPost2-EventDate', '2025-06-02', '2025-07-01 00:47:17'),
+(9, 1, 'Blog', 'BlogPost2-EventHeader', 'Yohan\'s Magical 7th Birthday Celebration at Mamyr!', '2025-07-01 00:47:17'),
+(10, 1, 'Blog', 'BlogPost2-Content', 'Yohan marked his 7th birthday in style at Mamyr, where the day was packed with exciting activities, laughter, and unforgettable moments that made it a celebration to remember.', '2025-07-01 00:47:17'),
+(11, 1, 'Blog', 'BlogPost3-EventType', 'Thanksgiving Party', '2025-07-01 01:29:13'),
+(12, 1, 'Blog', 'BlogPost3-EventDate', '2025-01-02', '2025-07-01 01:29:13'),
+(13, 1, 'Blog', 'BlogPost3-EventHeader', 'XYZ Company\'s Thanksgiving Party ', '2025-07-01 01:29:13'),
+(14, 1, 'Blog', 'BlogPost3-Content', 'XYZ Company\'s Thanksgiving Party: A Heartfelt Celebration of Gratitude, Team Spirit, and the Strong Bonds We’ve Built Together. This special gathering brought everyone together to reflect on the year\'s achievements, share delicious food, and create lasting memories with colleagues.', '2025-07-01 01:29:13'),
+(15, 1, 'Blog', 'BlogPost4-EventType', 'Debut', '2025-07-01 01:31:50'),
+(16, 1, 'Blog', 'BlogPost4-EventDate', '2024-09-02', '2025-07-01 01:31:50'),
+(17, 1, 'Blog', 'BlogPost4-EventHeader', 'Jannah\'s 18th Birthday', '2025-07-01 01:31:50'),
+(18, 1, 'Blog', 'BlogPost4-Content', 'Jannah\'s 18th Birthday: A Joyous Celebration Marking the Transition into Adulthood with Laughter, Love, and Unforgettable Memories. Surrounded by family and friends, this milestone birthday was a beautiful blend of cherished moments, heartfelt wishes, and the excitement of new beginnings.', '2025-07-01 01:31:50');
+
+
+--
+ALTER TABLE `websitecontents`
+  ADD PRIMARY KEY (`contentID`),
+  ADD KEY `adminID` (`adminID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `websitecontents`
+--
+ALTER TABLE `websitecontents`
+  MODIFY `contentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `websitecontents`
+--
+ALTER TABLE `websitecontents`
+  ADD CONSTRAINT `websitecontents_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admins` (`adminID`);
+COMMIT;

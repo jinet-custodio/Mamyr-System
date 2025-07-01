@@ -175,7 +175,7 @@ ul {
 
 .titleContainer {
   width: 70%;
-  margin: 10vw auto 2vw auto;
+  margin: 10vw auto 4vw auto;
   text-align: center;
 }
 
@@ -189,7 +189,6 @@ ul {
 
 .posts {
   width: 95%;
-  border: 1px solid black;
   margin: 1vw auto;
   display: flex;
 }
@@ -208,14 +207,53 @@ ul {
   padding: 1vw;
 }
 
-.others {
-  display: grid;
-  width: 50%;
-}
+
 .featuredpost img {
   width: 45vw;
 }
 
+.others {
+  display: grid;
+  width: 50%;
+}
+.othersImg {
+  object-fit: contain;
+  display: flex;
+  align-items: start;
+}
+
+.othersEventType p{
+  font-size: 0.9vw !important;
+}
+
+.eventType p, .othersEventType p{
+  margin-bottom: 0 !important;
+}
+
+.othersHeading h4{
+  font-size: 1.2vw !important;
+  font-weight: 800;
+}
+
+.othersDescription {
+  font-size: 1vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post {
+  margin-bottom: 1vw;
+}
+
+.post img {
+  width: 18vw;
+}
+
+.othersDesc {
+  display: flex;
+  flex-direction: column;
+}
 /* end of code for body */
 
 footer {
