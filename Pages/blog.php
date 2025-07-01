@@ -1,3 +1,6 @@
+<?php
+require '../Config/dbcon.php'
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -61,36 +64,110 @@
     </nav>
 
     <main>
+        <?php
+        $getWebContent = "SELECT * FROM websiteContents WHERE sectionName = 'Blog'";
+        $result = mysqli_query($conn, $getWebContent);
+
+        $contentMap = [];
+        $blogPosts = [];
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+
+                $contentMap[$cleanTitle] = $row['content'];
+
+                if (preg_match('/^BlogPost(\d+)-(.*)$/', $cleanTitle, $matches)) {
+                    $postNumber = 'BlogPost' . $matches[1];
+                    $field = $matches[2];
+                    $blogPosts[$postNumber][$field] = $row['content'];
+                }
+            }
+        }
+
+        uasort($blogPosts, function ($a, $b) {
+            $dateA = isset($a['EventDate']) ? $a['EventDate'] : '0000-00-00';
+            $dateB = isset($b['EventDate']) ? $b['EventDate'] : '0000-00-00';
+            return strcmp($dateB, $dateA);
+        });
+
+
+        $firstPost = reset($blogPosts);
+        ?>
+
+
         <div class="titleContainer">
-            <h4 class="title">The Mamyr Resort Blog: Stay Informed, Stay Inspired</h4>
-            <h4> Inspiration, Updates, and Insights Straight from Mamyr Resort</h4>
+            <h4 class="title"><?= htmlspecialchars($contentMap['MainTitle'] ?? 'Main Title Not Found') ?></h4>
+            <h4><?= htmlspecialchars($contentMap['Sub-title'] ?? '') ?></h4>
         </div>
 
         <div class="blogmain">
             <div class="title">
                 <h5>Recent blog posts</h5>
             </div>
+
             <div class="posts">
-                <div class="featured">
-                    <div class="featuredpost">
-                        <img src="../Assets/Images/blogposts/image.png" alt="">
-                        <div class="desc">
-                            <div class="eventType">
-                                <p style="color: gray;;">Private Event • 1 June 2025</p>
+                <!-- Featured Post -->
+                <?php if (!empty($firstPost)): ?>
+                    <div class="featured">
+                        <div class="featuredpost">
+                            <img src="../Assets/Images/blogposts/image.png" alt="">
+                            <div class="desc">
+                                <div class="eventType">
+                                    <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
+                                        <p style="color: rgb(43, 43, 43);">
+                                            <?= htmlspecialchars($firstPost['EventType']) ?> •
+                                            <?= htmlspecialchars(date("j F Y", strtotime($firstPost['EventDate']))) ?>
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="blogHeading">
+                                    <?php if (isset($firstPost['EventHeader'])): ?>
+                                        <h4><?= htmlspecialchars($firstPost['EventHeader']) ?></h4>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="blogDescription">
+                                    <?= htmlspecialchars($firstPost['Content'] ?? '') ?>
+                                </div>
                             </div>
-                            <div class="blogHeading">
-                                <h4>Mamyr Resort is Closed for a Private Event</h4>
-                            </div>
-                            <div class="blogDescription">We are sorry, but we will be closed on Sunday, June 1, 2025, due to a private event.
-                                Invitation-only guests will be allowed, and we will not be accepting walk-ins on this date. Thank you for your
-                                understanding.</div>
                         </div>
                     </div>
-                </div>
-                <div class="others">
-                    <div class="posts">
+                <?php endif; ?>
 
-                    </div>
+                <!-- Other Posts -->
+                <div class="others container">
+                    <?php
+                    $isFirst = true;
+                    foreach ($blogPosts as $postID => $post) {
+                        if ($isFirst) {
+                            $isFirst = false;
+                            continue;
+                        }
+                    ?>
+                        <div class="post row">
+                            <div class="othersImg col-md-5">
+                                <img src="../Assets/Images/blogposts/img2.png" alt="<?= htmlspecialchars($post['EventHeader'] ?? '') ?>">
+                            </div>
+                            <div class="othersDesc col-md-7">
+                                <div class="othersEventType">
+                                    <?php if (isset($post['EventType'], $post['EventDate'])): ?>
+                                        <p style="color: rgb(43, 43, 43);">
+                                            <?= htmlspecialchars($post['EventType']) ?> •
+                                            <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="othersHeading">
+                                    <?php if (isset($post['EventHeader'])): ?>
+                                        <h4><?= htmlspecialchars($post['EventHeader']) ?></h4>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="othersDescription">
+                                    <?= htmlspecialchars($post['Content'] ?? '') ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>

@@ -238,13 +238,14 @@ body {
 .legends {
   width: 90%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   margin: 0.8vw auto;
 }
 
 .legend {
   background-color: whitesmoke !important;
   color: rgb(22, 22, 22);
+  font-size: 1.3vw !important;
 }
 
 .legend:hover {
