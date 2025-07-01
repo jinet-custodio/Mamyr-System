@@ -43,6 +43,7 @@ CREATE TABLE bookingServices (
 CREATE TABLE confirmedBookings (
     confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
     bookingID INT NOT NULL,
+    CBpaymentMethod VARCHAR(50) NOT NULL,
     CBdownpayment DECIMAL(10,2) NOT NULL, -- calculated 30%
     downpaymentImage LONGBLOB NOT NULL, 
     CBtotalCost DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- total booking cost  

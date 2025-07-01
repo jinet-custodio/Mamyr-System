@@ -148,7 +148,7 @@ if (isset($_POST['approveBtn'])) {
     }
 
     $insertConfirmed = $conn->prepare("INSERT INTO confirmedbookings(bookingID, 
-    downpayment, downpaymentImage, CBtotalCost, userBalance, CBpaymentMethod, confirmedBookingStatus)
+        CBdownpayment, downpaymentImage, CBtotalCost, userBalance, CBpaymentMethod, confirmedBookingStatus)
             VALUES(?,?,?,?,?,?, ?)");
     $insertConfirmed->bind_param(
         "isbddsi",

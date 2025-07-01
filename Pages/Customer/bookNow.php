@@ -287,13 +287,13 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
             </div>
             <?php
-            $availsql = "SELECT RSAvailabilityID, RServiceName
+            $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration
             FROM resortAmenities 
             WHERE RScategoryID = '1'";
 
             $result = mysqli_query($conn, $availsql);
             ?>
-            <div class="container-fluid">
+            <div class="container-fluid" id="hotelContainerFluid">
                 <div class="hotelIconsContainer">
                     <div class="availabilityIcons">
                         <div class="availabilityIcon" id="allRooms" onclick="filterRooms('all')">
@@ -322,16 +322,25 @@ $userRole = $_SESSION['userRole'];
                                     : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
                                 $roomName = htmlspecialchars($row['RServiceName']);
                                 $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
-
-                                echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;" data-availability="' . $availabilityStatus . '">';
-                                echo '<a href="#' . trim($row['RServiceName']) . '">  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '"> </a>';
-                                echo '  <p class="roomCaption">' . $roomName . '</p>';
-                                echo '</div>';
+                        ?>
+                                <div class="hotelIconWithCaption" style="display: inline-block; text-align: center;" data-availability="<?= $availabilityStatus ?>">
+                                    <a href="#<?= trim($row['RServiceName']) ?>" data-duration="<?= htmlspecialchars($row['RSduration']) ?>">
+                                        <img src="<?= $iconPath ?>" alt="<?= $roomName ?>" class="hotelIcon" id="hotelIcon<?= $i ?>">
+                                    </a>
+                                    <p class="roomCaption"> <?= $roomName ?></p>
+                                </div>
+                            <?php
+                                // echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;" data-availability="' . $availabilityStatus . '">';
+                                // echo '<a href="#' . trim($row['RServiceName']) . '" >  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '"> </a>';
+                                // echo '  <p class="roomCaption">' . $roomName . '</p>';
+                                // echo '</div>';
 
                                 $i++;
                             }
                         } else {
-                            echo "<p>No room services found.</p>";
+                            ?>
+                            <p class="text-center m-auto">No room services found.</p>
+                        <?php
                         }
                         ?>
                     </div>
@@ -404,7 +413,7 @@ $userRole = $_SESSION['userRole'];
                     <div class="paymentMethod">
                         <h5 class="payment-title">Payment Method</h5>
                         <div class="input-group">
-                            <select class="form-select" name="PaymentMethod" id="PaymentMethod" required>
+                            <select class="form-select" name="PaymentMethod" id="paymentMethod" required>
                                 <option value="" disabled selected>Choose...</option>
                                 <option value="GCash">GCash</option>
                                 <option value="Cash">Cash</option>
@@ -544,14 +553,19 @@ $userRole = $_SESSION['userRole'];
 
         function filterRooms(filterType) {
             const allRooms = document.querySelectorAll('.hotelIconWithCaption');
+            const hotelCardContainer = document.querySelectorAll('#hotelContainerFluid');
 
             allRooms.forEach(room => {
                 const availability = room.getAttribute('data-availability');
 
                 if (filterType === 'all') {
                     room.style.display = 'inline-block'; // show all rooms
+                    hotelContainerFluid.style.display = 'flex';
+                    hotelContainerFluid.style.alignItems = 'start'
                 } else if (filterType === availability) {
                     room.style.display = 'inline-block'; // show matching availability
+                    hotelContainerFluid.style.display = 'flex';
+                    hotelContainerFluid.style.alignItems = 'center'
                 } else {
                     room.style.display = 'none'; // hide others
                 }
@@ -645,6 +659,7 @@ $userRole = $_SESSION['userRole'];
         const checkInInput = document.getElementById('checkInDate');
         const checkOutInput = document.getElementById('checkOutDate');
         const selectedHotel = document.getElementById('selectedHotel');
+        const hotelDivs = document.querySelectorAll('.hotelIconWithCaption')
 
         checkInInput.addEventListener('change', () => {
             const selectedValue = hoursSelected.value;
@@ -664,16 +679,19 @@ $userRole = $_SESSION['userRole'];
             }
         });
 
+
+
         hoursSelected.addEventListener('change', () => {
-            const selectedValue = hoursSelected.value;
+            const selectedValue = hoursSelected.value.trim().toLowerCase();
+
+
             if (checkInInput.value) {
                 checkInInput.dispatchEvent(new Event('change'));
             }
 
+
             selectedHotel.setAttribute('data-duration', selectedValue);
-
             Array.from(selectedHotel.options).forEach(option => {
-
                 if (!option.value) {
                     option.hidden = false;
                     return;
@@ -681,8 +699,16 @@ $userRole = $_SESSION['userRole'];
                 const roomDuration = option.getAttribute('data-duration')?.trim().toLowerCase() || '';
                 option.hidden = roomDuration !== selectedValue;
             });
-
             selectedHotel.selectedIndex = 0;
+
+
+            hotelDivs.forEach(div => {
+                const aTag = div.querySelector('a[data-duration]');
+                if (!aTag) return;
+
+                const duration = aTag.getAttribute('data-duration')?.trim().toLowerCase() || '';
+                div.style.display = duration === selectedValue ? 'inline-block' : 'none';
+            });
         });
     </script>
     <!-- Sweetalert Link -->

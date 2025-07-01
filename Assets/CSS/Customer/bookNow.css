@@ -502,10 +502,12 @@ footer {
   }
 
   .container-fluid {
+    /* border: 2px solid pink; */
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: center;
+    align-items: top;
     gap: 2rem;
+    padding: 1rem;
   }
 
   .hotelIconsContainer {
@@ -546,7 +548,7 @@ footer {
 
   .hotelIconContainer {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 2fr);
     img {
       width: 60px;
       height: auto;
@@ -556,8 +558,9 @@ footer {
 
   .hotel-card {
     width: 45% !important;
+    height: 50%;
     padding: 1.5rem;
-    margin-top: -10rem !important;
+    /* margin-top: -10rem !important; */
   }
 
   .checkInOut,

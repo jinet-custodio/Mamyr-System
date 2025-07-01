@@ -25,6 +25,25 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 $_SESSION['last_activity'] = time();
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+
+
+
+//Get the percent of payment methods
+
+$payments = $conn->prepare("SELECT 
+                    COUNT(CASE WHEN confirmedBookingStatus = '2' AND CBpaymentMethod = 'GCash' THEN 1 END) AS totalPaymentGCash,
+                     COUNT(CASE WHEN confirmedBookingStatus = '2' AND CBpaymentMethod = 'Cash' THEN 1 END) AS totalPaymentCash  
+                     FROM confirmedBookings
+                    ");
+$payments->execute();
+$payments->execute();
+$paymentsResult = $payments->get_result();
+if ($paymentsResult->num_rows > 0) {
+    $row = $paymentsResult->fetch_assoc();
+    $GCashCount = $row['totalPaymentGCash'];
+    $CashCount = $row['totalPaymentCash'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,54 +131,96 @@ $userRole = $_SESSION['userRole'];
                     <div class="revenue-chart">
                         <canvas id="revenueBar"></canvas>
                     </div>
-                    <div class="revenue-chart">
-                        <canvas id="revenuePie"></canvas>
-                    </div>
+                    <?php if (($GCashCount ?? 0) > 0 || ($CashCount ?? 0) > 0): ?>
+                        <div class="revenue-chart">
+                            <canvas id="revenuePie"></canvas>
+                        </div>
+                    <?php else: ?>
+                        <div class="revenuePie">No data available.</div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="cards">
                     <div class="display-revenue">
+
+                        <?php
+                        $revenue = "SELECT 
+                                        CURDATE() AS Today,
+                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 AND DATE(b.startDate) = CURDATE() THEN cb.CBtotalCost ELSE 0 END) AS totalToday,
+                                       SUM(CASE WHEN cb.confirmedBookingStatus = 2 AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)  AND DATE(b.startDate) <= CURDATE() THEN cb.CBtotalCost ELSE 0 END) AS totalThisWeek,
+                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 AND YEAR(b.startDate) = YEAR(CURDATE()) AND MONTH(b.startDate) = MONTH(CURDATE()) THEN cb.CBtotalCost ELSE 0 END) AS totalThisMonth,
+                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 AND YEAR(b.startDate) = YEAR(CURDATE()) THEN cb.CBtotalCost ELSE 0 END) AS totalThisYear                              
+                                    FROM bookings b 
+                                    JOIN confirmedbookings cb ON b.bookingID = cb.bookingID";
+                        $result = mysqli_query($conn, $revenue);
+
+                        if (mysqli_num_rows($result) > 0) {
+                            $data = mysqli_fetch_assoc($result);
+                            // echo '<pre>';
+                            // print_r($data);
+                            // echo '</pre>';
+                            $totalToday = $data['totalToday'];
+                            $totalThisWeek = $data['totalThisWeek'];
+                            $totalThisMonth = $data['totalThisMonth'];
+                            $totalThisYear = $data['totalThisYear'];
+                            // $allBookingsMade = $data['allBookingsMade'];
+                            $today = $data['Today'];
+                        }
+                        ?>
+
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="todayRevenue" value="₱20,000">
+                            <input type="text" class="form-control" id="todayRevenue" value="₱ <?= number_format($totalToday, 2) ?>" readonly>
                             <label for="floatingInputValue">Today</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="weekRevenue" value="₱30,000">
+                            <input type="text" class="form-control" id="weekRevenue" value="₱ <?= number_format($totalThisWeek, 2) ?>" readonly>
                             <label for="floatingInputValue">This Week</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="monthRevenue" value="₱40,000">
+                            <input type="text" class="form-control" id="monthRevenue" value="₱ <?= number_format($totalThisMonth, 2) ?>" readonly>
                             <label for="floatingInputValue">This Month</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="yearRevenue" value="₱500,000">
+                            <input type="text" class="form-control" id="yearRevenue" value="₱ <?= number_format($totalThisYear, 2) ?>" readonly>
                             <label for="floatingInputValue">This Year</label>
                         </div>
                     </div>
 
                     <div class="booking-status">
                         <?php
-                        $bookings = "SELECT 
+                        $bookings = "SELECT
                                         COUNT(CASE WHEN confirmedBookingStatus = '2' THEN 1 END) AS totalApprovedBookings,
-                                        COUNT(CASE WHEN confirmedBookingStatus = '3' THEN 1 END) AS totalCancelledBookings
-                                    FROM confirmedbookings";
+                                        COUNT(CASE WHEN confirmedBookingStatus = '3' THEN 1 END) AS totalRejectedBookings,
+                                         COUNT(CASE WHEN bookingStatus = '4' THEN 1 END) AS totalCancelledBookings                                       
+                                    FROM bookings b 
+                                    JOIN confirmedbookings cb ON b.bookingID = cb.bookingID";
                         $result = mysqli_query($conn, $bookings);
 
                         if (mysqli_num_rows($result) > 0) {
                             $data = mysqli_fetch_assoc($result);
                             $totalApprovedBookings = $data['totalApprovedBookings'];
+                            $totalRejectedBookings = $data['totalRejectedBookings'];
                             $totalCancelledBookings = $data['totalCancelledBookings'];
+                            // $allBookingsMade = $data['allBookingsMade'];
                         }
                         ?>
 
-                        <div class="form-floating">
+                        <!-- <div class="form-floating">
+                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($allBookingsMade) ?>">
+                            <label for="floatingInputValue">All Bookings</label>
+                        </div> -->
 
-                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalApprovedBookings) ?>">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalApprovedBookings) ?>" readonly>
                             <label for="floatingInputValue">Approved Bookings</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalCancelledBookings) ?>">
+                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalCancelledBookings) ?>" readonly>
                             <label for="floatingInputValue">Cancelled Bookings</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalRejectedBookings) ?>" readonly>
+                            <label for="floatingInputValue">Rejected Bookings</label>
                         </div>
 
                         <?php
@@ -168,7 +229,7 @@ $userRole = $_SESSION['userRole'];
                                             COUNT(CASE WHEN RSAvailabilityID = '2' THEN 1 END) * 100 / COUNT(*), 
                                             2
                                         ) AS occupiedRates
-                                    FROM resortservices
+                                    FROM resortamenities
                                     WHERE RScategoryID = '1'";
                         $result = mysqli_query($conn, $occupied);
 
@@ -178,7 +239,7 @@ $userRole = $_SESSION['userRole'];
                         }
                         ?>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="occupied" value="<?= htmlspecialchars($occupiedRates) ?>%">
+                            <input type="text" class="form-control" id="occupied" value="<?= htmlspecialchars($occupiedRates) ?>%" readonly>
                             <label for="floatingInputValue">Occupancy Rates</label>
                         </div>
                     </div>
@@ -228,14 +289,14 @@ $userRole = $_SESSION['userRole'];
         const myPieChart = new Chart(pie, {
             type: 'pie',
             data: {
-                labels: ['Cash', 'Gcash', 'Bank Transfer'],
+                labels: ['Gcash', 'Cash'],
                 datasets: [{
                     label: 'Payment Methods',
-                    data: [20, 40, 40],
+                    data: <?= json_encode([$GCashCount ?? 0, $CashCount ?? 0]) ?>,
                     backgroundColor: [
                         'rgba(30, 134, 232, 0.6)',
-                        'rgba(129, 204, 196, 0.6)',
-                        'rgba(99, 99, 99, 0.6)'
+                        'rgba(129, 204, 196, 0.6)'
+                        // 'rgba(99, 99, 99, 0.6)'
                     ],
                     borderColor: '#fff',
                     borderWidth: 2

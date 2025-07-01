@@ -261,7 +261,7 @@ $userRole = $_SESSION['userRole'];
         $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
         $selectedHotel = mysqli_real_escape_string($conn, $_POST['selectedHotel']);
         // $hotelNotes = mysqli_real_escape_string($conn, $_POST['hotelNotes']);
-        $paymentMethod = mysqli_real_escape_string($conn, $_POST['PaymentMethod']);
+        $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
 
         $buttonName = 'hotelBooking';
         $bookingType = 'Hotel';
@@ -327,7 +327,8 @@ $userRole = $_SESSION['userRole'];
             <div class="card-body">
                 <div class="info">
                     <h5 class="card-title">Booking Type:</h5>
-                    <input type="text" id="bookingType" name="bookingType" value="<?= $bookingType ?> Booking" class="form-control" readonly>
+                    <input type="text" value="<?= $bookingType ?> Booking" class="form-control" readonly>
+                    <input type="hidden" id="bookingType" name="bookingType" value="<?= $bookingType ?>" class="form-control" readonly>
                 </div>
                 <div class="info">
                     <h5 class="card-title">Customer Name:</h5>
