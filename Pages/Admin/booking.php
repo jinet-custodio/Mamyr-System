@@ -129,7 +129,7 @@ if (isset($_SESSION['error'])) {
             <h5>Rooms</h5>
         </a>
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
         </a>
@@ -160,10 +160,8 @@ if (isset($_SESSION['error'])) {
     <!-- Booking-container -->
 
     <div class="booking-container">
-
-        <div class="card " style="width: 80rem;">
+        <div class="card" style="width: 80rem;">
             <table class="table table-striped" id="bookingTable">
-
                 <thead>
                     <th scope="col">Booking ID</th>
                     <th scope="col">Guest</th>

@@ -140,7 +140,8 @@ body {
 }
 
 .card {
-  padding: 2vw;
+  padding: 1rem 2rem 0.5rem 2rem;
+  margin-bottom: 2rem;
 }
 
 label {
