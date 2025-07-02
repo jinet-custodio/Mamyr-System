@@ -139,7 +139,7 @@ label {
 }
 
 #roomsTable {
-    width: 100%;
+  width: 100%;
 }
 
 thead {
@@ -175,21 +175,41 @@ th {
 }
 
 .status-btn {
-    width: 50%;
-    color: whitesmoke !important;
-    font-size: 1.2vw !important;
+  width: 50%;
+  color: whitesmoke !important;
+  font-size: 1.2vw !important;
 }
 
-.Available {
-    background-color: #28A745 !important;
+/* .Available {
+  background-color: #28a745 !important;
 }
 
 .Occupied {
-    background-color:#17A2B8 !important;
+  background-color: #17a2b8 !important;
 }
 
 .Maintenance {
-    background-color: #DC3545 !important;
+  background-color: #dc3545 !important;
+}
+
+.Private {
+  background-color: #ff0000 !important;
+} */
+
+.Available {
+  background-color: #28a745 !important;
+}
+
+.Occupied {
+  background-color: #fd7e14 !important;
+}
+
+.Maintenance {
+  background-color: #ffc107 !important;
+}
+
+.Private {
+  background-color: #dc3545 !important;
 }
 
 .btn-secondary {
