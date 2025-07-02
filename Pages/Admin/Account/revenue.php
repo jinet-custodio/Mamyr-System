@@ -146,10 +146,27 @@ if ($paymentsResult->num_rows > 0) {
                         <?php
                         $revenue = "SELECT 
                                         CURDATE() AS Today,
-                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 AND DATE(b.startDate) = CURDATE() THEN cb.CBtotalCost ELSE 0 END) AS totalToday,
-                                       SUM(CASE WHEN cb.confirmedBookingStatus = 2 AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)  AND DATE(b.startDate) <= CURDATE() THEN cb.CBtotalCost ELSE 0 END) AS totalThisWeek,
-                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 AND YEAR(b.startDate) = YEAR(CURDATE()) AND MONTH(b.startDate) = MONTH(CURDATE()) THEN cb.CBtotalCost ELSE 0 END) AS totalThisMonth,
-                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 AND YEAR(b.startDate) = YEAR(CURDATE()) THEN cb.CBtotalCost ELSE 0 END) AS totalThisYear                              
+                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 
+                                                    AND DATE(b.startDate) = CURDATE() 
+                                                    AND DATE(b.endDate) < CURDATE()  
+                                                    THEN cb.CBtotalCost ELSE 0 END) 
+                                                    AS totalToday,
+                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 
+                                                    AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)  
+                                                    AND DATE(b.startDate) <= CURDATE() 
+                                                    AND DATE(b.endDate) < CURDATE() 
+                                                    THEN cb.CBtotalCost ELSE 0 END) 
+                                                    AS totalThisWeek,
+                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 
+                                                    AND YEAR(b.startDate) = YEAR(CURDATE()) 
+                                                    AND MONTH(b.startDate) = MONTH(CURDATE()) 
+                                                    AND DATE(b.endDate) < CURDATE() 
+                                                    THEN cb.CBtotalCost ELSE 0 END) 
+                                                    AS totalThisMonth,
+                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 
+                                                    AND YEAR(b.startDate) = YEAR(CURDATE()) 
+                                                    AND DATE(b.endDate) < CURDATE() 
+                                                    THEN cb.CBtotalCost ELSE 0 END) AS totalThisYear                              
                                     FROM bookings b 
                                     JOIN confirmedbookings cb ON b.bookingID = cb.bookingID";
                         $result = mysqli_query($conn, $revenue);

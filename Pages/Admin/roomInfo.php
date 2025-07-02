@@ -108,7 +108,7 @@ if (isset($_SESSION['error'])) {
                                 rs.*, 
                                 s.resortServiceID 
                             FROM bookings b 
-                            LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+                            LEFT JOIN booking                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      services bs ON b.bookingID = bs.bookingID
                             LEFT JOIN services s ON bs.serviceID = s.serviceID
                             LEFT JOIN resortamenities rs ON rs.resortServiceID = s.resortServiceID 
                             LEFT JOIN users u ON u.userID = b.userID 
@@ -189,6 +189,17 @@ if (isset($_SESSION['error'])) {
     }
         ?>
         </form>
+
+
+        <!-- Bootstrap Link -->
+        <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+        <!-- Jquery Link -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <!-- Data Table Link -->
+        <script src="../../Assets/JS/datatables.min.js"></script>
+
+
         <!-- checks whether the action chosen is view or edit, disables or enables input boxes depending on the result -->
         <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -235,13 +246,7 @@ if (isset($_SESSION['error'])) {
             });
         </script>
 
-        <!-- Bootstrap Link -->
-        <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
-        <!-- Jquery Link -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Data Table Link -->
-        <script src="../../Assets/JS/datatables.min.js"></script>
+
 </body>
 
 </html>

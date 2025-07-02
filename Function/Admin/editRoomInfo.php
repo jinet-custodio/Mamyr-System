@@ -30,7 +30,7 @@ if (isset($_POST['editRoom'])) {
         $roomImage_tmp_name = $_FILES['roomImage']['tmp_name'];
 
         if ($roomImage_size > 2000000) {
-            header("Location: ../Pages/Admin/roomInfo.php?message[]=Image%20is%20too%20large%20(max%202MB)");
+            header("Location: ../../Pages/Admin/roomInfo.php?message[]=Image%20is%20too%20large%20(max%202MB)");
             exit(0);
         }
 

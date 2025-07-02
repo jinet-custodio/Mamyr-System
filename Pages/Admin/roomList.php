@@ -178,6 +178,9 @@ if (isset($_SESSION['error'])) {
                         foreach ($result as $roomInfo) {
                             $roomID = $roomInfo['resortServiceID'];
                             $statColor = $roomInfo['roomStatus'];
+                            // echo '<pre>';
+                            // print_r($statColor);
+                            // echo '<pre>';
                     ?>
                             <tr>
                                 <td>
