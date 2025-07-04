@@ -1,0 +1,211 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+/* @font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+} */
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+body {
+  background: #a1c8c7 !important;
+}
+
+/* .button-container {
+  padding: 1rem;
+} */
+
+.container {
+  /* border: 1px solid black !important; */
+  background-color: #ffff;
+  height: 115vh;
+  display: block;
+  border-radius: 2vw;
+  margin: 0 auto !important;
+  margin-top: 1vw !important;
+  margin-bottom: 1vw !important;
+}
+
+.form-control {
+  margin-top: 1vw;
+}
+
+.form-select {
+  margin-top: 1vw;
+}
+
+/* resort css */
+
+.resortBooking {
+  padding: 1vw;
+}
+
+.backBtnContainer {
+  margin: 1vw;
+}
+
+.titleContainer {
+  padding: 2vw;
+  width: 100%;
+}
+
+.title {
+  text-align: center;
+  font-family: "Poppins Black";
+  color: #ffffff;
+  -webkit-text-stroke: 1px black;
+  letter-spacing: 0.5px;
+}
+
+/* resort css */
+.resortLabel {
+  font-family: "Poppins";
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 25.5px;
+  text-align: center;
+  margin-top: 1.5vw;
+}
+
+.schedLabel,
+.cottageLabel,
+.videokeRentalLabel,
+.noOfPeopleLabel,
+.purposeLabel,
+.roomLabel,
+.paymentLabel {
+  text-align: center;
+  margin: 0.5rem 0 0.5rem 0;
+}
+
+.scheduleForm,
+.peopleForm,
+.cottageRoomForm,
+.purposeForm,
+.paymentVideokeForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.peopleForm input {
+  height: 2.5rem;
+}
+
+/* resort css */
+
+/* hotel css */
+#hotelInfoContainer {
+  background-color: #78aeff;
+  height: 115vh;
+}
+
+.hotelLabel {
+  font-family: "Poppins";
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 25.5px;
+  text-align: center;
+  margin-top: 1.5vw;
+  color: #ffff;
+}
+
+.numberOfHours,
+.roomNumber-title,
+.containerLabel,
+.noOfPeopleHotelLabel,
+.payment-title {
+  text-align: center;
+  color: #ffff;
+  margin-top: 1vw;
+}
+
+.hotelInfoFormContainer {
+  padding: 1vw;
+}
+
+.checkInOut,
+.hotelPeopleForm,
+.firstRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
+
+.additional-info-container {
+  margin: 0;
+  margin-top: 0.5rem;
+
+  li {
+    text-transform: none !important;
+    font-size: 13px;
+    margin: 2px;
+    list-style: none;
+  }
+}
+
+/* .button-container {
+  padding: 1vw;
+} */
+
+.custom-btn {
+  background-color: #ffff !important;
+  color: #0d6dfc !important;
+  /* margin-top: 1.5vw; */
+
+  &:hover {
+    background-color: #0d6dfc !important;
+    color: #ffff !important;
+  }
+}
+/* hotel css */
+
+/* event css */
+.eventLabel {
+  font-family: "Poppins";
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 25.5px;
+  text-align: center;
+  margin-top: 1.5vw;
+}
+
+.eventForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-top: 2vw;
+  padding: 1vw;
+}
+
+.eventTypeLabel,
+.dateLabel,
+.startLabel,
+.endLabel,
+.guestLabel,
+.venueLabel,
+.packageLabel {
+  text-align: center;
+  margin: 0.5rem 0 0.5rem 0;
+}
+
+.timeOfEventContainer,
+.peopleVenueContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+/* event css */
