@@ -179,3 +179,12 @@ th {
   font-family: "Lora";
   text-transform: capitalize;
 }
+
+.btnContainer {
+  padding-bottom: 0.5vw;
+}
+
+.btn-primary {
+  float: right;
+  width: 16%;
+}
