@@ -392,7 +392,7 @@ $userRole = $_SESSION['userRole'];
                     </div>
 
                     <div class="guest-info" id="downpayment">
-                        <h4 class="card-title">Downpayment</h4>
+                        <h4 class="card-title">Downpayment (30%)</h4>
                         <p class="card-text">₱ <?= number_format($downpayment, 2) ?></p>
                     </div>
 

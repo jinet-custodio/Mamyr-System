@@ -80,17 +80,10 @@ $userRole = $_SESSION['userRole'];
                 <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
-                    Booking History
+                    Payment & Booking History
                 </a>
             </li>
 
-            <li>
-                <a href="payment.php" class="list-group-item" id="paymentBookingHist">
-                    <img src="../../../Assets/Images/Icon/Credit card.png" alt="Booking History"
-                        class="sidebar-icon">
-                    Payment
-                </a>
-            </li>
 
             <li>
                 <a href="loginSecurity.php" class="list-group-item">

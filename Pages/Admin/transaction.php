@@ -26,6 +26,9 @@ $_SESSION['last_activity'] = time();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+
+// $customerPayment = $_SESSION['huh']
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +45,9 @@ $userRole = $_SESSION['userRole'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
+    <!-- Data Table Link -->
+    <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
+
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/transaction.css" />
 
@@ -50,10 +56,9 @@ $userRole = $_SESSION['userRole'];
 <body>
     <div class="topSection">
         <div class="dashTitleContainer">
-            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
-                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
+            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard">
+                <img src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
-
 
         <div class="menus">
             <a href="#" class="notifs">
@@ -146,33 +151,96 @@ $userRole = $_SESSION['userRole'];
 
     </nav>
 
-    <div class="card">
-        <div class=" titleContainer">
-            <h3 class="title">Transaction</h3>
-        </div>
-
-
-        <div class="tableContainer">
-            <table class=" table table-striped" id="transaction">
+    <div class="transactionContainer">
+        <div class="card" style="width: 80rem;">
+            <div class="titleContainer">
+                <h3 class="title">Transaction</h3>
+            </div>
+            <table class=" table table-striped" id="transactionTable">
                 <thead>
+                    <th scope="col">Booking ID</th>
                     <th scope="col">Guest</th>
                     <th scope="col">Total Payment</th>
+                    <!-- <th scope="col">Downpayment (30%)</th> -->
+                    <!-- <th scope="col">Amount Paid</th> -->
                     <th scope="col">Balance Due</th>
-                    <th scope="col">Payment Status</th>
                     <th scope="col">Payment Method</th>
+                    <th scope="col">Payment Approval</th>
+                    <th scope="col">Payment Status</th>
                     <th scope="col">Action</th>
                 </thead>
-
+                <!-- Get data and isplay Transaction -->
                 <tbody>
-                    <tr>
-                        <td>Louise Bartolome</td>
-                        <td>1,500 Php</td>
-                        <td>0</td>
-                        <td><span class="btn btn-success w-75" id="fullyPaidStatus">Fully Paid</span></td>
-                        <td>Cash</td>
-                        <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr>
-                    <tr>
+                    <?php
+                    $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
+                    FROM confirmedBookings cb
+                    LEFT JOIN bookings b ON cb.bookingID = b.bookingID
+                    LEFT JOIN users u ON b.userID = u.userID
+                    LEFT JOIN bookingPaymentStatus bps ON cb.paymentStatus = bps.paymentStatusID
+                    LEFT JOIN statuses stat ON cb.confirmedBookingStatus = stat.statusID
+                    ");
+                    $payments->execute();
+                    $paymentsResult = $payments->get_result();
+                    if ($paymentsResult->num_rows > 0) {
+                        while ($data = $paymentsResult->fetch_assoc()) {
+                            $guestName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
+                            $bookingID = $data['bookingID'];
+                            $formattedID = $data['formattedID'];
+                            $totalAmount = $data['CBtotalCost'];
+                            $downpayment = $data['CBdownpayment'];
+                            $amountPaid = $data['amountPaid'];
+                            $balance = $data['userBalance'];
+                            $CBPaymentMethod = $data['CBpaymentMethod'];
+                            $paymentStatus = $data['PaymentStatus'];
+                            $paymentApprovalStatus = $data['paymentApprovalStatus'];
+
+                            if ($paymentStatus === 'Fully Paid') {
+                                $classColor = 'success';
+                            } elseif ($paymentStatus === 'Unpaid') {
+                                $classColor = 'warning';
+                            } elseif ($paymentStatus === 'Partially Paid') {
+                                $classColor = 'primary';
+                            }
+
+
+
+                            if ($paymentApprovalStatus === "Pending") {
+                                $addClass = "btn btn-warning w-100";
+                            } elseif ($paymentApprovalStatus === "Approved") {
+
+                                $addClass = "btn btn-success w-100";
+                            } elseif ($paymentApprovalStatus === "Rejected") {
+                                $addClass = "btn btn-danger w-100";
+                            }
+
+
+                    ?>
+                            <tr>
+                                <td><?= htmlspecialchars($formattedID) ?></td>
+                                <td><?= htmlspecialchars($guestName) ?></td>
+                                <td>₱ <?= number_format($totalAmount, 2) ?></td>
+                                <!-- <td>₱ <?= number_format($downpayment, 2) ?></td> -->
+                                <!-- <td>₱ <?= number_format($amountPaid, 2) ?></td> -->
+                                <td>₱ <?= number_format($balance, 2) ?></td>
+                                <td><?= htmlspecialchars($CBPaymentMethod) ?></td>
+                                <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
+                                <td><span class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span></td>
+
+                                <td>
+                                    <form action="viewPayments.php" method="POST">
+                                        <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                                        <button type="submit" name="viewIndividualPayment" class="btn btn-info w-100">View</button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                    <?php
+                        }
+                    }
+
+                    ?>
+
+                    <!-- <tr>
                         <td>Alliah Reyes</td>
                         <td>3,500 Php</td>
                         <td>3,500 Php</td>
@@ -203,35 +271,86 @@ $userRole = $_SESSION['userRole'];
                         <td><span class="btn btn-success w-75" id="fullyPaidStatus">Fully Paid</span></td>
                         <td>Cash</td>
                         <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr>
+                    </tr> -->
                 </tbody>
+            </table>
         </div>
+    </div>
 
 
-
-
-
-
-
-
-
-        <!-- Jquery Link -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- DataTables Link -->
-        <script src="../../Assets/JS/datatables.min.js"></script>
-        <!-- Table JS -->
-        <script>
+    <!-- Bootstrap Link -->
+    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <!-- Jquery Link -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- Data Table Link -->
+    <script src="../../Assets/JS/datatables.min.js"></script>
+    <!-- Table JS -->
+    <script>
         $(document).ready(function() {
-            $('#transaction').DataTable();
+            $('#transactionTable').DataTable({
+                columnDefs: [{
+                        width: '10%',
+                        target: 0,
+                    },
+                    {
+                        width: '15%',
+                        target: 1,
+                    },
+                    {
+                        width: '15%',
+                        target: 3,
+                    }
+                ]
+            });
         });
-        </script>
+    </script>
 
-        <!-- Bootstrap Link -->
-        <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-        </script>
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Sweetalert Popup -->
+    <script>
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        if (paramValue === "approved") {
+            Swal.fire({
+                title: "Payment Approved",
+                text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
+                icon: 'success',
+            });
+        } else if (paramValue === "rejected") {
+            Swal.fire({
+                title: "Payment Rejected",
+                text: "You have reviewed and rejected the payment.",
+                icon: 'success',
+            });
+        } else if (paramValue === "failed") {
+            Swal.fire({
+                title: "Payment Approval Failed",
+                text: "Unable to approve or reject the payment. Please try again later.",
+                icon: 'error',
+            });
+        } else if (paramValue === "paymentSuccess") {
+            Swal.fire({
+                title: "Payment Added",
+                text: "Payment was successfully added and processed.",
+                icon: 'success',
+            });
+        } else if (paramValue === "paymentFailed") {
+            Swal.fire({
+                title: "Payment Failed",
+                text: "Failed to deduct the payment. Please try again later.",
+                icon: 'error',
+            });
+        }
+
+        if (paramValue) {
+            const url = new URL(window.location.href);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
+    </script>
 
 
 </body>

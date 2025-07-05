@@ -1,0 +1,74 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+/* @font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+} */
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  background: #a1c8c7 !important;
+}
+
+main {
+  display: flex;
+}
+
+input {
+  width: 300px;
+  height: 5vh;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.preview-image {
+  height: 80vh;
+  width: auto;
+  cursor: zoom-in;
+}
+
+.zoom-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.zoom-overlay img {
+  border: 1px solid red;
+  max-height: 90vh;
+  max-width: 50vw;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  cursor: zoom-in;
+}
+
+.image-container:hover .zoom-overlay {
+  visibility: visible;
+  opacity: 1;
+}

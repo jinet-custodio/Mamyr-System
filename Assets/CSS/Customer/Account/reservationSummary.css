@@ -8,10 +8,10 @@
   src: url(../../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
-/* @font-face {
+@font-face {
   font-family: "Poppins Black";
   src: url(../../../Fonts/Poppins/Poppins-Black.ttf);
-} */
+}
 
 * {
   margin: 0;
@@ -213,6 +213,24 @@ body {
   margin-left: 6vw;
 }
 
+#gcashPaymentModal {
+  font-family: "Poppins";
+  font-size: 14px;
+  .modal-title {
+    font-family: "Poppins Black";
+    font-size: 18px;
+  }
+}
+
 #gcashModalBody {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#gcashModalBody img {
+  width: 20vw;
+  height: auto;
+  margin-top: 1vw;
 }

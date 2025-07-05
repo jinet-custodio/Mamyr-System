@@ -68,20 +68,13 @@ $userRole = $_SESSION['userRole'];
             </li>
 
             <li>
-                <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                <a href="bookingHistory.php" class="list-group-item active" id="paymentBookingHist">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
-                    Booking History
+                    Payment & Booking History
                 </a>
             </li>
 
-            <li>
-                <a href="payment.php" class="list-group-item" id="paymentBookingHist">
-                    <img src="../../../Assets/Images/Icon/Credit card.png" alt="Booking History"
-                        class="sidebar-icon">
-                    Payment
-                </a>
-            </li>
 
             <li>
                 <a href="loginSecurity.php" class="list-group-item">
@@ -115,9 +108,10 @@ $userRole = $_SESSION['userRole'];
             <table class=" table table-striped" id="bookingHistory">
                 <thead>
                     <th scope="col">Check In</th>
-                    <th scope="col">Check Out</th>
+                    <th scope="col">Total Cost</th>
+                    <th scope="col">Balance</th>
                     <th scope="col">Booking Type</th>
-                    <!-- <th scope="col">Details</th> -->
+                    <th scope="col">Payment Method</th>
                     <th scope="col">Status</th>
                     <th scope="col">Review</th>
                     <th scope="col">Action</th>
@@ -142,43 +136,57 @@ $userRole = $_SESSION['userRole'];
                             $endDate = strtotime($booking['endDate']);
                             $checkOut = date("d F Y", $endDate); //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
                             $bookingType = $booking['bookingType'];
+                            $totalAmount = $booking['totalCost'];
+                            $balance = $booking['userBalance'];
+                            $paymentMethod = $booking['paymentMethod']
                     ?>
                             <tr>
                                 <td><?= $checkIn ?></td>
-                                <td><?= $checkOut ?></td>
+                                <!-- <td><?= $checkOut ?></td> -->
+                                <td>₱<?= number_format($totalAmount, 2) ?></td>
+                                <td>₱<?= number_format($balance, 2) ?></td>
+                                <td><?= htmlspecialchars($paymentMethod) ?></a></td>
 
                                 <td><?= htmlspecialchars($bookingType) ?></a></td>
 
                                 <!-- Papalitan na lang ng mas magandang term -->
                                 <?php if (!empty($booking['confirmedBookingID'])) {
                                     if ($booking['confirmedStatus'] === "Pending") {
-                                        if ($bookingType === 'Resort') {
+                                        if ($paymentMethod === 'Cash') {
                                             $status = "Onsite payment";
+                                            $class = 'btn btn-info w-100';
                                         } else {
                                             $status = "Downpayment";
+                                            $class = 'btn btn-info w-100';
                                         }
                                     } elseif ($booking['confirmedStatus'] === "Approved") {
-                                        $status = "Successful Booking";
+                                        $status = "Successful";
+                                        $class = 'btn btn-success w-100';
                                     } elseif ($booking['confirmedStatus'] === "Rejected") {
-                                        $status = "Rejected Booking";
+                                        $status = "Rejected";
+                                        $class = 'btn btn-danger w-100';
                                     }
                                 } else {
                                     $confirmedBookingID = NULL;
                                     if ($booking['bookingStatus'] === "Pending") {
                                         $status = "Pending";
+                                        $class = 'btn btn-warning w-100';
                                     } else if ($booking['bookingStatus'] === "Approved") {
-                                        if ($bookingType === 'Resort') {
+                                        if ($paymentMethod === 'Cash') {
                                             $status = "Onsite payment";
+                                            $class = 'btn btn-info w-100';
                                         } else {
                                             $status = "Downpayment";
+                                            $class = 'btn btn-info w-100';
                                         }
                                     } elseif ($booking['bookingStatus'] === "Cancelled") {
                                         $status = "Cancelled";
+                                        $class = 'btn btn-danger w-100';
                                     }
                                 }
                                 ?>
 
-                                <td><?= $status ?></td>
+                                <td><span class="<?= $class ?>"><?= $status ?></span></td>
                                 <td><a href="" class=" btn btn-outline-primary">Rate</a></td>
 
                                 <td>
@@ -285,7 +293,12 @@ $userRole = $_SESSION['userRole'];
             $('#bookingHistory').DataTable({
                 language: {
                     emptyTable: "No Bookings Made" //Pakipalitan na lang din ng magandang term
-                }
+                },
+                columnDefs: [{
+                    width: '15%',
+                    target: 0
+
+                }]
             });
         });
     </script>
@@ -353,6 +366,13 @@ $userRole = $_SESSION['userRole'];
                 title: "Cancellation Failed!",
                 text: "An error occurred while cancelling.",
                 icon: "error",
+                confirmButtonText: "OK"
+            });
+        } else if (paramValue === 'paymentSuccess') {
+            Swal.fire({
+                title: "Payment Successful!",
+                text: "Thank you! Your GCash payment receipt has been successfully sent. Please wait while the admin verifies your payment.",
+                icon: "success",
                 confirmButtonText: "OK"
             });
         };

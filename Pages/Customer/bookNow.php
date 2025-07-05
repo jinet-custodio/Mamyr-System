@@ -393,11 +393,11 @@ $userRole = $_SESSION['userRole'];
 
                         <div class="checkIn-container">
                             <h5 class="containerLabel">Check-In Date</h5>
-                            <input type="datetime-local" class="form-control" name="checkInDate" id="checkInDate" required>
+                            <input type="datetime-local" class="form-control" style="width: 250px;" name="checkInDate" id="checkInDate" required>
                         </div>
                         <div class="checkOut-container">
                             <h5 class="containerLabel">Check-Out Date</h5>
-                            <input type="datetime-local" class="form-control" name="checkOutDate" id="checkOutDate" required>
+                            <input type="datetime-local" class="form-control" style="width: 250px;" name="checkOutDate" id="checkOutDate" required>
                         </div>
                     </div>
 
