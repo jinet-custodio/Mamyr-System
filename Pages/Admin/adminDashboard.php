@@ -151,7 +151,7 @@ $userRole = $_SESSION['userRole'];
 
             <div class="bookingSummary">
 
-                <div class="card" id="newBookings" style="width: 17rem; height:10rem;">
+                <div class="card trend-cards" id="newBookings">
                     <div class="card-header ">
                         New Bookings
                     </div>
@@ -163,7 +163,7 @@ $userRole = $_SESSION['userRole'];
                     <h6 class="newBookingDate">This Week</h6>
                 </div>
 
-                <div class="card" id="checkIn" style="width: 17rem; height:10rem; ">
+                <div class="card trend-cards" id="checkIn">
                     <div class="card-header ">
                         Check In
                     </div>
@@ -175,7 +175,7 @@ $userRole = $_SESSION['userRole'];
                     <h6 class="checkInDate">This Week</h6>
                 </div>
 
-                <div class="card" id="checkOut" style="width: 17rem; height:10rem;">
+                <div class="card trend-cards" id="checkOut">
                     <div class="card-header ">
                         Check Out
                     </div>
@@ -187,7 +187,7 @@ $userRole = $_SESSION['userRole'];
                     <h6 class="checkOutDate">This Week</h6>
                 </div>
 
-                <div class="card" id="revenue" style="width: 17rem; height:10rem;">
+                <div class="card trend-cards " id="revenue">
                     <div class="card-header ">
                         Revenue
                     </div>
@@ -200,7 +200,7 @@ $userRole = $_SESSION['userRole'];
                 </div>
 
                 <div class="ReservationTrendsContainer">
-                    <div class="card" id="sched" style="width: 35rem; height: 25rem;">
+                    <div class="card" id="sched">
                         <div class="card-header ">
                             Reservation Trends
                         </div>
@@ -208,6 +208,9 @@ $userRole = $_SESSION['userRole'];
                             <img src="../../Assets/Images/AdminImages/DashboardImages/graph.png" alt=""
                                 class="ReservationTrendsGraph">
                         </div>
+                    </div>
+                    <div class="salesReportBtn">
+                        <a href="salesReport.php" class="btn btn-light">Sales Report</a>
                     </div>
                 </div>
             </div>
@@ -224,7 +227,7 @@ $userRole = $_SESSION['userRole'];
             </div>
 
             <div class="rightSectionBottom">
-                <div class="card" id="sched" style="width: 20.5rem; height: 20rem;">
+                <div class="card" id="schedule">
                     <div class="card-header ">
                         Room Availability
                     </div>
@@ -243,7 +246,7 @@ $userRole = $_SESSION['userRole'];
                     </div>
                 </div>
 
-                <div class="card" id="sched" style="width: 20.5rem; height: 20rem;">
+                <div class="card" id="sched">
                     <div class="card-header ">
                         Overall Rating
                     </div>

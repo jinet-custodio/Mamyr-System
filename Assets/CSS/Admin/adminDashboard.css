@@ -120,6 +120,16 @@ body {
   object-fit: contain;
 }
 
+.salesReportBtn {
+  width: 30%;
+  margin: 1vw auto;
+}
+
+.salesReportBtn a {
+  font-size: 1.7vw !important;
+  font-weight: 800;
+  font-family: "Poppins" !important;
+}
 #contentsCF {
   /* border: 1px solid black; */
   width: 100%;
@@ -159,6 +169,16 @@ h6 {
   align-items: center;
   gap: 1vw;
 }
+
+.trend-cards {
+  width: 45%;
+
+}
+
+#sched {
+  width: 95%;
+  margin: 1vw auto;
+}
 /* .bookingSummary {
   border: 1px solid black;
   display: grid;
@@ -177,7 +197,7 @@ h6 {
 } */
 
 .ReservationTrendsGraph {
-  width: 35vw;
+  width: 90%;
   display: block;
   margin: auto;
 }
@@ -186,9 +206,9 @@ h6 {
   display: flex !important;
   flex-wrap: nowrap !important;
   gap: 5vw;
-  width: 42rem;
-  height: 25rem;
+  width: 98%;
   padding: 5px;
+  margin: 1vw auto;
 }
 
 .revenueGraphContainer {
@@ -200,7 +220,7 @@ h6 {
 
 .revenueGraph {
   /* border: 1px solid black; */
-  width: 45vw !important;
+  width: 95% !important;
 }
 
 .revTitle {
