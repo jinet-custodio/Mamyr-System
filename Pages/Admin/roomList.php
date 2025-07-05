@@ -124,7 +124,7 @@ if (isset($_SESSION['error'])) {
             <h5>Rooms</h5>
         </a>
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
         </a>

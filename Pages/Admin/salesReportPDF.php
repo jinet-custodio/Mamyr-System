@@ -17,17 +17,28 @@ require '../../Config/dbcon.php';
 </head>
 
 <body>
+  <?php
+
+  if (isset($_POST['requestReportBtn'])) {
+    $selectedDate = mysqli_real_escape_string($conn, $_POST['selectedDate']);
+    $dateToday = date("l, F d, Y  (g:i A)");
+  }
+
+  ?>
+
+
   <header>
     <h1 class="header-title">Mamyr resort & event place</h1>
     <h3>Gabihan, San Ildefonso, Bulacan</h3>
     <h4>mamyrResort@gmail.com | 0999-999-9999</h4>
   </header>
   <main>
+
     <section>
       <h1 class="section-title">Montly Sales Report</h1>
       <div>
         <p>Report Generated</p>
-        <p>June 1, 2005</p>
+        <p><?= $dateToday ?></p>
       </div>
       <div>
         <p>Date Range:</p>

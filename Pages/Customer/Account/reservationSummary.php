@@ -22,6 +22,13 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     exit();
 }
 
+
+if (isset($_POST['bookingID'])) {
+    $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
+} elseif (isset($_SESSION['bookingID'])) {
+    $bookingID = mysqli_real_escape_string($conn, $_SESSION['bookingID']);
+}
+
 $_SESSION['last_activity'] = time();
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -55,25 +62,13 @@ $userRole = $_SESSION['userRole'];
         </div>
 
         <div class="PendingContainer">
-
-            <div class="leftPendingContainer">
-
-                <img src="../../../Assets/Images/Icon/pending.png" alt="Pending Icon" class="PendingIcon">
-                <h4 class="pendingTitle">Your reservation is pending for approval </h4>
-                <h6 class="pendingSubtitle">Your request has been sent to the admin. Please wait for the approval of
-                    your reservation.</h6>
-
-                <!-- <button type="button" class="btn btn-success w-100 mt-3" data-bs-toggle="modal"
-                    data-bs-target="#modeofPaymentModal">Make a Down Payment</button> -->
-                <a href="../bookNow.php" class="btn btn-primary w-100 mt-2">Make Another Reservation</a>
-            </div>
-
             <!-- Get user data -->
             <?php
             $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
             $confirmedBookingID = mysqli_real_escape_string($conn, $_POST['confirmedBookingID']);
-            $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
-            $status = mysqli_real_escape_string($conn, $_POST['status']);
+            $bookingID = $bookingID;
+            // $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
+            // $status = mysqli_real_escape_string($conn, $_POST['status']);
             $getData = "SELECT bookings.*, users.firstName, users.middleInitial, users.lastName, users.phoneNumber, users.userAddress FROM bookings 
             JOIN users ON bookings.userID = users.userID
             WHERE bookings.userID = '$userID' AND bookings.bookingID = '$bookingID'";
@@ -84,6 +79,256 @@ $userRole = $_SESSION['userRole'];
                 $name = ucfirst($clientInfo['firstName']) . " " . ucfirst($clientInfo['middleInitial']) . " "  . ucfirst($clientInfo['lastName']);
             }
             ?>
+
+            <!-- Get booking info -->
+            <?php
+            $getBookingInfo = $conn->prepare("SELECT 
+                                    b.*, b.totalCost AS bookingCost , 
+                                    st.statusName AS confirmedBookingStatus, 
+                                    stat.statusName AS bookingStatus,
+                                    bps.statusName AS paymentStatus,
+                                    p.*, cp.*, cpi.*, 
+                                    bs.*, s.*, 
+                                    ra.*, rsc.categoryName AS serviceName, ec.categoryName AS eventName,
+                                    er.*, ps.*, cb.downpaymentImage
+                                    
+                                FROM bookings b
+
+                                LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID
+                                LEFT JOIN statuses st ON cb.confirmedBookingStatus = st.statusID
+                                LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
+                                LEFT JOIN bookingPaymentStatus bps ON cb.paymentStatus = bps.paymentStatusID
+
+                                LEFT JOIN packages p ON b.packageID = p.packageID
+                                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
+
+                                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
+                                LEFT JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
+
+                                LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID
+                                
+
+                                -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
+                                LEFT JOIN services s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+
+                                LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
+                                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
+
+                                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
+
+                                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
+                            WHERE b.bookingID = ?");
+            $getBookingInfo->bind_param("i", $bookingID);
+            $getBookingInfo->execute();
+            $getBookingInfoResult = $getBookingInfo->get_result();
+            if ($getBookingInfoResult->num_rows > 0) {
+
+                $services = [];
+                $allDescriptions = [];
+                $AddRequest = "";
+
+
+                $adultCount = 0;
+                $kidsCount = 0;
+
+                $package = "";
+                $customPackage = "";
+                $status = '';
+
+                while ($data = $getBookingInfoResult->fetch_assoc()) {
+                    // echo "<pre>";
+                    // print_r($data);
+                    // echo "</pre>";
+                    $startDate = date("j F Y", strtotime($data['startDate'])); //Bookings
+                    $time = date("g:i A", strtotime($data['startDate'])) . " - " . date("g:i A", strtotime($data['endDate'])); //Bookings
+                    $duration = $data['hoursNum'] . " hours"; //Bookings
+                    $pax = $data['paxNum']; //Bookings
+
+                    $totalCost = $data['bookingCost'];  //Booking
+                    $discount = $data['discountAmount'];  //Bookings
+                    $downpayment = $data['downpayment'];    //Bookings
+
+                    $paymentMethod = $data['paymentMethod'];
+
+                    $addOns = [];
+                    $addOns[] = $data['addOns'];  //Bookings
+
+
+                    $imageData = $data['downpaymentImage'];
+
+                    if (!empty($imageData)) {
+                        // Try to detect MIME type from binary data
+                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                        $mimeType = finfo_buffer($finfo, $imageData);
+                        finfo_close($finfo);
+                        $image = "data:" . $mimeType . ";base64," . base64_encode($imageData);
+                    } else {
+                        $image = "../../../Assets/Images/defaultDownpayment.png"; // Default image if no data
+                    }
+
+
+                    if ($bookingType === 'Resort') {
+                        foreach ($addOns as $addOns) {
+                            if (stripos($addOns, 'Videoke') !== false) {
+                                $videokeChoice = "Yes";
+                            } else {
+                                $videokeChoice = "No";
+                            }
+                        }
+
+                        if (!empty($data['serviceID'])) {
+                            $services[] = $data['sessionType'] . " Swimming";
+                            $cardHeader = "Type of Tour";
+                            if ($data['ERcategory'] === "Kids") {
+                                $kidsCount = $data['guests'];
+                            } elseif ($data['ERcategory'] === "Adult") {
+                                $adultCount = $data['guests'];
+                            }
+
+                            $guests = [];
+
+                            if ($adultCount > 0) {
+                                $guests[] = "Adult: $adultCount";
+                            }
+
+                            if ($kidsCount > 0) {
+                                $guests[] = "Kid: $kidsCount";
+                            }
+
+                            $resortGuest = implode(" & ", $guests);
+                        }
+                        if (!empty($data['resortServiceID'])) {
+                            $services[] = $data['RServiceName'];
+                        }
+                    } else if ($bookingType === 'Hotel') {
+                        $addOns = [];
+                        if (!empty($data['serviceID'])) {
+                            if (!empty($data['resortServiceID'])) {
+                                $services[] = $data['RServiceName'];
+                                $items = array_map('trim', explode(',', $data['RSdescription']));
+                                $allDescriptions = array_merge($allDescriptions, $items);
+                                $allDescriptions = array_unique($allDescriptions);
+                            }
+
+                            $downpaymentNote = "Please pay for the down payment amount for the approval of your booking
+                            withinseven (7) business days.";
+                        }
+                    }
+                    $package = $data['packageID'];
+                    $customPackageID = $data['customPackageID'];
+                    // $AddRequest = $data['additionalRequest'];
+
+                    if (!empty($package)) {
+                        $pax = $data['paxNum'];
+                        $serviceName = $data['packageName'];
+                        $items = array_map('trim', explode(',', $data['packageDescription']));
+                        $allDescriptions = array_merge($allDescriptions, $items);
+                        $allDescriptions = array_unique($allDescriptions);
+                    }
+
+                    if (!empty($customPackageID)) {
+                        $pax = $data['paxNum'];
+                        if (!empty($data['serviceID'])) {
+                            if (!empty($data['entranceRateID'])) {
+                                $services[] = $data['sessionType'] . " Swimming";
+                                if ($data['ERcategory'] === "Kids") {
+                                    $kidsCount = $data['guests'];
+                                } elseif ($data['ERcategory'] === "Adult") {
+                                    $adultCount = $data['guests'];
+                                }
+                            }
+                            if (!empty($data['partnershipServiceID'])) {
+                                $services[] = $data['PBName'];
+                            }
+                            if (!empty($data['resortServiceID'])) {
+                                $services[] = $data['RServiceName'];
+                                $items = array_map('trim', explode(',', $data['RSdescription']));
+                                $allDescriptions = array_merge($allDescriptions, $items);
+                                $allDescriptions = array_unique($allDescriptions);
+                            }
+                        }
+                    }
+
+
+
+                    $bookingStatus = $data['bookingStatus'];
+                    $confirmedBookingStatus = $data['confirmedBookingStatus'];
+                    $paymentStatus = $data['paymentStatus'];
+                    if ($bookingStatus === 'Pending') {
+                        $status = strtolower($bookingStatus) ?? NUll;
+                        $statusTitle = "Your reservation is pending for approval";
+                        $statusSubtitle = 'Your request has been sent to the admin. Please wait for the approval of
+                    your reservation.';
+                    } elseif ($bookingStatus === 'Approved' && $confirmedBookingStatus === 'Pending') {
+                        $status = strtolower($bookingStatus) ?? NUll;
+                        $statusTitle = "Your reservation has been approved.";
+                        if ($paymentMethod === 'GCash') {
+                            $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed with the down payment via GCash.";
+                        } elseif ($paymentMethod === 'Cash') {
+                            $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed to the resort to make your payment.";
+                        }
+                    } elseif ($confirmedBookingStatus === 'Approved' && $paymentStatus === 'Partially Paid') {
+                        $status = strtolower($bookingStatus) ?? NUll;
+                        $statusTitle = "Payment approved successfully.";
+                        $statusSubtitle = "We have received and reviewed your payment. The service you booked is now reserved. Thank you!";
+                    } elseif ($confirmedBookingStatus === 'Approved' && $paymentStatus === 'Fully Paid') {
+                        $status = strtolower($bookingStatus) ?? NUll;
+                        $statusTitle = "Payment done successfully.";
+                        $statusSubtitle = "Thank you! We have received your full payment. You may now enjoy your stay at the resort.";
+                    }
+                }
+
+                //Get the room or cottage
+                $cottageRoom = [];
+
+                foreach ($services as $service) {
+                    if (stripos($service, 'cottage') !== false) {
+                        $serviceVenue = "Cottage";
+                        $cottageRoom[] = $service;
+                    } elseif (stripos($service, 'room') !== false) {
+                        $serviceVenue = "Room";
+                        $cottageRoom[] = $service;
+                    }
+                    if (stripos($service, 'Day') !== false) {
+                        $tourType = "Day Tour";
+                    } elseif (stripos($service, 'Night') !== false) {
+                        $tourType = "Night Tour";
+                    } elseif (stripos($service, 'Overnight') !== false) {
+                        $tourType = "Overnight Tour";
+                    }
+                }
+
+                if (!empty($kidsCount) || !empty($adultCount)) {
+                    $guest = $resortGuest;
+                } else {
+                    $guest = $pax;
+                }
+                $totalBill =  $totalCost - $discount;
+            }
+            // echo $status;
+            ?>
+
+            <div class="leftPendingContainer">
+
+                <input type="hidden" name="bookingStatus" id="bookingStatus" value="<?= htmlspecialchars($bookingStatus) ?>">
+                <input type="hidden" name="confirmedBookingStatus" id="confirmedBookingStatus" value="<?= htmlspecialchars($confirmedBookingStatus) ?>">
+                <input type="hidden" name="paymentStatus" id="paymentStatus" value="<?= htmlspecialchars($paymentStatus) ?>">
+                <input type="hidden" name="paymentMethod" id="paymentMethod" value="<?= htmlspecialchars($paymentMethod) ?>">
+
+                <img src="../../../Assets/Images/Icon/<?= htmlspecialchars($status) ?>.png" alt="<?= htmlspecialchars($status) ?> Icon" class="PendingIcon">
+                <!-- <h4 class="pendingTitle">Your reservation is pending for approval </h4> -->
+                <!-- <h6 class="pendingSubtitle">Your request has been sent to the admin. Please wait for the approval of
+                    your reservation.</h6> -->
+                <h4 class="pendingTitle"><?= htmlspecialchars($statusTitle) ?></h4>
+                <h6 class="pendingSubtitle"><?= htmlspecialchars($statusSubtitle) ?></h6>
+
+                <div class="button-container">
+                    <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn" data-bs-toggle="modal"
+                        data-bs-target="#gcashPaymentModal">Make a Down Payment</button>
+                    <a href="../bookNow.php" class="btn btn-primary w-100 mt-2">Make Another Reservation</a>
+                </div>
+            </div>
+
             <div class="rightPendingContainer">
                 <h3 class="rightContainerTitle">Reservation Summary</h3>
 
@@ -115,183 +360,7 @@ $userRole = $_SESSION['userRole'];
                 <div class="card" id="summaryDetails" style="width: 25.6rem;">
                     <ul class="list-group list-group-flush">
 
-                        <?php
-                        $getBookingInfo = $conn->prepare("SELECT 
-                                    b.*, b.totalCost AS bookingCost , st.*,
-                                    p.*, cp.*, cpi.*, 
-                                    bs.*, s.*, 
-                                    ra.*, rsc.categoryName AS serviceName, ec.categoryName AS eventName,
-                                    er.*, ps.*  
-                                    
-                                FROM bookings b
 
-                                LEFT JOIN packages p ON b.packageID = p.packageID
-                                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
-
-                                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
-                                LEFT JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
-
-                                LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID
-                                LEFT JOIN statuses st ON st.statusID = b.bookingStatus
-
-                                -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
-                                LEFT JOIN services s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
-
-                                LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
-                                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
-
-                                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
-
-                                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
-                            WHERE b.bookingID = ?");
-                        $getBookingInfo->bind_param("i", $bookingID);
-                        $getBookingInfo->execute();
-                        $getBookingInfoResult = $getBookingInfo->get_result();
-                        if ($getBookingInfoResult->num_rows > 0) {
-
-                            $services = [];
-                            $allDescriptions = [];
-                            $AddRequest = "";
-
-
-                            $adultCount = 0;
-                            $kidsCount = 0;
-
-                            $package = "";
-                            $customPackage = "";
-                            $status = "";
-
-                            while ($data = $getBookingInfoResult->fetch_assoc()) {
-                                // echo "<pre>";
-                                // print_r($data);
-                                // echo "</pre>";
-                                $startDate = date("j F Y", strtotime($data['startDate'])); //Bookings
-                                $time = date("g:i A", strtotime($data['startDate'])) . " - " . date("g:i A", strtotime($data['endDate'])); //Bookings
-                                $duration = $data['hoursNum'] . " hours"; //Bookings
-                                $pax = $data['paxNum']; //Bookings
-
-                                $totalCost = $data['bookingCost'];  //Booking
-                                $discount = $data['discountAmount'];  //Bookings
-                                $downpayment = $data['downpayment'];    //Bookings
-
-                                $addOns = [];
-                                $addOns[] = $data['addOns'];  //Bookings
-
-                                if ($bookingType === 'Resort') {
-                                    foreach ($addOns as $addOns) {
-                                        if (stripos($addOns, 'Videoke') !== false) {
-                                            $videokeChoice = "Yes";
-                                        } else {
-                                            $videokeChoice = "No";
-                                        }
-                                    }
-
-                                    if (!empty($data['serviceID'])) {
-                                        $services[] = $data['sessionType'] . " Swimming";
-                                        $cardHeader = "Type of Tour";
-                                        if ($data['ERcategory'] === "Kids") {
-                                            $kidsCount = $data['guests'];
-                                        } elseif ($data['ERcategory'] === "Adult") {
-                                            $adultCount = $data['guests'];
-                                        }
-
-                                        $guests = [];
-
-                                        if ($adultCount > 0) {
-                                            $guests[] = "Adult: $adultCount";
-                                        }
-
-                                        if ($kidsCount > 0) {
-                                            $guests[] = "Kid: $kidsCount";
-                                        }
-
-                                        $resortGuest = implode(" & ", $guests);
-                                    }
-                                    if (!empty($data['resortServiceID'])) {
-                                        $services[] = $data['RServiceName'];
-                                    }
-                                } else if ($bookingType === 'Hotel') {
-                                    $addOns = [];
-                                    if (!empty($data['serviceID'])) {
-                                        if (!empty($data['resortServiceID'])) {
-                                            $services[] = $data['RServiceName'];
-                                            $items = array_map('trim', explode(',', $data['RSdescription']));
-                                            $allDescriptions = array_merge($allDescriptions, $items);
-                                            $allDescriptions = array_unique($allDescriptions);
-                                        }
-
-                                        $downpaymentNote = "Please pay for the down payment amount for the approval of your booking
-                            withinseven (7) business days.";
-                                    }
-                                }
-
-
-
-                                $status = $data['statusName'];
-                                $package = $data['eventName'];
-                                $customPackageID = $data['customPackageID'];
-                                $AddRequest = $data['additionalRequest'];
-
-                                if (!empty($package)) {
-                                    $pax = $data['paxNum'];
-                                    $serviceName = $data['packageName'];
-                                    $items = array_map('trim', explode(',', $data['packageDescription']));
-                                    $allDescriptions = array_merge($allDescriptions, $items);
-                                    $allDescriptions = array_unique($allDescriptions);
-                                }
-
-                                if (!empty($customPackageID)) {
-                                    $pax = $data['paxNum'];
-                                    if (!empty($data['serviceID'])) {
-                                        if (!empty($data['entranceRateID'])) {
-                                            $services[] = $data['sessionType'] . " Swimming";
-                                            if ($data['ERcategory'] === "Kids") {
-                                                $kidsCount = $data['guests'];
-                                            } elseif ($data['ERcategory'] === "Adult") {
-                                                $adultCount = $data['guests'];
-                                            }
-                                        }
-                                        if (!empty($data['partnershipServiceID'])) {
-                                            $services[] = $data['PBName'];
-                                        }
-                                        if (!empty($data['resortServiceID'])) {
-                                            $services[] = $data['RServiceName'];
-                                            $items = array_map('trim', explode(',', $data['RSdescription']));
-                                            $allDescriptions = array_merge($allDescriptions, $items);
-                                            $allDescriptions = array_unique($allDescriptions);
-                                        }
-                                    }
-                                }
-                            }
-
-                            //Get the room or cottage
-                            $cottageRoom = [];
-
-                            foreach ($services as $service) {
-                                if (stripos($service, 'cottage') !== false) {
-                                    $serviceVenue = "Cottage";
-                                    $cottageRoom[] = $service;
-                                } elseif (stripos($service, 'room') !== false) {
-                                    $serviceVenue = "Room";
-                                    $cottageRoom[] = $service;
-                                }
-                                if (stripos($service, 'Day') !== false) {
-                                    $tourType = "Day Tour";
-                                } elseif (stripos($service, 'Night') !== false) {
-                                    $tourType = "Night Tour";
-                                } elseif (stripos($service, 'Overnight') !== false) {
-                                    $tourType = "Overnight Tour";
-                                }
-                            }
-
-                            if (!empty($kidsCount) || !empty($adultCount)) {
-                                $guest = $resortGuest;
-                            } else {
-                                $guest = $pax;
-                            }
-                            $totalBill =  $totalCost - $discount;
-                        }
-                        ?>
 
                         <li class=" list-group-item" id="tourType">
                             <h6 class="cardHeader"><?= $cardHeader  ?></h6>
@@ -366,7 +435,7 @@ $userRole = $_SESSION['userRole'];
 
 
         <!-- modal -->
-        <div class="modal fade" id="modeofPaymentModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        <!-- <div class="modal fade" id="modeofPaymentModal" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -388,57 +457,36 @@ $userRole = $_SESSION['userRole'];
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
+        <form action="../../../Function/Customer/Account/uploadPayment.php" method="POST" enctype="multipart/form-data">
+            <div class="modal fade" id="gcashPaymentModal" aria-hidden="true" aria-labelledby="gcashPaymentModal"
+                tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
 
-        <div class="modal fade" id="gcashPaymentModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
-            tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Upload Your Screenshot</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-
-                    <div class="modal-body" id="gcashModalBody">
-                        Please upload a screenshot of your Gcash down payment below.
-
-                        <div class="form-group">
-                            <input type="file" class="form-control-file " id="fileInput"
-                                accept=".jpeg, .png, image/jpeg, image/png">
+                        <div class="modal-header">
+                            <h1 class="modal-title">Upload Your Screenshot</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                    </div>
 
+                        <div class="modal-body" id="gcashModalBody">
+                            Please upload a screenshot of your Gcash down payment below.
+                            <img src="<?= htmlspecialchars($image) ?>"
+                                alt="Downpayment Image" id="preview"
+                                class="downpaymentPic">
+                            <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                            <input type="file" name="downpaymentPic" id="downpaymentPic" hidden>
+                            <label for="downpaymentPic" class="custom-file-button btn btn-outline-primary">Upload Payment Receipt</label>
+                        </div>
 
-
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-target="#modeofPaymentModal"
-                            data-bs-toggle="modal">Back</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" name="submitDownpaymentImage">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <!-- Bootstrap Link -->
@@ -447,6 +495,41 @@ $userRole = $_SESSION['userRole'];
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
     </script>
 
+
+    <script>
+        //Hide the make a downpayment button
+        const paymentStatus = document.getElementById("paymentStatus").value;
+        const bookingStatus = document.getElementById("bookingStatus").value;
+        const confirmedBookingStatus = document.getElementById("confirmedBookingStatus").value;
+        const paymentMethod = document.getElementById("paymentMethod").value;
+        if (paymentMethod === 'Cash') {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else if (bookingStatus === "Pending") {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else if (bookingStatus === "Approved" && confirmedBookingStatus === "Pending" && paymentStatus === "Unpaid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "show";
+        } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Partially Paid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "show";
+        } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Fully Paid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        }
+    </script>
+
+
+    <script>
+        //Show the image preview
+        document.querySelector("input[type='file']").addEventListener("change", function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                let preview = document.getElementById("preview");
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
 
 
     <script>
@@ -471,6 +554,45 @@ $userRole = $_SESSION['userRole'];
             }
         });
     </script>
+
+
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Sweetalert Popup -->
+    <script>
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        if (paramValue === "imageError") {
+            Swal.fire({
+                title: "Oops!",
+                text: "Failed to upload downpayment receipt image",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === "imageFailed") {
+            Swal.fire({
+                title: "Oops!",
+                text: "No downpayment image submitted.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === "imageSize") {
+            Swal.fire({
+                title: "Oops!",
+                text: "File is too large. Maximum allowed size is 64MB.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        }
+
+
+        if (paramValue) {
+            const url = new URL(window.location.href);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
+    </script>
+
 
 </body>
 

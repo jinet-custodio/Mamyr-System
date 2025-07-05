@@ -8,6 +8,11 @@
 } */
 
 @font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+@font-face {
   font-family: "Lora";
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
@@ -49,6 +54,14 @@ body {
 .logo {
   width: 15vw;
 }
+/* #dashboard {
+  font-family: "Plus Jakarta Sans";
+  text-decoration: none;
+  color: black;
+  font-weight: 800;
+  font-size: 2.3vw;
+  margin-left: 1vw;
+} */
 
 #dashboard {
   text-decoration: none;
@@ -59,7 +72,7 @@ body {
   margin-top: 1rem;
   font-family: "Lora" !important;
   /* font-weight: bold; */
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .admin {
@@ -69,6 +82,7 @@ body {
     border-radius: 3rem;
   }
 }
+
 .navbar {
   font-family: "Lora";
   border-radius: 15px;
@@ -89,6 +103,10 @@ body {
   align-items: center;
   color: black;
   text-decoration: none;
+}
+
+.me-2 {
+  margin-left: 2vw;
 }
 
 .nav-link.active:after {
@@ -120,58 +138,57 @@ body {
   object-fit: contain;
 }
 
+.transactionContainer {
+  /* border: 1px solid black; */
+  display: flex;
+  justify-content: center;
+}
+
 .card {
-  margin: auto;
-  width: 90%;
-  padding: 2vw;
-  margin-bottom: 2vw;
-  margin-top: 5vw;
+  padding: 1rem 2rem 0.5rem 2rem;
+  margin-bottom: 2rem;
 }
 
 .titleContainer {
-  margin-bottom: 2vw;
+  font-family: "Poppins Black";
 }
+
 .title {
   font-size: 30px;
-  font-family: "Poppins";
-  font-weight: bold;
-}
-
-.table-striped {
-  text-align: center;
-  width: 100%;
-  margin: auto;
-  margin-top: 3vw !important;
-}
-
-th {
-  background-color: #cee4f2 !important;
-}
-
-th,
-td {
-  font-size: 18px;
-}
-
-.dt-column-title {
-  text-align: center;
 }
 
 label {
   margin-left: 1vw;
 }
 
-.dt-length {
-  float: right;
+thead {
+  font-family: "Lora";
 }
 
-.dt-input {
-  margin-left: 1vw;
+tbody {
+  font-family: "Poppins";
 }
-.dt-info {
-  margin-top: 1vw;
+
+td,
+th {
+  text-align: center !important;
 }
-.dt-paging-button {
-  margin-left: 0.1vw;
-  width: 2vw;
+
+th {
+  background-color: #91d2f2 !important;
+}
+
+.text-center {
+  color: rgb(255, 0, 0) !important;
+}
+
+.dt-column-title {
+  display: inline-block;
+  width: 2vw !important;
+}
+
+.dt-info,
+.dt-layout-row {
+  font-family: "Lora";
+  text-transform: capitalize;
 }

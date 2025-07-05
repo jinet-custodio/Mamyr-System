@@ -120,17 +120,10 @@ $userRole = $_SESSION['userRole'];
                 <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                     <img src="../../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
                         class="sidebar-icon">
-                    Booking History
+                    Payment & Booking History
                 </a>
             </li>
 
-            <li>
-                <a href="payment.php" class="list-group-item" id="paymentBookingHist">
-                    <img src="../../../Assets/Images/Icon/Credit card.png" alt="Booking History"
-                        class="sidebar-icon">
-                    Payment
-                </a>
-            </li>
 
             <li>
                 <a href="loginSecurity.php" class="list-group-item">
@@ -183,8 +176,7 @@ $userRole = $_SESSION['userRole'];
                                             alt="<?= htmlspecialchars($data['firstName']) ?> Picture" id="preview"
                                             class="profile-pic">
                                         <input type="file" name="profilePic" id="profilePic" hidden>
-                                        <label for="profilePic"
-                                            class="custom-file-button btn btn-outline-primary">Choose Image</label>
+                                        <label for="profilePic" class="custom-file-button btn btn-outline-primary">Choose Image</label>
                                     </div>
                                     <div class="modal-button">
                                         <button type="submit" class="btn btn-danger" name="cancelPfp">Cancel</button>
