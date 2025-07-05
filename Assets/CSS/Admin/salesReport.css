@@ -1,0 +1,34 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+/* @font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+} */
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: "Plus Jakarta Sans"; */
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  background: #ededed !important;
+}
+
+#sales-logo {
+    width: 3vw !important;
+}
+
+.navbar-brand {
+    font-family: "Lora";
+}

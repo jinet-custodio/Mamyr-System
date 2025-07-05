@@ -1,3 +1,22 @@
+<?php
+require 'Config/dbcon.php';
+
+
+//SQL statement for retrieving data for website content from DB
+$getWebContent = "SELECT * FROM websiteContents WHERE sectionName = 'BusinessInformation'";
+$result = mysqli_query($conn, $getWebContent);
+
+$contentMap = [];
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+
+    $contentMap[$cleanTitle] = $row['content'];
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,16 +79,16 @@
     <div class="custom-container">
         <div class="titleContainer">
             <div class="mamyrTitle">
-                <h1 class="name">M A M Y R</h1>
+                <?php
+                $businessName = str_split($contentMap['DisplayName']);
+                $display = strtoupper(implode(" ", $businessName))
+                ?>
+                <h1 class="name"> <?= htmlspecialchars($display ?? 'Name Not Found') ?> </h1>
             </div>
             <div class="description">
-                <p class="descriptionText">Welcome to Mamyr Resort and Event Place!
-                    We're more than just a resort, we're a place where memories are made. Whether you're here for a
-                    relaxing
-                    getaway, a family gathering, or a special event, we’re dedicated to making your stay unforgettable.
-                </p>
+                <p class="descriptionText"> <?= htmlspecialchars($contentMap['ShortDesc'] ?? 'Description Not Found') ?>
             </div>
-            <button class="btn btn-outline-light me-2">Learn More</button>
+            <a class="btn btn-outline-light me-2" href="Pages/about.php">Learn More</a>
         </div>
 
         <div class="containerBook">
@@ -96,8 +115,8 @@
             </div>
             <div class="wsText">
                 <hr class="line">
-                <h4 class="wsTitle">Welcome to Mamyr Resort and Events Place</h4>
-                <p class="wsDescription">Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable
+                <h4 class="wsTitle">Welcome to <?= htmlspecialchars($contentMap['FullName'] ?? 'Name Not Found') ?></h4>
+                <p class="wsDescription" style="color: red;">Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable
                     moments await you. Whether you're here for a peaceful retreat or a special celebration, we're
                     dedicated to making your experience truly exceptional.</p>
             </div>
@@ -111,17 +130,17 @@
 
                 <div class="location">
                     <img src="Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
-                    <h5 class="locationText">Sitio Colonia Gabihan, San Ildefonso, Bulacan</h5>
+                    <h5 class="locationText"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h5>
                 </div>
 
                 <div class="number">
                     <img src="Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
-                    <h5 class="number">(0998) 962 4697</h5>
+                    <h5 class="number"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h5>
                 </div>
 
                 <div class="email">
                     <img src="Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
-                    <h5 class="emailAddressText">mamyresort128@gmail.com</h5>
+                    <h5 class="emailAddressText"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h5>
                 </div>
 
 
@@ -155,18 +174,18 @@
 
                 <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
-                <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
+                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
             </div>
 
             <div class="info">
                 <div class="reservation">
                     <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter">(0998) 962 4697 </h4>
-                    <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
+                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h4>
+                    <h4 class="emailAddressTextFooter"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h4>
                 </div>
                 <div class="locationFooter">
                     <h4 class="locationTitle">Location</h4>
-                    <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
+                    <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h4>
 
                 </div>
             </div>
@@ -185,22 +204,22 @@
     </div>
 
     <script>
-    function myMap() {
-        var mapProp = {
-            center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-            zoom: 5,
-        };
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-    }
+        function myMap() {
+            var mapProp = {
+                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
+                zoom: 5,
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        }
     </script>
 
     <script>
-    const toggleButton = document.getElementById('bg-nav-toggler');
-    const navbar = document.querySelector('.navbar');
+        const toggleButton = document.getElementById('bg-nav-toggler');
+        const navbar = document.querySelector('.navbar');
 
-    toggleButton.addEventListener('click', () => {
-        navbar.classList.toggle('white-bg');
-    });
+        toggleButton.addEventListener('click', () => {
+            navbar.classList.toggle('white-bg');
+        });
     </script>
     <script src="Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="Assets/JS/scrollNavbg.js"></script>
