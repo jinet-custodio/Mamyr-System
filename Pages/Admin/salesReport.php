@@ -26,6 +26,21 @@ $_SESSION['last_activity'] = time();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $reportRange = $_POST['reportDate'] ?? '';
+
+    // Split the string by " to "
+    $dates = explode(" to ", $reportRange);
+
+    $startDate = $dates[0] ?? null;
+    $endDate = $dates[1] ?? null;
+
+    echo "Start Date: " . htmlspecialchars($startDate) . "<br>";
+    echo "End Date: " . htmlspecialchars($endDate);
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,6 +58,8 @@ $userRole = $_SESSION['userRole'];
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
 </head>
 
 <body>
@@ -51,6 +68,43 @@ $userRole = $_SESSION['userRole'];
             <img src="../../Assets/Images/Icon/Statistics.png" alt="" id="sales-logo"> Sales Report
         </a>
     </nav>
+    <main>
+        <div class="container-fluid">
+            <!-- Temporary form action lang hehe para ma-print yung ininput ng user-->
+            <form action="salesReport.php" method="POST">
+                <div class="dateRange">
+                    <label for="reportDate">Report Period: </label>
+                    <input type="text" name="reportDate" id="reportDate" placeholder="Click to enter date">
+                    <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -2vw;">
+                    </i>
+                </div>
+                <div class="salesSummary">
+                    <h2>Sales Summary:</h2>
+                    <div class="report">
+
+                    </div>
+                    <div class="generateBtn">
+                        <button type="submit" class="btn btn-primary">Generate Report</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr('#reportDate', {
+            mode: "range",
+            minDate: "today",
+            dateFormat: "Y-m-d"
+        });
+
+        const calIcon = document.getElementById("calendarIcon");
+        const reportDate = document.getElementById("reportDate");
+
+        calIcon.addEventListener('click', function(event) {
+            reportDate.click()
+        })
+    </script>
 </body>
 
 </html>
