@@ -206,11 +206,16 @@ $userRole = $_SESSION['userRole'];
                         required>
                     <label for="fullName">Full Name</label>
                 </div>
+
                 <div class="info">
-                    <input type="<?= htmlspecialchars($type) ?>" name="birthday" id="birthday"
-                        value="<?= htmlspecialchars($birthday) ?>" disabled>
+                    <?php if (!empty($data['birthDate'])) : ?>
+                        <input type="date" name="birthday" id="birthday" value="<?= htmlspecialchars($data['birthDate']) ?>" disabled>
+                    <?php else : ?>
+                        <input type="text" name="birthday" id="birthday" value="--" disabled>
+                    <?php endif; ?>
                     <label for="birthday">Birthday</label>
                 </div>
+
                 <div class="info">
                     <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>" disabled
                         required>
@@ -271,12 +276,25 @@ $userRole = $_SESSION['userRole'];
     </script>
 
     <script>
-        //All the disbaled input box will be removed
         function enableEditing() {
+            const birthdayInput = document.getElementById("birthday");
+
+            if (birthdayInput.type === "text" && birthdayInput.value === "--") {
+                const newInput = document.createElement("input");
+                newInput.type = "date";
+                newInput.name = "birthday";
+                newInput.id = "birthday";
+                newInput.disabled = false;
+                newInput.className = birthdayInput.className;
+
+                birthdayInput.parentNode.replaceChild(newInput, birthdayInput);
+            } else {
+                birthdayInput.removeAttribute("disabled");
+            }
+
             document.getElementById("fullName").removeAttribute("disabled");
             document.getElementById("address").removeAttribute("disabled");
             document.getElementById("phoneNumber").removeAttribute("disabled");
-            document.getElementById("birthday").removeAttribute("disabled");
 
             document.getElementById("saveBtn").style.display = "inline-block";
             document.getElementById("cancelBtn").style.display = "inline-block";
