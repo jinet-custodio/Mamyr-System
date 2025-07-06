@@ -27,8 +27,43 @@ body {
 
 #sales-logo {
     width: 3vw !important;
+    margin-right: 1vw;
 }
 
 .navbar-brand {
-    font-family: "Lora";
+    font-family: "Poppins";
+    font-size: 2.3vw !important;
+    display: flex !important;
+    align-items: center !important;
+    margin-left: 2vw;
 }
+
+.container-fluid {
+  margin: 10vw auto 1vw auto;
+  width: 95% !important;
+}
+
+.dateRange {
+  display: flex;
+  align-items: center;
+  width: 98%;
+}
+.dateRange label, .salesSummary h2 {
+  margin-bottom: 0;
+  font-size: 1.7vw;
+  font-family: "Poppins";
+  font-weight: 700;
+}
+
+
+#reportDate {
+ width: 25vw !important;
+ margin-left: 1vw;
+ font-size: 1.4vw;
+  font-family: "Poppins";
+}
+
+.salesSummary {
+  margin-top: 5vw;
+}
+

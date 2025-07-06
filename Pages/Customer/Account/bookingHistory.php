@@ -182,6 +182,9 @@ $userRole = $_SESSION['userRole'];
                                     } elseif ($booking['bookingStatus'] === "Cancelled") {
                                         $status = "Cancelled";
                                         $class = 'btn btn-danger w-100';
+                                    } elseif ($booking['bookingStatus'] === "Rejected") {
+                                        $status = "Rejected";
+                                        $class = 'btn btn-danger w-100';
                                     }
                                 }
                                 ?>
