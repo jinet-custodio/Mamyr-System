@@ -117,20 +117,37 @@ $userRole = $_SESSION['userRole'];
 
         $contentMap = [];
         $blogPosts = [];
+        $imagesByContentID = [];
 
-        if ($result && mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+        $getImagesQuery = "SELECT contentID, imageData, altText FROM websiteContentImages ORDER BY imageOrder ASC";
+        $imageResult = mysqli_query($conn, $getImagesQuery);
 
-                $contentMap[$cleanTitle] = $row['content'];
+        if ($imageResult && mysqli_num_rows($imageResult) > 0) {
+            while ($imgRow = mysqli_fetch_assoc($imageResult)) {
+                $cid = $imgRow['contentID'];
+                $imagesByContentID[$cid][] = $imgRow;
+            }
+        }
 
-                if (preg_match('/^BlogPost(\d+)-(.*)$/', $cleanTitle, $matches)) {
-                    $postNumber = 'BlogPost' . $matches[1];
-                    $field = $matches[2];
-                    $blogPosts[$postNumber][$field] = $row['content'];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+            $contentID = $row['contentID'];
+
+            $contentMap[$cleanTitle] = $row['content'];
+
+            if (preg_match('/^BlogPost(\d+)-(.*)$/', $cleanTitle, $matches)) {
+                $postNumber = 'BlogPost' . $matches[1];
+                $field = $matches[2];
+
+                $blogPosts[$postNumber][$field] = $row['content'];
+
+                if (!isset($blogPosts[$postNumber]['contentID'])) {
+                    $blogPosts[$postNumber]['contentID'] = $contentID;
                 }
             }
         }
+
+
 
         uasort($blogPosts, function ($a, $b) {
             $dateA = isset($a['EventDate']) ? $a['EventDate'] : '0000-00-00';
@@ -158,7 +175,24 @@ $userRole = $_SESSION['userRole'];
                 <?php if (!empty($firstPost)): ?>
                     <div class="featured">
                         <div class="featuredpost">
-                            <img src="../../Assets/Images/blogposts/image.png" alt="">
+                            <?php
+                            $featuredContentID = $firstPost['contentID'] ?? null;
+
+                            if ($featuredContentID && isset($imagesByContentID[$featuredContentID])) {
+                                $imgData = $imagesByContentID[$featuredContentID][0]['imageData'];
+                                $altText = $imagesByContentID[$featuredContentID][0]['altText'] ?? 'Blog image';
+                                $finfo = finfo_open();
+                                $mimeType = finfo_buffer($finfo, $imgData, FILEINFO_MIME_TYPE);
+                                finfo_close($finfo);
+
+                                $base64Image = base64_encode($imgData);
+                                echo "<img src='data:$mimeType;base64,$base64Image' alt='" . htmlspecialchars($altText) . "' />";
+                            } else {
+                                echo "<img src='../Assets/Images/no-picture.jpg' alt='Default blog image'>";
+                            }
+                            ?>
+
+
                             <div class="desc">
                                 <div class="eventType">
                                     <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
@@ -190,10 +224,22 @@ $userRole = $_SESSION['userRole'];
                             $isFirst = false;
                             continue;
                         }
+
+                        $contentID = $post['contentID'] ?? null;
                     ?>
                         <div class="post row">
                             <div class="othersImg col-md-5">
-                                <img src="../../Assets/Images/blogposts/img3.png" alt="<?= htmlspecialchars($post['EventHeader'] ?? '') ?>">
+                                <?php
+                                if ($contentID && isset($imagesByContentID[$contentID])) {
+                                    $imgData = $imagesByContentID[$contentID][0]['imageData'];
+                                    $finfo = finfo_open();
+                                    $mimeType = finfo_buffer($finfo, $imgData, FILEINFO_MIME_TYPE);
+                                    $base64Image = base64_encode($imgData);
+                                    echo "<img src='data:$mimeType;base64,$base64Image' alt='" . htmlspecialchars($altText) . "' />";
+                                } else {
+                                    echo "<img src='../Assets/Images/no-picture.jpg' alt='Default blog image'>";
+                                }
+                                ?>
                             </div>
                             <div class="othersDesc col-md-7">
                                 <div class="othersEventType">

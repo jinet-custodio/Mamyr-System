@@ -144,3 +144,43 @@ td {
 label {
   margin-left: 1vw;
 }
+
+#cancel-content {
+  padding: 2vw !important;
+}
+
+#cancelModalDesc {
+  font-size: 18px;
+}
+#cancelButtonModal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw;
+  margin-top: 2vw;
+}
+
+/* rate modal */
+
+#rate-modal-header {
+  display: flex;
+  justify-content: center;
+}
+
+.rateSubtitle {
+  text-align: center;
+}
+
+.d-flex {
+  justify-content: center;
+}
+.fa-star {
+  font-size: 3vw;
+  padding: 10px;
+  color: grey;
+  cursor: pointer;
+}
+.fa-star.orange {
+  color: orange;
+}
+/* rate modal */
