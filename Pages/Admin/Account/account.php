@@ -209,6 +209,13 @@ $userRole = $_SESSION['userRole'];
                     <?php endif; ?>
                     <label for="birthday">Birthday</label>
                 </div>
+                <!-- <div class="info">
+                    <input type="date" name="birthday" id="birthday"
+                        value="<?= !empty($data['birthDate']) ? htmlspecialchars($data['birthDate']) : '' ?>" disabled
+                        placeholder="<?= empty($data['birthDate']) ? '--' : '' ?>">
+                    <label for="birthday">Birthday</label>
+                </div> -->
+
                 <div class="info">
                     <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>" disabled required>
                     <label for="address">Address</label>
@@ -263,12 +270,25 @@ $userRole = $_SESSION['userRole'];
     </script>
 
     <script>
-        //All the disbaled input box will be removed
         function enableEditing() {
+            const birthdayInput = document.getElementById("birthday");
+
+            if (birthdayInput.type === "text" && birthdayInput.value === "--") {
+                const newInput = document.createElement("input");
+                newInput.type = "date";
+                newInput.name = "birthday";
+                newInput.id = "birthday";
+                newInput.disabled = false;
+                newInput.className = birthdayInput.className;
+
+                birthdayInput.parentNode.replaceChild(newInput, birthdayInput);
+            } else {
+                birthdayInput.removeAttribute("disabled");
+            }
+
             document.getElementById("fullName").removeAttribute("disabled");
             document.getElementById("address").removeAttribute("disabled");
             document.getElementById("phoneNumber").removeAttribute("disabled");
-            document.getElementById("birthday").removeAttribute("disabled");
 
             document.getElementById("saveBtn").style.display = "inline-block";
             document.getElementById("cancelBtn").style.display = "inline-block";
