@@ -259,13 +259,29 @@ $userRole = $_SESSION['userRole'];
                         $statusTitle = "Your reservation is pending for approval";
                         $statusSubtitle = 'Your request has been sent to the admin. Please wait for the approval of
                     your reservation.';
+                    } elseif ($bookingStatus === 'Rejected') {
+                        $status = strtolower($bookingStatus) ?? NUll;
+                        $statusTitle = "Booking Rejected!";
+                        $statusSubtitle = "We regret to inform you that your reservation has been rejected. Please contact us for more details.";
+                    } elseif ($bookingStatus === 'Cancelled') {
+                        $status = strtolower($bookingStatus) ?? null;
+                        $statusTitle = "Booking Cancelled";
+                        $statusSubtitle = "You have cancelled your reservation. If this was a mistake or you wish to rebook, please contact us.";
+                    } elseif ($bookingStatus === 'Approved' && $confirmedBookingStatus === 'Rejected') {
+                        $status = strtolower($bookingStatus) ?? null;
+                        $statusTitle = "Payment Rejected";
+                        $statusSubtitle = "Your reservation was approved, but the submitted payment was rejected. Please check the payment details and try again, or contact the admin for assistance.";
                     } elseif ($bookingStatus === 'Approved' && $confirmedBookingStatus === 'Pending') {
                         $status = strtolower($bookingStatus) ?? NUll;
                         $statusTitle = "Your reservation has been approved.";
                         if ($paymentMethod === 'GCash') {
                             $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed with the down payment via GCash.";
                         } elseif ($paymentMethod === 'Cash') {
-                            $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed to the resort to make your payment.";
+                            if ($bookingType === 'Resort') {
+                                $statusSubtitle = "Your reservation has been approved by the admin. Please proceed on your scheduled swimming date and complete the payment on that day.";
+                            } else {
+                                $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed to the resort to make your downpayment.";
+                            }
                         }
                     } elseif ($confirmedBookingStatus === 'Approved' && $paymentStatus === 'Partially Paid') {
                         $status = strtolower($bookingStatus) ?? NUll;
@@ -319,7 +335,7 @@ $userRole = $_SESSION['userRole'];
                 <input type="hidden" name="paymentMethod" id="paymentMethod"
                     value="<?= htmlspecialchars($paymentMethod) ?>">
 
-                <img src="../../../Assets/Images/Icon/<?= htmlspecialchars($status) ?>.png"
+                <img src="../../../Assets/Images/Icon/<?= htmlspecialchars(ucfirst($status)) ?>.png"
                     alt="<?= htmlspecialchars($status) ?> Icon" class="PendingIcon">
                 <!-- <h4 class="pendingTitle">Your reservation is pending for approval </h4> -->
                 <!-- <h6 class="pendingSubtitle">Your request has been sent to the admin. Please wait for the approval of
@@ -502,62 +518,62 @@ $userRole = $_SESSION['userRole'];
 
 
     <script>
-    //Hide the make a downpayment button
-    const paymentStatus = document.getElementById("paymentStatus").value;
-    const bookingStatus = document.getElementById("bookingStatus").value;
-    const confirmedBookingStatus = document.getElementById("confirmedBookingStatus").value;
-    const paymentMethod = document.getElementById("paymentMethod").value;
-    if (paymentMethod === 'Cash') {
-        document.getElementById("makeDownpaymentBtn").style.display = "none";
-    } else if (bookingStatus === "Pending") {
-        document.getElementById("makeDownpaymentBtn").style.display = "none";
-    } else if (bookingStatus === "Approved" && confirmedBookingStatus === "Pending" && paymentStatus === "Unpaid") {
-        document.getElementById("makeDownpaymentBtn").style.display = "show";
-    } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Partially Paid") {
-        document.getElementById("makeDownpaymentBtn").style.display = "show";
-    } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Fully Paid") {
-        document.getElementById("makeDownpaymentBtn").style.display = "none";
-    } else {
-        document.getElementById("makeDownpaymentBtn").style.display = "none";
-    }
-    </script>
-
-
-    <script>
-    //Show the image preview
-    document.querySelector("input[type='file']").addEventListener("change", function(event) {
-        let reader = new FileReader();
-        reader.onload = function() {
-            let preview = document.getElementById("preview");
-            preview.src = reader.result;
-            preview.style.display = "block";
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    });
-    </script>
-
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const bookingType = document.getElementById("bookingType").value;
-
-        const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
-        const addOnsContainer = document.getElementById("addOns");
-        const tourTypeContainer = document.getElementById("tourType");
-
-        if (bookingType === "Resort") {
-            downpaymentNoteContainer.style.display = "none";
-            addOnsContainer.style.display = "flex";
-            tourTypeContainer.style.display = "flex";
-        } else if (bookingType === "Hotel") {
-            downpaymentNoteContainer.style.display = "block";
-            addOnsContainer.style.display = "none";
-            tourTypeContainer.style.display = "none";
+        //Hide the make a downpayment button
+        const paymentStatus = document.getElementById("paymentStatus").value;
+        const bookingStatus = document.getElementById("bookingStatus").value;
+        const confirmedBookingStatus = document.getElementById("confirmedBookingStatus").value;
+        const paymentMethod = document.getElementById("paymentMethod").value;
+        if (paymentMethod === 'Cash') {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else if (bookingStatus === "Pending") {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else if (bookingStatus === "Approved" && confirmedBookingStatus === "Pending" && paymentStatus === "Unpaid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "show";
+        } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Partially Paid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "show";
+        } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Fully Paid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
         } else {
-            downpaymentNoteContainer.style.display = "block";
-            addOnsContainer.style.display = "none";
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
         }
-    });
+    </script>
+
+
+    <script>
+        //Show the image preview
+        document.querySelector("input[type='file']").addEventListener("change", function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                let preview = document.getElementById("preview");
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bookingType = document.getElementById("bookingType").value;
+
+            const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
+            const addOnsContainer = document.getElementById("addOns");
+            const tourTypeContainer = document.getElementById("tourType");
+
+            if (bookingType === "Resort") {
+                downpaymentNoteContainer.style.display = "none";
+                addOnsContainer.style.display = "flex";
+                tourTypeContainer.style.display = "flex";
+            } else if (bookingType === "Hotel") {
+                downpaymentNoteContainer.style.display = "block";
+                addOnsContainer.style.display = "none";
+                tourTypeContainer.style.display = "none";
+            } else {
+                downpaymentNoteContainer.style.display = "block";
+                addOnsContainer.style.display = "none";
+            }
+        });
     </script>
 
 
@@ -565,37 +581,37 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
-    if (paramValue === "imageError") {
-        Swal.fire({
-            title: "Oops!",
-            text: "Failed to upload downpayment receipt image",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    } else if (paramValue === "imageFailed") {
-        Swal.fire({
-            title: "Oops!",
-            text: "No downpayment image submitted.",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    } else if (paramValue === "imageSize") {
-        Swal.fire({
-            title: "Oops!",
-            text: "File is too large. Maximum allowed size is 64MB.",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    }
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        if (paramValue === "imageError") {
+            Swal.fire({
+                title: "Oops!",
+                text: "Failed to upload downpayment receipt image",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === "imageFailed") {
+            Swal.fire({
+                title: "Oops!",
+                text: "No downpayment image submitted.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === "imageSize") {
+            Swal.fire({
+                title: "Oops!",
+                text: "File is too large. Maximum allowed size is 64MB.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        }
 
 
-    if (paramValue) {
-        const url = new URL(window.location.href);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location.href);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 
