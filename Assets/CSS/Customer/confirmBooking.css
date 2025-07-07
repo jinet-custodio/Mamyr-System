@@ -15,6 +15,11 @@
   src: url(../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
 }
 
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
 /* Footer  */
 
 footer {
@@ -108,3 +113,103 @@ footer {
 }
 
 /* Footer */
+
+.backButton-container {
+  position: absolute;
+  left: 2%;
+  top: 1vw;
+}
+
+.container-fluid {
+  /* border: 1px solid red; */
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2vw;
+}
+
+.container-header {
+  text-align: center;
+  margin-top: 4vw;
+  text-align: center;
+  font-size: 36px;
+  font-family: "Poppins";
+  font-weight: bold;
+  margin-bottom: 2vw;
+}
+
+.container-body {
+  display: grid;
+  grid-template-columns: repeat(3, 20vw);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1vw;
+  margin-right: 20vw;
+  /* border: 1px solid red; */
+  position: relative;
+}
+
+.info {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-control {
+  margin-top: -5vw;
+  height: 8vh;
+  width: 25vw !important;
+}
+
+.card {
+  margin-left: -20vw;
+  height: 50vh !important;
+  background-color: #f5f5f5 !important;
+}
+
+.list-group-flash {
+  border-radius: 0 !important;
+  border-bottom: none !important;
+  border-top: none !important;
+}
+.list-group-item {
+  background-color: #f5f5f5 !important;
+}
+
+.payment-info {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center;
+  padding: 0.5rem 0.5rem;
+  background-color: #f5f5f5;
+  /* border: 1px solid red; */
+  gap: 0.3rem;
+}
+
+.cardHeader {
+  font-size: 25px !important;
+  text-align: center;
+  padding: 1vw;
+}
+
+.card-title {
+  flex-shrink: 0;
+}
+
+.card-content {
+  font-size: 18px;
+  margin-left: auto;
+  font-family: "Poppins Light";
+}
+
+/* #card-form {
+  margin-top: 2vw;
+  width: 25vw !important;
+  height: 8vh !important; 
+}*/

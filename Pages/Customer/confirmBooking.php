@@ -317,71 +317,92 @@ $userRole = $_SESSION['userRole'];
     ?>
 
 
-    <div class="button-container">
-        <a href="bookNow.php#<?= $page ?>" class="btn"><img src="../../Assets/Images/Icon/back-button.png" alt="Back"></a>
-    </div>
 
     <form action="../../Function/Booking/<?= htmlspecialchars($bookingFunctionPage) ?>" method="POST">
-        <div class="card display-confirmation">
-            <h5 class="card-header">Booking Summary</h5>
-            <div class="card-body">
+        <div class="backButton-container">
+            <a href="bookNow.php#<?= $page ?>" class="btn"><img src="../../Assets/Images/Icon/back-button.png"
+                    alt="Back"></a>
+        </div>
+
+        <h2 class="container-header">Booking Summary</h2>
+        <div class="container-fluid">
+            <div class="container-body">
                 <div class="info">
-                    <h5 class="card-title">Booking Type:</h5>
+                    <h5 class="info-title">Booking Type:</h5>
                     <input type="text" value="<?= $bookingType ?> Booking" class="form-control" readonly>
-                    <input type="hidden" id="bookingType" name="bookingType" value="<?= $bookingType ?>" class="form-control" readonly>
+                    <input type="hidden" id="bookingType" name="bookingType" value="<?= $bookingType ?>"
+                        class="form-control" readonly>
                 </div>
                 <div class="info">
-                    <h5 class="card-title">Customer Name:</h5>
+                    <h5 class="info-title">Customer Name:</h5>
                     <input type="text" name="customerName" value="<?= $name ?>" class="form-control" readonly>
                 </div>
                 <div class="info">
-                    <h5 class="card-title">Services:</h5>
-                    <input type="text" name="services" value="<?= htmlspecialchars(implode(', ', $services)) ?>" class="form-control" readonly>
+                    <h5 class="info-title">Services:</h5>
+                    <input type="text" name="services" value="<?= htmlspecialchars(implode(', ', $services)) ?>"
+                        class="form-control" readonly>
                 </div>
 
                 <div class="info">
-                    <h5 class="card-title">Description</h5>
-                    <input type="text" name="description" value="<?= htmlspecialchars(implode(', ', array_unique($description))) ?>" class="form-control" readonly>
+                    <h5 class="info-title">Description</h5>
+                    <input type="text" name="description"
+                        value="<?= htmlspecialchars(implode(', ', array_unique($description))) ?>" class="form-control"
+                        readonly>
                 </div>
 
                 <div class="info">
-                    <h5 class="card-title">Date:</h5>
+                    <h5 class="info-title">Date:</h5>
                     <input type="text" name="date" value="<?= $date ?>" class="form-control" readonly>
                 </div>
                 <div class="info">
-                    <h5 class="card-title">Time Range:</h5>
+                    <h5 class="info-title">Time Range:</h5>
                     <input type="text" name="timeRange" value="<?= $timeRange ?>" class="form-control" readonly>
                 </div>
                 <div class="info">
-                    <h5 class="card-title">Number of People:</h5>
+                    <h5 class="info-title">Number of People:</h5>
                     <input type="text" name="totalPax" value="<?= $totalPax ?>" class="form-control" readonly>
                 </div>
 
                 <div class="info">
-                    <h5 class="card-title">Additional:</h5>
-                    <input type="text" name="addOns" value="<?= htmlspecialchars(implode(', ', $addOns)) ?>" class="form-control" readonly>
+                    <h5 class="info-title">Additional:</h5>
+                    <input type="text" name="addOns" value="<?= htmlspecialchars(implode(', ', $addOns)) ?>"
+                        class="form-control" readonly>
                 </div>
 
-                <div class="info" id="addRequest" style="display: none;">
-                    <h5 class=" card-title">Additional Request</h5>
-                    <input type="text" name="additionalRequest" value="<?= htmlspecialchars($additionalRequest) ?>" class="form-control" readonly>
-                </div>
-
-                <div class="info">
-                    <h5 class="card-title">Payment Method:</h5>
-                    <input type="text" name="paymentMethod" value="<?= htmlspecialchars($paymentMethod) ?>" class="form-control" readonly>
-                </div>
-
-                <div class="info">
-                    <h5 class="card-title">Total Cost:</h5>
-                    <input type="text" name="totalCost" value="₱ <?= number_format($totalCost, 2) ?>" class="form-control" readonly>
-                </div>
-
-                <div class="info" id="downpayment" style="display: none;">
-                    <h5 class="card-title">Downpayment:</h5>
-                    <input type="text" name="downPayment" value="₱ <?= number_format($downPayment, 2) ?>" class="form-control" readonly>
+                <div class="info" id="addRequest">
+                    <h5 class=" info-title">Additional Request</h5>
+                    <input type="text" name="additionalRequest" value="<?= htmlspecialchars($additionalRequest) ?>"
+                        class="form-control " readonly>
                 </div>
             </div>
+
+            <div class="card" style="width: 25.6rem;">
+
+                <h5 class="cardHeader">Payment Summary</h5>
+
+                <ul class="list-group list-group-flash">
+                    <li class="list-group-item payment-info">
+                        <h5 class="card-title">Payment Method:</h5>
+                        <h6 class="card-content" id="card-form"><?= htmlspecialchars($paymentMethod) ?></h6>
+                    </li>
+
+                    <li class="list-group-item payment-info">
+                        <h5 class="card-title">Total Cost:</h5>
+                        <h6 class="card-content" id="card-form">₱ <?= number_format($totalCost, 2) ?></h6>
+                    </li>
+
+                    <li class="list-group-item payment-info" id="downpayment">
+                        <h5 class="card-title">Downpayment:</h5>
+                        <h6 class="card-content" id="card-form">₱ <?= number_format($downPayment, 2) ?></h6>
+                    </li>
+                </ul>
+
+                <div class="button-container w-100">
+                    <button type="submit" class="btn btn-primary w-75" name="<?= $buttonName ?>">Book
+                        Now</button>
+                </div>
+            </div>
+
 
             <input type="hidden" name="resortBookingDate" value="<?= htmlspecialchars($scheduledDate) ?>">
             <input type="hidden" name="tourSelections" value="<?= htmlspecialchars($tourSelections) ?>">
@@ -395,11 +416,10 @@ $userRole = $_SESSION['userRole'];
             <input type="hidden" name="selectedHotel" value="<?= htmlspecialchars($selectedHotel) ?>">
             <input type="hidden" name="hoursSelected" value="<?= htmlspecialchars($hoursSelected) ?>">
 
-            <div class="mt-auto button-container">
-                <button type="submit" class="btn btn-primary btn-md w-100" name="<?= $buttonName ?>">Book Now</button>
-            </div>
+
 
         </div>
+
     </form>
 
     <footer class="py-1 " id="footer" style="margin-top: 5vw !important;">
@@ -439,34 +459,39 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Hide downpayment and show addOns pag resort booking -->
-    <script>
-        const bookingType = document.getElementById("bookingType").value;
-        const downpaymentDiv = document.getElementById('downpayment');
-        const addRequestDiv = document.getElementById('addRequest');
-        // const addOnsDiv = document.getElementById('addOns');
+    <!-- <script>
+    const bookingType = document.getElementById("bookingType").value;
+    const downpaymentDiv = document.getElementById('downpayment');
+    const addRequestDiv = document.getElementById('addRequest');
+    // const addOnsDiv = document.getElementById('addOns');
 
-        if (bookingType === "Resort Booking") {
-            downpaymentDiv.style.display = "none";
-            // descriptionDiv.style.display = "none";
-            addRequestDiv.style.display = "block";
-            // addOnsDiv.style.display = "block";
-        } else if (bookingType === "Hotel Booking") {
-            downpaymentDiv.style.display = "block";
-            // descriptionDiv.style.display = "block";
-            addRequestDiv.style.display = "none";
-        } else {
-            downpaymentDiv.style.display = "block";
-            // descriptionDiv.style.display = "block";
-            addRequestDiv.style.display = "block";
-            // addOnsDiv.style.display = "none";
-        }
-    </script>
+    if (bookingType === "Resort Booking") {
+        downpaymentDiv.style.display = "none";
+        // descriptionDiv.style.display = "none";
+        // addRequestDiv.style.display = "block";
+
+
+        // addOnsDiv.style.display = "block";
+    } else if (bookingType === "Hotel Booking") {
+        downpaymentDiv.style.display = "block";
+        // descriptionDiv.style.display = "block";
+        addRequestDiv.style.display = "none";
+    } else {
+        downpaymentDiv.style.display = "block";
+        // descriptionDiv.style.display = "block";
+        // addRequestDiv.style.display = "block";
+
+        // addOnsDiv.style.display = "none";
+    }
+    </script> -->
 </body>
 
 </html>
