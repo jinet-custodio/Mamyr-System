@@ -58,13 +58,18 @@ INSERT INTO `websitecontents` (`contentID`, `adminID`, `sectionName`, `title`, `
 (15, 1, 'Blog', 'BlogPost4-EventType', 'Debut', '2025-07-01 01:31:50'),
 (16, 1, 'Blog', 'BlogPost4-EventDate', '2024-09-02', '2025-07-01 01:31:50'),
 (17, 1, 'Blog', 'BlogPost4-EventHeader', 'Jannah\'s 18th Birthday', '2025-07-01 01:31:50'),
-(18, 1, 'Blog', 'BlogPost4-Content', 'Jannah\'s 18th Birthday: A Joyous Celebration Marking the Transition into Adulthood with Laughter, Love, and Unforgettable Memories. Surrounded by family and friends, this milestone birthday was a beautiful blend of cherished moments, heartfelt wishes, and the excitement of new beginnings.', '2025-07-01 01:31:50');
-
+(18, 1, 'Blog', 'BlogPost4-Content', 'Jannah\'s 18th Birthday: A Joyous Celebration Marking the Transition into Adulthood with Laughter, Love, and Unforgettable Memories. Surrounded by family and friends, this milestone birthday was a beautiful blend of cherished moments, heartfelt wishes, and the excitement of new beginnings.', '2025-07-01 01:31:50'),
+(19, 1, 'BusinessInformation', 'DisplayName', 'Mamyr', '2025-07-03 00:29:44'),
+(20, 1, 'BusinessInformation', 'FullName', 'Mamyr Resort and Events Place', '2025-07-03 00:29:44'),
+(21, 1, 'BusinessInformation', 'ShortDesc', 'Welcome to Mamyr Resort and Event Place! We\'re more than just a resort, we\'re a place where memories are made. Whether you\'re here for a relaxing getaway, a family gathering, or a special event, we\'re dedicated to making your stay unforgettable.', '2025-07-03 00:38:51'),
+(22, 1, 'BusinessInformation', 'ContactNum', '(0998) 962 4697', '2025-07-03 00:38:51'),
+(24, 1, 'BusinessInformation', 'Email', 'mamyresort128@gmail.com', '2025-07-03 00:38:51'),
+(25, 1, 'BusinessInformation', 'Address', 'Sitio Colonia Gabihan, San Ildefonso, Bulacan', '2025-07-03 00:38:51');
 
 --
-ALTER TABLE `websitecontents`
-  ADD PRIMARY KEY (`contentID`),
-  ADD KEY `adminID` (`adminID`);
+-- ALTER TABLE `websitecontents`
+--   ADD PRIMARY KEY (`contentID`),
+--   ADD KEY `adminID` (`adminID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -73,8 +78,8 @@ ALTER TABLE `websitecontents`
 --
 -- AUTO_INCREMENT for table `websitecontents`
 --
-ALTER TABLE `websitecontents`
-  MODIFY `contentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+-- ALTER TABLE `websitecontents`
+--   MODIFY `contentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Constraints for dumped tables
@@ -83,6 +88,6 @@ ALTER TABLE `websitecontents`
 --
 -- Constraints for table `websitecontents`
 --
-ALTER TABLE `websitecontents`
-  ADD CONSTRAINT `websitecontents_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admins` (`adminID`);
-COMMIT;
+-- ALTER TABLE `websitecontents`
+--   ADD CONSTRAINT `websitecontents_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admins` (`adminID`);
+-- COMMIT;

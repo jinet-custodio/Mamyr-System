@@ -48,7 +48,7 @@ $userRole = $_SESSION['userRole'];
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
@@ -121,6 +121,13 @@ $userRole = $_SESSION['userRole'];
         $middleInitial = $data['middleInitial'];
         $lastName = $data['lastName'];
         $phoneNumber = $data['phoneNumber'];
+        $email = $data['email'];
+
+        if ($phoneNumber === "--") {
+            $phoneNumber = "";
+        } else {
+            $phoneNumber;
+        }
     }
     ?>
 
@@ -156,20 +163,22 @@ $userRole = $_SESSION['userRole'];
     </div>
 
 
-    <form action="../../Function/partnershipRequest.php" method="POST">
+    <form action="../../Function/partnershipRequest.php" method="POST" enctype="multipart/form-data" onsubmit="return submitRequest();">
 
-        <div class="container" id="basicInfo">
+        <div class=" container" id="basicInfo">
 
             <input type="hidden" class="form-control" id="userdID" name="userID"
-                value="<?= htmlspecialchars_decode($userID) ?>" placeholder="First Name" required>
-            <input type="hidden" class="form-control" id="userdID" name="userRole"
-                value="<?= htmlspecialchars_decode($userRole) ?>" placeholder="First Name" required>
-
+                value="<?= htmlspecialchars_decode($userID) ?>">
+            <input type="hidden" class="form-control" id="userdRole" name="userRole"
+                value="<?= htmlspecialchars_decode($userRole) ?>">
             <div class="row">
                 <div class="col" id="repInfoContainer">
                     <h4 class="repInfoLabel">Representative Information</h4>
 
                     <div class="repInfoFormContainer">
+                        <input type="email" class="form-control" id="businessEmail" name="businessEmail"
+                            placeholder="Business Email" required>
+
                         <input type="text" class="form-control" id="firstName" name="firstName"
                             value="<?= htmlspecialchars_decode($firstName) ?>" placeholder="First Name" required>
                         <input type="text" class="form-control" id="middleInitial"
@@ -177,8 +186,6 @@ $userRole = $_SESSION['userRole'];
                             placeholder="Middle Initial (Optional)">
                         <input type="text" class="form-control" id="lastName" name="lastName"
                             value="<?= htmlspecialchars_decode($lastName) ?>" placeholder="Last Name" required>
-                        <!-- <input type="text" class="form-control" id="email" name="email" placeholder="Email Address"
-                            required> -->
                         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
                             placeholder="Phone Number" value="<?= htmlspecialchars_decode($phoneNumber) ?>" required>
                     </div>
@@ -189,33 +196,40 @@ $userRole = $_SESSION['userRole'];
 
                     <div class="busInfoFormContainer">
                         <!--purpose of this div: going to put margin top para pumantay sa left and right column-->
-                        <input type="text" class="form-control" id="busName" name="busName" placeholder="Business Name">
+                        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Business Name" value="<?php echo isset($_SESSION['partnerData']['companyName']) ? htmlspecialchars(trim($_SESSION['partnerData']['companyName'])) : ''; ?>">
 
-                        <select id="service" name="partnerType" class="form-select primary" required>
+                        <select id="partnerType" name="partnerType" class="form-select primary">
                             <option value="" disabled selected>Type of Business</option>
+                            <?php
+                            $serviceType = $conn->prepare("SELECT * FROM partnershipTypes");
+                            $serviceType->execute();
+                            $serviceTypeResult = $serviceType->get_result();
+                            if ($serviceTypeResult->num_rows > 0) {
+                                while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
+                                    $partnerType = $serviceTypes['partnerType'];
+                                    $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
+                            ?>
+                                    <option value="<?= htmlspecialchars($partnerType) ?>"><?= htmlspecialchars($partnerTypeDescription) ?></option>
 
-                            <option value="photography">Photography/Videography</option>
-                            <option value="sound-lighting">Sound and Lighting</option>
-                            <option value="event-hosting">Event Hosting</option>
-                            <option value="photo-booth">Photo Booth</option>
-                            <option value="performer">Performer</option>
-                            <option value="food-cart">Food Cart</option>
-
+                            <?php
+                                }
+                            }
+                            ?>
                         </select>
 
                         <input type="text" class="form-control" id="streetAddress" name="streetAddress"
-                            placeholder="Street Address">
+                            placeholder="Street Address(optional)" value="<?php echo isset($_SESSION['partnerData']['streetAddress']) ? htmlspecialchars(trim($_SESSION['partnerData']['streetAddress'])) : ''; ?>">
 
-                        <input type="text" class="form-control" id="address2" name="address2"
-                            placeholder="Street Address Line 2 (optional)">
+                        <input type="text" class="form-control" id="barangay" name="barangay"
+                            placeholder="Barangay" value="<?php echo isset($_SESSION['partnerData']['barangay']) ? htmlspecialchars(trim($_SESSION['partnerData']['barangay'])) : ''; ?>" required>
 
-                        <input type="text" class="form-control" id="city" name="city" placeholder="Town/City">
+                        <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" value="<?php echo isset($_SESSION['partnerData']['city']) ? htmlspecialchars(trim($_SESSION['partnerData']['city'])) : ''; ?>" required>
 
                         <div class="row1">
                             <input type="text" class="form-control" id="province" name="province"
-                                placeholder="Province">
+                                placeholder="Province" value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>" required>
 
-                            <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code">
+                            <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code" value="<?php echo isset($_SESSION['partnerData']['zip']) ? htmlspecialchars(trim($_SESSION['partnerData']['zip'])) : ''; ?>">
                         </div>
                     </div>
                 </div>
@@ -230,13 +244,13 @@ $userRole = $_SESSION['userRole'];
 
 
                         <input type="text" class="form-control" id="proofLink" name="proofLink"
-                            placeholder="Paste the link here">
+                            placeholder="Paste the link here" value="<?php echo isset($_SESSION['partnerData']['proofLink']) ? htmlspecialchars(trim($_SESSION['partnerData']['proofLink'])) : ''; ?>" required>
 
                         <a href="#moreDetailsModal" class="moreDetails" data-bs-toggle="modal"
                             data-bs-target="#openModal">More Details</a>
 
                         <button type="submit" class="btn btn-primary w-75" name="submit_request"
-                            id="submit-request">Submit Request</button>
+                            id="submit-request" onclick="submitRequest()">Submit Request</button>
 
                     </div>
                 </div>
@@ -337,20 +351,6 @@ $userRole = $_SESSION['userRole'];
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -532,7 +532,7 @@ $userRole = $_SESSION['userRole'];
     </footer>
 
 
-    <script>
+    <!-- <script>
         const serviceSelect = document.getElementById('service');
         const otherContainer = document.getElementById('other-container');
         const otherInput = document.getElementById('other-input');
@@ -546,10 +546,58 @@ $userRole = $_SESSION['userRole'];
                 otherInput.required = false;
             }
         });
-    </script>
+    </script> -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
     <!-- Scroll Nav BG -->
     <script src="../../Assets/JS/scrollNavbg.js"></script>
+
+
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function submitRequest() {
+            const requiredFields = [
+                'firstName', 'lastName', 'phoneNumber', 'partnerType', 'proofLink', 'barangay', 'city', 'province', 'businessEmail'
+            ];
+
+            let allValid = true;
+
+            requiredFields.forEach(id => {
+                const field = document.getElementById(id);
+                if (!field || !field.value.trim()) {
+                    if (field) field.classList.add('is-invalid');
+                    allValid = false;
+                } else {
+                    if (field) field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!allValid) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: "Please fill out all required fields before continuing.",
+                    icon: 'warning'
+                });
+                return false; // stop form submission
+            }
+
+            return true; // allow form submission
+        }
+    </script>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('result');
+
+        if (paramValue === 'emailExist') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Email Already Exist!',
+                text: 'The email address you entered is already registered.'
+            })
+        }
+    </script>
+
 
 </body>
 
