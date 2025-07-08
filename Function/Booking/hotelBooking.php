@@ -15,7 +15,7 @@ if (isset($_POST['hotelBooking'])) {
     $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
     $selectedHotel = mysqli_real_escape_string($conn, $_POST['selectedHotel']);
     // $hotelNotes = mysqli_real_escape_string($conn, $_POST['hotelNotes']);
-    $paymentMethod = mysqli_real_escape_string($conn, $_POST['PaymentMethod']);
+    $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
 
     $excessChargePerPerson = 250;
