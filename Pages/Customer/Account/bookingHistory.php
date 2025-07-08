@@ -113,8 +113,8 @@ $userRole = $_SESSION['userRole'];
                     <th scope="col">Check In</th>
                     <th scope="col">Total Cost</th>
                     <th scope="col">Balance</th>
-                    <th scope="col">Booking Type</th>
                     <th scope="col">Payment Method</th>
+                    <th scope="col">Booking Type</th>
                     <th scope="col">Status</th>
                     <th scope="col">Review</th>
                     <th scope="col">Action</th>
@@ -128,7 +128,8 @@ $userRole = $_SESSION['userRole'];
                     LEFT JOIN confirmedbookings cb ON cb.bookingID = b.bookingID
                     LEFT JOIN statuses s ON cb.confirmedBookingStatus = s.statusID
                     LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
-                    WHERE userID = '$userID'";
+                    WHERE userID = '$userID'
+                    ORDER BY createdAt";
                     $resultGetBooking = mysqli_query($conn, $getBooking);
                     if (mysqli_num_rows($resultGetBooking) > 0) {
                         foreach ($resultGetBooking as $booking) {
