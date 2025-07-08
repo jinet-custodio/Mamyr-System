@@ -411,7 +411,7 @@ $userRole = $_SESSION['userRole'];
             <input type="hidden" name="childrenCount" value="<?= htmlspecialchars($childrenCount) ?>">
             <input type="hidden" name="cottageSelections" value="<?= htmlspecialchars($cottageChoice) ?>">
             <input type="hidden" name="videokeChoice" value="<?= htmlspecialchars($videokeChoice) ?>">
-
+            <input type="hidden" name="paymentMethod" value="<?= htmlspecialchars($paymentMethod) ?>">
             <input type="hidden" name="checkInDate" value="<?= htmlspecialchars($checkInDate) ?>">
             <input type="hidden" name="checkOutDate" value="<?= htmlspecialchars($checkOutDate) ?>">
             <input type="hidden" name="selectedHotel" value="<?= htmlspecialchars($selectedHotel) ?>">

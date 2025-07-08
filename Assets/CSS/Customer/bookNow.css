@@ -3,6 +3,10 @@
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+@font-face {
   font-family: "Plus Jakarta Sans";
   src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
 }
@@ -572,6 +576,14 @@ footer {
     justify-content: center;
     gap: 1rem;
     align-items: center;
+  }
+
+  .checkInOut {
+    justify-content: space-evenly !important;
+  }
+
+  .checkIn-container, .checkOut-container {
+    width: 50% !important  ;
   }
 
   .checkInOut,
