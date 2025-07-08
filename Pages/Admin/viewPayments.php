@@ -254,10 +254,10 @@ $userRole = $_SESSION['userRole'];
             <section id="downpaymentImageSection">
                 <div class="image-container" id="downpayment-image-container">
                     <?php if ($downpaymentImage !== 'None'): ?>
-                        <img src="<?= htmlspecialchars($downpaymentImage) ?>" alt="Receipt Image" class="preview-image">
+                        <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
 
                         <div class="zoom-overlay">
-                            <img src="<?= htmlspecialchars($downpaymentImage) ?>" alt="Zoomed Image">
+                            <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
                         </div>
                     <?php else: ?>
                         <p>Customer has not uploaded the receipt yet.</p>
@@ -379,7 +379,7 @@ $userRole = $_SESSION['userRole'];
         } else if (paymentStatus === 'Partially Paid') {
             document.getElementById("addPayment").style.display = "block";
             document.querySelector("#form-button").style.display = "none";
-        } else if (paymentStatus === 'Unpaid') {
+        } else if (paymentStatus === 'No Payment') {
             document.getElementById("addPayment").style.display = "none";
         }
     </script>

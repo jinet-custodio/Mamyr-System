@@ -273,9 +273,44 @@ require '../Function/OTPdeletion.php';
         if (action === "deleted") {
             Swal.fire({
                 title: "Success",
-                text: "Your Account has been deleted!",
+                text: "Your account has been deleted successfully.",
                 icon: "success"
             });
+        } else if (action === "unauthorized") {
+            Swal.fire({
+                title: "Oops",
+                text: "You are not authorized to access this page.",
+                icon: "warning"
+            })
+        } else if (action === "notVerified") {
+            Swal.fire({
+                title: "Oops",
+                text: "User not verified. Please verify your account.",
+                icon: "warning"
+            })
+        } else if (action === "emailExist") {
+            Swal.fire({
+                title: "Oops",
+                text: "An account with this email already exists.",
+                icon: "warning"
+            })
+        } else if (action === "OTPFailed") {
+            Swal.fire({
+                title: "Oops",
+                text: "We couldn’t send the OTP. Please try again.",
+                icon: "warning"
+            })
+        } else if (action === "successVerification") {
+            Swal.fire({
+                title: "Verified Successfully",
+                text: "Your account has been verified. You may now log in to your account.",
+                icon: "success"
+            })
+        }
+        if (page || action) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
         }
     </script>
 

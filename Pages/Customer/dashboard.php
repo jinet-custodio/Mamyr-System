@@ -52,7 +52,7 @@ $userRole = $_SESSION['userRole'];
 <body>
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
 
-
+        <input type="hidden" id="userRole" value="<?= $userRole ?>">
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
@@ -65,6 +65,10 @@ $userRole = $_SESSION['userRole'];
                 $mimeType = finfo_buffer($finfo, $imageData);
                 finfo_close($finfo);
                 $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+
+                // echo '<pre>';
+                // print_r($data);
+                // echo '</pre>';
             }
             ?>
             <li class="nav-item account-nav">
@@ -95,16 +99,19 @@ $userRole = $_SESSION['userRole'];
                 <li class="nav-item">
                     <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
-                </li>
-                <li class="nav-item">
+
+                <li class="nav-item" id="businessPartnerNav">
                     <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">ABOUT</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="bookNow.php">BOOK NOW</a>
                 </li>
+
                 <li class="nav-item">
                     <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
                 </li>
@@ -274,6 +281,18 @@ $userRole = $_SESSION['userRole'];
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const businessPartnerNavLink = document.getElementById("businessPartnerNav");
+            const userRoleValue = document.getElementById("userRole").value;
+
+            if (userRoleValue === "2") {
+                businessPartnerNavLink.style.display = "none";
+            }
+        });
+    </script>
 
 
 </body>

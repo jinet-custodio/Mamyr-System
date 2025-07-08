@@ -11,23 +11,42 @@ $userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
 if (isset($_POST['submitDownpaymentImage'])) {
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
     $imageMaxSize = 64 * 1024 * 1024;
-    if (isset($_FILES['downpaymentPic']) &&  $_FILES['downpaymentPic']['tmp_name']) {
+    $imageData = null;
+
+    if (isset($_FILES['downpaymentPic']) && is_uploaded_file($_FILES['downpaymentPic']['tmp_name'])) {
         if ($_FILES['downpaymentPic']['size'] <= $imageMaxSize) {
             $imageData = file_get_contents($_FILES['downpaymentPic']['tmp_name']);
-            $imageData = mysqli_real_escape_string($conn, $imageData);
         } else {
             $_SESSION['bookingID'] = $bookingID;
             header("Location: ../../../Pages/Customer/Account/reservationSummary.php?action=imageSize");
+            exit();
         }
     } else {
-        $defaultDownpaymentImage = '../../../Assets/Images/defaultDownpayment.png';
-        if (file_exists($defaultDownpaymentImage)) {
-            $imageData = file_get_contents($defaultDownpaymentImage);
-            $imageData = mysqli_real_escape_string($conn, $imageData);
-        } else {
-            $imageData = NULL;
+        $defaultImagePath = '../../../Assets/Images/defaultDownpayment.png';
+        if (file_exists($defaultImagePath)) {
+            $imageData = file_get_contents($defaultImagePath);
         }
     }
+
+
+    // if (isset($_FILES['downpaymentPic']) &&  $_FILES['downpaymentPic']['tmp_name']) {
+    //     if ($_FILES['downpaymentPic']['size'] <= $imageMaxSize) {
+    //         $imageData = file_get_contents($_FILES['downpaymentPic']['tmp_name']);
+    //         $imageData = mysqli_real_escape_string($conn, $imageData);
+    //     } else {
+    //         $_SESSION['bookingID'] = $bookingID;
+    //         header("Location: ../../../Pages/Customer/Account/reservationSummary.php?action=imageSize");
+    //     }
+    // } else {
+    //     $defaultDownpaymentImage = '../../../Assets/Images/defaultDownpayment.png';
+    //     if (file_exists($defaultDownpaymentImage)) {
+    //         $imageData = file_get_contents($defaultDownpaymentImage);
+    //         $imageData = mysqli_real_escape_string($conn, $imageData);
+    //     } else {
+    //         $imageData = NULL;
+    //     }
+    // }
+
 
 
     if ($imageData !== NULL) {

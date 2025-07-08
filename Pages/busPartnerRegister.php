@@ -1,3 +1,10 @@
+<?php
+require '../Config/dbcon.php';
+session_start();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,23 +30,32 @@
         </a>
     </div>
     <form action="../Function/register.php" method="POST">
-
         <div class="container" id="basicInfo">
             <div class="row">
                 <div class="col" id="repInfoContainer">
                     <h4 class="repInfoLabel">Representative Information</h4>
-
                     <div class="repInfoFormContainer">
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
+                            value="<?php echo isset($_SESSION['formData']['firstName']) ? htmlspecialchars(trim($_SESSION['formData']['firstName'])) : ''; ?>"
                             required>
+                        <!-- <i class='bx bxs-user-circle'></i> -->
+
                         <input type="text" class="form-control" id="middleInitial" name="middleInitial"
-                            placeholder="Middle Initial (Optional)">
+                            placeholder="M.I. (Optional)"
+                            value="<?php echo isset($_SESSION['formData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['formData']['middleInitial'])) : ''; ?>">
+                        <!-- <i class='bx bxs-user-circle'></i> -->
                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
+                            value="<?php echo isset($_SESSION['formData']['lastName']) ? htmlspecialchars(trim($_SESSION['formData']['lastName'])) : ''; ?>"
                             required>
+                        <!-- <i class='bx bxs-user-circle'></i> -->
                         <!-- <input type="text" class="form-control" id="email" name="email" placeholder="Email Address"
                             required> -->
                         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                            placeholder="Phone Number" required>
+                            placeholder="Phone Number"
+                            value="<?php echo isset($_SESSION['partnerData']['phoneNumber']) ? htmlspecialchars(trim($_SESSION['partnerData']['phoneNumber'])) : ''; ?>"
+                            required>
+                        <!-- <i class='bx bxs-phone'></i> -->
+
                     </div>
                 </div>
 
@@ -48,32 +64,40 @@
 
                     <div class="busInfoFormContainer">
                         <!--purpose of this div: going to put margin top para pumantay sa left and right column-->
-                        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Business Name">
+                        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Business Name" value="<?php echo isset($_SESSION['partnerData']['companyName']) ? htmlspecialchars(trim($_SESSION['partnerData']['companyName'])) : ''; ?>">
 
                         <select id="service" name="partnerType" class="form-select primary">
                             <option value="" disabled selected>Type of Business</option>
-                            <option value="photography">Photography/Videography</option>
-                            <option value="sound-lighting">Sound and Lighting</option>
-                            <option value="event-hosting">Event Hosting</option>
-                            <option value="photo-booth">Photo Booth</option>
-                            <option value="performer">Performer</option>
-                            <option value="food-cart">Food Cart</option>
+                            <?php
+                            $serviceType = $conn->prepare("SELECT * FROM partnershipTypes");
+                            $serviceType->execute();
+                            $serviceTypeResult = $serviceType->get_result();
+                            if ($serviceTypeResult->num_rows > 0) {
+                                while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
+                                    $partnerType = $serviceTypes['partnerType'];
+                                    $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
+                            ?>
+                                    <option value="<?= htmlspecialchars($partnerType) ?>"><?= htmlspecialchars($partnerTypeDescription) ?></option>
 
+                            <?php
+                                }
+                            }
+                            ?>
                         </select>
 
                         <input type="text" class="form-control" id="streetAddress" name="streetAddress"
-                            placeholder="Street Address">
+                            placeholder="Street Address(optional)" value="<?php echo isset($_SESSION['partnerData']['streetAddress']) ? htmlspecialchars(trim($_SESSION['partnerData']['streetAddress'])) : ''; ?>">
 
-                        <input type="text" class="form-control" id="address2" name="address2"
-                            placeholder="Street Address Line 2 (optional)">
+                        <input type="text" class="form-control" id="barangay" name="barangay"
+                            placeholder="Barangay" value="<?php echo isset($_SESSION['partnerData']['barangay']) ? htmlspecialchars(trim($_SESSION['partnerData']['barangay'])) : ''; ?>" required>
 
-                        <input type="text" class="form-control" id="city" name="city" placeholder="Town/City">
+                        <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" value="<?php echo isset($_SESSION['partnerData']['city']) ? htmlspecialchars(trim($_SESSION['partnerData']['city'])) : ''; ?>">
 
                         <div class="row1">
                             <input type="text" class="form-control" id="province" name="province"
-                                placeholder="Province">
+                                placeholder="Province" value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>">
 
-                            <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code">
+                            <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code" value="<?php echo isset($_SESSION['partnerData']['zip']) ? htmlspecialchars(trim($_SESSION['partnerData']['zip'])) : ''; ?>">
                         </div>
                     </div>
                 </div>
@@ -85,16 +109,13 @@
                         proof of your business</p>
 
                     <div class="busProofFormContainer">
-
-
                         <input type="text" class="form-control" id="proofLink" name="proofLink"
-                            placeholder="Paste the link here">
+                            placeholder="Paste the link here" value="<?php echo isset($_SESSION['partnerData']['proofLink']) ? htmlspecialchars(trim($_SESSION['partnerData']['proofLink'])) : ''; ?>" required>
 
                         <a href="#moreDetailsModal" class="moreDetails" data-bs-toggle="modal"
                             data-bs-target="#openModal">More Details</a>
 
                         <button class="btn btn-primary w-75" id="nextBtn" onclick="openEmailPass()">Next</button>
-
                     </div>
                 </div>
             </div>
@@ -112,7 +133,7 @@
 
             <div class="emailPassForm">
                 <div class="input-box">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
                         required>
                     <i class='bx bxs-envelope'></i>
                 </div>
@@ -123,7 +144,7 @@
                             oninput="checkPassword();" required>
                         <i id="togglePassword1" class='bx bxs-hide'></i>
                     </div>
-                    <div class=" input-box">
+                    <div class="input-box">
                         <input type="password" class="form-control" id="confirm_password" name="confirm_password"
                             placeholder="Confirm Password" oninput="checkPasswordMatch();" required>
                         <input type="hidden" name="userRole" value="2"> <!-- 2 = partner -->
@@ -153,11 +174,7 @@
                         <div class="confirmErrorMsg text-center" id="termsError"></div>
                     </div>
                 </div>
-
-
             </div>
-
-
         </div>
     </form>
 
@@ -260,7 +277,7 @@
     <!-- Register Password Validation JS -->
     <script src="../Assets/JS/checkPassword.js"></script>
 
-    <script>
+    <!-- <script>
         function validateStepOne() {
             const partnerType = document.getElementById('service').value;
             if (!partnerType) {
@@ -269,7 +286,10 @@
             }
             return true;
         }
-    </script>
+    </script> -->
+
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const emailPassContainer = document.getElementById("emailPassContainer");
         const basicInfo = document.getElementById("basicInfo")
@@ -278,6 +298,33 @@
 
         function openEmailPass() {
 
+            // Get required inputs
+            const requiredFields = [
+                'firstName', 'lastName', 'phoneNumber',
+                'companyName', 'service', 'barangay', 'proofLink'
+            ];
+
+            let allValid = true;
+
+            requiredFields.forEach(id => {
+                const field = document.getElementById(id);
+                if (!field || !field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    allValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!allValid) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: "Please fill out all required fields before continuing.",
+                    icon: 'warning'
+                });
+                return;
+            }
+
             if (emailPassContainer.style.display == "none") {
                 emailPassContainer.style.display = "block";
                 basicInfo.style.display = "none"
@@ -285,10 +332,29 @@
             } else {
                 emailPassContainer.style.display = "block"
             }
-
-
         }
     </script>
+
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get("action");
+
+        if (paramValue === 'emailExist') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Email Already Exist!',
+                text: 'The email address you entered is already registered.'
+            })
+        }
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
+    </script>
+
 
 
     <!-- Eye icon of password show and hide -->

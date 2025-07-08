@@ -196,7 +196,7 @@ $userRole = $_SESSION['userRole'];
 
                             if ($paymentStatus === 'Fully Paid') {
                                 $classColor = 'success';
-                            } elseif ($paymentStatus === 'Unpaid') {
+                            } elseif ($paymentStatus === 'No Payment') {
                                 $classColor = 'warning';
                             } elseif ($paymentStatus === 'Partially Paid') {
                                 $classColor = 'primary';

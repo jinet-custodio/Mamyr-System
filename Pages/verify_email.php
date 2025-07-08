@@ -22,6 +22,7 @@ if (isset($_SESSION['email'])) {
   <link rel="shortcut icon" href="../Assets/Images/Icon/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="../Assets/CSS/modal.css" />
   <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -91,7 +92,46 @@ if (isset($_SESSION['email'])) {
       </div>
     </form>
   </div>
+
+
+  <!-- Bootstrap JS -->
   <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+  <!-- Sweetalert Link -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get("action");
+
+    if (paramValue === "sendOTPFailed") {
+      Swal.fire({
+        title: "Oops!",
+        text: "We couldn’t send the OTP. Please try again.",
+        icon: "warning"
+      });
+    } else if (paramValue === "expiredOTP") {
+      Swal.fire({
+        title: 'Oops!',
+        text: "OTP expired. Please request a new code.",
+        icon: "warning"
+      })
+    } else if (paramValue === "invalidOTP") {
+      Swal.fire({
+        title: 'Oops!',
+        text: "Invalid OTP. Please try again!",
+        icon: "warning"
+      })
+    }
+
+    if (paramValue) {
+      const url = new URL(window.location);
+      url.search = '';
+      history.replaceState({}, document.title, url.toString());
+    }
+  </script>
+
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       var myModal = new bootstrap.Modal(document.getElementById('emailVerificationBox'), {

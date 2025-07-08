@@ -53,7 +53,9 @@ $userRole = $_SESSION['userRole'];
     <!-- Get the information to the database -->
     <?php
     if ($userRole == 1) {
-        $Customer = "Customer";
+        $role = "Customer";
+    } elseif ($userRole == 2) {
+        $role = "Business Partner";
     } else {
         $_SESSION['error'] = "Unauthorized Access eh!";
         session_destroy();
@@ -61,7 +63,7 @@ $userRole = $_SESSION['userRole'];
         exit();
     }
 
-    if ($Customer === "Customer") {
+    if ($role === "Customer" || $role === "Business Partner") {
         $query = "SELECT u.*, ut.typeName as roleName FROM users u
             INNER JOIN usertypes ut ON u.userRole = ut.userTypeID
             WHERE u.userID = '$userID' AND userRole = '$userRole'";
@@ -192,7 +194,7 @@ $userRole = $_SESSION['userRole'];
                         <h5 class="account-name"> <?= htmlspecialchars($data['firstName']) ?></h5>
                         <h6 class="account-contact"> <?= htmlspecialchars($email) ?> |
                             <?= htmlspecialchars($phoneNumber) ?></h6>
-                        <h6 class="roleName"><?= htmlspecialchars($data['roleName']) ?></h6>
+                        <h6 class="roleName"><?= htmlspecialchars($role) ?></h6>
                     </div>
                 </div>
         </form>
