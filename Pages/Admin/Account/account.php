@@ -129,12 +129,12 @@ $userRole = $_SESSION['userRole'];
                     System Preferences
                 </a>
             </li> -->
-            <li>
+            <!-- <li>
                 <a href="revenue.php" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
                     Revenue
                 </a>
-            </li>
+            </li> -->
             <li>
                 <a href="deleteAccount.php" class="list-group-item">
                     <img src="../../../Assets/Images/Icon/delete-user.png" alt="" class="sidebar-icon">

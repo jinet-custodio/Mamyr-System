@@ -131,10 +131,10 @@ if (isset($_SESSION['error-partnership'])) {
             <h5>Payments</h5>
         </a>
 
-        <!-- <a class="nav-link" href="#">
-                <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
-                <h5>Revenue</h5>
-            </a> -->
+        <a class="nav-link" href="revenue.php">
+            <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
+            <h5>Revenue</h5>
+        </a>
 
         <a class="nav-link active" href="displayPartnership.php">
             <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">

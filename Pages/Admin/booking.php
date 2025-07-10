@@ -136,10 +136,10 @@ if (isset($_SESSION['error'])) {
         </a>
 
 
-        <!-- <a class="nav-link" href="#">
-                <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
-                <h5>Revenue</h5>
-            </a> -->
+        <a class="nav-link" href="revenue.php">
+            <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
+            <h5>Revenue</h5>
+        </a>
 
 
         <a class="nav-link" href="displayPartnership.php">
@@ -257,26 +257,26 @@ if (isset($_SESSION['error'])) {
                             // }
 
                     ?>
-                    <tr>
-                        <td><?= htmlspecialchars($bookingID) ?></td>
-                        <td><?= htmlspecialchars($name) ?></td>
-                        <td><?= htmlspecialchars($bookingType) ?>&nbsp;Booking</td>
-                        <td><?= $checkIn ?></td>
-                        <td>
-                            <a class=" <?= $addClass ?>">
-                                <?= htmlspecialchars($status) ?>
-                            </a>
-                        </td>
-                        <td>
-                            <form action="viewBooking.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
-                                <input type="hidden" name="bookingStatus"
-                                    value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($bookings['confirmedStatus'])  ?>">
-                                <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                                <button type="submit" class="btn btn-primary w-75">View</button>
-                            </form>
-                        </td>
-                    </tr>
+                            <tr>
+                                <td><?= htmlspecialchars($bookingID) ?></td>
+                                <td><?= htmlspecialchars($name) ?></td>
+                                <td><?= htmlspecialchars($bookingType) ?>&nbsp;Booking</td>
+                                <td><?= $checkIn ?></td>
+                                <td>
+                                    <a class=" <?= $addClass ?>">
+                                        <?= htmlspecialchars($status) ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="viewBooking.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                                        <input type="hidden" name="bookingStatus"
+                                            value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($bookings['confirmedStatus'])  ?>">
+                                        <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                        <button type="submit" class="btn btn-primary w-75">View</button>
+                                    </form>
+                                </td>
+                            </tr>
                     <?php
                         }
                     }
@@ -298,65 +298,65 @@ if (isset($_SESSION['error'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#bookingTable').DataTable({
-            columnDefs: [{
-                    width: '10%',
-                    targets: 0
-                },
-                {
-                    width: '15%',
-                    targets: 2
-                },
-                {
-                    width: '15%',
-                    targets: 4
-                },
-            ],
+        $(document).ready(function() {
+            $('#bookingTable').DataTable({
+                columnDefs: [{
+                        width: '10%',
+                        targets: 0
+                    },
+                    {
+                        width: '15%',
+                        targets: 2
+                    },
+                    {
+                        width: '15%',
+                        targets: 4
+                    },
+                ],
+            });
         });
-    });
     </script>
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    <?php if (!empty($message)): ?>
-    Swal.fire({
-        icon: '<?= $status ?>',
-        title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
-        text: '<?= $message ?>'
-    });
-    <?php endif; ?>
+        <?php if (!empty($message)): ?>
+            Swal.fire({
+                icon: '<?= $status ?>',
+                title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
+                text: '<?= $message ?>'
+            });
+        <?php endif; ?>
 
 
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
 
-    if (paramValue === "success") {
-        Swal.fire({
-            title: "Booking Approved!",
-            text: "The booking has been successfully approved.",
-            icon: 'success',
-        });
-    } else if (paramValue === "error") {
-        Swal.fire({
-            title: "Action Failed!",
-            text: "The booking could not be approved or rejected. Please try again later.",
-            icon: 'error',
-        });
-    } else if (paramValue === 'rejected') {
-        Swal.fire({
-            title: "Booking Rejected!",
-            text: "The booking has been successfully rejected.",
-            icon: 'success',
-        });
-    }
+        if (paramValue === "success") {
+            Swal.fire({
+                title: "Booking Approved!",
+                text: "The booking has been successfully approved.",
+                icon: 'success',
+            });
+        } else if (paramValue === "error") {
+            Swal.fire({
+                title: "Action Failed!",
+                text: "The booking could not be approved or rejected. Please try again later.",
+                icon: 'error',
+            });
+        } else if (paramValue === 'rejected') {
+            Swal.fire({
+                title: "Booking Rejected!",
+                text: "The booking has been successfully rejected.",
+                icon: 'success',
+            });
+        }
 
-    if (paramValue) {
-        const url = new URL(windows.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString)
-    }
+        if (paramValue) {
+            const url = new URL(windows.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString)
+        }
     </script>
 </body>
 
