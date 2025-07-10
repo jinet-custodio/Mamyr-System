@@ -21,17 +21,34 @@
 }
 
 body {
-  background: #a1c8c7 !important;
+  background-color: #f5f5f5 !important;
 }
 
 main {
   display: flex;
+  padding: 2vw;
+  gap: 5vw;
 }
 
-input {
+.back-button {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+
+section {
+  /* background-color: #ffff; */
+  display: flex;
+  flex-direction: column;
+  padding: 1vw;
+  gap: 5vw;
+  margin-top: 5vw;
+}
+
+/* input {
   width: 300px;
   height: 5vh;
-}
+} */
 
 .image-container {
   position: relative;
@@ -71,4 +88,100 @@ input {
 .image-container:hover .zoom-overlay {
   visibility: visible;
   opacity: 1;
+}
+
+.firstRow {
+  /* border: 1px solid red; */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+  justify-items: center;
+  align-content: center;
+}
+
+label {
+  display: block;
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 18px;
+  font-family: "Poppins";
+  font-weight: bold;
+}
+
+#servicesContainer {
+  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: column !important;
+  margin-top: 0.2vw;
+}
+
+#scheduleContainer {
+  margin-top: -1vw;
+}
+
+.scheduleInputBox {
+  /* border: 1px solid red; */
+  display: flex;
+  gap: 0.2rem;
+}
+
+#services-form {
+  width: 100% !important;
+}
+
+.form-control {
+  height: 6vh;
+  /* width: 25vw !important; */
+  width: 50% !important;
+  background-color: #f5f5f5;
+  text-align: center;
+}
+#gridForm {
+  width: 25vw !important;
+}
+
+.card {
+  background-color: #f5f5f5;
+  margin-top: -4vw;
+}
+
+.card-body {
+  margin: auto;
+}
+
+.cardTitle {
+  font-size: 18px;
+}
+
+.payment-input-container {
+  display: grid;
+  grid-template-columns: repeat(2, 20vw);
+  grid-template-rows: repeat(5, 0.1vw);
+  gap: 8px;
+}
+
+#paymentLabel {
+  display: block;
+  text-align: left;
+  margin-top: 0.3vw;
+  font-size: 16px;
+}
+
+#payment-form,
+#paymentMethod {
+  /* height: 8vh; */
+  width: 100% !important;
+  /* margin-left: 2vw; */
+  /* border: none; */
+  background-color: #f5f5f5;
+  text-align: left !important;
+}
+
+.btn {
+  margin-top: 0.6vw;
+}
+
+.button-container {
+  margin-top: -5vw;
 }

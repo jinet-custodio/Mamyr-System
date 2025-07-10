@@ -346,7 +346,8 @@ $userRole = $_SESSION['userRole'];
                 <div class="button-container">
                     <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn"
                         data-bs-toggle="modal" data-bs-target="#gcashPaymentModal">Make a Down Payment</button>
-                    <a href="../bookNow.php" class="btn btn-primary  mt-2">Make Another Reservation</a>
+                    <a href="../bookNow.php" class="btn btn-primary mt-2" id="newReservationBtn">Make Another
+                        Reservation</a>
                 </div>
             </div>
 
@@ -496,7 +497,7 @@ $userRole = $_SESSION['userRole'];
                                 class="downpaymentPic">
                             <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
                             <input type="file" name="downpaymentPic" id="downpaymentPic" hidden>
-                            <label for="downpaymentPic" class="custom-file-button btn btn-outline-primary">Upload
+                            <label for="downpaymentPic" class="custom-file-button btn btn-outline-primary mt-2">Upload
                                 Payment Receipt</label>
                         </div>
 
@@ -542,40 +543,40 @@ $userRole = $_SESSION['userRole'];
 
 
     <script>
-        //Show the image preview
-        document.querySelector("input[type='file']").addEventListener("change", function(event) {
-            let reader = new FileReader();
-            reader.onload = function() {
-                let preview = document.getElementById("preview");
-                preview.src = reader.result;
-                preview.style.display = "block";
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        });
+    //Show the image preview
+    document.querySelector("input[type='file']").addEventListener("change", function(event) {
+        let reader = new FileReader();
+        reader.onload = function() {
+            let preview = document.getElementById("preview");
+            preview.src = reader.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
     </script>
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const bookingType = document.getElementById("bookingType").value;
+    document.addEventListener("DOMContentLoaded", function() {
+        const bookingType = document.getElementById("bookingType").value;
 
-            const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
-            const addOnsContainer = document.getElementById("addOns");
-            const tourTypeContainer = document.getElementById("tourType");
+        const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
+        const addOnsContainer = document.getElementById("addOns");
+        const tourTypeContainer = document.getElementById("tourType");
 
-            if (bookingType === "Resort") {
-                downpaymentNoteContainer.style.display = "none";
-                addOnsContainer.style.display = "flex";
-                tourTypeContainer.style.display = "flex";
-            } else if (bookingType === "Hotel") {
-                downpaymentNoteContainer.style.display = "block";
-                addOnsContainer.style.display = "none";
-                tourTypeContainer.style.display = "none";
-            } else {
-                downpaymentNoteContainer.style.display = "block";
-                addOnsContainer.style.display = "none";
-            }
-        });
+        if (bookingType === "Resort") {
+            downpaymentNoteContainer.style.display = "none";
+            addOnsContainer.style.display = "flex";
+            tourTypeContainer.style.display = "flex";
+        } else if (bookingType === "Hotel") {
+            downpaymentNoteContainer.style.display = "block";
+            addOnsContainer.style.display = "none";
+            tourTypeContainer.style.display = "none";
+        } else {
+            downpaymentNoteContainer.style.display = "block";
+            addOnsContainer.style.display = "none";
+        }
+    });
     </script>
 
 
@@ -583,37 +584,37 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
-        if (paramValue === "imageError") {
-            Swal.fire({
-                title: "Oops!",
-                text: "Failed to upload downpayment receipt image",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        } else if (paramValue === "imageFailed") {
-            Swal.fire({
-                title: "Oops!",
-                text: "No downpayment image submitted.",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        } else if (paramValue === "imageSize") {
-            Swal.fire({
-                title: "Oops!",
-                text: "File is too large. Maximum allowed size is 64MB.",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        }
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
+    if (paramValue === "imageError") {
+        Swal.fire({
+            title: "Oops!",
+            text: "Failed to upload downpayment receipt image",
+            icon: "warning",
+            confirmButtonText: "Okay",
+        });
+    } else if (paramValue === "imageFailed") {
+        Swal.fire({
+            title: "Oops!",
+            text: "No downpayment image submitted.",
+            icon: "warning",
+            confirmButtonText: "Okay",
+        });
+    } else if (paramValue === "imageSize") {
+        Swal.fire({
+            title: "Oops!",
+            text: "File is too large. Maximum allowed size is 64MB.",
+            icon: "warning",
+            confirmButtonText: "Okay",
+        });
+    }
 
 
-        if (paramValue) {
-            const url = new URL(window.location.href);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location.href);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 
