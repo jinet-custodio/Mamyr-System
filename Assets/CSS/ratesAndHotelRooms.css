@@ -299,11 +299,13 @@ nav {
   justify-content: space-between;
   margin: 0 auto;
 }
+
+
 .entranceTitleContainer {
   width: 50%;
   margin: auto;
   text-align: center;
-  margin-top: 5vw !important;
+  margin-top: 2vw !important;
   color: whitesmoke;
 }
 
@@ -354,7 +356,7 @@ nav {
 
 .title {
   text-align: center;
-  margin-top: 1.5vw;
+  margin-top: -3vw;
   margin-bottom: 1vw;
   font-size: 2.8vw;
   font-family: "Prata";
@@ -402,7 +404,7 @@ nav {
 
 .halfImg img,
 .singleImg img {
-  width: 30vw;
+  width: 25vw;
 }
 
 /* end of cottages code */
@@ -490,15 +492,33 @@ nav {
   padding-bottom: 1vw;
 }
 
+.hidden {
+  display: none !important;
+}
+
+.hotelIconWithCaption {
+  transition: all 0.3s ease;
+  width: 22%;
+}
+
 .hotelIconContainer {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5vw;
-  padding: 2vw;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  width: 50%;
+  gap: 1vw;
+  padding: 1vw;
 }
 
 .hotelIcon {
   width: 6vw;
+}
+
+.filterBtns button.selected {
+  border: 3px solid #5e99f3;
+    -webkit-box-shadow: 3px 3px 18px 1px rgba(107,195,255,0.91) ;
+  box-shadow: 3px 3px 18px 1px rgba(107,195,255,0.91) ;
 }
 
 .availabilityIcons, .availabilityIcon {
@@ -506,6 +526,10 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.availabilityIcons {
+  width: 50%;
 }
 
 .roomCaption {
@@ -524,11 +548,40 @@ nav {
   margin: 0 2vw 0 1vw;
 }
 
+.filterBtns {
+  width: 45%;
+  margin: 1vw auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+#elevenHrs, #twenty2Hrs {
+  font-size: 1.2vw !important;
+  border-radius: 2vw;
+  font-family: "Poppins";
+  font-weight: 700;
+}
+
+#elevenHrs {
+  background-color: #08AFF3;
+  color: #F2F2F2;
+}
+
+#hotelDate {
+  width: 20vw;
+}
+
+#twenty2Hrs {
+  background-color: #F2F2F2;
+  color: #04C8F2;
+
+}
+
 .hotel {
   display: flex;
   width: 80%;
   background-color: whitesmoke;
-  padding: 1vw;
+  padding: 0;
   margin: 0 auto 1vw auto;
   justify-content: space-around;
   border-radius: 0;
@@ -722,6 +775,7 @@ footer {
   .hotelIcon {
     width: 7vw;
   }
+
   .roomCaption {
     font-size: clamp(13px, calc(1.2vh + 2px), 18px);
   }

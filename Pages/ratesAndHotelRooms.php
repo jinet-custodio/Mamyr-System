@@ -16,7 +16,9 @@ require '../Config/dbcon.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <!-- flatpickr calendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
@@ -63,7 +65,7 @@ require '../Config/dbcon.php';
         </div>
     </nav>
 
-    <div class="selection" id="selection">
+    <div class="selection" id="selection" style="display: block;">
         <div class="titleContainer">
             <h4 class="title" id="mainTitle">RATES AND HOTEL ROOMS</h4>
         </div>
@@ -72,8 +74,7 @@ require '../Config/dbcon.php';
 
             <a class="categoryLink" onclick="showRates(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../assets/images/amenities/poolPics/poolPic3.jpg"
-                        alt="Wedding Event">
+                    <img class="card-img-top" src="../../assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
 
                     <div class="card-body">
                         <h5 class="card-title">Resort Rates</h5>
@@ -81,9 +82,9 @@ require '../Config/dbcon.php';
                 </div>
             </a>
 
-            <a class="categoryLink" onclick="showHotels()">
+            <a class="categoryLink" onclick="showHotels(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
+                    <img class="card-img-top" src="../../assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
                     <div class="card-body">
                         <h5 class="card-title">Hotel Rooms</h5>
                     </div>
@@ -94,9 +95,8 @@ require '../Config/dbcon.php';
     </div>
     <div class="rates" id="rates" style="display: none;">
         <div class="backToSelection" id="backToSelection">
-            <img src="../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+            <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
         </div>
-
         <div class="titleContainer">
             <h4 class="title">Our Rates</h4>
         </div>
@@ -111,7 +111,7 @@ require '../Config/dbcon.php';
                 <?php
                 // DB query
                 $rateSql = "SELECT er.*, etr.time_range  FROM entrancerates  er
-                LEFT JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID
+                LEFT JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID
                  ORDER BY 
                     FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
                     FIELD(ERcategory, 'Adult', 'Kids')";
@@ -164,7 +164,7 @@ require '../Config/dbcon.php';
 
             <div class="cottages">
                 <?php
-                $cottagesql = "SELECT * FROM resortAmenities WHERE RSCategoryID = 2";
+                $cottagesql = "SELECT * FROM resortAmenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
                 $cottresult = mysqli_query($conn, $cottagesql);
                 if (mysqli_num_rows($cottresult) > 0) {
                     foreach ($cottresult as $cottage) {
@@ -322,7 +322,7 @@ require '../Config/dbcon.php';
 
     <div class="hotelRooms" id="hotelRooms" style="display: none;">
         <div class="backToSelection" id="backToSelection">
-            <img src="../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+            <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
         </div>
         <div class="titleContainer" id="hotelTitle">
             <h4 class="title">Hotel Rooms</h4>
@@ -339,9 +339,15 @@ require '../Config/dbcon.php';
                 <hr class="entranceLine">
                 <h4 class="entranceTitle" style="color: black;">Room Availability </h4>
             </div>
-
+            <div class="filterBtns">
+                <input type="text" placeholder="Select your booking date" id="hotelDate">
+                <div style="width: 50%;display:flex;justify-content:space-evenly;">
+                    <button role="button" id="elevenHrs" class="btn btn-primary" data-duration="11">11 Hour Stay</button>
+                    <button role="button" id="twenty2Hrs" class="btn btn-info" data-duration="22">22 Hour Stay</button>
+                </div>
+            </div>
             <?php
-            $availsql = "SELECT RSAvailabilityID, RServiceName 
+            $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration 
             FROM resortAmenities
             WHERE RSCategoryID = 1";
 
@@ -349,21 +355,19 @@ require '../Config/dbcon.php';
             ?>
             <div class="hotelIconsContainer">
                 <div class="availabilityIcons">
-                    <div class="availabilityIcon" id="allRooms" onclick="filterRooms('all')">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1" class="avail">
+                    <div class="availabilityIcon" id="allRooms">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1" class="avail" id="allrooms">
                         <p>All Rooms</p>
                     </div>
-                    <div class="availabilityIcon" id="availableRooms" onclick="filterRooms('available')">
+                    <div class="availabilityIcon" id="availableRooms">
                         <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2" class="avail">
                         <p>Available</p>
                     </div>
-                    <div class="availabilityIcon" id="unavailableRooms" onclick="filterRooms('unavailable')">
+                    <div class="availabilityIcon" id="unavailableRooms">
                         <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3" class="avail">
                         <p>Not Available</p>
                     </div>
                 </div>
-
-
 
                 <div class="hotelIconContainer">
                     <?php
@@ -375,10 +379,13 @@ require '../Config/dbcon.php';
                                 ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
                                 : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
                             $roomName = htmlspecialchars($row['RServiceName']);
+                            $duration = htmlspecialchars($row['RSduration']);
                             $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
 
-                            echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;" data-availability="' . $availabilityStatus . '">';
-                            echo '  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '">';
+                            echo '<div class="hotelIconWithCaption" style="text-align: center;" 
+                            data-availability="' . $availabilityStatus . '" data-duration="' . $duration . '">';
+
+                            echo '<a href="#' . trim($row['RServiceName']) . '">  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '"> </a>';
                             echo '  <p class="roomCaption">' . $roomName . '</p>';
                             echo '</div>';
 
@@ -397,6 +404,8 @@ require '../Config/dbcon.php';
                 <hr class="entranceLine">
                 <h4 class="entranceTitle">Our Rooms</h4>
             </div>
+
+
             <div class="hotelRoomList">
                 <?php
                 $roomsql = "SELECT * FROM resortAmenities WHERE RScategoryID = 1";
@@ -404,7 +413,7 @@ require '../Config/dbcon.php';
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {
                 ?>
-                        <div class="hotel">
+                        <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>" data-duration="<?= $hotel['RSduration'] ?>">
                             <div class="halfImg">
                                 <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
@@ -414,23 +423,20 @@ require '../Config/dbcon.php';
                                 }
                                 ?>
                                 <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
-
                             </div>
 
                             <div class="Description">
-                                <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName'] ?> </h2>
-                                <?php $descriptions = explode(',', $hotel['RSdescription']);
+                                <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName']  ?> </h2>
+                                <?php
+                                $descriptions = explode(',', $hotel['RSdescription']);
                                 foreach ($descriptions as $description) {
                                 ?>
-                                    <p>
-                                        <?= "- " . trim($description) ?> <br>
-                                    </p>
+                                    <p><?= "- " . trim($description) ?><br></p>
                                 <?php } ?>
                                 <p class="font-weight-bold">
                                     Price: PHP <?= $hotel['RSprice'] ?>
                                 </p>
                             </div>
-
                         </div>
                 <?php
                     }
@@ -438,14 +444,19 @@ require '../Config/dbcon.php';
                     echo "<h5> No Record Found </h5>";
                 }
                 ?>
-
             </div>
+
         </div>
     </div>
-    <footer class="py-1" id="footer" style="margin-top: 5vw !important;">
+    <!-- Back to Top Button -->
+    <a href="#" id="backToTopBtn" title="Back to Top">
+        <i class="fas fa-chevron-up"></i>
+    </a>
+
+    <footer class="py-1" id="footer" style="margin-top: 5vw;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-            <a href="../index.php">
-                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+            <a href="../../index.php">
+                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
             </a>
             <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
         </div>
@@ -475,10 +486,10 @@ require '../Config/dbcon.php';
 
     </footer>
 
-
-
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
-    <script src="../Assets/JS/scrollNavbg.js"></script>
+    <!-- Flatpickr for date input -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script>
         const backbtn = document.getElementById("backToSelection");
 
@@ -486,77 +497,169 @@ require '../Config/dbcon.php';
             document.getElementById('selection').style.display = 'block';
             document.getElementById('hotelRooms').style.display = 'none';
             document.getElementById('rates').style.display = 'none';
-            document.getElementById("footer").style.marginTop = "100vh";
+            document.getElementById("footer").style.marginTop = "5vw";
         };
 
         function showRates(event) {
-
             event.preventDefault();
             document.getElementById('selection').style.display = 'none';
             document.getElementById('hotelRooms').style.display = 'none';
             document.getElementById('rates').style.display = 'block';
             document.getElementById("footer").style.marginTop = "3vw";
-
-
         }
 
         function showHotels(event) {
-
+            event.preventDefault();
             document.getElementById('selection').style.display = 'none';
             document.getElementById('hotelRooms').style.display = 'block';
             document.getElementById('rates').style.display = 'none';
             document.getElementById("footer").style.marginTop = "3vw";
         }
 
+        flatpickr('#hotelDate', {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+        });
 
-        function filterRooms(filterType) {
-            const allRooms = document.querySelectorAll('.hotelIconWithCaption');
+        window.onscroll = function() {
+            const btn = document.getElementById("backToTopBtn");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
 
-            allRooms.forEach(room => {
-                const availability = room.getAttribute('data-availability');
-
-                if (filterType === 'all') {
-                    room.style.display = 'inline-block'; // show all rooms
-                } else if (filterType === availability) {
-                    room.style.display = 'inline-block'; // show matching availability
-                } else {
-                    room.style.display = 'none'; // hide others
-                }
+        // Scroll to top
+        document.getElementById("backToTopBtn").addEventListener("click", function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
-        }
-        // const navbar = document.getElementById("navbar");
-
-        // window.addEventListener("scroll", () => {
-        //     if (window.scrollY > 10) {
-        //         navbar.classList.add("bg-white", "shadow");
-        //     } else {
-        //         navbar.classList.remove("bg-white", "shadow");
-        //     }
-        // });
+        });
     </script>
+    <!-- filters hotel rooms by the hour -->
+    <script>
+        // State variables
+        let currentAvailabilityFilter = 'all';
 
-    <!-- Sweetalert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        // Initialize filters when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Default selections
+            document.getElementById('allRooms').classList.add('selectedIcon');
+            document.getElementById('elevenHrs').classList.add('selected');
 
-    <!-- Sweet Alert -->
-    <!-- <script>
-        const bookButtons = document.querySelectorAll('#bopNav');
+            // Apply filters to set initial view
+            applyFilters();
 
-        bookButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Want to Become Our Business Partner?',
-                    text: 'You must have an existing account before becoming a business partner.',
-                    icon: 'info',
-                    confirmButtonText: 'Sign Up'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
-                    }
+            // Duration button click events
+            document.getElementById('elevenHrs').addEventListener('click', function() {
+                updateDuration(this);
+            });
+            document.getElementById('twenty2Hrs').addEventListener('click', function() {
+                updateDuration(this);
+            });
+
+            // Availability button click events
+            ['all', 'available', 'unavailable'].forEach(type => {
+                document.getElementById(`${type}Rooms`).addEventListener('click', function() {
+                    updateAvailability(type, this);
                 });
             });
         });
-    </script> -->
+
+        // Change selected duration
+        function updateDuration(button) {
+            // Update visual
+            document.querySelectorAll('.filterBtns button').forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+
+            applyFilters();
+        }
+
+        // Change availability filter
+        function updateAvailability(filterType, button) {
+            currentAvailabilityFilter = filterType;
+            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
+            button.classList.add('selectedIcon');
+
+            applyFilters();
+        }
+
+        function filterRooms(filterType) {
+            currentAvailabilityFilter = filterType;
+
+            // Update selected icon
+            document.querySelectorAll('.availabilityIcon').forEach(icon => {
+                icon.classList.remove('selectedIcon');
+            });
+
+            const selectedIcon = document.getElementById(`${filterType}Rooms`);
+            if (selectedIcon) {
+                selectedIcon.classList.add('selectedIcon');
+            }
+
+            applyFilters(); // Call the filter logic
+        }
+
+        function applyFilters() {
+            const selectedDuration = document.querySelector('.filterBtns .selected')?.getAttribute('data-duration');
+            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
+            const allRooms = document.querySelectorAll('.hotel');
+
+            allIcons.forEach(icon => {
+                const availability = icon.getAttribute('data-availability');
+                const duration = icon.getAttribute('data-duration')?.replace(/\D/g, '');
+
+                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter === availability);
+                const matchesDuration = !selectedDuration || (duration === selectedDuration);
+
+                icon.classList.toggle('hidden', !(matchesAvailability && matchesDuration));
+            });
+
+            allRooms.forEach(room => {
+                const duration = room.getAttribute('data-duration')?.replace(/\D/g, '');
+                const matchesDuration = !selectedDuration || (duration === selectedDuration);
+                room.style.display = matchesDuration ? 'flex' : 'none';
+            });
+        }
+    </script>
+
+    <!-- AJAX for fetching real time availability -->
+    <!-- to be further tested after availability is resolved -->
+    <script>
+        function fetchAvailability() {
+            fetch('/Function/Customer/getAvailability.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        dateTime: document.getElementById('hotelDate').value
+                    })
+                })
+                .then(res => res.json())
+                .then(json => {
+                    json.rooms.forEach(room => {
+                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-duration][data-availability]`);
+                        icons.forEach(icon => {
+                            const name = icon.querySelector('.roomCaption').textContent.trim();
+                            if (name === room.service) {
+                                icon.setAttribute('data-availability', room.available ? 'available' : 'unavailable');
+                            }
+                        });
+                    });
+                    applyFilters(); // re-apply filtering based on updated availability
+                })
+                .catch(console.error);
+        }
+
+        // Re-fetch availability whenever the date changes
+        document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
+        document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
+    </script>
+
 </body>
 
 </html>
