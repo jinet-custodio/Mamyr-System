@@ -185,3 +185,20 @@ label {
 .button-container {
   margin-top: -5vw;
 }
+
+/* modal */
+
+#rejectionReason {
+  width: 100% !important;
+  margin: auto !important;
+  background-color: #ffff;
+  margin-top: 1vw !important;
+}
+
+#customerPayment,
+#paymentModalForm,
+#approveModalForm {
+  width: 100% !important;
+  margin: auto !important;
+  margin-top: 1vw !important;
+}

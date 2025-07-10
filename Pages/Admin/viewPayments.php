@@ -282,10 +282,10 @@ $userRole = $_SESSION['userRole'];
             <section id="downpaymentImageSection">
                 <div class="image-container" id="downpayment-image-container">
                     <?php if ($downpaymentImage !== 'None'): ?>
-                        <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
-                        <div class="zoom-overlay">
-                            <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
-                        </div>
+                    <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
+                    <div class="zoom-overlay">
+                        <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
+                    </div>
                     <?php else: ?>
                     <p>Customer has not uploaded the receipt yet.</p>
                     <?php endif; ?>
@@ -308,17 +308,18 @@ $userRole = $_SESSION['userRole'];
                         <div class="modal-body">
                             <div class="input-container">
                                 <label for="totalAmount">Total Amount</label>
-                                <input type="text" name="totalAmount" value="₱<?= number_format($totalAmount, 2) ?>"
-                                    readonly>
+                                <input type="text" class="form-control" id="approveModalForm" name="totalAmount"
+                                    value="₱<?= number_format($totalAmount, 2) ?>" readonly>
                             </div>
                             <div class="input-container">
                                 <label for="balance">Customer Balance</label>
-                                <input type="text" name="balance" value="₱<?= number_format($userBalance, 2) ?>"
-                                    readonly>
+                                <input type="text" class="form-control" id="approveModalForm" name="balance"
+                                    value="₱<?= number_format($userBalance, 2) ?>" readonly>
                             </div>
                             <div class="input-container">
                                 <label for="paymentAmount">Payment Amount</label>
-                                <input type="text" name="paymentAmount">
+                                <input type="text" class="form-control" id="approveModalForm" name="paymentAmount"
+                                    style="background-color: #ffff;">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -343,7 +344,7 @@ $userRole = $_SESSION['userRole'];
                         <div class="modal-body">
                             <div class="input-container">
                                 <label for="rejectionReason">Please specify the reason for rejection</label>
-                                <input type="text" name="rejectionReason" id="rejectionReason">
+                                <input type="text" class="form-control" name="rejectionReason" id="rejectionReason">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -369,17 +370,18 @@ $userRole = $_SESSION['userRole'];
                         <div class="modal-body">
                             <div class="input-container">
                                 <label for="totalAmount">Total Amount</label>
-                                <input type="text" name="totalAmount" value="₱<?= number_format($totalAmount, 2) ?>"
-                                    readonly>
+                                <input type="text" class="form-control" id="paymentModalForm" name="totalAmount"
+                                    value="₱<?= number_format($totalAmount, 2) ?>" readonly>
                             </div>
                             <div class="input-container">
                                 <label for="balance">Customer Balance</label>
-                                <input type="text" name="balance" value="₱<?= number_format($userBalance, 2) ?>"
-                                    readonly>
+                                <input type="text" class="form-control" id="paymentModalForm" name="balance"
+                                    value="₱<?= number_format($userBalance, 2) ?>" readonly>
                             </div>
                             <div class="input-container">
                                 <label for="customerPayment">Payment Amount</label>
-                                <input type="text" name="customerPayment" id="customerPayment">
+                                <input type="text" class="form-control" name="customerPayment" id="customerPayment"
+                                    style="background-color: #ffff;">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -412,16 +414,16 @@ $userRole = $_SESSION['userRole'];
     }
 
 
-        if (paymentStatus === 'Fully Paid') {
-            document.querySelector("#form-button").style.display = "none";
-            document.getElementById("addPayment").style.display = "none";
-            document.getElementById("downpaymentImageSection").style.display = "none";
-        } else if (paymentStatus === 'Partially Paid') {
-            document.getElementById("addPayment").style.display = "block";
-            document.querySelector("#form-button").style.display = "none";
-        } else if (paymentStatus === 'No Payment') {
-            document.getElementById("addPayment").style.display = "none";
-        }
+    if (paymentStatus === 'Fully Paid') {
+        document.querySelector("#form-button").style.display = "none";
+        document.getElementById("addPayment").style.display = "none";
+        document.getElementById("downpaymentImageSection").style.display = "none";
+    } else if (paymentStatus === 'Partially Paid') {
+        document.getElementById("addPayment").style.display = "block";
+        document.querySelector("#form-button").style.display = "none";
+    } else if (paymentStatus === 'No Payment') {
+        document.getElementById("addPayment").style.display = "none";
+    }
     </script>
 
     <script>
