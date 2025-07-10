@@ -63,6 +63,10 @@ body {
   padding: 1vw;
 }
 
+.PendingIcon {
+  width: 5.5vw;
+}
+
 .pendingTitle {
   color: #000;
   text-align: center;
@@ -81,7 +85,8 @@ body {
   line-height: normal;
 }
 
-.btn-primary {
+#newReservationBtn,
+.btn-success {
   width: 32vw !important;
 }
 .rightPendingContainer {

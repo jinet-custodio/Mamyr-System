@@ -46,7 +46,8 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/viewPayments.css" />
@@ -176,91 +177,118 @@ $userRole = $_SESSION['userRole'];
     <form action="" method="POST" id="form">
 
         <div class="back-button">
-            <a href="transaction.php" class="back-btn"><img src="../../Assets/Images/Icon/back-button.png" alt="Go back"></a>
+            <a href="transaction.php" class="back-btn"><img src="../../Assets/Images/Icon/back-button.png"
+                    alt="Go back"></a>
         </div>
         <main>
             <section>
-                <div class="card">
+                <div class="bookingInfo">
+                    <!-- <div class="card"> -->
                     <input type="hidden" name="customerID" value="<?= $customerID ?>">
                     <input type="hidden" id="paymentStatus" value="<?= $paymentStatus ?>">
                     <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                    <div class="input-container">
-                        <label for="formattedBookingID">Booking ID</label>
-                        <input type="text" name="formattedBookingID" value="<?= $formattedBookingID ?>" readonly>
+                    <div class="firstRow">
+                        <div class="input-container">
+                            <label for="formattedBookingID">Booking ID</label>
+                            <input type="text" class="form-control" id="gridForm" name="formattedBookingID"
+                                value="<?= $formattedBookingID ?>" readonly>
+                        </div>
+
+                        <div class="input-container">
+                            <label for="Name">Guest Name:</label>
+                            <input type="text" class="form-control" id="gridForm"
+                                value="<?= htmlspecialchars($guestName) ?>" name="guestName" readonly>
+                        </div>
+                        <div class="input-container">
+                            <label for="phoneNumber">Phone Number</label>
+                            <input type="text" class="form-control" id="gridForm" name="phoneNumber"
+                                value="<?= htmlspecialchars($phoneNumber) ?>" readonly>
+                        </div>
+
+                        <div class="input-container">
+                            <label for="bookingType">Booking Type</label>
+                            <input type="text" class="form-control" id="gridForm" name="bookingType"
+                                value="<?= $bookingType ?> Booking " readonly>
+                        </div>
                     </div>
 
-                    <div class="input-container">
-                        <label for="Name">Guest Name:</label>
-                        <input type="text" value="<?= htmlspecialchars($guestName) ?>" name="guestName" readonly>
-                    </div>
-                    <div class="input-container">
-                        <label for="phoneNumber">Phone Number</label>
-                        <input type="text" name="phoneNumber" value="<?= htmlspecialchars($phoneNumber) ?>" readonly>
-                    </div>
-
-                    <div class="input-container">
-                        <label for="bookingType">Booking Type</label>
-                        <input type="text" name="bookingType" value="<?= $bookingType ?> Booking " readonly>
-                    </div>
-
-                    <div class="input-container">
+                    <div class="input-container" id="servicesContainer">
                         <label for="services">Services</label>
-                        <input type="text" name="services" value="<?= implode(", ",  array_unique($services)) ?>" readonly>
+                        <input type="text" class="form-control" name="services" id="services-form"
+                            value="<?= implode(", ",  array_unique($services)) ?>" readonly>
                     </div>
 
-                    <div class="input-container">
-                        <label for="date">Schedule</label>
-                        <input type="text" name="date" value="<?= $date ?>" readonly>
-                        <input type="text" name="time" value="<?= $time ?>" readonly>
-                        <input type="text" name="duration" value="<?= $duration ?>" readonly>
-                    </div>
-
-                    <div class="input-container">
-                        <label for="paymentMethod">Payment Method</label>
-                        <input type="text" name="paymentMethod" id="paymentMethod" value="<?= $paymentMethod ?>" readonly>
-                    </div>
-
-                    <div class="costContainer">
-                        <div class="input-container">
-                            <label for="totalAmount">Total Amount </label>
-                            <input type="text" name="totalAmount" value="₱<?= number_format($totalAmount, 2) ?>" readonly>
-                        </div>
-                        <div class="input-container" id="downpaymentContainer">
-                            <label for="downpayment">Downpayment (30%)</label>
-                            <input type="text" name="downpayment" id="downpayment" value="₱<?= number_format($downpayment, 2) ?>" readonly>
-                        </div>
-                        <div class="input-container">
-                            <label for="amountPaid">Amount Paid </label>
-                            <input type="text" name="amountPaid" value="₱<?= number_format($amountPaid, 2) ?>" readonly>
-                        </div>
-                        <div class="input-container">
-                            <label for="balance">Balance</label>
-                            <input type="text" name="balance" value="₱<?= number_format($userBalance, 2) ?>" readonly>
-                        </div>
-
-                    </div>
-
-                    <div class="button-container">
-                        <button type="submit" name="viewBooking" class="btn btn-info w-50" id="viewBookingBtn">View Booking Details</button>
-                        <button type="button" name="addPayment" id="addPayment" class="btn btn-success w-50" data-bs-toggle="modal" data-bs-target="#addPaymentModal">Add Payment</button>
-                        <div class="form-button" id="form-button">
-                            <button type="button" name="approveBtn" class="btn btn-primary w-50" data-bs-toggle="modal" data-bs-target="#approveModal">Approve</button>
-                            <button type="button" name="rejectBtn" class="btn btn-danger w-50" data-bs-toggle="modal" data-bs-target="#rejectModal">Reject</button>
+                    <div class="input-container" id="scheduleContainer">
+                        <label for="date" class="mt-3">Schedule</label>
+                        <div class="scheduleInputBox">
+                            <input type="text" class="form-control" name="date" value="<?= $date ?>" readonly>
+                            <input type="text" class="form-control" name="time" value="<?= $time ?>" readonly>
+                            <input type="text" class="form-control" name="duration" value="<?= $duration ?>" readonly>
                         </div>
                     </div>
                 </div>
+                <div class="card mx-auto" style="width: 100%;">
+
+                    <h4 class="cardTitle text-center mt-4">Payment Information</h4>
+
+                    <div class=" card-body">
+                        <div class="payment-input-container">
+                            <label for="paymentMethod" id="paymentLabel">Payment Method</label>
+                            <input type="text" class="form-control" name="paymentMethod" id="paymentMethod"
+                                value="<?= $paymentMethod ?>" readonly>
+                        </div>
+                        <!-- 
+                <div class="costContainer"> -->
+                        <div class="payment-input-container">
+                            <label for="totalAmount" id="paymentLabel">Total Amount </label>
+                            <input type="text" class="form-control" id="payment-form" name="totalAmount"
+                                value="₱<?= number_format($totalAmount, 2) ?>" readonly>
+                        </div>
+                        <div class="payment-input-container" id="downpaymentContainer">
+                            <label for="downpayment" id="paymentLabel">Downpayment (30%)</label>
+                            <input type="text" class="form-control" id="payment-form" name="downpayment"
+                                id="downpayment" value="₱<?= number_format($downpayment, 2) ?>" readonly>
+                        </div>
+                        <div class="payment-input-container">
+                            <label for="amountPaid" id="paymentLabel">Amount Paid </label>
+                            <input type="text" class="form-control" id="payment-form" name="amountPaid"
+                                value="₱<?= number_format($amountPaid, 2) ?>" readonly>
+                        </div>
+                        <div class="payment-input-container">
+                            <label for="balance" id="paymentLabel">Balance</label>
+                            <input type="text" class="form-control" id="payment-form" name="balance"
+                                value="₱<?= number_format($userBalance, 2) ?>" readonly>
+                        </div>
+                    </div>
+                </div>
+                <!-- </div> -->
+
+                <div class="button-container">
+                    <button type="submit" name="viewBooking" class="btn btn-info w-100" id="viewBookingBtn">View
+                        Booking
+                        Details</button>
+                    <button type="button" name="addPayment" id="addPayment" class="btn btn-success w-100"
+                        data-bs-toggle="modal" data-bs-target="#addPaymentModal">Add Payment</button>
+                    <div class="form-button" id="form-button">
+                        <button type="button" name="approveBtn" class="btn btn-primary w-100" data-bs-toggle="modal"
+                            data-bs-target="#approveModal">Approve</button>
+                        <button type="button" name="rejectBtn" class="btn btn-danger w-100" data-bs-toggle="modal"
+                            data-bs-target="#rejectModal">Reject</button>
+                    </div>
+                </div>
+                <!-- </div> -->
             </section>
 
             <section id="downpaymentImageSection">
                 <div class="image-container" id="downpayment-image-container">
                     <?php if ($downpaymentImage !== 'None'): ?>
-                        <img src="<?= htmlspecialchars($downpaymentImage) ?>" alt="Receipt Image" class="preview-image">
+                    <img src="<?= htmlspecialchars($downpaymentImage) ?>" alt="Receipt Image" class="preview-image">
 
-                        <div class="zoom-overlay">
-                            <img src="<?= htmlspecialchars($downpaymentImage) ?>" alt="Zoomed Image">
-                        </div>
+                    <div class="zoom-overlay">
+                        <img src="<?= htmlspecialchars($downpaymentImage) ?>" alt="Zoomed Image">
+                    </div>
                     <?php else: ?>
-                        <p>Customer has not uploaded the receipt yet.</p>
+                    <p>Customer has not uploaded the receipt yet.</p>
                     <?php endif; ?>
                 </div>
             </section>
@@ -270,7 +298,8 @@ $userRole = $_SESSION['userRole'];
 
         <div class="modals-container">
             <!-- Approve Modal -->
-            <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+            <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -280,11 +309,13 @@ $userRole = $_SESSION['userRole'];
                         <div class="modal-body">
                             <div class="input-container">
                                 <label for="totalAmount">Total Amount</label>
-                                <input type="text" name="totalAmount" value="₱<?= number_format($totalAmount, 2) ?>" readonly>
+                                <input type="text" name="totalAmount" value="₱<?= number_format($totalAmount, 2) ?>"
+                                    readonly>
                             </div>
                             <div class="input-container">
                                 <label for="balance">Customer Balance</label>
-                                <input type="text" name="balance" value="₱<?= number_format($userBalance, 2) ?>" readonly>
+                                <input type="text" name="balance" value="₱<?= number_format($userBalance, 2) ?>"
+                                    readonly>
                             </div>
                             <div class="input-container">
                                 <label for="paymentAmount">Payment Amount</label>
@@ -293,7 +324,8 @@ $userRole = $_SESSION['userRole'];
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" name="approvePaymentBtn" id="approvePaymentBtn">Approve Booking</button>
+                            <button type="submit" class="btn btn-primary" name="approvePaymentBtn"
+                                id="approvePaymentBtn">Approve Booking</button>
                         </div>
                     </div>
                 </div>
@@ -301,7 +333,8 @@ $userRole = $_SESSION['userRole'];
 
 
             <!-- Reject Modal -->
-            <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+            <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -316,7 +349,8 @@ $userRole = $_SESSION['userRole'];
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger" name="rejectPaymentBtn" id="rejectPaymentBtn">Reject Booking</button>
+                            <button type="submit" class="btn btn-danger" name="rejectPaymentBtn"
+                                id="rejectPaymentBtn">Reject Booking</button>
                         </div>
                     </div>
                 </div>
@@ -324,7 +358,8 @@ $userRole = $_SESSION['userRole'];
 
 
             <!-- Add Payment Modal -->
-            <div class="modal fade" id="addPaymentModal" tabindex="-1" aria-labelledby="addPaymentModal" aria-hidden="true">
+            <div class="modal fade" id="addPaymentModal" tabindex="-1" aria-labelledby="addPaymentModal"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -335,11 +370,13 @@ $userRole = $_SESSION['userRole'];
                         <div class="modal-body">
                             <div class="input-container">
                                 <label for="totalAmount">Total Amount</label>
-                                <input type="text" name="totalAmount" value="₱<?= number_format($totalAmount, 2) ?>" readonly>
+                                <input type="text" name="totalAmount" value="₱<?= number_format($totalAmount, 2) ?>"
+                                    readonly>
                             </div>
                             <div class="input-container">
                                 <label for="balance">Customer Balance</label>
-                                <input type="text" name="balance" value="₱<?= number_format($userBalance, 2) ?>" readonly>
+                                <input type="text" name="balance" value="₱<?= number_format($userBalance, 2) ?>"
+                                    readonly>
                             </div>
                             <div class="input-container">
                                 <label for="customerPayment">Payment Amount</label>
@@ -348,7 +385,8 @@ $userRole = $_SESSION['userRole'];
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" name="submitPaymentBtn" id="submitPaymentBtn">Submit</button>
+                            <button type="submit" class="btn btn-primary" name="submitPaymentBtn"
+                                id="submitPaymentBtn">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -360,48 +398,50 @@ $userRole = $_SESSION['userRole'];
 
 
     <!-- Bootstrap JS -->
-    <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-
-    <script>
-        const paymentMethod = document.getElementById("paymentMethod").value;
-        const paymentStatus = document.getElementById("paymentStatus").value;
-        const ImageContainer = document.getElementById("downpayment-image-container");
-        const downpaymentContainer = document.getElementById('downpaymentContainer');
-        if (paymentMethod === 'Cash - Onsite Payment') {
-            ImageContainer.style.display = "none";
-            downpaymentContainer.style.display = "none";
-        }
-
-        if (paymentStatus === 'Fully Paid') {
-            document.querySelector("#form-button").style.display = "none";
-            document.getElementById("addPayment").style.display = "none";
-            document.getElementById("downpaymentImageSection").style.display = "none";
-        } else if (paymentStatus === 'Partially Paid') {
-            document.getElementById("addPayment").style.display = "block";
-            document.querySelector("#form-button").style.display = "none";
-        } else if (paymentStatus === 'Unpaid') {
-            document.getElementById("addPayment").style.display = "none";
-        }
+    <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
 
     <script>
-        const form = document.getElementById('form');
+    const paymentMethod = document.getElementById("paymentMethod").value;
+    const paymentStatus = document.getElementById("paymentStatus").value;
+    const ImageContainer = document.getElementById("downpayment-image-container");
+    const downpaymentContainer = document.getElementById('downpaymentContainer');
+    if (paymentMethod === 'Cash - Onsite Payment') {
+        ImageContainer.style.display = "none";
+        downpaymentContainer.style.display = "none";
+    }
 
-        document.getElementById('viewBookingBtn').addEventListener('click', () => {
-            form.action = 'viewBooking.php';
-        });
+    if (paymentStatus === 'Fully Paid') {
+        document.querySelector("#form-button").style.display = "none";
+        document.getElementById("addPayment").style.display = "none";
+        document.getElementById("downpaymentImageSection").style.display = "none";
+    } else if (paymentStatus === 'Partially Paid') {
+        document.getElementById("addPayment").style.display = "block";
+        document.querySelector("#form-button").style.display = "none";
+    } else if (paymentStatus === 'Unpaid') {
+        document.getElementById("addPayment").style.display = "none";
+    }
+    </script>
 
-        document.getElementById('approvePaymentBtn').addEventListener('click', () => {
-            form.action = '../../Function/Admin/paymentApproval.php';
-        });
+    <script>
+    const form = document.getElementById('form');
 
-        document.getElementById('rejectPaymentBtn').addEventListener('click', () => {
-            form.action = '../../Function/Admin/paymentApproval.php';
-        });
+    document.getElementById('viewBookingBtn').addEventListener('click', () => {
+        form.action = 'viewBooking.php';
+    });
 
-        document.getElementById('submitPaymentBtn').addEventListener('click', () => {
-            form.action = '../../Function/Admin/paymentApproval.php';
-        })
+    document.getElementById('approvePaymentBtn').addEventListener('click', () => {
+        form.action = '../../Function/Admin/paymentApproval.php';
+    });
+
+    document.getElementById('rejectPaymentBtn').addEventListener('click', () => {
+        form.action = '../../Function/Admin/paymentApproval.php';
+    });
+
+    document.getElementById('submitPaymentBtn').addEventListener('click', () => {
+        form.action = '../../Function/Admin/paymentApproval.php';
+    })
     </script>
 
 
@@ -409,30 +449,30 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
-        if (paramValue === "paymentFieldEmpty") {
-            Swal.fire({
-                title: "Oops!",
-                text: "Please enter the payment amount.",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        } else if (paramValue === "reasonFieldEmpty") {
-            Swal.fire({
-                title: "Oops!",
-                text: "Please provide a reason for rejection.",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        }
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
+    if (paramValue === "paymentFieldEmpty") {
+        Swal.fire({
+            title: "Oops!",
+            text: "Please enter the payment amount.",
+            icon: "warning",
+            confirmButtonText: "Okay",
+        });
+    } else if (paramValue === "reasonFieldEmpty") {
+        Swal.fire({
+            title: "Oops!",
+            text: "Please provide a reason for rejection.",
+            icon: "warning",
+            confirmButtonText: "Okay",
+        });
+    }
 
 
-        if (paramValue) {
-            const url = new URL(window.location.href);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location.href);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 </body>
