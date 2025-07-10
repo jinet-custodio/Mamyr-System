@@ -95,7 +95,7 @@ if (isset($_POST['signUp'])) {
             $null = NULL;
             $insertUser = $conn->prepare("INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at) 
             VALUES(?,?,?,?,?,?,?,?,?)");
-            $insertUser->bind_param("sssssssss", $null, $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $otp, $OTP_expiration_at);
+            $insertUser->bind_param("bssssssss", $null, $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $otp, $OTP_expiration_at);
             $insertUser->send_long_data(0, $imageData);
 
             if ($registerStatus == "partner") {

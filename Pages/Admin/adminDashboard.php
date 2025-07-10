@@ -26,8 +26,134 @@ $_SESSION['last_activity'] = time();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
-?>
 
+$approvedStatus = 2;
+$bookingTypes =  $conn->prepare("SELECT 
+                                b.bookingType,
+                                COUNT(*) AS totalBookings
+                            FROM 
+                                confirmedBookings cb 
+                            JOIN 
+                                bookings b ON cb.bookingID = b.bookingID 
+                            WHERE 
+                                cb.confirmedBookingStatus = ?
+                            GROUP BY 
+                                b.bookingType 
+                    ");
+$bookingTypes->bind_param("i", $approvedStatus);
+$bookingTypes->execute();
+$bookingTypesResult = $bookingTypes->get_result();
+
+$bookingTypeName = [];
+$bookingTypeCount = [];
+if ($bookingTypesResult->num_rows > 0) {
+    while ($row = $bookingTypesResult->fetch_assoc()) {
+        $bookingTypeName[] = $row['bookingType'];
+        $bookingTypeCount[] = (float) $row['totalBookings'];
+    }
+}
+
+$revenue =  $conn->prepare("SELECT 
+                                CONCAT(
+                                    'Week ', WEEK(b.startDate, 1),
+                                    ' (',
+                                    DATE_FORMAT(DATE_SUB(b.startDate, INTERVAL WEEKDAY(b.startDate) DAY), '%b %e'),
+                                    ' - ',
+                                    DATE_FORMAT(DATE_ADD(b.startDate, INTERVAL (6 - WEEKDAY(b.startDate)) DAY), '%b %e'),
+                                    ')'
+                                ) AS weekName,
+
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 0 THEN cb.CBtotalCost ELSE 0 END) AS Mon,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 1 THEN cb.CBtotalCost ELSE 0 END) AS Tue,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 2 THEN cb.CBtotalCost ELSE 0 END) AS Wed,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 3 THEN cb.CBtotalCost ELSE 0 END) AS Thu,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN cb.CBtotalCost ELSE 0 END) AS Fri,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN cb.CBtotalCost ELSE 0 END) AS Sat,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN cb.CBtotalCost ELSE 0 END) AS Sun
+
+                            FROM 
+                                confirmedBookings cb
+                            JOIN 
+                                bookings b ON cb.bookingID = b.bookingID
+                            WHERE 
+                                cb.confirmedBookingStatus = ?
+                                AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)
+                            GROUP BY 
+                                weekName
+                            ORDER BY 
+                                MIN(b.startDate)
+                    ");
+$revenue->bind_param("i", $approvedStatus);
+$revenue->execute();
+$revenueResult = $revenue->get_result();
+
+$days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+$revenues = [];
+$weekName = "";
+if ($revenueResult->num_rows > 0) {
+    $row = $revenueResult->fetch_assoc();
+    $weekName = $row['weekName'];
+    $revenues[] = (float) $row['Mon'];
+    $revenues[] = (float) $row['Tue'];
+    $revenues[] = (float) $row['Wed'];
+    $revenues[] = (float) $row['Thu'];
+    $revenues[] = (float) $row['Fri'];
+    $revenues[] = (float) $row['Sat'];
+    $revenues[] = (float) $row['Sun'];
+}
+
+$hotel = 1;
+// $availabilityCount = [];
+// $availabilityName = ['Available', 'Maintenance', 'Occupied', 'Private'];
+$availabilityQuery = $conn->prepare("SELECT 
+                                        COUNT(CASE WHEN ra.RSAvailabilityID = 1 THEN 1 END) AS availableCount,
+                                        COUNT(CASE WHEN ra.RSAvailabilityID = 3 THEN 1 END) AS maintenanceCount,
+                                        COUNT(CASE WHEN ra.RSAvailabilityID = 2 THEN 1 END) AS occupiedCount,
+                                        COUNT(CASE WHEN ra.RSAvailabilityID = 4 THEN 1 END) AS privateCount,
+                                        sa.availabilityName 
+                                    FROM 
+                                        resortAmenities ra 
+                                    JOIN 
+                                        serviceAvailability sa ON ra.RSAvailabilityID = sa.availabilityID
+                                    WHERE 
+                                        ra.RScategoryID = ?
+                                    GROUP BY 
+                                        sa.availabilityName");
+$availabilityQuery->bind_param("i", $hotel);
+$availabilityQuery->execute();
+$availabilityResult = $availabilityQuery->get_result();
+if ($availabilityResult->num_rows > 0) {
+    $availabilityCount = [];
+    $availabilityName = ['Available', 'Maintenance', 'Occupied', 'Private'];
+
+    while ($data = $availabilityResult->fetch_assoc()) {
+        $name = $data['availabilityName'];
+        if ($name === 'Available') {
+            $availabilityCount[0] = $data['availableCount'];
+        }
+        if ($name === 'Maintenance') {
+            $availabilityCount[1] = $data['maintenanceCount'];
+        }
+        if ($name === 'Occupied') {
+            $availabilityCount[2] = $data['occupiedCount'];
+        }
+        if ($name === 'Private') {
+            $availabilityCount[3] = $data['privateCount'];
+        }
+    }
+
+    for ($i = 0; $i < count($availabilityName); $i++) {
+        if (!isset($availabilityCount[$i])) {
+            $availabilityCount[$i] = 0;
+        }
+    }
+
+    $availabilityCount = array_values($availabilityCount);
+
+    // print_r($availabilityName);
+    // print_r($availabilityCount);
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -118,16 +244,23 @@ $userRole = $_SESSION['userRole'];
             <h5>Rooms</h5>
         </a>
 
+
+        <!-- <a href="revenue.php" class="nav-link">
+            <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
+            <h5>Revenue</h5>
+        </a> -->
+
+
         <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
         </a>
 
 
-        <!-- <a class="nav-link" href="#">
-                <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
-                <h5>Revenue</h5>
-            </a> -->
+        <a class="nav-link" href="revenue.php">
+            <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
+            <h5>Revenue</h5>
+        </a>
 
 
         <a class="nav-link" href="displayPartnership.php">
@@ -146,166 +279,361 @@ $userRole = $_SESSION['userRole'];
 
     </nav>
 
+
+    <?php
+    $weeklyReport = $conn->prepare("SELECT 
+                                        -- Total guests 
+                                        SUM(CASE 
+                                            WHEN cb.confirmedBookingStatus = 2 
+                                            THEN b.paxNum 
+                                            ELSE 0 
+                                            END) AS totalGuests,
+
+                                        -- Total revenue
+                                        SUM(CASE 
+                                                WHEN cb.confirmedBookingStatus = 2 THEN b.totalCost 
+                                                ELSE 0 
+                                                END) AS totalRevenueThisWeek,
+
+                                        -- Check-outs this week
+                                        COUNT(CASE 
+                                                WHEN b.endDate >= weekStart AND b.endDate < weekEnd AND cb.confirmedBookingStatus = 2 
+                                                THEN 1 
+                                                ELSE NULL 
+                                                END) AS checkOutsThisWeek,
+
+                                        -- Check-ins this week
+                                        COUNT(CASE 
+                                                WHEN b.startDate >= weekStart AND b.startDate < weekEnd AND cb.confirmedBookingStatus = 2 
+                                                THEN 1 
+                                                ELSE NULL 
+                                                END) AS checkInsThisWeek,
+                                        -- Check-ins this week
+                                        COUNT(CASE 
+                                                WHEN b.bookingType = 'Event' AND
+                                                cb.confirmedBookingStatus = 2 
+                                                THEN 1 
+                                                ELSE NULL 
+                                                END) AS eventBooking,
+
+
+                                        --  All bookings this week
+                                        COUNT(DISTINCT b.bookingID) AS bookingsThisWeek
+
+                                    FROM bookings b
+                                    LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID
+                                    CROSS JOIN (
+                                        SELECT
+                                            DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS weekStart,
+                                            DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 DAY) AS weekEnd
+                                            ) AS weekRange
+                                        WHERE 
+                                            (
+                                            b.startDate >= weekStart AND b.startDate < weekEnd
+                                        OR
+                                            b.endDate >= weekStart AND b.endDate < weekEnd)
+                                            ");
+    $weeklyReport->execute();
+    $weeklyReportResult = $weeklyReport->get_result();
+    if ($weeklyReportResult->num_rows > 0) {
+        $data = $weeklyReportResult->fetch_assoc();
+
+        $bookingsThisWeek = $data['bookingsThisWeek'];
+        $checkOutsThisWeek = $data['checkOutsThisWeek'];
+        $checkInsThisWeek = $data['checkInsThisWeek'];
+        $totalGuests = $data['totalGuests'];
+        $totalRevenueThisWeek = $data['totalRevenueThisWeek'];
+        $eventBooking = $data['eventBooking'];
+    }
+    ?>
+    <h1 class="dashboardTitle">Weekly Status</h1>
     <div class="container-fluid" id="contentsCF">
+
         <div class="leftSection">
-
-            <div class="bookingSummary">
-
-                <div class="card trend-cards" id="newBookings">
+            <div class="trend-cards">
+                <div class="card">
                     <div class="card-header ">
-                        New Bookings
+                        All Bookings
                     </div>
 
                     <div class="card-body">
-                        <h2 class="newBookingTotal">15</h2>
+                        <h2 class="newBookingTotal"><?= $bookingsThisWeek ?></h2>
                     </div>
 
-                    <h6 class="newBookingDate">This Week</h6>
+                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
-                <div class="card trend-cards" id="checkIn">
+                <div class="card">
+                    <div class="card-header ">
+                        Event Bookings
+                    </div>
+
+                    <div class="card-body">
+                        <h2 class="newBookingTotal"><?= $eventBooking ?></h2>
+                    </div>
+
+                    <!-- <h6 class="card-footer">This Week</h6> -->
+                </div>
+
+                <div class="card">
+                    <div class="card-header ">
+                        Total Guest
+                    </div>
+
+                    <div class="card-body">
+                        <h2 class="totalGuest"><?= $totalGuests ?></h2>
+                    </div>
+
+                    <!-- <h6 class="card-footer">This Week</h6> -->
+                </div>
+
+
+                <div class="card">
                     <div class="card-header ">
                         Check In
                     </div>
 
                     <div class="card-body">
-                        <h2 class="checkInTotal">15</h2>
+                        <h2 class="checkInTotal"><?= $checkInsThisWeek ?></h2>
                     </div>
 
-                    <h6 class="checkInDate">This Week</h6>
+                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
-                <div class="card trend-cards" id="checkOut">
+                <div class="card">
                     <div class="card-header ">
                         Check Out
                     </div>
 
                     <div class="card-body">
-                        <h2 class="checkOutTotal">15</h2>
+                        <h2 class="checkOutTotal"><?= $checkOutsThisWeek ?></h2>
                     </div>
 
-                    <h6 class="checkOutDate">This Week</h6>
+                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
-                <div class="card trend-cards " id="revenue">
+                <div class="card">
                     <div class="card-header ">
                         Revenue
                     </div>
 
                     <div class="card-body">
-                        <h2 class="revenueTotal">&#8369;200,000</h2>
+                        <h2 class="revenueTotal">₱<?= number_format($totalRevenueThisWeek, 2) ?></h2>
                     </div>
 
-                    <h6 class="checkOutDate">This Week</h6>
+                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
-                <div class="ReservationTrendsContainer">
-                    <div class="card" id="sched">
-                        <div class="card-header ">
-                            Reservation Trends
-                        </div>
-                        <div class="card-body">
-                            <img src="../../Assets/Images/AdminImages/DashboardImages/graph.png" alt=""
-                                class="ReservationTrendsGraph">
-                        </div>
-                    </div>
-                    <div class="salesReportBtn">
-                        <a href="salesReport.php" class="btn btn-light">Sales Report</a>
+            </div>
+            <div class="card">
+                <div class="card-header ">
+                    Room Availability
+                </div>
+                <div class="card-body availabilityGraph">
+                    <div class="roomAvailabilityGraph">
+                        <canvas id="availabilityGraph"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <div class="rightSection">
 
+            <!-- <div class="salesReportBtn">
+                <a href="salesReport.php" class="btn btn-info">Sales Report</a>
+            </div> -->
 
-            <div class="card" id="revenueGraphCard">
+            <div class="card graph" id="revenueGraphCard">
                 <div class="revenueGraphContainer">
                     <h5 class=" revTitle">REVENUE</h5>
-                    <img src="../../Assets/Images/AdminImages/DashboardImages/graph.png" alt="" class="revenueGraph">
+                    <?php if (!empty($revenues)): ?>
+                        <div class="revenue-chart">
+                            <canvas id="revenueBar"></canvas>
+                        </div>
+                    <?php else: ?>
+                        <div class="revenueBar">No data available.</div>
+                    <?php endif; ?>
                 </div>
             </div>
 
-            <div class="rightSectionBottom">
-                <div class="card" id="schedule">
-                    <div class="card-header ">
-                        Room Availability
-                    </div>
-                    <div class="card-body">
-                        <div class="roomAvailabilityGraph">
-                            <img src="../../Assets/Images/AdminImages/DashboardImages/roomAvailabilityGraph.png" alt=""
-                                class="graphRA">
-                        </div>
 
-                        <div class="roomAvailabilityLegend">
+            <div class="card graph" id="reservationTrends">
+                <div class="card-header ">
 
-                            <span class="occupied bg-danger">Occupied</span>
-                            <span class="available bg-success">Available</span>
-                            <span class="maintenance bg-warning">Maintenance</span>
-                        </div>
-                    </div>
+                    <h5>Reservation Trends</h5>
                 </div>
-
-                <div class="card" id="sched">
-                    <div class="card-header ">
-                        Overall Rating
-                    </div>
-
-                    <div class="card-body">
-
-                        <div class="totalRating">
-                            <span class="totalRatingSpan bg-primary">4.3/5</span>
-                            <h5 class="card-title">Reviews</h5>
+                <div class="card-body">
+                    <?php if (!empty($bookingTypeCount)): ?>
+                        <div class="revenue-chart">
+                            <canvas id="reservationTrendsBar"></canvas>
                         </div>
-
-
-                        <div class="ratingLabelContainer">
-
-                            <div class="facilitiesRating">
-                                <h5 class="ratingLabel">Facilities</h5>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" id="facilitiesRating" role="progressbar"
-                                        style="width: 70%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    </div>
-                                </div>
-                                <h5 class="facilityRatingNumber">4.6</h5>
-                            </div>
-
-                            <div class="cleanlinessRating">
-                                <h5 class="ratingLabel">Cleanliness</h5>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" id="cleanlinessRating" role="progressbar"
-                                        style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    </div>
-                                </div>
-                                <h5 class="cleanlinessRatingNumber">4.5</h5>
-                            </div>
-
-                            <div class="servicesRating">
-                                <h5 class="ratingLabel">Services</h5>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" id="servicesRating" role="progressbar"
-                                        style="width: 95%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    </div>
-                                </div>
-                                <h5 class="servicesRatingNumber">4.8</h5>
-                            </div>
-
-                            <div class="comfortRating">
-                                <h5 class="ratingLabel">Comfort</h5>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" id="comfortRating" role="progressbar"
-                                        style="width: 45%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                    </div>
-                                </div>
-                                <h5 class="comfortRatingNumber">4.2</h5>
-                            </div>
-                        </div>
-                    </div>
+                    <?php else: ?>
+                        <div class="ReservationTrendsGraph">No data available.</div>
+                    <?php endif; ?>
                 </div>
             </div>
+
         </div>
     </div>
+
+
+    <!-- Bootstrap Link -->
+    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+
+    <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+        //Reservation Trends Bar
+        const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
+
+        const reservationTrendsChart = new Chart(reservationTrendsBar, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode($bookingTypeName) ?>,
+                datasets: [{
+                    data: <?= json_encode($bookingTypeCount) ?>,
+                    backgroundColor: [
+                        'rgba(0, 123, 255, 0.5)',
+                        'rgba(255, 193, 7, 0.5)',
+                        'rgba(40, 167, 69, 0.5)',
+                        'rgba(220, 53, 69, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(0, 123, 255, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)'
+                    ],
+
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+
+    <script>
+        // availabilityGraph
+        const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
+
+        const availabilityChart = new Chart(availabilityGraph, {
+            type: 'doughnut',
+            data: {
+                labels: <?= json_encode($availabilityName) ?>,
+                datasets: [{
+                    data: <?= json_encode($availabilityCount) ?>,
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.5)', // Available
+                        'rgba(255, 193, 7, 0.5)', // Maintenance
+                        'rgba(220, 53, 69, 0.5)', // Occupied
+                        'rgba(0, 123, 255, 0.5)' // Private
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(0, 123, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                cutout: '60%',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                }
+            }
+        });
+    </script>
+
+
+    <script>
+        //Revenue Bar
+        const revenueBar = document.getElementById("revenueBar").getContext('2d');
+
+        const revenueChart = new Chart(revenueBar, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode($days) ?>,
+                datasets: [{
+                    label: <?= json_encode($weekName) ?>,
+                    data: <?= json_encode($revenues) ?>,
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.5)', // Green
+                        'rgba(255, 193, 7, 0.5)', // Yellow
+                        'rgba(220, 53, 69, 0.5)', // Red
+                        'rgba(0, 123, 255, 0.5)', // Blue
+                        'rgba(23, 162, 184, 0.5)', // Cyan
+                        'rgba(108, 117, 125, 0.5)', // Gray
+                        'rgba(255, 99, 132, 0.5)', // Pink
+                        'rgba(153, 102, 255, 0.5)', // Purple
+                        'rgba(255, 159, 64, 0.5)', // Orange
+                        'rgba(75, 192, 192, 0.5)', // Teal
+                        'rgba(201, 203, 207, 0.5)', // Light Gray
+                        'rgba(54, 162, 235, 0.5)' // Light Blue
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(0, 123, 255, 1)',
+                        'rgba(23, 162, 184, 1)',
+                        'rgba(108, 117, 125, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(201, 203, 207, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: 'line',
+                            boxWidth: 0,
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+
+        });
+    </script>
 </body>
 
 </html>

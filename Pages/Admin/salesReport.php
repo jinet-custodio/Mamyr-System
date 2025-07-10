@@ -27,18 +27,6 @@ $_SESSION['last_activity'] = time();
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $reportRange = $_POST['reportDate'] ?? '';
-
-    // Split the string by " to "
-    $dates = explode(" to ", $reportRange);
-
-    $startDate = $dates[0] ?? null;
-    $endDate = $dates[1] ?? null;
-
-    echo "Start Date: " . htmlspecialchars($startDate) . "<br>";
-    echo "End Date: " . htmlspecialchars($endDate);
-}
 
 
 ?>
@@ -81,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -2vw;font-size:1.7vw;">
                     </i>
                 </div>
-                <div class="salesSummary">
+                <!-- <div class="salesSummary">
                     <h2>Sales Summary:</h2>
                     <div class="report">
                         <div class="summaryTable">
@@ -139,12 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div class="generateBtn">
-                        <button type="submit" class="btn btn-primary" name="generateReport" id="generateReport">Generate Detailed Report</button>
-                    </div>
+                    </div> -->
+                <div class="generateBtn">
+                    <button type="submit" class="btn btn-primary" name="generateReport" id="generateReport">Generate Detailed Report</button>
                 </div>
-            </form>
+        </div>
+        </form>
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

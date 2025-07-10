@@ -9,14 +9,10 @@
 }
 
 @font-face {
-  font-family: "Alkatra";
-  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
-} 
-
-@font-face {
   font-family: "Lora";
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
+
 
 * {
   margin: 0;
@@ -55,6 +51,14 @@ body {
 .logo {
   width: 15vw;
 }
+/* #dashboard {
+  font-family: "Plus Jakarta Sans";
+  text-decoration: none;
+  color: black;
+  font-weight: 800;
+  font-size: 2.3vw;
+  margin-left: 1vw;
+} */
 
 #dashboard {
   text-decoration: none;
@@ -65,7 +69,7 @@ body {
   margin-top: 1rem;
   font-family: "Lora" !important;
   /* font-weight: bold; */
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .admin {
@@ -75,6 +79,7 @@ body {
     border-radius: 3rem;
   }
 }
+
 .navbar {
   font-family: "Lora";
   border-radius: 15px;
@@ -95,6 +100,10 @@ body {
   align-items: center;
   color: black;
   text-decoration: none;
+}
+
+.me-2 {
+  margin-left: 2vw;
 }
 
 .nav-link.active:after {
@@ -127,110 +136,83 @@ body {
 }
 
 
-
-.dashboardTitle{
-  font-family: 'Lora';
+ .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: auto;
+  margin-top: -10vh;
+  width: 90vw;
   text-align: center;
 }
 
-.container-fluid{
+.card {
+  border: 1px solid red; 
+  border: none;
+  width: 100%;
+  height: 80vh;
+}
+
+.card-body {
+ /* border: 1px solid rgb(37, 11, 139);  */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  font-family: "Poppins";
+}
+
+.card-title {
+   /* border: 1px solid rgb(37, 11, 139);  */
+  font-family: "Poppins Black";
+  font-size: 30px;
+  padding: 1rem;
+}
+
+.charts {
+   /* border: 1px solid rgb(37, 11, 139);  */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.revenue-chart {
+   /* border: 1px solid rgb(37, 11, 139);  */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 350px;
+}
+
+.revenuePie, .revenueBar {
+  /* border: 1px solid rgb(37, 11, 139);  */
+  background-color: rgb(237, 255, 252);
+  border-radius: 5rem;
+  padding: 5rem;
+  width: 40%;
+  height: 350px; 
+  /* display: none; */
+}
+
+.cards {
+ /* border: 1px solid rgb(0, 255, 136); */
+  width: 70vw;
   display: flex;
   gap: 2rem;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  padding-top: 0;
+  margin: auto;
+} 
+
+.display-revenue,
+.booking-status {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
 }
 
-.leftSection{
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.card{
-  font-family: 'Poppins';
-}
-
-.card-header{
-  font-family: "Poppins" !important;
-}
-.card-body{
-  text-align: end;
-}
-
-.trend-cards{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem;
-    .card {
-    width: 45%;
-    height: 15vh !important;
-    margin: .5rem;
-   }
-}
-
-
-.roomAvailabilityGraph {
-  width: 500px;
-  height: 250px;
-  display: flex;
-  justify-content: center; 
-  align-items: center;  
-}
-
-
-
-#availabilityGraph{
-  width: 100%;
-  height: 100%;
-}
-
-
-.rightSection{
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  margin: 1rem;
-  gap: 1rem;
-}
-
-
-.salesReportBtn {
-  width: 100%;
-  margin: 1rem;
-
-}
-
-.salesReportBtn a {
-  font-size: 18px !important;
-  font-weight: 500;
-  font-family: "Lora" !important;
-}
-
-
-.revenueGraphContainer {
-  /* border: 1px solid black; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
-.revTitle {
-  font-family: "Poppins Black";
-  display: inline-block;
-  border: 1px;
-  word-wrap: break-word;
-  width: 1vw;
-  text-transform: capitalize;
-}
-
-.revenue-chart{
-  width: 90%;
-  height: 100%;
-}
+.form-control {
+  text-align: center;
+  font-size: 22px;
+} 
