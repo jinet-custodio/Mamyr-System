@@ -44,6 +44,9 @@ $userRole = $_SESSION['userRole'];
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <!-- flatpickr calendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
 </head>
 
 <body>
@@ -111,7 +114,7 @@ $userRole = $_SESSION['userRole'];
         </div>
     </nav>
 
-    <div class="selection" id="selection">
+    <div class="selection" id="selection" style="display: block;">
         <div class="titleContainer">
             <h4 class="title" id="mainTitle">RATES AND HOTEL ROOMS</h4>
         </div>
@@ -157,7 +160,7 @@ $userRole = $_SESSION['userRole'];
                 <?php
                 // DB query
                 $rateSql = "SELECT er.*, etr.time_range  FROM entrancerates  er
-                LEFT JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID
+                LEFT JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID
                  ORDER BY 
                     FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
                     FIELD(ERcategory, 'Adult', 'Kids')";
@@ -210,7 +213,7 @@ $userRole = $_SESSION['userRole'];
 
             <div class="cottages">
                 <?php
-                $cottagesql = "SELECT * FROM resortAmenities WHERE RSCategoryID = 2";
+                $cottagesql = "SELECT * FROM resortAmenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
                 $cottresult = mysqli_query($conn, $cottagesql);
                 if (mysqli_num_rows($cottresult) > 0) {
                     foreach ($cottresult as $cottage) {
@@ -385,9 +388,15 @@ $userRole = $_SESSION['userRole'];
                 <hr class="entranceLine">
                 <h4 class="entranceTitle" style="color: black;">Room Availability </h4>
             </div>
-
+            <div class="filterBtns">
+                <input type="text" placeholder="Select your booking date" id="hotelDate">
+                <div style="width: 50%;display:flex;justify-content:space-evenly;">
+                    <button role="button" id="elevenHrs" class="btn btn-primary" data-duration="11">11 Hour Stay</button>
+                    <button role="button" id="twenty2Hrs" class="btn btn-info" data-duration="22">22 Hour Stay</button>
+                </div>
+            </div>
             <?php
-            $availsql = "SELECT RSAvailabilityID, RServiceName 
+            $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration 
             FROM resortAmenities
             WHERE RSCategoryID = 1";
 
@@ -395,21 +404,19 @@ $userRole = $_SESSION['userRole'];
             ?>
             <div class="hotelIconsContainer">
                 <div class="availabilityIcons">
-                    <div class="availabilityIcon" id="allRooms" onclick="filterRooms('all')">
+                    <div class="availabilityIcon" id="allRooms">
                         <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1" class="avail" id="allrooms">
                         <p>All Rooms</p>
                     </div>
-                    <div class="availabilityIcon" id="availableRooms" onclick="filterRooms('available')">
+                    <div class="availabilityIcon" id="availableRooms">
                         <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2" class="avail">
                         <p>Available</p>
                     </div>
-                    <div class="availabilityIcon" id="unavailableRooms" onclick="filterRooms('unavailable')">
+                    <div class="availabilityIcon" id="unavailableRooms">
                         <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3" class="avail">
                         <p>Not Available</p>
                     </div>
                 </div>
-
-
 
                 <div class="hotelIconContainer">
                     <?php
@@ -421,9 +428,12 @@ $userRole = $_SESSION['userRole'];
                                 ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
                                 : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
                             $roomName = htmlspecialchars($row['RServiceName']);
+                            $duration = htmlspecialchars($row['RSduration']);
                             $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
 
-                            echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;" data-availability="' . $availabilityStatus . '">';
+                            echo '<div class="hotelIconWithCaption" style="text-align: center;" 
+                            data-availability="' . $availabilityStatus . '" data-duration="' . $duration . '">';
+
                             echo '<a href="#' . trim($row['RServiceName']) . '">  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '"> </a>';
                             echo '  <p class="roomCaption">' . $roomName . '</p>';
                             echo '</div>';
@@ -443,6 +453,8 @@ $userRole = $_SESSION['userRole'];
                 <hr class="entranceLine">
                 <h4 class="entranceTitle">Our Rooms</h4>
             </div>
+
+
             <div class="hotelRoomList">
                 <?php
                 $roomsql = "SELECT * FROM resortAmenities WHERE RScategoryID = 1";
@@ -450,7 +462,7 @@ $userRole = $_SESSION['userRole'];
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {
                 ?>
-                        <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>">
+                        <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>" data-duration="<?= $hotel['RSduration'] ?>">
                             <div class="halfImg">
                                 <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
@@ -460,23 +472,20 @@ $userRole = $_SESSION['userRole'];
                                 }
                                 ?>
                                 <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
-
                             </div>
 
                             <div class="Description">
-                                <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName'] ?> </h2>
-                                <?php $descriptions = explode(',', $hotel['RSdescription']);
+                                <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName']  ?> </h2>
+                                <?php
+                                $descriptions = explode(',', $hotel['RSdescription']);
                                 foreach ($descriptions as $description) {
                                 ?>
-                                    <p>
-                                        <?= "- " . trim($description) ?> <br>
-                                    </p>
+                                    <p><?= "- " . trim($description) ?><br></p>
                                 <?php } ?>
                                 <p class="font-weight-bold">
                                     Price: PHP <?= $hotel['RSprice'] ?>
                                 </p>
                             </div>
-
                         </div>
                 <?php
                     }
@@ -484,8 +493,8 @@ $userRole = $_SESSION['userRole'];
                     echo "<h5> No Record Found </h5>";
                 }
                 ?>
-
             </div>
+
         </div>
     </div>
     <!-- Back to Top Button -->
@@ -526,8 +535,8 @@ $userRole = $_SESSION['userRole'];
 
     </footer>
 
-
-
+    <!-- Flatpickr for date input -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script>
@@ -546,8 +555,6 @@ $userRole = $_SESSION['userRole'];
             document.getElementById('hotelRooms').style.display = 'none';
             document.getElementById('rates').style.display = 'block';
             document.getElementById("footer").style.marginTop = "3vw";
-
-
         }
 
         function showHotels(event) {
@@ -558,21 +565,10 @@ $userRole = $_SESSION['userRole'];
             document.getElementById("footer").style.marginTop = "3vw";
         }
 
-        function filterRooms(filterType) {
-            const allRooms = document.querySelectorAll('.hotelIconWithCaption');
-
-            allRooms.forEach(room => {
-                const availability = room.getAttribute('data-availability');
-
-                if (filterType === 'all') {
-                    room.style.display = 'inline-block'; // show all rooms
-                } else if (filterType === availability) {
-                    room.style.display = 'inline-block'; // show matching availability
-                } else {
-                    room.style.display = 'none'; // hide others
-                }
-            });
-        }
+        flatpickr('#hotelDate', {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+        });
 
         window.onscroll = function() {
             const btn = document.getElementById("backToTopBtn");
@@ -592,6 +588,127 @@ $userRole = $_SESSION['userRole'];
             });
         });
     </script>
+    <!-- filters hotel rooms by the hour -->
+    <script>
+        // State variables
+        let currentAvailabilityFilter = 'all';
+
+        // Initialize filters when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Default selections
+            document.getElementById('allRooms').classList.add('selectedIcon');
+            document.getElementById('elevenHrs').classList.add('selected');
+
+            // Apply filters to set initial view
+            applyFilters();
+
+            // Duration button click events
+            document.getElementById('elevenHrs').addEventListener('click', function() {
+                updateDuration(this);
+            });
+            document.getElementById('twenty2Hrs').addEventListener('click', function() {
+                updateDuration(this);
+            });
+
+            // Availability button click events
+            ['all', 'available', 'unavailable'].forEach(type => {
+                document.getElementById(`${type}Rooms`).addEventListener('click', function() {
+                    updateAvailability(type, this);
+                });
+            });
+        });
+
+        // Change selected duration
+        function updateDuration(button) {
+            // Update visual
+            document.querySelectorAll('.filterBtns button').forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+
+            applyFilters();
+        }
+
+        // Change availability filter
+        function updateAvailability(filterType, button) {
+            currentAvailabilityFilter = filterType;
+            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
+            button.classList.add('selectedIcon');
+
+            applyFilters();
+        }
+
+        function filterRooms(filterType) {
+            currentAvailabilityFilter = filterType;
+
+            // Update selected icon
+            document.querySelectorAll('.availabilityIcon').forEach(icon => {
+                icon.classList.remove('selectedIcon');
+            });
+
+            const selectedIcon = document.getElementById(`${filterType}Rooms`);
+            if (selectedIcon) {
+                selectedIcon.classList.add('selectedIcon');
+            }
+
+            applyFilters(); // Call the filter logic
+        }
+
+        function applyFilters() {
+            const selectedDuration = document.querySelector('.filterBtns .selected')?.getAttribute('data-duration');
+            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
+            const allRooms = document.querySelectorAll('.hotel');
+
+            allIcons.forEach(icon => {
+                const availability = icon.getAttribute('data-availability');
+                const duration = icon.getAttribute('data-duration')?.replace(/\D/g, '');
+
+                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter === availability);
+                const matchesDuration = !selectedDuration || (duration === selectedDuration);
+
+                icon.classList.toggle('hidden', !(matchesAvailability && matchesDuration));
+            });
+
+            allRooms.forEach(room => {
+                const duration = room.getAttribute('data-duration')?.replace(/\D/g, '');
+                const matchesDuration = !selectedDuration || (duration === selectedDuration);
+                room.style.display = matchesDuration ? 'flex' : 'none';
+            });
+        }
+    </script>
+
+    <!-- AJAX for fetching real time availability -->
+    <!-- to be further tested after availability is resolved -->
+    <script>
+        function fetchAvailability() {
+            fetch('/Function/Customer/getAvailability.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        dateTime: document.getElementById('hotelDate').value
+                    })
+                })
+                .then(res => res.json())
+                .then(json => {
+                    json.rooms.forEach(room => {
+                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-duration][data-availability]`);
+                        icons.forEach(icon => {
+                            const name = icon.querySelector('.roomCaption').textContent.trim();
+                            if (name === room.service) {
+                                icon.setAttribute('data-availability', room.available ? 'available' : 'unavailable');
+                            }
+                        });
+                    });
+                    applyFilters(); // re-apply filtering based on updated availability
+                })
+                .catch(console.error);
+        }
+
+        // Re-fetch availability whenever the date changes
+        document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
+        document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
+    </script>
+
 </body>
 
 </html>
