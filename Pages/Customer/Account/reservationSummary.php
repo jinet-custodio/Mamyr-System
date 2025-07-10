@@ -336,7 +336,7 @@ $userRole = $_SESSION['userRole'];
                     value="<?= htmlspecialchars($paymentMethod) ?>">
 
                 <img src="../../../Assets/Images/Icon/<?= htmlspecialchars(ucfirst($status)) ?>.png"
-                    alt="<?= htmlspecialchars($status) ?> Icon" class="PendingIcon">
+                    alt="<?= ucfirst(htmlspecialchars($status)) ?> Icon" class="PendingIcon">
                 <!-- <h4 class="pendingTitle">Your reservation is pending for approval </h4> -->
                 <!-- <h6 class="pendingSubtitle">Your request has been sent to the admin. Please wait for the approval of
                     your reservation.</h6> -->
@@ -519,24 +519,26 @@ $userRole = $_SESSION['userRole'];
 
 
     <script>
-    //Hide the make a downpayment button
-    const paymentStatus = document.getElementById("paymentStatus").value;
-    const bookingStatus = document.getElementById("bookingStatus").value;
-    const confirmedBookingStatus = document.getElementById("confirmedBookingStatus").value;
-    const paymentMethod = document.getElementById("paymentMethod").value;
-    if (paymentMethod === 'Cash') {
-        document.getElementById("makeDownpaymentBtn").style.display = "none";
-    } else if (bookingStatus === "Pending") {
-        document.getElementById("makeDownpaymentBtn").style.display = "none";
-    } else if (bookingStatus === "Approved" && confirmedBookingStatus === "Pending" && paymentStatus === "Unpaid") {
-        document.getElementById("makeDownpaymentBtn").style.display = "show";
-    } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Partially Paid") {
-        document.getElementById("makeDownpaymentBtn").style.display = "show";
-    } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Fully Paid") {
-        document.getElementById("makeDownpaymentBtn").style.display = "none";
-    } else {
-        document.getElementById("makeDownpaymentBtn").style.display = "none";
-    }
+        //Hide the make a downpayment button
+        const paymentStatus = document.getElementById("paymentStatus").value;
+        const bookingStatus = document.getElementById("bookingStatus").value;
+        const confirmedBookingStatus = document.getElementById("confirmedBookingStatus").value;
+        const paymentMethod = document.getElementById("paymentMethod").value;
+        if (paymentMethod === 'Cash') {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else if (paymentMethod === 'GCash') {
+            document.getElementById("makeDownpaymentBtn").style.display = "block";
+        } else if (bookingStatus === "Pending") {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else if (bookingStatus === "Approved" && confirmedBookingStatus === "Pending" && paymentStatus === "Unpaid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "show";
+        } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Partially Paid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "show";
+        } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Fully Paid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        }
     </script>
 
 

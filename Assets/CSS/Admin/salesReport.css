@@ -3,8 +3,8 @@
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 /* @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+  font-family: "Alkatra";
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 } */
 
 @font-face {
@@ -30,12 +30,14 @@ body {
     margin-right: 1vw;
 }
 
-.navbar-brand {
-    font-family: "Poppins";
-    font-size: 2.3vw !important;
+#pagetitle{
+    font-family: "Alkatra";
+    font-size: 2.8vw !important;
     display: flex !important;
     align-items: center !important;
-    margin-left: 2vw;
+    margin-top: 1vw;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 .container-fluid {
@@ -55,15 +57,52 @@ body {
   font-weight: 700;
 }
 
+#backToDashboard {
+  width: 3vw !important;
+  margin-right: 0;
+  margin-left: 0.4vw;
+
+}
+
+#back-btn{
+  width: 5vw !important;
+  display: flex;
+  align-items: center;
+}
 
 #reportDate {
- width: 25vw !important;
+ width: 30vw !important;
  margin-left: 1vw;
- font-size: 1.4vw;
+ font-size: 1.7vw;
   font-family: "Poppins";
 }
 
 .salesSummary {
-  margin-top: 5vw;
+  margin-top: 3vw;
 }
 
+.generateBtn {
+  margin: 0 auto !important;
+  width: 15vw;
+}
+
+#generateReport {
+  font-size: 1.2vw;
+  font-family: "Poppins";
+  font-weight: 700;
+  letter-spacing: 1px;
+
+}
+
+.table {
+  width: 85% !important;
+  margin: 2.2vw auto;
+}
+
+.table thead {
+  font-size: 1.4vw !important;
+}
+
+.table tbody {
+  font-size: 1.3vw;
+}

@@ -13,16 +13,16 @@ use PHPMailer\PHPMailer\Exception;
 // require '../phpmailer/src/Exception.php';
 // require '../phpmailer/src/SMTP.php';
 
-function assembleFullAddress($post)
-{
-    $street = $post['streetAddress'] ?? '';
-    $address2 = $post['address2'] ?? '';
-    $city = $post['city'] ?? '';
-    $province = $post['province'] ?? '';
-    $zip = $post['zip'] ?? '';
+// function assembleFullAddress($post)
+// {
+//     $street = $post['barangay'] ?? '';
+//     $streetAddress = $post['streetAddress'] ?? '';
+//     $city = $post['city'] ?? '';
+//     $province = $post['province'] ?? '';
+//     $zip = $post['zip'] ?? '';
 
-    return trim("$street $address2, $city, $province, $zip");
-}
+//     return trim("$street $streetAddress, $city, $province, $zip");
+// }
 
 
 
@@ -53,39 +53,73 @@ if (isset($_POST['signUp'])) {
         $imageData = file_get_contents('../Assets/Images/defaultProfile.png');
         $imageData = mysqli_real_escape_string($conn, $imageData);
     } else {
-        $imageData = null;
+        $imageData = NULL;
     }
+
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && array_filter($extensions, fn($ext) => str_ends_with($email, $ext))) {
 
-        $check_email = "SELECT email FROM users WHERE email = '$email' LIMIT 1";
-        $check_query = mysqli_query($conn, $check_email);
+        $checkEmail = $conn->prepare("SELECT email FROM users WHERE email = ? LIMIT 1");
+        $checkEmail->bind_param("s", $email);
+        $checkEmail->execute();
+        $checkEmailResult = $checkEmail->get_result();
         $_SESSION['formData'] = $_POST;  // store the data in session that user enter
-        if (mysqli_num_rows($check_query) > 0) {
-            $_SESSION['email-message'] = 'Email already exist.'; //Error Message
-            header("Location: ../Pages/register.php?page=register");
-            exit;
+        if ($checkEmailResult->num_rows > 0) {
+            $_SESSION['formData'] = $_POST;
+
+            if ($registerStatus == "partner") {
+                $_SESSION['partnerData'] = [
+                    'companyName'    => $_POST['companyName'],
+                    'partnerType'    => $_POST['partnerType'],
+                    'phoneNumber'    => $_POST['phoneNumber'],
+                    'barangay'       => $_POST['barangay'],
+                    'streetAddress'  => $_POST['streetAddress'],
+                    'city'           => $_POST['city'],
+                    'province'       => $_POST['province'],
+                    'zip'            => $_POST['zip'],
+                    'proofLink'      => $_POST['proofLink']
+                ];
+                header("Location: ../Pages/busPartnerRegister.php?action=emailExist");
+                exit;
+            } else {
+                header("Location: ../Pages/register.php?page=register&action=emailExist");
+                exit;
+            }
         } elseif ($password == $confirm_password) {
             $hashpassword = password_hash($password, PASSWORD_DEFAULT);
             $otp = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
             date_default_timezone_set('Asia/Manila'); //Set default time zone 
             $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes')); //Add a 5mins to the time of creation
             unset($_SESSION['formData']);
-            $storeData = "INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at, userRole) 
-            VALUES('$imageData','$firstName','$middleInitial','$lastName','$email','$userAddress','$hashpassword','$otp', '$OTP_expiration_at', '$userRole')";
-            $result = mysqli_query($conn, $storeData);
-            if ($result && $registerStatus == "partner") {
+
+            $null = NULL;
+            $insertUser = $conn->prepare("INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at) 
+            VALUES(?,?,?,?,?,?,?,?,?)");
+            $insertUser->bind_param("sssssssss", $null, $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $otp, $OTP_expiration_at);
+            $insertUser->send_long_data(0, $imageData);
+
+            if ($registerStatus == "partner") {
                 // Save business partner info into session temporarily
                 $_SESSION['partnerData'] = [
-                    'companyName' => $_POST['companyName'],
-                    'partnerType' => $_POST['partnerType'],
-                    'phoneNumber' => $_POST['phoneNumber'],
-                    'partnerAddress' => $_POST['streetAddress'] . ' ' . $_POST['address2'] . ', ' . $_POST['city'] . ', ' . $_POST['province'] . ', ' . $_POST['zip'],
-                    'proofLink' => $_POST['proofLink']
+                    'companyName'    => $_POST['companyName'],
+                    'partnerType'    => $_POST['partnerType'],
+                    'phoneNumber'    => $_POST['phoneNumber'],
+                    'barangay'       => $_POST['barangay'],
+                    'streetAddress'       => $_POST['streetAddress'],
+                    'city'           => $_POST['city'],
+                    'province'       => $_POST['province'],
+                    'zip'            => $_POST['zip'],
+                    'partnerAddress' =>
+                    $_POST['barangay'] . ' ' .
+                        $_POST['streetAddress'] . ', ' .
+                        $_POST['city'] . ', ' .
+                        $_POST['province'] . ', ' .
+                        $_POST['zip'],
+                    'proofLink'      => $_POST['proofLink']
                 ];
             }
 
-            if ($result) {
+            if ($insertUser->execute()) {
                 $mail = new PHPmailer(true);
                 try {
                     $_SESSION['email'] = $email;
@@ -101,25 +135,36 @@ if (isset($_POST['signUp'])) {
                     $mail->setFrom($env['SMTP_USER'], 'Mamyr Resort and Event Place');
                     $mail->addAddress($email, $firstName);
 
-                    $message = "
-                                <h2 style='color: #333;'>Your OTP Code for Account Verification</h2>
-                                <p>Hello,</p>
-                                <p>Your One-Time Password (OTP) for account verification is:</p>
-                                <h2 style='color:rgb(12, 6, 5); font-size: 24px; margin-left:120px;'> $otp </h2>
-                                <p>This OTP is valid for <strong>5 minutes</strong>. Do not share it with anyone.</p>
-                                <p>If you did not request this code, please ignore this email.</p>
-                                <br>
-                                <p>Thank you,</p>
-                                <p><strong>Mamyr</strong></p>
-                                ";
+                    $message = '<body style="font-family: Arial, sans-serif;                  background-color: #f4f4f4; padding: 20px; margin: 0;">
+                                <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                                    <tr>
+                                    <td style="padding: 30px; text-align: left; color: #333333;">
+                                        <h2 style="color: #333333; margin-top: 0;">Your OTP Code for Account Verification</h2>
+                                        <p style="font-size: 16px; margin: 20px 0 10px;">Hello,</p>
+                                        <p style="font-size: 16px; margin: 10px 0;">Your One-Time Password (OTP) for account verification is:</p>
 
+                                        <div style="text-align: center; margin: 30px 0;">
+                                        <span style="display: inline-block; background-color: #00e1ff; color: #0c0605; font-size: 24px; padding: 15px 30px; border-radius: 6px; font-weight: bold;">
+                                           ' . $otp . '
+                                        </span>
+                                        </div>
+                                        <p style="font-size: 16px; margin: 10px 0;">This OTP is valid for <strong>5 minutes</strong>. Do not share it with anyone.</p>
+                                        <p style="font-size: 16px; margin: 10px 0;">If you did not request this code, please ignore this email.</p>
+                                        <br>
+                                        <p style="font-size: 16px;">Thank you,</p>
+                                        <p style="font-size: 16px; font-weight: bold;">Mamyr.</p>
+                                    </td>
+                                    </tr>
+                                </table>
+                                </body>
+                                ';
                     $mail->isHTML(true);
-                    $mail->Subject = 'Hello';
+                    $mail->Subject = 'Account Verification';
                     $mail->Body    = $message;
                     // $mail->AltBody = 'Body in plain text for non-HTML mail clients';
                     if (!$mail->send()) {
-                        $_SESSION['OTP'] = 'Failed to send OTP. Try again.';
-                        header("Location: ../Pages/verify_email.php");
+                        // $_SESSION['error'] = 'Failed to send OTP. Try again.';
+                        header("Location: ../Pages/register.php?page=register&action=OTPFailed");
                         exit;
                     } else {
                         header("Location: ../Pages/verify_email.php");
@@ -145,42 +190,74 @@ if (isset($_POST['signUp'])) {
     $email = mysqli_real_escape_string($conn, $_POST['login_email']);
     $password = mysqli_real_escape_string($conn, $_POST['login_password']);
 
-    $loginQuery = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($conn, $loginQuery);
+    $loginQuery = $conn->prepare("SELECT u.*, 
+    ut.typeName AS roleName, ut.userTypeID AS roleID,
+    us.userStatusID AS statusID, us.statusName FROM users u
+    LEFT JOIN userTypes ut ON u.userRole = ut.userTypeID
+    LEFT JOIN userStatuses us ON u.userStatusID = us.userStatusID 
+    WHERE email = ?");
+    $loginQuery->bind_param("s", $email);
+    $loginQuery->execute();
+    $loginResult = $loginQuery->get_result();
     $_SESSION['formData']['email'] = $email;
-    if (mysqli_num_rows($result) > 0) {
-        $data = mysqli_fetch_assoc($result);
+    if ($loginResult->num_rows > 0) {
+        $data = $loginResult->fetch_assoc();
         $storedPassword = $data['password'];
+        $roleName = $data['roleName'];
+        $statusName = $data['statusName'];
         $userRole = $data['userRole'];
-        $userStatus = $data['userStatusID'];
+        $userStatusID = $data['userStatusID'];
         if (password_verify($password, $storedPassword)) {
-            if ($userStatus == 2) { //The user must be verified
-                if ($userRole == 1) { //Customer
+
+            //Get the corresponding ID depend on the role
+            if ($roleName === 'Admin') {
+                $admin = $data['roleID'];
+            } elseif ($roleName === 'Customer') {
+                $customer = $data['roleID'];
+            } elseif ($roleName === 'Partner') {
+                $partner = $data['roleID'];
+            }
+
+            //Get the corresponding ID depend on the status
+            if ($statusName === 'Pending') {
+                $pending = $data['statusID'];
+            } elseif ($statusName === 'Verified') {
+                $verified = $data['statusID'];
+            } elseif ($statusName === 'Not Verified') {
+                $notVerified = $data['statusID'];
+            } elseif ($statusName === 'Deleted') {
+                $deleted = $data['statusID'];
+            }
+
+            if ($userStatusID == $verified) { //The user must be verified
+                if ($userRole == $customer) { //Customer
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
                     $_SESSION['userRole'] = $userRole;
-                    header("Location: ../Pages/Customer/dashboard.php");
+                    header("Location: ../Pages/Customer/dashboard.php?action=successLogin");
                     exit;
-                } elseif ($userRole == 2) { //Partner
+                } elseif ($userRole == $partner) { //Partner
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
                     $_SESSION['userRole'] = $userRole;
-                    header("Location: ../Pages/Customer/dashboard.php");
+                    header("Location: ../Pages/Customer/dashboard.php?action=successLogin");
                     exit;
-                } elseif ($userRole == 3) { //Admin
+                } elseif ($userRole == $admin) { //Admin
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
                     $_SESSION['userRole'] = $userRole;
-                    header("Location: ../Pages/Admin/adminDashboard.php");
+                    header("Location: ../Pages/Admin/adminDashboard.php?action=successLogin");
                     exit;
                 } else {
-                    $_SESSION['error'] = 'Unauthorized User Role!';
-                    header("Location: ../Pages/register.php?page=login");
+                    // $_SESSION['error'] = 'Unauthorized User Role!';
+                    // header("Location: ../Pages/register.php?page=login");
+                    // exit;
+                    header("Location: ../Pages/register.php?page=login&action=unauthorized");
                     exit;
                 }
             } else {
-                $_SESSION['error'] = 'User is not verified!';
-                header("Location: ../Pages/register.php?page=login");
+                // $_SESSION['error'] = 'User is not verified!';
+                header("Location: ../Pages/register.php?page=login&action=notVerified");
                 exit;
             }
         } else {

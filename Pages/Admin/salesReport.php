@@ -64,7 +64,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top">
-        <a href="#" class="navbar-brand">
+        <a href="adminDashboard.php" class="navbar-brand" id="backToDashboard">
+            <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
+        </a>
+        <a href="#" class="navbar-brand" id="pagetitle">
             <img src="../../Assets/Images/Icon/Statistics.png" alt="" id="sales-logo"> Sales Report
         </a>
     </nav>
@@ -75,16 +78,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="dateRange">
                     <label for="reportDate">Report Period: </label>
                     <input type="text" name="reportDate" id="reportDate" placeholder="Click to enter date">
-                    <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -2vw;">
+                    <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -2vw;font-size:1.7vw;">
                     </i>
                 </div>
                 <div class="salesSummary">
                     <h2>Sales Summary:</h2>
                     <div class="report">
-
+                        <div class="summaryTable">
+                            <table class="table table-bordered table-hover text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Value</th>
+                                        <th>Add-ons</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Total Sales
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Booking Completed
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Cancelled Bookings
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Most Booked Area
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Total Guests
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Average Booking
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="generateBtn">
-                        <button type="submit" class="btn btn-primary">Generate Report</button>
+                        <button type="submit" class="btn btn-primary" name="generateReport" id="generateReport">Generate Detailed Report</button>
                     </div>
                 </div>
             </form>

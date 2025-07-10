@@ -18,7 +18,7 @@ if (isset($_POST['bookRates'])) {
     $roomChoice = isset($_POST['roomSelections']) ? mysqli_real_escape_string($conn, $_POST['roomSelections']) : "";
     $videokeChoice = mysqli_real_escape_string($conn, $_POST['videokeChoice']);
     $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
-    $paymentMethod = mysqli_real_escape_string($conn, $_POST['PaymentMethod']);
+    $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     $totalPax = mysqli_real_escape_string($conn, $_POST['totalPax']);
 

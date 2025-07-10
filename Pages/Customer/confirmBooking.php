@@ -261,7 +261,7 @@ $userRole = $_SESSION['userRole'];
         $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
         $selectedHotel = mysqli_real_escape_string($conn, $_POST['selectedHotel']);
         // $hotelNotes = mysqli_real_escape_string($conn, $_POST['hotelNotes']);
-        $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
+        $paymentMethod = mysqli_real_escape_string($conn, $_POST['PaymentMethod']);
 
         $buttonName = 'hotelBooking';
         $bookingType = 'Hotel';
@@ -383,17 +383,18 @@ $userRole = $_SESSION['userRole'];
                 <ul class="list-group list-group-flash">
                     <li class="list-group-item payment-info">
                         <h5 class="card-title">Payment Method:</h5>
-                        <h6 class="card-content" id="card-form"><?= htmlspecialchars($paymentMethod) ?></h6>
+                        <input type="text" name="paymentMethod" value="<?= htmlspecialchars($paymentMethod) ?>" class="card-content" readonly>
                     </li>
 
                     <li class="list-group-item payment-info">
                         <h5 class="card-title">Total Cost:</h5>
-                        <h6 class="card-content" id="card-form">₱ <?= number_format($totalCost, 2) ?></h6>
+                        <input type="text" name="totalCost" value="₱ <?= number_format($totalCost, 2) ?>" class="card-content" readonly>
+
                     </li>
 
                     <li class="list-group-item payment-info" id="downpayment">
                         <h5 class="card-title">Downpayment:</h5>
-                        <h6 class="card-content" id="card-form">₱ <?= number_format($downPayment, 2) ?></h6>
+                        <input type="text" name="downPayment" value="₱ <?= number_format($downPayment, 2) ?>" class="card-content" readonly>
                     </li>
                 </ul>
 
@@ -410,7 +411,7 @@ $userRole = $_SESSION['userRole'];
             <input type="hidden" name="childrenCount" value="<?= htmlspecialchars($childrenCount) ?>">
             <input type="hidden" name="cottageSelections" value="<?= htmlspecialchars($cottageChoice) ?>">
             <input type="hidden" name="videokeChoice" value="<?= htmlspecialchars($videokeChoice) ?>">
-
+            <input type="hidden" name="paymentMethod" value="<?= htmlspecialchars($paymentMethod) ?>">
             <input type="hidden" name="checkInDate" value="<?= htmlspecialchars($checkInDate) ?>">
             <input type="hidden" name="checkOutDate" value="<?= htmlspecialchars($checkOutDate) ?>">
             <input type="hidden" name="selectedHotel" value="<?= htmlspecialchars($selectedHotel) ?>">

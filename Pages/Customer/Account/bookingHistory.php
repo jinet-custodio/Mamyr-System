@@ -113,8 +113,8 @@ $userRole = $_SESSION['userRole'];
                     <th scope="col">Check In</th>
                     <th scope="col">Total Cost</th>
                     <th scope="col">Balance</th>
-                    <th scope="col">Booking Type</th>
                     <th scope="col">Payment Method</th>
+                    <th scope="col">Booking Type</th>
                     <th scope="col">Status</th>
                     <th scope="col">Review</th>
                     <th scope="col">Action</th>
@@ -128,7 +128,8 @@ $userRole = $_SESSION['userRole'];
                     LEFT JOIN confirmedbookings cb ON cb.bookingID = b.bookingID
                     LEFT JOIN statuses s ON cb.confirmedBookingStatus = s.statusID
                     LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
-                    WHERE userID = '$userID'";
+                    WHERE userID = '$userID'
+                    ORDER BY createdAt";
                     $resultGetBooking = mysqli_query($conn, $getBooking);
                     if (mysqli_num_rows($resultGetBooking) > 0) {
                         foreach ($resultGetBooking as $booking) {
@@ -140,20 +141,20 @@ $userRole = $_SESSION['userRole'];
                             $checkOut = date("d F Y", $endDate); //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
                             $bookingType = $booking['bookingType'];
                             $totalAmount = $booking['totalCost'];
-                            $balance = $booking['userBalance'];
+                            $balance = $booking['userBalance'] ?? $totalAmount;
                             $paymentMethod = $booking['paymentMethod']
                     ?>
-                    <tr>
-                        <td><?= $checkIn ?></td>
-                        <!-- <td><?= $checkOut ?></td> -->
-                        <td>₱<?= number_format($totalAmount, 2) ?></td>
-                        <td>₱<?= number_format($balance, 2) ?></td>
-                        <td><?= htmlspecialchars($paymentMethod) ?></a></td>
+                            <tr>
+                                <td><?= $checkIn ?></td>
+                                <!-- <td><?= $checkOut ?></td> -->
+                                <td>₱<?= number_format($totalAmount, 2) ?></td>
+                                <td>₱<?= number_format($balance, 2) ?></td>
+                                <td><?= htmlspecialchars($paymentMethod) ?></a></td>
 
-                        <td><?= htmlspecialchars($bookingType) ?></a></td>
+                                <td><?= htmlspecialchars($bookingType) ?></a></td>
 
-                        <!-- Papalitan na lang ng mas magandang term -->
-                        <?php if (!empty($booking['confirmedBookingID'])) {
+                                <!-- Papalitan na lang ng mas magandang term -->
+                                <?php if (!empty($booking['confirmedBookingID'])) {
                                     if ($booking['confirmedStatus'] === "Pending") {
                                         if ($paymentMethod === 'Cash') {
                                             $status = "Onsite payment";
@@ -182,11 +183,10 @@ $userRole = $_SESSION['userRole'];
                                             $status = "Downpayment";
                                             $class = 'btn btn-info w-100';
                                         }
-                                    } 
-                                    elseif ($booking['bookingStatus'] === "Rejected") {
+                                    } elseif ($booking['bookingStatus'] === "Rejected") {
                                         $status = "Rejected";
                                         $class = 'btn btn-danger w-100';
-                                    }elseif ($booking['bookingStatus'] === "Cancelled") {
+                                    } elseif ($booking['bookingStatus'] === "Cancelled") {
                                         $status = "Cancelled";
                                         $class = 'btn btn-danger w-100';
                                     } elseif ($booking['bookingStatus'] === "Rejected") {
@@ -196,28 +196,28 @@ $userRole = $_SESSION['userRole'];
                                 }
                                 ?>
 
-                        <td><span class="<?= $class ?>"><?= $status ?></span></td>
-                        <td><a href="" class=" btn btn-outline-primary" data-bs-toggle="modal"
-                                data-bs-target="#rateModal">Rate</a></td>
+                                <td><span class="<?= $class ?>"><?= $status ?></span></td>
+                                <td><a href="" class=" btn btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#rateModal">Rate</a></td>
 
-                        <td>
-                            <div class="button-container gap-2 md-auto"
-                                style="display: flex;  width: 100%; justify-content: center;">
-                                <form action="reservationSummary.php" method="POST">
-                                    <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
-                                    <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
-                                    <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                                    <input type="hidden" name="status" value="<?= $status ?>">
-                                    <button type="submit" name="viewBooking" class="btn btn-info w-100">View</button>
-                                </form>
+                                <td>
+                                    <div class="button-container gap-2 md-auto"
+                                        style="display: flex;  width: 100%; justify-content: center;">
+                                        <form action="reservationSummary.php" method="POST">
+                                            <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                                            <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
+                                            <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                            <input type="hidden" name="status" value="<?= $status ?>">
+                                            <button type="submit" name="viewBooking" class="btn btn-info w-100">View</button>
+                                        </form>
 
-                                <button type="button" class="btn btn-danger  w-100 cancelBooking"
-                                    data-bookingid="<?= $bookingID ?>"
-                                    data-confirmedbookingid="<?= $confirmedBookingID ?>"
-                                    data-status="<?= $status ?>">Cancel</button>
-                            </div>
-                        </td>
-                    </tr>
+                                        <button type="button" class="btn btn-danger  w-100 cancelBooking"
+                                            data-bookingid="<?= $bookingID ?>"
+                                            data-confirmedbookingid="<?= $confirmedBookingID ?>"
+                                            data-status="<?= $status ?>">Cancel</button>
+                                    </div>
+                                </td>
+                            </tr>
                     <?php
                         }
                     }
@@ -367,18 +367,18 @@ $userRole = $_SESSION['userRole'];
     <script src="../../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#bookingHistory').DataTable({
-            language: {
-                emptyTable: "No Bookings Made" //Pakipalitan na lang din ng magandang term
-            },
-            columnDefs: [{
-                width: '15%',
-                target: 0
+        $(document).ready(function() {
+            $('#bookingHistory').DataTable({
+                language: {
+                    emptyTable: "No Bookings Made" //Pakipalitan na lang din ng magandang term
+                },
+                columnDefs: [{
+                    width: '15%',
+                    target: 0
 
-            }]
+                }]
+            });
         });
-    });
     </script>
 
     <!-- Bootstrap Link -->
@@ -391,88 +391,88 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Show -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('action')
-    const confirmationModal = document.getElementById("confirmationModal");
-    const logoutBtn = document.getElementById('logoutBtn');
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action')
+        const confirmationModal = document.getElementById("confirmationModal");
+        const logoutBtn = document.getElementById('logoutBtn');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/logout.php";
-            }
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/logout.php";
+                }
+            });
         });
-    });
 
-    document.querySelectorAll(".cancelBooking").forEach(button => {
-        button.addEventListener("click", function() {
+        document.querySelectorAll(".cancelBooking").forEach(button => {
+            button.addEventListener("click", function() {
 
-            const bookingID = this.getAttribute("data-bookingid");
-            const confirmedBookingID = this.getAttribute("data-confirmedbookingid");
-            const status = this.getAttribute("data-status");
+                const bookingID = this.getAttribute("data-bookingid");
+                const confirmedBookingID = this.getAttribute("data-confirmedbookingid");
+                const status = this.getAttribute("data-status");
 
-            document.getElementById("bookingIDModal").value = bookingID;
-            document.getElementById("confirmedBookingIDModal").value = confirmedBookingID;
-            document.getElementById("statusModal").value = status;
+                document.getElementById("bookingIDModal").value = bookingID;
+                document.getElementById("confirmedBookingIDModal").value = confirmedBookingID;
+                document.getElementById("statusModal").value = status;
 
 
-            const myCancelBookingModal = new bootstrap.Modal(confirmationModal);
-            myCancelBookingModal.show();
+                const myCancelBookingModal = new bootstrap.Modal(confirmationModal);
+                myCancelBookingModal.show();
+            });
         });
-    });
 
-    if (paramValue === "Cancelled") {
-        Swal.fire({
-            title: "Successfully Cancelled!",
-            text: "If you change your mind, feel free to book again anytime. Thank you.",
-            icon: "success",
-        });
-    } else if (paramValue === "Error") {
-        Swal.fire({
-            title: "Cancellation Failed!",
-            text: "An error occurred while cancelling.",
-            icon: "error",
-            confirmButtonText: "OK"
-        });
-    } else if (paramValue === 'paymentSuccess') {
-        Swal.fire({
-            title: "Payment Successful!",
-            text: "Thank you! Your GCash payment receipt has been successfully sent. Please wait while the admin verifies your payment.",
-            icon: "success",
-            confirmButtonText: "OK"
-        });
-    };
+        if (paramValue === "Cancelled") {
+            Swal.fire({
+                title: "Successfully Cancelled!",
+                text: "If you change your mind, feel free to book again anytime. Thank you.",
+                icon: "success",
+            });
+        } else if (paramValue === "Error") {
+            Swal.fire({
+                title: "Cancellation Failed!",
+                text: "An error occurred while cancelling.",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        } else if (paramValue === 'paymentSuccess') {
+            Swal.fire({
+                title: "Payment Successful!",
+                text: "Thank you! Your GCash payment receipt has been successfully sent. Please wait while the admin verifies your payment.",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        };
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = "";
-        history.replaceState({}, document.title, url.toString());
-    };
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = "";
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 
     <!-- rate JS -->
     <script>
-    function toggleStars(starNumber) {
-        for (let i = 1; i <= 5; i++) {
-            document.getElementById('star' + i).classList.remove('orange');
-        }
+        function toggleStars(starNumber) {
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById('star' + i).classList.remove('orange');
+            }
 
-        for (let i = 1; i <= starNumber; i++) {
-            document.getElementById('star' + i).classList.add('orange');
+            for (let i = 1; i <= starNumber; i++) {
+                document.getElementById('star' + i).classList.add('orange');
+            }
         }
-    }
     </script>
 </body>
 

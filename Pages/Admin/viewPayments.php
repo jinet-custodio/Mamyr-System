@@ -282,11 +282,10 @@ $userRole = $_SESSION['userRole'];
             <section id="downpaymentImageSection">
                 <div class="image-container" id="downpayment-image-container">
                     <?php if ($downpaymentImage !== 'None'): ?>
-                    <img src="<?= htmlspecialchars($downpaymentImage) ?>" alt="Receipt Image" class="preview-image">
-
-                    <div class="zoom-overlay">
-                        <img src="<?= htmlspecialchars($downpaymentImage) ?>" alt="Zoomed Image">
-                    </div>
+                        <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
+                        <div class="zoom-overlay">
+                            <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
+                        </div>
                     <?php else: ?>
                     <p>Customer has not uploaded the receipt yet.</p>
                     <?php endif; ?>
@@ -412,16 +411,17 @@ $userRole = $_SESSION['userRole'];
         downpaymentContainer.style.display = "none";
     }
 
-    if (paymentStatus === 'Fully Paid') {
-        document.querySelector("#form-button").style.display = "none";
-        document.getElementById("addPayment").style.display = "none";
-        document.getElementById("downpaymentImageSection").style.display = "none";
-    } else if (paymentStatus === 'Partially Paid') {
-        document.getElementById("addPayment").style.display = "block";
-        document.querySelector("#form-button").style.display = "none";
-    } else if (paymentStatus === 'Unpaid') {
-        document.getElementById("addPayment").style.display = "none";
-    }
+
+        if (paymentStatus === 'Fully Paid') {
+            document.querySelector("#form-button").style.display = "none";
+            document.getElementById("addPayment").style.display = "none";
+            document.getElementById("downpaymentImageSection").style.display = "none";
+        } else if (paymentStatus === 'Partially Paid') {
+            document.getElementById("addPayment").style.display = "block";
+            document.querySelector("#form-button").style.display = "none";
+        } else if (paymentStatus === 'No Payment') {
+            document.getElementById("addPayment").style.display = "none";
+        }
     </script>
 
     <script>

@@ -205,34 +205,41 @@ if (isset($_SESSION['error-partnership'])) {
                     <tbody class="table-body">
                         <!-- Select to display all the applicants  -->
                         <?php
-                        $selectQuery = "SELECT u.firstName, u.lastName, p.*, s.statusName
+                        $pendingStatus = 1;
+                        $rejectedStatus = 3;
+                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName, pt.partnerTypeDescription
                                 FROM partnerships p
                                 INNER JOIN users u ON p.userID = u.userID
                                 INNER JOIN statuses s ON s.statusID = p.partnerStatus
-                                WHERE partnerStatus = '2'
-                                ";
-                        $result = mysqli_query($conn, $selectQuery);
-                        if (mysqli_num_rows($result) > 0) {
+                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                WHERE partnerStatus != ? AND partnerStatus != ?
+                                ");
+                        $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);
+                        $selectQuery->execute();
+                        $result = $selectQuery->get_result();
+                        if ($result->num_rows > 0) {
                             foreach ($result as $applicants) {
-                                $name = $applicants['firstName'] . " " . $applicants['lastName'];
+                                $name = ucwords($applicants['firstName']) . " " . ucwords($applicants['lastName']);
                                 $partnerID = $applicants['partnershipID'];
                                 $status = $applicants['statusName'];
+                                $date = $applicants['startDate'];
+                                $startDate = date("F d, Y — g:i A", strtotime($date));
                         ?>
                                 <tr>
                                     <td scope="row"><?= $name ?></td>
 
-                                    <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
+                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
 
                                     <td scope="row">
-                                        <?= $applicants['startDate'] ?>
+                                        <?= $startDate ?>
                                     </td>
 
                                     <td scope="row">
                                         <?php
                                         $partner = 3;
-                                        $partnerContainer = base64_encode($partner);
+                                        // $partnerContainer = base64_encode($partner);
                                         ?>
-                                        <form action="partnership.php?container=<?= $partnerContainer ?>" method="POST" style="display:inline;">
+                                        <form action="partnership.php?container=<?= $partner ?>" method="POST" style="display:inline;">
                                             <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
                                             <button type="submit" class="btn btn-info" name="view-btn">View</button>
                                         </form>
@@ -272,6 +279,7 @@ if (isset($_SESSION['error-partnership'])) {
                         <tr>
                             <th class="table-header" scope="col">Name</th>
                             <th class="table-header" scope="col">Partner Type</th>
+                            <th class="table-header" scope="col">Request Date</th>
                             <th class="table-header" scope="col">Status</th>
                             <th class="table-header" scope="col">Action</th>
                         </tr>
@@ -279,23 +287,31 @@ if (isset($_SESSION['error-partnership'])) {
                     <tbody class="table-body">
                         <!-- Select to display all the applicants  -->
                         <?php
-                        $selectQuery = "SELECT u.firstName, u.lastName, p.*, s.statusName
+                        $pendingStatus = 1;
+                        $rejectedStatus = 3;
+                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName, pt.partnerTypeDescription
                                 FROM partnerships p
                                 INNER JOIN users u ON p.userID = u.userID
                                 INNER JOIN statuses s ON s.statusID = p.partnerStatus
-                                WHERE partnerStatus = '1' OR partnerStatus = '3'
-                                ";
-                        $result = mysqli_query($conn, $selectQuery);
-                        if (mysqli_num_rows($result) > 0) {
+                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                WHERE partnerStatus = ? OR partnerStatus = ?
+                                ");
+                        $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);
+                        $selectQuery->execute();
+                        $result = $selectQuery->get_result();
+                        if ($result->num_rows > 0) {
                             foreach ($result as $applicants) {
-                                $name = $applicants['firstName'] . " " . $applicants['lastName'];
+                                $name = ucwords($applicants['firstName']) . " " . ucwords($applicants['lastName']);
                                 $partnerID = $applicants['partnershipID'];
                                 $status = $applicants['statusName'];
+                                $date = $applicants['requestDate'];
+                                $requestDate = date("F d, Y — g:i A", strtotime($date));
                         ?>
                                 <tr>
                                     <td scope="row"><?= $name ?></td>
 
-                                    <td scope="row"><?= ucfirst($applicants['partnerType'])  ?></td>
+                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
+                                    <td scope="row"><?= htmlspecialchars($requestDate) ?></td>
                                     <?php
                                     if ($status == "Pending") {
                                     ?>
@@ -316,9 +332,9 @@ if (isset($_SESSION['error-partnership'])) {
                                     <td scope="row">
                                         <?php
                                         $applicant = 4;
-                                        $applicantContainer = base64_encode($applicant);
+                                        // $applicantContainer = base64_encode($applicant);
                                         ?>
-                                        <form action="partnership.php?container=<?= $applicantContainer ?>" method="POST" style="display:inline;">
+                                        <form action="partnership.php?container=<?= $applicant ?>" method="POST" style="display:inline;">
                                             <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
                                             <button type="submit" class="btn btn-info w-75" name="view-partner">View</button>
                                         </form>
@@ -343,6 +359,8 @@ if (isset($_SESSION['error-partnership'])) {
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Pages hide/show -->
     <script>
@@ -403,6 +421,7 @@ if (isset($_SESSION['error-partnership'])) {
     <script>
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('container');
+        const action = params.get("action");
 
         const choices = document.getElementById("choice-container");
         const partnerContainer = document.getElementById("partner-container");
@@ -424,18 +443,23 @@ if (isset($_SESSION['error-partnership'])) {
             requestCard.style.display = "block";
         }
 
-        // if (paramValue) {
-        //     const url = new URL(window.location);
-        //     url.search = '';
-        //     history.replaceState({}, document.title, url.toString());
-        // };
+
+
+        if (action === "approved") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Partnership Approved',
+                text: 'The partnership request has been approved successfully.'
+            });
+        }
+
+        if (paramValue || action) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 
-
-
-
-    <!-- Sweetalert Link -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
         <?php if (!empty($message)): ?>
@@ -446,6 +470,8 @@ if (isset($_SESSION['error-partnership'])) {
             });
         <?php endif; ?>
     </script>
+
+
 
 </body>
 

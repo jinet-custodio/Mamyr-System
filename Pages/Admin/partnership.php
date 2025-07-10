@@ -57,6 +57,7 @@ if (!$partnerID) {
 
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/partnership.css">
 </head>
@@ -71,17 +72,21 @@ if (!$partnerID) {
         </div>
         <!-- Get the information to the database -->
         <?php
-        $query = "SELECT u.firstName, u.lastName, u.userProfile, u.phoneNumber, p.*, s.statusName 
-               FROM partnerships p
-               INNER JOIN users u ON p.userID = u.userID 
-               INNER JOIN statuses s ON s.statusID = p.partnerStatus
-               WHERE partnershipID = '$partnerID'";
-        $result = mysqli_query($conn, $query);
-        if (mysqli_num_rows($result) > 0) {
-            $data = mysqli_fetch_assoc($result);
+        $selectQuery = $conn->prepare("SELECT u.*, p.*, s.statusName, pt.partnerTypeDescription
+                                FROM partnerships p
+                                INNER JOIN users u ON p.userID = u.userID
+                                INNER JOIN statuses s ON s.statusID = p.partnerStatus
+                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                WHERE partnershipID = ?
+                                ");
+        $selectQuery->bind_param("i", $partnerID);
+        $selectQuery->execute();
+        $result = $selectQuery->get_result();
+        if ($result->num_rows > 0) {
+            $data = $result->fetch_assoc();
             $applicantName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
             $companyName = $data['companyName'];
-            $partnerType = $data['partnerType'];
+            $partnerType = $data['partnerTypeDescription'];
             $businessEmail = $data['businessEmail'];
             $phoneNumber = $data['phoneNumber'];
             if ($phoneNumber === NULL) {
@@ -101,6 +106,10 @@ if (!$partnerID) {
             } else {
                 $image = '../../Assets/Images/defaultProfile.png';
             }
+
+            // echo '<pre>';
+            // print_r($data);
+            // echo '</pre>';
         }
         ?>
         <!-- Display the information -->
@@ -146,17 +155,21 @@ if (!$partnerID) {
         </div>
         <!-- Get the information to the database -->
         <?php
-        $query = "SELECT u.firstName, u.lastName, u.userProfile, u.phoneNumber, p.*, s.statusName
-               FROM partnerships p
-               INNER JOIN users u ON p.userID = u.userID 
-               INNER JOIN statuses s ON s.statusID = p.partnerStatus
-               WHERE partnershipID = '$partnerID'";
-        $result = mysqli_query($conn, $query);
-        if (mysqli_num_rows($result) > 0) {
-            $data = mysqli_fetch_assoc($result);
+        $selectQuery = $conn->prepare("SELECT u.*, p.*, s.statusName, pt.partnerTypeDescription
+                                FROM partnerships p
+                                INNER JOIN users u ON p.userID = u.userID
+                                INNER JOIN statuses s ON s.statusID = p.partnerStatus
+                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                WHERE partnershipID = ?
+                                ");
+        $selectQuery->bind_param("i", $partnerID);
+        $selectQuery->execute();
+        $result = $selectQuery->get_result();
+        if ($result->num_rows > 0) {
+            $data = $result->fetch_assoc();
             $applicantName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
             $companyName = $data['companyName'];
-            $partnerType = $data['partnerType'];
+            $partnerType = $data['partnerTypeDescription'];
             $businessEmail = $data['businessEmail'];
             $phoneNumber = $data['phoneNumber'];
             if ($phoneNumber === NULL) {
@@ -192,8 +205,30 @@ if (!$partnerID) {
                     <form action="../../Function/Admin/partnerApproval.php" method="POST">
                         <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
                         <input type="hidden" name="partnerStatus" value="<?= $data['partnerStatus'] ?>">
+                        <input type="hidden" name="partnerUserID" value="<?= $data['userID'] ?>">
                         <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
-                        <button type="submit" class="btn btn-danger" name="declineBtn">Decline</button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectionModal">
+                            Decline
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="rejectionModalLabel">Reason for Rejection</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="rejectionReason">Please provide the reason for rejecting this request</label>
+                                        <input type="text" name="rejectionReason" id="rejectionReason">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-danger" name="declineBtn">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -222,11 +257,14 @@ if (!$partnerID) {
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
     <!-- Search URL -->
     <script>
         const params = new URLSearchParams(window.location.search);
-        const encodedParamValue = params.get('container');
-        const paramValue = atob(encodedParamValue);
+        const paramValue = params.get('container');
+        const action = params.get("action");
+        // const paramValue = atob(encodedParamValue);
 
         const partnerContainer = document.getElementById("partner-info");
         const requestContainer = document.getElementById("applicant-request");
@@ -239,11 +277,34 @@ if (!$partnerID) {
             requestContainer.style.display = "block";
         }
 
-        // if (paramValue) {
-        //     const url = new URL(window.location);
-        //     url.search = '';
-        //     history.replaceState({}, document.title, url.toString());
-        // };
+        if (action === "failed1") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Partnership Approval Failed',
+                text: 'There was an issue approving the partnership request. Please try again.'
+            });
+        } else if (action === "failed2") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Partnership Rejection Failed',
+                text: 'There was an issue declining the partnership request. Please try again.'
+            });
+        } else if (action === "failed") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Partnership Approval Failed',
+                text: 'There was an issue approving/rejecting the partnership request. Please try again.'
+            });
+        }
+
+
+
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 </body>
 

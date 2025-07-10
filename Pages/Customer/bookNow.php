@@ -39,6 +39,9 @@ $userRole = $_SESSION['userRole'];
     <link rel="stylesheet" href="../../Assets/CSS/Customer/bookNow.css">
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
+    <!-- flatpickr calendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -170,7 +173,8 @@ $userRole = $_SESSION['userRole'];
 
                     <h5 class="schedLabel">Schedule</h5>
                     <div class="scheduleForm">
-                        <input type="date" class="form-control w-100" id="resortBookingDate" name="resortBookingDate" required>
+                        <input type="text" class="form-control w-95" id="resortBookingDate" name="resortBookingDate" placeholder="Select booking date" required>
+                        <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -5vw;font-size:1.2vw;"> </i>
                         <select id="tourSelections" name="tourSelections" class="form-select" required>
                             <option value="" disabled selected>Select Preferred Tour</option>
                             <option value="Day" id="dayTour">Day Tour</option>
@@ -393,11 +397,17 @@ $userRole = $_SESSION['userRole'];
 
                         <div class="checkIn-container">
                             <h5 class="containerLabel">Check-In Date</h5>
-                            <input type="datetime-local" class="form-control" style="width: 250px;" name="checkInDate" id="checkInDate" required>
+                            <div style="display: flex;align-items:center;width:100%">
+                                <input type="text" class="form-control" name="checkInDate" id="checkInDate" required placeholder="Select Date and Time">
+                                <i class="fa-solid fa-calendar" id="hotelCheckinIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i>
+                            </div>
                         </div>
                         <div class="checkOut-container">
                             <h5 class="containerLabel">Check-Out Date</h5>
-                            <input type="datetime-local" class="form-control" style="width: 250px;" name="checkOutDate" id="checkOutDate" required>
+                            <div style="display: flex;align-items:center;">
+                                <input type="text" class="form-control" name="checkOutDate" id="checkOutDate" required placeholder="Select Date and Time">
+                                <i class="fa-solid fa-calendar" id="hotelCheckoutIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i>
+                            </div>
                         </div>
                     </div>
 
@@ -462,7 +472,11 @@ $userRole = $_SESSION['userRole'];
                     <div class="dateVenue">
                         <div class="dateForm">
                             <h5 class="dateLabel">Date</h5>
-                            <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" disabled required>
+                            <div style="display: flex;align-items:center;">
+                                <!-- <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" disabled required> -->
+                                <input type="text" class="form-control w-100" name="eventDate" id="eventtBookingDate" placeholder="Select Date and Time for your Event">
+                                <i class="fa-solid fa-calendar" id="eventDateIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i>
+                            </div>
                         </div>
                     </div>
 
@@ -531,9 +545,12 @@ $userRole = $_SESSION['userRole'];
         </div>
 
     </footer>
-
+    <!-- Full Calendar for Date display -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script src="../../Assets/JS/fullCalendar.js"></script>
+
+    <!-- Flatpickr for date input -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -589,6 +606,58 @@ $userRole = $_SESSION['userRole'];
                 behavior: 'smooth'
             });
         }
+
+        //JS for calendar pickers
+        const calIcon = document.getElementById("calendarIcon");
+        const hotelCheckinIcon = document.getElementById("hotelCheckinIcon");
+        const hotelCheckoutIcon = document.getElementById("hotelCheckoutIcon");
+        const eventDateIcon = document.getElementById("eventDateIcon");
+        //sets the minimum date in which the customer can book  (tentative)
+        const minDate = new Date();
+        minDate.setDate(minDate.getDate() + 3);
+
+        //resort calendar
+        flatpickr('#resortBookingDate', {
+            minDate: minDate,
+            dateFormat: "Y-m-d"
+        });
+
+        calIcon.addEventListener('click', function(event) {
+            resortBookingDate.click()
+        });
+
+        //hotel calendar
+        flatpickr('#checkInDate', {
+            enableTime: true,
+            minDate: minDate,
+            dateFormat: "Y-m-d H:i"
+        });
+
+        hotelCheckinIcon.addEventListener('click', function(event) {
+            checkInDate.click()
+        });
+
+
+        flatpickr('#checkOutDate', {
+            enableTime: true,
+            minDate: minDate,
+            dateFormat: "Y-m-d H:i"
+        });
+
+        hotelCheckoutIcon.addEventListener('click', function(event) {
+            checkOutDate.click()
+        });
+
+        flatpickr('#eventtBookingDate', {
+            enableTime: true,
+            minDate: minDate,
+            dateFormat: "Y-m-d H:i"
+        });
+
+        eventDateIcon.addEventListener('click', function(event) {
+            eventtBookingDate.click()
+        });
+
 
         document.addEventListener("DOMContentLoaded", function() {
             console.log("DOM fully loaded and parsed");
@@ -674,8 +743,9 @@ $userRole = $_SESSION['userRole'];
                 const hours = String(checkOutDate.getHours()).padStart(2, '0');
                 const minutes = String(checkOutDate.getMinutes()).padStart(2, '0');
 
-                const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+                const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
                 checkOutInput.value = formattedDate;
+
             }
         });
 
