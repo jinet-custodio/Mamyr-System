@@ -30,12 +30,23 @@
   z-index: 1000;
 }
 
-.profileContainer {
+.home {
   /* border: 1px solid red; */
-  padding: 2vw;
+  position: absolute;
+  top: 7%;
+  right: 4%;
 }
 
 .homeIcon {
+  float: right;
+  height: 6vh;
+}
+
+.profileContainer {
+  padding: 2vw;
+}
+
+.profilePic {
   height: 70px;
   width: 70px;
   border-radius: 3rem;

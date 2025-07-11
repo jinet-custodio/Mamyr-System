@@ -20,7 +20,7 @@
     <div class="sidebar">
 
         <div class="profileContainer">
-            <a href="#"><img src="../../Assets/Images/defaultProfile.png" alt="home icon" class="homeIcon"></a>
+            <a href="#"><img src="../../Assets/Images/defaultProfile.png" alt="home icon" class="profilePic"></a>
         </div>
 
         <ul class="list-group">
@@ -63,6 +63,11 @@
 
     <div class="container">
         <h3 class="welcomeText">Hello there, Partner!</h3>
+
+        <div class="home">
+            <a href="#"><img src="../../../Assets/Images/Icon/home2.png" alt="home icon" class="homeIcon"></a>
+            <!-- this will lead to dashboard -->
+        </div>
 
         <section>
             <div class="column1">
