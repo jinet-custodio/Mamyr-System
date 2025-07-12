@@ -3,12 +3,13 @@ require 'Config/dbcon.php';
 
 
 //SQL statement for retrieving data for website content from DB
-$getWebContent = "SELECT * FROM websiteContents WHERE sectionName = 'BusinessInformation'";
-$result = mysqli_query($conn, $getWebContent);
-
+$sectionName = 'BusinessInformation';
+$getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
 $contentMap = [];
-
-while ($row = mysqli_fetch_assoc($result)) {
+while ($row = $getWebContentResult->fetch_assoc()) {
     $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
     $contentID = $row['contentID'];
 
@@ -202,6 +203,11 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         </footer>
     </div>
+
+
+    <!-- Bootstrap JS -->
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
     <script>
         function myMap() {

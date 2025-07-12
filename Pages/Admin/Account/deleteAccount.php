@@ -53,10 +53,12 @@ $userRole = $_SESSION['userRole'];
     <!-- Get User Info -->
 
     <?php
-    $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-    $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) > 0) {
-        $data = mysqli_fetch_assoc($result);
+    $getUserInfo = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ?");
+    $getUserInfo->bind_param("ii", $userID, $userRole);
+    $getUserInfo->execute();
+    $getUserInfoResult = $getUserInfo->get_result();
+    if ($getUserInfoResult->num_rows > 0) {
+        $data =  $getUserInfoResult->fetch_assoc();
     }
     ?>
 

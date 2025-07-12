@@ -37,6 +37,7 @@ $bookingTypes =  $conn->prepare("SELECT
                                 bookings b ON cb.bookingID = b.bookingID 
                             WHERE 
                                 cb.confirmedBookingStatus = ?
+                                AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)
                             GROUP BY 
                                 b.bookingType 
                     ");
@@ -105,48 +106,47 @@ if ($revenueResult->num_rows > 0) {
 $hotel = 1;
 // $availabilityCount = [];
 // $availabilityName = ['Available', 'Maintenance', 'Occupied', 'Private'];
-$availabilityQuery = $conn->prepare("SELECT 
-                                        COUNT(CASE WHEN ra.RSAvailabilityID = 1 THEN 1 END) AS availableCount,
-                                        COUNT(CASE WHEN ra.RSAvailabilityID = 3 THEN 1 END) AS maintenanceCount,
-                                        COUNT(CASE WHEN ra.RSAvailabilityID = 2 THEN 1 END) AS occupiedCount,
-                                        COUNT(CASE WHEN ra.RSAvailabilityID = 4 THEN 1 END) AS privateCount,
-                                        sa.availabilityName 
-                                    FROM 
-                                        resortAmenities ra 
-                                    JOIN 
-                                        serviceAvailability sa ON ra.RSAvailabilityID = sa.availabilityID
-                                    WHERE 
-                                        ra.RScategoryID = ?
-                                    GROUP BY 
-                                        sa.availabilityName");
+$availabilityQuery = $conn->prepare("SELECT
+                                        COUNT(CASE WHEN uniqueRooms.RSAvailabilityID = 1 THEN 1 END) AS availableCount,
+                                        COUNT(CASE WHEN uniqueRooms.RSAvailabilityID = 2 THEN 1 END) AS occupiedCount,
+                                        COUNT(CASE WHEN uniqueRooms.RSAvailabilityID = 3 THEN 1 END) AS maintenanceCount,
+                                        COUNT(CASE WHEN uniqueRooms.RSAvailabilityID = 4 THEN 1 END) AS privateCount,
+                                        sa.availabilityName
+                                    FROM (
+                                        SELECT RServiceName, RSAvailabilityID
+                                        FROM resortAmenities
+                                        WHERE RScategoryID = ?
+                                        GROUP BY RServiceName
+                                    ) AS uniqueRooms
+                                    JOIN serviceAvailability sa ON uniqueRooms.RSAvailabilityID = sa.availabilityID
+                                    GROUP BY sa.availabilityName
+                                    ");
 $availabilityQuery->bind_param("i", $hotel);
 $availabilityQuery->execute();
 $availabilityResult = $availabilityQuery->get_result();
 if ($availabilityResult->num_rows > 0) {
     $availabilityCount = [];
     $availabilityName = ['Available', 'Maintenance', 'Occupied', 'Private'];
+    $availabilityCount = array_fill_keys($availabilityName, 0);
 
     while ($data = $availabilityResult->fetch_assoc()) {
         $name = $data['availabilityName'];
         if ($name === 'Available') {
-            $availabilityCount[0] = $data['availableCount'];
-        }
-        if ($name === 'Maintenance') {
-            $availabilityCount[1] = $data['maintenanceCount'];
-        }
-        if ($name === 'Occupied') {
-            $availabilityCount[2] = $data['occupiedCount'];
-        }
-        if ($name === 'Private') {
-            $availabilityCount[3] = $data['privateCount'];
+            $availabilityCount['Available'] = (int)$data['availableCount'];
+        } elseif ($name === 'Maintenance') {
+            $availabilityCount['Maintenance'] = (int)$data['maintenanceCount'];
+        } elseif ($name === 'Occupied') {
+            $availabilityCount['Occupied'] = (int)$data['occupiedCount'];
+        } elseif ($name === 'Private') {
+            $availabilityCount['Private'] = (int)$data['privateCount'];
         }
     }
 
-    for ($i = 0; $i < count($availabilityName); $i++) {
-        if (!isset($availabilityCount[$i])) {
-            $availabilityCount[$i] = 0;
-        }
-    }
+    // for ($i = 0; $i < count($availabilityName); $i++) {
+    //     if (!isset($availabilityCount[$i])) {
+    //         $availabilityCount[$i] = 0;
+    //     }
+    // }
 
     $availabilityCount = array_values($availabilityCount);
 
@@ -199,18 +199,18 @@ if ($availabilityResult->num_rows > 0) {
             }
 
             if ($admin === "Admin") {
-                $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-                $result = mysqli_query($conn, $query);
-                if (mysqli_num_rows($result) > 0) {
-                    $row = mysqli_fetch_assoc($result);
-                    $firstName = $row['firstName'];
-                    $profile = $row['userProfile'];
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $data = $getProfileResult->fetch_assoc();
+                    $firstName = $data['firstName'];
+                    $imageData = $data['userProfile'];
                     $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $profile);
+                    $mimeType = finfo_buffer($finfo, $imageData);
                     finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
-                } else {
-                    $firstName = 'None';
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
             } else {
                 $_SESSION['error'] = "Unauthorized Access!";

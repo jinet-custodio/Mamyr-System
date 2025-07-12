@@ -50,11 +50,14 @@ $userRole = $_SESSION['userRole'];
 <body id="body">
 
     <!-- Get name of customer -->
+
     <?php
-    $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-    $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) > 0) {
-        $data = mysqli_fetch_assoc($result);
+    $getUserInfo = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ?");
+    $getUserInfo->bind_param("ii", $userID, $userRole);
+    $getUserInfo->execute();
+    $getUserInfoResult = $getUserInfo->get_result();
+    if ($getUserInfoResult->num_rows > 0) {
+        $data =  $getUserInfoResult->fetch_assoc();
         $middleInitial = trim($data['middleInitial']);
         $name = ucfirst($data['firstName']) . " " . ucfirst($data['middleInitial']) . " "  . ucfirst($data['lastName']);
     }
@@ -102,13 +105,15 @@ $userRole = $_SESSION['userRole'];
         $childRate = 0;
 
         //Get the rates
-        $query = "SELECT er.*, s.serviceID 
+        $query = $conn->prepare("SELECT er.*, s.serviceID 
             FROM entranceRates er
             JOIN services s ON s.entranceRateID = er.entranceRateID
-            WHERE er.sessionType = '$tourSelections'";
-        $result = mysqli_query($conn, $query);
-        if (mysqli_num_rows($result) > 0) {
-            while ($rates = mysqli_fetch_assoc($result)) {
+            WHERE er.sessionType = ?");
+        $query->bind_param("s", $tourSelections);
+        $query->execute();
+        $result = $query->get_result();
+        if ($result->num_rows > 0) {
+            while ($rates = $result->fetch_assoc()) {
                 if ($rates['ERcategory'] === 'Adult') {
                     $adultRate = $rates['ERprice'];
                     $adultServiceID = $rates['serviceID'];
@@ -198,12 +203,14 @@ $userRole = $_SESSION['userRole'];
             $getServiceChoice = "";
         }
 
-        $getServiceChoiceQuery = "SELECT s.*, rs.* FROM services s
+        $getServiceChoiceQuery = $conn->prepare("SELECT s.*, rs.* FROM services s
             INNER JOIN resortAmenities rs ON s.resortServiceID = rs.resortServiceID 
-            WHERE RServiceName = '$getServiceChoice'";
-        $getServiceChoiceResult = mysqli_query($conn, $getServiceChoiceQuery);
-        if (mysqli_num_rows($getServiceChoiceResult) > 0) {
-            $data = mysqli_fetch_assoc($getServiceChoiceResult);
+            WHERE RServiceName = ?");
+        $getServiceChoiceQuery->bind_param("s", $getServiceChoice);
+        $getServiceChoiceQuery->execute();
+        $getServiceChoiceResult = $getServiceChoiceQuery->get_result();
+        if ($getServiceChoiceResult->num_rows > 0) {
+            $data =  $getServiceChoiceResult->fetch_assoc();
             $serviceID = $data['serviceID'];  //Makukuha nito is cottage or hotel 
             $servicePrice = $data['RSprice'];
             $serviceCapacity = $data['RScapacity'];
@@ -276,12 +283,14 @@ $userRole = $_SESSION['userRole'];
         $additionalCharge = 0;
         $additionalGuest = 0;
         $totalCost = 0;
-        $selectHotelQuery = "SELECT * FROM services s
+        $selectHotelQuery = $conn->prepare("SELECT * FROM services s
             JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
-            WHERE ra.RServiceName = '$selectedHotel'";
-        $resultHotelQuery = mysqli_query($conn, $selectHotelQuery);
-        if (mysqli_num_rows($resultHotelQuery) > 0) {
-            $data = mysqli_fetch_assoc($resultHotelQuery);
+            WHERE ra.RServiceName = ?");
+        $selectHotelQuery->bind_param("s", $selectedHotel);
+        $selectHotelQuery->execute();
+        $resultHotelQuery = $selectedHotelQuery->get_result();
+        if ($resultHotelQuery->num_rows > 0) {
+            $data = $resultHotelQuery->fetch_assoc();
             $serviceID = $data['serviceID'];
             $maxCapacity = $data['RScapacity'];
             $hotelPrice = $data['RSprice'];
@@ -365,7 +374,7 @@ $userRole = $_SESSION['userRole'];
 
                 <div class="info">
                     <h5 class="info-title">Additional:</h5>
-                    <input type="text" name="addOns" value="<?= htmlspecialchars(implode(', ', $addOns)) ?>"
+                    <input type="text" name="addOns" value="<?= !empty($addOns) ? htmlspecialchars(implode(', ', $addOns)) : 'None' ?>"
                         class="form-control" readonly>
                 </div>
 

@@ -53,10 +53,12 @@ $userRole = $_SESSION['userRole'];
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-            $result = mysqli_query($conn, $query);
-            if (mysqli_num_rows($result) > 0) {
-                $data = mysqli_fetch_assoc($result);
+            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile->bind_param("ii", $userID, $userRole);
+            $getProfile->execute();
+            $getProfileResult = $getProfile->get_result();
+            if ($getProfileResult->num_rows > 0) {
+                $data = $getProfileResult->fetch_assoc();
                 $imageData = $data['userProfile'];
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $imageData);
@@ -112,24 +114,27 @@ $userRole = $_SESSION['userRole'];
 
     <main>
         <?php
-        $getWebContent = "SELECT * FROM websiteContents WHERE sectionName = 'Blog'";
-        $result = mysqli_query($conn, $getWebContent);
+        $sectionName = 'Blog';
+        $getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+        $getWebContent->bind_param("s", $sectionName);
+        $getWebContent->execute();
+        $getWebContentResult = $getWebContent->get_result();
 
         $contentMap = [];
         $blogPosts = [];
         $imagesByContentID = [];
 
-        $getImagesQuery = "SELECT contentID, imageData, altText FROM websiteContentImages ORDER BY imageOrder ASC";
-        $imageResult = mysqli_query($conn, $getImagesQuery);
-
-        if ($imageResult && mysqli_num_rows($imageResult) > 0) {
-            while ($imgRow = mysqli_fetch_assoc($imageResult)) {
+        $getImagesQuery = $conn->prepare("SELECT contentID, imageData, altText FROM websiteContentImages ORDER BY imageOrder ASC");
+        $getImagesQuery->execute();
+        $getImagesQueryResult = $getImagesQuery->get_result();
+        if ($getImagesQueryResult && $getImagesQueryResult->num_rows > 0) {
+            while ($imgRow = $getImagesQueryResult->fetch_assoc()) {
                 $cid = $imgRow['contentID'];
                 $imagesByContentID[$cid][] = $imgRow;
             }
         }
 
-        while ($row = mysqli_fetch_assoc($result)) {
+        while ($row = $getWebContentResult->fetch_assoc()) {
             $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
             $contentID = $row['contentID'];
 
@@ -188,7 +193,7 @@ $userRole = $_SESSION['userRole'];
                                 $base64Image = base64_encode($imgData);
                                 echo "<img src='data:$mimeType;base64,$base64Image' alt='" . htmlspecialchars($altText) . "' />";
                             } else {
-                                echo "<img src='../Assets/Images/no-picture.jpg' alt='Default blog image'>";
+                                echo "<img src='../../Assets/Images/no-picture.jpg' alt='Default blog image'>";
                             }
                             ?>
 
@@ -237,7 +242,7 @@ $userRole = $_SESSION['userRole'];
                                     $base64Image = base64_encode($imgData);
                                     echo "<img src='data:$mimeType;base64,$base64Image' alt='" . htmlspecialchars($altText) . "' />";
                                 } else {
-                                    echo "<img src='../Assets/Images/no-picture.jpg' alt='Default blog image'>";
+                                    echo "<img src='../../Assets/Images/no-picture.jpg' alt='Default blog image'>";
                                 }
                                 ?>
                             </div>

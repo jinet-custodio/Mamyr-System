@@ -9,13 +9,16 @@ if (isset($_POST['yesDelete'])) {
     $selectedUserID = mysqli_real_escape_string($conn, $_POST['selectedUserID']);
 
     if ($selectedUserID !== "") {
-        $selectQuery = "SELECT * FROM users WHERE userID = '$selectedUserID'";
-        $result = mysqli_query($conn, $selectQuery);
-        if (mysqli_num_rows($result) > 0) {
-            $updateStatus = "UPDATE users SET
-            userStatusID = '4' WHERE userID = '$selectedUserID'";
-            $result = mysqli_query($conn, $updateStatus);
-            if ($result) {
+        $selectedUserQuery = $conn->prepare("SELECT * FROM users WHERE userID = ?");
+        $selectedUserQuery->bind_param('i', $selectedUserID);
+        $selectedUserQuery->execute();
+        $result = $selectedUserQuery->get_result();
+        if ($result->num_rows > 0) {
+            $storedData = $result->fetch_assoc();
+            $deletedID = 4;
+            $deleteQuery = $conn->prepare("UPDATE users SET userStatusID = ? WHERE userID = ?");
+            $deleteQuery->bind_param("iis", $deletedID, $selectedUserID);
+            if ($deleteQuery->execute()) {
                 header("Location: ../../../Pages/Admin/Account/userManagement.php?status=deleted");
                 exit;
             } else {

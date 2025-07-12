@@ -56,7 +56,7 @@ $selectedUserID = $_SESSION['selectedUserID'];
     <!-- Get User Info (Customer pa lang nagagawa ko) -->
 
     <?php
-    $query = "SELECT u.*,
+    $getUserData = $conn->prepare("SELECT u.*,
                 ut.typeName as roleName, 
                 us.statusName as userStatusName,
                 b.*, cb.*, p.*,
@@ -68,10 +68,12 @@ $selectedUserID = $_SESSION['selectedUserID'];
               LEFT JOIN bookings b ON u.userID = b.userID
               LEFT JOIN confirmedbookings cb ON b.bookingID = cb.bookingID
               LEFT JOIN statuses s ON  cb.confirmedBookingStatus = s.statusID
-              WHERE u.userID = '$selectedUserID'";
-    $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) > 0) {
-        $data = mysqli_fetch_assoc($result);
+              WHERE u.userID = ?");
+    $getUserData->bind_param("i", $selectedUserID);
+    $getUserData->execute();
+    $getUserDataResult =  $getUserData->get_result();
+    if ($getUserDataResult->num_rows > 0) {
+        $data =  $getUserDataResult->fetch_assoc();
         $middleInitial = trim($data['middleInitial']);
         $name = ucfirst($data['firstName']) . " " . ucfirst($data['middleInitial']) . " "  . ucfirst($data['lastName']);
         $email = $data['email'];
@@ -134,9 +136,13 @@ $selectedUserID = $_SESSION['selectedUserID'];
             </div>
             <div class="card-body">
                 <div class="user-details">
-                    <div class="info form-floating fullwidth">
+                    <div class="info form-floating">
                         <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($name) ?>" readonly>
                         <label for="floatingInputValue">Full Name</label>
+                    </div>
+                    <div class="info form-floating">
+                        <input type="<?= $type ?>" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($phoneNumber) ?>" readonly>
+                        <label for="floatingInputValue">Phone Number</label>
                     </div>
                     <div class="info form-floating">
                         <input type="<?= $type ?>" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($birthday) ?>" readonly>
@@ -150,10 +156,7 @@ $selectedUserID = $_SESSION['selectedUserID'];
                         <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($data['userStatusName']) ?>" readonly>
                         <label for="floatingInputValue">Status</label>
                     </div>
-                    <div class="info form-floating">
-                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($accountCreated) ?>" readonly>
-                        <label for="floatingInputValue">Account Creation Date</label>
-                    </div>
+
                     <div class="info form-floating">
                         <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($confirmedBookingCount) ?>" readonly>
                         <label for="floatingInputValue">Bookings Made</label>
@@ -166,6 +169,10 @@ $selectedUserID = $_SESSION['selectedUserID'];
                     <div class="info form-floating" id="companyName" style="display: none;">
                         <input type=" text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($data['companyName']) ?>" readonly>
                         <label for="floatingInputValue">Company Name</label>
+                    </div>
+                    <div class="info form-floating">
+                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($accountCreated) ?>" readonly>
+                        <label for="floatingInputValue">Account Creation Date</label>
                     </div>
                 </div>
             </div>

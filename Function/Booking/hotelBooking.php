@@ -24,12 +24,14 @@ if (isset($_POST['hotelBooking'])) {
     $additionalGuest = 0;
     $totalPrice = 0;
     $bookingStatus = 1;
-    $selectHotelQuery = "SELECT * FROM services s
-    JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
-    WHERE ra.RServiceName = '$selectedHotel'";
-    $resultHotelQuery = mysqli_query($conn, $selectHotelQuery);
-    if (mysqli_num_rows($resultHotelQuery) > 0) {
-        $data = mysqli_fetch_assoc($resultHotelQuery);
+    $selectHotelQuery = $conn->prepare("SELECT * FROM services s
+            JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
+            WHERE ra.RServiceName = ?");
+    $selectHotelQuery->bind_param("s", $selectedHotel);
+    $selectHotelQuery->execute();
+    $resultHotelQuery = $selectedHotelQuery->get_result();
+    if ($resultHotelQuery->num_rows > 0) {
+        $data = $resultHotelQuery->fetch_assoc();
         $serviceID = $data['serviceID'];
         $maxCapacity = $data['RScapacity'];
         $hotelPrice = $data['RSprice'];

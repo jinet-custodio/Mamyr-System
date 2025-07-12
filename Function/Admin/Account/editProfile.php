@@ -22,9 +22,10 @@ if (isset($_POST['changePfpBtn'])) {
     }
 
     if ($imageData !== NULL) {
-        $query = "UPDATE users SET userProfile = '$imageData' WHERE userID = '$userID' AND userRole = '$userRole'";
+        $query = $conn->prepare("UPDATE users SET userProfile = ? WHERE userID = ? AND userRole = ?");
+        $query->bind_param("sii", $imageData, $userID, $userRole);
 
-        if (mysqli_query($conn, $query)) {
+        if ($query->execute()) {
             header("Location: ../../../Pages/Admin/Account/account.php?message=success-image");
             exit;
         } else {

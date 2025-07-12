@@ -18,19 +18,22 @@ if (isset($_POST['verify_email'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     // $password = mysqli_real_escape_string($conn, $_POST['newPassword']);
 
-    $emailQuery = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($conn, $emailQuery);
-    if (mysqli_num_rows($result) > 0) {
-        $storedData = mysqli_fetch_assoc($result);
+    $emailQuery = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $emailQuery->bind_param('s', $email);
+    $emailQuery->execute();
+    $result = $emailQuery->get_result();
+    if ($result->num_rows > 0) {
+        $storedData = $result->fetch_assoc();
         $status = $storedData['userStatusID'];
         if ($status == 2) {
             $resetOTP = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
             date_default_timezone_set('Asia/Manila');
             $time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
             // $hashpassword = password_hash($password, PASSWORD_DEFAULT);
-            $newOTP = "UPDATE users SET userOTP = '$resetOTP', OTP_expiration_at = '$time' WHERE email = '$email'";
-            $OTPresult = mysqli_query($conn, $newOTP);
-            if ($OTPresult) {
+            $updateOTP = $conn->prepare("UPDATE users SET userOTP = ?, OTP_expiration_at = ? WHERE email = ?");
+            $updateOTP->bind_param("sss", $resetOTP, $time, $email);
+
+            if ($updateOTP->execute()) {
                 $mail = new PHPmailer(true);
                 try {
                     $_SESSION['email'] = $email;
@@ -99,14 +102,17 @@ if (isset($_POST['changePassword'])) {
     $password = mysqli_real_escape_string($conn, $_POST['newPassword']);
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirmPassword']);
 
-    $emailQuery = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($conn, $emailQuery);
-    if (mysqli_num_rows($result) > 0) {
+    $emailQuery = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $emailQuery->bind_param('s', $email);
+    $emailQuery->execute();
+    $result = $emailQuery->get_result();
+    if ($result->num_rows > 0) {
+        $storedData = $result->fetch_assoc();
         if ($password == $confirm_password) {
             $hashpassword = password_hash($password, PASSWORD_DEFAULT);
-            $newPass = "UPDATE users SET password = '$hashpassword' WHERE email = '$email'";
-            $passwordResult = mysqli_query($conn, $newPass);
-            if ($passwordResult) {
+            $updatePassword = $conn->prepare("UPDATE users SET password = ? WHERE email = ?");
+            $updatePassword->bind_param("ss", $hashpassword, $email);
+            if ($updatePassword->execute()) {
                 $_SESSION['success'] = 'Password Updated';
                 header("Location: ../Pages/register.php");
                 exit;
@@ -121,7 +127,7 @@ if (isset($_POST['changePassword'])) {
             exit;
         }
     } else {
-        print $email . "wala?";
+        print $email . "Email not found";
         $_SESSION['error'] = 'Email not found.';
         header("Location:  ../Pages/forgotPassword.php");
         exit;

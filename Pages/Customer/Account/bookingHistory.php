@@ -124,15 +124,18 @@ $userRole = $_SESSION['userRole'];
 
                     <?php
 
-                    $getBooking = "SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM bookings b
+                    $getBooking = $conn->prepare("SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM bookings b
                     LEFT JOIN confirmedbookings cb ON cb.bookingID = b.bookingID
                     LEFT JOIN statuses s ON cb.confirmedBookingStatus = s.statusID
                     LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
-                    WHERE userID = '$userID'
-                    ORDER BY createdAt";
-                    $resultGetBooking = mysqli_query($conn, $getBooking);
-                    if (mysqli_num_rows($resultGetBooking) > 0) {
-                        foreach ($resultGetBooking as $booking) {
+                    WHERE userID = ?
+                    ORDER BY createdAt");
+                    $getBooking->bind_param("i", $userID);
+                    $getBooking->execute();
+                    $resultGetBooking = $getBooking->get_result();
+                    if ($resultGetBooking->num_rows > 0) {
+                        $bookings = $resultGetBooking->fetch_all(MYSQLI_ASSOC);
+                        foreach ($bookings as $booking) {
                             $confirmedBookingID = $booking['confirmedBookingID'];
                             $bookingID = $booking['bookingID'];
                             $startDate = strtotime($booking['startDate']);

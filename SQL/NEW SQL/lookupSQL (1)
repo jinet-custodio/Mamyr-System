@@ -97,7 +97,8 @@ INSERT INTO resortServicesCategories (categoryName) VALUES
 ('Videoke'), 
 ('Massage'),
 ('Billiard'),
-('Event Hall');
+('Event Hall'),
+('Mini Pavillion');
 
 CREATE TABLE entranceTimeRanges(
     timeRangeID INT PRIMARY KEY AUTO_INCREMENT,
