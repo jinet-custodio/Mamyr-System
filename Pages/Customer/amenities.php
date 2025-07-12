@@ -55,10 +55,12 @@ $userRole = $_SESSION['userRole'];
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-            $result = mysqli_query($conn, $query);
-            if (mysqli_num_rows($result) > 0) {
-                $data = mysqli_fetch_assoc($result);
+            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile->bind_param("ii", $userID, $userRole);
+            $getProfile->execute();
+            $getProfileResult = $getProfile->get_result();
+            if ($getProfileResult->num_rows > 0) {
+                $data = $getProfileResult->fetch_assoc();
                 $imageData = $data['userProfile'];
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $imageData);
@@ -161,15 +163,16 @@ $userRole = $_SESSION['userRole'];
 
             <div class="carousel-container">
                 <div class="carousel">
-
                     <?php
-                    $serviceCategory = 2;
-                    $query = "SELECT * FROM resortAmenities WHERE RScategoryID = $serviceCategory ";
-                    $result = mysqli_query($conn, $query);
-                    if (mysqli_num_rows($result) > 0) {
-                        $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                    $cottageCategoryID = 2;
+                    $getCottage = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+                    $getCottage->bind_param("i", $cottageCategoryID);
+                    $getCottage->execute();
+                    $getCottageResult =  $getCottage->get_result();
+                    if ($getCottageResult->num_rows > 0) {
+
                         $counter = 1;
-                        foreach ($cottages as $cottage) {
+                        while ($cottage = $getCottageResult->fetch_assoc()) {
                             $imageData = $cottage['RSimageData'];
                             if ($imageData) {
                                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -207,9 +210,36 @@ $userRole = $_SESSION['userRole'];
             </div>
 
             <div class="poolPics">
-                <img src="../../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Hotel Picture 1" class="pic1">
-                <img src="../../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Hotel Picture 1" class="pic1">
+                <?php
+                $videokeCategoryID = 3;
+                $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+                $getVideoke->bind_param("i", $videokeCategoryID);
+                $getVideoke->execute();
+                $getVideokeResult =  $getVideoke->get_result();
+                if ($getVideokeResult->num_rows > 0) {
+                    // $counter = 1;
+                    while ($videoke = $getVideokeResult->fetch_assoc()) {
+                        $imageData = $videoke['RSimageData'];
+                        if ($imageData) {
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                            $mimeType = finfo_buffer($finfo, $imageData);
+                            finfo_close($finfo);
+                            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                        } else {
+                            $image = '../../Assets/Images/no-picture.jpg';
+                        }
+                ?>
 
+                        <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="pic1">
+                <?php
+                        // $counter++;
+                    }
+                } else {
+                    echo 'No Videoke';
+                }
+                ?>
+                <!-- <img src="../../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Hotel Picture 1" class="pic1">
+                <img src="../../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Hotel Picture 1" class="pic1"> -->
             </div>
 
         </div>
@@ -229,7 +259,36 @@ $userRole = $_SESSION['userRole'];
 
             <div class="carousel-container">
                 <div class="carousel">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
+
+                    <?php
+                    $eventHallCategoryID = 6;
+                    $getEventHall = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+                    $getEventHall->bind_param("i",  $eventHallCategoryID);
+                    $getEventHall->execute();
+                    $getEventHallResult =  $getEventHall->get_result();
+                    if ($getEventHallResult->num_rows > 0) {
+                        $counter = 1;
+                        while ($eventHall = $getEventHallResult->fetch_assoc()) {
+                            $imageData = $eventHall['RSimageData'];
+                            if ($imageData) {
+                                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                                $mimeType = finfo_buffer($finfo, $imageData);
+                                finfo_close($finfo);
+                                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                            } else {
+                                $image = '../../Assets/Images/no-picture.jpg';
+                            }
+                    ?>
+
+                            <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
+                    <?php
+                            $counter++;
+                        }
+                    } else {
+                        echo 'No Event Hall';
+                    }
+                    ?>
+                    <!-- <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
                         class="poolPic1">
                     <img src="../../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
                         class="poolPic2">
@@ -238,7 +297,7 @@ $userRole = $_SESSION['userRole'];
                     <img src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
                         class="poolPic4">
                     <img src="../../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
-                        class="poolPic5">
+                        class="poolPic5"> -->
 
                 </div>
                 <button class="btn btn-primary prev-btn">&#10094;</button>
@@ -259,6 +318,34 @@ $userRole = $_SESSION['userRole'];
 
             <div class="carousel-container">
                 <div class="carousel">
+                    <?php
+                    $miniPavCategoryID = 7;
+                    $getMiniPav = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+                    $getMiniPav->bind_param("i", $miniPavCategoryID);
+                    $getMiniPav->execute();
+                    $getMiniPavResult =  $getMiniPav->get_result();
+                    if ($getMiniPavResult->num_rows > 0) {
+                        // $counter = 1;
+                        while ($videoke =  $getMiniPav->fetch_assoc()) {
+                            $imageData = $videoke['RSimageData'];
+                            if ($imageData) {
+                                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                                $mimeType = finfo_buffer($finfo, $imageData);
+                                finfo_close($finfo);
+                                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                            } else {
+                                $image = '../../Assets/Images/no-picture.jpg';
+                            }
+                    ?>
+
+                            <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="pic1">
+                    <?php
+                            // $counter++;
+                        }
+                    } else {
+                        echo 'No Cottages';
+                    }
+                    ?>
                     <img src="../../Assets/Images/amenities/miniPavPics/miniPav1.jpg" alt="Mini Pavilion Picture 1"
                         class="poolPic1">
                     <img src="../../Assets/Images/amenities/miniPavPics/miniPav2.jpg" alt="Mini Pavilion Picture 2"

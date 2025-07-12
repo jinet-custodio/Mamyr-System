@@ -69,12 +69,14 @@ $userRole = $_SESSION['userRole'];
             $bookingID = $bookingID;
             // $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
             // $status = mysqli_real_escape_string($conn, $_POST['status']);
-            $getData = "SELECT bookings.*, users.firstName, users.middleInitial, users.lastName, users.phoneNumber, users.userAddress FROM bookings 
+            $getData = $conn->prepare("SELECT bookings.*, users.firstName, users.middleInitial, users.lastName, users.phoneNumber, users.userAddress FROM bookings 
             JOIN users ON bookings.userID = users.userID
-            WHERE bookings.userID = '$userID' AND bookings.bookingID = '$bookingID'";
-            $resultData = mysqli_query($conn, $getData);
-            if (mysqli_num_rows($resultData) > 0) {
-                $clientInfo = mysqli_fetch_assoc($resultData);
+            WHERE bookings.userID = ? AND bookings.bookingID =?");
+            $getData->bind_param("ii", $userID, $bookingID);
+            $getData->execute();
+            $resultData = $getData->get_result();
+            if ($resultData->num_rows > 0) {
+                $clientInfo = $resultData->fetch_assoc();
                 $middleInitial = trim($clientInfo['middleInitial']);
                 $name = ucfirst($clientInfo['firstName']) . " " . ucfirst($clientInfo['middleInitial']) . " "  . ucfirst($clientInfo['lastName']);
             }
@@ -543,40 +545,40 @@ $userRole = $_SESSION['userRole'];
 
 
     <script>
-    //Show the image preview
-    document.querySelector("input[type='file']").addEventListener("change", function(event) {
-        let reader = new FileReader();
-        reader.onload = function() {
-            let preview = document.getElementById("preview");
-            preview.src = reader.result;
-            preview.style.display = "block";
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    });
+        //Show the image preview
+        document.querySelector("input[type='file']").addEventListener("change", function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                let preview = document.getElementById("preview");
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
     </script>
 
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const bookingType = document.getElementById("bookingType").value;
+        document.addEventListener("DOMContentLoaded", function() {
+            const bookingType = document.getElementById("bookingType").value;
 
-        const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
-        const addOnsContainer = document.getElementById("addOns");
-        const tourTypeContainer = document.getElementById("tourType");
+            const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
+            const addOnsContainer = document.getElementById("addOns");
+            const tourTypeContainer = document.getElementById("tourType");
 
-        if (bookingType === "Resort") {
-            downpaymentNoteContainer.style.display = "none";
-            addOnsContainer.style.display = "flex";
-            tourTypeContainer.style.display = "flex";
-        } else if (bookingType === "Hotel") {
-            downpaymentNoteContainer.style.display = "block";
-            addOnsContainer.style.display = "none";
-            tourTypeContainer.style.display = "none";
-        } else {
-            downpaymentNoteContainer.style.display = "block";
-            addOnsContainer.style.display = "none";
-        }
-    });
+            if (bookingType === "Resort") {
+                downpaymentNoteContainer.style.display = "none";
+                addOnsContainer.style.display = "flex";
+                tourTypeContainer.style.display = "flex";
+            } else if (bookingType === "Hotel") {
+                downpaymentNoteContainer.style.display = "block";
+                addOnsContainer.style.display = "none";
+                tourTypeContainer.style.display = "none";
+            } else {
+                downpaymentNoteContainer.style.display = "block";
+                addOnsContainer.style.display = "none";
+            }
+        });
     </script>
 
 
@@ -584,37 +586,37 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
-    if (paramValue === "imageError") {
-        Swal.fire({
-            title: "Oops!",
-            text: "Failed to upload downpayment receipt image",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    } else if (paramValue === "imageFailed") {
-        Swal.fire({
-            title: "Oops!",
-            text: "No downpayment image submitted.",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    } else if (paramValue === "imageSize") {
-        Swal.fire({
-            title: "Oops!",
-            text: "File is too large. Maximum allowed size is 64MB.",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    }
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        if (paramValue === "imageError") {
+            Swal.fire({
+                title: "Oops!",
+                text: "Failed to upload downpayment receipt image",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === "imageFailed") {
+            Swal.fire({
+                title: "Oops!",
+                text: "No downpayment image submitted.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === "imageSize") {
+            Swal.fire({
+                title: "Oops!",
+                text: "File is too large. Maximum allowed size is 64MB.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        }
 
 
-    if (paramValue) {
-        const url = new URL(window.location.href);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location.href);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 

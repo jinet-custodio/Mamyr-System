@@ -85,18 +85,18 @@ if (isset($_SESSION['error'])) {
             }
 
             if ($admin === "Admin") {
-                $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-                $result = mysqli_query($conn, $query);
-                if (mysqli_num_rows($result) > 0) {
-                    $row = mysqli_fetch_assoc($result);
-                    $firstName = $row['firstName'];
-                    $profile = $row['userProfile'];
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $data = $getProfileResult->fetch_assoc();
+                    $firstName = $data['firstName'];
+                    $imageData = $data['userProfile'];
                     $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $profile);
+                    $mimeType = finfo_buffer($finfo, $imageData);
                     finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
-                } else {
-                    $firstName = 'None';
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
             } else {
                 $_SESSION['error'] = "Unauthorized Access!";
@@ -179,7 +179,7 @@ if (isset($_SESSION['error'])) {
                 <tbody>
                     <!-- Select booking info -->
                     <?php
-                    $selectQuery = "SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID, u.firstName,u.middleInitial, u.lastName, b.*,
+                    $getBookingInfo = $conn->prepare("SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID, u.firstName,u.middleInitial, u.lastName, b.*,
                     cp.*, ec.categoryName AS eventCategoryName,
                     cb.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus
                                     FROM bookings b
@@ -195,10 +195,11 @@ if (isset($_SESSION['error'])) {
                                     -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
                                     -- LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
                                     LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
-                                    ";
-                    $result = mysqli_query($conn, $selectQuery);
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($bookings = mysqli_fetch_assoc($result)) {
+                                    ");
+                    $getBookingInfo->execute();
+                    $getBookingInfoResult = $getBookingInfo->get_result();
+                    if ($getBookingInfoResult->num_rows > 0) {
+                        while ($bookings = $getBookingInfoResult->fetch_assoc()) {
                             // echo "<pre>";
                             // print_r($bookings);
                             // echo "</pre>";
@@ -214,37 +215,37 @@ if (isset($_SESSION['error'])) {
                                 if ($bookings['confirmedStatus'] === "Pending") {
                                     if ($bookingType === 'Resort') {
                                         $status = "Onsite payment";
-                                        $addClass = "btn btn-outline-info w-100";
+                                        $addClass = "btn btn-info w-100";
                                     } else {
                                         $status = "Downpayment";
-                                        $addClass = "btn btn-outline-primary w-100";
+                                        $addClass = "btn btn-primary w-100";
                                     }
                                 } elseif ($bookings['confirmedStatus'] === "Approved") {
                                     $status = "Successful";
-                                    $addClass = "btn btn-outline-success w-100";
+                                    $addClass = "btn btn-success w-100";
                                 } elseif ($bookings['confirmedStatus'] === "Rejected") {
                                     $status = "Rejected";
-                                    $addClass = "btn btn-outline-danger w-100";
+                                    $addClass = "btn btn-danger w-100";
                                 }
                             } else {
                                 $confirmedBookingID = NULL;
                                 if ($bookings['bookingStatus'] === "Pending") {
                                     $status = "Pending";
-                                    $addClass = "btn btn-outline-warning w-100";
+                                    $addClass = "btn btn-warning w-100";
                                 } else if ($bookings['bookingStatus'] === "Approved") {
                                     if ($bookingType === 'Resort') {
                                         $status = "Onsite payment";
-                                        $addClass = "btn btn-outline-info w-100";
+                                        $addClass = "btn btn-info w-100";
                                     } else {
                                         $status = "Downpayment";
-                                        $addClass = "btn btn-outline-primary w-100";
+                                        $addClass = "btn btn-primary w-100";
                                     }
                                 } elseif ($bookings['bookingStatus'] === "Cancelled") {
                                     $status = "Cancelled";
-                                    $addClass = "btn btn-outline-dark w-100";
+                                    $addClass = "btn btn-dark w-100";
                                 } elseif ($bookings['bookingStatus'] === "Rejected") {
                                     $status = "Rejected";
-                                    $addClass = "btn btn-outline-danger w-100";
+                                    $addClass = "btn btn-danger w-100";
                                 }
                             }
                             // $status = $bookings['statusName'];

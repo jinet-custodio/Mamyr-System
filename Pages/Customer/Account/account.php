@@ -64,12 +64,14 @@ $userRole = $_SESSION['userRole'];
     }
 
     if ($role === "Customer" || $role === "Business Partner") {
-        $query = "SELECT u.*, ut.typeName as roleName FROM users u
+        $getData = $conn->prepare("SELECT u.*, ut.typeName as roleName FROM users u
             INNER JOIN usertypes ut ON u.userRole = ut.userTypeID
-            WHERE u.userID = '$userID' AND userRole = '$userRole'";
-        $result = mysqli_query($conn, $query);
-        if (mysqli_num_rows($result) > 0) {
-            $data = mysqli_fetch_assoc($result);
+            WHERE u.userID = ? AND userRole = ?");
+        $getData->bind_param("ii", $userID, $userRole);
+        $getData->execute();
+        $getDataResult = $getData->get_result();
+        if ($getDataResult->num_rows > 0) {
+            $data =  $getDataResult->fetch_assoc();
             $middleInitial = trim($data['middleInitial']);
             $name = ucfirst($data['firstName']) . " " . ucfirst($data['middleInitial']) . " "  . ucfirst($data['lastName']);
             $email = $data['email'];

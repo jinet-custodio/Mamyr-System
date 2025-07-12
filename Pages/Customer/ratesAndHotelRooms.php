@@ -55,10 +55,12 @@ $userRole = $_SESSION['userRole'];
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-            $result = mysqli_query($conn, $query);
-            if (mysqli_num_rows($result) > 0) {
-                $data = mysqli_fetch_assoc($result);
+            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile->bind_param("ii", $userID, $userRole);
+            $getProfile->execute();
+            $getProfileResult = $getProfile->get_result();
+            if ($getProfileResult->num_rows > 0) {
+                $data = $getProfileResult->fetch_assoc();
                 $imageData = $data['userProfile'];
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $imageData);
@@ -159,17 +161,18 @@ $userRole = $_SESSION['userRole'];
             <div class="entranceFee">
                 <?php
                 // DB query
-                $rateSql = "SELECT er.*, etr.time_range  FROM entrancerates  er
+                $rateSql = $conn->prepare("SELECT er.*, etr.time_range  FROM entrancerates  er
                 LEFT JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID
                  ORDER BY 
                     FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
-                    FIELD(ERcategory, 'Adult', 'Kids')";
-                $rateResult = mysqli_query($conn, $rateSql);
+                    FIELD(ERcategory, 'Adult', 'Kids')");
+                $rateSql->execute();
+                $rateResult = $rateSql->get_result();
 
                 // Organize data into sessions
                 $sessions = [];
-                if (mysqli_num_rows($rateResult) > 0) {
-                    while ($row = mysqli_fetch_assoc($rateResult)) {
+                if ($rateResult->num_rows > 0) {
+                    while ($row = $rateResult->fetch_assoc()) {
                         $session = $row['sessionType'];
                         if (!isset($sessions[$session])) {
                             $sessions[$session] = [
@@ -213,10 +216,15 @@ $userRole = $_SESSION['userRole'];
 
             <div class="cottages">
                 <?php
-                $cottagesql = "SELECT * FROM resortAmenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
-                $cottresult = mysqli_query($conn, $cottagesql);
-                if (mysqli_num_rows($cottresult) > 0) {
-                    foreach ($cottresult as $cottage) {
+                $cottageCategoryID = 2;
+                $availableID = 1;
+                $cottagesql = $conn->prepare("SELECT * FROM resortAmenities WHERE RSCategoryID = ? AND RSAvailabilityID = ?");
+                $cottagesql->bind_param("ii", $cottageCategoryID, $availableID);
+                $cottagesql->execute();
+                $cottresult = $cottagesql->get_result();
+                if ($cottresult->num_rows > 0) {
+                    $cottages = $cottresult->fetch_all(MYSQLI_ASSOC);
+                    foreach ($cottages as $cottage) {
                 ?>
                         <div class="cottage">
                             <div class="Description" style="width: 40%;">
@@ -259,10 +267,14 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="entranceTitle">Videoke for Rent</h4>
             </div>
             <?php
-            $vidsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Videoke 1'";
-            $vidresult = mysqli_query($conn, $vidsql);
-            if (mysqli_num_rows($vidresult) > 0) {
-                foreach ($vidresult as $videoke) {
+            $videoke = 'Videoke 1';
+            $vidsql = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ?");
+            $vidsql->bind_param("s", $videoke);
+            $vidsql->execute();
+            $vidresult = $vidsql->get_result();
+            if ($vidresult->num_rows > 0) {
+                $videokes = $vidresult->fetch_all(MYSQLI_ASSOC);
+                foreach ($videokes as $videoke) {
             ?>
                     <div class="section">
                         <div class="singleImg" style="width: 40%;">
@@ -298,10 +310,14 @@ $userRole = $_SESSION['userRole'];
         </div>
         <div class="cottage " id="billiards">
             <?php
-            $bilsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Billiard'";
-            $bilresult = mysqli_query($conn, $bilsql);
-            if (mysqli_num_rows($bilresult) > 0) {
-                foreach ($bilresult as $bill) {
+            $billiard = 'Billiard';
+            $bilsql = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ?");
+            $bilsql->bind_param("s", $billiard);
+            $bilsql->execute();
+            $bilresult = $bilsql->get_result();
+            if ($bilresult->num_rows > 0) {
+                $billiards = $bilresult->fetch_all(MYSQLI_ASSOC);
+                foreach ($billiards as $bill) {
             ?>
                     <div class="Description" style="width: 40%;">
                         <p>
@@ -336,10 +352,14 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="entranceTitle">Massage Chair</h4>
             </div>
             <?php
-            $massagesql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Massage Chair'";
-            $massageresult = mysqli_query($conn, $massagesql);
-            if (mysqli_num_rows($massageresult) > 0) {
-                foreach ($massageresult as $massage) {
+            $massageChair = 'Massage Chair';
+            $massagesql = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ?");
+            $massagesql->bind_param("s", $massageChair);
+            $massagesql->execute();
+            $massageresult = $massagesql->get_result();
+            if ($massageresult->num_rows > 0) {
+                $massages = $massageresult->fetch_all(MYSQLI_ASSOC);
+                foreach ($massages as $massage) {
             ?>
                     <div class="section" id="massage">
                         <div class="singleImg" style="width: 50%;">

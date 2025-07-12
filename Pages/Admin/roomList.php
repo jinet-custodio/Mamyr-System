@@ -84,13 +84,18 @@ if (isset($_SESSION['error'])) {
             }
 
             if ($admin === "Admin") {
-                $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-                $result = mysqli_query($conn, $query);
-                if (mysqli_num_rows($result) > 0) {
-                    $row = mysqli_fetch_assoc($result);
-                    $firstName = $row['firstName'];
-                } else {
-                    $firstName = 'None';
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $data = $getProfileResult->fetch_assoc();
+                    $firstName = $data['firstName'];
+                    $imageData = $data['userProfile'];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_buffer($finfo, $imageData);
+                    finfo_close($finfo);
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
             } else {
                 $_SESSION['error'] = "Unauthorized Access!";
@@ -168,14 +173,18 @@ if (isset($_SESSION['error'])) {
                 <tbody>
                     <!-- Select booking info -->
                     <?php
-                    $selectQuery = "SELECT rs.*, sa.availabilityName AS roomStatus
+                    $hotelCategoryID = 1;
+                    $getRoomInfo = $conn->prepare("SELECT rs.*, sa.availabilityName AS roomStatus
                     FROM resortamenities rs 
                     LEFT JOIN serviceAvailability sa ON rs.RSAvailabilityID = sa.availabilityID
-                    WHERE RScategoryID = 1
-                    ORDER  BY resortServiceID";
-                    $result = mysqli_query($conn, $selectQuery);
-                    if (mysqli_num_rows($result) > 0) {
-                        foreach ($result as $roomInfo) {
+                    WHERE RScategoryID = ?
+                    ORDER  BY resortServiceID");
+                    $getRoomInfo->bind_param("i", $hotelCategoryID);
+                    $getRoomInfo->execute();
+                    $getRoomInfoResult = $getRoomInfo->get_result();
+                    if ($getRoomInfoResult->num_rows > 0) {
+                        $rooms = $getRoomInfoResult->fetch_all(MYSQLI_ASSOC);
+                        foreach ($rooms as $roomInfo) {
                             $roomID = $roomInfo['resortServiceID'];
                             $statColor = $roomInfo['roomStatus'];
                             // echo '<pre>';

@@ -54,10 +54,12 @@ $userRole = $_SESSION['userRole'];
     <!-- Get User Info -->
 
     <?php
-    $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-    $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) > 0) {
-        $userData = mysqli_fetch_assoc($result);
+    $getUserInfo = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ?");
+    $getUserInfo->bind_param("ii", $userID, $userRole);
+    $getUserInfo->execute();
+    $getUserInfoResult = $getUserInfo->get_result();
+    if ($getUserInfoResult->num_rows > 0) {
+        $data =  $getUserInfoResult->fetch_assoc();
     }
     ?>
 
@@ -124,25 +126,31 @@ $userRole = $_SESSION['userRole'];
                     <thead>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Role</th>
                         <th scope="col">Status</th>
                         <th scope="col">Date Created</th>
                         <th scope="col">Action</th>
                     </thead>
                     <tbody>
                         <?php
-                        $selectUsers = "SELECT u.*, ut.typeName as roleName, stat.statusName as status
+                        $userStatusID = 4;
+                        $selectUsers = $conn->prepare("SELECT u.*, ut.typeName as roleName, stat.statusName as status
                             FROM users u
                             INNER JOIN usertypes ut ON u.userRole = ut.userTypeID
                             INNER JOIN userstatuses stat ON u.userStatusID = stat.userStatusID
-                            WHERE u.userID != '$userID' AND u.userRole != '$userRole' AND u.userStatusID != '4'
-                            ORDER BY u.userRole DESC";
-                        $userResult = mysqli_query($conn, $selectUsers);
-                        if (mysqli_num_rows($userResult) > 0) {
-                            foreach ($userResult as $userData) {
+                            WHERE u.userID != ? AND u.userRole != ? AND u.userStatusID != ?
+                            ORDER BY u.userRole DESC");
+                        $selectUsers->bind_param("iii", $userID, $userRole, $userStatusID);
+                        $selectUsers->execute();
+                        $selectUsersResult = $selectUsers->get_result();
+                        if ($selectUsersResult->num_rows > 0) {
+                            $users = $selectUsersResult->fetch_all(MYSQLI_ASSOC);
+                            foreach ($users as $userData) {
                                 $middleInitial = trim($userData['middleInitial']);
                                 $name = ucfirst($userData['firstName']) . ($middleInitial ? " " . ucfirst($middleInitial) . "." : "") . " " . ucfirst($userData['lastName']);
                                 $status =  $userData['status'];
-                                $dataCreated = date("m-d-y", strtotime($userData['createdAt']));
+                                $role = $userData['roleName'];
+                                $dataCreated = date("F d, Y", strtotime($userData['createdAt']));
                                 if ($status === 'Verified') {
                                     // $class = 'badge rounded-pill bg-success text-light';
                                     $image = '../../../Assets/Images/Icon/greencircle.png';
@@ -154,6 +162,7 @@ $userRole = $_SESSION['userRole'];
                                 <tr>
                                     <td><?= htmlspecialchars($name) ?></td>
                                     <td><?= htmlspecialchars($userData['email']) ?> </td>
+                                    <td><?= htmlspecialchars($role) ?> </td>
                                     <td><?= htmlspecialchars(ucfirst($userData['status'])) ?><img src="<?= $image ?>" alt="" class="status-image"></td>
                                     <td><?= htmlspecialchars($dataCreated) ?> </td>
                                     <td>
@@ -215,7 +224,11 @@ $userRole = $_SESSION['userRole'];
             $('#usertable').DataTable({
                 language: {
                     emptyTable: "No users found."
-                }
+                },
+                columnDefs: [{
+                    width: "20%",
+                    target: 4
+                }]
             });
         });
     </script>

@@ -52,10 +52,12 @@ $userRole = $_SESSION['userRole'];
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-            $result = mysqli_query($conn, $query);
-            if (mysqli_num_rows($result) > 0) {
-                $data = mysqli_fetch_assoc($result);
+            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile->bind_param("ii", $userID, $userRole);
+            $getProfile->execute();
+            $getProfileResult = $getProfile->get_result();
+            if ($getProfileResult->num_rows > 0) {
+                $data = $getProfileResult->fetch_assoc();
                 $imageData = $data['userProfile'];
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $imageData);
@@ -111,12 +113,15 @@ $userRole = $_SESSION['userRole'];
         </div>
     </nav>
 
-
     <?php
-    $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-    $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) > 0) {
-        $data = mysqli_fetch_assoc($result);
+    $getUserInfo = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ?");
+    $getUserInfo->bind_param("ii", $userID, $userRole);
+    $getUserInfo->execute();
+    $getUserInfoResult = $getUserInfo->get_result();
+    if ($getUserInfoResult->num_rows > 0) {
+        $data =  $getUserInfoResult->fetch_assoc();
+
+
         $firstName = $data['firstName'];
         $middleInitial = $data['middleInitial'];
         $lastName = $data['lastName'];

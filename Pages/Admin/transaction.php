@@ -78,18 +78,18 @@ $userRole = $_SESSION['userRole'];
             }
 
             if ($admin === "Admin") {
-                $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-                $result = mysqli_query($conn, $query);
-                if (mysqli_num_rows($result) > 0) {
-                    $row = mysqli_fetch_assoc($result);
-                    $firstName = $row['firstName'];
-                    $profile = $row['userProfile'];
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $data = $getProfileResult->fetch_assoc();
+                    $firstName = $data['firstName'];
+                    $imageData = $data['userProfile'];
                     $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $profile);
+                    $mimeType = finfo_buffer($finfo, $imageData);
                     finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
-                } else {
-                    $firstName = 'None';
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
             } else {
                 $_SESSION['error'] = "Unauthorized Access!";
@@ -162,7 +162,7 @@ $userRole = $_SESSION['userRole'];
                     <th scope="col">Total Payment</th>
                     <!-- <th scope="col">Downpayment (30%)</th> -->
                     <!-- <th scope="col">Amount Paid</th> -->
-                    <th scope="col">Balance Due</th>
+                    <th scope="col">Balance</th>
                     <th scope="col">Payment Method</th>
                     <th scope="col">Payment Approval</th>
                     <th scope="col">Payment Status</th>
@@ -214,27 +214,27 @@ $userRole = $_SESSION['userRole'];
 
 
                     ?>
-                    <tr>
-                        <td><?= htmlspecialchars($formattedID) ?></td>
-                        <td><?= htmlspecialchars($guestName) ?></td>
-                        <td>₱ <?= number_format($totalAmount, 2) ?></td>
-                        <!-- <td>₱ <?= number_format($downpayment, 2) ?></td> -->
-                        <!-- <td>₱ <?= number_format($amountPaid, 2) ?></td> -->
-                        <td>₱ <?= number_format($balance, 2) ?></td>
-                        <td><?= htmlspecialchars($CBPaymentMethod) ?></td>
-                        <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
-                        <td><span
-                                class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
-                        </td>
+                            <tr>
+                                <td><?= htmlspecialchars($formattedID) ?></td>
+                                <td><?= htmlspecialchars($guestName) ?></td>
+                                <td>₱ <?= number_format($totalAmount, 2) ?></td>
+                                <!-- <td>₱ <?= number_format($downpayment, 2) ?></td> -->
+                                <!-- <td>₱ <?= number_format($amountPaid, 2) ?></td> -->
+                                <td>₱ <?= number_format($balance, 2) ?></td>
+                                <td><?= htmlspecialchars($CBPaymentMethod) ?></td>
+                                <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
+                                <td><span
+                                        class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
+                                </td>
 
-                        <td>
-                            <form action="viewPayments.php" method="POST">
-                                <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
-                                <button type="submit" name="viewIndividualPayment"
-                                    class="btn btn-info w-100">View</button>
-                            </form>
-                        </td>
-                    </tr>
+                                <td>
+                                    <form action="viewPayments.php" method="POST">
+                                        <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                                        <button type="submit" name="viewIndividualPayment"
+                                            class="btn btn-info w-100">View</button>
+                                    </form>
+                                </td>
+                            </tr>
 
                     <?php
                         }
@@ -292,68 +292,84 @@ $userRole = $_SESSION['userRole'];
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#transactionTable').DataTable({
-            columnDefs: [{
-                    width: '10%',
-                    target: 0,
-                },
-                {
-                    width: '15%',
-                    target: 1,
-                },
-                {
-                    width: '15%',
-                    target: 3,
-                }
-            ]
+        $(document).ready(function() {
+            $('#transactionTable').DataTable({
+                columnDefs: [{
+                        width: '9%',
+                        target: 0,
+                    },
+                    {
+                        width: '15%',
+                        target: 1,
+                    },
+                    {
+                        width: '15%',
+                        target: 2,
+                    },
+                    {
+                        width: '10%',
+                        target: 4,
+                    },
+                    {
+                        width: '15%',
+                        target: 5,
+                    },
+                    {
+                        width: '15%',
+                        target: 6,
+                    },
+                    {
+                        width: '10%',
+                        target: 7,
+                    }
+                ]
+            });
         });
-    });
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
-    if (paramValue === "approved") {
-        Swal.fire({
-            title: "Payment Approved",
-            text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
-            icon: 'success',
-        });
-    } else if (paramValue === "rejected") {
-        Swal.fire({
-            title: "Payment Rejected",
-            text: "You have reviewed and rejected the payment.",
-            icon: 'success',
-        });
-    } else if (paramValue === "failed") {
-        Swal.fire({
-            title: "Payment Approval Failed",
-            text: "Unable to approve or reject the payment. Please try again later.",
-            icon: 'error',
-        });
-    } else if (paramValue === "paymentSuccess") {
-        Swal.fire({
-            title: "Payment Added",
-            text: "Payment was successfully added and processed.",
-            icon: 'success',
-        });
-    } else if (paramValue === "paymentFailed") {
-        Swal.fire({
-            title: "Payment Failed",
-            text: "Failed to deduct the payment. Please try again later.",
-            icon: 'error',
-        });
-    }
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        if (paramValue === "approved") {
+            Swal.fire({
+                title: "Payment Approved",
+                text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
+                icon: 'success',
+            });
+        } else if (paramValue === "rejected") {
+            Swal.fire({
+                title: "Payment Rejected",
+                text: "You have reviewed and rejected the payment.",
+                icon: 'success',
+            });
+        } else if (paramValue === "failed") {
+            Swal.fire({
+                title: "Payment Approval Failed",
+                text: "Unable to approve or reject the payment. Please try again later.",
+                icon: 'error',
+            });
+        } else if (paramValue === "paymentSuccess") {
+            Swal.fire({
+                title: "Payment Added",
+                text: "Payment was successfully added and processed.",
+                icon: 'success',
+            });
+        } else if (paramValue === "paymentFailed") {
+            Swal.fire({
+                title: "Payment Failed",
+                text: "Failed to deduct the payment. Please try again later.",
+                icon: 'error',
+            });
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location.href);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location.href);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 

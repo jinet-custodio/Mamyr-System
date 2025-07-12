@@ -53,10 +53,12 @@ $userRole = $_SESSION['userRole'];
 <body id="body">
 
     <?php
-    $emailQuery = "SELECT email FROM users WHERE userID = '$userID' and userRole = '$userRole'";
-    $emailResult = mysqli_query($conn, $emailQuery);
-    if (mysqli_num_rows($emailResult) > 0) {
-        $data = mysqli_fetch_assoc($emailResult);
+    $emailQuery = $conn->prepare("SELECT email FROM users WHERE userID = ? and userRole = ?");
+    $emailQuery->bind_param("ii", $userID, $userRole);
+    $emailQuery->execute();
+    $emailResult = $emailQuery->get_result();
+    if ($emailResult->num_rows > 0) {
+        $data =  $emailResult->fetch_assoc();
         $email = $data['email'];
     } else {
         echo 'No Email Found';
@@ -66,10 +68,12 @@ $userRole = $_SESSION['userRole'];
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-            $result = mysqli_query($conn, $query);
-            if (mysqli_num_rows($result) > 0) {
-                $data = mysqli_fetch_assoc($result);
+            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile->bind_param("ii", $userID, $userRole);
+            $getProfile->execute();
+            $getProfileResult = $getProfile->get_result();
+            if ($getProfileResult->num_rows > 0) {
+                $data = $getProfileResult->fetch_assoc();
                 $imageData = $data['userProfile'];
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $imageData);
@@ -195,11 +199,14 @@ $userRole = $_SESSION['userRole'];
                             <select id="cottageSelections" name="cottageSelections" class="form-select">
                                 <option value="" disabled selected>Please Select a Cottage</option>
                                 <?php
-                                $cottageQuery = "SELECT * FROM resortAmenities WHERE RScategoryID = 2 AND RSAvailabilityID = 1";
-                                $result = mysqli_query($conn, $cottageQuery);
-                                if (mysqli_num_rows($result) > 0) {
-                                    $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                                    foreach ($cottages as $cottage) {
+                                $cottageCategoryID = 2;
+                                $availableID = 1;
+                                $cottageQuery = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? AND RSAvailabilityID = ?");
+                                $cottageQuery->bind_param("ii", $cottageCategoryID, $availableID);
+                                $cottageQuery->execute();
+                                $cottageResult = $cottageQuery->get_result();
+                                if ($cottageResult->num_rows > 0) {
+                                    while ($cottage = $cottageResult->fetch_assoc()) {
                                         echo "<option value='" . $cottage['RServiceName'] . "'>₱" . $cottage['RSprice'] . " - Good for " . $cottage['RScapacity'] . " pax " . "</option>";
                                     }
                                 } else {
@@ -215,11 +222,14 @@ $userRole = $_SESSION['userRole'];
                                 <option value="" selected disabled>Choose a room</option>
                                 <?php
                                 $category = 'Hotel';
-                                $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortAmenities rs
+                                $availableID = 1;
+                                $selectHotel = $conn->prepare("SELECT rs.*, rsc.categoryName FROM resortAmenities rs
                             JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
-                            WHERE rsc.categoryName = '$category' AND RSAvailabilityID = 1";
-                                $result = mysqli_query($conn, $selectHotel);
-                                if (mysqli_num_rows($result) > 0) {
+                            WHERE rsc.categoryName = ? AND RSAvailabilityID = ?");
+                                $selectHotel->bind_param("si", $category, $availableID);
+                                $selectHotel->execute();
+                                $result = $selectHotel->get_result();
+                                if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                 ?>
                                         <option value="<?= $row['RServiceName'] ?>">
@@ -376,11 +386,14 @@ $userRole = $_SESSION['userRole'];
                                     <option value="" disabled selected>Choose a room</option>
                                     <?php
                                     $category = 'Hotel';
-                                    $selectHotel = "SELECT rs.*, rsc.categoryName FROM resortAmenities rs
+                                    $availableID = 1;
+                                    $selectHotel = $conn->prepare("SELECT rs.*, rsc.categoryName FROM resortAmenities rs
                             JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
-                            WHERE rsc.categoryName = '$category' AND RSAvailabilityID = 1";
-                                    $result = mysqli_query($conn, $selectHotel);
-                                    if (mysqli_num_rows($result) > 0) {
+                            WHERE rsc.categoryName = ? AND RSAvailabilityID = ?");
+                                    $selectHotel->bind_param("si", $category, $availableID);
+                                    $selectHotel->execute();
+                                    $result = $selectHotel->get_result();
+                                    if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                     ?>
                                             <option value="<?= $row['RServiceName'] ?>" data-duration="<?= $row['RSduration'] ?>"><?= $row['RServiceName'] ?> - Max. of <?= $row['RScapacity'] ?> pax - ₱<?= $row['RSprice'] ?></option>
@@ -793,7 +806,8 @@ $userRole = $_SESSION['userRole'];
                 title: "Successful Booking!",
                 text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info. Thank You!",
                 icon: "success",
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'View',
+                showCloseButton: true,
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = 'Account/bookingHistory.php';

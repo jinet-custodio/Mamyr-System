@@ -77,21 +77,23 @@ if (isset($_SESSION['error'])) {
     $roomID = mysqli_real_escape_string($conn, $_POST['roomID']);
     $actionType = mysqli_real_escape_string($conn, $_POST['actionType']);
     $availabilityOptions = [];
-    $availabilityQuery = "SELECT availabilityID, availabilityName FROM serviceavailability";
-    $availabilityResult = mysqli_query($conn, $availabilityQuery);
-
-    while ($row = mysqli_fetch_assoc($availabilityResult)) {
+    $availabilityQuery = $conn->prepare("SELECT availabilityID, availabilityName FROM serviceavailability");
+    $availabilityQuery->execute();
+    $availabilityQueryResult = $availabilityQuery->get_result();
+    while ($row =  $availabilityQueryResult->fetch_assoc()) {
         $availabilityOptions[] = $row;
     }
-
-    $selectQuery = "SELECT rs.*, 
+    $hotelCategoryID = 1;
+    $getRoomStatus = $conn->prepare("SELECT rs.*, 
     sa.availabilityName AS roomStatus 
     FROM resortamenities rs 
     LEFT JOIN serviceAvailability sa ON rs.RSAvailabilityID = sa.availabilityID 
-    WHERE RScategoryID = 1 AND resortServiceID = $roomID";
-    $result = mysqli_query($conn, $selectQuery);
-    if (mysqli_num_rows($result) > 0) {
-        $roomInfo = mysqli_fetch_array($result);
+    WHERE RScategoryID = ? AND resortServiceID = ?");
+    $getRoomStatus->bind_param("ii", $hotelCategoryID, $roomID);
+    $getRoomStatus->execute();
+    $getRoomStatusResult = $getRoomStatus->get_result();
+    if ($getRoomStatusResult->num_rows > 0) {
+        $roomInfo = $getRoomStatusResult->fetch_array();
     ?>
         <form action="../../Function/Admin/editRoomInfo.php" method="POST" enctype="multipart/form-data" class="information">
 
@@ -102,23 +104,25 @@ if (isset($_SESSION['error'])) {
                     $_SESSION['roomID'] = $roomID;
                     $actionType = mysqli_real_escape_string($conn, $_POST['actionType']);
 
-                    $userQuery = "SELECT 
+                    $userQuery = $conn->prepare("SELECT 
                                 b.*, bs.*, 
                                 u.firstName, u.middleInitial, u.lastName, 
                                 rs.*, 
                                 s.resortServiceID 
                             FROM bookings b 
-                            LEFT JOIN booking                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      services bs ON b.bookingID = bs.bookingID
+                            LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID                                                                                                          
                             LEFT JOIN services s ON bs.serviceID = s.serviceID
                             LEFT JOIN resortamenities rs ON rs.resortServiceID = s.resortServiceID 
                             LEFT JOIN users u ON u.userID = b.userID 
                             WHERE 
-                                rs.RScategoryID = 1 
-                                AND rs.resortServiceID = $roomID
-                                AND NOW() BETWEEN b.startDate AND b.endDate";
-                    $result = mysqli_query($conn, $userQuery);
-                    if (mysqli_num_rows($result) > 0) {
-                        $rentor = mysqli_fetch_array($result);
+                                rs.RScategoryID = ?
+                                AND rs.resortServiceID = ?
+                                AND NOW() BETWEEN b.startDate AND b.endDate");
+                    $userQuery->bind_param("ii", $hotelCategoryID, $roomID);
+                    $userQuery->execute();
+                    $userQueryResult = $userQuery->get_result();
+                    if ($userQueryResult->num_rows > 0) {
+                        $rentor = $userQueryResult->fetch_array();
                         $rentorName = $rentor['firstName'] . " " . $rentor['middleInitial'] . " " .  $rentor['lastName'];
                     ?>
                         <div class="info" id="rentorRow">

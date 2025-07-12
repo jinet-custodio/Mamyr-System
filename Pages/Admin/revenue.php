@@ -114,18 +114,18 @@ if ($revenueResult->num_rows > 0) {
             }
 
             if ($admin === "Admin") {
-                $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-                $result = mysqli_query($conn, $query);
-                if (mysqli_num_rows($result) > 0) {
-                    $row = mysqli_fetch_assoc($result);
-                    $firstName = $row['firstName'];
-                    $profile = $row['userProfile'];
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $data = $getProfileResult->fetch_assoc();
+                    $firstName = $data['firstName'];
+                    $imageData = $data['userProfile'];
                     $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $profile);
+                    $mimeType = finfo_buffer($finfo, $imageData);
                     finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
-                } else {
-                    $firstName = 'None';
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
             } else {
                 $_SESSION['error'] = "Unauthorized Access!";
@@ -213,7 +213,7 @@ if ($revenueResult->num_rows > 0) {
                     <div class="display-revenue">
 
                         <?php
-                        $sales = "SELECT 
+                        $getSales = $conn->prepare("SELECT 
                                         CURDATE() AS Today,
                                         SUM(CASE WHEN cb.confirmedBookingStatus = 2 
                                                     AND DATE(b.startDate) = CURDATE() 
@@ -233,15 +233,13 @@ if ($revenueResult->num_rows > 0) {
                                                     THEN cb.CBtotalCost ELSE 0 END) 
                                                     AS totalThisMonth,
                                         SUM(CASE WHEN cb.confirmedBookingStatus = 2 
-                                                    AND YEAR(b.startDate) = YEAR(CURDATE()) 
-                                                    AND DATE(b.endDate) < CURDATE() 
                                                     THEN cb.CBtotalCost ELSE 0 END) AS totalThisYear                              
                                     FROM bookings b 
-                                    JOIN confirmedbookings cb ON b.bookingID = cb.bookingID";
-                        $result = mysqli_query($conn, $sales);
-
-                        if (mysqli_num_rows($result) > 0) {
-                            $data = mysqli_fetch_assoc($result);
+                                    JOIN confirmedbookings cb ON b.bookingID = cb.bookingID");
+                        $getSales->execute();
+                        $getSalesResult = $getSales->get_result();
+                        if ($getSalesResult->num_rows > 0) {
+                            $data = $getSalesResult->fetch_assoc();
                             // echo '<pre>';
                             // print_r($data);
                             // echo '</pre>';
@@ -274,16 +272,16 @@ if ($revenueResult->num_rows > 0) {
 
                     <div class="booking-status">
                         <?php
-                        $bookings = "SELECT
-                                        COUNT(CASE WHEN confirmedBookingStatus = '2' THEN 1 END) AS totalApprovedBookings,
-                                        COUNT(CASE WHEN confirmedBookingStatus = '3' THEN 1 END) AS totalRejectedBookings,
-                                         COUNT(CASE WHEN bookingStatus = '4' THEN 1 END) AS totalCancelledBookings                                       
+                        $getBookings = $conn->prepare("SELECT
+                                        COUNT(CASE WHEN confirmedBookingStatus = 2 THEN 1 END) AS totalApprovedBookings,
+                                        COUNT(CASE WHEN confirmedBookingStatus = 3 THEN 1 END) AS totalRejectedBookings,
+                                         COUNT(CASE WHEN bookingStatus = 4 THEN 1 END) AS totalCancelledBookings                                       
                                     FROM bookings b 
-                                    JOIN confirmedbookings cb ON b.bookingID = cb.bookingID";
-                        $result = mysqli_query($conn, $bookings);
-
-                        if (mysqli_num_rows($result) > 0) {
-                            $data = mysqli_fetch_assoc($result);
+                                    JOIN confirmedbookings cb ON b.bookingID = cb.bookingID");
+                        $getBookings->execute();
+                        $getBookingsResult = $getBookings->get_result();
+                        if ($getBookingsResult->num_rows > 0) {
+                            $data = $getBookingsResult->fetch_assoc();
                             $totalApprovedBookings = $data['totalApprovedBookings'];
                             $totalRejectedBookings = $data['totalRejectedBookings'];
                             $totalCancelledBookings = $data['totalCancelledBookings'];
@@ -310,17 +308,19 @@ if ($revenueResult->num_rows > 0) {
                         </div>
 
                         <?php
-                        $occupied = "SELECT 
+                        $hotelCategoryID = 1;
+                        $getOccupiedRates = $conn->prepare("SELECT 
                                         ROUND(
                                             COUNT(CASE WHEN RSAvailabilityID = '2' THEN 1 END) * 100 / COUNT(*), 
                                             2
                                         ) AS occupiedRates
                                     FROM resortamenities
-                                    WHERE RScategoryID = '1'";
-                        $result = mysqli_query($conn, $occupied);
-
-                        if (mysqli_num_rows($result) > 0) {
-                            $data = mysqli_fetch_assoc($result);
+                                    WHERE RScategoryID = ?");
+                        $getOccupiedRates->bind_param("i", $hotelCategoryID);
+                        $getOccupiedRates->execute();
+                        $getOccupiedRatesResult = $getOccupiedRates->get_result();
+                        if ($getOccupiedRatesResult->num_rows > 0) {
+                            $data = $getOccupiedRatesResult->fetch_assoc();
                             $occupiedRates = $data['occupiedRates'];
                         }
                         ?>

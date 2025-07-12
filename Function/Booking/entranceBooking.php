@@ -43,13 +43,15 @@ if (isset($_POST['bookRates'])) {
     $childRate = 0;
 
     //Get the rates
-    $query = "SELECT er.*, s.serviceID 
-    FROM entranceRates er
-    JOIN services s ON s.entranceRateID = er.entranceRateID
-    WHERE er.sessionType = '$tourSelections'";
-    $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) > 0) {
-        while ($rates = mysqli_fetch_assoc($result)) {
+    $query = $conn->prepare("SELECT er.*, s.serviceID 
+            FROM entranceRates er
+            JOIN services s ON s.entranceRateID = er.entranceRateID
+            WHERE er.sessionType = ?");
+    $query->bind_param("s", $tourSelections);
+    $query->execute();
+    $result = $query->get_result();
+    if ($result->num_rows > 0) {
+        while ($rates = $result->fetch_assoc()) {
             if ($rates['ERcategory'] === 'Adult') {
                 $adultRate = $rates['ERprice'];
                 $adultServiceID = $rates['serviceID'];
@@ -130,12 +132,14 @@ if (isset($_POST['bookRates'])) {
     }
 
 
-    $getServiceChoiceQuery = "SELECT s.*, rs.* FROM services s
-    INNER JOIN resortAmenities rs ON s.resortServiceID = rs.resortServiceID 
-    WHERE RServiceName = '$getServiceChoice'";
-    $getServiceChoiceResult = mysqli_query($conn, $getServiceChoiceQuery);
-    if (mysqli_num_rows($getServiceChoiceResult) > 0) {
-        $data = mysqli_fetch_assoc($getServiceChoiceResult);
+    $getServiceChoiceQuery = $conn->prepare("SELECT s.*, rs.* FROM services s
+            INNER JOIN resortAmenities rs ON s.resortServiceID = rs.resortServiceID 
+            WHERE RServiceName = ?");
+    $getServiceChoiceQuery->bind_param("s", $getServiceChoice);
+    $getServiceChoiceQuery->execute();
+    $getServiceChoiceResult = $getServiceChoiceQuery->get_result();
+    if ($getServiceChoiceResult->num_rows > 0) {
+        $data =  $getServiceChoiceResult->fetch_assoc();
         $serviceID = $data['serviceID'];  //Makukuha nito is cottage or hotel 
         $servicePrice = $data['RSprice'];
         $serviceCapacity = $data['RScapacity'];

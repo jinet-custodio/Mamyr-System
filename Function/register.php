@@ -47,15 +47,9 @@ if (isset($_POST['signUp'])) {
     $extensions = ['@gmail.com', '@yahoo.com', '@outlook.com', '@protonmail.com', '@icloud.com'];
 
 
-    // Set the default image when a user registered
-    $defaultImage = '../Assets/Images/defaultProfile.png';
-    if (file_exists($defaultImage)) {
-        $imageData = file_get_contents('../Assets/Images/defaultProfile.png');
-        $imageData = mysqli_real_escape_string($conn, $imageData);
-    } else {
-        $imageData = NULL;
-    }
 
+    $defaultImage = '../Assets/Images/defaultProfile.png';
+    $userProfile = file_exists($defaultImage) ? file_get_contents($defaultImage) : NULL;
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && array_filter($extensions, fn($ext) => str_ends_with($email, $ext))) {
 
@@ -92,11 +86,9 @@ if (isset($_POST['signUp'])) {
             $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes')); //Add a 5mins to the time of creation
             unset($_SESSION['formData']);
 
-            $null = NULL;
             $insertUser = $conn->prepare("INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at) 
             VALUES(?,?,?,?,?,?,?,?,?)");
-            $insertUser->bind_param("bssssssss", $null, $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $otp, $OTP_expiration_at);
-            $insertUser->send_long_data(0, $imageData);
+            $insertUser->bind_param("sssssssss", $userProfile, $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $otp, $OTP_expiration_at);
 
             if ($registerStatus == "partner") {
                 // Save business partner info into session temporarily
@@ -240,7 +232,7 @@ if (isset($_POST['signUp'])) {
                     unset($_SESSION['formData']);
                     $_SESSION['userID'] = $data['userID'];
                     $_SESSION['userRole'] = $userRole;
-                    header("Location: ../Pages/Customer/dashboard.php?action=successLogin");
+                    header("Location: ../Pages/BusinessPartner/bpDashboard.php?action=successLogin");
                     exit;
                 } elseif ($userRole == $admin) { //Admin
                     unset($_SESSION['formData']);

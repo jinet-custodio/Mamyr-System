@@ -88,16 +88,21 @@ if (isset($_SESSION['error-partnership'])) {
             }
 
             if ($admin === "Admin") {
-                $query = "SELECT * FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-                $result = mysqli_query($conn, $query);
-                if (mysqli_num_rows($result) > 0) {
-                    $row = mysqli_fetch_assoc($result);
-                    $firstName = $row['firstName'];
-                } else {
-                    $firstName = 'None';
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $data = $getProfileResult->fetch_assoc();
+                    $firstName = $data['firstName'];
+                    $imageData = $data['userProfile'];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_buffer($finfo, $imageData);
+                    finfo_close($finfo);
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
             } else {
-                $_SESSION['error'] = "Unauthorized Access ah!";
+                $_SESSION['error'] = "Unauthorized Access!";
                 session_destroy();
                 header("Location: ../register.php");
                 exit();

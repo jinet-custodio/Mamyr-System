@@ -26,6 +26,22 @@ $_SESSION['last_activity'] = time();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+
+
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'BusinessInformation';
+$getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+
+    $contentMap[$cleanTitle] = $row['content'];
+}
 ?>
 
 
@@ -56,19 +72,18 @@ $userRole = $_SESSION['userRole'];
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
-            $result = mysqli_query($conn, $query);
-            if (mysqli_num_rows($result) > 0) {
-                $data = mysqli_fetch_assoc($result);
+            $getProfile = $conn->prepare("SELECT firstName, userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile->bind_param("ii", $userID, $userRole);
+            $getProfile->execute();
+            $getProfileResult = $getProfile->get_result();
+            if ($getProfileResult->num_rows > 0) {
+                $data = $getProfileResult->fetch_assoc();
+                $firstName = $data['firstName'];
                 $imageData = $data['userProfile'];
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $imageData);
                 finfo_close($finfo);
                 $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-
-                // echo '<pre>';
-                // print_r($data);
-                // echo '</pre>';
             }
             ?>
             <li class="nav-item account-nav">
@@ -126,17 +141,6 @@ $userRole = $_SESSION['userRole'];
                 <div class="mamyrTitle">
                     <h1 class="welcome">Welcome to Mamyr,</h1>
                 </div>
-
-                <?php
-                $query = "SELECT firstName FROM users WHERE userID = '$userID'";
-                $result = mysqli_query($conn, $query);
-                if (mysqli_num_rows($result) > 0) {
-                    $row = mysqli_fetch_assoc($result);
-                    $firstName = $row['firstName'];
-                } else {
-                    $firstName = 'None';
-                }
-                ?>
                 <div class="nameOfUserContainer">
                     <h1 class="nameOfUser"><?= ucfirst($firstName) ?></h1>
                 </div>
@@ -164,7 +168,7 @@ $userRole = $_SESSION['userRole'];
             </div>
             <div class="wsText">
                 <hr class="line">
-                <h4 class="wsTitle">Welcome to Mamyr Resort and Events Place</h4>
+                <h4 class="wsTitle">Welcome to <?= htmlspecialchars($contentMap['FullName'] ?? 'Name Not Found') ?></h4>
                 <p class="wsDescription">Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable
                     moments await you. Whether you're here for a peaceful retreat or a special celebration, we're
                     dedicated to making your experience truly exceptional.</p>
@@ -178,21 +182,19 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="contactTitle">Contact Us </h4>
 
                 <div class="location">
-                    <img src="../../../Assets/Images/landingPage/icons/location.png" alt="locationPin"
-                        class="locationIcon">
-                    <h5 class="locationText">Sitio Colonia Gabihan, San Ildefonso, Bulacan</h5>
+                    <img src="../../Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
+                    <h5 class="locationText"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h5>
                 </div>
 
                 <div class="number">
-                    <img src="../../../Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
-                    <h5 class="number">(0998) 962 4697</h5>
+                    <img src="../../Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
+                    <h5 class="number"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h5>
                 </div>
 
                 <div class="email">
-                    <img src="../../../Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
-                    <h5 class="emailAddressText">mamyresort128@gmail.com</h5>
+                    <img src="../../Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
+                    <h5 class="emailAddressText"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h5>
                 </div>
-
 
             </div>
             <div class="googleMap" id="googleMap"></div>
@@ -222,18 +224,18 @@ $userRole = $_SESSION['userRole'];
 
                 <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
-                <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
+                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
             </div>
 
             <div class="info">
                 <div class="reservation">
                     <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter">(0998) 962 4697 </h4>
-                    <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
+                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h4>
+                    <h4 class="emailAddressTextFooter"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h4>
                 </div>
                 <div class="locationFooter">
                     <h4 class="locationTitle">Location</h4>
-                    <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
+                    <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h4>
 
                 </div>
             </div>
@@ -250,6 +252,11 @@ $userRole = $_SESSION['userRole'];
 
         </footer>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
 
 
     <script>
@@ -282,7 +289,6 @@ $userRole = $_SESSION['userRole'];
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const businessPartnerNavLink = document.getElementById("businessPartnerNav");
@@ -292,6 +298,29 @@ $userRole = $_SESSION['userRole'];
                 businessPartnerNavLink.style.display = "none";
             }
         });
+    </script>
+
+
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Sweetalert Popup -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
+
+        if (paramValue === 'successLogin') {
+            Swal.fire({
+                title: "Login Successful!",
+                text: "Welcome back! You have successfully logged in.",
+                icon: "success",
+            })
+        };
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 
 
