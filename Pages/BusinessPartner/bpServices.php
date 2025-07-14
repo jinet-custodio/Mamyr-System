@@ -33,19 +33,19 @@
             </li>
 
             <li>
-                <a href="#" class="list-group-item">
+                <a href="bpBookings.php" class="list-group-item">
                     <img src="../../Assets/Images/Icon/booking.png" alt="Bookings" class="sidebar-icon">
                     Bookings
                 </a>
             </li>
 
-            <a href="deleteAccount.php" class="list-group-item active">
+            <a href="bpServices.php" class="list-group-item active">
                 <img src="../../Assets/Images/Icon/services.png" alt="Services" class="sidebar-icon">
                 Services
             </a>
 
             <li>
-                <a href="#" class="list-group-item">
+                <a href="bpRevenue.php" class="list-group-item">
                     <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue" class="sidebar-icon">
                     Revenue
                 </a>
