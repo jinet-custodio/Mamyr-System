@@ -169,7 +169,7 @@ body {
   margin: 1rem;
     .card {
     width: 45%;
-    height: 15vh !important;
+    height: 18vh !important;
     margin: .5rem;
    }
 }
@@ -202,8 +202,9 @@ body {
 
 .salesReportBtn {
   width: 100%;
-  margin: 1rem;
-
+  display: flex;
+  margin: auto;
+justify-content: center;
 }
 
 .salesReportBtn a {

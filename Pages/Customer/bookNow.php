@@ -53,17 +53,27 @@ $userRole = $_SESSION['userRole'];
 <body id="body">
 
     <?php
-    $emailQuery = $conn->prepare("SELECT email FROM users WHERE userID = ? and userRole = ?");
+    $emailQuery = $conn->prepare("SELECT email, phoneNumber FROM users WHERE userID = ? and userRole = ?");
     $emailQuery->bind_param("ii", $userID, $userRole);
     $emailQuery->execute();
     $emailResult = $emailQuery->get_result();
     if ($emailResult->num_rows > 0) {
         $data =  $emailResult->fetch_assoc();
         $email = $data['email'];
+        $phoneNumber = $data['phoneNumber'];
+
+        if ($phoneNumber === NUll || $phoneNumber === "--") {
+            $phoneNumber = NULL;
+        } else {
+            $phoneNumber = $phoneNumber;
+        }
     } else {
         echo 'No Email Found';
     }
     ?>
+
+    <input type="hidden" name="phoneNumber" id="phoneNumber" value="<?= $phoneNumber ?>">
+
     <nav class="navbar navbar-expand-lg fixed-top">
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
@@ -527,6 +537,30 @@ $userRole = $_SESSION['userRole'];
     </form>
 
 
+
+
+    <!-- Phone Number Modal -->
+    <form action="../../Function/getPhoneNumber.php" method="POST">
+        <div class="modal fade" id="phoneNumberModal" data-bs-backdrop="static" tabindex=" -1" aria-labelledby="phoneNumberModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="phoneNumberModalLabel">Required Phone Number</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Phone number is required before booking please enter your phone number</p>
+                        <input type="tel" name="phoneNumber" id="phoneNumber" placeholder="+63 9XX XXX XXXX"
+                            pattern="^(?:\+63|0)9\d{9}$" title="e.g., +639123456789 or 09123456789" required>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" name="submitPhoneNumber">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <footer class="py-1 " id="footer" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../index.php">
@@ -568,6 +602,7 @@ $userRole = $_SESSION['userRole'];
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
 
     <!-- Page switch -->
     <script>
@@ -814,6 +849,14 @@ $userRole = $_SESSION['userRole'];
                 }
             });
         }
+        if (paramValue === 'bookNow') {
+            Swal.fire({
+                title: "Success!",
+                text: "Your phone number has been submitted successfully. You may now proceed with booking.",
+                icon: "success",
+                confirmButtonText: "Okay"
+            })
+        }
 
         if (paramValue) {
             const url = new URL(window.location);
@@ -849,6 +892,20 @@ $userRole = $_SESSION['userRole'];
         });
     </script>
 
+
+    <!-- For checking the phone Number -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const phoneNumber = document.getElementById("phoneNumber").value;
+
+            if (phoneNumber === '') {
+                const phoneNumberModal = new bootstrap.Modal(document.getElementById('phoneNumberModal'));
+                phoneNumberModal.show();
+            }
+
+
+        });
+    </script>
 
 </body>
 

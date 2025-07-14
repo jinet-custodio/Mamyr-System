@@ -10,12 +10,10 @@ if (isset($_POST['changePfpBtn'])) {
     $userRole = mysqli_real_escape_string($conn, $_POST['userRole']);
     if (isset($_FILES['profilePic']) && $_FILES['profilePic']['size'] > 0) {
         $imageData = file_get_contents($_FILES['profilePic']['tmp_name']);
-        $imageData = mysqli_real_escape_string($conn, $imageData);
     } else {
         $defaultImage = '../../../Assets/Images/defaultProfile.png';
         if (file_exists($defaultImage)) {
             $imageData = file_get_contents('../../../Assets/Images/defaultProfile.png');
-            $imageData = mysqli_real_escape_string($conn, $imageData);
         } else {
             $imageData = NULL;
         }

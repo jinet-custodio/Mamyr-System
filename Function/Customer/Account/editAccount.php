@@ -49,6 +49,13 @@ if (isset($_POST['saveChanges'])) {
         }
     }
 
+
+    if (!empty($birthday) && strtotime($birthday)) {
+        $birthDate = date('Y-m-d', strtotime($birthday));
+    } else {
+        $birthDate = NULL;
+    }
+
     $updateUser = $conn->prepare("UPDATE users SET 
     firstName = ?, 
     middleInitial = ?,  
@@ -76,9 +83,6 @@ if (isset($_POST['saveChanges'])) {
         header("Location: ../../../Pages/Customer/Account/account.php?message=error-change");
         exit;
     }
-} elseif (isset($_POST['cancelChanges'])) {
-    header("Location: ../../../Pages/Customer/Account/account.php");
-    exit;
 } else {
     header("Location: ../../../Pages/Customer/Account/account.php");
     exit;

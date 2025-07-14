@@ -45,13 +45,13 @@ if (isset($_SESSION['formData']['email'])) {
                         value="<?= $email ?>" required>
                 </div>
                 <div class="input-box">
-                    <input type="password" class="form-control" id="password" name="newPassword"
-                        placeholder="New Password" oninput="checkPassword()" required>
+                    <input type="password" class="form-control" id="newPassword" name="newPassword"
+                        placeholder="New Password" oninput="checkPasswordModal()" required>
                     <i id="togglePassword1" class='bx bxs-hide'></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" class="form-control" id="confirm_password" name="confirmPassword"
-                        placeholder="Confirm Password" oninput="checkPasswordMatch()" required>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                        placeholder="Confirm Password" oninput="checkPasswordMatchModal()" required>
                     <i id="togglePassword2" class='bx bxs-hide'></i>
                 </div>
 

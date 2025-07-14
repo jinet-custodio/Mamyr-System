@@ -3,13 +3,10 @@
   src: url(../../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+  font-family: "Lora";
+  src: url(../../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
-@font-face {
-  font-family: "Prata";
-  src: url(../../../Fonts/Prata/Prata-Regular.ttf);
-}
+
 @font-face {
   font-family: "Agbalumo";
   src: url(../../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
@@ -39,15 +36,28 @@
 }
 
 .sidebar-header {
-  color: black !important;
-  margin: 1.5rem 0.5rem 1.5rem 0.5rem;
-  padding-top: 2rem;
+ color: black !important;
+ display: flex;
+ flex-direction: column;
+ margin: 1rem auto;
+  /* margin: 1.5rem 0.5rem 1.5rem 0.5rem; */
+  padding-top: .5rem;
   h5 {
-    font-family: "Plus Jakarta Sans" !important;
+    font-family: "Lora" !important;
     margin: 0;
     font-size: 30px;
     text-align: center;
     font-weight: bold;
+  }
+}
+
+.profileImage{
+  margin: auto;
+  padding: 1rem;
+  img{
+    height: 100px;
+    width: 100px;
+    border-radius: 2rem;
   }
 }
 
@@ -56,7 +66,7 @@
   font-size: 22px;
   border: none;
   list-style: none;
-  margin-top: 3vw;
+  margin-top: .5rem;
 
   a {
     text-decoration: none;

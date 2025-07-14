@@ -211,25 +211,19 @@ $userRole = $_SESSION['userRole'];
                     <?php endif; ?>
                     <label for="birthday">Birthday</label>
                 </div>
-                <!-- <div class="info">
-                    <input type="date" name="birthday" id="birthday"
-                        value="<?= !empty($data['birthDate']) ? htmlspecialchars($data['birthDate']) : '' ?>" disabled
-                        placeholder="<?= empty($data['birthDate']) ? '--' : '' ?>">
-                    <label for="birthday">Birthday</label>
-                </div> -->
 
                 <div class="info">
                     <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>" disabled required>
                     <label for="address">Address</label>
                 </div>
                 <div class="info">
-                    <input type="text" name="phoneNumber" id="phoneNumber" value="<?= htmlspecialchars($phoneNumber) ?>" disabled required>
+                    <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$" title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>" disabled required>
                     <label for="phoneNumber">Phone Number</label>
                 </div>
             </div>
             <div class="button-container">
                 <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn" onclick="enableEditing()">Edit</button>
-                <button type="submit" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger" style="display: none;">Cancel</button>
+                <button type="button" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger" style="display: none;">Cancel</button>
                 <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary" style="display: none;">Save</button>
             </div>
         </form>
@@ -295,7 +289,19 @@ $userRole = $_SESSION['userRole'];
             document.getElementById("saveBtn").style.display = "inline-block";
             document.getElementById("cancelBtn").style.display = "inline-block";
             document.getElementById("editBtn").style.display = "none";
-        }
+        };
+
+        document.getElementById("cancelBtn").addEventListener("click", function() {
+            document.getElementById("saveBtn").style.display = "none";
+            document.getElementById("cancelBtn").style.display = "none";
+            document.getElementById("editBtn").style.display = "block";
+
+            document.getElementById("fullName").disabled = true;
+            document.getElementById("address").disabled = true;
+            document.getElementById("phoneNumber").disabled = true;
+            document.getElementById("birthday").disabled = true;
+
+        });
     </script>
 
     <!-- Sweetalert Link -->
