@@ -38,9 +38,9 @@ body {
   text-align: center;
   margin-top: 4vw;
   margin-bottom: 3vw;
-  font-family: "Poppins";
+  font-family: "Lora";
   font-weight: bold;
-  font-size: 36px;
+  font-size: 40px;
 }
 
 /* .column {
@@ -71,14 +71,14 @@ body {
 
 .repInfoLabel,
 .busProofLabel {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 25.5px;
   text-align: center;
   margin-top: 1.5vw;
 }
 .busInfoLabel {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 25.5px;
   text-align: center;
@@ -112,7 +112,7 @@ body {
 }
 
 .description {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-size: 14px;
   text-align: center;
   margin-top: 2vw;
@@ -178,7 +178,7 @@ body {
 }
 
 .accountCreationLabel {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 25.5px;
   text-align: center;

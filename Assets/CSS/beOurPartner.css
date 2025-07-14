@@ -2,17 +2,15 @@
   font-family: "Poppins";
   src: url(../Fonts/Poppins/Poppins-Regular.ttf);
 }
+
 @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+  font-family: "Lora";
+  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
+
 @font-face {
-  font-family: "Prata";
-  src: url(../Fonts/Prata/Prata-Regular.ttf);
-}
-@font-face {
-  font-family: "Agbalumo";
-  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+  font-family: "Alkatra";
+  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
 * {
@@ -178,7 +176,7 @@ footer {
   height: auto;
 }
 .mb-0 {
-  font-family: "Prata";
+  font-family: "Lora";
   font-size: 1.5vw;
   font-weight: bold;
   color: #ffff;
@@ -204,7 +202,7 @@ footer {
 
 .reservationTitle,
 .locationTitle {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 1.5vw;
   color: #fff;
@@ -259,7 +257,7 @@ footer {
 .title {
   margin-top: 1vw;
   font-size: 2.5vw;
-  font-family: "Prata";
+  font-family: "Lora";
   color: #fff;
   font-weight: bold;
 }
@@ -288,14 +286,14 @@ footer {
 
 .repInfoLabel,
 .busProofLabel {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 25.5px;
   text-align: center;
   margin-top: 1.5vw;
 }
 .busInfoLabel {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 25.5px;
   text-align: center;
@@ -329,7 +327,7 @@ footer {
 }
 
 .description {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-size: 14px;
   text-align: center;
   margin-top: 2vw;

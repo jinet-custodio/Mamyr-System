@@ -7,17 +7,10 @@
   src: url(../../Fonts/Poppins/Poppins-Black.ttf);
 }
 @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-}
-@font-face {
   font-family: "Lora";
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
-@font-face {
-  font-family: "Agbalumo";
-  src: url(../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
-}
+
 
 * {
   margin: 0;
@@ -71,7 +64,7 @@ nav {
 }
 
 ul {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: lighter;
   font-size: 1.3vw;
   list-style: none;
@@ -206,7 +199,7 @@ footer {
 
 .reservationTitle,
 .locationTitle {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 1.5vw;
   color: #fff;

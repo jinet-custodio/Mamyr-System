@@ -2,22 +2,21 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
-@font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-}
-@font-face {
-  font-family: "Prata";
-  src: url(../../Fonts/Prata/Prata-Regular.ttf);
-}
+
 @font-face {
   font-family: "Galada";
   src: url(../../Fonts/Galada/Galada-Regular.ttf);
 }
 @font-face {
-  font-family: "Alkatra";
-  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+  font-family: "Lora";
+  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
+
+@font-face {
+  font-family: "Alkatra";
+  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
+
 
 * {
   margin: 0;
@@ -429,14 +428,14 @@ thead {
 }
 
 .wsTitle {
-  font-family: "Plus Jakarta sans";
+  font-family: "Poppins";
   font-size: 25px;
   text-align: center;
   color: rgb(0, 0, 0);
 }
 
 .wsDescription {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   text-align: justify;
   margin-top: 30px;
   font-size: 20px;
@@ -475,7 +474,7 @@ thead {
 
 .contactTitle {
   margin-bottom: 2vw;
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
 }
 .locationText {
   margin-top: 0.1vw;
@@ -498,7 +497,7 @@ thead {
 }
 
 .galleryTitle {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-size: 2vw;
 }
 
@@ -538,7 +537,7 @@ footer {
   height: auto;
 }
 .mb-0 {
-  font-family: "Prata";
+  font-family: "Lora";
   font-size: 1.5vw;
   font-weight: bold;
   color: #ffff;
@@ -564,7 +563,7 @@ footer {
 
 .reservationTitle,
 .locationTitle {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 1.5vw;
   color: #fff;
