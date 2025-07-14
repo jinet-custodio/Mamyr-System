@@ -89,6 +89,7 @@ $userRole = $_SESSION['userRole'];
                 $type = "date";
                 $birthday;
             }
+
             $address = $data['userAddress'];
             $profile = $data['userProfile'];
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -111,6 +112,9 @@ $userRole = $_SESSION['userRole'];
         </div>
         <div class="sidebar-header">
             <h5>User Account</h5>
+            <div class="profileImage">
+                <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+            </div>
         </div>
         <ul class="list-group">
             <li>
@@ -160,7 +164,7 @@ $userRole = $_SESSION['userRole'];
                     <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
                     <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
                     <div class="profile-image">
-                        <img src="<?= htmlspecialchars($image) ?>"
+                        <img src="<?= $image ?>"
                             alt="<?= htmlspecialchars($data['firstName']) ?> Picture" class="profile-pic">
                         <button type="button" class="changePfpBtn btn btn-primary" id="changePfp">
                             Change Profile
@@ -176,7 +180,7 @@ $userRole = $_SESSION['userRole'];
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <img src="<?= htmlspecialchars($image) ?>"
+                                        <img src="<?= $image ?>"
                                             alt="<?= htmlspecialchars($data['firstName']) ?> Picture" id="preview"
                                             class="profile-pic">
                                         <input type="file" name="profilePic" id="profilePic" hidden>
@@ -226,7 +230,7 @@ $userRole = $_SESSION['userRole'];
                     <label for="address">Address</label>
                 </div>
                 <div class="info">
-                    <input type="text" name="phoneNumber" id="phoneNumber" value="<?= htmlspecialchars($phoneNumber) ?>"
+                    <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$" title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>"
                         disabled required>
                     <label for="phoneNumber">Phone Number</label>
                 </div>
@@ -234,7 +238,7 @@ $userRole = $_SESSION['userRole'];
             <div class="button-container">
                 <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
                     onclick="enableEditing()">Edit</button>
-                <button type="submit" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
+                <button type="button" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
                     style="display: none;">Cancel</button>
                 <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
                     style="display: none;">Save</button>
@@ -303,7 +307,19 @@ $userRole = $_SESSION['userRole'];
             document.getElementById("saveBtn").style.display = "inline-block";
             document.getElementById("cancelBtn").style.display = "inline-block";
             document.getElementById("editBtn").style.display = "none";
-        }
+        };
+
+        document.getElementById("cancelBtn").addEventListener("click", function() {
+            document.getElementById("saveBtn").style.display = "none";
+            document.getElementById("cancelBtn").style.display = "none";
+            document.getElementById("editBtn").style.display = "block";
+
+            document.getElementById("fullName").disabled = true;
+            document.getElementById("address").disabled = true;
+            document.getElementById("phoneNumber").disabled = true;
+            document.getElementById("birthday").disabled = true;
+
+        });
     </script>
 
     <!-- Sweetalert Link -->
@@ -336,6 +352,13 @@ $userRole = $_SESSION['userRole'];
                 title: "Error!",
                 text: "Updating Information Failed!",
                 icon: "error"
+            });
+        } else if (paramValue === 'emptyPhoneNumber') {
+            Swal.fire({
+                title: "Oops!",
+                text: "Empty Phone Number!",
+                icon: "warning",
+                confirmButtonText: 'Okay',
             });
         }
 

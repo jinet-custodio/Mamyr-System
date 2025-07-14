@@ -85,9 +85,6 @@ if (isset($_POST['saveChanges'])) {
         header("Location: ../../../Pages/Admin/Account/account.php?message=error-change");
         exit;
     }
-} elseif (isset($_POST['cancelChanges'])) {
-    header("Location: ../../../Pages/Admin/Account/account.php");
-    exit;
 } else {
     header("Location: ../../../Pages/Admin/Account/account.php");
     exit;

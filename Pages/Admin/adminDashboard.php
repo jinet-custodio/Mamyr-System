@@ -142,12 +142,6 @@ if ($availabilityResult->num_rows > 0) {
         }
     }
 
-    // for ($i = 0; $i < count($availabilityName); $i++) {
-    //     if (!isset($availabilityCount[$i])) {
-    //         $availabilityCount[$i] = 0;
-    //     }
-    // }
-
     $availabilityCount = array_values($availabilityCount);
 
     // print_r($availabilityName);
@@ -440,9 +434,9 @@ if ($availabilityResult->num_rows > 0) {
 
         <div class="rightSection">
 
-            <!-- <div class="salesReportBtn">
-                <a href="salesReport.php" class="btn btn-info">Sales Report</a>
-            </div> -->
+            <div class="salesReportBtn">
+                <a href="salesReport.php" class="btn btn-outline-primary w-75">Sales Report</a>
+            </div>
 
             <div class="card graph" id="revenueGraphCard">
                 <div class="revenueGraphContainer">
@@ -456,7 +450,6 @@ if ($availabilityResult->num_rows > 0) {
                     <?php endif; ?>
                 </div>
             </div>
-
 
             <div class="card graph" id="reservationTrends">
                 <div class="card-header ">
