@@ -32,19 +32,19 @@
             </li>
 
             <li>
-                <a href="#" class="list-group-item">
+                <a href="bpBookings.php" class="list-group-item">
                     <img src="../../Assets/Images/Icon/booking.png" alt="Bookings" class="sidebar-icon">
                     Bookings
                 </a>
             </li>
 
-            <a href="deleteAccount.php" class="list-group-item">
+            <a href="bpServices.php" class="list-group-item">
                 <img src="../../Assets/Images/Icon/services.png" alt="Services" class="sidebar-icon">
                 Services
             </a>
 
             <li>
-                <a href="#" class="list-group-item">
+                <a href="bpRevenue.php" class="list-group-item">
                     <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue" class="sidebar-icon">
                     Revenue
                 </a>
@@ -81,21 +81,21 @@
                 <div class="card">
                     <div class="card-header fw-bold fs-5">Approved</div>
                     <div class="card-body">
-                        <h2 class="bookingNumber">5</h2>
+                        <h2 class="approvedNumber">5</h2>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header fw-bold fs-5">Pending</div>
                     <div class="card-body">
-                        <h2 class="bookingNumber">3</h2>
+                        <h2 class="pendingNumber">3</h2>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header fw-bold fs-5">Revenue</div>
                     <div class="card-body">
-                        <h2 class="bookingNumber">₱10,000</h2>
+                        <h2 class="revenueNumber">₱10,000</h2>
                     </div>
                 </div>
 
