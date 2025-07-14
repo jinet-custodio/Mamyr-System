@@ -2,18 +2,17 @@
   font-family: "Poppins";
   src: url(../Fonts/Poppins/Poppins-Regular.ttf);
 }
+
 @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+  font-family: "Lora";
+  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
+
 @font-face {
-  font-family: "Prata";
-  src: url(../Fonts/Prata/Prata-Regular.ttf);
+  font-family: "Alkatra";
+  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
-@font-face {
-  font-family: "Agbalumo";
-  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
-}
+
 
 * {
   margin: 0;
@@ -320,7 +319,7 @@ nav {
 .entranceTitle {
   margin-top: 2vw;
   font-size: 2.8vw;
-  font-family: "Prata";
+  font-family: "Lora";
 }
 
 .entranceCard {
@@ -333,8 +332,7 @@ nav {
 }
 
 .entrance-card-title {
-  font-family: "Plus Jakarta Sans";
-  font-weight: bold;
+  font-family: "Lora";
   font-size: 1.7vw;
   color: #212121 !important;
   text-align: center;
@@ -358,8 +356,8 @@ nav {
   text-align: center;
   margin-top: -3vw;
   margin-bottom: 1vw;
-  font-size: 2.8vw;
-  font-family: "Prata";
+  font-size: 3vw;
+  font-family: "Lora";
   color: #000000;
 }
 
@@ -386,7 +384,7 @@ nav {
 
 .Description h2 {
   font-size: 2.1vw !important;
-  font-family: "Prata";
+  font-family: "Poppins";
 }
 
 .Description p {
@@ -431,7 +429,7 @@ nav {
 .videokeTitle {
   margin-top: 1vw;
   font-size: 2.5vw;
-  font-family: "Prata";
+  font-family: "Lora";
 }
 
 #videokeDesc {
@@ -534,7 +532,7 @@ nav {
 
 .roomCaption {
   font-size: 1.2vw;
-  font-family: "Prata";
+  font-family: "Lora";
 }
 
 .avail {
@@ -544,7 +542,7 @@ nav {
 .availabilityIcons p {
   font-size: 1.3vw;
   font-weight: 700;
-  font-family: "Prata";
+  font-family: "Lora";
   margin: 0 2vw 0 1vw;
 }
 
@@ -647,7 +645,7 @@ footer {
   height: auto;
 }
 .mb-0 {
-  font-family: "Prata";
+  font-family: "Lora";
   font-size: 1.5vw;
   font-weight: bold;
   color: #ffff;
@@ -673,7 +671,7 @@ footer {
 
 .reservationTitle,
 .locationTitle {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 1.5vw;
   color: #fff;
@@ -872,7 +870,7 @@ footer {
   .availabilityIcons p {
     font-size: 1.9vw;
     font-weight: 700;
-    font-family: "Prata";
+    font-family: "Lora";
     margin: 0 2vw 0 1vw;
   }
 
@@ -952,7 +950,7 @@ footer {
   .availabilityIcons p {
     font-size: 2.3vw;
     font-weight: 700;
-    font-family: "Prata";
+    font-family: "Lora";
     margin: 0 2vw 0 1vw;
   }
 }

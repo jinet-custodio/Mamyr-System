@@ -3,16 +3,21 @@
   src: url(../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
+  font-family: "Lora";
+  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Alkatra";
+  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
+
+@font-face {
   font-family: "Plus Jakarta Sans";
   src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
 }
 @font-face {
   font-family: "Prata";
   src: url(../Fonts/Prata/Prata-Regular.ttf);
-}
-@font-face {
-  font-family: "Agbalumo";
-  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
 }
 
 @font-face {
@@ -209,7 +214,7 @@ footer {
   height: auto;
 }
 .mb-0 {
-  font-family: "Prata";
+  font-family: "Lora";
   font-size: 1.5vw;
   font-weight: bold;
   color: #ffff;
@@ -235,7 +240,7 @@ footer {
 
 .reservationTitle,
 .locationTitle {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Poppins";
   font-weight: bold;
   font-size: 1.5vw;
   color: #fff;
@@ -289,10 +294,9 @@ footer {
 
 .title {
   margin-top: 1vw;
-  font-size: 2.5vw;
-  font-family: "Prata";
+  font-size: 2.8vw;
+  font-family: "Lora";
   color: #ffffff;
-  font-weight: bold;
 }
 
 .description {
@@ -331,7 +335,7 @@ footer {
 }
 
 .card-title {
-  font-family: "Galada";
+  font-family: "Alkatra";
   font-size: 1.67vw;
 }
 
