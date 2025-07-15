@@ -54,21 +54,15 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <title>Mamyr - Home </title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/Customer/dashboard.css">
-    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
-
-    <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-
-
+    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
+    <!-- online stylesheet link for bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- icon libraries for font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
 <body>
@@ -354,15 +348,35 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
-                events: '../../Function/fetchUserBookings.php', // the PHP file above
+                events: '../../Function/fetchUserBookings.php',
                 eventClick: function(info) {
                     window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+                },
+                eventDidMount: function(info) {
+                    if (info.event.allDay) {
+                        const dateStr = info.event.startStr; // e.g. "2025-07-15"
+                        const dayCell = document.querySelector(`.fc-daygrid-day[data-date="${dateStr}"]`);
+
+                        if (dayCell) {
+                            // Base color
+                            let baseColor = info.event.backgroundColor || info.event.extendedProps.color || '#dc3545';
+                            dayCell.style.backgroundColor = baseColor;
+                            dayCell.style.color = '#000';
+                        }
+
+                        // Hide the small event block if you only want background color
+                        if (info.el) {
+                            info.el.style.display = 'none';
+                        }
+                    }
                 }
             });
+
 
             calendar.render();
         });
     </script>
+    <script src="../../Assets/JS/bo"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
