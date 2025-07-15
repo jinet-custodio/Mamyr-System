@@ -9,11 +9,10 @@
     <link rel="stylesheet" href="../Assets/CSS/about.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- icon library from font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
@@ -269,26 +268,6 @@
 
     <!-- Sweetalert JS -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
-
-    <!-- Sweet Alert -->
-    <!-- <script>
-        const bookButtons = document.querySelectorAll('#bopNav');
-
-        bookButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Want to Become Our Business Partner?',
-                    text: 'You must have an existing account before becoming a business partner.',
-                    icon: 'info',
-                    confirmButtonText: 'Sign Up'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
-                    }
-                });
-            });
-        });
-    </script> -->
 </body>
 
 </html>
