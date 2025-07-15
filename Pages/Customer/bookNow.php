@@ -145,8 +145,10 @@ $userRole = $_SESSION['userRole'];
         </div>
         <div class="categories">
             <a href="#resort-page" id="resort-link" class="categoryLink">
-                <div class="card category-card resort-category" style="width: 20rem; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../Assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
+                <div class="card category-card resort-category"
+                    style="width: 20rem; display: flex; flex-direction: column;">
+                    <img class="card-img-top" src="../../Assets/images/amenities/poolPics/poolPic3.jpg"
+                        alt="Wedding Event">
 
                     <div class="category-body">
                         <h5 class="category-title">RESORT</h5>
@@ -154,16 +156,20 @@ $userRole = $_SESSION['userRole'];
                 </div>
             </a>
             <a href="#hotel-page" id="hotel-link" class="categoryLink">
-                <div class="card category-card hotel-category" style="width: 20rem; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../Assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
+                <div class="card category-card hotel-category"
+                    style="width: 20rem; display: flex; flex-direction: column;">
+                    <img class="card-img-top" src="../../Assets/images/amenities/hotelPics/hotel1.jpg"
+                        alt="Wedding Event">
                     <div class="category-body">
                         <h5 class="category-title">HOTEL</h5>
                     </div>
                 </div>
             </a>
             <a href="#event-page" id="event-link" class="categoryLink">
-                <div class="card category-card event-category" style="width: 20rem; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../Assets/images/amenities/pavilionPics/pav4.jpg" alt="Wedding Event">
+                <div class="card category-card event-category"
+                    style="width: 20rem; display: flex; flex-direction: column;">
+                    <img class="card-img-top" src="../../Assets/images/amenities/pavilionPics/pav4.jpg"
+                        alt="Wedding Event">
                     <div class="category-body">
                         <h5 class="category-title">EVENT</h5>
                     </div>
@@ -187,8 +193,10 @@ $userRole = $_SESSION['userRole'];
 
                     <h5 class="schedLabel">Schedule</h5>
                     <div class="scheduleForm">
-                        <input type="text" class="form-control w-95" id="resortBookingDate" name="resortBookingDate" placeholder="Select booking date" required>
-                        <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -5vw;font-size:1.2vw;"> </i>
+                        <input type="text" class="form-control w-95" id="resortBookingDate" name="resortBookingDate"
+                            placeholder="Select booking date" required>
+                        <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -5vw;font-size:1.2vw;">
+                        </i>
                         <select id="tourSelections" name="tourSelections" class="form-select" required>
                             <option value="" disabled selected>Select Preferred Tour</option>
                             <option value="Day" id="dayTour">Day Tour</option>
@@ -242,9 +250,10 @@ $userRole = $_SESSION['userRole'];
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                 ?>
-                                        <option value="<?= $row['RServiceName'] ?>">
-                                            <?= $row['RServiceName'] ?> — <?= $row['RScapacity'] ?> guests for ₱<?= $row['RSprice'] ?>
-                                        </option>
+                                <option value="<?= $row['RServiceName'] ?>">
+                                    <?= $row['RServiceName'] ?> — <?= $row['RScapacity'] ?> guests for
+                                    ₱<?= $row['RSprice'] ?>
+                                </option>
                                 <?php
                                     }
                                 }
@@ -321,15 +330,18 @@ $userRole = $_SESSION['userRole'];
                 <div class="hotelIconsContainer">
                     <div class="availabilityIcons">
                         <div class="availabilityIcon" id="allRooms" onclick="filterRooms('all')">
-                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1" class="avail" id="allrooms">
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
+                                class="avail" id="allrooms">
                             <p>All Rooms</p>
                         </div>
                         <div class="availabilityIcon" id="availableRooms" onclick="filterRooms('available')">
-                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2" class="avail">
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2"
+                                class="avail">
                             <p>Available</p>
                         </div>
                         <div class="availabilityIcon" id="unavailableRooms" onclick="filterRooms('unavailable')">
-                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3" class="avail">
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3"
+                                class="avail">
                             <p>Not Available</p>
                         </div>
                     </div>
@@ -347,13 +359,16 @@ $userRole = $_SESSION['userRole'];
                                 $roomName = htmlspecialchars($row['RServiceName']);
                                 $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
                         ?>
-                                <div class="hotelIconWithCaption" style="display: inline-block; text-align: center;" data-availability="<?= $availabilityStatus ?>">
-                                    <a href="#<?= trim($row['RServiceName']) ?>" data-duration="<?= htmlspecialchars($row['RSduration']) ?>">
-                                        <img src="<?= $iconPath ?>" alt="<?= $roomName ?>" class="hotelIcon" id="hotelIcon<?= $i ?>">
-                                    </a>
-                                    <p class="roomCaption"> <?= $roomName ?></p>
-                                </div>
-                            <?php
+                        <div class="hotelIconWithCaption" style="display: inline-block; text-align: center;"
+                            data-availability="<?= $availabilityStatus ?>">
+                            <a href="#<?= trim($row['RServiceName']) ?>"
+                                data-duration="<?= htmlspecialchars($row['RSduration']) ?>">
+                                <img src="<?= $iconPath ?>" alt="<?= $roomName ?>" class="hotelIcon"
+                                    id="hotelIcon<?= $i ?>">
+                            </a>
+                            <p class="roomCaption"> <?= $roomName ?></p>
+                        </div>
+                        <?php
                                 // echo '<div class="hotelIconWithCaption" style="display: inline-block; text-align: center;" data-availability="' . $availabilityStatus . '">';
                                 // echo '<a href="#' . trim($row['RServiceName']) . '" >  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '"> </a>';
                                 // echo '  <p class="roomCaption">' . $roomName . '</p>';
@@ -363,14 +378,15 @@ $userRole = $_SESSION['userRole'];
                             }
                         } else {
                             ?>
-                            <p class="text-center m-auto">No room services found.</p>
+                        <p class="text-center m-auto">No room services found.</p>
                         <?php
                         }
                         ?>
                     </div>
 
                     <div>
-                        <a href="ratesAndHotelRooms.php" class="btn btn-primary btn-md w-100" id="amenitiesHR"> Take me to Hotel Rooms and
+                        <a href="ratesAndHotelRooms.php" class="btn btn-primary btn-md w-100" id="amenitiesHR"> Take me
+                            to Hotel Rooms and
                             Rates</a>
                     </div>
                 </div>
@@ -406,7 +422,9 @@ $userRole = $_SESSION['userRole'];
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                     ?>
-                                            <option value="<?= $row['RServiceName'] ?>" data-duration="<?= $row['RSduration'] ?>"><?= $row['RServiceName'] ?> - Max. of <?= $row['RScapacity'] ?> pax - ₱<?= $row['RSprice'] ?></option>
+                                    <option value="<?= $row['RServiceName'] ?>"
+                                        data-duration="<?= $row['RSduration'] ?>"><?= $row['RServiceName'] ?> - Max. of
+                                        <?= $row['RScapacity'] ?> pax - ₱<?= $row['RSprice'] ?></option>
                                     <?php
                                         }
                                     }
@@ -421,15 +439,19 @@ $userRole = $_SESSION['userRole'];
                         <div class="checkIn-container">
                             <h5 class="containerLabel">Check-In Date</h5>
                             <div style="display: flex;align-items:center;width:100%">
-                                <input type="text" class="form-control" name="checkInDate" id="checkInDate" required placeholder="Select Date and Time">
-                                <i class="fa-solid fa-calendar" id="hotelCheckinIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i>
+                                <input type="text" class="form-control" name="checkInDate" id="checkInDate" required
+                                    placeholder="Select Date and Time">
+                                <i class="fa-solid fa-calendar" id="hotelCheckinIcon"
+                                    style="margin-left: -2vw;font-size:1.2vw;"> </i>
                             </div>
                         </div>
                         <div class="checkOut-container">
                             <h5 class="containerLabel">Check-Out Date</h5>
                             <div style="display: flex;align-items:center;">
-                                <input type="text" class="form-control" name="checkOutDate" id="checkOutDate" required placeholder="Select Date and Time">
-                                <i class="fa-solid fa-calendar" id="hotelCheckoutIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i>
+                                <input type="text" class="form-control" name="checkOutDate" id="checkOutDate" required
+                                    placeholder="Select Date and Time">
+                                <i class="fa-solid fa-calendar" id="hotelCheckoutIcon"
+                                    style="margin-left: -2vw;font-size:1.2vw;"> </i>
                             </div>
                         </div>
                     </div>
@@ -438,7 +460,8 @@ $userRole = $_SESSION['userRole'];
                         <h5 class="noOfPeopleHotelLabel">Number of People</h5>
                         <div class="hotelPeopleForm">
                             <input type="number" class="form-control" name="adultCount" placeholder="Adults" required>
-                            <input type="number" class="form-control" name="childrenCount" placeholder="Children" required>
+                            <input type="number" class="form-control" name="childrenCount" placeholder="Children"
+                                required>
                         </div>
                     </div>
 
@@ -465,10 +488,13 @@ $userRole = $_SESSION['userRole'];
                         <ul>
                             <!-- <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon" class="info-icon">&nbsp;&nbsp;The ₱2,500(22hours)/₱2,000(11hours) room accommodates a maximum of 4 pax</li>
                             <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon" class="info-icon">&nbsp;&nbsp;The ₱3,500 room acommodates a maximum of 6 pax</li> -->
-                            <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon" class="info-icon">&nbsp;&nbsp;If the maximum pax exceeded, extra guest is charged ₱250 per head</li>
+                            <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon"
+                                    class="info-icon">&nbsp;&nbsp;If the maximum pax exceeded, extra guest is charged
+                                ₱250 per head</li>
                         </ul>
                     </div>
-                    <button type="submit" class="btn btn-success" name="hotelBooking" id="hotelBooking">Book Now</button>
+                    <button type="submit" class="btn btn-success" name="hotelBooking" id="hotelBooking">Book
+                        Now</button>
                 </div>
             </div>
 
@@ -497,8 +523,10 @@ $userRole = $_SESSION['userRole'];
                             <h5 class="dateLabel">Date</h5>
                             <div style="display: flex;align-items:center;">
                                 <!-- <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" disabled required> -->
-                                <input type="text" class="form-control w-100" name="eventDate" id="eventtBookingDate" placeholder="Select Date and Time for your Event">
-                                <i class="fa-solid fa-calendar" id="eventDateIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i>
+                                <input type="text" class="form-control w-100" name="eventDate" id="eventtBookingDate"
+                                    placeholder="Select Date and Time for your Event">
+                                <i class="fa-solid fa-calendar" id="eventDateIcon"
+                                    style="margin-left: -2vw;font-size:1.2vw;"> </i>
                             </div>
                         </div>
                     </div>
@@ -510,8 +538,8 @@ $userRole = $_SESSION['userRole'];
                     </div>
 
                     <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
-                    <textarea class="form-control w-100" id="additionalNotes" rows="5"
-                        name="additionalNotes" placeholder="Optional" disabled></textarea>
+                    <textarea class="form-control w-100" id="additionalNotes" rows="5" name="additionalNotes"
+                        placeholder="Optional" disabled></textarea>
 
                     <div class="button-container">
                         <a href="packages.php" class="btn btn-info btn-md">View Event Packages</a>
@@ -541,16 +569,19 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Phone Number Modal -->
     <form action="../../Function/getPhoneNumber.php" method="POST">
-        <div class="modal fade" id="phoneNumberModal" data-bs-backdrop="static" tabindex=" -1" aria-labelledby="phoneNumberModalLabel" aria-hidden="true">
+        <div class="modal fade" id="phoneNumberModal" data-bs-backdrop="static" tabindex=" -1"
+            aria-labelledby="phoneNumberModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="phoneNumberModalLabel">Required Phone Number</h5>
                     </div>
                     <div class="modal-body">
-                        <p>Phone number is required before booking please enter your phone number</p>
-                        <input type="tel" name="phoneNumber" id="phoneNumber" placeholder="+63 9XX XXX XXXX"
-                            pattern="^(?:\+63|0)9\d{9}$" title="e.g., +639123456789 or 09123456789" required>
+                        <p class="text-center">Phone number is required before booking please enter your phone number
+                        </p>
+                        <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control w-100 mt-2"
+                            placeholder="+63 9XX XXX XXXX" pattern="^(?:\+63|0)9\d{9}$"
+                            title="e.g., +639123456789 or 09123456789" required>
 
                     </div>
                     <div class="modal-footer">
@@ -601,153 +632,156 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
 
 
     <!-- Page switch -->
     <script>
-        const resortLink = document.getElementById("resort-link");
-        const hotelLink = document.getElementById("hotel-link");
-        const eventLink = document.getElementById("event-link");
+    const resortLink = document.getElementById("resort-link");
+    const hotelLink = document.getElementById("hotel-link");
+    const eventLink = document.getElementById("event-link");
 
-        const categories = document.getElementById("category-page");
-        const events = document.getElementById("event-page");
-        const hotels = document.getElementById("hotel-page");
-        const resorts = document.getElementById("resort-page");
-        const backbtn = document.getElementById("backToSelection");
+    const categories = document.getElementById("category-page");
+    const events = document.getElementById("event-page");
+    const hotels = document.getElementById("hotel-page");
+    const resorts = document.getElementById("resort-page");
+    const backbtn = document.getElementById("backToSelection");
 
-        function filterRooms(filterType) {
-            const allRooms = document.querySelectorAll('.hotelIconWithCaption');
-            const hotelCardContainer = document.querySelectorAll('#hotelContainerFluid');
+    function filterRooms(filterType) {
+        const allRooms = document.querySelectorAll('.hotelIconWithCaption');
+        const hotelCardContainer = document.querySelectorAll('#hotelContainerFluid');
 
-            allRooms.forEach(room => {
-                const availability = room.getAttribute('data-availability');
+        allRooms.forEach(room => {
+            const availability = room.getAttribute('data-availability');
 
-                if (filterType === 'all') {
-                    room.style.display = 'inline-block'; // show all rooms
-                    hotelContainerFluid.style.display = 'flex';
-                    hotelContainerFluid.style.alignItems = 'start'
-                } else if (filterType === availability) {
-                    room.style.display = 'inline-block'; // show matching availability
-                    hotelContainerFluid.style.display = 'flex';
-                    hotelContainerFluid.style.alignItems = 'center'
-                } else {
-                    room.style.display = 'none'; // hide others
-                }
-            });
-        }
+            if (filterType === 'all') {
+                room.style.display = 'inline-block'; // show all rooms
+                hotelContainerFluid.style.display = 'flex';
+                hotelContainerFluid.style.alignItems = 'start'
+            } else if (filterType === availability) {
+                room.style.display = 'inline-block'; // show matching availability
+                hotelContainerFluid.style.display = 'flex';
+                hotelContainerFluid.style.alignItems = 'center'
+            } else {
+                room.style.display = 'none'; // hide others
+            }
+        });
+    }
 
-        function backToSelection() {
-            categories.style.display = 'block';
-            events.style.display = 'none';
-            resorts.style.display = 'none';
-            hotels.style.display = 'none';
+    function backToSelection() {
+        categories.style.display = 'block';
+        events.style.display = 'none';
+        resorts.style.display = 'none';
+        hotels.style.display = 'none';
+        document.getElementById("footer").style.marginTop = "5vw";
+        document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
+    };
+
+    function showPackageCards() {
+        const container = document.getElementById('packageCardsContainer');
+        container.style.display = 'block';
+        // Optionally scroll to it
+        container.scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+
+    //JS for calendar pickers
+    const calIcon = document.getElementById("calendarIcon");
+    const hotelCheckinIcon = document.getElementById("hotelCheckinIcon");
+    const hotelCheckoutIcon = document.getElementById("hotelCheckoutIcon");
+    const eventDateIcon = document.getElementById("eventDateIcon");
+    //sets the minimum date in which the customer can book  (tentative)
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 3);
+
+    //resort calendar
+    flatpickr('#resortBookingDate', {
+        minDate: minDate,
+        dateFormat: "Y-m-d"
+    });
+
+    calIcon.addEventListener('click', function(event) {
+        resortBookingDate.click()
+    });
+
+    //hotel calendar
+    flatpickr('#checkInDate', {
+        enableTime: true,
+        minDate: minDate,
+        dateFormat: "Y-m-d H:i"
+    });
+
+    hotelCheckinIcon.addEventListener('click', function(event) {
+        checkInDate.click()
+    });
+
+
+    flatpickr('#checkOutDate', {
+        enableTime: true,
+        minDate: minDate,
+        dateFormat: "Y-m-d H:i"
+    });
+
+    hotelCheckoutIcon.addEventListener('click', function(event) {
+        checkOutDate.click()
+    });
+
+    flatpickr('#eventtBookingDate', {
+        enableTime: true,
+        minDate: minDate,
+        dateFormat: "Y-m-d H:i"
+    });
+
+    eventDateIcon.addEventListener('click', function(event) {
+        eventtBookingDate.click()
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("DOM fully loaded and parsed");
+        var calendarEl = document.getElementById("calendar");
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: "dayGridMonth",
+        });
+
+        eventLink.addEventListener('click', function(event) {
+            categories.style.display = "none";
+            events.style.display = "block";
+            resorts.style.display = "none";
+            hotels.style.display = "none";
+            document.body.style.setProperty('background', 'none');
+            document.body.style.setProperty('background-color', 'rgb(164, 241, 255)');
+            calendar.render();
             document.getElementById("footer").style.marginTop = "5vw";
-            document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
-        };
-
-        function showPackageCards() {
-            const container = document.getElementById('packageCardsContainer');
-            container.style.display = 'block';
-            // Optionally scroll to it
-            container.scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
-
-        //JS for calendar pickers
-        const calIcon = document.getElementById("calendarIcon");
-        const hotelCheckinIcon = document.getElementById("hotelCheckinIcon");
-        const hotelCheckoutIcon = document.getElementById("hotelCheckoutIcon");
-        const eventDateIcon = document.getElementById("eventDateIcon");
-        //sets the minimum date in which the customer can book  (tentative)
-        const minDate = new Date();
-        minDate.setDate(minDate.getDate() + 3);
-
-        //resort calendar
-        flatpickr('#resortBookingDate', {
-            minDate: minDate,
-            dateFormat: "Y-m-d"
         });
 
-        calIcon.addEventListener('click', function(event) {
-            resortBookingDate.click()
+        resortLink.addEventListener('click', function(event) {
+            categories.style.display = "none";
+            events.style.display = "none";
+            resorts.style.display = "block";
+            hotels.style.display = "none";
+            document.body.style.setProperty('background',
+                'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
+            document.body.style.setProperty('background-repeat', 'no-repeat');
+            document.body.style.setProperty('background-size', 'cover');
+            document.body.style.setProperty('background-position', 'center');
+            document.getElementById("footer").style.marginTop = "5vw";
         });
 
-        //hotel calendar
-        flatpickr('#checkInDate', {
-            enableTime: true,
-            minDate: minDate,
-            dateFormat: "Y-m-d H:i"
+        hotelLink.addEventListener('click', function(event) {
+            categories.style.display = "none";
+            events.style.display = "none";
+            resorts.style.display = "none";
+            hotels.style.display = "block";
+            document.body.style.setProperty('background', 'none');
+            document.body.style.setProperty('background-color', 'rgb(255, 220, 174)');
+            document.getElementById("footer").style.marginTop = "5vw";
         });
 
-        hotelCheckinIcon.addEventListener('click', function(event) {
-            checkInDate.click()
-        });
-
-
-        flatpickr('#checkOutDate', {
-            enableTime: true,
-            minDate: minDate,
-            dateFormat: "Y-m-d H:i"
-        });
-
-        hotelCheckoutIcon.addEventListener('click', function(event) {
-            checkOutDate.click()
-        });
-
-        flatpickr('#eventtBookingDate', {
-            enableTime: true,
-            minDate: minDate,
-            dateFormat: "Y-m-d H:i"
-        });
-
-        eventDateIcon.addEventListener('click', function(event) {
-            eventtBookingDate.click()
-        });
-
-
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("DOM fully loaded and parsed");
-            var calendarEl = document.getElementById("calendar");
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: "dayGridMonth",
-            });
-
-            eventLink.addEventListener('click', function(event) {
-                categories.style.display = "none";
-                events.style.display = "block";
-                resorts.style.display = "none";
-                hotels.style.display = "none";
-                document.body.style.setProperty('background', 'none');
-                document.body.style.setProperty('background-color', 'rgb(164, 241, 255)');
-                calendar.render();
-                document.getElementById("footer").style.marginTop = "5vw";
-            });
-
-            resortLink.addEventListener('click', function(event) {
-                categories.style.display = "none";
-                events.style.display = "none";
-                resorts.style.display = "block";
-                hotels.style.display = "none";
-                document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
-                document.body.style.setProperty('background-repeat', 'no-repeat');
-                document.body.style.setProperty('background-size', 'cover');
-                document.body.style.setProperty('background-position', 'center');
-                document.getElementById("footer").style.marginTop = "5vw";
-            });
-
-            hotelLink.addEventListener('click', function(event) {
-                categories.style.display = "none";
-                events.style.display = "none";
-                resorts.style.display = "none";
-                hotels.style.display = "block";
-                document.body.style.setProperty('background', 'none');
-                document.body.style.setProperty('background-color', 'rgb(255, 220, 174)');
-                document.getElementById("footer").style.marginTop = "5vw";
-            });
-
-        });
+    });
     </script>
 
     <!-- Select Option -->
@@ -772,139 +806,139 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Hotel check-in check-out  -->
     <script>
-        const hoursSelected = document.getElementById('hoursSelected');
-        const checkInInput = document.getElementById('checkInDate');
-        const checkOutInput = document.getElementById('checkOutDate');
-        const selectedHotel = document.getElementById('selectedHotel');
-        const hotelDivs = document.querySelectorAll('.hotelIconWithCaption')
+    const hoursSelected = document.getElementById('hoursSelected');
+    const checkInInput = document.getElementById('checkInDate');
+    const checkOutInput = document.getElementById('checkOutDate');
+    const selectedHotel = document.getElementById('selectedHotel');
+    const hotelDivs = document.querySelectorAll('.hotelIconWithCaption')
 
-        checkInInput.addEventListener('change', () => {
-            const selectedValue = hoursSelected.value;
-            const checkInDate = new Date(checkInInput.value);
-            const addHours = parseInt(selectedValue);
-            if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
-                const checkOutDate = new Date(checkInDate.getTime() + addHours * 60 * 60 * 1000);
+    checkInInput.addEventListener('change', () => {
+        const selectedValue = hoursSelected.value;
+        const checkInDate = new Date(checkInInput.value);
+        const addHours = parseInt(selectedValue);
+        if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
+            const checkOutDate = new Date(checkInDate.getTime() + addHours * 60 * 60 * 1000);
 
-                const year = checkOutDate.getFullYear();
-                const month = String(checkOutDate.getMonth() + 1).padStart(2, '0');
-                const day = String(checkOutDate.getDate()).padStart(2, '0');
-                const hours = String(checkOutDate.getHours()).padStart(2, '0');
-                const minutes = String(checkOutDate.getMinutes()).padStart(2, '0');
+            const year = checkOutDate.getFullYear();
+            const month = String(checkOutDate.getMonth() + 1).padStart(2, '0');
+            const day = String(checkOutDate.getDate()).padStart(2, '0');
+            const hours = String(checkOutDate.getHours()).padStart(2, '0');
+            const minutes = String(checkOutDate.getMinutes()).padStart(2, '0');
 
-                const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
-                checkOutInput.value = formattedDate;
+            const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+            checkOutInput.value = formattedDate;
 
+        }
+    });
+
+
+
+    hoursSelected.addEventListener('change', () => {
+        const selectedValue = hoursSelected.value.trim().toLowerCase();
+
+
+        if (checkInInput.value) {
+            checkInInput.dispatchEvent(new Event('change'));
+        }
+
+
+        selectedHotel.setAttribute('data-duration', selectedValue);
+        Array.from(selectedHotel.options).forEach(option => {
+            if (!option.value) {
+                option.hidden = false;
+                return;
             }
+            const roomDuration = option.getAttribute('data-duration')?.trim().toLowerCase() || '';
+            option.hidden = roomDuration !== selectedValue;
         });
+        selectedHotel.selectedIndex = 0;
 
 
+        hotelDivs.forEach(div => {
+            const aTag = div.querySelector('a[data-duration]');
+            if (!aTag) return;
 
-        hoursSelected.addEventListener('change', () => {
-            const selectedValue = hoursSelected.value.trim().toLowerCase();
-
-
-            if (checkInInput.value) {
-                checkInInput.dispatchEvent(new Event('change'));
-            }
-
-
-            selectedHotel.setAttribute('data-duration', selectedValue);
-            Array.from(selectedHotel.options).forEach(option => {
-                if (!option.value) {
-                    option.hidden = false;
-                    return;
-                }
-                const roomDuration = option.getAttribute('data-duration')?.trim().toLowerCase() || '';
-                option.hidden = roomDuration !== selectedValue;
-            });
-            selectedHotel.selectedIndex = 0;
-
-
-            hotelDivs.forEach(div => {
-                const aTag = div.querySelector('a[data-duration]');
-                if (!aTag) return;
-
-                const duration = aTag.getAttribute('data-duration')?.trim().toLowerCase() || '';
-                div.style.display = duration === selectedValue ? 'inline-block' : 'none';
-            });
+            const duration = aTag.getAttribute('data-duration')?.trim().toLowerCase() || '';
+            div.style.display = duration === selectedValue ? 'inline-block' : 'none';
         });
+    });
     </script>
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('action');
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('action');
 
-        if (paramValue === 'success') {
-            Swal.fire({
-                title: "Successful Booking!",
-                text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info. Thank You!",
-                icon: "success",
-                confirmButtonText: 'View',
-                showCloseButton: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'Account/bookingHistory.php';
-                }
-            });
-        }
-        if (paramValue === 'bookNow') {
-            Swal.fire({
-                title: "Success!",
-                text: "Your phone number has been submitted successfully. You may now proceed with booking.",
-                icon: "success",
-                confirmButtonText: "Okay"
-            })
-        }
+    if (paramValue === 'success') {
+        Swal.fire({
+            title: "Successful Booking!",
+            text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info. Thank You!",
+            icon: "success",
+            confirmButtonText: 'View',
+            showCloseButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'Account/bookingHistory.php';
+            }
+        });
+    }
+    if (paramValue === 'bookNow') {
+        Swal.fire({
+            title: "Success!",
+            text: "Your phone number has been submitted successfully. You may now proceed with booking.",
+            icon: "success",
+            confirmButtonText: "Okay"
+        })
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 
     <!-- Show the cottages if overnight -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const tourSelect = document.getElementById("tourSelections");
-            const rooms = document.getElementById("rooms");
-            const roomSelect = document.getElementById("roomSelect");
-            const cottages = document.getElementById("cottage");
+    document.addEventListener("DOMContentLoaded", function() {
+        const tourSelect = document.getElementById("tourSelections");
+        const rooms = document.getElementById("rooms");
+        const roomSelect = document.getElementById("roomSelect");
+        const cottages = document.getElementById("cottage");
 
-            tourSelect.addEventListener("change", function() {
-                if (tourSelect.value === "Overnight") {
-                    rooms.style.display = "block";
-                    // roomSelect.setAttribute("required", "required");
-                    cottages.style.display = "none";
-                } else if (tourSelect.value === "Day") {
-                    rooms.style.display = "none";
-                    // roomSelect.setAttribute("required", "required");
-                    cottages.style.display = "block";
-                } else {
-                    cottages.style.display = "block";
-                    rooms.style.display = "none";
-                    roomSelect.removeAttribute("required");
-                    roomSelect.value = "";
-                }
-            });
+        tourSelect.addEventListener("change", function() {
+            if (tourSelect.value === "Overnight") {
+                rooms.style.display = "block";
+                // roomSelect.setAttribute("required", "required");
+                cottages.style.display = "none";
+            } else if (tourSelect.value === "Day") {
+                rooms.style.display = "none";
+                // roomSelect.setAttribute("required", "required");
+                cottages.style.display = "block";
+            } else {
+                cottages.style.display = "block";
+                rooms.style.display = "none";
+                roomSelect.removeAttribute("required");
+                roomSelect.value = "";
+            }
         });
+    });
     </script>
 
 
     <!-- For checking the phone Number -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const phoneNumber = document.getElementById("phoneNumber").value;
+    document.addEventListener("DOMContentLoaded", function() {
+        const phoneNumber = document.getElementById("phoneNumber").value;
 
-            if (phoneNumber === '') {
-                const phoneNumberModal = new bootstrap.Modal(document.getElementById('phoneNumberModal'));
-                phoneNumberModal.show();
-            }
+        if (phoneNumber === '') {
+            const phoneNumberModal = new bootstrap.Modal(document.getElementById('phoneNumberModal'));
+            phoneNumberModal.show();
+        }
 
 
-        });
+    });
     </script>
 
 </body>
