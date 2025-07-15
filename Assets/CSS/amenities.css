@@ -257,9 +257,9 @@ footer {
 
 .embed-responsive {
   width: 100%;
-  max-width: 900px;
+  max-width: 700px;
   height: auto;
-  margin-top: 4vw !important;
+  margin-top: 2vw !important;
   margin: auto;
 }
 
@@ -269,28 +269,28 @@ footer {
 }
 
 .poolTitleContainer {
-  width: 70%;
+  width: 85%;
   margin: auto;
   text-align: center;
-  margin-top: 3vw !important;
+  margin-top: 4vw !important;
 }
 
 .poolLine {
   border: none;
   border-top: 5px solid #d48d31;
-  width: 30%;
+  width: 25%;
   margin: 0 auto;
   opacity: 1;
 }
 
 .poolTitle {
   margin-top: 1vw;
-  font-size: 2.5vw;
+  font-size: 2vw;
 }
 
 .poolDescription {
-  margin-top: 2vw;
-  font-size: 1.5vw;
+  margin-top: 1vw;
+  font-size: 1.3vw;
 }
 
 .poolPics {
@@ -302,11 +302,8 @@ footer {
 }
 
 .pic1,
-.pic2,
-.pic3,
-.pic4,
-.pic5 {
-  height: 25vw;
+.pic2 {
+  height: 20vw;
   width: auto;
 }
 
@@ -315,15 +312,15 @@ footer {
 .poolPic3,
 .poolPic4,
 .poolPic5 {
-  height: 20vw;
+  height: 17vw;
   width: auto;
 }
 
 .carousel-container {
   position: relative;
-  width: 80%;
-  height: 400px;
-  margin: 50px auto;
+  width: 60%;
+  height: 300px;
+  margin: 30px auto;
   perspective: 1000px;
 }
 
@@ -363,12 +360,12 @@ footer {
 }
 
 .cottage {
-  height: 110vh !important;
+  height: 90vh !important;
 }
 
 .cottageTitleContainer {
   /* border: 1px solid black; */
-  width: 70%;
+  width: 85%;
   margin: auto;
   text-align: center;
   margin-top: 5vw !important;
@@ -377,19 +374,19 @@ footer {
 .cottageLine {
   border: none;
   border-top: 5px solid #d48d31;
-  width: 30%;
+  width: 25%;
   margin: 0 auto;
   opacity: 1;
 }
 
 .cottageTitle {
   margin-top: 1vw;
-  font-size: 2.5vw;
+  font-size: 2vw;
 }
 
 .cottageDescription {
-  margin-top: 2vw;
-  font-size: 1.5vw;
+  margin-top: 1vw;
+  font-size: 1.3vw;
 }
 
 .videoke {
@@ -398,120 +395,120 @@ footer {
 
 .videokeTitleContainer {
   /* border: 1px solid black; */
-  width: 70%;
+  width: 85%;
   margin: auto;
   text-align: center;
-  margin-top: 5vw !important;
+  margin-top: 1vw !important;
 }
 
 .videokeLine {
   border: none;
   border-top: 5px solid #d48d31;
-  width: 30%;
+  width: 25%;
   margin: 0 auto;
   opacity: 1;
 }
 
 .videokeTitle {
   margin-top: 1vw;
-  font-size: 2.5vw;
+  font-size: 2vw;
 }
 
 .videokeDescription {
-  margin-top: 2vw;
-  font-size: 1.5vw;
+  margin-top: 1vw;
+  font-size: 1.3vw;
 }
 
 .pavilion {
-  height: 130vh !important;
+  height: 110vh !important;
 }
 
 .pavilionTitleContainer {
   /* border: 1px solid black; */
-  width: 70%;
+  width: 85%;
   margin: auto;
   text-align: center;
-  margin-top: 5vw !important;
+  margin-top: 2vw !important;
 }
 
 .pavilionLine {
   border: none;
   border-top: 5px solid #d48d31;
-  width: 30%;
+  width: 25%;
   margin: 0 auto;
   opacity: 1;
 }
 
 .pavilionTitle {
   margin-top: 1vw;
-  font-size: 2.5vw;
+  font-size: 2vw;
 }
 
 .pavilionDescription {
-  margin-top: 2vw;
-  font-size: 1.5vw;
+  margin-top: 1vw;
+  font-size: 1.3vw;
 }
 
 .minipavilion {
-  height: 110vh !important;
+  height: 90vh !important;
 }
 
 .minipavilionTitleContainer {
   /* border: 1px solid black; */
-  width: 50%;
+  width: 95%;
   margin: auto;
   text-align: center;
-  margin-top: 3vw !important;
+  margin-top: 1vw !important;
 }
 
 .minipavilionLine {
   border: none;
   border-top: 5px solid #d48d31;
-  width: 30%;
+  width: 25%;
   margin: 0 auto;
   opacity: 1;
 }
 
 .minipavilionTitle {
   margin-top: 1vw;
-  font-size: 2.5vw;
+  font-size: 2vw;
 }
 
 .minipavilionDescription {
-  margin-top: 2vw;
-  font-size: 1.5vw;
+  margin-top: 1vw;
+  font-size: 1.3vw;
 }
 
 .hotel {
-  height: 110vh !important;
+  height: 100vh !important;
 }
 .hotelTitleContainer {
-  width: 75%;
+  width: 85%;
   margin: auto;
   text-align: center;
-  margin-top: 5vw !important;
+  margin-top: 1vw !important;
 }
 
 .hotelLine {
   border: none;
   border-top: 5px solid #d48d31;
-  width: 30%;
+  width: 25%;
   margin: 0 auto;
   opacity: 1;
 }
 
 .hotelTitle {
   margin-top: 1vw;
-  font-size: 2.5vw;
+  font-size: 2vw;
 }
 
 .hotelDescription {
-  font-size: clamp(15px, 1.5vw, 17px);
+  font-size: clamp(14px, 1.3vw, 18px);
 }
 
 .parkingTitleContainer {
   /* border: 1px solid black; */
-  width: 75%;
+  width: 85%;
   margin: auto;
   text-align: center;
   margin-top: 5vw !important;
@@ -520,19 +517,19 @@ footer {
 .parkingLine {
   border: none;
   border-top: 5px solid #d48d31;
-  width: 30%;
+  width: 25%;
   margin: 0 auto;
   opacity: 1;
 }
 
 .parkingTitle {
   margin-top: 1vw;
-  font-size: 2.5vw;
+  font-size: 2vw;
 }
 
 .parkingDescription {
-  margin-top: 2vw;
-  font-size: clamp(15px, 1.5vw, 17px);
+  margin-top: 1vw;
+  font-size: clamp(14px, 1.3vw, 18px);
 }
 
 button {
