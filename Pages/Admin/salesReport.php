@@ -51,96 +51,62 @@ $userRole = $_SESSION['userRole'];
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <a href="adminDashboard.php" class="navbar-brand" id="backToDashboard">
+    <header class="header">
+        <a href="adminDashboard.php" id="backToDashboard" class="backButton">
             <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
         </a>
-        <a href="#" class="navbar-brand" id="pagetitle">
-            <img src="../../Assets/Images/Icon/Statistics.png" alt="" id="sales-logo"> Sales Report
-        </a>
-    </nav>
+        <div class="pagetitle">
+            <img src="../../Assets/Images/Icon/Statistics.png" alt="" id="sales-logo">
+            <h1>Sales Report</h1>
+        </div>
+    </header>
     <main>
-        <div class="container-fluid">
+        <div class="container-fluid" style="border: 1px solid red;">
             <!-- Temporary form action lang hehe para ma-print yung ininput ng user-->
             <form action="salesReport.php" method="POST">
                 <div class="dateRange">
                     <label for="reportDate">Report Period: </label>
-                    <input type="text" name="reportDate" id="reportDate" placeholder="Click to enter date">
-                    <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -2vw;font-size:1.7vw;">
-                    </i>
-                </div>
-                <!-- <div class="salesSummary">
-                    <h2>Sales Summary:</h2>
-                    <div class="report">
-                        <div class="summaryTable">
-                            <table class="table table-bordered table-hover text-center">
-                                <thead>
-                                    <tr>
-                                        <th>Category</th>
-                                        <th>Value</th>
-                                        <th>Add-ons</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            Total Sales
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Booking Completed
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Cancelled Bookings
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Most Booked Area
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Total Guests
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Average Booking
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="date-picker">
+                        <div class="input-wrapper w-100">
+                            <input type="text" name="reportDate" id="reportDate" placeholder="Click to enter date">
+                            <i class="fa-solid fa-calendar" id="calendarIcon"></i>
                         </div>
-                    </div> -->
-                <div class="generateBtn">
-                    <button type="submit" class="btn btn-primary" name="generateReport" id="generateReport">Generate Detailed Report</button>
+                    </div>
                 </div>
+                <button type="button" class="generateBtn btn btn-outline-primary" name="generateReport" id="generateReport">
+                    Generate Report
+                </button>
+            </form>
+
+
+            <div class="table">
+
+                <?php
+
+                ?>
+                <table>
+                    <thead>
+
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
-        </form>
-        </div>
+
+
+
+
     </main>
+
+
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         flatpickr('#reportDate', {
             mode: "range",
-            minDate: "today",
-            dateFormat: "Y-m-d"
+            minDate: null,
+            dateFormat: "m-d-y"
         });
 
         const calIcon = document.getElementById("calendarIcon");
@@ -149,7 +115,25 @@ $userRole = $_SESSION['userRole'];
         calIcon.addEventListener('click', function(event) {
             reportDate.click()
         })
+
+
+        const generateReportBtn = document.getElementById("generateReport");
+
+        generateReportBtn.addEventListener("click", function() {
+            const reportDateValue = reportDate.value.trim();
+
+            if (reportDateValue.includes(" to ")) {
+                const [firstDate, lastDate] = reportDateValue.split(" to ");
+                console.log("First date:", firstDate);
+                console.log("Last date:", lastDate);
+            } else {
+                console.log("Only one date selected:", reportDateValue);
+            }
+
+            
+        })
     </script>
+
 </body>
 
 </html>

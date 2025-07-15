@@ -75,6 +75,14 @@ if (isset($_POST['hotelBooking'])) {
         $insertBookingServices->bind_param("iiss", $bookingID, $serviceID, $totalGuest, $totalPrice);
         $insertBookingServices->execute();
 
+
+        $receiver = 'Admin';
+        $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking request';
+        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+            VALUES(?,?,?,?)");
+        $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
+        $insertBookingNotificationRequest->execute();
+
         header('Location: ../../Pages/Customer/bookNow.php?action=success');
         exit();
     } else {

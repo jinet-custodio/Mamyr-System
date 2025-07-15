@@ -96,6 +96,44 @@ $userRole = $_SESSION['userRole'];
                     <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
                 </a>
             </li>
+
+            <!-- Get notification -->
+            <?php
+            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND is_read = 0");
+            $getNotifications->bind_param("i", $userID);
+            $getNotifications->execute();
+            $getNotificationsResult = $getNotifications->get_result();
+            if ($getNotificationsResult->num_rows > 0) {
+                $counter = 0;
+                $notificationsArray = [];
+                $color = [];
+                $notificationIDs = [];
+                while ($notifications = $getNotificationsResult->fetch_assoc()) {
+                    $is_readValue = $notifications['is_read'];
+                    $notificationIDs[] = $notifications['notificationID'];
+                    if ($is_readValue === 0) {
+                        $notificationsArray[] = $notifications['message'];
+                        $counter++;
+                        $color[] = "rgb(247, 213, 176, .5)";
+                    } elseif ($is_readValue === 1) {
+                        $notificationsArray[] = $notifications['message'];
+                        $counter++;
+                        $color[] = "white";
+                    }
+                }
+            }
+            ?>
+
+            <div class="notification-container position-relative">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                    <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
+                    <?php if (!empty($counter)): ?>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
+                    <?php endif; ?>
+                </button>
+            </div>
         </ul>
 
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -137,6 +175,38 @@ $userRole = $_SESSION['userRole'];
             </ul>
         </div>
     </nav>
+
+
+
+    <!-- Notification Modal -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-0">
+                    <?php if (!empty($notificationsArray)): ?>
+                        <ul class="list-group list-group-flush ">
+                            <?php foreach ($notificationsArray as $index => $message):
+                                $bgColor = $color[$index];
+                                $notificationID = $notificationIDs[$index];
+                            ?>
+                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                    <?= htmlspecialchars($message) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php else: ?>
+                        <div class="p-3 text-muted">No new notifications.</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Made every section visible except for the selection section to see the errors -->
     <div class="categories-page" id="category-page">
@@ -634,6 +704,30 @@ $userRole = $_SESSION['userRole'];
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
+
+
+    <!-- Notification Ajax -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
+
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            this.style.backgroundColor = 'white';
+                        });
+                });
+            });
+        });
     </script>
 
 
