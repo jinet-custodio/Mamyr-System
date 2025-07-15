@@ -53,10 +53,11 @@ if (isset($_POST['approvePaymentBtn'])) {
         paymentStatus = ? WHERE bookingID = ?");
             $updateBookingPaymentStatus->bind_param("ddiii", $paymentAmount, $totalBalance, $confirmBookingStatus, $paymentStatus, $bookingID);
             if ($updateBookingPaymentStatus->execute()) {
+                $receiver = 'Customer';
                 $message = 'Payment approved successfully. We have received and reviewed your payment. The service you booked is now reserved. Thank you';
-                $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message)
-            VALUES(?,?,?)");
-                $insertNotification->bind_param("iis", $bookingID, $customerID, $message);
+                $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+            VALUES(?,?,?,?)");
+                $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();
 
                 header('Location: ../../Pages/Admin/transaction.php?action=approved');
@@ -92,9 +93,11 @@ if (isset($_POST['approvePaymentBtn'])) {
         confirmedBookingStatus = ? WHERE bookingID = ?");
             $updateBookingPaymentStatus->bind_param("ii", $confirmBookingStatus,  $bookingID);
             if ($updateBookingPaymentStatus->execute()) {
-                $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message)
-            VALUES(?,?,?)");
-                $insertNotification->bind_param("iis", $bookingID, $customerID, $message);
+
+                $receiver = 'Customer';
+                $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+            VALUES(?,?,?,?)");
+                $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();
 
                 header('Location: ../../Pages/Admin/transaction.php?action=rejected');
@@ -162,14 +165,17 @@ if (isset($_POST['approvePaymentBtn'])) {
                                 paymentStatus = ? WHERE bookingID = ?");
             $updateBookingPaymentStatus->bind_param("ddii", $amountPaid, $totalBalance,  $paymentStatus, $bookingID);
             if ($updateBookingPaymentStatus->execute()) {
+
+                $receiver = 'Customer';
                 $message = "We have successfully deducted your payment of " . $customerPayment .
                     " from your balance. Please check your payment history in your account for more details. " .
                     "Your current balance is: " . ($totalBalance > 0 ? "₱" . number_format($totalBalance, 2) : "0.00") . ".";
-                $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message)
-            VALUES(?,?,?)");
-                $insertNotification->bind_param("iis", $bookingID, $customerID, $message);
+                $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+            VALUES(?,?,?,?)");
+                $insertNotification->bind_param("iis", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();
-                // $_SESSION['huh'] = $customerPayment;
+
+
                 header('Location: ../../Pages/Admin/transaction.php?action=paymentSuccess');
                 exit();
             } else {

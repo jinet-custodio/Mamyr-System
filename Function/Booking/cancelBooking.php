@@ -24,8 +24,15 @@ if (isset($_POST['cancelBooking'])) {
         WHERE bookingID = ?  ");
         $cancelBooking->bind_param("ii", $newBookingStatus, $bookingID);
         if ($cancelBooking->execute()) {
-            header("Location: ../../Pages/Customer/Account/bookingHistory.php?action=Cancelled&bookingID=$bookingID");
-            // header("Location: ../../Pages/Customer/Account/bookingHistory.php?action=Cancelled");
+
+            $receiver = 'Admin';
+            $message = 'A customer has cancelled a' . strtolower($bookingType) . ' booking.';
+            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+            VALUES(?,?,?,?)");
+            $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
+            $insertBookingNotificationRequest->execute();
+            // header("Location: ../../Pages/Customer/Account/bookingHistory.php?action=Cancelled&bookingID=$bookingID");
+            header("Location: ../../Pages/Customer/Account/bookingHistory.php?action=Cancelled");
             $cancelBooking->close();
         } else {
             header("Location: ../../Pages/Customer/Account/bookingHistory.php?action=Error");

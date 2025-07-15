@@ -2,10 +2,11 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
-/* @font-face {
+
+@font-face {
   font-family: "Alkatra";
   src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
-} */
+}
 
 @font-face {
   font-family: "Lora";
@@ -25,19 +26,127 @@ body {
   background: #ededed !important;
 }
 
-#sales-logo {
+.header {
+  /* border: 1px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 90px;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.backButton {
+    position: absolute;
+    left: 20px; 
+    display: flex;
+    align-items: center;
+}
+
+
+.pagetitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  /* border: 1px solid blue; */
+  padding: .5rem;
+}
+
+.pagetitle h1 {
+  font-family: "Alkatra";
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0;
+  margin-top: .5rem;
+}
+
+.pagetitle img {
+  height: 50px !important;
+}
+
+
+main{
+  width: 90vw;
+  margin: auto;
+  padding: 1rem;
+}
+
+/* Base form styling */
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  width: 80%;
+  gap: 1rem;
+  flex-wrap: wrap; 
+}
+
+.dateRange{
+  /* border: 1px solid red; */
+  width: 50%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .5rem;
+  font-family: 'Poppins';
+}
+
+.dateRange label{
+  margin-top: .5rem;
+}
+
+.input-wrapper{
+  display: flex;
+  /* border: 1px solid rebeccapurple; */
+  position: relative;
+}
+
+.input-wrapper input{
+  padding: 0 4rem 0 .5rem;
+  border: 1px solid rgb(179, 168, 168);
+  height: 35px;
+  border-radius: 5px;
+}
+
+.input-wrapper i{
+  position: absolute;
+  top: 25%;
+  left: 85%;
+}
+
+
+
+.generateBtn {
+  border: 1px solid rgb(0, 217, 255);
+  background-color: #00d9ff;
+  color: black;
+  font-weight: 500;
+  width: 20%;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.generateBtn:hover {
+  background-color: #00c3e6;
+}
+
+
+
+/* #sales-logo {
     width: 3vw !important;
     margin-right: 1vw;
 }
 
 #pagetitle{
-    font-family: "Alkatra";
-    font-size: 2.8vw !important;
+
     display: flex !important;
     align-items: center !important;
-    margin-top: 1vw;
-    margin-left: auto !important;
-    margin-right: auto !important;
+
 }
 
 .container-fluid {
@@ -79,9 +188,9 @@ body {
 
 .salesSummary {
   margin-top: 3vw;
-}
+} */
 
-.generateBtn {
+/* .generateBtn {
   margin: 0 auto !important;
   width: 15vw;
 }
@@ -92,9 +201,9 @@ body {
   font-weight: 700;
   letter-spacing: 1px;
 
-}
+} */
 
-.table {
+/* .table {
   width: 85% !important;
   margin: 2.2vw auto;
 }
@@ -105,4 +214,4 @@ body {
 
 .table tbody {
   font-size: 1.3vw;
-}
+} */

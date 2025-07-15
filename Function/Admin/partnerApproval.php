@@ -78,10 +78,12 @@ if (isset($_POST['declineBtn'])) {
     if ($result->num_rows > 0) {
 
         if ($rejectionReason !== "") {
+            $receiver = 'Partner';
             $message = $rejectionReason;
             $bookingID = Null;
         } else {
             //pakipalitan si gpt gumawa
+            $receiver = 'Partner';
             $message = "Thank you for reaching out and considering our venue for your project. We’re currently being selective with partnerships to ensure alignment with our brand and guest experience. At this time, we won’t be moving forward with this opportunity, but we truly appreciate your interest and wish you all the best.";
             $bookingID = Null;
         }
@@ -91,9 +93,9 @@ if (isset($_POST['declineBtn'])) {
         WHERE partnershipID = ?");
         $updateStatus->bind_param("ii", $newPartnerStatus, $partnerID);
 
-        $insertNotif = $conn->prepare("INSERT INTO notifications(partnershipID, userID, message, bookingID)
-        VALUES(?,?,?,?)");
-        $insertNotif->bind_param("iisi", $partnerID,  $partnerUserID, $message, $bookingID);
+        $insertNotif = $conn->prepare("INSERT INTO notifications(partnershipID, userID, message, bookingID, receiver)
+        VALUES(?,?,?,?,?)");
+        $insertNotif->bind_param("iisis", $partnerID,  $partnerUserID, $message, $bookingID, $receiver);
 
 
         if ($updateStatus->execute() && $insertNotif->execute()) {

@@ -141,7 +141,7 @@ nav {
 .account-nav {
   margin: 1px;
   margin-left: 1rem;
-  border: 1px solid white;
+  /* border: 1px solid white; */
   border-radius: 2rem;
   img {
     height: 5vw;
@@ -150,6 +150,18 @@ nav {
     object-fit: cover;
   }
 }
+
+
+.notification-container{
+  margin: 1rem;
+
+  button{
+    background-color: transparent;
+    border: none;
+  }
+}
+
+
 
 .logoNav {
   /* border: 1px solid black; */
@@ -247,6 +259,8 @@ footer {
   color: #c1a534;
   transition: 0.5s;
 }
+
+
 
 .amenities {
   margin-top: 9vw;
@@ -541,7 +555,7 @@ footer {
   font-size: clamp(15px, 1.5vw, 17px);
 }
 
-button {
+.btn-primary {
   position: absolute;
   top: 50%;
   z-index: 10;
@@ -562,9 +576,11 @@ button {
   right: 20px;
 }
 
-button:hover {
+.btn-primary:hover {
   background: rgba(0, 0, 0, 0.8);
 }
+
+
 
 @media (max-width: 600px) {
   .amenities {

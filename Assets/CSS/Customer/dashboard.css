@@ -140,7 +140,6 @@ body {
 .account-nav {
   margin: 1px;
   margin-left: 1rem;
-  border: 1px solid white;
   border-radius: 50%;
   .profile-pic {
     height: 5vw;
@@ -149,6 +148,19 @@ body {
     object-fit: cover;
   }
 }
+
+
+.notification-container{
+  margin: 1rem;
+
+  button{
+    background-color: transparent;
+    border: none;
+  }
+}
+
+
+
 
 .topContainer {
   display: flex;

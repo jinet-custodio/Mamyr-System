@@ -282,12 +282,13 @@ $userRole = $_SESSION['userRole'];
             <section id="downpaymentImageSection">
                 <div class="image-container" id="downpayment-image-container">
                     <?php if ($downpaymentImage !== 'None'): ?>
-                    <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
-                    <div class="zoom-overlay">
-                        <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
-                    </div>
+                        <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
+                        <div class="zoom-overlay">
+                            <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
+                        </div>
                     <?php else: ?>
-                    <p>Customer has not uploaded the receipt yet.</p>
+                        <img src="../../Assets/Images/defaultDownpayment.png" alt="Payment Icon" class="defaultDownpaymentImage">
+                        <p class="text-center">Customer has not uploaded the receipt yet</p>
                     <?php endif; ?>
                 </div>
             </section>
@@ -404,46 +405,46 @@ $userRole = $_SESSION['userRole'];
     </script>
 
     <script>
-    const paymentMethod = document.getElementById("paymentMethod").value;
-    const paymentStatus = document.getElementById("paymentStatus").value;
-    const ImageContainer = document.getElementById("downpayment-image-container");
-    const downpaymentContainer = document.getElementById('downpaymentContainer');
-    if (paymentMethod === 'Cash - Onsite Payment') {
-        ImageContainer.style.display = "none";
-        downpaymentContainer.style.display = "none";
-    }
+        const paymentMethod = document.getElementById("paymentMethod").value;
+        const paymentStatus = document.getElementById("paymentStatus").value;
+        const ImageContainer = document.getElementById("downpayment-image-container");
+        const downpaymentContainer = document.getElementById('downpaymentContainer');
+        if (paymentMethod === 'Cash - Onsite Payment') {
+            ImageContainer.style.display = "none";
+            downpaymentContainer.style.display = "none";
+        }
 
 
-    if (paymentStatus === 'Fully Paid') {
-        document.querySelector("#form-button").style.display = "none";
-        document.getElementById("addPayment").style.display = "none";
-        document.getElementById("downpaymentImageSection").style.display = "none";
-    } else if (paymentStatus === 'Partially Paid') {
-        document.getElementById("addPayment").style.display = "block";
-        document.querySelector("#form-button").style.display = "none";
-    } else if (paymentStatus === 'No Payment') {
-        document.getElementById("addPayment").style.display = "none";
-    }
+        if (paymentStatus === 'Fully Paid') {
+            document.querySelector("#form-button").style.display = "none";
+            document.getElementById("addPayment").style.display = "none";
+            document.getElementById("downpaymentImageSection").style.display = "none";
+        } else if (paymentStatus === 'Partially Paid') {
+            document.getElementById("addPayment").style.display = "block";
+            document.querySelector("#form-button").style.display = "none";
+        } else if (paymentStatus === 'No Payment') {
+            document.getElementById("addPayment").style.display = "none";
+        }
     </script>
 
     <script>
-    const form = document.getElementById('form');
+        const form = document.getElementById('form');
 
-    document.getElementById('viewBookingBtn').addEventListener('click', () => {
-        form.action = 'viewBooking.php';
-    });
+        document.getElementById('viewBookingBtn').addEventListener('click', () => {
+            form.action = 'viewBooking.php';
+        });
 
-    document.getElementById('approvePaymentBtn').addEventListener('click', () => {
-        form.action = '../../Function/Admin/paymentApproval.php';
-    });
+        document.getElementById('approvePaymentBtn').addEventListener('click', () => {
+            form.action = '../../Function/Admin/paymentApproval.php';
+        });
 
-    document.getElementById('rejectPaymentBtn').addEventListener('click', () => {
-        form.action = '../../Function/Admin/paymentApproval.php';
-    });
+        document.getElementById('rejectPaymentBtn').addEventListener('click', () => {
+            form.action = '../../Function/Admin/paymentApproval.php';
+        });
 
-    document.getElementById('submitPaymentBtn').addEventListener('click', () => {
-        form.action = '../../Function/Admin/paymentApproval.php';
-    })
+        document.getElementById('submitPaymentBtn').addEventListener('click', () => {
+            form.action = '../../Function/Admin/paymentApproval.php';
+        })
     </script>
 
 
@@ -451,30 +452,30 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
-    if (paramValue === "paymentFieldEmpty") {
-        Swal.fire({
-            title: "Oops!",
-            text: "Please enter the payment amount.",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    } else if (paramValue === "reasonFieldEmpty") {
-        Swal.fire({
-            title: "Oops!",
-            text: "Please provide a reason for rejection.",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    }
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        if (paramValue === "paymentFieldEmpty") {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter the payment amount.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === "reasonFieldEmpty") {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please provide a reason for rejection.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        }
 
 
-    if (paramValue) {
-        const url = new URL(window.location.href);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location.href);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 </body>
