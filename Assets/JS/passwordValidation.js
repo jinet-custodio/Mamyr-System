@@ -6,7 +6,7 @@ function passwordValidation(password, passwordMessage) {
 
   let passwordIsValid = true;
   if (password === "") {
-    passwordMessage.textContent = "Please enter your password";
+    passwordMessage.textContent = "";
     passwordIsValid = false;
   } else if (!password.match(passwordLetter)) {
     passwordMessage.textContent = "Must contain letters";
@@ -36,7 +36,7 @@ function passwordValidation(password, passwordMessage) {
 function passwordMatchValidation(password, confirmPassword, passwordMessage) {
   let passwordMatch = true;
   if (confirmPassword === "") {
-    passwordMessage.innerHTML = "Please confirm your password";
+    passwordMessage.innerHTML = "";
     passwordMatch = false;
   } else if (confirmPassword !== password) {
     passwordMessage.innerHTML = "Passwords do not match!";
