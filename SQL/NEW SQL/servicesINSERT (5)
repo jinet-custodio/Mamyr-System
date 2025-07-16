@@ -79,21 +79,21 @@ INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RSca
 VALUES ('Room 11','2500', '6', '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1);
 
 
-INSERT INTO packages 
-(packageName, packageDescription, Pduration, Pcapacity, resortserviceID, Pprice, PcategoryID, packageAvailability)
-VALUES (
-  'Wedding Event',
-  CONCAT('- 4 dishes', '\n',
-         '- With styling for presidential table, stage and entrance', '\n',
-         '- Basic sounds and lights', '\n',
-         '- 1 airconditioned function hall good for 5 hours (max 350 pax)', '\n',
-         '- With 1 Free Room'),
-  5.00,
-  200,
-  12,
-  140000.00,
-  2,
-   1
-);
+-- INSERT INTO packages 
+-- (packageName, packageDescription, Pduration, Pcapacity, resortserviceID, Pprice, PcategoryID, packageAvailability)
+-- VALUES (
+--   'Wedding Event',
+--   CONCAT('- 4 dishes', '\n',
+--          '- With styling for presidential table, stage and entrance', '\n',
+--          '- Basic sounds and lights', '\n',
+--          '- 1 airconditioned function hall good for 5 hours (max 350 pax)', '\n',
+--          '- With 1 Free Room'),
+--   5.00,
+--   200,
+--   12,
+--   140000.00,
+--   2,
+--    1
+-- );
 
 

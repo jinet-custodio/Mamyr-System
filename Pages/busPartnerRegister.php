@@ -13,9 +13,13 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Business Partner Sign Up</title>
     <link rel="shortcut icon" href="../Assets/Images/Icon/favicon.png" type="image/x-icon">
+    <!-- CSS Link -->
     <link rel="stylesheet" href="../Assets/CSS/bpRegister.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Link -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -131,48 +135,31 @@ session_start();
             </div>
             <h5 class="accountCreationLabel m-6">Create an Account</h5>
 
-            <div class="emailPassForm">
+            <div class="passwordContainer">
                 <div class="input-box">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
-                        required>
-                    <i class='bx bxs-envelope'></i>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                        oninput="validateSignUpForm();" required>
+                    <i id="togglePassword1" class='bx bxs-hide'></i>
                 </div>
+                <div class="confirmErrorMsg" id="passwordValidation"></div>
+                <div class="input-box">
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                        placeholder="Confirm Password" oninput="validateSignUpForm();" required>
+                    <input type="hidden" name="userRole" value="2"> <!-- 2 = partner -->
+                    <input type="hidden" name="registerStatus" value="partner">
 
-                <div class="passwordContainer">
-                    <div class="input-box">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-                            oninput="checkPassword();" required>
-                        <i id="togglePassword1" class='bx bxs-hide'></i>
-                    </div>
-                    <div class="input-box">
-                        <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-                            placeholder="Confirm Password" oninput="checkPasswordMatch();" required>
-                        <input type="hidden" name="userRole" value="2"> <!-- 2 = partner -->
-                        <input type="hidden" name="registerStatus" value="partner">
-
-                        <i id="togglePassword2" class='bx bxs-hide'></i>
-                    </div>
-
-                    <div class="bottomPart">
-                        <label for="terms">
-                            <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
-                                onchange="checkBox()"> I agree to the
-                            <a href="#" id="open-modal" style="text-decoration: none;">Terms and Conditions</a>.
-                        </label><br>
-                        <button class="btn btn-primary w-75 m-auto" id="signUp" name="signUp" disabled>Sign Up</button>
-                    </div>
+                    <i id="togglePassword2" class='bx bxs-hide'></i>
                 </div>
+                <div class="confirmErrorMsg" id="passwordMatch"></div>
 
-                <div class="passwordContainerError">
-                    <div class="errorMsg">
-                        <div class="confirmErrorMsg" id="passwordValidation"></div>
-                    </div>
-                    <div class="errorMsg">
-                        <div class="confirmErrorMsg1" id="passwordMatch"></div>
-                    </div>
-                    <div class="errorMsg">
-                        <div class="confirmErrorMsg text-center" id="termsError"></div>
-                    </div>
+                <div class="bottomPart">
+                    <label for="terms">
+                        <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
+                            onchange="validateSignUpForm()"> I agree to the
+                        <a href="#" id="open-modal" style="text-decoration: none;">Terms and Conditions</a>.
+                    </label><br>
+                    <div class="confirmErrorMsg text-center" id="termsError"></div>
+                    <button class="btn btn-primary w-75 m-auto" id="signUp" name="signUp" disabled>Sign Up</button>
                 </div>
             </div>
         </div>
@@ -270,12 +257,9 @@ session_start();
 
     <!-- Bootstrap JS -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
-    <!-- Check if user agree to the terms and condition -->
-    <script src="../Assets/JS/checkbox.js"></script>
-    <!-- Password Match JS-->
-    <script src="../Assets/JS/checkPasswordMatch.js"></script>
-    <!-- Register Password Validation JS -->
-    <script src="../Assets/JS/checkPassword.js"></script>
+    <!-- Password and terms Validation -->
+    <script src="../Assets/JS/passwordValidation.js"></script>
+
 
     <!-- <script>
         function validateStepOne() {

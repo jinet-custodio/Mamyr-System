@@ -101,7 +101,7 @@ $userRole = $_SESSION['userRole'];
                             <label for="email">Email</label>
                         </div>
                         <div class="input-container form-floating">
-                            <input type="password" class="form-control" name="password" id="password" oninput="checkPassword()" required>
+                            <input type="password" class="form-control" name="password" id="password" oninput="heckCreateAccountPassword();" required>
                             <label for="password">Password</label>
                             <div class="errorMsg">
                                 <div class="confirmErrorMsg" id="passwordValidation"></div>
@@ -110,7 +110,7 @@ $userRole = $_SESSION['userRole'];
                     </div>
                 </div>
                 <div class="button-container">
-                    <button type="submit" class="btn btn-primary" name="createAccount">Create Account</button>
+                    <button type="submit" class="btn btn-primary" name="createAccount" id="createAccount">Create Account</button>
                 </div>
             </div>
         </form>
@@ -124,7 +124,7 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Password Validation -->
-    <script src="../../../Assets/JS/checkPassword.js"></script>
+    <script src="../../../Assets/JS/passwordValidation.js"></script>
     <!-- Preview Image -->
     <script>
         document.querySelector("input[type='file']").addEventListener("change", function(event) {
