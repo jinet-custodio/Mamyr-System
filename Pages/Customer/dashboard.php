@@ -376,7 +376,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             calendar.render();
         });
     </script>
-    <script src="../../Assets/JS/bo"></script>
+
     <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
