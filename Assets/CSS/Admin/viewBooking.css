@@ -4,8 +4,8 @@
 }
 
 @font-face {
-  font-family: "Agbalumo";
-  src: url(../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+  font-family: "Alkatra";
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
 @font-face {
@@ -32,7 +32,7 @@ body {
 }
 
 .page-title {
-  font-family: "Agbalumo";
+  font-family: "Alkatra";
   font-size: 25px;
   margin-left: 0.5rem;
   margin-top: 0.3rem;

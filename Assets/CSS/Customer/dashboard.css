@@ -9,12 +9,12 @@
 }
 @font-face {
   font-family: "Lora";
-  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
 @font-face {
   font-family: "Alkatra";
-  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
 
@@ -267,6 +267,11 @@ body {
   width: 48% !important;
 }
 
+a {
+  color: #141414 !important;
+  text-decoration: none !important;
+}
+
 #calendar {
   width: 95%;
   margin: 0 auto;
@@ -343,7 +348,7 @@ body {
 }
 
 .fc .fc-daygrid-day.fc-day-today {
-  background-color: #5dccf5;
+  background-color: #20c028 !important;
   color: #fff;
 }
 
@@ -377,10 +382,6 @@ body {
   color: white;
   border-radius: 5px;
   padding: 5px;
-}
-
-.fc-bg-event {
-  opacity: 1 !important;
 }
 
 .fc .fc-bg-event .fc-event-title {

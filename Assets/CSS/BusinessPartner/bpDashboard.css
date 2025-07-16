@@ -3,17 +3,14 @@
   src: url(../../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+  font-family: "Alkatra";
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 @font-face {
-  font-family: "Prata";
-  src: url(../../../Fonts/Prata/Prata-Regular.ttf);
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
-@font-face {
-  font-family: "Agbalumo";
-  src: url(../../../Fonts/Agbalumo/Agbalumo-Regular.ttf);
-}
+
 
 /* sidebar */
 .sidebar {

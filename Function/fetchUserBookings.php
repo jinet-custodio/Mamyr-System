@@ -9,54 +9,60 @@ if (!isset($_SESSION['userID'])) {
     exit;
 }
 
-$userID = 2;
+$userID = $_SESSION['userID'];
 
 $sql = "
     SELECT 
         cb.bookingID,
         b.startDate,
+        b.bookingType,
         u.firstName,
         u.lastName,
         s.resortServiceID,
         s.entranceRateID,
+        cp.customPackageID,
         s.partnershipServiceID
     FROM confirmedbookings cb
     INNER JOIN bookings b ON cb.bookingID = b.bookingID
     INNER JOIN users u ON b.userID = u.userID
-    LEFT JOIN bookingsservices bs ON bs.bookingID = b.bookingID
+    LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
+    LEFT JOIN bookingservices bs ON bs.bookingID = b.bookingID
     LEFT JOIN services s ON bs.serviceID = s.serviceID
-    WHERE u.userID = ?
+    WHERE cb.paymentStatus = 2 AND u.userID = ?
 ";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userID);
 $stmt->execute();
 $result = $stmt->get_result();
-
-$events = [];
+$eventsByDate = [];
 
 while ($row = $result->fetch_assoc()) {
-    // Default values
-    // $title = 'Event';
-    $color = '#dc3545'; // Red
-
-    // Determine simplified label and color
-    if (!empty($row['resortServiceID'])) {
-        // $title = 'Resort/Hotel';
-        $color = '#ffc107'; // Yellow
-    } elseif (!empty($row['entranceRateID'])) {
-        // $title = 'Resort Entrance';
-        $color = '#007bff'; // Blue
+    $date = $row['startDate'];
+    $type = $row['bookingType'];
+    // Skip if we already stored an event for this date
+    if (isset($eventsByDate[$date])) {
+        continue;
     }
 
-    $events[] = [
-        'start' => $row['startDate'],
-        'description' => $row['firstName'] . ' ' . $row['lastName'],
+    // Decide color & label
+    $color = '#dc3545'; // Default red
+
+    if ($type == 'Hotel') {
+        $color = '#ffc107'; // Yellow
+    } elseif ($type == 'Resort') {
+        $color = '#5dccf5'; // Blue
+    }
+
+    // Only record the first event per day
+    $eventsByDate[$date] = [
+        'title' => $type . ' #' . $row['bookingID'],
+        'start' => $date,
         'allDay' => true,
-        'display' => 'background',
         'backgroundColor' => $color,
         'opacity' => '1'
     ];
 }
 
-echo json_encode($events);
+// Output the filtered list
+echo json_encode(array_values($eventsByDate));
