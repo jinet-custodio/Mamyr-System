@@ -58,7 +58,7 @@ body {
   /* border: 1px solid black !important; */
   background-color: #ffff;
   width: 1289px;
-  height: 436px;
+  height: 450px;
   border-radius: 40px;
   display: block;
   margin: 0 auto !important;
@@ -175,6 +175,7 @@ body {
 
 #emailPassContainer {
   width: 50%;
+  font-family: "Poppins";
 }
 
 .accountCreationLabel {
@@ -191,7 +192,7 @@ body {
 
 .input-box {
   position: relative;
-  margin: 20px 0;
+  margin: 30px 0;
 }
 
 .back-icon-container {
@@ -199,7 +200,6 @@ body {
   right: 8vw;
   top: 4vw;
 }
-
 
 .input-box input {
   width: 100%;
@@ -254,8 +254,7 @@ input[type="password"]::-webkit-search-cancel-button {
   margin-top: 2vw;
 }
 
-.passwordContainerError {
-  /* border: 1px solid red; */
+/* .passwordContainerError {
   position: absolute;
   left: 50%;
   bottom: 24%;
@@ -264,14 +263,28 @@ input[type="password"]::-webkit-search-cancel-button {
   color: red;
   padding: 0;
   text-align: center;
-}
+} */
 
 .back-icon-container-login {
   margin: 1px solid black;
   position: absolute;
   left: 26.5vw;
-
+  font-family: "Lora";
   margin-top: 1vh;
+}
+
+.confirmErrorMsg {
+  position: absolute;
+  z-index: 1000;
+  color: red;
+  margin-top: -1.7rem;
+  text-indent: 1rem;
+}
+
+#termsError {
+  margin-top: 1.5rem;
+  text-align: center;
+  margin-left: -1.8rem;
 }
 
 @media screen and (max-width: 600px) {

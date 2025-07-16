@@ -251,7 +251,7 @@ $userRole = $_SESSION['userRole'];
                                 <div class="input-container">
                                     <label for="newPassword">New Password</label>
                                     <div class="password">
-                                        <input type="password" name="newPassword" id="newPassword" oninput="checkPasswordModal()" required>
+                                        <input type="password" name="newPassword" id="newPassword" oninput="changePasswordValidation()" required>
                                         <i id="togglePassword3" class='bx bxs-hide'></i>
                                     </div>
                                     <div class="errorMsg">
@@ -261,7 +261,7 @@ $userRole = $_SESSION['userRole'];
                                 <div class="input-container">
                                     <label for="confirmPassword">Confirm Password</label>
                                     <div class="password">
-                                        <input type="password" name="confirmPassword" id="confirmPassword" oninput="checkPassMatchModal()" required>
+                                        <input type="password" name="confirmPassword" id="confirmPassword" oninput="changePasswordValidation()" required>
                                         <i id="togglePassword4" class='bx bxs-hide'></i>
                                     </div>
                                     <div class="errorMsg">
@@ -270,7 +270,7 @@ $userRole = $_SESSION['userRole'];
                                 </div>
                                 <div class="button-container">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary" name="changePassword">Submit</button>
+                                    <button type="submit" class="btn btn-primary" id="changePassword" name="changePassword">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -286,8 +286,7 @@ $userRole = $_SESSION['userRole'];
 
 
     <!-- Password Validation -->
-    <script src="../../../Assets/JS/checkPassword.js"></script>
-    <script src="../../../Assets/JS/checkPasswordMatch.js"></script>
+    <script src="../../../Assets/JS/passwordValidation.js"></script>
 
 
     <script>

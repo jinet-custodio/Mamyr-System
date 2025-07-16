@@ -15,7 +15,12 @@ require '../Function/OTPdeletion.php';
     <title>Sign Up</title>
     <link rel="shortcut icon" href="../Assets/Images/Icon/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../Assets/CSS/index.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+
+    <!-- Bootstrap Link -->
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -39,7 +44,7 @@ require '../Function/OTPdeletion.php';
                 <div class="forgot-link">
                     <a href="../Pages/enterEmail.php">Forgot Password?</a>
                 </div>
-                <button type="submit" class="btn" id="login" name="login" disabled>Login</button>
+                <button type="submit" class="btn btn-primary" id="login" name="login" disabled>Login</button>
 
                 <div class="loginMessageBox">
                     <div class="errorMsg">
@@ -117,12 +122,12 @@ require '../Function/OTPdeletion.php';
                     <div class="passwordContainer">
                         <div class="input-box">
                             <input type="password" class="form-control" id="password" name="password"
-                                placeholder="Password" oninput="checkPassword();" required>
+                                placeholder="Password" oninput="validateSignUpForm();" required>
                             <i id="togglePassword1" class='bx bxs-hide'></i>
                         </div>
                         <div class=" input-box">
                             <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-                                placeholder="Confirm Password" oninput="checkPasswordMatch();" required>
+                                placeholder="Confirm Password" oninput="validateSignUpForm();" required>
                             <i id="togglePassword2" class='bx bxs-hide'></i>
                         </div>
                     </div>
@@ -130,10 +135,10 @@ require '../Function/OTPdeletion.php';
 
                 <label for="terms">
                     <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
-                        onchange="checkBox()"> I agree to the
+                        onchange="validateSignUpForm();"> I agree to the
                     <a href="#" id="open-modal">Terms and Conditions</a>.
                 </label><br>
-                <button type="submit" class="btn" id="signUp" name="signUp" disabled>Sign Up</button>
+                <button type="submit" class="btn btn-primary" id="signUp" name="signUp" disabled>Sign Up</button>
             </form>
 
 
@@ -170,28 +175,25 @@ require '../Function/OTPdeletion.php';
             <div class="toggle-panel toggle-left">
                 <h1 class="welcome">Welcome to Mamyr!</h1>
                 <p>Don't have an account?</p>
-                <button class="btn register-btn"> <a href="userType.php" class="signUpLink">Sign Up
-                    </a></button>
+                <a href="userType.php" class="btn btn-outline-light signUpLink">Sign Up
+                </a>
 
                 <div class="back-icon-container-login">
                     <a href="../index.php">
                         <img src="../Assets/Images/Icon/home.png" alt="Go back" class="backArrow">
-
                     </a>
                 </div>
-
             </div>
 
 
             <div class="toggle-panel toggle-right">
                 <h1 class="welcome">Welcome Back!</h1>
                 <p>Already have an account?</p>
-                <button class="btn login-btn">Login</button>
+                <button class="btn btn-outline-light login-btn">Login</button>
 
                 <div class="back-icon-container-signup">
                     <a href="../index.php">
                         <img src="../Assets/Images/Icon/home.png" alt="Go back" class="backArrow">
-
                     </a>
                 </div>
 
@@ -202,14 +204,25 @@ require '../Function/OTPdeletion.php';
         <div class="loader" id="loader"></div>
     </div>
 
+
+    <!-- Bootstrap Link -->
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+
+
+    <!--Password Validation JS -->
+    <script src="../Assets/JS/passwordValidation.js"></script>
+
     <!-- Check if user agree to the terms and condition -->
-    <script src="../Assets/JS/checkbox.js"></script>
+    <!-- <script src="../Assets/JS/checkbox.js"></script> -->
+
+
     <!-- Password Match JS-->
-    <script src="../Assets/JS/checkPasswordMatch.js"></script>
+    <!-- <script src="../Assets/JS/checkPasswordMatch.js"></script> -->
     <!-- Register Password Validation JS -->
-    <script src="../Assets/JS/checkPassword.js"></script>
-    <!-- Login Password Validation JS -->
-    <script src="../Assets/JS/checkLoginPassword.js"></script>
+    <!-- <script src="../Assets/JS/checkPassword.js"></script> -->
+
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -222,14 +235,14 @@ require '../Function/OTPdeletion.php';
             const loginPassword = document.getElementById('login_password');
             const loader = document.getElementById('loader');
 
-            function validateLoginFields() {
-                const emailFilled = loginEmail.value.trim() !== '';
-                const passwordFilled = loginPassword.value.trim() !== '';
-                loginBtn.disabled = !(emailFilled && passwordFilled);
-            }
-            loginEmail.addEventListener('input', validateLoginFields);
-            loginPassword.addEventListener('input', validateLoginFields);
-            validateLoginFields();
+            // function validateLoginFields() {
+            //     const emailFilled = loginEmail.value.trim() !== '';
+            //     const passwordFilled = loginPassword.value.trim() !== '';
+            //     loginBtn.disabled = !(emailFilled && passwordFilled);
+            // }
+            // loginEmail.addEventListener('input', validateLoginFields);
+            // loginPassword.addEventListener('input', validateLoginFields);
+            // validateLoginFields();
 
 
             // Click event on the button
@@ -347,8 +360,6 @@ require '../Function/OTPdeletion.php';
             togglePasswordVisibility(passwordField2, togglePassword2);
         });
     </script>
-    <!-- Bootstrap JS -->
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

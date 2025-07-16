@@ -16,8 +16,13 @@ if (isset($_SESSION['formData']['email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
     <link rel="stylesheet" href="../assets/css/forgotPassword.css">
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap Link -->
+    <!-- <link rel="stylesheet" href="../assets/css/bootstrap.min.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
@@ -37,8 +42,8 @@ if (isset($_SESSION['formData']['email'])) {
                         }
                         ?>
                     </div>
-                    <div class="errorMsg" id="passwordValidation"></div>
-                    <div class="errorMsg" id="passwordMatch"></div>
+
+
                 </div>
                 <div class="input-box">
                     <input type="email" class="form-control" id="email" name="email"
@@ -46,27 +51,36 @@ if (isset($_SESSION['formData']['email'])) {
                 </div>
                 <div class="input-box">
                     <input type="password" class="form-control" id="newPassword" name="newPassword"
-                        placeholder="New Password" oninput="checkPasswordModal()" required>
+                        placeholder="New Password" oninput="changePasswordValidation();" required>
                     <i id="togglePassword1" class='bx bxs-hide'></i>
                 </div>
+                <div class="errorMsg" id="passwordValidation"> </div>
                 <div class="input-box">
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                        placeholder="Confirm Password" oninput="checkPasswordMatchModal()" required>
+                        placeholder="Confirm Password" oninput="changePasswordValidation();" required>
                     <i id="togglePassword2" class='bx bxs-hide'></i>
                 </div>
+                <div class="errorMsg" id="passwordMatch"></div>
 
-                <button type="submit" class="btn" id="changePassword" name="changePassword">Change Password</button>
+                <button type="submit" class="btn btn-primary" id="changePassword" name="changePassword" disabled>Change Password</button>
             </form>
         </div>
     </div>
 
 
-    <script src="../Assets/JS/checkPasswordMatch.js"></script>
-    <script src="../Assets/JS/checkPassword.js"></script>
+    <!-- Bootstrap Script -->
+    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
+
+    <!-- Password Validation Script -->
+    <script src="../Assets/JS/passwordValidation.js"></script>
+
+
+    <!-- Password show/hide(yung eye) JS -->
     <script>
-        const passwordField1 = document.getElementById('password');
-        const passwordField2 = document.getElementById('confirm_password');
+        const passwordField1 = document.getElementById('newPassword');
+        const passwordField2 = document.getElementById('confirmPassword');
         const togglePassword1 = document.getElementById('togglePassword1');
         const togglePassword2 = document.getElementById('togglePassword2');
 
