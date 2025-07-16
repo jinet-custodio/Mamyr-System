@@ -184,7 +184,7 @@ ul {
 
 .titleContainer {
   width: 70%;
-  margin: 10vw auto 4vw auto;
+  margin: 8vw auto 2vw auto;
   text-align: center;
 }
 
@@ -196,9 +196,9 @@ ul {
   font-size: 2.5vw !important;
 }
 
-.posts {
+.posts, .title {
   width: 95%;
-  margin: 1vw auto;
+  margin: 0 auto;
   display: flex;
 }
 
@@ -263,7 +263,51 @@ ul {
   display: flex;
   flex-direction: column;
 }
+
+.btn-primary {
+  display:flex;
+  align-self:flex-end;
+  text-align:center;
+  font-size: 1.2vw !important;
+}
+
 /* end of code for body */
+
+/* code for modal */
+
+.modal-header h5 {
+  font-size: 1.7vw;
+  font-weight: 700;
+  margin: 0 auto !important;
+  text-align: center;
+}
+
+.btn-close {
+  margin-left: -1vw !important;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modal-body img {
+  width: 50%;
+  margin: 2vw auto 1vw auto !important;
+}
+
+.blog-full-content {
+  width: 80%;
+  margin: 1vw auto !important;
+  text-align: center;
+}
+
+.text-muted {
+  text-align: center;
+}
+
+/* end of code for modal */
 
 footer {
   /* border: 1px solid black; */
