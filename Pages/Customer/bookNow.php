@@ -1193,14 +1193,14 @@ $userRole = $_SESSION['userRole'];
             document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
         };
 
-        function showPackageCards() {
-            const container = document.getElementById('packageCardsContainer');
-            container.style.display = 'block';
-            // Optionally scroll to it
-            container.scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
+        // function showPackageCards() {
+        //     const container = document.getElementById('packageCardsContainer');
+        //     container.style.display = 'block';
+        //     // Optionally scroll to it
+        //     container.scrollIntoView({
+        //         behavior: 'smooth'
+        //     });
+        // }
 
         //JS for calendar pickers
         const calIcon = document.getElementById("calendarIcon");
@@ -1243,15 +1243,15 @@ $userRole = $_SESSION['userRole'];
             checkOutDate.click()
         });
 
-        flatpickr('#eventtBookingDate', {
-            enableTime: true,
-            minDate: minDate,
-            dateFormat: "Y-m-d H:i"
-        });
+        // flatpickr('#eventBookingDate', {
+        //     enableTime: true,
+        //     minDate: minDate,
+        //     dateFormat: "Y-m-d H:i"
+        // });
 
-        eventDateIcon.addEventListener('click', function(event) {
-            eventtBookingDate.click()
-        });
+        // eventDateIcon.addEventListener('click', function(event) {
+        //     eventBookingDate.click()
+        // });
 
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -1313,25 +1313,6 @@ $userRole = $_SESSION['userRole'];
 
         });
     </script>
-
-    <!-- Select Option -->
-    <!-- <script>
-        // Events
-        const eventSelect = document.getElementById('eventType');
-        const otherContainer = document.getElementById('other-container');
-        const other_input = document.getElementById('other-input');
-
-
-        eventSelect.addEventListener('change', () => {
-            if (eventSelect.value === 'other') {
-                otherContainer.style.display = 'block';
-                other_input.required = true;
-            } else {
-                otherContainer.style.display = 'none';
-                other_input.required = false;
-            }
-        });
-    </script> -->
 
 
     <!-- Hotel check-in check-out  -->
