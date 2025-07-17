@@ -46,7 +46,6 @@ $userRole = $_SESSION['userRole'];
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
@@ -511,50 +510,102 @@ $userRole = $_SESSION['userRole'];
                 <h4 class="eventTitle" id="eventTitle">EVENT BOOKING</h4>
             </div>
 
-            <div class="container-fluid event-container">
+            <div class="container-fluid event-container" id="eventContainer">
                 <div class="card event-card" id="eventBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
-                    <div class="eventForm">
-                        <h5 class="eventLabel">Type of Event</h5>
+                    <div class="eventTypeContainer">
+                        <label for="eventType" class="eventInfoLabel">Type of Event</label>
+                        <select class="form-select" name="eventType" id="eventType" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="birthday">Birthday</option>
+                            <option value="wedding">Wedding</option>
+                            <option value="teamBuilding">Team Building</option>
+                            <option value="christening">Christening</option>
+                            <option value="thanksgiving">Thanksgiving Party</option>
+                        </select>
                     </div>
 
-                    <div class="dateVenue">
-                        <div class="dateForm">
-                            <h5 class="dateLabel">Date</h5>
-                            <div style="display: flex;align-items:center;">
-                                <!-- <input type="date" class="form-control w-100" name="eventDate" id="eventtBookingDate" disabled required> -->
-                                <input type="text" class="form-control w-100" name="eventDate" id="eventtBookingDate"
-                                    placeholder="Select Date and Time for your Event">
-                                <i class="fa-solid fa-calendar" id="eventDateIcon"
-                                    style="margin-left: -2vw;font-size:1.2vw;"> </i>
-                            </div>
+                    <div class="guestInfo">
+                        <label for="guestNo" class="eventInfoLabel">Number of Guests</label>
+                        <input type="number" class="form-control" name="guestNo" id="guestNo"
+                            placeholder="Estimated Number of Guests" required>
+                    </div>
+
+                    <div class="eventSched">
+                        <label for="eventSched" class="eventInfoLabel">Event Schedule</label>
+                        <input type="datetime-local" class="form-control">
+                    </div>
+
+                    <div class="eventVenue">
+                        <label for="eventVenue" class="eventInfoLabel">Venue</label>
+                        <select class="form-select" name="eventType" id="eventType" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="pavilionHall">Pavilion Hall (Max. 350 pax)</option>
+                            <option value="miniPavilion">Mini Pavilion Hall (Max. 50 pax)</option>
+                        </select>
+                    </div>
+
+                    <div class="eventStartTime">
+                        <label for="eventStartTime" class="eventInfoLabel">Start Time</label>
+                        <input type="time" class="form-control" name="eventStartTime" id="eventStartTime" required>
+                    </div>
+
+                    <div class="eventEndTime">
+                        <label for="eventEndTime" class="eventInfoLabel">End Time</label>
+                        <input type="time" class="form-control" name="eventEndTime" id="eventStartTime" required>
+                    </div>
+
+                    <div class="paymentMethod">
+                        <label for="paymentMethod" class="eventInfoLabel">Payment Method</label>
+                        <select class="form-select" name="paymentMethod" id="paymentMethod" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="gcash">Gcash</option>
+                            <option value="cash">Cash (Onsite Payment)</option>
+                        </select>
+
+                        <div class="noteContainer">
+                            <p class="note">Note: For any concerns or details regarding food and other services, contact
+                                us at
+                                (0998) 962 4697.</p>
                         </div>
                     </div>
 
-                    <div class="noHrPpl">
-                    </div>
+                    <div class="eventInfo">
+                        <label for="additionalRequest" class="eventInfoLabel">Additional Notes</label>
+                        <textarea class="form-control w-100" id="purpose-additionalNotes" name="additionalRequest"
+                            rows="5" placeholder="Optional"></textarea>
 
-                    <div class="package">
-                    </div>
-
-                    <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
-                    <textarea class="form-control w-100" id="additionalNotes" rows="5" name="additionalNotes"
-                        placeholder="Optional" disabled></textarea>
-
-                    <div class="button-container">
-                        <a href="packages.php" class="btn btn-info btn-md">View Event Packages</a>
-                        <button type="submit" class="btn btn-success btn-md" name="eventBook">Book Now</button>
                     </div>
                 </div>
 
-                <div class="secondrow">
+                <div class="secondColumn">
                     <div id="calendar"></div>
                     <div class="packageDisplay" style="display: none;">
                         <div id="packageCardsContainer" class="container d-flex flex-wrap gap-3">
-                            <!-- Cards will be inserted here -->
                         </div>
                     </div>
+                </div>
 
+                <!-- <div class="card foodSelection-card" id="foodSelectionCard">
+                    <h1>testing</h1>
+                </div> -->
+
+                <div class="card foodSelection-card" id="foodSelectionCard" style="width: 30rem;">
+                    <div class="card-body">
+                        <img src="../../Assets/Images/BookNowPhotos/foodCoverImg.jpg" class="card-img-top"
+                            alt="Food Selection Cover">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Dish Selection</h5>
+                        <p class="card-text mt-3">Choose from a variety of catering options to suit your event’s needs.
+                            Select dishes that will delight your guests and complement your celebration.</p>
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                            data-bs-target="#dishModal">Open Menu</button>
+                    </div>
+                </div>
+
+                <div class="card additionalService-card" id="additionalServiceCard">
+                    <h1>testing</h1>
                 </div>
 
             </div>
@@ -564,6 +615,273 @@ $userRole = $_SESSION['userRole'];
         <!--end ng event div-->
     </form>
 
+
+    <!-- Dish Modal -->
+    <div class="modal fade modal-lg" id="dishModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-4 fw-bold" id="dishModalLabel">Select Dishes</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="chicken">
+                        <div class="dishTypeContainer">
+                            <h6 class="dishType fw-bold">Chicken</h6>
+                        </div>
+                        <div class="dishListContainer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="cPastil" id="cPastil">
+                                <label class="form-check-label" for="cPastil">
+                                    Chicken Pastil
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="cBbq" id="cBbq">
+                                <label class="form-check-label" for="cBbq">
+                                    Chicken Barbecue Sauce
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="cCordonBleu"
+                                    id="cCordonBleu">
+                                <label class="form-check-label" for="cCordonBleu">
+                                    Chicken Cordon Bleu
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="cTeriyaki"
+                                    id="cTeriyaki">
+                                <label class="form-check-label" for="cTeriyaki">
+                                    Chicken Teriyaki
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="cButterGarlic"
+                                    id="cButterGarlic">
+                                <label class="form-check-label" for="cButterGarlic">
+                                    Butter Garlic Chicken
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pasta">
+                        <div class="dishTypeContainer">
+                            <h6 class="dishType fw-bold">Pasta</h6>
+                        </div>
+                        <div class="dishListContainer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="carbonara"
+                                    id="carbonara">
+                                <label class="form-check-label" for="carbonara">
+                                    Creamy Carbonara
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="spag" id="spag">
+                                <label class="form-check-label" for="spag">
+                                    Filipino Style Spaghetti
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="pastaPesto"
+                                    id="pastaPesto">
+                                <label class="form-check-label" for="pastaPesto">
+                                    Pasta Pesto Sauce
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="cantonBihon"
+                                    id="cantonBihon">
+                                <label class="form-check-label" for="cantonBihon">
+                                    Canton and Bihon Guisado
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="japchae" id="japchae">
+                                <label class="form-check-label" for="japchae">
+                                    Japchae Noodles
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pork">
+                        <div class="dishTypeContainer">
+                            <h6 class="dishType fw-bold">Pork</h6>
+                        </div>
+                        <div class="dishListContainer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="asado" id="asado">
+                                <label class="form-check-label" for="asado">
+                                    Pork Asado
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="mechado" id="mechado">
+                                <label class="form-check-label" for="mechado">
+                                    Pork Mechado Roll
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="caldereta"
+                                    id="caldereta">
+                                <label class="form-check-label" for="caldereta">
+                                    Pork Caldereta
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="hamonado" id="hamonado">
+                                <label class="form-check-label" for="hamonado">
+                                    Pork Hamonado
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="roastedPork"
+                                    id="roastedPork">
+                                <label class="form-check-label" for="roastedPork">
+                                    Roasted Pork
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="veg">
+                        <div class="dishTypeContainer">
+                            <h6 class="dishType fw-bold">Vegetables</h6>
+                        </div>
+                        <div class="dishListContainer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="mixedVeggie"
+                                    id="mixedVeggie">
+                                <label class="form-check-label" for="mixedVeggie">
+                                    Mixed Veggies Sauté
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="orientalMix"
+                                    id="orientalMix">
+                                <label class="form-check-label" for="orientalMix">
+                                    Oriental Mix Veggies
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="chopsuey" id="chopsuey">
+                                <label class="form-check-label" for="chopsuey">
+                                    Chopsuey
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="chineseChopsuey"
+                                    id="chineseChopsuey">
+                                <label class="form-check-label" for="chineseChopsuey">
+                                    Chinese Chopsuey
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="butterCreamy"
+                                    id="butterCreamy">
+                                <label class="form-check-label" for="butterCreamy">
+                                    Butter Creamy Veggies
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="beef">
+                        <div class="dishTypeContainer">
+                            <h6 class="dishType fw-bold">Beef</h6>
+                        </div>
+                        <div class="dishListContainer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="beefCaldereta"
+                                    id="beefCaldereta">
+                                <label class="form-check-label" for="beefCaldereta">
+                                    Beef Spicy Caldereta
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="beefBroccolli"
+                                    id="beefBroccolli">
+                                <label class="form-check-label" for="beefBroccolli">
+                                    Beef Broccolli
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="roastBeef"
+                                    id="roastBeef">
+                                <label class="form-check-label" for="roastBeef">
+                                    Roast Beef
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="beefTeriyaki"
+                                    id="beefTeriyaki">
+                                <label class="form-check-label" for="beefTeriyaki">
+                                    Beef Teriyaki
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="beefMushroom"
+                                    id="beefMushroom">
+                                <label class="form-check-label" for="beefMushroom">
+                                    Beef Creamy Mushroom Sauce
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="seafood">
+                        <div class="dishTypeContainer">
+                            <h6 class="dishType fw-bold">Seafood</h6>
+                        </div>
+                        <div class="dishListContainer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="fishFillet"
+                                    id="fishFillet">
+                                <label class="form-check-label" for="fishFillet">
+                                    Crispy Fish Fillet with Creamy Mayo
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="shrimpTempura"
+                                    id="shrimpTempura">
+                                <label class="form-check-label" for="shrimpTempura">
+                                    Shrimp Tempura
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="garlicShrimp"
+                                    id="garlicShrimp">
+                                <label class="form-check-label" for="garlicShrimp">
+                                    Butter Garlic Shrimp
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="squidGambas"
+                                    id="squidGambas">
+                                <label class="form-check-label" for="squidGambas">
+                                    Squid Gambas
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" name="nutCrustFillet"
+                                    id="nutCrustFillet">
+                                <label class="form-check-label" for="nutCrustFillet">
+                                    Nut Crusted Fish Fillet with Sweet Chili Sauce
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dish Modal -->
 
 
 
@@ -679,15 +997,6 @@ $userRole = $_SESSION['userRole'];
         document.body.style.setProperty('background', 'url(../../Assets/Images/BookNowPhotos/bookNowBg.jpg)');
     };
 
-    function showPackageCards() {
-        const container = document.getElementById('packageCardsContainer');
-        container.style.display = 'block';
-        // Optionally scroll to it
-        container.scrollIntoView({
-            behavior: 'smooth'
-        });
-    }
-
     //JS for calendar pickers
     const calIcon = document.getElementById("calendarIcon");
     const hotelCheckinIcon = document.getElementById("hotelCheckinIcon");
@@ -735,10 +1044,6 @@ $userRole = $_SESSION['userRole'];
         dateFormat: "Y-m-d H:i"
     });
 
-    eventDateIcon.addEventListener('click', function(event) {
-        eventtBookingDate.click()
-    });
-
 
     document.addEventListener("DOMContentLoaded", function() {
         console.log("DOM fully loaded and parsed");
@@ -754,9 +1059,15 @@ $userRole = $_SESSION['userRole'];
             hotels.style.display = "none";
             document.body.style.setProperty('background', 'none');
             document.body.style.setProperty('background-color', 'rgb(164, 241, 255)');
-            calendar.render();
             document.getElementById("footer").style.marginTop = "5vw";
+
+            const calendarEl = document.getElementById("calendar");
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: "dayGridMonth",
+            });
+            calendar.render();
         });
+
 
         resortLink.addEventListener('click', function(event) {
             categories.style.display = "none";
