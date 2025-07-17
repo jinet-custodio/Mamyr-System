@@ -125,11 +125,13 @@ require '../Function/OTPdeletion.php';
                                 placeholder="Password" oninput="validateSignUpForm();" required>
                             <i id="togglePassword1" class='bx bxs-hide'></i>
                         </div>
+                        <div class="confirmErrorMsg" id="passwordValidation"></div>
                         <div class=" input-box">
                             <input type="password" class="form-control" id="confirm_password" name="confirm_password"
                                 placeholder="Confirm Password" oninput="validateSignUpForm();" required>
                             <i id="togglePassword2" class='bx bxs-hide'></i>
                         </div>
+                        <div class="confirmErrorMsg" id="passwordMatch"></div>
                     </div>
                 </div>
 
@@ -138,6 +140,8 @@ require '../Function/OTPdeletion.php';
                         onchange="validateSignUpForm();"> I agree to the
                     <a href="#" id="open-modal">Terms and Conditions</a>.
                 </label><br>
+
+                <div id="termsError"></div>
                 <button type="submit" class="btn btn-primary" id="signUp" name="signUp" disabled>Sign Up</button>
             </form>
 
@@ -155,18 +159,6 @@ require '../Function/OTPdeletion.php';
                     }
                     ?>
                 </p>
-            </div>
-
-            <div class="passwordContainerError">
-                <div class="errorMsg">
-                    <div class="confirmErrorMsg" id="passwordValidation"></div>
-                </div>
-                <div class="errorMsg">
-                    <div class="confirmErrorMsg1" id="passwordMatch"></div>
-                </div>
-                <div class="errorMsg">
-                    <div class="confirmErrorMsg text-center" id="termsError"></div>
-                </div>
             </div>
 
         </div>

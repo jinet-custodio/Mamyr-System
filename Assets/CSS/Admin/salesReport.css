@@ -28,22 +28,21 @@ body {
 
 .header {
   /* border: 1px solid red; */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    height: 90px;
-    padding: 1rem;
-    margin: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 90px;
+  padding: 1rem;
+  margin: 1rem;
 }
 
 .backButton {
-    position: absolute;
-    left: 20px; 
-    display: flex;
-    align-items: center;
+  position: absolute;
+  left: 20px;
+  display: flex;
+  align-items: center;
 }
-
 
 .pagetitle {
   display: flex;
@@ -52,7 +51,7 @@ body {
   justify-content: center;
   gap: 1rem;
   /* border: 1px solid blue; */
-  padding: .5rem;
+  padding: 0.5rem;
 }
 
 .pagetitle h1 {
@@ -60,15 +59,14 @@ body {
   font-size: 30px;
   font-weight: bold;
   margin: 0;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .pagetitle img {
   height: 50px !important;
 }
 
-
-main{
+main {
   width: 90vw;
   margin: auto;
   padding: 1rem;
@@ -82,47 +80,64 @@ form {
   margin: auto;
   width: 80%;
   gap: 1rem;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
 
-.dateRange{
-  /* border: 1px solid red; */
-  width: 50%;
+.dateRange {
+  width: 60%;
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: .5rem;
-  font-family: 'Poppins';
+  padding: 0.5rem;
+  font-family: "Poppins";
 }
 
-.dateRange label{
-  margin-top: .5rem;
+.dateRange label {
+  margin-top: 0.5rem;
+  font-size: 18px;
 }
 
-.input-wrapper{
-  display: flex;
-  /* border: 1px solid rebeccapurple; */
+.input-wrapper {
   position: relative;
+  width: 100%;
 }
 
-.input-wrapper input{
-  padding: 0 4rem 0 .5rem;
-  border: 1px solid rgb(179, 168, 168);
+.input-wrapper input {
+  width: 300px;
+  padding-right: 2rem;
+  padding-left: 0.5rem;
+  font-size: 16px;
   height: 35px;
+  border: 1px solid rgb(179, 168, 168);
   border-radius: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.input-wrapper i{
+.input-wrapper i {
   position: absolute;
-  top: 25%;
-  left: 85%;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0.5rem;
+  pointer-events: none;
+  color: #666;
 }
 
+.error-message {
+  position: absolute;
+  margin: 0.5rem 0 0 -7.5rem;
+  text-align: center;
+  color: red;
+  font-size: 14px;
+}
 
+button {
+  font-family: "Lora" !important;
+}
 
 .generateBtn {
   border: 1px solid rgb(0, 217, 255);
-  background-color: #00d9ff;
   color: black;
   font-weight: 500;
   width: 20%;
@@ -135,83 +150,40 @@ form {
   background-color: #00c3e6;
 }
 
-
-
-/* #sales-logo {
-    width: 3vw !important;
-    margin-right: 1vw;
-}
-
-#pagetitle{
-
-    display: flex !important;
-    align-items: center !important;
-
-}
-
-.container-fluid {
-  margin: 10vw auto 1vw auto;
-  width: 95% !important;
-}
-
-.dateRange {
+.container {
   display: flex;
-  align-items: center;
-  width: 98%;
+  flex-wrap: wrap;
+  margin-top: 2rem;
 }
-.dateRange label, .salesSummary h2 {
-  margin-bottom: 0;
-  font-size: 1.7vw;
+
+table {
+  margin: auto;
+}
+
+tbody,
+td,
+tfoot {
+  border-style: none !important;
+  border-color: transparent !important;
+}
+
+th {
+  font-family: "Lora";
+  font-size: 18px;
+}
+
+td {
   font-family: "Poppins";
-  font-weight: 700;
+  font-size: 16px;
 }
 
-#backToDashboard {
-  width: 3vw !important;
-  margin-right: 0;
-  margin-left: 0.4vw;
-
+.button-container {
+  margin: 1rem auto;
+  width: 20%;
 }
 
-#back-btn{
-  width: 5vw !important;
-  display: flex;
-  align-items: center;
+#generatePDF {
+  width: 100%;
+  /* background-color: rgb(11, 93, 217); */
+  color: white;
 }
-
-#reportDate {
- width: 30vw !important;
- margin-left: 1vw;
- font-size: 1.7vw;
-  font-family: "Poppins";
-}
-
-.salesSummary {
-  margin-top: 3vw;
-} */
-
-/* .generateBtn {
-  margin: 0 auto !important;
-  width: 15vw;
-}
-
-#generateReport {
-  font-size: 1.2vw;
-  font-family: "Poppins";
-  font-weight: 700;
-  letter-spacing: 1px;
-
-} */
-
-/* .table {
-  width: 85% !important;
-  margin: 2.2vw auto;
-}
-
-.table thead {
-  font-size: 1.4vw !important;
-}
-
-.table tbody {
-  font-size: 1.3vw;
-} */

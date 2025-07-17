@@ -55,6 +55,7 @@ body {
 }
 */
 .container {
+  font-family: "Poppins";
   /* border: 1px solid black !important; */
   background-color: #ffff;
   width: 1289px;
@@ -71,14 +72,14 @@ body {
 
 .repInfoLabel,
 .busProofLabel {
-  font-family: "Poppins";
+  /* font-family: "Poppins"; */
   font-weight: bold;
   font-size: 25.5px;
   text-align: center;
   margin-top: 1.5vw;
 }
 .busInfoLabel {
-  font-family: "Poppins";
+  /* font-family: "Poppins"; */
   font-weight: bold;
   font-size: 25.5px;
   text-align: center;
@@ -112,7 +113,7 @@ body {
 }
 
 .description {
-  font-family: "Poppins";
+  /* font-family: "Poppins"; */
   font-size: 14px;
   text-align: center;
   margin-top: 2vw;
@@ -175,11 +176,11 @@ body {
 
 #emailPassContainer {
   width: 50%;
-  font-family: "Poppins";
+  /* font-family: "Poppins"; */
 }
 
 .accountCreationLabel {
-  font-family: "Poppins";
+  /* font-family: "Poppins"; */
   font-weight: bold;
   font-size: 25.5px;
   text-align: center;

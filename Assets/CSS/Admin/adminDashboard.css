@@ -11,7 +11,7 @@
 @font-face {
   font-family: "Alkatra";
   src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
-} 
+}
 
 @font-face {
   font-family: "Lora";
@@ -126,14 +126,12 @@ body {
   object-fit: contain;
 }
 
-
-
-.dashboardTitle{
-  font-family: 'Lora';
+.dashboardTitle {
+  font-family: "Lora";
   text-align: center;
 }
 
-.container-fluid{
+.container-fluid {
   display: flex;
   gap: 2rem;
   justify-content: center;
@@ -142,7 +140,7 @@ body {
   padding-top: 0;
 }
 
-.leftSection{
+.leftSection {
   width: 50%;
   display: flex;
   flex-direction: column;
@@ -150,48 +148,44 @@ body {
   align-items: center;
 }
 
-.card{
-  font-family: 'Poppins';
+.card {
+  font-family: "Poppins";
 }
 
-.card-header{
+.card-header {
   font-family: "Poppins" !important;
 }
-.card-body{
+.card-body {
   text-align: end;
 }
 
-.trend-cards{
+.trend-cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   margin: 1rem;
-    .card {
+  .card {
     width: 45%;
     height: 18vh !important;
-    margin: .5rem;
-   }
+    margin: 0.5rem;
+  }
 }
-
 
 .roomAvailabilityGraph {
   width: 500px;
   height: 250px;
   display: flex;
-  justify-content: center; 
-  align-items: center;  
+  justify-content: center;
+  align-items: center;
 }
 
-
-
-#availabilityGraph{
+#availabilityGraph {
   width: 100%;
   height: 100%;
 }
 
-
-.rightSection{
+.rightSection {
   width: 50%;
   display: flex;
   flex-direction: column;
@@ -199,12 +193,12 @@ body {
   gap: 1rem;
 }
 
-
 .salesReportBtn {
   width: 100%;
   display: flex;
   margin: auto;
-justify-content: center;
+  justify-content: center;
+  margin: 0.5rem;
 }
 
 .salesReportBtn a {
@@ -213,13 +207,13 @@ justify-content: center;
   font-family: "Lora" !important;
 }
 
-
 .revenueGraphContainer {
   /* border: 1px solid black; */
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  padding: 1rem;
 }
 
 .revTitle {
@@ -231,7 +225,12 @@ justify-content: center;
   text-transform: capitalize;
 }
 
-.revenue-chart{
+.revenue-chart {
   width: 90%;
   height: 100%;
 }
+
+/* .revenueImage img {
+  width: 550px;
+  height: 250px;
+} */
