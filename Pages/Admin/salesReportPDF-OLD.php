@@ -19,7 +19,7 @@ require '../../Config/dbcon.php';
 <body>
   <?php
 
-  if (isset($_POST['requestReportBtn'])) {
+  if (isset($_POST['generatePDF'])) {
     $selectedDate = mysqli_real_escape_string($conn, $_POST['selectedDate']);
     $dateToday = date("l, F d, Y  (g:i A)");
   }
@@ -37,7 +37,7 @@ require '../../Config/dbcon.php';
     <section>
       <h1 class="section-title">Montly Sales Report</h1>
       <div>
-        <p>Report Generated</p>
+        <p>Report Generated:</p>
         <p><?= $dateToday ?></p>
       </div>
       <div>
@@ -46,7 +46,7 @@ require '../../Config/dbcon.php';
       </div>
     </section>
     <section>
-      <p>Requested By: Name of the requester</p>
+      <p>Requested By: <?= htmlspecialchars($name) ?></p>
       <table>
         <thead>
           <th>Booking ID</th>

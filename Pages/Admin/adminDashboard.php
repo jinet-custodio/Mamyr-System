@@ -483,8 +483,11 @@ if ($availabilityResult->num_rows > 0) {
                             <canvas id="revenueBar"></canvas>
                         </div>
                     <?php else: ?>
+                        <div class="revenue-chart">
+                            <canvas id="revenueBar"></canvas>
+                        </div>
                         <!-- Change this div -->
-                        <div class="revenueBar">No data available.</div>
+                        <!-- <div class="revenueImage"><img src="../../Assets/Images/revenueGraph.png" alt=""></div> -->
                     <?php endif; ?>
                 </div>
 
@@ -504,8 +507,11 @@ if ($availabilityResult->num_rows > 0) {
                             <canvas id="reservationTrendsBar"></canvas>
                         </div>
                     <?php else: ?>
+                        <div class="revenue-chart">
+                            <canvas id="reservationTrendsBar"></canvas>
+                        </div>
                         <!-- Change this div -->
-                        <div class="ReservationTrendsGraph">No data available.</div>
+                        <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
                     <?php endif; ?>
                 </div>
             </div>
@@ -575,6 +581,35 @@ if ($availabilityResult->num_rows > 0) {
                         });
                 });
             });
+        });
+    </script>
+
+    <!-- Display if no available data -->
+    <script>
+        Chart.register({
+            id: 'noDataPlugin',
+            beforeDraw(chart) {
+                const dataset = chart.data.datasets[0];
+                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
+
+                if (!hasData) {
+                    const ctx = chart.ctx;
+                    const {
+                        width,
+                        height
+                    } = chart;
+
+                    chart.clear();
+
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = '20px Times New Roman';
+                    ctx.fillStyle = 'gray';
+                    ctx.fillText('No available data', width / 2, height / 2);
+                    ctx.restore();
+                }
+            }
         });
     </script>
 

@@ -55,14 +55,8 @@ $userRole = $_SESSION['userRole'];
         <ul class="navbar-nav">
             <?php
 
-            if ($userRole === 1) {
-                $receiver = 'Customer';
-            } else {
-                $receiver = 'Partner';
-            }
-
-            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND receiver = ? AND userRole = ?");
-            $getProfile->bind_param("isi", $userID, $receiver, $userRole);
+            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
             if ($getProfileResult->num_rows > 0) {
@@ -83,8 +77,15 @@ $userRole = $_SESSION['userRole'];
 
             <!-- Get notification -->
             <?php
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND is_read = 0");
-            $getNotifications->bind_param("i", $userID);
+
+            if ($userRole === 1) {
+                $receiver = 'Customer';
+            } elseif ($userRole === 2) {
+                $receiver = 'Partner';
+            }
+
+            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
             if ($getNotificationsResult->num_rows > 0) {

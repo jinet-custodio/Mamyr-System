@@ -265,14 +265,20 @@ if ($revenueResult->num_rows > 0) {
                             <canvas id="revenueBar"></canvas>
                         </div>
                     <?php else: ?>
-                        <div class="revenueBar">No data available.</div>
+                        <!-- <div class="revenueBar">No data available.</div> -->
+                        <div class="revenue-chart">
+                            <canvas id="revenueBar"></canvas>
+                        </div>
                     <?php endif; ?>
                     <?php if (($GCashCount ?? 0) > 0 || ($CashCount ?? 0) > 0): ?>
                         <div class="revenue-chart">
                             <canvas id="revenuePie"></canvas>
                         </div>
                     <?php else: ?>
-                        <div class="revenuePie">No data available.</div>
+                        <div class="revenue-chart">
+                            <canvas id="revenuePie"></canvas>
+                        </div>
+                        <!-- <div class="revenuePie">No data available.</div> -->
                     <?php endif; ?>
                 </div>
 
@@ -435,6 +441,33 @@ if ($revenueResult->num_rows > 0) {
     <!-- <script src="path/to/chartjs/dist/chart.umd.js"></script> -->
 
     <script>
+        Chart.register({
+            id: 'noDataPlugin',
+            beforeDraw(chart) {
+                const dataset = chart.data.datasets[0];
+                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
+
+                if (!hasData) {
+                    const ctx = chart.ctx;
+                    const {
+                        width,
+                        height
+                    } = chart;
+
+                    chart.clear();
+
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = '20px Times New Roman';
+                    ctx.fillStyle = 'gray';
+                    ctx.fillText('No available data', width / 2, height / 2);
+                    ctx.restore();
+                }
+            }
+        });
+
+
         const bar = document.getElementById("revenueBar").getContext('2d');
 
         const myBarChart = new Chart(bar, {
@@ -456,8 +489,10 @@ if ($revenueResult->num_rows > 0) {
                         beginAtZero: true
                     }
                 }
-            }
+            },
+            plugins: ['noDataPlugin']
         });
+
 
         const pie = document.getElementById('revenuePie').getContext('2d');
 
@@ -488,7 +523,8 @@ if ($revenueResult->num_rows > 0) {
                         text: 'Payment Methods'
                     }
                 }
-            }
+            },
+            plugins: ['noDataPlugin']
         });
     </script>
 </body>

@@ -168,17 +168,14 @@ ul {
   }
 }
 
-
-.notification-container{
+.notification-container {
   margin: 1rem;
 
-  button{
+  button {
     background-color: transparent;
     border: none;
   }
 }
-
-
 
 .logoNav {
   /* border: 1px solid black; */
@@ -222,7 +219,7 @@ ul {
 }
 
 .hook {
-  font-family: Poppins;
+  font-family: "Poppins";
   font-size: 36px;
   font-style: normal;
   font-weight: bold;
@@ -231,7 +228,7 @@ ul {
 .aboutDescription {
   margin-top: 2vw;
   text-align: justify;
-  font-family: Poppins;
+  font-family: "Poppins";
   font-size: 18px;
   font-style: normal;
 }
@@ -302,7 +299,7 @@ ul {
 .hotelIconTitle {
   font-weight: bold;
   text-align: center;
-  font-family: Poppins;
+  font-family: "Poppins";
   font-size: 32px;
   margin-top: 2.5vw;
 }
@@ -311,7 +308,7 @@ ul {
 .eventIconDescription,
 .hotelIconDescription {
   text-align: center;
-  font-family: Poppins;
+  font-family: "Poppins";
   font-size: 16.5px;
   margin-top: 2vw;
 }
@@ -336,7 +333,7 @@ ul {
 
 .videoTitle {
   color: #fff;
-  font-family: Poppins;
+  font-family: "Poppins";
   font-size: 36px;
   font-style: normal;
   text-align: center;
@@ -345,7 +342,7 @@ ul {
 .videoDescription {
   margin-top: 2vw;
   text-align: justify;
-  font-family: Poppins;
+  font-family: "Poppins";
   font-size: 18px;
   font-style: normal;
   color: #fff;
