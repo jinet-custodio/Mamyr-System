@@ -716,8 +716,9 @@ footer {
       }
     }
   }
+}
 
-  /* .hotelTitle {
+/* .hotelTitle {
   margin-top: 1vw;
   font-size: 2.5vw;
   font-family: "Lora";
@@ -823,181 +824,171 @@ footer {
 .rooms {
   margin-top: 2vw;
 } */
-  /* hotel booking */
+/* hotel booking */
 
-  /* event booking */
+/* event booking */
 
-  #event-page {
-    .eventTitle {
-      padding-top: 7rem;
-      font-size: 2.5vw;
-      font-family: "Lora";
-      color: #000000;
-      font-weight: bold;
+#event-page {
+  .eventTitle {
+    padding-top: 7rem;
+    font-size: 2.5vw;
+    font-family: "Lora";
+    color: #000000;
+    font-weight: bold;
+  }
+
+  .backToSelection {
+    position: absolute;
+    margin: 7rem 0 0 3rem;
+  }
+
+  .container-fluid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1.5rem;
+    width: 95%;
+  }
+
+  .card {
+    margin-top: 1rem;
+    height: 90vh;
+    padding: 2rem;
+  }
+
+  #eventBookingCard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 6vw);
+    gap: 8px;
+  }
+
+  .eventInfoLabel {
+    font-family: "Poppins";
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 0.7vw;
+    display: block;
+    text-align: center;
+  }
+  .secondColumn {
+    display: grid;
+    width: 100%;
+  }
+
+  .noteContainer {
+    margin-top: 1.5vw;
+    width: 98%;
+  }
+
+  .note {
+    color: #ff0000;
+    text-align: justify;
+  }
+
+  #foodSelectionCard {
+    padding: 0 !important;
+    margin: auto !important;
+  }
+
+  .fw-bold {
+    margin-top: -3vw;
+    font-family: "Poppins";
+  }
+
+  #calendar {
+    width: 85%;
+    height: 67vh;
+    margin: auto;
+
+    background-color: #fffefe;
+    border-radius: 2.5rem;
+  }
+
+  .fc table {
+    font-size: 18px;
+  }
+
+  .fc-scrollgrid,
+  td {
+    /* border: 1px solid red !important; */
+    border: none;
+  }
+  .fc a {
+    text-decoration: none !important;
+    color: black;
+  }
+
+  .fc-header-toolbar {
+    /* margin-top: 1rem; */
+    height: 5rem !important;
+    padding: 2rem;
+    border-top-left-radius: 3vw;
+    border-top-right-radius: 3vw;
+    margin-bottom: 0;
+    background-color: #00bbff;
+  }
+
+  .fc-button {
+    background-color: #ffffff !important;
+    color: rgb(0, 0, 0) !important;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+
+  .fc-toolbar-title {
+    color: #fff;
+  }
+
+  .fc-daygrid-day-events {
+    display: none;
+  }
+
+  .fc .fc-button-primary:disabled {
+    background-color: #fdfdfd !important;
+    opacity: 1 !important;
+  }
+
+  .fc .fc-button-primary:disabled:hover {
+    background-color: #f2d8b7 !important;
+    opacity: 1 !important;
+  }
+
+  .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+    margin-left: 1vw;
+
+    &:hover {
+      background-color: #91c6ff !important;
+      color: #fff !important;
     }
+  }
 
-    .backToSelection {
-      position: absolute;
-      margin: 7rem 0 0 3rem;
+  .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+    margin-left: 1vw;
+
+    &:hover {
+      background-color: #91c6ff !important;
+      color: #fff !important;
     }
+  }
 
-    .container-fluid {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      gap: 1.5rem;
-      width: 95%;
+  .fc .fc-daygrid-day.fc-day-today {
+    background-color: #5dccf5 !important;
+    .fc-daygrid-day-number {
+      color: #fff !important;
     }
+  }
 
-    .card {
-      margin-top: 1rem;
-      height: 90vh;
-      padding: 2rem;
-    }
+  /* di ko sure 'to test nalang pag may event na nalagay*/
+  .fc-event {
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+  }
 
-    #eventBookingCard {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(4, 6vw);
-      gap: 8px;
-    }
-
-    .eventInfoLabel {
-      font-family: "Poppins";
-      font-weight: bold;
-      font-size: 20px;
-      margin-bottom: 0.7vw;
-      display: block;
-      text-align: center;
-    }
-    .secondColumn {
-      display: grid;
-      width: 100%;
-    }
-
-    .noteContainer {
-      margin-top: 1.5vw;
-      width: 98%;
-    }
-
-    .note {
-      color: #ff0000;
-      text-align: justify;
-    }
-
-    #foodSelectionCard {
-      padding: 0 !important;
-      margin: auto !important;
-    }
-
-    .fw-bold {
-      margin-top: -3vw;
-      font-family: "Poppins";
-    }
-
-    #calendar {
-      width: 85%;
-      height: 67vh;
-      margin: auto;
-
-      background-color: #fffefe;
-      border-radius: 2.5rem;
-    }
-
-    .fc table {
-      font-size: 18px;
-    }
-
-    .fc-scrollgrid,
-    td {
-      /* border: 1px solid red !important; */
-      border: none;
-    }
-    .fc a {
-      text-decoration: none !important;
-      color: black;
-    }
-
-    .fc-header-toolbar {
-      /* margin-top: 1rem; */
-      height: 5rem !important;
-      padding: 2rem;
-      border-top-left-radius: 3vw;
-      border-top-right-radius: 3vw;
-      margin-bottom: 0;
-      background-color: #00bbff;
-    }
-
-    .fc-button {
-      background-color: #ffffff !important;
-      color: rgb(0, 0, 0) !important;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-
-    .fc-toolbar-title {
-      color: #fff;
-    }
-
-    .fc-daygrid-day-events {
-      display: none;
-    }
-
-    .fc .fc-button-primary:disabled {
-      background-color: #fdfdfd !important;
-      opacity: 1 !important;
-    }
-
-    .fc .fc-button-primary:disabled:hover {
-      background-color: #f2d8b7 !important;
-      opacity: 1 !important;
-    }
-
-    .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
-      margin-left: 1vw;
-
-      &:hover {
-        background-color: #91c6ff !important;
-        color: #fff !important;
-      }
-    }
-
-    .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
-      margin-left: 1vw;
-
-      &:hover {
-        background-color: #91c6ff !important;
-        color: #fff !important;
-      }
-    }
-
-    .fc .fc-daygrid-day.fc-day-today {
-      background-color: #5dccf5 !important;
-      .fc-daygrid-day-number {
-        color: #fff !important;
-      }
-    }
-
-    /* di ko sure 'to test nalang pag may event na nalagay*/
-    .fc-event {
-      background-color: #28a745;
-      color: white;
-      border-radius: 5px;
-      padding: 5px;
-    }
-
-    .fc-event:hover {
-      background-color: #218838;
-    }
-    /* di ko sure 'to test nalang pag may event na nalagay*/
-
-    /* code for the packages display */
-
-    /* .shadow-sm {
-    width: 30%;
-    margin: 0.5vw;
-  } */
-    /* end of code for the packages display */
+  .fc-event:hover {
+    background-color: #218838;
   }
 
   #eventContainer {
