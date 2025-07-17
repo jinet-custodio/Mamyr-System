@@ -58,6 +58,22 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 }
 
 
+
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'About';
+$getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+
+    $contentMap[$cleanTitle] = $row['content'];
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -82,6 +98,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Online link for Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- icon library from font-awesome and box icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
@@ -94,6 +116,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
+            if ($userRole === 1) {
+                $receiver = 'Customer';
+            } else {
+                $receiver = 'Partner';
+            }
+
+            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND receiver = ? AND userRole = ?");
+            $getProfile->bind_param("isi", $userID, $receiver, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
             if ($getProfileResult->num_rows > 0) {
@@ -247,12 +277,18 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             <a href="#backArrowContainer"><button class="btn btn-primary" onclick="readMore()">Read More</button></a>
             <a href="#backArrowContainer"><button class="btn btn-primary" onclick="readMore()">Read More</button></a>
+            <h3 class="hook"><?= htmlspecialchars($contentMap['Header'] ?? 'Header Not Found') ?> </h3>
+
+            <p class="aboutDescription indent"><?= htmlspecialchars($contentMap['AboutMamyr'] ?? 'No description Not Found') ?></p>
+
+            <a href="#backArrowContainer"><button class="btn btn-primary" onclick="readMore()">Read More</button></a>
         </div>
     </div>
 
     <div class="ourServicesContainer" id="ourServicesContainer">
         <div class="servicesTitleContainer">
             <h3 class="servicesTitle">Our Services</h3>
+            <p class="servicesDescription indent"><?= htmlspecialchars($contentMap['ServicesDesc'] ?? 'No description Not Found') ?></p>
             <p class="servicesDescription indent"><?= htmlspecialchars($contentMap['ServicesDesc'] ?? 'No description Not Found') ?></p>
             <p class="servicesDescription indent"><?= htmlspecialchars($contentMap['ServicesDesc'] ?? 'No description Not Found') ?></p>
         </div>
@@ -265,6 +301,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <p class="resortIconDescription"><?= htmlspecialchars($contentMap['Service1Desc'] ?? 'No description Not Found') ?></p>
                 <h4 class="resortIconTitle"><?= htmlspecialchars($contentMap['Service1'] ?? 'No description Not Found') ?></h4>
                 <p class="resortIconDescription"><?= htmlspecialchars($contentMap['Service1Desc'] ?? 'No description Not Found') ?></p>
+                <h4 class="resortIconTitle"><?= htmlspecialchars($contentMap['Service1'] ?? 'No description Not Found') ?></h4>
+                <p class="resortIconDescription"><?= htmlspecialchars($contentMap['Service1Desc'] ?? 'No description Not Found') ?></p>
             </div>
 
             <div class="eventContainer">
@@ -273,10 +311,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <p class="eventIconDescription"><?= htmlspecialchars($contentMap['Service2Desc'] ?? 'No description Not Found') ?></p>
                 <h4 class="eventIconTitle"><?= htmlspecialchars($contentMap['Service2'] ?? 'No description Not Found') ?></h4>
                 <p class="eventIconDescription"><?= htmlspecialchars($contentMap['Service2Desc'] ?? 'No description Not Found') ?></p>
+                <h4 class="eventIconTitle"><?= htmlspecialchars($contentMap['Service2'] ?? 'No description Not Found') ?></h4>
+                <p class="eventIconDescription"><?= htmlspecialchars($contentMap['Service2Desc'] ?? 'No description Not Found') ?></p>
             </div>
 
             <div class="hotelContainer">
                 <img src="../../Assets/Images/AboutImages/hotel.png" alt="Hotel Icon" class="hotelIcon">
+                <h4 class="hotelIconTitle"><?= htmlspecialchars($contentMap['Service3'] ?? 'No description Not Found') ?></h4>
+                <p class="hotelIconDescription"><?= htmlspecialchars($contentMap['Service3Desc'] ?? 'No description Not Found') ?></p>
                 <h4 class="hotelIconTitle"><?= htmlspecialchars($contentMap['Service3'] ?? 'No description Not Found') ?></h4>
                 <p class="hotelIconDescription"><?= htmlspecialchars($contentMap['Service3Desc'] ?? 'No description Not Found') ?></p>
                 <h4 class="hotelIconTitle"><?= htmlspecialchars($contentMap['Service3'] ?? 'No description Not Found') ?></h4>
@@ -322,10 +364,28 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <h3 class="videoTitle">Explore <?= htmlspecialchars($businessInfo['FullName'] ?? 'No description Not Found') ?></h3>
 
             <p class="videoDescription indent"><?= htmlspecialchars($contentMap['Explore'] ?? 'No description Not Found') ?></p>
+            <?php
+            $sectionName = 'BusinessInformation';
+            $getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+            $getWebContent->bind_param("s", $sectionName);
+            $getWebContent->execute();
+            $getWebContentResult = $getWebContent->get_result();
+            $businessInfo = [];
+            while ($row = $getWebContentResult->fetch_assoc()) {
+                $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+                $contentID = $row['contentID'];
+
+                $businessInfo[$cleanTitle] = $row['content'];
+            }
+            ?>
+            <h3 class="videoTitle">Explore <?= htmlspecialchars($businessInfo['FullName'] ?? 'No description Not Found') ?></h3>
+
+            <p class="videoDescription indent"><?= htmlspecialchars($contentMap['Explore'] ?? 'No description Not Found') ?></p>
         </div>
 
         <div class="embed-responsive embed-responsive-16by9">
             <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
+                poster="../../Assets/Videos/thumbnail2.jpg">
                 poster="../../Assets/Videos/thumbnail2.jpg">
                 poster="../../Assets/Videos/thumbnail2.jpg">
                 <source src="../../Assets/Videos/mamyrVideo2.mp4" type="video/mp4">
@@ -338,6 +398,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <div class="backArrowContainer" id="backArrowContainer">
         <a href="about.php"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
         <a href="about.php"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
+        <a href="about.php"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
     </div>
 
     <div class="mamyrHistoryContainer" id="mamyrHistoryContainer">
@@ -345,7 +406,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="firstParagraphtextContainer">
                 <p class="firstParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph1'] ?? 'No description Not Found') ?></p>
                 <p class="firstParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph1'] ?? 'No description Not Found') ?></p>
+                <p class="firstParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph1'] ?? 'No description Not Found') ?></p>
 
+                <p class="secondParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph2'] ?? 'No description Not Found') ?>
                 <p class="secondParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph2'] ?? 'No description Not Found') ?>
                 <p class="secondParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph2'] ?? 'No description Not Found') ?>
             </div>
@@ -367,11 +430,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="thirdParagraphtextContainer">
                 <p class="thirdParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph3'] ?? 'No description Not Found') ?>
                 <p class="thirdParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph3'] ?? 'No description Not Found') ?>
+                <p class="thirdParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph3'] ?? 'No description Not Found') ?>
                 </p>
             </div>
         </div>
 
         <div class="fourthParagraphContainer">
+            <p class="fourthParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph4'] ?? 'No description Not Found') ?>
             <p class="fourthParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph4'] ?? 'No description Not Found') ?>
             <p class="fourthParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph4'] ?? 'No description Not Found') ?>
             </p>
@@ -385,6 +450,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </a>
             <h3 class="mb-0"><?= htmlspecialchars(strtoupper($businessInfo['FullName']) ?? 'Name Not Found') ?></h3>
             <h3 class="mb-0"><?= htmlspecialchars(strtoupper($businessInfo['FullName']) ?? 'Name Not Found') ?></h3>
+            <h3 class="mb-0"><?= htmlspecialchars(strtoupper($businessInfo['FullName']) ?? 'Name Not Found') ?></h3>
         </div>
 
         <div class="info">
@@ -394,9 +460,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <h4 class="emailAddressTextFooter"><?= htmlspecialchars($businessInfo['Email'] ?? 'None Provided') ?></h4>
                 <h4 class="numberFooter"><?= htmlspecialchars($businessInfo['ContactNum'] ?? 'None Provided') ?></h4>
                 <h4 class="emailAddressTextFooter"><?= htmlspecialchars($businessInfo['Email'] ?? 'None Provided') ?></h4>
+                <h4 class="numberFooter"><?= htmlspecialchars($businessInfo['ContactNum'] ?? 'None Provided') ?></h4>
+                <h4 class="emailAddressTextFooter"><?= htmlspecialchars($businessInfo['Email'] ?? 'None Provided') ?></h4>
             </div>
             <div class="locationFooter">
                 <h4 class="locationTitle">Location</h4>
+                <h4 class="addressTextFooter"><?= htmlspecialchars($businessInfo['Address'] ?? 'None Provided') ?></h4>
                 <h4 class="addressTextFooter"><?= htmlspecialchars($businessInfo['Address'] ?? 'None Provided') ?></h4>
                 <h4 class="addressTextFooter"><?= htmlspecialchars($businessInfo['Address'] ?? 'None Provided') ?></h4>
             </div>
@@ -408,6 +477,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         class='bx bxl-facebook-circle'></i></a>
             <a href="mailto: <?= htmlspecialchars($businessInfo['GmailAdd'] ?? 'None Provided') ?>"><i class='bx bxl-gmail'></i></a>
             <a href="tel:<?= htmlspecialchars($businessInfo['ContactNum'] ?? 'None Provided') ?>">
+                <a href="mailto: <?= htmlspecialchars($businessInfo['GmailAdd'] ?? 'None Provided') ?>"><i class='bx bxl-gmail'></i></a>
+                <a href="tel:<?= htmlspecialchars($businessInfo['ContactNum'] ?? 'None Provided') ?>">
+                    <i class='bx bxs-phone'></i>
+                </a>
+                <a href="<?= htmlspecialchars($businessInfo['FBLink'] ?? 'None Provided') ?>"><i
+                        class='bx bxl-facebook-circle'></i></a>
                 <a href="mailto: <?= htmlspecialchars($businessInfo['GmailAdd'] ?? 'None Provided') ?>"><i class='bx bxl-gmail'></i></a>
                 <a href="tel:<?= htmlspecialchars($businessInfo['ContactNum'] ?? 'None Provided') ?>">
                     <i class='bx bxs-phone'></i>
@@ -481,6 +556,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </script>
 
 
+    <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
 
