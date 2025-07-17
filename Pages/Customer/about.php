@@ -26,6 +26,22 @@ $_SESSION['last_activity'] = time();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'About';
+$getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+
+    $contentMap[$cleanTitle] = $row['content'];
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -37,14 +53,13 @@ $userRole = $_SESSION['userRole'];
     <title>Mamyr - About</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/about.css">
-
-    <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!-- Online link for Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- icon library from font-awesome and box icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
@@ -202,48 +217,38 @@ $userRole = $_SESSION['userRole'];
         </div>
 
         <div class="topTextContainer">
-            <h3 class="hook">Compassionate Service, Unforgettable Family Moments</h3>
+            <h3 class="hook"><?= htmlspecialchars($contentMap['Header'] ?? 'Header Not Found') ?> </h3>
 
-            <p class="aboutDescription">Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San
-                Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the
-                land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz
-                and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family but
-                also bring joy to others.</p>
+            <p class="aboutDescription indent"><?= htmlspecialchars($contentMap['AboutMamyr'] ?? 'No description Not Found') ?></p>
 
-            <a href="#"><button class="btn btn-primary" onclick="readMore()">Read More</button></a>
-
+            <a href="#backArrowContainer"><button class="btn btn-primary" onclick="readMore()">Read More</button></a>
         </div>
     </div>
 
     <div class="ourServicesContainer" id="ourServicesContainer">
         <div class="servicesTitleContainer">
             <h3 class="servicesTitle">Our Services</h3>
-            <p class="servicesDescription">Mamyr isn’t just a resort; it’s a family-oriented getaway with comfortable
-                rooms and a versatile event venue for gatherings and celebrations. It offers a relaxed, fun environment
-                for all ages to enjoy.</p>
+            <p class="servicesDescription indent"><?= htmlspecialchars($contentMap['ServicesDesc'] ?? 'No description Not Found') ?></p>
         </div>
 
         <div class="servicesIconContainer">
 
             <div class="resortContainer">
                 <img src="../../Assets/Images/AboutImages/resort.png" alt="Resort Icon" class="resortIcon">
-                <h4 class="resortIconTitle">Resort</h4>
-                <p class="resortIconDescription">Mamyr features three refreshing pools, providing the perfect spots for
-                    family fun, relaxation, and leisurely swims.</p>
+                <h4 class="resortIconTitle"><?= htmlspecialchars($contentMap['Service1'] ?? 'No description Not Found') ?></h4>
+                <p class="resortIconDescription"><?= htmlspecialchars($contentMap['Service1Desc'] ?? 'No description Not Found') ?></p>
             </div>
 
             <div class="eventContainer">
                 <img src="../../Assets/Images/AboutImages/events.png" alt="Event Icon" class="eventIcon">
-                <h4 class="eventIconTitle">Events Place</h4>
-                <p class="eventIconDescription">Mamyr’s versatile event venue offers a spacious and welcoming setting,
-                    ideal for family gatherings, reunions, and celebrations of all kinds.</p>
+                <h4 class="eventIconTitle"><?= htmlspecialchars($contentMap['Service2'] ?? 'No description Not Found') ?></h4>
+                <p class="eventIconDescription"><?= htmlspecialchars($contentMap['Service2Desc'] ?? 'No description Not Found') ?></p>
             </div>
 
             <div class="hotelContainer">
                 <img src="../../Assets/Images/AboutImages/hotel.png" alt="Hotel Icon" class="hotelIcon">
-                <h4 class="hotelIconTitle">Hotel</h4>
-                <p class="hotelIconDescription">Mamyr’s cozy hotel features 11 comfortable rooms, perfect for a relaxing
-                    stay with family and friends.</p>
+                <h4 class="hotelIconTitle"><?= htmlspecialchars($contentMap['Service3'] ?? 'No description Not Found') ?></h4>
+                <p class="hotelIconDescription"><?= htmlspecialchars($contentMap['Service3Desc'] ?? 'No description Not Found') ?></p>
             </div>
         </div>
     </div>
@@ -251,20 +256,28 @@ $userRole = $_SESSION['userRole'];
 
     <div class="videoContainer" id="videoContainer">
         <div class="videoTextContainer">
-            <h3 class="videoTitle">Explore Mamyr Resort and Events Place</h3>
+            <?php
+            $sectionName = 'BusinessInformation';
+            $getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+            $getWebContent->bind_param("s", $sectionName);
+            $getWebContent->execute();
+            $getWebContentResult = $getWebContent->get_result();
+            $businessInfo = [];
+            while ($row = $getWebContentResult->fetch_assoc()) {
+                $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+                $contentID = $row['contentID'];
 
-            <p class="videoDescription">At Mamyr Resort, we treat every guest like family, offering an experience that
-                goes beyond just comfort. From our humble beginnings to the thriving retreat we are today, we've poured
-                our heart and soul into creating a sanctuary where nature and relaxation meet. Our story is built on
-                passion, growth, and a deep commitment to providing an unforgettable experience. When you visit, you’ll
-                discover not just stunning surroundings and luxurious comfort, but the warm, welcoming spirit that
-                defines us. Come join us and see firsthand what makes Mamyr Resort a place where memories are made, and
-                guests feel right at home.</p>
+                $businessInfo[$cleanTitle] = $row['content'];
+            }
+            ?>
+            <h3 class="videoTitle">Explore <?= htmlspecialchars($businessInfo['FullName'] ?? 'No description Not Found') ?></h3>
+
+            <p class="videoDescription indent"><?= htmlspecialchars($contentMap['Explore'] ?? 'No description Not Found') ?></p>
         </div>
 
         <div class="embed-responsive embed-responsive-16by9">
             <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
-                poster="../Assets/Videos/thumbnail2.jpg">
+                poster="../../Assets/Videos/thumbnail2.jpg">
                 <source src="../../Assets/Videos/mamyrVideo2.mp4" type="video/mp4">
 
             </video>
@@ -273,28 +286,15 @@ $userRole = $_SESSION['userRole'];
 
 
     <div class="backArrowContainer" id="backArrowContainer">
-        <a href="about.php"><img src="../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
+        <a href="about.php"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
     </div>
 
     <div class="mamyrHistoryContainer" id="mamyrHistoryContainer">
         <div class="firstParagraphContainer">
             <div class="firstParagraphtextContainer">
-                <p class="firstParagraph">Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San
-                    Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the
-                    land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela
-                    Cruz
-                    and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family
-                    but
-                    also bring joy to others.</p>
+                <p class="firstParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph1'] ?? 'No description Not Found') ?></p>
 
-                <p class="secondParagraph">With faith and hard work, they transformed the land into a relaxing resort
-                    that people could enjoy. Their vision and dedication shaped the
-                    landscape into a serene retreat where visitors could unwind and create lasting memories.
-                    The name "Mamyr" came from their own names—Mamerto and Myrna—a symbol of the spirit of unity that
-                    brought
-                    the resort to life, making it not just a place to stay, but a reflection of their dreams and the
-                    love they poured into every corner of the property.
-                </p>
+                <p class="secondParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph2'] ?? 'No description Not Found') ?>
             </div>
 
 
@@ -312,24 +312,13 @@ $userRole = $_SESSION['userRole'];
             </div>
 
             <div class="thirdParagraphtextContainer">
-                <p class="thirdParagraph">Opened in 2022, Mamyr Resort has become a popular and welcoming place
-                    for people looking to relax and enjoy nature. The resort is known for its clean swimming pools,
-                    spacious function areas, beautiful surroundings, and warm hospitality. Guests
-                    can enjoy the resort's three refreshing swimming pools, two elegant pavilions, cozy cottages to stay
-                    in, as well as 11 comfortable
-                    hotel rooms for those who prefer a more private stay, and a spacious parking lot to accommodate all
-                    guests conveniently.
+                <p class="thirdParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph3'] ?? 'No description Not Found') ?>
                 </p>
             </div>
         </div>
 
         <div class="fourthParagraphContainer">
-            <p class="fourthParagraph">
-                At Mamyr Resort, we treat every guest like family, making sure your stay is special and enjoyable.
-                Whether you're celebrating an important event, spending time with loved ones, or just looking for a
-                peaceful break, we have everything you need to feel comfortable and relaxed. Our team works hard to
-                create a warm and welcoming atmosphere where you can make lasting memories. Visit us and see for
-                yourself why we're so proud of how much we've grown.
+            <p class="fourthParagraph indent"><?= htmlspecialchars($contentMap['HistoryParagraph4'] ?? 'No description Not Found') ?>
             </p>
         </div>
     </div>
@@ -339,30 +328,28 @@ $userRole = $_SESSION['userRole'];
             <a href="../index.php">
                 <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
             </a>
-            <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
+            <h3 class="mb-0"><?= htmlspecialchars(strtoupper($businessInfo['FullName']) ?? 'Name Not Found') ?></h3>
         </div>
 
         <div class="info">
             <div class="reservation">
                 <h4 class="reservationTitle">Reservation</h4>
-                <h4 class="numberFooter">(0998) 962 4697 </h4>
-                <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
+                <h4 class="numberFooter"><?= htmlspecialchars($businessInfo['ContactNum'] ?? 'None Provided') ?></h4>
+                <h4 class="emailAddressTextFooter"><?= htmlspecialchars($businessInfo['Email'] ?? 'None Provided') ?></h4>
             </div>
             <div class="locationFooter">
                 <h4 class="locationTitle">Location</h4>
-                <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
+                <h4 class="addressTextFooter"><?= htmlspecialchars($businessInfo['Address'] ?? 'None Provided') ?></h4>
             </div>
         </div>
         <hr class="footerLine">
         <div class="socialIcons">
-            <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
+            <a href="<?= htmlspecialchars($businessInfo['FBLink'] ?? 'None Provided') ?>"><i
                     class='bx bxl-facebook-circle'></i></a>
-            <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-            <a href="tel:+09989624697">
+            <a href="mailto: <?= htmlspecialchars($businessInfo['GmailAdd'] ?? 'None Provided') ?>"><i class='bx bxl-gmail'></i></a>
+            <a href="tel:<?= htmlspecialchars($businessInfo['ContactNum'] ?? 'None Provided') ?>">
                 <i class='bx bxs-phone'></i>
             </a>
-
         </div>
     </footer>
 
@@ -432,7 +419,7 @@ $userRole = $_SESSION['userRole'];
     </script>
 
 
-    <script src="../Assets/JS/scrollNavbg.js"></script>
+    <script src="../../Assets/JS/scrollNavbg.js"></script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -237,6 +237,10 @@ ul {
   margin-top: 1vw;
 }
 
+.indent {
+  text-indent: 2vw;
+}
+
 .ourServicesContainer {
   /* border: 1px solid red; */
   border-radius: 20px;

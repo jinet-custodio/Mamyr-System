@@ -118,9 +118,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="wsText">
                 <hr class="line">
                 <h4 class="wsTitle">Welcome to <?= htmlspecialchars($contentMap['FullName'] ?? 'Name Not Found') ?></h4>
-                <p class="wsDescription">Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable
-                    moments await you. Whether you're here for a peaceful retreat or a special celebration, we're
-                    dedicated to making your experience truly exceptional.</p>
+                <p class="wsDescription"> <?= htmlspecialchars($contentMap['ShortDesc2'] ?? 'Description Not Found') ?> </p>
             </div>
 
         </div>
@@ -171,7 +169,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
 
-        <footer class="py-1 my-2">
+        <footer class="py-1 ">
             <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
 
                 <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
@@ -193,10 +191,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
             <hr class="footerLine">
             <div class="socialIcons">
-                <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
+                <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
                         class='bx bxl-facebook-circle'></i></a>
-                <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-                <a href="tel:+09989624697">
+                <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>"><i class='bx bxl-gmail'></i></a>
+                <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
                     <i class='bx bxs-phone'></i>
                 </a>
 
