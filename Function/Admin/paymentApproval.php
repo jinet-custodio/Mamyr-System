@@ -172,7 +172,7 @@ if (isset($_POST['approvePaymentBtn'])) {
                     "Your current balance is: " . ($totalBalance > 0 ? "₱" . number_format($totalBalance, 2) : "0.00") . ".";
                 $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
             VALUES(?,?,?,?)");
-                $insertNotification->bind_param("iis", $bookingID, $customerID, $message, $receiver);
+                $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();
 
 
