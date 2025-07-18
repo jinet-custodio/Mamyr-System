@@ -886,13 +886,14 @@ footer {
     text-align: justify;
   }
 
-  #foodSelectionCard {
+  #foodSelectionCard,
+  #additionalServicesCard {
     padding: 0 !important;
     margin: auto !important;
   }
 
   .fw-bold {
-    margin-top: -3vw;
+    margin-top: -2vw;
     font-family: "Poppins";
   }
 
