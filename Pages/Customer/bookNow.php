@@ -124,12 +124,13 @@ $userRole = $_SESSION['userRole'];
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -178,7 +179,8 @@ $userRole = $_SESSION['userRole'];
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -189,18 +191,20 @@ $userRole = $_SESSION['userRole'];
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($message) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -660,10 +664,10 @@ $userRole = $_SESSION['userRole'];
                     <h1>testing</h1>
                 </div> -->
 
-                <div class="card foodSelection-card" id="foodSelectionCard" style="width: 30rem;">
+                <div class="card foodSelection-card" id="foodSelectionCard" style="width:30rem;">
                     <div class="card-body">
                         <img src="../../Assets/Images/BookNowPhotos/foodCoverImg.jpg" class="card-img-top"
-                            alt="Food Selection Cover">
+                            id="foodSelectionCover" alt="Food Selection Cover">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Dish Selection</h5>
@@ -674,9 +678,23 @@ $userRole = $_SESSION['userRole'];
                     </div>
                 </div>
 
-                <div class="card additionalService-card" id="additionalServiceCard">
-                    <h1>testing</h1>
+                <div class="card additionalServices-card" id="additionalServicesCard" style="width:30rem;">
+                    <div class="card-body">
+                        <img src="../../Assets/Images/BookNowPhotos/additionalServiceImg.jpg" class="card-img-top"
+                            id="additionalServicesCover" alt="Additional Services Cover">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Additional Services</h5>
+                        <p class="card-text mt-3">Explore our range of additional services to elevate your event. From
+                            photography to hosting, choose what best suits your needs and adds a special touch to
+                            your celebration.</p>
+
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                            data-bs-target="#additionalServicesModal">Open Menu</button>
+                    </div>
                 </div>
+
+
 
             </div>
             <!--end ng container div-->
@@ -1027,25 +1045,25 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-                            this.style.backgroundColor = 'white';
-                        });
-                });
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        this.style.backgroundColor = 'white';
+                    });
             });
         });
+    });
     </script>
 
 

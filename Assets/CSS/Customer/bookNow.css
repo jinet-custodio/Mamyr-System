@@ -145,16 +145,14 @@ ul {
   }
 }
 
-.notification-container{
+.notification-container {
   margin: 1rem;
 
-  button{
+  button {
     background-color: transparent;
     border: none;
   }
 }
-
-
 
 .logoNav {
   /* border: 1px solid black; */
@@ -807,13 +805,14 @@ footer {
     text-align: justify;
   }
 
-  #foodSelectionCard {
+  #foodSelectionCard,
+  #additionalServicesCard {
     padding: 0 !important;
     margin: auto !important;
   }
 
   .fw-bold {
-    margin-top: -3vw;
+    margin-top: -2vw;
     font-family: "Poppins";
   }
 
