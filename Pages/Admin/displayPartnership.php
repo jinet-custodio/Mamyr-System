@@ -207,12 +207,12 @@ if (isset($_SESSION['error-partnership'])) {
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
                         <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                            <?php foreach ($notificationsArray as $index => $notifMessage):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
                                 <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
+                                    <?= htmlspecialchars($notifMessage) ?>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
