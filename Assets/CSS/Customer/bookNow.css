@@ -847,7 +847,8 @@ footer {
     justify-content: space-around;
     align-items: center;
     gap: 1.5rem;
-    width: 95%;
+    width: 100%;
+    padding: 2vw;
   }
 
   .card {
@@ -892,16 +893,36 @@ footer {
     margin: auto !important;
   }
 
+  #foodSelectionCard,
+  #additionalServicesCard {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    height: 56vh !important;
+    margin-top: 1vw !important;
+  }
+
+  #foodSelectionCover,
+  #additionalServicesCover {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  #additionalServicesCover {
+    width: 51vh;
+    aspect-ratio: 1;
+  }
   .fw-bold {
-    margin-top: -2vw;
+    /* margin-top: -2vw; */
     font-family: "Poppins";
   }
 
   #calendar {
     width: 85%;
-    height: 67vh;
+    height: 80vh;
     margin: auto;
-
+    margin-top: 1vw !important;
     background-color: #fffefe;
     border-radius: 2.5rem;
   }
@@ -997,17 +1018,21 @@ footer {
     grid-template-columns: repeat(2, 1fr) !important;
     grid-template-rows: repeat(2, 1fr) !important;
     gap: 8px !important;
-    margin-top: 5vw !important;
-  }
-
-  .modal-body {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 20px;
+    margin-top: 2vw !important;
   }
 }
+.modal-body {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-rows: repeat(3, 1fr) !important;
+  gap: 10px;
+}
 
+.eventButton-container {
+  display: flex;
+  justify-content: center;
+  margin-top: -15vw !important;
+}
 /* .eventTitle {
   margin-top: 1vw;
   font-size: 2.5vw;
