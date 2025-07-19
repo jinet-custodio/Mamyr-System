@@ -72,8 +72,12 @@ $userRole = $_SESSION['userRole'];
         $getDataResult = $getData->get_result();
         if ($getDataResult->num_rows > 0) {
             $data =  $getDataResult->fetch_assoc();
-            $middleInitial = trim($data['middleInitial']);
-            $name = ucfirst($data['firstName']) . " " . ucfirst($data['middleInitial']) . " "  . ucfirst($data['lastName']);
+            $middleInitial = trim($data['middleInitial'] ?? '');
+            $name = ucfirst($data['firstName'] ?? '') . " " .
+                ucfirst($data['middleInitial'] ?? '') . " " .
+                ucfirst($data['lastName'] ?? '');
+
+            var_dump($name);
             $email = $data['email'];
             $phoneNumber = $data['phoneNumber'];
             if ($phoneNumber === NULL || $phoneNumber === "") {

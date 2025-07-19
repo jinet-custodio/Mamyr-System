@@ -480,10 +480,6 @@ $userRole = $_SESSION['userRole'];
             </div>
             <div class="filterBtns">
                 <input type="text" placeholder="Select your booking date" id="hotelDate">
-                <div style="width: 50%;display:flex;justify-content:space-evenly;">
-                    <button role="button" id="elevenHrs" class="btn btn-primary" data-duration="11">11 Hour Stay</button>
-                    <button role="button" id="twenty2Hrs" class="btn btn-info" data-duration="22">22 Hour Stay</button>
-                </div>
             </div>
             <?php
             $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration 
@@ -522,7 +518,8 @@ $userRole = $_SESSION['userRole'];
                             $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
 
                             echo '<div class="hotelIconWithCaption" style="text-align: center;" 
-                            data-availability="' . $availabilityStatus . '" data-duration="' . $duration . '">';
+                                data-availability="' . $availabilityStatus . '">';
+
 
                             echo '<a href="#' . trim($row['RServiceName']) . '">  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '"> </a>';
                             echo '  <p class="roomCaption">' . $roomName . '</p>';
@@ -552,7 +549,7 @@ $userRole = $_SESSION['userRole'];
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {
                 ?>
-                        <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>" data-duration="<?= $hotel['RSduration'] ?>">
+                        <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>">
                             <div class="halfImg">
                                 <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
@@ -690,22 +687,13 @@ $userRole = $_SESSION['userRole'];
 
         // Initialize filters when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            // Default selections
+            // Default 
             document.getElementById('allRooms').classList.add('selectedIcon');
-            document.getElementById('elevenHrs').classList.add('selected');
 
-            // Apply filters to set initial view
+            // Apply filters 
             applyFilters();
 
-            // Duration button click events
-            document.getElementById('elevenHrs').addEventListener('click', function() {
-                updateDuration(this);
-            });
-            document.getElementById('twenty2Hrs').addEventListener('click', function() {
-                updateDuration(this);
-            });
-
-            // Availability button click events
+            // Click events
             ['all', 'available', 'unavailable'].forEach(type => {
                 document.getElementById(`${type}Rooms`).addEventListener('click', function() {
                     updateAvailability(type, this);
@@ -713,16 +701,6 @@ $userRole = $_SESSION['userRole'];
             });
         });
 
-        // Change selected duration
-        function updateDuration(button) {
-            // Update visual
-            document.querySelectorAll('.filterBtns button').forEach(btn => btn.classList.remove('selected'));
-            button.classList.add('selected');
-
-            applyFilters();
-        }
-
-        // Change availability filter
         function updateAvailability(filterType, button) {
             currentAvailabilityFilter = filterType;
             document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
@@ -748,24 +726,19 @@ $userRole = $_SESSION['userRole'];
         }
 
         function applyFilters() {
-            const selectedDuration = document.querySelector('.filterBtns .selected')?.getAttribute('data-duration');
             const allIcons = document.querySelectorAll('.hotelIconWithCaption');
             const allRooms = document.querySelectorAll('.hotel');
 
             allIcons.forEach(icon => {
                 const availability = icon.getAttribute('data-availability');
-                const duration = icon.getAttribute('data-duration')?.replace(/\D/g, '');
-
                 const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter === availability);
-                const matchesDuration = !selectedDuration || (duration === selectedDuration);
 
-                icon.classList.toggle('hidden', !(matchesAvailability && matchesDuration));
+                icon.classList.toggle('hidden', !matchesAvailability);
             });
 
             allRooms.forEach(room => {
-                const duration = room.getAttribute('data-duration')?.replace(/\D/g, '');
-                const matchesDuration = !selectedDuration || (duration === selectedDuration);
-                room.style.display = matchesDuration ? 'flex' : 'none';
+                // No duration logic; just show all rooms
+                room.style.display = 'flex';
             });
         }
     </script>
@@ -786,7 +759,7 @@ $userRole = $_SESSION['userRole'];
                 .then(res => res.json())
                 .then(json => {
                     json.rooms.forEach(room => {
-                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-duration][data-availability]`);
+                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
                         icons.forEach(icon => {
                             const name = icon.querySelector('.roomCaption').textContent.trim();
                             if (name === room.service) {
