@@ -26,11 +26,21 @@
     height: 100%;
     margin: 0;
   }
-  
+*/  
   body {
-    display: flex;
-    flex-direction: column;
-  } */
+    margin: 0;
+  }
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+main {
+  flex: 1;
+}
 
 nav {
   position: absolute;
@@ -189,11 +199,15 @@ ul {
 }
 
 .titleContainer h4{
-  font-size: 2vw;
+  font-size: 2vw !important;
 }
 
-.title {
-  font-size: 2.5vw !important;
+#maintext {
+  font-size: 3vw !important;
+}
+
+.title h5 {
+  font-size: 1.7vw !important;
 }
 
 .posts, .title {
@@ -204,6 +218,7 @@ ul {
 
 .blogHeading h4 {
   font-weight: 800 !important;
+  font-size: 2.4vw;
 }
 
 .featured {
@@ -214,6 +229,10 @@ ul {
   display: grid;
   width: 100%;
   padding: 1vw;
+}
+
+.blogDescription p, .eventType p{
+  font-size: 1.4vw;
 }
 
 
@@ -228,11 +247,15 @@ ul {
 .othersImg {
   object-fit: contain;
   display: flex;
-  align-items: start;
+  align-items: center;
+}
+
+#featuredReadmore, .othersReadmore {
+  font-size: clamp(1.5vw, calc(1.2vw + 2px), 1vw) !important;
 }
 
 .othersEventType p{
-  font-size: 0.9vw !important;
+  font-size: 1.3vw !important;
 }
 
 .eventType p, .othersEventType p{
@@ -240,12 +263,12 @@ ul {
 }
 
 .othersHeading h4{
-  font-size: 1.2vw !important;
+  font-size: 1.6vw !important;
   font-weight: 800;
 }
 
 .othersDescription {
-  font-size: 1vw;
+  font-size: 1.2vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -257,6 +280,7 @@ ul {
 
 .post img {
   width: 18vw;
+  border: 1px solid black;
 }
 
 .othersDesc {
@@ -312,6 +336,7 @@ ul {
 footer {
   /* border: 1px solid black; */
   margin-top: auto !important;
+  margin-bottom: 0 !important;
   background: linear-gradient(
     to top,
     rgba(255, 255, 255, 0.445) -50%,
@@ -418,4 +443,350 @@ footer {
 .construction-image {
   width: 40vw;
   height: auto;
+}
+
+/* Tablet size */
+@media only screen and (min-width: 600px) and (max-width: 1025px) { 
+}
+
+
+/* Tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+  .logoNav {
+    top: 2vw;
+  }
+
+  .navbarDropdown {
+    text-align: center;
+    width: 100%;
+  }
+
+  .nav-item {
+    font-size: clamp(10px, calc(1.5vh + 4px), 12px);
+  }
+
+  .dropdown-item {
+    font-size: clamp(10px, calc(1.5vh + 4px), 12px);
+    text-align: center !important;
+  }
+  .navbar-collapse {
+    background-color: white;
+    .nav-link {
+      color: black !important;
+      text-align: center;
+    }
+  }
+
+  .navbar.white-bg {
+    background-color: white;
+  }
+
+  .navbar-toggler {
+    float: right;
+    background-color: #ffffff !important;
+    margin: 3vw;
+    border: none;
+
+    &:focus,
+    &:active {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none;
+    }
+  }
+
+  .navbar.scrolled {
+    background-color: none !important;
+  }
+
+
+
+ #maintext{
+    font-size: clamp(3.2vw, calc(2.9vw + 2px), 2.6vw) !important;
+    width: 100% !important;
+  }
+
+  .titleContainer h4{
+    font-size: clamp(2.4vw, calc(2.2vw + 2px), 1.8vw) !important;
+  }
+  
+  .posts {
+    flex-direction: column;
+    width: 80%;
+    justify-content: center;
+  }
+
+  .post {
+    width: 100%;
+  }
+
+  .title {
+    width: 70%;
+  }
+
+  .featured {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .featuredpost {
+    justify-content: center;
+
+  }
+
+  .featured img {
+    width: 65vw;
+  }
+
+  .featuredpost, .featured img, .desc, .post img {
+    margin: 0 auto;
+  }
+
+  .blogHeading h4 {
+     font-size: clamp(2.8vw, calc(2.4vw + 2px), 2.1vw) !important;
+  }
+
+  .blogDescription p{
+    font-size: clamp(1.9vw, calc(1.7vw + 2px), 1.4vw) !important;
+  }
+
+  .desc {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #featuredReadmore {
+    font-size: 2vw !important;
+  }
+
+  .others {
+    width: 90% !important;
+  }
+  
+  .post img {
+    width: 25vw;
+  }
+
+  .othersEventType p, .othersReadmore {
+    font-size: clamp(1.7vw, calc(1.4vw + 2px), 1.2vw) !important;
+  }
+
+  .othersHeading h4, .eventType p {
+    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.4vw) !important;
+  }
+
+  .othersDescription {
+    font-size: clamp(1.7vw, calc(1.4vw + 2px), 1.2vw) !important;
+  }
+
+  .mb-0 {
+    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
+  }
+
+  .logo {
+    width: 15vw;
+  }
+
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
+  }
+
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
+  }
+
+  .socialIcons a {
+    justify-items: center;
+    align-items: center;
+  }
+ 
+    .socialIcons a i { 
+      font-size: 3vw;
+    }
+
+}
+
+/* Tablet landscape */
+/* @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {} */
+
+/* Phone size */
+@media screen and (min-width: 360px) and (max-width: 599px) {
+  .logoNav {
+    top: 2vw;
+  }
+
+  .navbarDropdown {
+    text-align: center;
+    width: 100%;
+  }
+ .nav-item {
+    font-size: clamp(10px, calc(1.5vh + 4px), 12px);
+  }
+
+  .dropdown-item {
+    font-size: clamp(10px, calc(1.5vh + 4px), 12px);
+    text-align: center !important;
+  }
+  .navbar-collapse {
+    background-color: white;
+    .nav-link {
+      color: black !important;
+      text-align: center;
+    }
+  }
+
+  .navbar.white-bg {
+    background-color: white;
+  }
+
+  .navbar-toggler {
+    float: right;
+    background-color: #ffffff !important;
+    margin: 3vw;
+    border: none;
+
+    &:focus,
+    &:active {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none;
+    }
+  }
+
+  .navbar-toggler-icon {
+    width: 1em !important;
+    height: 1em !important;
+  }
+
+  .navbar.scrolled {
+    background-color: none !important;
+  }
+
+ #maintext{
+    font-size: clamp(3.6vw, calc(3.2vw + 2px), 2.9vw) !important;
+    width: 100% !important;
+  }
+
+  .titleContainer {
+    margin-top: 8vh !important;
+  }
+  .titleContainer h4{
+    font-size: clamp(2.9vw, calc(2vw + 2px), 1.9vw) !important;
+  }
+
+  .title h5 {
+    font-size: clamp(2.4vw, calc(2.2vw + 2px), 1.8vw) !important;
+  }
+  
+  .posts {
+    flex-direction: column;
+    width: 90%;
+    justify-content: center;
+  }
+
+  .post {
+    width: 100%;
+    margin-top: 1.5vw;
+  }
+
+  .title {
+    width: 70%;
+  }
+
+  .featured {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .featuredpost {
+    justify-content: center;
+
+  }
+
+  .featured img {
+    width: 65vw;
+  }
+
+  .othersDesc {
+    padding: 0 !important;
+  }
+
+  .featuredpost, .featured img, .desc, .post img {
+    margin: 0 auto;
+  }
+
+  .blogHeading h4 {
+     font-size: clamp(3.3vw, calc(2.8vw + 2px), 2.6vw) !important;
+  }
+
+  .blogDescription p{
+    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
+  }
+
+  .desc {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #featuredReadmore {
+    font-size: clamp(2.7vw, calc(2.3vw + 2px), 2.1vw) !important;
+  }
+
+  #featuredReadmore, .othersReadmore {
+    margin-top: 0 !important;
+    padding: 1vw 2vw !important;
+  }
+
+  .others {
+    width: 90% !important;
+    padding: 0 !important;
+  }
+  
+  .post img {
+    width: 31vw;
+  }
+
+  .othersImg, .othersDesc {
+    width: 50% !important;
+  }
+
+  .othersEventType p, .othersReadmore {
+    font-size: clamp(2.1vw, calc(1.7vw + 2px), 1.5vw) !important;
+  }
+
+  .othersHeading h4, .eventType p {
+    font-size: clamp(2.7vw, calc(2.4vw + 2px), 2.1vw) !important;
+  }
+
+  .othersDescription {
+    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.7vw) !important;
+  }
+
+  .mb-0 {
+    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
+  }
+
+  .logo {
+    width: 15vw;
+  }
+
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
+  }
+
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
+  }
+
+  .socialIcons a {
+    justify-items: center;
+    align-items: center;
+  }
+ 
+    .socialIcons a i { 
+      font-size: 3vw;
+    }
+
 }

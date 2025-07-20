@@ -458,7 +458,7 @@ footer {
   }
 
   .name {
-    font-size: clamp(40px, calc(3.5vw + 4px), 45px) !important;
+    font-size: clamp(60px, calc(3.5vw + 4px), 45px) !important;
     text-align: left;
   }
 
@@ -467,7 +467,7 @@ footer {
   }
   .descriptionText {
     text-align: justify;
-    font-size: clamp(23px, calc(3vw + 4px), 35px);
+    font-size: clamp(23px, calc(2vw + 4px), 35px);
   }
 
   .navbar-toggler {
@@ -737,7 +737,7 @@ footer {
   }
 
   .descriptionText {
-    font-size: clamp(25px, calc(3vw + 4px), 35px);
+    font-size: clamp(20px, calc(2vw + 4px), 35px);
   }
 
   .btn-outline-light {
@@ -858,7 +858,7 @@ footer {
   }
 
   .name {
-    font-size: clamp(35px, calc(3.5vw + 4px), 40px) !important;
+    font-size: clamp(35px, calc(3.5vw + 4px), 45px) !important;
     text-align: left;
   }
 
@@ -867,8 +867,9 @@ footer {
   }
 
   .descriptionText {
-    font-size: clamp(18px, calc(1.5vw + 4px), 35px) !important;
+    font-size: clamp(15px, calc(1.5vw + 4px), 35px) !important;
     text-align: justify;
+    letter-spacing: 0;
   }
 
   .nav-item {

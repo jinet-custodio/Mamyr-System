@@ -41,7 +41,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 <body>
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
         <button class=" navbar-toggler ms-auto" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarNav">
+            data-bs-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -205,7 +207,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
     <!-- Bootstrap JS -->
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
     <script>
@@ -219,12 +221,20 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </script>
 
     <script>
-        const toggleButton = document.getElementById('bg-nav-toggler');
         const navbar = document.querySelector('.navbar');
+        const navCollapse = document.getElementById('navbarNav');
 
-        toggleButton.addEventListener('click', () => {
-            navbar.classList.toggle('white-bg');
+        // Add background when collapse is shown
+        navCollapse.addEventListener('shown.bs.collapse', () => {
+            navbar.classList.add('white-bg');
         });
+
+        // Remove background when collapse is hidden
+        navCollapse.addEventListener('hidden.bs.collapse', () => {
+            navbar.classList.remove('white-bg');
+        });
+    </script>
+
     </script>
     <script src="Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="Assets/JS/scrollNavbg.js"></script>
