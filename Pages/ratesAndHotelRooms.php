@@ -35,25 +35,25 @@ require '../Config/dbcon.php';
                 <li class="nav-item">
                     <a class="nav-link" href="../index.php"> Home</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href=" ../Pages/amenities.php" id="navbarDropdown"
+                <li class="nav-item dropdown text-center">
+                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item active" href="#">HOTEL ROOMS AND RATES</a></li>
+                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                         <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="blog.php">BLOG</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">RATES</a>
+                    <a class="nav-link active" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="./about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
@@ -64,6 +64,7 @@ require '../Config/dbcon.php';
             </ul>
         </div>
     </nav>
+
 
     <div class="selection" id="selection" style="display: block;">
         <div class="titleContainer">
@@ -450,6 +451,11 @@ require '../Config/dbcon.php';
         <i class="fas fa-chevron-up"></i>
     </a>
 
+    <!-- Div for loader -->
+    <div id="loaderOverlay" style="display: none;">
+        <div class="loader"></div>
+    </div>
+
     <footer class="py-1" id="footer" style="margin-top: 5vw;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <a href="../../index.php">
@@ -541,6 +547,50 @@ require '../Config/dbcon.php';
             });
         });
     </script>
+
+    <!-- Script for loader -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
+
+            const navbarLinks = document.querySelectorAll('.navbar a');
+
+            navbarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = link.getAttribute('href');
+
+                    if (href && !href.startsWith('#')) {
+                        // Create a temporary anchor to parse the href
+                        const tempAnchor = document.createElement('a');
+                        tempAnchor.href = href;
+                        const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
+
+                        // If the target is different from the current path, show loader
+                        if (targetPath !== currentPath) {
+                            loaderOverlay.style.display = 'flex';
+                        }
+                    }
+                });
+            });
+        });
+
+        function hideLoader() {
+            const overlay = document.getElementById('loaderOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        // Hide loader on normal load
+        window.addEventListener('load', hideLoader);
+
+        // Hide loader on back/forward navigation (from browser cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+            }
+        });
+    </script>
+
     <!-- filters hotel rooms by the hour -->
     <script>
         // State variables

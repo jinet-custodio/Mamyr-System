@@ -36,6 +36,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+
 </head>
 
 <body>
@@ -50,7 +51,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="Pages/amenities.php" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Amenities
                     </a>
@@ -205,6 +206,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </footer>
     </div>
 
+    <!-- Div for loader -->
+    <div id="loaderOverlay" style="display: none;">
+        <div class="loader"></div>
+    </div>
 
     <!-- Bootstrap JS -->
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -219,6 +224,50 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         }
     </script>
+
+    <!-- Script for loader -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
+
+            const navbarLinks = document.querySelectorAll('.navbar a');
+
+            navbarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = link.getAttribute('href');
+
+                    if (href && !href.startsWith('#')) {
+                        // Create a temporary anchor to parse the href
+                        const tempAnchor = document.createElement('a');
+                        tempAnchor.href = href;
+                        const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
+
+                        // If the target is different from the current path, show loader
+                        if (targetPath !== currentPath) {
+                            loaderOverlay.style.display = 'flex';
+                        }
+                    }
+                });
+            });
+        });
+
+        function hideLoader() {
+            const overlay = document.getElementById('loaderOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        // Hide loader on normal load
+        window.addEventListener('load', hideLoader);
+
+        // Hide loader on back/forward navigation (from browser cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+            }
+        });
+    </script>
+
 
     <script>
         const navbar = document.querySelector('.navbar');
@@ -244,25 +293,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Sweet Alert -->
-    <!-- <script>
-    const bookButtons = document.querySelectorAll('#bopNav');
 
-    bookButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            Swal.fire({
-                title: 'Want to Become Our Business Partner?',
-                text: 'You must have an existing account before becoming a business partner.',
-                icon: 'info',
-                confirmButtonText: 'Sign Up'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'pages/register.php';
-                }
-            });
-        });
-    });
-    </script> -->
 </body>
 
 </html>

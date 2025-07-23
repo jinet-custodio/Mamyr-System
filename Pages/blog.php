@@ -35,7 +35,7 @@ require '../Config/dbcon.php'
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
                     <li class="nav-item dropdown text-center">
-                        <a class="nav-link  dropdown-toggle " href=" ../Pages/amenities.php" id="navbarDropdown"
+                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             AMENITIES
                         </a>

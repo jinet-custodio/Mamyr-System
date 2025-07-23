@@ -36,7 +36,7 @@ require '../Config/dbcon.php';
                     <a class="nav-link" href="../index.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href=" amenities.php" id="navbarDropdown" role="button"
+                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
@@ -309,6 +309,10 @@ require '../Config/dbcon.php';
         </div>
     </div>
 
+    <!-- Div for loader -->
+    <div id="loaderOverlay" style="display: none;">
+        <div class="loader"></div>
+    </div>
 
     <footer class="py-1" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
@@ -349,7 +353,10 @@ require '../Config/dbcon.php';
             video.muted = false;
         };
     </script>
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
 
     <script>
         const navbar = document.getElementById("navbar");
@@ -363,10 +370,53 @@ require '../Config/dbcon.php';
         });
     </script>
 
+    <!-- Script for loader -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
+
+            const navbarLinks = document.querySelectorAll('.navbar a');
+
+            navbarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = link.getAttribute('href');
+
+                    if (href && !href.startsWith('#')) {
+                        // Create a temporary anchor to parse the href
+                        const tempAnchor = document.createElement('a');
+                        tempAnchor.href = href;
+                        const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
+
+                        // If the target is different from the current path, show loader
+                        if (targetPath !== currentPath) {
+                            loaderOverlay.style.display = 'flex';
+                        }
+                    }
+                });
+            });
+        });
+
+        function hideLoader() {
+            const overlay = document.getElementById('loaderOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        // Hide loader on normal load
+        window.addEventListener('load', hideLoader);
+
+        // Hide loader on back/forward navigation (from browser cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+            }
+        });
+    </script>
+
+
 
     <script>
         const carousels = document.querySelectorAll('.carousel');
-
 
         carousels.forEach(carousel => {
             let angle = 0;
@@ -391,25 +441,7 @@ require '../Config/dbcon.php';
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Sweet Alert -->
-    <!-- <script>
-        const bookButtons = document.querySelectorAll('#bopNav');
 
-        bookButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Want to Become Our Business Partner?',
-                    text: 'You must have an existing account before becoming a business partner.',
-                    icon: 'info',
-                    confirmButtonText: 'Sign Up'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
-                    }
-                });
-            });
-        });
-    </script> -->
 </body>
 
 </html>
