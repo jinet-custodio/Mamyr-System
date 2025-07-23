@@ -1,0 +1,157 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../../Fonts/Poppins/Poppins-SemiBold.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* body {
+  background: #a1c8c7 !important;
+} */
+
+.sidebar {
+  width: 20vw;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 2px solid rgb(185, 185, 185);
+  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2);
+  border-top-right-radius: 1rem;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  color: black !important;
+  padding: 1rem;
+  margin: 1.5rem 0.5rem 1.5rem 0.5rem;
+  h5 {
+    font-family: "Lora" !important;
+    margin: 0;
+    font-size: 25px;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.list-group {
+  font-family: "Lora";
+  font-size: 18px;
+  border: none;
+  a {
+    text-decoration: none;
+    color: black;
+  }
+}
+.list-group-item {
+  border: none;
+}
+
+.sidebar li:hover a,
+.list-group-item.active {
+  color: white;
+  /* background-color: #007bff; */
+  background-color: rgb(50, 181, 247);
+}
+
+#logoutBtn {
+  display: flex;
+  margin: auto;
+  margin-top: 1rem;
+  text-align: center;
+  color: black;
+}
+
+#logoutBtn:hover {
+  background-color: rgb(219, 53, 69);
+  color: white;
+}
+
+.sidebar-icon {
+  height: 25px;
+  width: 25px;
+}
+
+.backIcon {
+  padding: 1vw;
+}
+
+/* sidebar CSS */
+
+.container-fluid {
+  /* border: 1px solid red; */
+  height: auto;
+}
+
+.backButtonContainer {
+  position: absolute;
+  top: 8%;
+  left: 4%;
+}
+
+.titleContainer {
+  margin-top: 4vw;
+}
+
+#saveButton {
+  position: absolute;
+  right: 4%;
+  top: 7%;
+}
+.pageTitle {
+  text-align: center;
+  font-family: "Poppins";
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.pagesContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 18px;
+  width: 80%;
+  margin: auto;
+  margin-top: 7vw !important;
+}
+
+.btn-info {
+  height: 15vh;
+  font-size: 22px;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.buttonIcon {
+  width: 3.5vw;
+  margin-right: 1vw;
+}
+
+iframe {
+  /* border: 2px solid black; */
+  border-radius: 2vw;
+  display: block;
+  margin: auto;
+}
+
+#landingPageContainer {
+  /* border: 1px solid red; */
+  margin-top: 1vw;
+}
