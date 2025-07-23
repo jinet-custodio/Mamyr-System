@@ -134,32 +134,39 @@ session_start();
                 </a>
             </div>
             <h5 class="accountCreationLabel m-6">Create an Account</h5>
-
-            <div class="passwordContainer">
+            <div class="emailPassForm">
                 <div class="input-box">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-                        oninput="validateSignUpForm();" required>
-                    <i id="togglePassword1" class='bx bxs-hide'></i>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                        required>
+                    <i class='bx bxs-envelope'></i>
                 </div>
-                <div class="confirmErrorMsg" id="passwordValidation"></div>
-                <div class="input-box">
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-                        placeholder="Confirm Password" oninput="validateSignUpForm();" required>
-                    <input type="hidden" name="userRole" value="2"> <!-- 2 = partner -->
-                    <input type="hidden" name="registerStatus" value="partner">
 
-                    <i id="togglePassword2" class='bx bxs-hide'></i>
-                </div>
-                <div class="confirmErrorMsg" id="passwordMatch"></div>
+                <div class="passwordContainer">
+                    <div class="input-box">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                            oninput="validateSignUpForm();" required>
+                        <i id="togglePassword1" class='bx bxs-hide'></i>
+                    </div>
+                    <div class="confirmErrorMsg" id="passwordValidation"></div>
+                    <div class="input-box">
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                            placeholder="Confirm Password" oninput="validateSignUpForm();" required>
+                        <input type="hidden" name="userRole" value="2"> <!-- 2 = partner -->
+                        <input type="hidden" name="registerStatus" value="partner">
 
-                <div class="bottomPart">
-                    <label for="terms">
-                        <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
-                            onchange="validateSignUpForm()"> I agree to the
-                        <a href="#" id="open-modal" style="text-decoration: none;">Terms and Conditions</a>.
-                    </label><br>
-                    <div class="confirmErrorMsg text-center" id="termsError"></div>
-                    <button class="btn btn-primary w-75 m-auto" id="signUp" name="signUp" disabled>Sign Up</button>
+                        <i id="togglePassword2" class='bx bxs-hide'></i>
+                    </div>
+                    <div class="confirmErrorMsg" id="passwordMatch"></div>
+
+                    <div class="bottomPart">
+                        <label for="terms">
+                            <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
+                                onchange="validateSignUpForm()"> I agree to the
+                            <a href="#" id="open-modal" style="text-decoration: none;">Terms and Conditions</a>.
+                        </label><br>
+                        <div class="confirmErrorMsg text-center" id="termsError"></div>
+                        <button class="btn btn-primary w-75 m-auto" id="signUp" name="signUp" disabled>Sign Up</button>
+                    </div>
                 </div>
             </div>
         </div>
