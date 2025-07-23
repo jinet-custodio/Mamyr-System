@@ -145,7 +145,7 @@ if (isset($_POST['bookRates'])) {
         $serviceCapacity = $data['RScapacity'];
     } else {
         echo "Service not found. MySQL error: " . mysqli_error($conn);
-        echo "<br>Query: $getServiceChoiceQuery";
+        error_log("Running query to fetch service with name: " . $getServiceChoice);
         exit();
     }
 
