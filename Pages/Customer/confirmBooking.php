@@ -283,11 +283,11 @@ $userRole = $_SESSION['userRole'];
         $additionalCharge = 0;
         $additionalGuest = 0;
         $totalCost = 0;
-        $selectHotelQuery = $conn->prepare("SELECT * FROM services s
+        $selectedHotelQuery = $conn->prepare("SELECT * FROM services s
             JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
             WHERE ra.RServiceName = ?");
-        $selectHotelQuery->bind_param("s", $selectedHotel);
-        $selectHotelQuery->execute();
+        $selectedHotelQuery->bind_param("s", $selectedHotel);
+        $selectedHotelQuery->execute();
         $resultHotelQuery = $selectedHotelQuery->get_result();
         if ($resultHotelQuery->num_rows > 0) {
             $data = $resultHotelQuery->fetch_assoc();
