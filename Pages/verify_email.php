@@ -23,9 +23,11 @@ if (isset($_SESSION['email'])) {
   <link rel="stylesheet" href="../Assets/CSS/modal.css" />
   <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+  <!-- icon libraries for font-awesome and box icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link
     rel="stylesheet"
     href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
@@ -78,6 +80,7 @@ if (isset($_SESSION['email'])) {
 
               <button
                 type="submit"
+                id="submitBtn"
                 class="btn btn-primary"
                 data-bs-dismiss="modal"
                 name="verify-btn">
@@ -95,11 +98,40 @@ if (isset($_SESSION['email'])) {
 
 
   <!-- Bootstrap JS -->
-  <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+  <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
   <!-- Sweetalert Link -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Script for loader -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loaderOverlay = document.getElementById('loaderOverlay');
+      const form = document.querySelector('form');
+
+      if (form) {
+        form.addEventListener('submit', function() {
+          loaderOverlay.style.display = 'flex';
+        });
+      }
+    });
+
+    function hideLoader() {
+      const overlay = document.getElementById('loaderOverlay');
+      if (overlay) overlay.style.display = 'none';
+    }
+
+    // Hide loader on normal load
+    window.addEventListener('load', hideLoader);
+
+    // Hide loader on back/forward navigation (from browser cache)
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        hideLoader();
+      }
+    });
+  </script>
 
   <script>
     const params = new URLSearchParams(window.location.search);

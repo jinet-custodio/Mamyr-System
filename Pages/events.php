@@ -40,13 +40,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Pages/blog.php">BLOG</a>
+                    <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="about.php">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
@@ -180,7 +180,10 @@
 
     </div>
 
-
+    <!-- Div for loader -->
+    <div id="loaderOverlay" style="display: none;">
+        <div class="loader"></div>
+    </div>
 
     <footer class="py-1" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
@@ -219,45 +222,50 @@
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
     <!-- Scroll Nav BG -->
     <script src="../Assets/JS/scrollNavbg.js"></script>
-    <!-- Sweet Alert -->
-    <script>
-        const bookButtons = document.querySelectorAll('#bookBtn');
 
-        bookButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Are you ready to book?',
-                    text: 'You must have an existing account before booking our services.',
-                    icon: 'info',
-                    confirmButtonText: 'Go'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
+    <!-- Script for loader -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
+
+            const navbarLinks = document.querySelectorAll('.navbar a');
+
+            navbarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = link.getAttribute('href');
+
+                    if (href && !href.startsWith('#')) {
+                        // Create a temporary anchor to parse the href
+                        const tempAnchor = document.createElement('a');
+                        tempAnchor.href = href;
+                        const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
+
+                        // If the target is different from the current path, show loader
+                        if (targetPath !== currentPath) {
+                            loaderOverlay.style.display = 'flex';
+                        }
                     }
                 });
             });
+        });
+
+        function hideLoader() {
+            const overlay = document.getElementById('loaderOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        // Hide loader on normal load
+        window.addEventListener('load', hideLoader);
+
+        // Hide loader on back/forward navigation (from browser cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+            }
         });
     </script>
 
-    <!-- Sweet Alert -->
-    <!-- <script>
-        const bopButtons = document.querySelectorAll('#bopNav');
-
-        bopButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Want to Become Our Business Partner?',
-                    text: 'You must have an existing account before becoming a business partner.',
-                    icon: 'info',
-                    confirmButtonText: 'Sign Up'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
-                    }
-                });
-            });
-        });
-    </script> -->
 </body>
 
 </html>

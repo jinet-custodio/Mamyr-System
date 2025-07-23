@@ -227,15 +227,6 @@ require '../Function/OTPdeletion.php';
             const loginPassword = document.getElementById('login_password');
             const loader = document.getElementById('loader');
 
-            // function validateLoginFields() {
-            //     const emailFilled = loginEmail.value.trim() !== '';
-            //     const passwordFilled = loginPassword.value.trim() !== '';
-            //     loginBtn.disabled = !(emailFilled && passwordFilled);
-            // }
-            // loginEmail.addEventListener('input', validateLoginFields);
-            // loginPassword.addEventListener('input', validateLoginFields);
-            // validateLoginFields();
-
 
             // Click event on the button
             signUpBtn.addEventListener('click', function(e) {

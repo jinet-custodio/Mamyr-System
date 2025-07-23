@@ -11,4 +11,4 @@ CREATE TABLE notifications (
     FOREIGN KEY (bookingID) REFERENCES bookings(bookingID),
     FOREIGN KEY (partnershipID) REFERENCES partnerships(partnershipID),
     FOREIGN KEY (userID) REFERENCES users(userID)
-    )
+    );

@@ -46,6 +46,63 @@ require '../Config/dbcon.php';
             </form>
         </div>
     </div>
+    <!-- Div for loader -->
+    <div id="loaderOverlay" style="display: none;">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Script for loader -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const form = document.querySelector('form');
+            const emailInput = document.getElementById('email');
+            const submitBtn = document.getElementById('verify_email');
+
+            // Disable the button initially
+            submitBtn.disabled = true;
+
+            // Function to validate email
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            // Listen for input changes
+            emailInput.addEventListener('input', function() {
+                if (isValidEmail(emailInput.value)) {
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.disabled = true;
+                }
+            });
+
+            // Checks if the email box is not empty before triggering loader
+            form.addEventListener('submit', function(e) {
+                if (!isValidEmail(emailInput.value)) {
+                    e.preventDefault();
+                    loaderOverlay.style.display = 'none';
+                    return;
+                }
+                loaderOverlay.style.display = 'flex';
+            });
+        });
+
+        function hideLoader() {
+            const overlay = document.getElementById('loaderOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        // Hide loader on normal load
+        window.addEventListener('load', hideLoader);
+
+        // Hide loader on back/forward navigation (from browser cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+            }
+        });
+    </script>
 
 </body>
 
