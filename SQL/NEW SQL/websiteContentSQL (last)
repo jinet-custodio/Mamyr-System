@@ -65,7 +65,7 @@ INSERT INTO `websitecontents` (`contentID`, `adminID`, `sectionName`, `title`, `
 (22, 1, 'BusinessInformation', 'ContactNum', '(0998) 962 4697', '2025-07-03 00:38:51'),
 (24, 1, 'BusinessInformation', 'Email', 'mamyresort128@gmail.com', '2025-07-03 00:38:51'),
 (25, 1, 'BusinessInformation', 'Address', 'Sitio Colonia Gabihan, San Ildefonso, Bulacan', '2025-07-03 00:38:51'),
-(26, '1', 'BusinessInformation', 'ShortDesc2', 'Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional.', current_timestamp())
+(26, '1', 'BusinessInformation', 'ShortDesc2', 'Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional.', current_timestamp()),
 (27, '1', 'About', 'Header', 'Compassionate Service, Unforgettable Family Moments', current_timestamp()),
 (28, '1', 'About', 'AboutMamyr', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family but also bring joy to others.', current_timestamp()),
 (NULL, '1', 'About', 'ServicesDesc', 'Mamyr isn’t just a resort; it’s a family-oriented getaway with comfortable rooms and a versatile event venue for gatherings and celebrations. It offers a relaxed, fun environment for all ages to enjoy.', current_timestamp()), 
@@ -81,9 +81,7 @@ INSERT INTO `websitecontents` (`contentID`, `adminID`, `sectionName`, `title`, `
 (NULL, '1', 'About', 'HistoryParagraph3', 'Opened in 2022, Mamyr Resort has become a popular and welcoming place for people looking to relax and enjoy nature. The resort is known for its clean swimming pools, spacious function areas, beautiful surroundings, and warm hospitality. Guests can enjoy the resort\'s three refreshing swimming pools, two elegant pavilions, cozy cottages to stay in, as well as 11 comfortable hotel rooms for those who prefer a more private stay, and a spacious parking lot to accommodate all guests conveniently.', current_timestamp()),
 (NULL, '1', 'About', 'HistoryParagraph4', 'At Mamyr Resort, we treat every guest like family, making sure your stay is special and enjoyable. Whether you\'re celebrating an important event, spending time with loved ones, or just looking for a peaceful break, we have everything you need to feel comfortable and relaxed. Our team works hard to create a warm and welcoming atmosphere where you can make lasting memories. Visit us and see for yourself why we\'re so proud of how much we\'ve grown.', current_timestamp()),
 (NULL, '1', 'BusinessInformation', 'FBLink', 'https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/', current_timestamp()), 
-(NULL, '1', 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp()), (NULL, '1', 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp()) ;,
-;
-
+(NULL, '1', 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp()), (NULL, '1', 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp());
 --
 -- ALTER TABLE `websitecontents`
 --   ADD PRIMARY KEY (`contentID`),
