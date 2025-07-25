@@ -126,14 +126,15 @@ session_start();
         </div>
 
         <div class="container" id="emailPassContainer">
+            <div class="labelAndArrow">
+                <div class="back-icon-container-login">
+                    <a href="busPartnerRegister.php?page=basicInfo">
+                        <img src="../Assets/Images/Icon/arrow.png" style="height: 4vw" alt="Go back" class="backArrow" id="emailBackArrow">
 
-            <div class="back-icon-container-login">
-                <a href="busPartnerRegister.php?page=basicInfo">
-                    <img src="../Assets/Images/Icon/arrow.png" style="height: 4vw" alt="Go back" class="backArrow">
-
-                </a>
+                    </a>
+                </div>
+                <h5 class="accountCreationLabel m-6">Create an Account</h5>
             </div>
-            <h5 class="accountCreationLabel m-6">Create an Account</h5>
             <div class="emailPassForm">
                 <div class="input-box">
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email"

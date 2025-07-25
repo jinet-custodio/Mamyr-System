@@ -54,20 +54,31 @@ body {
   clear: both;
 }
 */
+#basicInfo {
+  display: flex;
+  align-items: center;
+}
+
 .container {
   font-family: "Poppins";
   /* border: 1px solid black !important; */
   background-color: #ffff;
   width: 1289px;
-  height: 450px;
   border-radius: 40px;
   display: block;
   margin: 0 auto !important;
 }
 
+.row {
+  height: 100%;
+}
+
+.col {
+  padding: 1vw 0 3vw 0;
+}
+
 #busInfoContainer {
   background-color: #78aeff;
-  height: 436px;
 }
 
 .repInfoLabel,
@@ -328,4 +339,97 @@ input[type="password"]::-webkit-search-cancel-button {
   .column {
     width: 100%;
   }
+}
+
+/* Tablet landscape */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+.title {
+  font-size: 32px !important;
+}
+
+}
+
+/* Tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+.title {
+  font-size:  clamp(30px, calc(4vh + 3px), 45px) !important;
+  margin-top: 10vh !important;
+}
+
+.backArrow {
+  width: 6vw !important;
+  margin-top: 7vh;
+}
+
+.container {
+  width: 65% !important;
+  padding: 0 !important;
+}
+
+#emailPassContainer {
+  margin-top: 20vh !important;
+}
+
+.emailPassForm {
+  padding-bottom: 3vw;
+}
+
+.row {
+  flex-direction: column;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.repInfoFormContainer, .busInfoFormContainer, .busProofFormContainer, .description, .emailPassForm {
+  width: 80%;
+  flex-wrap:wrap;
+  margin: 0 auto;
+}
+
+.repInfoFormContainer {
+  padding: 0;
+}
+
+.col {
+  padding: 2vw 0 5vw 0;
+}
+
+.col h4 {
+  margin-bottom: 3vw !important;
+}
+
+.back-icon-container-login {
+  position: static;
+  width: 10%;
+  margin-top: 0;
+}
+
+#emailBackArrow {
+  margin-top: 0 !important;
+  margin-left: 2vw;
+  height: 100%;
+}
+
+.accountCreationLabel {
+  width: 100%;
+  text-align: center;
+  padding-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-left: -10%;
+}
+
+.labelAndArrow {
+  padding-top: 5vw !important;
+  display: flex;
+  align-items: center;
+}
+
+
+}
+
+/* Phone size */
+@media screen and (min-width: 360px) and (max-width: 599px) {
+.title {
+  font-size: 20px;
+}
 }
