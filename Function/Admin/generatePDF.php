@@ -121,7 +121,7 @@ if (isset($_POST['generatePDF'])) {
 
             <section>
                 <h2 class="section-title">Summary</h2>
-                <p><strong>Monthly Total Bookings:</strong> <?= $totalBookings ?></p>
+                <p><strong>Total Bookings:</strong> <?= $totalBookings ?></p>
                 <p><strong>Total Cost:</strong> ₱<?= number_format($totalCost, 2) ?></p>
             </section>
 

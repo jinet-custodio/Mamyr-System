@@ -72,10 +72,11 @@ $userRole = $_SESSION['userRole'];
         $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
         $cottageChoice = isset($_POST['cottageSelections']) ? mysqli_real_escape_string($conn, $_POST['cottageSelections']) : "";
         $roomChoice = isset($_POST['roomSelections']) ? mysqli_real_escape_string($conn, $_POST['roomSelections']) : "";
-        $videokeChoice = mysqli_real_escape_string($conn, $_POST['videokeChoice']);
+        $addOns = mysqli_real_escape_string($conn, $_POST['entertainment']);
         $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
-        $paymentMethod = mysqli_real_escape_string($conn, $_POST['PaymentMethod']);
-        // $paymentMethod = 'Cash';
+
+        $paymentMethod = "Cash";
+
         $bookingType = 'Resort';
         $page = 'resort-page';
         $buttonName = 'bookRates';

@@ -526,11 +526,7 @@ $userRole = $_SESSION['userRole'];
         const bookingStatus = document.getElementById("bookingStatus").value;
         const confirmedBookingStatus = document.getElementById("confirmedBookingStatus").value;
         const paymentMethod = document.getElementById("paymentMethod").value;
-        if (paymentMethod === 'Cash') {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-        } else if (paymentMethod === 'GCash') {
-            document.getElementById("makeDownpaymentBtn").style.display = "block";
-        } else if (bookingStatus === "Pending") {
+        if (bookingStatus === "Pending" && confirmedBookingStatus === '') {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
         } else if (bookingStatus === "Approved" && confirmedBookingStatus === "Pending" && paymentStatus === "Unpaid") {
             document.getElementById("makeDownpaymentBtn").style.display = "show";
@@ -538,6 +534,10 @@ $userRole = $_SESSION['userRole'];
             document.getElementById("makeDownpaymentBtn").style.display = "show";
         } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Fully Paid") {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else if (paymentMethod === 'Cash') {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
+        } else if (paymentMethod === 'GCash') {
+            document.getElementById("makeDownpaymentBtn").style.display = "block";
         } else {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
         }
