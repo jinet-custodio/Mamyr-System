@@ -29,7 +29,7 @@ BEGIN
 
     IF NEW.userRole = 3 AND OLD.userRole <> 3 THEN
         IF NOT EXISTS (SELECT 1 FROM admins WHERE userID = NEW.userID) THEN
-            INSERT INTO admins (userID, position) VALUES (NEW.userID, 'Admin');
+            INSERT INTO admins (userID, position) VALUES (NEW.userID, 'Administrator');
         END IF;
     END IF;
 END $$

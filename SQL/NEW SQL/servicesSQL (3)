@@ -5,18 +5,19 @@ CREATE TABLE partnershipServices (
     PBPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     PBDescription TEXT,
     PBcapacity INT,
-    PSStatus INT NOT NULL,
+    PSstatus INT NOT NULL,
     PSAvailabilityID INT NOT NULL,
 
     FOREIGN KEY (partnershipID) REFERENCES partnerships(partnershipID),
     FOREIGN KEY (PSAvailabilityID) REFERENCES serviceAvailability(availabilityID),
-    FOREIGN KEY (PSStatus) REFERENCES statuses(statusID)
+    FOREIGN KEY (PSstatus) REFERENCES statuses(statusID)
 );
 
 CREATE TABLE resortAmenities (
     resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
     RServiceName VARCHAR(200) NOT NULL,
     RSprice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    RSquantity INT NOT NULL,
     RScapacity INT DEFAULT 0,
     RSduration VARCHAR(50) DEFAULT '0',
     RScategoryID INT NOT NULL,
@@ -141,5 +142,19 @@ CREATE TABLE discounts (
 
     FOREIGN KEY (serviceID) REFERENCES services(serviceID),
     FOREIGN KEY (packageID) REFERENCES packages(packageID)
+);
+
+
+
+CREATE TABLE serviceUnavailableDates (
+    serviceUnavailableID INT AUTO_INCREMENT PRIMARY KEY,
+    resortServiceID INT NULL,
+    partnershipServiceID INT NULL,
+    unavailableStartDate DATETIME NOT NULL,
+    unavailableEndDate DATETIME NOT NULL,
+
+
+    FOREIGN KEY (resortServiceID) REFERENCES resortAmenities(resortServiceID),
+    FOREIGN KEY(partnershipServiceID) REFERENCES partnershipServices(partnershipServiceID)
 );
 

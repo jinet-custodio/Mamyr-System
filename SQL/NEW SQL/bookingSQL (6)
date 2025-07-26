@@ -15,6 +15,7 @@ CREATE TABLE bookings (
     additionalCharge DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     discountID INT DEFAULT NULL,
     discountAmount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    initialCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     totalCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     downpayment DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     bookingStatus INT NOT NULL,
