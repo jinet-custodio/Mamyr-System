@@ -64,7 +64,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <li class="nav-item">
                     <a class="nav-link" href="Pages/blog.php">Blog</a>
                 </li>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">Be Our Partner</a>
                 </li>
@@ -285,7 +284,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </script>
 
     </script>
-    <script src="Assets/JS/bootstrap.bundle.min.js"></script>
+
     <script src="Assets/JS/scrollNavbg.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>

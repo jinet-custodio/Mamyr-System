@@ -155,18 +155,18 @@
     <script src="../../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#booking').DataTable({
-            language: {
-                emptyTable: "No Services"
-            },
-            columnDefs: [{
-                width: '15%',
-                target: 0
+        $(document).ready(function() {
+            $('#booking').DataTable({
+                language: {
+                    emptyTable: "No Services"
+                },
+                columnDefs: [{
+                    width: '15%',
+                    target: 0
 
-            }]
+                }]
+            });
         });
-    });
     </script>
 
     <!-- Bootstrap Link -->
@@ -179,28 +179,28 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Show -->
     <script>
-    const logoutBtn = document.getElementById('logoutBtn');
-    const logoutModal = document.getElementById('logoutModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/logout.php";
-            }
-        });
-    })
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/logout.php";
+                }
+            });
+        })
     </script>
 </body>
 

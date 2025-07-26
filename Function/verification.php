@@ -99,11 +99,19 @@ if (isset($_POST['verify-btn'])) {
                                     // Cleanup
                                     unset($_SESSION['partnerData']);
                                     if ($insertPartner->execute()) {
+
+                                        $partnershipID = $conn->insert_id;
                                         $userOTP = NULL;
                                         $otpExpirationDate = NULL;
                                         $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = ?, OTP_expiration_at = ? WHERE email = ?");
                                         $changeStatus->bind_param("isss", $userStat, $userOTP, $otpExpirationDate, $email);
-                                        if ($changeStatus->execute()) {
+
+                                        $receiver = "Customer";
+                                        $message = "Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.";
+                                        $insertNotification = $conn->prepare("INSERT INTO notifications(partnershipID, userID, message, receiver) VALUES(?, ?, ?, ?)");
+                                        $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
+
+                                        if ($changeStatus->execute() && $insertNotification->execute()) {
                                             $_SESSION['success'] = "Partner registered and verified successfully!";
                                             header("Location: ../Pages/register.php");
                                             exit;

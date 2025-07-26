@@ -211,7 +211,7 @@ $userRole = $_SESSION['userRole'];
             <h4 class="title">What are you booking for?</h4>
         </div>
         <div class="categories">
-            <a href="resortBooking.php" id="resort-link" class="categoryLink">
+            <a href="#resort-page" id="resort-link" class="categoryLink">
                 <div class="card category-card resort-category"
                     style="width: 20rem; display: flex; flex-direction: column;">
                     <img class="card-img-top" src="../../Assets/images/amenities/poolPics/poolPic3.jpg"
@@ -222,7 +222,7 @@ $userRole = $_SESSION['userRole'];
                     </div>
                 </div>
             </a>
-            <a href="hotelBooking.php" id="hotel-link" class="categoryLink">
+            <a href="#hotel-page" id="hotel-link" class="categoryLink">
                 <div class="card category-card hotel-category"
                     style="width: 20rem; display: flex; flex-direction: column;">
                     <img class="card-img-top" src="../../Assets/images/amenities/hotelPics/hotel1.jpg"
@@ -244,6 +244,411 @@ $userRole = $_SESSION['userRole'];
             </a>
         </div>
     </div>
+
+    <!-- Resort Booking -->
+    <form action="confirmBooking.php" method="POST" id="resort-page" style="display: none;">
+        <div class="resort" id="resort">
+            <div class="backToSelection" id="backToSelection">
+                <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
+            </div>
+            <div class="titleContainer">
+                <h4 class="resortTitle" id="resortTitle">RESORT BOOKING</h4>
+            </div>
+
+            <div class="container-fluid">
+                <div class="card resort-card" id="resortBookingCard" style="flex-shrink: 0; ">
+
+                    <h5 class="schedLabel">Schedule</h5>
+                    <div class="scheduleForm">
+                        <input type="text" class="form-control w-95" id="resortBookingDate" name="resortBookingDate"
+                            placeholder="Select booking date" required>
+                        <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -5vw;font-size:1.2vw;">
+                        </i>
+                        <select id="tourSelections" name="tourSelections" class="form-select" required>
+                            <option value="" disabled selected>Select Preferred Tour</option>
+                            <option value="Day" id="dayTour">Day Tour</option>
+                            <option value="Night" id="nightTour">Night Tour</option>
+                            <option value="Overnight" id="overnightTour">Overnight Tour</option>
+                        </select>
+                    </div>
+
+                    <h5 class="noOfPeopleLabel">Number of People</h5>
+                    <div class="peopleForm">
+                        <input type="number" class="form-control" placeholder="Adults" name="adultCount">
+                        <input type="number" class="form-control" placeholder="Children" name="childrenCount">
+                    </div>
+
+                    <div class="cottageRoomForm">
+                        <div class="cottageForm" id="cottage">
+                            <h5 class="cottageLabel">Cottage</h5>
+                            <select id="cottageSelections" name="cottageSelections" class="form-select">
+                                <option value="" disabled selected>Please Select a Cottage</option>
+                                <?php
+                                $cottageCategoryID = 2;
+                                $availableID = 1;
+                                $cottageQuery = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? AND RSAvailabilityID = ?");
+                                $cottageQuery->bind_param("ii", $cottageCategoryID, $availableID);
+                                $cottageQuery->execute();
+                                $cottageResult = $cottageQuery->get_result();
+                                if ($cottageResult->num_rows > 0) {
+                                    while ($cottage = $cottageResult->fetch_assoc()) {
+                                        echo "<option value='" . $cottage['RServiceName'] . "'>₱" . $cottage['RSprice'] . " - Good for " . $cottage['RScapacity'] . " pax " . "</option>";
+                                    }
+                                } else {
+                                    echo "<option value='' disabled>No cottages available</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="roomNumbers" style="display: none;" id="rooms">
+                            <h5 class="roomLabel">Room</h5>
+                            <select class="form-select" id="roomSelect" name="roomSelections">
+                                <option value="" selected disabled>Choose a room</option>
+                                <?php
+                                $category = 'Hotel';
+                                $availableID = 1;
+                                $selectHotel = $conn->prepare("SELECT rs.*, rsc.categoryName FROM resortAmenities rs
+                            JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
+                            WHERE rsc.categoryName = ? AND RSAvailabilityID = ?");
+                                $selectHotel->bind_param("si", $category, $availableID);
+                                $selectHotel->execute();
+                                $result = $selectHotel->get_result();
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                ?>
+                                        <option value="<?= $row['RServiceName'] ?>">
+                                            <?= $row['RServiceName'] ?> — <?= $row['RScapacity'] ?> guests for
+                                            ₱<?= $row['RSprice'] ?>
+                                        </option>
+                                <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="paymentVideokeForm">
+                        <div class="paymentMethod">
+                            <h5 class="paymentLabel">Payment Method</h5>
+                            <div class="input-group">
+                                <select class="form-select" name="PaymentMethod" required>
+                                    <option value="" disabled selected>Choose...</option>
+                                    <option value="GCash">GCash</option>
+                                    <option value="Cash">Cash</option>
+                                </select>
+                            </div>
+                            <!-- <input type="hidden" name="eventPax" id="hiddenGuestValue"> -->
+                        </div>
+
+                        <div class="videokeForm">
+                            <h5 class="videokeRentalLabel">Videoke Rental</h5>
+                            <div class="input-group">
+                                <select id="booleanSelections" name="videokeChoice" class="form-select" required>
+                                    <option value="" selected disabled>Choose...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
+                    <textarea class="form-control w-100" id="purpose-additionalNotes" name="additionalRequest" rows="5"
+                        placeholder="Optional"></textarea>
+
+                    <div class="mt-auto button-container">
+                        <button type="submit" class="btn btn-primary btn-md w-100" name="bookRates">Book Now</button>
+                    </div>
+                </div>
+
+                <div class="entrance-rates">
+                    <div class="card rates">
+
+                        <h1 class="text-center">Entrance Fee</h1>
+
+                        <div class="card-body">
+                            <?php
+                            $getEntranceRates = $conn->prepare("SELECT er.*, etr.timeRangeID AS primaryID, etr.time_range AS timeRange FROM entranceRates er
+                        JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID
+                        ORDER BY er.sessionType, etr.time_range, er.ERcategory");
+                            $getEntranceRates->execute();
+                            $getEntranceRatesResult = $getEntranceRates->get_result();
+
+                            if ($getEntranceRatesResult->num_rows > 0) {
+                                $groupedData = [];
+                                while ($row = $getEntranceRatesResult->fetch_assoc()) {
+                                    $sessionType = $row['sessionType'];
+                                    $timeRange = $row['timeRange'];
+                                    $category = $row['ERcategory'];
+                                    $price = $row['ERprice'];
+
+                                    $key = $sessionType . '|' . $timeRange;
+                                    $groupedData[$key][] = [
+                                        'category' => $category,
+                                        'price' => $price
+                                    ];
+                                }
+                                foreach ($groupedData as $key => $entries) {
+                                    list($sessionType, $timeRange) = explode('|', $key);
+                            ?>
+                                    <div class="data-container">
+                                        <h5><strong><?= htmlspecialchars($sessionType) ?></strong>|
+                                            <?= htmlspecialchars($timeRange) ?> </h5>
+                                        <?php
+                                        foreach ($entries as $entry) {
+                                        ?>
+                                            <p><strong><?= htmlspecialchars($entry['category']) ?></strong> -
+                                                <?= htmlspecialchars($entry['price']) ?></p>
+                                        <?php
+                                        }
+                                        ?>
+                                    </div>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+
+                    <div class="card cottagesVideoke">
+                        <div class="card-body cottage">
+                            <h1>Cottages</h1>
+                            <?php
+                            $cottageCategoryID = 2;
+
+                            $getCottageQuery = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ?");
+                            $getCottageQuery->bind_param("i", $cottageCategoryID);
+                            $getCottageQuery->execute();
+                            $getCottageQueryResult =  $getCottageQuery->get_result();
+                            if ($getCottageQueryResult->num_rows > 0) {
+                                while ($row = $getCottageQueryResult->fetch_assoc()) {
+                                    $description = $row['RSdescription'];
+                                    $price = $row['RSprice'];
+                            ?>
+                                    <p> <?= htmlspecialchars(number_format($price, 0)) ?> pesos
+                                        <?= htmlspecialchars(strtolower($description)) ?> </p>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </div>
+
+                        <div class="card-body note">
+                            <h1 class="card-title">NOTE:</h1>
+                            <ul>
+                                <li>Food is allowed except alcoholic drink and soft drinks. It`s available and
+                                    affordable in our convenience store inside.</li>
+                                <li>Appropriate swimming attire is required.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card-body videoke">
+                            <?php
+                            $videokeCategoryID = 3;
+
+                            $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? LIMIT 1");
+                            $getVideoke->bind_param("i", $videokeCategoryID);
+                            $getVideoke->execute();
+                            $getVideokeResult =  $getVideoke->get_result();
+                            if ($getVideokeResult->num_rows > 0) {
+
+                                while ($row = $getVideokeResult->fetch_assoc()) {
+                                    $price = $row['RSprice'];
+                            ?>
+                                    <h1> Videoke for rent </h1>
+                                    <p><?= htmlspecialchars(number_format($price, 0)) ?> pesos per rent </p>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </form>
+
+    <!-- Hotel Booking -->
+    <form action="confirmBooking.php" method="POST" id="hotel-page" style="display: none;">
+        <div class="hotel" id="hotel">
+            <div class="backToSelection" id="backToSelection">
+                <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
+            </div>
+            <div class="titleContainer">
+                <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
+            </div>
+            <?php
+            $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration
+            FROM resortAmenities 
+            WHERE RScategoryID = '1'";
+
+            $result = mysqli_query($conn, $availsql);
+            ?>
+            <div class="container-fluid" id="hotelContainerFluid">
+                <div class="hotelIconsContainer">
+                    <div class="availabilityIcons">
+                        <div class="availabilityIcon" id="allRooms" onclick="filterRooms('all')">
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
+                                class="avail" id="allrooms">
+                            <p>All Rooms</p>
+                        </div>
+                        <div class="availabilityIcon" id="availableRooms" onclick="filterRooms('available')">
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2"
+                                class="avail">
+                            <p>Available</p>
+                        </div>
+                        <div class="availabilityIcon" id="unavailableRooms" onclick="filterRooms('unavailable')">
+                            <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3"
+                                class="avail">
+                            <p>Not Available</p>
+                        </div>
+                    </div>
+
+
+                    <div class="hotelIconContainer mt-3">
+                        <?php
+                        if ($result->num_rows > 0) {
+                            $i = 1;
+                            while ($row = $result->fetch_assoc()) {
+                                $isAvailable = ($row['RSAvailabilityID'] == 1);
+                                $iconPath = $isAvailable
+                                    ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
+                                    : "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
+                                $roomName = htmlspecialchars($row['RServiceName']);
+                                $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
+                        ?>
+                                <div class="hotelIconWithCaption" style="display: inline-block; text-align: center;"
+                                    data-availability="<?= $availabilityStatus ?>">
+                                    <a href="#<?= trim($row['RServiceName']) ?>"
+                                        data-duration="<?= htmlspecialchars($row['RSduration']) ?>">
+                                        <img src="<?= $iconPath ?>" alt="<?= $roomName ?>" class="hotelIcon"
+                                            id="hotelIcon<?= $i ?>">
+                                    </a>
+                                    <p class="roomCaption"> <?= $roomName ?></p>
+                                </div>
+                            <?php
+                                $i++;
+                            }
+                        } else {
+                            ?>
+                            <p class="text-center m-auto">No room services found.</p>
+                        <?php
+                        }
+                        ?>
+                    </div>
+
+                    <div>
+                        <a href="ratesAndHotelRooms.php" class="btn btn-primary btn-md w-100" id="amenitiesHR"> Take me
+                            to Hotel Rooms and
+                            Rates</a>
+                    </div>
+                </div>
+
+
+                <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
+
+                    <div class="hoursRoom">
+                        <div class="NumberOfHours">
+                            <h5 class="numberOfHours">Number of Hours</h5>
+                            <div class="input-group">
+                                <select class="form-select" name="hoursSelected" id="hoursSelected" required>
+                                    <option value="" disabled selected>Choose...</option>
+                                    <option value="11 hours">11 Hours</option>
+                                    <option value="22 hours">22 Hours</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="roomNumbers">
+                            <h5 class="roomNumber-title">Room Number</h5>
+                            <div class="input-group">
+                                <select class="form-select" name="selectedHotel" id="selectedHotel" required>
+                                    <option value="" disabled selected>Choose a room</option>
+                                    <?php
+                                    $category = 'Hotel';
+                                    $availableID = 1;
+                                    $selectHotel = $conn->prepare("SELECT rs.*, rsc.categoryName FROM resortAmenities rs
+                            JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
+                            WHERE rsc.categoryName = ? AND RSAvailabilityID = ?");
+                                    $selectHotel->bind_param("si", $category, $availableID);
+                                    $selectHotel->execute();
+                                    $result = $selectHotel->get_result();
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                            <option value="<?= $row['RServiceName'] ?>"
+                                                data-duration="<?= $row['RSduration'] ?>"><?= $row['RServiceName'] ?> - Max. of
+                                                <?= $row['RScapacity'] ?> pax - ₱<?= $row['RSprice'] ?></option>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkInOut">
+
+                        <div class="checkIn-container">
+                            <h5 class="containerLabel">Check-In Date</h5>
+                            <div style="display: flex;align-items:center;width:100%">
+                                <input type="text" class="form-control" name="checkInDate" id="checkInDate" required
+                                    placeholder="Select Date and Time">
+                                <i class="fa-solid fa-calendar" id="hotelCheckinIcon"
+                                    style="margin-left: -2vw;font-size:1.2vw;"> </i>
+                            </div>
+                        </div>
+                        <div class="checkOut-container">
+                            <h5 class="containerLabel">Check-Out Date</h5>
+                            <div style="display: flex;align-items:center;">
+                                <input type="text" class="form-control" name="checkOutDate" id="checkOutDate" required
+                                    placeholder="Select Date and Time">
+                                <i class="fa-solid fa-calendar" id="hotelCheckoutIcon"
+                                    style="margin-left: -2vw;font-size:1.2vw;"> </i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hotelPax">
+                        <h5 class="noOfPeopleHotelLabel">Number of People</h5>
+                        <div class="hotelPeopleForm">
+                            <input type="number" class="form-control" name="adultCount" placeholder="Adults" required>
+                            <input type="number" class="form-control" name="childrenCount" placeholder="Children"
+                                required>
+                        </div>
+                    </div>
+
+
+                    <div class="paymentMethod">
+                        <h5 class="payment-title">Payment Method</h5>
+                        <div class="input-group">
+                            <select class="form-select" name="PaymentMethod" id="paymentMethod" required>
+                                <option value="" disabled selected>Choose...</option>
+                                <option value="GCash">GCash</option>
+                                <option value="Cash">Cash</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="additional-info-container">
+                        <ul>
+                            <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon"
+                                    class="info-icon">&nbsp;&nbsp;If the maximum pax exceeded, extra guest is charged
+                                ₱250 per head</li>
+                        </ul>
+                    </div>
+                    <button type="submit" class="btn btn-success" name="hotelBooking" id="hotelBooking">Book
+                        Now</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
 
     <!-- Event Booking -->
     <form action="../../Function/Booking/eventBooking.php" method="POST" id="event-page" style="display: none;">
@@ -1056,7 +1461,65 @@ $userRole = $_SESSION['userRole'];
     </script>
 
 
+    <!-- Hotel check-in check-out  -->
+    <script>
+        const hoursSelected = document.getElementById('hoursSelected');
+        const checkInInput = document.getElementById('checkInDate');
+        const checkOutInput = document.getElementById('checkOutDate');
+        const selectedHotel = document.getElementById('selectedHotel');
+        const hotelDivs = document.querySelectorAll('.hotelIconWithCaption')
 
+        checkInInput.addEventListener('change', () => {
+            const selectedValue = hoursSelected.value;
+            const checkInDate = new Date(checkInInput.value);
+            const addHours = parseInt(selectedValue);
+            if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
+                const checkOutDate = new Date(checkInDate.getTime() + addHours * 60 * 60 * 1000);
+
+                const year = checkOutDate.getFullYear();
+                const month = String(checkOutDate.getMonth() + 1).padStart(2, '0');
+                const day = String(checkOutDate.getDate()).padStart(2, '0');
+                const hours = String(checkOutDate.getHours()).padStart(2, '0');
+                const minutes = String(checkOutDate.getMinutes()).padStart(2, '0');
+
+                const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+                checkOutInput.value = formattedDate;
+
+            }
+        });
+
+
+
+        hoursSelected.addEventListener('change', () => {
+            const selectedValue = hoursSelected.value.trim().toLowerCase();
+
+
+            if (checkInInput.value) {
+                checkInInput.dispatchEvent(new Event('change'));
+            }
+
+
+            selectedHotel.setAttribute('data-duration', selectedValue);
+            Array.from(selectedHotel.options).forEach(option => {
+                if (!option.value) {
+                    option.hidden = false;
+                    return;
+                }
+                const roomDuration = option.getAttribute('data-duration')?.trim().toLowerCase() || '';
+                option.hidden = roomDuration !== selectedValue;
+            });
+            selectedHotel.selectedIndex = 0;
+
+
+            hotelDivs.forEach(div => {
+                const aTag = div.querySelector('a[data-duration]');
+                if (!aTag) return;
+
+                const duration = aTag.getAttribute('data-duration')?.trim().toLowerCase() || '';
+                div.style.display = duration === selectedValue ? 'inline-block' : 'none';
+            });
+        });
+    </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -1095,6 +1558,32 @@ $userRole = $_SESSION['userRole'];
         };
     </script>
 
+    <!-- Show the hotel rooms if overnight -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tourSelect = document.getElementById("tourSelections");
+            const rooms = document.getElementById("rooms");
+            const roomSelect = document.getElementById("roomSelect");
+            const cottages = document.getElementById("cottage");
+
+            tourSelect.addEventListener("change", function() {
+                if (tourSelect.value === "Overnight") {
+                    rooms.style.display = "block";
+                    // roomSelect.setAttribute("required", "required");
+                    cottages.style.display = "none";
+                } else if (tourSelect.value === "Day") {
+                    rooms.style.display = "none";
+                    // roomSelect.setAttribute("required", "required");
+                    cottages.style.display = "block";
+                } else {
+                    cottages.style.display = "block";
+                    rooms.style.display = "none";
+                    roomSelect.removeAttribute("required");
+                    roomSelect.value = "";
+                }
+            });
+        });
+    </script>
 
     <!-- For checking the phone Number -->
     <script>
