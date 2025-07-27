@@ -411,14 +411,22 @@ nav {
 /* end of entrance code */
 
 /* cottages code */
+.cottages {
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1vw auto;
+}
+
 .cottage {
   display: flex;
   flex-wrap: wrap;
-  width: 90%;
+  flex-direction: column;
+  width: 35%;
   background-color: whitesmoke;
   border-radius: 1vw;
   padding: 1vw;
-  margin: 0 auto 1vw auto;
+  margin: 1vw auto;
   justify-content: space-around;
 }
 
@@ -447,7 +455,9 @@ nav {
   justify-content: center;
 }
 
-.halfImg img,
+.halfImg img {
+  width: 18vw;
+}
 .singleImg img {
   width: 25vw;
 }

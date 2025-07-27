@@ -1,3 +1,32 @@
+<?php
+require '../../../Config/dbcon.php';
+
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
+session_start();
+date_default_timezone_set('Asia/Manila');
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
+    header("Location: /Pages/register.php?");
+    exit();
+}
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: /Pages/register.php?session=expired");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,12 +37,15 @@
     <link rel="icon" type="image/x-icon" href="../../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../../Assets/CSS/Admin/editWebsite/landingPageEdit.css" />
+    <!-- icon libraries from font-awesome and box icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
 </head>
 
@@ -26,8 +58,7 @@
 
         <div class="titleContainer">
             <h2 class="pageTitle" id="title">Edit Website</h2>
-
-            <button type="submit" class="btn btn-primary" id="saveButton" style="display: none;">Save Changes</button>
+            <i class="fa-sharp fa-regular fa-circle-question" style="color: #559cd3;display: none;cursor: pointer;" id="help-circle"></i>
         </div>
 
 
@@ -55,92 +86,8 @@
     </div>
 
     <div class="container-fluid landingPage" id="landingPageContainer">
-        <iframe src="../../../index.php" id="editFrame" style="width: 1280px; height:768px"></iframe>
+        <iframe src="../../../index.php?edit=true" id="editFrame" style="width: 100%; height: 768px;"></iframe>
     </div>
-
-
-
-
-
-
-
-
-    <script>
-    const pagesContainer = document.getElementById("pagesContainer")
-    const landingPageContainer = document.getElementById("landingPageContainer")
-    const saveButton = document.getElementById("saveButton")
-
-    landingPageContainer.style.display = "none"
-
-    function landingPage() {
-        if (landingPageContainer.style.display == "none") {
-            landingPageContainer.style.display = "block";
-            saveButton.style.display = "block"
-            pagesContainer.style.display = "none";
-            document.getElementById("backBtn").href = "landingPageEdit.php?pages=pagesContainer"
-            document.getElementById("title").innerHTML = "Landing Page"
-
-        } else {
-            landingPageContainer.style.display = "block";
-        }
-    }
-    </script>
-
-
-
-
-    <!-- <script>
-    const iframe = document.getElementById('editFrame');
-
-    iframe.onload = () => {
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-        // Enable editing within the iframe
-        iframeDoc.body.contentEditable = true;
-        iframeDoc.designMode = "on";
-
-        // Add a "Change Image" button for each image element
-        const images = iframeDoc.getElementsByTagName('img');
-        Array.from(images).forEach(img => {
-            // Create a button element
-            const button = iframeDoc.createElement('button');
-            button.style.position = 'absolute';
-            button.style.top = '50'
-            button.style.left = '50'
-            button.style.zIndex = '10';
-
-            // Position the button on top of the image
-            const rect = img.getBoundingClientRect();
-            button.style.top = `${rect.top + window.scrollY}px`;
-            button.style.left = `${rect.left + window.scrollX}px`;
-
-            // Event listener to handle image change
-            button.addEventListener('click', () => {
-                const input = iframeDoc.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*';
-
-                input.addEventListener('change', (e) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        img.src = e.target.result;
-                    };
-                    reader.readAsDataURL(e.target.files[0]);
-                });
-
-                // Trigger file input click to allow image selection
-                input.click();
-            });
-
-            // Append the button to the iframe document
-            iframeDoc.body.appendChild(button);
-        });
-    };
-    </script> -->
-
-
-
-
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -151,6 +98,43 @@
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        const pagesContainer = document.getElementById("pagesContainer")
+        const landingPageContainer = document.getElementById("landingPageContainer")
+        const icon = document.getElementById("help-circle")
+
+        landingPageContainer.style.display = "none"
+
+        function landingPage() {
+            if (landingPageContainer.style.display == "none") {
+                landingPageContainer.style.display = "block";
+                icon.style.display = "block";
+                pagesContainer.style.display = "none";
+                document.getElementById("backBtn").href = "landingPageEdit.php?pages=pagesContainer"
+                document.getElementById("title").innerHTML = "Landing Page"
+
+            } else {
+                landingPageContainer.style.display = "block";
+            }
+        }
+    </script>
+
+    <!-- Sweetalert Popup -->
+    <script>
+        document.getElementById("help-circle").addEventListener("click", function() {
+            Swal.fire({
+                title: "How it works",
+                text: "Texts and images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
+                icon: "info",
+                confirmButtonText: "Got it!"
+            });
+        });
+    </script>
+
 </body>
 
 </html>
