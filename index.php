@@ -1,6 +1,8 @@
 <?php
 require 'Config/dbcon.php';
 
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_GET['edit']) && $_GET['edit'] === 'true';
 
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
@@ -80,19 +82,38 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
     </nav>
 
+
     <div class="custom-container">
+        <!-- Save button, only visible if page is on edit mode -->
+        <?php if ($editMode): ?>
+            <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
+        <?php endif; ?>
         <div class="titleContainer">
             <div class="mamyrTitle">
                 <?php
                 $businessName = str_split($contentMap['DisplayName']);
                 $display = strtoupper(implode(" ", $businessName))
                 ?>
-                <h1 class="name"> <?= htmlspecialchars($display ?? 'Name Not Found') ?> </h1>
+                <h1 class="name">
+                    <?php if ($editMode): ?>
+                        <input type="text" class="editable-input form-control white-text" data-title="DisplayName" style="font-size:4.5vw !important;" value="<?= htmlspecialchars($contentMap['DisplayName'] ?? '') ?>">
+                    <?php else: ?>
+                        <?= htmlspecialchars($display ?? 'Name Not Found') ?>
+                    <?php endif; ?>
+                </h1>
+
             </div>
+
             <div class="description">
-                <p class="descriptionText"> <?= htmlspecialchars($contentMap['ShortDesc'] ?? 'Description Not Found') ?>
+
+                <?php if ($editMode): ?>
+                    <textarea cols="20" rows="5" type="text" class="editable-input form-control descriptionText white-text" data-title="ShortDesc" style="font-size:2vw !important;"><?= htmlspecialchars($contentMap['ShortDesc'] ?? 'Description Not Found') ?></textarea>
+                <?php else: ?>
+                    <p class="descriptionText">
+                        <?= htmlspecialchars($contentMap['ShortDesc'] ?? 'Description Not Found') ?> </p>
+                <?php endif; ?>
             </div>
-            <a class="btn btn-outline-light me-2" href="Pages/about.php">Learn More</a>
+            <a class=" btn btn-outline-light me-2" href="Pages/about.php">Learn More</a>
         </div>
 
         <div class="containerBook">
@@ -119,8 +140,21 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
             <div class="wsText">
                 <hr class="line">
-                <h4 class="wsTitle">Welcome to <?= htmlspecialchars($contentMap['FullName'] ?? 'Name Not Found') ?></h4>
-                <p class="wsDescription"> <?= htmlspecialchars($contentMap['ShortDesc2'] ?? 'Description Not Found') ?> </p>
+                <h4 class="wsTitle" style="display: flex;align-items:center;">
+                    Welcome to
+                    <?php if ($editMode): ?>
+                        <input type="text" class="editable-input form-control" data-title="FullName" style="width: 28vw;" value="<?= htmlspecialchars($contentMap['FullName'] ?? 'Name Not Found') ?>">
+                    <?php else: ?>
+                        <?= htmlspecialchars($contentMap['FullName'] ?? 'Name Not Found') ?>
+                    <?php endif; ?>
+
+                </h4>
+                <?php if ($editMode): ?>
+                    <textarea cols="15" rows="5" type="text" class="editable-input form-control descriptionText" data-title="ShortDesc2"> <?= htmlspecialchars($contentMap['ShortDesc2'] ?? 'Description Not Found') ?> </textarea>
+                <?php else: ?>
+                    <p class="wsDescription">
+                        <?= htmlspecialchars($contentMap['ShortDesc2'] ?? 'Description Not Found') ?> </p>
+                <?php endif; ?>
             </div>
 
         </div>
@@ -132,17 +166,35 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                 <div class="location">
                     <img src="Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
-                    <h5 class="locationText"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h5>
+                    <h5 class="locationText">
+                        <?php if ($editMode): ?>
+                            <input type="text" class="editable-input form-control" data-title="Address" style="width: 37vw;margin-left:-2vw" value="<?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>">
+                        <?php else: ?>
+                            <?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>
+                        <?php endif; ?>
+                    </h5>
                 </div>
 
                 <div class="number">
                     <img src="Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
-                    <h5 class="number"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h5>
+                    <h5 class="number">
+                        <?php if ($editMode): ?>
+                            <input type="text" class="editable-input form-control" data-title="ContactNum" style="width: 37vw;margin-left:-2vw" value="<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
+                        <?php else: ?>
+                            <?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>
+                        <?php endif; ?>
+                    </h5>
                 </div>
 
                 <div class="email">
                     <img src="Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
-                    <h5 class="emailAddressText"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h5>
+                    <h5 class="emailAddressText">
+                        <?php if ($editMode): ?>
+                            <input type="text" class="editable-input form-control" data-title="Email" style="width: 37vw;margin-left:-2vw" value="<?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>">
+                        <?php else: ?>
+                            <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>
+                        <?php endif; ?>
+                    </h5>
                 </div>
 
 
@@ -169,40 +221,38 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
         </div>
 
+        <?php if (!$editMode): ?>
+            <footer class="py-1 ">
+                <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
 
+                    <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
-        <footer class="py-1 ">
-            <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-
-                <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-
-                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
-            </div>
-
-            <div class="info">
-                <div class="reservation">
-                    <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h4>
-                    <h4 class="emailAddressTextFooter"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h4>
+                    <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
                 </div>
-                <div class="locationFooter">
-                    <h4 class="locationTitle">Location</h4>
-                    <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h4>
+
+                <div class="info">
+                    <div class="reservation">
+                        <h4 class="reservationTitle">Reservation</h4>
+                        <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h4>
+                        <h4 class="emailAddressTextFooter"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h4>
+                    </div>
+                    <div class="locationFooter">
+                        <h4 class="locationTitle">Location</h4>
+                        <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h4>
+                    </div>
+                </div>
+                <hr class="footerLine">
+                <div class="socialIcons">
+                    <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
+                            class='bx bxl-facebook-circle'></i></a>
+                    <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>"><i class='bx bxl-gmail'></i></a>
+                    <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
+                        <i class='bx bxs-phone'></i>
+                    </a>
 
                 </div>
-            </div>
-            <hr class="footerLine">
-            <div class="socialIcons">
-                <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
-                        class='bx bxl-facebook-circle'></i></a>
-                <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>"><i class='bx bxl-gmail'></i></a>
-                <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
-                    <i class='bx bxs-phone'></i>
-                </a>
-
-            </div>
-
-        </footer>
+            </footer>
+        <?php endif; ?>
     </div>
 
     <!-- Div for loader -->
@@ -213,6 +263,45 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- Bootstrap JS -->
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <!-- AJAX for editing website content -->
+    <?php if ($editMode): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const saveBtn = document.getElementById('saveChangesBtn');
+
+                saveBtn?.addEventListener('click', () => {
+                    const inputs = document.querySelectorAll('.editable-input');
+                    const data = {
+                        sectionName: 'BusinessInformation'
+                    };
+
+                    inputs.forEach(input => {
+                        const title = input.getAttribute('data-title');
+                        const value = input.value;
+                        data[title] = value;
+                    });
+
+                    fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(res => res.text())
+                        .then(response => {
+                            alert('Saved: ' + response);
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            alert('An error occurred while saving.');
+                        });
+                });
+            });
+        </script>
+    <?php endif; ?>
+
+
 
     <script>
         function myMap() {

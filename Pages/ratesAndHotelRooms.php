@@ -171,16 +171,7 @@ require '../Config/dbcon.php';
                     foreach ($cottresult as $cottage) {
                 ?>
                         <div class="cottage">
-                            <div class="Description" style="width: 40%;">
-                                <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
-                                <p>
-                                    <?= $cottage['RSdescription'] ?>
-                                </p>
-                                <p class="font-weight-bold">
-                                    Price: PHP <?= $cottage['RSprice'] ?>
-                                </p>
-                            </div>
-                            <div class="halfImg" style="width: 40%;">
+                            <div class="halfImg">
                                 <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
                                 if (!empty($cottage['imageData'])) {
@@ -189,10 +180,16 @@ require '../Config/dbcon.php';
                                 }
                                 ?>
                                 <img src="<?= $imgSrc ?>" alt="Cottage Image" class="rounded" id="displayPhoto">
-
                             </div>
-
-
+                            <div class="Description">
+                                <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
+                                <p>
+                                    <?= $cottage['RSdescription'] ?>
+                                </p>
+                                <p class="font-weight-bold">
+                                    Price: PHP <?= $cottage['RSprice'] ?>
+                                </p>
+                            </div>
                         </div>
                 <?php
                     }

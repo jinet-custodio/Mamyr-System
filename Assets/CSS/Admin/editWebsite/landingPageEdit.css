@@ -107,6 +107,18 @@
 
 .titleContainer {
   margin-top: 4vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#title {
+  margin-bottom: 0 !important;
+}
+
+.fa-regular {
+  font-size: 3vw !important;
+  margin-left: 2vw;
 }
 
 #saveButton {
@@ -154,4 +166,10 @@ iframe {
 #landingPageContainer {
   /* border: 1px solid red; */
   margin-top: 1vw;
+}
+
+.explanation {
+  width: 90%;
+  text-align: center;
+  margin: 2vw auto;
 }
