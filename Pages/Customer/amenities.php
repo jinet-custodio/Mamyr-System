@@ -77,8 +77,9 @@ $userRole = $_SESSION['userRole'];
 
             <!-- Get notification -->
             <?php
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND is_read = 0");
-            $getNotifications->bind_param("i", $userID);
+            $receiver = 'Customer';
+            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
             if ($getNotificationsResult->num_rows > 0) {

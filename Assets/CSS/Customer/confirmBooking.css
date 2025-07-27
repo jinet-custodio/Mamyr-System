@@ -2,19 +2,165 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
+
 @font-face {
   font-family: "Lora";
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
+
 @font-face {
   font-family: "Poppins Black";
-  src: url(../../../Fonts/Poppins/Poppins-Black.ttf);
-}
-@font-face {
-  font-family: "Alkatra";
-  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
 }
 
+@font-face {
+  font-family: "Alkatra";
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0 40px;
+  height: 10vh;
+  margin-top: 1rem;
+}
+
+.page-header .btn {
+  position: absolute;
+  left: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.page-header-title {
+  margin: 0;
+  text-align: center;
+  width: 100%;
+  font-size: 32px;
+  font-family: "Poppins Black" !important;
+}
+
+.container-fluid {
+  width: 90% !important;
+  display: flex;
+  gap: 2rem;
+  margin: 1rem auto;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins";
+}
+
+.booking-summary {
+  align-items: start;
+  padding: 1rem;
+  border: none !important;
+}
+
+.card-info {
+  /* border: 1px solid red !important; */
+  padding: 0.2rem;
+  width: 500px;
+  display: flex;
+}
+
+.info-title {
+  width: 40%;
+  /* border: 1px solid red !important; */
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.info p {
+  width: 50%;
+  /* border: 1px solid red !important; */
+  margin: 0;
+  font-size: 16px;
+}
+
+.info input {
+  border: none;
+}
+
+.payment-summary {
+  padding: 1rem;
+  border: none !important;
+}
+
+.cardHeader {
+  font-weight: bold;
+}
+
+.list-group {
+  border: none !important;
+}
+
+.list-group-item {
+  display: flex !important;
+}
+
+.list-group-item h5 {
+  font-size: 16px;
+  margin: 0 1rem;
+  width: 70%;
+  font-weight: bold;
+}
+
+.list-group-item p {
+  width: 30%;
+  margin: 0;
+  font-size: 16px;
+}
+
+.list-group .list-group-item:last-child,
+.list-group-item p:last-child {
+  font-weight: bold;
+  /* border: 2px solid rgb(10, 7, 7); */
+  /* background-color: rgb(90, 89, 89, 0.5); */
+}
+
+#downpaymentDiv {
+  display: none !important;
+}
+
+.button-container {
+  display: flex;
+}
+
+.button-container button {
+  margin: 1rem auto;
+}
+
+.note {
+  width: 50%;
+  margin: auto;
+  font-family: "Poppins";
+  font-size: 16px;
+}
+
+.note ul {
+  width: 100% !important;
+}
+
+.note li {
+  list-style-type: none;
+  margin: 0.5rem;
+  color: blue;
+}
 
 /* Footer  */
 
@@ -109,103 +255,3 @@ footer {
 }
 
 /* Footer */
-
-.backButton-container {
-  position: absolute;
-  left: 2%;
-  top: 1vw;
-}
-
-.container-fluid {
-  /* border: 1px solid red; */
-  width: 100%;
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2vw;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 2vw;
-}
-
-.container-header {
-  text-align: center;
-  margin-top: 4vw;
-  text-align: center;
-  font-size: 36px;
-  font-family: "Poppins";
-  font-weight: bold;
-  margin-bottom: 2vw;
-}
-
-.container-body {
-  display: grid;
-  grid-template-columns: repeat(3, 20vw);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 1vw;
-  margin-right: 20vw;
-  /* border: 1px solid red; */
-  position: relative;
-}
-
-.info {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.form-control {
-  margin-top: -5vw;
-  height: 8vh;
-  width: 25vw !important;
-}
-
-.card {
-  margin-left: -20vw;
-  height: 50vh !important;
-  background-color: #f5f5f5 !important;
-}
-
-.list-group-flash {
-  border-radius: 0 !important;
-  border-bottom: none !important;
-  border-top: none !important;
-}
-.list-group-item {
-  background-color: #f5f5f5 !important;
-}
-
-.payment-info {
-  display: flex !important;
-  justify-content: flex-start !important;
-  align-items: center;
-  padding: 0.5rem 0.5rem;
-  background-color: #f5f5f5;
-  /* border: 1px solid red; */
-  gap: 0.3rem;
-}
-
-.cardHeader {
-  font-size: 25px !important;
-  text-align: center;
-  padding: 1vw;
-}
-
-.card-title {
-  flex-shrink: 0;
-}
-
-.card-content {
-  font-size: 18px;
-  margin-left: auto;
-  font-family: "Poppins Light";
-}
-
-/* #card-form {
-  margin-top: 2vw;
-  width: 25vw !important;
-  height: 8vh !important; 
-}*/
