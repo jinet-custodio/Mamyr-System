@@ -17,7 +17,6 @@ CREATE TABLE resortAmenities (
     resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
     RServiceName VARCHAR(200) NOT NULL,
     RSprice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    RSquantity INT NOT NULL,
     RScapacity INT DEFAULT 0,
     RSduration VARCHAR(50) DEFAULT '0',
     RScategoryID INT NOT NULL,

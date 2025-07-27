@@ -106,10 +106,13 @@
                          </div>
 
                          <div class="roomNumbers" style="display: none;" id="rooms">
-                             <h5 class="roomLabel">Room</h5>
-                             <select class="form-select" id="roomSelect" name="roomSelections">
+                             <h5 class="roomLabel" id="roomLabel"></h5>
+                             <div class="input-box">
+                                 <div id="roomsContainer"></div>
+                             </div>
+                             <!-- <select class="form-select" id="roomsContainer" name="roomsContainerions">
                                  <option value="" selected disabled>Choose a room</option>
-                             </select>
+                             </select> -->
                          </div>
                      </div>
 
@@ -126,7 +129,7 @@
                          placeholder="Optional"></textarea>
 
                      <div class="mt-auto button-container">
-                         <button type="submit" class="btn btn-primary btn-md w-100" name="bookRates">Book Now</button>
+                         <button type="button" class="btn btn-primary btn-md w-100" id="bookRatesBTN" name="bookRates">Book Now</button>
                      </div>
                  </div>
 
@@ -285,18 +288,16 @@
      </form>
 
 
-     <!-- Full Calendar for Date display -->
-     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
-     <script src="../../Assets/JS/fullCalendar.js"></script>
-
-     <!-- Flatpickr for date input -->
-     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
      <!-- Bootstrap Link -->
      <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
      </script>
+
+     <!-- Flatpickr for date input -->
+     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
 
      <!-- Sweetalert Link -->
      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -313,17 +314,15 @@
      <script>
          const calIcon = document.getElementById("calendarIcon");
 
-         const minDate = new Date();
-         minDate.setDate(minDate.getDate() + 2);
 
          //resort calendar
          flatpickr('#resortBookingDate', {
-             minDate: minDate,
+             minDate: 'today',
              dateFormat: "Y-m-d"
          });
-         calIcon.addEventListener('click', function(event) {
-             resortBookingDate.click()
-         });
+         //  calIcon.addEventListener('click', function(event) {
+         //      resortBookingDate.click()
+         //  });
      </script>
 
 
@@ -335,16 +334,13 @@
                  text: 'Please pick a booking date to continue',
                  confirmButtonText: 'OK'
              }).then(() => {
-
-                 const dateInput = document.getElementById('resortBookingDate');
-                 dateInput.style.border = '2px solid red';
-
-                 dateInput.focus();
+                 setTimeout(() => {
+                     const dateInput = document.getElementById('resortBookingDate');
+                     dateInput.style.border = '2px solid red';
+                     dateInput.focus();
+                 }, 150);
              });
          });
-
-
-
 
          const dateInput = document.getElementById('resortBookingDate');
          const tourSelect = document.getElementById('tourSelections');
@@ -355,7 +351,7 @@
 
              if (!selectedDate || !selectedTour) return;
 
-             fetch(`../../Function/Booking/getAvailableAmenities.php?date=${encodeURIComponent(selectedDate)}`)
+             fetch(`../../Function/Booking/getAvailableAmenities.php?date=${encodeURIComponent(selectedDate)}&tour=${encodeURIComponent(selectedTour)}`)
                  .then(response => {
                      if (!response.ok) throw new Error("Network error");
                      return response.json();
@@ -366,16 +362,17 @@
                          return;
                      }
 
-                     // Reset UI
+
                      const cottageContainer = document.getElementById('cottagesContainer');
                      const roomSection = document.getElementById('rooms');
-                     const roomSelect = document.getElementById('roomSelect');
+                     const roomsContainer = document.getElementById('roomsContainer');
                      const cottageLabel = document.getElementById('cottagesFormLabel');
+                     const roomLabel = document.getElementById('roomLabel');
                      const entertainmentContainer = document.getElementById('entertainmentContainer');
                      const entertainmentLabel = document.getElementById('entertainmentFormLabel');
 
                      cottageContainer.innerHTML = '';
-                     roomSelect.innerHTML = '';
+                     roomsContainer.innerHTML = '';
                      entertainmentContainer.innerHTML = '';
                      roomSection.style.display = 'none';
                      cottageLabel.innerHTML = '';
@@ -392,7 +389,8 @@
                              checkbox.type = 'checkbox';
                              checkbox.name = 'cottageOptions[]';
                              checkbox.value = cottage.RServiceName;
-                             checkbox.id = `cottage-${cottage.RServiceName}`;
+                             checkbox.id = `${cottage.RServiceName}`;
+                             checkbox.dataset.capacity = cottage.RScapacity;
 
                              const label = document.createElement('label');
                              label.setAttribute('for', checkbox.id);
@@ -407,18 +405,32 @@
                      // Show rooms for Overnight
                      if (selectedTour === 'Overnight') {
                          roomSection.style.display = 'block';
-                         const defaultOption = document.createElement('option');
-                         defaultOption.value = "";
-                         defaultOption.disabled = true;
-                         defaultOption.selected = true;
-                         defaultOption.textContent = "Please select a room";
-                         roomSelect.appendChild(defaultOption);
+                         roomLabel.innerHTML = "Available Rooms"
+                         //  const defaultOption = document.createElement('option');
+                         //  defaultOption.value = "";
+                         //  defaultOption.disabled = true;
+                         //  defaultOption.selected = true;
+                         //  defaultOption.textContent = "Please select a room";
+                         //  roomsContainer.appendChild(defaultOption);
 
                          data.rooms.forEach(room => {
-                             const option = document.createElement('option');
-                             option.value = room.RServiceName;
-                             option.textContent = `${room.RServiceName} for ₱${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
-                             roomSelect.appendChild(option);
+                             const wrapper = document.createElement('div');
+                             wrapper.classList.add('checkbox-item');
+
+                             const checkbox = document.createElement('input');
+                             checkbox.type = 'checkbox';
+                             checkbox.name = 'roomOptions[]';
+                             checkbox.value = room.RServiceName;
+                             checkbox.id = `${room.RServiceName}`;
+                             checkbox.dataset.capacity = room.RScapacity;
+
+                             const label = document.createElement('label');
+                             label.setAttribute('for', checkbox.id);
+                             label.innerHTML = `<strong>${room.RServiceName} </strong> for ₱${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
+
+                             wrapper.appendChild(checkbox);
+                             wrapper.appendChild(label);
+                             roomsContainer.appendChild(wrapper);
                          });
                      }
 
@@ -455,122 +467,62 @@
                  });
          }
 
-         // Attach event listeners to both fields
          dateInput.addEventListener('change', fetchAmenities);
          tourSelect.addEventListener('change', fetchAmenities);
 
 
+         const adultCount = document.getElementById('adultCount');
+         const kidsCount = document.getElementById('childrenCount');
+
+         function getTotalPax() {
+             const kids = parseInt(kidsCount.value) || 0;
+             const adults = parseInt(adultCount.value) || 0;
+             return kids + adults;
+         }
+
+         const bookRatesBTN = document.getElementById('bookRatesBTN')
 
 
+         bookRatesBTN.addEventListener("click", function() {
 
+             let totalCapacity = 0;
 
-         // document.getElementById('resortBookingDate').addEventListener('change', function() {
-         // const resortBookingDate = this.value;
-         // const tourSelect = document.getElementById("tourSelections");
-         // tourSelect.addEventListener('change', function() {
-         // const selectedTour = tourSelect.value;
-         // })
+             const cottageSelected = document.querySelectorAll('input[name="cottageOptions[]"]:checked');
+             cottageSelected.forEach(item => {
+                 totalCapacity += parseInt(item.dataset.capacity) || 0;
 
-         // if (resortBookingDate !== "") {
-         // this.style.border = '2px solid rgb(235, 237, 240)';
-         // // document.getElementById("openAddOns").disabled = false;
-         // }
+             });
 
-         // fetch(`../../Function/Booking/getAvailableAmenities.php?date=${encodeURIComponent(resortBookingDate)}`)
-         // .then(response => {
-         // if (!response.ok) throw new Error("Network error");
-         // return response.json();
-         // })
-         // .then(data => {
-         // if (data.error) {
-         // alert("Error: " + data.error);
-         // return;
-         // }
+             const roomSelected = document.querySelectorAll('input[name="roomOptions[]"]:checked');
+             roomSelected.forEach(item => {
+                 totalCapacity += parseInt(item.dataset.capacity) || 0;
+             });
+             if (getTotalPax() === 0) {
+                 Swal.fire({
+                     icon: 'warning',
+                     title: 'Oops',
+                     text: 'Please enter the number of guests.',
 
-         // if (selectedTour === 'Day' || selectedTour === 'Night') {
-         // // COTTAGE
-         // const cottageSelection = document.getElementById('cottagesContainer');
-         // const cottagesFormLabel = document.getElementById('cottagesFormLabel');
-         // cottagesFormLabel.innerHTML = "Available Cottages";
-         // cottageSelection.innerHTML = "";
-
-         // data.cottages.forEach(cottage => {
-         // const wrapper = document.createElement('div');
-         // wrapper.classList.add('checkbox-item');
-
-         // const checkbox = document.createElement('input');
-         // checkbox.type = 'checkbox';
-         // checkbox.name = 'cottageOptions[]';
-         // checkbox.value = cottage.RServiceName;
-         // checkbox.id = `ent-${cottage.RServiceName}`;
-
-         // const label = document.createElement('label');
-         // label.setAttribute('for', checkbox.id);
-         // label.innerHTML = `${cottage.RServiceName}-(${cottage.RScapacity} pax)`;
-
-         // wrapper.appendChild(checkbox);
-         // wrapper.appendChild(label);
-         // cottageSelection.appendChild(wrapper);
-         // });
-         // }
-
-         // if (selectedTour === 'Overnight') {
-         // const roomSelection = document.getElementById('roomSelect');
-         // roomSelection.innerHTML = "";
-
-         // const defaultRoomOption = document.createElement('option');
-         // defaultRoomOption.value = "";
-         // defaultRoomOption.disabled = true;
-         // defaultRoomOption.selected = true;
-         // defaultRoomOption.textContent = "Please select a room";
-         // roomSelection.appendChild(defaultRoomOption);
-
-         // data.rooms.forEach(room => {
-         // const roomOption = document.createElement('option');
-         // roomOption.value = room.RServiceName;
-         // roomOption.textContent = `${room.RServiceName} for ₱ ${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
-         // roomSelection.appendChild(roomOption);
-         // });
-         // }
-
-
-         // const entertainmentSelection = document.getElementById('entertainmentContainer');
-         // entertainmentSelection.innerHTML = "";
-         // const entertainmentFormLabel = document.getElementById('entertainmentFormLabel');
-
-         // entertainmentFormLabel.innerHTML = "Additional Services";
-
-         // data.entertainments.forEach(entertainment => {
-         // const wrapper = document.createElement('div');
-         // wrapper.classList.add('checkbox-item');
-
-         // const checkbox = document.createElement('input');
-         // checkbox.type = 'checkbox';
-         // checkbox.name = 'entertainmentOptions[]';
-         // checkbox.value = entertainment.RServiceName;
-         // checkbox.id = `ent-${entertainment.RServiceName}`;
-
-         // const label = document.createElement('label');
-         // label.setAttribute('for', checkbox.id);
-         // label.innerHTML = `${entertainment.RServiceName} for ₱${Number(entertainment.RSprice).toLocaleString()}.00`;
-
-         // wrapper.appendChild(checkbox);
-         // wrapper.appendChild(label);
-         // entertainmentSelection.appendChild(wrapper);
-         // });
-
-
-
-         // })
-         // .catch(error => console.error(
-         // Swal.fire({
-         // icon: 'error',
-         // text: 'Please select date first',
-         // title: 'Error'
-         // })
-         // ));
-
-         // });
+                 });
+                 bookRatesBTN.type = 'button';
+             } else if (totalCapacity === 0) {
+                 Swal.fire({
+                     icon: 'warning',
+                     title: 'Oops',
+                     text: 'Select a cottage(s) or room(s)',
+                 });
+                 bookRatesBTN.type = 'button';
+             } else if (getTotalPax() <= totalCapacity) {
+                 bookRatesBTN.type = 'submit';
+             } else {
+                 Swal.fire({
+                     icon: 'warning',
+                     title: 'Oops',
+                     text: 'The number of guests exceeds the capacity of the selected cottage(s) or room(s). Please adjust your selection.',
+                 });
+                 bookRatesBTN.type = 'button';
+             }
+         })
      </script>
 
 
