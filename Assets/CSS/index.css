@@ -18,7 +18,7 @@
   padding: 0;
   box-sizing: border-box;
   text-decoration: none;
-  list-style: none;
+  /* list-style: none; */
 }
 
 #loaderOverlay {
@@ -301,6 +301,7 @@ input[type="password"]::-webkit-search-cancel-button {
 .register {
   button {
     margin-top: 1rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -370,6 +371,34 @@ input[type="password"]::-webkit-search-cancel-button {
   font-size: 15px;
   margin-top: -0.5rem;
 }
+
+/* modal css */
+
+.modal-dialog {
+  max-width: 60% !important;
+}
+.modal-body {
+  max-height: 500px;
+
+  overflow-y: auto !important;
+}
+.modal-title {
+  margin: auto;
+  font-size: 2vw;
+}
+
+.modal-footer {
+  display: flex;
+  margin: auto;
+}
+
+#declineBtn,
+#acceptBtn {
+  width: 15vw;
+  border-radius: 30px;
+}
+
+/* modal css */
 
 @media screen and (max-width: 650px) {
   .container {
