@@ -11,11 +11,26 @@ $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
 $contentMap = [];
+
+$imageMap = [];
+
 while ($row = $getWebContentResult->fetch_assoc()) {
     $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
     $contentID = $row['contentID'];
-
     $contentMap[$cleanTitle] = $row['content'];
+
+    // Fetch images with this contentID
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websiteContentImages WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages->bind_param("i", $contentID);
+    $getImages->execute();
+    $imageResult = $getImages->get_result();
+
+    $images = [];
+    while ($imageRow = $imageResult->fetch_assoc()) {
+        $images[] = $imageRow;
+    }
+
+    $imageMap[$cleanTitle] = $images;
 }
 
 ?>
@@ -105,7 +120,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
 
             <div class="description">
-
                 <?php if ($editMode): ?>
                     <textarea cols="20" rows="5" type="text" class="editable-input form-control descriptionText white-text" data-title="ShortDesc" style="font-size:2vw !important;"><?= htmlspecialchars($contentMap['ShortDesc'] ?? 'Description Not Found') ?></textarea>
                 <?php else: ?>
@@ -136,8 +150,30 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="welcomeSection">
             <div class="resortPic1">
-                <img src="Assets/Images/landingPage/resortPic1.png" alt="Mamyr Resort" class="pic1">
+                <?php if (isset($imageMap['DisplayName'])): ?>
+                    <?php foreach ($imageMap['DisplayName'] as $index => $img):
+                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
+                        $defaultImage = "Assets/Images/no-picture.png";
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                        <div class="image-wrapper mb-3 pic1">
+                            <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                                alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class="img-fluid mb-2 editable-img"
+                                style="cursor: pointer;"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editImageModal"
+                                data-wcimageid="<?= $img['WCImageID'] ?>"
+                                data-folder="landingPage"
+                                data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        </div>
+                    <?php endforeach;
+                    ?>
+                <?php endif; ?>
+                <!-- <img src="Assets/Images/landingPage/resortPic1.png" alt="Mamyr Resort" class="pic1"> -->
             </div>
+
+
             <div class="wsText">
                 <hr class="line">
                 <h4 class="wsTitle" style="display: flex;align-items:center;">
@@ -150,7 +186,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                 </h4>
                 <?php if ($editMode): ?>
-                    <textarea cols="15" rows="5" type="text" class="editable-input form-control descriptionText" data-title="ShortDesc2"> <?= htmlspecialchars($contentMap['ShortDesc2'] ?? 'Description Not Found') ?> </textarea>
+                    <textarea cols="15" rows="5" type="text" class="editable-input form-control descriptionText" data-title="ShortDesc2"> <?= ltrim(htmlspecialchars($contentMap['ShortDesc2'] ?? 'Description Not Found')) ?> </textarea>
                 <?php else: ?>
                     <p class="wsDescription">
                         <?= htmlspecialchars($contentMap['ShortDesc2'] ?? 'Description Not Found') ?> </p>
@@ -205,21 +241,34 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="gallery">
             <hr class="line">
             <h4 class="galleryTitle">Gallery </h4>
-
-            <div class="galleryPictures">
-
-                <img src="Assets/Images/landingPage/gallery/img1.png" alt="resort View 1" class="img1 galleryImg">
-                <img src="Assets/Images/landingPage/gallery/img2.png" alt="resort View 2" class="img2 galleryImg">
-                <img src="Assets/Images/landingPage/gallery/img3.png" alt="resort View 3" class="img3 galleryImg">
-                <img src="Assets/Images/landingPage/gallery/img4.png" alt="resort View 4" class="img4 galleryImg">
-                <img src="Assets/Images/landingPage/gallery/img5.png" alt="resort View 5" class="img5 galleryImg">
-                <img src="Assets/Images/landingPage/gallery/img6.png" alt="resort View 6" class="img6 galleryImg">
-            </div>
-
-            <div class="seeMore">
-                <a href="Pages/amenities.php" class="btn custom-btn ">See More</a>
-            </div>
+            <?php if (isset($imageMap['FullName'])): ?>
+                <div class="galleryPictures">
+                    <?php foreach ($imageMap['FullName'] as $index => $img):
+                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
+                        $defaultImage = "Assets/Images/no-picture.png";
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                        <div class="image-wrapper mb-3 galleryImg">
+                            <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                                alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class="img-fluid mb-2 editable-img"
+                                style="cursor: pointer;"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editImageModal"
+                                data-wcimageid="<?= $img['WCImageID'] ?>"
+                                data-folder="landingPage"
+                                data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        </div>
+                    <?php endforeach;
+                    ?>
+                </div>
+            <?php endif; ?>
         </div>
+
+        <div class="seeMore">
+            <a href="Pages/amenities.php" class="btn custom-btn ">See More</a>
+        </div>
+
 
         <?php if (!$editMode): ?>
             <footer class="py-1 ">
@@ -255,6 +304,84 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <?php endif; ?>
     </div>
 
+
+    <!-- Modal for editing images and alt texts in edit mode -->
+    <?php if ($editMode): ?>
+        <!-- Edit Image Modal -->
+        <div class="modal fade" id="editImageModal" tabindex="-1" aria-labelledby="editImageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editImageModalLabel">Edit Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modalImagePreview" src="" alt="" class="img-thumbnail mb-3" style="max-width: 250px;">
+
+                        <input type="file" id="modalImageUpload" class="form-control mb-2">
+
+                        <input type="text" id="modalAltText" class="form-control mb-3" placeholder="Alt text">
+
+                        <!-- Changed label to "Choose" -->
+                        <button id="chooseImageBtn" class="btn btn-success me-2" data-bs-dismiss="modal">Choose This Image</button>
+                        <button id="deleteImageBtn" class="btn btn-danger">Delete Image</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                let activeImageElement = null;
+                let activeWCImageID = null;
+
+                // On image click - open modal and load current image/alt
+                document.querySelectorAll('.editable-img').forEach(img => {
+                    img.addEventListener('click', function() {
+                        activeImageElement = this;
+                        activeWCImageID = this.dataset.wcimageid;
+
+                        const currentSrc = this.src;
+                        const currentAlt = this.alt;
+
+                        document.getElementById('modalImagePreview').src = currentSrc;
+                        document.getElementById('modalAltText').value = currentAlt;
+                        activeImageElement.setAttribute('data-folder', this.dataset.folder || '');
+                        document.getElementById('modalImageUpload').value = '';
+                    });
+                });
+
+                // When user clicks "Choose"
+                document.getElementById('chooseImageBtn').addEventListener('click', () => {
+                    if (!activeImageElement) return;
+
+                    const newAlt = document.getElementById('modalAltText').value;
+                    const newFile = document.getElementById('modalImageUpload').files[0];
+
+                    // Save alt text immediately to the image's alt and data attribute
+                    activeImageElement.alt = newAlt;
+                    activeImageElement.setAttribute('data-alttext', newAlt);
+
+                    // Handle local image preview before uploading
+                    if (newFile) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            activeImageElement.src = e.target.result;
+
+                            // Save temp image to dataset (so we can upload on final save)
+                            activeImageElement.setAttribute('data-tempfile', newFile.name);
+                            activeImageElement.fileObject = newFile; // temporarily attach file to element
+                        };
+                        reader.readAsDataURL(newFile);
+                    }
+                });
+            });
+        </script>
+
+    <?php endif; ?>
+
+
+
     <!-- Div for loader -->
     <div id="loaderOverlay" style="display: none;">
         <div class="loader"></div>
@@ -270,6 +397,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 const saveBtn = document.getElementById('saveChangesBtn');
 
                 saveBtn?.addEventListener('click', () => {
+                    // === 1. Save text-based website content ===
                     const inputs = document.querySelectorAll('.editable-input');
                     const data = {
                         sectionName: 'BusinessInformation'
@@ -290,12 +418,50 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         })
                         .then(res => res.text())
                         .then(response => {
-                            alert('Saved: ' + response);
+                            console.log('Content saved:', response);
+                            alert('Website content saved!');
                         })
                         .catch(err => {
-                            console.error('Error:', err);
-                            alert('An error occurred while saving.');
+                            console.error('Error saving content:', err);
+                            alert('An error occurred while saving content.');
                         });
+
+                    const editableImages = document.querySelectorAll('.editable-img');
+                    editableImages.forEach(img => {
+                        const wcImageID = img.dataset.wcimageid;
+                        const altText = img.dataset.alttext;
+                        const folder = img.dataset.folder || '';
+                        const file = img.fileObject || null;
+
+                        if (!wcImageID || (!file && !altText)) return;
+
+                        const formData = new FormData();
+                        formData.append('wcImageID', wcImageID);
+                        formData.append('altText', altText);
+                        formData.append('folder', folder);
+
+                        if (file) {
+                            formData.append('image', file);
+                        }
+
+                        fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    console.log(`Image ${wcImageID} updated successfully.`);
+                                } else {
+                                    alert(`Failed to update image ${wcImageID}: ` + data.message);
+                                }
+                            })
+                            .catch(err => {
+                                console.error('Image update failed:', err);
+                                alert('An error occurred while updating an image.');
+                            });
+                    });
+
                 });
             });
         </script>
