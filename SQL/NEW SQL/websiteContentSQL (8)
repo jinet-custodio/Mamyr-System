@@ -17,7 +17,7 @@ CREATE TABLE websiteContents (
 CREATE TABLE websiteContentImages (
     WCImageID INT PRIMARY KEY AUTO_INCREMENT,
     contentID INT NOT NULL,
-    imageData LONGBLOB NOT NULL,
+    imageData VARCHAR (255) NOT NULL,
     altText VARCHAR(255),
     imageOrder INT DEFAULT 1,
     uploadedAt DATETIME DEFAULT CURRENT_TIMESTAMP,

@@ -21,7 +21,7 @@ CREATE TABLE resortAmenities (
     RSduration VARCHAR(50) DEFAULT '0',
     RScategoryID INT NOT NULL,
     RSdescription TEXT NULL,
-    RSimageData LONGBLOB,
+    RSimageData VARCHAR(255) NULL,
     RSAvailabilityID INT,
 
    FOREIGN KEY (RSAvailabilityID) REFERENCES serviceAvailability(availabilityID),

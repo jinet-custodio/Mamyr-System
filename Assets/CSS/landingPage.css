@@ -49,6 +49,11 @@ body {
 .editable-input {
   background-color: rgba(255, 255, 255, 0) !important;
   border: 1px solid rgb(255, 13, 13) !important;
+  padding: 2px;
+}
+
+.editable-img {
+  border: 2px solid rgb(255, 13, 13) !important;
 }
 
 .white-text {
@@ -382,7 +387,9 @@ input[type="number"]::-webkit-inner-spin-button {
 .gallery {
   /* border: 1px solid black; */
   margin: 2vw;
+  margin-bottom: 0;
   padding: 2vw;
+  padding-bottom: 0;
 }
 
 .galleryTitle {
@@ -401,14 +408,11 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .seeMore {
-  margin: auto;
-  margin-top: 2.5vh;
+  margin: 1vh auto 3vh auto;
   width: 15vw;
 }
 
 footer {
-  /* border: 1px solid black; */
-
   background: linear-gradient(
     to top,
     rgba(255, 255, 255, 0.445) -50%,
