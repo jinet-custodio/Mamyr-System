@@ -6,7 +6,6 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
     $resortBookingDate = new DateTime($_GET['date']);
     $selectedDate = $resortBookingDate->format('Y-m-d');
     $availableID = 1;
-    $cottageCategoryID = 2;
 
     $getTimeRange = $conn->prepare("SELECT * FROM entrancetimeranges WHERE session_type = ?");
     $getTimeRange->bind_param("s", $selectedTour);
@@ -80,6 +79,17 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
         'rooms' => $rooms,
         'entertainments' => $entertainments
     ]);
+} else if (isset($_GET['hotelSelectedDate'])) {
+
+    $availableID = 1;
+    $hotelCategoryID = 1;
+
+    $getAvailableHotel = $conn->prepare("SELECT * FROM resortAmenities ra WHERE ra.RSAvailabity = ? AND RScategory = ?
+                            AND NOT EXISTS (
+                            SELECT 1 FROM serviceUnavailableDates sud
+                            WHERE sud.resortServiceID = ra.resortServiceID
+                            AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate)
+                        )");
 } else {
     echo json_encode(['error' => 'Date or tour not provided']);
     exit();
