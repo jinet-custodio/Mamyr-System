@@ -25,6 +25,7 @@ if (isset($_POST['bookRates'])) {
     // $timeRange = mysqli_real_escape_string($conn, $_POST['timeRange']);
     // $services = isset($_POST['services']) ? $_POST['services'] : [];
 
+    $bookingStatus = 1;
     $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['scheduledStartDate']);
     $scheduledEndDate = mysqli_real_escape_string($conn, $_POST['scheduledEndDate']);
     $hoursNumber = mysqli_real_escape_string($conn, $_POST['hoursNumber']);
@@ -152,15 +153,14 @@ if (isset($_POST['bookRates'])) {
     $downPayment = 0.00;
     $addOns = is_array($addOnsServices) ? implode(', ', $addOnsServices) : $addOnsServices;
 
-
-    $insertBooking = $conn->prepare("INSERT INTO 
+$insertBooking = $conn->prepare("INSERT INTO 
         bookings(userID, additionalRequest,  paxNum, hoursNum, 
         startDate, endDate, 
         totalCost, downpayment, 
-        addOns, paymentMethod, bookingType) 
-        VALUES(?,?,?,?,?,?,?,?,?,?, ?)");
+        addOns, paymentMethod, bookingStatus, bookingType) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
     $insertBooking->bind_param(
-        "isiissddsss",
+        "isiissddssis",
         $userID,
         $additionalRequest,
         $totalPax,
@@ -171,6 +171,7 @@ if (isset($_POST['bookRates'])) {
         $downPayment,
         $addOns,
         $paymentMethod,
+        $bookingStatus,
         $bookingType
     );
     if ($insertBooking->execute()) {
