@@ -270,7 +270,7 @@ $userRole = $_SESSION['userRole'];
                                 </div>
                                 <div class="button-container">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary" id="changePassword" name="changePassword">Submit</button>
+                                    <button type="submit" class="btn btn-primary" id="changePassword" name="changePassword" disabled>Submit</button>
                                 </div>
                             </div>
                         </div>

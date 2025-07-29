@@ -45,9 +45,13 @@
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
      <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
 
+     <!-- Font Awesome -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
          crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+     <!-- BoxIcon -->
      <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
  </head>
 
@@ -62,36 +66,25 @@
              <div class="titleContainer">
                  <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
              </div>
-             <?php
-                $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration
-            FROM resortAmenities 
-            WHERE RScategoryID = '1'";
-
-                $result = mysqli_query($conn, $availsql);
-                ?>
              <div class="container-fluid" id="hotelContainerFluid">
                  <div class="hotelIconsContainer">
                      <div class="availabilityIcons">
-                         <div class="availabilityIcon" id="allRooms" onclick="filterRooms('all')">
-                             <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
-                                 class="avail" id="allrooms">
-                             <p>All Rooms</p>
-                         </div>
-                         <div class="availabilityIcon" id="availableRooms" onclick="filterRooms('available')">
+                         <div class="availabilityIcon" id="availableRooms">
                              <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2"
                                  class="avail">
                              <p>Available</p>
                          </div>
-                         <div class="availabilityIcon" id="unavailableRooms" onclick="filterRooms('unavailable')">
+                         <div class="availabilityIcon" id="unavailableRooms">
                              <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3"
                                  class="avail">
                              <p>Not Available</p>
                          </div>
                      </div>
 
-
                      <div class="hotelIconContainer mt-3">
                          <?php
+
+
                             if ($result->num_rows > 0) {
                                 $i = 1;
                                 while ($row = $result->fetch_assoc()) {
@@ -217,8 +210,7 @@
 
                      <div class="additional-info-container">
                          <ul>
-                             <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon"
-                                     class="info-icon">&nbsp;&nbsp;If the maximum pax exceeded, extra guest is charged
+                             <li style="color: #0076d1ff;"><i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>&nbsp;If the maximum pax exceeded, extra guest is charged
                                  ₱250 per head</li>
                          </ul>
                      </div>
@@ -271,19 +263,10 @@
              dateFormat: "Y-m-d H:i"
          });
 
-         hotelCheckinIcon.addEventListener('click', function(event) {
-             checkInDate.click()
-         });
-
-
          flatpickr('#checkOutDate', {
              enableTime: true,
              minDate: minDate,
              dateFormat: "Y-m-d H:i"
-         });
-
-         hotelCheckoutIcon.addEventListener('click', function(event) {
-             checkOutDate.click()
          });
      </script>
 
@@ -349,9 +332,12 @@
      </script>
 
 
-     <!-- Get the available amenities depends on the customer selected date -->
+     <!-- Get the available hotel/room depends on the customer selected date -->
      <script>
          document.addEventListener("DOMContentLoaded", function() {
+             const checkInDate = document.getElementById('checkInDate');
+             const hoursSelected = document.getElementById('hoursSelected');
+             const checkOutDate = document.getElementById('checkInDate');
 
              Swal.fire({
                  icon: 'info',
@@ -359,106 +345,33 @@
                  text: 'Please pick a booking date to continue',
                  confirmButtonText: 'OK'
              }).then(() => {
-
-                 const dateInput = document.getElementById('checkInDate');
-                 dateInput.style.border = '2px solid red';
+                 checkInDate.style.border = '2px solid red';
+                 hoursSelected.style.border = '2px solid red';
 
                  //  dateInput.focus();
              });
          });
 
 
+         function fetchAvailableRooms() {
 
-         document.getElementById('checkInDate').addEventListener('change', function() {
-             const checkInDate = this.value;
+             const checkInDateValue = checkInDate.value;
+             const checkOutDateValue = checkOutDate.value;
 
-             if (checkInDate !== "") {
-                 this.style.border = '2px solid rgb(235, 237, 240)';
-             }
+             if (!checkInDateValue || !checkOutDateValue) return;
 
-             fetch(`../../Function/Booking/getAvailableAmenities.php?date=${encodeURIComponent(checkInDate)}`)
+
+             fetch(`../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(checkInDateValue)}&hotelCheckOutDate=${encodeURIComponent(checkOutDateValue)}`)
                  .then(response => {
-                     if (!response.ok) throw new Error("Network error");
+                     if (!response.ok) throw new Error('Network Problem');
                      return response.json();
-                 })
-                 .then(data => {
+                 }).then(data => {
                      if (data.error) {
                          alert("Error: " + data.error);
                          return;
                      }
-
-                     const cottageSelection = document.getElementById('cottageSelections');
-                     cottageSelection.setAttribute("multiple", "");
-                     cottageSelection.innerHTML = "";
-
-
-                     const defaultCottageOption = document.createElement('option');
-                     defaultCottageOption.value = "";
-                     defaultCottageOption.disabled = true;
-                     defaultCottageOption.selected = true;
-                     defaultCottageOption.textContent = "Please select a cottage";
-                     cottageSelection.appendChild(defaultCottageOption);
-
-                     data.cottages.forEach(cottage => {
-                         const cottageOption = document.createElement('option');
-                         cottageOption.value = cottage.RServiceName;
-                         cottageOption.textContent = `${cottage.RServiceName} for ₱${Number(cottage.RSprice).toLocaleString()}.00 - Good for ${cottage.RScapacity} pax`;
-                         cottageSelection.appendChild(cottageOption);
-                     });
-
-                     const roomSelection = document.getElementById('roomSelect');
-                     roomSelection.innerHTML = "";
-
-                     const defaultRoomOption = document.createElement('option');
-                     defaultRoomOption.value = "";
-                     defaultRoomOption.disabled = true;
-                     defaultRoomOption.selected = true;
-                     defaultRoomOption.textContent = "Please select a room";
-                     roomSelection.appendChild(defaultRoomOption);
-
-                     data.rooms.forEach(room => {
-                         const roomOption = document.createElement('option');
-                         roomOption.value = room.RServiceName;
-                         roomOption.textContent = `${room.RServiceName} for ₱ ${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
-                         roomSelection.appendChild(roomOption);
-                     });
-
-
-                     const entertainmentSelection = document.getElementById('entertainmentContainer');
-                     entertainmentSelection.innerHTML = "";
-                     const entertainmentFormLabel = document.getElementById('entertainmentFormLabel');
-
-                     entertainmentFormLabel.innerHTML = "Additional Services";
-
-                     data.entertainments.forEach(entertainment => {
-                         const wrapper = document.createElement('div');
-                         wrapper.classList.add('checkbox-item');
-
-                         const checkbox = document.createElement('input');
-                         checkbox.type = 'checkbox';
-                         checkbox.name = 'entertainmentOptions[]';
-                         checkbox.value = entertainment.RServiceName;
-                         checkbox.id = `ent-${entertainment.RServiceName}`;
-
-                         const label = document.createElement('label');
-                         label.setAttribute('for', checkbox.id);
-                         label.innerHTML = `${entertainment.RServiceName} for ₱${Number(entertainment.RSprice).toLocaleString()}.00`;
-
-                         wrapper.appendChild(checkbox);
-                         wrapper.appendChild(label);
-                         entertainmentSelection.appendChild(wrapper);
-                     });
                  })
-                 .catch(error => console.error(
-                     Swal.fire({
-                         icon: 'error',
-                         text: 'Please select date first',
-                         title: 'Error',
-                         confirmButtonOkay: 'Okay'
-                     })
-                 ));
-
-         });
+         };
      </script>
 
 
