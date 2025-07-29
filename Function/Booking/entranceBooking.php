@@ -158,7 +158,7 @@ $insertBooking = $conn->prepare("INSERT INTO
         startDate, endDate, 
         totalCost, downpayment, 
         addOns, paymentMethod, bookingStatus, bookingType) 
-        VALUES(?,?,?,?,?,?,?,?,?,?, ?)");
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
     $insertBooking->bind_param(
         "isiissddssis",
         $userID,
