@@ -56,10 +56,10 @@ if (isset($_POST['submit_request'])) {
             $_SESSION['message'] = "Failed to update profile.";
         }
         //Select partnerType ID
-        $partnerType = $conn->prepare("SELECT * FROM partnershipTypes WHERE partnerType = ?");
-        $partnerType->bind_param("s", $partnerType);
-        $partnerType->execute();
-        $partnerTypeResult = $partnerType->get_result();
+        $partnerTypeQuery = $conn->prepare("SELECT * FROM partnershipTypes WHERE partnerType = ?");
+        $partnerTypeQuery->bind_param("s", $partnerType);
+        $partnerTypeQuery->execute();
+        $partnerTypeResult = $partnerTypeQuery->get_result();
         if ($partnerTypeResult->num_rows > 0) {
             $data = $partnerTypeResult->fetch_assoc();
             $partnerTypeID = $data['partnerTypeID'];
