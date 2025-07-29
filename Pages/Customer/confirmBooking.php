@@ -627,6 +627,7 @@ $userRole = $_SESSION['userRole'];
             <input type="hidden" name="hotelSelections" value="<?= htmlspecialchars(implode(', ', $selectedHotels ?? [])) ?>">
             <input type="hidden" name="hoursSelected" value="<?= htmlspecialchars($hoursSelected ?? '') ?>">
             <input type="hidden" name="hoursNumber" value="<?= htmlspecialchars($numHours ?? '') ?>">
+            <input type="hidden" name="arrivalTime" value="<?= htmlspecialchars($arrivalTime ?? '') ?>">
 
             <input type="hidden" name="tourSelections" value="<?= htmlspecialchars($tourSelections ?? '') ?>">
 
@@ -636,6 +637,7 @@ $userRole = $_SESSION['userRole'];
             <input type="hidden" name="childrenCount" value="<?= htmlspecialchars($childrenCount ?? 0) ?>">
             <input type="hidden" name="adultRate" value="<?= htmlspecialchars($adultRate ?? 0) ?>">
             <input type="hidden" name="childrenRate" value="<?= htmlspecialchars($childRate ?? 0) ?>">
+
         </div>
 
     </form>
