@@ -16,12 +16,50 @@ Array
 
 
 
-    // Open or create a log file in write mode (it will create the file if it doesn't exist)
+Debuggings service ID:
+Array
+(
+)
+Debuggings service ID:
+Array
+(
+)
+Debuggings service ID:
+Array
+(
+)
+Debuggings service ID:
+Array
+(
+)
+Debuggings service ID:
+Array
+(
+)
+Debuggings service ID:
+Array
+(
+)
+Debuggings service ID:
+Array
+(
+    [0] => 34
+)
+Debuggings hotels:
+Array
+(
+    [0] => Room 4
+)
+
+
+// Open or create a log file in write mode (it will create the file if it doesn't exist)
     $logFile = fopen('debug_log.txt', 'a');
 
     // Write the debug information to the log file
-    fwrite($logFile, "Debuggings service Capacity:\n");
-    fwrite($logFile, print_r($serviceCapacity, true));
+    fwrite($logFile, "Debuggings service ID:\n");
+    fwrite($logFile, print_r($serviceIDs, true));
+    fwrite($logFile, "Debuggings hotels:\n");
+    fwrite($logFile, print_r($selectedHotels, true));
 
     // Close the log file
-    // fclose($logFile);
+    fclose($logFile);
