@@ -55,7 +55,6 @@ body {
 }
 
 .container-fluid {
-  width: 90% !important;
   display: flex;
   gap: 2rem;
   margin: 1rem auto;
@@ -73,7 +72,7 @@ body {
 .card-info {
   /* border: 1px solid red !important; */
   padding: 0.2rem;
-  width: 500px;
+  width: 100%;
   display: flex;
 }
 
@@ -85,14 +84,25 @@ body {
   margin: 0;
 }
 
-.info p {
-  width: 50%;
+.card-info p {
+  width: 100%;
   /* border: 1px solid red !important; */
   margin: 0;
   font-size: 16px;
 }
 
-.info input {
+.card-info ul {
+  width: 100%;
+  margin: 0;
+  font-size: 16px;
+  list-style: none;
+}
+
+li .features {
+  list-style: square;
+}
+
+.card-info input {
   border: none;
 }
 
@@ -147,9 +157,10 @@ body {
 
 .note {
   width: 50%;
-  margin: auto;
+  margin: 0 auto;
   font-family: "Poppins";
   font-size: 16px;
+  padding: 1rem 0;
 }
 
 .note ul {

@@ -7,62 +7,99 @@ session_start();
 $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
 $userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
 
-if (isset($_POST['hotelBooking'])) {
 
-    $checkInDate = mysqli_real_escape_string($conn, $_POST['checkInDate']);
-    $checkOutDate = mysqli_real_escape_string($conn, $_POST['checkOutDate']);
+function arrayAddition($array)
+{
+    return array_sum($array);
+}
+
+
+function addition($a, $b, $c)
+{
+    return $a + $b + $c;
+}
+
+function subtraction($a, $b, $c)
+{
+    return $a - $b - $c;
+}
+
+function multiplication($a, $b)
+{
+    return $a * $b;
+}
+
+
+
+if (isset($_POST['hotelBooking'])) {
+    $selectedHotels = [];
+
+    $hoursSelected = mysqli_real_escape_string($conn, $_POST['hoursSelected']);
+    $checkInDate = mysqli_real_escape_string($conn, $_POST['scheduledStartDate']);
+    $checkOutDate = mysqli_real_escape_string($conn, $_POST['scheduledEndDate']);
+
     $adultCount = mysqli_real_escape_string($conn, $_POST['adultCount']);
     $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
-    $selectedHotel = mysqli_real_escape_string($conn, $_POST['selectedHotel']);
-    // $hotelNotes = mysqli_real_escape_string($conn, $_POST['hotelNotes']);
+    $totalPax = mysqli_real_escape_string($conn, $_POST['totalPax']);
+    $totalCapacity = mysqli_real_escape_string($conn, $_POST['capacity']);
+
+    $selectedHotels = !empty($_POST['hotelSelections']) ? array_map('trim', explode(', ', $_POST['hotelSelections'])) : [];
+
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
 
+    $downpayment = mysqli_real_escape_string($conn, $_POST['downPayment']);
+    $totalCost = mysqli_real_escape_string($conn, $_POST['totalCost']);
+
     $excessChargePerPerson = 250;
-    $totalGuest = $childrenCount + $adultCount; //Get total number of people
     $additionalCharge = 0;
     $additionalGuest = 0;
-    $totalPrice = 0;
     $bookingStatus = 1;
+    $serviceIDs = [];
+    $hotelPrices = [];
+    $hotelCapacity = [];
+    if ($totalPax > $totalCapacity) {
+        $additionalGuest = subtraction($totalPax, $totalCapacity, 0);
+        $additionalCharge = multiplication($additionalGuest, $excessChargePerPerson);
+    }
+
+    if (empty($selectedHotels)) {
+        header("Location: ../../Pages/Customer/hotelBooking.php");
+    }
+
     $selectedHotelQuery = $conn->prepare("SELECT * FROM services s
             JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
-            WHERE ra.RServiceName = ?");
-    $selectedHotelQuery->bind_param("s", $selectedHotel);
-    $selectedHotelQuery->execute();
-    $resultHotelQuery = $selectedHotelQuery->get_result();
-    if ($resultHotelQuery->num_rows > 0) {
-        $data = $resultHotelQuery->fetch_assoc();
-        $serviceID = $data['serviceID'];
-        $maxCapacity = $data['RScapacity'];
-        $hotelPrice = $data['RSprice'];
-        $stayDuration = $data['RSduration'];
+            WHERE ra.RServiceName = ? AND ra.RSduration = ?");
+
+    foreach ($selectedHotels as $selectedHotel) {
+        $selectedHotel = trim($selectedHotel);
+        $selectedHotelQuery->bind_param("ss", $selectedHotel, $hoursSelected);
+        $selectedHotelQuery->execute();
+        $resultHotelQuery = $selectedHotelQuery->get_result();
+        if ($resultHotelQuery->num_rows > 0) {
+            $data = $resultHotelQuery->fetch_assoc();
+            $serviceIDs[] = $data['serviceID'];
+            $hotelPrices[] = $data['RSprice'];
+            $hotelCapacity[] = $data['RScapacity'];
+        }
     }
 
-    if ($maxCapacity < $totalGuest) {
-        $additionalGuest = $totalGuest - $maxCapacity;
-        $additionalCharge = $additionalGuest * $excessChargePerPerson;
-        $totalPrice = $hotelPrice + $additionalCharge;
-    } else {
-        $totalPrice =  $hotelPrice;
-    }
-
-    $downpayment = $totalPrice * 0.3;
-
+    $hoursNum = str_replace(" hours", "", $hoursSelected);
 
     //Insert Booking
     $insertBooking = $conn->prepare("INSERT INTO bookings(userID, paxNum, hoursNum, startDate, endDate, 
     paymentMethod, additionalCharge, totalCost, downpayment, bookingStatus, bookingType) 
     VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     $insertBooking->bind_param(
-        "iiissssssis",
+        "iiisssdddis",
         $userID,
-        $totalGuest,
-        $stayDuration,
+        $totalPax,
+        $hoursNum,
         $checkInDate,
         $checkOutDate,
         $paymentMethod,
         $additionalCharge,
-        $totalPrice,
+        $totalCost,
         $downpayment,
         $bookingStatus,
         $bookingType
@@ -72,9 +109,17 @@ if (isset($_POST['hotelBooking'])) {
 
         $insertBookingServices = $conn->prepare("INSERT INTO bookingservices(bookingID, serviceID, guests, bookingServicePrice)
         VALUES(?,?,?,?)");
-        $insertBookingServices->bind_param("iiss", $bookingID, $serviceID, $totalGuest, $totalPrice);
-        $insertBookingServices->execute();
+        if (!empty($serviceIDs)) {
+            for ($i = 0; $i < count($serviceIDs); $i++) {
+                $serviceID = $serviceIDs[$i];
+                $servicePrice = $hotelPrices[$i];
+                $serviceCapacity = $hotelCapacity[$i];
 
+                $insertBookingServices->bind_param("iiid", $bookingID, $serviceID, $serviceCapacity, $servicePrice);
+                $insertBookingServices->execute();
+            }
+        }
+        $insertBookingServices->close();
 
         $receiver = 'Admin';
         $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking request';
@@ -82,7 +127,7 @@ if (isset($_POST['hotelBooking'])) {
             VALUES(?,?,?,?)");
         $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
         $insertBookingNotificationRequest->execute();
-
+        $insertBookingNotificationRequest->close();
         header('Location: ../../Pages/Customer/bookNow.php?action=success');
         exit();
     } else {

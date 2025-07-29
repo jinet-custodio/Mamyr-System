@@ -85,6 +85,11 @@ $userRole = $_SESSION['userRole'];
         return $a + $b + $c;
     }
 
+    function subtraction($a, $b, $c)
+    {
+        return $a - $b - $c;
+    }
+
     function multiplication($a, $b)
     {
         return $a * $b;
@@ -112,7 +117,7 @@ $userRole = $_SESSION['userRole'];
 
         $paymentMethod = "Cash";
         $bookingType = 'Resort';
-        $page = 'resort-page';
+        $page = 'resortBooking.php';
         $buttonName = 'bookRates';
         $bookingFunctionPage = 'entranceBooking.php';
 
@@ -282,6 +287,7 @@ $userRole = $_SESSION['userRole'];
         $entertainmentPrice = [];
         $entertainmentName = [];
         $entertainmentIDs = [];
+        $addOnsServices = [];
         //Get Selected Entertainment 
         $getEntertainment = $conn->prepare("SELECT s.serviceID, rs.RSprice, rs.RServiceName  
             FROM services s
@@ -335,56 +341,82 @@ $userRole = $_SESSION['userRole'];
     if (isset($_POST['hotelBooking'])) {
 
         $hoursSelected = mysqli_real_escape_string($conn, $_POST['hoursSelected']);
-        $checkInDate = mysqli_real_escape_string($conn, $_POST['checkInDate']);
-        $checkOutDate = mysqli_real_escape_string($conn, $_POST['checkOutDate']);
-        $adultCount = mysqli_real_escape_string($conn, $_POST['adultCount']);
-        $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
-        $selectedHotel = mysqli_real_escape_string($conn, $_POST['selectedHotel']);
-        // $hotelNotes = mysqli_real_escape_string($conn, $_POST['hotelNotes']);
-        $paymentMethod = mysqli_real_escape_string($conn, $_POST['PaymentMethod']);
+        $arrivalTime = mysqli_real_escape_string($conn, $_POST['arrivalTime']);
+        $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['checkInDate']);
+        $scheduledEndDate = mysqli_real_escape_string($conn, $_POST['checkOutDate']);
+        $adultCount = (int) mysqli_real_escape_string($conn, $_POST['adultCount']);
+        $childrenCount = (int) mysqli_real_escape_string($conn, $_POST['childrenCount']);
+        $selectedHotels = isset($_POST['hotelSelections']) ? $_POST['hotelSelections'] : [];
+        $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
 
         $buttonName = 'hotelBooking';
         $bookingType = 'Hotel';
-        $page = 'hotel-page';
-        $services = [];
-        $addOns = [];
-        $description = [];
+        $page = 'hotelBooking.php';
         $bookingFunctionPage = 'hotelBooking.php';
         $additionalRequest = "None";
         $excessChargePerPerson = 250;
-        $totalPax = $childrenCount + $adultCount;
+
         $additionalCharge = 0;
         $additionalGuest = 0;
         $totalCost = 0;
+
+        $services = [];
+        $serviceIDs = [];
+        $capacity = [];
+        $hotelPrices = [];
+        $descriptions = [];
+        $items = [];
+
         $selectedHotelQuery = $conn->prepare("SELECT * FROM services s
             JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
-            WHERE ra.RServiceName = ?");
-        $selectedHotelQuery->bind_param("s", $selectedHotel);
-        $selectedHotelQuery->execute();
-        $resultHotelQuery = $selectedHotelQuery->get_result();
-        if ($resultHotelQuery->num_rows > 0) {
-            $data = $resultHotelQuery->fetch_assoc();
-            $serviceID = $data['serviceID'];
-            $maxCapacity = $data['RScapacity'];
-            $hotelPrice = $data['RSprice'];
-            $stayDuration = $data['RSduration'];
-            $description[] = $data['RSdescription'];
-            $services[] = $data['RServiceName'];
+            WHERE ra.RServiceName = ? AND ra.RSduration = ?");
+
+        foreach ($selectedHotels as $selectedHotel) {
+            $selectedHotel = trim($selectedHotel);
+
+            $selectedHotelQuery->bind_param("ss", $selectedHotel, $hoursSelected);
+            $selectedHotelQuery->execute();
+            $resultHotelQuery = $selectedHotelQuery->get_result();
+            if ($resultHotelQuery->num_rows > 0) {
+
+                while ($data = $resultHotelQuery->fetch_assoc()) {
+                    $serviceIDs[] = $data['serviceID'];
+                    $capacity[] = $data['RScapacity'];
+                    $hotelPrices[] = $data['RSprice'];
+                    $descriptions[] = $data['RSdescription'];
+                    $services[] = $data['RServiceName'];
+
+                    $items[] = [
+                        'serviceName' =>  $data['RServiceName'],
+                        'description' => $data['RSdescription']
+                    ];
+                }
+            }
         }
 
-        if ($maxCapacity < $totalPax) {
-            $additionalGuest = $totalPax - $maxCapacity;
-            $additionalCharge = $additionalGuest * $excessChargePerPerson;
-            $totalCost = $hotelPrice + $additionalCharge;
-            $addOns[] = "Additional Guest:" . $additionalGuest;
+        $totalCapacity = arrayAddition($capacity);
+        $totalPax = addition($childrenCount, $adultCount, 0);
+        $totalHotelPrice = arrayAddition($hotelPrices);
+
+
+        if ($totalCapacity < $totalPax) {
+            $additionalGuest = subtraction($totalPax, $totalCapacity,  0);
+            $additionalCharge = multiplication($additionalGuest, $excessChargePerPerson);
+            $totalCost = addition($totalHotelPrice, $additionalCharge, 0);
         } else {
-            $totalCost =  $hotelPrice;
+            $totalCost =  $totalHotelPrice;
         }
 
-        $downPayment = $totalCost * 0.3;
+        $totalServicePrice = $totalHotelPrice;
 
-        $startDateObj = new DateTime($checkInDate);
-        $endDateObj = new DateTime($checkOutDate);
+        $numberOfPeople =
+            ($adultCount > 0 ? "{$adultCount} Adults" : '') .
+            ($childrenCount > 0 ? ($adultCount > 0 ? ' and ' : '') . "{$childrenCount} Kids" : '');
+
+        $downPayment = multiplication($totalCost, .3);
+
+        $startDateObj = new DateTime($scheduledStartDate);
+        $endDateObj = new DateTime($scheduledEndDate);
         $startDate = $startDateObj->format("d F Y");
         $endDate = $endDateObj->format("d F Y");
 
@@ -401,7 +433,7 @@ $userRole = $_SESSION['userRole'];
     <form action="../../Function/Booking/<?= htmlspecialchars($bookingFunctionPage) ?>" method="POST">
 
         <div class="page-header">
-            <a href="bookNow.php#<?= $page ?>" class="btn"><img src="../../Assets/Images/Icon/back-button.png"
+            <a href="<?= $page ?>" class="btn"><img src="../../Assets/Images/Icon/back-button.png"
                     alt="Back Button Image"></a>
 
             <h2 class="page-header-title">Booking Summary</h2>
@@ -425,35 +457,64 @@ $userRole = $_SESSION['userRole'];
                     <p class="card-text"><?= htmlspecialchars(implode(', ', $services)) ?></p>
                 </div>
 
-                <div class="card-info" id="capacityContainer">
-                    <h5 class="info-title">Description</h5>
-                    <p class="card-text">Good for <?= $totalCapacity ?> people</p>
-                    <input type="hidden" name="capacity"
-                        value="<?= $totalCapacity ?>">
-                </div>
-
-
                 <div class="card-info">
-                    <h5 class="info-title">Date:</h5>
+                    <h5 class="info-title" id='date'>Date:</h5>
                     <p class="card-text"><?= $date ?></p>
                     <input type="hidden" name="date" value="<?= $date ?>">
                 </div>
+
                 <div class="card-info">
                     <h5 class="info-title">Time Range:</h5>
                     <p class="card-text"><?= $timeRange ?></p>
                     <input type="hidden" name="timeRange" value="<?= $timeRange ?>">
                 </div>
+
                 <div class="card-info">
                     <h5 class="info-title">Number of People:</h5>
                     <p class="card-text"><?= $numberOfPeople ?></p>
                     <input type="hidden" name="totalPax" value="<?= $totalPax ?>">
                 </div>
 
-                <div class="card-info">
-                    <h5 class="info-title">Additional Services:</h5>
-                    <p class="card-text"><?= !empty($addOnsServices) ? htmlspecialchars(implode(', ', $addOnsServices)) : 'None' ?></p>
-                    <input type="hidden" name="addOnsServices" value="<?= !empty($addOnsServices) ? htmlspecialchars(implode(', ', $addOnsServices)) : 'None' ?>">
-                </div>
+                <?php if ($bookingType === 'Resort') { ?>
+                    <div class="card-info" id="capacityContainer">
+                        <h5 class="info-title">Description:</h5>
+                        <p class="card-text">Good for <?= $totalCapacity ?> people</p>
+                        <input type="hidden" name="capacity"
+                            value="<?= $totalCapacity ?>">
+                    </div>
+                <?php } else if ($bookingType === 'Hotel') { ?>
+                    <div class="card-info" id="descriptionContainer">
+                        <h5 class="info-title">Description:</h5>
+                        <ul class="card-text">
+                            <?php foreach ($items as $service): ?>
+                                <li>
+                                    <strong><?= htmlspecialchars($service['serviceName']) ?></strong>
+                                    <ul>
+                                        <?php foreach (explode(',', $service['description']) as $feature): ?>
+                                            <li class="features"><?= htmlspecialchars(trim($feature)) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <input type="hidden" name="capacity"
+                            value="<?= $totalCapacity ?>">
+                    </div>
+                <?php } ?>
+
+                <?php if ($bookingType === 'Resort') { ?>
+                    <div class="card-info">
+                        <h5 class="info-title">Additional Services:</h5>
+                        <p class="card-text"><?= !empty($addOnsServices) ? htmlspecialchars(implode(', ', $addOnsServices)) : 'None' ?></p>
+                        <input type="hidden" name="addOnsServices" value="<?= !empty($addOnsServices) ? htmlspecialchars(implode(', ', $addOnsServices)) : 'None' ?>">
+                    </div>
+                <?php } else if ($bookingType === 'Hotel') { ?>
+                    <div class="card-info">
+                        <h5 class="info-title">Additional Guest:</h5>
+                        <p class="card-text"><?= !empty($additionalGuest) ? htmlspecialchars($additionalGuest) : 'None' ?></p>
+                        <input type="hidden" name="additionalGuest" value="<?= !empty($additionalGuest) ? $additionalGuest : 0 ?>">
+                    </div>
+                <?php } ?>
 
                 <div class="card-info" id="addRequest">
                     <h5 class="info-title">Additional Request:</h5>
@@ -475,29 +536,42 @@ $userRole = $_SESSION['userRole'];
                         <input type="hidden" name="paymentMethod" value="<?= htmlspecialchars($paymentMethod) ?>" class="card-content">
                     </li>
 
-                    <li class="list-group-item payment-info" id="entranceFee">
-                        <h5 class="card-title">Entrance Fee:</h5>
-                        <p class="card-text">₱ <?= htmlspecialchars(number_format($totalEntranceFee, 2)) ?></p>
-                        <input type="hidden" name="paymentMethod" value="<?= htmlspecialchars($totalEntranceFee) ?>" class="card-content">
-                    </li>
+                    <?php if ($bookingType === "Resort") { ?>
+                        <li class="list-group-item payment-info" id="entranceFeeDiv">
+                            <h5 class="card-title">Entrance Fee:</h5>
+                            <p class="card-text">₱ <?= htmlspecialchars(number_format($totalEntranceFee, 2)) ?></p>
+                            <input type="hidden" name="entranceFee" value="<?= htmlspecialchars($totalEntranceFee) ?>" class="card-content">
+                        </li>
+                    <?php } ?>
 
                     <li class="list-group-item payment-info">
                         <h5 class="card-title">Service Fee:</h5>
                         <p class="card-text">₱ <?= htmlspecialchars(number_format($totalServicePrice, 2)) ?></p>
-                        <input type="hidden" name="paymentMethod" value="<?= htmlspecialchars($totalEntranceFee) ?>" class="card-content">
+                        <input type="hidden" name="serviceFee" value="<?= htmlspecialchars($totalServicePrice) ?>" class="card-content">
                     </li>
 
-                    <li class="list-group-item payment-info">
-                        <h5 class="card-title">Additional Service Fee:</h5>
-                        <p class="card-text">₱ <?= htmlspecialchars(number_format($totalEntertainmentPrice, 2)) ?></p>
-                        <input type="hidden" name="paymentMethod" value="<?= htmlspecialchars($totalEntertainmentPrice) ?>" class="card-content">
-                    </li>
+                    <?php if ($bookingType === "Hotel" || $bookingType === "Event") { ?>
+                        <li class="list-group-item payment-info" id="entertainmentDiv">
+                            <h5 class="card-title">Additional Fee:</h5>
+                            <p class="card-text">₱ <?= htmlspecialchars(number_format($additionalCharge, 2)) ?></p>
+                            <input type="hidden" name="additionalFee" value="<?= htmlspecialchars($additionalCharge) ?>" class="card-content">
+                        </li>
+                    <?php } else { ?>
+                        <li class="list-group-item payment-info" id="entertainmentDiv">
+                            <h5 class="card-title">Additional Service Fee:</h5>
+                            <p class="card-text">₱ <?= htmlspecialchars(number_format($totalEntertainmentPrice, 2)) ?></p>
+                            <input type="hidden" name="additionalServiceFee" value="<?= htmlspecialchars($totalEntertainmentPrice) ?>" class="card-content">
+                        </li>
+                    <?php } ?>
 
-                    <li class="list-group-item payment-info" id="downpaymentDiv">
-                        <h5 class=" card-title">Downpayment:</h5>
-                        <p class="card-text">₱ <?= number_format($downPayment, 2) ?></p>
-                        <input type="hidden" name="downPayment" value="<?= $downPayment ?>" class="card-content">
-                    </li>
+
+                    <?php if ($bookingType === "Hotel" || $bookingType === "Event") { ?>
+                        <li class="list-group-item payment-info">
+                            <h5 class=" card-title">Downpayment (30%):</h5>
+                            <p class="card-text">₱ <?= number_format($downPayment, 2) ?> </p>
+                            <input type="hidden" name="downPayment" value="<?= $downPayment ?>" class="card-content">
+                        </li>
+                    <?php } ?>
 
                     <li class="list-group-item payment-info">
                         <h5 class="card-title">Total Cost:</h5>
@@ -506,8 +580,6 @@ $userRole = $_SESSION['userRole'];
 
                     </li>
                 </ul>
-
-
 
                 <div class="button-container w-100">
                     <button type="submit" class="btn btn-primary w-75" name="<?= $buttonName ?>">Book Now</button>
@@ -518,37 +590,54 @@ $userRole = $_SESSION['userRole'];
         </div>
 
         <div class="note">
-            <ul>
-                <li>
-                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                    Payment will be made directly at the resort upon arrival.
-                </li>
-                <li>
-                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                    For any questions, contact <strong>0900-000-0000</strong>.
-                </li>
-            </ul>
+            <?php if ($bookingType === "Resort") { ?>
+                <ul>
+                    <li>
+                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                        Payment will be made directly at the resort upon arrival.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                        Upon arrival, the staff will double check the number of people.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                        For any questions, contact <strong>0900-000-0000</strong>.
+                    </li>
+                </ul>
+            <?php } else if ($bookingType === 'Hotel') { ?>
+                <ul>
+                    <li>
+                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                        Downpayment(30%) is required. Once you pay the downpayment its not refundable but you can still cancel the booking after 5-7 days of approval.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                        For any questions, contact <strong>0900-000-0000</strong>.
+                    </li>
+                </ul>
+            <?php } ?>
         </div>
 
         <div style="display: none;">
-            <input type="hidden" name="tourSelections" value="<?= htmlspecialchars($tourSelections) ?>">
+            <input type="hidden" name="scheduledStartDate" value="<?= htmlspecialchars($scheduledStartDate ?? '') ?>">
+            <input type="hidden" name="scheduledEndDate" value="<?= htmlspecialchars($scheduledEndDate ?? '') ?>">
+            <input type="hidden" name="cottageSelections" value="<?= htmlspecialchars(implode(', ', $cottageChoices ?? [])) ?>">
+            <input type="hidden" name="roomSelections" value="<?= htmlspecialchars(implode(', ', $roomChoices ?? [])) ?>">
+            <input type="hidden" name="hotelSelections" value="<?= htmlspecialchars(implode(', ', $selectedHotels ?? [])) ?>">
+            <input type="hidden" name="hoursSelected" value="<?= htmlspecialchars($hoursSelected ?? '') ?>">
+            <input type="hidden" name="hoursNumber" value="<?= htmlspecialchars($numHours ?? '') ?>">
 
-            <input type="hidden" name="cottageSelections" value="<?= htmlspecialchars(implode(', ', $cottageChoices)) ?>">
-            <input type="hidden" name="roomSelections" value="<?= htmlspecialchars(implode(', ', $roomChoices)) ?>">
+            <input type="hidden" name="tourSelections" value="<?= htmlspecialchars($tourSelections ?? '') ?>">
 
-            <input type="hidden" name="paymentMethod" value="<?= htmlspecialchars($paymentMethod) ?>">
-
-            <input type="hidden" name="adultServiceID" value="<?= htmlspecialchars($adultServiceID) ?>">
-            <input type="hidden" name="childrenServiceID" value="<?= htmlspecialchars($childrenServiceID) ?>">
-            <input type="hidden" name="adultCount" value="<?= htmlspecialchars($adultCount) ?>">
-            <input type="hidden" name="childrenCount" value="<?= htmlspecialchars($childrenCount) ?>">
-            <input type="hidden" name="adultRate" value="<?= htmlspecialchars($adultRate) ?>">
-            <input type="hidden" name="childrenRate" value="<?= htmlspecialchars($childRate) ?>">
-
-            <input type="hidden" name="scheduledStartDate" value="<?= htmlspecialchars($scheduledStartDate) ?>">
-            <input type="hidden" name="scheduledEndDate" value="<?= htmlspecialchars($scheduledEndDate) ?>">
-            <input type="hidden" name="hoursNumber" value="<?= htmlspecialchars($numHours) ?>">
+            <input type="hidden" name="adultServiceID" value="<?= htmlspecialchars($adultServiceID ?? '') ?>">
+            <input type="hidden" name="childrenServiceID" value="<?= htmlspecialchars($childrenServiceID ?? '') ?>">
+            <input type="hidden" name="adultCount" value="<?= htmlspecialchars($adultCount ?? 0) ?>">
+            <input type="hidden" name="childrenCount" value="<?= htmlspecialchars($childrenCount ?? 0) ?>">
+            <input type="hidden" name="adultRate" value="<?= htmlspecialchars($adultRate ?? 0) ?>">
+            <input type="hidden" name="childrenRate" value="<?= htmlspecialchars($childRate ?? 0) ?>">
         </div>
+
     </form>
 
 
@@ -593,22 +682,6 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Hide downpayment and show addOns pag resort booking -->
-    <script>
-        const bookingType = document.getElementById("bookingType").value;
-        const downpaymentDiv = document.getElementById('downpaymentDiv');
-        // const addOnsDiv = document.getElementById('addOns');
-
-        if (bookingType === "Resort") {
-            downpaymentDiv.style.display = "none";
-        } else if (bookingType === "Hotel") {
-            downpaymentDiv.style.setProperty("display", "block", "important");
-
-        } else {
-            downpaymentDiv.style.setProperty("display", "block", "important");
-        }
-    </script>
 </body>
 
 </html>

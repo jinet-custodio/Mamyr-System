@@ -21,9 +21,6 @@ function multiplication($a, $b)
 
 
 if (isset($_POST['bookRates'])) {
-    // $date = mysqli_real_escape_string($conn, $_POST['date']);
-    // $timeRange = mysqli_real_escape_string($conn, $_POST['timeRange']);
-    // $services = isset($_POST['services']) ? $_POST['services'] : [];
 
     $bookingStatus = 1;
     $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['scheduledStartDate']);
@@ -153,7 +150,7 @@ if (isset($_POST['bookRates'])) {
     $downPayment = 0.00;
     $addOns = is_array($addOnsServices) ? implode(', ', $addOnsServices) : $addOnsServices;
 
-$insertBooking = $conn->prepare("INSERT INTO 
+    $insertBooking = $conn->prepare("INSERT INTO 
         bookings(userID, additionalRequest,  paxNum, hoursNum, 
         startDate, endDate, 
         totalCost, downpayment, 
@@ -181,19 +178,19 @@ $insertBooking = $conn->prepare("INSERT INTO
     bookingservices(bookingID, serviceID, guests, bookingServicePrice)
     VALUES(?,?,?,?)");
 
-        // Insert Adult Service if exists
+
         if ($adultCount > 0 && isset($adultServiceID)) {
             $insertBookingServices->bind_param("iiid", $bookingID, $adultServiceID, $adultCount, $totalAdultFee);
             $insertBookingServices->execute();
         }
 
-        // Insert Children Service if exists
+
         if ($childrenCount > 0 && isset($childrenServiceID)) {
             $insertBookingServices->bind_param("iiid", $bookingID, $childrenServiceID, $childrenCount, $totalChildFee);
             $insertBookingServices->execute();
         }
 
-        // Insert Other Services (Cottages, Rooms, Add-ons)
+
         if (!empty($serviceIDs)) {
             for ($i = 0; $i < count($serviceIDs); $i++) {
                 $serviceID = $serviceIDs[$i];
