@@ -1,0 +1,27 @@
+
+Debuggings service Capacity:
+Array
+(
+    [0] => 5
+    [1] => 10
+    [2] => 15
+)
+Debuggings service Capacity:
+Array
+(
+    [0] => 5
+    [1] => 10
+    [2] => 15
+)
+
+
+
+    // Open or create a log file in write mode (it will create the file if it doesn't exist)
+    $logFile = fopen('debug_log.txt', 'a');
+
+    // Write the debug information to the log file
+    fwrite($logFile, "Debuggings service Capacity:\n");
+    fwrite($logFile, print_r($serviceCapacity, true));
+
+    // Close the log file
+    // fclose($logFile);
