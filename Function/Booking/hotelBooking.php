@@ -37,6 +37,7 @@ if (isset($_POST['hotelBooking'])) {
     $hoursSelected = mysqli_real_escape_string($conn, $_POST['hoursSelected']);
     $checkInDate = mysqli_real_escape_string($conn, $_POST['scheduledStartDate']);
     $checkOutDate = mysqli_real_escape_string($conn, $_POST['scheduledEndDate']);
+    $arrivalTime = mysqli_real_escape_string($conn, $_POST['arrivalTime']);
 
     $adultCount = mysqli_real_escape_string($conn, $_POST['adultCount']);
     $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
@@ -88,10 +89,10 @@ if (isset($_POST['hotelBooking'])) {
 
     //Insert Booking
     $insertBooking = $conn->prepare("INSERT INTO bookings(userID, paxNum, hoursNum, startDate, endDate, 
-    paymentMethod, additionalCharge, totalCost, downpayment, bookingStatus, bookingType) 
-    VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+    paymentMethod, additionalCharge, totalCost, downpayment, bookingStatus, bookingType, arrivalTime) 
+    VALUES(?,?,?,?,?,?,?,?,?,?,?, ?)");
     $insertBooking->bind_param(
-        "iiisssdddis",
+        "iiisssdddiss",
         $userID,
         $totalPax,
         $hoursNum,
@@ -102,7 +103,8 @@ if (isset($_POST['hotelBooking'])) {
         $totalCost,
         $downpayment,
         $bookingStatus,
-        $bookingType
+        $bookingType,
+        $arrivalTime
     );
     if ($insertBooking->execute()) {
         $bookingID = $conn->insert_id;
