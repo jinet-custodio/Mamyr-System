@@ -83,11 +83,17 @@
 
                      <div class="hotelIconContainer mt-3">
                          <?php
-
-
-                            if ($result->num_rows > 0) {
+                            $hotelCategoryID = 1;
+                            $getAllHotelQuery = $conn->prepare("SELECT RServiceName, RSduration, RSAvailabilityID FROM resortAmenities 
+                                                                WHERE RScategoryID = ? 
+                                                                GROUP BY RServiceName
+                                                                ORDER BY CAST(SUBSTRING(RServiceName, LOCATE(' ', RServiceName) + 1) AS UNSIGNED)");
+                            $getAllHotelQuery->bind_param("i", $hotelCategoryID);
+                            $getAllHotelQuery->execute();
+                            $getAllHotelResult = $getAllHotelQuery->get_result();
+                            if ($getAllHotelResult->num_rows > 0) {
                                 $i = 1;
-                                while ($row = $result->fetch_assoc()) {
+                                while ($row = $getAllHotelResult->fetch_assoc()) {
                                     $isAvailable = ($row['RSAvailabilityID'] == 1);
                                     $iconPath = $isAvailable
                                         ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
@@ -124,10 +130,9 @@
 
 
                  <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
-
                      <div class="hoursRoom">
                          <div class="NumberOfHours">
-                             <h5 class="numberOfHours">Number of Hours</h5>
+                             <h5 class="numberOfHoursLabel">Number of Hours</h5>
                              <div class="input-group">
                                  <select class="form-select" name="hoursSelected" id="hoursSelected" required>
                                      <option value="" disabled selected>Choose...</option>
@@ -136,37 +141,15 @@
                                  </select>
                              </div>
                          </div>
-                         <div class="roomNumbers">
-                             <h5 class="roomNumber-title">Room Number</h5>
+                         <div class="arrivalTime">
+                             <h5 class="arrivalTimeLabel">Time arrival</h5>
                              <div class="input-group">
-                                 <select class="form-select" name="selectedHotel" id="selectedHotel" required>
-                                     <option value="" disabled selected>Choose a room</option>
-                                     <?php
-                                        $category = 'Hotel';
-                                        $availableID = 1;
-                                        $selectHotel = $conn->prepare("SELECT rs.*, rsc.categoryName FROM resortAmenities rs
-                            JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
-                            WHERE rsc.categoryName = ? AND RSAvailabilityID = ?");
-                                        $selectHotel->bind_param("si", $category, $availableID);
-                                        $selectHotel->execute();
-                                        $result = $selectHotel->get_result();
-                                        if ($result->num_rows > 0) {
-                                            while ($row = $result->fetch_assoc()) {
-                                        ?>
-                                             <option value="<?= $row['RServiceName'] ?>"
-                                                 data-duration="<?= $row['RSduration'] ?>"><?= $row['RServiceName'] ?> - Max. of
-                                                 <?= $row['RScapacity'] ?> pax - ₱<?= $row['RSprice'] ?></option>
-                                     <?php
-                                            }
-                                        }
-                                        ?>
-                                 </select>
+                                 <input type="time" name="arrivalTime" id="arrivalTime">
                              </div>
                          </div>
                      </div>
 
                      <div class="checkInOut">
-
                          <div class="checkIn-container">
                              <h5 class="containerLabel">Check-In Date</h5>
                              <div style="display: flex;align-items:center;width:100%">
@@ -196,11 +179,32 @@
                          </div>
                      </div>
 
+                     <div class="hotelRooms">
+                         <h5 class="hotelRooms-title">Room Number</h5>
+                         <button type="button" class="btn btn-outline-info text-black w-100" name="selectedHotel" id="selectedHotel" data-bs-toggle="modal" data-bs-target="#hotelRoomModal"> Choose your room</button>
+
+                         <!-- Modal for hotel rooms -->
+                         <div class="modal" id="hotelRoomModal" tabindex="-1">
+                             <div class="modal-dialog">
+                                 <div class="modal-content">
+                                     <div class="modal-header">
+                                         <h5 class="modal-title">Available Hotels</h5>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                     </div>
+                                     <div class="modal-body" id="hotelDisplaySelection">
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
 
                      <div class="paymentMethod">
                          <h5 class="payment-title">Payment Method</h5>
                          <div class="input-group">
-                             <select class="form-select" name="PaymentMethod" id="paymentMethod" required>
+                             <select class="form-select" name="paymentMethod" id="paymentMethod" required>
                                  <option value="" disabled selected>Choose...</option>
                                  <option value="GCash">GCash</option>
                                  <option value="Cash">Cash</option>
@@ -260,13 +264,16 @@
          flatpickr('#checkInDate', {
              enableTime: true,
              minDate: minDate,
-             dateFormat: "Y-m-d H:i"
+             dateFormat: "Y-m-d H:i ",
+             minTime: '00:00'
          });
+
 
          flatpickr('#checkOutDate', {
              enableTime: true,
              minDate: minDate,
-             dateFormat: "Y-m-d H:i"
+             dateFormat: "Y-m-d H:i ",
+             minTime: '00:00'
          });
      </script>
 
@@ -276,8 +283,6 @@
          const hoursSelected = document.getElementById('hoursSelected');
          const checkInInput = document.getElementById('checkInDate');
          const checkOutInput = document.getElementById('checkOutDate');
-         const selectedHotel = document.getElementById('selectedHotel');
-         const hotelDivs = document.querySelectorAll('.hotelIconWithCaption')
 
          checkInInput.addEventListener('change', () => {
              const selectedValue = hoursSelected.value;
@@ -299,7 +304,6 @@
          });
 
 
-
          hoursSelected.addEventListener('change', () => {
              const selectedValue = hoursSelected.value.trim().toLowerCase();
 
@@ -308,26 +312,6 @@
                  checkInInput.dispatchEvent(new Event('change'));
              }
 
-
-             selectedHotel.setAttribute('data-duration', selectedValue);
-             Array.from(selectedHotel.options).forEach(option => {
-                 if (!option.value) {
-                     option.hidden = false;
-                     return;
-                 }
-                 const roomDuration = option.getAttribute('data-duration')?.trim().toLowerCase() || '';
-                 option.hidden = roomDuration !== selectedValue;
-             });
-             selectedHotel.selectedIndex = 0;
-
-
-             hotelDivs.forEach(div => {
-                 const aTag = div.querySelector('a[data-duration]');
-                 if (!aTag) return;
-
-                 const duration = aTag.getAttribute('data-duration')?.trim().toLowerCase() || '';
-                 div.style.display = duration === selectedValue ? 'inline-block' : 'none';
-             });
          });
      </script>
 
@@ -337,8 +321,7 @@
          document.addEventListener("DOMContentLoaded", function() {
              const checkInDate = document.getElementById('checkInDate');
              const hoursSelected = document.getElementById('hoursSelected');
-             const checkOutDate = document.getElementById('checkInDate');
-
+             const checkOutDate = document.getElementById('checkOutDate');
              Swal.fire({
                  icon: 'info',
                  title: 'Select your choice of date',
@@ -347,31 +330,89 @@
              }).then(() => {
                  checkInDate.style.border = '2px solid red';
                  hoursSelected.style.border = '2px solid red';
-
                  //  dateInput.focus();
              });
+
          });
 
-
          function fetchAvailableRooms() {
-
              const checkInDateValue = checkInDate.value;
              const checkOutDateValue = checkOutDate.value;
+             const hoursSelectedValue = hoursSelected.value;
 
-             if (!checkInDateValue || !checkOutDateValue) return;
+             if (!checkInDateValue || !hoursSelectedValue) return;
 
-
-             fetch(`../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(checkInDateValue)}&hotelCheckOutDate=${encodeURIComponent(checkOutDateValue)}`)
+             fetch(`../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(checkInDateValue)}&hotelCheckOutDate=${encodeURIComponent(checkOutDateValue)}&duration=${encodeURIComponent(hoursSelectedValue)}`)
                  .then(response => {
                      if (!response.ok) throw new Error('Network Problem');
                      return response.json();
-                 }).then(data => {
+                 })
+                 .then(data => {
                      if (data.error) {
                          alert("Error: " + data.error);
                          return;
                      }
-                 })
-         };
+
+                     const hotelRoomContainer = document.getElementById("hotelDisplaySelection");
+                     hotelRoomContainer.innerHTML = '';
+
+                     data.hotels.forEach(hotel => {
+                         const wrapper = document.createElement('div');
+                         wrapper.classList.add('checkbox-item');
+
+                         const checkbox = document.createElement('input');
+                         checkbox.type = 'checkbox';
+                         checkbox.name = 'hotelSelections[]';
+                         checkbox.value = hotel.RServiceName;
+                         checkbox.id = hotel.RServiceName;
+                         checkbox.dataset.capacity = hotel.RScapacity;
+
+                         const label = document.createElement('label');
+                         label.setAttribute('for', checkbox.id);
+                         label.textContent = `${hotel.RServiceName} good for ${hotel.RScapacity} pax (₱${Number(hotel.RSprice).toLocaleString()}.00)`;
+
+                         wrapper.appendChild(checkbox);
+                         wrapper.appendChild(label);
+                         hotelRoomContainer.appendChild(wrapper);
+                     })
+
+                 }).catch(error => {
+                     console.error(error);
+                     Swal.fire({
+                         icon: 'error',
+                         title: 'Error',
+                         text: 'Failed to fetch hotels. Please try again.',
+                     });
+                 });
+         }
+
+         checkInDate.addEventListener("change", () => {
+             fetchAvailableRooms();
+             if (!checkInDate.value) {
+                 checkInDate.style.border = '2px solid red';
+             } else {
+                 checkInDate.style.border = '';
+             }
+         });
+
+         checkOutDate.addEventListener("change", fetchAvailableRooms);
+
+         hoursSelected.addEventListener("change", () => {
+             fetchAvailableRooms();
+             checkInDate.addEventListener("change", fetchAvailableRooms);
+             checkOutDate.addEventListener("change", fetchAvailableRooms);
+             hoursSelected.addEventListener("change", fetchAvailableRooms);
+
+
+
+
+             if (!hoursSelected.value) {
+                 hoursSelected.style.border = '2px solid red';
+             } else {
+                 hoursSelected.style.border = '';
+             }
+
+         });
      </script>
 
 

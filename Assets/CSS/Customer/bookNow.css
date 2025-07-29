@@ -599,13 +599,20 @@ footer {
   }
 
   .hotelIconContainer {
-    display: grid;
-    grid-template-columns: repeat(4, 2fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem;
+
     img {
       width: 60px;
       height: auto;
       margin-bottom: 8px;
     }
+  }
+
+  .hotelIconWithCaption {
+    flex: 0 0 calc((100% - 3 * 2.5rem) / 4);
   }
 
   .hotel-card {
@@ -648,7 +655,7 @@ footer {
     font-weight: 600;
   }
 
-  .roomNumbers,
+  .hotelRooms,
   .NumberOfHours {
     display: flex;
     flex-direction: column;
@@ -656,15 +663,15 @@ footer {
     align-items: center;
   }
 
-  .roomNumbers {
-    width: 65%;
+  #selectedHotel .btn {
+    color: #000000 !important;
   }
 
   .NumberOfHours {
     width: 30%;
   }
 
-  .btn {
+  #hotelBooking .btn {
     width: 100%;
     margin: auto;
     margin-top: 0.5rem;

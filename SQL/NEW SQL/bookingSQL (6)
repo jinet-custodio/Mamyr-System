@@ -29,6 +29,9 @@ CREATE TABLE bookings (
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
 );
 
+ALTER TABLE bookings
+ADD COLUMN arrivalTime TIME NULL
+AFTER hoursNum;
 
 CREATE TABLE bookingServices (
     bookingServiceID INT PRIMARY KEY AUTO_INCREMENT,
