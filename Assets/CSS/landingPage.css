@@ -37,7 +37,6 @@ body {
   max-height: 100vh;
 }
 
-
 /* Edit mode CSS */
 #saveChangesBtn {
   margin-top: 8vw !important;
@@ -52,14 +51,13 @@ body {
   padding: 2px;
 }
 
-.editable-img {
+/* .editable-img {
   border: 2px solid rgb(255, 13, 13) !important;
-}
+} */
 
 .white-text {
   color: whitesmoke !important;
 }
-
 
 /* Div for loader */
 #loaderOverlay {
