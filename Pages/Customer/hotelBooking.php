@@ -45,9 +45,13 @@
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
      <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
 
+     <!-- Font Awesome -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
          crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+     <!-- BoxIcon -->
      <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
  </head>
 
@@ -62,39 +66,34 @@
              <div class="titleContainer">
                  <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
              </div>
-             <?php
-                $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration
-            FROM resortAmenities 
-            WHERE RScategoryID = '1'";
-
-                $result = mysqli_query($conn, $availsql);
-                ?>
              <div class="container-fluid" id="hotelContainerFluid">
                  <div class="hotelIconsContainer">
                      <div class="availabilityIcons">
-                         <div class="availabilityIcon" id="allRooms" onclick="filterRooms('all')">
-                             <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
-                                 class="avail" id="allrooms">
-                             <p>All Rooms</p>
-                         </div>
-                         <div class="availabilityIcon" id="availableRooms" onclick="filterRooms('available')">
+                         <div class="availabilityIcon" id="availableRooms">
                              <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2"
                                  class="avail">
                              <p>Available</p>
                          </div>
-                         <div class="availabilityIcon" id="unavailableRooms" onclick="filterRooms('unavailable')">
+                         <div class="availabilityIcon" id="unavailableRooms">
                              <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3"
                                  class="avail">
                              <p>Not Available</p>
                          </div>
                      </div>
 
-
                      <div class="hotelIconContainer mt-3">
                          <?php
-                            if ($result->num_rows > 0) {
+                            $hotelCategoryID = 1;
+                            $getAllHotelQuery = $conn->prepare("SELECT RServiceName, RSduration, RSAvailabilityID FROM resortAmenities 
+                                                                WHERE RScategoryID = ? 
+                                                                GROUP BY RServiceName
+                                                                ORDER BY CAST(SUBSTRING(RServiceName, LOCATE(' ', RServiceName) + 1) AS UNSIGNED)");
+                            $getAllHotelQuery->bind_param("i", $hotelCategoryID);
+                            $getAllHotelQuery->execute();
+                            $getAllHotelResult = $getAllHotelQuery->get_result();
+                            if ($getAllHotelResult->num_rows > 0) {
                                 $i = 1;
-                                while ($row = $result->fetch_assoc()) {
+                                while ($row = $getAllHotelResult->fetch_assoc()) {
                                     $isAvailable = ($row['RSAvailabilityID'] == 1);
                                     $iconPath = $isAvailable
                                         ? "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png"
@@ -131,10 +130,9 @@
 
 
                  <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
-
                      <div class="hoursRoom">
                          <div class="NumberOfHours">
-                             <h5 class="numberOfHours">Number of Hours</h5>
+                             <h5 class="numberOfHoursLabel">Number of Hours</h5>
                              <div class="input-group">
                                  <select class="form-select" name="hoursSelected" id="hoursSelected" required>
                                      <option value="" disabled selected>Choose...</option>
@@ -143,37 +141,15 @@
                                  </select>
                              </div>
                          </div>
-                         <div class="roomNumbers">
-                             <h5 class="roomNumber-title">Room Number</h5>
+                         <div class="arrivalTime">
+                             <h5 class="arrivalTimeLabel">Time arrival</h5>
                              <div class="input-group">
-                                 <select class="form-select" name="selectedHotel" id="selectedHotel" required>
-                                     <option value="" disabled selected>Choose a room</option>
-                                     <?php
-                                        $category = 'Hotel';
-                                        $availableID = 1;
-                                        $selectHotel = $conn->prepare("SELECT rs.*, rsc.categoryName FROM resortAmenities rs
-                            JOIN resortservicescategories rsc ON rs.RScategoryID = rsc.categoryID  
-                            WHERE rsc.categoryName = ? AND RSAvailabilityID = ?");
-                                        $selectHotel->bind_param("si", $category, $availableID);
-                                        $selectHotel->execute();
-                                        $result = $selectHotel->get_result();
-                                        if ($result->num_rows > 0) {
-                                            while ($row = $result->fetch_assoc()) {
-                                        ?>
-                                             <option value="<?= $row['RServiceName'] ?>"
-                                                 data-duration="<?= $row['RSduration'] ?>"><?= $row['RServiceName'] ?> - Max. of
-                                                 <?= $row['RScapacity'] ?> pax - ₱<?= $row['RSprice'] ?></option>
-                                     <?php
-                                            }
-                                        }
-                                        ?>
-                                 </select>
+                                 <input type="time" name="arrivalTime" id="arrivalTime">
                              </div>
                          </div>
                      </div>
 
                      <div class="checkInOut">
-
                          <div class="checkIn-container">
                              <h5 class="containerLabel">Check-In Date</h5>
                              <div style="display: flex;align-items:center;width:100%">
@@ -203,11 +179,32 @@
                          </div>
                      </div>
 
+                     <div class="hotelRooms">
+                         <h5 class="hotelRooms-title">Room Number</h5>
+                         <button type="button" class="btn btn-outline-info text-black w-100" name="selectedHotel" id="selectedHotel" data-bs-toggle="modal" data-bs-target="#hotelRoomModal"> Choose your room</button>
+
+                         <!-- Modal for hotel rooms -->
+                         <div class="modal" id="hotelRoomModal" tabindex="-1">
+                             <div class="modal-dialog">
+                                 <div class="modal-content">
+                                     <div class="modal-header">
+                                         <h5 class="modal-title">Available Hotels</h5>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                     </div>
+                                     <div class="modal-body" id="hotelDisplaySelection">
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
 
                      <div class="paymentMethod">
                          <h5 class="payment-title">Payment Method</h5>
                          <div class="input-group">
-                             <select class="form-select" name="PaymentMethod" id="paymentMethod" required>
+                             <select class="form-select" name="paymentMethod" id="paymentMethod" required>
                                  <option value="" disabled selected>Choose...</option>
                                  <option value="GCash">GCash</option>
                                  <option value="Cash">Cash</option>
@@ -217,8 +214,7 @@
 
                      <div class="additional-info-container">
                          <ul>
-                             <li><img src="../../Assets/Images/Icon/info.png" alt="Info Icon"
-                                     class="info-icon">&nbsp;&nbsp;If the maximum pax exceeded, extra guest is charged
+                             <li style="color: #0076d1ff;"><i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>&nbsp;If the maximum pax exceeded, extra guest is charged
                                  ₱250 per head</li>
                          </ul>
                      </div>
@@ -268,22 +264,16 @@
          flatpickr('#checkInDate', {
              enableTime: true,
              minDate: minDate,
-             dateFormat: "Y-m-d H:i"
-         });
-
-         hotelCheckinIcon.addEventListener('click', function(event) {
-             checkInDate.click()
+             dateFormat: "Y-m-d H:i ",
+             minTime: '00:00'
          });
 
 
          flatpickr('#checkOutDate', {
              enableTime: true,
              minDate: minDate,
-             dateFormat: "Y-m-d H:i"
-         });
-
-         hotelCheckoutIcon.addEventListener('click', function(event) {
-             checkOutDate.click()
+             dateFormat: "Y-m-d H:i ",
+             minTime: '00:00'
          });
      </script>
 
@@ -293,8 +283,6 @@
          const hoursSelected = document.getElementById('hoursSelected');
          const checkInInput = document.getElementById('checkInDate');
          const checkOutInput = document.getElementById('checkOutDate');
-         const selectedHotel = document.getElementById('selectedHotel');
-         const hotelDivs = document.querySelectorAll('.hotelIconWithCaption')
 
          checkInInput.addEventListener('change', () => {
              const selectedValue = hoursSelected.value;
@@ -316,7 +304,6 @@
          });
 
 
-
          hoursSelected.addEventListener('change', () => {
              const selectedValue = hoursSelected.value.trim().toLowerCase();
 
@@ -325,60 +312,39 @@
                  checkInInput.dispatchEvent(new Event('change'));
              }
 
-
-             selectedHotel.setAttribute('data-duration', selectedValue);
-             Array.from(selectedHotel.options).forEach(option => {
-                 if (!option.value) {
-                     option.hidden = false;
-                     return;
-                 }
-                 const roomDuration = option.getAttribute('data-duration')?.trim().toLowerCase() || '';
-                 option.hidden = roomDuration !== selectedValue;
-             });
-             selectedHotel.selectedIndex = 0;
-
-
-             hotelDivs.forEach(div => {
-                 const aTag = div.querySelector('a[data-duration]');
-                 if (!aTag) return;
-
-                 const duration = aTag.getAttribute('data-duration')?.trim().toLowerCase() || '';
-                 div.style.display = duration === selectedValue ? 'inline-block' : 'none';
-             });
          });
      </script>
 
 
-     <!-- Get the available amenities depends on the customer selected date -->
+     <!-- Get the available hotel/room depends on the customer selected date -->
      <script>
          document.addEventListener("DOMContentLoaded", function() {
-
+             const checkInDate = document.getElementById('checkInDate');
+             const hoursSelected = document.getElementById('hoursSelected');
+             const checkOutDate = document.getElementById('checkOutDate');
              Swal.fire({
                  icon: 'info',
                  title: 'Select your choice of date',
                  text: 'Please pick a booking date to continue',
                  confirmButtonText: 'OK'
              }).then(() => {
-
-                 const dateInput = document.getElementById('checkInDate');
-                 dateInput.style.border = '2px solid red';
-
+                 checkInDate.style.border = '2px solid red';
+                 hoursSelected.style.border = '2px solid red';
                  //  dateInput.focus();
              });
+
          });
 
+         function fetchAvailableRooms() {
+             const checkInDateValue = checkInDate.value;
+             const checkOutDateValue = checkOutDate.value;
+             const hoursSelectedValue = hoursSelected.value;
 
+             if (!checkInDateValue || !hoursSelectedValue) return;
 
-         document.getElementById('checkInDate').addEventListener('change', function() {
-             const checkInDate = this.value;
-
-             if (checkInDate !== "") {
-                 this.style.border = '2px solid rgb(235, 237, 240)';
-             }
-
-             fetch(`../../Function/Booking/getAvailableAmenities.php?date=${encodeURIComponent(checkInDate)}`)
+             fetch(`../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(checkInDateValue)}&hotelCheckOutDate=${encodeURIComponent(checkOutDateValue)}&duration=${encodeURIComponent(hoursSelectedValue)}`)
                  .then(response => {
-                     if (!response.ok) throw new Error("Network error");
+                     if (!response.ok) throw new Error('Network Problem');
                      return response.json();
                  })
                  .then(data => {
@@ -387,76 +353,64 @@
                          return;
                      }
 
-                     const cottageSelection = document.getElementById('cottageSelections');
-                     cottageSelection.setAttribute("multiple", "");
-                     cottageSelection.innerHTML = "";
+                     const hotelRoomContainer = document.getElementById("hotelDisplaySelection");
+                     hotelRoomContainer.innerHTML = '';
 
-
-                     const defaultCottageOption = document.createElement('option');
-                     defaultCottageOption.value = "";
-                     defaultCottageOption.disabled = true;
-                     defaultCottageOption.selected = true;
-                     defaultCottageOption.textContent = "Please select a cottage";
-                     cottageSelection.appendChild(defaultCottageOption);
-
-                     data.cottages.forEach(cottage => {
-                         const cottageOption = document.createElement('option');
-                         cottageOption.value = cottage.RServiceName;
-                         cottageOption.textContent = `${cottage.RServiceName} for ₱${Number(cottage.RSprice).toLocaleString()}.00 - Good for ${cottage.RScapacity} pax`;
-                         cottageSelection.appendChild(cottageOption);
-                     });
-
-                     const roomSelection = document.getElementById('roomSelect');
-                     roomSelection.innerHTML = "";
-
-                     const defaultRoomOption = document.createElement('option');
-                     defaultRoomOption.value = "";
-                     defaultRoomOption.disabled = true;
-                     defaultRoomOption.selected = true;
-                     defaultRoomOption.textContent = "Please select a room";
-                     roomSelection.appendChild(defaultRoomOption);
-
-                     data.rooms.forEach(room => {
-                         const roomOption = document.createElement('option');
-                         roomOption.value = room.RServiceName;
-                         roomOption.textContent = `${room.RServiceName} for ₱ ${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
-                         roomSelection.appendChild(roomOption);
-                     });
-
-
-                     const entertainmentSelection = document.getElementById('entertainmentContainer');
-                     entertainmentSelection.innerHTML = "";
-                     const entertainmentFormLabel = document.getElementById('entertainmentFormLabel');
-
-                     entertainmentFormLabel.innerHTML = "Additional Services";
-
-                     data.entertainments.forEach(entertainment => {
+                     data.hotels.forEach(hotel => {
                          const wrapper = document.createElement('div');
                          wrapper.classList.add('checkbox-item');
 
                          const checkbox = document.createElement('input');
                          checkbox.type = 'checkbox';
-                         checkbox.name = 'entertainmentOptions[]';
-                         checkbox.value = entertainment.RServiceName;
-                         checkbox.id = `ent-${entertainment.RServiceName}`;
+                         checkbox.name = 'hotelSelections[]';
+                         checkbox.value = hotel.RServiceName;
+                         checkbox.id = hotel.RServiceName;
+                         checkbox.dataset.capacity = hotel.RScapacity;
 
                          const label = document.createElement('label');
                          label.setAttribute('for', checkbox.id);
-                         label.innerHTML = `${entertainment.RServiceName} for ₱${Number(entertainment.RSprice).toLocaleString()}.00`;
+                         label.textContent = `${hotel.RServiceName} good for ${hotel.RScapacity} pax (₱${Number(hotel.RSprice).toLocaleString()}.00)`;
 
                          wrapper.appendChild(checkbox);
                          wrapper.appendChild(label);
-                         entertainmentSelection.appendChild(wrapper);
-                     });
-                 })
-                 .catch(error => console.error(
+                         hotelRoomContainer.appendChild(wrapper);
+                     })
+
+                 }).catch(error => {
+                     console.error(error);
                      Swal.fire({
                          icon: 'error',
-                         text: 'Please select date first',
                          title: 'Error',
-                         confirmButtonOkay: 'Okay'
-                     })
-                 ));
+                         text: 'Failed to fetch hotels. Please try again.',
+                     });
+                 });
+         }
+
+         checkInDate.addEventListener("change", () => {
+             fetchAvailableRooms();
+             if (!checkInDate.value) {
+                 checkInDate.style.border = '2px solid red';
+             } else {
+                 checkInDate.style.border = '';
+             }
+         });
+
+         checkOutDate.addEventListener("change", fetchAvailableRooms);
+
+         hoursSelected.addEventListener("change", () => {
+             fetchAvailableRooms();
+             checkInDate.addEventListener("change", fetchAvailableRooms);
+             checkOutDate.addEventListener("change", fetchAvailableRooms);
+             hoursSelected.addEventListener("change", fetchAvailableRooms);
+
+
+
+
+             if (!hoursSelected.value) {
+                 hoursSelected.style.border = '2px solid red';
+             } else {
+                 hoursSelected.style.border = '';
+             }
 
          });
      </script>

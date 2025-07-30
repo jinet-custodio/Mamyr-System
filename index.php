@@ -152,18 +152,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="resortPic1">
                 <?php if (isset($imageMap['DisplayName'])): ?>
                     <?php foreach ($imageMap['DisplayName'] as $index => $img):
-                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
+                        $imagePath = $img['imageData'];
                         $defaultImage = "Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <div class="image-wrapper mb-3 pic1">
-                            <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                            <img src="<?= htmlspecialchars($img['imageData']) ?>"
                                 alt="<?= htmlspecialchars($img['altText']) ?>"
                                 class="img-fluid mb-2 editable-img"
                                 style="cursor: pointer;"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editImageModal"
                                 data-wcimageid="<?= $img['WCImageID'] ?>"
-                                data-folder="landingPage"
                                 data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                                 data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                         </div>
@@ -244,18 +243,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <?php if (isset($imageMap['FullName'])): ?>
                 <div class="galleryPictures">
                     <?php foreach ($imageMap['FullName'] as $index => $img):
-                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
+                        $imagePath = $img['imageData'];
                         $defaultImage = "Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <div class="image-wrapper mb-3 galleryImg">
-                            <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                            <img src="<?= htmlspecialchars($img['imageData']) ?>"
                                 alt="<?= htmlspecialchars($img['altText']) ?>"
                                 class="img-fluid mb-2 editable-img"
                                 style="cursor: pointer;"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editImageModal"
                                 data-wcimageid="<?= $img['WCImageID'] ?>"
-                                data-folder="landingPage"
                                 data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                                 data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                         </div>
@@ -346,7 +344,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                         document.getElementById('modalImagePreview').src = currentSrc;
                         document.getElementById('modalAltText').value = currentAlt;
-                        activeImageElement.setAttribute('data-folder', this.dataset.folder || '');
                         document.getElementById('modalImageUpload').value = '';
                     });
                 });
@@ -430,15 +427,15 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     editableImages.forEach(img => {
                         const wcImageID = img.dataset.wcimageid;
                         const altText = img.dataset.alttext;
-                        const folder = img.dataset.folder || '';
                         const file = img.fileObject || null;
+                        const imagePath = img.dataset.imagepath || ''; // Full path like 'Assets/Images/landingPage/resortPic1.png'
 
                         if (!wcImageID || (!file && !altText)) return;
 
                         const formData = new FormData();
                         formData.append('wcImageID', wcImageID);
                         formData.append('altText', altText);
-                        formData.append('folder', folder);
+                        formData.append('imagePath', imagePath); // ✅ Send full path
 
                         if (file) {
                             formData.append('image', file);

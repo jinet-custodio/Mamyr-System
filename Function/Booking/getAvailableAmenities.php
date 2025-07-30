@@ -6,7 +6,6 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
     $resortBookingDate = new DateTime($_GET['date']);
     $selectedDate = $resortBookingDate->format('Y-m-d');
     $availableID = 1;
-    $cottageCategoryID = 2;
 
     $getTimeRange = $conn->prepare("SELECT * FROM entrancetimeranges WHERE session_type = ?");
     $getTimeRange->bind_param("s", $selectedTour);
@@ -80,7 +79,41 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
         'rooms' => $rooms,
         'entertainments' => $entertainments
     ]);
+} else if (isset($_GET['hotelCheckInDate']) && isset($_GET['hotelCheckOutDate']) && isset($_GET['duration'])) {
+
+    $hotelCheckInDate = new DateTime($_GET['hotelCheckInDate']);
+    $hotelCheckOutDate = new DateTime($_GET['hotelCheckOutDate']);
+    $startDate = $hotelCheckInDate->format('Y-m-d H:i:s');
+    $endDate = $hotelCheckOutDate->format('Y-m-d H:i:s');
+    $duration = trim(mysqli_real_escape_string($conn, $_GET['duration']));
+
+    $availableID = 1;
+    $hotelCategoryID = 1;
+
+    $getAvailableHotel = $conn->prepare("SELECT * FROM resortAmenities ra WHERE ra.RSAvailabilityID = ? AND ra.RScategoryID = ? AND ra.RSduration = ?
+                            AND NOT EXISTS (
+                            SELECT 1 FROM serviceUnavailableDates sud
+                            WHERE sud.resortServiceID = ra.resortServiceID
+                            AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate)
+                        )");
+
+    $getAvailableHotel->bind_param("iisss", $availableID, $hotelCategoryID, $duration, $startDate, $endDate);
+    $getAvailableHotel->execute();
+    $getAvailableHotelResult = $getAvailableHotel->get_result();
+
+    $hotels = [];
+
+    while ($row = $getAvailableHotelResult->fetch_assoc()) {
+        $hotels[] = $row;
+    }
+
+
+
+    echo json_encode([
+        'hotels' => $hotels
+    ]);
+    $getAvailableHotel->close();
 } else {
-    echo json_encode(['error' => 'Date or tour not provided']);
+    echo json_encode(['error' => 'Required data not provided']);
     exit();
 }

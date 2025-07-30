@@ -70,7 +70,7 @@ $userRole = $_SESSION['userRole'];
         <div class="sidebar-header">
             <h5>User Account</h5>
             <?php
-            $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile = $conn->prepare("SELECT firstName,userProfile, email FROM users WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
