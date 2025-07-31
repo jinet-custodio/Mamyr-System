@@ -34,30 +34,115 @@ if (isset($_POST['generatePDF'])) {
     ob_start();
 ?>
 
-    <!DOCTYPE html>
-    <html>
+<!DOCTYPE html>
+<html>
 
-    <head>
-        <title>Sales Report</title>
-    </head>
+<head>
+    <title>Sales Report - Mamyr Resort and Events Place</title>
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
 
-    <body>
+    <style>
+    .logo {
+        height: 35px;
+        margin-top: -5px;
 
-        <header>
-            <h1 class="header-title">Mamyr Resort & Event Place</h1>
-            <h3 style="text-align:center;">Gabihan, San Ildefonso, Bulacan</h3>
-            <h4 style="text-align:center;">mamyrResort@gmail.com | 0999-999-9999</h4>
-        </header>
+    }
 
-        <main>
-            <section>
+    .header-title {
+        font-size: 20px;
+        margin-top: -55px;
+
+    }
+
+    .headerTextContainer {
+        margin-top: 37px;
+    }
+
+    h4 {
+        font-family: "Poppins Light";
+        font-size: 12px;
+        margin-top: -30px;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    hr {
+        width: 95%;
+        height: 2px;
+        margin-top: -15px;
+        background-color: black;
+    }
+
+    p {
+        font-size: 12px;
+    }
+
+    .request {
+        text-align: right;
+    }
+
+    .table {
+        width: 100%;
+        margin-top: 75px;
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 12px;
+
+    }
+
+    tr tr,
+    td,
+    th {
+        border: 1px solid black;
+        padding: 10px;
+
+    }
+
+    .no-data-text {
+        font-weight: bold;
+        color: red;
+    }
+
+    .signatories {
+        margin-top: 70px;
+
+    }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+        <h1 class="header-title" style="text-align: center;">Mamyr Resort & Events Place</h2>
+
+            <div class="headerTextContainer">
+                <h4 style="text-align:center;">Gabihan, San Ildefonso, Bulacan <br> mamyresort@gmail.com | (0998) 962
+                    4697
+                </h4>
+
+            </div>
+    </header>
+    <hr>
+    <main>
+        <div class="background-image">
+
+            <section class="contents">
                 <h2 class="section-title">Sales Report</h2>
-                <p><strong>Report Generated:</strong> <?= $dateToday ?></p>
-                <p><strong>Date Range:</strong> <?= date("F d, Y", strtotime($selectedStartDate)) ?> to <?= date("F d, Y", strtotime($selectedEndDate)) ?></p>
-            </section>
+                <p style="text-align: left; margin-top: 40px"><strong>Report Generated:</strong> <?= $dateToday ?></p>
+                <p style="text-align: left;"><strong>Date Range:</strong>
+                    <?= date("F d, Y", strtotime($selectedStartDate)) ?> to
+                    <?= date("F d, Y", strtotime($selectedEndDate)) ?></p>
 
-            <section>
-                <p><strong>Requested By:</strong> <?= htmlspecialchars($name) ?></p>
+            </section>
+            <p class="request" style="text-align: right; margin-top: -60px"><strong>Requested By:</strong>
+                <?= htmlspecialchars($name) ?></p>
+
+            <section class="contents">
                 <table class="table">
                     <thead>
                         <tr>
@@ -95,23 +180,23 @@ if (isset($_POST['generatePDF'])) {
                                 $totalBookings++;
                                 $totalCost += $row['totalCost'];
                         ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($row['formattedBookingID']) ?></td>
-                                    <td><?= htmlspecialchars($row['firstName']) ?></td>
-                                    <td><?= htmlspecialchars($row['bookingType']) ?></td>
-                                    <td><?= htmlspecialchars($row['guest']) ?></td>
-                                    <td><?= date('F d, Y', strtotime($row['startDate'])) ?></td>
-                                    <td><?= date('F d, Y', strtotime($row['endDate'])) ?></td>
-                                    <td><?= htmlspecialchars($row['paymentMethod']) ?></td>
-                                    <td>₱<?= number_format($row['totalCost'], 2) ?></td>
-                                </tr>
-                            <?php
+                        <tr>
+                            <td><?= htmlspecialchars($row['formattedBookingID']) ?></td>
+                            <td><?= htmlspecialchars($row['firstName']) ?></td>
+                            <td><?= htmlspecialchars($row['bookingType']) ?></td>
+                            <td><?= htmlspecialchars($row['guest']) ?></td>
+                            <td><?= date('F d, Y', strtotime($row['startDate'])) ?></td>
+                            <td><?= date('F d, Y', strtotime($row['endDate'])) ?></td>
+                            <td><?= htmlspecialchars($row['paymentMethod']) ?></td>
+                            <td>₱<?= number_format($row['totalCost'], 2) ?></td>
+                        </tr>
+                        <?php
                             }
                         } else {
                             ?>
-                            <tr>
-                                <td colspan="8" class="no-data-text">No bookings found for selected dates</td>
-                            </tr>
+                        <tr>
+                            <td colspan="8" class="no-data-text">No bookings found for selected dates</td>
+                        </tr>
                         <?php
                         }
                         ?>
@@ -119,21 +204,24 @@ if (isset($_POST['generatePDF'])) {
                 </table>
             </section>
 
-            <section>
-                <h2 class="section-title">Summary</h2>
-                <p><strong>Total Bookings:</strong> <?= $totalBookings ?></p>
-                <p><strong>Total Cost:</strong> ₱<?= number_format($totalCost, 2) ?></p>
+            <section class="contents">
+                <h2 class="section-title" style="margin-top: 50px;">Report Summary</h2>
+                <p style="text-align: left; margin-top: 20px;"><strong>Total Bookings:</strong> <?= $totalBookings ?>
+                </p>
+                <p style="text-align: left;"><strong>Total Cost:</strong> ₱<?= number_format($totalCost, 2) ?></p>
             </section>
 
-            <section>
-                <p><strong>Signed By:</strong> ________________________</p>
-                <p><strong>Submitted By:</strong> ______________________</p>
+            <section class="signatories">
+                <p style="text-align: left; margin-left:60px;"><strong>Signed By:</strong> ________________________</p>
             </section>
-        </main>
+            <p style="text-align:right; margin-top: -25px; margin-right:60px;"><strong>Submitted By:</strong>
+                ______________________</p>
+        </div>
+    </main>
 
-    </body>
+</body>
 
-    </html>
+</html>
 
 <?php
 
