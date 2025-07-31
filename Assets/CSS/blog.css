@@ -55,14 +55,13 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* height: 15vh; */
   padding: 1rem;
 }
 
 .navbar-nav {
   display: flex !important;
   list-style: none;
-  margin-top: 10px !important;
+  margin-top: 5px !important;
 }
 
 .navbar.scrolled {
@@ -158,29 +157,48 @@ ul {
   font-weight: bold;
 }
 
+
 .account-nav {
-  margin: 1px;
-  margin-left: 1rem;
-  /* border: 1px solid white; */
+  height: 100%;
+  display: flex;
+  align-items: center;
   border-radius: 50%;
+  margin-left: 2vw;
+  margin-top: 0 !important;
   img {
     height: 5vw;
     border-radius: 50%;
     aspect-ratio: 1;
     object-fit: cover;
   }
+  a {
+      height: 100%;
+  display: flex;
+  align-items: center;
+  }
 }
 
 
 .notification-container{
   margin: 1rem;
-
-  button{
-    background-color: transparent;
-    border: none;
-  }
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
+button.btn{
+    background-color: transparent;
+    border: none;
+    padding: 0 !important;  
+    margin-left: 2vw;
+  }
+
+.notificationIcon {
+  display: flex;
+  align-items: center;
+  height: 2.2vw;
+  aspect-ratio: 1;
+  }
 
 
 .logoNav {
@@ -194,7 +212,7 @@ ul {
 
 .titleContainer {
   width: 70%;
-  margin: 8vw auto 2vw auto;
+  margin: 9vw auto 2vw auto;
   text-align: center;
 }
 
@@ -447,6 +465,37 @@ footer {
 
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1025px) { 
+   .profile {
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+    align-items: center;
+  }
+
+  .account-nav img {
+    height: clamp(5vw, 6.5vw, 7.1vw);
+    aspect-ratio: 1;
+  }
+
+  .notificationIcon {
+  display: flex;
+  align-items: center;
+  height:  clamp(3vw, 3.4vw, 4.1vw);
+  aspect-ratio: 1;
+  }
+
+  button.btn {
+    margin-left: 1.5vw;
+  }
+
+  .navbarDropdown {
+    text-align: center;
+    width: 100%;
+  }
+
+  .nav-item {
+    font-size: clamp(10px, calc(1.5vh + 4px), 12px);
+  }
+
 }
 
 
@@ -454,6 +503,28 @@ footer {
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
   .logoNav {
     top: 2vw;
+  }
+
+   .profile {
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+    align-items: center;
+  }
+
+  .account-nav img {
+    height: clamp(5.2vw, 6.8vw, 7.3vw);
+    aspect-ratio: 1;
+  }
+
+  .notificationIcon {
+  display: flex;
+  align-items: center;
+  height:  clamp(3vw, 3.8vw, 4.2vw);
+  aspect-ratio: 1;
+  }
+
+  button.btn {
+    margin-left: 1.5vw;
   }
 
   .navbarDropdown {
@@ -499,7 +570,9 @@ footer {
     background-color: none !important;
   }
 
-
+.titleContainer {
+  margin-top: 16vw;
+}
 
  #maintext{
     font-size: clamp(3.2vw, calc(2.9vw + 2px), 2.6vw) !important;
@@ -611,9 +684,10 @@ footer {
 /* @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {} */
 
 /* Phone size */
-@media screen and (min-width: 360px) and (max-width: 599px) {
+@media screen and (max-width: 599px) {
   .logoNav {
     top: 2vw;
+    width: 20vw !important;
   }
 
   .navbarDropdown {
@@ -669,7 +743,7 @@ footer {
   }
 
   .titleContainer {
-    margin-top: 8vh !important;
+    margin-top: 15vw !important;
   }
   .titleContainer h4{
     font-size: clamp(2.9vw, calc(2vw + 2px), 1.9vw) !important;
@@ -678,6 +752,32 @@ footer {
   .title h5 {
     font-size: clamp(2.4vw, calc(2.2vw + 2px), 1.8vw) !important;
   }
+
+  .navbar-nav {
+    margin-top: 0 !important;
+  }
+
+  .navbar {
+    padding: 0 !important;
+  }
+
+   .account-nav img {
+    height: clamp(7.5vw, 8vw, 9.5vw);
+    aspect-ratio: 1;
+  }
+
+  .notificationIcon {
+  display: flex;
+  align-items: center;
+  height:  clamp(4vw, 4.7vw, 5.4vw);
+  aspect-ratio: 1;
+  }
+
+  #notifs {
+    margin-top: 0 !important;
+  }
+
+
   
   .posts {
     flex-direction: column;
@@ -764,29 +864,38 @@ footer {
     font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.7vw) !important;
   }
 
-  .mb-0 {
-    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
+
+.mb-0 {
+    font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
   }
 
   .logo {
-    width: 15vw;
+    width: 18vw;
+  }
+
+  .reservation {
+    width: 20%;
+  }
+
+  .locationFooter {
+    width: 50%;
   }
 
   .reservationTitle, .locationTitle {
-    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
+    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
   .numberFooter, .emailAddressTextFooter, .addressTextFooter {
-    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
+    font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
   }
 
   .socialIcons a {
     justify-items: center;
     align-items: center;
+    padding: 0.5vw 1.5vw;
   }
  
     .socialIcons a i { 
-      font-size: 3vw;
-    }
-
+      font-size: 3.5vw;
+    }  
 }

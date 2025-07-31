@@ -77,10 +77,10 @@ require '../Config/dbcon.php';
         </div>
 
         <div class="pool">
-            <div class="poolTitleContainer">
-                <hr class="poolLine">
-                <h4 class="poolTitle">Swimming Pools</h4>
-                <p class="poolDescription">We offer three spacious pools designed for relaxation and fun. Whether you’re
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <h4 class="amenityTitle">Swimming Pools</h4>
+                <p class="amenityDescription">We offer three spacious pools designed for relaxation and fun. Whether you’re
                     looking to take a
                     refreshing dip or lounge by the water, each pool provides a perfect setting to unwind and enjoy your
                     stay. Dive in and make the most of your resort experience!</p>
@@ -99,11 +99,11 @@ require '../Config/dbcon.php';
             </div>
         </div>
 
-        <div class="cottage" style="background-color:#f7d5b0; height: 120vh;">
-            <div class=" cottageTitleContainer" style="padding-top: 2vw;">
-                <hr class="cottageLine">
-                <h4 class="cottageTitle">Cottages</h4>
-                <p class="cottageDescription">Our cozy cottages offer a relaxing retreat with spacious porches, secure
+        <div class="cottage colored-bg" style="background-color:#f7d5b0;">
+            <div class=" amenityTitleContainer">
+                <hr class="amenityLine">
+                <h4 class="amenityTitle">Cottages</h4>
+                <p class="amenityDescription">Our cozy cottages offer a relaxing retreat with spacious porches, secure
                     surroundings, and a refreshing ambiance. Enjoy a perfect blend of nature and modern facilities
                     designed for your comfort.</p>
             </div>
@@ -111,7 +111,6 @@ require '../Config/dbcon.php';
 
             <div class="carousel-container">
                 <div class="carousel">
-
                     <?php
                     $serviceCategory = 2;
                     $query = "SELECT * FROM resortAmenities WHERE RScategoryID = $serviceCategory ";
@@ -143,14 +142,13 @@ require '../Config/dbcon.php';
                 <button class="btn btn-primary prev-btn">&#10094;</button>
                 <button class="btn btn-primary next-btn">&#10095;</button>
             </div>
-
         </div>
 
-        <div class="videoke" style="height: 120vh;">
-            <div class=" poolTitleContainer" style="padding-top: 2vw;">
-                <hr class="videokeLine">
-                <h4 class="videokeTitle">Videoke Area</h4>
-                <p class="videokeDescription">Enjoy nonstop fun just steps away from your cottage! Our videoke area is
+        <div class="videoke">
+            <div class=" amenityTitleContainer">
+                <hr class="amenityLine">
+                <h4 class="amenityTitle">Videoke Area</h4>
+                <p class="amenityDescription">Enjoy nonstop fun just steps away from your cottage! Our videoke area is
                     conveniently located beside the cottages, making it easy to sing, laugh, and bond without going far.
                     With a great sound system and cozy setup, it’s the perfect spot for music-filled memories in the
                     heart of the resort.</p>
@@ -186,7 +184,7 @@ require '../Config/dbcon.php';
                 <?php
                     }
                 } else {
-                    echo '<h5 class="cottageTitle" style="padding-top: 5rem;">No Videoke Pics</h5>';
+                    echo '<h5 class="cottageTitle">No Videoke Pics</h5>';
                 }
                 ?>
 
@@ -194,17 +192,15 @@ require '../Config/dbcon.php';
 
         </div>
 
-        <div class="pavilion" style="background-color: #7dcbf2; height: 155vh;">
-            <div class="pavilionTitleContainer" style="padding-top: 2vw ;">
-                <hr class="pavilionLine">
-                <h4 class="pavilionTitle">Pavilion Hall</h4>
-                <p class="pavilionDescription">Our Pavilion Hall offers the perfect space for events, gatherings, and
+        <div class="pavilion colored-bg" style="background-color: #7dcbf2;">
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <h4 class="amenityTitle">Pavilion Hall</h4>
+                <p class="amenityDescription">Our Pavilion Hall offers the perfect space for events, gatherings, and
                     special occasions. With its spacious and elegant design, it’s ideal for everything from weddings to
-                    corporate events, comfortably accommodating up to 350 guests. Fully air-conditioned for your
-                    comfort, the hall can be rented for a maximum of 5 hours. Included with your rental is exclusive
+                    corporate events, comfortably accommodating up to 350 guests. Included with your rental is exclusive
                     access to one private air-conditioned room and a dedicated powder room with separate comfort rooms
-                    for both male and female guests. Let us help you create unforgettable memories in a setting of pure
-                    sophistication and convenience.</p>
+                    for both male and female guests.</p>
             </div>
 
             <div class="carousel-container">
@@ -226,11 +222,11 @@ require '../Config/dbcon.php';
             </div>
         </div>
 
-        <div class="minipavilion" style=" height: 125vh;">
-            <div class="minipavilionTitleContainer">
-                <hr class="minipavilionLine">
-                <h4 class="minipavilionTitle">Mini Pavilion</h4>
-                <p class="minipavilionDescription">Our mini pavilion offers an intimate and charming space perfect for
+        <div class="minipavilion">
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <h4 class="amenityTitle">Mini Pavilion</h4>
+                <p class="amenityDescription">Our mini pavilion offers an intimate and charming space perfect for
                     small
                     gatherings and special occasions. Designed to comfortably accommodate up to 50 guests, it’s ideal
                     for birthdays, reunions, meetings, or any cozy celebration. Surrounded by a refreshing resort
@@ -256,11 +252,11 @@ require '../Config/dbcon.php';
             </div>
         </div>
 
-        <div class="hotel" style="background-color:#f7d5b0; height: 140vh;">
-            <div class="hotelTitleContainer" style="padding-top: 5vw;">
-                <hr class="hotelLine">
-                <h4 class="hotelTitle">Mamyr Hotel</h4>
-                <p class="hotelDescription">We offer 11 thoughtfully designed hotel rooms, each providing a peaceful and
+        <div class="hotel colored-bg" style="background-color:#f7d5b0;">
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <h4 class="amenityTitle">Mamyr Hotel</h4>
+                <p class="amenityDescription">We offer 11 thoughtfully designed hotel rooms, each providing a peaceful and
                     comfortable retreat. Perfect for guests looking for a relaxing space to unwind after a day of
                     exploration, our rooms offer all the essentials for a restful stay with a touch of convenience.</p>
             </div>
@@ -280,12 +276,11 @@ require '../Config/dbcon.php';
         </div>
 
         <div class="parking">
-            <div class="parkingTitleContainer">
-                <hr class="parkingLine">
-                <h4 class="parkingTitle">Parking Space</h4>
-                <p class="parkingDescription">We provide ample parking spaces to ensure a hassle-free stay. Whether
-                    you’re
-                    arriving by car or with a group, our secure parking area is conveniently located, giving you peace
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <h4 class="amenityTitle">Parking Space</h4>
+                <p class="amenityDescription">We provide ample parking spaces to ensure a hassle-free stay. Whether
+                    you’re arriving by car or with a group, our secure parking area is conveniently located, giving you peace
                     of mind throughout your visit.</p>
             </div>
 
@@ -347,7 +342,7 @@ require '../Config/dbcon.php';
     </footer>
 
     <script>
-        var video = document.getElementById("myVideo");
+        var video = document.getElementById("mamyrVideo");
 
         video.onplay = function() {
             video.muted = false;
