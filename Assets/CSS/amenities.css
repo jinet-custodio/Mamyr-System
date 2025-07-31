@@ -55,7 +55,7 @@ nav {
 
 .navbar-nav .dropdown-toggle {
   display: inline-block;
-  padding: 10px 15px !important;
+  padding: 10px !important;
   line-height: 1.5;
   vertical-align: middle;
   position: relative;
@@ -67,7 +67,7 @@ nav {
   font-family: "Poppins" !important;
   font-weight: lighter;
   margin-top: 15px;
-  font-size: 1.3vw;
+  font-size: 1.5vw;
   /* margin-left: 3vw; */
 }
 
@@ -134,27 +134,46 @@ nav {
 }
 
 .account-nav {
-  margin: 1px;
-  margin-left: 1rem;
-  /* border: 1px solid white; */
-  border-radius: 2rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  margin-left: 2vw;
+  margin-top: 0 !important;
   img {
     height: 5vw;
     border-radius: 50%;
     aspect-ratio: 1;
     object-fit: cover;
   }
+  a {
+      height: 100%;
+  display: flex;
+  align-items: center;
+  }
 }
 
 
 .notification-container{
   margin: 1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
 
-  button{
+button.btn{
     background-color: transparent;
     border: none;
+    padding: 0 !important;  
+    margin-left: 2vw;
   }
-}
+
+.notificationIcon {
+  display: flex;
+  align-items: center;
+  height: 2.2vw;
+  aspect-ratio: 1;
+  }
 
 /* Div for loader */
 #loaderOverlay {
@@ -196,100 +215,8 @@ nav {
   /* border: 1px solid black; */
   width: 15vw;
   position: absolute;
-  margin: 2vw;
+  margin: 1vw;
 }
-
-footer {
-  /* border: 1px solid black; */
-  margin-top: auto !important;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 10vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 1.5vw;
-  font-weight: bold;
-  color: #ffff;
-}
-
-.footerLine {
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  opacity: 1;
-}
-
-.info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5vw;
-}
-.locationFooter {
-  /* border: 1px solid black; */
-  width: 30%;
-}
-
-.reservationTitle,
-.locationTitle {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 1.5vw;
-  color: #fff;
-}
-
-.numberFooter,
-.emailAddressTextFooter,
-.addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: 1vw;
-}
-
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  margin: 0.3vw;
-}
-
-.socialIcons a {
-  text-decoration: none;
-  padding: 0.8vw;
-  background-color: rgb(255, 255, 255);
-  margin: 5px;
-  border-radius: 50%;
-}
-
-.socialIcons a i {
-  font-size: 2vw;
-  color: #3e849e;
-  opacity: 0.9;
-}
-
-.socialIcons a:hover {
-  background-color: white;
-  transition: 0.5s;
-}
-
-.socialIcons a:hover i {
-  color: #c1a534;
-  transition: 0.5s;
-}
-
-
 
 .amenities {
   margin-top: 9vw;
@@ -298,14 +225,13 @@ footer {
 .title {
   text-align: center;
   margin-top: 1vw;
-  font-size: 2.8vw;
+  font-size: clamp(2.2vw, calc(2.3vw + 1vh), 3.8vw);
   font-family: "Lora";
   color: #000000;
 }
 
 .embed-responsive {
-  width: 100%;
-  max-width: 700px;
+  width: clamp(500px, 50%, 80%) !important;
   height: auto;
   margin-top: 2vw !important;
   margin: auto;
@@ -316,14 +242,7 @@ footer {
   height: 100%;
 }
 
-.poolTitleContainer {
-  width: 85%;
-  margin: auto;
-  text-align: center;
-  margin-top: 4vw !important;
-}
-
-.poolLine {
+.amenityLine {
   border: none;
   border-top: 5px solid #d48d31;
   width: 25%;
@@ -331,15 +250,17 @@ footer {
   opacity: 1;
 }
 
-.poolTitle {
+.amenityTitle {
   margin-top: 1vw;
-  font-size: 2vw;
+  font-size: clamp(2.2vw, calc(2.3vw + 1vh), 2.9vw);
 }
 
-.poolDescription {
+.amenityDescription {
   margin-top: 1vw;
-  font-size: 1.3vw;
+  font-size: clamp(1vw, calc(1vw + 1vh), 3vw);
+  margin-bottom: 0 !important;
 }
+
 
 .poolPics {
   display: flex;
@@ -353,6 +274,8 @@ footer {
 .pic2 {
   height: 20vw;
   width: auto;
+  margin-bottom: 3vw;
+  margin-top: 1vw !important;
 }
 
 .poolPic1,
@@ -360,15 +283,15 @@ footer {
 .poolPic3,
 .poolPic4,
 .poolPic5 {
-  height: 17vw;
+  height: clamp(15vw, calc(16vw  + 1vh),18vw);
   width: auto;
 }
 
 .carousel-container {
   position: relative;
   width: 60%;
-  height: 300px;
-  margin: 30px auto;
+  height: clamp(28vw, 30vw, 32vw);
+  margin: 20px auto;
   perspective: 1000px;
 }
 
@@ -407,178 +330,27 @@ footer {
   transform: rotateY(288deg) translateZ(300px);
 }
 
-.cottage {
-  height: 90vh !important;
-}
 
-.cottageTitleContainer {
-  /* border: 1px solid black; */
+.amenityTitleContainer {
   width: 85%;
   margin: auto;
   text-align: center;
-  margin-top: 5vw !important;
-}
-
-.cottageLine {
-  border: none;
-  border-top: 5px solid #d48d31;
-  width: 25%;
-  margin: 0 auto;
-  opacity: 1;
-}
-
-.cottageTitle {
-  margin-top: 1vw;
-  font-size: 2vw;
-}
-
-.cottageDescription {
-  margin-top: 1vw;
-  font-size: 1.3vw;
-}
-
-.videoke {
-  height: 90vh !important;
-}
-
-.videokeTitleContainer {
-  /* border: 1px solid black; */
-  width: 85%;
-  margin: auto;
-  text-align: center;
-  margin-top: 1vw !important;
-}
-
-.videokeLine {
-  border: none;
-  border-top: 5px solid #d48d31;
-  width: 25%;
-  margin: 0 auto;
-  opacity: 1;
-}
-
-.videokeTitle {
-  margin-top: 1vw;
-  font-size: 2vw;
-}
-
-.videokeDescription {
-  margin-top: 1vw;
-  font-size: 1.3vw;
-}
-
-.pavilion {
-  height: 110vh !important;
-}
-
-.pavilionTitleContainer {
-  /* border: 1px solid black; */
-  width: 85%;
-  margin: auto;
-  text-align: center;
+  padding-top: 1vw !important;
   margin-top: 2vw !important;
 }
 
-.pavilionLine {
-  border: none;
-  border-top: 5px solid #d48d31;
-  width: 25%;
-  margin: 0 auto;
-  opacity: 1;
+.colored-bg {
+  padding-top: 0.5vw !important;
 }
 
-.pavilionTitle {
-  margin-top: 1vw;
-  font-size: 2vw;
-}
-
-.pavilionDescription {
-  margin-top: 1vw;
-  font-size: 1.3vw;
-}
-
-.minipavilion {
-  height: 90vh !important;
-}
-
-.minipavilionTitleContainer {
-  /* border: 1px solid black; */
-  width: 95%;
-  margin: auto;
-  text-align: center;
-  margin-top: 1vw !important;
-}
-
-.minipavilionLine {
-  border: none;
-  border-top: 5px solid #d48d31;
-  width: 25%;
-  margin: 0 auto;
-  opacity: 1;
-}
-
-.minipavilionTitle {
-  margin-top: 1vw;
-  font-size: 2vw;
-}
-
-.minipavilionDescription {
-  margin-top: 1vw;
-  font-size: 1.3vw;
-}
-
+.pavilion, 
+.minipavilion, 
+.cottage, 
+.videoke, 
 .hotel {
-  height: 100vh !important;
-}
-.hotelTitleContainer {
-  width: 85%;
-  margin: auto;
-  text-align: center;
-  margin-top: 1vw !important;
+  padding-bottom: 1vw !important;
 }
 
-.hotelLine {
-  border: none;
-  border-top: 5px solid #d48d31;
-  width: 25%;
-  margin: 0 auto;
-  opacity: 1;
-}
-
-.hotelTitle {
-  margin-top: 1vw;
-  font-size: 2vw;
-}
-
-.hotelDescription {
-  font-size: clamp(14px, 1.3vw, 18px);
-}
-
-.parkingTitleContainer {
-  /* border: 1px solid black; */
-  width: 85%;
-  margin: auto;
-  text-align: center;
-  margin-top: 5vw !important;
-}
-
-.parkingLine {
-  border: none;
-  border-top: 5px solid #d48d31;
-  width: 25%;
-  margin: 0 auto;
-  opacity: 1;
-}
-
-.parkingTitle {
-  margin-top: 1vw;
-  font-size: 2vw;
-}
-
-.parkingDescription {
-  margin-top: 1vw;
-  font-size: clamp(14px, 1.3vw, 18px);
-}
 
 .btn-primary {
   position: absolute;
@@ -595,10 +367,12 @@ footer {
 
 .prev-btn {
   left: 20px;
+  font-size: clamp(20px, 2.2vw, 3.2vw) !important;
 }
 
 .next-btn {
   right: 20px;
+  font-size: clamp(20px, 2.2vw, 3.2vw) !important;
 }
 
 .btn-primary:hover {
@@ -606,93 +380,158 @@ footer {
 }
 
 
-
-@media (max-width: 600px) {
-  .amenities {
-    margin-top: 18vw !important;
-  }
-
-  .carousel-container {
-    width: 90%;
-    height: 350px;
-  }
-
-  .carousel img {
-    width: 50%; /* Make images smaller */
-    height: auto;
-  }
-
-  .poolPic1 {
-    transform: rotateY(0deg) translateZ(350px);
-  }
-  .poolPic2 {
-    transform: rotateY(72deg) translateZ(350px);
-  }
-  .poolPic3 {
-    transform: rotateY(144deg) translateZ(350px);
-  }
-  .poolPic4 {
-    transform: rotateY(216deg) translateZ(350px);
-  }
-  .poolPic5 {
-    transform: rotateY(288deg) translateZ(350px);
-  }
-
-  button {
-    font-size: 25px; /* Smaller button size */
-  }
+footer {
+  /* border: 1px solid black; */
+  margin-top: auto !important;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.445) -50%,
+    rgb(62, 132, 158) 95%
+  );
 }
 
-@media (max-width: 400px) {
-  .carousel-container {
-    width: 95%; /* Reduce width further */
-    height: 250px; /* Further reduce height */
-  }
-
-  .carousel img {
-    width: 40%; /* Even smaller images */
-  }
-
-  .poolPic1 {
-    transform: rotateY(0deg) translateZ(250px);
-  }
-  .poolPic2 {
-    transform: rotateY(72deg) translateZ(250px);
-  }
-  .poolPic3 {
-    transform: rotateY(144deg) translateZ(250px);
-  }
-  .poolPic4 {
-    transform: rotateY(216deg) translateZ(250px);
-  }
-  .poolPic5 {
-    transform: rotateY(288deg) translateZ(250px);
-  }
-
-  button {
-    font-size: 20px; /* Smaller buttons */
-  }
+.pb-1 {
+  gap: 2vw;
+  padding: 1vw 0 0 2vw;
 }
+
+.logo {
+  width: 10vw;
+  height: auto;
+}
+.mb-0 {
+  font-family: "Lora";
+  font-size: 1.7vw;
+  font-weight: bold;
+  color: #ffff;
+}
+
+.footerLine {
+  width: 80%;
+  margin: 0 auto;
+  color: #fff;
+  opacity: 1;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5vw;
+}
+.locationFooter {
+  /* border: 1px solid black; */
+  width: 30%;
+}
+
+.reservationTitle,
+.locationTitle {
+  font-family: "Poppins";
+  font-weight: bold;
+  font-size: 1.5vw;
+  color: #fff;
+}
+
+.numberFooter,
+.emailAddressTextFooter,
+.addressTextFooter {
+  font-family: "Poppins ExtraLight";
+  color: #fff;
+  font-size: clamp(1vw, 1.2vw, 1.3vw);
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  margin: 0.3vw;
+}
+
+.socialIcons a {
+  text-decoration: none;
+  padding: 0.8vw;
+  background-color: rgb(255, 255, 255);
+  margin: 5px;
+  border-radius: 50%;
+}
+
+.socialIcons a i {
+  font-size: 2vw;
+  color: #3e849e;
+  opacity: 0.9;
+}
+
+.socialIcons a:hover {
+  background-color: white;
+  transition: 0.5s;
+}
+
+.socialIcons a:hover i {
+  color: #c1a534;
+  transition: 0.5s;
+}
+
+
 
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
+  .navbar {
+    height: 10vh;
+  }
+
+  button.position-relative {
+    padding: 0 !important;
+  }
+
+  .profile {
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+    align-items: center;
+  }
+
+  .account-nav img {
+    height: clamp(5.2vw, 5.8vw, 6.5vw);
+    aspect-ratio: 1;
+  }
+
+  .notificationIcon {
+  display: flex;
+  align-items: center;
+  height:  clamp(2.8vw, 3.2vw, 4vw);
+  aspect-ratio: 1;
+  }
+
+  button.btn {
+    margin-left: 1vw;
+    height: 100%;
+    margin-top: 1vw;
+  }
+
+  .logoNav {
+    width: 18vw;
+  }
+  
+  .ms-auto {
+    position: absolute !important;
+    right: 2vw !important;
+  }
+
   .title {
     margin-top: clamp(2vw, calc(1.5vh + 4px), 4vw);
   }
 
-  .poolTitleContainer {
+  .amenityTitleContainer {
     width: 75%;
     margin: auto;
     text-align: center;
   }
 
-  .poolTitle {
-    font-size: clamp(25px, calc(1.5vw + 4px), 20px);
+  .amenityTitle {
+    font-size: clamp(3vw, calc(2vw + 4px), 2vw);
     text-align: center;
   }
 
-  .poolDescription {
-    font-size: clamp(15px, 1.5vw, 17px);
+  .amenityDescription {
+    font-size: clamp(2.2vw, 1.9vw, 1.7vw) !important;
   }
 
   .poolPics {
@@ -703,13 +542,10 @@ footer {
     /* margin-top: 2vw; */
   }
 
-  .pic1,
-  .pic2,
-  .pic3,
-  .pic4,
-  .pic5 {
-    height: 25vw;
+  .pic1 {
+    height: clamp(21vw, 25vw, 28vw);
     width: auto;
+    margin-bottom: 3vw !important ;
   }
 
   .poolPic1,
@@ -717,17 +553,15 @@ footer {
   .poolPic3,
   .poolPic4,
   .poolPic5 {
-    height: clamp(20vh, calc(2.5vw + 10vh), 30vh);
+    height: clamp(20vw, 23vw, 25vw);
     width: auto;
   }
 
   .carousel-container {
+    height: clamp(34vw, 36vw, 38vw);
     position: relative;
-    border: 1px solid red;
     width: 80%;
-    height: 400px;
-    margin: 50px auto;
-    /* perspective: 1000px; */
+    margin: 20px auto;
   }
 
   .carousel {
@@ -750,33 +584,22 @@ footer {
   }
 
   .poolPic1 {
-    transform: rotateY(0deg) translateZ(300px);
+    transform: rotateY(0deg) translateZ(280px);
   }
   .poolPic2 {
-    transform: rotateY(72deg) translateZ(300px);
+    transform: rotateY(72deg) translateZ(280px);
   }
   .poolPic3 {
-    transform: rotateY(144deg) translateZ(300px);
+    transform: rotateY(144deg) translateZ(280px);
   }
   .poolPic4 {
-    transform: rotateY(216deg) translateZ(300px);
+    transform: rotateY(216deg) translateZ(280px);
   }
   .poolPic5 {
-    transform: rotateY(288deg) translateZ(300px);
+    transform: rotateY(288deg) translateZ(280px);
   }
 
-  .cottage {
-    height: 90vh !important;
-  }
-  .cottageTitleContainer {
-    /* border: 1px solid black; */
-    width: 75%;
-    margin: auto;
-    text-align: center;
-    margin-top: 5vw !important;
-  }
-
-  .cottageLine {
+  .amenityLine  {
     border: none;
     border-top: 5px solid #d48d31;
     width: 30%;
@@ -784,95 +607,6 @@ footer {
     opacity: 1;
   }
 
-  .cottageTitle {
-    margin-top: 1vw;
-    font-size: 2.5vw;
-    text-align: center;
-  }
-
-  .cottageDescription {
-    margin-top: 2vw;
-    font-size: clamp(15px, 1.5vw, 17px);
-    text-align: center;
-  }
-
-  .videokeTitleContainer {
-    /* border: 1px solid black; */
-    width: 75%;
-    margin: auto;
-    text-align: center;
-    margin-top: 5vw !important;
-  }
-
-  .videokeLine {
-    border: none;
-    border-top: 5px solid #d48d31;
-    width: 30%;
-    margin: 0 auto;
-    opacity: 1;
-  }
-
-  .videokeTitle {
-    margin-top: 1vw;
-    font-size: 2.5vw;
-  }
-
-  .videokeDescription {
-    margin-top: 2vw;
-    font-size: clamp(15px, 1.5vw, 17px);
-  }
-
-  .pavilionTitleContainer {
-    /* border: 1px solid black; */
-    width: 75%;
-    margin: auto;
-    text-align: center;
-    margin-top: 5vw !important;
-  }
-
-  .pavilionLine {
-    border: none;
-    border-top: 5px solid #d48d31;
-    width: 30%;
-    margin: 0 auto;
-    opacity: 1;
-  }
-
-  .pavilionTitle {
-    margin-top: 1vw;
-    font-size: 2.5vw;
-  }
-
-  .pavilionDescription {
-    margin-top: 2vw;
-    font-size: clamp(15px, 1.5vw, 17px);
-  }
-
-  .minipavilionTitleContainer {
-    /* border: 1px solid black; */
-    width: 75%;
-    margin: auto;
-    text-align: center;
-    margin-top: 5vw !important;
-  }
-
-  .minipavilionLine {
-    border: none;
-    border-top: 5px solid #d48d31;
-    width: 30%;
-    margin: 0 auto;
-    opacity: 1;
-  }
-
-  .minipavilionTitle {
-    margin-top: 1vw;
-    font-size: 2.5vw;
-  }
-
-  .minipavilionDescription {
-    margin-top: 2vw;
-    font-size: clamp(15px, 1.5vw, 17px);
-  }
   button {
     position: absolute;
     top: 50%;
@@ -897,54 +631,189 @@ footer {
   button:hover {
     background: rgba(0, 0, 0, 0.8);
   }
-
-  .hotelTitleContainer {
-    width: 75%;
-    margin: auto;
-    text-align: center;
-    margin-top: 5vw !important;
+  
+  .mb-0 {
+    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
   }
 
-  .hotelLine {
+  .logo {
+    width: 15vw;
+  }
+
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
+  }
+
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
+  }
+
+  .socialIcons a {
+    justify-items: center;
+    align-items: center;
+  }
+ 
+    .socialIcons a i { 
+      font-size: 3vw;
+    }
+}
+
+
+
+@media (max-width: 600px) {
+  .logoNav {
+    width: 20vw !important;
+  }
+
+  .navbar {
+    height: 10vh;
+  }
+
+  .ms-auto {
+    position: absolute !important;
+    right: 4vw !important;
+  }
+  .embed-responsive {
+    width: clamp(70vw, 75vw, 80vw) !important;
+  }
+
+  .account-nav img {
+    height: clamp(8.5vw, 9.5vw, 10vw);
+    aspect-ratio: 1;
+  }
+
+  .notificationIcon {
+  display: flex;
+  align-items: center;
+  height:  clamp(4.5vw, 5.1vw, 6vw);
+  aspect-ratio: 1;
+  }
+
+  #notifs {
+    margin-top: 0 !important;
+  }
+
+
+  button.btn {
+    margin-left: 1.5vw;
+    margin-top: 0 !important;
+  }
+
+  .amenities {
+    margin-top: 18vw !important;
+  }
+
+  .title {
+  font-size: clamp(4.5vw, calc(3.3vw + 1vh), 3.8vw);
+  }
+
+  .amenityTitle {
+    font-size: clamp(4vw, calc(3vw + 4px), 3vw);
+  }
+
+  .amenityLine  {
     border: none;
-    border-top: 5px solid #d48d31;
+    border-top: 3px solid #d48d31;
     width: 30%;
     margin: 0 auto;
     opacity: 1;
   }
 
-  .hotelTitle {
-    margin-top: 1vw;
-    font-size: 2.5vw;
+
+  .amenityDescription {
+  font-size: clamp(1.9vw, calc(1.3vw + 1vh), 3vw);
   }
 
-  .hotelDescription {
-    font-size: clamp(15px, 1.5vw, 17px);
+  .pic1 {
+    height: 28vw !important;
   }
 
-  .parkingTitleContainer {
-    /* border: 1px solid black; */
-    width: 75%;
-    margin: auto;
-    text-align: center;
-    margin-top: 5vw !important;
+  .carousel-container {
+    width: 90%;
+    height: 240px;
   }
 
-  .parkingLine {
-    border: none;
-    border-top: 5px solid #d48d31;
-    width: 30%;
-    margin: 0 auto;
-    opacity: 1;
+  .carousel img {
+    width: 50%; /* Make images smaller */
+    height: auto;
   }
 
-  .parkingTitle {
-    margin-top: 1vw;
-    font-size: 2.5vw;
+   .poolPic1 {
+    transform: rotateY(0deg) translateZ(160px);
+  }
+  .poolPic2 {
+    transform: rotateY(72deg) translateZ(160px);
+  }
+  .poolPic3 {
+    transform: rotateY(144deg) translateZ(160px);
+  }
+  .poolPic4 {
+    transform: rotateY(216deg) translateZ(160px);
+  }
+  .poolPic5 {
+    transform: rotateY(288deg) translateZ(160px);
   }
 
-  .parkingDescription {
-    margin-top: 2vw;
-    font-size: clamp(15px, 1.5vw, 17px);
+.navbar-toggler-icon {
+    width: 23px !important; /* Smaller button size */
   }
+
+.mb-0 {
+    font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
+  }
+
+  .logo {
+    width: 18vw;
+  }
+
+  .reservation {
+    width: 20%;
+  }
+
+  .locationFooter {
+    width: 50%;
+  }
+
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
+  }
+
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
+  }
+
+  .socialIcons a {
+    justify-items: center;
+    align-items: center;
+    padding: 0.5vw 1.5vw;
+  }
+ 
+    .socialIcons a i { 
+      font-size: 3.5vw;
+    }  
+}
+
+@media (max-width: 400px) {
+  .carousel-container {
+    width: 95%; /* Reduce width further */
+    height: 200px; /* Further reduce height */
+  }
+
+  .carousel img {
+    width: 50%; /* Even smaller images */
+  }
+
+  .amenityDescription {
+  font-size: clamp(1.7vw, calc(1vw + 1vh), 2.5vw);
+  }
+
+  button {
+    font-size: 18px; /* Smaller buttons */
+  }
+
+  .ms-auto {
+    position: absolute !important;
+    right: 5vw !important;
+  }
+
 }
