@@ -115,7 +115,7 @@ $userRole = $_SESSION['userRole'];
             : 'None';
 
 
-        $paymentMethod = "Cash";
+        $paymentMethod = "GCash";
         $bookingType = 'Resort';
         $page = 'resortBooking.php';
         $buttonName = 'bookRates';
@@ -250,7 +250,8 @@ $userRole = $_SESSION['userRole'];
                     exit();
                 }
             }
-        } elseif (!empty($roomChoices)) { //Get selected rooms
+        }
+        if (!empty($roomChoices)) { //Get selected rooms
             $duration = '11 hours';
             $trimmedDuration = trim($duration);
 
@@ -331,7 +332,7 @@ $userRole = $_SESSION['userRole'];
             ($adultCount > 0 ? "{$adultCount} Adults" : '') .
             ($childrenCount > 0 ? ($adultCount > 0 ? ' and ' : '') . "{$childrenCount} Kids" : '');
 
-        $downPayment = 0.00;
+        $downPayment = $servicePrices[0];
     }
     ?>
 
@@ -564,14 +565,11 @@ $userRole = $_SESSION['userRole'];
                         </li>
                     <?php } ?>
 
-
-                    <?php if ($bookingType === "Hotel" || $bookingType === "Event") { ?>
-                        <li class="list-group-item payment-info">
-                            <h5 class=" card-title">Downpayment (30%):</h5>
-                            <p class="card-text">₱ <?= number_format($downPayment, 2) ?> </p>
-                            <input type="hidden" name="downPayment" value="<?= $downPayment ?>" class="card-content">
-                        </li>
-                    <?php } ?>
+                    <li class="list-group-item payment-info">
+                        <h5 class=" card-title">Downpayment (30%):</h5>
+                        <p class="card-text">₱ <?= number_format($downPayment, 2) ?> </p>
+                        <input type="hidden" name="downPayment" value="<?= $downPayment ?>" class="card-content">
+                    </li>
 
                     <li class="list-group-item payment-info">
                         <h5 class="card-title">Total Cost:</h5>
@@ -594,16 +592,25 @@ $userRole = $_SESSION['userRole'];
                 <ul>
                     <li>
                         <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        Payment will be made directly at the resort upon arrival.
+                        Payment for the cottage reservation must be made through the resort's GCash account.
                     </li>
                     <li>
                         <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        Upon arrival, the staff will double check the number of people.
+                        If you reserve more than one cottage, a down payment is required for only one cottage.
                     </li>
                     <li>
                         <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        For any questions, contact <strong>0900-000-0000</strong>.
+                        The remaining balance should be paid directly at the resort upon arrival.
                     </li>
+                    <li>
+                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                        Upon arrival, the staff will verify the number of guests.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                        For any questions, please contact <strong>0900-000-0000</strong>.
+                    </li>
+
                 </ul>
             <?php } else if ($bookingType === 'Hotel') { ?>
                 <ul>
