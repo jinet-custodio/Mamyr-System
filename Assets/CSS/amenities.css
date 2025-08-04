@@ -50,7 +50,6 @@ nav {
 .navbar-nav {
   display: flex !important;
   list-style: none;
-  margin-top: 5px !important;
 }
 
 .navbar-nav .dropdown-toggle {
