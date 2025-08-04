@@ -71,31 +71,39 @@
                      <h5 class="schedLabel">Schedule</h5>
                      <div class="scheduleForm">
                          <input type="text" class="form-control w-95" id="resortBookingDate" name="resortBookingDate"
-                             placeholder="Select booking date" required />
+                             placeholder="Select booking date" required value="<?php echo isset($_SESSION['formData']['resortBookingDate']) ? htmlspecialchars(trim($_SESSION['formData']['resortBookingDate'])) : ''; ?>" />
                          <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -5vw;font-size:1.2vw;">
                          </i>
                          <select id="tourSelections" name="tourSelections" class="form-select" required>
                              <option value="" disabled selected>Select Preferred Tour</option>
-                             <option value="Day" id="dayTour">Day Tour</option>
-                             <option value="Night" id="nightTour">Night Tour</option>
-                             <option value="Overnight" id="overnightTour">Overnight Tour</option>
+                             <option value="Day" id="dayTour" <?= (isset($_SESSION['formData']['tourSelections']) && $_SESSION['formData']['tourSelections'] === 'Day') ? 'selected' : '' ?>>Day Tour</option>
+                             <option value="Night" id="nightTour" <?= (isset($_SESSION['formData']['tourSelections']) && $_SESSION['formData']['tourSelections'] === 'Night') ? 'selected' : '' ?>>Night Tour</option>
+                             <option value="Overnight" id="overnightTour" <?= (isset($_SESSION['formData']['tourSelections']) && $_SESSION['formData']['tourSelections'] === 'Overnight') ? 'selected' : '' ?>>Overnight Tour</option>
                          </select>
                      </div>
 
                      <h5 class="noOfPeopleLabel">Number of People</h5>
                      <div class="peopleForm">
                          <div class="input-container ">
-                             <input type="number" class="form-control" placeholder="Adults" id="adultCount" name="adultCount" />
+                             <input type="number" class="form-control" placeholder="Adults" id="adultCount" name="adultCount" value="<?php echo isset($_SESSION['formData']['adultCount']) ? htmlspecialchars(trim($_SESSION['formData']['adultCount'])) : ''; ?>" />
                              <div class="info-container mt-1">
                                  <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
-                                 <p>Adult aged 14 and up</p>
+                                 <p>Aged 14 and up</p>
                              </div>
                          </div>
                          <div class="input-container">
-                             <input type="number" class="form-control" placeholder="Kids" id="childrenCount" name="childrenCount" />
+                             <input type="number" class="form-control" placeholder="Kids" id="childrenCount" name="childrenCount" value="<?php echo isset($_SESSION['formData']['childrenCount']) ? htmlspecialchars(trim($_SESSION['formData']['childrenCount'])) : ''; ?>" />
                              <div class="info-container mt-1">
                                  <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
-                                 <p>Children aged 13 and below</p>
+                                 <p>Aged 13 and below</p>
+                             </div>
+                         </div>
+
+                         <div class="input-container">
+                             <input type="number" class="form-control" placeholder="Toddler" id="toddlerCount" name="toddlerCount" value="<?php echo isset($_SESSION['formData']['toddlerCount']) ? htmlspecialchars(trim($_SESSION['formData']['toddlerCount'])) : ''; ?>" />
+                             <div class="info-container mt-1">
+                                 <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
+                                 <p>Height 3ft and below</p>
                              </div>
                          </div>
                      </div>
@@ -392,20 +400,20 @@
      <!-- Fetch Info -->
      <script>
          document.addEventListener("DOMContentLoaded", function() {
-             Swal.fire({
-                 icon: 'info',
-                 title: 'Select your choice of date',
-                 text: 'Please pick a booking date to continue',
-                 confirmButtonText: 'OK'
-             }).then(() => {
-                 setTimeout(() => {
-                     const dateInput = document.getElementById('resortBookingDate');
-                     const form = document.querySelector('form');
+             const dateInput = document.getElementById('resortBookingDate');
+             const form = document.querySelector('form');
+             if (dateInput && !dateInput.value) {
+                 Swal.fire({
+                     icon: 'info',
+                     title: 'Select your choice of date',
+                     text: 'Please pick a booking date to continue',
+                     confirmButtonText: 'OK'
+                 }).then(() => {
                      dateInput.style.border = '2px solid red';
                      form.removeAttribute('aria-hidden');
                      dateInput.focus();
-                 }, 150);
-             });
+                 })
+             };
          });
 
          const startDate = document.getElementById('resortBookingDate');
@@ -555,20 +563,32 @@
          }
 
 
+         document.addEventListener("DOMContentLoaded", () => {
+             if (startDate && startDate.value) {
+                 fetchAmenities();
+                 startDate.style.border = '1px solid rgb(223, 226, 230)';
+             }
 
-         startDate.addEventListener('change', function() {
-             fetchAmenities();
+             console.log("startDate.value at DOMContentLoaded:", startDate?.value);
+
          });
 
-         tourSelect.addEventListener('change', function() {
-             fetchAmenities();
+         if (startDate) {
+             startDate.addEventListener("change", () => {
+                 fetchAmenities();
+             });
+         }
+         if (tourSelect) {
              document.getElementById("cottageBtn").disabled = false;
              document.getElementById("entertainmentBtn").disabled = false;
              document.getElementById("hotelBtn").disabled = false;
-         });
-
-
-
+             tourSelect.addEventListener('change', function() {
+                 fetchAmenities();
+                 document.getElementById("cottageBtn").disabled = false;
+                 document.getElementById("entertainmentBtn").disabled = false;
+                 document.getElementById("hotelBtn").disabled = false;
+             });
+         }
          const bookRatesBTN = document.getElementById('bookRatesBTN')
 
 
