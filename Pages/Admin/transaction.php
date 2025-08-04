@@ -359,6 +359,8 @@ $userRole = $_SESSION['userRole'];
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -372,12 +374,26 @@ $userRole = $_SESSION['userRole'];
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });
         });
     </script>
+
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
