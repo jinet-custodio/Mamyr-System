@@ -11,34 +11,37 @@ if (isset($_POST['saveChanges'])) {
     $userRole = mysqli_real_escape_string($conn, $_POST['userRole']);
     $fullName = mysqli_real_escape_string($conn, $_POST['fullName']);
     $birthday = mysqli_real_escape_string($conn, $_POST['birthday']);
-    // $birthDate = date('Y-m-d', strtotime($birthday));
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
 
-    $nameParts = explode(" ", trim($fullName));
+    $nameParts = array_values(array_filter(explode(" ", trim($fullName))));
     $numParts = count($nameParts);
+    $firstName = '';
+    $middleInitial = NULL;
+    $lastName = '';
 
-    if ($numParts <= 2) {
+    if ($numParts == 2) {
         $firstName = $nameParts[0];
         $lastName = $nameParts[1] ?? '';
     } elseif ($numParts == 3) {
-        $firstName = $nameParts[0] . ' ' . $nameParts[1];
+        $firstName = $nameParts[0];
         $lastName = $nameParts[2];
-    } elseif ($numParts >= 4) {
-        // First 2 words = first name
-        $firstName = $nameParts[0] . ' ' . $nameParts[1];
 
-        // Last word = last name
+        if (substr($nameParts[1], -1) === '.' && strlen($nameParts[1]) <= 3) {
+            $middleInitial = $nameParts[1];
+        } else {
+            $middleInitial = $nameParts[1];
+        }
+    } else {
+        $firstName = $nameParts[0] . ' ' . $nameParts[1];
         $lastName = $nameParts[$numParts - 1];
 
-        // Middle parts between index 2 and numParts - 1
         $middleInitials = [];
         for ($i = 2; $i < $numParts - 1; $i++) {
             $middle = trim($nameParts[$i]);
             if (substr($middle, -1) === '.' && strlen($middle) <= 3) {
                 $middleInitials[] = $middle;
             } else {
-                // Also add any middle names that are not initials
                 $middleInitials[] = $middle;
             }
         }
@@ -48,7 +51,6 @@ if (isset($_POST['saveChanges'])) {
             $middleInitial = NULL;
         }
     }
-
 
     if (!empty($birthday) && strtotime($birthday)) {
         $birthDate = date('Y-m-d', strtotime($birthday));
