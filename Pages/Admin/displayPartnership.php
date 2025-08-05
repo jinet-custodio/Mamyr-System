@@ -146,8 +146,8 @@ if (isset($_SESSION['error-partnership'])) {
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="Account/account.php" class="admin">
-                <img src="<?= $image ?>" alt="home icon">
+            <a href="../Account/account.php" class="admin">
+                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
             </a>
         </div>
     </div>
@@ -183,7 +183,7 @@ if (isset($_SESSION['error-partnership'])) {
             <h5>Partnerships</h5>
         </a>
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="editWebsite/landingPageEdit.php">
             <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
             <h5>Edit Website</h5>
         </a>

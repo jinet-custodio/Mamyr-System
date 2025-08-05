@@ -67,11 +67,13 @@ $userRole = $_SESSION['userRole'];
                     $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
                 ?>
+
                 <li class="nav-item account-nav">
-                    <a href="Account/account.php">
-                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                    <a href="../Account/account.php">
+                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                     </a>
                 </li>
+
 
 
                 <!-- Get notification -->

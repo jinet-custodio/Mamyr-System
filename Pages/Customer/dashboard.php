@@ -87,7 +87,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             }
             ?>
             <li class="nav-item account-nav">
-                <a href="Account/account.php">
+                <a href="../Account/account.php">
                     <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                 </a>
             </li>
