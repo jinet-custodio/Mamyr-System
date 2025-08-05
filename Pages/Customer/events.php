@@ -64,10 +64,11 @@ $userRole = $_SESSION['userRole'];
             }
             ?>
             <li class="nav-item account-nav">
-                <a href="Account/account.php">
-                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                <a href="../Account/account.php">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                 </a>
             </li>
+
 
             <!-- Get notification -->
             <?php

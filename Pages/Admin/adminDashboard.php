@@ -251,7 +251,7 @@ if ($availabilityResult->num_rows > 0) {
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="Account/account.php" class="admin">
+            <a href="../Account/account.php" class="admin">
                 <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
             </a>
         </div>

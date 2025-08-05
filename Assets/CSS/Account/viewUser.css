@@ -1,0 +1,97 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f5f5;
+}
+
+.back-button {
+  position: absolute;
+  margin: -4vw 0 0 3vw !important;
+  z-index: 1000;
+  padding: 0;
+}
+
+.back-button:hover {
+  border: 1px solid rgb(23, 143, 235);
+  box-shadow: 0 0 5px 5px rgb(23, 143, 235, 0.5);
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4rem auto auto auto;
+  width: 80vw;
+}
+
+.card {
+  padding: 1.5rem;
+  width: 90%;
+  margin-bottom: 1rem;
+  border: none;
+  /* border: 1px solid rgb(23, 143, 235); */
+  /* box-shadow: 0 0 8px 8px rgb(23, 143, 235, 0.5); */
+  transition: box-shadow 0.3s ease;
+}
+
+.profile-pic {
+  height: 120px;
+  width: 120px;
+  border-radius: 4rem;
+}
+
+.card-header {
+  display: flex;
+  border: none;
+  background-color: transparent;
+  align-items: center;
+  font-family: "Poppins";
+
+  .profile-info {
+    padding: 1rem;
+  }
+
+  .roleName {
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+
+.user-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+  font-family: "Poppins";
+}
+
+.fullwidth {
+  grid-column: span 2;
+}
+
+.info input {
+  text-indent: 1rem;
+}
+
+.form-control {
+  height: 60px !important;
+}
