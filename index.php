@@ -480,8 +480,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         document.addEventListener('DOMContentLoaded', function() {
             const loaderOverlay = document.getElementById('loaderOverlay');
             const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
-
             const navbarLinks = document.querySelectorAll('.navbar a');
+            const params = new URLSearchParams(window.location.search);
+            const paramValue = params.get('edit');
+
+            if (paramValue) {
+                let editables = document.querySelectorAll('.editable-img');
+
+                editables.forEach(editable => {
+                    editable.style.border = "2px solid red";
+                })
+            };
 
             navbarLinks.forEach(link => {
                 link.addEventListener('click', function(e) {

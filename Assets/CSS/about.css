@@ -220,11 +220,35 @@ ul {
   }
 }
 
+/* Edit mode CSS */
+#saveChangesBtn {
+  margin-top: -10vw !important;
+  margin-left: 80vw;
+  font-size: 1.8vw !important;
+  position: fixed;
+}
+
+.editable-input {
+  background-color: rgba(255, 255, 255, 0) !important;
+  border: 1px solid rgb(255, 13, 13) !important;
+  padding: 2px;
+}
+
+.services {
+  font-size: 1.7vw !important;
+  font-weight: 800 !important;
+}
+
 .titleContainer {
   /* border: 1px solid red; */
   width: 100%;
   margin-top: 15vw;
 }
+
+.white-text {
+  color: whitesmoke !important;
+}
+
 
 .title {
   color: #fff;

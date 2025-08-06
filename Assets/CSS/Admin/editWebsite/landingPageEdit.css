@@ -159,8 +159,9 @@
 iframe {
   /* border: 2px solid black; */
   border-radius: 2vw;
+  padding: 1vw;
   display: block;
-  margin: auto;
+  margin: 2vw auto 4vw auto;
 }
 
 #landingPageContainer {
