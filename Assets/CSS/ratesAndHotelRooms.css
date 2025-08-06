@@ -167,7 +167,7 @@ nav {
 .navbar-toggler {
   float: right;
   background-color: #ffffff !important;
-  margin: 5vw;
+  margin: 3vw;
   border: none;
 
   &:focus,
@@ -610,36 +610,26 @@ nav {
   justify-content: space-between;
 }
 
-#elevenHrs, #twenty2Hrs {
-  font-size: 1.2vw !important;
-  border-radius: 2vw;
-  font-family: "Poppins";
-  font-weight: 700;
-}
-
-#elevenHrs {
-  background-color: #08AFF3;
-  color: #F2F2F2;
-}
 
 #hotelDate {
   width: 20vw;
 }
 
-#twenty2Hrs {
-  background-color: #F2F2F2;
-  color: #04C8F2;
-
+.hotelRoomList {
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 2vw auto;
 }
 
 .hotel {
-  display: flex;
-  width: 80%;
+  width: 35%;
+  flex-wrap: wrap;
   background-color: whitesmoke;
-  padding: 0;
-  margin: 0 auto 1vw auto;
+  padding: 0.5vw;
+  margin: 1vw auto 1vw auto;
   justify-content: space-around;
-  border-radius: 0;
+  border-radius: 1vw;
   border: 1px solid black;
 }
 
