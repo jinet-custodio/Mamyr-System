@@ -91,12 +91,13 @@ $userRole = $_SESSION['userRole'];
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -160,6 +161,11 @@ $userRole = $_SESSION['userRole'];
             <h5>Rooms</h5>
         </a>
 
+        <a class="nav-link" href="services.php">
+            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+            <h5>Services</h5>
+        </a>
+
         <a class="nav-link active" href="#">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
@@ -189,7 +195,8 @@ $userRole = $_SESSION['userRole'];
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -200,18 +207,20 @@ $userRole = $_SESSION['userRole'];
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($message) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -282,27 +291,27 @@ $userRole = $_SESSION['userRole'];
 
 
                     ?>
-                            <tr>
-                                <td><?= htmlspecialchars($formattedID) ?></td>
-                                <td><?= htmlspecialchars($guestName) ?></td>
-                                <td>₱ <?= number_format($totalAmount, 2) ?></td>
-                                <!-- <td>₱ <?= number_format($downpayment, 2) ?></td> -->
-                                <!-- <td>₱ <?= number_format($amountPaid, 2) ?></td> -->
-                                <td>₱ <?= number_format($balance, 2) ?></td>
-                                <td><?= htmlspecialchars($CBPaymentMethod) ?></td>
-                                <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
-                                <td><span
-                                        class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
-                                </td>
+                    <tr>
+                        <td><?= htmlspecialchars($formattedID) ?></td>
+                        <td><?= htmlspecialchars($guestName) ?></td>
+                        <td>₱ <?= number_format($totalAmount, 2) ?></td>
+                        <!-- <td>₱ <?= number_format($downpayment, 2) ?></td> -->
+                        <!-- <td>₱ <?= number_format($amountPaid, 2) ?></td> -->
+                        <td>₱ <?= number_format($balance, 2) ?></td>
+                        <td><?= htmlspecialchars($CBPaymentMethod) ?></td>
+                        <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
+                        <td><span
+                                class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
+                        </td>
 
-                                <td>
-                                    <form action="viewPayments.php" method="POST">
-                                        <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
-                                        <button type="submit" name="viewIndividualPayment"
-                                            class="btn btn-info w-100">View</button>
-                                    </form>
-                                </td>
-                            </tr>
+                        <td>
+                            <form action="viewPayments.php" method="POST">
+                                <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                                <button type="submit" name="viewIndividualPayment"
+                                    class="btn btn-info w-100">View</button>
+                            </form>
+                        </td>
+                    </tr>
 
                     <?php
                         }
@@ -358,25 +367,25 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-                            this.style.backgroundColor = 'white';
-                        });
-                });
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        this.style.backgroundColor = 'white';
+                    });
             });
         });
+    });
     </script>
 
     <!-- Jquery Link -->
@@ -386,84 +395,84 @@ $userRole = $_SESSION['userRole'];
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#transactionTable').DataTable({
-                columnDefs: [{
-                        width: '9%',
-                        target: 0,
-                    },
-                    {
-                        width: '15%',
-                        target: 1,
-                    },
-                    {
-                        width: '15%',
-                        target: 2,
-                    },
-                    {
-                        width: '10%',
-                        target: 4,
-                    },
-                    {
-                        width: '15%',
-                        target: 5,
-                    },
-                    {
-                        width: '15%',
-                        target: 6,
-                    },
-                    {
-                        width: '10%',
-                        target: 7,
-                    }
-                ]
-            });
+    $(document).ready(function() {
+        $('#transactionTable').DataTable({
+            columnDefs: [{
+                    width: '9%',
+                    target: 0,
+                },
+                {
+                    width: '15%',
+                    target: 1,
+                },
+                {
+                    width: '15%',
+                    target: 2,
+                },
+                {
+                    width: '10%',
+                    target: 4,
+                },
+                {
+                    width: '15%',
+                    target: 5,
+                },
+                {
+                    width: '15%',
+                    target: 6,
+                },
+                {
+                    width: '10%',
+                    target: 7,
+                }
+            ]
         });
+    });
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
-        if (paramValue === "approved") {
-            Swal.fire({
-                title: "Payment Approved",
-                text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
-                icon: 'success',
-            });
-        } else if (paramValue === "rejected") {
-            Swal.fire({
-                title: "Payment Rejected",
-                text: "You have reviewed and rejected the payment.",
-                icon: 'success',
-            });
-        } else if (paramValue === "failed") {
-            Swal.fire({
-                title: "Payment Approval Failed",
-                text: "Unable to approve or reject the payment. Please try again later.",
-                icon: 'error',
-            });
-        } else if (paramValue === "paymentSuccess") {
-            Swal.fire({
-                title: "Payment Added",
-                text: "Payment was successfully added and processed.",
-                icon: 'success',
-            });
-        } else if (paramValue === "paymentFailed") {
-            Swal.fire({
-                title: "Payment Failed",
-                text: "Failed to deduct the payment. Please try again later.",
-                icon: 'error',
-            });
-        }
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
+    if (paramValue === "approved") {
+        Swal.fire({
+            title: "Payment Approved",
+            text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
+            icon: 'success',
+        });
+    } else if (paramValue === "rejected") {
+        Swal.fire({
+            title: "Payment Rejected",
+            text: "You have reviewed and rejected the payment.",
+            icon: 'success',
+        });
+    } else if (paramValue === "failed") {
+        Swal.fire({
+            title: "Payment Approval Failed",
+            text: "Unable to approve or reject the payment. Please try again later.",
+            icon: 'error',
+        });
+    } else if (paramValue === "paymentSuccess") {
+        Swal.fire({
+            title: "Payment Added",
+            text: "Payment was successfully added and processed.",
+            icon: 'success',
+        });
+    } else if (paramValue === "paymentFailed") {
+        Swal.fire({
+            title: "Payment Failed",
+            text: "Failed to deduct the payment. Please try again later.",
+            icon: 'error',
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location.href);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location.href);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 

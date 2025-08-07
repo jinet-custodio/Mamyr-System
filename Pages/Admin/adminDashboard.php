@@ -206,12 +206,13 @@ if ($availabilityResult->num_rows > 0) {
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -273,6 +274,11 @@ if ($availabilityResult->num_rows > 0) {
         <a class="nav-link" href="roomList.php">
             <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
             <h5>Rooms</h5>
+        </a>
+
+        <a class="nav-link" href="services.php">
+            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+            <h5>Services</h5>
         </a>
 
 
@@ -479,15 +485,15 @@ if ($availabilityResult->num_rows > 0) {
                 <div class="revenueGraphContainer">
                     <h5 class=" revTitle">REVENUE</h5>
                     <?php if (!empty($revenues)): ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
+                    <div class="revenue-chart">
+                        <canvas id="revenueBar"></canvas>
+                    </div>
                     <?php else: ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
-                        <!-- Change this div -->
-                        <!-- <div class="revenueImage"><img src="../../Assets/Images/revenueGraph.png" alt=""></div> -->
+                    <div class="revenue-chart">
+                        <canvas id="revenueBar"></canvas>
+                    </div>
+                    <!-- Change this div -->
+                    <!-- <div class="revenueImage"><img src="../../Assets/Images/revenueGraph.png" alt=""></div> -->
                     <?php endif; ?>
                 </div>
 
@@ -503,15 +509,15 @@ if ($availabilityResult->num_rows > 0) {
                 </div>
                 <div class="card-body">
                     <?php if (!empty($bookingTypeCount)): ?>
-                        <div class="revenue-chart">
-                            <canvas id="reservationTrendsBar"></canvas>
-                        </div>
+                    <div class="revenue-chart">
+                        <canvas id="reservationTrendsBar"></canvas>
+                    </div>
                     <?php else: ?>
-                        <div class="revenue-chart">
-                            <canvas id="reservationTrendsBar"></canvas>
-                        </div>
-                        <!-- Change this div -->
-                        <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
+                    <div class="revenue-chart">
+                        <canvas id="reservationTrendsBar"></canvas>
+                    </div>
+                    <!-- Change this div -->
+                    <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
                     <?php endif; ?>
                 </div>
             </div>
@@ -521,7 +527,8 @@ if ($availabilityResult->num_rows > 0) {
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -532,18 +539,20 @@ if ($availabilityResult->num_rows > 0) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($message) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -552,7 +561,9 @@ if ($availabilityResult->num_rows > 0) {
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
+    </script>
 
 
 
@@ -563,203 +574,203 @@ if ($availabilityResult->num_rows > 0) {
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-                            this.style.backgroundColor = 'white';
-                        });
-                });
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        this.style.backgroundColor = 'white';
+                    });
             });
         });
+    });
     </script>
 
     <!-- Display if no available data -->
     <script>
-        Chart.register({
-            id: 'noDataPlugin',
-            beforeDraw(chart) {
-                const dataset = chart.data.datasets[0];
-                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
+    Chart.register({
+        id: 'noDataPlugin',
+        beforeDraw(chart) {
+            const dataset = chart.data.datasets[0];
+            const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
 
-                if (!hasData) {
-                    const ctx = chart.ctx;
-                    const {
-                        width,
-                        height
-                    } = chart;
+            if (!hasData) {
+                const ctx = chart.ctx;
+                const {
+                    width,
+                    height
+                } = chart;
 
-                    chart.clear();
+                chart.clear();
 
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.font = '20px Times New Roman';
-                    ctx.fillStyle = 'gray';
-                    ctx.fillText('No available data', width / 2, height / 2);
-                    ctx.restore();
-                }
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = '20px Times New Roman';
+                ctx.fillStyle = 'gray';
+                ctx.fillText('No available data', width / 2, height / 2);
+                ctx.restore();
             }
-        });
+        }
+    });
     </script>
 
 
     <script>
-        //Reservation Trends Bar
-        const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
+    //Reservation Trends Bar
+    const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
 
-        const reservationTrendsChart = new Chart(reservationTrendsBar, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($bookingTypeName) ?>,
-                datasets: [{
-                    data: <?= json_encode($bookingTypeCount) ?>,
-                    backgroundColor: [
-                        'rgba(0, 123, 255, 0.5)',
-                        'rgba(255, 193, 7, 0.5)',
-                        'rgba(40, 167, 69, 0.5)',
-                        'rgba(220, 53, 69, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(0, 123, 255, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(220, 53, 69, 1)'
-                    ],
+    const reservationTrendsChart = new Chart(reservationTrendsBar, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($bookingTypeName) ?>,
+            datasets: [{
+                data: <?= json_encode($bookingTypeCount) ?>,
+                backgroundColor: [
+                    'rgba(0, 123, 255, 0.5)',
+                    'rgba(255, 193, 7, 0.5)',
+                    'rgba(40, 167, 69, 0.5)',
+                    'rgba(220, 53, 69, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(0, 123, 255, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(220, 53, 69, 1)'
+                ],
 
-                    borderWidth: 3
-                }]
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
     </script>
 
 
     <script>
-        // availabilityGraph
-        const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
+    // availabilityGraph
+    const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
 
-        const availabilityChart = new Chart(availabilityGraph, {
-            type: 'doughnut',
-            data: {
-                labels: <?= json_encode($availabilityName) ?>,
-                datasets: [{
-                    data: <?= json_encode($availabilityCount) ?>,
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.5)', // Available
-                        'rgba(255, 193, 7, 0.5)', // Maintenance
-                        'rgba(220, 53, 69, 0.5)', // Occupied
-                        'rgba(0, 123, 255, 0.5)' // Private
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(0, 123, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                cutout: '60%',
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    }
+    const availabilityChart = new Chart(availabilityGraph, {
+        type: 'doughnut',
+        data: {
+            labels: <?= json_encode($availabilityName) ?>,
+            datasets: [{
+                data: <?= json_encode($availabilityCount) ?>,
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.5)', // Available
+                    'rgba(255, 193, 7, 0.5)', // Maintenance
+                    'rgba(220, 53, 69, 0.5)', // Occupied
+                    'rgba(0, 123, 255, 0.5)' // Private
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(0, 123, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            cutout: '60%',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
                 }
             }
-        });
+        }
+    });
     </script>
 
 
     <script>
-        //Revenue Bar
-        const revenueBar = document.getElementById("revenueBar").getContext('2d');
+    //Revenue Bar
+    const revenueBar = document.getElementById("revenueBar").getContext('2d');
 
-        const revenueChart = new Chart(revenueBar, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($days) ?>,
-                datasets: [{
-                    label: <?= json_encode($weekName) ?>,
-                    data: <?= json_encode($revenues) ?>,
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.5)', // Green
-                        'rgba(255, 193, 7, 0.5)', // Yellow
-                        'rgba(220, 53, 69, 0.5)', // Red
-                        'rgba(0, 123, 255, 0.5)', // Blue
-                        'rgba(23, 162, 184, 0.5)', // Cyan
-                        'rgba(108, 117, 125, 0.5)', // Gray
-                        'rgba(255, 99, 132, 0.5)', // Pink
-                        'rgba(153, 102, 255, 0.5)', // Purple
-                        'rgba(255, 159, 64, 0.5)', // Orange
-                        'rgba(75, 192, 192, 0.5)', // Teal
-                        'rgba(201, 203, 207, 0.5)', // Light Gray
-                        'rgba(54, 162, 235, 0.5)' // Light Blue
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(0, 123, 255, 1)',
-                        'rgba(23, 162, 184, 1)',
-                        'rgba(108, 117, 125, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(201, 203, 207, 1)',
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 3
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        labels: {
-                            usePointStyle: true,
-                            pointStyle: 'line',
-                            boxWidth: 0,
-                            font: {
-                                size: 16
-                            }
+    const revenueChart = new Chart(revenueBar, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($days) ?>,
+            datasets: [{
+                label: <?= json_encode($weekName) ?>,
+                data: <?= json_encode($revenues) ?>,
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.5)', // Green
+                    'rgba(255, 193, 7, 0.5)', // Yellow
+                    'rgba(220, 53, 69, 0.5)', // Red
+                    'rgba(0, 123, 255, 0.5)', // Blue
+                    'rgba(23, 162, 184, 0.5)', // Cyan
+                    'rgba(108, 117, 125, 0.5)', // Gray
+                    'rgba(255, 99, 132, 0.5)', // Pink
+                    'rgba(153, 102, 255, 0.5)', // Purple
+                    'rgba(255, 159, 64, 0.5)', // Orange
+                    'rgba(75, 192, 192, 0.5)', // Teal
+                    'rgba(201, 203, 207, 0.5)', // Light Gray
+                    'rgba(54, 162, 235, 0.5)' // Light Blue
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(0, 123, 255, 1)',
+                    'rgba(23, 162, 184, 1)',
+                    'rgba(108, 117, 125, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(201, 203, 207, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'line',
+                        boxWidth: 0,
+                        font: {
+                            size: 16
                         }
                     }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
+        }
 
-        });
+    });
     </script>
 </body>
 

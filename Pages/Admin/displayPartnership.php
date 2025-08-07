@@ -100,12 +100,13 @@ if (isset($_SESSION['error-partnership'])) {
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -168,6 +169,11 @@ if (isset($_SESSION['error-partnership'])) {
             <h5>Rooms</h5>
         </a>
 
+        <a class="nav-link" href="services.php">
+            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+            <h5>Services</h5>
+        </a>
+
         <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
@@ -195,7 +201,8 @@ if (isset($_SESSION['error-partnership'])) {
     </nav>
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -206,18 +213,20 @@ if (isset($_SESSION['error-partnership'])) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $notifMessage):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $notifMessage):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($notifMessage) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($notifMessage) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -297,33 +306,34 @@ if (isset($_SESSION['error-partnership'])) {
                                 $date = $applicants['startDate'];
                                 $startDate = date("F d, Y — g:i A", strtotime($date));
                         ?>
-                                <tr>
-                                    <td scope="row"><?= $name ?></td>
+                        <tr>
+                            <td scope="row"><?= $name ?></td>
 
-                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
+                            <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
 
-                                    <td scope="row">
-                                        <?= $startDate ?>
-                                    </td>
+                            <td scope="row">
+                                <?= $startDate ?>
+                            </td>
 
-                                    <td scope="row">
-                                        <?php
+                            <td scope="row">
+                                <?php
                                         $partner = 3;
                                         // $partnerContainer = base64_encode($partner);
                                         ?>
-                                        <form action="partnership.php?container=<?= $partner ?>" method="POST" style="display:inline;">
-                                            <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                            <button type="submit" class="btn btn-info" name="view-btn">View</button>
-                                        </form>
-                                    </td>
-                                    </td>
-                                <?php
+                                <form action="partnership.php?container=<?= $partner ?>" method="POST"
+                                    style="display:inline;">
+                                    <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                    <button type="submit" class="btn btn-info" name="view-btn">View</button>
+                                </form>
+                            </td>
+                            </td>
+                            <?php
                             }
                         } else {
                                 ?>
-                                <td colspan="5">
-                                    <h5 scope="row" class="text-center">No Record Found!</h5>
-                                </td>
+                            <td colspan="5">
+                                <h5 scope="row" class="text-center">No Record Found!</h5>
+                            </td>
                             <?php
                         } ?>
                     </tbody>
@@ -379,47 +389,48 @@ if (isset($_SESSION['error-partnership'])) {
                                 $date = $applicants['requestDate'];
                                 $requestDate = date("F d, Y — g:i A", strtotime($date));
                         ?>
-                                <tr>
-                                    <td scope="row"><?= $name ?></td>
+                        <tr>
+                            <td scope="row"><?= $name ?></td>
 
-                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
-                                    <td scope="row"><?= htmlspecialchars($requestDate) ?></td>
-                                    <?php
+                            <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
+                            <td scope="row"><?= htmlspecialchars($requestDate) ?></td>
+                            <?php
                                     if ($status == "Pending") {
                                     ?>
-                                        <td scope="row" class="btn btn-warning w-75 d-block m-auto mt-1"
-                                            style="background-color:#ffc108 ;">
-                                            <?= $status ?>
-                                        </td>
-                                    <?php
+                            <td scope="row" class="btn btn-warning w-75 d-block m-auto mt-1"
+                                style="background-color:#ffc108 ;">
+                                <?= $status ?>
+                            </td>
+                            <?php
                                     } else if ($status == "Rejected") {
                                     ?>
-                                        <td scope="row" class="btn btn-danger w-75 d-block m-auto mt-1"
-                                            style="background-color:#FF0000; color:#ffff ;">
-                                            <?= $status ?>
-                                        </td>
-                                    <?php
+                            <td scope="row" class="btn btn-danger w-75 d-block m-auto mt-1"
+                                style="background-color:#FF0000; color:#ffff ;">
+                                <?= $status ?>
+                            </td>
+                            <?php
                                     }
                                     ?>
-                                    <td scope="row">
-                                        <?php
+                            <td scope="row">
+                                <?php
                                         $applicant = 4;
                                         // $applicantContainer = base64_encode($applicant);
                                         ?>
-                                        <form action="partnership.php?container=<?= $applicant ?>" method="POST" style="display:inline;">
-                                            <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                            <button type="submit" class="btn btn-info w-75" name="view-partner">View</button>
-                                        </form>
+                                <form action="partnership.php?container=<?= $applicant ?>" method="POST"
+                                    style="display:inline;">
+                                    <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                    <button type="submit" class="btn btn-info w-75" name="view-partner">View</button>
+                                </form>
 
-                                    </td>
-                                    </td>
-                                <?php
+                            </td>
+                            </td>
+                            <?php
                             }
                         } else {
                                 ?>
-                                <td colspan="5">
-                                    <h5 scope="row" class="text-center">No Record Found!</h5>
-                                </td>
+                            <td colspan="5">
+                                <h5 scope="row" class="text-center">No Record Found!</h5>
+                            </td>
                             <?php
                         } ?>
                     </tbody>
@@ -431,29 +442,31 @@ if (isset($_SESSION['error-partnership'])) {
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-                            this.style.backgroundColor = 'white';
-                        });
-                });
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        this.style.backgroundColor = 'white';
+                    });
             });
         });
+    });
     </script>
 
 
@@ -462,111 +475,111 @@ if (isset($_SESSION['error-partnership'])) {
 
     <!-- Pages hide/show -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("Script loaded");
-            const requestLink = document.getElementById("request-link");
-            const partnerLink = document.getElementById("partner-link");
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("Script loaded");
+        const requestLink = document.getElementById("request-link");
+        const partnerLink = document.getElementById("partner-link");
 
-            const choices = document.getElementById("choice-container");
-            const choice1Link = document.getElementById("choice1-link");
-            const choice2Link = document.getElementById("choice2-link");
-            const partner_Container = document.getElementById("partner-container");
-            const request_Container = document.getElementById("request-container");
-            const partner_Card = document.getElementById("partner-card");
-            const request_Card = document.getElementById("request-card");
+        const choices = document.getElementById("choice-container");
+        const choice1Link = document.getElementById("choice1-link");
+        const choice2Link = document.getElementById("choice2-link");
+        const partner_Container = document.getElementById("partner-container");
+        const request_Container = document.getElementById("request-container");
+        const partner_Card = document.getElementById("partner-card");
+        const request_Card = document.getElementById("request-card");
 
-            requestLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                console.log("Request link clicked");
-                choices.style.display = "none";
-                partner_Container.style.display = "none";
-                request_Container.style.display = "block";
-                partner_Card.style.display = "none";
-                request_Card.style.display = "block";
-            });
-
-            partnerLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                console.log("Request link clicked");
-                choices.style.display = "none";
-                partner_Container.style.display = "block";
-                request_Container.style.display = "none";
-                partner_Card.style.display = "block";
-                request_Card.style.display = "none";
-            });
-
-            choice1Link.addEventListener('click', function(event) {
-                event.preventDefault();
-                choices.style.display = "flex";
-                partner_Container.style.display = "none";
-                request_Container.style.display = "none";
-                partner_Card.style.display = "none";
-                request_Card.style.display = "none";
-            });
-
-            choice2Link.addEventListener('click', function(event) {
-                event.preventDefault();
-                choices.style.display = "flex";
-                partner_Container.style.display = "none";
-                request_Container.style.display = "none";
-                partner_Card.style.display = "none";
-                request_Card.style.display = "none";
-            });
+        requestLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            console.log("Request link clicked");
+            choices.style.display = "none";
+            partner_Container.style.display = "none";
+            request_Container.style.display = "block";
+            partner_Card.style.display = "none";
+            request_Card.style.display = "block";
         });
+
+        partnerLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            console.log("Request link clicked");
+            choices.style.display = "none";
+            partner_Container.style.display = "block";
+            request_Container.style.display = "none";
+            partner_Card.style.display = "block";
+            request_Card.style.display = "none";
+        });
+
+        choice1Link.addEventListener('click', function(event) {
+            event.preventDefault();
+            choices.style.display = "flex";
+            partner_Container.style.display = "none";
+            request_Container.style.display = "none";
+            partner_Card.style.display = "none";
+            request_Card.style.display = "none";
+        });
+
+        choice2Link.addEventListener('click', function(event) {
+            event.preventDefault();
+            choices.style.display = "flex";
+            partner_Container.style.display = "none";
+            request_Container.style.display = "none";
+            partner_Card.style.display = "none";
+            request_Card.style.display = "none";
+        });
+    });
     </script>
 
     <!-- Search URL -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('container');
-        const action = params.get("action");
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('container');
+    const action = params.get("action");
 
-        const choices = document.getElementById("choice-container");
-        const partnerContainer = document.getElementById("partner-container");
-        const requestContainer = document.getElementById("request-container");
-        const partnerCard = document.getElementById("partner-card");
-        const requestCard = document.getElementById("request-card");
+    const choices = document.getElementById("choice-container");
+    const partnerContainer = document.getElementById("partner-container");
+    const requestContainer = document.getElementById("request-container");
+    const partnerCard = document.getElementById("partner-card");
+    const requestCard = document.getElementById("request-card");
 
-        if (paramValue == 1) {
-            choices.style.display = "none";
-            partnerContainer.style.display = "block";
-            requestContainer.style.display = "none";
-            partnerCard.style.display = "block";
-            requestCard.style.display = "none";
-        } else if (paramValue == 2) {
-            choices.style.display = "none";
-            partnerContainer.style.display = "none";
-            requestContainer.style.display = "block";
-            partnerCard.style.display = "none";
-            requestCard.style.display = "block";
-        }
+    if (paramValue == 1) {
+        choices.style.display = "none";
+        partnerContainer.style.display = "block";
+        requestContainer.style.display = "none";
+        partnerCard.style.display = "block";
+        requestCard.style.display = "none";
+    } else if (paramValue == 2) {
+        choices.style.display = "none";
+        partnerContainer.style.display = "none";
+        requestContainer.style.display = "block";
+        partnerCard.style.display = "none";
+        requestCard.style.display = "block";
+    }
 
 
 
-        if (action === "approved") {
-            Swal.fire({
-                icon: 'success',
-                title: 'Partnership Approved',
-                text: 'The partnership request has been approved successfully.'
-            });
-        }
+    if (action === "approved") {
+        Swal.fire({
+            icon: 'success',
+            title: 'Partnership Approved',
+            text: 'The partnership request has been approved successfully.'
+        });
+    }
 
-        if (paramValue || action) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramValue || action) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-        <?php if (!empty($message)): ?>
-            Swal.fire({
-                icon: '<?= $status ?>',
-                title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
-                text: '<?= $message ?>'
-            });
-        <?php endif; ?>
+    <?php if (!empty($message)): ?>
+    Swal.fire({
+        icon: '<?= $status ?>',
+        title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
+        text: '<?= $message ?>'
+    });
+    <?php endif; ?>
     </script>
 
 
