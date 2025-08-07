@@ -61,8 +61,8 @@ if (isset($_SESSION['error'])) {
 <body>
     <div class="topSection">
         <div class="dashTitleContainer">
-            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img src="../../Assets/images/MamyrLogo.png" alt=""
-                    class="logo"></a>
+            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
+                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -96,12 +96,13 @@ if (isset($_SESSION['error'])) {
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -166,6 +167,11 @@ if (isset($_SESSION['error'])) {
             <h5>Rooms</h5>
         </a>
 
+        <a class="nav-link" href="services.php">
+            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+            <h5>Services</h5>
+        </a>
+
         <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
@@ -196,7 +202,8 @@ if (isset($_SESSION['error'])) {
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -207,18 +214,20 @@ if (isset($_SESSION['error'])) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($message) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -259,28 +268,30 @@ if (isset($_SESSION['error'])) {
                             // print_r($statColor);
                             // echo '<pre>';
                     ?>
-                            <tr>
-                                <td>
-                                    <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p> <?= $roomInfo['RServiceName'] ?>
-                                </td>
-                                <td><button type="button" href="#" class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
-                                <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
-                                </td>
-                                <td>
-                                    <form action="roomInfo.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
-                                        <input type="hidden" name="actionType" value="edit">
-                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                        <button type="submit" class="btn btn-secondary w-20">Edit</button>
-                                    </form>
-                                    <form action="roomInfo.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
-                                        <input type="hidden" name="actionType" value="view">
-                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                        <button type="submit" class="btn btn-secondary w-20">View</button>
-                                    </form>
-                                </td>
-                            </tr>
+                    <tr>
+                        <td>
+                            <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
+                            <?= $roomInfo['RServiceName'] ?>
+                        </td>
+                        <td><button type="button" href="#"
+                                class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
+                        <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
+                        </td>
+                        <td>
+                            <form action="roomInfo.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                <input type="hidden" name="actionType" value="edit">
+                                <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
+                                <button type="submit" class="btn btn-secondary w-20">Edit</button>
+                            </form>
+                            <form action="roomInfo.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                <input type="hidden" name="actionType" value="view">
+                                <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
+                                <button type="submit" class="btn btn-secondary w-20">View</button>
+                            </form>
+                        </td>
+                    </tr>
                     <?php
                         }
                     }
@@ -293,7 +304,9 @@ if (isset($_SESSION['error'])) {
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
 
 
 
@@ -333,6 +346,7 @@ if (isset($_SESSION['error'])) {
                 });
             });
         });
+    });
     </script>
 
 
@@ -344,9 +358,9 @@ if (isset($_SESSION['error'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#bookingTable').DataTable();
-        });
+    $(document).ready(function() {
+        $('#bookingTable').DataTable();
+    });
     </script>
 </body>
 

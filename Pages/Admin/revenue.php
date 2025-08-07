@@ -126,12 +126,13 @@ if ($revenueResult->num_rows > 0) {
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -196,6 +197,11 @@ if ($revenueResult->num_rows > 0) {
             <h5>Rooms</h5>
         </a>
 
+        <a class="nav-link" href="services.php">
+            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+            <h5>Services</h5>
+        </a>
+
         <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
@@ -226,7 +232,8 @@ if ($revenueResult->num_rows > 0) {
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -237,18 +244,20 @@ if ($revenueResult->num_rows > 0) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($message) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -261,24 +270,24 @@ if ($revenueResult->num_rows > 0) {
             <div class="card-body">
                 <div class="charts">
                     <?php if (!empty($revenues)): ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
+                    <div class="revenue-chart">
+                        <canvas id="revenueBar"></canvas>
+                    </div>
                     <?php else: ?>
-                        <!-- <div class="revenueBar">No data available.</div> -->
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
+                    <!-- <div class="revenueBar">No data available.</div> -->
+                    <div class="revenue-chart">
+                        <canvas id="revenueBar"></canvas>
+                    </div>
                     <?php endif; ?>
                     <?php if (($GCashCount ?? 0) > 0 || ($CashCount ?? 0) > 0): ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenuePie"></canvas>
-                        </div>
+                    <div class="revenue-chart">
+                        <canvas id="revenuePie"></canvas>
+                    </div>
                     <?php else: ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenuePie"></canvas>
-                        </div>
-                        <!-- <div class="revenuePie">No data available.</div> -->
+                    <div class="revenue-chart">
+                        <canvas id="revenuePie"></canvas>
+                    </div>
+                    <!-- <div class="revenuePie">No data available.</div> -->
                     <?php endif; ?>
                 </div>
 
@@ -326,19 +335,23 @@ if ($revenueResult->num_rows > 0) {
                         ?>
 
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="todayRevenue" value="₱ <?= number_format($totalToday, 2) ?>" readonly>
+                            <input type="text" class="form-control" id="todayRevenue"
+                                value="₱ <?= number_format($totalToday, 2) ?>" readonly>
                             <label for="floatingInputValue">Today</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="weekRevenue" value="₱ <?= number_format($totalThisWeek, 2) ?>" readonly>
+                            <input type="text" class="form-control" id="weekRevenue"
+                                value="₱ <?= number_format($totalThisWeek, 2) ?>" readonly>
                             <label for="floatingInputValue">This Week</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="monthRevenue" value="₱ <?= number_format($totalThisMonth, 2) ?>" readonly>
+                            <input type="text" class="form-control" id="monthRevenue"
+                                value="₱ <?= number_format($totalThisMonth, 2) ?>" readonly>
                             <label for="floatingInputValue">This Month</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="yearRevenue" value="₱ <?= number_format($totalThisYear, 2) ?>" readonly>
+                            <input type="text" class="form-control" id="yearRevenue"
+                                value="₱ <?= number_format($totalThisYear, 2) ?>" readonly>
                             <label for="floatingInputValue">This Year</label>
                         </div>
                     </div>
@@ -368,15 +381,18 @@ if ($revenueResult->num_rows > 0) {
                         </div> -->
 
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalApprovedBookings) ?>" readonly>
+                            <input type="text" class="form-control" id="bookingMade"
+                                value="<?= htmlspecialchars($totalApprovedBookings) ?>" readonly>
                             <label for="floatingInputValue">Approved Bookings</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalCancelledBookings) ?>" readonly>
+                            <input type="text" class="form-control" id="bookingMade"
+                                value="<?= htmlspecialchars($totalCancelledBookings) ?>" readonly>
                             <label for="floatingInputValue">Cancelled Bookings</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalRejectedBookings) ?>" readonly>
+                            <input type="text" class="form-control" id="bookingMade"
+                                value="<?= htmlspecialchars($totalRejectedBookings) ?>" readonly>
                             <label for="floatingInputValue">Rejected Bookings</label>
                         </div>
 
@@ -398,7 +414,8 @@ if ($revenueResult->num_rows > 0) {
                         }
                         ?>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="occupied" value="<?= htmlspecialchars($occupiedRates) ?>%" readonly>
+                            <input type="text" class="form-control" id="occupied"
+                                value="<?= htmlspecialchars($occupiedRates) ?>%" readonly>
                             <label for="floatingInputValue">Occupancy Rates</label>
                         </div>
                     </div>
@@ -410,7 +427,9 @@ if ($revenueResult->num_rows > 0) {
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
+    </script>
 
     <!-- Notification Ajax -->
     <script>
@@ -448,6 +467,7 @@ if ($revenueResult->num_rows > 0) {
                 });
             });
         });
+    });
     </script>
 
 
@@ -456,91 +476,91 @@ if ($revenueResult->num_rows > 0) {
     <!-- <script src="path/to/chartjs/dist/chart.umd.js"></script> -->
 
     <script>
-        Chart.register({
-            id: 'noDataPlugin',
-            beforeDraw(chart) {
-                const dataset = chart.data.datasets[0];
-                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
+    Chart.register({
+        id: 'noDataPlugin',
+        beforeDraw(chart) {
+            const dataset = chart.data.datasets[0];
+            const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
 
-                if (!hasData) {
-                    const ctx = chart.ctx;
-                    const {
-                        width,
-                        height
-                    } = chart;
+            if (!hasData) {
+                const ctx = chart.ctx;
+                const {
+                    width,
+                    height
+                } = chart;
 
-                    chart.clear();
+                chart.clear();
 
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.font = '20px Times New Roman';
-                    ctx.fillStyle = 'gray';
-                    ctx.fillText('No available data', width / 2, height / 2);
-                    ctx.restore();
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = '20px Times New Roman';
+                ctx.fillStyle = 'gray';
+                ctx.fillText('No available data', width / 2, height / 2);
+                ctx.restore();
+            }
+        }
+    });
+
+
+    const bar = document.getElementById("revenueBar").getContext('2d');
+
+    const myBarChart = new Chart(bar, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($months) ?>,
+            datasets: [{
+                label: 'Sales',
+                data: <?= json_encode($revenues) ?>,
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        },
+        plugins: ['noDataPlugin']
+    });
 
 
-        const bar = document.getElementById("revenueBar").getContext('2d');
+    const pie = document.getElementById('revenuePie').getContext('2d');
 
-        const myBarChart = new Chart(bar, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($months) ?>,
-                datasets: [{
-                    label: 'Sales',
-                    data: <?= json_encode($revenues) ?>,
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+    const myPieChart = new Chart(pie, {
+        type: 'pie',
+        data: {
+            labels: ['Gcash', 'Cash'],
+            datasets: [{
+                label: 'Payment Methods',
+                data: <?= json_encode([$GCashCount ?? 0, $CashCount ?? 0]) ?>,
+                backgroundColor: [
+                    'rgba(30, 134, 232, 0.6)',
+                    'rgba(129, 204, 196, 0.6)'
+                    // 'rgba(99, 99, 99, 0.6)'
+                ],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                title: {
+                    display: true,
+                    text: 'Payment Methods'
                 }
-            },
-            plugins: ['noDataPlugin']
-        });
-
-
-        const pie = document.getElementById('revenuePie').getContext('2d');
-
-        const myPieChart = new Chart(pie, {
-            type: 'pie',
-            data: {
-                labels: ['Gcash', 'Cash'],
-                datasets: [{
-                    label: 'Payment Methods',
-                    data: <?= json_encode([$GCashCount ?? 0, $CashCount ?? 0]) ?>,
-                    backgroundColor: [
-                        'rgba(30, 134, 232, 0.6)',
-                        'rgba(129, 204, 196, 0.6)'
-                        // 'rgba(99, 99, 99, 0.6)'
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top'
-                    },
-                    title: {
-                        display: true,
-                        text: 'Payment Methods'
-                    }
-                }
-            },
-            plugins: ['noDataPlugin']
-        });
+            }
+        },
+        plugins: ['noDataPlugin']
+    });
     </script>
 </body>
 
