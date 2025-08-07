@@ -82,9 +82,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
             }
             ?>
+
             <li class="nav-item account-nav">
-                <a href="Account/account.php">
-                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                <a href="../Account/account.php">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                 </a>
             </li>
 
@@ -389,6 +390,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -402,12 +405,26 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });
         });
     </script>
+
 
 
 

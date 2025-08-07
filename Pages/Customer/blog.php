@@ -67,16 +67,24 @@ $userRole = $_SESSION['userRole'];
                     $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
                 ?>
+
                 <li class="nav-item account-nav">
-                    <a href="Account/account.php">
-                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                    <a href="../Account/account.php">
+                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                     </a>
                 </li>
 
 
+
                 <!-- Get notification -->
                 <?php
-                $receiver = 'Customer';
+
+                if ($userRole === 1) {
+                    $receiver = 'Customer';
+                } elseif ($userRole === 2) {
+                    $receiver = 'Partner';
+                }
+
                 $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
                 $getNotifications->bind_param("is", $userID, $receiver);
                 $getNotifications->execute();
@@ -101,6 +109,7 @@ $userRole = $_SESSION['userRole'];
                     }
                 }
                 ?>
+
                 <li class="nav-item" id="notifs">
                     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#notificationModal">
                         <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
@@ -485,6 +494,8 @@ $userRole = $_SESSION['userRole'];
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -498,12 +509,26 @@ $userRole = $_SESSION['userRole'];
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });
         });
     </script>
+
 
 </body>
 

@@ -29,6 +29,10 @@ CREATE TABLE resortAmenities (
    FOREIGN KEY (RScategoryID) REFERENCES  resortServicesCategories(categoryID) 
 );
 
+
+ALTER TABLE resortamenities
+MODIFY COLUMN RSimageData VARCHAR(500);
+
 CREATE TABLE entranceRates (
     entranceRateID INT PRIMARY KEY AUTO_INCREMENT,
     sessionType VARCHAR(20),               

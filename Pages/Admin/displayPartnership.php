@@ -147,8 +147,8 @@ if (isset($_SESSION['error-partnership'])) {
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="Account/account.php" class="admin">
-                <img src="<?= $image ?>" alt="home icon">
+            <a href="../Account/account.php" class="admin">
+                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
             </a>
         </div>
     </div>
@@ -189,7 +189,7 @@ if (isset($_SESSION['error-partnership'])) {
             <h5>Partnerships</h5>
         </a>
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="editWebsite/landingPageEdit.php">
             <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
             <h5>Edit Website</h5>
         </a>
@@ -439,7 +439,6 @@ if (isset($_SESSION['error-partnership'])) {
         </div>
     </div>
 
-
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
@@ -448,22 +447,38 @@ if (isset($_SESSION['error-partnership'])) {
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        this.style.backgroundColor = 'white';
-                    });
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
+
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
+                        });
+                });
             });
         });
     });

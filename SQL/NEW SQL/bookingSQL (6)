@@ -60,3 +60,7 @@ CREATE TABLE confirmedBookings (
     FOREIGN KEY (confirmedBookingStatus) REFERENCES statuses(statusID),
     FOREIGN KEY (paymentStatus) REFERENCES bookingPaymentStatus(paymentStatusID)
 );
+
+ALTER TABLE confirmedBookings 
+ADD COLUMN paymentDueDate DATE NOT NULL
+AFTER paymentStatus

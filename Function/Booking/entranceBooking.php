@@ -160,8 +160,6 @@ if (isset($_POST['bookRates'])) {
     $dateScheduled = $scheduledStartDateObj->format('F');
 
 
-
-
     $insertBooking = $conn->prepare("INSERT INTO 
         bookings(userID, additionalRequest,  paxNum, hoursNum, 
         startDate, endDate, 
@@ -174,6 +172,7 @@ if (isset($_POST['bookRates'])) {
     } else {
         $bookingStatus = 2;
     }
+
 
     $insertBooking->bind_param(
         "isiissddssis",
@@ -236,9 +235,17 @@ if (isset($_POST['bookRates'])) {
             header('Location: ../../Pages/Customer/bookNow.php?action=success');
             exit();
         } elseif ($bookingStatus === 2) {
-            $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedBookings(bookingID, CBpaymentMethod, CBdownpayment, CBtotalCost, userBalance)
-                VALUES(?,?,?,?,?)");
-            $insertConfirmedBooking->bind_param("issdd", $bookingID, $paymentMethod, $downPayment, $totalCost, $totalCost);
+            $today = date('Y m d');
+            if ($today === $scheduledStartDate) {
+                $downpaymentDueDate = $today;
+            } else {
+                $scheduledStartDateObj->modify('-1 day');
+                $downpaymentDueDate  = $scheduledStartDateObj->format('Y-m-d');
+            }
+
+            $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedBookings(bookingID, CBpaymentMethod, CBdownpayment, CBtotalCost, userBalance, paymentDueDate )
+                VALUES(?,?,?,?,?, ?)");
+            $insertConfirmedBooking->bind_param("issdds", $bookingID, $paymentMethod, $downPayment, $totalCost, $totalCost, $downpaymentDueDate);
             $insertConfirmedBooking->execute();
             $insertConfirmedBooking->close();
 

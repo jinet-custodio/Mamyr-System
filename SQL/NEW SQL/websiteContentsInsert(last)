@@ -42,11 +42,17 @@ INSERT INTO `websitecontents` (`adminID`, `sectionName`, `title`, `content`, `la
 (1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp()), (1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp());
 
 
-INSERT INTO websitecontentimages (contentID, imageData, altText, imageOrder, uploadedAt) VALUES 
-(19, 'resortPic1.png', 'Mamyr Resort Image', '1', current_timestamp()), 
-(20, 'img1.png', 'Mamyr Gallery Image 1', '1', current_timestamp()),
-(20, 'img2.png', 'Mamyr Gallery Image 2', '2', current_timestamp()),
-(20, 'img3.png', 'Mamyr Gallery Image 3', '3', current_timestamp()),
-(20, 'img4.png', 'Mamyr Gallery Image 4', '4', current_timestamp()),
-(20, 'img5.png', 'Mamyr Gallery Image 5', '5', current_timestamp()), 
-(20, 'img6.png', 'Mamyr Gallery Image 6', '6', current_timestamp());
+INSERT INTO `websitecontentimages` (`contentID`, `imageData`, `altText`, `imageOrder`, `uploadedAt`) VALUES
+(19, 'Assets/Images/landingPage/resortPic1.png', 'Mamyr Resort Image', 1, '2025-07-30 00:44:24'),
+(20, 'Assets/Images/landingPage/img1.png', 'Mamyr Gallery Image 1', 1, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img2.png', 'Mamyr Gallery Image 2', 2, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img3.png', 'Mamyr Gallery Image 3', 3, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img4.png', 'Mamyr Gallery Image 4', 4, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img5.png', 'Mamyr Gallery Image 5', 5, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img6.png', 'Mamyr Gallery Image 6', 6, '2025-07-30 00:44:24'),
+(27, '../Assets/Images/AboutImages/firstPic.jpg', 'About Image 1', 1, '2025-08-06 17:54:49'),
+(30, '../Assets/Images/AboutImages/resort.png', 'Resort Logo', 1, '2025-08-06 17:54:49'),
+(32, '../Assets/Images/AboutImages/events.png', 'Events Logo', 1, '2025-08-06 17:54:49'),
+(34, '../Assets/Images/AboutImages/hotel.png', 'Hotel Logo', 1, '2025-08-06 17:54:49'),
+(37, '../Assets/Images/AboutImages/aboutImage.jpg', 'About Image 2', 1, '2025-08-06 17:54:49'),
+(39, '../Assets/Images/AboutImages/poolPic.jpg', 'About Image 3', 1, '2025-08-06 17:54:49');
