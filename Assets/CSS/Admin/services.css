@@ -27,7 +27,7 @@
 }
 
 body {
-  background: #a1c8c7 !important;
+  background: #a1c8c7;
 }
 
 .backArrowContainer {
@@ -103,4 +103,36 @@ body {
 .categoryLink:hover .category-card {
   transform: translateY(-12px);
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+}
+
+.resortContainer,
+.hotelContainer,
+.eventContainer,
+.cateringContainer {
+  /* border: 1px solid red;
+  background-color: #fff; */
+  padding: 2vw;
+}
+
+td,
+th {
+  text-align: center !important;
+}
+
+.form-control {
+  margin: auto;
+  width: 100% !important;
+}
+
+th {
+  background-color: #91d2f2 !important;
+}
+
+.d-flex {
+  gap: 1vw;
+}
+
+.btn-primary,
+.btn-danger {
+  width: 5vw;
 }

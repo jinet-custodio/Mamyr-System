@@ -20,7 +20,7 @@
 
 </head>
 
-<body>
+<body id="servicesBody">
     <div class="container-fluid">
 
         <div class="headerContainer">
@@ -75,23 +75,149 @@
         </section>
 
         <div class="resortContainer" id="resortContainer">
+            <table class=" table table-striped" id="resortServices">
+                <thead>
+                    <th scope="col">Service Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Capacity</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Availability</th>
+                    <th scope="col">Action</th>
 
+                </thead>
 
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td> <select id="resortAvailability" name="resortAvailability" class="form-select" required>
+                                <option value="" disabled selected>Select Availability</option>
+                                <option value="available" id="available">Available</option>
+                                <option value="occupied" id="available">Occupied</option>
+                                <option value="reserved" id="reserrved">Reserved</option>
+                                <option value="maintenance" id="maintenance">Maintenance</option>
+                            </select>
+                        </td>
+                        <td class="d-flex">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <div class="hotelContainer" id="hotelContainer">
-            <h1>test1</h1>
+            <table class=" table table-striped" id="resortServices">
+                <thead>
+                    <th scope="col">Service Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Capacity</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Availability</th>
+                    <th scope="col">Action</th>
 
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td> <select id="resortAvailability" name="resortAvailability" class="form-select" required>
+                                <option value="" disabled selected>Select Availability</option>
+                                <option value="available" id="available">Available</option>
+                                <option value="occupied" id="available">Occupied</option>
+                                <option value="reserved" id="reserrved">Reserved</option>
+                                <option value="maintenance" id="maintenance">Maintenance</option>
+                            </select>
+                        </td>
+                        <td class="d-flex">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <div class="eventContainer" id="eventContainer">
-            <h1>test2</h1>
+            <table class=" table table-striped" id="resortServices">
+                <thead>
+                    <th scope="col">Service Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Capacity</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Availability</th>
+                    <th scope="col">Action</th>
 
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td> <select id="resortAvailability" name="resortAvailability" class="form-select" required>
+                                <option value="" disabled selected>Select Availability</option>
+                                <option value="available" id="available">Available</option>
+                                <option value="occupied" id="available">Occupied</option>
+                                <option value="reserved" id="reserrved">Reserved</option>
+                                <option value="maintenance" id="maintenance">Maintenance</option>
+                            </select>
+                        </td>
+                        <td class="d-flex">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <div class="cateringContainer" id="cateringContainer">
-            <h1>test3</h1>
+            <table class=" table table-striped" id="resortServices">
+                <thead>
+                    <th scope="col">Food Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Availability</th>
+                    <th scope="col">Action</th>
 
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" class="form-control"></td>
+
+                        <td> <select id="resortAvailability" name="resortAvailability" class="form-select" required>
+                                <option value="" disabled selected>Select Availability</option>
+                                <option value="available" id="available">Available</option>
+                                <option value="unavailable" id="unavailable">Unavailable</option>
+
+                            </select>
+                        </td>
+                        <td class="d-flex">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
 
@@ -135,15 +261,10 @@
     <!-- Table JS -->
     <script>
     $(document).ready(function() {
-        $('#services').DataTable({
+        $('#resortServices').DataTable({
             language: {
                 emptyTable: "No Services"
-            },
-            columnDefs: [{
-                width: '15%',
-                target: 0
-
-            }]
+            }
         });
     });
     </script>
@@ -155,6 +276,8 @@
     const eventContainer = document.getElementById("eventContainer")
     const cateringContainer = document.getElementById("cateringContainer")
     const backButton = document.getElementById("backButton")
+    const servicesBody = document.getElementById("servicesBody")
+
 
     backButton.href = "services.php"
     resortContainer.style.display = "none"
@@ -171,6 +294,7 @@
             eventContainer.style.display = "none"
             cateringContainer.style.display = "none"
             document.getElementById("headerText").innerHTML = "Resort"
+            document.body.setAttribute("style", "background-color: white;");
 
         } else {
             resortContainer.style.display = "none"
@@ -187,6 +311,7 @@
             eventContainer.style.display = "none"
             cateringContainer.style.display = "none"
             document.getElementById("headerText").innerHTML = "Hotel"
+            document.body.setAttribute("style", "background-color: white;");
 
         } else {
             hotelContainer.style.display = "none"
@@ -203,6 +328,7 @@
             hotelContainer.style.display = "none"
             cateringContainer.style.display = "none"
             document.getElementById("headerText").innerHTML = "Event"
+            document.body.setAttribute("style", "background-color: white;");
 
         } else {
             eventContainer.style.display = "none"
@@ -219,6 +345,7 @@
             hotelContainer.style.display = "none"
             eventContainer.style.display = "none"
             document.getElementById("headerText").innerHTML = "Catering"
+            document.body.setAttribute("style", "background-color: white;");
 
         } else {
             cateringContainer.style.display = "none"
