@@ -1,0 +1,106 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+/* @font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+} */
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: "Plus Jakarta Sans"; */
+  text-decoration: none !important;
+  list-style: none;
+}
+
+body {
+  background: #a1c8c7 !important;
+}
+
+.backArrowContainer {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+
+.header {
+  font-family: "Poppins Black";
+  font-size: 3vw;
+  margin-top: 3vw;
+}
+#serviceCategories {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw !important;
+  margin-top: 6vw;
+}
+
+.category-card {
+  height: 50vh !important;
+  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+}
+
+.category-card,
+.category-body {
+  /* margin: 2vw; */
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  text-align: center;
+}
+
+.category-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.resort-card,
+.hotel-card {
+  border-radius: 2vw !important;
+}
+
+.category-card img {
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  padding: 1vw;
+  height: 18vw !important;
+  object-fit: cover;
+}
+
+.category-title {
+  font-family: "Poppins Black";
+  font-style: italic;
+  font-weight: bold;
+  font-size: 2vw;
+  /* color: #00b3d1 !important; */
+}
+
+.categoryLink {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.categoryLink .category-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.categoryLink:hover .category-card {
+  transform: translateY(-12px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+}

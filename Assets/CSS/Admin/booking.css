@@ -81,7 +81,7 @@ body {
 .navbar {
   font-family: "Lora";
   border-radius: 15px;
-  max-width: 75vw;
+  max-width: 80vw;
   margin: 20px auto;
   padding: 1rem !important;
   background-color: white;
@@ -182,7 +182,7 @@ th {
 
 .btnContainer {
   padding-bottom: 0.5vw;
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
 .btn-primary {
