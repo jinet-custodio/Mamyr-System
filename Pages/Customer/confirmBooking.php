@@ -25,6 +25,9 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 $_SESSION['last_activity'] = time();
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+
+unset($_SESSION['formData']);
 ?>
 
 <!DOCTYPE html>
@@ -103,8 +106,9 @@ $userRole = $_SESSION['userRole'];
         $scheduledDate = mysqli_real_escape_string($conn, $_POST['resortBookingDate']);
         $tourSelections = mysqli_real_escape_string($conn, $_POST['tourSelections']);
 
-        $adultCount = mysqli_real_escape_string($conn, $_POST['adultCount']);
-        $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
+        $adultCount = (int) $_POST['adultCount'] ?? 0;
+        $childrenCount = (int) $_POST['childrenCount'] ?? 0;
+        $toddlerCount = (int) $_POST['toddlerCount'] ?? 0;
 
         $cottageChoices = isset($_POST['cottageOptions']) ? $_POST['cottageOptions'] : [];
         $roomChoices = isset($_POST['roomOptions']) ? $_POST['roomOptions'] : [];
@@ -115,7 +119,7 @@ $userRole = $_SESSION['userRole'];
             : 'None';
 
 
-        $paymentMethod = "Cash";
+        $paymentMethod = "GCash";
         $bookingType = 'Resort';
         $page = 'resortBooking.php';
         $buttonName = 'bookRates';
@@ -128,7 +132,7 @@ $userRole = $_SESSION['userRole'];
         $servicePrices = [];
         $serviceCapacity = [];
         $services = [];
-        $description = [];
+        $items = [];
 
         //Get the rates
         $query = $conn->prepare("SELECT er.*, s.serviceID 
@@ -209,8 +213,8 @@ $userRole = $_SESSION['userRole'];
             $numHours = $interval->h + ($interval->days * 24);
         }
 
-        $startDate = $startDateObj->format("d F Y");
-        $endDate = $endDateObj->format("d F Y");
+        $startDate = $startDateObj->format("F d, Y");
+        $endDate = $endDateObj->format("F d, Y");
 
         if ($startDate === $endDate) {
             $date = $startDate;
@@ -242,7 +246,12 @@ $userRole = $_SESSION['userRole'];
                         $servicePrices[] = $data['RSprice'];
                         $serviceCapacity[] = $data['RScapacity'];
                         $services[] = $data['RServiceName'];
-                        // $description[] = $data['RSdescription'];
+
+
+                        $items[] = [
+                            'serviceName' =>  $data['RServiceName'],
+                            'description' => $data['RSdescription']
+                        ];
                     }
                 } else {
                     echo "Service not found. MySQL error: " . mysqli_error($conn);
@@ -250,7 +259,8 @@ $userRole = $_SESSION['userRole'];
                     exit();
                 }
             }
-        } elseif (!empty($roomChoices)) { //Get selected rooms
+        }
+        if (!empty($roomChoices)) { //Get selected rooms
             $duration = '11 hours';
             $trimmedDuration = trim($duration);
 
@@ -272,7 +282,11 @@ $userRole = $_SESSION['userRole'];
                         $servicePrices[] = $data['RSprice'];
                         $serviceCapacity[] = $data['RScapacity'];
                         $services[] = $data['RServiceName'];
-                        // $description[] = $data['RSdescription'];
+
+                        $items[] = [
+                            'serviceName' =>  $data['RServiceName'],
+                            'description' =>  "Good for " . $data['RScapacity'] . " pax"
+                        ];
                     }
                 } else {
                     echo "Service not found. MySQL error: " . htmlspecialchars($selectedRoom);
@@ -311,12 +325,9 @@ $userRole = $_SESSION['userRole'];
             }
         }
 
-        $adultCount = (int)(empty($adultCount) ? 0 : $adultCount);
-        $childrenCount = (int)(empty($childrenCount) ? 0 : $childrenCount);
 
-
-
-        $totalPax = addition($adultCount, $childrenCount, 0);
+        $totalPax = addition($adultCount, $childrenCount, $toddlerCount);
+        $adultKidsCount = addition($adultCount, $childrenCount, 0);
         $totalAdultFee = multiplication($adultCount, $adultRate);
         $totalChildFee =  multiplication($childrenCount, $childRate);
         $totalEntranceFee = addition($totalAdultFee, $totalChildFee, 0);
@@ -329,9 +340,13 @@ $userRole = $_SESSION['userRole'];
 
         $numberOfPeople =
             ($adultCount > 0 ? "{$adultCount} Adults" : '') .
-            ($childrenCount > 0 ? ($adultCount > 0 ? ' and ' : '') . "{$childrenCount} Kids" : '');
+            ($childrenCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$childrenCount} Kids" : '') .
+            ($toddlerCount > 0 ? (($adultCount > 0 || $childrenCount > 0) ? ' & ' : '') . "{$toddlerCount} toddlers" : '');
 
-        $downPayment = 0.00;
+
+        $downPayment = $servicePrices[0];
+
+        $_SESSION['formData'] = $_POST;
     }
     ?>
 
@@ -340,12 +355,15 @@ $userRole = $_SESSION['userRole'];
     <?php
     if (isset($_POST['hotelBooking'])) {
 
-        $hoursSelected = mysqli_real_escape_string($conn, $_POST['hoursSelected']);
+        $hoursSelected = "22 hours";
         $arrivalTime = mysqli_real_escape_string($conn, $_POST['arrivalTime']);
         $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['checkInDate']);
         $scheduledEndDate = mysqli_real_escape_string($conn, $_POST['checkOutDate']);
-        $adultCount = (int) mysqli_real_escape_string($conn, $_POST['adultCount']);
-        $childrenCount = (int) mysqli_real_escape_string($conn, $_POST['childrenCount']);
+
+        $adultCount = (int) $_POST['adultCount'] ?? 0;
+        $childrenCount = (int)  $_POST['childrenCount'] ?? 0;
+        $toddlerCount = (int) $_POST['toddlerCount'] ?? 0;
+
         $selectedHotels = isset($_POST['hotelSelections']) ? $_POST['hotelSelections'] : [];
         $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
 
@@ -366,6 +384,9 @@ $userRole = $_SESSION['userRole'];
         $hotelPrices = [];
         $descriptions = [];
         $items = [];
+
+        $arrivalTimeObj = new DateTime($arrivalTime);
+        $arrivalTime = $arrivalTimeObj->format('g:i a');
 
         $selectedHotelQuery = $conn->prepare("SELECT * FROM services s
             JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
@@ -395,12 +416,13 @@ $userRole = $_SESSION['userRole'];
         }
 
         $totalCapacity = arrayAddition($capacity);
-        $totalPax = addition($childrenCount, $adultCount, 0);
+        $totalPax = addition($childrenCount, $adultCount, $toddlerCount);
+        $adultChildrenCount = addition($childrenCount, $adultCount, 0);
         $totalHotelPrice = arrayAddition($hotelPrices);
 
 
-        if ($totalCapacity < $totalPax) {
-            $additionalGuest = subtraction($totalPax, $totalCapacity,  0);
+        if ($totalCapacity < $adultChildrenCount) {
+            $additionalGuest = subtraction($adultChildrenCount, $totalCapacity,  0);
             $additionalCharge = multiplication($additionalGuest, $excessChargePerPerson);
             $totalCost = addition($totalHotelPrice, $additionalCharge, 0);
         } else {
@@ -411,14 +433,15 @@ $userRole = $_SESSION['userRole'];
 
         $numberOfPeople =
             ($adultCount > 0 ? "{$adultCount} Adults" : '') .
-            ($childrenCount > 0 ? ($adultCount > 0 ? ' and ' : '') . "{$childrenCount} Kids" : '');
+            ($childrenCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$childrenCount} Kids" : '') .
+            ($toddlerCount > 0 ? (($adultCount > 0 || $childrenCount > 0) ? ' & ' : ' ') . "{$toddlerCount} toddler" : '');
 
         $downPayment = multiplication($totalCost, .3);
 
         $startDateObj = new DateTime($scheduledStartDate);
         $endDateObj = new DateTime($scheduledEndDate);
-        $startDate = $startDateObj->format("d F Y");
-        $endDate = $endDateObj->format("d F Y");
+        $startDate = $startDateObj->format("F d, Y");
+        $endDate = $endDateObj->format("F d, Y");
 
         if ($startDate === $endDate) {
             $date = $startDate;
@@ -427,6 +450,7 @@ $userRole = $_SESSION['userRole'];
         }
 
         $timeRange = $startDateObj->format("g:i A") . " - " . $endDateObj->format("g:i A");
+        $_SESSION['formData'] = $_POST;
     }
     ?>
 
@@ -469,38 +493,39 @@ $userRole = $_SESSION['userRole'];
                     <input type="hidden" name="timeRange" value="<?= $timeRange ?>">
                 </div>
 
+                <?php if ($bookingType === 'Hotel') { ?>
+                    <div class="card-info">
+                        <h5 class="info-title">Arrival Time:</h5>
+                        <p class="card-text"><?= $arrivalTime ?></p>
+                        <input type="hidden" name="arrivalTime" value="<?= $arrivalTime ?>">
+                    </div>
+                <?php } ?>
+
                 <div class="card-info">
                     <h5 class="info-title">Number of People:</h5>
                     <p class="card-text"><?= $numberOfPeople ?></p>
                     <input type="hidden" name="totalPax" value="<?= $totalPax ?>">
                 </div>
 
-                <?php if ($bookingType === 'Resort') { ?>
-                    <div class="card-info" id="capacityContainer">
-                        <h5 class="info-title">Description:</h5>
-                        <p class="card-text">Good for <?= $totalCapacity ?> people</p>
-                        <input type="hidden" name="capacity"
-                            value="<?= $totalCapacity ?>">
-                    </div>
-                <?php } else if ($bookingType === 'Hotel') { ?>
-                    <div class="card-info" id="descriptionContainer">
-                        <h5 class="info-title">Description:</h5>
-                        <ul class="card-text">
-                            <?php foreach ($items as $service): ?>
-                                <li>
-                                    <strong><?= htmlspecialchars($service['serviceName']) ?></strong>
-                                    <ul>
-                                        <?php foreach (explode(',', $service['description']) as $feature): ?>
-                                            <li class="features"><?= htmlspecialchars(trim($feature)) ?></li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <input type="hidden" name="capacity"
-                            value="<?= $totalCapacity ?>">
-                    </div>
-                <?php } ?>
+
+                <div class="card-info" id="descriptionContainer">
+                    <h5 class="info-title">Description:</h5>
+                    <ul class="card-text">
+                        <?php foreach ($items as $service): ?>
+                            <li>
+                                <strong><?= htmlspecialchars($service['serviceName']) ?></strong>
+                                <ul>
+                                    <?php foreach (explode(',', $service['description']) as $feature): ?>
+                                        <li class="features"><?= htmlspecialchars(trim($feature)) ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <input type="hidden" name="capacity"
+                        value="<?= $totalCapacity ?>">
+                </div>
+
 
                 <?php if ($bookingType === 'Resort') { ?>
                     <div class="card-info">
@@ -564,14 +589,11 @@ $userRole = $_SESSION['userRole'];
                         </li>
                     <?php } ?>
 
-
-                    <?php if ($bookingType === "Hotel" || $bookingType === "Event") { ?>
-                        <li class="list-group-item payment-info">
-                            <h5 class=" card-title">Downpayment (30%):</h5>
-                            <p class="card-text">₱ <?= number_format($downPayment, 2) ?> </p>
-                            <input type="hidden" name="downPayment" value="<?= $downPayment ?>" class="card-content">
-                        </li>
-                    <?php } ?>
+                    <li class="list-group-item payment-info">
+                        <h5 class=" card-title">Downpayment:</h5>
+                        <p class="card-text">₱ <?= number_format($downPayment, 2) ?> </p>
+                        <input type="hidden" name="downPayment" value="<?= $downPayment ?>" class="card-content">
+                    </li>
 
                     <li class="list-group-item payment-info">
                         <h5 class="card-title">Total Cost:</h5>
@@ -594,16 +616,25 @@ $userRole = $_SESSION['userRole'];
                 <ul>
                     <li>
                         <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        Payment will be made directly at the resort upon arrival.
+                        Payment for the cottage reservation must be made through the resort's GCash account.
                     </li>
                     <li>
                         <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        Upon arrival, the staff will double check the number of people.
+                        If you reserve more than one cottage, a down payment is required for only one cottage.
                     </li>
                     <li>
                         <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        For any questions, contact <strong>0900-000-0000</strong>.
+                        The remaining balance should be paid directly at the resort upon arrival.
                     </li>
+                    <li>
+                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                        Upon arrival, the staff will verify the number of guests.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                        For any questions, please contact <strong>0900-000-0000</strong>.
+                    </li>
+
                 </ul>
             <?php } else if ($bookingType === 'Hotel') { ?>
                 <ul>
@@ -627,7 +658,6 @@ $userRole = $_SESSION['userRole'];
             <input type="hidden" name="hotelSelections" value="<?= htmlspecialchars(implode(', ', $selectedHotels ?? [])) ?>">
             <input type="hidden" name="hoursSelected" value="<?= htmlspecialchars($hoursSelected ?? '') ?>">
             <input type="hidden" name="hoursNumber" value="<?= htmlspecialchars($numHours ?? '') ?>">
-            <input type="hidden" name="arrivalTime" value="<?= htmlspecialchars($arrivalTime ?? '') ?>">
 
             <input type="hidden" name="tourSelections" value="<?= htmlspecialchars($tourSelections ?? '') ?>">
 

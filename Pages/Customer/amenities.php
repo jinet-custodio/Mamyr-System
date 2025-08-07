@@ -53,7 +53,7 @@ $userRole = $_SESSION['userRole'];
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
 
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-2">
             <?php
             $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
@@ -69,15 +69,21 @@ $userRole = $_SESSION['userRole'];
             }
             ?>
             <li class="nav-item account-nav">
-                <a href="Account/account.php">
-                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                <a href="../Account/account.php">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                 </a>
             </li>
 
 
             <!-- Get notification -->
             <?php
-            $receiver = 'Customer';
+
+            if ($userRole === 1) {
+                $receiver = 'Customer';
+            } elseif ($userRole === 2) {
+                $receiver = 'Partner';
+            }
+
             $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
@@ -103,8 +109,8 @@ $userRole = $_SESSION['userRole'];
             }
             ?>
 
-            <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+            <li class="nav-item" id="notifs">
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -112,8 +118,7 @@ $userRole = $_SESSION['userRole'];
                         </span>
                     <?php endif; ?>
                 </button>
-            </div>
-
+            </li>
         </ul>
 
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -201,10 +206,10 @@ $userRole = $_SESSION['userRole'];
         </div>
 
         <div class="pool">
-            <div class="poolTitleContainer">
-                <hr class="poolLine">
-                <h4 class="poolTitle">Swimming Pools</h4>
-                <p class="poolDescription">We offer three spacious pools designed for relaxation and fun. Whether you’re
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <h4 class="amenityTitle">Swimming Pools</h4>
+                <p class="amenityDescription">We offer three spacious pools designed for relaxation and fun. Whether you’re
                     looking to take a
                     refreshing dip or lounge by the water, each pool provides a perfect setting to unwind and enjoy your
                     stay. Dive in and make the most of your resort experience!</p>
@@ -223,11 +228,11 @@ $userRole = $_SESSION['userRole'];
             </div>
         </div>
 
-        <div class="cottage" style="background-color:#f7d5b0; height: 120vh;">
-            <div class=" cottageTitleContainer" style="padding-top: 2vw;">
-                <hr class="cottageLine">
-                <h4 class="cottageTitle">Cottages</h4>
-                <p class="cottageDescription">Our cozy cottages offer a relaxing retreat with spacious porches, secure
+        <div class="cottage colored-bg" style="background-color:#f7d5b0;">
+            <div class=" amenityTitleContainer">
+                <hr class="amenityLine">
+                <h4 class="amenityTitle">Cottages</h4>
+                <p class="amenityDescription">Our cozy cottages offer a relaxing retreat with spacious porches, secure
                     surroundings, and a refreshing ambiance. Enjoy a perfect blend of nature and modern facilities
                     designed for your comfort.</p>
             </div>
@@ -236,15 +241,13 @@ $userRole = $_SESSION['userRole'];
             <div class="carousel-container">
                 <div class="carousel">
                     <?php
-                    $cottageCategoryID = 2;
-                    $getCottage = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
-                    $getCottage->bind_param("i", $cottageCategoryID);
-                    $getCottage->execute();
-                    $getCottageResult =  $getCottage->get_result();
-                    if ($getCottageResult->num_rows > 0) {
-
+                    $serviceCategory = 2;
+                    $query = "SELECT * FROM resortAmenities WHERE RScategoryID = $serviceCategory ";
+                    $result = mysqli_query($conn, $query);
+                    if (mysqli_num_rows($result) > 0) {
+                        $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         $counter = 1;
-                        while ($cottage = $getCottageResult->fetch_assoc()) {
+                        foreach ($cottages as $cottage) {
                             $imageData = $cottage['RSimageData'];
                             if ($imageData) {
                                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -268,29 +271,136 @@ $userRole = $_SESSION['userRole'];
                 <button class="btn btn-primary prev-btn">&#10094;</button>
                 <button class="btn btn-primary next-btn">&#10095;</button>
             </div>
-
         </div>
 
-        <div class="videoke" style="height: 120vh;">
-            <div class=" poolTitleContainer" style="padding-top: 2vw;">
-                <hr class="videokeLine">
-                <h4 class="videokeTitle">Videoke Area</h4>
-                <p class="videokeDescription">Enjoy nonstop fun just steps away from your cottage! Our videoke area is
-                    conveniently located beside the cottages, making it easy to sing, laugh, and bond without going far.
-                    With a great sound system and cozy setup, it’s the perfect spot for music-filled memories in the
-                    heart of the resort.</p>
-            </div>
+    </div>
 
-            <div class="poolPics">
+    <div class="videoke">
+        <div class=" amenityTitleContainer">
+            <hr class="amenityLine">
+            <h4 class="amenityTitle">Videoke Area</h4>
+            <p class="amenityDescription">Enjoy nonstop fun just steps away from your cottage! Our videoke area is
+                conveniently located beside the cottages, making it easy to sing, laugh, and bond without going far.
+                With a great sound system and cozy setup, it’s the perfect spot for music-filled memories in the
+                heart of the resort.</p>
+        </div>
+
+        <div class="poolPics">
+            <?php
+            $videokeCategoryID = 3;
+            $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+            $getVideoke->bind_param("i", $videokeCategoryID);
+            $getVideoke->execute();
+            $getVideokeResult =  $getVideoke->get_result();
+            if ($getVideokeResult->num_rows > 0) {
+                // $counter = 1;
+                while ($videoke = $getVideokeResult->fetch_assoc()) {
+                    $imageData = $videoke['RSimageData'];
+                    if ($imageData) {
+                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                        $mimeType = finfo_buffer($finfo, $imageData);
+                        finfo_close($finfo);
+                        $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                    } else {
+                        $image = '../../Assets/Images/no-picture.jpg';
+                    }
+            ?>
+
+                    <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="pic1">
+            <?php
+                    // $counter++;
+                }
+            } else {
+                echo 'No Videoke';
+            }
+            ?>
+            <!-- <img src="../../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Hotel Picture 1" class="pic1">
+                <img src="../../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Hotel Picture 1" class="pic1"> -->
+        </div>
+
+    </div>
+
+    <div class="pavilion colored-bg" style="background-color: #7dcbf2;">
+        <div class="amenityTitleContainer">
+            <hr class="amenityLine">
+            <h4 class="amenityTitle">Pavilion Hall</h4>
+            <p class="amenityDescription">Our Pavilion Hall offers the perfect space for events, gatherings, and
+                special occasions. With its spacious and elegant design, it’s ideal for everything from weddings to
+                corporate events, comfortably accommodating up to 350 guests. Included with your rental is exclusive
+                access to one private air-conditioned room and a dedicated powder room with separate comfort rooms
+                for both male and female guests.</p>
+        </div>
+
+        <div class="carousel-container">
+            <div class="carousel">
+
                 <?php
-                $videokeCategoryID = 3;
-                $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
-                $getVideoke->bind_param("i", $videokeCategoryID);
-                $getVideoke->execute();
-                $getVideokeResult =  $getVideoke->get_result();
-                if ($getVideokeResult->num_rows > 0) {
+                $eventHallCategoryID = 6;
+                $getEventHall = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+                $getEventHall->bind_param("i",  $eventHallCategoryID);
+                $getEventHall->execute();
+                $getEventHallResult =  $getEventHall->get_result();
+                if ($getEventHallResult->num_rows > 0) {
+                    $counter = 1;
+                    while ($eventHall = $getEventHallResult->fetch_assoc()) {
+                        $imageData = $eventHall['RSimageData'];
+                        if ($imageData) {
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                            $mimeType = finfo_buffer($finfo, $imageData);
+                            finfo_close($finfo);
+                            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                        } else {
+                            $image = '../../Assets/Images/no-picture.jpg';
+                        }
+                ?>
+
+                        <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
+                <?php
+                        $counter++;
+                    }
+                } else {
+                    echo 'No Event Hall';
+                }
+                ?>
+                <!-- <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
+                        class="poolPic1">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
+                        class="poolPic2">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3"
+                        class="poolPic3">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
+                        class="poolPic4">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
+                        class="poolPic5"> -->
+
+            </div>
+            <button class="btn btn-primary prev-btn">&#10094;</button>
+            <button class="btn btn-primary next-btn">&#10095;</button>
+        </div>
+    </div>
+
+    <div class="minipavilion">
+        <div class="amenityTitleContainer">
+            <hr class="amenityLine">
+            <h4 class="amenityTitle">Mini Pavilion</h4>
+            <p class="amenityDescription">Our mini pavilion offers an intimate and charming space perfect for
+                small
+                gatherings and special occasions. Designed to comfortably accommodate up to 50 guests, it’s ideal
+                for birthdays, reunions, meetings, or any cozy celebration. Surrounded by a refreshing resort
+                atmosphere, it provides both functionality and a relaxing vibe.</p>
+        </div>
+
+        <div class="carousel-container">
+            <div class="carousel">
+                <?php
+                $miniPavCategoryID = 7;
+                $getMiniPav = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+                $getMiniPav->bind_param("i", $miniPavCategoryID);
+                $getMiniPav->execute();
+                $getMiniPavResult =  $getMiniPav->get_result();
+                if ($getMiniPavResult->num_rows > 0) {
                     // $counter = 1;
-                    while ($videoke = $getVideokeResult->fetch_assoc()) {
+                    while ($videoke =  $getMiniPav->fetch_assoc()) {
                         $imageData = $videoke['RSimageData'];
                         if ($imageData) {
                             $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -307,185 +417,76 @@ $userRole = $_SESSION['userRole'];
                         // $counter++;
                     }
                 } else {
-                    echo 'No Videoke';
+                    echo 'No Cottages';
                 }
                 ?>
-                <!-- <img src="../../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Hotel Picture 1" class="pic1">
-                <img src="../../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Hotel Picture 1" class="pic1"> -->
-            </div>
+                <img src="../../Assets/Images/amenities/miniPavPics/miniPav1.jpg" alt="Mini Pavilion Picture 1"
+                    class="poolPic1">
+                <img src="../../Assets/Images/amenities/miniPavPics/miniPav2.jpg" alt="Mini Pavilion Picture 2"
+                    class="poolPic2">
+                <img src="../../Assets/Images/amenities/miniPavPics/miniPav3.jpeg" alt="Mini Pavilion Picture 3"
+                    class="poolPic3">
+                <img src="../../Assets/Images/amenities/miniPavPics/miniPav4.jpeg" alt="Mini Pavilion Picture 4"
+                    class="poolPic4">
+                <img src="../../Assets/Images/amenities/miniPavPics/miniPav5.jpeg" alt="Mini Pavilion Picture 5"
+                    class="poolPic5">
 
+            </div>
+            <button class="btn btn-primary prev-btn">&#10094;</button>
+            <button class="btn btn-primary next-btn">&#10095;</button>
+        </div>
+    </div>
+
+    <div class="hotel colored-bg" style="background-color:#f7d5b0;">
+        <div class="amenityTitleContainer">
+            <hr class="amenityLine">
+            <h4 class="amenityTitle">Mamyr Hotel</h4>
+            <p class="amenityDescription">We offer 11 thoughtfully designed hotel rooms, each providing a peaceful and
+                comfortable retreat. Perfect for guests looking for a relaxing space to unwind after a day of
+                exploration, our rooms offer all the essentials for a restful stay with a touch of convenience.</p>
         </div>
 
-        <div class="pavilion" style="background-color: #7dcbf2; height: 155vh;">
-            <div class="pavilionTitleContainer" style="padding-top: 2vw ;">
-                <hr class="pavilionLine">
-                <h4 class="pavilionTitle">Pavilion Hall</h4>
-                <p class="pavilionDescription">Our Pavilion Hall offers the perfect space for events, gatherings, and
-                    special occasions. With its spacious and elegant design, it’s ideal for everything from weddings to
-                    corporate events, comfortably accommodating up to 350 guests. Fully air-conditioned for your
-                    comfort, the hall can be rented for a maximum of 5 hours. Included with your rental is exclusive
-                    access to one private air-conditioned room and a dedicated powder room with separate comfort rooms
-                    for both male and female guests. Let us help you create unforgettable memories in a setting of pure
-                    sophistication and convenience.</p>
+        <div class="carousel-container">
+            <div class="carousel">
+                <img src="../../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel Picture 1" class="poolPic1">
+                <img src="../../Assets/Images/amenities/hotelPics/hotel2.jpg" alt="Hotel Picture 2" class="poolPic2">
+                <img src="../../Assets/Images/amenities/hotelPics/hotel3.jpg" alt="Hotel Picture 3" class="poolPic3">
+                <img src="../../Assets/Images/amenities/hotelPics/hotel4.jpg" alt="Hotel Picture 4" class="poolPic4">
+                <img src="../../Assets/Images/amenities/hotelPics/hotel5.jpeg" alt="Hotel Picture 5" class="poolPic5">
+
             </div>
+            <button class="btn btn-primary prev-btn">&#10094;</button>
+            <button class="btn btn-primary next-btn">&#10095;</button>
+        </div>
+    </div>
 
-            <div class="carousel-container">
-                <div class="carousel">
-
-                    <?php
-                    $eventHallCategoryID = 6;
-                    $getEventHall = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
-                    $getEventHall->bind_param("i",  $eventHallCategoryID);
-                    $getEventHall->execute();
-                    $getEventHallResult =  $getEventHall->get_result();
-                    if ($getEventHallResult->num_rows > 0) {
-                        $counter = 1;
-                        while ($eventHall = $getEventHallResult->fetch_assoc()) {
-                            $imageData = $eventHall['RSimageData'];
-                            if ($imageData) {
-                                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                                $mimeType = finfo_buffer($finfo, $imageData);
-                                finfo_close($finfo);
-                                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                            } else {
-                                $image = '../../Assets/Images/no-picture.jpg';
-                            }
-                    ?>
-
-                            <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
-                    <?php
-                            $counter++;
-                        }
-                    } else {
-                        echo 'No Event Hall';
-                    }
-                    ?>
-                    <!-- <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
-                        class="poolPic1">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
-                        class="poolPic2">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3"
-                        class="poolPic3">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
-                        class="poolPic4">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
-                        class="poolPic5"> -->
-
-                </div>
-                <button class="btn btn-primary prev-btn">&#10094;</button>
-                <button class="btn btn-primary next-btn">&#10095;</button>
-            </div>
+    <div class="parking">
+        <div class="amenityTitleContainer">
+            <hr class="amenityLine">
+            <h4 class="amenityTitle">Parking Space</h4>
+            <p class="amenityDescription">We provide ample parking spaces to ensure a hassle-free stay. Whether
+                you’re arriving by car or with a group, our secure parking area is conveniently located, giving you peace
+                of mind throughout your visit.</p>
         </div>
 
-        <div class="minipavilion" style=" height: 125vh;">
-            <div class="minipavilionTitleContainer">
-                <hr class="minipavilionLine">
-                <h4 class="minipavilionTitle">Mini Pavilion</h4>
-                <p class="minipavilionDescription">Our mini pavilion offers an intimate and charming space perfect for
-                    small
-                    gatherings and special occasions. Designed to comfortably accommodate up to 50 guests, it’s ideal
-                    for birthdays, reunions, meetings, or any cozy celebration. Surrounded by a refreshing resort
-                    atmosphere, it provides both functionality and a relaxing vibe.</p>
+        <div class="carousel-container">
+            <div class="carousel">
+                <img src="../../Assets/Images/amenities/parkingPics/parking1.jpg" alt="Parking Picture 1"
+                    class="poolPic1">
+                <img src="../../Assets/Images/amenities/parkingPics/parking2.jpg" alt="Parking Picture 2"
+                    class="poolPic2">
+                <img src="../../Assets/Images/amenities/parkingPics/parking3.jpg" alt="Parking Picture 3"
+                    class="poolPic3">
+                <img src="../../Assets/Images/amenities/parkingPics/parking4.jpg" alt="Parking Picture 4"
+                    class="poolPic4">
+                <img src="../../Assets/Images/amenities/parkingPics/parking5.jpg" alt="Parking Picture 5"
+                    class="poolPic5">
+
             </div>
-
-            <div class="carousel-container">
-                <div class="carousel">
-                    <?php
-                    $miniPavCategoryID = 7;
-                    $getMiniPav = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
-                    $getMiniPav->bind_param("i", $miniPavCategoryID);
-                    $getMiniPav->execute();
-                    $getMiniPavResult =  $getMiniPav->get_result();
-                    if ($getMiniPavResult->num_rows > 0) {
-                        // $counter = 1;
-                        while ($videoke =  $getMiniPav->fetch_assoc()) {
-                            $imageData = $videoke['RSimageData'];
-                            if ($imageData) {
-                                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                                $mimeType = finfo_buffer($finfo, $imageData);
-                                finfo_close($finfo);
-                                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                            } else {
-                                $image = '../../Assets/Images/no-picture.jpg';
-                            }
-                    ?>
-
-                            <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="pic1">
-                    <?php
-                            // $counter++;
-                        }
-                    } else {
-                        echo 'No Cottages';
-                    }
-                    ?>
-                    <img src="../../Assets/Images/amenities/miniPavPics/miniPav1.jpg" alt="Mini Pavilion Picture 1"
-                        class="poolPic1">
-                    <img src="../../Assets/Images/amenities/miniPavPics/miniPav2.jpg" alt="Mini Pavilion Picture 2"
-                        class="poolPic2">
-                    <img src="../../Assets/Images/amenities/miniPavPics/miniPav3.jpeg" alt="Mini Pavilion Picture 3"
-                        class="poolPic3">
-                    <img src="../../Assets/Images/amenities/miniPavPics/miniPav4.jpeg" alt="Mini Pavilion Picture 4"
-                        class="poolPic4">
-                    <img src="../../Assets/Images/amenities/miniPavPics/miniPav5.jpeg" alt="Mini Pavilion Picture 5"
-                        class="poolPic5">
-
-                </div>
-                <button class="btn btn-primary prev-btn">&#10094;</button>
-                <button class="btn btn-primary next-btn">&#10095;</button>
-            </div>
+            <button class="btn btn-primary prev-btn">&#10094;</button>
+            <button class="btn btn-primary next-btn">&#10095;</button>
         </div>
-
-        <div class="hotel" style="background-color:#f7d5b0; height: 140vh;">
-            <div class="hotelTitleContainer" style="padding-top: 5vw;">
-                <hr class="hotelLine">
-                <h4 class="hotelTitle">Mamyr Hotel</h4>
-                <p class="hotelDescription">We offer 11 thoughtfully designed hotel rooms, each providing a peaceful and
-                    comfortable retreat. Perfect for guests looking for a relaxing space to unwind after a day of
-                    exploration, our rooms offer all the essentials for a restful stay with a touch of convenience.</p>
-            </div>
-
-            <div class="carousel-container">
-                <div class="carousel">
-                    <img src="../../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel Picture 1" class="poolPic1">
-                    <img src="../../Assets/Images/amenities/hotelPics/hotel2.jpg" alt="Hotel Picture 2" class="poolPic2">
-                    <img src="../../Assets/Images/amenities/hotelPics/hotel3.jpg" alt="Hotel Picture 3" class="poolPic3">
-                    <img src="../../Assets/Images/amenities/hotelPics/hotel4.jpg" alt="Hotel Picture 4" class="poolPic4">
-                    <img src="../../Assets/Images/amenities/hotelPics/hotel5.jpeg" alt="Hotel Picture 5" class="poolPic5">
-
-                </div>
-                <button class="btn btn-primary prev-btn">&#10094;</button>
-                <button class="btn btn-primary next-btn">&#10095;</button>
-            </div>
-        </div>
-
-        <div class="parking">
-            <div class="parkingTitleContainer">
-                <hr class="parkingLine">
-                <h4 class="parkingTitle">Parking Space</h4>
-                <p class="parkingDescription">We provide ample parking spaces to ensure a hassle-free stay. Whether
-                    you’re
-                    arriving by car or with a group, our secure parking area is conveniently located, giving you peace
-                    of mind throughout your visit.</p>
-            </div>
-
-            <div class="carousel-container">
-                <div class="carousel">
-                    <img src="../../Assets/Images/amenities/parkingPics/parking1.jpg" alt="Parking Picture 1"
-                        class="poolPic1">
-                    <img src="../../Assets/Images/amenities/parkingPics/parking2.jpg" alt="Parking Picture 2"
-                        class="poolPic2">
-                    <img src="../../Assets/Images/amenities/parkingPics/parking3.jpg" alt="Parking Picture 3"
-                        class="poolPic3">
-                    <img src="../../Assets/Images/amenities/parkingPics/parking4.jpg" alt="Parking Picture 4"
-                        class="poolPic4">
-                    <img src="../../Assets/Images/amenities/parkingPics/parking5.jpg" alt="Parking Picture 5"
-                        class="poolPic5">
-
-                </div>
-                <button class="btn btn-primary prev-btn">&#10094;</button>
-                <button class="btn btn-primary next-btn">&#10095;</button>
-            </div>
-        </div>
+    </div>
     </div>
 
 
@@ -533,6 +534,8 @@ $userRole = $_SESSION['userRole'];
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -546,12 +549,26 @@ $userRole = $_SESSION['userRole'];
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });
         });
     </script>
+
 
 
     <script>

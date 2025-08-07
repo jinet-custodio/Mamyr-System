@@ -18,7 +18,7 @@ CREATE TABLE bookings (
     initialCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     totalCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     downpayment DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    bookingStatus INT NOT NULL,
+    bookingStatus INT DEFAULT 1,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (userID) REFERENCES users(userID),
@@ -60,3 +60,7 @@ CREATE TABLE confirmedBookings (
     FOREIGN KEY (confirmedBookingStatus) REFERENCES statuses(statusID),
     FOREIGN KEY (paymentStatus) REFERENCES bookingPaymentStatus(paymentStatusID)
 );
+
+ALTER TABLE confirmedBookings 
+ADD COLUMN paymentDueDate DATE NOT NULL
+AFTER paymentStatus

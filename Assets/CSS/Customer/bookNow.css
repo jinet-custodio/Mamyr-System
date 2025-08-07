@@ -367,8 +367,10 @@ footer {
   }
 
   .resort-card {
-    padding: 2rem;
+    padding: 2rem 2rem 0 2rem;
+    margin-bottom: 1rem;
     font-family: "Poppins";
+    width: 50%;
   }
 
   .scheduleForm,
@@ -397,15 +399,28 @@ footer {
     height: 1rem;
   }
 
-  .cottageForm,
+  .cottagesForm,
   .roomNumbers,
-  .paymentMethod,
   .videokeForm {
     width: 100%;
   }
 
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-text {
+    color: rgb(15, 127, 255) !important;
+  }
+
+  .modal-text i {
+    gap: 1rem;
+  }
+
   #entertainmentContainer,
   #cottagesContainer {
+    /* border: 1px solid red; */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
@@ -419,14 +434,11 @@ footer {
     gap: 1rem;
   }
 
-  /* #cottagesContainer .checkbox-item:last-of-type {
-    grid-column: span 2;
-  } */
-
   #entertainmentContainer label,
   #cottagesContainer label,
   #roomsContainer label {
     margin-left: 0.5rem;
+    font-size: 15px;
   }
 
   .entrance-rates {
@@ -475,7 +487,7 @@ footer {
 
   .cottagesEntertainment {
     width: auto;
-    height: 300px;
+    height: 320px;
     display: flex;
     flex-direction: column;
   }
@@ -533,6 +545,20 @@ footer {
   .button-container {
     padding: 1rem;
   }
+
+  .additional-info-container ul {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .additional-info-container li {
+    font-size: 12px;
+    text-transform: none;
+    margin: 0.5rem;
+    padding: 0.3rem;
+    text-align: justify;
+  }
 }
 
 #hotel-page {
@@ -557,7 +583,7 @@ footer {
     /* border: 2px solid pink; */
     display: flex;
     justify-content: center;
-    align-items: top;
+    align-items: center;
     gap: 2rem;
     padding: 1rem;
   }
@@ -619,13 +645,11 @@ footer {
     width: 50% !important;
     height: 50%;
     padding: 1.5rem;
-    /* margin-top: -10rem !important; */
   }
 
   .checkInOut,
   .hotelPeopleForm,
-  .paymentVideokeForm,
-  .hoursRoom {
+  .paymentTimeDiv {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -633,19 +657,33 @@ footer {
     align-items: center;
   }
 
-  .checkInOut {
+  .hotelPeopleForm .info-container p {
+    font-size: 12px;
+    color: #007bff;
+  }
+
+  .hotelPeopleForm .info-container {
+    display: flex;
+    gap: 0.2rem;
+    height: 1rem;
+  }
+
+  .checkInOut,
+  .paymentTimeDiv {
     justify-content: space-evenly !important;
   }
 
   .checkIn-container,
-  .checkOut-container {
+  .checkOut-container,
+  .paymentMethod,
+  .arrivalTime {
     width: 50% !important  ;
   }
 
   .checkInOut,
   .hotelPax,
   .roomNumbers,
-  .paymentMethod {
+  .paymentTimeDiv {
     margin: 0.5rem;
   }
 
@@ -655,8 +693,7 @@ footer {
     font-weight: 600;
   }
 
-  .hotelRooms,
-  .NumberOfHours {
+  .hotelRooms {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -667,9 +704,9 @@ footer {
     color: #000000 !important;
   }
 
-  .NumberOfHours {
+  /* .NumberOfHours {
     width: 30%;
-  }
+  } */
 
   #hotelBooking .btn {
     width: 100%;
@@ -689,8 +726,12 @@ footer {
 }
 
 #event-page {
+  background-image: unset;
+  background-color: rgb(255, 220, 174) !important;
+  margin: 0;
+  padding: 0;
+
   .eventTitle {
-    padding-top: 7rem;
     font-size: 2.5vw;
     font-family: "Lora";
     color: #000000;
@@ -699,7 +740,7 @@ footer {
 
   .backToSelection {
     position: absolute;
-    margin: 7rem 0 0 3rem;
+    margin: -1rem 0 0 4rem;
   }
 
   .container-fluid {

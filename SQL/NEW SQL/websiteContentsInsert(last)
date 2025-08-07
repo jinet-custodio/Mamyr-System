@@ -1,76 +1,58 @@
-INSERT INTO `websitecontents` (`contentID`, `adminID`, `sectionName`, `title`, `content`, `lastUpdated`) VALUES
-(1, 1, 'Blog', 'MainTitle', 'The Mamyr Resort Blog: Stay Infomed, Stay Inspired', '2025-07-01 00:01:44'),
-(2, 1, 'Blog', 'Sub-title', 'Inspiration, Updates, and Insights Straight from Mamyr Resort', '2025-07-01 00:01:44'),
-(3, 1, 'Blog', 'BlogPost1-EventType', 'Private Event', '2025-07-01 00:27:10'),
-(4, 1, 'Blog', 'BlogPost1-EventDate', '2025-08-01', '2025-07-01 00:27:10'),
-(5, 1, 'Blog', 'BlogPost1-EventHeader', 'Mamyr Resort is Closed for a Private Event', '2025-07-01 00:28:59'),
-(6, 1, 'Blog', 'BlogPost1-Content', 'We are sorry, but we will be closed on Sunday, June 1, 2025, due to a private event. Invitation-only guests will be allowed, and we will not be accepting walk-ins on this date. Thank you for your understanding.', '2025-07-01 00:28:59'),
-(7, 1, 'Blog', 'BlogPost2-EventType', '7th Birthday ', '2025-07-01 00:47:17'),
-(8, 1, 'Blog', 'BlogPost2-EventDate', '2025-06-02', '2025-07-01 00:47:17'),
-(9, 1, 'Blog', 'BlogPost2-EventHeader', 'Yohan\'s Magical 7th Birthday Celebration at Mamyr!', '2025-07-01 00:47:17'),
-(10, 1, 'Blog', 'BlogPost2-Content', 'Yohan marked his 7th birthday in style at Mamyr, where the day was packed with exciting activities, laughter, and unforgettable moments that made it a celebration to remember.', '2025-07-01 00:47:17'),
-(11, 1, 'Blog', 'BlogPost3-EventType', 'Thanksgiving Party', '2025-07-01 01:29:13'),
-(12, 1, 'Blog', 'BlogPost3-EventDate', '2025-01-02', '2025-07-01 01:29:13'),
-(13, 1, 'Blog', 'BlogPost3-EventHeader', 'XYZ Company\'s Thanksgiving Party ', '2025-07-01 01:29:13'),
-(14, 1, 'Blog', 'BlogPost3-Content', 'XYZ Company\'s Thanksgiving Party: A Heartfelt Celebration of Gratitude, Team Spirit, and the Strong Bonds We’ve Built Together. This special gathering brought everyone together to reflect on the year\'s achievements, share delicious food, and create lasting memories with colleagues.', '2025-07-01 01:29:13'),
-(15, 1, 'Blog', 'BlogPost4-EventType', 'Debut', '2025-07-01 01:31:50'),
-(16, 1, 'Blog', 'BlogPost4-EventDate', '2024-09-02', '2025-07-01 01:31:50'),
-(17, 1, 'Blog', 'BlogPost4-EventHeader', 'Jannah\'s 18th Birthday', '2025-07-01 01:31:50'),
-(18, 1, 'Blog', 'BlogPost4-Content', 'Jannah\'s 18th Birthday: A Joyous Celebration Marking the Transition into Adulthood with Laughter, Love, and Unforgettable Memories. Surrounded by family and friends, this milestone birthday was a beautiful blend of cherished moments, heartfelt wishes, and the excitement of new beginnings.', '2025-07-01 01:31:50'),
-(19, 1, 'BusinessInformation', 'DisplayName', 'Mamyr', '2025-07-03 00:29:44'),
-(20, 1, 'BusinessInformation', 'FullName', 'Mamyr Resort and Events Place', '2025-07-03 00:29:44'),
-(21, 1, 'BusinessInformation', 'ShortDesc', 'Welcome to Mamyr Resort and Event Place! We\'re more than just a resort, we\'re a place where memories are made. Whether you\'re here for a relaxing getaway, a family gathering, or a special event, we\'re dedicated to making your stay unforgettable.', '2025-07-03 00:38:51'),
-(22, 1, 'BusinessInformation', 'ContactNum', '(0998) 962 4697', '2025-07-03 00:38:51'),
-(24, 1, 'BusinessInformation', 'Email', 'mamyresort128@gmail.com', '2025-07-03 00:38:51'),
-(25, 1, 'BusinessInformation', 'Address', 'Sitio Colonia Gabihan, San Ildefonso, Bulacan', '2025-07-03 00:38:51'),
-(26, '1', 'BusinessInformation', 'ShortDesc2', 'Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional.', current_timestamp()),
-(27, '1', 'About', 'Header', 'Compassionate Service, Unforgettable Family Moments', current_timestamp()),
-(28, '1', 'About', 'AboutMamyr', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family but also bring joy to others.', current_timestamp()),
-(NULL, '1', 'About', 'ServicesDesc', 'Mamyr isn’t just a resort; it’s a family-oriented getaway with comfortable rooms and a versatile event venue for gatherings and celebrations. It offers a relaxed, fun environment for all ages to enjoy.', current_timestamp()), 
-(NULL, '1', 'About', 'Service1', 'Resort', current_timestamp()),
-(NULL, '1', 'About', 'Service1Desc', 'Mamyr features three refreshing pools, providing the perfect spots for family fun, relaxation, and leisurely swims.', current_timestamp()),
-(NULL, '1', 'About', 'Service2', 'Events Place', current_timestamp()), 
-(NULL, '1', 'About', 'Service2Desc', 'Mamyr’s versatile event venue offers a spacious and welcoming setting, ideal for family gatherings, reunions, and celebrations of all kinds.', current_timestamp()),
-(NULL, '1', 'About', 'Service3', 'Hotel', current_timestamp()), 
-(NULL, '1', 'About', 'Service3Desc', 'Mamyr’s cozy hotel features 11 comfortable rooms, perfect for a relaxing stay with family and friends.', current_timestamp()),
+INSERT INTO `websitecontents` (`adminID`, `sectionName`, `title`, `content`, `lastUpdated`) VALUES
+(1, 'Blog', 'MainTitle', 'The Mamyr Resort Blog: Stay Infomed, Stay Inspired', '2025-07-01 00:01:44'),
+(1, 'Blog', 'Sub-title', 'Inspiration, Updates, and Insights Straight from Mamyr Resort', '2025-07-01 00:01:44'),
+(1, 'Blog', 'BlogPost1-EventType', 'Private Event', '2025-07-01 00:27:10'),
+(1, 'Blog', 'BlogPost1-EventDate', '2025-08-01', '2025-07-01 00:27:10'),
+(1, 'Blog', 'BlogPost1-EventHeader', 'Mamyr Resort is Closed for a Private Event', '2025-07-01 00:28:59'),
+(1, 'Blog', 'BlogPost1-Content', 'We are sorry, but we will be closed on Sunday, June 1, 2025, due to a private event. Invitation-only guests will be allowed, and we will not be accepting walk-ins on this date. Thank you for your understanding.', '2025-07-01 00:28:59'),
+(1, 'Blog', 'BlogPost2-EventType', '7th Birthday ', '2025-07-01 00:47:17'),
+(1, 'Blog', 'BlogPost2-EventDate', '2025-06-02', '2025-07-01 00:47:17'),
+(1, 'Blog', 'BlogPost2-EventHeader', 'Yohan''s Magical 7th Birthday Celebration at Mamyr!', '2025-07-01 00:47:17'),
+(1, 'Blog', 'BlogPost2-Content', 'Yohan marked his 7th birthday in style at Mamyr, where the day was packed with exciting activities, laughter, and unforgettable moments that made it a celebration to remember.', '2025-07-01 00:47:17'),
+(1, 'Blog', 'BlogPost3-EventType', 'Thanksgiving Party', '2025-07-01 01:29:13'),
+(1, 'Blog', 'BlogPost3-EventDate', '2025-01-02', '2025-07-01 01:29:13'),
+(1, 'Blog', 'BlogPost3-EventHeader', 'XYZ Company''s Thanksgiving Party ', '2025-07-01 01:29:13'),
+(1, 'Blog', 'BlogPost3-Content', 'XYZ Company''s Thanksgiving Party: A Heartfelt Celebration of Gratitude, Team Spirit, and the Strong Bonds We’ve Built Together. This special gathering brought everyone together to reflect on the year''s achievements, share delicious food, and create lasting memories with colleagues.', '2025-07-01 01:29:13'),
+(1, 'Blog', 'BlogPost4-EventType', 'Debut', '2025-07-01 01:31:50'),
+(1, 'Blog', 'BlogPost4-EventDate', '2024-09-02', '2025-07-01 01:31:50'),
+(1, 'Blog', 'BlogPost4-EventHeader', 'Jannah''s 18th Birthday', '2025-07-01 01:31:50'),
+(1, 'Blog', 'BlogPost4-Content', 'Jannah''s 18th Birthday: A Joyous Celebration Marking the Transition into Adulthood with Laughter, Love, and Unforgettable Memories. Surrounded by family and friends, this milestone birthday was a beautiful blend of cherished moments, heartfelt wishes, and the excitement of new beginnings.', '2025-07-01 01:31:50'),
+(1, 'BusinessInformation', 'DisplayName', 'Mamyr', '2025-07-03 00:29:44'),
+(1, 'BusinessInformation', 'FullName', 'Mamyr Resort and Events Place', '2025-07-03 00:29:44'),
+(1, 'BusinessInformation', 'ShortDesc', 'Welcome to Mamyr Resort and Event Place! We''re more than just a resort, we''re a place where memories are made. Whether you\'re here for a relaxing getaway, a family gathering, or a special event, we\'re dedicated to making your stay unforgettable.', '2025-07-03 00:38:51'),
+(1, 'BusinessInformation', 'ContactNum', '(0998) 962 4697', '2025-07-03 00:38:51'),
+(1, 'BusinessInformation', 'Email', 'mamyresort128@gmail.com', '2025-07-03 00:38:51'),
+(1, 'BusinessInformation', 'Address', 'Sitio Colonia Gabihan, San Ildefonso, Bulacan', '2025-07-03 00:38:51'),
+(1, 'BusinessInformation', 'ShortDesc2', 'Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional.', current_timestamp()),
+(1, 'About', 'Header', 'Compassionate Service, Unforgettable Family Moments', current_timestamp()),
+(1, 'About', 'AboutMamyr', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family but also bring joy to others.', current_timestamp()),
+(1, 'About', 'ServicesDesc', 'Mamyr isn’t just a resort; it’s a family-oriented getaway with comfortable rooms and a versatile event venue for gatherings and celebrations. It offers a relaxed, fun environment for all ages to enjoy.', current_timestamp()), 
+(1, 'About', 'Service1', 'Resort', current_timestamp()),
+(1, 'About', 'Service1Desc', 'Mamyr features three refreshing pools, providing the perfect spots for family fun, relaxation, and leisurely swims.', current_timestamp()),
+(1, 'About', 'Service2', 'Events Place', current_timestamp()), 
+(1, 'About', 'Service2Desc', 'Mamyr’s versatile event venue offers a spacious and welcoming setting, ideal for family gatherings, reunions, and celebrations of all kinds.', current_timestamp()),
+(1, 'About', 'Service3', 'Hotel', current_timestamp()), 
+(1, 'About', 'Service3Desc', 'Mamyr’s cozy hotel features 11 comfortable rooms, perfect for a relaxing stay with family and friends.', current_timestamp()),
+(1, 'About', 'Explore', 'At Mamyr Resort, we treat every guest like family, offering an experience that goes beyond just comfort. From our humble beginnings to the thriving retreat we are today, we''ve poured our heart and soul into creating a sanctuary where nature and relaxation meet. Our story is built on passion, growth, and a deep commitment to providing an unforgettable experience. When you visit, you’ll discover not just stunning surroundings and luxurious comfort, but the warm, welcoming spirit that defines us. Come join us and see firsthand what makes Mamyr Resort a place where memories are made, and guests feel right at home.', current_timestamp()),
+(1, 'About', 'HistoryParagraph1', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity— something that would not only support their family but also bring joy to others.', current_timestamp()),
+(1, 'About', 'HistoryParagraph2', 'With faith and hard work, they transformed the land into a relaxing resort that people could enjoy. Their vision and dedication shaped the landscape into a serene retreat where visitors could unwind and create lasting memories. The name "Mamyr" came from their own names—Mamerto and Myrna—a symbol of the spirit of unity that brought the resort to life, making it not just a place to stay, but a reflection of their dreams and the love they poured into every corner of the property.', current_timestamp()), 
+(1, 'About', 'HistoryParagraph3', 'Opened in 2022, Mamyr Resort has become a popular and welcoming place for people looking to relax and enjoy nature. The resort is known for its clean swimming pools, spacious function areas, beautiful surroundings, and warm hospitality. Guests can enjoy the resort''s three refreshing swimming pools, two elegant pavilions, cozy cottages to stay in, as well as 11 comfortable hotel rooms for those who prefer a more private stay, and a spacious parking lot to accommodate all guests conveniently.', current_timestamp()),
+(1, 'About', 'HistoryParagraph4', 'At Mamyr Resort, we treat every guest like family, making sure your stay is special and enjoyable. Whether you''re celebrating an important event, spending time with loved ones, or just looking for a peaceful break, we have everything you need to feel comfortable and relaxed. Our team works hard to create a warm and welcoming atmosphere where you can make lasting memories. Visit us and see for yourself why we''re so proud of how much we''ve grown.', current_timestamp()),
+(1, 'BusinessInformation', 'FBLink', 'https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/', current_timestamp()), 
+(1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp()), (1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp());
 
-(NULL, '1', 'About', 'Explore', 'At Mamyr Resort, we treat every guest like family, offering an experience that goes beyond just comfort. From our humble beginnings to the thriving retreat we are today, we''ve poured our heart and soul into creating a sanctuary where nature and relaxation meet. Our story is built on passion, growth, and a deep commitment to providing an unforgettable experience. When you visit, you’ll discover not just stunning surroundings and luxurious comfort, but the warm, welcoming spirit that defines us. Come join us and see firsthand what makes Mamyr Resort a place where memories are made, and guests feel right at home.', current_timestamp()),
 
-(NULL, '1', 'About', 'HistoryParagraph1', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity— something that would not only support their family but also bring joy to others.', current_timestamp()),
-
-(NULL, '1', 'About', 'HistoryParagraph2', 'With faith and hard work, they transformed the land into a relaxing resort that people could enjoy. Their vision and dedication shaped the landscape into a serene retreat where visitors could unwind and create lasting memories. The name "Mamyr" came from their own names—Mamerto and Myrna—a symbol of the spirit of unity that brought the resort to life, making it not just a place to stay, but a reflection of their dreams and the love they poured into every corner of the property.', current_timestamp()), 
-
-(NULL, '1', 'About', 'HistoryParagraph3', 'Opened in 2022, Mamyr Resort has become a popular and welcoming place for people looking to relax and enjoy nature. The resort is known for its clean swimming pools, spacious function areas, beautiful surroundings, and warm hospitality. Guests can enjoy the resort''s three refreshing swimming pools, two elegant pavilions, cozy cottages to stay in, as well as 11 comfortable hotel rooms for those who prefer a more private stay, and a spacious parking lot to accommodate all guests conveniently.', current_timestamp()),
-
-
-(NULL, '1', 'About', 'HistoryParagraph4', 'At Mamyr Resort, we treat every guest like family, making sure your stay is special and enjoyable. Whether you''re celebrating an important event, spending time with loved ones, or just looking for a peaceful break, we have everything you need to feel comfortable and relaxed. Our team works hard to create a warm and welcoming atmosphere where you can make lasting memories. Visit us and see for yourself why we''re so proud of how much we''ve grown.', current_timestamp()),
-
-(NULL, '1', 'BusinessInformation', 'FBLink', 'https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/', current_timestamp()), 
-
-(NULL, '1', 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp()), (NULL, '1', 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp());
---
--- ALTER TABLE `websitecontents`[ppppp]
---   ADD PRIMARY KEY (`contentID`),
---   ADD KEY `adminID` (`adminID`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `websitecontents`
---
--- ALTER TABLE `websitecontents`
---   MODIFY `contentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `websitecontents`
---
--- ALTER TABLE `websitecontents`
---   ADD CONSTRAINT `websitecontents_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admins` (`adminID`);
--- COMMIT;
-
+INSERT INTO `websitecontentimages` (`contentID`, `imageData`, `altText`, `imageOrder`, `uploadedAt`) VALUES
+(19, 'Assets/Images/landingPage/resortPic1.png', 'Mamyr Resort Image', 1, '2025-07-30 00:44:24'),
+(20, 'Assets/Images/landingPage/img1.png', 'Mamyr Gallery Image 1', 1, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img2.png', 'Mamyr Gallery Image 2', 2, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img3.png', 'Mamyr Gallery Image 3', 3, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img4.png', 'Mamyr Gallery Image 4', 4, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img5.png', 'Mamyr Gallery Image 5', 5, '2025-07-30 00:44:23'),
+(20, 'Assets/Images/landingPage/img6.png', 'Mamyr Gallery Image 6', 6, '2025-07-30 00:44:24'),
+(27, '../Assets/Images/AboutImages/firstPic.jpg', 'About Image 1', 1, '2025-08-06 17:54:49'),
+(30, '../Assets/Images/AboutImages/resort.png', 'Resort Logo', 1, '2025-08-06 17:54:49'),
+(32, '../Assets/Images/AboutImages/events.png', 'Events Logo', 1, '2025-08-06 17:54:49'),
+(34, '../Assets/Images/AboutImages/hotel.png', 'Hotel Logo', 1, '2025-08-06 17:54:49'),
+(37, '../Assets/Images/AboutImages/aboutImage.jpg', 'About Image 2', 1, '2025-08-06 17:54:49'),
+(39, '../Assets/Images/AboutImages/poolPic.jpg', 'About Image 3', 1, '2025-08-06 17:54:49');

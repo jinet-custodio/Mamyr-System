@@ -117,7 +117,10 @@ INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSduration, RSca
 VALUES ('Room 11','2500', '6','11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1);
 
 
-
+UPDATE `resortamenities` SET`RSprice`='3000' WHERE RServiceName = 'Room 9' AND RSduration = '11 hours';
+UPDATE `resortamenities` SET`RSprice`='5000' WHERE RServiceName = 'Room 9' AND RSduration = '22 hours';
+UPDATE `resortamenities` SET `RScapacity`= '2',`RSmaxCapacity`='4' WHERE RScapacity = '4';
+UPDATE `resortamenities` SET `RScapacity`= '3',`RSmaxCapacity`='6' WHERE RScapacity = '6';
 
 -- INSERT INTO packages 
 -- (packageName, packageDescription, Pduration, Pcapacity, resortserviceID, Pprice, PcategoryID, packageAvailability)

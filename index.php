@@ -57,46 +57,47 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-        <button class=" navbar-toggler ms-auto" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarNav" aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <?php if (!$editMode): ?>
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+            <button class=" navbar-toggler ms-auto" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse " id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Amenities
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="Pages/amenities.php">Resort Amenities</a></li>
-                        <li><a class="dropdown-item" href="Pages/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="Pages/events.php">Events</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages/blog.php">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">Be Our Partner</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages/about.php">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages/register.php">Book Now</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages/register.php">Sign Up</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
+            <div class="collapse navbar-collapse " id="navbarNav">
+                <ul class="navbar-nav ms-auto me-10">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Amenities
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="Pages/amenities.php">Resort Amenities</a></li>
+                            <li><a class="dropdown-item" href="Pages/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                            <li><a class="dropdown-item" href="Pages/events.php">Events</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/blog.php">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">Be Our Partner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/about.php">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/register.php">Book Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/register.php">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    <?php endif; ?>
 
     <div class="custom-container">
         <!-- Save button, only visible if page is on edit mode -->
@@ -464,8 +465,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </script>
     <?php endif; ?>
 
-
-
     <script>
         function myMap() {
             var mapProp = {
@@ -481,8 +480,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         document.addEventListener('DOMContentLoaded', function() {
             const loaderOverlay = document.getElementById('loaderOverlay');
             const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
-
             const navbarLinks = document.querySelectorAll('.navbar a');
+            const params = new URLSearchParams(window.location.search);
+            const paramValue = params.get('edit');
+
+            if (paramValue) {
+                let editables = document.querySelectorAll('.editable-img');
+
+                editables.forEach(editable => {
+                    editable.style.border = "2px solid red";
+                })
+            };
 
             navbarLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -534,8 +542,21 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             navbar.classList.remove('white-bg');
         });
     </script>
+    <script>
+        const dropdownToggle = document.getElementById('navbarDropdown');
+        const dropdownMenu = dropdownToggle?.nextElementSibling;
 
+        dropdownToggle?.addEventListener('click', function(e) {
+            const isShown = dropdownMenu?.classList.contains('show');
+
+            // If dropdown is already shown, hide it manually
+            if (isShown) {
+                e.preventDefault(); // Prevent default behavior
+                bootstrap.Dropdown.getInstance(dropdownToggle)?.hide();
+            }
+        });
     </script>
+
 
     <script src="Assets/JS/scrollNavbg.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">

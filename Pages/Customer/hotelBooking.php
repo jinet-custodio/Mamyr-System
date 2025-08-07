@@ -130,8 +130,8 @@
 
 
                  <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
-                     <div class="hoursRoom">
-                         <div class="NumberOfHours">
+                     <!-- <div class="hoursRoom">
+                          <div class="NumberOfHours">
                              <h5 class="numberOfHoursLabel">Number of Hours</h5>
                              <div class="input-group">
                                  <select class="form-select" name="hoursSelected" id="hoursSelected" required>
@@ -140,21 +140,15 @@
                                      <option value="22 hours">22 Hours</option>
                                  </select>
                              </div>
-                         </div>
-                         <div class="arrivalTime">
-                             <h5 class="arrivalTimeLabel">Time arrival</h5>
-                             <div class="input-group">
-                                 <input type="time" name="arrivalTime" id="arrivalTime">
-                             </div>
-                         </div>
-                     </div>
+                         </div> 
+                 </div> -->
 
                      <div class="checkInOut">
                          <div class="checkIn-container">
                              <h5 class="containerLabel">Check-In Date</h5>
                              <div style="display: flex;align-items:center;width:100%">
                                  <input type="text" class="form-control" name="checkInDate" id="checkInDate" required
-                                     placeholder="Select Date and Time">
+                                     placeholder="Select Date and Time" value="<?php echo isset($_SESSION['formData']['checkInDate']) ? htmlspecialchars(trim($_SESSION['formData']['checkInDate'])) : ''; ?>">
                                  <i class="fa-solid fa-calendar" id="hotelCheckinIcon"
                                      style="margin-left: -2vw;font-size:1.2vw;"> </i>
                              </div>
@@ -163,7 +157,8 @@
                              <h5 class="containerLabel">Check-Out Date</h5>
                              <div style="display: flex;align-items:center;">
                                  <input type="text" class="form-control" name="checkOutDate" id="checkOutDate" required
-                                     placeholder="Select Date and Time">
+                                     placeholder="Select Date and Time"
+                                     value="<?php echo isset($_SESSION['formData']['checkOutDate']) ? htmlspecialchars(trim($_SESSION['formData']['checkOutDate'])) : ''; ?>">
                                  <i class="fa-solid fa-calendar" id="hotelCheckoutIcon"
                                      style="margin-left: -2vw;font-size:1.2vw;"> </i>
                              </div>
@@ -173,15 +168,36 @@
                      <div class="hotelPax">
                          <h5 class="noOfPeopleHotelLabel">Number of People</h5>
                          <div class="hotelPeopleForm">
-                             <input type="number" class="form-control" name="adultCount" placeholder="Adults" required>
-                             <input type="number" class="form-control" name="childrenCount" placeholder="Children"
-                                 required>
+                             <div class="input-container ">
+                                 <input type="number" class="form-control" placeholder="Adults" id="adultCount" name="adultCount" required
+                                     value="<?php echo isset($_SESSION['formData']['adultCount']) ? htmlspecialchars(trim($_SESSION['formData']['adultCount'])) : ''; ?>" />
+                                 <div class="info-container mt-1">
+                                     <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
+                                     <p>Ages 14 and up</p>
+                                 </div>
+                             </div>
+                             <div class="input-container">
+                                 <input type="number" class="form-control" placeholder="Kids" id="childrenCount" name="childrenCount"
+                                     value="<?php echo isset($_SESSION['formData']['childrenCount']) ? htmlspecialchars(trim($_SESSION['formData']['childrenCount'])) : ''; ?>" />
+                                 <div class="info-container mt-1">
+                                     <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
+                                     <p>Ages 4 to 13</p>
+                                 </div>
+                             </div>
+                             <div class="input-container">
+                                 <input type="number" class="form-control" placeholder="Toddler/Infant" id="toddlerCount" name="toddlerCount"
+                                     value="<?php echo isset($_SESSION['formData']['toddlerCount']) ? htmlspecialchars(trim($_SESSION['formData']['toddlerCount'])) : ''; ?>" />
+                                 <div class="info-container mt-1">
+                                     <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
+                                     <p>Ages 3 and below</p>
+                                 </div>
+                             </div>
                          </div>
                      </div>
 
                      <div class="hotelRooms">
                          <h5 class="hotelRooms-title">Room Number</h5>
-                         <button type="button" class="btn btn-outline-info text-black w-100" name="selectedHotel" id="selectedHotel" data-bs-toggle="modal" data-bs-target="#hotelRoomModal"> Choose your room</button>
+                         <button type="button" class="btn btn-info text-black w-100" name="hotelSelectionBtn" id="hotelSelectionBtn" data-bs-toggle="modal" data-bs-target="#hotelRoomModal" disabled> Choose your room</button>
 
                          <!-- Modal for hotel rooms -->
                          <div class="modal" id="hotelRoomModal" tabindex="-1">
@@ -201,24 +217,42 @@
                          </div>
                      </div>
 
-                     <div class="paymentMethod">
-                         <h5 class="payment-title">Payment Method</h5>
-                         <div class="input-group">
-                             <select class="form-select" name="paymentMethod" id="paymentMethod" required>
-                                 <option value="" disabled selected>Choose...</option>
-                                 <option value="GCash">GCash</option>
-                                 <option value="Cash">Cash</option>
-                             </select>
+                     <div class="paymentTimeDiv">
+                         <div class="paymentMethod">
+                             <h5 class="payment-title">Payment Method</h5>
+                             <div class="input-group">
+                                 <select class="form-select" name="paymentMethod" id="paymentMethod" required>
+                                     <option value="" disabled <?= !isset($_SESSION['formData']['paymentMethod']) ? 'selected' : '' ?>>Choose...</option>
+                                     <option value="GCash" <?= (isset($_SESSION['formData']['paymentMethod']) && $_SESSION['formData']['paymentMethod'] === 'GCash') ? 'selected' : '' ?>>GCash</option>
+                                     <option value="Cash" <?= (isset($_SESSION['formData']['paymentMethod']) && $_SESSION['formData']['paymentMethod'] === 'Cash') ? 'selected' : '' ?>>Cash</option>
+                                 </select>
+
+                             </div>
+                         </div>
+
+                         <div class="arrivalTime">
+                             <h5 class="arrivalTimeLabel">Time arrival</h5>
+                             <div class="input-group">
+                                 <input type="time" name="arrivalTime" id="arrivalTime" class="form-control" placeholder="Select Arrival Time"
+                                     value="<?php echo isset($_SESSION['formData']['arrivalTime']) ? htmlspecialchars(trim($_SESSION['formData']['arrivalTime'])) : ''; ?>">
+                             </div>
                          </div>
                      </div>
 
                      <div class="additional-info-container">
                          <ul>
-                             <li style="color: #0076d1ff;"><i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>&nbsp;If the maximum pax exceeded, extra guest is charged
-                                 ₱250 per head</li>
+                             <li style="color: #0076d1ff;">
+                                 <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
+                                 &nbsp;If the maximum pax exceeded, extra guest is charged
+                                 ₱250 per head
+                             </li>
+                             <li style="color: #0076d1ff;">
+                                 <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
+                                 &nbsp;Children 3 years old and below are free
+                             </li>
                          </ul>
                      </div>
-                     <button type="submit" class="btn btn-success" name="hotelBooking" id="hotelBooking">Book
+                     <button type="button" class="btn btn-success" name="hotelBooking" id="hotelBooking">Book
                          Now</button>
                  </div>
              </div>
@@ -240,8 +274,6 @@
      <!-- Flatpickr for date input -->
      <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-
-
      <!-- Sweetalert Link -->
      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -258,7 +290,7 @@
          const calIcon = document.getElementById("calendarIcon");
 
          const minDate = new Date();
-         minDate.setDate(minDate.getDate() + 3);
+         minDate.setDate(minDate.getDate() + 2);
 
          //hotel calendar
          flatpickr('#checkInDate', {
@@ -275,17 +307,23 @@
              dateFormat: "Y-m-d H:i ",
              minTime: '00:00'
          });
+
+         flatpickr('#arrivalTime', {
+             enableTime: true,
+             noCalendar: true,
+             dateFormat: "H:i"
+         });
      </script>
 
 
      <!-- Hotel check-in check-out  -->
      <script>
-         const hoursSelected = document.getElementById('hoursSelected');
+         //  const hoursSelected = document.getElementById('hoursSelected');
          const checkInInput = document.getElementById('checkInDate');
          const checkOutInput = document.getElementById('checkOutDate');
 
          checkInInput.addEventListener('change', () => {
-             const selectedValue = hoursSelected.value;
+             const selectedValue = '22 hours';
              const checkInDate = new Date(checkInInput.value);
              const addHours = parseInt(selectedValue);
              if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
@@ -302,17 +340,6 @@
 
              }
          });
-
-
-         hoursSelected.addEventListener('change', () => {
-             const selectedValue = hoursSelected.value.trim().toLowerCase();
-
-
-             if (checkInInput.value) {
-                 checkInInput.dispatchEvent(new Event('change'));
-             }
-
-         });
      </script>
 
 
@@ -320,25 +347,26 @@
      <script>
          document.addEventListener("DOMContentLoaded", function() {
              const checkInDate = document.getElementById('checkInDate');
-             const hoursSelected = document.getElementById('hoursSelected');
              const checkOutDate = document.getElementById('checkOutDate');
-             Swal.fire({
-                 icon: 'info',
-                 title: 'Select your choice of date',
-                 text: 'Please pick a booking date to continue',
-                 confirmButtonText: 'OK'
-             }).then(() => {
-                 checkInDate.style.border = '2px solid red';
-                 hoursSelected.style.border = '2px solid red';
-                 //  dateInput.focus();
-             });
 
+             if (checkInDate && !checkInDate.value) {
+                 Swal.fire({
+                     icon: 'info',
+                     title: 'Select your choice of date',
+                     text: 'Please pick a booking date to continue',
+                     confirmButtonText: 'OK'
+                 }).then(() => {
+                     checkInDate.style.border = '2px solid red';
+                     checkInDate.focus();
+                 });
+             }
          });
+
 
          function fetchAvailableRooms() {
              const checkInDateValue = checkInDate.value;
              const checkOutDateValue = checkOutDate.value;
-             const hoursSelectedValue = hoursSelected.value;
+             const hoursSelectedValue = "22 hours";
 
              if (!checkInDateValue || !hoursSelectedValue) return;
 
@@ -371,8 +399,15 @@
                          label.setAttribute('for', checkbox.id);
                          label.textContent = `${hotel.RServiceName} good for ${hotel.RScapacity} pax (₱${Number(hotel.RSprice).toLocaleString()}.00)`;
 
+                         const img = document.createElement('img');
+                         img.classList.add('hotel-image');
+                         img.src = hotel.RSimageData;
+                         img.alt = `${hotel.RServiceName} image`;
+                         img.style.width = "150px";
+
                          wrapper.appendChild(checkbox);
                          wrapper.appendChild(label);
+                         wrapper.appendChild(img);
                          hotelRoomContainer.appendChild(wrapper);
                      })
 
@@ -386,32 +421,46 @@
                  });
          }
 
-         checkInDate.addEventListener("change", () => {
-             fetchAvailableRooms();
-             if (!checkInDate.value) {
-                 checkInDate.style.border = '2px solid red';
-             } else {
-                 checkInDate.style.border = '';
+         document.addEventListener("DOMContentLoaded", () => {
+             if (checkInDate && checkInDate.value) {
+                 fetchAvailableRooms();
+                 hotelSelectionBtn.disabled = false;
+                 checkInDate.style.border = '1px solid rgb(223, 226, 230)';
              }
          });
 
-         checkOutDate.addEventListener("change", fetchAvailableRooms);
-
-         hoursSelected.addEventListener("change", () => {
-             fetchAvailableRooms();
-             checkInDate.addEventListener("change", fetchAvailableRooms);
+         if (checkInDate) {
+             checkInDate.addEventListener("change", () => {
+                 fetchAvailableRooms();
+                 checkInDate.style.border = checkInDate.value ? '' : '2px solid red';
+                 hotelSelectionBtn.disabled = false;
+             });
+         }
+         if (checkOutDate) {
              checkOutDate.addEventListener("change", fetchAvailableRooms);
-             hoursSelected.addEventListener("change", fetchAvailableRooms);
+         }
 
+         const hotelBookingBtn = document.getElementById('hotelBooking');
 
+         hotelBookingBtn.addEventListener("click", function() {
 
+             let totalCapacity = 0;
 
-             if (!hoursSelected.value) {
-                 hoursSelected.style.border = '2px solid red';
+             const hotelSelected = document.querySelectorAll('input[name="hotelSelections[]"]:checked');
+             hotelSelected.forEach(item => {
+                 totalCapacity += parseInt(item.dataset.capacity) || 0;
+             });
+
+             if (totalCapacity === 0) {
+                 Swal.fire({
+                     icon: 'warning',
+                     title: 'Oops',
+                     text: 'Select a cottage(s) or room(s)',
+                 });
+                 hotelBookingBtn.type = 'button';
              } else {
-                 hoursSelected.style.border = '';
+                 hotelBookingBtn.type = 'submit';
              }
-
          });
      </script>
 

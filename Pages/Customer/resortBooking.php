@@ -41,13 +41,16 @@
      <!-- Bootstrap Link -->
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
-     <!-- flatpickr calendar -->
+     <!-- Flatpickr calendar -->
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
      <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
 
+     <!-- FontAwesome -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+     <!-- Boxicons -->
      <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
  </head>
 
@@ -68,59 +71,112 @@
                      <h5 class="schedLabel">Schedule</h5>
                      <div class="scheduleForm">
                          <input type="text" class="form-control w-95" id="resortBookingDate" name="resortBookingDate"
-                             placeholder="Select booking date" required />
+                             placeholder="Select booking date" required value="<?php echo isset($_SESSION['formData']['resortBookingDate']) ? htmlspecialchars(trim($_SESSION['formData']['resortBookingDate'])) : ''; ?>" />
                          <i class="fa-solid fa-calendar" id="calendarIcon" style="margin-left: -5vw;font-size:1.2vw;">
                          </i>
                          <select id="tourSelections" name="tourSelections" class="form-select" required>
                              <option value="" disabled selected>Select Preferred Tour</option>
-                             <option value="Day" id="dayTour">Day Tour</option>
-                             <option value="Night" id="nightTour">Night Tour</option>
-                             <option value="Overnight" id="overnightTour">Overnight Tour</option>
+                             <option value="Day" id="dayTour" <?= (isset($_SESSION['formData']['tourSelections']) && $_SESSION['formData']['tourSelections'] === 'Day') ? 'selected' : '' ?>>Day Tour</option>
+                             <option value="Night" id="nightTour" <?= (isset($_SESSION['formData']['tourSelections']) && $_SESSION['formData']['tourSelections'] === 'Night') ? 'selected' : '' ?>>Night Tour</option>
+                             <option value="Overnight" id="overnightTour" <?= (isset($_SESSION['formData']['tourSelections']) && $_SESSION['formData']['tourSelections'] === 'Overnight') ? 'selected' : '' ?>>Overnight Tour</option>
                          </select>
                      </div>
 
                      <h5 class="noOfPeopleLabel">Number of People</h5>
                      <div class="peopleForm">
                          <div class="input-container ">
-                             <input type="number" class="form-control" placeholder="Adults" id="adultCount" name="adultCount" />
+                             <input type="number" class="form-control" placeholder="Adults" id="adultCount" name="adultCount" value="<?php echo isset($_SESSION['formData']['adultCount']) ? htmlspecialchars(trim($_SESSION['formData']['adultCount'])) : ''; ?>" />
                              <div class="info-container mt-1">
                                  <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
-                                 <p>Adult aged 14 and up</p>
+                                 <p>Aged 14 and up</p>
                              </div>
                          </div>
                          <div class="input-container">
-                             <input type="number" class="form-control" placeholder="Kids" id="childrenCount" name="childrenCount" />
+                             <input type="number" class="form-control" placeholder="Kids" id="childrenCount" name="childrenCount" value="<?php echo isset($_SESSION['formData']['childrenCount']) ? htmlspecialchars(trim($_SESSION['formData']['childrenCount'])) : ''; ?>" />
                              <div class="info-container mt-1">
                                  <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
-                                 <p>Children aged 13 and below</p>
+                                 <p>Aged 13 and below</p>
+                             </div>
+                         </div>
+
+                         <div class="input-container">
+                             <input type="number" class="form-control" placeholder="Toddler" id="toddlerCount" name="toddlerCount" value="<?php echo isset($_SESSION['formData']['toddlerCount']) ? htmlspecialchars(trim($_SESSION['formData']['toddlerCount'])) : ''; ?>" />
+                             <div class="info-container mt-1">
+                                 <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
+                                 <p>Height 3ft and below</p>
                              </div>
                          </div>
                      </div>
 
                      <div class="cottageRoomForm">
-                         <div class="cottagesForm">
-                             <h5 class="cottagesFormLabel" id="cottagesFormLabel"></h5>
-                             <div class="input-box">
-                                 <div id="cottagesContainer"></div>
+                         <div class="cottagesForm" id="cottages">
+                             <h5 class="cottagesFormLabel" id="cottagesFormLabel">Cottage/s</h5>
+                             <button type="button" class="btn btn-info text-white w-100" name="cottageBtn" id="cottageBtn" data-bs-toggle="modal" data-bs-target="#cottageModal" disabled> Choose here</button>
+
+                             <!-- Modal for cottages -->
+                             <div class="modal" id="cottageModal">
+                                 <div class="modal-dialog">
+                                     <div class="modal-content">
+                                         <div class="modal-header">
+                                             <h5 class="modal-title">Available Cottage/s</h5>
+                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                         </div>
+                                         <div class="modal-body" id="cottageModalBody">
+                                             <p class="modal-text"> <i class="fa-solid fa-circle-info" style="color: rgb(15, 127, 255);"></i> You can select more than one cottage</p>
+                                             <div id="cottagesContainer"></div>
+                                         </div>
+                                         <div class="modal-footer">
+                                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                                         </div>
+                                     </div>
+                                 </div>
                              </div>
                          </div>
 
-                         <div class="roomNumbers" style="display: none;" id="rooms">
-                             <h5 class="roomLabel" id="roomLabel"></h5>
-                             <div class="input-box">
-                                 <div id="roomsContainer"></div>
+                         <div class="roomNumbers" id="rooms" style="display: none;">
+                             <h5 class="roomLabel" id="roomLabel">Hotel Room</h5>
+                             <button type="button" class="btn btn-info text-white w-100" name="hotelBtn" id="hotelBtn" data-bs-toggle="modal" data-bs-target="#hotelRoomModal" disabled> Choose here...</button>
+                             <!-- Modal for hotel rooms -->
+                             <div class="modal" id="hotelRoomModal">
+                                 <div class="modal-dialog">
+                                     <div class="modal-content">
+                                         <div class="modal-header">
+                                             <h5 class="modal-title">Available Hotels</h5>
+                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                         </div>
+                                         <div class="modal-body">
+                                             <p class="modal-text"> <i class="fa-solid fa-circle-info" style="color: rgb(15, 127, 255);"></i> You can select more than one cottage</p>
+                                             <div id="roomsContainer"> </div>
+                                         </div>
+
+                                         <div class="modal-footer">
+                                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                                         </div>
+                                     </div>
+                                 </div>
                              </div>
-                             <!-- <select class="form-select" id="roomsContainer" name="roomsContainerions">
-                                 <option value="" selected disabled>Choose a room</option>
-                             </select> -->
                          </div>
                      </div>
 
-
                      <div class="entertainmentForm">
-                         <h5 class="entertainmentFormLabel" id="entertainmentFormLabel"></h5>
-                         <div class="input-box">
-                             <div id="entertainmentContainer"></div>
+                         <h5 class="entertainmentFormLabel" id="entertainmentFormLabel">Additional Services:</h5>
+                         <button type="button" class="btn btn-info text-white w-100" name="entertainmentBtn" id="entertainmentBtn" data-bs-toggle="modal" data-bs-target="#entertainmentModal" disabled> Choose here...</button>
+                         <!-- Modal for hotel rooms -->
+                         <div class="modal modal-fullscreen-sm-down" id="entertainmentModal">
+                             <div class="modal-dialog">
+                                 <div class="modal-content">
+                                     <div class="modal-header">
+                                         <h5 class="modal-title">Available Additional Services</h5>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                     </div>
+                                     <div class="modal-body">
+                                         <div id="entertainmentContainer"></div>
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                                     </div>
+                                 </div>
+                             </div>
                          </div>
                      </div>
 
@@ -131,7 +187,26 @@
                      <div class="mt-auto button-container">
                          <button type="button" class="btn btn-primary btn-md w-100" id="bookRatesBTN" name="bookRates">Book Now</button>
                      </div>
+
+                     <div class="additional-info-container">
+                         <ul>
+                             <li style="color: #0076d1ff;">
+                                 <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>&nbsp;
+                                 The resort staff will double check the number of people on the day of the scheduled booking
+                             </li>
+                             <li style="color: #0076d1ff;">
+                                 <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>&nbsp;
+                                 Children’s height will be measured on the day of the scheduled booking to verify if they are 3 feet tall or below.
+                             </li>
+                             <li style="color: #0076d1ff;">
+                                 <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>&nbsp;
+                                 Payment for cottages or rooms is required and must be made through the resort’s GCash account.
+                             </li>
+
+                         </ul>
+                     </div>
                  </div>
+
 
                  <div class="entrance-rates">
                      <div class="card rates">
@@ -221,10 +296,10 @@
                          <div class="entertainmentContainer">
                              <div class="card-body videoke">
                                  <?php
-                                    $entertainmentName = 'Videoke';
+                                    $entertainmentName = 'Videoke %';
                                     $categoryID = 3;
-                                    $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ? AND RScategoryID = ?");
-                                    $getVideoke->bind_param("si", $entertainmentName, $categoryID);
+                                    $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE  RScategoryID = ? AND  RServiceName LIKE ? LIMIT 1");
+                                    $getVideoke->bind_param("is",  $categoryID, $entertainmentName);
                                     $getVideoke->execute();
                                     $getVideokeResult =  $getVideoke->get_result();
                                     if ($getVideokeResult->num_rows > 0) {
@@ -289,15 +364,12 @@
 
 
      <!-- Bootstrap Link -->
-     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
      </script>
 
      <!-- Flatpickr for date input -->
      <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-
 
      <!-- Sweetalert Link -->
      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -325,28 +397,40 @@
          //  });
      </script>
 
-
+     <!-- Fetch Info -->
      <script>
          document.addEventListener("DOMContentLoaded", function() {
-             Swal.fire({
-                 icon: 'info',
-                 title: 'Select your choice of date',
-                 text: 'Please pick a booking date to continue',
-                 confirmButtonText: 'OK'
-             }).then(() => {
-                 setTimeout(() => {
-                     const dateInput = document.getElementById('resortBookingDate');
+             const dateInput = document.getElementById('resortBookingDate');
+             const form = document.querySelector('form');
+             if (dateInput && !dateInput.value) {
+                 Swal.fire({
+                     icon: 'info',
+                     title: 'Select your choice of date',
+                     text: 'Please pick a booking date to continue',
+                     confirmButtonText: 'OK'
+                 }).then(() => {
                      dateInput.style.border = '2px solid red';
+                     form.removeAttribute('aria-hidden');
                      dateInput.focus();
-                 }, 150);
-             });
+                 })
+             };
          });
 
-         const dateInput = document.getElementById('resortBookingDate');
+         const startDate = document.getElementById('resortBookingDate');
          const tourSelect = document.getElementById('tourSelections');
 
+         const adultCount = document.getElementById('adultCount');
+         const kidsCount = document.getElementById('childrenCount');
+
+         function getTotalPax() {
+             const kids = parseInt(kidsCount.value) || 0;
+             const adults = parseInt(adultCount.value) || 0;
+             return kids + adults;
+         }
+
+
          function fetchAmenities() {
-             const selectedDate = dateInput.value;
+             const selectedDate = startDate.value;
              const selectedTour = tourSelect.value;
 
              if (!selectedDate || !selectedTour) return;
@@ -363,24 +447,24 @@
                      }
 
 
+                     //  const cottageModalBody = document.getElementById('cottageModalBody');
                      const cottageContainer = document.getElementById('cottagesContainer');
                      const roomSection = document.getElementById('rooms');
                      const roomsContainer = document.getElementById('roomsContainer');
-                     const cottageLabel = document.getElementById('cottagesFormLabel');
-                     const roomLabel = document.getElementById('roomLabel');
+                     //  const cottageLabel = document.getElementById('cottagesFormLabel');
+                     //  const roomLabel = document.getElementById('roomLabel');
                      const entertainmentContainer = document.getElementById('entertainmentContainer');
-                     const entertainmentLabel = document.getElementById('entertainmentFormLabel');
+                     //  const entertainmentLabel = document.getElementById('entertainmentFormLabel');
 
                      cottageContainer.innerHTML = '';
                      roomsContainer.innerHTML = '';
                      entertainmentContainer.innerHTML = '';
                      roomSection.style.display = 'none';
-                     cottageLabel.innerHTML = '';
-                     entertainmentLabel.innerHTML = '';
+                     //  cottageLabel.innerHTML = '';
+                     //  entertainmentLabel.innerHTML = '';
 
-                     // Show cottages for Day/Night
-                     if (selectedTour === 'Day' || selectedTour === 'Night') {
-                         cottageLabel.innerHTML = "Available Cottages";
+
+                     function getCottages() {
                          data.cottages.forEach(cottage => {
                              const wrapper = document.createElement('div');
                              wrapper.classList.add('checkbox-item');
@@ -398,14 +482,14 @@
 
                              wrapper.appendChild(checkbox);
                              wrapper.appendChild(label);
+
                              cottageContainer.appendChild(wrapper);
                          });
-                     }
+                     };
 
-                     // Show rooms for Overnight
-                     if (selectedTour === 'Overnight') {
+                     function getRooms() {
                          roomSection.style.display = 'block';
-                         roomLabel.innerHTML = "Available Rooms"
+                         //  roomLabel.innerHTML = "Available Rooms"
                          //  const defaultOption = document.createElement('option');
                          //  defaultOption.value = "";
                          //  defaultOption.disabled = true;
@@ -434,9 +518,20 @@
                          });
                      }
 
+                     // Show cottages for Day/Night
+                     if (selectedTour === 'Day' || selectedTour === 'Night') {
+                         getCottages();
+                     }
+
+                     // Show rooms for Overnight
+                     if (selectedTour === 'Overnight') {
+                         getRooms();
+                         getCottages();
+                     }
+
                      // Show entertainment for all
                      if (data.entertainments && data.entertainments.length > 0) {
-                         entertainmentLabel.innerHTML = "Additional Services";
+                         //  entertainmentLabel.innerHTML = "Additional Services";
                          data.entertainments.forEach(ent => {
                              const wrapper = document.createElement('div');
                              wrapper.classList.add('checkbox-item');
@@ -449,7 +544,7 @@
 
                              const label = document.createElement('label');
                              label.setAttribute('for', checkbox.id);
-                             label.textContent = `${ent.RServiceName} for ₱${Number(ent.RSprice).toLocaleString()}.00`;
+                             label.textContent = `${ent.RServiceName} - ₱${Number(ent.RSprice).toLocaleString()}.00`;
 
                              wrapper.appendChild(checkbox);
                              wrapper.appendChild(label);
@@ -467,19 +562,33 @@
                  });
          }
 
-         dateInput.addEventListener('change', fetchAmenities);
-         tourSelect.addEventListener('change', fetchAmenities);
 
+         document.addEventListener("DOMContentLoaded", () => {
+             if (startDate && startDate.value) {
+                 fetchAmenities();
+                 startDate.style.border = '1px solid rgb(223, 226, 230)';
+             }
 
-         const adultCount = document.getElementById('adultCount');
-         const kidsCount = document.getElementById('childrenCount');
+             console.log("startDate.value at DOMContentLoaded:", startDate?.value);
 
-         function getTotalPax() {
-             const kids = parseInt(kidsCount.value) || 0;
-             const adults = parseInt(adultCount.value) || 0;
-             return kids + adults;
+         });
+
+         if (startDate) {
+             startDate.addEventListener("change", () => {
+                 fetchAmenities();
+             });
          }
-
+         if (tourSelect) {
+             document.getElementById("cottageBtn").disabled = false;
+             document.getElementById("entertainmentBtn").disabled = false;
+             document.getElementById("hotelBtn").disabled = false;
+             tourSelect.addEventListener('change', function() {
+                 fetchAmenities();
+                 document.getElementById("cottageBtn").disabled = false;
+                 document.getElementById("entertainmentBtn").disabled = false;
+                 document.getElementById("hotelBtn").disabled = false;
+             });
+         }
          const bookRatesBTN = document.getElementById('bookRatesBTN')
 
 

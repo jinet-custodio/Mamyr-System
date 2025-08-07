@@ -51,6 +51,7 @@ CREATE TABLE admins (
 CREATE TABLE partnerships (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT DEFAULT NULL,
+    validID varchar(500) NOT NULL,
     companyName varchar(100) not null,
     businessEmail VARCHAR(255) NOT NULL UNIQUE,
     partnerAddress TEXT NOT NULL,
