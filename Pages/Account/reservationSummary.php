@@ -44,14 +44,14 @@ $userRole = $_SESSION['userRole'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservation Summary - Mamyr Resort and Events Place</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
-
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="../../Assets/CSS/Account/reservationSummary.css" />
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
-    <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/Customer/Account/reservationSummary.css" />
+
 </head>
 
 <body>

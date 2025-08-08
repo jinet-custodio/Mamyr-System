@@ -13,17 +13,55 @@
 }
 
 .sidebar {
-  width: 23vw;
+  width: 25vw;
   background-color: #cee4f2;
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
+  overflow-x: hidden;
   overflow-y: auto;
   border-right: 2px solid #cee4f2;
   border-top-right-radius: 30px;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
+}
+
+.sidebar.collapsed {
+  width: 15vw;
+  justify-content: flex-start !important;
+}
+
+.sidebar .sidebar-text {
+    display: inline-block;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .sidebar-text {
+    display: none;
+    width: 0;
+    overflow: hidden;
+}
+
+.sidebar-icon {
+  font-size: 2vw;
+    min-width: 3vw;
+    text-align: center;
+    margin-right: 10px;
+}
+
+/* Sidebar toggle button */
+.toggle-button {
+    background: none;
+    border: none;
+    margin: 10px;
+}
+
+.sidebar-item, .list-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
 }
 
 .home {
@@ -39,8 +77,8 @@
   color: black !important;
   display: flex;
   flex-direction: column;
-  margin: 1rem auto;
-  /* margin: 1.5rem 0.5rem 1.5rem 0.5rem; */
+  margin: 1vw auto;
+  width: 100%;
   padding-top: 0.5rem;
   h5 {
     font-family: "Lora" !important;
@@ -55,15 +93,14 @@
   margin: auto;
   padding: 1rem;
   img {
-    height: 100px;
-    width: 100px;
-    border-radius: 2rem;
+    height: clamp(8vw, 6.5vw, 4vw);
+    border-radius: 50%;
   }
 }
 
 .list-group {
   font-family: "Poppins";
-  font-size: 22px;
+  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
   border: none;
   list-style: none;
   margin-top: 0.5rem;
@@ -81,7 +118,6 @@
 
 #paymentBookingHist {
   text-align: center;
-  margin-left: -1.5vw;
 }
 .sidebar li:hover a,
 .list-group-item.active {
@@ -90,12 +126,10 @@
 }
 
 #logoutBtn {
-  display: flex;
-  margin: auto;
-  margin-top: 2rem;
   text-align: center;
   color: black;
-  padding-top: 10px;
+  padding: 10px;
+  font-size: clamp(1.4vw, 1.2vw, 1vw);
 }
 
 #logoutBtn:hover {
@@ -103,18 +137,14 @@
   color: white;
 }
 
-.sidebar-icon {
-  height: 30px;
-  padding-right: 1vw;
-}
 
-.customer-account-container {
+.main-content {
   /* border: 1px solid red; */
   margin-left: 27vw;
   margin-top: 5rem;
-  flex-grow: 1;
   padding: 1rem;
   overflow-y: auto;
+  width: 75%;
 }
 
 .card {
@@ -146,7 +176,7 @@
 
 .changePfpBtn {
   font-family: "Lora" !important;
-  font-size: 15px;
+  font-size: clamp(1.1vw, 0.9vw, 0.7vw);
   border: none;
   padding: 0.5rem;
   border-radius: 0.5rem;
@@ -192,14 +222,15 @@
 }
 
 .account-name {
-  font-size: 20px !important;
+  font-size: clamp(2vw, 1.8vw, 1.7vw);
 }
-.account-contact {
-  font-size: 18px !important;
+.account-contact, .roleName {
+  font-size: clamp(1.5vw, 1.3vw, 1.1vw);
 }
 
+
 .profile-pic {
-  height: 9vw !important;
+  height: 9vw;
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 50%;
@@ -220,11 +251,11 @@
 }
 
 .info input {
-  padding: 0.5rem;
-  padding-top: 1.5rem;
+  padding: 0.5vw 0.5vw 0.5vw;
+  padding-top: 1.8rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
-  font-size: 18px !important;
+  font-size: clamp(1.4vw, 1.3vw, 1.1vw);
   background-color: #fff;
   text-indent: 1rem;
   width: 100%;
@@ -250,7 +281,7 @@
 .info input:not(:placeholder-shown) + label {
   top: 1rem;
   left: 1rem;
-  font-size: 15px;
+  font-size: clamp(1.2vw, 1vw, 0.9vw);
   color: #796565;
 }
 
@@ -301,4 +332,219 @@
 
 .swal2-confirm {
   margin-right: 2vw !important;
+}
+
+
+/* Tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+.sidebar{
+  width: 35vw;
+}
+
+.list-group {
+  font-size: clamp(2.5vw, 2.2vw, 2vw);
+}
+
+.sidebar-icon {
+  font-size: clamp(2.6vw, 2.3vw, 2vw);  
+}
+
+.sidebar-header h5 {
+  margin-top: 2vw !important;
+  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+}
+
+.profileImage {
+    img {
+      height: clamp(13vw, 11vw, 10vw);
+    }
+    margin: 1vw auto;
+  }
+
+.main-content {
+  margin-left: 36vw;
+}
+
+.customer-details {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile-image {
+  width: 30%;
+}
+
+.profile-pic {
+  height: 11vw;
+}
+
+.changePfpBtn  {
+  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+}
+
+.profile-info {
+  width: 70%;
+}
+.account-name, .swal2-html-container {
+  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+}
+
+.account-contact, .roleName {
+  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+}
+
+.info {
+  width: 100%;
+}
+
+.info input:focus + label, .info input:not(:placeholder-shown) + label {
+  font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+}
+
+.info input {
+  font-size: clamp(2.2vw, 2vw, 1.9vw);
+  padding-top: 2rem;
+}
+
+.edit,.swal2-confirm, #saveBtn, #cancelBtn {
+  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+}
+
+.swal2-title {
+    font-size: clamp(3.3vw, 3vw, 2.8vw);
+}
+}
+
+/* Tablet landscape */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+  .profile-image {
+  width: 30%;
+}
+
+.profile-pic {
+  height: 11vw;
+}
+
+.changePfpBtn  {
+  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+}
+
+.profile-info {
+  width: 70%;
+}
+.account-name, .swal2-html-container {
+  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+}
+
+.account-contact, .roleName {
+  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+}
+
+.info {
+  width: 100%;
+}
+
+.info input:focus + label, .info input:not(:placeholder-shown) + label {
+  font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+}
+
+.info input {
+  font-size: clamp(2.2vw, 2vw, 1.9vw);
+}
+
+.edit,.swal2-confirm, #saveBtn, #cancelBtn {
+  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+}
+
+.swal2-title {
+    font-size: clamp(3.3vw, 3vw, 2.8vw);
+}
+}
+
+/* Phone size */
+@media screen and (max-width: 600px) {
+
+.sidebar {
+  width: 45vw;
+}
+.main-content {
+  margin-left: 16vw;
+  width: 85%;
+}
+
+.customer-details {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.list-group-item{
+  justify-content: flex-start;
+}
+
+.sidebar-icon {
+  font-size: clamp(4.5vw, 4.2vw, 4vw);  
+  margin-right: 0 !important;
+}
+
+.sidebar-text {
+  font-size: clamp(2.9vw, 2.7vw, 2.5vw);  
+  margin-left: 2vw;
+}
+
+.home {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-image {
+  width: 35%;
+}
+
+.profile-pic {
+  height: 18vw;
+}
+
+.changePfpBtn  {
+  font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+}
+
+.profile-info {
+  width: 65%;
+}
+
+.account-name, .swal2-html-container {
+  font-size: clamp(3.7vw, 3.5vw, 3.3vw);
+}
+
+.account-contact, .roleName {
+  font-size: clamp(2.5vw, 2.2vw, 2vw);
+}
+
+.info {
+  width: 100%;
+}
+
+.info input:focus + label, .info input:not(:placeholder-shown) + label {
+  font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+}
+
+.info input {
+  font-size: clamp(3vw, 2.8vw, 2.6vw);
+  padding-top: 4.5vw;
+}
+
+.edit,.swal2-confirm, #saveBtn, #cancelBtn {
+  font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+}
+
+.swal2-title {
+    font-size: clamp(3.8vw, 3.6vw, 3.4vw);
+}
+.info input:focus + label,
+.info input:not(:placeholder-shown) + label {
+  top: 0.7rem;
+  left: 0.8rem;
+}
+
 }

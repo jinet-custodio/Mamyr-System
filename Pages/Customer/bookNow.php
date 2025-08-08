@@ -378,7 +378,7 @@ $userRole = $_SESSION['userRole'];
                 showCloseButton: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'Account/bookingHistory.php';
+                    window.location.href = '../Account/bookingHistory.php';
                 }
             });
         }

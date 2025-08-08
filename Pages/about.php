@@ -57,7 +57,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
     <?php if (!$editMode): ?>
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
