@@ -34,8 +34,9 @@
 
 body {
   background-image: url(../Images/AboutImages/aboutbg.jpg);
-  background-repeat: no-repeat;
-  background-position: -5vw -5vw;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: contain;
 }
 
 nav {

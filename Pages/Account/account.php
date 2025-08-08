@@ -39,12 +39,17 @@ $userRole = $_SESSION['userRole'];
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/account.css" />
+
+    <!-- icon libraries for font-awesome and box icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
 </head>
 
@@ -105,158 +110,161 @@ $userRole = $_SESSION['userRole'];
     }
 
     ?>
-    <!-- Side Bar -->
-    <div class="sidebar">
-
-        <div class="home">
-            <a href="javascript:history.back()">
-                <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-            </a>
-        </div>
-        <div class="sidebar-header">
-            <h5>User Account</h5>
-            <div class="profileImage">
-                <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="d-flex" id="toggle-container">
+                <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
             </div>
-        </div>
-        <ul class="list-group">
-            <li>
-                <a href="account.php" class="list-group-item active">
-                    <img src="../../Assets/Images/Icon/user.png" alt="Profile Information" class="sidebar-icon">
-                    Profile Information
+            <div class="home text-center">
+                <a href="../Customer/dashboard.php">
+                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                 </a>
-            </li>
-
-            <li>
-                <a href="loginSecurity.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/login_security.png" alt="Login Security" class="sidebar-icon">
-                    Login & Security
-                </a>
-            </li>
-
-            <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                <li>
-                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                        <img src="../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
-                            class="sidebar-icon">
-                        Payment & Booking History
+            </div>
+            <div class="sidebar-header text-center">
+                <h5 class="sidebar-text">User Account</h5>
+                <div class="profileImage">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($data['firstName']) ?> Picture">
+                </div>
+            </div>
+            <ul class="list-group sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="account.php" class="list-group-item active">
+                        <i class="fa-regular fa-user sidebar-icon"></i>
+                        <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
-            <?php } elseif ($role === 'Admin') { ?>
-                <li>
-                    <a href="userManagement.php" class="list-group-item">
-                        <img src="../../Assets/Images/Icon/usermanagement.png" alt="" class="sidebar-icon">
-                        Manage Users
+                <li class="sidebar-item">
+                    <a href="loginSecurity.php" class="list-group-item">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
-            <?php } ?>
 
-            <li>
-                <a href="deleteAccount.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/delete-user.png" alt="Delete Account" class="sidebar-icon">
-                    Delete Account
-                </a>
-            </li>
-            <li>
-                <button type="button" class="btn btn-outline-danger" id="logoutBtn"> <img
-                        src="../../Assets/Images/Icon/logout.png" alt="Log Out" class="sidebar-icon">
-                    Logout</button>
-            </li>
-        </ul>
-    </div>
-    <!-- End Side Bar -->
+                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                            <i class="fa-solid fa-table-list sidebar-icon"></i>
+                            <span class="sidebar-text">Payment & Booking History</span>
+                        </a>
+                    </li>
+                <?php } elseif ($role === 'Admin') { ?>
+                    <li class="sidebar-item">
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <li class="sidebar-item">
+                    <a href="deleteAccount.php" class="list-group-item">
+                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
+                        <span class="sidebar-text">Delete Account</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
+                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                        <span class="sidebar-text ms-2">Logout</span>
+                    </button>
+                </li>
+            </ul>
+        </aside> <!-- End Side Bar -->
 
 
-    <!-- Customer Information Container -->
-    <div class="customer-account-container">
-        <form action="../../Function/Account/editProfile.php" method="POST" enctype="multipart/form-data">
-            <div class="card">
-                <div class="account-info">
-                    <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
-                    <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
-                    <div class="profile-image">
-                        <img src="<?= $image ?>"
-                            alt="<?= htmlspecialchars($data['firstName']) ?> Picture" class="profile-pic">
-                        <button type="button" class="changePfpBtn btn btn-primary" id="changePfp">
-                            Change Profile
-                        </button>
-                        <!-- Profile Picture Modal -->
-                        <div class="modal" id="picModal" tabindex="-1" aria-labelledby="picModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="picModalLabel">Change Profile Picture</h5>
-                                        <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <img src="<?= $image ?>"
-                                            alt="<?= htmlspecialchars($data['firstName']) ?> Picture" id="preview"
-                                            class="profile-pic">
-                                        <input type="file" name="profilePic" id="profilePic" hidden>
-                                        <label for="profilePic" class="custom-file-button btn btn-outline-primary">Choose Image</label>
-                                    </div>
-                                    <div class="modal-button">
-                                        <button type="submit" class="btn btn-danger" name="cancelPfp">Cancel</button>
-                                        <button type="submit" class="btn btn-success" name="changePfpBtn">Save
-                                            Changes</button>
+        <!-- Customer Information Container -->
+        <main class="main-content" id="main-content">
+            <form action="../../Function/Account/editProfile.php" method="POST" enctype="multipart/form-data">
+                <div class="card">
+                    <div class="account-info">
+                        <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
+                        <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
+                        <div class="profile-image">
+                            <img src="<?= $image ?>"
+                                alt="<?= htmlspecialchars($data['firstName']) ?> Picture" class="profile-pic">
+                            <button type="button" class="changePfpBtn btn btn-primary" id="changePfp">
+                                Change Profile
+                            </button>
+                            <!-- Profile Picture Modal -->
+                            <div class="modal" id="picModal" tabindex="-1" aria-labelledby="picModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="picModalLabel">Change Profile Picture</h5>
+                                            <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <img src="<?= $image ?>"
+                                                alt="<?= htmlspecialchars($data['firstName']) ?> Picture" id="preview"
+                                                class="profile-pic">
+                                            <input type="file" name="profilePic" id="profilePic" hidden>
+                                            <label for="profilePic" class="custom-file-button btn btn-outline-primary">Choose Image</label>
+                                        </div>
+                                        <div class="modal-button">
+                                            <button type="submit" class="btn btn-danger" name="cancelPfp">Cancel</button>
+                                            <button type="submit" class="btn btn-success" name="changePfpBtn">Save
+                                                Changes</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="profile-info">
+                            <h5 class="account-name"> <?= htmlspecialchars($data['firstName']) ?></h5>
+                            <h6 class="account-contact"> <?= htmlspecialchars($email) ?> |
+                                <?= htmlspecialchars($phoneNumber) ?></h6>
+                            <h6 class="roleName"><?= htmlspecialchars($role) ?></h6>
+                        </div>
+                    </div>
+            </form>
+
+            <form action="../../Function/Account/editAccount.php" method="POST">
+                <div class="customer-details">
+                    <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
+                    <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
+                    <div class="info">
+                        <input type="text" name="fullName" id="fullName" value="<?= htmlspecialchars($name) ?>" disabled
+                            required>
+                        <label for="fullName">Full Name</label>
                     </div>
 
-                    <div class="profile-info">
-                        <h5 class="account-name"> <?= htmlspecialchars($data['firstName']) ?></h5>
-                        <h6 class="account-contact"> <?= htmlspecialchars($email) ?> |
-                            <?= htmlspecialchars($phoneNumber) ?></h6>
-                        <h6 class="roleName"><?= htmlspecialchars($role) ?></h6>
+                    <div class="info">
+                        <?php if (!empty($data['birthDate'])) : ?>
+                            <input type="date" name="birthday" id="birthday" value="<?= htmlspecialchars($data['birthDate']) ?>" disabled>
+                        <?php else : ?>
+                            <input type="text" name="birthday" id="birthday" value="--" disabled>
+                        <?php endif; ?>
+                        <label for="birthday">Birthday</label>
+                    </div>
+
+                    <div class="info">
+                        <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>" disabled
+                            required>
+                        <label for="address">Address</label>
+                    </div>
+                    <div class="info">
+                        <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$" title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>"
+                            disabled required>
+                        <label for="phoneNumber">Phone Number</label>
                     </div>
                 </div>
-        </form>
-
-        <form action="../../Function/Account/editAccount.php" method="POST">
-            <div class="customer-details">
-                <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
-                <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
-                <div class="info">
-                    <input type="text" name="fullName" id="fullName" value="<?= htmlspecialchars($name) ?>" disabled
-                        required>
-                    <label for="fullName">Full Name</label>
+                <div class="button-container">
+                    <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
+                        onclick="enableEditing()">Edit</button>
+                    <button type="button" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
+                        style="display: none;">Cancel</button>
+                    <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
+                        style="display: none;">Save</button>
                 </div>
-
-                <div class="info">
-                    <?php if (!empty($data['birthDate'])) : ?>
-                        <input type="date" name="birthday" id="birthday" value="<?= htmlspecialchars($data['birthDate']) ?>" disabled>
-                    <?php else : ?>
-                        <input type="text" name="birthday" id="birthday" value="--" disabled>
-                    <?php endif; ?>
-                    <label for="birthday">Birthday</label>
-                </div>
-
-                <div class="info">
-                    <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>" disabled
-                        required>
-                    <label for="address">Address</label>
-                </div>
-                <div class="info">
-                    <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$" title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>"
-                        disabled required>
-                    <label for="phoneNumber">Phone Number</label>
-                </div>
-            </div>
-            <div class="button-container">
-                <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
-                    onclick="enableEditing()">Edit</button>
-                <button type="button" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
-                    style="display: none;">Cancel</button>
-                <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
-                    style="display: none;">Save</button>
-            </div>
-        </form>
+            </form>
+        </main>
     </div>
-
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -286,6 +294,48 @@ $userRole = $_SESSION['userRole'];
         document.addEventListener("DOMContentLoaded", function() {
             const changeBtn = document.getElementById("changePfp");
             const modalElement = document.getElementById("picModal");
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container')
+
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 600) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    })
+                    sidebar.classList.remove('collapsed');
+                }
+            }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
 
             changeBtn.addEventListener("click", function() {
                 const myModal = new bootstrap.Modal(modalElement);

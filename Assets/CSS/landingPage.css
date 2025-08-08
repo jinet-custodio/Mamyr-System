@@ -10,14 +10,7 @@
   font-family: "Lora";
   src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
-@font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-}
-@font-face {
-  font-family: "Prata";
-  src: url(../Fonts/Prata/Prata-Regular.ttf);
-}
+
 
 * {
   margin: 0;
@@ -100,6 +93,7 @@ body {
   width: 100%;
   top: 0;
   text-transform: uppercase;
+  border: 2px solid red;
 }
 
 .navbar.scrolled {
@@ -116,7 +110,6 @@ body {
   font-family: "Poppins" !important;
   font-weight: lighter;
   margin-top: 15px;
-  font-size: 1.5vw;
   /* margin-left: 3vw; */
 }
 
@@ -165,7 +158,15 @@ body {
 
 .navbar-collapse {
   text-align: center;
-  padding-bottom: 0.5rem;
+}
+
+ul {
+  font-family: "Poppins";
+  font-weight: lighter;
+  list-style: none;
+  display: table;
+  font-size: 1.3vw !important;
+  text-transform: uppercase;
 }
 
 .navbar-toggler {
