@@ -66,14 +66,8 @@ $userRole = $_SESSION['userRole'];
                 <div class="card event-card" id="eventBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
                     <div class="eventTypeContainer">
-                        <label for="eventType" class="eventInfoLabel">Type of Event</label>
+                        <label for="eventType" class="eventInfoLabel"></label>
                         <select class="form-select" name="eventType" id="eventType" required>
-                            <option value="" disabled selected>Choose...</option>
-                            <option value="birthday">Birthday</option>
-                            <option value="wedding">Wedding</option>
-                            <option value="teamBuilding">Team Building</option>
-                            <option value="christening">Christening</option>
-                            <option value="thanksgiving">Thanksgiving Party</option>
                         </select>
                     </div>
 
@@ -89,11 +83,8 @@ $userRole = $_SESSION['userRole'];
                     </div>
 
                     <div class="eventVenue">
-                        <label for="eventVenue" class="eventInfoLabel">Venue</label>
-                        <select class="form-select" name="eventType" id="eventType" required>
-                            <option value="" disabled selected>Choose...</option>
-                            <option value="pavilionHall">Pavilion Hall (Max. 350 pax)</option>
-                            <option value="miniPavilion">Mini Pavilion Hall (Max. 50 pax)</option>
+                        <label for="eventVenue" class="eventInfoLabel" id="venueInfoLabel">Venue</label>
+                        <select class="form-select" name="eventVenue" id="eventVenue" required>
                         </select>
                     </div>
 
@@ -173,9 +164,6 @@ $userRole = $_SESSION['userRole'];
                             data-bs-target="#additionalServicesModal">View Services</button>
                     </div>
                 </div>
-
-
-
             </div>
             <!--end ng container div-->
 
@@ -185,8 +173,6 @@ $userRole = $_SESSION['userRole'];
 
         </div>
         <!--end ng event div-->
-
-
 
         <!-- Dish Modal -->
         <div class="modal fade modal-lg" id="dishModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -454,7 +440,6 @@ $userRole = $_SESSION['userRole'];
             </div>
         </div>
 
-
         <!-- BP Modal -->
         <div class="modal fade modal-lg" id="additionalServicesModal" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -641,6 +626,74 @@ $userRole = $_SESSION['userRole'];
             minTime: '00:00'
         });
     </script>
+
+    <!-- Event Category and Hall-->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            fetch(`../../Function/Booking/getEventCategory.php`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network Error');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        alert("Error: " + data.error);
+                        return;
+                    }
+
+                    const eventInfoLabel = document.querySelector(".eventInfoLabel");
+                    const eventTypeSelect = document.getElementById("eventType");
+
+                    const venueInfoLabel = document.querySelector("#venueInfoLabel");
+                    const venueSelect = document.getElementById("eventVenue");
+
+                    eventTypeSelect.innerHTML = '';
+
+                    eventInfoLabel.innerHTML = 'Type of Event';
+
+                    const typeOption = document.createElement('option');
+                    typeOption.value = "";
+                    typeOption.disabled = true;
+                    typeOption.selected = true;
+                    typeOption.textContent = "Choose here...";
+                    eventTypeSelect.appendChild(typeOption);
+
+
+                    data.Categories.forEach(category => {
+                        const typeOptions = document.createElement('option');
+                        typeOptions.value = category.categoryName;
+                        typeOptions.textContent = category.categoryName;
+                        eventTypeSelect.appendChild(typeOptions);
+                    })
+
+                    venueSelect.innerHTML = '';
+
+                    venueInfoLabel.innerHTML = 'Venue';
+
+                    const venueOption = document.createElement('option')
+                    venueOption.value = "";
+                    venueOption.disabled = true;
+                    venueOption.selected = true;
+                    venueOption.textContent = "Choose...";
+                    venueSelect.appendChild(venueOption);
+
+                    data.Halls.forEach(hall => {
+                        const venueOptions = document.createElement('option');
+                        venueOptions.value = hall.RServiceName;
+                        venueOptions.textContent = `${hall.RServiceName} - ${hall.RSmaxCapacity} pax`;
+                        venueSelect.appendChild(venueOptions);
+                    })
+
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation', error);
+                })
+        });
+    </script>
+
+
+
 
 </body>
 
