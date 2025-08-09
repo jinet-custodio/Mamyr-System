@@ -122,6 +122,13 @@ UPDATE `resortamenities` SET`RSprice`='5000' WHERE RServiceName = 'Room 9' AND R
 UPDATE `resortamenities` SET `RScapacity`= '2',`RSmaxCapacity`='4' WHERE RScapacity = '4';
 UPDATE `resortamenities` SET `RScapacity`= '3',`RSmaxCapacity`='6' WHERE RScapacity = '6';
 
+
+
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSmaxCapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+VALUES ('Pavilion Hall','0.00', '0', '350','None', 4, NULL, NULL, 1);
+INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSmaxCapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
+VALUES ('Mini Pavilion Hall','0.00', '0', '50','None', 5, NULL, NULL, 1);
+
 -- INSERT INTO packages 
 -- (packageName, packageDescription, Pduration, Pcapacity, resortserviceID, Pprice, PcategoryID, packageAvailability)
 -- VALUES (

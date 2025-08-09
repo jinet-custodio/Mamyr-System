@@ -13,7 +13,7 @@ require '../Config/dbcon.php';
     <title>Mamyr - Amenities</title>
     <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/amenities.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <!-- Link to Bootsrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -28,7 +28,6 @@ require '../Config/dbcon.php';
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">

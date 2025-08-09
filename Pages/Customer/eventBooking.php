@@ -39,7 +39,8 @@ $userRole = $_SESSION['userRole'];
     <link rel="stylesheet" href="../../Assets/CSS/Customer/bookNow.css">
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
     <!-- flatpickr calendar -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -66,14 +67,8 @@ $userRole = $_SESSION['userRole'];
                 <div class="card event-card" id="eventBookingCard" style="width: 40rem; flex-shrink: 0; ">
 
                     <div class="eventTypeContainer">
-                        <label for="eventType" class="eventInfoLabel">Type of Event</label>
+                        <label for="eventType" class="eventInfoLabel"></label>
                         <select class="form-select" name="eventType" id="eventType" required>
-                            <option value="" disabled selected>Choose...</option>
-                            <option value="birthday">Birthday</option>
-                            <option value="wedding">Wedding</option>
-                            <option value="teamBuilding">Team Building</option>
-                            <option value="christening">Christening</option>
-                            <option value="thanksgiving">Thanksgiving Party</option>
                         </select>
                     </div>
 
@@ -89,11 +84,8 @@ $userRole = $_SESSION['userRole'];
                     </div>
 
                     <div class="eventVenue">
-                        <label for="eventVenue" class="eventInfoLabel">Venue</label>
-                        <select class="form-select" name="eventType" id="eventType" required>
-                            <option value="" disabled selected>Choose...</option>
-                            <option value="pavilionHall">Pavilion Hall (Max. 350 pax)</option>
-                            <option value="miniPavilion">Mini Pavilion Hall (Max. 50 pax)</option>
+                        <label for="eventVenue" class="eventInfoLabel" id="venueInfoLabel">Venue</label>
+                        <select class="form-select" name="eventVenue" id="eventVenue" required>
                         </select>
                     </div>
 
@@ -173,9 +165,6 @@ $userRole = $_SESSION['userRole'];
                             data-bs-target="#additionalServicesModal">View Services</button>
                     </div>
                 </div>
-
-
-
             </div>
             <!--end ng container div-->
 
@@ -185,8 +174,6 @@ $userRole = $_SESSION['userRole'];
 
         </div>
         <!--end ng event div-->
-
-
 
         <!-- Dish Modal -->
         <div class="modal fade modal-lg" id="dishModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -204,7 +191,8 @@ $userRole = $_SESSION['userRole'];
                             </div>
                             <div class="dishListContainer">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cPastil" id="cPastil">
+                                    <input class="form-check-input" type="checkbox" value="" name="cPastil"
+                                        id="cPastil">
                                     <label class="form-check-label" for="cPastil">
                                         Chicken Pastil
                                     </label>
@@ -271,7 +259,8 @@ $userRole = $_SESSION['userRole'];
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="japchae" id="japchae">
+                                    <input class="form-check-input" type="checkbox" value="" name="japchae"
+                                        id="japchae">
                                     <label class="form-check-label" for="japchae">
                                         Japchae Noodles
                                     </label>
@@ -290,7 +279,8 @@ $userRole = $_SESSION['userRole'];
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="mechado" id="mechado">
+                                    <input class="form-check-input" type="checkbox" value="" name="mechado"
+                                        id="mechado">
                                     <label class="form-check-label" for="mechado">
                                         Pork Mechado Roll
                                     </label>
@@ -303,7 +293,8 @@ $userRole = $_SESSION['userRole'];
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="hamonado" id="hamonado">
+                                    <input class="form-check-input" type="checkbox" value="" name="hamonado"
+                                        id="hamonado">
                                     <label class="form-check-label" for="hamonado">
                                         Pork Hamonado
                                     </label>
@@ -338,7 +329,8 @@ $userRole = $_SESSION['userRole'];
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="chopsuey" id="chopsuey">
+                                    <input class="form-check-input" type="checkbox" value="" name="chopsuey"
+                                        id="chopsuey">
                                     <label class="form-check-label" for="chopsuey">
                                         Chopsuey
                                     </label>
@@ -445,6 +437,85 @@ $userRole = $_SESSION['userRole'];
                                 </div>
                             </div>
                         </div>
+
+                        <div class="drinks">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Drinks</h6>
+                            </div>
+                            <div class="dishListContainer">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="lemonIceTea"
+                                        id="lemonIceTea">
+                                    <label class="form-check-label" for="lemonIceTea">
+                                        Lemon Iced Tea
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="orangeJuice"
+                                        id="orangeJuice">
+                                    <label class="form-check-label" for="orangeJuice">
+                                        Orange Juice
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="pineappleJuice"
+                                        id="pineappleJuice">
+                                    <label class="form-check-label" for="pineappleJuice">
+                                        Pineapple Juice
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="redIcedTea"
+                                        id="redIcedTea">
+                                    <label class="form-check-label" for="redIcedTea">
+                                        Red Iced Tea
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="lemonade"
+                                        id="lemonade">
+                                    <label class="form-check-label" for="lemonade">
+                                        Lemonade
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dessert">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Desserts</h6>
+                            </div>
+                            <div class="dishListContainer">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="fruitSalad"
+                                        id="fruitSalad">
+                                    <label class="form-check-label" for="fruitSalad">
+                                        Fruit Salad
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="bukoSalad"
+                                        id="bukoSalad">
+                                    <label class="form-check-label" for="bukoSalad">
+                                        Buko Salad
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="bukoPandan"
+                                        id="bukoPandan">
+                                    <label class="form-check-label" for="bukoPandan">
+                                        Buko Pandan
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" name="coffeeJelly"
+                                        id="coffeeJelly">
+                                    <label class="form-check-label" for="coffeeJelly">
+                                        Coffee Jelly
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -453,7 +524,6 @@ $userRole = $_SESSION['userRole'];
                 </div>
             </div>
         </div>
-
 
         <!-- BP Modal -->
         <div class="modal fade modal-lg" id="additionalServicesModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -614,33 +684,101 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Functions -->
     <script>
-        function backToSelection() {
-            location.href = "bookNow.php"
-        };
+    function backToSelection() {
+        location.href = "bookNow.php"
+    };
     </script>
 
     <!-- Calendar -->
     <script>
-        const calIcon = document.getElementById("calendarIcon");
+    const calIcon = document.getElementById("calendarIcon");
 
-        const minDate = new Date();
-        minDate.setDate(minDate.getDate() + 3);
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 3);
 
-        //hotel calendar
-        flatpickr('#checkInDate', {
-            enableTime: true,
-            minDate: minDate,
-            dateFormat: "Y-m-d H:i ",
-            minTime: '00:00'
-        });
+    //hotel calendar
+    flatpickr('#checkInDate', {
+        enableTime: true,
+        minDate: minDate,
+        dateFormat: "Y-m-d H:i ",
+        minTime: '00:00'
+    });
 
-        flatpickr('#checkOutDate', {
-            enableTime: true,
-            minDate: minDate,
-            dateFormat: "Y-m-d H:i ",
-            minTime: '00:00'
-        });
+    flatpickr('#checkOutDate', {
+        enableTime: true,
+        minDate: minDate,
+        dateFormat: "Y-m-d H:i ",
+        minTime: '00:00'
+    });
     </script>
+
+    <!-- Event Category and Hall-->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        fetch(`../../Function/Booking/getEventCategory.php`)
+            .then(response => {
+                if (!response.ok) throw new Error('Network Error');
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                    return;
+                }
+
+                const eventInfoLabel = document.querySelector(".eventInfoLabel");
+                const eventTypeSelect = document.getElementById("eventType");
+
+                const venueInfoLabel = document.querySelector("#venueInfoLabel");
+                const venueSelect = document.getElementById("eventVenue");
+
+                eventTypeSelect.innerHTML = '';
+
+                eventInfoLabel.innerHTML = 'Type of Event';
+
+                const typeOption = document.createElement('option');
+                typeOption.value = "";
+                typeOption.disabled = true;
+                typeOption.selected = true;
+                typeOption.textContent = "Choose here...";
+                eventTypeSelect.appendChild(typeOption);
+
+
+                data.Categories.forEach(category => {
+                    const typeOptions = document.createElement('option');
+                    typeOptions.value = category.categoryName;
+                    typeOptions.textContent = category.categoryName;
+                    eventTypeSelect.appendChild(typeOptions);
+                })
+
+                venueSelect.innerHTML = '';
+
+                venueInfoLabel.innerHTML = 'Venue';
+
+                const venueOption = document.createElement('option')
+                venueOption.value = "";
+                venueOption.disabled = true;
+                venueOption.selected = true;
+                venueOption.textContent = "Choose...";
+                venueSelect.appendChild(venueOption);
+
+                data.Halls.forEach(hall => {
+                    const venueOptions = document.createElement('option');
+                    venueOptions.value = hall.RServiceName;
+                    venueOptions.textContent = `${hall.RServiceName} - ${hall.RSmaxCapacity} pax`;
+                    venueSelect.appendChild(venueOptions);
+                })
+
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation', error);
+            })
+    });
+    </script>
+
+
+
 
 </body>
 

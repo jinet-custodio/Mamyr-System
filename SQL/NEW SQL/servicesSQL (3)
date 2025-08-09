@@ -68,6 +68,14 @@ CREATE TABLE menuItems (
     FOREIGN KEY (availabilityID) REFERENCES serviceAvailability(availabilityID)
 );
 
+ALTER TABLE menuItems
+ADD COLUMN foodImage varchar(255) NULL
+AFTER foodDescription;
+
+ALTER TABLE menuItems
+ADD COLUMN ageGroup ENUM('Adult', 'Child', 'Both') NOT NULL DEFAULT 'Adult' 
+AFTER foodCategory;
+
 
 CREATE TABLE packages (
     packageID INT PRIMARY KEY AUTO_INCREMENT,
