@@ -119,9 +119,15 @@ $userRole = $_SESSION['userRole'];
                 </button>
             </div>
             <div class="home text-center">
-                <a href="../Customer/dashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
+                <?php if ($role === 'Customer') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } elseif ($role === 'Admin') { ?>
+                    <a href="../Admin/adminDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } ?>
             </div>
             <div class="sidebar-header text-center">
                 <h5 class="sidebar-text">User Account</h5>

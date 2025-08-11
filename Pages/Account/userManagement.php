@@ -87,7 +87,7 @@ $userRole = $_SESSION['userRole'];
     <!-- Side Bar -->
     <div class="sidebar">
         <div class="home">
-            <a href="javascript:history.back()">
+            <a href="../Admin/adminDashboard.php">
                 <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
             </a>
         </div>
