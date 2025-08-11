@@ -665,6 +665,7 @@ unset($_SESSION['formData']);
             <input type="hidden" name="childrenServiceID" value="<?= htmlspecialchars($childrenServiceID ?? '') ?>">
             <input type="hidden" name="adultCount" value="<?= htmlspecialchars($adultCount ?? 0) ?>">
             <input type="hidden" name="childrenCount" value="<?= htmlspecialchars($childrenCount ?? 0) ?>">
+            <input type="hidden" name="toddlerCount" value="<?= htmlspecialchars($toddlerCount ?? 0) ?>">
             <input type="hidden" name="adultRate" value="<?= htmlspecialchars($adultRate ?? 0) ?>">
             <input type="hidden" name="childrenRate" value="<?= htmlspecialchars($childRate ?? 0) ?>">
 

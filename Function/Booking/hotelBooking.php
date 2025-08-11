@@ -41,6 +41,7 @@ if (isset($_POST['hotelBooking'])) {
 
     $adultCount = (int)$_POST['adultCount'];
     $childrenCount = (int) $_POST['childrenCount'];
+    $toddlerCount = (int) $_POST['toddlerCount'];
     $totalPax = (int) $_POST['totalPax'];
     $totalCapacity = (int) $_POST['capacity'];
     $additionalGuest = (int) $_POST['additionalGuest'];
@@ -86,12 +87,13 @@ if (isset($_POST['hotelBooking'])) {
     $hoursNum = str_replace(" hours", "", $hoursSelected);
 
     //Insert Booking
-    $insertBooking = $conn->prepare("INSERT INTO bookings(userID, paxNum, hoursNum, startDate, endDate, 
+    $insertBooking = $conn->prepare("INSERT INTO bookings(userID, toddlerCount, paxNum, hoursNum, startDate, endDate, 
     paymentMethod, additionalCharge, totalCost, downpayment, bookingStatus, bookingType, arrivalTime) 
-    VALUES(?,?,?,?,?,?,?,?,?,?,?, ?)");
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?, ?)");
     $insertBooking->bind_param(
-        "iiisssdddiss",
+        "iiiisssdddiss",
         $userID,
+        $toddlerCount,
         $totalPax,
         $hoursNum,
         $checkInDate,

@@ -45,7 +45,7 @@ $selectedUserID = $_SESSION['selectedUserID'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/Admin/Account/viewUser.css" />
+    <link rel="stylesheet" href="../../Assets/CSS/Account/viewUser.css" />
 
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
