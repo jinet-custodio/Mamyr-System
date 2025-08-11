@@ -27,6 +27,7 @@ if (isset($_POST['bookRates'])) {
 
     $adultCount = (int) $_POST['adultCount'];
     $childrenCount = (int) $_POST['childrenCount'];
+    $toddlerCount = (int) $_POST['toddlerCount'];
     $totalPax = addition($adultCount, $childrenCount, 0);
 
     $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
@@ -161,11 +162,11 @@ if (isset($_POST['bookRates'])) {
 
 
     $insertBooking = $conn->prepare("INSERT INTO 
-        bookings(userID, additionalRequest,  paxNum, hoursNum, 
+        bookings(userID, additionalRequest, toddlerCount,  paxNum, hoursNum, 
         startDate, endDate, 
         totalCost, downpayment, 
         addOns, paymentMethod, bookingStatus, bookingType) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
     if ($dateScheduled === 'March' || $dateScheduled === 'April' || $dateScheduled === 'May') {
         $bookingStatus = 1;
@@ -175,9 +176,10 @@ if (isset($_POST['bookRates'])) {
 
 
     $insertBooking->bind_param(
-        "isiissddssis",
+        "isiiissddssis",
         $userID,
         $additionalRequest,
+        $toddlerCount,
         $totalPax,
         $hoursNumber,
         $scheduledStartDate,

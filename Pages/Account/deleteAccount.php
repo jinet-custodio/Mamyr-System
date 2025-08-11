@@ -26,6 +26,18 @@ $_SESSION['last_activity'] = time();
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if ($userRole == 1) {
+    $role = "Customer";
+} elseif ($userRole == 2) {
+    $role = "Business Partner";
+} elseif ($userRole == 3) {
+    $role = "Admin";
+} else {
+    $_SESSION['error'] = "Unauthorized Access eh!";
+    session_destroy();
+    header("Location: ../register.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -64,26 +76,21 @@ $userRole = $_SESSION['userRole'];
     <div class="sidebar">
 
         <div class="home">
-            <a href="javascript:history.back()">
-                <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-            </a>
+            <?php if ($role === 'Customer') { ?>
+                <a href="../Customer/dashboard.php">
+                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                </a>
+            <?php } elseif ($role === 'Admin') { ?>
+                <a href="../Admin/adminDashboard.php">
+                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                </a>
+            <?php } ?>
         </div>
 
         <div class="sidebar-header">
             <h5>User Account</h5>
             <?php
-            if ($userRole == 1) {
-                $role = "Customer";
-            } elseif ($userRole == 2) {
-                $role = "Business Partner";
-            } elseif ($userRole == 3) {
-                $role = "Admin";
-            } else {
-                $_SESSION['error'] = "Unauthorized Access eh!";
-                session_destroy();
-                header("Location: ../register.php");
-                exit();
-            }
+
 
             $getProfile = $conn->prepare("SELECT firstName,userProfile, email FROM users WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);

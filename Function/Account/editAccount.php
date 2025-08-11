@@ -20,36 +20,32 @@ if (isset($_POST['saveChanges'])) {
     $nameParts = explode(" ", trim($fullName));
     $numParts = count($nameParts);
 
-    if ($numParts <= 2) {
+    $fullName = preg_replace('/\s+/', ' ', trim($fullName));
+    $nameParts = explode(' ', $fullName);
+    $numParts = count($nameParts);
+
+    $firstName = '';
+    $middleInitial = null;
+    $lastName = '';
+
+    if ($numParts === 1) {
         $firstName = $nameParts[0];
-        $lastName = $nameParts[1] ?? '';
-    } elseif ($numParts == 3) {
-        $firstName = $nameParts[0] . ' ' . $nameParts[1];
-        $lastName = $nameParts[2];
-    } elseif ($numParts >= 4) {
-        // First 2 words = first name
-        $firstName = $nameParts[0] . ' ' . $nameParts[1];
+    } elseif ($numParts === 2) {
+        $firstName = $nameParts[0];
+        $lastName = $nameParts[1];
+    } elseif ($numParts >= 3) {
 
-        // Last word = last name
-        $lastName = $nameParts[$numParts - 1];
+        $lastName = array_pop($nameParts);
 
-        // Middle parts between index 2 and numParts - 1
-        $middleInitials = [];
-        for ($i = 2; $i < $numParts - 1; $i++) {
-            $middle = trim($nameParts[$i]);
-            if (substr($middle, -1) === '.' && strlen($middle) <= 3) {
-                $middleInitials[] = $middle;
-            } else {
-                // Also add any middle names that are not initials
-                $middleInitials[] = $middle;
-            }
+
+        $possibleMiddle = end($nameParts);
+        if (preg_match('/^[A-Z]\.$/i', $possibleMiddle)) {
+            $middleInitial = array_pop($nameParts);
         }
 
-        $middleInitial = implode(' ', $middleInitials);
-        if ($middleInitial === "") {
-            $middleInitial = NULL;
-        }
+        $firstName = implode(' ', $nameParts);
     }
+
 
     if (!empty($birthday) && strtotime($birthday)) {
         $birthDate = date('Y-m-d', strtotime($birthday));

@@ -21,150 +21,98 @@
 
 body {
   background-color: #e3e3e3;
-  font-family: "Poppins";
 }
 
 .container {
+  margin: 2rem auto;
   /* border: 1px solid red; */
-  width: 85vw;
-  /* height: 110vh; */
-  background-color: #ffff;
-  border-radius: 2rem;
-  margin-top: 2vw;
-  margin-bottom: 2vw;
-  padding: 2rem;
 }
-
-.backButtonContainer {
-  /* border: 1px solid red; */
-  position: absolute;
-  top: 7%;
-  left: 10%;
-}
-
-.PendingContainer {
-  /* border: 1px solid red; */
+.statusContainer {
+  width: 100%;
   display: flex;
-  gap: 3vw;
-  padding: 1rem;
-  align-items: center;
-  /* height: 102vh; */
+  margin: 1rem;
+  justify-content: space-around;
 }
 
-.leftPendingContainer {
+.leftStatusContainer {
   /* border: 1px solid red; */
-  width: 50%;
+  width: 45%;
+  padding: 0.5rem;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.7vw;
-  margin-top: 1vw;
-  padding: 1vw;
-}
-
-.PendingIcon {
-  width: 5.5vw;
-}
-
-.pendingTitle {
-  color: #000;
   text-align: center;
-  /* font-family:"Poppins"; */
-  font-size: 22px;
-  font-weight: bold;
 }
 
-.pendingSubtitle {
-  color: #000;
-  text-align: center;
-  /* font-family: "Poppins"; */
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+.leftStatusContainer img {
+  height: 80px;
+  width: 80px;
 }
 
-#newReservationBtn,
-.btn-success {
-  width: 32vw !important;
-}
-.rightPendingContainer {
-  /* border: 1px solid red; */
-  background-color: #f5f5f5 !important;
-  /* height: 100vh; */
-  width: 50%;
-  height: auto;
-  padding: 0.5rem;
-  border-radius: 1.5rem !important;
-  margin-right: 1vw;
-  margin-left: 2vw;
-  /* margin-bottom: 3vw; */
+.btn {
+  font-family: "Lora" !important;
+  font-size: 16px !important;
 }
 
+.statusTitle,
 .rightContainerTitle {
-  color: #020101;
-  /* font-family: "Poppins"; */
-  font-size: 20px;
-  font-weight: bold;
-  margin: 3vw 0 0 2.5vw;
+  font-family: "Lora" !important;
+  font-weight: bolder;
 }
 
-/* .firstRow,
-.secondRow {
- 
-  display: flex;
-  margin: 2.5vw;
-  gap: 5vw;
-} */
-
-.firstRow {
-  display: grid;
-  align-items: center;
-  justify-self: center;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 8px;
-  margin: 2vw 0 2vw 0;
-  padding: 0 2vw 0 2vw;
-}
-.secondRow {
-  margin-top: -1.7vw;
+.statusSubtitle {
+  font-family: "Poppins";
 }
 
-.header {
-  font-size: 15px;
-  font-weight: bold;
+.rightStatusContainer {
+  border-left: 3px solid rgb(209, 209, 209);
+  /* border: 1px solid red; */
+  padding: 0.5rem;
+  width: 45%;
 }
 
-.content {
-  font-family: "Poppins Light";
-  font-size: 14px;
+.rightStatusContainer .header {
+  font-family: "Poppins";
+  font-size: 16px !important;
+}
+
+.rightStatusContainer .content {
   text-indent: 0.5rem;
 }
 
-.card {
-  margin: auto;
-  margin-bottom: 2vw !important;
+.rightStatusContainer .content,
+.cardHeader {
+  font-family: "Poppins";
+  font-size: 14px !important;
+  font-weight: bold;
+}
+
+.rightStatusContainer .firstRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+.rightStatusContainer .card {
   /* border: 1px solid red; */
+  margin: auto;
 }
 
 .list-group-item {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0.5rem 0.5rem;
+  display: flex !important;
+  align-items: center !important;
+  /* padding: 0.5rem 0.5rem; */
   background-color: #f5f5f5;
-  /* border: 1px solid red; */
   gap: 0.3rem;
+  height: 3rem !important;
 }
-
-.cardHeader {
-  font-size: 14px;
-  flex-shrink: 0;
+.list-group-item p {
+  margin-top: 0.5rem;
 }
-
 .cardContent {
+  font-family: "Poppins";
   font-size: 14px;
   margin-left: auto;
   width: 130px;
@@ -174,10 +122,10 @@ body {
   font-size: 14px;
 }
 
-.infoIcon {
+/* .infoIcon {
   height: 1.3vw;
   aspect-ratio: 1;
-}
+} */
 
 #totalAmountSection,
 #promoSection,
@@ -200,17 +148,12 @@ body {
 }
 
 .note {
-  /* border: 1px solid red; */
   width: 90%;
   position: relative;
   margin: 0 auto;
   margin-top: 1.5vw !important;
-}
-
-.note {
   color: #d70b0b;
   text-align: center;
-  /* font-family: "Poppins"; */
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -225,7 +168,6 @@ body {
 }
 
 .form-group {
-  /* border: 1px solid red; */
   margin-top: 2vw;
   display: flex;
   justify-content: center;

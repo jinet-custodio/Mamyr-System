@@ -61,7 +61,7 @@ $userRole = $_SESSION['userRole'];
                     class="backButton"></a>
         </div>
 
-        <div class="PendingContainer">
+        <div class="statusContainer">
             <!-- Get user data -->
             <?php
             $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
@@ -141,7 +141,7 @@ $userRole = $_SESSION['userRole'];
                     // echo "<pre>";
                     // print_r($data);
                     // echo "</pre>";
-                    $startDate = date("j F Y", strtotime($data['startDate'])); //Bookings
+                    $startDate = date("F j, Y", strtotime($data['startDate'])); //Bookings
                     $time = date("g:i A", strtotime($data['startDate'])) . " - " . date("g:i A", strtotime($data['endDate'])); //Bookings
                     $duration = $data['hoursNum'] . " hours"; //Bookings
                     $pax = $data['paxNum']; //Bookings
@@ -326,7 +326,7 @@ $userRole = $_SESSION['userRole'];
             // echo $status;
             ?>
 
-            <div class="leftPendingContainer">
+            <div class="leftStatusContainer">
 
                 <input type="hidden" name="bookingStatus" id="bookingStatus"
                     value="<?= htmlspecialchars($bookingStatus) ?>">
@@ -338,107 +338,117 @@ $userRole = $_SESSION['userRole'];
                     value="<?= htmlspecialchars($paymentMethod) ?>">
 
                 <img src="../../Assets/Images/Icon/<?= htmlspecialchars(ucfirst($status)) ?>.png"
-                    alt="<?= ucfirst(htmlspecialchars($status)) ?> Icon" class="PendingIcon">
-                <!-- <h4 class="pendingTitle">Your reservation is pending for approval </h4> -->
-                <!-- <h6 class="pendingSubtitle">Your request has been sent to the admin. Please wait for the approval of
-                    your reservation.</h6> -->
-                <h4 class="pendingTitle"><?= htmlspecialchars($statusTitle) ?></h4>
-                <h6 class="pendingSubtitle"><?= htmlspecialchars($statusSubtitle) ?></h6>
+                    alt="<?= ucfirst(htmlspecialchars($status)) ?> Icon" class="statusIcon">
+
+                <h4 class="statusTitle"><?= htmlspecialchars($statusTitle) ?></h4>
+                <h6 class="statusSubtitle"><?= htmlspecialchars($statusSubtitle) ?></h6>
 
                 <div class="button-container">
                     <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn"
                         data-bs-toggle="modal" data-bs-target="#gcashPaymentModal">Make a Down Payment</button>
-                    <a href="../bookNow.php" class="btn btn-primary mt-2" id="newReservationBtn">Make Another
-                        Reservation</a>
+                    <!-- <a href="../bookNow.php" class="btn btn-primary w-100 mt-3" id="newReservationBtn">Make Another
+                        Reservation</a> -->
+                    <form action="../../Function/Customer/receiptPDF.php" method="POST">
+                        <input type="hidden" name="totalCost" value="<?= $totalBill ?>">
+                        <input type="hidden" name="name" value="<?= $name ?>">
+                        <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                        <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                        <button type="submit" class="btn btn-primary w-100 mt-3" name="downloadReceiptBtn" id="downloadReceiptBtn">Download Receipt </button>
+                    </form>
                 </div>
             </div>
 
-            <div class="rightPendingContainer">
+            <div class="rightStatusContainer">
                 <h3 class="rightContainerTitle">Reservation Summary</h3>
 
                 <div class="firstRow">
                     <div class="clientContainer">
                         <h6 class="header">Client</h6>
-                        <h6 class="content" id="clientName"><?= htmlspecialchars($name) ?></h6>
+                        <p class="content" id="clientName"><?= htmlspecialchars($name) ?></p>
                     </div>
 
                     <div class="contactNumContainer">
                         <h6 class="header">Contact Number</h6>
-                        <h6 class="content" id="contactNumber">
-                            <?= $clientInfo['phoneNumber'] ? $clientInfo['phoneNumber'] : 'Not Available' ?></h6>
+                        <p class="content" id="contactNumber">
+                            <?= $clientInfo['phoneNumber'] ? $clientInfo['phoneNumber'] : 'Not Available' ?></p>
                     </div>
 
                     <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
                     <div class="reservationTypeContainer">
                         <h6 class="header">Reservation Type</h6>
-                        <h6 class="content" id="reservation"><?= $bookingType ?> Booking</h6>
+                        <p class="content" id="reservation"><?= $bookingType ?> Booking</p>
                     </div>
 
                     <div class="contactNumContainer">
                         <h6 class="header">Address</h6>
-                        <h6 class="content" id="address">
-                            <?= $clientInfo['userAddress'] ? $clientInfo['userAddress'] : 'Not Available' ?></h6>
+                        <p class="content" id="address">
+                            <?= $clientInfo['userAddress'] ? $clientInfo['userAddress'] : 'Not Available' ?></p>
                     </div>
                 </div>
 
                 <div class="card" id="summaryDetails" style="width: 25.6rem;">
                     <ul class="list-group list-group-flush">
+                        <?php if ($bookingType === 'Resort') { ?>
+                            <li class="list-group-item" id="tourType">
+                                <h6 class="cardHeader"><?= $cardHeader ?></h6>
+                                <p class="cardContent" id="eventDate"><?= $tourType ?></p>
+                            </li>
+                        <?php } ?>
 
-
-
-                        <li class=" list-group-item" id="tourType">
-                            <h6 class="cardHeader"><?= $cardHeader  ?></h6>
-                            <h6 class="cardContent" id="eventDate"><?= $tourType ?></h6>
-                        </li>
-
-                        <li class=" list-group-item">
+                        <li class="list-group-item">
                             <h6 class="cardHeader">Date</h6>
-                            <h6 class="cardContent" id="eventDate"><?= $startDate ?></h6>
+                            <p class="cardContent" id="eventDate"><?= $startDate ?></p>
                         </li>
-                        <li class=" list-group-item">
+
+                        <li class="list-group-item">
                             <h6 class="cardHeader">Time</h6>
-                            <h6 class="cardContent" id="eventTime"><?= $time ?></h6>
+                            <p class="cardContent" id="eventTime"><?= $time ?></p>
                         </li>
-                        <li class=" list-group-item">
+
+                        <li class="list-group-item">
                             <h6 class="cardHeader"><?= $serviceVenue ?></h6>
-                            <h6 class="cardContent" id="venue"><?= implode(', ', array_unique($cottageRoom)) ?></h6>
+                            <p class="cardContent" id="venue"><?= implode(', ', array_unique($cottageRoom)) ?></p>
                         </li>
-                        <li class=" list-group-item">
+
+                        <li class="list-group-item">
                             <h6 class="cardHeader">Duration</h6>
-                            <h6 class="cardContent" id="eventDuration"><?= $duration ?></h6>
+                            <p class="cardContent" id="eventDuration"><?= $duration ?></p>
                         </li>
-                        <li class=" list-group-item">
+
+                        <li class="list-group-item">
                             <h6 class="cardHeader">Number of Guests</h6>
-                            <h6 class="cardContent" id="guestNo"><?= $guest ?></h6>
+                            <p class="cardContent" id="guestNo"><?= $guest ?></p>
                         </li>
 
-                        <li class=" list-group-item" id="addOns">
+                        <li class="list-group-item" id="addOns">
                             <h6 class="cardHeader">Add Ons</h6>
-                            <h6 class="cardContent"><?= !empty($addOns) ? htmlspecialchars($addOns) : "None" ?></h6>
+                            <p class="cardContent"><?= !empty($addOns) ? htmlspecialchars($addOns) : "None" ?></p>
                         </li>
 
-                        <li class=" list-group-item">
+                        <li class="list-group-item">
                             <h6 class="cardHeader">Request/Notes</h6>
-                            <h6 class="cardContent" id="request">
+                            <p class="cardContent" id="request">
                                 <?= !empty($AddRequest) ? htmlspecialchars($AddRequest) : "None" ?>
-                            </h6>
+                            </p>
                         </li>
-                        <!-- <li class=" list-group-item">
+                        <!-- <li class="list-group-item">
                             <h6 class="cardHeader">Package Type</h6>
-                            <h6 class="cardContent" id="packageType">Wedding <img
+                            <p class="cardContent" id="packageType">Wedding <img
                                     src="../../Assets/Images/Icon/information.png" alt="More Details"
                                     class="infoIcon">
-                            </h6>
+        </p>
                         </li> -->
-                        <li class=" list-group-item" id="totalAmountSection">
+                        <li class="list-group-item" id="totalAmountSection">
                             <h6 class="cardHeader">Total Amount:</h6>
                             <h6 class="cardContentBill" id="totalAmount">₱ <?= number_format($totalCost, 2) ?></h6>
                         </li>
-                        <li class=" list-group-item" id="promoSection">
+
+                        <li class="list-group-item" id="promoSection">
                             <h6 class="cardHeader">Promo/Discount:</h6>
                             <h6 class="cardContentBill" id="promoDiscount"> <?= $discount ?></h6>
                         </li>
-                        <li class=" list-group-item" id="totalBillSection">
+
+                        <li class="list-group-item" id="totalBillSection">
                             <h6 class="cardHeader">Grand Total:</h6>
                             <h6 class="cardContentBill" id="totalBill">₱ <?= number_format($totalCost, 2) ?></h6>
                         </li>
@@ -448,7 +458,7 @@ $userRole = $_SESSION['userRole'];
                 <div class="downpaymentNoteContainer" id="downpaymentNoteContainer" style="display: none;">
                     <div class="downpayment">
                         <h6 class="header">Down Payment Amount (30%):</h6>
-                        <h6 class="content" id="downPaymentAmount">₱ <?= number_format($downpayment, 2) ?></h6>
+                        <p class="content" id="downPaymentAmount">₱ <?= number_format($downpayment, 2) ?></p>
                     </div>
                     <div class="note">
                         <h6 class="note">Note: <?= $downpaymentNote ?></h6>

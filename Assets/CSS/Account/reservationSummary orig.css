@@ -1,0 +1,247 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #e3e3e3;
+  font-family: "Poppins";
+}
+
+.container {
+  width: 100% !important;
+  border: 1px solid red;
+  border-radius: 2rem;
+  margin-top: 2vw;
+  margin-bottom: 2vw;
+  padding: 2rem;
+}
+
+/* .backButtonContainer {
+  border: 1px solid red;
+  position: absolute;
+  top: 7%;
+  left: 10%;
+} */
+
+.PendingContainer {
+  display: flex;
+  gap: 3vw;
+  padding: 1rem;
+  align-items: center;
+  /* height: 102vh; */
+}
+
+.leftPendingContainer {
+  width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7vw;
+  margin-top: 1vw;
+  padding: 1vw;
+}
+
+.PendingIcon {
+  width: 5.5vw;
+}
+
+.pendingTitle {
+  color: #000;
+  text-align: center;
+  /* font-family:"Poppins"; */
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.pendingSubtitle {
+  color: #000;
+  text-align: center;
+  /* font-family: "Poppins"; */
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+#newReservationBtn,
+.btn-success {
+  width: 32vw !important;
+}
+.rightPendingContainer {
+  background-color: #f5f5f5 !important;
+  /* height: 100vh; */
+  width: 50%;
+  height: auto;
+  padding: 0.5rem;
+  border-radius: 1.5rem !important;
+  margin-right: 1vw;
+  margin-left: 2vw;
+  /* margin-bottom: 3vw; */
+}
+
+.rightContainerTitle {
+  color: #020101;
+  /* font-family: "Poppins"; */
+  font-size: 20px;
+  font-weight: bold;
+  margin: 3vw 0 0 2.5vw;
+}
+
+/* .firstRow,
+.secondRow {
+ 
+  display: flex;
+  margin: 2.5vw;
+  gap: 5vw;
+} */
+
+.firstRow {
+  display: grid;
+  align-items: center;
+  justify-self: center;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  margin: 2vw 0 2vw 0;
+  padding: 0 2vw 0 2vw;
+}
+.secondRow {
+  margin-top: -1.7vw;
+}
+
+.header {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.content {
+  font-family: "Poppins Light";
+  font-size: 14px;
+  text-indent: 0.5rem;
+}
+
+.card {
+  margin: auto;
+  margin-bottom: 2vw !important;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.5rem 0.5rem;
+  background-color: #f5f5f5;
+  gap: 0.3rem;
+}
+
+.cardHeader {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.cardContent {
+  font-size: 14px;
+  margin-left: auto;
+  width: 130px;
+}
+
+.cardContentBill {
+  font-size: 14px;
+}
+
+.infoIcon {
+  height: 1.3vw;
+  aspect-ratio: 1;
+}
+
+#totalAmountSection,
+#promoSection,
+#totalBillSection {
+  display: flex;
+  justify-content: end !important;
+  /* gap: 1.5vw; */
+}
+
+#downPaymentAmount,
+#totalBill {
+  color: #09b800;
+}
+
+.downpayment {
+  display: flex;
+  justify-content: center;
+  gap: 5vw;
+  margin-top: 1.5vw;
+}
+
+.note {
+  width: 90%;
+  position: relative;
+  margin: 0 auto;
+  margin-top: 1.5vw !important;
+}
+
+.note {
+  color: #d70b0b;
+  text-align: center;
+  /* font-family: "Poppins"; */
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+#modeofPaymentModalBody {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1vw;
+}
+
+.form-group {
+  margin-top: 2vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 6vw;
+}
+
+#gcashPaymentModal {
+  font-family: "Poppins";
+  font-size: 14px;
+  .modal-title {
+    font-family: "Poppins Black";
+    font-size: 18px;
+  }
+}
+
+#gcashModalBody {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#gcashModalBody img {
+  width: 20vw;
+  height: auto;
+  margin-top: 1vw;
+}
