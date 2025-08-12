@@ -723,6 +723,31 @@ footer {
       margin: 2px;
     }
   }
+
+  .wrapper {
+    display: flex !important;
+    gap: 2vw !important;
+  }
+
+  .content {
+    display: flex;
+    gap: 0.5rem !important;
+    justify-content: center;
+  }
+
+  .checkbox-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1vw;
+  }
+
+  #hotelDisplaySelection {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
 }
 
 #event-page {

@@ -39,7 +39,8 @@
      <link rel="stylesheet" href="../../Assets/CSS/Customer/bookNow.css">
 
      <!-- Bootstrap Link -->
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
      <!-- Flatpickr calendar -->
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -101,21 +102,21 @@
                                     $roomName = htmlspecialchars($row['RServiceName']);
                                     $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
                             ?>
-                                 <div class="hotelIconWithCaption" style="display: inline-block; text-align: center;"
-                                     data-availability="<?= $availabilityStatus ?>">
-                                     <a href="#<?= trim($row['RServiceName']) ?>"
-                                         data-duration="<?= htmlspecialchars($row['RSduration']) ?>">
-                                         <img src="<?= $iconPath ?>" alt="<?= $roomName ?>" class="hotelIcon"
-                                             id="hotelIcon<?= $i ?>">
-                                     </a>
-                                     <p class="roomCaption"> <?= $roomName ?></p>
-                                 </div>
-                             <?php
+                         <div class="hotelIconWithCaption" style="display: inline-block; text-align: center;"
+                             data-availability="<?= $availabilityStatus ?>">
+                             <a href="#<?= trim($row['RServiceName']) ?>"
+                                 data-duration="<?= htmlspecialchars($row['RSduration']) ?>">
+                                 <img src="<?= $iconPath ?>" alt="<?= $roomName ?>" class="hotelIcon"
+                                     id="hotelIcon<?= $i ?>">
+                             </a>
+                             <p class="roomCaption"> <?= $roomName ?></p>
+                         </div>
+                         <?php
                                     $i++;
                                 }
                             } else {
                                 ?>
-                             <p class="text-center m-auto">No room services found.</p>
+                         <p class="text-center m-auto">No room services found.</p>
                          <?php
                             }
                             ?>
@@ -148,7 +149,8 @@
                              <h5 class="containerLabel">Check-In Date</h5>
                              <div style="display: flex;align-items:center;width:100%">
                                  <input type="text" class="form-control" name="checkInDate" id="checkInDate" required
-                                     placeholder="Select Date and Time" value="<?php echo isset($_SESSION['formData']['checkInDate']) ? htmlspecialchars(trim($_SESSION['formData']['checkInDate'])) : ''; ?>">
+                                     placeholder="Select Date and Time"
+                                     value="<?php echo isset($_SESSION['formData']['checkInDate']) ? htmlspecialchars(trim($_SESSION['formData']['checkInDate'])) : ''; ?>">
                                  <i class="fa-solid fa-calendar" id="hotelCheckinIcon"
                                      style="margin-left: -2vw;font-size:1.2vw;"> </i>
                              </div>
@@ -169,7 +171,8 @@
                          <h5 class="noOfPeopleHotelLabel">Number of People</h5>
                          <div class="hotelPeopleForm">
                              <div class="input-container ">
-                                 <input type="number" class="form-control" placeholder="Adults" id="adultCount" name="adultCount" required
+                                 <input type="number" class="form-control" placeholder="Adults" id="adultCount"
+                                     name="adultCount" required
                                      value="<?php echo isset($_SESSION['formData']['adultCount']) ? htmlspecialchars(trim($_SESSION['formData']['adultCount'])) : ''; ?>" />
                                  <div class="info-container mt-1">
                                      <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
@@ -177,7 +180,8 @@
                                  </div>
                              </div>
                              <div class="input-container">
-                                 <input type="number" class="form-control" placeholder="Kids" id="childrenCount" name="childrenCount"
+                                 <input type="number" class="form-control" placeholder="Kids" id="childrenCount"
+                                     name="childrenCount"
                                      value="<?php echo isset($_SESSION['formData']['childrenCount']) ? htmlspecialchars(trim($_SESSION['formData']['childrenCount'])) : ''; ?>" />
                                  <div class="info-container mt-1">
                                      <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
@@ -185,7 +189,8 @@
                                  </div>
                              </div>
                              <div class="input-container">
-                                 <input type="number" class="form-control" placeholder="Toddler/Infant" id="toddlerCount" name="toddlerCount"
+                                 <input type="number" class="form-control" placeholder="Toddler/Infant"
+                                     id="toddlerCount" name="toddlerCount"
                                      value="<?php echo isset($_SESSION['formData']['toddlerCount']) ? htmlspecialchars(trim($_SESSION['formData']['toddlerCount'])) : ''; ?>" />
                                  <div class="info-container mt-1">
                                      <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
@@ -197,20 +202,24 @@
 
                      <div class="hotelRooms">
                          <h5 class="hotelRooms-title">Room Number</h5>
-                         <button type="button" class="btn btn-info text-black w-100" name="hotelSelectionBtn" id="hotelSelectionBtn" data-bs-toggle="modal" data-bs-target="#hotelRoomModal" disabled> Choose your room</button>
+                         <button type="button" class="btn btn-info text-black w-100" name="hotelSelectionBtn"
+                             id="hotelSelectionBtn" data-bs-toggle="modal" data-bs-target="#hotelRoomModal" disabled>
+                             Choose your room</button>
 
                          <!-- Modal for hotel rooms -->
-                         <div class="modal" id="hotelRoomModal" tabindex="-1">
+                         <div class="modal modal-lg" id="hotelRoomModal" tabindex="-1">
                              <div class="modal-dialog">
                                  <div class="modal-content">
                                      <div class="modal-header">
-                                         <h5 class="modal-title">Available Hotels</h5>
-                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                         <h5 class="modal-title">Available Hotel Rooms</h5>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                             aria-label="Close"></button>
                                      </div>
                                      <div class="modal-body" id="hotelDisplaySelection">
                                      </div>
                                      <div class="modal-footer">
-                                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                                         <button type="button" class="btn btn-primary"
+                                             data-bs-dismiss="modal">Okay</button>
                                      </div>
                                  </div>
                              </div>
@@ -222,9 +231,15 @@
                              <h5 class="payment-title">Payment Method</h5>
                              <div class="input-group">
                                  <select class="form-select" name="paymentMethod" id="paymentMethod" required>
-                                     <option value="" disabled <?= !isset($_SESSION['formData']['paymentMethod']) ? 'selected' : '' ?>>Choose...</option>
-                                     <option value="GCash" <?= (isset($_SESSION['formData']['paymentMethod']) && $_SESSION['formData']['paymentMethod'] === 'GCash') ? 'selected' : '' ?>>GCash</option>
-                                     <option value="Cash" <?= (isset($_SESSION['formData']['paymentMethod']) && $_SESSION['formData']['paymentMethod'] === 'Cash') ? 'selected' : '' ?>>Cash</option>
+                                     <option value="" disabled
+                                         <?= !isset($_SESSION['formData']['paymentMethod']) ? 'selected' : '' ?>>
+                                         Choose...</option>
+                                     <option value="GCash"
+                                         <?= (isset($_SESSION['formData']['paymentMethod']) && $_SESSION['formData']['paymentMethod'] === 'GCash') ? 'selected' : '' ?>>
+                                         GCash</option>
+                                     <option value="Cash"
+                                         <?= (isset($_SESSION['formData']['paymentMethod']) && $_SESSION['formData']['paymentMethod'] === 'Cash') ? 'selected' : '' ?>>
+                                         Cash</option>
                                  </select>
 
                              </div>
@@ -233,7 +248,8 @@
                          <div class="arrivalTime">
                              <h5 class="arrivalTimeLabel">Time arrival</h5>
                              <div class="input-group">
-                                 <input type="time" name="arrivalTime" id="arrivalTime" class="form-control" placeholder="Select Arrival Time"
+                                 <input type="time" name="arrivalTime" id="arrivalTime" class="form-control"
+                                     placeholder="Select Arrival Time"
                                      value="<?php echo isset($_SESSION['formData']['arrivalTime']) ? htmlspecialchars(trim($_SESSION['formData']['arrivalTime'])) : ''; ?>">
                              </div>
                          </div>
@@ -280,188 +296,195 @@
 
      <!-- Functions -->
      <script>
-         function backToSelection() {
-             location.href = "bookNow.php"
-         };
+     function backToSelection() {
+         location.href = "bookNow.php"
+     };
      </script>
 
      <!-- Calendar -->
      <script>
-         const calIcon = document.getElementById("calendarIcon");
+     const calIcon = document.getElementById("calendarIcon");
 
-         const minDate = new Date();
-         minDate.setDate(minDate.getDate() + 2);
+     const minDate = new Date();
+     minDate.setDate(minDate.getDate() + 2);
 
-         //hotel calendar
-         flatpickr('#checkInDate', {
-             enableTime: true,
-             minDate: minDate,
-             dateFormat: "Y-m-d H:i ",
-             minTime: '00:00'
-         });
+     //hotel calendar
+     flatpickr('#checkInDate', {
+         enableTime: true,
+         minDate: minDate,
+         dateFormat: "Y-m-d H:i ",
+         minTime: '00:00'
+     });
 
 
-         flatpickr('#checkOutDate', {
-             enableTime: true,
-             minDate: minDate,
-             dateFormat: "Y-m-d H:i ",
-             minTime: '00:00'
-         });
+     flatpickr('#checkOutDate', {
+         enableTime: true,
+         minDate: minDate,
+         dateFormat: "Y-m-d H:i ",
+         minTime: '00:00'
+     });
 
-         flatpickr('#arrivalTime', {
-             enableTime: true,
-             noCalendar: true,
-             dateFormat: "H:i"
-         });
+     flatpickr('#arrivalTime', {
+         enableTime: true,
+         noCalendar: true,
+         dateFormat: "H:i"
+     });
      </script>
 
 
      <!-- Hotel check-in check-out  -->
      <script>
-         //  const hoursSelected = document.getElementById('hoursSelected');
-         const checkInInput = document.getElementById('checkInDate');
-         const checkOutInput = document.getElementById('checkOutDate');
+     //  const hoursSelected = document.getElementById('hoursSelected');
+     const checkInInput = document.getElementById('checkInDate');
+     const checkOutInput = document.getElementById('checkOutDate');
 
-         checkInInput.addEventListener('change', () => {
-             const selectedValue = '22 hours';
-             const checkInDate = new Date(checkInInput.value);
-             const addHours = parseInt(selectedValue);
-             if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
-                 const checkOutDate = new Date(checkInDate.getTime() + addHours * 60 * 60 * 1000);
+     checkInInput.addEventListener('change', () => {
+         const selectedValue = '22 hours';
+         const checkInDate = new Date(checkInInput.value);
+         const addHours = parseInt(selectedValue);
+         if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
+             const checkOutDate = new Date(checkInDate.getTime() + addHours * 60 * 60 * 1000);
 
-                 const year = checkOutDate.getFullYear();
-                 const month = String(checkOutDate.getMonth() + 1).padStart(2, '0');
-                 const day = String(checkOutDate.getDate()).padStart(2, '0');
-                 const hours = String(checkOutDate.getHours()).padStart(2, '0');
-                 const minutes = String(checkOutDate.getMinutes()).padStart(2, '0');
+             const year = checkOutDate.getFullYear();
+             const month = String(checkOutDate.getMonth() + 1).padStart(2, '0');
+             const day = String(checkOutDate.getDate()).padStart(2, '0');
+             const hours = String(checkOutDate.getHours()).padStart(2, '0');
+             const minutes = String(checkOutDate.getMinutes()).padStart(2, '0');
 
-                 const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
-                 checkOutInput.value = formattedDate;
+             const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+             checkOutInput.value = formattedDate;
 
-             }
-         });
+         }
+     });
      </script>
 
 
      <!-- Get the available hotel/room depends on the customer selected date -->
      <script>
-         document.addEventListener("DOMContentLoaded", function() {
-             const checkInDate = document.getElementById('checkInDate');
-             const checkOutDate = document.getElementById('checkOutDate');
+     document.addEventListener("DOMContentLoaded", function() {
+         const checkInDate = document.getElementById('checkInDate');
+         const checkOutDate = document.getElementById('checkOutDate');
 
-             if (checkInDate && !checkInDate.value) {
-                 Swal.fire({
-                     icon: 'info',
-                     title: 'Select your choice of date',
-                     text: 'Please pick a booking date to continue',
-                     confirmButtonText: 'OK'
-                 }).then(() => {
-                     checkInDate.style.border = '2px solid red';
-                     checkInDate.focus();
-                 });
-             }
-         });
+         if (checkInDate && !checkInDate.value) {
+             Swal.fire({
+                 icon: 'info',
+                 title: 'Select your choice of date',
+                 text: 'Please pick a booking date to continue',
+                 confirmButtonText: 'OK'
+             }).then(() => {
+                 checkInDate.style.border = '2px solid red';
+                 checkInDate.focus();
+             });
+         }
+     });
 
 
-         function fetchAvailableRooms() {
-             const checkInDateValue = checkInDate.value;
-             const checkOutDateValue = checkOutDate.value;
-             const hoursSelectedValue = "22 hours";
+     function fetchAvailableRooms() {
+         const checkInDateValue = checkInDate.value;
+         const checkOutDateValue = checkOutDate.value;
+         const hoursSelectedValue = "22 hours";
 
-             if (!checkInDateValue || !hoursSelectedValue) return;
+         if (!checkInDateValue || !hoursSelectedValue) return;
 
-             fetch(`../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(checkInDateValue)}&hotelCheckOutDate=${encodeURIComponent(checkOutDateValue)}&duration=${encodeURIComponent(hoursSelectedValue)}`)
-                 .then(response => {
-                     if (!response.ok) throw new Error('Network Problem');
-                     return response.json();
+         fetch(
+                 `../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(checkInDateValue)}&hotelCheckOutDate=${encodeURIComponent(checkOutDateValue)}&duration=${encodeURIComponent(hoursSelectedValue)}`
+             )
+             .then(response => {
+                 if (!response.ok) throw new Error('Network Problem');
+                 return response.json();
+             })
+             .then(data => {
+                 if (data.error) {
+                     alert("Error: " + data.error);
+                     return;
+                 }
+
+                 const hotelRoomContainer = document.getElementById("hotelDisplaySelection");
+                 hotelRoomContainer.innerHTML = '';
+
+                 data.hotels.forEach(hotel => {
+                     const wrapper = document.createElement('div');
+                     wrapper.classList.add('checkbox-item');
+
+                     const checkbox = document.createElement('input');
+                     checkbox.type = 'checkbox';
+                     checkbox.name = 'hotelSelections[]';
+                     checkbox.value = hotel.RServiceName;
+                     checkbox.id = hotel.RServiceName;
+                     checkbox.dataset.capacity = hotel.RScapacity;
+
+
+                     const content = document.createElement('div');
+                     content.classList.add('content');
+                     const label = document.createElement('label');
+                     label.setAttribute('for', checkbox.id);
+                     label.textContent =
+                         `${hotel.RServiceName} good for ${hotel.RScapacity} pax (₱${Number(hotel.RSprice).toLocaleString()}.00)`;
+
+                     const img = document.createElement('img');
+                     img.classList.add('hotel-image');
+                     img.src = `../../Assets/Images/amenities/hotelPics/${hotel.RSimageData}`;
+                     img.alt = `${hotel.RServiceName} image`;
+                     img.style.width = "200px";
+
+                     content.appendChild(checkbox);
+                     content.appendChild(label);
+                     wrapper.appendChild(img);
+                     wrapper.appendChild(content);
+                     hotelRoomContainer.appendChild(wrapper);
                  })
-                 .then(data => {
-                     if (data.error) {
-                         alert("Error: " + data.error);
-                         return;
-                     }
 
-                     const hotelRoomContainer = document.getElementById("hotelDisplaySelection");
-                     hotelRoomContainer.innerHTML = '';
-
-                     data.hotels.forEach(hotel => {
-                         const wrapper = document.createElement('div');
-                         wrapper.classList.add('checkbox-item');
-
-                         const checkbox = document.createElement('input');
-                         checkbox.type = 'checkbox';
-                         checkbox.name = 'hotelSelections[]';
-                         checkbox.value = hotel.RServiceName;
-                         checkbox.id = hotel.RServiceName;
-                         checkbox.dataset.capacity = hotel.RScapacity;
-
-                         const label = document.createElement('label');
-                         label.setAttribute('for', checkbox.id);
-                         label.textContent = `${hotel.RServiceName} good for ${hotel.RScapacity} pax (₱${Number(hotel.RSprice).toLocaleString()}.00)`;
-
-                         const img = document.createElement('img');
-                         img.classList.add('hotel-image');
-                         img.src = hotel.RSimageData;
-                         img.alt = `${hotel.RServiceName} image`;
-                         img.style.width = "150px";
-
-                         wrapper.appendChild(checkbox);
-                         wrapper.appendChild(label);
-                         wrapper.appendChild(img);
-                         hotelRoomContainer.appendChild(wrapper);
-                     })
-
-                 }).catch(error => {
-                     console.error(error);
-                     Swal.fire({
-                         icon: 'error',
-                         title: 'Error',
-                         text: 'Failed to fetch hotels. Please try again.',
-                     });
-                 });
-         }
-
-         document.addEventListener("DOMContentLoaded", () => {
-             if (checkInDate && checkInDate.value) {
-                 fetchAvailableRooms();
-                 hotelSelectionBtn.disabled = false;
-                 checkInDate.style.border = '1px solid rgb(223, 226, 230)';
-             }
-         });
-
-         if (checkInDate) {
-             checkInDate.addEventListener("change", () => {
-                 fetchAvailableRooms();
-                 checkInDate.style.border = checkInDate.value ? '' : '2px solid red';
-                 hotelSelectionBtn.disabled = false;
-             });
-         }
-         if (checkOutDate) {
-             checkOutDate.addEventListener("change", fetchAvailableRooms);
-         }
-
-         const hotelBookingBtn = document.getElementById('hotelBooking');
-
-         hotelBookingBtn.addEventListener("click", function() {
-
-             let totalCapacity = 0;
-
-             const hotelSelected = document.querySelectorAll('input[name="hotelSelections[]"]:checked');
-             hotelSelected.forEach(item => {
-                 totalCapacity += parseInt(item.dataset.capacity) || 0;
-             });
-
-             if (totalCapacity === 0) {
+             }).catch(error => {
+                 console.error(error);
                  Swal.fire({
-                     icon: 'warning',
-                     title: 'Oops',
-                     text: 'Select a cottage(s) or room(s)',
+                     icon: 'error',
+                     title: 'Error',
+                     text: 'Failed to fetch hotels. Please try again.',
                  });
-                 hotelBookingBtn.type = 'button';
-             } else {
-                 hotelBookingBtn.type = 'submit';
-             }
+             });
+     }
+
+     document.addEventListener("DOMContentLoaded", () => {
+         if (checkInDate && checkInDate.value) {
+             fetchAvailableRooms();
+             hotelSelectionBtn.disabled = false;
+             checkInDate.style.border = '1px solid rgb(223, 226, 230)';
+         }
+     });
+
+     if (checkInDate) {
+         checkInDate.addEventListener("change", () => {
+             fetchAvailableRooms();
+             checkInDate.style.border = checkInDate.value ? '' : '2px solid red';
+             hotelSelectionBtn.disabled = false;
          });
+     }
+     if (checkOutDate) {
+         checkOutDate.addEventListener("change", fetchAvailableRooms);
+     }
+
+     const hotelBookingBtn = document.getElementById('hotelBooking');
+
+     hotelBookingBtn.addEventListener("click", function() {
+
+         let totalCapacity = 0;
+
+         const hotelSelected = document.querySelectorAll('input[name="hotelSelections[]"]:checked');
+         hotelSelected.forEach(item => {
+             totalCapacity += parseInt(item.dataset.capacity) || 0;
+         });
+
+         if (totalCapacity === 0) {
+             Swal.fire({
+                 icon: 'warning',
+                 title: 'Oops',
+                 text: 'Select a cottage(s) or room(s)',
+             });
+             hotelBookingBtn.type = 'button';
+         } else {
+             hotelBookingBtn.type = 'submit';
+         }
+     });
      </script>
 
 
