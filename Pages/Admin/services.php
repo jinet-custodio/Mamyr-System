@@ -260,98 +260,96 @@
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#resortServices').DataTable({
-            language: {
-                emptyTable: "No Services"
-            }
+        $(document).ready(function() {
+            $('#resortServices').DataTable({
+                language: {
+                    emptyTable: "No Services"
+                }
+            });
         });
-    });
     </script>
 
     <script>
-    const serviceCategories = document.getElementById("serviceCategories")
-    const resortContainer = document.getElementById("resortContainer")
-    const hotelContainer = document.getElementById("hotelContainer")
-    const eventContainer = document.getElementById("eventContainer")
-    const cateringContainer = document.getElementById("cateringContainer")
-    const backButton = document.getElementById("backButton")
-    const servicesBody = document.getElementById("servicesBody")
+        const serviceCategories = document.getElementById("serviceCategories")
+        const resortContainer = document.getElementById("resortContainer")
+        const hotelContainer = document.getElementById("hotelContainer")
+        const eventContainer = document.getElementById("eventContainer")
+        const cateringContainer = document.getElementById("cateringContainer")
+        const backButton = document.getElementById("backButton")
+        const servicesBody = document.getElementById("servicesBody")
 
+        resortContainer.style.display = "none"
+        hotelContainer.style.display = "none"
+        eventContainer.style.display = "none"
+        cateringContainer.style.display = "none"
 
-    backButton.href = "services.php"
-    resortContainer.style.display = "none"
-    hotelContainer.style.display = "none"
-    eventContainer.style.display = "none"
-    cateringContainer.style.display = "none"
+        function resort() {
+            if (resortContainer.style.display == "none") {
 
-    function resort() {
-        if (resortContainer.style.display == "none") {
+                resortContainer.style.display = "block";
+                serviceCategories.style.display = "none"
+                hotelContainer.style.display = "none"
+                eventContainer.style.display = "none"
+                cateringContainer.style.display = "none"
+                document.getElementById("headerText").innerHTML = "Resort"
+                document.body.setAttribute("style", "background-color: white;");
 
-            resortContainer.style.display = "block";
-            serviceCategories.style.display = "none"
-            hotelContainer.style.display = "none"
-            eventContainer.style.display = "none"
-            cateringContainer.style.display = "none"
-            document.getElementById("headerText").innerHTML = "Resort"
-            document.body.setAttribute("style", "background-color: white;");
-
-        } else {
-            resortContainer.style.display = "none"
-            backButton.href = "adminDashboard.php";
+            } else {
+                resortContainer.style.display = "none"
+                backButton.href = "adminDashboard.php";
+            }
         }
-    }
 
-    function hotel() {
-        if (hotelContainer.style.display == "none") {
+        function hotel() {
+            if (hotelContainer.style.display == "none") {
 
-            hotelContainer.style.display = "block";
-            serviceCategories.style.display = "none"
-            resortContainer.style.display = "none"
-            eventContainer.style.display = "none"
-            cateringContainer.style.display = "none"
-            document.getElementById("headerText").innerHTML = "Hotel"
-            document.body.setAttribute("style", "background-color: white;");
+                hotelContainer.style.display = "block";
+                serviceCategories.style.display = "none"
+                resortContainer.style.display = "none"
+                eventContainer.style.display = "none"
+                cateringContainer.style.display = "none"
+                document.getElementById("headerText").innerHTML = "Hotel"
+                document.body.setAttribute("style", "background-color: white;");
 
-        } else {
-            hotelContainer.style.display = "none"
-            backButton.href = "adminDashboard.php";
+            } else {
+                hotelContainer.style.display = "none"
+                backButton.href = "adminDashboard.php";
+            }
         }
-    }
 
-    function eventCategory() {
-        if (eventContainer.style.display == "none") {
+        function eventCategory() {
+            if (eventContainer.style.display == "none") {
 
-            eventContainer.style.display = "block";
-            serviceCategories.style.display = "none"
-            resortContainer.style.display = "none"
-            hotelContainer.style.display = "none"
-            cateringContainer.style.display = "none"
-            document.getElementById("headerText").innerHTML = "Event"
-            document.body.setAttribute("style", "background-color: white;");
+                eventContainer.style.display = "block";
+                serviceCategories.style.display = "none"
+                resortContainer.style.display = "none"
+                hotelContainer.style.display = "none"
+                cateringContainer.style.display = "none"
+                document.getElementById("headerText").innerHTML = "Event"
+                document.body.setAttribute("style", "background-color: white;");
 
-        } else {
-            eventContainer.style.display = "none"
-            backButton.href = "adminDashboard.php";
+            } else {
+                eventContainer.style.display = "none"
+                backButton.href = "adminDashboard.php";
+            }
         }
-    }
 
-    function catering() {
-        if (cateringContainer.style.display == "none") {
+        function catering() {
+            if (cateringContainer.style.display == "none") {
 
-            cateringContainer.style.display = "block";
-            serviceCategories.style.display = "none"
-            resortContainer.style.display = "none"
-            hotelContainer.style.display = "none"
-            eventContainer.style.display = "none"
-            document.getElementById("headerText").innerHTML = "Catering"
-            document.body.setAttribute("style", "background-color: white;");
+                cateringContainer.style.display = "block";
+                serviceCategories.style.display = "none"
+                resortContainer.style.display = "none"
+                hotelContainer.style.display = "none"
+                eventContainer.style.display = "none"
+                document.getElementById("headerText").innerHTML = "Catering"
+                document.body.setAttribute("style", "background-color: white;");
 
-        } else {
-            cateringContainer.style.display = "none"
-            backButton.href = "adminDashboard.php";
+            } else {
+                cateringContainer.style.display = "none"
+                backButton.href = "adminDashboard.php";
+            }
         }
-    }
     </script>
 </body>
 
