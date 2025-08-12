@@ -51,34 +51,59 @@ if (isset($_POST['downloadReceiptBtn'])) {
     ob_start();
 ?>
 
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-
-    <body>
-
-        <header>
-            <h1>Mamyr Resort</h1>
-            <h6><?= $mamyrAddress ?></h6>
-            <h6><?= $resortOwner ?></h6>
-        </header>
-        <h1>Official Receipt No. <?= $bookingID ?></h1>
-        <p><strong>Date:</strong> <?= $date ?></p>
-        <p>Received from <?= $adminName ?> </p>
-        <p> with Address at <?= $mamyrAddress ?> </p>
-        <p>Bus. Style/Name <?= $businessName ?></p>
-        <p>the sum of <?= $amountInWords ?> (₱ <?= number_format($totalBill, 2) ?>)</p>
-        <p>In partial/full payment for <?= $bookingType ?></p>
-        <p>Request by: <?= $name ?></p>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 
 
-    </html>
+    <style>
+    .logo {
+        height: 35px;
+        margin-top: -5px;
+
+    }
+
+    h3 {
+        margin-top: -10px;
+    }
+    </style>
+</head>
+
+<body>
+
+    <header style="margin-bottom:20px">
+        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+        <h3 style="text-align: center;">Mamyr Resort</h3>
+        <h5 class="mamyrAddress" style="text-align: center;"><?= $mamyrAddress ?></h5>
+        <h4 style="text-align: center;"><?= $resortOwner ?></h4>
+    </header>
+    <div class="receiptNo">
+        <h3>Official Receipt No. <?= $bookingID ?></h3>
+    </div>
+    <p style="text-align:right; margin-top: -40px;"><strong>Date:</strong> <?= $date ?></p>
+
+    <div class="contents" style="margin-top: 25px; padding: 15px">
+        <p style="text-align: justify; font-size: 15px"><strong>Received from </strong> <?= $adminName ?> <strong>with
+                Address at
+            </strong> <?= $mamyrAddress ?>
+            <strong>Bus. Style/Name </strong><?= $businessName ?>
+            <strong>the sum of </strong> <?= $amountInWords ?> (₱
+            <?= number_format($totalBill, 2) ?>)
+
+            <strong>In partial/full payment for</strong> <?= $bookingType ?> Booking.
+        </p>
+
+    </div>
+
+    <p style="text-align: center; font-size: 15px"><strong>Requested by:</strong> <?= $name ?></p>
+</body>
+
+
+</html>
 
 
 <?php
