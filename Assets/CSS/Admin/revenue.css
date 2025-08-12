@@ -178,6 +178,7 @@ body {
 .revenue-chart {
   /* border: 1px solid rgb(37, 11, 139);  */
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 50%;
@@ -195,10 +196,25 @@ body {
   /* display: none; */
 }
 
+.salesReportBtn {
+  width: 100%;
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  margin: 0.5rem;
+}
+
+.salesReportBtn a {
+  font-size: 18px !important;
+  font-weight: 500;
+  font-family: "Lora" !important;
+}
+
 .cards {
   /* border: 1px solid rgb(0, 255, 136); */
   width: 70vw;
   display: flex;
+  justify-content: center;
   gap: 2rem;
   margin: auto;
 }

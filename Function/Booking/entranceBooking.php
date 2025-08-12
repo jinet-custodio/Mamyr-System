@@ -118,7 +118,7 @@ if (isset($_POST['bookRates'])) {
         }
     }
 
-    if (!empty($addOnsServices)) {
+   
         //Get Selected Entertainment 
         $getEntertainment = $conn->prepare("SELECT s.serviceID, rs.RSprice, rs.RServiceName, rs.RScapacity, rs.resortServiceID
             FROM services s
@@ -139,12 +139,9 @@ if (isset($_POST['bookRates'])) {
                     $services[] = $row['RServiceName'];
                     $serviceCapacity[] = $row['RScapacity'] ?? 0;
                 }
-            } else {
-                echo "Service not found for: " . htmlspecialchars($selectedEntertainment);
-                exit();
-            }
+            } 
         }
-    }
+ 
 
 
     $totalAdultFee = multiplication($adultCount, $adultRate);
