@@ -130,9 +130,9 @@ if ($revenueResult->num_rows > 0) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -244,20 +244,20 @@ if ($revenueResult->num_rows > 0) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                    <ul class="list-group list-group-flush ">
-                        <?php foreach ($notificationsArray as $index => $message):
+                        <ul class="list-group list-group-flush ">
+                            <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                        <li class="list-group-item mb-2 notification-item"
-                            data-id="<?= htmlspecialchars($notificationID) ?>"
-                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                            <?= htmlspecialchars($message) ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                    <?= htmlspecialchars($message) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     <?php else: ?>
-                    <div class="p-3 text-muted">No new notifications.</div>
+                        <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -270,27 +270,29 @@ if ($revenueResult->num_rows > 0) {
             <div class="card-body">
                 <div class="charts">
                     <?php if (!empty($revenues)): ?>
-                    <div class="revenue-chart">
-                        <canvas id="revenueBar"></canvas>
-                    </div>
+                        <div class="revenue-chart">
+                            <canvas id="revenueBar"></canvas>
+                        </div>
                     <?php else: ?>
-                    <!-- <div class="revenueBar">No data available.</div> -->
-                    <div class="revenue-chart">
-                        <canvas id="revenueBar"></canvas>
-                    </div>
+                        <!-- <div class="revenueBar">No data available.</div> -->
+                        <div class="revenue-chart">
+                            <canvas id="revenueBar"></canvas>
+                        </div>
                     <?php endif; ?>
                     <?php if (($GCashCount ?? 0) > 0 || ($CashCount ?? 0) > 0): ?>
-                    <div class="revenue-chart">
-                        <canvas id="revenuePie"></canvas>
-                    </div>
+                        <div class="revenue-chart">
+                            <canvas id="revenuePie"></canvas>
+                        </div>
                     <?php else: ?>
-                    <div class="revenue-chart">
-                        <canvas id="revenuePie"></canvas>
-                    </div>
-                    <!-- <div class="revenuePie">No data available.</div> -->
+                        <div class="revenue-chart">
+                            <canvas id="revenuePie"></canvas>
+                        </div>
+                        <!-- <div class="revenuePie">No data available.</div> -->
                     <?php endif; ?>
                 </div>
-
+                <div class="salesReportBtn">
+                    <a href="salesReport.php" class="btn btn-primary w-50">Sales Report</a>
+                </div>
                 <div class="cards">
                     <div class="display-revenue">
 
@@ -467,7 +469,6 @@ if ($revenueResult->num_rows > 0) {
                 });
             });
         });
-    });
     </script>
 
 
@@ -476,91 +477,91 @@ if ($revenueResult->num_rows > 0) {
     <!-- <script src="path/to/chartjs/dist/chart.umd.js"></script> -->
 
     <script>
-    Chart.register({
-        id: 'noDataPlugin',
-        beforeDraw(chart) {
-            const dataset = chart.data.datasets[0];
-            const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
+        Chart.register({
+            id: 'noDataPlugin',
+            beforeDraw(chart) {
+                const dataset = chart.data.datasets[0];
+                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
 
-            if (!hasData) {
-                const ctx = chart.ctx;
-                const {
-                    width,
-                    height
-                } = chart;
+                if (!hasData) {
+                    const ctx = chart.ctx;
+                    const {
+                        width,
+                        height
+                    } = chart;
 
-                chart.clear();
+                    chart.clear();
 
-                ctx.save();
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.font = '20px Times New Roman';
-                ctx.fillStyle = 'gray';
-                ctx.fillText('No available data', width / 2, height / 2);
-                ctx.restore();
-            }
-        }
-    });
-
-
-    const bar = document.getElementById("revenueBar").getContext('2d');
-
-    const myBarChart = new Chart(bar, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($months) ?>,
-            datasets: [{
-                label: 'Sales',
-                data: <?= json_encode($revenues) ?>,
-                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = '20px Times New Roman';
+                    ctx.fillStyle = 'gray';
+                    ctx.fillText('No available data', width / 2, height / 2);
+                    ctx.restore();
                 }
             }
-        },
-        plugins: ['noDataPlugin']
-    });
+        });
 
 
-    const pie = document.getElementById('revenuePie').getContext('2d');
+        const bar = document.getElementById("revenueBar").getContext('2d');
 
-    const myPieChart = new Chart(pie, {
-        type: 'pie',
-        data: {
-            labels: ['Gcash', 'Cash'],
-            datasets: [{
-                label: 'Payment Methods',
-                data: <?= json_encode([$GCashCount ?? 0, $CashCount ?? 0]) ?>,
-                backgroundColor: [
-                    'rgba(30, 134, 232, 0.6)',
-                    'rgba(129, 204, 196, 0.6)'
-                    // 'rgba(99, 99, 99, 0.6)'
-                ],
-                borderColor: '#fff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top'
-                },
-                title: {
-                    display: true,
-                    text: 'Payment Methods'
+        const myBarChart = new Chart(bar, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode($months) ?>,
+                datasets: [{
+                    label: 'Sales',
+                    data: <?= json_encode($revenues) ?>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
-            }
-        },
-        plugins: ['noDataPlugin']
-    });
+            },
+            plugins: ['noDataPlugin']
+        });
+
+
+        const pie = document.getElementById('revenuePie').getContext('2d');
+
+        const myPieChart = new Chart(pie, {
+            type: 'pie',
+            data: {
+                labels: ['Gcash', 'Cash'],
+                datasets: [{
+                    label: 'Payment Methods',
+                    data: <?= json_encode([$GCashCount ?? 0, $CashCount ?? 0]) ?>,
+                    backgroundColor: [
+                        'rgba(30, 134, 232, 0.6)',
+                        'rgba(129, 204, 196, 0.6)'
+                        // 'rgba(99, 99, 99, 0.6)'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Payment Methods'
+                    }
+                }
+            },
+            plugins: ['noDataPlugin']
+        });
     </script>
 </body>
 
