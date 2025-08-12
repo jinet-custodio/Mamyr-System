@@ -128,7 +128,7 @@ $userRole = $_SESSION['userRole'];
                 $services = [];
                 $allDescriptions = [];
                 $AddRequest = "";
-
+                $discount = 0.00;
 
                 $adultCount = 0;
                 $kidsCount = 0;
@@ -147,7 +147,7 @@ $userRole = $_SESSION['userRole'];
                     $pax = $data['paxNum']; //Bookings
 
                     $totalCost = $data['bookingCost'];  //Booking
-                    $discount = $data['discountAmount'];  //Bookings
+                    // $discount = $data['discountAmount'];  //Bookings
                     $downpayment = $data['downpayment'];    //Bookings
 
                     $paymentMethod = $data['paymentMethod'];
@@ -348,7 +348,7 @@ $userRole = $_SESSION['userRole'];
                         data-bs-toggle="modal" data-bs-target="#gcashPaymentModal">Make a Down Payment</button>
                     <!-- <a href="../bookNow.php" class="btn btn-primary w-100 mt-3" id="newReservationBtn">Make Another
                         Reservation</a> -->
-                    <form action="../../Function/Customer/receiptPDF.php" method="POST">
+                    <form action="../../Function/Customer/receiptPDF.php" method="POST" target="_blank">
                         <input type="hidden" name="totalCost" value="<?= $totalBill ?>">
                         <input type="hidden" name="name" value="<?= $name ?>">
                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
