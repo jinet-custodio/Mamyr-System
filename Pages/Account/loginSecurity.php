@@ -41,12 +41,13 @@ $userRole = $_SESSION['userRole'];
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/loginSecurity.css" />
-
-    <!-- Boxicon Link -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- icon libraries for font-awesome and box icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
 <body>
@@ -76,289 +77,293 @@ $userRole = $_SESSION['userRole'];
         $data =  $getUserInfoResult->fetch_assoc();
     }
     ?>
-    <!-- Side Bar -->
-    <div class="sidebar">
-
-        <div class="home">
-            <?php if ($role === 'Customer') { ?>
-                <a href="../Customer/dashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
-            <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
-            <?php } ?>
-        </div>
-
-        <div class="sidebar-header">
-            <h5>User Account</h5>
-
-            <?php
-            $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
-            $getProfile->bind_param("ii", $userID, $userRole);
-            $getProfile->execute();
-            $getProfileResult = $getProfile->get_result();
-            if ($getProfileResult->num_rows > 0) {
-                $profile = $getProfileResult->fetch_assoc();
-                $firstName = $profile['firstName'];
-                $imageData = $profile['userProfile'];
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_buffer($finfo, $imageData);
-                finfo_close($finfo);
-                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-            }
-            ?>
-
-            <div class="profileImage">
-                <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+    <div class="wrapper d-flex">
+        <!-- Side Bar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="d-flex" id="toggle-container">
+                <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
             </div>
-        </div>
-        <ul class="list-group">
-            <li>
-                <a href="account.php" class="list-group-item ">
-                    <img src="../../Assets/Images/Icon/user.png" alt="Profile Information" class="sidebar-icon">
-                    Profile Information
-                </a>
-            </li>
-
-            <li>
-                <a href="loginSecurity.php" class="list-group-item active">
-                    <img src="../../Assets/Images/Icon/login_security.png" alt="Login Security" class="sidebar-icon">
-                    Login & Security
-                </a>
-            </li>
-
-            <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                <li>
-                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                        <img src="../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
-                            class="sidebar-icon">
-                        Payment & Booking History
+            <div class="home">
+                <?php if ($role === 'Customer') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
-                </li>
-            <?php } elseif ($role === 'Admin') { ?>
-                <li>
-                    <a href="userManagement.php" class="list-group-item">
-                        <img src="../../Assets/Images/Icon/usermanagement.png" alt="" class="sidebar-icon">
-                        Manage Users
+                <?php } elseif ($role === 'Admin') { ?>
+                    <a href="../Admin/adminDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
-                </li>
-            <?php } ?>
+                <?php } ?>
+            </div>
 
-            <li>
-                <a href="deleteAccount.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/delete-user.png" alt="Delete Account" class="sidebar-icon">
-                    Delete Account
-                </a>
-            </li>
-            <li>
-                <button type="button" class="btn btn-outline-danger" id="logoutBtn"> <img
-                        src="../../Assets/Images/Icon/logout.png" alt="Log Out" class="sidebar-icon">
-                    Logout</button>
-            </li>
-        </ul>
-    </div>
-    <!-- End Side Bar -->
-
-    <div class="card">
-        <h5 class="card-header">
-            Login & security settings
-
-        </h5>
-        <div class="card-body">
-            <p class="card-text">Your account credentials are used to securely access your resort account, manage
-                reservations, view transaction history,
-                and receive important notifications regarding services, promotions, and exclusive offers.</p>
-            <div class="form-container">
-                <div class="input-box">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" value="<?= $data['email'] ?>" disabled>
-                    <button type="button" class="btn btn-primary" id="changeEmailBtn" data-toggle="modal"
-                        data-target="#emailModal">Change</button>
-                </div>
-                <div class="input-box">
-                    <label for="password">Password</label>
-                    <input type="password" name="showPassword" id="showPassword" value="*********" disabled>
-                    <button type="button" class="btn btn-primary" id="changePasswordBtn">Change</button>
-                </div>
-
+            <div class="sidebar-header text-center">
+                <h5 class="sidebar-text">User Account</h5>
                 <?php
-                if (isset($_SESSION['email-change'])) {
-                    echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['email-change']) . '</div>';
-                    unset($_SESSION['email-change']);
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $profile = $getProfileResult->fetch_assoc();
+                    $firstName = $profile['firstName'];
+                    $imageData = $profile['userProfile'];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_buffer($finfo, $imageData);
+                    finfo_close($finfo);
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
                 ?>
 
+                <div class="profileImage">
+                    <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+                </div>
             </div>
-            <!-- Email Change Modal -->
-            <form action="../../Function/Account/loginSecurity.php" method="POST">
-                <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-center" id="emailModalLabel">Your current email is <br>
-                                    <strong><strong><?= htmlspecialchars($data['email']) ?></strong>
-                                </h5>
-                                <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
-                                <div class="closeButtonContainer">
-                                    <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
-                                        aria-label="Close"> </button>
-                                </div>
+            <ul class="list-group">
+                <li>
+                    <a href="account.php" class="list-group-item ">
+                        <i class="fa-regular fa-user sidebar-icon"></i>
+                        <span class="sidebar-text">Profile Information</span>
+                    </a>
+                </li>
 
-                            </div>
-                            <div class="modal-body">
-                                <p class="modal-text">Please enter your password</p>
-                                <input type="password" name="passwordEntered" id="passwordEntered" required>
-                                <i id="togglePassword" class='bx bxs-hide'></i>
-                                <div class="button-container">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary"
-                                        name="validatePassword">Continue</button>
+                <li>
+                    <a href="loginSecurity.php" class="list-group-item active">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
+                    </a>
+                </li>
+
+                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                    <li>
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                            <i class="fa-solid fa-table-list sidebar-icon"></i>
+                            <span class="sidebar-text">Payment & Booking History</span>
+                        </a>
+                    </li>
+                <?php } elseif ($role === 'Admin') { ?>
+                    <li>
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <li>
+                    <a href="deleteAccount.php" class="list-group-item">
+                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
+                        <span class="sidebar-text">Delete Account</span>
+                    </a>
+                </li>
+                <li>
+                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
+                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon" alt="Log Out"></i>
+                        <span class="sidebar-text ms-2">Logout</span></button>
+                </li>
+            </ul>
+        </aside>
+        <!-- End Side Bar -->
+        <main class="main-content" id="main-content">
+            <div class="card">
+                <h5 class="card-header">
+                    Login & security settings
+
+                </h5>
+                <div class="card-body">
+                    <p class="card-text">Your account credentials are used to securely access your resort account, manage
+                        reservations, view transaction history,
+                        and receive important notifications regarding services, promotions, and exclusive offers.</p>
+                    <div class="form-container">
+                        <div class="input-box">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email" value="<?= $data['email'] ?>" disabled>
+                            <button type="button" class="btn btn-primary" id="changeEmailBtn" data-toggle="modal"
+                                data-target="#emailModal">Change</button>
+                        </div>
+                        <div class="input-box">
+                            <label for="password">Password</label>
+                            <input type="password" name="showPassword" id="showPassword" value="*********" disabled>
+                            <button type="button" class="btn btn-primary" id="changePasswordBtn">Change</button>
+                        </div>
+
+                        <?php
+                        if (isset($_SESSION['email-change'])) {
+                            echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['email-change']) . '</div>';
+                            unset($_SESSION['email-change']);
+                        }
+                        ?>
+
+                    </div>
+                    <!-- Email Change Modal -->
+                    <form action="../../Function/Account/loginSecurity.php" method="POST">
+                        <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-center" id="emailModalLabel">Your current email is <br>
+                                            <strong><strong><?= htmlspecialchars($data['email']) ?></strong>
+                                        </h5>
+                                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                        <div class="closeButtonContainer">
+                                            <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
+                                                aria-label="Close"> </button>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="modal-text">Please enter your password</p>
+                                        <input type="password" name="passwordEntered" id="passwordEntered" required>
+                                        <i id="togglePassword" class='bx bxs-hide'></i>
+                                        <div class="button-container">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary"
+                                                name="validatePassword">Continue</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </form>
+                    </form>
 
-            <!-- Email Change Modal -->
-            <form action="../../Function/Account/loginSecurity.php" method="POST">
-                <div class="modal fade" id="email2Modal" tabindex="-1" aria-labelledby="email2ModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-center" id="email2ModalLabel">Your current email is <br>
-                                    <strong><strong><?= htmlspecialchars($data['email']) ?></strong>
-                                </h5>
-                                <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
-                                <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
-                                    aria-label="Close">
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <?php
-                                if (isset($_SESSION['modal-error'])) {
-                                    echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
-                                    unset($_SESSION['modal-error']);
-                                }
-                                ?>
-                                <p class="modal-text">Please enter your new email</p>
-                                <input type="email" name="newEmail" id="newEmail" placeholder="Email" required>
-                                <div class="button-container">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" name="verifyEmail">Verify</button>
+                    <!-- Email Change Modal -->
+                    <form action="../../Function/Account/loginSecurity.php" method="POST">
+                        <div class="modal fade" id="email2Modal" tabindex="-1" aria-labelledby="email2ModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-center" id="email2ModalLabel">Your current email is <br>
+                                            <strong><strong><?= htmlspecialchars($data['email']) ?></strong>
+                                        </h5>
+                                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                        <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php
+                                        if (isset($_SESSION['modal-error'])) {
+                                            echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
+                                            unset($_SESSION['modal-error']);
+                                        }
+                                        ?>
+                                        <p class="modal-text">Please enter your new email</p>
+                                        <input type="email" name="newEmail" id="newEmail" placeholder="Email" required>
+                                        <div class="button-container">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary" name="verifyEmail">Verify</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </form>
+                    </form>
 
-            <!-- Email Change Modal -->
-            <form action="../../Function/Account/loginSecurity.php" method="POST">
-                <div class="modal fade" id="email3Modal" tabindex="-1" aria-labelledby="email3ModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-center" id="email3ModalLabel">Your current email is <br>
-                                    <strong><?= htmlspecialchars($data['email']) ?></strong>
-                                </h5>
-                                <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
-                                <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
-                                    aria-label="Close">
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <?php
-                                $newEmail = $_SESSION['newEmail'];
-                                if (isset($_SESSION['modal-error'])) {
-                                    echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
-                                    unset($_SESSION['modal-error']);
-                                }
-                                ?>
-                                <input type="hidden" name="newEmail" value="<?= htmlspecialchars($newEmail) ?>">
-                                <p class="modal-text">Please enter the verification code</p>
-                                <input type="text" name="enteredOTP" id="enteredOTP" placeholder="6 digit security code"
-                                    required>
-                                <div class="button-container">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" name="verifyCode">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            <!-- Password Change Modal -->
-            <form action="../../Function/Account/loginSecurity.php" method="POST">
-                <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="passwordLabel">Change Password</h5>
-                                <p class="modal-text">Password must contain at least 1 letter, 1 number, and 1 symbol.
-                                    Minimun length is 8 characters.</p>
-                            </div>
-
-                            <div class="modal-body">
-                                <?php
-                                if (isset($_SESSION['password-error'])) {
-                                    echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['password-error']) . '</div>';
-                                    unset($_SESSION['password-error']);
-                                }
-                                ?>
-
-                                <div class="input-container">
-                                    <label for="currentPassword">Current Password</label>
-                                    <div class="password">
-                                        <input type="password" name="currentPassword" id="currentPassword" required>
-                                        <i id="togglePassword2" class='bx bxs-hide'></i>
+                    <!-- Email Change Modal -->
+                    <form action="../../Function/Account/loginSecurity.php" method="POST">
+                        <div class="modal fade" id="email3Modal" tabindex="-1" aria-labelledby="email3ModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-center" id="email3ModalLabel">Your current email is <br>
+                                            <strong><?= htmlspecialchars($data['email']) ?></strong>
+                                        </h5>
+                                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                        <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                        </button>
                                     </div>
-                                </div>
-                                <div class="input-container">
-                                    <label for="newPassword">New Password</label>
-                                    <div class="password">
-                                        <input type="password" name="newPassword" id="newPassword"
-                                            oninput="changePasswordValidation();" required>
-                                        <i id="togglePassword3" class='bx bxs-hide'></i>
+                                    <div class="modal-body">
+                                        <?php
+                                        $newEmail = $_SESSION['newEmail'];
+                                        if (isset($_SESSION['modal-error'])) {
+                                            echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
+                                            unset($_SESSION['modal-error']);
+                                        }
+                                        ?>
+                                        <input type="hidden" name="newEmail" value="<?= htmlspecialchars($newEmail) ?>">
+                                        <p class="modal-text">Please enter the verification code</p>
+                                        <input type="text" name="enteredOTP" id="enteredOTP" placeholder="6 digit security code"
+                                            required>
+                                        <div class="button-container">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary" name="verifyCode">Submit</button>
+                                        </div>
                                     </div>
-                                    <div class="errorMsg">
-                                        <div class="confirmErrorMsg" id="passwordValidation"></div>
-                                    </div>
-                                </div>
-                                <div class="input-container">
-                                    <label for="confirmPassword">Confirm Password</label>
-                                    <div class="password">
-                                        <input type="password" name="confirmPassword" id="confirmPassword"
-                                            oninput="changePasswordValidation();" required>
-                                        <i id="togglePassword4" class='bx bxs-hide'></i>
-                                    </div>
-                                    <div class="errorMsg">
-                                        <div class="confirmErrorMsg" id="passwordMatch"></div>
-                                    </div>
-                                </div>
-                                <div class="button-container">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary" id="changePassword" name="changePassword" disabled>Submit</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
+
+                    <!-- Password Change Modal -->
+                    <form action="../../Function/Account/loginSecurity.php" method="POST">
+                        <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="passwordLabel">Change Password</h5>
+                                        <p class="modal-text">Password must contain at least 1 letter, 1 number, and 1 symbol.
+                                            Minimun length is 8 characters.</p>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <?php
+                                        if (isset($_SESSION['password-error'])) {
+                                            echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['password-error']) . '</div>';
+                                            unset($_SESSION['password-error']);
+                                        }
+                                        ?>
+
+                                        <div class="input-container">
+                                            <label for="currentPassword">Current Password</label>
+                                            <div class="password">
+                                                <input type="password" name="currentPassword" id="currentPassword" required>
+                                                <i id="togglePassword2" class='bx bxs-hide'></i>
+                                            </div>
+                                        </div>
+                                        <div class="input-container">
+                                            <label for="newPassword">New Password</label>
+                                            <div class="password">
+                                                <input type="password" name="newPassword" id="newPassword"
+                                                    oninput="changePasswordValidation();" required>
+                                                <i id="togglePassword3" class='bx bxs-hide'></i>
+                                            </div>
+                                            <div class="errorMsg">
+                                                <div class="confirmErrorMsg" id="passwordValidation"></div>
+                                            </div>
+                                        </div>
+                                        <div class="input-container">
+                                            <label for="confirmPassword">Confirm Password</label>
+                                            <div class="password">
+                                                <input type="password" name="confirmPassword" id="confirmPassword"
+                                                    oninput="changePasswordValidation();" required>
+                                                <i id="togglePassword4" class='bx bxs-hide'></i>
+                                            </div>
+                                            <div class="errorMsg">
+                                                <div class="confirmErrorMsg" id="passwordMatch"></div>
+                                            </div>
+                                        </div>
+                                        <div class="button-container">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary" id="changePassword" name="changePassword" disabled>Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
+            </div>
+        </main>
     </div>
-
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
@@ -391,6 +396,54 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container')
+
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 600) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    })
+                    sidebar.classList.remove('collapsed');
+                }
+            }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
+        });
+    </script>
 
     <script>
         const params = new URLSearchParams(window.location.search);
