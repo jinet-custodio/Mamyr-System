@@ -105,8 +105,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <div class="aboutTopContainer" id="aboutTopContainer">
         <div class="topPicContainer">
-            <?php if (isset($imageMap['Header'])): ?>
-                <?php foreach ($imageMap['Header'] as $index => $img):
+            <?php if (isset($imageMap['AboutMamyr'])): ?>
+                <?php foreach ($imageMap['AboutMamyr'] as $index => $img):
                     $imagePath = $img['imageData'];
                     $defaultImage = "Assets/Images/no-picture.png";
                     $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>

@@ -1,30 +1,30 @@
 <?php
 require '../../../Config/dbcon.php';
 
-// $session_timeout = 3600;
+$session_timeout = 3600;
 
-// ini_set('session.gc_maxlifetime', $session_timeout);
-// session_set_cookie_params($session_timeout);
-// session_start();
-// date_default_timezone_set('Asia/Manila');
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
+session_start();
+date_default_timezone_set('Asia/Manila');
 
-// if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
-//     header("Location: /Pages/register.php?");
-//     exit();
-// }
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
+    header("Location: /Pages/register.php?");
+    exit();
+}
 
-// if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-//     $_SESSION['error'] = 'Session Expired';
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
 
-//     session_unset();
-//     session_destroy();
-//     header("Location: /Pages/register.php?session=expired");
-//     exit();
-// }
+    session_unset();
+    session_destroy();
+    header("Location: /Pages/register.php?session=expired");
+    exit();
+}
 
-// $_SESSION['last_activity'] = time();
-// $userID = $_SESSION['userID'];
-// $userRole = $_SESSION['userRole'];
+$_SESSION['last_activity'] = time();
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 ?>
 <!DOCTYPE html>

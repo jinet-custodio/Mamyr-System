@@ -219,7 +219,7 @@ if ($revenueResult->num_rows > 0) {
             <h5>Partnerships</h5>
         </a>
 
-        <a class="nav-link" href="editWebsite/landingPageEdit.php">
+        <a class="nav-link" href="editWebsite/editWebsite.php">
             <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
             <h5>Edit Website</h5>
         </a>
