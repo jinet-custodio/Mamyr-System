@@ -214,7 +214,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <div class="aboutTopContainer" id="aboutTopContainer">
         <div class="topPicContainer">
-            <img src="../../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Pool Picture" class="resortPic">
+            <img src="../../Assets/Images/AboutImages/poolPic.jpg" alt="Pool Picture" class="resortPic">
         </div>
 
         <div class="topTextContainer">
