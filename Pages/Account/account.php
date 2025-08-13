@@ -41,10 +41,8 @@ $userRole = $_SESSION['userRole'];
     <!-- Bootstrap Link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/account.css" />
-
     <!-- icon libraries for font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -296,10 +294,20 @@ $userRole = $_SESSION['userRole'];
     </script>
 
     <script>
-        //Show Modal
+        //Show Modal 
         document.addEventListener("DOMContentLoaded", function() {
             const changeBtn = document.getElementById("changePfp");
             const modalElement = document.getElementById("picModal");
+
+            changeBtn.addEventListener("click", function() {
+                const myModal = new bootstrap.Modal(modalElement);
+                myModal.show();
+            });
+        });
+    </script>
+    <script>
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
             const toggleBtn = document.getElementById('toggle-btn');
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
@@ -342,11 +350,6 @@ $userRole = $_SESSION['userRole'];
             // Run on load and when window resizes
             handleResponsiveSidebar();
             window.addEventListener('resize', handleResponsiveSidebar);
-
-            changeBtn.addEventListener("click", function() {
-                const myModal = new bootstrap.Modal(modalElement);
-                myModal.show();
-            });
         });
     </script>
 
