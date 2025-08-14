@@ -33,7 +33,6 @@ if ($getEventHallResult->num_rows > 0) {
 }
 $getEventHallQuery->close();
 
-// Output a single JSON response
 echo json_encode([
     'Categories' => $categories,
     'Halls' => $halls
