@@ -99,7 +99,7 @@ body {
   border-radius: 4rem;
 }
 
-.card-text {
+/* .card-text {
   text-indent: 0.5rem;
   font-family: "Poppins";
   font-size: 18px;
@@ -130,12 +130,9 @@ body {
   background-color: #f9f9f9;
 }
 
-/* .back:hover {
-  background-color: transparent;
-} */
 
 .button-container {
-  /* border: 1px solid red; */
+ 
   display: grid;
   font-family: "Lora";
   width: 200px;
@@ -150,4 +147,4 @@ body {
   word-break: break-word;
   text-indent: 0%;
   text-transform: capitalize;
-}
+} */
