@@ -266,11 +266,6 @@ if (isset($_SESSION['error'])) {
                                     LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID  -- to get the status name
                                     LEFT JOIN packages p ON b.packageID = p.packageID  -- to get the info of the package na binook 
                                     LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
-                                    -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
-                                    -- LEFT JOIN services s ON bs.serviceID = s.serviceID   -- to get the info of the service na binook 
-                                    -- LEFT JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID  -- info of service
-                                    -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
-                                    -- LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
                                     LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
                                     ");
                     $getBookingInfo->execute();
@@ -282,7 +277,7 @@ if (isset($_SESSION['error'])) {
                             // echo "</pre>";
                             $bookingID = $bookings['formattedBookingID'];
                             $startDate = strtotime($bookings['startDate']);
-                            $checkIn = date("d F Y", $startDate);
+                            $checkIn = date("F d, Y", $startDate);
                             $middleInitial = trim($bookings['middleInitial'] ?? '');
                             $name = ucfirst($bookings['firstName']) . " " . ucfirst($middleInitial) . " "  . ucfirst($bookings['lastName']);
 
@@ -325,15 +320,6 @@ if (isset($_SESSION['error'])) {
                                     $addClass = "btn btn-danger w-100";
                                 }
                             }
-                            // $status = $bookings['statusName'];
-                            // if ($bookings['eventCategoryName'] != "") {
-                            //     $bookingType = "Event Booking";
-                            // } elseif ($bookings['customPackageID'] != "") {
-                            //     $bookingType = "Customized Package";
-                            // } else {
-                            //     $bookingType = "Resort Booking";
-                            // }
-
                     ?>
                             <tr>
                                 <td><?= htmlspecialchars($bookingID) ?></td>
