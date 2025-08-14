@@ -33,6 +33,7 @@ if (isset($_POST['bookRates'])) {
     $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
 
     $totalCost = (float) $_POST['totalCost'];
+    $downPayment = (float) $_POST['downpayment'];
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
 
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
@@ -118,37 +119,36 @@ if (isset($_POST['bookRates'])) {
         }
     }
 
-   
-        //Get Selected Entertainment 
-        $getEntertainment = $conn->prepare("SELECT s.serviceID, rs.RSprice, rs.RServiceName, rs.RScapacity, rs.resortServiceID
+
+    //Get Selected Entertainment 
+    $getEntertainment = $conn->prepare("SELECT s.serviceID, rs.RSprice, rs.RServiceName, rs.RScapacity, rs.resortServiceID
             FROM services s
             INNER JOIN resortAmenities rs ON s.resortServiceID = rs.resortServiceID 
             WHERE RServiceName = ?");
 
-        foreach ($addOnsServices as $entertainment) {
-            $selectedEntertainment = trim($entertainment);
-            $getEntertainment->bind_param('s',  $selectedEntertainment);
-            $getEntertainment->execute();
-            $resultGetEntertainment = $getEntertainment->get_result();
+    foreach ($addOnsServices as $entertainment) {
+        $selectedEntertainment = trim($entertainment);
+        $getEntertainment->bind_param('s',  $selectedEntertainment);
+        $getEntertainment->execute();
+        $resultGetEntertainment = $getEntertainment->get_result();
 
-            if ($resultGetEntertainment->num_rows > 0) {
-                while ($row = $resultGetEntertainment->fetch_assoc()) {
-                    $resortServiceIDs[] = $row['resortServiceID'];
-                    $serviceIDs[] = $row['serviceID'];
-                    $servicePrices[] = $row['RSprice'];
-                    $services[] = $row['RServiceName'];
-                    $serviceCapacity[] = $row['RScapacity'] ?? 0;
-                }
-            } 
+        if ($resultGetEntertainment->num_rows > 0) {
+            while ($row = $resultGetEntertainment->fetch_assoc()) {
+                $resortServiceIDs[] = $row['resortServiceID'];
+                $serviceIDs[] = $row['serviceID'];
+                $servicePrices[] = $row['RSprice'];
+                $services[] = $row['RServiceName'];
+                $serviceCapacity[] = $row['RScapacity'] ?? 0;
+            }
         }
- 
+    }
+
 
 
     $totalAdultFee = multiplication($adultCount, $adultRate);
     $totalChildFee =  multiplication($childrenCount, $childRate);
     $totalEntranceFee = addition($totalAdultFee, $totalChildFee, 0);
 
-    $downPayment = 0.00;
     $addOns = is_array($addOnsServices) ? implode(', ', $addOnsServices) : $addOnsServices;
 
 
