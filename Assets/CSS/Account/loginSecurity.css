@@ -389,7 +389,7 @@ input[type="password"]::-webkit-search-cancel-button {
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
 .sidebar{
-  width: 35vw;
+  width: 33vw;
 }
 
 .list-group {
@@ -410,10 +410,10 @@ input[type="password"]::-webkit-search-cancel-button {
       height: clamp(13vw, 11vw, 10vw);
     }
     margin: 1vw auto;
-  }
+}
 
 .main-content {
-  margin-left: 36vw;
+  margin-left: 34vw;
 }
 
 .card {
@@ -482,6 +482,12 @@ input[type="password"]::-webkit-search-cancel-button {
   width: 30%;
 }
 
+
+.homeIcon {
+  width: 4vw;
+}
+
+
 .sidebar{
   width: 35vw;
 }
@@ -504,7 +510,7 @@ input[type="password"]::-webkit-search-cancel-button {
       height: clamp(13vw, 11vw, 10vw);
     }
     margin: 1vw auto;
-  }
+}
 
 .main-content {
   margin-left: 36vw;
