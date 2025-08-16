@@ -361,7 +361,7 @@
   }
 
 .main-content {
-  margin-left: 36vw;
+  margin-left: 34vw;
 }
 
 .customer-details {
@@ -416,8 +416,31 @@
 
 /* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
-  .profile-image {
+
+.homeIcon {
+  width: 4vw;
+}
+
+.sidebar-header h5, .card-header {
+  margin-top: 2vw;
+  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+}
+
+.profile-image {
   width: 30%;
+}
+
+.card {
+  padding: 0;
+  width: 100%;
+}
+
+.main-content {
+  margin-left: 34vw;
+}
+
+.sidebar{
+  width: 35vw;
 }
 
 .profile-pic {
@@ -431,6 +454,14 @@
 .profile-info {
   width: 70%;
 }
+
+.profileImage {
+    img {
+      height: clamp(13vw, 11vw, 10vw);
+    }
+    margin: 1vw auto;
+}
+
 .account-name, .swal2-html-container {
   font-size: clamp(2.5vw, 2.3vw, 2.1vw);
 }
@@ -441,6 +472,10 @@
 
 .info {
   width: 100%;
+}
+
+.list-group {
+  font-size: clamp(2.5vw, 2.2vw, 2vw);
 }
 
 .info input:focus + label, .info input:not(:placeholder-shown) + label {

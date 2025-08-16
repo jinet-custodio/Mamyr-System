@@ -65,217 +65,222 @@ if ($userRole == 1) {
 </head>
 
 <body>
+    <div class="wrapper d-flex">
+        <aside class="sidebar" id="sidebar">
 
-    <div class="sidebar">
-
-        <div class="home">
-            <?php if ($role === 'Customer') { ?>
-                <a href="../Customer/dashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
-            <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
-            <?php } ?>
-        </div>
-
-        <div class="sidebar-header">
-            <h5>User Account</h5>
-
-            <?php
-            $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
-            $getProfile->bind_param("ii", $userID, $userRole);
-            $getProfile->execute();
-            $getProfileResult = $getProfile->get_result();
-            if ($getProfileResult->num_rows > 0) {
-                $data = $getProfileResult->fetch_assoc();
-                $firstName = $data['firstName'];
-                $imageData = $data['userProfile'];
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_buffer($finfo, $imageData);
-                finfo_close($finfo);
-                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-            }
-            ?>
-            <div class="profileImage">
-                <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+            <div class="home">
+                <?php if ($role === 'Customer') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } elseif ($role === 'Admin') { ?>
+                    <a href="../Admin/adminDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } ?>
             </div>
-        </div>
-        <ul class="list-group">
-            <li>
-                <a href="account.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/user.png" alt="Profile Information" class="sidebar-icon">
-                    Profile Information
-                </a>
-            </li>
 
-            <li>
-                <a href="loginSecurity.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/login_security.png" alt="Login Security" class="sidebar-icon">
-                    Login & Security
-                </a>
-            </li>
+            <div class="sidebar-header text-center">
+                <div class="d-flex" id="toggle-container">
+                    <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
+                </div>
+                <h5 class="sidebar-text">User Account</h5>
 
-
-            <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                <?php
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $data = $getProfileResult->fetch_assoc();
+                    $firstName = $data['firstName'];
+                    $imageData = $data['userProfile'];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_buffer($finfo, $imageData);
+                    finfo_close($finfo);
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                }
+                ?>
+                <div class="profileImage">
+                    <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+                </div>
+            </div>
+            <ul class="list-group sidebar-nav">
                 <li>
-                    <a href="bookingHistory.php" class="list-group-item active" id="paymentBookingHist">
-                        <img src="../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
-                            class="sidebar-icon">
-                        Payment & Booking History
+                    <a href="account.php" class="list-group-item">
+                        <i class="fa-regular fa-user sidebar-icon"></i>
+                        <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
-            <?php } elseif ($role === 'Admin') { ?>
+
                 <li>
-                    <a href="userManagement.php" class="list-group-item">
-                        <img src="../../Assets/Images/Icon/usermanagement.png" alt="" class="sidebar-icon">
-                        Manage Users
+                    <a href="loginSecurity.php" class="list-group-item">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
-            <?php } ?>
-
-            <li>
-                <a href="deleteAccount.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/delete-user.png" alt="Delete Account" class="sidebar-icon">
-                    Delete Account
-                </a>
-            </li>
-            <li>
-                <button type="button" class="btn btn-outline-danger" id="logoutBtn"> <img
-                        src="../../Assets/Images/Icon/logout.png" alt="Log Out" class="sidebar-icon">
-                    Logout</button>
-            </li>
-        </ul>
-    </div>
-
-    <div class="bookingHistContainer">
-
-        <div class="titleContainer">
-            <h2 class="title">Booking History</h2>
-        </div>
 
 
-        <div class="tableContainer">
-            <table class=" table table-striped" id="bookingHistory">
-                <thead>
-                    <th scope="col">Check In</th>
-                    <th scope="col">Total Cost</th>
-                    <th scope="col">Balance</th>
-                    <th scope="col">Payment Method</th>
-                    <th scope="col">Booking Type</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Review</th>
-                    <th scope="col">Action</th>
-                </thead>
+                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                    <li>
+                        <a href="bookingHistory.php" class="list-group-item active" id="paymentBookingHist">
+                            <i class="fa-solid fa-table-list sidebar-icon"></i>
+                            <span class="sidebar-text">Payment & Booking History</span>
+                        </a>
+                    </li>
+                <?php } elseif ($role === 'Admin') { ?>
+                    <li>
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
+                <?php } ?>
 
-                <tbody>
+                <li>
+                    <a href="deleteAccount.php" class="list-group-item">
+                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
+                        <span class="sidebar-text">Delete Account</span>
+                    </a>
+                </li>
+                <li>
+                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
+                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                        <span class="sidebar-text ms-2">Logout</span>
+                    </button>
+                </li>
+            </ul>
+        </aside>
+        <main class="main-content" id="main-content">
+            <div class="bookingHistContainer">
 
-                    <?php
+                <div class="titleContainer">
+                    <h2 class="title">Booking History</h2>
+                </div>
 
-                    $getBooking = $conn->prepare("SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM bookings b
+
+                <div class="tableContainer">
+                    <table class=" table table-striped" id="bookingHistory">
+                        <thead>
+                            <th scope="col">Check In</th>
+                            <th scope="col">Total Cost</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Payment Method</th>
+                            <th scope="col">Booking Type</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Review</th>
+                            <th scope="col">Action</th>
+                        </thead>
+
+                        <tbody>
+
+                            <?php
+
+                            $getBooking = $conn->prepare("SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM bookings b
                     LEFT JOIN confirmedbookings cb ON cb.bookingID = b.bookingID
                     LEFT JOIN statuses s ON cb.confirmedBookingStatus = s.statusID
                     LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
                     WHERE userID = ?
                     ORDER BY createdAt");
-                    $getBooking->bind_param("i", $userID);
-                    $getBooking->execute();
-                    $resultGetBooking = $getBooking->get_result();
-                    if ($resultGetBooking->num_rows > 0) {
-                        $bookings = $resultGetBooking->fetch_all(MYSQLI_ASSOC);
-                        foreach ($bookings as $booking) {
-                            $confirmedBookingID = $booking['confirmedBookingID'];
-                            $bookingID = $booking['bookingID'];
-                            $startDate = strtotime($booking['startDate']);
-                            $checkIn = date("M j, Y", $startDate);  //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
-                            $endDate = strtotime($booking['endDate']);
-                            $checkOut = date("M j, Y", $endDate); //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
-                            $bookingType = $booking['bookingType'];
-                            $totalAmount = $booking['totalCost'];
-                            $balance = $booking['userBalance'] ?? $totalAmount;
-                            $paymentMethod = $booking['paymentMethod']
-                    ?>
-                            <tr>
-                                <td><?= $checkIn ?></td>
-                                <!-- <td><?= $checkOut ?></td> -->
-                                <td>₱<?= number_format($totalAmount, 2) ?></td>
-                                <td>₱<?= number_format($balance, 2) ?></td>
-                                <td><?= htmlspecialchars($paymentMethod) ?></a></td>
+                            $getBooking->bind_param("i", $userID);
+                            $getBooking->execute();
+                            $resultGetBooking = $getBooking->get_result();
+                            if ($resultGetBooking->num_rows > 0) {
+                                $bookings = $resultGetBooking->fetch_all(MYSQLI_ASSOC);
+                                foreach ($bookings as $booking) {
+                                    $confirmedBookingID = $booking['confirmedBookingID'];
+                                    $bookingID = $booking['bookingID'];
+                                    $startDate = strtotime($booking['startDate']);
+                                    $checkIn = date("M j, Y", $startDate);  //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
+                                    $endDate = strtotime($booking['endDate']);
+                                    $checkOut = date("M j, Y", $endDate); //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
+                                    $bookingType = $booking['bookingType'];
+                                    $totalAmount = $booking['totalCost'];
+                                    $balance = $booking['userBalance'] ?? $totalAmount;
+                                    $paymentMethod = $booking['paymentMethod']
+                            ?>
+                                    <tr>
+                                        <td><?= $checkIn ?></td>
+                                        <!-- <td><?= $checkOut ?></td> -->
+                                        <td>₱<?= number_format($totalAmount, 2) ?></td>
+                                        <td>₱<?= number_format($balance, 2) ?></td>
+                                        <td><?= htmlspecialchars($paymentMethod) ?></a></td>
 
-                                <td><?= htmlspecialchars($bookingType) ?></a></td>
+                                        <td><?= htmlspecialchars($bookingType) ?></a></td>
 
-                                <!-- Papalitan na lang ng mas magandang term -->
-                                <?php if (!empty($booking['confirmedBookingID'])) {
-                                    if ($booking['confirmedStatus'] === "Pending") {
-                                        if ($paymentMethod === 'Cash') {
-                                            $status = "Onsite payment";
-                                            $class = 'btn btn-info w-100';
+                                        <!-- Papalitan na lang ng mas magandang term -->
+                                        <?php if (!empty($booking['confirmedBookingID'])) {
+                                            if ($booking['confirmedStatus'] === "Pending") {
+                                                if ($paymentMethod === 'Cash') {
+                                                    $status = "Onsite payment";
+                                                    $class = 'btn btn-info w-100';
+                                                } else {
+                                                    $status = "Downpayment";
+                                                    $class = 'btn btn-info w-100';
+                                                }
+                                            } elseif ($booking['confirmedStatus'] === "Approved") {
+                                                $status = "Successful";
+                                                $class = 'btn btn-success w-100';
+                                            } elseif ($booking['confirmedStatus'] === "Rejected") {
+                                                $status = "Rejected";
+                                                $class = 'btn btn-danger w-100';
+                                            }
                                         } else {
-                                            $status = "Downpayment";
-                                            $class = 'btn btn-info w-100';
+                                            $confirmedBookingID = NULL;
+                                            if ($booking['bookingStatus'] === "Pending") {
+                                                $status = "Pending";
+                                                $class = 'btn btn-warning w-100';
+                                            } else if ($booking['bookingStatus'] === "Approved") {
+                                                if ($paymentMethod === 'Cash') {
+                                                    $status = "Onsite payment";
+                                                    $class = 'btn btn-info w-100';
+                                                } else {
+                                                    $status = "Downpayment";
+                                                    $class = 'btn btn-info w-100';
+                                                }
+                                            } elseif ($booking['bookingStatus'] === "Rejected") {
+                                                $status = "Rejected";
+                                                $class = 'btn btn-danger w-100';
+                                            } elseif ($booking['bookingStatus'] === "Cancelled") {
+                                                $status = "Cancelled";
+                                                $class = 'btn btn-danger w-100';
+                                            } elseif ($booking['bookingStatus'] === "Rejected") {
+                                                $status = "Rejected";
+                                                $class = 'btn btn-danger w-100';
+                                            }
                                         }
-                                    } elseif ($booking['confirmedStatus'] === "Approved") {
-                                        $status = "Successful";
-                                        $class = 'btn btn-success w-100';
-                                    } elseif ($booking['confirmedStatus'] === "Rejected") {
-                                        $status = "Rejected";
-                                        $class = 'btn btn-danger w-100';
-                                    }
-                                } else {
-                                    $confirmedBookingID = NULL;
-                                    if ($booking['bookingStatus'] === "Pending") {
-                                        $status = "Pending";
-                                        $class = 'btn btn-warning w-100';
-                                    } else if ($booking['bookingStatus'] === "Approved") {
-                                        if ($paymentMethod === 'Cash') {
-                                            $status = "Onsite payment";
-                                            $class = 'btn btn-info w-100';
-                                        } else {
-                                            $status = "Downpayment";
-                                            $class = 'btn btn-info w-100';
-                                        }
-                                    } elseif ($booking['bookingStatus'] === "Rejected") {
-                                        $status = "Rejected";
-                                        $class = 'btn btn-danger w-100';
-                                    } elseif ($booking['bookingStatus'] === "Cancelled") {
-                                        $status = "Cancelled";
-                                        $class = 'btn btn-danger w-100';
-                                    } elseif ($booking['bookingStatus'] === "Rejected") {
-                                        $status = "Rejected";
-                                        $class = 'btn btn-danger w-100';
-                                    }
+                                        ?>
+
+                                        <td> <span class="<?= $class ?> bookingStatus" data-label="<?= $status ?>"><?= $status ?></span></td>
+                                        <td><a href="" class="btn btn-outline-primary rateBtn" data-bs-toggle="modal"
+                                                data-bs-target="#rateModal" data-label="Rate">Rate</a></td>
+
+                                        <td>
+                                            <div class="button-container gap-2 md-auto"
+                                                style="display: flex;  width: 100%; justify-content: center;">
+                                                <form action="reservationSummary.php" method="POST">
+                                                    <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                                                    <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
+                                                    <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                                    <input type="hidden" name="status" value="<?= $status ?>">
+                                                    <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
+                                                </form>
+
+                                                <button type="button" class="btn btn-danger  w-100 cancelBooking"
+                                                    data-bookingid="<?= $bookingID ?>"
+                                                    data-confirmedbookingid="<?= $confirmedBookingID ?>"
+                                                    data-status="<?= $status ?>" data-label="Cancel">Cancel</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                            <?php
                                 }
-                                ?>
+                            }
+                            ?>
 
-                                <td><span class="<?= $class ?>"><?= $status ?></span></td>
-                                <td><a href="" class=" btn btn-outline-primary" data-bs-toggle="modal"
-                                        data-bs-target="#rateModal">Rate</a></td>
-
-                                <td>
-                                    <div class="button-container gap-2 md-auto"
-                                        style="display: flex;  width: 100%; justify-content: center;">
-                                        <form action="reservationSummary.php" method="POST">
-                                            <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
-                                            <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
-                                            <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                                            <input type="hidden" name="status" value="<?= $status ?>">
-                                            <button type="submit" name="viewBooking" class="btn btn-info w-100">View</button>
-                                        </form>
-
-                                        <button type="button" class="btn btn-danger  w-100 cancelBooking"
-                                            data-bookingid="<?= $bookingID ?>"
-                                            data-confirmedbookingid="<?= $confirmedBookingID ?>"
-                                            data-status="<?= $status ?>">Cancel</button>
-                                    </div>
-                                </td>
-                            </tr>
-                    <?php
-                        }
-                    }
-                    ?>
-
-                    <!-- <tr>
+                            <!-- <tr>
                         <td>January 26, 2025</td>
                         <td>January 26, 2025</td>
                         <td><a href=" #" class="fw-bold">Event Booking</a>
@@ -307,43 +312,43 @@ if ($userRole == 1) {
                                 <td><a href="#" class="btn btn-success w-75">View</a></td>
                                 <td><a href="" class="btn btn-outline-primary ">Rate</a></td>
                             </tr> -->
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
 
 
-            <!-- rate Modal -->
-            <div class="modal fade" id="rateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header" id="rate-modal-header">
-                            <h4 class="modal-title" id="rateModalLabel">Please Rate Your Mamyr Experience</h4>
+                    <!-- rate Modal -->
+                    <div class="modal fade" id="rateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header" id="rate-modal-header">
+                                    <h4 class="modal-title" id="rateModalLabel">Please Rate Your Mamyr Experience</h4>
 
-                        </div>
-                        <div class="modal-body">
-                            <p class="rateSubtitle">We value your feedback! Share your thoughts to help us improve and
-                                offer better experiences.</p>
-                            <div class="d-flex">
-                                <span class="fa fa-star" id="star1" onclick="toggleStars(1)"></span>
-                                <span class="fa fa-star" id="star2" onclick="toggleStars(2)"></span>
-                                <span class="fa fa-star" id="star3" onclick="toggleStars(3)"></span>
-                                <span class="fa fa-star" id="star4" onclick="toggleStars(4)"></span>
-                                <span class="fa fa-star" id="star5" onclick="toggleStars(5)"></span>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="rateSubtitle">We value your feedback! Share your thoughts to help us improve and
+                                        offer better experiences.</p>
+                                    <div class="d-flex">
+                                        <span class="fa fa-star" id="star1" onclick="toggleStars(1)"></span>
+                                        <span class="fa fa-star" id="star2" onclick="toggleStars(2)"></span>
+                                        <span class="fa fa-star" id="star3" onclick="toggleStars(3)"></span>
+                                        <span class="fa fa-star" id="star4" onclick="toggleStars(4)"></span>
+                                        <span class="fa fa-star" id="star5" onclick="toggleStars(5)"></span>
+                                    </div>
+
+
+                                    <textarea class="form-control w-100 mt-3" id="purpose-additionalNotes"
+                                        name="additionalRequest" rows="5" placeholder="Additional Feedback"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary w-25">Rate</button>
+
+                                </div>
                             </div>
-
-
-                            <textarea class="form-control w-100 mt-3" id="purpose-additionalNotes"
-                                name="additionalRequest" rows="5" placeholder="Additional Feedback"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary w-25">Rate</button>
-
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- <div class="modal modal-sm fade" id="rateModal" data-bs-backdrop="static">
+                    <!-- <div class="modal modal-sm fade" id="rateModal" data-bs-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -367,48 +372,48 @@ if ($userRole == 1) {
                 </div>
             </div> -->
 
-            <!-- rate Modal -->
+                    <!-- rate Modal -->
 
 
 
-            <!-- Confirmation Modal -->
-            <form action="../../Function/Booking/cancelBooking.php" method="POST">
-                <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content" id="cancel-content">
-                            <div class="image w-100 text-center">
-                                <img src="../../Assets/Images/Icon/warning.png" alt="warning icon"
-                                    class="warning-image">
+                    <!-- Confirmation Modal -->
+                    <form action="../../Function/Booking/cancelBooking.php" method="POST">
+                        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content" id="cancel-content">
+                                    <div class="image w-100 text-center">
+                                        <img src="../../Assets/Images/Icon/warning.png" alt="warning icon"
+                                            class="warning-image">
 
-                            </div>
-                            <div class="modal-body">
-                                <input type="hidden" name="bookingID" id="bookingIDModal" value="<?= $bookingID ?>">
-                                <input type="hidden" name="confirmedBookingID" id="confirmedBookingIDModal"
-                                    value="<?= $confirmedBookingID ?>">
-                                <input type="hidden" name="status" id="statusModal" value="<?= $status ?>">
-                                <p class="modal-title text-center mb-2 fw-bold fs-3">Are you sure?</p>
-                                <p class="modal-text text-center mb-2" id="cancelModalDesc">You are about to cancel this
-                                    booking. This
-                                    action
-                                    cannot be undone.</p>
-                                <div class="button-container" id="cancelButtonModal">
-                                    <button type="button" class="btn btn-secondary w-25"
-                                        data-bs-dismiss="modal">No</button>
-                                    <button type="submit" class="btn btn-primary w-25" name="cancelBooking"
-                                        id="yesDelete">Yes</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="bookingID" id="bookingIDModal" value="<?= $bookingID ?>">
+                                        <input type="hidden" name="confirmedBookingID" id="confirmedBookingIDModal"
+                                            value="<?= $confirmedBookingID ?>">
+                                        <input type="hidden" name="status" id="statusModal" value="<?= $status ?>">
+                                        <p class="modal-title text-center mb-2 fw-bold fs-3">Are you sure?</p>
+                                        <p class="modal-text text-center mb-2" id="cancelModalDesc">You are about to cancel this
+                                            booking. This
+                                            action
+                                            cannot be undone.</p>
+                                        <div class="button-container" id="cancelButtonModal">
+                                            <button type="button" class="btn btn-secondary w-25"
+                                                data-bs-dismiss="modal">No</button>
+                                            <button type="submit" class="btn btn-primary w-25" name="cancelBooking"
+                                                id="yesDelete">Yes</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
+
+
                 </div>
-            </form>
-
-
-        </div>
+            </div>
+        </main>
     </div>
-
-
 
 
 
@@ -441,6 +446,116 @@ if ($userRole == 1) {
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container');
+            const viewBtns = document.querySelectorAll('.viewBooking');
+            const cancelBtns = document.querySelectorAll('.cancelBooking');
+            const statuses = document.querySelectorAll('.bookingStatus');
+            const rateBtns = document.querySelectorAll('.rateBtn')
+
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 600) {
+                    viewBtns.forEach(viewBtn => {
+                        viewBtn.innerHTML = '<i class="fa-regular fa-eye"></i>';
+                        viewBtn.style.width = '70%';
+                    });
+                    cancelBtns.forEach(cancelBtn => {
+                        cancelBtn.innerHTML = '<i class="fa-solid fa-ban" style="color: #f4ebeb;"></i>';
+                        cancelBtn.style.width = '70%';
+                    });
+                    rateBtns.forEach(rateBtns => {
+                        rateBtns.innerHTML = '<i class="fa-solid fa-star" style="color: #FFD43B;padding:0;"></i>';
+                        rateBtns.classList.remove('btn-outline-primary')
+                    })
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    })
+                    sidebar.classList.remove('collapsed');
+
+                    viewBtns.forEach(viewBtn => {
+                        viewBtn.innerHTML = `${viewBtn.getAttribute('data-label')}`;
+                    })
+                    cancelBtns.forEach(cancelBtn => {
+                        cancelBtn.innerHTML = `${cancelBtn.getAttribute('data-label')}`;
+                    })
+                    rateBtns.forEach(rateBtn => {
+                        rateBtn.innerHTML = `${rateBtn.getAttribute('data-label')}`;
+                        rateBtn.classList.add('btn-outline-primary')
+                    })
+                }
+                //change the text into icons when the screen width shrinks to below 1024px
+                if (window.innerWidth <= 1024) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+                    statuses.forEach(status => {
+                        if (status.innerHTML == "Pending") {
+                            status.innerHTML = '<i class="fa-solid fa-hourglass-half" style="color: #ffc107;"></i>';
+                            status.classList.remove('btn-warning');
+                            status.classList.remove('w-100');
+                        } else if (status.innerHTML == "Downpayment" || status.innerHTML == "Onsite Payment") {
+                            status.innerHTML = '<i class="fa-solid fa-money-bill-1-wave" style="color: #0dcaf0;"></i>';
+                            status.classList.remove('btn-info');
+                            status.classList.remove('w-100');
+                        } else if (status.innerHTML == "Cancelled") {
+                            status.innerHTML = '<i class="fa-solid fa-xmark" style="color: #b02a37;"></i>';
+                            status.classList.remove('btn-danger');
+                            status.classList.remove('w-100');
+                        }
+                        status.style.width = "70%"
+                    })
+                } else {
+                    //reverts the text for icons when screen is resized to larger sizes
+                    statuses.forEach(status => {
+                        status.innerHTML = `${status.getAttribute('data-label')}`;
+                        if (status.innerHTML == "Pending") {
+                            status.classList.add('btn-warning');
+                            status.classList.add('w-100');
+                        } else if (status.innerHTML == "Downpayment" || status.innerHTML == "Onsite Payment") {
+                            status.classList.add('btn-info');
+                            status.classList.add('w-100');
+                        } else if (status.innerHTML == "Cancelled") {
+                            status.classList.add('btn-danger');
+                            status.classList.add('w-100');
+                        }
+                    })
+                }
+
+            }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
+        });
+    </script>
+
     <!-- Show -->
     <script>
         const params = new URLSearchParams(window.location.search);
