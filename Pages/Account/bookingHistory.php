@@ -253,7 +253,7 @@ if ($userRole == 1) {
                                         }
                                         ?>
 
-                                        <td> <span class="<?= $class ?> bookingStatus" data-label="<?= $status ?>"><?= $status ?></span></td>
+                                        <td> <span class="<?= $class ?> font-weight-bold bookingStatus" data-label="<?= $status ?>"><?= $status ?></span></td>
                                         <td><a href="" class="btn btn-outline-primary rateBtn" data-bs-toggle="modal"
                                                 data-bs-target="#rateModal" data-label="Rate">Rate</a></td>
 
