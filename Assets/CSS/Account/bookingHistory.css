@@ -136,7 +136,7 @@
   text-align: center;
   color: black;
   padding: 10px;
-  font-size: clamp(1.4vw, 1.2vw, 1vw);
+  font-size: clamp(2vw, 1.8vw, 1.6vw);
 }
 
 #logoutBtn:hover {
@@ -283,26 +283,6 @@ div.dt-container div.dt-layout-row:not(.dt-layout-table) {
   width: 82%;
 }
 
-.customer-details {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.profile-image {
-  width: 30%;
-}
-
-.profile-pic {
-  height: 11vw;
-}
-
-.changePfpBtn  {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
-
-.profile-info {
-  width: 70%;
-}
 .account-name, .swal2-html-container {
   font-size: clamp(2.5vw, 2.3vw, 2.1vw);
 }
@@ -359,10 +339,6 @@ table.dataTable>thead>tr>th, table.dataTable>thead>tr>td {
 
 /* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
-.profile-image {
-  width: 30%;
-}
-
 .title {
   font-size: clamp(5.5vw, 5vw, 4.5vw);
 }
