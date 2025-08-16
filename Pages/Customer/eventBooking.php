@@ -80,7 +80,10 @@ $userRole = $_SESSION['userRole'];
 
                     <div class="eventSched">
                         <label for="eventSched" class="eventInfoLabel">Event Schedule</label>
-                        <input type="datetime-local" class="form-control" id="eventDateTime">
+                        <div class="eventBox">
+                            <input type="datetime-local" class="form-control" id="eventDateTime">
+                            <i class="fa-solid fa-calendar-days" style="color: #333333; "></i>
+                        </div>
                     </div>
 
                     <div class="eventVenue">
@@ -446,161 +449,166 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Functions -->
     <script>
-        function backToSelection() {
-            location.href = "bookNow.php"
-        };
+    function backToSelection() {
+        location.href = "bookNow.php"
+    };
     </script>
 
     <!-- Calendar -->
     <script>
-        // const calIcon = document.getElementById("calendarIcon");
+    // const calIcon = document.getElementById("calendarIcon");
 
-        const minDate = new Date();
-        minDate.setDate(minDate.getDate() + 3);
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 3);
 
-        //hotel calendar
-        flatpickr('#eventDateTime', {
-            enableTime: true,
-            minDate: minDate,
-            dateFormat: "Y-m-d H:i",
-            minTime: '00:00'
-        });
+    //hotel calendar
+    flatpickr('#eventDateTime', {
+        enableTime: true,
+        minDate: minDate,
+        dateFormat: "Y-m-d H:i",
+        minTime: '00:00'
+    });
 
-        // flatpickr('#checkOutDate', {
-        //     enableTime: true,
-        //     minDate: minDate,
-        //     dateFormat: "Y-m-d H:i ",
-        //     minTime: '00:00'
-        // });
+    // flatpickr('#checkOutDate', {
+    //     enableTime: true,
+    //     minDate: minDate,
+    //     dateFormat: "Y-m-d H:i ",
+    //     minTime: '00:00'
+    // });
     </script>
 
     <!-- Event Category and Hall-->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
 
-            fetch(`../../Function/Booking/getEventCategory.php`)
-                .then(response => {
-                    if (!response.ok) throw new Error('Network Error');
-                    return response.json();
+        fetch(`../../Function/Booking/getEventCategory.php`)
+            .then(response => {
+                if (!response.ok) throw new Error('Network Error');
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                    return;
+                }
+
+                const eventInfoLabel = document.querySelector(".eventInfoLabel");
+                const eventTypeSelect = document.getElementById("eventType");
+
+                const venueInfoLabel = document.querySelector("#venueInfoLabel");
+                const venueSelect = document.getElementById("eventVenue");
+
+                eventTypeSelect.innerHTML = '';
+
+                eventInfoLabel.innerHTML = 'Type of Event';
+
+                const typeOption = document.createElement('option');
+                typeOption.value = "";
+                typeOption.disabled = true;
+                typeOption.selected = true;
+                typeOption.textContent = "Choose here...";
+                eventTypeSelect.appendChild(typeOption);
+
+
+                data.Categories.forEach(category => {
+                    const typeOptions = document.createElement('option');
+                    typeOptions.value = category.categoryName;
+                    typeOptions.textContent = category.categoryName;
+                    eventTypeSelect.appendChild(typeOptions);
                 })
-                .then(data => {
-                    if (data.error) {
-                        alert("Error: " + data.error);
-                        return;
-                    }
 
-                    const eventInfoLabel = document.querySelector(".eventInfoLabel");
-                    const eventTypeSelect = document.getElementById("eventType");
+                venueSelect.innerHTML = '';
 
-                    const venueInfoLabel = document.querySelector("#venueInfoLabel");
-                    const venueSelect = document.getElementById("eventVenue");
+                venueInfoLabel.innerHTML = 'Venue';
 
-                    eventTypeSelect.innerHTML = '';
+                const venueOption = document.createElement('option')
+                venueOption.value = "";
+                venueOption.disabled = true;
+                venueOption.selected = true;
+                venueOption.textContent = "Choose...";
+                venueSelect.appendChild(venueOption);
 
-                    eventInfoLabel.innerHTML = 'Type of Event';
-
-                    const typeOption = document.createElement('option');
-                    typeOption.value = "";
-                    typeOption.disabled = true;
-                    typeOption.selected = true;
-                    typeOption.textContent = "Choose here...";
-                    eventTypeSelect.appendChild(typeOption);
-
-
-                    data.Categories.forEach(category => {
-                        const typeOptions = document.createElement('option');
-                        typeOptions.value = category.categoryName;
-                        typeOptions.textContent = category.categoryName;
-                        eventTypeSelect.appendChild(typeOptions);
-                    })
-
-                    venueSelect.innerHTML = '';
-
-                    venueInfoLabel.innerHTML = 'Venue';
-
-                    const venueOption = document.createElement('option')
-                    venueOption.value = "";
-                    venueOption.disabled = true;
-                    venueOption.selected = true;
-                    venueOption.textContent = "Choose...";
-                    venueSelect.appendChild(venueOption);
-
-                    data.Halls.forEach(hall => {
-                        const venueOptions = document.createElement('option');
-                        venueOptions.value = hall.RServiceName;
-                        venueOptions.textContent = `${hall.RServiceName} - ${hall.RSmaxCapacity} pax`;
-                        venueSelect.appendChild(venueOptions);
-                    })
-
+                data.Halls.forEach(hall => {
+                    const venueOptions = document.createElement('option');
+                    venueOptions.value = hall.RServiceName;
+                    venueOptions.textContent = `${hall.RServiceName} - ${hall.RSmaxCapacity} pax`;
+                    venueSelect.appendChild(venueOptions);
                 })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation', error);
-                })
-        });
+
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation', error);
+            })
+    });
     </script>
 
     <!-- For event food -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('../../Function/Booking/getAvailableFood.php')
-                .then(response => {
-                    if (!response.ok) throw new Error('Network Error');
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        alert("Error: " + data.error);
-                        return;
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('../../Function/Booking/getAvailableFood.php')
+            .then(response => {
+                if (!response.ok) throw new Error('Network Error');
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                    return;
+                }
+
+                function getMenuByCategory(menuContainerID, categories, categoryName, message) {
+
+                    const container = document.getElementById(menuContainerID);
+                    container.innerHTML = '';
+
+                    if (categories.length > 0) {
+                        categories.forEach(category => {
+                            const wrapper = document.createElement('div');
+                            wrapper.classList.add('form-check');
+
+                            const input = document.createElement('input');
+                            input.name = categoryName + 'Selections[]';
+                            input.type = 'checkbox';
+                            input.id = category.foodItemID;
+                            input.value = category.foodName;
+                            input.classList.add('form-check-input');
+
+                            const label = document.createElement('label');
+                            label.setAttribute('for', input.id);
+                            label.textContent = category.foodName;
+                            label.classList.add('form-check-label');
+
+                            wrapper.appendChild(input);
+                            wrapper.appendChild(label);
+                            container.appendChild(wrapper);
+                        });
+                    } else {
+                        const p = document.createElement('p');
+                        p.classList.add('card-text');
+                        p.textContent = message;
+                        container.appendChild(p);
                     }
+                }
 
-                    function getMenuByCategory(menuContainerID, categories, categoryName, message) {
+                getMenuByCategory('chickenContainerA', data.chickenCategory, 'chicken',
+                    'No Available Chicken Menu');
+                getMenuByCategory('porkContainerA', data.porkCategory, 'pork', 'No Available Pork Menu');
+                getMenuByCategory('pastaContainerA', data.pastaCategory, 'pasta',
+                    'No Available Pasta Menu');
+                getMenuByCategory('beefContainerA', data.beefCategory, 'beef', 'No Available Beef Menu');
+                getMenuByCategory('vegieContainerA', data.vegieCategory, 'vegie',
+                    'No Available Vegetables Menu');
+                getMenuByCategory('seafoodContainerA', data.seafoodCategory, 'seafood',
+                    'No Available Seafood Menu');
+                getMenuByCategory('drinkContainer', data.drinkCategory, 'drink', 'No Available Drink Menu');
+                getMenuByCategory('dessertContainer', data.dessertCategory, 'dessert',
+                    'No Available Dessert Menu');
 
-                        const container = document.getElementById(menuContainerID);
-                        container.innerHTML = '';
-
-                        if (categories.length > 0) {
-                            categories.forEach(category => {
-                                const wrapper = document.createElement('div');
-                                wrapper.classList.add('form-check');
-
-                                const input = document.createElement('input');
-                                input.name = categoryName + 'Selections[]';
-                                input.type = 'checkbox';
-                                input.id = category.foodItemID;
-                                input.value = category.foodName;
-                                input.classList.add('form-check-input');
-
-                                const label = document.createElement('label');
-                                label.setAttribute('for', input.id);
-                                label.textContent = category.foodName;
-                                label.classList.add('form-check-label');
-
-                                wrapper.appendChild(input);
-                                wrapper.appendChild(label);
-                                container.appendChild(wrapper);
-                            });
-                        } else {
-                            const p = document.createElement('p');
-                            p.classList.add('card-text');
-                            p.textContent = message;
-                            container.appendChild(p);
-                        }
-                    }
-
-                    getMenuByCategory('chickenContainerA', data.chickenCategory, 'chicken', 'No Available Chicken Menu');
-                    getMenuByCategory('porkContainerA', data.porkCategory, 'pork', 'No Available Pork Menu');
-                    getMenuByCategory('pastaContainerA', data.pastaCategory, 'pasta', 'No Available Pasta Menu');
-                    getMenuByCategory('beefContainerA', data.beefCategory, 'beef', 'No Available Beef Menu');
-                    getMenuByCategory('vegieContainerA', data.vegieCategory, 'vegie', 'No Available Vegetables Menu');
-                    getMenuByCategory('seafoodContainerA', data.seafoodCategory, 'seafood', 'No Available Seafood Menu');
-                    getMenuByCategory('drinkContainer', data.drinkCategory, 'drink', 'No Available Drink Menu');
-                    getMenuByCategory('dessertContainer', data.dessertCategory, 'dessert', 'No Available Dessert Menu');
-
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation', error);
-                })
-        });
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation', error);
+            })
+    });
     </script>
 
 
