@@ -38,7 +38,6 @@ main {
 }
 
 section {
-  background-color: #ffff;
   display: flex;
   flex-direction: column;
   padding: 1vw;
@@ -54,8 +53,8 @@ section {
 .image-container {
   position: relative;
   display: inline-block;
-  p{
-    font-family: 'Poppins';
+  p {
+    font-family: "Poppins";
   }
 }
 
@@ -65,8 +64,7 @@ section {
   cursor: zoom-in;
 }
 
-
-.defaultDownpaymentImage{
+.defaultDownpaymentImage {
   max-height: 50vh;
   max-width: 40vw;
 }
@@ -190,7 +188,7 @@ label {
 
 .btn {
   margin-top: 0.6vw;
-  font-family: 'Lora';
+  font-family: "Lora";
 }
 
 .button-container {

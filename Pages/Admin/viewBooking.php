@@ -40,15 +40,17 @@ $userRole = $_SESSION['userRole'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr Resort and Events Place</title>
-    <link
-        rel="icon"
-        type="image/x-icon"
-        href="../../Assets/Images/Icon/favicon.png " />
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <!-- icon library from font-awesome and box icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/viewBooking.css" />
 </head>
@@ -58,7 +60,8 @@ $userRole = $_SESSION['userRole'];
     <div class="guest-container">
         <!-- Back Button -->
         <div class="page-container">
-            <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+            <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png"
+                    alt="Back Button"></a>
             <h5 class="page-title">Guest Booking Information</h5>
         </div>
         <!-- Information -->
@@ -102,14 +105,15 @@ $userRole = $_SESSION['userRole'];
                         <img src="<?= htmlspecialchars($userProfile) ?>" class="img-fluid rounded-start">
                         <div class="booking-info-contact">
                             <p class="card-text name"><?= htmlspecialchars($name) ?></p>
-                            <p class="card-text sub-name"><?= htmlspecialchars($email) ?> | <?= htmlspecialchars($phoneNumber) ?> </p>
+                            <p class="card-text sub-name"><?= htmlspecialchars($email) ?> |
+                                <?= htmlspecialchars($phoneNumber) ?> </p>
                             <p class="card-text sub-name"><?= htmlspecialchars($address) ?></p>
                         </div>
                     </div>
 
                     <div class="button-container" id="button-container">
-                        <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
-                        <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
+                        <button type="submit" class="btn btn-primary w-50" name="approveBtn">Approve</button>
+                        <button type="submit" class="btn btn-danger w-50" name="rejectBtn">Reject</button>
                     </div>
                 </div>
 
@@ -250,113 +254,151 @@ $userRole = $_SESSION['userRole'];
                 ?>
 
                 <!-- Display the information -->
-                <div class="card" style="border: 1px solid red;">
-                    <div class="info-container">
-                        <label for="bookingType">Booking Type</label>
-                        <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
-                        <input type="text" name="bookingType" value="<?= $bookingType ?> Booking">
-                    </div>
-                    <div class="info-container">
-                        <label for="tourType">Tour Type</label>
-                        <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
-                        <input type="text" name="tourType" value="<?= $tourType ?> Swimming">
-                    </div>
-                    <div class="datesContainer" style="border: 1px solid blue;">
-                        <h1 class="card-title">Date and Time</h1>
-                        <div class="info-container">
-                            <label for="arrivalTime">Time Arrival</label>
-                            <input type="text" name="arrivalTime" id="arrivalTime" value="<?= $arrivalTime ?>">
+
+                <div class="card" id="info-card">
+                    <div class="bookingInfoLeft">
+                        <div class="row1">
+                            <div class="info-container" id="booking-info-container">
+                                <label for="bookingType" class="info-label">Booking Type</label>
+                                <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
+                                <input type="text" class="form-control" name="bookingType"
+                                    value="<?= $bookingType ?> Booking">
+                            </div>
+                            <div class="info-container" id="booking-info-container">
+                                <label for="tourType" class="info-label">Tour Type</label>
+                                <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
+                                <input type="text" class="form-control" name="tourType"
+                                    value="<?= $tourType ?> Swimming">
+                            </div>
                         </div>
 
-                        <div class="info-container">
-                            <label for="timeDuration">Time Duration</label>
-                            <input type="text" name="timeDuration" id="timeDuration" value="<?= $time ?> (<?= $duration ?>)">
+
+                        <div class="datesContainer mt-3">
+                            <h1 class="card-title text-center">Date and Time</h1>
+                            <div class="row2 mt-2">
+                                <div class="info-container mt-2" id="booking-info-container">
+                                    <label for="arrivalTime" class="info-label mb-2">Arrival Time</label>
+                                    <input type="text" class="form-control" name="arrivalTime" id="arrivalTime"
+                                        value="<?= $arrivalTime ?>">
+                                </div>
+
+                                <div class="info-container mt-2" id="booking-info-container">
+                                    <label for="timeDuration" class="info-label mb-2">Time Duration</label>
+                                    <input type="text" class="form-control" name="timeDuration" id="timeDuration"
+                                        value="<?= $time ?> (<?= $duration ?>)">
+                                </div>
+
+                                <div class="info-container mt-2" id="booking-info-container">
+                                    <label for="bookingDate" class="info-label mb-2">Booking Date</label>
+                                    <input type="text" class="form-control" name="bookingDate" id="bookingDate"
+                                        value="<?= $bookingDate ?>">
+                                </div>
+                                <div class="info-container mt-2" id="booking-info-container">
+                                    <label for="bookingCreationDate" class="info-label mb-2">Booking Creation
+                                        Date</label>
+                                    <input type="text" class="form-control" name="bookingCreationDate"
+                                        id="bookingCreationDate" value="<?= $bookingCreationDate ?>">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="info-container">
-                            <label for="bookingDate">Booking Date</label>
-                            <input type="text" name="bookingDate" id="bookingDate" value="<?= $bookingDate ?>">
-                        </div>
-                        <div class="info-container">
-                            <label for="bookingCreationDate">Booking Creation Date</label>
-                            <input type="text" name="bookingCreationDate" id="bookingCreationDate" value="<?= $bookingCreationDate ?>">
-                        </div>
-                    </div>
-
-                    <div class="bookingDetails" style="border: 1px solid pink;">
-                        <div class="servicesDetails" style="border: 1px solid yellow;">
-                            <h1 class="card-title">Services</h1>
-                            <div class="servicesInfo">
-                                <ul>
-                                    <?php
+                        <div class="bookingDetails mt-3">
+                            <div class="servicesDetails">
+                                <h1 class="card-title text-center">Services</h1>
+                                <div class="servicesInfo">
+                                    <ul>
+                                        <?php
                                     foreach ($services as $service) {
                                     ?>
                                         <li><?= $service ?></li>
-                                    <?php
+                                        <?php
                                     }
                                     ?>
-                                </ul>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="row3 mt-4">
+                                <div class="additionalServices" id="booking-info-container">
+                                    <label for="addOns" class="info-label mb-2">Additional Services</label>
+                                    <input type="text" class="form-control" name="addOns" id="addOns"
+                                        value="<?= $additionalServices ?>">
+                                </div>
+                                <div class="peopleCountContainer" id="booking-info-container">
+                                    <label for="paxNum" class="info-label mb-2">Number of People:</label>
+                                    <input type="text" class="form-control" name="paxNum" id="paxNum"
+                                        value="<?= $totalPax ?>">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="additionalServices" style="border: 1px solid green;">
-                            <label for="addOns">Additional Services</label>
-                            <input type="text" name="addOns" id="addOns" value="<?= $additionalServices ?>">
+                    </div>
+
+                    <div class="paymentDetails">
+                        <div class="payment-body">
+                            <h1 class="card-title text-center mt-1 mb-3 me-3">
+                                Payment Details
+                            </h1>
+                            <div class="info-container" id="payment-info">
+                                <label for="paymentMethod" class="mt-2">Payment Method</label>
+                                <input type="text" class="form-control w-50" name="paymentMethod" id="paymentMethod"
+                                    value="<?= $paymentMethod ?>">
+                            </div>
+                            <div class="info-container" id="payment-info">
+                                <label for="paymentStatus" class="mt-2">Payment Status</label>
+                                <input type="text" class="form-control w-50" name="paymentStatus" id="paymentStatus"
+                                    value="<?= $paymentStatus ?>">
+                            </div>
+                            <?php if ($bookingStatusName === 'Approved') { ?>
+                            <div class="info-container" id="payment-info">
+                                <label for="paymentDue" class="mt-2">Payment Due Date</label>
+                                <input type="text" class="form-control w-50" name="paymentDue" id="paymentDue"
+                                    value="<?= $paymentDueDate ?>">
+                            </div>
+                            <div class="info-container" id="payment-info">
+                                <label for="userBalance" class="mt-2">User Balance</label>
+                                <input type="text" class="form-control w-50" name="userBalance" id="userBalance"
+                                    value="₱<?= number_format($userBalance, 2) ?>">
+                            </div>
+                            <div class="info-container" id="payment-info">
+                                <label for="amountPaid" class="mt-2">Amount Paid</label>
+                                <input type="text" class="form-control w-50" name="amountPaid" id="amountPaid"
+                                    value="₱<?= number_format($amountPaid, 2) ?>">
+                            </div>
+                            <?php } ?>
+                            <div class="info-container" id="payment-info">
+                                <label for="discountAmount" class="mt-2">Discount</label>
+                                <div class="discountform">
+                                    <input type="text" class="form-control w-100" name="discountAmount"
+                                        id="discountAmount" value="₱<?= number_format($discount, 2) ?>">
+                                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                                </div>
+                            </div>
+                            <div class="info-container" id="payment-info">
+                                <label for="downpayment" class="mt-2">Downpayment</label>
+                                <input type="text" class="form-control w-50" name="downpayment" id="downpayment"
+                                    value="₱<?= number_format($downpayment, 2) ?>">
+                            </div>
+                            <div class="info-container" id="payment-info">
+                                <label for="totalCost" class="mt-2"> Total Cost</label>
+                                <input type="text" class="form-control w-50" name="totalCost" id="totalCost"
+                                    value="₱<?= number_format($totalBill, 2) ?>">
+                            </div>
                         </div>
-                        <div class="peopleCountContainer" style="border: 1px solid orange;">
-                            <label for="paxNum">Number of People:</label>
-                            <input type="text" name="paxNum" id="paxNum" value="<?= $totalPax ?>">
+
+                        <div class="notesContainer mt-3">
+                            <h1 class="card-title text-center"> Notes</h1>
+                            <div class="info-container">
+                                <label for="req" class="info-label mt-2 mb-2">Additional Request(s)/Note(s)</label>
+                                <!-- <input type="text" class="form-control" name="req" id="req"
+                                    value="<?= $additionalReq ?>"> -->
+                                <textarea class="form-control" rows="4" name="req"
+                                    id="req"><?= $additionalReq ?></textarea>
+                            </div>
                         </div>
                     </div>
 
 
-                    <div class="paymentDetails" style="border: 1px solid purple;">
-                        <h1 class="card-title">
-                            Payment Details
-                        </h1>
-                        <div class="info-container">
-                            <label for="paymentMethod">Payment Method</label>
-                            <input type="text" name="paymentMethod" id="paymentMethod" value="<?= $paymentMethod ?>">
-                        </div>
-                        <div class="info-container">
-                            <label for="paymentStatus">Payment Status</label>
-                            <input type="text" name="paymentStatus" id="paymentStatus" value="<?= $paymentStatus ?>">
-                        </div>
-                        <?php if ($bookingStatusName === 'Approved') { ?>
-                            <div class="info-container">
-                                <label for="paymentDue">Payment Due Date</label>
-                                <input type="text" name="paymentDue" id="paymentDue" value="<?= $paymentDueDate ?>">
-                            </div>
-                            <div class="info-container">
-                                <label for="userBalance">User Balance</label>
-                                <input type="text" name="userBalance" id="userBalance" value="₱<?= number_format($userBalance, 2) ?>">
-                            </div>
-                            <div class="info-container">
-                                <label for="amountPaid">Amount Paid</label>
-                                <input type="text" name="amountPaid" id="amountPaid" value="₱<?= number_format($amountPaid, 2) ?>">
-                            </div>
-                        <?php } ?>
-                        <div class="info-container">
-                            <label for="discountAmount">Discount</label>
-                            <input type="text" name="discountAmount" id="discountAmount" value="₱<?= number_format($discount, 2) ?>">
-                        </div>
-                        <div class="info-container">
-                            <label for="downpayment">Downpayment</label>
-                            <input type="text" name="downpayment" id="downpayment" value="₱<?= number_format($downpayment, 2) ?>">
-                        </div>
-                        <div class="info-container">
-                            <label for="totalCost">Total Cost</label>
-                            <input type="text" name="totalCost" id="totalCost" value="₱<?= number_format($totalBill, 2) ?>">
-                        </div>
-                    </div>
-
-                    <div class="notesContainer" style="border: 1px solid skyblue;">
-                        <h1 class="card-title"> Notes</h1>
-                        <div class="info-container">
-                            <label for="req">Additional Request(s)/Note(s)</label>
-                            <input type="text" name="req" id="req" value="<?= $additionalReq ?>">
-                        </div>
-                    </div>
 
                 </div>
 
@@ -368,66 +410,68 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
 
     <script>
-        const videoke = document.getElementById("videoke").value;
-        const bookingType = document.getElementById("bookingType").value;
-        const status = document.getElementById("status").value;
-        const addOns = document.getElementById("addOns").textContent.trim();
+    const videoke = document.getElementById("videoke").value;
+    const bookingType = document.getElementById("bookingType").value;
+    const status = document.getElementById("status").value;
+    const addOns = document.getElementById("addOns").textContent.trim();
 
-        const buttonContainer = document.getElementById("button-container")
-        const videokeSelectionContainer = document.getElementById("videokeSelectionContainer");
-        const downpaymentContainer = document.getElementById("downpayment");
-        const paymentStatusContainer = document.getElementById("paymentStatus");
+    const buttonContainer = document.getElementById("button-container")
+    const videokeSelectionContainer = document.getElementById("videokeSelectionContainer");
+    const downpaymentContainer = document.getElementById("downpayment");
+    const paymentStatusContainer = document.getElementById("paymentStatus");
 
-        if (videoke === 'Videoke') {
-            videokeSelectionContainer.style.display = "block";
-            videokeSelectionContainer.required = true;
-        }
+    if (videoke === 'Videoke') {
+        videokeSelectionContainer.style.display = "block";
+        videokeSelectionContainer.required = true;
+    }
 
-        if (bookingType === "Resort") {
-            downpaymentContainer.style.display = "none";
-            document.querySelector(".guest-info.payment").classList.add("fullWidth");
-        }
+    if (bookingType === "Resort") {
+        downpaymentContainer.style.display = "none";
+        document.querySelector(".guest-info.payment").classList.add("fullWidth");
+    }
 
-        if (status === "Approved") {
-            buttonContainer.style.display = "none";
-            videokeSelectionContainer.style.display = "none";
-            document.querySelector(".guest-info.addOns").classList.add("fullWidth");
-            document.querySelector(".guest-info.payment").classList.remove("fullWidth");
-            paymentStatusContainer.style.display = "block";
-        }
+    if (status === "Approved") {
+        buttonContainer.style.display = "none";
+        videokeSelectionContainer.style.display = "none";
+        document.querySelector(".guest-info.addOns").classList.add("fullWidth");
+        document.querySelector(".guest-info.payment").classList.remove("fullWidth");
+        paymentStatusContainer.style.display = "block";
+    }
 
-        if (addOns === "None") {
-            document.querySelector(".guest-info.addOns").classList.add("fullWidth");
-        }
+    if (addOns === "None") {
+        document.querySelector(".guest-info.addOns").classList.add("fullWidth");
+    }
 
-        if (status === "Cancelled" || status === "Rejected") {
-            buttonContainer.style.display = "none";
-        }
+    if (status === "Cancelled" || status === "Rejected") {
+        buttonContainer.style.display = "none";
+    }
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
 
-        if (paramValue === "videoke") {
-            Swal.fire({
-                title: "Oops!",
-                text: "Please assign a videoke.",
-                icon: 'warning',
-            });
-        } else if (paramValue === "error") {
-            Swal.fire({
-                title: "Failed!",
-                text: "The booking request could not be approved. Please try again later.",
-                icon: 'error',
-            });
-        }
+    if (paramValue === "videoke") {
+        Swal.fire({
+            title: "Oops!",
+            text: "Please assign a videoke.",
+            icon: 'warning',
+        });
+    } else if (paramValue === "error") {
+        Swal.fire({
+            title: "Failed!",
+            text: "The booking request could not be approved. Please try again later.",
+            icon: 'error',
+        });
+    }
     </script>
 
 
