@@ -269,6 +269,7 @@ $userRole = $_SESSION['userRole'];
                         Details</button>
                     <button type="button" name="addPayment" id="addPayment" class="btn btn-success w-100"
                         data-bs-toggle="modal" data-bs-target="#addPaymentModal">Add Payment</button>
+
                     <div class="form-button" id="form-button">
                         <button type="button" name="approveBtn" class="btn btn-primary w-100" data-bs-toggle="modal"
                             data-bs-target="#approveModal">Approve</button>
@@ -291,7 +292,10 @@ $userRole = $_SESSION['userRole'];
                         class="defaultDownpaymentImage">
                     <p class="text-center">Customer has not uploaded the receipt yet</p>
                     <?php endif; ?>
+                    <button type="button" name="genReceipt" id="genReceipt" class="btn btn-primary w-100 mt-4">Generate
+                        Receipt</button>
                 </div>
+
             </section>
 
 
