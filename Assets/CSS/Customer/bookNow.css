@@ -959,4 +959,14 @@ footer {
     justify-content: center;
     margin-top: -15vw !important;
   }
+
+  .eventBox {
+    display: flex;
+  }
+
+  .fa-solid {
+    position: absolute;
+    left: 45%;
+    top: 32.1%;
+  }
 }

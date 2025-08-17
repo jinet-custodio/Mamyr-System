@@ -57,6 +57,10 @@ if ($userRole == 1) {
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/deleteAccount.css" />
 
+    <!-- Font Awesome Link -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+
 </head>
 
 <body>
@@ -72,199 +76,251 @@ if ($userRole == 1) {
         $data =  $getUserInfoResult->fetch_assoc();
     }
     ?>
-    <!-- Side Bar -->
-    <div class="sidebar">
-
-        <div class="home">
-            <?php if ($role === 'Customer') { ?>
-                <a href="../Customer/dashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
-            <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
-            <?php } ?>
-        </div>
-
-        <div class="sidebar-header">
-            <h5>User Account</h5>
-            <?php
-
-
-            $getProfile = $conn->prepare("SELECT firstName,userProfile, email FROM users WHERE userID = ? AND userRole = ?");
-            $getProfile->bind_param("ii", $userID, $userRole);
-            $getProfile->execute();
-            $getProfileResult = $getProfile->get_result();
-            if ($getProfileResult->num_rows > 0) {
-                $data = $getProfileResult->fetch_assoc();
-                $firstName = $data['firstName'];
-                $imageData = $data['userProfile'];
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_buffer($finfo, $imageData);
-                finfo_close($finfo);
-                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-            }
-            ?>
-
-            <div class="profileImage">
-                <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
-            </div>
-        </div>
-        <ul class="list-group">
-            <li>
-                <a href="account.php" class="list-group-item ">
-                    <img src="../../Assets/Images/Icon/user.png" alt="Profile Information" class="sidebar-icon">
-                    Profile Information
-                </a>
-            </li>
-
-            <li>
-                <a href="loginSecurity.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/login_security.png" alt="Login Security" class="sidebar-icon">
-                    Login & Security
-                </a>
-            </li>
-
-            <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                <li>
-                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                        <img src="../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
-                            class="sidebar-icon">
-                        Payment & Booking History
+    <div class="wrapper d-flex">
+        <aside class="sidebar" id="sidebar">
+            <div class="home">
+                <?php if ($role === 'Customer') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
-                </li>
-            <?php } elseif ($role === 'Admin') { ?>
-                <li>
-                    <a href="userManagement.php" class="list-group-item">
-                        <img src="../../Assets/Images/Icon/usermanagement.png" alt="" class="sidebar-icon">
-                        Manage Users
+                <?php } elseif ($role === 'Admin') { ?>
+                    <a href="../Admin/adminDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
-                </li>
-            <?php } ?>
-            <li>
-                <a href="deleteAccount.php" class="list-group-item active">
-                    <img src="../../Assets/Images/Icon/delete-user.png" alt="Delete Account" class="sidebar-icon">
-                    Delete Account
-                </a>
-            </li>
-            <li>
-                <button type="button" class="btn btn-outline-danger" id="logoutBtn"> <img
-                        src="../../Assets/Images/Icon/logout.png" alt="Log Out" class="sidebar-icon">
-                    Logout</button>
-            </li>
-        </ul>
-    </div>
-    <!-- End Side Bar -->
-
-    <div class="wrapper">
-        <div class="card">
-            <div class="header">
-                <h5 class="card-title">Account Deletion</h5>
+                <?php } ?>
             </div>
-            <div class="card-body">
-                <p class="card-text">
-                    Deleting your account is permanent.
-                    When you delete your account, your main profile and everything else that you've added will be
-                    permanently deleted.
-                    You won't be able to retrieve anything that you've added. All additional information, and all of
-                    your
-                    messages will also be deleted.
-                </p>
-                <div class="button-container">
-                    <button type="button" class="btn btn-danger" name="confirmationBtn" id="confirmationBtn">Delete
-                        Account</button>
+
+            <div class="sidebar-header text-center">
+                <div class="d-flex" id="toggle-container">
+                    <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
                 </div>
+                <h5 class="sidebar-text">User Account</h5>
                 <?php
-                if (isset($_SESSION['deleteAccountMessage'])) {
-                    echo '<div class="message-container alert alert-danger text-center">' . htmlspecialchars($_SESSION['deleteAccountMessage']) . '</div>';
-                    unset($_SESSION['deleteAccountMessage']);
+                $getProfile = $conn->prepare("SELECT firstName,userProfile, email FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $data = $getProfileResult->fetch_assoc();
+                    $firstName = $data['firstName'];
+                    $imageData = $data['userProfile'];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_buffer($finfo, $imageData);
+                    finfo_close($finfo);
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
                 ?>
 
-                <!-- Confirmation Modal -->
-                <form action="../../Function/Account/deleteAccount.php" method="POST">
-                    <div class="modal fade" id="confirmationModal" tabindex="-1"
-                        aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="image w-100 text-center">
-                                    <img src="../../Assets/Images/Icon/warning.png" alt="warning icon"
-                                        class="warning-image">
-
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
-                                    <p class="modal-title text-center mb-2">Are you sure?</p>
-                                    <p class="modal-text text-center mb-2">You won't be able to revert this!</p>
-                                    <div class="button-container">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">No</button>
-                                        <button type="submit" class="btn btn-primary" name="yesDelete"
-                                            id="yesDelete">Yes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- Verification Modal -->
-                <form action="../../Function/Account/deleteAccount.php" method="POST">
-                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <div class="w-100 text-center">
-                                        <h5 class="modal-title">This action cannot be undone</h5>
-                                        <h6 class="modal-text" id="deleteModalLabel">
-                                            This will permanently delete your current email <br>
-                                            <strong><?= htmlspecialchars($data['email']) ?></strong>
-                                        </h6>
-                                        <input type="hidden" name="email"
-                                            value="<?= htmlspecialchars($data['email']) ?>">
-                                    </div>
-                                    <button type="button" class="btn-close btn btn-danger ms-2" data-bs-dismiss="modal"
-                                        aria-label="Close">
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <?php
-                                    if (isset($_SESSION['modal-error'])) {
-                                        echo '<div class="message-container alert alert-danger text-center">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
-                                        unset($_SESSION['modal-error']);
-                                    }
-                                    ?>
-
-                                    <input type="hidden" name="newEmail" value="<?= htmlspecialchars($newEmail) ?>">
-
-                                    <p class="modal-text text-center mb-2">Please enter the verification code</p>
-
-                                    <div class="text-center">
-                                        <input type="text" name="enteredOTP" id="enteredOTP"
-                                            class="form-control d-inline-block w-50 text-center"
-                                            placeholder="6 digit security code" required>
-                                    </div>
-
-                                    <div class="button-container">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary" name="verifyCode">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                <div class="profileImage">
+                    <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+                </div>
             </div>
-        </div>
+            <ul class="list-group sidebar-nav">
+                <li>
+                    <a href="account.php" class="list-group-item ">
+                        <i class="fa-regular fa-user sidebar-icon"></i>
+                        <span class="sidebar-text">Profile Information</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="loginSecurity.php" class="list-group-item">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
+                    </a>
+                </li>
+
+                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                    <li>
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                            <i class="fa-solid fa-table-list sidebar-icon"></i>
+                            <span class="sidebar-text">Payment & Booking History</span>
+                        </a>
+                    </li>
+                <?php } elseif ($role === 'Admin') { ?>
+                    <li>
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <li>
+                    <a href="deleteAccount.php" class="list-group-item active">
+                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
+                        <span class="sidebar-text">Delete Account</span>
+                    </a>
+                </li>
+                <li>
+                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
+                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                        <span class="sidebar-text ms-2">Logout</span>
+                </li>
+            </ul>
+
+        </aside>
+        <!-- End Side Bar -->
+        <main class="main-content" id="main-content">
+            <div class="wrapper">
+                <div class="card">
+                    <div class="header">
+                        <h5 class="card-title">Account Deletion</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Deleting your account is permanent.
+                            When you delete your account, your main profile and everything else that you've added will be
+                            permanently deleted.
+                            You won't be able to retrieve anything that you've added. All additional information, and all of
+                            your
+                            messages will also be deleted.
+                        </p>
+                        <div class="delete-button">
+                            <button type="button" class="btn btn-danger" name="confirmationBtn" id="confirmationBtn">Delete
+                                Account</button>
+                        </div>
+                        <?php
+                        if (isset($_SESSION['deleteAccountMessage'])) {
+                            echo '<div class="message-container alert alert-danger text-center">' . htmlspecialchars($_SESSION['deleteAccountMessage']) . '</div>';
+                            unset($_SESSION['deleteAccountMessage']);
+                        }
+                        ?>
+
+                        <!-- Confirmation Modal -->
+                        <form action="../../Function/Account/deleteAccount.php" method="POST">
+                            <div class="modal fade" id="confirmationModal" tabindex="-1"
+                                aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="image w-100 text-center">
+                                            <img src="../../Assets/Images/Icon/warning.png" alt="warning icon"
+                                                class="warning-image">
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                            <p class="modal-title text-center mb-2">Are you sure?</p>
+                                            <p class="modal-text text-center mb-2">You won't be able to revert this!</p>
+                                            <div class="button-container">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">No</button>
+                                                <button type="submit" class="btn btn-primary" name="yesDelete"
+                                                    id="yesDelete">Yes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Verification Modal -->
+                        <form action="../../Function/Account/deleteAccount.php" method="POST">
+                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <div class="w-100 text-center">
+                                                <h5 class="modal-title">This action cannot be undone</h5>
+                                                <h6 class="modal-text" id="deleteModalLabel">
+                                                    This will permanently delete your current email <br>
+                                                    <strong><?= htmlspecialchars($data['email']) ?></strong>
+                                                </h6>
+                                                <input type="hidden" name="email"
+                                                    value="<?= htmlspecialchars($data['email']) ?>">
+                                            </div>
+                                            <button type="button" class="btn-close btn btn-danger ms-2" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <?php
+                                            if (isset($_SESSION['modal-error'])) {
+                                                echo '<div class="message-container alert alert-danger text-center">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
+                                                unset($_SESSION['modal-error']);
+                                            }
+                                            ?>
+
+                                            <input type="hidden" name="newEmail" value="<?= htmlspecialchars($newEmail) ?>">
+
+                                            <p class="modal-text text-center mb-2">Please enter the verification code</p>
+
+                                            <div class="text-center">
+                                                <input type="text" name="enteredOTP" id="enteredOTP"
+                                                    class="form-control d-inline-block w-50 text-center"
+                                                    placeholder="6 digit security code" required>
+                                            </div>
+
+                                            <div class="button-container">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary" name="verifyCode">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
+    </script>
+
+    <script>
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container')
+
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 600) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    })
+                    sidebar.classList.remove('collapsed');
+                }
+            }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
+        });
     </script>
 
     <!-- Sweetalert JS -->

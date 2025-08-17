@@ -305,7 +305,7 @@ if ($availabilityResult->num_rows > 0) {
             <h5>Partnerships</h5>
         </a>
 
-        <a class="nav-link" href="editWebsite/landingPageEdit.php">
+        <a class="nav-link" href="editWebsite/editWebsite.php">
             <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
             <h5>Edit Website</h5>
         </a>
@@ -496,10 +496,6 @@ if ($availabilityResult->num_rows > 0) {
                         <!-- <div class="revenueImage"><img src="../../Assets/Images/revenueGraph.png" alt=""></div> -->
                     <?php endif; ?>
                 </div>
-
-                <!-- <div class="salesReportBtn">
-                    <a href="salesReport.php" class="btn btn-outline-primary w-75">Sales Report</a>
-                </div> -->
             </div>
 
             <div class="card graph" id="reservationTrends">

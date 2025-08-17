@@ -80,7 +80,10 @@ $userRole = $_SESSION['userRole'];
 
                     <div class="eventSched">
                         <label for="eventSched" class="eventInfoLabel">Event Schedule</label>
-                        <input type="datetime-local" class="form-control">
+                        <div class="eventBox">
+                            <input type="datetime-local" class="form-control" id="eventDateTime">
+                            <i class="fa-solid fa-calendar-days" style="color: #333333; "></i>
+                        </div>
                     </div>
 
                     <div class="eventVenue">
@@ -189,8 +192,8 @@ $userRole = $_SESSION['userRole'];
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Chicken</h6>
                             </div>
-                            <div class="dishListContainer">
-                                <div class="form-check">
+                            <div class="dishListContainer" id="chickenContainerA">
+                                <!-- <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" name="cPastil"
                                         id="cPastil">
                                     <label class="form-check-label" for="cPastil">
@@ -223,297 +226,59 @@ $userRole = $_SESSION['userRole'];
                                     <label class="form-check-label" for="cButterGarlic">
                                         Butter Garlic Chicken
                                     </label>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="pasta">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Pasta</h6>
                             </div>
-                            <div class="dishListContainer">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="carbonara"
-                                        id="carbonara">
-                                    <label class="form-check-label" for="carbonara">
-                                        Creamy Carbonara
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="spag" id="spag">
-                                    <label class="form-check-label" for="spag">
-                                        Filipino Style Spaghetti
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="pastaPesto"
-                                        id="pastaPesto">
-                                    <label class="form-check-label" for="pastaPesto">
-                                        Pasta Pesto Sauce
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cantonBihon"
-                                        id="cantonBihon">
-                                    <label class="form-check-label" for="cantonBihon">
-                                        Canton and Bihon Guisado
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="japchae"
-                                        id="japchae">
-                                    <label class="form-check-label" for="japchae">
-                                        Japchae Noodles
-                                    </label>
-                                </div>
+                            <div class="dishListContainer" id="pastaContainerA">
                             </div>
                         </div>
                         <div class="pork">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Pork</h6>
                             </div>
-                            <div class="dishListContainer">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="asado" id="asado">
-                                    <label class="form-check-label" for="asado">
-                                        Pork Asado
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="mechado"
-                                        id="mechado">
-                                    <label class="form-check-label" for="mechado">
-                                        Pork Mechado Roll
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="caldereta"
-                                        id="caldereta">
-                                    <label class="form-check-label" for="caldereta">
-                                        Pork Caldereta
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="hamonado"
-                                        id="hamonado">
-                                    <label class="form-check-label" for="hamonado">
-                                        Pork Hamonado
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="roastedPork"
-                                        id="roastedPork">
-                                    <label class="form-check-label" for="roastedPork">
-                                        Roasted Pork
-                                    </label>
-                                </div>
+                            <div class="dishListContainer" id="porkContainerA">
                             </div>
                         </div>
-
                         <div class="veg">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Vegetables</h6>
                             </div>
-                            <div class="dishListContainer">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="mixedVeggie"
-                                        id="mixedVeggie">
-                                    <label class="form-check-label" for="mixedVeggie">
-                                        Mixed Veggies Sauté
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="orientalMix"
-                                        id="orientalMix">
-                                    <label class="form-check-label" for="orientalMix">
-                                        Oriental Mix Veggies
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="chopsuey"
-                                        id="chopsuey">
-                                    <label class="form-check-label" for="chopsuey">
-                                        Chopsuey
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="chineseChopsuey"
-                                        id="chineseChopsuey">
-                                    <label class="form-check-label" for="chineseChopsuey">
-                                        Chinese Chopsuey
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="butterCreamy"
-                                        id="butterCreamy">
-                                    <label class="form-check-label" for="butterCreamy">
-                                        Butter Creamy Veggies
-                                    </label>
-                                </div>
+                            <div class="dishListContainer" id="vegieContainerA">
+
                             </div>
                         </div>
-
                         <div class="beef">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Beef</h6>
                             </div>
-                            <div class="dishListContainer">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="beefCaldereta"
-                                        id="beefCaldereta">
-                                    <label class="form-check-label" for="beefCaldereta">
-                                        Beef Spicy Caldereta
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="beefBroccolli"
-                                        id="beefBroccolli">
-                                    <label class="form-check-label" for="beefBroccolli">
-                                        Beef Broccolli
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="roastBeef"
-                                        id="roastBeef">
-                                    <label class="form-check-label" for="roastBeef">
-                                        Roast Beef
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="beefTeriyaki"
-                                        id="beefTeriyaki">
-                                    <label class="form-check-label" for="beefTeriyaki">
-                                        Beef Teriyaki
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="beefMushroom"
-                                        id="beefMushroom">
-                                    <label class="form-check-label" for="beefMushroom">
-                                        Beef Creamy Mushroom Sauce
-                                    </label>
-                                </div>
+                            <div class="dishListContainer" id="beefContainerA">
                             </div>
                         </div>
-
                         <div class="seafood">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Seafood</h6>
                             </div>
-                            <div class="dishListContainer">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="fishFillet"
-                                        id="fishFillet">
-                                    <label class="form-check-label" for="fishFillet">
-                                        Crispy Fish Fillet with Creamy Mayo
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="shrimpTempura"
-                                        id="shrimpTempura">
-                                    <label class="form-check-label" for="shrimpTempura">
-                                        Shrimp Tempura
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="garlicShrimp"
-                                        id="garlicShrimp">
-                                    <label class="form-check-label" for="garlicShrimp">
-                                        Butter Garlic Shrimp
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="squidGambas"
-                                        id="squidGambas">
-                                    <label class="form-check-label" for="squidGambas">
-                                        Squid Gambas
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="nutCrustFillet"
-                                        id="nutCrustFillet">
-                                    <label class="form-check-label" for="nutCrustFillet">
-                                        Nut Crusted Fish Fillet with Sweet Chili Sauce
-                                    </label>
-                                </div>
+                            <div class="dishListContainer" id="seafoodContainerA">
+
                             </div>
                         </div>
-
                         <div class="drinks">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Drinks</h6>
                             </div>
-                            <div class="dishListContainer">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="lemonIceTea"
-                                        id="lemonIceTea">
-                                    <label class="form-check-label" for="lemonIceTea">
-                                        Lemon Iced Tea
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="orangeJuice"
-                                        id="orangeJuice">
-                                    <label class="form-check-label" for="orangeJuice">
-                                        Orange Juice
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="pineappleJuice"
-                                        id="pineappleJuice">
-                                    <label class="form-check-label" for="pineappleJuice">
-                                        Pineapple Juice
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="redIcedTea"
-                                        id="redIcedTea">
-                                    <label class="form-check-label" for="redIcedTea">
-                                        Red Iced Tea
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="lemonade"
-                                        id="lemonade">
-                                    <label class="form-check-label" for="lemonade">
-                                        Lemonade
-                                    </label>
-                                </div>
+                            <div class="dishListContainer" id="drinkContainer">
+
                             </div>
                         </div>
-
                         <div class="dessert">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Desserts</h6>
                             </div>
-                            <div class="dishListContainer">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="fruitSalad"
-                                        id="fruitSalad">
-                                    <label class="form-check-label" for="fruitSalad">
-                                        Fruit Salad
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="bukoSalad"
-                                        id="bukoSalad">
-                                    <label class="form-check-label" for="bukoSalad">
-                                        Buko Salad
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="bukoPandan"
-                                        id="bukoPandan">
-                                    <label class="form-check-label" for="bukoPandan">
-                                        Buko Pandan
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="coffeeJelly"
-                                        id="coffeeJelly">
-                                    <label class="form-check-label" for="coffeeJelly">
-                                        Coffee Jelly
-                                    </label>
-                                </div>
+                            <div class="dishListContainer" id="dessertContainer">
                             </div>
                         </div>
                     </div>
@@ -691,25 +456,25 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Calendar -->
     <script>
-    const calIcon = document.getElementById("calendarIcon");
+    // const calIcon = document.getElementById("calendarIcon");
 
     const minDate = new Date();
     minDate.setDate(minDate.getDate() + 3);
 
     //hotel calendar
-    flatpickr('#checkInDate', {
+    flatpickr('#eventDateTime', {
         enableTime: true,
         minDate: minDate,
-        dateFormat: "Y-m-d H:i ",
+        dateFormat: "Y-m-d H:i",
         minTime: '00:00'
     });
 
-    flatpickr('#checkOutDate', {
-        enableTime: true,
-        minDate: minDate,
-        dateFormat: "Y-m-d H:i ",
-        minTime: '00:00'
-    });
+    // flatpickr('#checkOutDate', {
+    //     enableTime: true,
+    //     minDate: minDate,
+    //     dateFormat: "Y-m-d H:i ",
+    //     minTime: '00:00'
+    // });
     </script>
 
     <!-- Event Category and Hall-->
@@ -769,6 +534,75 @@ $userRole = $_SESSION['userRole'];
                     venueOptions.textContent = `${hall.RServiceName} - ${hall.RSmaxCapacity} pax`;
                     venueSelect.appendChild(venueOptions);
                 })
+
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation', error);
+            })
+    });
+    </script>
+
+    <!-- For event food -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('../../Function/Booking/getAvailableFood.php')
+            .then(response => {
+                if (!response.ok) throw new Error('Network Error');
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                    return;
+                }
+
+                function getMenuByCategory(menuContainerID, categories, categoryName, message) {
+
+                    const container = document.getElementById(menuContainerID);
+                    container.innerHTML = '';
+
+                    if (categories.length > 0) {
+                        categories.forEach(category => {
+                            const wrapper = document.createElement('div');
+                            wrapper.classList.add('form-check');
+
+                            const input = document.createElement('input');
+                            input.name = categoryName + 'Selections[]';
+                            input.type = 'checkbox';
+                            input.id = category.foodItemID;
+                            input.value = category.foodName;
+                            input.classList.add('form-check-input');
+
+                            const label = document.createElement('label');
+                            label.setAttribute('for', input.id);
+                            label.textContent = category.foodName;
+                            label.classList.add('form-check-label');
+
+                            wrapper.appendChild(input);
+                            wrapper.appendChild(label);
+                            container.appendChild(wrapper);
+                        });
+                    } else {
+                        const p = document.createElement('p');
+                        p.classList.add('card-text');
+                        p.textContent = message;
+                        container.appendChild(p);
+                    }
+                }
+
+                getMenuByCategory('chickenContainerA', data.chickenCategory, 'chicken',
+                    'No Available Chicken Menu');
+                getMenuByCategory('porkContainerA', data.porkCategory, 'pork', 'No Available Pork Menu');
+                getMenuByCategory('pastaContainerA', data.pastaCategory, 'pasta',
+                    'No Available Pasta Menu');
+                getMenuByCategory('beefContainerA', data.beefCategory, 'beef', 'No Available Beef Menu');
+                getMenuByCategory('vegieContainerA', data.vegieCategory, 'vegie',
+                    'No Available Vegetables Menu');
+                getMenuByCategory('seafoodContainerA', data.seafoodCategory, 'seafood',
+                    'No Available Seafood Menu');
+                getMenuByCategory('drinkContainer', data.drinkCategory, 'drink', 'No Available Drink Menu');
+                getMenuByCategory('dessertContainer', data.dessertCategory, 'dessert',
+                    'No Available Dessert Menu');
 
             })
             .catch(error => {

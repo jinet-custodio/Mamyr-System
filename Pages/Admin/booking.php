@@ -101,9 +101,9 @@ if (isset($_SESSION['error'])) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -190,7 +190,7 @@ if (isset($_SESSION['error'])) {
             <h5>Partnerships</h5>
         </a>
 
-        <a class="nav-link" href="editWebsite/landingPageEdit.php">
+        <a class="nav-link" href="editWebsite/editWebsite.php">
             <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
             <h5>Edit Website</h5>
         </a>
@@ -215,20 +215,20 @@ if (isset($_SESSION['error'])) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                    <ul class="list-group list-group-flush ">
-                        <?php foreach ($notificationsArray as $index => $notifMessage):
+                        <ul class="list-group list-group-flush ">
+                            <?php foreach ($notificationsArray as $index => $notifMessage):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                        <li class="list-group-item mb-2 notification-item"
-                            data-id="<?= htmlspecialchars($notificationID) ?>"
-                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                            <?= htmlspecialchars($notifMessage) ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                    <?= htmlspecialchars($notifMessage) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     <?php else: ?>
-                    <div class="p-3 text-muted">No new notifications.</div>
+                        <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -266,11 +266,6 @@ if (isset($_SESSION['error'])) {
                                     LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID  -- to get the status name
                                     LEFT JOIN packages p ON b.packageID = p.packageID  -- to get the info of the package na binook 
                                     LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
-                                    -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
-                                    -- LEFT JOIN services s ON bs.serviceID = s.serviceID   -- to get the info of the service na binook 
-                                    -- LEFT JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID  -- info of service
-                                    -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
-                                    -- LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
                                     LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
                                     ");
                     $getBookingInfo->execute();
@@ -282,7 +277,7 @@ if (isset($_SESSION['error'])) {
                             // echo "</pre>";
                             $bookingID = $bookings['formattedBookingID'];
                             $startDate = strtotime($bookings['startDate']);
-                            $checkIn = date("d F Y", $startDate);
+                            $checkIn = date("F d, Y", $startDate);
                             $middleInitial = trim($bookings['middleInitial'] ?? '');
                             $name = ucfirst($bookings['firstName']) . " " . ucfirst($middleInitial) . " "  . ucfirst($bookings['lastName']);
 
@@ -325,36 +320,27 @@ if (isset($_SESSION['error'])) {
                                     $addClass = "btn btn-danger w-100";
                                 }
                             }
-                            // $status = $bookings['statusName'];
-                            // if ($bookings['eventCategoryName'] != "") {
-                            //     $bookingType = "Event Booking";
-                            // } elseif ($bookings['customPackageID'] != "") {
-                            //     $bookingType = "Customized Package";
-                            // } else {
-                            //     $bookingType = "Resort Booking";
-                            // }
-
                     ?>
-                    <tr>
-                        <td><?= htmlspecialchars($bookingID) ?></td>
-                        <td><?= htmlspecialchars($name) ?></td>
-                        <td><?= htmlspecialchars($bookingType) ?>&nbsp;Booking</td>
-                        <td><?= $checkIn ?></td>
-                        <td>
-                            <a class=" <?= $addClass ?>">
-                                <?= htmlspecialchars($status) ?>
-                            </a>
-                        </td>
-                        <td>
-                            <form action="viewBooking.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
-                                <input type="hidden" name="bookingStatus"
-                                    value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($bookings['confirmedStatus'])  ?>">
-                                <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                                <button type="submit" class="btn btn-primary w-75">View</button>
-                            </form>
-                        </td>
-                    </tr>
+                            <tr>
+                                <td><?= htmlspecialchars($bookingID) ?></td>
+                                <td><?= htmlspecialchars($name) ?></td>
+                                <td><?= htmlspecialchars($bookingType) ?>&nbsp;Booking</td>
+                                <td><?= $checkIn ?></td>
+                                <td>
+                                    <a class=" <?= $addClass ?>">
+                                        <?= htmlspecialchars($status) ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="viewBooking.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                                        <input type="hidden" name="bookingStatus"
+                                            value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($bookings['confirmedStatus'])  ?>">
+                                        <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                        <button type="submit" class="btn btn-primary w-75">View</button>
+                                    </form>
+                                </td>
+                            </tr>
                     <?php
                         }
                     }
@@ -406,7 +392,6 @@ if (isset($_SESSION['error'])) {
                 });
             });
         });
-    });
     </script>
 
     <!-- Jquery Link -->
@@ -416,65 +401,65 @@ if (isset($_SESSION['error'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#bookingTable').DataTable({
-            columnDefs: [{
-                    width: '10%',
-                    targets: 0
-                },
-                {
-                    width: '15%',
-                    targets: 2
-                },
-                {
-                    width: '15%',
-                    targets: 4
-                },
-            ],
+        $(document).ready(function() {
+            $('#bookingTable').DataTable({
+                columnDefs: [{
+                        width: '10%',
+                        targets: 0
+                    },
+                    {
+                        width: '15%',
+                        targets: 2
+                    },
+                    {
+                        width: '15%',
+                        targets: 4
+                    },
+                ],
+            });
         });
-    });
     </script>
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    <?php if (!empty($message)): ?>
-    Swal.fire({
-        icon: '<?= $status ?>',
-        title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
-        text: '<?= $message ?>'
-    });
-    <?php endif; ?>
+        <?php if (!empty($message)): ?>
+            Swal.fire({
+                icon: '<?= $status ?>',
+                title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
+                text: '<?= $message ?>'
+            });
+        <?php endif; ?>
 
 
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
 
-    if (paramValue === "success") {
-        Swal.fire({
-            title: "Booking Approved!",
-            text: "The booking has been successfully approved.",
-            icon: 'success',
-        });
-    } else if (paramValue === "error") {
-        Swal.fire({
-            title: "Action Failed!",
-            text: "The booking could not be approved or rejected. Please try again later.",
-            icon: 'error',
-        });
-    } else if (paramValue === 'rejected') {
-        Swal.fire({
-            title: "Booking Rejected!",
-            text: "The booking has been successfully rejected.",
-            icon: 'success',
-        });
-    }
+        if (paramValue === "success") {
+            Swal.fire({
+                title: "Booking Approved!",
+                text: "The booking has been successfully approved.",
+                icon: 'success',
+            });
+        } else if (paramValue === "error") {
+            Swal.fire({
+                title: "Action Failed!",
+                text: "The booking could not be approved or rejected. Please try again later.",
+                icon: 'error',
+            });
+        } else if (paramValue === 'rejected') {
+            Swal.fire({
+                title: "Booking Rejected!",
+                text: "The booking has been successfully rejected.",
+                icon: 'success',
+            });
+        }
 
-    if (paramValue) {
-        const url = new URL(windows.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString)
-    }
+        if (paramValue) {
+            const url = new URL(windows.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString)
+        }
     </script>
 </body>
 
