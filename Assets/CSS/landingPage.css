@@ -11,7 +11,6 @@
   src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
-
 * {
   margin: 0;
   padding: 0;
@@ -238,17 +237,34 @@ ul {
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 
+.checkBoxContainer {
+  display: flex;
+
+  gap: 1vw;
+  border: 1px solid #dfe2e6;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.3rem;
+}
+
+.form-check-label {
+  font-size: 1.6vw;
+}
+
+.form-check-input {
+  border-color: black !important;
+}
 .label {
   display: flex;
-  gap: 4vw;
+  gap: 5vw;
   margin-top: 3vw;
+  justify-content: center;
 }
 
 .formBoxes {
   width: 100%;
   gap: 4vw;
   display: flex;
-  justify-content: center;
 }
 
 input[type="number"]::-webkit-inner-spin-button {
