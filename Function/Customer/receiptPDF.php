@@ -5,7 +5,7 @@ require '../../Config/dbcon.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 session_start();
 $mpdf = new \Mpdf\Mpdf([
-    'format' => [150, 200],
+    'format' => [180, 250],
     'orientation' => 'L',
     'margin_left' => 5,
     'margin_right' => 5,
@@ -63,12 +63,14 @@ if (isset($_POST['downloadReceiptBtn'])) {
     <style>
     .logo {
         height: 35px;
-        margin-top: -5px;
+        margin-top: 5px;
+        margin-left: 20px;
 
     }
 
     h3 {
-        margin-top: -10px;
+        margin-top: -25px;
+        margin-right: 20px;
     }
     </style>
 </head>
@@ -77,29 +79,45 @@ if (isset($_POST['downloadReceiptBtn'])) {
 
     <header style="margin-bottom:20px">
         <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-        <h3 style="text-align: center;">Mamyr Resort</h3>
-        <h5 class="mamyrAddress" style="text-align: center;"><?= $mamyrAddress ?></h5>
-        <h4 style="text-align: center;"><?= $resortOwner ?></h4>
+
+        <div>
+            <h3 style="text-align: right;">Official Receipt No. <?= $bookingID ?></h3>
+            <h4 style="text-align: left; margin-top:20px; margin-left:5px"><?= $resortOwner ?></h4>
+        </div>
+        <p style="text-align:right; margin-top: -35px; margin-right:21px;"><strong>Date:</strong> <?= $date ?></p>
+
     </header>
-    <div class="receiptNo">
-        <h3>Official Receipt No. <?= $bookingID ?></h3>
-    </div>
-    <p style="text-align:right; margin-top: -40px;"><strong>Date:</strong> <?= $date ?></p>
 
-    <div class="contents" style="margin-top: 25px; padding: 15px">
-        <p style="text-align: justify; font-size: 15px"><strong>Received from </strong> <?= $adminName ?> <strong>with
-                Address at
-            </strong> <?= $mamyrAddress ?>
-            <strong>Bus. Style/Name </strong><?= $businessName ?>
-            <strong>the sum of </strong> <?= $amountInWords ?> (₱
-            <?= number_format($totalBill, 2) ?>)
+    <hr style="height:5px; color: #09a7eb; margin-top:-20px">
+    <div class="contents" style="margin-top: 35px; padding: 15px">
+        <h3 style="text-align: center; margin-top:-40px">Mamyr Resort and Events Place</h3>
+        <h4 style="text-align: center;">Official Receipt</h4>
 
-            <strong>In partial/full payment for</strong> <?= $bookingType ?> Booking.
+        <p style="text-align: justify; font-size: 15px; margin-top: 35px"><strong>Received from </strong>
+            <?= $adminName ?> Dela Cruz</p>
+
+        <p><strong>
+                Address
+            </strong> <?= $mamyrAddress ?></p>
+
+        <p><strong>Bus. Style/Name </strong><?= $businessName ?></p>
+
+        <p><strong>Amount</strong> ₱
+            <?= number_format($totalBill, 2) ?></p>
+
+        <p><strong>In words </strong> <?= $amountInWords ?></p>
+
+        <p><strong>In partial/full payment for</strong> <?= $bookingType ?> Booking
         </p>
 
+        <p><strong>Service/s</strong> Videoke, Massage Chair
+        </p>
+        <p><strong>Requested by:</strong> <?= $name ?></p>
+        <hr style="width:200px; height:1px; color:black; text-align:right; margin-top:20px">
+        <p style="text-align: right; margin-top:1px; margin-right: 30px">Authorized Signature</p>
     </div>
 
-    <p style="text-align: center; font-size: 15px"><strong>Requested by:</strong> <?= $name ?></p>
+
 </body>
 
 
