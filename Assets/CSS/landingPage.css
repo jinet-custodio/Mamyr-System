@@ -239,9 +239,7 @@ ul {
 
 .checkBoxContainer {
   display: flex;
-
   gap: 1vw;
-  border: 1px solid #dfe2e6;
   border-radius: 5px;
   width: 100%;
   padding: 0.3rem;
