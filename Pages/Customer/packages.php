@@ -2,10 +2,9 @@
 require '../../Config/dbcon.php';
 
 $session_timeout = 3600;
-
+session_start();
 ini_set('session.gc_maxlifetime', $session_timeout);
 session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
@@ -22,10 +21,12 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     exit();
 }
 
-$_SESSION['last_activity'] = time();
+
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+$_SESSION['last_activity'] = time();
 ?>
 
 <!DOCTYPE html>

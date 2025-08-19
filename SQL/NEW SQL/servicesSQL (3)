@@ -77,33 +77,33 @@ ADD COLUMN ageGroup ENUM('Adult', 'Child', 'Both') NOT NULL DEFAULT 'Adult'
 AFTER foodCategory;
 
 
-CREATE TABLE packages (
-    packageID INT PRIMARY KEY AUTO_INCREMENT,
-    packageName VARCHAR(100) NOT NULL,
-    packageDescription TEXT NOT NULL,
-    Pduration DECIMAL(10,2), 
-    Pcapacity INT NOT NULL,
-    resortServiceID INT NOT NULL,
-    Pprice DECIMAL(10,2) DEFAULT 0.00,
-    PcategoryID INT NOT NULL,
-    packageAvailability INT DEFAULT 1,
+-- CREATE TABLE packages (
+--     packageID INT PRIMARY KEY AUTO_INCREMENT,
+--     packageName VARCHAR(100) NOT NULL,
+--     packageDescription TEXT NOT NULL,
+--     Pduration DECIMAL(10,2), 
+--     Pcapacity INT NOT NULL,
+--     resortServiceID INT NOT NULL,
+--     Pprice DECIMAL(10,2) DEFAULT 0.00,
+--     PcategoryID INT NOT NULL,
+--     packageAvailability INT DEFAULT 1,
 
-    FOREIGN KEY (packageAvailability) REFERENCES serviceAvailability(availabilityID), 
-    FOREIGN KEY (resortServiceID) REFERENCES resortAmenities(resortServiceID),
-    FOREIGN KEY (PcategoryID) REFERENCES eventCategories(categoryID)
-);
+--     FOREIGN KEY (packageAvailability) REFERENCES serviceAvailability(availabilityID), 
+--     FOREIGN KEY (resortServiceID) REFERENCES resortAmenities(resortServiceID),
+--     FOREIGN KEY (PcategoryID) REFERENCES eventCategories(categoryID)
+-- );
 
 
-CREATE TABLE packageFoodItems (
-    packageFoodItemID INT PRIMARY KEY AUTO_INCREMENT,
-    packageID INT NOT NULL,
-    foodItemID INT NOT NULL,
-    quantity INT NOT NULL DEFAULT 1,
-    totalPrice DECIMAL(10,2) NOT NULL,
+-- CREATE TABLE packageFoodItems (
+--     packageFoodItemID INT PRIMARY KEY AUTO_INCREMENT,
+--     packageID INT NOT NULL,
+--     foodItemID INT NOT NULL,
+--     quantity INT NOT NULL DEFAULT 1,
+--     totalPrice DECIMAL(10,2) NOT NULL,
 
-    FOREIGN KEY (packageID) REFERENCES packages(packageID),
-    FOREIGN KEY (foodItemID) REFERENCES menuItems(foodItemID)
-);
+--     FOREIGN KEY (packageID) REFERENCES packages(packageID),
+--     FOREIGN KEY (foodItemID) REFERENCES menuItems(foodItemID)
+-- );
 
 -- CREATE TABLE customPackages (
 --     customPackageID INT PRIMARY KEY AUTO_INCREMENT, 
@@ -140,21 +140,21 @@ CREATE TABLE customPackageItems (
 
 
 
-CREATE TABLE discounts (
-    discountID INT PRIMARY KEY AUTO_INCREMENT,
-    discountName VARCHAR(100) NOT NULL,
-    discountPercent DECIMAL(5,2) NOT NULL, 
-    discountAmount DECIMAL(10,2) DEFAULT NULL, 
-    startDate DATE NOT NULL,
-    endDate DATE NOT NULL,
-    applicableTo ENUM('Service', 'Package', 'Booking', 'All') NOT NULL DEFAULT 'All',
-    serviceID INT DEFAULT NULL,
-    packageID INT DEFAULT NULL,
-    isActive BOOLEAN DEFAULT TRUE,
+-- CREATE TABLE discounts (
+--     discountID INT PRIMARY KEY AUTO_INCREMENT,
+--     discountName VARCHAR(100) NOT NULL,
+--     discountPercent DECIMAL(5,2) NOT NULL, 
+--     discountAmount DECIMAL(10,2) DEFAULT NULL, 
+--     startDate DATE NOT NULL,
+--     endDate DATE NOT NULL,
+--     applicableTo ENUM('Service', 'Package', 'Booking', 'All') NOT NULL DEFAULT 'All',
+--     serviceID INT DEFAULT NULL,
+--     packageID INT DEFAULT NULL,
+--     isActive BOOLEAN DEFAULT TRUE,
 
-    FOREIGN KEY (serviceID) REFERENCES services(serviceID),
-    FOREIGN KEY (packageID) REFERENCES packages(packageID)
-);
+--     FOREIGN KEY (serviceID) REFERENCES services(serviceID),
+--     FOREIGN KEY (packageID) REFERENCES packages(packageID)
+-- );
 
 
 
