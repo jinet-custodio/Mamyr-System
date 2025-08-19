@@ -261,8 +261,8 @@ $userRole = $_SESSION['userRole'];
                         <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$"
                             title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>"
                             disabled required>
-                        <label for="phoneNumber">Phone Number <i class="fa-solid fa-asterisk"
-                                style="color: #ff0000;"></i></label>
+                        <label for="phoneNumber">Phone Number <sup> <i class="fa-solid fa-asterisk"
+                                    style="color: #ff0000;"></i></sup></label>
 
                     </div>
                 </div>
