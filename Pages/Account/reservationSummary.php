@@ -179,7 +179,7 @@ $userRole = $_SESSION['userRole'];
                         }
 
                         if (!empty($data['serviceID'])) {
-                            $services[] = $data['sessionType'] . " Swimming";
+                            $services[] = !empty($data['sessionType']) ? $data['sessionType'] . " Swimming" : '';
                             $cardHeader = "Type of Tour";
                             if ($data['ERcategory'] === "Kids") {
                                 $kidsCount = $data['guests'];
@@ -199,6 +199,7 @@ $userRole = $_SESSION['userRole'];
 
                             $resortGuest = implode(" & ", $guests);
                         }
+
                         if (!empty($data['resortServiceID'])) {
                             $services[] = $data['RServiceName'];
                         }
@@ -216,8 +217,8 @@ $userRole = $_SESSION['userRole'];
                             withinseven (7) business days.";
                         }
                     }
-                    $package = $data['packageID'];
-                    $customPackageID = $data['customPackageID'];
+                    $package = $data['packageID'] ?? '';
+                    $customPackageID = $data['customPackageID'] ?? '';
                     // $AddRequest = $data['additionalRequest'];
 
                     if (!empty($package)) {
@@ -232,7 +233,7 @@ $userRole = $_SESSION['userRole'];
                         $pax = $data['paxNum'];
                         if (!empty($data['serviceID'])) {
                             if (!empty($data['entranceRateID'])) {
-                                $services[] = $data['sessionType'] . " Swimming";
+                                $services[] = !empty($data['sessionType']) ? $data['sessionType'] . " Swimming" : NULL;
                                 if ($data['ERcategory'] === "Kids") {
                                     $kidsCount = $data['guests'];
                                 } elseif ($data['ERcategory'] === "Adult") {
@@ -323,7 +324,9 @@ $userRole = $_SESSION['userRole'];
                 }
                 $totalBill =  $totalCost - $discount;
             }
-            // echo $status;
+            // echo '<pre>';
+            // print_r($services);
+            // echo '</pre>';
             ?>
 
             <div class="leftStatusContainer">
@@ -348,11 +351,12 @@ $userRole = $_SESSION['userRole'];
                         data-bs-toggle="modal" data-bs-target="#gcashPaymentModal">Make a Down Payment</button>
                     <!-- <a href="../bookNow.php" class="btn btn-primary w-100 mt-3" id="newReservationBtn">Make Another
                         Reservation</a> -->
-                    <form action="../../Function/Customer/receiptPDF.php" method="POST" target="_blank">
+                    <form action="../../Function/receiptPDF.php" method="POST" target="_blank">
                         <input type="hidden" name="totalCost" value="<?= $totalBill ?>">
                         <input type="hidden" name="name" value="<?= $name ?>">
                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                         <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                        <input type="hidden" name="services" value="<?= implode(', ', array_unique($services)) ?>">
                         <button type="submit" class="btn btn-primary w-100 mt-3" name="downloadReceiptBtn" id="downloadReceiptBtn">Download Receipt </button>
                     </form>
                 </div>

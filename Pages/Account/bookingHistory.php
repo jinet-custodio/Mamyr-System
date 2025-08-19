@@ -1,6 +1,10 @@
 <?php
 require '../../Config/dbcon.php';
 
+require_once '../../Function/functions.php';
+//Changing Status function to ah galing sa file na functions.php
+changeToExpiredStatus($conn);
+changeToDoneStatus($conn);
 $session_timeout = 3600;
 
 ini_set('session.gc_maxlifetime', $session_timeout);
@@ -23,8 +27,8 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 }
 
 $_SESSION['last_activity'] = time();
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
+$userID =  (int) $_SESSION['userID'];
+$userRole = (int) $_SESSION['userRole'];
 
 
 if ($userRole == 1) {
@@ -170,7 +174,7 @@ if ($userRole == 1) {
                             <th scope="col">Payment Method</th>
                             <th scope="col">Booking Type</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Review</th>
+                            <!-- <th scope="col">Review</th> -->
                             <th scope="col">Action</th>
                         </thead>
 
@@ -199,7 +203,7 @@ if ($userRole == 1) {
                                     $bookingType = $booking['bookingType'];
                                     $totalAmount = $booking['totalCost'];
                                     $balance = $booking['userBalance'] ?? $totalAmount;
-                                    $paymentMethod = $booking['paymentMethod']
+                                    $paymentMethod = $booking['paymentMethod'];
                             ?>
                                     <tr>
                                         <td><?= $checkIn ?></td>
@@ -213,6 +217,8 @@ if ($userRole == 1) {
                                         <!-- Papalitan na lang ng mas magandang term -->
                                         <?php if (!empty($booking['confirmedBookingID'])) {
                                             if ($booking['confirmedStatus'] === "Pending") {
+                                                $confirmedStatus = $booking['confirmedStatus'];
+                                                $bookingStatus = $booking['bookingStatus'];;
                                                 if ($paymentMethod === 'Cash') {
                                                     $status = "Onsite payment";
                                                     $class = 'btn btn-info w-100';
@@ -223,16 +229,27 @@ if ($userRole == 1) {
                                             } elseif ($booking['confirmedStatus'] === "Approved") {
                                                 $status = "Successful";
                                                 $class = 'btn btn-success w-100';
+                                                $confirmedStatus = $booking['confirmedStatus'];
+                                                $bookingStatus = $booking['bookingStatus'];
                                             } elseif ($booking['confirmedStatus'] === "Rejected") {
                                                 $status = "Rejected";
                                                 $class = 'btn btn-danger w-100';
+                                                $bookingStatus = $booking['bookingStatus'];
+                                                $confirmedStatus = $booking['confirmedStatus'];
+                                            } elseif ($booking['confirmedStatus'] === 'Done') {
+                                                $status = "Success";
+                                                $class = 'btn btn-success w-100';
+                                                $confirmedStatus = $booking['confirmedStatus'];
+                                                $bookingStatus = $booking['bookingStatus'];
                                             }
                                         } else {
                                             $confirmedBookingID = NULL;
                                             if ($booking['bookingStatus'] === "Pending") {
                                                 $status = "Pending";
                                                 $class = 'btn btn-warning w-100';
+                                                $bookingStatus = $booking['bookingStatus'];
                                             } else if ($booking['bookingStatus'] === "Approved") {
+                                                $bookingStatus = $booking['bookingStatus'];
                                                 if ($paymentMethod === 'Cash') {
                                                     $status = "Onsite payment";
                                                     $class = 'btn btn-info w-100';
@@ -241,22 +258,24 @@ if ($userRole == 1) {
                                                     $class = 'btn btn-info w-100';
                                                 }
                                             } elseif ($booking['bookingStatus'] === "Rejected") {
+                                                $bookingStatus = $booking['bookingStatus'];
                                                 $status = "Rejected";
                                                 $class = 'btn btn-danger w-100';
                                             } elseif ($booking['bookingStatus'] === "Cancelled") {
+                                                $bookingStatus = $booking['bookingStatus'];
                                                 $status = "Cancelled";
                                                 $class = 'btn btn-danger w-100';
                                             } elseif ($booking['bookingStatus'] === "Rejected") {
+                                                $bookingStatus = $booking['bookingStatus'];
                                                 $status = "Rejected";
                                                 $class = 'btn btn-danger w-100';
                                             }
                                         }
+
+
                                         ?>
 
                                         <td> <span class="<?= $class ?> font-weight-bold bookingStatus" data-label="<?= $status ?>"><?= $status ?></span></td>
-                                        <td><a href="" class="btn btn-outline-primary rateBtn" data-bs-toggle="modal"
-                                                data-bs-target="#rateModal" data-label="Rate">Rate</a></td>
-
                                         <td>
                                             <div class="button-container gap-2 md-auto"
                                                 style="display: flex;  width: 100%; justify-content: center;">
@@ -267,51 +286,32 @@ if ($userRole == 1) {
                                                     <input type="hidden" name="status" value="<?= $status ?>">
                                                     <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
                                                 </form>
-
-                                                <button type="button" class="btn btn-danger  w-100 cancelBooking"
-                                                    data-bookingid="<?= $bookingID ?>"
-                                                    data-confirmedbookingid="<?= $confirmedBookingID ?>"
-                                                    data-status="<?= $status ?>" data-label="Cancel">Cancel</button>
+                                                <?php if ($confirmedStatus === 'Done' ||  $bookingStatus === 'Cancelled') { ?>
+                                                    <button class="btn btn-outline-primary w-100 rateBtn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#rateModal"
+                                                        data-bookingid="<?= $bookingID ?>"
+                                                        data-label="Rate">
+                                                    </button>
+                                                <?php } else { ?>
+                                                    <button type="button" class="btn btn-danger w-100 cancelBooking"
+                                                        data-bookingid="<?= $bookingID ?>"
+                                                        data-confirmedbookingid="<?= $confirmedBookingID ?>"
+                                                        data-status="<?= $status ?>"
+                                                        data-bookingstatus="<?= $booking['bookingStatus'] ?>"
+                                                        data-confirmedstatus="<?= $booking['confirmedStatus'] ?>"
+                                                        data-bookingtype="<?= $bookingType ?>"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#confirmationModal" data-label="Cancel"></button>
                                             </div>
                                         </td>
+                                    <?php } ?>
                                     </tr>
                             <?php
                                 }
                             }
                             ?>
 
-                            <!-- <tr>
-                        <td>January 26, 2025</td>
-                        <td>January 26, 2025</td>
-                        <td><a href=" #" class="fw-bold">Event Booking</a>
-                                </td>
-                                <td><a href="#" class="btn btn-success w-75">View</a></td>
-                                <td><a href="" class="btn btn-outline-primary">Rate</a></td>
-                            </tr>
-
-                            <tr>
-                                <td>February 27, 2025</td>
-                                <td>February 27, 2025</td>
-                                <td><a href="#" class="fw-bold">Resort Booking</a></td>
-                                <td><a href="#" class="btn btn-success w-75">View</a></td>
-                                <td><a href="" class="btn btn-outline-primary">Rate</a></td>
-                            </tr>
-
-                            <tr>
-                                <td>March 26, 2025</td>
-                                <td>March 26, 2025</td>
-                                <td><a href="#" class="fw-bold">Event Booking</a></td>
-                                <td><a href="#" class="btn btn-success w-75">View</a></td>
-                                <td><a href="" class="btn btn-outline-primary">Rate</a></td>
-                            </tr>
-
-                            <tr>
-                                <td>April 26, 2025</td>
-                                <td>April 26, 2025</td>
-                                <td><a href="#" class="fw-bold">Resort Booking</a></td>
-                                <td><a href="#" class="btn btn-success w-75">View</a></td>
-                                <td><a href="" class="btn btn-outline-primary ">Rate</a></td>
-                            </tr> -->
                         </tbody>
                     </table>
 
@@ -348,33 +348,6 @@ if ($userRole == 1) {
                         </div>
                     </div>
 
-                    <!-- <div class="modal modal-sm fade" id="rateModal" data-bs-backdrop="static">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3 class="modal-title">Thank you for Ordering!</h3>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <h5>Please rate your experience.</h5>
-                            <span class="fa fa-star" id="star1" onclick="toggleStars(1)"></span>
-                            <span class="fa fa-star" id="star2" onclick="toggleStars(2)"></span>
-                            <span class="fa fa-star" id="star3" onclick="toggleStars(3)"></span>
-                            <span class="fa fa-star" id="star4" onclick="toggleStars(4)"></span>
-                            <span class="fa fa-star" id="star5" onclick="toggleStars(5)"></span>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-                    <!-- rate Modal -->
-
-
 
                     <!-- Confirmation Modal -->
                     <form action="../../Function/Booking/cancelBooking.php" method="POST">
@@ -382,33 +355,34 @@ if ($userRole == 1) {
                             aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content" id="cancel-content">
+
                                     <div class="image w-100 text-center">
                                         <img src="../../Assets/Images/Icon/warning.png" alt="warning icon"
                                             class="warning-image">
-
                                     </div>
+
                                     <div class="modal-body">
-                                        <input type="hidden" name="bookingID" id="bookingIDModal" value="<?= $bookingID ?>">
-                                        <input type="hidden" name="confirmedBookingID" id="confirmedBookingIDModal"
-                                            value="<?= $confirmedBookingID ?>">
-                                        <input type="hidden" name="status" id="statusModal" value="<?= $status ?>">
+
+                                        <input type="hidden" name="bookingID" id="bookingIDModal" value="">
+                                        <input type="hidden" name="confirmedBookingID" id="confirmedBookingIDModal" value="">
+                                        <input type="hidden" name="bookingStatus" id="bookingStatusModal" value="">
+                                        <input type="hidden" name="confirmedStatus" id="confirmedStatusModal" value="">
+                                        <input type="hidden" name="bookingType" id="bookingTypeModal" value="">
+                                        <input type="hidden" name="status" id="statusModal" value="">
+
                                         <p class="modal-title text-center mb-2 fw-bold fs-3">Are you sure?</p>
-                                        <p class="modal-text text-center mb-2" id="cancelModalDesc">You are about to cancel this
-                                            booking. This
-                                            action
-                                            cannot be undone.</p>
+                                        <p class="modal-text text-center mb-2" id="cancelModalDesc">You are about to cancel this booking. This action cannot be undone.</p>
+
                                         <div class="button-container" id="cancelButtonModal">
-                                            <button type="button" class="btn btn-secondary w-25"
-                                                data-bs-dismiss="modal">No</button>
-                                            <button type="submit" class="btn btn-primary w-25" name="cancelBooking"
-                                                id="yesDelete">Yes</button>
+                                            <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">No</button>
+                                            <button type="submit" class="btn btn-primary w-25" name="cancelBooking" id="yesDelete">Yes</button>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </form>
-
 
                 </div>
             </div>
@@ -589,14 +563,16 @@ if ($userRole == 1) {
                 const bookingID = this.getAttribute("data-bookingid");
                 const confirmedBookingID = this.getAttribute("data-confirmedbookingid");
                 const status = this.getAttribute("data-status");
+                const bookingStatus = this.getAttribute("data-bookingstatus");
+                const confirmedStatus = this.getAttribute("data-confirmedstatus");
+                const bookingType = this.getAttribute("data-bookingtype");
 
                 document.getElementById("bookingIDModal").value = bookingID;
                 document.getElementById("confirmedBookingIDModal").value = confirmedBookingID;
                 document.getElementById("statusModal").value = status;
-
-
-                const myCancelBookingModal = new bootstrap.Modal(confirmationModal);
-                myCancelBookingModal.show();
+                document.querySelector('input[name="bookingStatus"]').value = bookingStatus;
+                document.querySelector('input[name="confirmedStatus"]').value = confirmedStatus;
+                document.querySelector('input[name="bookingType"]').value = bookingType;
             });
         });
 
@@ -622,11 +598,11 @@ if ($userRole == 1) {
             });
         };
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = "";
-            history.replaceState({}, document.title, url.toString());
-        };
+        // if (paramValue) {
+        //     const url = new URL(window.location);
+        //     url.search = "";
+        //     history.replaceState({}, document.title, url.toString());
+        // };
     </script>
 
     <!-- rate JS -->

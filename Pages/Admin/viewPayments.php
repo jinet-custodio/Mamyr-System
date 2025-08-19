@@ -33,6 +33,35 @@ $_SESSION['last_activity'] = time();
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+
+if ($userRole == 3) {
+    $admin = "Admin";
+} else {
+    $_SESSION['error'] = "Unauthorized Access!";
+    session_destroy();
+    header("Location: ../register.php");
+    exit();
+}
+
+if ($admin === "Admin") {
+    $getAdminName = $conn->prepare("SELECT firstName,middleInitial, lastName FROM users WHERE userID = ? AND userRole = ?");
+    $getAdminName->bind_param("ii", $userID, $userRole);
+    $getAdminName->execute();
+    $getAdminNameResult = $getAdminName->get_result();
+    if ($getAdminNameResult->num_rows > 0) {
+        $data = $getAdminNameResult->fetch_assoc();
+        $middleInitial = $data['middleInitial'] ?? '';
+        $firstName = $data['firstName'];
+        $lastName = $data['lastName'];
+        $adminName = $firstName . " " . $middleInitial . " " . $lastName;
+    }
+} else {
+    $_SESSION['error'] = "Unauthorized Access!";
+    session_destroy();
+    header("Location: ../register.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -215,7 +244,7 @@ $userRole = $_SESSION['userRole'];
                     <div class="input-container" id="servicesContainer">
                         <label for="services">Services</label>
                         <input type="text" class="form-control" name="services" id="services-form"
-                            value="<?= implode(", ",  array_unique($services)) ?>" readonly>
+                            value="<?= implode(", ",  array_unique($services)) ?>" readonly> <!-- info for receipt -->
                     </div>
 
                     <div class="input-container" id="scheduleContainer">
@@ -273,6 +302,7 @@ $userRole = $_SESSION['userRole'];
                     <div class="form-button" id="form-button">
                         <button type="button" name="approveBtn" class="btn btn-primary w-100" data-bs-toggle="modal"
                             data-bs-target="#approveModal">Approve</button>
+
                         <button type="button" name="rejectBtn" class="btn btn-danger w-100" data-bs-toggle="modal"
                             data-bs-target="#rejectModal">Reject</button>
                     </div>
@@ -283,19 +313,22 @@ $userRole = $_SESSION['userRole'];
             <section id="downpaymentImageSection">
                 <div class="image-container" id="downpayment-image-container">
                     <?php if ($downpaymentImage !== 'None'): ?>
-                    <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
-                    <div class="zoom-overlay">
-                        <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
-                    </div>
+                        <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
+                        <div class="zoom-overlay">
+                            <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
+                        </div>
                     <?php else: ?>
-                    <img src="../../Assets/Images/defaultDownpayment.png" alt="Payment Icon"
-                        class="defaultDownpaymentImage">
-                    <p class="text-center">Customer has not uploaded the receipt yet</p>
+                        <img src="../../Assets/Images/defaultDownpayment.png" alt="Payment Icon"
+                            class="defaultDownpaymentImage">
+                        <p class="text-center">Customer has not uploaded the receipt yet</p>
                     <?php endif; ?>
-                    <button type="button" name="genReceipt" id="genReceipt" class="btn btn-primary w-100 mt-4">Generate
+
+                    <input type="hidden" name="totalCost" value="<?= $totalAmount ?>"> <!-- info for receipt -->
+                    <input type="hidden" name="bookingType" value="<?= $bookingType ?>"> <!-- info for receipt -->
+                    <input type="hidden" name="adminName" value="<?= $adminName ?>"> <!-- info for receipt -->
+                    <button type="submit" name="downloadReceiptBtn" id="genReceipt" class="btn btn-primary w-100 mt-4">Generate
                         Receipt</button>
                 </div>
-
             </section>
 
 
@@ -410,46 +443,51 @@ $userRole = $_SESSION['userRole'];
     </script>
 
     <script>
-    const paymentMethod = document.getElementById("paymentMethod").value;
-    const paymentStatus = document.getElementById("paymentStatus").value;
-    const ImageContainer = document.getElementById("downpayment-image-container");
-    const downpaymentContainer = document.getElementById('downpaymentContainer');
-    if (paymentMethod === 'Cash - Onsite Payment') {
-        ImageContainer.style.display = "none";
-        downpaymentContainer.style.display = "none";
-    }
+        const paymentMethod = document.getElementById("paymentMethod").value;
+        const paymentStatus = document.getElementById("paymentStatus").value;
+        const ImageContainer = document.getElementById("downpayment-image-container");
+        const downpaymentContainer = document.getElementById('downpaymentContainer');
+        if (paymentMethod === 'Cash - Onsite Payment') {
+            ImageContainer.style.display = "none";
+            downpaymentContainer.style.display = "none";
+        }
 
 
-    if (paymentStatus === 'Fully Paid') {
-        document.querySelector("#form-button").style.display = "none";
-        document.getElementById("addPayment").style.display = "none";
-        document.getElementById("downpaymentImageSection").style.display = "none";
-    } else if (paymentStatus === 'Partially Paid') {
-        document.getElementById("addPayment").style.display = "block";
-        document.querySelector("#form-button").style.display = "none";
-    } else if (paymentStatus === 'No Payment') {
-        document.getElementById("addPayment").style.display = "none";
-    }
+        if (paymentStatus === 'Fully Paid') {
+            document.querySelector("#form-button").style.display = "none";
+            document.getElementById("addPayment").style.display = "none";
+            document.getElementById("downpaymentImageSection").style.display = "none";
+        } else if (paymentStatus === 'Partially Paid') {
+            document.getElementById("addPayment").style.display = "block";
+            document.querySelector("#form-button").style.display = "none";
+        } else if (paymentStatus === 'No Payment') {
+            document.getElementById("addPayment").style.display = "none";
+        }
     </script>
 
     <script>
-    const form = document.getElementById('form');
+        const form = document.getElementById('form');
 
-    document.getElementById('viewBookingBtn').addEventListener('click', () => {
-        form.action = 'viewBooking.php';
-    });
+        document.getElementById('viewBookingBtn').addEventListener('click', () => {
+            form.action = 'viewBooking.php';
+        });
 
-    document.getElementById('approvePaymentBtn').addEventListener('click', () => {
-        form.action = '../../Function/Admin/paymentApproval.php';
-    });
+        document.getElementById('approvePaymentBtn').addEventListener('click', () => {
+            form.action = '../../Function/Admin/paymentApproval.php';
+        });
 
-    document.getElementById('rejectPaymentBtn').addEventListener('click', () => {
-        form.action = '../../Function/Admin/paymentApproval.php';
-    });
+        document.getElementById('rejectPaymentBtn').addEventListener('click', () => {
+            form.action = '../../Function/Admin/paymentApproval.php';
+        });
 
-    document.getElementById('submitPaymentBtn').addEventListener('click', () => {
-        form.action = '../../Function/Admin/paymentApproval.php';
-    })
+        document.getElementById('submitPaymentBtn').addEventListener('click', () => {
+            form.action = '../../Function/Admin/paymentApproval.php';
+        })
+
+        document.getElementById('genReceipt').addEventListener('click', () => {
+            form.setAttribute('target', '_blank');
+            form.action = '../../Function/receiptPDF.php';
+        })
     </script>
 
 
@@ -457,30 +495,30 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
-    if (paramValue === "paymentFieldEmpty") {
-        Swal.fire({
-            title: "Oops!",
-            text: "Please enter the payment amount.",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    } else if (paramValue === "reasonFieldEmpty") {
-        Swal.fire({
-            title: "Oops!",
-            text: "Please provide a reason for rejection.",
-            icon: "warning",
-            confirmButtonText: "Okay",
-        });
-    }
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        if (paramValue === "paymentFieldEmpty") {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter the payment amount.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === "reasonFieldEmpty") {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please provide a reason for rejection.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        }
 
 
-    if (paramValue) {
-        const url = new URL(window.location.href);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location.href);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 </body>
