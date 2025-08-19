@@ -33,31 +33,32 @@
 }
 
 .sidebar .sidebar-text {
-    display: inline-block;
-    transition: opacity 0.2s ease;
+  display: inline-block;
+  transition: opacity 0.2s ease;
 }
 
 .sidebar.collapsed .sidebar-text {
-    display: none;
-    width: 0;
-    overflow: hidden;
+  display: none;
+  width: 0;
+  overflow: hidden;
 }
 
 .sidebar-icon {
   font-size: 2vw;
-    min-width: 3vw;
-    text-align: center;
-    margin-right: 10px;
+  min-width: 3vw;
+  text-align: center;
+  margin-right: 10px;
 }
 
 /* Sidebar toggle button */
 .toggle-button {
-    background: none;
-    border: none;
-    margin: 10px;
+  background: none;
+  border: none;
+  margin: 10px;
 }
 
-.sidebar-item, .list-group-item {
+.sidebar-item,
+.list-group-item {
   display: flex;
   align-items: center;
   justify-content: start;
@@ -136,7 +137,6 @@
   background-color: rgb(219, 53, 69);
   color: white;
 }
-
 
 .main-content {
   /* border: 1px solid red; */
@@ -223,10 +223,10 @@
 .account-name {
   font-size: clamp(2vw, 1.8vw, 1.7vw);
 }
-.account-contact, .roleName {
+.account-contact,
+.roleName {
   font-size: clamp(1.5vw, 1.3vw, 1.1vw);
 }
-
 
 .profile-pic {
   height: 9vw;
@@ -333,252 +333,267 @@
   margin-right: 2vw !important;
 }
 
-
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-.sidebar{
-  width: 35vw;
-}
+  .sidebar {
+    width: 35vw;
+  }
 
-.list-group {
-  font-size: clamp(2.5vw, 2.2vw, 2vw);
-}
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
 
-.sidebar-icon {
-  font-size: clamp(2.6vw, 2.3vw, 2vw);  
-}
+  .sidebar-icon {
+    font-size: clamp(2.6vw, 2.3vw, 2vw);
+  }
 
-.sidebar-header h5 {
-  margin-top: 2vw !important;
-  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-}
+  .sidebar-header h5 {
+    margin-top: 2vw !important;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
 
-.profileImage {
+  .profileImage {
     img {
       height: clamp(13vw, 11vw, 10vw);
     }
     margin: 1vw auto;
   }
 
-.main-content {
-  margin-left: 34vw;
-}
+  .main-content {
+    margin-left: 34vw;
+  }
 
-.customer-details {
-  display: flex;
-  flex-wrap: wrap;
-}
+  .customer-details {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
-.profile-image {
-  width: 30%;
-}
+  .profile-image {
+    width: 30%;
+  }
 
-.profile-pic {
-  height: 11vw;
-}
+  .profile-pic {
+    height: 11vw;
+  }
 
-.changePfpBtn  {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
+  .changePfpBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.profile-info {
-  width: 70%;
-}
-.account-name, .swal2-html-container {
-  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
-}
+  .profile-info {
+    width: 70%;
+  }
+  .account-name,
+  .swal2-html-container {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
 
-.account-contact, .roleName {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
+  .account-contact,
+  .roleName {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.info {
-  width: 100%;
-}
+  .info {
+    width: 100%;
+  }
 
-.info input:focus + label, .info input:not(:placeholder-shown) + label {
-  font-size: clamp(1.9vw, 1.7vw, 1.5vw);
-}
+  .info input:focus + label,
+  .info input:not(:placeholder-shown) + label {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+  }
 
-.info input {
-  font-size: clamp(2.2vw, 2vw, 1.9vw);
-  padding-top: 2rem;
-}
+  .info input {
+    font-size: clamp(2.2vw, 2vw, 1.9vw);
+    padding-top: 2rem;
+  }
 
-.edit,.swal2-confirm, #saveBtn, #cancelBtn {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.swal2-title {
+  .swal2-title {
     font-size: clamp(3.3vw, 3vw, 2.8vw);
-}
+  }
 }
 
 /* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+  .homeIcon {
+    width: 4vw;
+  }
 
-.homeIcon {
-  width: 4vw;
-}
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
 
-.sidebar-header h5, .card-header {
-  margin-top: 2vw;
-  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-}
+  .profile-image {
+    width: 30%;
+  }
 
-.profile-image {
-  width: 30%;
-}
+  .card {
+    padding: 0;
+    width: 100%;
+  }
 
-.card {
-  padding: 0;
-  width: 100%;
-}
+  .main-content {
+    margin-left: 34vw;
+  }
 
-.main-content {
-  margin-left: 34vw;
-}
+  .sidebar {
+    width: 35vw;
+  }
 
-.sidebar{
-  width: 35vw;
-}
+  .profile-pic {
+    height: 11vw;
+  }
 
-.profile-pic {
-  height: 11vw;
-}
+  .changePfpBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.changePfpBtn  {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
+  .profile-info {
+    width: 70%;
+  }
 
-.profile-info {
-  width: 70%;
-}
-
-.profileImage {
+  .profileImage {
     img {
       height: clamp(13vw, 11vw, 10vw);
     }
     margin: 1vw auto;
-}
+  }
 
-.account-name, .swal2-html-container {
-  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
-}
+  .account-name,
+  .swal2-html-container {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
 
-.account-contact, .roleName {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
+  .account-contact,
+  .roleName {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.info {
-  width: 100%;
-}
+  .info {
+    width: 100%;
+  }
 
-.list-group {
-  font-size: clamp(2.5vw, 2.2vw, 2vw);
-}
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
 
-.info input:focus + label, .info input:not(:placeholder-shown) + label {
-  font-size: clamp(1.9vw, 1.7vw, 1.5vw);
-}
+  .info input:focus + label,
+  .info input:not(:placeholder-shown) + label {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+  }
 
-.info input {
-  font-size: clamp(2.2vw, 2vw, 1.9vw);
-}
+  .info input {
+    font-size: clamp(2.2vw, 2vw, 1.9vw);
+  }
 
-.edit,.swal2-confirm, #saveBtn, #cancelBtn {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.swal2-title {
+  .swal2-title {
     font-size: clamp(3.3vw, 3vw, 2.8vw);
-}
+  }
 }
 
 /* Phone size */
 @media screen and (max-width: 600px) {
+  .sidebar {
+    width: 45vw;
+  }
+  .main-content {
+    margin-left: 16vw;
+    width: 85%;
+  }
 
-.sidebar {
-  width: 45vw;
-}
-.main-content {
-  margin-left: 16vw;
-  width: 85%;
-}
+  .customer-details {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
-.customer-details {
-  display: flex;
-  flex-wrap: wrap;
-}
+  .list-group-item {
+    justify-content: flex-start;
+  }
 
-.list-group-item{
-  justify-content: flex-start;
-}
+  .sidebar-icon {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+    margin-right: 0 !important;
+  }
 
-.sidebar-icon {
-  font-size: clamp(4.5vw, 4.2vw, 4vw);  
-  margin-right: 0 !important;
-}
+  .sidebar-text {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+    margin-left: 2vw;
+  }
 
-.sidebar-text {
-  font-size: clamp(2.9vw, 2.7vw, 2.5vw);  
-  margin-left: 2vw;
-}
+  .home {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 
-.home {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
+  .profile-image {
+    width: 35%;
+  }
 
-.profile-image {
-  width: 35%;
-}
+  .profile-pic {
+    height: 18vw;
+  }
 
-.profile-pic {
-  height: 18vw;
-}
+  .changePfpBtn {
+    font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+  }
 
-.changePfpBtn  {
-  font-size: clamp(2.6vw, 2.4vw, 2.2vw);
-}
+  .profile-info {
+    width: 65%;
+  }
 
-.profile-info {
-  width: 65%;
-}
+  .account-name,
+  .swal2-html-container {
+    font-size: clamp(3.7vw, 3.5vw, 3.3vw);
+  }
 
-.account-name, .swal2-html-container {
-  font-size: clamp(3.7vw, 3.5vw, 3.3vw);
-}
+  .account-contact,
+  .roleName {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
 
-.account-contact, .roleName {
-  font-size: clamp(2.5vw, 2.2vw, 2vw);
-}
+  .info {
+    width: 100%;
+  }
 
-.info {
-  width: 100%;
-}
+  .info input:focus + label,
+  .info input:not(:placeholder-shown) + label {
+    font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+  }
 
-.info input:focus + label, .info input:not(:placeholder-shown) + label {
-  font-size: clamp(2.6vw, 2.4vw, 2.2vw);
-}
+  .info input {
+    font-size: clamp(3vw, 2.8vw, 2.6vw);
+    padding-top: 4.5vw;
+  }
 
-.info input {
-  font-size: clamp(3vw, 2.8vw, 2.6vw);
-  padding-top: 4.5vw;
-}
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+  }
 
-.edit,.swal2-confirm, #saveBtn, #cancelBtn {
-  font-size: clamp(2.9vw, 2.7vw, 2.5vw);
-}
-
-.swal2-title {
+  .swal2-title {
     font-size: clamp(3.8vw, 3.6vw, 3.4vw);
-}
-.info input:focus + label,
-.info input:not(:placeholder-shown) + label {
-  top: 0.7rem;
-  left: 0.8rem;
-}
-
+  }
+  .info input:focus + label,
+  .info input:not(:placeholder-shown) + label {
+    top: 0.7rem;
+    left: 0.8rem;
+  }
 }

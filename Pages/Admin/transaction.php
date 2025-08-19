@@ -283,10 +283,11 @@ $userRole = $_SESSION['userRole'];
                             if ($paymentApprovalStatus === "Pending") {
                                 $addClass = "btn btn-warning w-100";
                             } elseif ($paymentApprovalStatus === "Approved") {
-
-                                $addClass = "btn btn-success w-100";
+                                $addClass = "btn btn-primary w-100";
                             } elseif ($paymentApprovalStatus === "Rejected") {
                                 $addClass = "btn btn-danger w-100";
+                            } elseif ($paymentApprovalStatus === "Done") {
+                                $addClass = "btn btn-success w-100";
                             }
 
 
