@@ -160,7 +160,7 @@ nav {
   align-items: center;
 }
 
-button.btn{
+.notifBtn{
     background-color: transparent;
     border: none;
     padding: 0 !important;  
