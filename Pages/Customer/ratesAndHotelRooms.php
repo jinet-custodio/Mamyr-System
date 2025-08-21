@@ -304,7 +304,7 @@ $userRole = $_SESSION['userRole'];
                     foreach ($cottages as $cottage) {
                 ?>
                         <div class="cottage">
-                            <div class="Description" style="width: 40%;">
+                            <div class="Description">
                                 <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
                                 <p>
                                     <?= $cottage['RSdescription'] ?>
@@ -313,7 +313,7 @@ $userRole = $_SESSION['userRole'];
                                     Price: PHP <?= $cottage['RSprice'] ?>
                                 </p>
                             </div>
-                            <div class="halfImg" style="width: 40%;">
+                            <div class="halfImg">
                                 <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
                                 if (!empty($cottage['imageData'])) {

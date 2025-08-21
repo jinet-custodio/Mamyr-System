@@ -102,6 +102,8 @@
   img {
     height: clamp(8vw, 6.5vw, 4vw);
     border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
   }
 }
 

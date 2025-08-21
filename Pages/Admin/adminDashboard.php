@@ -36,7 +36,7 @@ $bookingTypes =  $conn->prepare("SELECT
                             JOIN 
                                 bookings b ON cb.bookingID = b.bookingID 
                             WHERE 
-                                cb.confirmedBookingStatus = ?
+                                cb.paymentApprovalStatus = ?
                                 AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)
                             GROUP BY 
                                 b.bookingType 
@@ -64,20 +64,20 @@ $revenue =  $conn->prepare("SELECT
                                     ')'
                                 ) AS weekName,
 
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 0 THEN cb.CBtotalCost ELSE 0 END) AS Mon,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 1 THEN cb.CBtotalCost ELSE 0 END) AS Tue,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 2 THEN cb.CBtotalCost ELSE 0 END) AS Wed,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 3 THEN cb.CBtotalCost ELSE 0 END) AS Thu,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN cb.CBtotalCost ELSE 0 END) AS Fri,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN cb.CBtotalCost ELSE 0 END) AS Sat,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN cb.CBtotalCost ELSE 0 END) AS Sun
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 0 THEN cb.confirmedFinalBill ELSE 0 END) AS Mon,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 1 THEN cb.confirmedFinalBill ELSE 0 END) AS Tue,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 2 THEN cb.confirmedFinalBill ELSE 0 END) AS Wed,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 3 THEN cb.confirmedFinalBill ELSE 0 END) AS Thu,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN cb.confirmedFinalBill ELSE 0 END) AS Fri,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN cb.confirmedFinalBill ELSE 0 END) AS Sat,
+                                SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN cb.confirmedFinalBill ELSE 0 END) AS Sun
 
                             FROM 
                                 confirmedBookings cb
                             JOIN 
                                 bookings b ON cb.bookingID = b.bookingID
                             WHERE 
-                                cb.confirmedBookingStatus = ?
+                                cb.paymentApprovalStatus = ?
                                 AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)
                             GROUP BY 
                                 weekName
@@ -321,34 +321,34 @@ if ($availabilityResult->num_rows > 0) {
     $weeklyReport = $conn->prepare("SELECT 
                                         -- Total guests 
                                         SUM(CASE 
-                                            WHEN cb.confirmedBookingStatus = 2 
-                                            THEN b.paxNum 
+                                            WHEN cb.paymentApprovalStatus = 2 
+                                            THEN b.guestCount 
                                             ELSE 0 
                                             END) AS totalGuests,
 
                                         -- Total revenue
                                         SUM(CASE 
-                                                WHEN cb.confirmedBookingStatus = 2 THEN b.totalCost 
+                                                WHEN cb.paymentApprovalStatus = 2 THEN b.totalCost 
                                                 ELSE 0 
                                                 END) AS totalRevenueThisWeek,
 
                                         -- Check-outs this week
                                         COUNT(CASE 
-                                                WHEN b.endDate >= weekStart AND b.endDate < weekEnd AND cb.confirmedBookingStatus = 2 
+                                                WHEN b.endDate >= weekStart AND b.endDate < weekEnd AND cb.paymentApprovalStatus = 2 
                                                 THEN 1 
                                                 ELSE NULL 
                                                 END) AS checkOutsThisWeek,
 
                                         -- Check-ins this week
                                         COUNT(CASE 
-                                                WHEN b.startDate >= weekStart AND b.startDate < weekEnd AND cb.confirmedBookingStatus = 2 
+                                                WHEN b.startDate >= weekStart AND b.startDate < weekEnd AND cb.paymentApprovalStatus = 2 
                                                 THEN 1 
                                                 ELSE NULL 
                                                 END) AS checkInsThisWeek,
                                         -- Check-ins this week
                                         COUNT(CASE 
                                                 WHEN b.bookingType = 'Event' AND
-                                                cb.confirmedBookingStatus = 2 
+                                                cb.paymentApprovalStatus = 2 
                                                 THEN 1 
                                                 ELSE NULL 
                                                 END) AS eventBooking,
