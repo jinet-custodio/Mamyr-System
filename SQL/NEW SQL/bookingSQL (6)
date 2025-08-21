@@ -3,21 +3,25 @@ CREATE TABLE bookings (
     userID INT NOT NULL,
     -- serviceID INT NULL,
     bookingType ENUM('Resort', 'Hotel', 'Event', 'Customized') NOT NULL,
-    packageID INT NULL,
+    -- packageID INT NULL, -- remove
     customPackageID INT NULL,
-    addOns VARCHAR(50),
+    addOns VARCHAR(50), 
     additionalRequest TEXT,
     toddlerCount INT DEFAULT 0,
-    paxNum INT NOT NULL,
-    hoursNum INT NOT NULL,
+    kidCount INT DEFAULT 0,
+    adultCount INT DEFAULT 0,
+    guestCount INT NOT NULL, -- guestCount
+    durationCount INT NOT NULL, -- durationCount
     startDate DATETIME NOT NULL,
     endDate DATETIME NOT NULL,
     paymentMethod VARCHAR(50) NOT NULL,
+
     additionalCharge DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     -- discountID INT DEFAULT NULL,
-    initialCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    -- initialCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     totalCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     downpayment DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+
     bookingStatus INT DEFAULT 1,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
@@ -25,13 +29,13 @@ CREATE TABLE bookings (
     FOREIGN KEY (bookingStatus) REFERENCES statuses(statusID),
     -- FOREIGN KEY (discountID) REFERENCES discounts(discountID),
     -- FOREIGN KEY (serviceID) REFERENCES services(serviceID),
-    FOREIGN KEY (packageID) REFERENCES packages(packageID),
+    -- FOREIGN KEY (packageID) REFERENCES packages(packageID),
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID)
 );
 
 ALTER TABLE bookings
 ADD COLUMN arrivalTime TIME NULL
-AFTER hoursNum;
+AFTER durationCount;
 
 CREATE TABLE bookingServices (
     bookingServiceID INT PRIMARY KEY AUTO_INCREMENT,
@@ -47,20 +51,20 @@ CREATE TABLE bookingServices (
 CREATE TABLE confirmedBookings (
     confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
     bookingID INT NOT NULL,
-    downpaymentImage LONGBLOB NULL, 
+    downpaymentImage varchar(255) DEFAULT 'defaultDownpayment.png', 
     discountAmount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    CBtotalCost DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- total booking cost  
-    CBfinalBill DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- with discount 
+    -- confirmedTotalCost DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- original  
+    confirmedFinalBill DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- discounted
     amountPaid DECIMAL(10,2) NOT NULL DEFAULT 0.00,  -- admin will input how much the user pay
     userBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00,  -- balance after payment
-    confirmedBookingStatus INT DEFAULT 1,
+    paymentApprovalStatus INT DEFAULT 1,
     paymentStatus INT DEFAULT 1,
     
     FOREIGN KEY (bookingID) REFERENCES bookings(bookingID),
-    FOREIGN KEY (confirmedBookingStatus) REFERENCES statuses(statusID),
+    FOREIGN KEY (paymentApprovalStatus) REFERENCES statuses(statusID),
     FOREIGN KEY (paymentStatus) REFERENCES bookingPaymentStatus(paymentStatusID)
 );            
 
 ALTER TABLE confirmedBookings 
-ADD COLUMN paymentDueDate DATE NOT NULL
-AFTER paymentStatus
+ADD COLUMN paymentDueDate DATETIME NOT NULL
+AFTER paymentStatus;

@@ -39,7 +39,7 @@ CREATE TABLE auditLogs (
     action VARCHAR(255) NOT NULL,
     targetTable VARCHAR(100),
     targetID INT,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (adminID) REFERENCES admins(adminID)
 );
 

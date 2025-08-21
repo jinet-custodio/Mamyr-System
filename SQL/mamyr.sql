@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 12, 2025 at 04:22 AM
+-- Generation Time: Aug 20, 2025 at 05:33 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -52,7 +52,7 @@ CREATE TABLE `auditlogs` (
   `action` varchar(255) NOT NULL,
   `targetTable` varchar(100) DEFAULT NULL,
   `targetID` int(11) DEFAULT NULL,
-  `timestamp` datetime DEFAULT current_timestamp()
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -85,32 +85,24 @@ CREATE TABLE `bookings` (
   `bookingID` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
   `bookingType` enum('Resort','Hotel','Event','Customized') NOT NULL,
-  `packageID` int(11) DEFAULT NULL,
   `customPackageID` int(11) DEFAULT NULL,
   `addOns` varchar(50) DEFAULT NULL,
   `additionalRequest` text DEFAULT NULL,
   `toddlerCount` int(11) DEFAULT 0,
-  `paxNum` int(11) NOT NULL,
-  `hoursNum` int(11) NOT NULL,
+  `kidCount` int(11) DEFAULT 0,
+  `adultCount` int(11) DEFAULT 0,
+  `guestCount` int(11) NOT NULL,
+  `durationCount` int(11) NOT NULL,
   `arrivalTime` time DEFAULT NULL,
   `startDate` datetime NOT NULL,
   `endDate` datetime NOT NULL,
   `paymentMethod` varchar(50) NOT NULL,
   `additionalCharge` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `initialCost` decimal(10,2) NOT NULL DEFAULT 0.00,
   `totalCost` decimal(10,2) NOT NULL DEFAULT 0.00,
   `downpayment` decimal(10,2) NOT NULL DEFAULT 0.00,
   `bookingStatus` int(11) DEFAULT 1,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `bookings`
---
-
-INSERT INTO `bookings` (`bookingID`, `userID`, `bookingType`, `packageID`, `customPackageID`, `addOns`, `additionalRequest`, `toddlerCount`, `paxNum`, `hoursNum`, `arrivalTime`, `startDate`, `endDate`, `paymentMethod`, `additionalCharge`, `initialCost`, `totalCost`, `downpayment`, `bookingStatus`, `createdAt`) VALUES
-(1, 2, 'Resort', NULL, NULL, 'Billiard', 'None', 0, 8, 9, NULL, '2025-08-13 20:00:00', '2025-08-14 05:00:00', 'GCash', 0.00, 0.00, 4850.00, 0.00, 2, '2025-08-12 02:14:56'),
-(2, 2, 'Resort', NULL, NULL, 'Videoke B', 'None', 1, 10, 8, NULL, '2025-08-28 12:00:00', '2025-08-28 20:00:00', 'GCash', 0.00, 0.00, 3150.00, 0.00, 2, '2025-08-12 02:20:48');
 
 -- --------------------------------------------------------
 
@@ -126,21 +118,6 @@ CREATE TABLE `bookingservices` (
   `bookingServicePrice` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `bookingservices`
---
-
-INSERT INTO `bookingservices` (`bookingServiceID`, `bookingID`, `serviceID`, `guests`, `bookingServicePrice`) VALUES
-(1, 1, 5, 5, 1250.00),
-(2, 1, 6, 3, 600.00),
-(3, 1, 15, 10, 800.00),
-(4, 1, 42, 2, 2000.00),
-(5, 1, 29, 0, 200.00),
-(6, 2, 3, 5, 900.00),
-(7, 2, 4, 5, 650.00),
-(8, 2, 13, 10, 800.00),
-(9, 2, 28, 0, 800.00);
-
 -- --------------------------------------------------------
 
 --
@@ -150,25 +127,15 @@ INSERT INTO `bookingservices` (`bookingServiceID`, `bookingID`, `serviceID`, `gu
 CREATE TABLE `confirmedbookings` (
   `confirmedBookingID` int(11) NOT NULL,
   `bookingID` int(11) NOT NULL,
-  `CBpaymentMethod` varchar(50) NOT NULL,
-  `CBdownpayment` decimal(10,2) NOT NULL,
-  `downpaymentImage` longblob DEFAULT NULL,
+  `downpaymentImage` varchar(255) DEFAULT 'defaultDownpayment.png',
   `discountAmount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `CBtotalCost` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `confirmedFinalBill` decimal(10,2) NOT NULL DEFAULT 0.00,
   `amountPaid` decimal(10,2) NOT NULL DEFAULT 0.00,
   `userBalance` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `confirmedBookingStatus` int(11) DEFAULT 1,
+  `paymentApprovalStatus` int(11) DEFAULT 1,
   `paymentStatus` int(11) DEFAULT 1,
-  `paymentDueDate` date NOT NULL
+  `paymentDueDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `confirmedbookings`
---
-
-INSERT INTO `confirmedbookings` (`confirmedBookingID`, `bookingID`, `CBpaymentMethod`, `CBdownpayment`, `downpaymentImage`, `discountAmount`, `CBtotalCost`, `amountPaid`, `userBalance`, `confirmedBookingStatus`, `paymentStatus`, `paymentDueDate`) VALUES
-(1, 1, 'GCash', 0.00, NULL, 0.00, 4850.00, 0.00, 4850.00, 1, 1, '2025-08-12'),
-(2, 2, 'GCash', 0.00, NULL, 0.00, 3150.00, 0.00, 3150.00, 1, 1, '2025-08-27');
 
 -- --------------------------------------------------------
 
@@ -180,7 +147,6 @@ CREATE TABLE `custompackageitems` (
   `customPackageItemID` int(11) NOT NULL,
   `customPackageID` int(11) NOT NULL,
   `serviceID` int(11) NOT NULL,
-  `packageID` int(11) NOT NULL,
   `quantity` int(11) NOT NULL DEFAULT 1,
   `servicePrice` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -197,25 +163,6 @@ CREATE TABLE `custompackages` (
   `customPackageTotalPrice` decimal(10,2) NOT NULL,
   `customPackageNotes` varchar(255) DEFAULT NULL,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `discounts`
---
-
-CREATE TABLE `discounts` (
-  `discountID` int(11) NOT NULL,
-  `discountName` varchar(100) NOT NULL,
-  `discountPercent` decimal(5,2) NOT NULL,
-  `discountAmount` decimal(10,2) DEFAULT NULL,
-  `startDate` date NOT NULL,
-  `endDate` date NOT NULL,
-  `applicableTo` enum('Service','Package','Booking','All') NOT NULL DEFAULT 'All',
-  `serviceID` int(11) DEFAULT NULL,
-  `packageID` int(11) DEFAULT NULL,
-  `isActive` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -371,7 +318,16 @@ INSERT INTO `menuitems` (`foodItemID`, `foodName`, `foodDescription`, `foodImage
 (46, 'Toasted Bread', NULL, NULL, 0.00, 'Finger Foods Cocktail', 'Child', 1),
 (47, 'Fish Fillet Nuggets', NULL, NULL, 0.00, 'Seafood', 'Child', 1),
 (48, 'Shrimp Tempura', NULL, NULL, 0.00, 'Seafood', 'Child', 1),
-(49, 'Fish Tempura', NULL, NULL, 0.00, 'Seafood', 'Child', 1);
+(49, 'Fish Tempura', NULL, NULL, 0.00, 'Seafood', 'Child', 1),
+(50, 'Lemon Iced Tea', NULL, NULL, 0.00, 'Drink', 'Adult', 1),
+(51, 'Orange Juice', NULL, NULL, 0.00, 'Drink', 'Adult', 1),
+(52, 'Pineapple Juice', NULL, NULL, 0.00, 'Drink', 'Adult', 1),
+(53, 'Red Iced Tea', NULL, NULL, 0.00, 'Drink', 'Adult', 1),
+(54, 'Lemonade', NULL, NULL, 0.00, 'Drink', 'Adult', 1),
+(55, 'Fruit Salad', NULL, NULL, 0.00, 'Dessert', 'Adult', 1),
+(56, 'Buko Pandan', NULL, NULL, 0.00, 'Dessert', 'Adult', 1),
+(57, 'Buko Salad', NULL, NULL, 0.00, 'Dessert', 'Adult', 1),
+(58, 'Coffee Jelly', NULL, NULL, 0.00, 'Dessert', 'Adult', 1);
 
 -- --------------------------------------------------------
 
@@ -393,38 +349,6 @@ CREATE TABLE `notifications` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `packagefooditems`
---
-
-CREATE TABLE `packagefooditems` (
-  `packageFoodItemID` int(11) NOT NULL,
-  `packageID` int(11) NOT NULL,
-  `foodItemID` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 1,
-  `totalPrice` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `packages`
---
-
-CREATE TABLE `packages` (
-  `packageID` int(11) NOT NULL,
-  `packageName` varchar(100) NOT NULL,
-  `packageDescription` text NOT NULL,
-  `Pduration` decimal(10,2) DEFAULT NULL,
-  `Pcapacity` int(11) NOT NULL,
-  `resortServiceID` int(11) NOT NULL,
-  `Pprice` decimal(10,2) DEFAULT 0.00,
-  `PcategoryID` int(11) NOT NULL,
-  `packageAvailability` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `partnerships`
 --
 
@@ -437,7 +361,7 @@ CREATE TABLE `partnerships` (
   `partnerAddress` text NOT NULL,
   `documentLink` varchar(500) NOT NULL,
   `partnerTypeID` int(11) NOT NULL,
-  `partnerStatus` int(11) NOT NULL DEFAULT 1,
+  `partnerStatusID` int(11) NOT NULL DEFAULT 1,
   `requestDate` timestamp NOT NULL DEFAULT current_timestamp(),
   `startDate` date DEFAULT NULL,
   `endDate` date DEFAULT NULL
@@ -533,7 +457,7 @@ CREATE TABLE `resortamenities` (
   `RSduration` varchar(50) DEFAULT '0',
   `RScategoryID` int(11) NOT NULL,
   `RSdescription` text DEFAULT NULL,
-  `RSimageData` varchar(500) DEFAULT NULL,
+  `RSimageData` varchar(255) DEFAULT NULL,
   `RSAvailabilityID` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -542,54 +466,54 @@ CREATE TABLE `resortamenities` (
 --
 
 INSERT INTO `resortamenities` (`resortServiceID`, `RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES
-(1, 'Umbrella 1', 500.00, 5, 0, '0', 2, 'Good for 5 pax', NULL, 1),
-(2, 'Umbrella 2', 500.00, 5, 0, '0', 2, 'Good for 5 pax', NULL, 1),
-(3, 'Umbrella 3', 500.00, 5, 0, '0', 2, 'Good for 5 pax', NULL, 1),
-(4, 'Umbrella 4', 500.00, 5, 0, '0', 2, 'Good for 5 pax', NULL, 1),
-(5, 'Umbrella 5', 500.00, 5, 0, '0', 2, 'Good for 5 pax', NULL, 1),
-(6, 'Cottage 1', 800.00, 10, 0, '0', 2, 'Good for 10 pax', NULL, 1),
-(7, 'Cottage 2', 800.00, 10, 0, '0', 2, 'Good for 10 pax', NULL, 2),
-(8, 'Cottage 3', 800.00, 10, 0, '0', 2, 'Good for 10 pax', NULL, 1),
-(9, 'Cottage 4', 800.00, 10, 0, '0', 2, 'Good for 10 pax', NULL, 2),
-(10, 'Cottage 5', 800.00, 10, 0, '0', 2, 'Good for 10 pax', NULL, 1),
-(11, 'Cottage 6', 800.00, 10, 0, '0', 2, 'Good for 10 pax', NULL, 1),
-(12, 'Cottage 7', 800.00, 10, 0, '0', 2, 'Good for 10 pax', NULL, 1),
-(13, 'Cottage 8', 900.00, 12, 0, '0', 2, 'Good for 12 pax', NULL, 1),
-(14, 'Cottage 9', 900.00, 12, 0, '0', 2, 'Good for 12 pax', NULL, 1),
-(15, 'Cottage 10', 900.00, 12, 0, '0', 2, 'Good for 12 pax', NULL, 1),
-(16, 'Cottage 11', 900.00, 12, 0, '0', 2, 'Good for 12 pax', NULL, 1),
-(17, 'Cottage 12', 1000.00, 15, 0, '0', 2, 'Good for 15 pax', NULL, 1),
-(18, 'Cottage 13', 1000.00, 15, 0, '0', 2, 'Good for 15 pax', NULL, 1),
-(19, 'Cottage 14', 1000.00, 15, 0, '0', 2, 'Good for 15 pax', NULL, 1),
-(20, 'Cottage Stage', 2000.00, 25, 0, '0', 2, 'Good for 25 pax', NULL, 1),
-(21, 'Videoke A', 800.00, 0, 0, '0', 3, NULL, NULL, 1),
-(22, 'Videoke B', 800.00, 0, 0, '0', 3, NULL, NULL, 2),
-(23, 'Billiard', 200.00, 0, 0, '1 hour', 3, NULL, NULL, 2),
-(24, 'Massage Chair', 100.00, 0, 0, '40 minutes', 3, NULL, NULL, 1),
-(25, 'Room 1', 2500.00, 2, 4, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', NULL, 1),
-(26, 'Room 2', 2500.00, 2, 4, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', NULL, 1),
-(27, 'Room 3', 2500.00, 2, 4, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', NULL, 1),
-(28, 'Room 4', 2500.00, 2, 4, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', NULL, 1),
-(29, 'Room 5', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(30, 'Room 6', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(31, 'Room 7', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 4),
-(32, 'Room 8', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(33, 'Room 9', 5000.00, 3, 6, '22 hours', 1, 'Barkada Room', NULL, 1),
-(34, 'Room 10', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(35, 'Room 11', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(36, 'Room 1', 2000.00, 2, 4, '11 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', NULL, 2),
-(37, 'Room 2', 2000.00, 2, 4, '11 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', NULL, 1),
-(38, 'Room 3', 2000.00, 2, 4, '11 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', NULL, 1),
-(39, 'Room 4', 2000.00, 2, 4, '11 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', NULL, 1),
-(40, 'Room 5', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(41, 'Room 6', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(42, 'Room 7', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 4),
-(43, 'Room 8', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(44, 'Room 9', 3000.00, 3, 6, '11 hours', 1, 'Barkada Room', NULL, 1),
-(45, 'Room 10', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(46, 'Room 11', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', NULL, 1),
-(47, 'Pavilion Hall', 0.00, 0, 350, 'None', 4, NULL, NULL, 1),
-(49, 'Mini Pavilion Hall', 0.00, 0, 50, 'None', 4, NULL, NULL, 1);
+(1, 'Umbrella 1', 500.00, 5, 0, '0', 2, 'Good for 5 pax', 'cottage1.png', 1),
+(2, 'Umbrella 2', 500.00, 5, 0, '0', 2, 'Good for 5 pax', 'cottage1.png', 1),
+(3, 'Umbrella 3', 500.00, 5, 0, '0', 2, 'Good for 5 pax', 'cottage1.png', 1),
+(4, 'Umbrella 4', 500.00, 5, 0, '0', 2, 'Good for 5 pax', 'cottage1.png', 1),
+(5, 'Umbrella 5', 500.00, 5, 0, '0', 2, 'Good for 5 pax', 'cottage1.png', 1),
+(6, 'Cottage 1', 800.00, 10, 0, '0', 2, 'Good for 10 pax', 'cottage1.png', 1),
+(7, 'Cottage 2', 800.00, 10, 0, '0', 2, 'Good for 10 pax', 'cottage1.png', 1),
+(8, 'Cottage 3', 800.00, 10, 0, '0', 2, 'Good for 10 pax', 'cottage1.png', 1),
+(9, 'Cottage 4', 800.00, 10, 0, '0', 2, 'Good for 10 pax', 'cottage1.png', 1),
+(10, 'Cottage 5', 800.00, 10, 0, '0', 2, 'Good for 10 pax', 'cottage1.png', 1),
+(11, 'Cottage 6', 800.00, 10, 0, '0', 2, 'Good for 10 pax', 'cottage1.png', 1),
+(12, 'Cottage 7', 800.00, 10, 0, '0', 2, 'Good for 10 pax', 'cottage1.png', 1),
+(13, 'Cottage 8', 900.00, 12, 0, '0', 2, 'Good for 12 pax', 'cottage1.png', 1),
+(14, 'Cottage 9', 900.00, 12, 0, '0', 2, 'Good for 12 pax', 'cottage1.png', 1),
+(15, 'Cottage 10', 900.00, 12, 0, '0', 2, 'Good for 12 pax', 'cottage1.png', 1),
+(16, 'Cottage 11', 900.00, 12, 0, '0', 2, 'Good for 12 pax', 'cottage1.png', 1),
+(17, 'Cottage 12', 1000.00, 15, 0, '0', 2, 'Good for 15 pax', 'cottage1.png', 1),
+(18, 'Cottage 13', 1000.00, 15, 0, '0', 2, 'Good for 15 pax', 'cottage1.png', 1),
+(19, 'Cottage 14', 1000.00, 15, 0, '0', 2, 'Good for 15 pax', 'cottage1.png', 1),
+(20, 'Cottage Stage', 2000.00, 25, 0, '0', 2, 'Good for 25 pax', 'cottage1.png', 1),
+(21, 'Videoke A', 800.00, 0, 0, '0', 3, NULL, 'videoke1.jpg', 1),
+(22, 'Videoke B', 800.00, 0, 0, '0', 3, NULL, 'videoke2.jpg', 1),
+(23, 'Billiard', 200.00, 0, 0, '1 hour', 3, NULL, 'billiardPic1.jpg', 1),
+(24, 'Massage Chair', 100.00, 0, 0, '40 minutes', 3, NULL, 'massageChair.png', 1),
+(25, 'Room 1', 2500.00, 2, 4, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', 'hotel1.jpg', 1),
+(26, 'Room 2', 2500.00, 2, 4, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', 'hotel1.jpg', 1),
+(27, 'Room 3', 2500.00, 2, 4, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', 'hotel1.jpg', 1),
+(28, 'Room 4', 2500.00, 2, 4, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', 'hotel1.jpg', 1),
+(29, 'Room 5', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(30, 'Room 6', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(31, 'Room 7', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 4),
+(32, 'Room 8', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(33, 'Room 9', 5000.00, 3, 6, '22 hours', 1, 'Barkada Room', 'hotel1.jpg', 1),
+(34, 'Room 10', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(35, 'Room 11', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(36, 'Room 1', 2000.00, 2, 4, '11 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', 'hotel1.jpg', 1),
+(37, 'Room 2', 2000.00, 2, 4, '11 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', 'hotel1.jpg', 1),
+(38, 'Room 3', 2000.00, 2, 4, '11 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', 'hotel1.jpg', 1),
+(39, 'Room 4', 2000.00, 2, 4, '11 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', 'hotel1.jpg', 1),
+(40, 'Room 5', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(41, 'Room 6', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(42, 'Room 7', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 4),
+(43, 'Room 8', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(44, 'Room 9', 3000.00, 3, 6, '11 hours', 1, 'Barkada Room', 'hotel1.jpg', 1),
+(45, 'Room 10', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(46, 'Room 11', 2500.00, 3, 6, '11 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'hotel1.jpg', 1),
+(47, 'Pavilion Hall', 0.00, 0, 350, 'None', 4, 'pav2.jpg', NULL, 1),
+(48, 'Mini Pavilion Hall', 0.00, 0, 50, 'None', 4, 'miniPav.jpg', NULL, 1);
 
 --
 -- Triggers `resortamenities`
@@ -716,7 +640,7 @@ INSERT INTO `services` (`serviceID`, `resortServiceID`, `partnershipServiceID`, 
 (51, 45, NULL, NULL, 'Resort'),
 (52, 46, NULL, NULL, 'Resort'),
 (53, 47, NULL, NULL, 'Resort'),
-(54, 49, NULL, NULL, 'Resort');
+(54, 48, NULL, NULL, 'Resort');
 
 -- --------------------------------------------------------
 
@@ -731,17 +655,6 @@ CREATE TABLE `serviceunavailabledates` (
   `unavailableStartDate` datetime NOT NULL,
   `unavailableEndDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `serviceunavailabledates`
---
-
-INSERT INTO `serviceunavailabledates` (`serviceUnavailableID`, `resortServiceID`, `partnershipServiceID`, `unavailableStartDate`, `unavailableEndDate`) VALUES
-(1, 9, NULL, '2025-08-13 20:00:00', '2025-08-14 05:00:00'),
-(2, 36, NULL, '2025-08-13 20:00:00', '2025-08-14 05:00:00'),
-(3, 23, NULL, '2025-08-13 20:00:00', '2025-08-14 05:00:00'),
-(4, 7, NULL, '2025-08-28 12:00:00', '2025-08-28 20:00:00'),
-(5, 22, NULL, '2025-08-28 12:00:00', '2025-08-28 20:00:00');
 
 -- --------------------------------------------------------
 
@@ -763,6 +676,7 @@ INSERT INTO `statuses` (`statusID`, `statusName`) VALUES
 (4, 'Cancelled'),
 (5, 'Done'),
 (6, 'Expired'),
+(7, 'Payment Issue'),
 (1, 'Pending'),
 (3, 'Rejected');
 
@@ -878,19 +792,19 @@ CREATE TABLE `websitecontentimages` (
 --
 
 INSERT INTO `websitecontentimages` (`WCImageID`, `contentID`, `imageData`, `altText`, `imageOrder`, `uploadedAt`) VALUES
-(1, 19, 'Assets/Images/landingPage/resortPic1.png', 'Mamyr Resort Image', 1, '2025-07-30 00:44:24'),
-(2, 20, 'Assets/Images/landingPage/img1.png', 'Mamyr Gallery Image 1', 1, '2025-07-30 00:44:23'),
-(3, 20, 'Assets/Images/landingPage/img2.png', 'Mamyr Gallery Image 2', 2, '2025-07-30 00:44:23'),
-(4, 20, 'Assets/Images/landingPage/img3.png', 'Mamyr Gallery Image 3', 3, '2025-07-30 00:44:23'),
-(5, 20, 'Assets/Images/landingPage/img4.png', 'Mamyr Gallery Image 4', 4, '2025-07-30 00:44:23'),
-(6, 20, 'Assets/Images/landingPage/img5.png', 'Mamyr Gallery Image 5', 5, '2025-07-30 00:44:23'),
-(7, 20, 'Assets/Images/landingPage/img6.png', 'Mamyr Gallery Image 6', 6, '2025-07-30 00:44:24'),
-(8, 27, '../Assets/Images/AboutImages/firstPic.jpg', 'About Image 1', 1, '2025-08-06 17:54:49'),
-(9, 30, '../Assets/Images/AboutImages/resort.png', 'Resort Logo', 1, '2025-08-06 17:54:49'),
-(10, 32, '../Assets/Images/AboutImages/events.png', 'Events Logo', 1, '2025-08-06 17:54:49'),
-(11, 34, '../Assets/Images/AboutImages/hotel.png', 'Hotel Logo', 1, '2025-08-06 17:54:49'),
-(12, 37, '../Assets/Images/AboutImages/aboutImage.jpg', 'About Image 2', 1, '2025-08-06 17:54:49'),
-(13, 39, '../Assets/Images/AboutImages/poolPic.jpg', 'About Image 3', 1, '2025-08-06 17:54:49');
+(1, 19, 'resortPic1.png', 'Mamyr Resort Image', 1, '2025-07-30 00:44:24'),
+(2, 20, 'img1.png', 'Mamyr Gallery Image 1', 1, '2025-07-30 00:44:23'),
+(3, 20, 'img2.png', 'Mamyr Gallery Image 2', 2, '2025-07-30 00:44:23'),
+(4, 20, 'img3.png', 'Mamyr Gallery Image 3', 3, '2025-07-30 00:44:23'),
+(5, 20, 'img4.png', 'Mamyr Gallery Image 4', 4, '2025-07-30 00:44:23'),
+(6, 20, 'img5.png', 'Mamyr Gallery Image 5', 5, '2025-07-30 00:44:23'),
+(7, 20, 'img6.png', 'Mamyr Gallery Image 6', 6, '2025-07-30 00:44:24'),
+(8, 27, 'firstPic.jpg', 'About Image 1', 1, '2025-08-06 17:54:49'),
+(9, 30, 'resort.png', 'Resort Logo', 1, '2025-08-06 17:54:49'),
+(10, 32, 'events.png', 'Events Logo', 1, '2025-08-06 17:54:49'),
+(11, 34, 'hotel.png', 'Hotel Logo', 1, '2025-08-06 17:54:49'),
+(12, 37, 'aboutImage.jpg', 'About Image 2', 1, '2025-08-06 17:54:49'),
+(13, 39, 'poolPic.jpg', 'About Image 3', 1, '2025-08-06 17:54:49');
 
 -- --------------------------------------------------------
 
@@ -936,24 +850,24 @@ INSERT INTO `websitecontents` (`contentID`, `adminID`, `sectionName`, `title`, `
 (22, 1, 'BusinessInformation', 'ContactNum', '(0998) 962 4697', '2025-07-03 00:38:51'),
 (23, 1, 'BusinessInformation', 'Email', 'mamyresort128@gmail.com', '2025-07-03 00:38:51'),
 (24, 1, 'BusinessInformation', 'Address', 'Sitio Colonia Gabihan, San Ildefonso, Bulacan', '2025-07-03 00:38:51'),
-(25, 1, 'BusinessInformation', 'ShortDesc2', 'Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional.', '2025-08-12 10:14:06'),
-(26, 1, 'About', 'Header', 'Compassionate Service, Unforgettable Family Moments', '2025-08-12 10:14:06'),
-(27, 1, 'About', 'AboutMamyr', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family but also bring joy to others.', '2025-08-12 10:14:06'),
-(28, 1, 'About', 'ServicesDesc', 'Mamyr isn’t just a resort; it’s a family-oriented getaway with comfortable rooms and a versatile event venue for gatherings and celebrations. It offers a relaxed, fun environment for all ages to enjoy.', '2025-08-12 10:14:06'),
-(29, 1, 'About', 'Service1', 'Resort', '2025-08-12 10:14:06'),
-(30, 1, 'About', 'Service1Desc', 'Mamyr features three refreshing pools, providing the perfect spots for family fun, relaxation, and leisurely swims.', '2025-08-12 10:14:06'),
-(31, 1, 'About', 'Service2', 'Events Place', '2025-08-12 10:14:06'),
-(32, 1, 'About', 'Service2Desc', 'Mamyr’s versatile event venue offers a spacious and welcoming setting, ideal for family gatherings, reunions, and celebrations of all kinds.', '2025-08-12 10:14:06'),
-(33, 1, 'About', 'Service3', 'Hotel', '2025-08-12 10:14:06'),
-(34, 1, 'About', 'Service3Desc', 'Mamyr’s cozy hotel features 11 comfortable rooms, perfect for a relaxing stay with family and friends.', '2025-08-12 10:14:06'),
-(35, 1, 'About', 'Explore', 'At Mamyr Resort, we treat every guest like family, offering an experience that goes beyond just comfort. From our humble beginnings to the thriving retreat we are today, we\'ve poured our heart and soul into creating a sanctuary where nature and relaxation meet. Our story is built on passion, growth, and a deep commitment to providing an unforgettable experience. When you visit, you’ll discover not just stunning surroundings and luxurious comfort, but the warm, welcoming spirit that defines us. Come join us and see firsthand what makes Mamyr Resort a place where memories are made, and guests feel right at home.', '2025-08-12 10:14:06'),
-(36, 1, 'About', 'HistoryParagraph1', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity— something that would not only support their family but also bring joy to others.', '2025-08-12 10:14:06'),
-(37, 1, 'About', 'HistoryParagraph2', 'With faith and hard work, they transformed the land into a relaxing resort that people could enjoy. Their vision and dedication shaped the landscape into a serene retreat where visitors could unwind and create lasting memories. The name \"Mamyr\" came from their own names—Mamerto and Myrna—a symbol of the spirit of unity that brought the resort to life, making it not just a place to stay, but a reflection of their dreams and the love they poured into every corner of the property.', '2025-08-12 10:14:06'),
-(38, 1, 'About', 'HistoryParagraph3', 'Opened in 2022, Mamyr Resort has become a popular and welcoming place for people looking to relax and enjoy nature. The resort is known for its clean swimming pools, spacious function areas, beautiful surroundings, and warm hospitality. Guests can enjoy the resort\'s three refreshing swimming pools, two elegant pavilions, cozy cottages to stay in, as well as 11 comfortable hotel rooms for those who prefer a more private stay, and a spacious parking lot to accommodate all guests conveniently.', '2025-08-12 10:14:06'),
-(39, 1, 'About', 'HistoryParagraph4', 'At Mamyr Resort, we treat every guest like family, making sure your stay is special and enjoyable. Whether you\'re celebrating an important event, spending time with loved ones, or just looking for a peaceful break, we have everything you need to feel comfortable and relaxed. Our team works hard to create a warm and welcoming atmosphere where you can make lasting memories. Visit us and see for yourself why we\'re so proud of how much we\'ve grown.', '2025-08-12 10:14:06'),
-(40, 1, 'BusinessInformation', 'FBLink', 'https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/', '2025-08-12 10:14:06'),
-(41, 1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', '2025-08-12 10:14:06'),
-(42, 1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', '2025-08-12 10:14:06');
+(25, 1, 'BusinessInformation', 'ShortDesc2', 'Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional.', '2025-08-20 22:59:59'),
+(26, 1, 'About', 'Header', 'Compassionate Service, Unforgettable Family Moments', '2025-08-20 22:59:59'),
+(27, 1, 'About', 'AboutMamyr', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family but also bring joy to others.', '2025-08-20 22:59:59'),
+(28, 1, 'About', 'ServicesDesc', 'Mamyr isn’t just a resort; it’s a family-oriented getaway with comfortable rooms and a versatile event venue for gatherings and celebrations. It offers a relaxed, fun environment for all ages to enjoy.', '2025-08-20 22:59:59'),
+(29, 1, 'About', 'Service1', 'Resort', '2025-08-20 22:59:59'),
+(30, 1, 'About', 'Service1Desc', 'Mamyr features three refreshing pools, providing the perfect spots for family fun, relaxation, and leisurely swims.', '2025-08-20 22:59:59'),
+(31, 1, 'About', 'Service2', 'Events Place', '2025-08-20 22:59:59'),
+(32, 1, 'About', 'Service2Desc', 'Mamyr’s versatile event venue offers a spacious and welcoming setting, ideal for family gatherings, reunions, and celebrations of all kinds.', '2025-08-20 22:59:59'),
+(33, 1, 'About', 'Service3', 'Hotel', '2025-08-20 22:59:59'),
+(34, 1, 'About', 'Service3Desc', 'Mamyr’s cozy hotel features 11 comfortable rooms, perfect for a relaxing stay with family and friends.', '2025-08-20 22:59:59'),
+(35, 1, 'About', 'Explore', 'At Mamyr Resort, we treat every guest like family, offering an experience that goes beyond just comfort. From our humble beginnings to the thriving retreat we are today, we\'ve poured our heart and soul into creating a sanctuary where nature and relaxation meet. Our story is built on passion, growth, and a deep commitment to providing an unforgettable experience. When you visit, you’ll discover not just stunning surroundings and luxurious comfort, but the warm, welcoming spirit that defines us. Come join us and see firsthand what makes Mamyr Resort a place where memories are made, and guests feel right at home.', '2025-08-20 22:59:59'),
+(36, 1, 'About', 'HistoryParagraph1', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity— something that would not only support their family but also bring joy to others.', '2025-08-20 22:59:59'),
+(37, 1, 'About', 'HistoryParagraph2', 'With faith and hard work, they transformed the land into a relaxing resort that people could enjoy. Their vision and dedication shaped the landscape into a serene retreat where visitors could unwind and create lasting memories. The name \"Mamyr\" came from their own names—Mamerto and Myrna—a symbol of the spirit of unity that brought the resort to life, making it not just a place to stay, but a reflection of their dreams and the love they poured into every corner of the property.', '2025-08-20 22:59:59'),
+(38, 1, 'About', 'HistoryParagraph3', 'Opened in 2022, Mamyr Resort has become a popular and welcoming place for people looking to relax and enjoy nature. The resort is known for its clean swimming pools, spacious function areas, beautiful surroundings, and warm hospitality. Guests can enjoy the resort\'s three refreshing swimming pools, two elegant pavilions, cozy cottages to stay in, as well as 11 comfortable hotel rooms for those who prefer a more private stay, and a spacious parking lot to accommodate all guests conveniently.', '2025-08-20 22:59:59'),
+(39, 1, 'About', 'HistoryParagraph4', 'At Mamyr Resort, we treat every guest like family, making sure your stay is special and enjoyable. Whether you\'re celebrating an important event, spending time with loved ones, or just looking for a peaceful break, we have everything you need to feel comfortable and relaxed. Our team works hard to create a warm and welcoming atmosphere where you can make lasting memories. Visit us and see for yourself why we\'re so proud of how much we\'ve grown.', '2025-08-20 22:59:59'),
+(40, 1, 'BusinessInformation', 'FBLink', 'https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/', '2025-08-20 22:59:59'),
+(41, 1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', '2025-08-20 22:59:59'),
+(42, 1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', '2025-08-20 22:59:59');
 
 --
 -- Indexes for dumped tables
@@ -987,7 +901,6 @@ ALTER TABLE `bookings`
   ADD PRIMARY KEY (`bookingID`),
   ADD KEY `userID` (`userID`),
   ADD KEY `bookingStatus` (`bookingStatus`),
-  ADD KEY `packageID` (`packageID`),
   ADD KEY `customPackageID` (`customPackageID`);
 
 --
@@ -1004,7 +917,7 @@ ALTER TABLE `bookingservices`
 ALTER TABLE `confirmedbookings`
   ADD PRIMARY KEY (`confirmedBookingID`),
   ADD KEY `bookingID` (`bookingID`),
-  ADD KEY `confirmedBookingStatus` (`confirmedBookingStatus`),
+  ADD KEY `paymentApprovalStatus` (`paymentApprovalStatus`),
   ADD KEY `paymentStatus` (`paymentStatus`);
 
 --
@@ -1013,8 +926,7 @@ ALTER TABLE `confirmedbookings`
 ALTER TABLE `custompackageitems`
   ADD PRIMARY KEY (`customPackageItemID`),
   ADD KEY `customPackageID` (`customPackageID`),
-  ADD KEY `serviceID` (`serviceID`),
-  ADD KEY `packageID` (`packageID`);
+  ADD KEY `serviceID` (`serviceID`);
 
 --
 -- Indexes for table `custompackages`
@@ -1022,14 +934,6 @@ ALTER TABLE `custompackageitems`
 ALTER TABLE `custompackages`
   ADD PRIMARY KEY (`customPackageID`),
   ADD KEY `userID` (`userID`);
-
---
--- Indexes for table `discounts`
---
-ALTER TABLE `discounts`
-  ADD PRIMARY KEY (`discountID`),
-  ADD KEY `serviceID` (`serviceID`),
-  ADD KEY `packageID` (`packageID`);
 
 --
 -- Indexes for table `entrancerates`
@@ -1067,30 +971,13 @@ ALTER TABLE `notifications`
   ADD KEY `userID` (`userID`);
 
 --
--- Indexes for table `packagefooditems`
---
-ALTER TABLE `packagefooditems`
-  ADD PRIMARY KEY (`packageFoodItemID`),
-  ADD KEY `packageID` (`packageID`),
-  ADD KEY `foodItemID` (`foodItemID`);
-
---
--- Indexes for table `packages`
---
-ALTER TABLE `packages`
-  ADD PRIMARY KEY (`packageID`),
-  ADD KEY `packageAvailability` (`packageAvailability`),
-  ADD KEY `resortServiceID` (`resortServiceID`),
-  ADD KEY `PcategoryID` (`PcategoryID`);
-
---
 -- Indexes for table `partnerships`
 --
 ALTER TABLE `partnerships`
   ADD PRIMARY KEY (`partnershipID`),
   ADD UNIQUE KEY `businessEmail` (`businessEmail`),
   ADD KEY `userID` (`userID`),
-  ADD KEY `partnerStatus` (`partnerStatus`),
+  ADD KEY `partnerStatusID` (`partnerStatusID`),
   ADD KEY `partnerTypeID` (`partnerTypeID`);
 
 --
@@ -1224,19 +1111,19 @@ ALTER TABLE `bookingpaymentstatus`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `bookingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `bookingID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `bookingservices`
 --
 ALTER TABLE `bookingservices`
-  MODIFY `bookingServiceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `bookingServiceID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `confirmedbookings`
 --
 ALTER TABLE `confirmedbookings`
-  MODIFY `confirmedBookingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `confirmedBookingID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `custompackageitems`
@@ -1249,12 +1136,6 @@ ALTER TABLE `custompackageitems`
 --
 ALTER TABLE `custompackages`
   MODIFY `customPackageID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `discounts`
---
-ALTER TABLE `discounts`
-  MODIFY `discountID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `entrancerates`
@@ -1278,25 +1159,13 @@ ALTER TABLE `eventcategories`
 -- AUTO_INCREMENT for table `menuitems`
 --
 ALTER TABLE `menuitems`
-  MODIFY `foodItemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `foodItemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
   MODIFY `notificationID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `packagefooditems`
---
-ALTER TABLE `packagefooditems`
-  MODIFY `packageFoodItemID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `packages`
---
-ALTER TABLE `packages`
-  MODIFY `packageID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `partnerships`
@@ -1326,7 +1195,7 @@ ALTER TABLE `partnerstatuses`
 -- AUTO_INCREMENT for table `resortamenities`
 --
 ALTER TABLE `resortamenities`
-  MODIFY `resortServiceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `resortServiceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `resortservicescategories`
@@ -1350,13 +1219,13 @@ ALTER TABLE `services`
 -- AUTO_INCREMENT for table `serviceunavailabledates`
 --
 ALTER TABLE `serviceunavailabledates`
-  MODIFY `serviceUnavailableID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `serviceUnavailableID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `statuses`
 --
 ALTER TABLE `statuses`
-  MODIFY `statusID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `statusID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1410,8 +1279,7 @@ ALTER TABLE `auditlogs`
 ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
   ADD CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`bookingStatus`) REFERENCES `statuses` (`statusID`),
-  ADD CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`packageID`) REFERENCES `packages` (`packageID`),
-  ADD CONSTRAINT `bookings_ibfk_4` FOREIGN KEY (`customPackageID`) REFERENCES `custompackages` (`customPackageID`);
+  ADD CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`customPackageID`) REFERENCES `custompackages` (`customPackageID`);
 
 --
 -- Constraints for table `bookingservices`
@@ -1425,7 +1293,7 @@ ALTER TABLE `bookingservices`
 --
 ALTER TABLE `confirmedbookings`
   ADD CONSTRAINT `confirmedbookings_ibfk_1` FOREIGN KEY (`bookingID`) REFERENCES `bookings` (`bookingID`),
-  ADD CONSTRAINT `confirmedbookings_ibfk_2` FOREIGN KEY (`confirmedBookingStatus`) REFERENCES `statuses` (`statusID`),
+  ADD CONSTRAINT `confirmedbookings_ibfk_2` FOREIGN KEY (`paymentApprovalStatus`) REFERENCES `statuses` (`statusID`),
   ADD CONSTRAINT `confirmedbookings_ibfk_3` FOREIGN KEY (`paymentStatus`) REFERENCES `bookingpaymentstatus` (`paymentStatusID`);
 
 --
@@ -1433,21 +1301,13 @@ ALTER TABLE `confirmedbookings`
 --
 ALTER TABLE `custompackageitems`
   ADD CONSTRAINT `custompackageitems_ibfk_1` FOREIGN KEY (`customPackageID`) REFERENCES `custompackages` (`customPackageID`),
-  ADD CONSTRAINT `custompackageitems_ibfk_2` FOREIGN KEY (`serviceID`) REFERENCES `services` (`serviceID`),
-  ADD CONSTRAINT `custompackageitems_ibfk_3` FOREIGN KEY (`packageID`) REFERENCES `packages` (`packageID`);
+  ADD CONSTRAINT `custompackageitems_ibfk_2` FOREIGN KEY (`serviceID`) REFERENCES `services` (`serviceID`);
 
 --
 -- Constraints for table `custompackages`
 --
 ALTER TABLE `custompackages`
   ADD CONSTRAINT `custompackages_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
-
---
--- Constraints for table `discounts`
---
-ALTER TABLE `discounts`
-  ADD CONSTRAINT `discounts_ibfk_1` FOREIGN KEY (`serviceID`) REFERENCES `services` (`serviceID`),
-  ADD CONSTRAINT `discounts_ibfk_2` FOREIGN KEY (`packageID`) REFERENCES `packages` (`packageID`);
 
 --
 -- Constraints for table `entrancerates`
@@ -1470,26 +1330,11 @@ ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_3` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`);
 
 --
--- Constraints for table `packagefooditems`
---
-ALTER TABLE `packagefooditems`
-  ADD CONSTRAINT `packagefooditems_ibfk_1` FOREIGN KEY (`packageID`) REFERENCES `packages` (`packageID`),
-  ADD CONSTRAINT `packagefooditems_ibfk_2` FOREIGN KEY (`foodItemID`) REFERENCES `menuitems` (`foodItemID`);
-
---
--- Constraints for table `packages`
---
-ALTER TABLE `packages`
-  ADD CONSTRAINT `packages_ibfk_1` FOREIGN KEY (`packageAvailability`) REFERENCES `serviceavailability` (`availabilityID`),
-  ADD CONSTRAINT `packages_ibfk_2` FOREIGN KEY (`resortServiceID`) REFERENCES `resortamenities` (`resortServiceID`),
-  ADD CONSTRAINT `packages_ibfk_3` FOREIGN KEY (`PcategoryID`) REFERENCES `eventcategories` (`categoryID`);
-
---
 -- Constraints for table `partnerships`
 --
 ALTER TABLE `partnerships`
   ADD CONSTRAINT `partnerships_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
-  ADD CONSTRAINT `partnerships_ibfk_2` FOREIGN KEY (`partnerStatus`) REFERENCES `partnerstatuses` (`partnerStatusID`),
+  ADD CONSTRAINT `partnerships_ibfk_2` FOREIGN KEY (`partnerStatusID`) REFERENCES `partnerstatuses` (`partnerStatusID`),
   ADD CONSTRAINT `partnerships_ibfk_3` FOREIGN KEY (`partnerTypeID`) REFERENCES `partnershiptypes` (`partnerTypeID`);
 
 --

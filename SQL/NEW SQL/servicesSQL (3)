@@ -29,10 +29,6 @@ CREATE TABLE resortAmenities (
    FOREIGN KEY (RScategoryID) REFERENCES  resortServicesCategories(categoryID) 
 );
 
-
-ALTER TABLE resortamenities
-MODIFY COLUMN RSimageData VARCHAR(500);
-
 CREATE TABLE entranceRates (
     entranceRateID INT PRIMARY KEY AUTO_INCREMENT,
     sessionType VARCHAR(20),               
@@ -129,13 +125,13 @@ CREATE TABLE customPackageItems (
     customPackageItemID INT PRIMARY KEY AUTO_INCREMENT,
     customPackageID INT NOT NULL,
     serviceID INT NOT NULL,
-    packageID INT NOT NULL,
+    -- packageID INT NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
     servicePrice DECIMAL(10,2) NOT NULL,
 
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
-    FOREIGN KEY (serviceID) REFERENCES services(serviceID),
-    FOREIGN KEY (packageID) REFERENCES packages(packageID)
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID)
+    -- FOREIGN KEY (packageID) REFERENCES packages(packageID)
 );
 
 

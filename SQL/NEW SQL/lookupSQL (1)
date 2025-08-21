@@ -61,7 +61,8 @@ INSERT INTO statuses (statusName) VALUES
 ('Rejected'),
 ('Cancelled'),
 ('Done'),
-('Expired');
+('Expired'),
+('Payment Issue');
 
 
 CREATE TABLE eventCategories (
