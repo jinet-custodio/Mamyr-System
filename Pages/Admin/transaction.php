@@ -1,31 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 
 
 // $customerPayment = $_SESSION['huh']
@@ -248,12 +235,12 @@ $userRole = $_SESSION['userRole'];
                 <!-- Get data and isplay Transaction -->
                 <tbody>
                     <?php
-                    $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
+                    $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, b.paymentMethod, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
                     FROM confirmedBookings cb
                     LEFT JOIN bookings b ON cb.bookingID = b.bookingID
                     LEFT JOIN users u ON b.userID = u.userID
                     LEFT JOIN bookingPaymentStatus bps ON cb.paymentStatus = bps.paymentStatusID
-                    LEFT JOIN statuses stat ON cb.confirmedBookingStatus = stat.statusID
+                    LEFT JOIN statuses stat ON cb.paymentApprovalStatus = stat.statusID
                     ");
                     $payments->execute();
                     $paymentsResult = $payments->get_result();
@@ -262,11 +249,11 @@ $userRole = $_SESSION['userRole'];
                             $guestName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
                             $bookingID = $data['bookingID'];
                             $formattedID = $data['formattedID'];
-                            $totalAmount = $data['CBtotalCost'];
-                            $downpayment = $data['CBdownpayment'];
+                            $totalAmount = $data['confirmedFinalBill'];
+                            // $downpayment = $data['CBdownpayment'];
                             $amountPaid = $data['amountPaid'];
                             $balance = $data['userBalance'];
-                            $CBPaymentMethod = $data['CBpaymentMethod'];
+                            $paymentMethod = $data['paymentMethod'];
                             $paymentStatus = $data['PaymentStatus'];
                             $paymentApprovalStatus = $data['paymentApprovalStatus'];
 
@@ -299,7 +286,7 @@ $userRole = $_SESSION['userRole'];
                                 <!-- <td>₱ <?= number_format($downpayment, 2) ?></td> -->
                                 <!-- <td>₱ <?= number_format($amountPaid, 2) ?></td> -->
                                 <td>₱ <?= number_format($balance, 2) ?></td>
-                                <td><?= htmlspecialchars($CBPaymentMethod) ?></td>
+                                <td><?= htmlspecialchars($paymentMethod) ?></td>
                                 <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
                                 <td><span
                                         class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>

@@ -1,35 +1,23 @@
 <?php
 require '../../Config/dbcon.php';
-
-require_once '../../Function/functions.php';
-//Changing Status function to ah galing sa file na functions.php
-changeToExpiredStatus($conn);
-changeToDoneStatus($conn);
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
 
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-$userID =  (int) $_SESSION['userID'];
-$userRole = (int) $_SESSION['userRole'];
-
+require_once '../../Function/functions.php';
+//Changing Status function to ah galing sa file na functions.php
+changeToExpiredStatus($conn);
+changeToDoneStatus($conn);
 
 if ($userRole == 1) {
     $role = "Customer";
@@ -183,11 +171,11 @@ if ($userRole == 1) {
                             <?php
 
                             $getBooking = $conn->prepare("SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM bookings b
-                    LEFT JOIN confirmedbookings cb ON cb.bookingID = b.bookingID
-                    LEFT JOIN statuses s ON cb.confirmedBookingStatus = s.statusID
-                    LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
-                    WHERE userID = ?
-                    ORDER BY createdAt");
+                                LEFT JOIN confirmedbookings cb ON cb.bookingID = b.bookingID
+                                LEFT JOIN statuses s ON cb.paymentApprovalStatus = s.statusID
+                                LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
+                                WHERE userID = ?
+                                ORDER BY createdAt");
                             $getBooking->bind_param("i", $userID);
                             $getBooking->execute();
                             $resultGetBooking = $getBooking->get_result();
@@ -221,10 +209,10 @@ if ($userRole == 1) {
                                                 $bookingStatus = $booking['bookingStatus'];;
                                                 if ($paymentMethod === 'Cash') {
                                                     $status = "Onsite payment";
-                                                    $class = 'btn btn-info w-100';
+                                                    $class = 'btn btn-primary w-100';
                                                 } else {
                                                     $status = "Downpayment";
-                                                    $class = 'btn btn-info w-100';
+                                                    $class = 'btn btn-primary w-100';
                                                 }
                                             } elseif ($booking['confirmedStatus'] === "Approved") {
                                                 $status = "Successful";
@@ -233,14 +221,19 @@ if ($userRole == 1) {
                                                 $bookingStatus = $booking['bookingStatus'];
                                             } elseif ($booking['confirmedStatus'] === "Rejected") {
                                                 $status = "Rejected";
-                                                $class = 'btn btn-danger w-100';
+                                                $class = 'btn btn-red w-100';
                                                 $bookingStatus = $booking['bookingStatus'];
                                                 $confirmedStatus = $booking['confirmedStatus'];
                                             } elseif ($booking['confirmedStatus'] === 'Done') {
                                                 $status = "Success";
-                                                $class = 'btn btn-success w-100';
+                                                $class = 'btn btn-dark-green w-100';
                                                 $confirmedStatus = $booking['confirmedStatus'];
                                                 $bookingStatus = $booking['bookingStatus'];
+                                            } elseif ($booking['confirmedStatus'] === "Cancelled") {
+                                                $confirmedStatus = $booking['confirmedStatus'];
+                                                $bookingStatus = $booking['bookingStatus'];
+                                                $status = "Cancelled";
+                                                $class = 'btn btn-orange w-100';
                                             }
                                         } else {
                                             $confirmedBookingID = NULL;
@@ -252,22 +245,22 @@ if ($userRole == 1) {
                                                 $bookingStatus = $booking['bookingStatus'];
                                                 if ($paymentMethod === 'Cash') {
                                                     $status = "Onsite payment";
-                                                    $class = 'btn btn-info w-100';
+                                                    $class = 'btn btn-primary w-100';
                                                 } else {
                                                     $status = "Downpayment";
-                                                    $class = 'btn btn-info w-100';
+                                                    $class = 'btn btn-primary w-100';
                                                 }
                                             } elseif ($booking['bookingStatus'] === "Rejected") {
                                                 $bookingStatus = $booking['bookingStatus'];
                                                 $status = "Rejected";
-                                                $class = 'btn btn-danger w-100';
+                                                $class = 'btn btn-red w-100';
                                             } elseif ($booking['bookingStatus'] === "Cancelled") {
                                                 $bookingStatus = $booking['bookingStatus'];
                                                 $status = "Cancelled";
-                                                $class = 'btn btn-danger w-100';
-                                            } elseif ($booking['bookingStatus'] === "Rejected") {
+                                                $class = 'btn btn-orange w-100';
+                                            } elseif ($booking['bookingStatus'] === "Expired") {
                                                 $bookingStatus = $booking['bookingStatus'];
-                                                $status = "Rejected";
+                                                $status = "Expired";
                                                 $class = 'btn btn-danger w-100';
                                             }
                                         }
@@ -286,7 +279,14 @@ if ($userRole == 1) {
                                                     <input type="hidden" name="status" value="<?= $status ?>">
                                                     <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
                                                 </form>
-                                                <?php if ($confirmedStatus === 'Done' ||  $bookingStatus === 'Cancelled') { ?>
+                                                <?php if (
+                                                    $confirmedStatus === 'Done'
+                                                    ||  $bookingStatus === 'Cancelled'
+                                                    || $bookingStatus === 'Expired'
+                                                    || $confirmedStatus === 'Approved'
+                                                    || $bookingStatus === 'Rejected'
+                                                    || $confirmedStatus === 'Rejected'
+                                                ) { ?>
                                                     <button class="btn btn-outline-primary w-100 rateBtn"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#rateModal"

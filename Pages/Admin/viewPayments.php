@@ -1,37 +1,26 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
 
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
 
 if (isset($_POST['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
+    $_SESSION['bookingID'] = $bookingID;
 } elseif (isset($_SESSION['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_SESSION['bookingID']);
 }
-
-$_SESSION['last_activity'] = time();
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 
 
 if ($userRole == 3) {
@@ -95,11 +84,11 @@ if ($admin === "Admin") {
                     LPAD(cb.bookingID, 4, '0') AS formattedID,
                     cb.*,
                     b.*,
-                    u.firstName, u.lastName, u.phoneNumber, u.userID AS customerID,
+                    u.firstName, u.lastName, u.phoneNumber, u.userID AS customerID, u.userRole,
                     bs.*,
                     cp.*,
                     cpi.*,
-                    p.packageName,
+                    -- p.packageName,
                     s.*,
                     ra.RServiceName ,
                     -- rsc.categoryName,
@@ -114,7 +103,7 @@ if ($admin === "Admin") {
                 LEFT JOIN bookingServices bs ON b.bookingID = bs.bookingID
                 LEFT JOIN customPackages cp ON b.customPackageID = cp.customPackageID
                 LEFT JOIN customPackageItems cpi ON cp.customPackageID = cpi.customPackageID
-                 LEFT JOIN packages p ON b.packageID = p.packageID
+                --  LEFT JOIN packages p ON b.packageID = p.packageID
                 LEFT JOIN services s ON bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID
                 LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
                 -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
@@ -133,16 +122,18 @@ if ($admin === "Admin") {
             $customerID = $row['customerID'];
             $guestName = ucfirst($row['firstName']) . " " . ucfirst($row['lastName']);
             $phoneNumber = $row['phoneNumber'] ?? '--';
+            $userRoleID = $row['userRole'];
 
             //booking info
             $bookingType = $row['bookingType'];
             $formattedBookingID = $row['formattedID'];
-            $totalAmount = $row['CBtotalCost'];
+            $totalAmount = $row['confirmedFinalBill'];
             $userBalance = $row['userBalance'];
             $amountPaid = $row['amountPaid'];
-            $downpayment = $row['CBdownpayment'];
-            $paymentMethod = $row['CBpaymentMethod'];
+            $downpayment = $row['downpayment'];
+            $paymentMethod = $row['paymentMethod'];
             $paymentStatus = $row['paymentStatus'];
+            $discount = $row['discountAmount'];
 
             if ($paymentMethod === 'Cash') {
                 $paymentMethod = $paymentMethod . ' - Onsite Payment';
@@ -150,40 +141,34 @@ if ($admin === "Admin") {
                 $paymentMethod = $paymentMethod;
             }
 
-            $startDate = date("M d, Y", strtotime($row['startDate']));
-            $endDate = date("M d, Y", strtotime($row['endDate']));
+            $rawStartDate = $row['startDate'];
+            $rawEndDate = $row['endDate'];
+
+            $startDate = date("M d, Y", strtotime($rawStartDate));
+            $endDate = date("M d, Y", strtotime($rawEndDate));
 
             if ($startDate === $endDate) {
-                $date = date("F d, Y", strtotime($row['startDate']));
+                $date = date("F d, Y", strtotime($rawStartDate));
             } else {
                 $date = $startDate . " - " . $endDate;
             }
 
-            $time = date("g:i A", strtotime($row['startDate'])) . " - " . date("g:i A", strtotime($row['endDate']));
-            $duration = $row['hoursNum'] . " hours";
+            $time = date("g:i A", strtotime($rawStartDate)) . " - " . date("g:i A", strtotime($rawEndDate));
+            $duration = $row['durationCount'] . " hours";
 
 
             //Downpayment Image
             $imageData = $row['downpaymentImage'] ?? null;
 
             if ($imageData) {
-                $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_buffer($fileInfo, $imageData);
-                finfo_close($fileInfo);
-
-                // Validate mime type starts with "image/"
-                if (strpos($mimeType, 'image/') === 0) {
-                    $downpaymentImage = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                } else {
-                    $downpaymentImage = 'None'; // invalid image mime type
-                }
+                $downpaymentImage = '../../Assets/Images/PaymentProof/' . $imageData;
             } else {
-                $downpaymentImage = 'None'; // no image data
+                $downpaymentImage = '../../Assets/Images/PaymentProof/defaultDownpayment.png';
             }
 
 
             //services
-            $packageID = $row['packageID'];
+            // $packageID = $row['packageID'];
             $serviceID = $row['serviceID'];
             $customPackageID = $row['customPackageID'];
 
@@ -200,6 +185,10 @@ if ($admin === "Admin") {
                 }
             }
         }
+
+        // echo '<pre>';
+        // print_r('Data ' . $userRoleID);
+        // echo '</pre>';
     }
     // var_dump($mimeType);
     ?>
@@ -215,6 +204,7 @@ if ($admin === "Admin") {
                     <!-- <div class="card"> -->
                     <input type="hidden" name="customerID" value="<?= $customerID ?>">
                     <input type="hidden" id="paymentStatus" value="<?= $paymentStatus ?>">
+                    <input type="hidden" name="userRoleID" value="<?= $userRoleID ?>">
                     <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                     <div class="firstRow">
                         <div class="input-container">
@@ -279,6 +269,11 @@ if ($admin === "Admin") {
                                 id="downpayment" value="₱<?= number_format($downpayment, 2) ?>" readonly>
                         </div>
                         <div class="payment-input-container">
+                            <label for="discountAmount" id="paymentLabel">Discount</label>
+                            <input type="text" class="form-control" name="discountAmount" id="payment-form"
+                                value="₱<?= number_format($discount, 2) ?>" readonly>
+                        </div>
+                        <div class="payment-input-container">
                             <label for="amountPaid" id="paymentLabel">Amount Paid </label>
                             <input type="text" class="form-control" id="payment-form" name="amountPaid"
                                 value="₱<?= number_format($amountPaid, 2) ?>" readonly>
@@ -293,9 +288,7 @@ if ($admin === "Admin") {
                 <!-- </div> -->
 
                 <div class="button-container">
-                    <button type="submit" name="viewBooking" class="btn btn-info w-100" id="viewBookingBtn">View
-                        Booking
-                        Details</button>
+                    <button type="submit" name="viewBooking" class="btn btn-info w-100" id="viewBookingBtn">View Booking Details</button>
                     <button type="button" name="addPayment" id="addPayment" class="btn btn-success w-100"
                         data-bs-toggle="modal" data-bs-target="#addPaymentModal">Add Payment</button>
 
@@ -306,6 +299,12 @@ if ($admin === "Admin") {
                         <button type="button" name="rejectBtn" class="btn btn-danger w-100" data-bs-toggle="modal"
                             data-bs-target="#rejectModal">Reject</button>
                     </div>
+
+                    <input type="hidden" name="totalCost" value="<?= $totalAmount ?>"> <!-- info for receipt -->
+                    <input type="hidden" name="bookingType" value="<?= $bookingType ?>"> <!-- info for receipt -->
+                    <input type="hidden" name="adminName" value="<?= $adminName ?>"> <!-- info for receipt -->
+                    <button type="submit" name="downloadReceiptBtn" id="genReceipt" class="btn btn-primary w-100 mt-4">Generate
+                        Receipt</button>
                 </div>
                 <!-- </div> -->
             </section>
@@ -314,20 +313,16 @@ if ($admin === "Admin") {
                 <div class="image-container" id="downpayment-image-container">
                     <?php if ($downpaymentImage !== 'None'): ?>
                         <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
-                        <div class="zoom-overlay">
+                        <!-- <div class="zoom-overlay">
                             <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
-                        </div>
+                        </div> -->
                     <?php else: ?>
                         <img src="../../Assets/Images/defaultDownpayment.png" alt="Payment Icon"
                             class="defaultDownpaymentImage">
                         <p class="text-center">Customer has not uploaded the receipt yet</p>
                     <?php endif; ?>
 
-                    <input type="hidden" name="totalCost" value="<?= $totalAmount ?>"> <!-- info for receipt -->
-                    <input type="hidden" name="bookingType" value="<?= $bookingType ?>"> <!-- info for receipt -->
-                    <input type="hidden" name="adminName" value="<?= $adminName ?>"> <!-- info for receipt -->
-                    <button type="submit" name="downloadReceiptBtn" id="genReceipt" class="btn btn-primary w-100 mt-4">Generate
-                        Receipt</button>
+
                 </div>
             </section>
 
@@ -359,6 +354,12 @@ if ($admin === "Admin") {
                                 <label for="paymentAmount">Payment Amount</label>
                                 <input type="text" class="form-control" id="approveModalForm" name="paymentAmount"
                                     style="background-color: #ffff;">
+                            </div>
+
+                            <div class="input-container">
+                                <label for="discountAmount">Discount</label>
+                                <input type="text" class="form-control" name="discountAmount"
+                                    id="approveModalForm" value="<?= number_format($discount) ?>" style="background-color: #ffff;">
                             </div>
                         </div>
                         <div class="modal-footer">

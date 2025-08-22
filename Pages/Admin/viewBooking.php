@@ -1,37 +1,27 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
+require_once '../../Function/functions.php';
 
 if (isset($_POST['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
+    $_SESSION['bookingID'] = $bookingID;
 } elseif (isset($_SESSION['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_SESSION['bookingID']);
 }
 
-$_SESSION['last_activity'] = time();
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,8 +50,12 @@ $userRole = $_SESSION['userRole'];
     <div class="guest-container">
         <!-- Back Button -->
         <div class="page-container">
-            <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png"
-                    alt="Back Button"></a>
+            <form action="viewPayments.php" method="POST" style="display:inline;">
+                <input type="hidden" name="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
+                <button type="submit" class="btn btn-primary back">
+                    <img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button">
+                </button>
+            </form>
             <h5 class="page-title">Guest Booking Information</h5>
         </div>
         <!-- Information -->
@@ -81,6 +75,7 @@ $userRole = $_SESSION['userRole'];
             $email = $data['email'];
             $phoneNumber = $data['phoneNumber'];
             $address = $data['userAddress'];
+            $userRoleID = $data['userRole'];
 
             $file_info = finfo_open(FILEINFO_MIME_TYPE);
             $imageData = $data['userProfile'];
@@ -113,7 +108,27 @@ $userRole = $_SESSION['userRole'];
 
                     <div class="button-container" id="button-container">
                         <button type="submit" class="btn btn-primary w-50" name="approveBtn">Approve</button>
-                        <button type="submit" class="btn btn-danger w-50" name="rejectBtn">Reject</button>
+                        <button type="button" class="btn btn-danger w-50" data-bs-toggle="modal" data-bs-target="#rejectionModal">Reject</button>
+                    </div>
+                </div>
+
+                <!--Rejection Modal -->
+                <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rejectionModalLabel">Rejection</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>State the reason for rejection</p>
+                                <textarea rows="4" cols="50" name="rejectionReason" id="rejectionReason"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -124,13 +139,11 @@ $userRole = $_SESSION['userRole'];
                                 
                                 b.*, 
                                 cb.amountPaid, 
-                                cb.CBtotalCost AS finalBill, 
+                                cb.confirmedFinalBill, 
                                 cb.userBalance, 
-                                cb.confirmedBookingStatus AS cbStatus, 
-                                cb.paymentDueDate, bps.statusName AS paymentStatus,
+                                cb.paymentApprovalStatus, 
+                                cb.paymentDueDate, cb.paymentStatus,
                                 cb.discountAmount,
-                                stat1.statusName AS bookingStatusName,
-                                stat2.statusName AS confirmedBookingStatusName,
                                 bs.*,
                                 s.*, s.serviceType,
                                 er.sessionType AS tourType, er.ERCategory, er.ERprice,
@@ -140,11 +153,11 @@ $userRole = $_SESSION['userRole'];
                                 LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID
                                 LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
 
-                                LEFT JOIN statuses stat1 ON stat1.statusID = b.bookingStatus
-                                LEFT JOIN statuses stat2 ON stat2.statusID = cb.confirmedBookingStatus
+                                -- LEFT JOIN statuses stat1 ON stat1.statusID = b.bookingStatus
+                                -- LEFT JOIN statuses stat2 ON stat2.statusID = cb.confirmedBookingStatus
 
-                                LEFT JOIN packages p ON b.packageID = p.packageID
-                                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
+                                -- LEFT JOIN packages p ON b.packageID = p.packageID
+                                -- LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
 
                                 LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
                                 LEFT JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
@@ -165,6 +178,7 @@ $userRole = $_SESSION['userRole'];
                 if ($getBookingInfoResult->num_rows > 0) {
 
                     $services = [];
+                    $serviceIDs = [];
                     $totalCost = 0;
                     $downpayment = 0;
                     $discount = 0;
@@ -174,48 +188,67 @@ $userRole = $_SESSION['userRole'];
                     $finalBill  = 0;
                     $userBalance = 0;
                     $amountPaid = 0;
+                    $additionalCharge = 0;
                     while ($row = $getBookingInfoResult->fetch_assoc()) {
 
                         // echo '<pre>';
                         // print_r($row);
                         // echo '</pre>';
-
-                        $packageID = $data['packageID'];
-                        $customPackageID = $data['customPackageID'];
+                        $customPackageID = $row['customPackageID'];
 
 
                         $bookingType = $row['bookingType'];
-                        $arrivalTime = $row['arrivalTime'] ?? 'Not Stated';
-                        $startDate = date('M. d, Y', strtotime($row['startDate']));
-                        $endDate = date('M. d, Y', strtotime($row['endDate']));
+
+                        $rawStartDate = $row['startDate'];
+                        $rawEndDate = $row['endDate'];
+
+                        $arrivalTime = date('H:i A', strtotime($row['arrivalTime'])) ?? 'Not Stated';
+                        $startDate = date('M. d, Y', strtotime($rawStartDate));
+                        $endDate = date('M. d, Y', strtotime($rawEndDate));
 
                         if ($startDate === $endDate) {
-                            $bookingDate = date('F d, Y', strtotime($row['startDate']));
+                            $bookingDate = date('F d, Y', strtotime($rawStartDate));
                         } else {
                             $bookingDate = $startDate . " - " . $endDate;
                         }
 
-                        $bookingCreationDate = date('F d,Y g:i A', strtotime($row['createdAt']));
+                        $bookingCreationDate = date('F d, Y H:i A', strtotime($row['createdAt']));
 
-                        $time = date("g:i A", strtotime($data['startDate'])) . " - " . date("g:i A", strtotime($data['endDate']));
-                        $duration = $data['hoursNum'] . " hours";
+                        $time = date("g:i A", strtotime($rawStartDate)) . " - " . date("g:i A", strtotime($data['endDate']));
+                        $duration = $row['durationCount'] . " hours";
 
-                        $bookingStatusName = $row['bookingStatusName'];
-                        $confirmedBookingStatusName = $row['confirmedBookingStatusName'];
+                        $bookingStatus = $row['bookingStatus'];
+                        $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? '';
 
-                        $additionalServices = $row['addOns'];
+                        $additionalServices = $row['addOns'] ?? 'None';
                         $paymentMethod = $row['paymentMethod'];
-                        $paymentStatus = $row['paymentStatus'];
+                        $paymentStatus = $row['paymentStatus'] ?? '';
                         $totalCost = $row['totalCost'];
                         $downpayment = $row['downpayment'];
                         $discount = $row['discountAmount'];
                         $userBalance = $row['userBalance'];
                         $amountPaid = $row['amountPaid'];
-                        $finalBill = $row['finalBill'];
+                        $finalBill = $row['confirmedFinalBill'];
                         $paymentDueDate = date('F d, Y g:i A', strtotime($row['paymentDueDate']));
+                        $additionalCharge = $row['additionalCharge'];
 
                         $toddlerCount = $row['toddlerCount'];
                         $additionalReq = $row['additionalRequest'];
+
+
+                        if ($paymentStatus !== '' || $paymentApprovalStatus !== '') {
+                            $paymentStatuses = getPaymentStatus($conn, $paymentStatus);
+                            $paymentStatusID = $paymentStatuses['paymentStatusID'];
+                            $paymentStatusName = $paymentStatuses['paymentStatusName'];
+
+                            $paymentApprovalStatuses = getStatuses($conn, $paymentApprovalStatus);
+                            $paymentApprovalStatusID = $paymentApprovalStatuses['statusID'];
+                            $paymentApprovalStatusName = $paymentApprovalStatuses['statusName'];
+                        }
+
+                        $bookingStatuses = getStatuses($conn, $bookingStatus);
+                        $bookingStatusID = $bookingStatuses['statusID'];
+                        $bookingStatusName = $bookingStatuses['statusName'];
 
                         if (!empty($packageID)) {
                             echo 'Wala pa';
@@ -223,10 +256,13 @@ $userRole = $_SESSION['userRole'];
                         } else {
                             $serviceID = $row['serviceID'];
                             $serviceType = $row['serviceType'];
+                            $pax = $row['guestCount'];
 
 
                             if ($serviceType === 'Resort') {
                                 $services[] = $row['RServiceName'] . " - ₱"  . number_format($row['RSprice'], 2);
+                                $serviceIDs[] = $row['resortServiceID'];
+                                $totalPax = $pax . ($toddlerCount > 0 ? " & {$toddlerCount} toddlers" : '');
                             }
 
                             if ($serviceType === 'Entrance') {
@@ -237,19 +273,33 @@ $userRole = $_SESSION['userRole'];
                                     $adultCount = $row['guests'];
                                 }
 
-                                $totalPax =  ($adultCount > 0 ? "{$adultCount} Adults" : '') .
+                                $entrancePax =  ($adultCount > 0 ? "{$adultCount} Adults" : '') .
                                     ($kidsCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidsCount} Kids" : '') .
                                     ($toddlerCount > 0 ? (($adultCount > 0 || $kidsCount > 0) ? ' & ' : '') . "{$toddlerCount} toddlers" : '');
+                            }
+
+                            if ($bookingType === 'Resort') {
+                                $totalPax = $entrancePax;
+                            } elseif ($bookingType === 'Hotel') {
+                                $totalPax;
                             }
                         }
 
                         if ($finalBill === 0.00) {
                             $totalBill = $totalCost;
-                        } elseif ($finalBill >= $totalCost || $finalBill <= $totalCost) {
+                        } elseif ($finalBill >= $totalCost || ($finalBill <= $totalCost && $finalBill === 0.00)) {
                             $totalBill = $finalBill;
+                        } else {
+                            $totalBill = $totalCost;
                         }
+
+                        // echo '<pre>';
+                        // print_r('Data ' . $totalBill);
+                        // echo '</pre>';
                     }
                 }
+
+
 
                 ?>
 
@@ -262,14 +312,16 @@ $userRole = $_SESSION['userRole'];
                                 <label for="bookingType" class="info-label">Booking Type</label>
                                 <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
                                 <input type="text" class="form-control" name="bookingType"
-                                    value="<?= $bookingType ?> Booking">
+                                    value="<?= $bookingType ?> Booking" readonly>
                             </div>
-                            <div class="info-container" id="booking-info-container">
-                                <label for="tourType" class="info-label">Tour Type</label>
-                                <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
-                                <input type="text" class="form-control" name="tourType"
-                                    value="<?= $tourType ?> Swimming">
-                            </div>
+                            <?php if ($bookingType === 'Resort') { ?>
+                                <div class="info-container" id="booking-info-container">
+                                    <label for="tourType" class="info-label">Tour Type</label>
+                                    <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
+                                    <input type="text" class="form-control" name="tourType"
+                                        value="<?= $tourType ?> Swimming" readonly>
+                                </div>
+                            <?php } ?>
                         </div>
 
 
@@ -279,25 +331,25 @@ $userRole = $_SESSION['userRole'];
                                 <div class="info-container mt-2" id="booking-info-container">
                                     <label for="arrivalTime" class="info-label mb-2">Arrival Time</label>
                                     <input type="text" class="form-control" name="arrivalTime" id="arrivalTime"
-                                        value="<?= $arrivalTime ?>">
+                                        value="<?= $arrivalTime ?>" readonly>
                                 </div>
 
                                 <div class="info-container mt-2" id="booking-info-container">
                                     <label for="timeDuration" class="info-label mb-2">Time Duration</label>
                                     <input type="text" class="form-control" name="timeDuration" id="timeDuration"
-                                        value="<?= $time ?> (<?= $duration ?>)">
+                                        value="<?= $time ?> (<?= $duration ?>)" readonly>
                                 </div>
 
                                 <div class="info-container mt-2" id="booking-info-container">
                                     <label for="bookingDate" class="info-label mb-2">Booking Date</label>
                                     <input type="text" class="form-control" name="bookingDate" id="bookingDate"
-                                        value="<?= $bookingDate ?>">
+                                        value="<?= $bookingDate ?>" readonly>
                                 </div>
                                 <div class="info-container mt-2" id="booking-info-container">
                                     <label for="bookingCreationDate" class="info-label mb-2">Booking Creation
                                         Date</label>
                                     <input type="text" class="form-control" name="bookingCreationDate"
-                                        id="bookingCreationDate" value="<?= $bookingCreationDate ?>">
+                                        id="bookingCreationDate" value="<?= $bookingCreationDate ?>" readonly>
                                 </div>
                             </div>
                         </div>
@@ -308,12 +360,12 @@ $userRole = $_SESSION['userRole'];
                                 <div class="servicesInfo">
                                     <ul>
                                         <?php
-                                    foreach ($services as $service) {
-                                    ?>
-                                        <li><?= $service ?></li>
+                                        foreach ($services as $service) {
+                                        ?>
+                                            <li><?= $service ?></li>
                                         <?php
-                                    }
-                                    ?>
+                                        }
+                                        ?>
                                     </ul>
                                 </div>
                             </div>
@@ -322,12 +374,12 @@ $userRole = $_SESSION['userRole'];
                                 <div class="additionalServices" id="booking-info-container">
                                     <label for="addOns" class="info-label mb-2">Additional Services</label>
                                     <input type="text" class="form-control" name="addOns" id="addOns"
-                                        value="<?= $additionalServices ?>">
+                                        value="<?= $additionalServices ?>" readonly>
                                 </div>
                                 <div class="peopleCountContainer" id="booking-info-container">
                                     <label for="paxNum" class="info-label mb-2">Number of People:</label>
                                     <input type="text" class="form-control" name="paxNum" id="paxNum"
-                                        value="<?= $totalPax ?>">
+                                        value="<?= $totalPax ?>" readonly>
                                 </div>
                             </div>
                         </div>
@@ -342,52 +394,69 @@ $userRole = $_SESSION['userRole'];
                             <div class="info-container" id="payment-info">
                                 <label for="paymentMethod" class="mt-2">Payment Method</label>
                                 <input type="text" class="form-control w-50" name="paymentMethod" id="paymentMethod"
-                                    value="<?= $paymentMethod ?>">
-                            </div>
-                            <div class="info-container" id="payment-info">
-                                <label for="paymentStatus" class="mt-2">Payment Status</label>
-                                <input type="text" class="form-control w-50" name="paymentStatus" id="paymentStatus"
-                                    value="<?= $paymentStatus ?>">
+                                    value="<?= $paymentMethod ?>" readonly>
                             </div>
                             <?php if ($bookingStatusName === 'Approved') { ?>
-                            <div class="info-container" id="payment-info">
-                                <label for="paymentDue" class="mt-2">Payment Due Date</label>
-                                <input type="text" class="form-control w-50" name="paymentDue" id="paymentDue"
-                                    value="<?= $paymentDueDate ?>">
-                            </div>
-                            <div class="info-container" id="payment-info">
-                                <label for="userBalance" class="mt-2">User Balance</label>
-                                <input type="text" class="form-control w-50" name="userBalance" id="userBalance"
-                                    value="₱<?= number_format($userBalance, 2) ?>">
-                            </div>
-                            <div class="info-container" id="payment-info">
-                                <label for="amountPaid" class="mt-2">Amount Paid</label>
-                                <input type="text" class="form-control w-50" name="amountPaid" id="amountPaid"
-                                    value="₱<?= number_format($amountPaid, 2) ?>">
-                            </div>
+                                <div class="info-container" id="payment-info">
+                                    <label for="paymentStatus" class="mt-2">Payment Status</label>
+                                    <input type="text" class="form-control w-50" name="paymentStatus" id="paymentStatus"
+                                        value="<?= $paymentStatusName ?>" readonly>
+                                </div>
                             <?php } ?>
+
+                            <div class="info-container" id="payment-info">
+                                <label for="additionalCharge" class="mt-2">Additional Charge</label>
+                                <input type="text" class="form-control w-50" name="additionalCharge" id="additionalCharge"
+                                    value="₱<?= number_format($additionalCharge, 2) ?>" readonly>
+                            </div>
+
                             <div class="info-container" id="payment-info">
                                 <label for="discountAmount" class="mt-2">Discount</label>
                                 <div class="discountform">
                                     <input type="text" class="form-control w-100" name="discountAmount"
                                         id="discountAmount" value="₱<?= number_format($discount, 2) ?>">
-                                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                                    <i class="fa-solid fa-circle-info"
+                                        id="discountTooltip"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="You can change the discount amount manually."
+                                        style="color: #74C0FC;">
+                                    </i>
+
                                 </div>
                             </div>
+
+                            <?php if ($bookingStatusName === 'Approved') { ?>
+                                <div class="info-container" id="payment-info">
+                                    <label for="paymentDue" class="mt-2">Payment Due Date</label>
+                                    <input type="text" class="form-control w-50" name="paymentDue" id="paymentDue"
+                                        value="<?= $paymentDueDate ?>">
+                                </div>
+                                <div class="info-container" id="payment-info">
+                                    <label for="userBalance" class="mt-2">User Balance</label>
+                                    <input type="text" class="form-control w-50" name="userBalance" id="userBalance"
+                                        value="₱<?= number_format($userBalance, 2) ?>" readonly>
+                                </div>
+                                <div class="info-container" id="payment-info">
+                                    <label for="amountPaid" class="mt-2">Amount Paid</label>
+                                    <input type="text" class="form-control w-50" name="amountPaid" id="amountPaid"
+                                        value="₱<?= number_format($amountPaid, 2) ?>" readonly>
+                                </div>
+                            <?php } ?>
                             <div class="info-container" id="payment-info">
                                 <label for="downpayment" class="mt-2">Downpayment</label>
-                                <input type="text" class="form-control w-50" name="downpayment" id="downpayment"
-                                    value="₱<?= number_format($downpayment, 2) ?>">
+                                <input type="text" class="form-control w-50"
+                                    value="₱<?= number_format($downpayment, 2) ?>" readonly>
                             </div>
                             <div class="info-container" id="payment-info">
                                 <label for="totalCost" class="mt-2"> Total Cost</label>
                                 <input type="text" class="form-control w-50" name="totalCost" id="totalCost"
-                                    value="₱<?= number_format($totalBill, 2) ?>">
+                                    value="₱<?= number_format($totalBill, 2) ?>" readonly>
                             </div>
                         </div>
 
                         <div class="notesContainer mt-3">
-                            <h1 class="card-title text-center"> Notes</h1>
+                            <!-- <h1 class="card-title text-center"> Notes</h1> -->
                             <div class="info-container">
                                 <label for="req" class="info-label mt-2 mb-2">Additional Request(s)/Note(s)</label>
                                 <!-- <input type="text" class="form-control" name="req" id="req"
@@ -397,13 +466,21 @@ $userRole = $_SESSION['userRole'];
                             </div>
                         </div>
                     </div>
-
-
-
                 </div>
 
+                <div class="hidden-inputs">
+                    <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                    <input type="hidden" name="bookingStatusID" id="bookingStatusID" value="<?= $bookingStatusID ?>">
+                    <input type="hidden" name="bookingStatusName" id="bookingStatusName" value="<?= $bookingStatusName ?>">
+                    <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus" value="<?= $paymentApprovalStatusName ?>">
+                    <?php foreach ($serviceIDs as $serviceID): ?>
+                        <input type="hidden" name="serviceIDs[]" value="<?= $serviceID ?>">
+                    <?php endforeach; ?>
+                    <input type="hidden" name="endDate" id="endDate" value="<?= $rawEndDate ?>">
+                    <input type="hidden" name="startDate" id="startDate" value="<?= $rawStartDate ?>">
+                    <input type="hidden" name="userRoleID" value="<?= $userRoleID ?>">
+                </div>
             </form>
-
         </div>
 
     </div>
@@ -414,64 +491,66 @@ $userRole = $_SESSION['userRole'];
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
 
+    <!-- Show discount tooltip and border -->
     <script>
-    const videoke = document.getElementById("videoke").value;
-    const bookingType = document.getElementById("bookingType").value;
-    const status = document.getElementById("status").value;
-    const addOns = document.getElementById("addOns").textContent.trim();
+        window.addEventListener('DOMContentLoaded', () => {
+            const discountForm = document.querySelector('.discountform');
+            const tooltipTrigger = document.getElementById('discountTooltip');
+            const tooltip = new bootstrap.Tooltip(tooltipTrigger);
+            tooltip.show();
 
-    const buttonContainer = document.getElementById("button-container")
-    const videokeSelectionContainer = document.getElementById("videokeSelectionContainer");
-    const downpaymentContainer = document.getElementById("downpayment");
-    const paymentStatusContainer = document.getElementById("paymentStatus");
+            discountForm.style.border = "1px solid red";
 
-    if (videoke === 'Videoke') {
-        videokeSelectionContainer.style.display = "block";
-        videokeSelectionContainer.required = true;
-    }
+            discountForm.addEventListener('change', function() {
+                discountForm.style.border = "none";
+            })
 
-    if (bookingType === "Resort") {
-        downpaymentContainer.style.display = "none";
-        document.querySelector(".guest-info.payment").classList.add("fullWidth");
-    }
 
-    if (status === "Approved") {
-        buttonContainer.style.display = "none";
-        videokeSelectionContainer.style.display = "none";
-        document.querySelector(".guest-info.addOns").classList.add("fullWidth");
-        document.querySelector(".guest-info.payment").classList.remove("fullWidth");
-        paymentStatusContainer.style.display = "block";
-    }
+            setTimeout(() => {
+                tooltip.hide();
+            }, 3000);
+        });
+    </script>
 
-    if (addOns === "None") {
-        document.querySelector(".guest-info.addOns").classList.add("fullWidth");
-    }
 
-    if (status === "Cancelled" || status === "Rejected") {
-        buttonContainer.style.display = "none";
-    }
+    <!-- Hiding buttons -->
+    <script>
+        const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
+        const bookingStatus = document.getElementById('bookingStatusName').value;
+
+        const buttonContainer = document.getElementById('button-container');
+
+        if (paymentApprovalStatus === 'Done' ||
+            bookingStatus === 'Expired' ||
+            bookingStatus === 'Rejected' ||
+            bookingStatus === 'Cancelled' ||
+            paymentApprovalStatus === 'Rejected' ||
+            paymentApprovalStatus === 'Cancelled' ||
+            bookingStatus === 'Approved') {
+            buttonContainer.style.display = "none";
+        }
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
 
-    if (paramValue === "videoke") {
-        Swal.fire({
-            title: "Oops!",
-            text: "Please assign a videoke.",
-            icon: 'warning',
-        });
-    } else if (paramValue === "error") {
-        Swal.fire({
-            title: "Failed!",
-            text: "The booking request could not be approved. Please try again later.",
-            icon: 'error',
-        });
-    }
+        if (paramValue === "videoke") {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please assign a videoke.",
+                icon: 'warning',
+            });
+        } else if (paramValue === "error") {
+            Swal.fire({
+                title: "Failed!",
+                text: "The booking request could not be approved. Please try again later.",
+                icon: 'error',
+            });
+        }
     </script>
 
 
