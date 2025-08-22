@@ -1,16 +1,24 @@
 <?php
 require '../../Config/dbcon.php';
-date_default_timezone_set('Asia/Manila');
 
+$session_timeout = 3600;
+
+ini_set('session.gc_maxlifetime', $session_timeout);
+session_set_cookie_params($session_timeout);
 session_start();
-require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
+date_default_timezone_set('Asia/Manila');
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
+    exit();
+}
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
+    $_SESSION['error'] = 'Session Expired';
+
+    session_unset();
+    session_destroy();
+    header("Location: ../register.php?session=expired");
     exit();
 }
 
@@ -21,8 +29,9 @@ if (isset($_POST['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_SESSION['bookingID']);
 }
 
-require_once '../../Function/functions.php';
-
+$_SESSION['last_activity'] = time();
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 ?>
 
@@ -34,7 +43,7 @@ require_once '../../Function/functions.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservation Summary - Mamyr Resort and Events Place</title>
-    <link rel="icon" type="down$downpaymentImage/x-icon" href="../../Assets/Images/Icon/favicon.png " />
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/reservationSummary.css" />
     <!-- Bootstrap Link -->
@@ -56,8 +65,8 @@ require_once '../../Function/functions.php';
             <!-- Get user data -->
             <?php
             $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
-            $confirmedBookingID = (int) $_POST['confirmedBookingID'];
-            $bookingID = (int) $bookingID;
+            $confirmedBookingID = mysqli_real_escape_string($conn, $_POST['confirmedBookingID']);
+            $bookingID = $bookingID;
             // $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
             // $status = mysqli_real_escape_string($conn, $_POST['status']);
             $getData = $conn->prepare("SELECT bookings.*, users.firstName, users.middleInitial, users.lastName, users.phoneNumber, users.userAddress FROM bookings 
@@ -69,36 +78,39 @@ require_once '../../Function/functions.php';
             if ($resultData->num_rows > 0) {
                 $clientInfo = $resultData->fetch_assoc();
                 $middleInitial = trim($clientInfo['middleInitial']);
-                $firstName = $clientInfo['firstName'];
-                $name = ucfirst($firstName) . " " . ucfirst($clientInfo['middleInitial']) . " "  . ucfirst($clientInfo['lastName']);
+                $name = ucfirst($clientInfo['firstName']) . " " . ucfirst($clientInfo['middleInitial']) . " "  . ucfirst($clientInfo['lastName']);
             }
             ?>
 
             <!-- Get booking info -->
             <?php
             $getBookingInfo = $conn->prepare("SELECT 
-                                
-                                b.*, 
-                                cb.confirmedBookingID,
-                                cb.amountPaid, 
-                                cb.confirmedFinalBill, 
-                                cb.userBalance, 
-                                cb.paymentApprovalStatus, 
-                                cb.paymentDueDate, cb.paymentStatus,
-                                cb.discountAmount, cb.downpaymentImage,
-                                cb.downpaymentDueDate, 
-                                bs.*,
-                                s.*, s.serviceType,
-                                er.sessionType AS tourType, er.ERCategory, er.ERprice,
-                                ra.RServiceName, ra.RSprice, rsc.categoryName AS serviceCategory   
+                                    b.*, b.totalCost AS bookingCost , 
+                                    st.statusName AS confirmedBookingStatus, 
+                                    stat.statusName AS bookingStatus,
+                                    bps.statusName AS paymentStatus,
+                                    p.*, cp.*, cpi.*, 
+                                    bs.*, s.*, 
+                                    ra.*, rsc.categoryName AS serviceName, ec.categoryName AS eventName,
+                                    er.*, ps.*, cb.downpaymentImage
                                     
                                 FROM bookings b
-                                LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID 
+
+                                LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID
+                                LEFT JOIN statuses st ON cb.confirmedBookingStatus = st.statusID
+                                LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
+                                LEFT JOIN bookingPaymentStatus bps ON cb.paymentStatus = bps.paymentStatusID
+
+                                LEFT JOIN packages p ON b.packageID = p.packageID
+                                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
 
                                 LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
                                 LEFT JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
 
                                 LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID
+                                
+
+                                -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
                                 LEFT JOIN services s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
 
                                 LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
@@ -114,170 +126,160 @@ require_once '../../Function/functions.php';
             if ($getBookingInfoResult->num_rows > 0) {
 
                 $services = [];
-                $totalCost = 0;
-                $downpayment = 0;
-                $discount = 0;
-                $totalPax = 0;
-                $kidsCount = 0;
+                $allDescriptions = [];
+                $AddRequest = "";
+                $discount = 0.00;
+
                 $adultCount = 0;
-                $finalBill  = 0;
-                $userBalance = 0;
-                $amountPaid = 0;
-                $additionalCharge = 0;
-                $serviceVenue = '';
-                $downpaymentNotes = [];
-                $paymentApprovalStatusName = '';
+                $kidsCount = 0;
 
-                while ($row = $getBookingInfoResult->fetch_assoc()) {
+                $package = "";
+                $customPackage = "";
+                $status = '';
 
-                    // echo '<pre>';
-                    // print_r($row);
-                    // echo '</pre>';
+                while ($data = $getBookingInfoResult->fetch_assoc()) {
+                    // echo "<pre>";
+                    // print_r($data);
+                    // echo "</pre>";
+                    $startDate = date("F j, Y", strtotime($data['startDate'])); //Bookings
+                    $time = date("g:i A", strtotime($data['startDate'])) . " - " . date("g:i A", strtotime($data['endDate'])); //Bookings
+                    $duration = $data['hoursNum'] . " hours"; //Bookings
+                    $pax = $data['paxNum']; //Bookings
 
-                    $customPackageID = $row['customPackageID'];
-                    $bookingType = $row['bookingType'];
-                    $arrivalTime = date('H:i A', strtotime($row['arrivalTime'])) ?? 'Not Stated';
-                    $startDate = date('M. d, Y', strtotime($row['startDate']));
-                    $endDate = date('M. d, Y', strtotime($row['endDate']));
+                    $totalCost = $data['bookingCost'];  //Booking
+                    // $discount = $data['discountAmount'];  //Bookings
+                    $downpayment = $data['downpayment'];    //Bookings
 
-                    if ($startDate === $endDate) {
-                        $bookingDate = date('F d, Y', strtotime($row['startDate']));
+                    $paymentMethod = $data['paymentMethod'];
+
+                    $addOns = [];
+                    $addOns[] = $data['addOns'];  //Bookings
+
+
+                    $imageData = $data['downpaymentImage'];
+
+                    if (!empty($imageData)) {
+                        // Try to detect MIME type from binary data
+                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                        $mimeType = finfo_buffer($finfo, $imageData);
+                        finfo_close($finfo);
+                        $image = "data:" . $mimeType . ";base64," . base64_encode($imageData);
                     } else {
-                        $bookingDate = $startDate . "<br>" . $endDate;
-                    }
-
-                    $bookingCreationDate = date('F d, Y H:i A', strtotime($row['createdAt'])); //Booking
-
-                    $time = date("g:i A", strtotime($row['startDate'])) . " - " . date("g:i A", strtotime($row['endDate'])); //Booking
-                    $duration = $row['durationCount'] . " hours"; //Booking
-
-                    $bookingStatus = $row['bookingStatus']; //Booking
-                    $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? ''; //Confirmed Booking
-                    $paymentStatus = $row['paymentStatus'] ?? ''; //Confirmed Booking
-                    $additionalServices = $row['addOns'] ?? 'None'; //Booking
-                    $paymentMethod = $row['paymentMethod']; //Booking
-                    $totalCost = $row['totalCost']; //Booking
-                    $downpayment = $row['downpayment']; //Booking
-
-                    if ($paymentStatus !== '' || $paymentApprovalStatus !== '') {
-                        $paymentStatuses = getPaymentStatus($conn, $paymentStatus);
-                        $paymentStatusID = $paymentStatuses['paymentStatusID'];
-                        $paymentStatusName = $paymentStatuses['paymentStatusName'];
-
-                        $paymentApprovalStatuses = getStatuses($conn, $paymentApprovalStatus);
-                        $paymentApprovalStatusID = $paymentApprovalStatuses['statusID'];
-                        $paymentApprovalStatusName = $paymentApprovalStatuses['statusName'];
-                    }
-
-                    $bookingStatuses = getStatuses($conn, $bookingStatus);
-                    $bookingStatusNameID = $bookingStatuses['statusID'];
-                    $bookingStatusName = $bookingStatuses['statusName'];
-
-                    $startDateObj = new DateTime($row['startDate']);
-                    $startDateObj->modify('-1 day');
-
-                    $raw_paymentDueDate = $row['paymentDueDate'] ?? $startDate;
-                    $raw_downpaymentDueDate = $row['downpaymentDueDate'] ?? $startDateObj->format('F d, Y g:i A');
-                    $paymentDueDate = date('F d, Y g:i A', strtotime($raw_paymentDueDate));
-                    $downpaymentDueDate = date('F d, Y g:i A', strtotime($raw_downpaymentDueDate));
-                    if ($amountPaid === $downpayment || $amountPaid > $downpayment) {
-                        $dueDate =  $paymentDueDate;
-                        $buttonName = 'Check Payment';
-                    } else {
-                        $dueDate =  $downpaymentDueDate;
-                        $buttonName = 'Make a Down Payment';
+                        $image = "../../Assets/Images/defaultDownpayment.png"; // Default image if no data
                     }
 
 
-
-
-
-                    $downpaymentImageData = $row['downpaymentImage'];
-                    if (!empty($downpaymentImageData)) {
-                        $downpaymentImage = "../../Assets/Images/PaymentProof/" . $downpaymentImageData;
-                    } else {
-                        $downpaymentImage = "../../Assets/Images/PaymentProof/defaultDownpayment.png";
-                    }
-
-                    $discount = $row['discountAmount'] ?? 0;
-                    $userBalance = $row['userBalance'] ?? 0;
-                    $amountPaid = $row['amountPaid'] ?? 0;
-                    $finalBill = $row['confirmedFinalBill'] ?? 0;
-                    $additionalCharge = $row['additionalCharge'];
-
-                    $toddlerCount = $row['toddlerCount'];
-                    $adultCount = $row['adultCount'];
-                    $kidsCount = $row['kidCount'];
-
-                    $additionalReq = $row['additionalRequest'];
-                    $addOns = $row['addOns'] ?? 'None';
-
-                    if (!empty($customPackageID)) {
-                        echo 'Wala pa';
-                    } else {
-                        $serviceID = $row['serviceID'];
-                        $serviceType = $row['serviceType'];
-                        $pax = $row['guestCount'];
-
-                        $downpaymentNotes[] = 'Wait for the approval before paying the downpayment.';
-                        $downpaymentNotes[] = 'Your booking is considered confirmed only after the downpayment is received and proof of payment verified';
-                        $downpaymentNotes[] = 'You can check the payment due date by clicking the "Make a Down Payment" button';
-
-                        if ($bookingType === 'Resort') {
-                            $downpaymentNotes[] = 'Required to pay for 1 cottage/room for reservation';
+                    if ($bookingType === 'Resort') {
+                        foreach ($addOns as $addOns) {
+                            if (stripos($addOns, 'Videoke') !== false) {
+                                $videokeChoice = "Yes";
+                            } else {
+                                $videokeChoice = "No";
+                            }
                         }
 
-                        if ($bookingType === 'Hotel') {
-                            $downpaymentNotes[] = 'Please pay for the down payment amount for the approval of your booking
-                            withinseven (7) business days.';
-                        }
-
-                        if ($serviceType === 'Resort') {
-                            $services[] = $row['RServiceName'];
-                            $totalPax = ($adultCount > 0 ? "{$adultCount} Adults" : '') .
-                                ($kidsCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidsCount} Kids" : '') .
-                                ($toddlerCount > 0 ? (($adultCount > 0 || $kidsCount > 0) ? ' & ' : '') . "{$toddlerCount} toddlers" : '');
-                        }
-
-                        if ($serviceType === 'Entrance') {
-                            $tourType = $row['tourType'];
+                        if (!empty($data['serviceID'])) {
+                            $services[] = !empty($data['sessionType']) ? $data['sessionType'] . " Swimming" : '';
                             $cardHeader = "Type of Tour";
-
-                            if ($row['ERCategory'] === "Kids") {
-                                $kidsCount = $row['guests'];
-                            } elseif ($row['ERCategory'] === "Adult") {
-                                $adultCount = $row['guests'];
+                            if ($data['ERcategory'] === "Kids") {
+                                $kidsCount = $data['guests'];
+                            } elseif ($data['ERcategory'] === "Adult") {
+                                $adultCount = $data['guests'];
                             }
 
-                            $totalPax =  ($adultCount > 0 ? "{$adultCount} Adults" : '') .
-                                ($kidsCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidsCount} Kids" : '') .
-                                ($toddlerCount > 0 ? (($adultCount > 0 || $kidsCount > 0) ? ' & ' : '') . "{$toddlerCount} toddlers" : '');
+                            $guests = [];
+
+                            if ($adultCount > 0) {
+                                $guests[] = "Adult: $adultCount";
+                            }
+
+                            if ($kidsCount > 0) {
+                                $guests[] = "Kid: $kidsCount";
+                            }
+
+                            $resortGuest = implode(" & ", $guests);
+                        }
+
+                        if (!empty($data['resortServiceID'])) {
+                            $services[] = $data['RServiceName'];
+                        }
+                    } else if ($bookingType === 'Hotel') {
+                        $addOns = [];
+                        if (!empty($data['serviceID'])) {
+                            if (!empty($data['resortServiceID'])) {
+                                $services[] = $data['RServiceName'];
+                                $items = array_map('trim', explode(',', $data['RSdescription']));
+                                $allDescriptions = array_merge($allDescriptions, $items);
+                                $allDescriptions = array_unique($allDescriptions);
+                            }
+
+                            $downpaymentNote = "Please pay for the down payment amount for the approval of your booking
+                            withinseven (7) business days.";
+                        }
+                    }
+                    $package = $data['packageID'] ?? '';
+                    $customPackageID = $data['customPackageID'] ?? '';
+                    // $AddRequest = $data['additionalRequest'];
+
+                    if (!empty($package)) {
+                        $pax = $data['paxNum'];
+                        $serviceName = $data['packageName'];
+                        $items = array_map('trim', explode(',', $data['packageDescription']));
+                        $allDescriptions = array_merge($allDescriptions, $items);
+                        $allDescriptions = array_unique($allDescriptions);
+                    }
+
+                    if (!empty($customPackageID)) {
+                        $pax = $data['paxNum'];
+                        if (!empty($data['serviceID'])) {
+                            if (!empty($data['entranceRateID'])) {
+                                $services[] = !empty($data['sessionType']) ? $data['sessionType'] . " Swimming" : NULL;
+                                if ($data['ERcategory'] === "Kids") {
+                                    $kidsCount = $data['guests'];
+                                } elseif ($data['ERcategory'] === "Adult") {
+                                    $adultCount = $data['guests'];
+                                }
+                            }
+                            if (!empty($data['partnershipServiceID'])) {
+                                $services[] = $data['PBName'];
+                            }
+                            if (!empty($data['resortServiceID'])) {
+                                $services[] = $data['RServiceName'];
+                                $items = array_map('trim', explode(',', $data['RSdescription']));
+                                $allDescriptions = array_merge($allDescriptions, $items);
+                                $allDescriptions = array_unique($allDescriptions);
+                            }
                         }
                     }
 
-                    if ($bookingStatusName === 'Pending') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
+
+
+                    $bookingStatus = $data['bookingStatus'];
+                    $confirmedBookingStatus = $data['confirmedBookingStatus'];
+                    $paymentStatus = $data['paymentStatus'];
+                    if ($bookingStatus === 'Pending') {
+                        $status = strtolower($bookingStatus) ?? NUll;
                         $statusTitle = "Your reservation is pending for approval";
                         $statusSubtitle = 'Your request has been sent to the admin. Please wait for the approval of
                     your reservation.';
-                    } elseif ($bookingStatusName === 'Rejected') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
+                    } elseif ($bookingStatus === 'Rejected') {
+                        $status = strtolower($bookingStatus) ?? NUll;
                         $statusTitle = "Booking Rejected!";
                         $statusSubtitle = "We regret to inform you that your reservation has been rejected. Please contact us for more details.";
-                    } elseif ($bookingStatusName === 'Cancelled') {
-                        $status = strtolower($bookingStatusName) ?? null;
+                    } elseif ($bookingStatus === 'Cancelled') {
+                        $status = strtolower($bookingStatus) ?? null;
                         $statusTitle = "Booking Cancelled";
                         $statusSubtitle = "You have cancelled your reservation. If this was a mistake or you wish to rebook, please contact us.";
-                    } elseif ($bookingStatusName === 'Expired') {
-                        $status = strtolower($bookingStatusName) ?? null;
+                    } elseif ($bookingStatus === 'Expired') {
+                        $status = strtolower($bookingStatus) ?? null;
                         $statusTitle = "Expired Booking";
                         $statusSubtitle = "Sorry. The scheduled time for this booking has passed.";
-                    } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Rejected') {
-                        $status = strtolower($bookingStatusName) ?? null;
+                    } elseif ($bookingStatus === 'Approved' && $confirmedBookingStatus === 'Rejected') {
+                        $status = strtolower($bookingStatus) ?? null;
                         $statusTitle = "Payment Rejected";
                         $statusSubtitle = "Your reservation was approved, but the submitted payment was rejected. Please check the payment details and try again, or contact the admin for assistance.";
-                    } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Pending') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
+                    } elseif ($bookingStatus === 'Approved' && $confirmedBookingStatus === 'Pending') {
+                        $status = strtolower($bookingStatus) ?? NUll;
                         $statusTitle = "Your reservation has been approved.";
                         if ($paymentMethod === 'GCash') {
                             $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed with the down payment via GCash.";
@@ -288,27 +290,18 @@ require_once '../../Function/functions.php';
                                 $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed to the resort to make your downpayment.";
                             }
                         }
-                    } elseif ($paymentApprovalStatusName === 'Approved' && $paymentStatus === 'Partially Paid') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
+                    } elseif ($confirmedBookingStatus === 'Approved' && $paymentStatus === 'Partially Paid') {
+                        $status = strtolower($bookingStatus) ?? NUll;
                         $statusTitle = "Payment approved successfully.";
                         $statusSubtitle = "We have received and reviewed your payment. The service you booked is now reserved. Thank you!";
-                    } elseif ($paymentApprovalStatusName === 'Approved' && $paymentStatus === 'Fully Paid') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
+                    } elseif ($confirmedBookingStatus === 'Approved' && $paymentStatus === 'Fully Paid') {
+                        $status = strtolower($bookingStatus) ?? NUll;
                         $statusTitle = "Payment done successfully.";
                         $statusSubtitle = "Thank you! We have received your full payment. You may now enjoy your stay at the resort.";
-                    } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Done' && $paymentStatus === 'Fully Paid') {
+                    } elseif ($bookingStatus === 'Approved' && $confirmedBookingStatus === 'Done' && $paymentStatus === 'Fully Paid') {
                         $statusTitle = "Booking Completed";
-                        $status = strtolower($bookingStatusName) ?? NUll;
+                        $status = strtolower($bookingStatus) ?? NUll;
                         $statusSubtitle = "Thank you for staying with us! Your booking is fully paid and successfully completed. We hope you had a wonderful time.";
-                    }
-
-
-                    if ($finalBill === 0) {
-                        $totalBill = $totalCost;
-                    } elseif ($finalBill <= $totalCost || $finalBill >= $totalCost) {
-                        $totalBill = $finalBill;
-                    } else {
-                        $totalBill = $totalCost;
                     }
                 }
 
@@ -322,9 +315,6 @@ require_once '../../Function/functions.php';
                     } elseif (stripos($service, 'room') !== false) {
                         $serviceVenue = "Room";
                         $cottageRoom[] = $service;
-                    } elseif (stripos($service, 'umbrella') !== false) {
-                        $serviceVenue = "Umbrella";
-                        $cottageRoom[] = $service;
                     }
                     if (stripos($service, 'Day') !== false) {
                         $tourType = "Day Tour";
@@ -334,15 +324,25 @@ require_once '../../Function/functions.php';
                         $tourType = "Overnight Tour";
                     }
                 }
+
+                if (!empty($kidsCount) || !empty($adultCount)) {
+                    $guest = $resortGuest;
+                } else {
+                    $guest = $pax;
+                }
+                $totalBill =  $totalCost - $discount;
             }
+            // echo '<pre>';
+            // print_r($services);
+            // echo '</pre>';
             ?>
 
             <div class="leftStatusContainer">
 
                 <input type="hidden" name="bookingStatus" id="bookingStatus"
-                    value="<?= htmlspecialchars($bookingStatusName) ?>">
-                <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus"
-                    value="<?= htmlspecialchars($paymentApprovalStatusName) ?>">
+                    value="<?= htmlspecialchars($bookingStatus) ?>">
+                <input type="hidden" name="confirmedBookingStatus" id="confirmedBookingStatus"
+                    value="<?= htmlspecialchars($confirmedBookingStatus) ?>">
                 <input type="hidden" name="paymentStatus" id="paymentStatus"
                     value="<?= htmlspecialchars($paymentStatus) ?>">
                 <input type="hidden" name="paymentMethod" id="paymentMethod"
@@ -355,8 +355,8 @@ require_once '../../Function/functions.php';
                 <h6 class="statusSubtitle"><?= htmlspecialchars($statusSubtitle) ?></h6>
 
                 <div class="button-container">
-                    <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn" style="display: none;"
-                        data-bs-toggle="modal" data-bs-target="#gcashPaymentModal"><?= $buttonName ?></button>
+                    <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn"
+                        data-bs-toggle="modal" data-bs-target="#gcashPaymentModal">Make a Down Payment</button>
                     <!-- <a href="../bookNow.php" class="btn btn-primary w-100 mt-3" id="newReservationBtn">Make Another
                         Reservation</a> -->
                     <form action="../../Function/receiptPDF.php" method="POST" target="_blank">
@@ -398,7 +398,7 @@ require_once '../../Function/functions.php';
                     </div>
                 </div>
 
-                <div class="card" id="summaryDetails">
+                <div class="card" id="summaryDetails" style="width: 25.6rem;">
                     <ul class="list-group list-group-flush">
                         <?php if ($bookingType === 'Resort') { ?>
                             <li class="list-group-item" id="tourType">
@@ -409,7 +409,7 @@ require_once '../../Function/functions.php';
 
                         <li class="list-group-item">
                             <h6 class="cardHeader">Date</h6>
-                            <p class="cardContent" id="eventDate"><?= $bookingDate ?></p>
+                            <p class="cardContent" id="eventDate"><?= $startDate ?></p>
                         </li>
 
                         <li class="list-group-item">
@@ -418,8 +418,8 @@ require_once '../../Function/functions.php';
                         </li>
 
                         <li class="list-group-item">
-                            <h6 class="cardHeader"> Venue </h6>
-                            <p class="cardContent" id="venue"><?= implode(' & ', array_unique($cottageRoom)) ?></p>
+                            <h6 class="cardHeader"><?= $serviceVenue ?></h6>
+                            <p class="cardContent" id="venue"><?= implode(', ', array_unique($cottageRoom)) ?></p>
                         </li>
 
                         <li class="list-group-item">
@@ -429,7 +429,7 @@ require_once '../../Function/functions.php';
 
                         <li class="list-group-item">
                             <h6 class="cardHeader">Number of Guests</h6>
-                            <p class="cardContent" id="guestNo"><?= $totalPax ?></p>
+                            <p class="cardContent" id="guestNo"><?= $guest ?></p>
                         </li>
 
                         <li class="list-group-item" id="addOns">
@@ -457,7 +457,7 @@ require_once '../../Function/functions.php';
 
                         <li class="list-group-item" id="promoSection">
                             <h6 class="cardHeader">Promo/Discount:</h6>
-                            <h6 class="cardContentBill" id="promoDiscount">₱ <?= number_format($discount, 2) ?></h6>
+                            <h6 class="cardContentBill" id="promoDiscount"> <?= $discount ?></h6>
                         </li>
 
                         <li class="list-group-item" id="totalBillSection">
@@ -467,22 +467,43 @@ require_once '../../Function/functions.php';
                     </ul>
                 </div>
 
-                <div class="downpaymentNoteContainer" id="downpaymentNoteContainer">
+                <div class="downpaymentNoteContainer" id="downpaymentNoteContainer" style="display: none;">
                     <div class="downpayment">
-                        <h6 class="header">Down Payment Amount:</h6>
+                        <h6 class="header">Down Payment Amount (30%):</h6>
                         <p class="content" id="downPaymentAmount">₱ <?= number_format($downpayment, 2) ?></p>
                     </div>
                     <div class="note">
-                        <ul>
-                            <?php foreach (array_unique($downpaymentNotes) as $notes) {  ?>
-                                <li><?= $notes ?></li>
-                            <?php  }  ?>
-                        </ul>
+                        <h6 class="note">Note: <?= $downpaymentNote ?></h6>
                     </div>
                 </div>
             </div>
         </div>
 
+
+        <!-- modal -->
+        <!-- <div class="modal fade" id="modeofPaymentModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Mode of Payment</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body" id="modeofPaymentModalBody">
+                        <button class="btn btn-primary w-75 m-auto" data-bs-target="#gcashPaymentModal"
+                            data-bs-toggle="modal">Gcash
+                            Down Payment</button>
+                        <button class="btn btn-info w-75 m-auto">On-site Down Payment</button>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
         <form action="../../Function/Customer/Account/uploadPayment.php" method="POST" enctype="multipart/form-data">
             <div class="modal fade" id="gcashPaymentModal" aria-hidden="true" aria-labelledby="gcashPaymentModal"
                 tabindex="-1">
@@ -495,16 +516,13 @@ require_once '../../Function/functions.php';
                         </div>
 
                         <div class="modal-body" id="gcashModalBody">
-                            Please upload a screenshot of your GCash down payment below.
-                            <img src="<?= $downpaymentImage ?>" alt="Downpayment Image" id="preview"
+                            Please upload a screenshot of your Gcash down payment below.
+                            <img src="<?= htmlspecialchars($image) ?>" alt="Downpayment Image" id="preview"
                                 class="downpaymentPic">
                             <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
-
-                            <input type="text" name="paymentDueDate" value="<?= $dueDate ?>">
                             <input type="file" name="downpaymentPic" id="downpaymentPic" hidden>
-                            <label for="downpaymentPic" class="custom-file-button btn btn-outline-primary mt-2">
-                                Upload Payment Receipt
-                            </label>
+                            <label for="downpaymentPic" class="custom-file-button btn btn-outline-primary mt-2">Upload
+                                Payment Receipt</label>
                         </div>
 
                         <div class="modal-footer">
@@ -528,18 +546,15 @@ require_once '../../Function/functions.php';
         //Hide the make a downpayment button
         const paymentStatus = document.getElementById("paymentStatus").value;
         const bookingStatus = document.getElementById("bookingStatus").value;
-        const paymentApprovalStatus = document.getElementById("paymentApprovalStatus").value;
+        const confirmedBookingStatus = document.getElementById("confirmedBookingStatus").value;
         const paymentMethod = document.getElementById("paymentMethod").value;
-
-        console.log("Booking Stat: " + bookingStatus);
-        console.log("payment App Stat" + paymentApprovalStatus);
-        if (bookingStatus === "Pending" && paymentApprovalStatus === '') {
+        if (bookingStatus === "Pending" && confirmedBookingStatus === '') {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
-        } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && paymentStatus === "Unpaid") {
+        } else if (bookingStatus === "Approved" && confirmedBookingStatus === "Pending" && paymentStatus === "Unpaid") {
             document.getElementById("makeDownpaymentBtn").style.display = "show";
-        } else if (paymentApprovalStatus === "Approved" && paymentStatus === "Partially Paid") {
+        } else if (confirmedBookingStatus === "Approved" && paymentStatus === "Partially Paid") {
             document.getElementById("makeDownpaymentBtn").style.display = "show";
-        } else if (paymentApprovalStatus === "Done" && paymentStatus === "Fully Paid") {
+        } else if (confirmedBookingStatus === "Done" && paymentStatus === "Fully Paid") {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
         } else if (paymentMethod === 'Cash') {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
@@ -552,7 +567,7 @@ require_once '../../Function/functions.php';
 
 
     <script>
-        //Show the preview of image
+        //Show the image preview
         document.querySelector("input[type='file']").addEventListener("change", function(event) {
             let reader = new FileReader();
             reader.onload = function() {
@@ -564,21 +579,25 @@ require_once '../../Function/functions.php';
         });
     </script>
 
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const bookingType = document.getElementById("bookingType").value;
 
-            // const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
+            const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
             const addOnsContainer = document.getElementById("addOns");
-            // const tourTypeContainer = document.getElementById("tourType");
+            const tourTypeContainer = document.getElementById("tourType");
 
             if (bookingType === "Resort") {
+                downpaymentNoteContainer.style.display = "none";
                 addOnsContainer.style.display = "flex";
-                // tourTypeContainer.style.display = "flex";
+                tourTypeContainer.style.display = "flex";
             } else if (bookingType === "Hotel") {
+                downpaymentNoteContainer.style.display = "block";
                 addOnsContainer.style.display = "none";
-                // tourTypeContainer.style.display = "none";
+                tourTypeContainer.style.display = "none";
             } else {
+                downpaymentNoteContainer.style.display = "block";
                 addOnsContainer.style.display = "none";
             }
         });
@@ -591,21 +610,21 @@ require_once '../../Function/functions.php';
     <script>
         const param = new URLSearchParams(window.location.search);
         const paramValue = param.get('action');
-        if (paramValue === "down$downpaymentImageError") {
+        if (paramValue === "imageError") {
             Swal.fire({
                 title: "Oops!",
-                text: "Failed to upload downpayment receipt down$downpaymentImage",
+                text: "Failed to upload downpayment receipt image",
                 icon: "warning",
                 confirmButtonText: "Okay",
             });
-        } else if (paramValue === "down$downpaymentImageFailed") {
+        } else if (paramValue === "imageFailed") {
             Swal.fire({
                 title: "Oops!",
-                text: "No downpayment down$downpaymentImage submitted.",
+                text: "No downpayment image submitted.",
                 icon: "warning",
                 confirmButtonText: "Okay",
             });
-        } else if (paramValue === "down$downpaymentImageSize") {
+        } else if (paramValue === "imageSize") {
             Swal.fire({
                 title: "Oops!",
                 text: "File is too large. Maximum allowed size is 64MB.",
