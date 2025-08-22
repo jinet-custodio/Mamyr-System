@@ -1,7 +1,7 @@
 <?php
 
 require '../Config/dbcon.php';
-
+date_default_timezone_set('Asia/Manila'); //Set default time zone 
 require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 $mpdf = new \Mpdf\Mpdf([
@@ -19,7 +19,6 @@ $userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
 $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
 
 //Function for turning the number format to word format
-
 //Paki enable na lang yung extension na intl sa php.ini to mga bes
 function convertToWords($number)
 {
@@ -38,11 +37,11 @@ if (isset($_POST['downloadReceiptBtn'])) {
     $totalBill = (float) $_POST['totalCost'];
     $name = !empty($_POST['name']) ? mysqli_real_escape_string($conn, $_POST['name']) : mysqli_real_escape_string($conn, $_POST['guestName']);
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
-    $adminName = !empty($_POST['adminName']) ? mysqli_real_escape_string($conn, $_POST['adminName']) : "Ms. Diane";
+    $adminName = !empty($_POST['adminName']) ? mysqli_real_escape_string($conn, $_POST['adminName']) : mysqli_real_escape_string($conn, $_POST['name']);
     $mamyrAddress = 'Gabihan, San Ildefonso, Bulacan 3010';
     $businessName = "Mamyr Resort & Event Place";
     $resortOwner = "Myrna C. Dela Cruz - Prop.";
-    $date = date('F d, Y g:i a');
+    $date = date('F d, Y g:i A');
     $services =  $_POST['services'];
 
 

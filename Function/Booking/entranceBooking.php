@@ -33,7 +33,8 @@ if (isset($_POST['bookRates'])) {
     $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
 
     $totalCost = (float) $_POST['totalCost'];
-    $downPayment = (float) $_POST['downpayment'];
+    $downpayment = (float) $_POST['downPayment'];
+    $additionalCharge = (float) $_POST['additionalServiceFee'];
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
 
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
@@ -48,8 +49,6 @@ if (isset($_POST['bookRates'])) {
     $cottageChoices = !empty($_POST['cottageSelections']) ? array_map('trim', explode(', ', $_POST['cottageSelections'])) : [];
     $roomChoices = !empty($_POST['roomSelections']) ? array_map('trim', explode(', ', $_POST['roomSelections'])) : [];
     $addOnsServices = !empty($_POST['addOnsServices']) ? array_map('trim', explode(', ', $_POST['addOnsServices'])) : [];
-
-
 
 
     $serviceIDs = [];
@@ -159,11 +158,11 @@ if (isset($_POST['bookRates'])) {
 
 
     $insertBooking = $conn->prepare("INSERT INTO 
-        bookings(userID, additionalRequest, toddlerCount,  paxNum, hoursNum, 
-        startDate, endDate, 
+        bookings(userID, additionalRequest, toddlerCount, kidCount, adultCount, guestCount, durationCount, 
+        startDate, endDate, additionalCharge,
         totalCost, downpayment, 
         addOns, paymentMethod, bookingStatus, bookingType) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
     if ($dateScheduled === 'March' || $dateScheduled === 'April' || $dateScheduled === 'May') {
         $bookingStatus = 1;
@@ -173,16 +172,19 @@ if (isset($_POST['bookRates'])) {
 
 
     $insertBooking->bind_param(
-        "isiiissddssis",
+        "isiiiiissdddssis",
         $userID,
         $additionalRequest,
         $toddlerCount,
+        $childrenCount,
+        $adultCount,
         $totalPax,
         $hoursNumber,
         $scheduledStartDate,
         $scheduledEndDate,
+        $additionalCharge,
         $totalCost,
-        $downPayment,
+        $downpayment,
         $addOns,
         $paymentMethod,
         $bookingStatus,
@@ -236,15 +238,16 @@ if (isset($_POST['bookRates'])) {
         } elseif ($bookingStatus === 2) {
             $today = date('Y m d');
             if ($today === $scheduledStartDate) {
-                $downpaymentDueDate = $today;
+                $paymentDueDate = $downpaymentDueDate = $today;
             } else {
                 $scheduledStartDateObj->modify('-1 day');
                 $downpaymentDueDate  = $scheduledStartDateObj->format('Y-m-d');
+                $paymentDueDate = $scheduledStartDate;
             }
 
-            $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedBookings(bookingID, CBpaymentMethod, CBdownpayment, CBtotalCost, userBalance, paymentDueDate )
-                VALUES(?,?,?,?,?, ?)");
-            $insertConfirmedBooking->bind_param("issdds", $bookingID, $paymentMethod, $downPayment, $totalCost, $totalCost, $downpaymentDueDate);
+            $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedBookings(bookingID, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate )
+                VALUES(?,?,?,?,?)");
+            $insertConfirmedBooking->bind_param("iddss", $bookingID,  $totalCost, $totalCost, $downpaymentDueDate, $paymentDueDate);
             $insertConfirmedBooking->execute();
             $insertConfirmedBooking->close();
 
@@ -268,6 +271,14 @@ if (isset($_POST['bookRates'])) {
                     $updateAvailabilityID->execute();
                 }
             }
+
+
+            $receiver = 'Admin';
+            $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking.';
+            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+            VALUES(?,?,?,?)");
+            $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
+            $insertBookingNotificationRequest->execute();
 
             header('Location: ../../Pages/Customer/bookNow.php?action=success');
             exit();
