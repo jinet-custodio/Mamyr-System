@@ -65,7 +65,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </button>
 
         <div class="collapse navbar-collapse " id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
+           <ul class="navbar-nav ms-auto me-10" id="navUL">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -169,13 +169,15 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="resortPic1">
                 <?php if (isset($imageMap['DisplayName'])): ?>
                 <?php foreach ($imageMap['DisplayName'] as $index => $img):
-                        $imagePath = $img['imageData'];
+                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
                         $defaultImage = "Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                 <div class="image-wrapper mb-3 pic1">
-                    <img src="<?= htmlspecialchars($img['imageData']) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                     <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                     alt="<?= htmlspecialchars($img['altText']) ?>"
                         class="img-fluid mb-2 editable-img" style="cursor: pointer;" data-bs-toggle="modal"
                         data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                        data-folder="landingPage"
                         data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                         data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                 </div>
@@ -264,13 +266,16 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <?php if (isset($imageMap['FullName'])): ?>
             <div class="galleryPictures">
                 <?php foreach ($imageMap['FullName'] as $index => $img):
-                        $imagePath = $img['imageData'];
+                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
                         $defaultImage = "Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                 <div class="image-wrapper mb-3 galleryImg">
-                    <img src="<?= htmlspecialchars($img['imageData']) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                   <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                        alt="<?= htmlspecialchars($img['altText']) ?>"
                         class="img-fluid mb-2 editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                        data-bs-target="#editImageModal"
+                         data-folder="landingPage"
+                        data-wcimageid="<?= $img['WCImageID'] ?>"
                         data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                         data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                 </div>
@@ -365,6 +370,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                 document.getElementById('modalImagePreview').src = currentSrc;
                 document.getElementById('modalAltText').value = currentAlt;
+                activeImageElement.setAttribute('data-folder', this.dataset.folder || '');
                 document.getElementById('modalImageUpload').value = '';
             });
         });
@@ -449,16 +455,15 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             editableImages.forEach(img => {
                 const wcImageID = img.dataset.wcimageid;
                 const altText = img.dataset.alttext;
+                const folder = img.dataset.folder || '';
                 const file = img.fileObject || null;
-                const imagePath = img.dataset.imagepath ||
-                    ''; // Full path like 'Assets/Images/landingPage/resortPic1.png'
 
                 if (!wcImageID || (!file && !altText)) return;
 
                 const formData = new FormData();
                 formData.append('wcImageID', wcImageID);
                 formData.append('altText', altText);
-                formData.append('imagePath', imagePath); // ✅ Send full path
+                formData.append('folder', folder);
 
                 if (file) {
                     formData.append('image', file);
@@ -553,15 +558,16 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <script>
     const navbar = document.querySelector('.navbar');
     const navCollapse = document.getElementById('navbarNav');
+    const navList = document.getElementById('navUL');
 
     // Add background when collapse is shown
     navCollapse.addEventListener('shown.bs.collapse', () => {
-        navbar.classList.add('white-bg');
+        navList.classList.add('white-bg');
     });
 
     // Remove background when collapse is hidden
     navCollapse.addEventListener('hidden.bs.collapse', () => {
-        navbar.classList.remove('white-bg');
+        navList.classList.remove('white-bg');
     });
     </script>
     <script>
