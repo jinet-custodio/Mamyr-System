@@ -273,7 +273,7 @@ require_once '../../Function/functions.php';
                         $statusTitle = "Expired Booking";
                         $statusSubtitle = "Sorry. The scheduled time for this booking has passed.";
                     } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Rejected') {
-                        $status = strtolower($bookingStatusName) ?? null;
+                        $status = strtolower($paymentApprovalStatusName) ?? null;
                         $statusTitle = "Payment Rejected";
                         $statusSubtitle = "Your reservation was approved, but the submitted payment was rejected. Please check the payment details and try again, or contact the admin for assistance.";
                     } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Pending') {
@@ -288,15 +288,15 @@ require_once '../../Function/functions.php';
                                 $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed to the resort to make your downpayment.";
                             }
                         }
-                    } elseif ($paymentApprovalStatusName === 'Approved' && $paymentStatus === 'Partially Paid') {
+                    } elseif ($paymentApprovalStatusName === 'Approved' && $paymentStatusName === 'Partially Paid') {
                         $status = strtolower($bookingStatusName) ?? NUll;
                         $statusTitle = "Payment approved successfully.";
                         $statusSubtitle = "We have received and reviewed your payment. The service you booked is now reserved. Thank you!";
-                    } elseif ($paymentApprovalStatusName === 'Approved' && $paymentStatus === 'Fully Paid') {
+                    } elseif ($paymentApprovalStatusName === 'Approved' && $paymentStatusName === 'Fully Paid') {
                         $status = strtolower($bookingStatusName) ?? NUll;
                         $statusTitle = "Payment done successfully.";
                         $statusSubtitle = "Thank you! We have received your full payment. You may now enjoy your stay at the resort.";
-                    } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Done' && $paymentStatus === 'Fully Paid') {
+                    } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Done' && $paymentStatusName === 'Fully Paid') {
                         $statusTitle = "Booking Completed";
                         $status = strtolower($bookingStatusName) ?? NUll;
                         $statusSubtitle = "Thank you for staying with us! Your booking is fully paid and successfully completed. We hope you had a wonderful time.";
@@ -344,7 +344,7 @@ require_once '../../Function/functions.php';
                 <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus"
                     value="<?= htmlspecialchars($paymentApprovalStatusName) ?>">
                 <input type="hidden" name="paymentStatus" id="paymentStatus"
-                    value="<?= htmlspecialchars($paymentStatus) ?>">
+                    value="<?= htmlspecialchars($paymentStatusName) ?>">
                 <input type="hidden" name="paymentMethod" id="paymentMethod"
                     value="<?= htmlspecialchars($paymentMethod) ?>">
 

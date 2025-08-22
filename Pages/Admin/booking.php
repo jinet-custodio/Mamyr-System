@@ -1,31 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 
 
 $message = '';
@@ -257,15 +244,13 @@ if (isset($_SESSION['error'])) {
                     <!-- Select booking info -->
                     <?php
                     $getBookingInfo = $conn->prepare("SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID, u.firstName,u.middleInitial, u.lastName, b.*,
-                    cp.*, ec.categoryName AS eventCategoryName,
+                    cp.*,
                     cb.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus
                                     FROM bookings b
                                     INNER JOIN users u ON b.userID = u.userID   -- to get  the firstname, M.I and lastname 
                                     LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID 
-                                    LEFT JOIN statuses s ON cb.confirmedBookingStatus = s.statusID -- to get the status name
-                                    LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID  -- to get the status name
-                                    LEFT JOIN packages p ON b.packageID = p.packageID  -- to get the info of the package na binook 
-                                    LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
+                                    LEFT JOIN statuses s ON cb.paymentApprovalStatus = s.statusID -- to get the status name
+                                    LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID  -- to get the status name 
                                     LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
                                     ");
                     $getBookingInfo->execute();
@@ -298,6 +283,9 @@ if (isset($_SESSION['error'])) {
                                 } elseif ($bookings['confirmedStatus'] === "Rejected") {
                                     $status = "Rejected";
                                     $addClass = "btn btn-danger w-100";
+                                } elseif ($bookings['confirmedStatus'] === "Done") {
+                                    $status = "Done";
+                                    $addClass = "btn btn-success w-100";
                                 }
                             } else {
                                 $confirmedBookingID = NULL;
@@ -318,6 +306,9 @@ if (isset($_SESSION['error'])) {
                                 } elseif ($bookings['bookingStatus'] === "Rejected") {
                                     $status = "Rejected";
                                     $addClass = "btn btn-danger w-100";
+                                } elseif ($bookings['bookingStatus'] === "Expired") {
+                                    $status = "Expired";
+                                    $addClass = "btn btn-secondary w-100";
                                 }
                             }
                     ?>

@@ -15,7 +15,6 @@ function resetExpiredOTPs($conn)
     $otpResetQuery->close();
 }
 
-
 function changeToExpiredStatus($conn)
 {
     date_default_timezone_set('Asia/Manila');
@@ -59,12 +58,12 @@ function changeToDoneStatus($conn)
 
     //Select all confirmed bookings that have ended and is fully paid
     $selectConfirmedBookings = $conn->prepare("SELECT cb.*, b.endDate, b.bookingID FROM confirmedBookings cb 
-                            JOIN bookings b ON cb.bookingID = b.bookingID WHERE B.endDate < ? AND paymentStatus = ? AND confirmedBookingStatus = ?");
+                            JOIN bookings b ON cb.bookingID = b.bookingID WHERE B.endDate < ? AND paymentStatus = ? AND paymentApprovalStatus = ?");
     $selectConfirmedBookings->bind_param("sii", $dateNow, $fullyPaidID, $approvedStatusID);
     $selectConfirmedBookings->execute();
     $result = $selectConfirmedBookings->get_result();
     if ($result->num_rows > 0) {
-        $updateQuery = $conn->prepare("UPDATE confirmedBookings SET confirmedBookingStatus = ? WHERE bookingID = ?");
+        $updateQuery = $conn->prepare("UPDATE confirmedBookings SET paymentApprovalStatus = ? WHERE bookingID = ?");
         $counter = 0;
         while ($row = $result->fetch_assoc()) {
             $bookingID = (int)$row['bookingID'];
@@ -78,4 +77,40 @@ function changeToDoneStatus($conn)
     }
 
     $selectConfirmedBookings->close();
+}
+
+function getStatuses($conn, $statusID)
+{
+
+    $getStatus = $conn->prepare("SELECT * FROM statuses WHERE statusID = ?");
+    $getStatus->bind_param("i", $statusID);
+    $getStatus->execute();
+    $getStatusResult = $getStatus->get_result();
+    if ($getStatusResult->num_rows > 0) {
+        $row = $getStatusResult->fetch_assoc();
+        return [
+            'statusID' => $row['statusID'],
+            'statusName' => $row['statusName']
+        ];
+    } else {
+        return NULL;
+    }
+}
+
+function getPaymentStatus($conn, $paymentStatusID)
+{
+
+    $getPaymentStatus = $conn->prepare("SELECT * FROM bookingPaymentStatus WHERE paymentStatusID = ?");
+    $getPaymentStatus->bind_param("i", $paymentStatusID);
+    $getPaymentStatus->execute();
+    $getPaymentStatusResult = $getPaymentStatus->get_result();
+    if ($getPaymentStatusResult->num_rows > 0) {
+        $row = $getPaymentStatusResult->fetch_assoc();
+        return [
+            'paymentStatusID' => $row['paymentStatusID'],
+            'paymentStatusName' => $row['statusName']
+        ];
+    } else {
+        return NULL;
+    }
 }
