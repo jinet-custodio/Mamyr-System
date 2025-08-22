@@ -29,6 +29,16 @@ CREATE TABLE websiteContentImages (
 ALTER TABLE websiteContentImages
 MODIFY COLUMN imageData VARCHAR(500);
 
+
+CREATE TABLE resortInfo (
+  resortInfoID INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  resortInfoTitle VARCHAR(200) NOT NULL,
+  resortInfoTitle VARCHAR(200) NOT NULL,
+  resortInfoTitle VARCHAR(200) NOT NULL
+);
+
+
+
 -- =========================
 -- AUDIT LOGS
 -- =========================

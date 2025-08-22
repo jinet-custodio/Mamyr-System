@@ -102,9 +102,10 @@
   img {
     height: clamp(8vw, 6.5vw, 4vw);
     border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
   }
 }
-
 .list-group {
   font-family: "Poppins";
   font-size: clamp(1.4vw, 1.3vw, 1.2vw);

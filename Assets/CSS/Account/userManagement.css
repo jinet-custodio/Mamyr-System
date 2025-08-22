@@ -61,12 +61,12 @@
   margin: auto;
   padding: 1rem;
   img {
-    height: 100px;
-    width: 100px;
-    border-radius: 2rem;
+    height: clamp(8vw, 6.5vw, 4vw);
+    border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
   }
 }
-
 .list-group {
   font-family: "Poppins";
   font-size: 22px;

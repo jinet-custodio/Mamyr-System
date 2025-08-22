@@ -6,10 +6,9 @@ function resetExpiredOTPs($conn)
               WHERE OTP_expiration_at IS NOT NULL AND OTP_expiration_at < NOW() - INTERVAL 5 MINUTE";
 
     $otpResetQuery = $conn->prepare($query);
-
-    if ($otpResetQuery->execute()) {
-        echo $otpResetQuery->affected_rows . " OTP(s) reset.";
-    } else {
+    
+    $otpResetQuery->execute();
+    if (!$otpResetQuery->execute()) {
         echo "Error updating OTPs: " . $conn->error;
     }
     $otpResetQuery->close();

@@ -96,6 +96,8 @@
   img {
     height: clamp(8vw, 6.5vw, 4vw);
     border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
   }
 }
 
@@ -130,7 +132,7 @@
   text-align: center;
   color: black;
   padding: 10px;
-  font-size: clamp(2vw, 1.8vw, 1.6vw);
+  font-size: clamp(1.6vw, 1.4vw, 1.3vw);
 }
 
 #logoutBtn:hover {

@@ -97,7 +97,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             ?>
 
             <li class="nav-item" id="notifs">
-                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="notifBtn" data-bs-toggle="modal" data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -246,7 +246,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             }
                     ?>
 
-                            <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
+                            <!-- <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>"> -->
                     <?php
                             $counter++;
                         }
@@ -254,6 +254,20 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         echo 'No Cottages';
                     }
                     ?>
+
+                     <div class="carousel">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
+                        class="poolPic1">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
+                        class="poolPic2">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3"
+                        class="poolPic3">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
+                        class="poolPic4">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
+                        class="poolPic5">
+
+                </div>
                 </div>
                 <button class="btn btn-primary prev-btn">&#10094;</button>
                 <button class="btn btn-primary next-btn">&#10095;</button>
