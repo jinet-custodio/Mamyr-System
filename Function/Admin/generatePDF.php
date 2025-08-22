@@ -2,6 +2,7 @@
 require '../../Config/dbcon.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 session_start();
+date_default_timezone_set('Asia/Manila'); //Set default time zone 
 $mpdf = new \Mpdf\Mpdf();
 $userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
 $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
