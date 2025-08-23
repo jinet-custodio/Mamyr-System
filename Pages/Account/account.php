@@ -220,7 +220,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </div>
             </form>
 
-            <form action="../../Function/Account/editAccount.php" method="POST">
+            <form action="../../Function/Account/editAccount.php" id="accountForm" method="POST">
                 <div class="customer-details">
                     <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
                     <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
@@ -249,17 +249,22 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$"
                             title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>"
                             disabled required>
-                        <label for="phoneNumber">Phone Number <sup> <i class="fa-solid fa-asterisk"
-                                    style="color: #ff0000;"></i></sup></label>
+                        <label for="phoneNumber">Phone Number
+                            <?php if ($phoneNumber === '--' || $phoneNumber === Null) { ?>
+                                <sup>
+                                    <i class="fa-solid fa-asterisk m-2" style="color: #ff0000; "></i>
+                                </sup>
+                            <?php } ?>
+                        </label>
 
                     </div>
                 </div>
                 <div class="button-container">
                     <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
                         onclick="enableEditing()">Edit</button>
-                    <button type="button" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
+                    <button type="submit" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
                         style="display: none;">Cancel</button>
-                    <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
+                    <button type="button" onclick="cancelEdit()" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
                         style="display: none;">Save</button>
                 </div>
             </form>
@@ -288,6 +293,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             reader.readAsDataURL(event.target.files[0]);
         });
     </script>
+
+    <!-- Cancel the edit and bring it back to its orginal data -->
+    <script>
+        function cancelEdit() {
+            document.getElementById('accountForm').reset();
+        }
+    </script>
+
 
     <script>
         //Show Modal 

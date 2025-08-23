@@ -11,7 +11,7 @@ $userID = (int) $_SESSION['userID'];
 if (isset($_POST['submitDownpaymentImage'])) {
     $bookingID = (int) $_POST['bookingID'];
     $imageMaxSize = 64 * 1024 * 1024;
-    $imageData = null;
+    // $imageData = null;
     $storeProofPath = __DIR__ . '/../../../Assets/Images/PaymentProof/';
 
     if (!is_dir($storeProofPath)) {
@@ -21,7 +21,8 @@ if (isset($_POST['submitDownpaymentImage'])) {
     if (isset($_FILES['downpaymentPic']) && is_uploaded_file($_FILES['downpaymentPic']['tmp_name'])) {
         if ($_FILES['downpaymentPic']['size'] <= $imageMaxSize) {
             $imagePath = $_FILES['downpaymentPic']['tmp_name'];
-            $imageFileName = $imageData = $_FILES['downpaymentPic']['name'];
+            $randomNum = rand(1111, 9999);
+            $imageFileName = $randomNum . $_FILES['downpaymentPic']['name'];
             $storeImage = $storeProofPath . $imageFileName;
             move_uploaded_file($imagePath,  $storeImage);
         } else {
@@ -30,23 +31,24 @@ if (isset($_POST['submitDownpaymentImage'])) {
             exit();
         }
     } else {
-        $defaultImagePath = '../../../Assets/Images/ProofPayment/defaultDownpayment.png';
-        if (file_exists($defaultImagePath)) {
-            $imageData = file_get_contents($defaultImagePath);
+        $defaultImage = 'defaultDownpayment.png';
+        if (file_exists($defaultImage)) {
+            $imageFileName = file_get_contents($defaultImage);
         }
     }
 
-    if ($imageData !== NULL) {
+    if ($imageFileName !== NULL) {
         $downpaymentImageQuery = $conn->prepare("UPDATE confirmedBookings
             SET downpaymentImage = ?
             WHERE bookingID = ? ");
         $null = NULL;
-        $downpaymentImageQuery->bind_param("si", $imageData, $bookingID);
+        $downpaymentImageQuery->bind_param("si", $imageFileName, $bookingID);
 
         if ($downpaymentImageQuery->execute()) {
-
             $receiver = 'Admin';
             $message = 'A payment proof has been uploaded for Booking ID:' . $bookingID . '. Please review and verify the payment.';
+            $insertNotificationQuery = $conn->prepare("INSERT INTO notifications(receiver, userID, bookingID, message) VALUES(?,?,?,?)");
+            $insertNotificationQuery->bind_param('siis', $receiver, $userID, $bookingID, $message);
 
             header("Location: ../../../Pages/Account/bookingHistory.php?action=paymentSuccess");
             $downpaymentImageQuery->close();

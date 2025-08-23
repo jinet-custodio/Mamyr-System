@@ -79,6 +79,8 @@ if (isset($_POST['saveChanges'])) {
         header("Location: ../../Pages/Account/account.php?message=success-change");
         exit;
     } else {
+        error_log("User update failed: " . $updateUser->error);
+        // $_SESSION['update-error'] = "Failed to update account details.";
         header("Location: ../../Pages/Account/account.php?message=error-change");
         exit;
     }

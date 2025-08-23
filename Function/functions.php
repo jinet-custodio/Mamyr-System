@@ -1,12 +1,14 @@
 <?php
 
+date_default_timezone_set('Asia/Manila');
+
 function resetExpiredOTPs($conn)
 {
     $query = "UPDATE users SET userOTP = NULL, OTP_expiration_at = NULL 
               WHERE OTP_expiration_at IS NOT NULL AND OTP_expiration_at < NOW() - INTERVAL 5 MINUTE";
 
     $otpResetQuery = $conn->prepare($query);
-    
+
     $otpResetQuery->execute();
     if (!$otpResetQuery->execute()) {
         echo "Error updating OTPs: " . $conn->error;
@@ -111,5 +113,98 @@ function getPaymentStatus($conn, $paymentStatusID)
         ];
     } else {
         return NULL;
+    }
+}
+
+
+function addToAdminTable($conn)
+{
+
+    $adminID = 3;
+    $position = 'Administrator';
+
+    $getAdminQuery = $conn->prepare("SELECT * FROM users WHERE userRole = ?");
+    $getAdminQuery->bind_param('i', $adminID);
+    $getAdminQuery->execute();
+    $adminQueryResult = $getAdminQuery->get_result();
+
+    if ($adminQueryResult->num_rows > 0) {
+        while ($row = $adminQueryResult->fetch_assoc()) {
+            $storedUserID = intval($row['userID']);
+
+
+            $selectUsers = $conn->prepare("SELECT userID FROM admins WHERE userID = ?");
+            $selectUsers->bind_param('i', $storedUserID);
+            $selectUsers->execute();
+            $result = $selectUsers->get_result();
+            if ($result->num_rows < 1) {
+                $insertAdminQuery = $conn->prepare("INSERT INTO admins (userID, position) VALUES (?, ?)");
+                $insertAdminQuery->bind_param('is', $storedUserID, $position);
+                if ($insertAdminQuery->execute()) {
+                    $adminQueryResult->close();
+                    $insertAdminQuery->close();
+                } else {
+                    echo "Error: " . $conn->error;
+                }
+            }
+        }
+    }
+}
+
+function autoChangeStatus($conn)
+{
+    $occupiedStatusID = 2;
+    $availableStatusID = 1;
+
+
+    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledates WHERE unavailableStartDate <= NOW() AND unavailableEndDate >=  NOW()");
+    // $fetchUnavailableServiceDatesQuery->bind_param('ss', $today, $today);
+    $fetchUnavailableServiceDatesQuery->execute();
+    $result = $fetchUnavailableServiceDatesQuery->get_result();
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $resortServiceID = intval($row['resortServiceID']);
+            $partnershipServiceID = intval($row['partnershipServiceID']);
+
+            if ($resortServiceID  > 0) {
+                $updateStatus = $conn->prepare("UPDATE resortAmenities SET RSAvailabilityID = ? WHERE resortServiceID = ? AND RSAvailabilityID = ?");
+                $updateStatus->bind_param('iii', $occupiedStatusID, $resortServiceID, $availableStatusID);
+                $updateStatus->execute();
+                $updateStatus->close();
+            }
+
+            if ($partnershipServiceID > 0) {
+                $updateStatus = $conn->prepare("UPDATE partnershipServices SET PSAvailabilityID = ? WHERE partnershipServiceID = ? AND PSAvailabilityID = ?");
+                $updateStatus->bind_param('iii', $occupiedStatusID, $partnershipServiceID, $availableStatusID);
+                $updateStatus->execute();
+                $updateStatus->close();
+            }
+        }
+    }
+
+
+    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledates WHERE unavailableStartDate > NOW() OR unavailableEndDate < NOW()");
+    $fetchUnavailableServiceDatesQuery->execute();
+    $result = $fetchUnavailableServiceDatesQuery->get_result();
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $resortServiceID = intval($row['resortServiceID']);
+            $partnershipServiceID = intval($row['partnershipServiceID']);
+
+            if (!empty($resortServiceID)) {
+                $updateStatus = $conn->prepare("UPDATE resortAmenities SET RSAvailabilityID = ? WHERE resortServiceID = ? AND RSAvailabilityID = ?");
+                $updateStatus->bind_param('iii', $availableStatusID, $resortServiceID, $occupiedStatusID);
+                $updateStatus->execute();
+                $updateStatus->close();
+            }
+
+            if (!empty($partnershipServiceID)) {
+
+                $updateStatus = $conn->prepare("UPDATE partnershipServices SET PSAvailabilityID = ? WHERE partnershipServiceID = ? AND PSAvailabilityID = ?");
+                $updateStatus->bind_param('iii', $availableStatusID, $partnershipServiceID, $occupiedStatusID);
+                $updateStatus->execute();
+                $updateStatus->close();
+            }
+        }
     }
 }
