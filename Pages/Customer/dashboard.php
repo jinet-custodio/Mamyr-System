@@ -3,9 +3,12 @@ require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
 session_start();
-require_once '../../Function/sessionFunction.php';
+require '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+require '../../Function/functions.php';
+addToAdminTable($conn);
+autoChangeStatus($conn);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 

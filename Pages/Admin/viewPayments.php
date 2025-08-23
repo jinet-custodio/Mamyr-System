@@ -359,7 +359,7 @@ if ($admin === "Admin") {
                             <div class="input-container">
                                 <label for="discountAmount">Discount</label>
                                 <input type="text" class="form-control" name="discountAmount"
-                                    id="approveModalForm" value="<?= number_format($discount) ?>" style="background-color: #ffff;">
+                                    id="approveModalForm" style="background-color: #ffff;">
                             </div>
                         </div>
                         <div class="modal-footer">

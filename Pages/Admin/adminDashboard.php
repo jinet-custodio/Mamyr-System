@@ -2,9 +2,11 @@
 require '../../Config/dbcon.php';
 
 session_start();
-require_once '../../Function/sessionFunction.php';
-
+require '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
+
+require '../../Function/functions.php';
+addToAdminTable($conn);
 
 
 $userID = $_SESSION['userID'];
