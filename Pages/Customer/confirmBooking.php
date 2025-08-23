@@ -1,30 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 
 
 unset($_SESSION['formData']);
@@ -346,7 +334,7 @@ unset($_SESSION['formData']);
 
         $downPayment = $servicePrices[0];
 
-        $_SESSION['formData'] = $_POST;
+        $_SESSION['resortFormData'] = $_POST;
     }
     ?>
 
@@ -450,7 +438,7 @@ unset($_SESSION['formData']);
         }
 
         $timeRange = $startDateObj->format("g:i A") . " - " . $endDateObj->format("g:i A");
-        $_SESSION['formData'] = $_POST;
+        $_SESSION['hotelFormData'] = $_POST;
     }
     ?>
 

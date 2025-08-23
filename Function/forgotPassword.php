@@ -128,7 +128,7 @@ if (isset($_POST['changePassword'])) {
         }
     } else {
         print $email . "Email not found";
-        $_SESSION['error'] = 'Email not found.';
+        $_SESSION['error'] = 'Email not found. ' . $email;
         header("Location:  ../Pages/forgotPassword.php");
         exit;
     }

@@ -580,7 +580,7 @@ footer {
     }
   }
 
-  .navbar.white-bg {
+.white-bg {
     background-color: white;
   }
 
@@ -664,7 +664,11 @@ footer {
     height: clamp(4vh, calc(1.5vw + 4px), 2vh) !important;
     width: auto;
   }
-
+#navUL {
+        position: absolute !important;
+        right: 2vw !important;
+    }
+  
   .emailAddressText {
     margin-top: 0.1vw;
   }
@@ -959,7 +963,7 @@ footer {
     }
   }
 
-  .navbar.white-bg {
+  .white-bg {
     background-color: white;
   }
 

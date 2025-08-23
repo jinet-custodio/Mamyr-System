@@ -5,13 +5,22 @@ session_start();
 
 
 if (isset($_POST['approvePaymentBtn'])) {
-    $paymentAmount = mysqli_real_escape_string($conn, $_POST['paymentAmount']);
-    $bookingID  = mysqli_real_escape_string($conn, $_POST['bookingID']);
-    // $balance = mysqli_real_escape_string($conn, $_POST['balance']);
-    // $totalAmount = mysqli_real_escape_string($conn, $_POST['totalAmount']);
-    $customerID = mysqli_real_escape_string($conn, $_POST['customerID']);
-    $confirmBookingStatus = 2; //approve status
+    $paymentAmount = (float) $_POST['paymentAmount'];
+    $bookingID  = (int) $_POST['bookingID'];
+    $userRoleID = (int) $_POST['userRoleID'];
+    $customerID = (int) $_POST['customerID'];
+    $approvedPaymentStatus = 2;
 
+    $totalAmount = mysqli_real_escape_string($conn, $_POST['totalAmount']);
+    $totalCost = (float) str_replace(['₱', ','], '', $totalAmount);
+    $discount = floatval($_POST['discountAmount']);
+
+
+    if ($discount != 0.00) {
+        $bill = $discountedAmount = $totalCost - $discount;
+    } else {
+        $bill = $totalCost;
+    }
 
     if (empty($paymentAmount)) {
         $_SESSION['bookingID'] = $bookingID;
@@ -30,38 +39,52 @@ if (isset($_POST['approvePaymentBtn'])) {
         if ($bookingResult->num_rows > 0) {
             $row = $bookingResult->fetch_assoc();
 
-            $userBalance = $row['userBalance'];
-            $storedAmountPaid = $row['amountPaid'];
-            $totalAmount = $row['CBtotalCost'];
+            $storedUserBalance = floatval($row['userBalance']);
+            $storedAmountPaid = floatval($row['amountPaid']);
+            $storedBill = floatval($row['confirmedFinalBill']);
 
-            $totalBalance = $userBalance - $paymentAmount;
+
+            $totalBalance = $storeUserBalance - $paymentAmount;
             $amountPaid = $storedAmountPaid + $paymentAmount;
 
-            if ($totalBalance == $userBalance) {
-                $paymentStatus = 1;
-            } elseif ($paymentAmount < $userBalance && $totalBalance < $totalAmount) {
-                $paymentStatus = 2;
-            } elseif ($totalBalance == 0) {
+            if ($totalBalance <= 0) {
+                $totalBalance = 0;
                 $paymentStatus = 3;
+            } elseif ($paymentAmount > 0 && $totalBalance > 0 && $totalBalance < $storedBill) {
+                $paymentStatus = 2;
+            } else {
+                $paymentStatus = 1;
             }
+
 
             //Update booking and payment status
             $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedBookings SET 
-        amountPaid = ?,
-        userBalance = ?,
-        confirmedBookingStatus = ?,
-        paymentStatus = ? WHERE bookingID = ?");
-            $updateBookingPaymentStatus->bind_param("ddiii", $paymentAmount, $totalBalance, $confirmBookingStatus, $paymentStatus, $bookingID);
+                    confirmedFinalBill = ?,
+                    discountAmount = ?,
+                    amountPaid = ?,
+                    userBalance = ?,
+                    paymentApprovalStatus = ?,
+                    paymentStatus = ? WHERE bookingID = ?");
+            $updateBookingPaymentStatus->bind_param("ddddiii", $bill, $discount, $amountPaid, $totalBalance, $approvedPaymentStatus, $paymentStatus, $bookingID);
             if ($updateBookingPaymentStatus->execute()) {
-                $receiver = 'Customer';
+
+                if ($userRoleID === 1) {
+                    $receiver = 'Customer';
+                } elseif ($userRoleID === 2) {
+                    $receiver = 'Partner';
+                } elseif ($userRoleID === 3) {
+                    $receiver = 'Admin';
+                }
                 $message = 'Payment approved successfully. We have received and reviewed your payment. The service you booked is now reserved. Thank you';
                 $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
-            VALUES(?,?,?,?)");
+                 VALUES(?,?,?,?)");
                 $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();
 
                 header('Location: ../../Pages/Admin/transaction.php?action=approved');
                 exit();
+                $updateBookingPaymentStatus->close();
+                $insertNotification->close();
             } else {
                 header('Location: ../../Pages/Admin/transaction.php?action=failed');
                 exit();
@@ -72,10 +95,11 @@ if (isset($_POST['approvePaymentBtn'])) {
         }
     }
 } elseif (isset($_POST['rejectPaymentBtn'])) {
-    $bookingID  = mysqli_real_escape_string($conn, $_POST['bookingID']);
-    $customerID = mysqli_real_escape_string($conn, $_POST['customerID']);
+    $bookingID  = (int) $_POST['bookingID'];
+    $userRoleID = (int) $_POST['userRoleID'];
+    $customerID = (int) $_POST['customerID'];
     $message = mysqli_real_escape_string($conn, $_POST['rejectionReason']);
-    $confirmBookingStatus = 3;  //Rejected Status
+    $paymentRejectedStatus = 3;  //Rejected Status
 
     if (empty($message)) {
         $_SESSION['bookingID'] = $bookingID;
@@ -90,13 +114,20 @@ if (isset($_POST['approvePaymentBtn'])) {
             $row = $bookingResult->fetch_assoc();
 
             $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedBookings SET
-        confirmedBookingStatus = ? WHERE bookingID = ?");
-            $updateBookingPaymentStatus->bind_param("ii", $confirmBookingStatus,  $bookingID);
+            paymentApprovalStatus = ? WHERE bookingID = ?");
+            $updateBookingPaymentStatus->bind_param("ii", $paymentRejectedStatus,  $bookingID);
             if ($updateBookingPaymentStatus->execute()) {
 
-                $receiver = 'Customer';
+                if ($userRoleID === 1) {
+                    $receiver = 'Customer';
+                } elseif ($userRoleID === 2) {
+                    $receiver = 'Partner';
+                } elseif ($userRoleID === 3) {
+                    $receiver = 'Admin';
+                }
+
                 $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
-            VALUES(?,?,?,?)");
+                    VALUES(?,?,?,?)");
                 $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();
 
@@ -114,28 +145,22 @@ if (isset($_POST['approvePaymentBtn'])) {
 } elseif (isset($_POST['submitPaymentBtn'])) {
 
     $customerPayment = mysqli_real_escape_string($conn, $_POST['customerPayment']);
-    $bookingID  = mysqli_real_escape_string($conn, $_POST['bookingID']);
+    $bookingID  = (int) $_POST['bookingID'];
+    $userRoleID = (int) $_POST['userRoleID'];
+    $customerID = (int) $_POST['customerID'];
     $balance = mysqli_real_escape_string($conn, $_POST['balance']);
     // $totalAmount = mysqli_real_escape_string($conn, $_POST['totalAmount']);
-    $customerID = mysqli_real_escape_string($conn, $_POST['customerID']);
 
     if (empty($customerPayment)) {
         $_SESSION['bookingID'] = $bookingID;
         header('Location: ../../Pages/Admin/viewPayments.php?action=paymentFieldEmpty');
         exit();
     } else {
-
         $customerPayment = "₱" . number_format($customerPayment, 2);
         $balance = (float) str_replace(['₱', ','], '', $balance);
         $paymentAmount = (float) str_replace(['₱', ','], '', $customerPayment);
 
-        // $totalBalance = $balance - $customerPayment;
 
-        // if ($customerPayment < $totalAmount || $customerPayment === 0) {
-        //     $paymentStatus = 2; //Partially Paid
-        // } elseif ($customerPayment >= $totalAmount) {
-        //     $paymentStatus = 3; //Fully Paid
-        // }
         $bookingCheck = $conn->prepare("SELECT * FROM confirmedBookings WHERE bookingID = ? ");
         $bookingCheck->bind_param("i", $bookingID);
         $bookingCheck->execute();
@@ -143,20 +168,23 @@ if (isset($_POST['approvePaymentBtn'])) {
         if ($bookingResult->num_rows > 0) {
             $row = $bookingResult->fetch_assoc();
 
-            $userBalance = $row['userBalance'];
-            $storedAmountPaid = $row['amountPaid'];
-            $totalAmount = $row['CBtotalCost'];
+            $storedUserBalance = floatval($row['userBalance']);
+            $storedAmountPaid = floatval($row['amountPaid']);
+            $storedBill = floatval($row['confirmedFinalBill']);
 
-            $totalBalance = $userBalance - $paymentAmount;
+            $totalBalance = $storeUserBalance - $paymentAmount;
             $amountPaid = $storedAmountPaid + $paymentAmount;
 
-            if ($totalBalance == $userBalance) {
-                $paymentStatus = 1;
-            } elseif ($paymentAmount < $userBalance && $totalBalance < $totalAmount) {
-                $paymentStatus = 2;
-            } elseif ($totalBalance == 0) {
+
+            if ($totalBalance <= 0) {
+                $totalBalance = 0;
                 $paymentStatus = 3;
+            } elseif ($paymentAmount > 0 && $totalBalance > 0 && $totalBalance < $storedBill) {
+                $paymentStatus = 2;
+            } else {
+                $paymentStatus = 1;
             }
+
 
             //Update payment amount and payment status
             $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedBookings SET 
@@ -166,7 +194,14 @@ if (isset($_POST['approvePaymentBtn'])) {
             $updateBookingPaymentStatus->bind_param("ddii", $amountPaid, $totalBalance,  $paymentStatus, $bookingID);
             if ($updateBookingPaymentStatus->execute()) {
 
-                $receiver = 'Customer';
+                if ($userRoleID === 1) {
+                    $receiver = 'Customer';
+                } elseif ($userRoleID === 2) {
+                    $receiver = 'Partner';
+                } elseif ($userRoleID === 3) {
+                    $receiver = 'Admin';
+                }
+
                 $message = "We have successfully deducted your payment of " . $customerPayment .
                     " from your balance. Please check your payment history in your account for more details. " .
                     "Your current balance is: " . ($totalBalance > 0 ? "₱" . number_format($totalBalance, 2) : "0.00") . ".";
@@ -174,7 +209,6 @@ if (isset($_POST['approvePaymentBtn'])) {
             VALUES(?,?,?,?)");
                 $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();
-
 
                 header('Location: ../../Pages/Admin/transaction.php?action=paymentSuccess');
                 exit();
