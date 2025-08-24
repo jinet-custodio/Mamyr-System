@@ -342,10 +342,46 @@ input[type="password"]::-webkit-search-cancel-button {
 }
 
 /* Tablet landscape */
-@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+@media (min-width: 1024px) and (max-width: 1400px) and (orientation: landscape) {
 .title {
-  font-size: 32px !important;
+  font-size: 40px !important;
+  margin-top: 4vw;
 }
+
+#basicInfo {
+  display: flex;
+  align-items: center;
+  padding: 0 1vw;
+  margin-top:2vw !important;
+}
+.container {
+  padding: 10px;
+}
+
+.back-icon-container {
+  position: absolute;
+  right: 8vw;
+  top: 7vw;
+}
+.backArrow {
+  width: 4vw !important;
+  margin-top:-35px;
+  
+}
+
+.repInfoFormContainer {
+  padding: 0vw !important;
+  gap: 1vw ;
+  margin-top: 2vw !important;
+}
+.busProofFormContainer {
+  margin-top: 2vw !important;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5vw;
+}
+
 
 }
 
@@ -353,19 +389,35 @@ input[type="password"]::-webkit-search-cancel-button {
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
 .title {
   font-size:  clamp(30px, calc(4vh + 3px), 45px) !important;
-  margin-top: 10vh !important;
+  margin-top: 4vh  !important;
+}
+
+.row {
+  flex-direction: column;
+  width: 100% !important;
+  margin: 0 !important;
 }
 
 .backArrow {
-  width: 6vw !important;
-  margin-top: 7vh;
+  width: 5vw !important;
+  margin-top: 7px;
+  
 }
-
+#basicInfo {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
 .container {
-  width: 65% !important;
-  padding: 0 !important;
+  font-family: "Poppins";
+  /* border: 1px solid black !important; */
+  background-color: #ffff;
+  width: 1289px;
+  border-radius: 40px;
+  display: block;
+  margin: 0 auto !important;
+  max-width: 975px;
 }
-
 #emailPassContainer {
   margin-top: 20vh !important;
 }
@@ -378,6 +430,11 @@ input[type="password"]::-webkit-search-cancel-button {
   flex-direction: column;
   width: 100% !important;
   margin: 0 !important;
+}
+
+#busInfoContainer {
+  background-color: #78aeff;
+
 }
 
 .repInfoFormContainer, .busInfoFormContainer, .busProofFormContainer, .description, .emailPassForm {
@@ -396,6 +453,11 @@ input[type="password"]::-webkit-search-cancel-button {
 
 .col h4 {
   margin-bottom: 3vw !important;
+}
+.back-icon-container {
+  position: absolute;
+  right: 3.5vw;
+  top: 4vw;
 }
 
 .back-icon-container-login {
@@ -431,5 +493,90 @@ input[type="password"]::-webkit-search-cancel-button {
 @media screen and (min-width: 360px) and (max-width: 599px) {
 .title {
   font-size: 20px;
+  margin-top: 5vw !important;
+}
+#basicInfo {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+.backArrow {
+  width: 6vw !important;
+  height: 5vw;
+  margin-top: 7px; 
+}
+.repInfoLabel {
+  font-weight: bold;
+  font-size: 22px;
+  text-align: center;
+  margin-top: 1.5vw;
+}
+.row {
+  flex-direction: column;
+  width: 100% !important;
+  margin: 0 !important;
+
+}
+.container-wrapper {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .container {
+    transform: scale(0.7);
+    transform-origin: top center;
+    width: 100%;
+  }
+#busInfoContainer {
+  background-color: #78aeff;
+  width: 100%;
+  margin-top: -10px;
+  padding: 15px;
+}
+
+/*Laptop*/
+@media screen and (min-width: 1200px) and (max-width: 1280px) {
+
+  #basicInfo {
+  display: flex;
+  align-items: center;
+  padding: 0 1vw;
+  margin-top:8vw !important;
+}
+.container {
+  padding: 10px;
+}
+
+.back-icon-container {
+  position: absolute;
+  right: 8vw;
+  top: 7vw;
+}
+.backArrow {
+  width: 5vw !important;
+  margin-top:7px;
+}
+
+.repInfoFormContainer {
+  padding: 6px 12px !important;
+  gap: 1vw ;
+  margin-top: 12.8px 0 0 !important;
+}
+.busProofFormContainer {
+  margin-top: 2vw !important;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5vw;
+}
+
 }
 }
+
+
+
