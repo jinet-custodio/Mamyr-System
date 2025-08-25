@@ -1,0 +1,268 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+/* @font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
+} */
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: "Plus Jakarta Sans"; */
+  text-decoration: none !important;
+  list-style: none;
+}
+
+body {
+  background: #a1c8c7;
+}
+
+.topSection {
+  /* border: 1px solid black; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5vw;
+}
+
+.menus {
+  /* border: 1px solid black; */
+  padding: 0.5vw;
+  margin-right: 2vw;
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+
+.dashTitleContainer {
+  margin-left: 1vw;
+}
+
+.logo {
+  width: 15vw;
+}
+
+#dashboard {
+  text-decoration: none;
+  margin-left: 1vw;
+}
+
+.adminTitle {
+  margin-top: 1rem;
+  font-family: "Lora" !important;
+  /* font-weight: bold; */
+  font-size: 20px;
+}
+
+.admin {
+  img {
+    height: 70px;
+    width: 70px;
+    border-radius: 3rem;
+  }
+}
+.navbar {
+  font-family: "Lora";
+  border-radius: 15px;
+  max-width: 80vw;
+  margin: 20px auto;
+  padding: 1rem !important;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  h5 {
+    font-size: 20px !important;
+  }
+}
+
+.nav-link {
+  display: flex !important;
+  margin: auto;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+  text-decoration: none;
+}
+
+.nav-link.active:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-link:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 100%;
+  /* position: absolute; */
+  border-bottom: 4px solid rgb(126, 203, 242) !important;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link:hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-link img {
+  height: 2vw;
+  width: auto;
+  object-fit: contain;
+}
+
+.backArrowContainer {
+  width: 90%;
+  margin: 0 auto;
+  img {
+    width: 2vw;
+    aspect-ratio: 1;
+    margin-top: 1vw;
+  }
+}
+
+.header {
+  font-family: "Poppins Black";
+  font-size: 3vw;
+  margin-top: 2vw;
+}
+#serviceCategories {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw !important;
+  margin-top: 3vw;
+}
+
+.category-card {
+  padding: 0.5vw 0.5vw 4vw 0.5vw;
+  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+}
+
+.category-card,
+.category-body {
+  /* margin: 2vw; */
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  text-align: center;
+}
+
+.category-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.resort-card,
+.hotel-card {
+  border-radius: 2vw !important;
+}
+
+.category-card img {
+  border-radius: 2vw;
+  padding: 1vw;
+  height: 16vw !important;
+  object-fit: cover;
+}
+
+.category-title {
+  font-family: "Poppins Black";
+  font-style: italic;
+  font-weight: bold;
+  font-size: 2vw;
+  /* color: #00b3d1 !important; */
+}
+
+.categoryLink {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.categoryLink .category-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.categoryLink:hover .category-card {
+  transform: translateY(-12px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+}
+
+.resortContainer,
+.hotelContainer,
+.eventContainer,
+.cateringContainer {
+  width: 90%;
+  margin: 1vw auto;
+  background-color: white;
+  padding: 0.5vw;
+  min-height: 10vh;
+}
+
+tbody tr {
+  height: 70px !important;
+}
+
+td,
+th {
+  text-align: center !important;
+  background-color: white;
+}
+
+.form-control {
+  margin: auto;
+  width: 100% !important;
+}
+
+th {
+  background-color: #91d2f2 !important;
+}
+
+.d-flex {
+  gap: 1vw;
+}
+
+.btn-primary,
+.deleteBtn {
+  width: 5vw;
+}
+
+#addResortServiceBtn,
+#addHotelServiceBtn,
+#addEventServiceBtn,
+#addCateringServiceBtn {
+  width: 10vw;
+  float: right;
+  margin: 1vw 0 1vw 0;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 1vw;
+}
+
+.saveBtnContainer {
+  width: 100%;
+  display: flex;
+  justify-content: right;
+}
+
+#saveChanges {
+  width: 10vw;
+}

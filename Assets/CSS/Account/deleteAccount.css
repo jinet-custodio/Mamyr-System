@@ -1,0 +1,572 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 25vw;
+  background-color: #cee4f2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 2px solid #cee4f2;
+  border-top-right-radius: 30px;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.sidebar.collapsed {
+  width: 15vw;
+  justify-content: flex-start !important;
+}
+
+.sidebar .sidebar-text {
+    display: inline-block;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .sidebar-text {
+    display: none;
+    width: 0;
+    overflow: hidden;
+}
+
+.sidebar-icon {
+  font-size: 2vw;
+    min-width: 3vw;
+    text-align: center;
+    margin-right: 10px;
+}
+
+/* Sidebar toggle button */
+.toggle-button {
+    background: none;
+    border: none;
+    margin: 10px;
+}
+
+.sidebar-item, .list-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+}
+
+
+.home {
+  padding: 2vw;
+}
+
+.homeIcon {
+  float: right;
+}
+
+.sidebar-header {
+  color: black !important;
+  display: flex;
+  flex-direction: column;
+  margin: 1vw auto;
+  width: 100%;
+  padding-top: 0.5rem;
+  h5 {
+    font-family: "Lora" !important;
+    margin: 0;
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.profileImage {
+  margin: auto;
+  padding: 1rem;
+  img {
+    height: clamp(8vw, 6.5vw, 4vw);
+    border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+}
+
+.list-group {
+  font-family: "Poppins";
+  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+  border: none;
+  list-style: none;
+  margin-top: 0.5rem;
+
+  a {
+    text-decoration: none;
+    color: rgb(0, 0, 0) !important;
+    background-color: #cee4f2;
+  }
+}
+.list-group-item {
+  border: none;
+  margin-top: 1vw;
+}
+#paymentBookingHist {
+  text-align: center;
+}
+
+.sidebar li:hover a,
+.list-group-item.active {
+  color: #0000;
+  background-color: rgb(255, 255, 255);
+}
+
+#logoutBtn {
+  text-align: center;
+  color: black;
+  padding: 10px;
+  font-size: clamp(2vw, 1.8vw, 1.6vw);
+}
+
+#logoutBtn:hover {
+  background-color: rgb(219, 53, 69);
+  color: white;
+}
+
+.main-content {
+  /* border: 1px solid red; */
+  margin-left: 28vw;
+  margin-top: 5rem;
+  padding: 1rem;
+  overflow-y: auto;
+  width: 75%;
+}
+
+.card {
+  border: none;
+  width: 90%;
+}
+
+.card-title {
+  font-size: clamp(3vw, 2.8vw, 2.7vw);
+  font-family: "Poppins Black";
+  font-weight: bold;
+  margin-bottom: 2vw;
+}
+
+.card-body {
+  .button-container {
+    font-family: "Poppins";
+  }
+}
+
+.card-text {
+  font-family: "Poppins";
+  font-size: clamp(1.4vw, 1.2vw, 1.1vw);
+  text-indent: 2rem;
+  line-height: 2;
+  text-align: justify;
+}
+
+#confirmationModal {
+  .image {
+    padding: 1rem;
+  }
+  .modal-title {
+    font-family: "Poppins Black";
+    font-size: clamp(2.3vw, 2.1vw, 2vw) ;
+  }
+
+  .modal-text {
+    font-family: "Poppins";
+    font-size: clamp(1.7vw, 1.5vw, 1.4vw) ;
+  }
+
+  .button-container {
+    margin: 1vw auto;
+    width: 70%;
+    display: flex;
+    justify-content: space-around;
+    button {
+      width: 8vw;
+      font-size: clamp(1.5vw, 1.4vw, 1.3vw) ;
+    }
+  }
+}
+
+#deleteModal {
+  .modal {
+    font-family: "Poppins";
+    .modal-title {
+      margin-left: 2rem;
+    }
+    .button-container {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      button {
+        width: 100px;
+      }
+    }
+    .modal-title {
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+
+    .modal-header {
+      position: relative;
+      border: none;
+    }
+
+    .modal-header::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 85%;
+      border-bottom: 2px solid #dadad6;
+    }
+  }
+}
+.swal-custom-title {
+  font-family: "Poppins";
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.swal-custom-text {
+  font-family: "Poppins";
+  font-size: 16px;
+}
+
+.swal2-actions {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.swal2-confirm {
+  margin-right: 2vw !important;
+}
+
+#confirmationBtn {
+ font-size: clamp(1.4vw, 1.2vw, 1.1vw);
+}
+
+
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+.sidebar{
+  width: 33vw;
+}
+
+.list-group {
+  font-size: clamp(2.5vw, 2.2vw, 2vw);
+}
+
+.card-title {
+  font-size: clamp(4vw, 3.9vw, 3.8vw);
+}
+
+div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+  display: flex !important;
+}
+
+.sidebar-icon {
+  font-size: clamp(2.6vw, 2.3vw, 2vw);  
+}
+
+.sidebar-header h5 {
+  margin-top: 2vw !important;
+  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+}
+
+.profileImage {
+    img {
+      height: clamp(9vw, 8vw, 7vw);
+    }
+    margin: 1vw auto;
+  }
+
+.card-text{
+  font-size: clamp(2vw, 1.8vw, 1.6vw);
+}
+
+.main-content {
+  margin-left: 37vw;
+  margin-top: 10vh;
+  padding: 0.4rem;
+  width: 82%;
+}
+
+#confirmationModal {
+  .modal-title {
+  font-size: clamp(3vw, 2.9vw, 2.8vw);
+  }    
+  .modal-text {
+    font-size: clamp(2.7vw, 2.5vw, 2.3vw);
+  }
+  .button-container button {
+    width: 9vw !important;
+    font-size: clamp(2.7vw, 2.5vw, 2.3vw);
+  }
+}
+
+.card-body {
+  .button-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 3.5vw;
+  }
+  .btn-primary, .btn-secondary {
+    width: 30%;
+  }
+}
+.swal2-html-container {
+  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+}
+
+.edit,.swal2-confirm, #saveBtn, #cancelBtn {
+  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+}
+
+.swal2-title {
+    font-size: clamp(3.3vw, 3vw, 2.8vw);
+}
+
+#confirmationBtn {
+ font-size: clamp(2.4vw, 2.2vw, 2vw); 
+}
+
+.modal-header {
+  h5 {
+   font-size: clamp(2.8vw, 2.6vw, 2.4vw);  
+  }
+  h6 {
+    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  }
+}
+
+.modal-body {
+  p, input, button {
+    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  }
+}
+
+
+}
+
+/* Tablet landscape */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+.card-title {
+  font-size: clamp(5.5vw, 5vw, 4.5vw);
+}
+
+.sidebar{
+  width: 35vw;
+}
+
+.list-group {
+  font-size: clamp(2.5vw, 2.2vw, 2vw);
+}
+
+.sidebar-icon {
+  font-size: clamp(2.6vw, 2.3vw, 2vw);  
+}
+
+.sidebar-header h5, .card-header {
+  margin-top: 2vw;
+  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+}
+
+.profileImage {
+    img {
+       height: clamp(8vw, 7vw, 6vw);
+    }
+    margin: 1vw auto;
+}
+.modal-header {
+  h5 {
+   font-size: clamp(2.8vw, 2.6vw, 2.4vw);  
+  }
+  h6 {
+    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  }
+}
+
+.modal-body {
+  p, input, button {
+    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  }
+}
+.swal2-html-container {
+  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+}
+
+.card-text{
+  font-size: clamp(2vw, 1.8vw, 1.6vw);
+}
+
+.main-content {
+  margin-left: 37vw;
+  margin-top: 10vh;
+  padding: 0.4rem;
+  width: 82%;
+}
+
+#confirmationModal {
+  .modal-title {
+  font-size: clamp(3vw, 2.9vw, 2.8vw);
+  }    
+  .modal-text {
+    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  }
+  button {
+    width: 9vw !important;
+    font-size: clamp(2.2vw, 2vw, 1.8vw);
+    margin-top: 1vw;
+  }
+}
+
+
+.card-body {
+  .button-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 3.5vw;
+  }
+  button {
+    width: 60%;
+  }
+}
+
+.swal2-title {
+    font-size: clamp(3.3vw, 3vw, 2.8vw);
+}
+#confirmationBtn {
+ font-size: clamp(1.7vw, 1.5vw, 1.3vw);
+}
+
+
+}
+
+/* Phone size */
+@media screen and (max-width: 600px) {
+
+.sidebar {
+  width: 45vw;
+}
+.main-content {
+  margin-left: 17vw;
+  width: 85%;
+  margin-top: 10vh;
+  padding: 0.3rem;
+}
+
+.card-title {
+  font-size: clamp(5.1vw, 5vw, 4.8vw);
+}
+
+#confirmationBtn {
+ font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+}
+
+
+#toggle-btn {
+  font-size: clamp(4.5vw, 4.2vw, 4vw);  
+}
+
+.list-group-item{
+  justify-content: flex-start;
+}
+
+.card-text{
+  font-size: clamp(2.8vw, 2.7vw, 2.6vw);
+}
+
+.sidebar-icon {
+  font-size: clamp(4.5vw, 4.2vw, 4vw);  
+  margin-right: 0 !important;
+}
+
+label {
+  font-size: clamp(2.2vw, 2vw, 1.8vw);
+}
+
+.current {
+  font-size: 2.5vw;
+}
+
+.sidebar-text {
+  font-size: clamp(2.9vw, 2.7vw, 2.5vw);  
+  margin-left: 2vw;
+}
+
+.home {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#confirmationModal {
+    & .button-container {
+      justify-content: space-between;
+        button {
+            width: 40%;
+        }
+    }
+}
+
+.swal2-html-container {
+  font-size: clamp(3.7vw, 3.5vw, 3.3vw);
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.sidebar-header h5, .card-header {
+  margin-top: 2vw;
+  font-size: clamp(3.7vw, 3.5vw, 3.2vw);
+}
+
+.edit,.swal2-confirm {
+  font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+}
+
+.swal2-title {
+    font-size: clamp(3.8vw, 3.6vw, 3.4vw);
+} 
+
+
+}
+
+@media screen and (max-width: 400px) {
+.card {
+ padding: 0; 
+} 
+.card-header {
+  margin-top: 1vw;
+  font-size: clamp(4vw, 3.8vw, 3.6vw);
+}
+.card-text{
+  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+}
+
+
+}

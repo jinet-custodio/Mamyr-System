@@ -1,31 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 ?>
 
 <!DOCTYPE html>
@@ -67,16 +54,24 @@ $userRole = $_SESSION['userRole'];
                     $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
                 ?>
+
                 <li class="nav-item account-nav">
-                    <a href="Account/account.php">
-                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                    <a href="../Account/account.php">
+                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                     </a>
                 </li>
 
 
+
                 <!-- Get notification -->
                 <?php
-                $receiver = 'Customer';
+
+                if ($userRole === 1) {
+                    $receiver = 'Customer';
+                } elseif ($userRole === 2) {
+                    $receiver = 'Partner';
+                }
+
                 $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
                 $getNotifications->bind_param("is", $userID, $receiver);
                 $getNotifications->execute();
@@ -101,8 +96,9 @@ $userRole = $_SESSION['userRole'];
                     }
                 }
                 ?>
+
                 <li class="nav-item" id="notifs">
-                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                    <button type="button" class="notifBtn" data-bs-toggle="modal" data-bs-target="#notificationModal">
                         <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                         <?php if (!empty($counter)): ?>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -154,7 +150,8 @@ $userRole = $_SESSION['userRole'];
 
 
         <!-- Notification Modal -->
-        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
 
@@ -170,7 +167,9 @@ $userRole = $_SESSION['userRole'];
                                     $bgColor = $color[$index];
                                     $notificationID = $notificationIDs[$index];
                                 ?>
-                                    <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                    <li class="list-group-item mb-2 notification-item"
+                                        data-id="<?= htmlspecialchars($notificationID) ?>"
+                                        style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
                                         <?= htmlspecialchars($message) ?>
                                     </li>
                                 <?php endforeach; ?>
@@ -232,7 +231,8 @@ $userRole = $_SESSION['userRole'];
 
 
             <div class="titleContainer">
-                <h4 class="title" id="maintext"><?= htmlspecialchars($contentMap['MainTitle'] ?? 'Main Title Not Found') ?></h4>
+                <h4 class="title" id="maintext">
+                    <?= htmlspecialchars($contentMap['MainTitle'] ?? 'Main Title Not Found') ?></h4>
                 <h4><?= htmlspecialchars($contentMap['Sub-title'] ?? '') ?></h4>
             </div>
 
@@ -280,7 +280,8 @@ $userRole = $_SESSION['userRole'];
                                     <div class="blogDescription">
                                         <?= htmlspecialchars($firstPost['Content'] ?? '') ?>
                                     </div>
-                                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalFeatured">
+                                    <button class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                        data-bs-target="#modalFeatured">
                                         Read More
                                     </button>
 
@@ -332,7 +333,9 @@ $userRole = $_SESSION['userRole'];
                                     <div class="othersDescription">
                                         <?= htmlspecialchars($post['Content'] ?? '') ?>
                                     </div>
-                                    <button class="btn btn-primary mt-3" style="display:flex;align-self:flex-end;text-align:center" data-bs-toggle="modal" data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
+                                    <button class="btn btn-primary mt-3"
+                                        style="display:flex;align-self:flex-end;text-align:center" data-bs-toggle="modal"
+                                        data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
                                         Read More
                                     </button>
                                 </div>
@@ -341,7 +344,8 @@ $userRole = $_SESSION['userRole'];
                     </div>
 
                     <!-- Modal for featured post -->
-                    <div class="modal fade" id="modalFeatured" tabindex="-1" aria-labelledby="modalFeaturedLabel" aria-hidden="true">
+                    <div class="modal fade" id="modalFeatured" tabindex="-1" aria-labelledby="modalFeaturedLabel"
+                        aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
 
@@ -349,7 +353,8 @@ $userRole = $_SESSION['userRole'];
                                     <h5 class="modal-title" id="modalFeaturedLabel">
                                         <?= htmlspecialchars($firstPost['EventHeader'] ?? 'Blog Post') ?>
                                     </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
 
                                 <div class="modal-body">
@@ -370,10 +375,12 @@ $userRole = $_SESSION['userRole'];
                                     }
                                     ?>
 
-                                    <img src="<?= htmlspecialchars($featuredImage) ?>" alt="<?= htmlspecialchars($featuredAlt) ?>" class="img-fluid mb-3" />
+                                    <img src="<?= htmlspecialchars($featuredImage) ?>"
+                                        alt="<?= htmlspecialchars($featuredAlt) ?>" class="img-fluid mb-3" />
                                     <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
                                         <p class="text-muted">
-                                            <?= htmlspecialchars($firstPost['EventType']) ?> • <?= htmlspecialchars(date("j F Y", strtotime($firstPost['EventDate']))) ?>
+                                            <?= htmlspecialchars($firstPost['EventType']) ?> •
+                                            <?= htmlspecialchars(date("j F Y", strtotime($firstPost['EventDate']))) ?>
                                         </p>
 
                                     <?php endif; ?>
@@ -381,7 +388,8 @@ $userRole = $_SESSION['userRole'];
                                         <?= nl2br(htmlspecialchars($firstPost['Content'] ?? '')) ?>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
 
@@ -409,7 +417,8 @@ $userRole = $_SESSION['userRole'];
                         }
                         ?>
 
-                        <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1" aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
+                        <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1"
+                            aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                 <div class="modal-content">
 
@@ -417,16 +426,19 @@ $userRole = $_SESSION['userRole'];
                                         <h5 class="modal-title" id="modalLabel<?= htmlspecialchars($postID) ?>">
                                             <?= htmlspecialchars($post['EventHeader'] ?? 'Blog Post') ?>
                                         </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
 
                                     <div class="modal-body">
                                         <!-- Blog Image -->
-                                        <img src="<?= htmlspecialchars($base64Image) ?>" alt="<?= htmlspecialchars($alt) ?>" class="img-fluid mb-3" />
+                                        <img src="<?= htmlspecialchars($base64Image) ?>" alt="<?= htmlspecialchars($alt) ?>"
+                                            class="img-fluid mb-3" />
                                         <!-- Event Info -->
                                         <?php if (isset($post['EventType'], $post['EventDate'])): ?>
                                             <p class="text-muted">
-                                                <?= htmlspecialchars($post['EventType']) ?> • <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                                <?= htmlspecialchars($post['EventType']) ?> •
+                                                <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
                                             </p>
                                         <?php endif; ?>
                                         <!-- Full Content -->
@@ -434,7 +446,8 @@ $userRole = $_SESSION['userRole'];
                                             <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
 
@@ -485,6 +498,8 @@ $userRole = $_SESSION['userRole'];
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -498,12 +513,26 @@ $userRole = $_SESSION['userRole'];
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });
         });
     </script>
+
 
 </body>
 

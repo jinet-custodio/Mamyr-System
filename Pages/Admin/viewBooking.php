@@ -1,37 +1,27 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
+require_once '../../Function/functions.php';
 
 if (isset($_POST['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
+    $_SESSION['bookingID'] = $bookingID;
 } elseif (isset($_SESSION['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_SESSION['bookingID']);
 }
 
-$_SESSION['last_activity'] = time();
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,15 +30,17 @@ $userRole = $_SESSION['userRole'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr Resort and Events Place</title>
-    <link
-        rel="icon"
-        type="image/x-icon"
-        href="../../Assets/Images/Icon/favicon.png " />
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <!-- icon library from font-awesome and box icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/viewBooking.css" />
 </head>
@@ -58,7 +50,12 @@ $userRole = $_SESSION['userRole'];
     <div class="guest-container">
         <!-- Back Button -->
         <div class="page-container">
-            <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+            <form action="viewPayments.php" method="POST" style="display:inline;">
+                <input type="hidden" name="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
+                <button type="submit" class="btn btn-primary back">
+                    <img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button">
+                </button>
+            </form>
             <h5 class="page-title">Guest Booking Information</h5>
         </div>
         <!-- Information -->
@@ -78,6 +75,7 @@ $userRole = $_SESSION['userRole'];
             $email = $data['email'];
             $phoneNumber = $data['phoneNumber'];
             $address = $data['userAddress'];
+            $userRoleID = $data['userRole'];
 
             $file_info = finfo_open(FILEINFO_MIME_TYPE);
             $imageData = $data['userProfile'];
@@ -102,14 +100,35 @@ $userRole = $_SESSION['userRole'];
                         <img src="<?= htmlspecialchars($userProfile) ?>" class="img-fluid rounded-start">
                         <div class="booking-info-contact">
                             <p class="card-text name"><?= htmlspecialchars($name) ?></p>
-                            <p class="card-text sub-name"><?= htmlspecialchars($email) ?> | <?= htmlspecialchars($phoneNumber) ?> </p>
+                            <p class="card-text sub-name"><?= htmlspecialchars($email) ?> |
+                                <?= htmlspecialchars($phoneNumber) ?> </p>
                             <p class="card-text sub-name"><?= htmlspecialchars($address) ?></p>
                         </div>
                     </div>
 
                     <div class="button-container" id="button-container">
-                        <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
-                        <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
+                        <button type="submit" class="btn btn-primary w-50" name="approveBtn">Approve</button>
+                        <button type="button" class="btn btn-danger w-50" data-bs-toggle="modal" data-bs-target="#rejectionModal">Reject</button>
+                    </div>
+                </div>
+
+                <!--Rejection Modal -->
+                <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rejectionModalLabel">Rejection</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>State the reason for rejection</p>
+                                <textarea rows="4" cols="50" name="rejectionReason" id="rejectionReason"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -117,26 +136,33 @@ $userRole = $_SESSION['userRole'];
                 <?php
 
                 $getBookingInfo = $conn->prepare("SELECT 
-                                    b.*, b.totalCost AS bookingCost , st.*,
-                                    p.*, cp.*, cpi.*, 
-                                    bs.*, s.*, 
-                                    ra.*, rsc.categoryName AS serviceName, ec.categoryName AS eventName,
-                                    er.*, ps.*, bps.statusName AS paymentStatus 
+                                
+                                b.*, 
+                                cb.amountPaid, 
+                                cb.confirmedFinalBill, 
+                                cb.userBalance, 
+                                cb.paymentApprovalStatus, 
+                                cb.paymentDueDate, cb.paymentStatus,
+                                cb.discountAmount,
+                                bs.*,
+                                s.*, s.serviceType,
+                                er.sessionType AS tourType, er.ERCategory, er.ERprice,
+                                ra.RServiceName, ra.RSprice, rsc.categoryName AS serviceCategory   
                                     
                                 FROM bookings b
                                 LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID
-                                LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID
+                                LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
 
-                                LEFT JOIN packages p ON b.packageID = p.packageID
-                                LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
+                                -- LEFT JOIN statuses stat1 ON stat1.statusID = b.bookingStatus
+                                -- LEFT JOIN statuses stat2 ON stat2.statusID = cb.confirmedBookingStatus
+
+                                -- LEFT JOIN packages p ON b.packageID = p.packageID
+                                -- LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
 
                                 LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
                                 LEFT JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
 
                                 LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID
-                                LEFT JOIN statuses st ON st.statusID = b.bookingStatus 
-
-                                -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
                                 LEFT JOIN services s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
 
                                 LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
@@ -152,315 +178,355 @@ $userRole = $_SESSION['userRole'];
                 if ($getBookingInfoResult->num_rows > 0) {
 
                     $services = [];
-                    $allDescriptions = [];
-                    $AddRequest = "";
-
-
-                    $adultCount = 0;
+                    $serviceIDs = [];
+                    $totalCost = 0;
+                    $downpayment = 0;
+                    $discount = 0;
+                    $totalPax = 0;
                     $kidsCount = 0;
+                    $adultCount = 0;
+                    $finalBill  = 0;
+                    $userBalance = 0;
+                    $amountPaid = 0;
+                    $additionalCharge = 0;
+                    while ($row = $getBookingInfoResult->fetch_assoc()) {
 
-                    $package = "";
-                    $customPackage = "";
-                    $status = "";
+                        // echo '<pre>';
+                        // print_r($row);
+                        // echo '</pre>';
+                        $customPackageID = $row['customPackageID'];
 
-                    while ($data = $getBookingInfoResult->fetch_assoc()) {
 
-                        $startDate = date("M d, Y", strtotime($data['startDate']));
-                        $endDate = date("M d, Y", strtotime($data['endDate']));
+                        $bookingType = $row['bookingType'];
+
+                        $rawStartDate = $row['startDate'];
+                        $rawEndDate = $row['endDate'];
+
+                        $arrivalTime = date('H:i A', strtotime($row['arrivalTime'])) ?? 'Not Stated';
+                        $startDate = date('M. d, Y', strtotime($rawStartDate));
+                        $endDate = date('M. d, Y', strtotime($rawEndDate));
 
                         if ($startDate === $endDate) {
-                            $date = date("F d, Y", strtotime($data['startDate']));
+                            $bookingDate = date('F d, Y', strtotime($rawStartDate));
                         } else {
-                            $date = $startDate . " - " . $endDate;
+                            $bookingDate = $startDate . " - " . $endDate;
                         }
 
-                        $time = date("g:i A", strtotime($data['startDate'])) . " - " . date("g:i A", strtotime($data['endDate']));
-                        $duration = $data['hoursNum'] . " hours";
-                        $pax = $data['paxNum'];
+                        $bookingCreationDate = date('F d, Y H:i A', strtotime($row['createdAt']));
 
-                        $totalCost = $data['bookingCost'];  //Booking
-                        $discount = $data['discountAmount'];
-                        $downpayment = $data['downpayment'];
-                        $bookingType = $data['bookingType'];
-                        $paymentMethod = $data['paymentMethod'];
-                        $paymentStatus = $data['paymentStatus'];
+                        $time = date("g:i A", strtotime($rawStartDate)) . " - " . date("g:i A", strtotime($data['endDate']));
+                        $duration = $row['durationCount'] . " hours";
 
-                        if ($paymentMethod === 'Cash') {
-                            $paymentMethod = $paymentMethod . ' - Onsite Payment';
+                        $bookingStatus = $row['bookingStatus'];
+                        $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? '';
+
+                        $additionalServices = $row['addOns'] ?? 'None';
+                        $paymentMethod = $row['paymentMethod'];
+                        $paymentStatus = $row['paymentStatus'] ?? '';
+                        $totalCost = $row['totalCost'];
+                        $downpayment = $row['downpayment'];
+                        $discount = $row['discountAmount'];
+                        $userBalance = $row['userBalance'];
+                        $amountPaid = $row['amountPaid'];
+                        $finalBill = $row['confirmedFinalBill'];
+                        $paymentDueDate = date('F d, Y g:i A', strtotime($row['paymentDueDate']));
+                        $additionalCharge = $row['additionalCharge'];
+
+                        $toddlerCount = $row['toddlerCount'];
+                        $additionalReq = $row['additionalRequest'];
+
+
+                        if ($paymentStatus !== '' || $paymentApprovalStatus !== '') {
+                            $paymentStatuses = getPaymentStatus($conn, $paymentStatus);
+                            $paymentStatusID = $paymentStatuses['paymentStatusID'];
+                            $paymentStatusName = $paymentStatuses['paymentStatusName'];
+
+                            $paymentApprovalStatuses = getStatuses($conn, $paymentApprovalStatus);
+                            $paymentApprovalStatusID = $paymentApprovalStatuses['statusID'];
+                            $paymentApprovalStatusName = $paymentApprovalStatuses['statusName'];
+                        }
+
+                        $bookingStatuses = getStatuses($conn, $bookingStatus);
+                        $bookingStatusID = $bookingStatuses['statusID'];
+                        $bookingStatusName = $bookingStatuses['statusName'];
+
+                        if (!empty($packageID)) {
+                            echo 'Wala pa';
+                        } elseif (!empty($customPackageID)) {
                         } else {
-                            $paymentMethod = $paymentMethod;
-                        }
+                            $serviceID = $row['serviceID'];
+                            $serviceType = $row['serviceType'];
+                            $pax = $row['guestCount'];
 
-                        if ($bookingType === 'Resort') {
-                            $pax = $data['paxNum'] . " Guest";
-                            $addOns = $data['addOns'];
 
-                            if ($addOns === "Videoke") {
-                                $videoke = 'Videoke';
-                            } else {
-                                $videoke = 'None';
+                            if ($serviceType === 'Resort') {
+                                $services[] = $row['RServiceName'] . " - ₱"  . number_format($row['RSprice'], 2);
+                                $serviceIDs[] = $row['resortServiceID'];
+                                $totalPax = $pax . ($toddlerCount > 0 ? " & {$toddlerCount} toddlers" : '');
                             }
 
-                            if (!empty($data['serviceID'])) {
-                                if (!empty($data['sessionType'])) {
-                                    $services[] = $data['sessionType'] . ' Swimming';
-                                } else {
-                                    $services[] = NULL;
+                            if ($serviceType === 'Entrance') {
+                                $tourType = $row['tourType'];
+                                if ($row['ERCategory'] === "Kids") {
+                                    $kidsCount = $row['guests'];
+                                } elseif ($row['ERCategory'] === "Adult") {
+                                    $adultCount = $row['guests'];
                                 }
 
-                                if ($data['ERcategory'] === "Kids") {
-                                    $kidsCount = $data['guests'];
-                                } elseif ($data['ERcategory'] === "Adult") {
-                                    $adultCount = $data['guests'];
-                                }
-
-                                $guests = [];
-
-                                if ($adultCount > 0) {
-                                    $guests[] = "Adult: $adultCount";
-                                }
-
-                                if ($kidsCount > 0) {
-                                    $guests[] = "Kid: $kidsCount";
-                                }
-
-                                $resortGuest = implode(" & ", $guests);
+                                $entrancePax =  ($adultCount > 0 ? "{$adultCount} Adults" : '') .
+                                    ($kidsCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidsCount} Kids" : '') .
+                                    ($toddlerCount > 0 ? (($adultCount > 0 || $kidsCount > 0) ? ' & ' : '') . "{$toddlerCount} toddlers" : '');
                             }
-                            if (!empty($data['resortServiceID'])) {
-                                $services[] = $data['RServiceName'];
-                                $items = array_map('trim', explode(',', $data['RSdescription']));
-                                $allDescriptions = array_merge($allDescriptions, $items);
-                                $allDescriptions = array_unique($allDescriptions);
-                            }
-                        } else if ($bookingType === 'Hotel') {
-                            $addOns = "";
-                            $pax = $data['paxNum'] . " Guest";
-                            if (!empty($data['serviceID'])) {
-                                if (!empty($data['resortServiceID'])) {
-                                    $services[] = $data['RServiceName'];
-                                    $items = array_map('trim', explode(',', $data['RSdescription']));
-                                    $allDescriptions = array_merge($allDescriptions, $items);
-                                    $allDescriptions = array_unique($allDescriptions);
-                                }
 
-                                $downpaymentNote = "Please pay for the down payment amount for the approval of your booking
-                            withinseven (7) business days.";
+                            if ($bookingType === 'Resort') {
+                                $totalPax = $entrancePax;
+                            } elseif ($bookingType === 'Hotel') {
+                                $totalPax;
                             }
                         }
 
-
-                        $status = $data['statusName'];
-                        $package = $data['eventName'];
-                        $customPackageID = $data['customPackageID'];
-                        $AddRequest = $data['additionalRequest'];
-
-                        if (!empty($package)) {
-                            $pax = $data['paxNum'];
-                            $serviceName = $data['packageName'];
-                            $items = array_map('trim', explode(',', $data['packageDescription']));
-                            $allDescriptions = array_merge($allDescriptions, $items);
-                            $allDescriptions = array_unique($allDescriptions);
+                        if ($finalBill === 0.00) {
+                            $totalBill = $totalCost;
+                        } elseif ($finalBill >= $totalCost || ($finalBill <= $totalCost && $finalBill === 0.00)) {
+                            $totalBill = $finalBill;
+                        } else {
+                            $totalBill = $totalCost;
                         }
 
-                        if (!empty($customPackageID)) {
-                            $pax = $data['paxNum'] . " Guest";
-                            if (!empty($data['serviceID'])) {
-                                if (!empty($data['entranceRateID'])) {
-                                    $services[] = trim($data['sessionType']) . " Swimming";
-                                    if ($data['ERcategory'] === "Kids") {
-                                        $kidsCount = $data['guests'];
-                                    } elseif ($data['ERcategory'] === "Adult") {
-                                        $adultCount = $data['guests'];
-                                    }
-                                }
-                                if (!empty($data['partnershipServiceID'])) {
-                                    $services[] = $data['PBName'];
-                                }
-                                if (!empty($data['resortServiceID'])) {
-                                    $services[] = $data['RServiceName'];
-                                    $items = array_map('trim', explode(',', $data['RSdescription']));
-                                    $allDescriptions = array_merge($allDescriptions, $items);
-                                    $allDescriptions = array_unique($allDescriptions);
-                                }
-                            }
-                        }
-
-                        // echo "<pre>";
-                        // print_r($paymentMethod);
-                        // echo "</pre>";
+                        // echo '<pre>';
+                        // print_r('Data ' . $totalBill);
+                        // echo '</pre>';
                     }
-
-                    //Get the room or cottage
-                    $cottageRoom = [];
-
-                    // foreach ($services as $service) {
-                    //     if (stripos($service, 'cottage') !== false) {
-                    //         $serviceVenue = "Cottage";
-                    //         $cottageRoom[] = $service;
-                    //     } elseif (stripos($service, 'room') !== false) {
-                    //         $serviceVenue = "Room";
-                    //         $cottageRoom[] = $service;
-                    //     }
-                    //     if (stripos($service, 'Day') !== false) {
-                    //         $tourType = "Day Tour";
-                    //     } elseif (stripos($service, 'Night') !== false) {
-                    //         $tourType = "Night Tour";
-                    //     } elseif (stripos($service, 'Overnight') !== false) {
-                    //         $tourType = "Overnight Tour";
-                    //     }
-                    // }
-
-                    if (!empty($kidsCount) || !empty($adultCount)) {
-                        $guest = $resortGuest;
-                    } else {
-                        $guest = $pax;
-                    }
-                    $totalBill =  $totalCost - $discount;
                 }
+
+
+
                 ?>
 
                 <!-- Display the information -->
-                <div class="card-body">
-                    <input type="hidden" id="bookingType" value="<?= htmlspecialchars($bookingType) ?>">
-                    <input type="hidden" id="status" name="bookingStatus" value="<?= htmlspecialchars($status) ?>">
-                    <input type="hidden" id="videoke" value="<?= htmlspecialchars($videoke) ?>">
-                    <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                    <div class="two-item-row">
-                        <div class="guest-info">
-                            <h4 class="card-title important-title">Booking Type</h4>
-                            <p class="card-text important-sub-title"><?= ucfirst($bookingType) ?> Booking</p>
+
+                <div class="card" id="info-card">
+                    <div class="bookingInfoLeft">
+                        <div class="row1">
+                            <div class="info-container" id="booking-info-container">
+                                <label for="bookingType" class="info-label">Booking Type</label>
+                                <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
+                                <input type="text" class="form-control" name="bookingType"
+                                    value="<?= $bookingType ?> Booking" readonly>
+                            </div>
+                            <?php if ($bookingType === 'Resort') { ?>
+                                <div class="info-container" id="booking-info-container">
+                                    <label for="tourType" class="info-label">Tour Type</label>
+                                    <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
+                                    <input type="text" class="form-control" name="tourType"
+                                        value="<?= $tourType ?> Swimming" readonly>
+                                </div>
+                            <?php } ?>
                         </div>
-                        <div class="guest-info">
-                            <h4 class="card-title important-title">Service/s</h4>
-                            <p class="card-text important-sub-title">
-                                <?= !empty($services) ? implode(" | ", array_filter(array_unique($services))) : 'Not Available' ?>
-                            </p>
+
+
+                        <div class="datesContainer mt-3">
+                            <h1 class="card-title text-center">Date and Time</h1>
+                            <div class="row2 mt-2">
+                                <div class="info-container mt-2" id="booking-info-container">
+                                    <label for="arrivalTime" class="info-label mb-2">Arrival Time</label>
+                                    <input type="text" class="form-control" name="arrivalTime" id="arrivalTime"
+                                        value="<?= $arrivalTime ?>" readonly>
+                                </div>
+
+                                <div class="info-container mt-2" id="booking-info-container">
+                                    <label for="timeDuration" class="info-label mb-2">Time Duration</label>
+                                    <input type="text" class="form-control" name="timeDuration" id="timeDuration"
+                                        value="<?= $time ?> (<?= $duration ?>)" readonly>
+                                </div>
+
+                                <div class="info-container mt-2" id="booking-info-container">
+                                    <label for="bookingDate" class="info-label mb-2">Booking Date</label>
+                                    <input type="text" class="form-control" name="bookingDate" id="bookingDate"
+                                        value="<?= $bookingDate ?>" readonly>
+                                </div>
+                                <div class="info-container mt-2" id="booking-info-container">
+                                    <label for="bookingCreationDate" class="info-label mb-2">Booking Creation
+                                        Date</label>
+                                    <input type="text" class="form-control" name="bookingCreationDate"
+                                        id="bookingCreationDate" value="<?= $bookingCreationDate ?>" readonly>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="guest-info">
-                        <h4 class="card-title">Time Range</h4>
-                        <p class="card-text"> <?= $time ?> </p>
-                    </div>
+                        <div class="bookingDetails mt-3">
+                            <div class="servicesDetails">
+                                <h1 class="card-title text-center">Services</h1>
+                                <div class="servicesInfo">
+                                    <ul>
+                                        <?php
+                                        foreach ($services as $service) {
+                                        ?>
+                                            <li><?= $service ?></li>
+                                        <?php
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
+                            </div>
 
-                    <div class="guest-info">
-                        <h4 class="card-title">Schedule</h4>
-                        <p class="card-text"> <?= $date ?> </p>
-                    </div>
-
-                    <div class="guest-info">
-                        <h4 class="card-title">Stay Duration</h4>
-                        <p class="card-text"><?= !empty($duration) ? $duration  : 'Not Available' ?></p>
-                    </div>
-
-                    <div class="guest-info">
-                        <h4 class="card-title">Guest</h4>
-                        <p class="card-text"> <?= htmlspecialchars($guest)  ?></p>
-                    </div>
-
-                    <div class="guest-info addOns">
-                        <h4 class="card-title">Add Ons</h4>
-                        <input type="hidden" name="addOns" value="<?= !empty(htmlspecialchars($addOns)) ? htmlspecialchars($addOns) : "None" ?>">
-                        <p class="card-text" id="addOns"><?= !empty(htmlspecialchars($addOns)) ? htmlspecialchars($addOns) : "None" ?></p>
-                    </div>
-
-                    <div class="guest-info" id="videokeSelectionContainer" style="display: none;">
-                        <h4 class="card-title">Videoke</h4>
-                        <select class="form-select" name="videokeChoice">
-                            <option value="" selected disabled>Assign a videoke</option>
-                            <?php
-                            $selectHotel = "SELECT * FROM resortAmenities WHERE 
-                            (RServiceName = 'Videoke 1' OR RServiceName = 'Videoke 2') AND RSAvailabilityID = 1";
-
-                            $result = mysqli_query($conn, $selectHotel);
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                            ?>
-                                    <option value="<?= $row['RServiceName'] ?>">
-                                        <?= $row['RServiceName'] ?> — ₱<?= number_format($row['RSprice'], 2) ?>
-                                    </option>
-                            <?php
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <div class="guest-info">
-                        <h4 class="card-title">Total Price</h4>
-                        <p class="card-text">₱ <?= number_format($totalBill, 2) ?></p>
-                    </div>
-
-                    <div class="guest-info" id="downpayment">
-                        <h4 class="card-title">Downpayment (30%)</h4>
-                        <p class="card-text">₱ <?= number_format($downpayment, 2) ?></p>
-                    </div>
-
-                    <div class="guest-info payment" id="paymentMethod">
-                        <h4 class="card-title">Payment Method</h4>
-                        <p class="card-text"><?= htmlspecialchars($paymentMethod) ?> </p>
-                    </div>
-
-                    <div class="guest-info" id="paymentStatus" style="display: none;">
-                        <h4 class="card-title">Payment Status</h4>
-                        <p class="card-text"><?= htmlspecialchars($paymentStatus) ?> </p>
-                    </div>
-
-                    <div class="two-item-row">
-                        <div class="guest-info">
-                            <h4 class="card-title">Service Description</h4>
-                            <pre class="card-text description"><?= !empty($allDescriptions) ? implode("<br>", $allDescriptions) : 'None' ?></pre>
+                            <div class="row3 mt-4">
+                                <div class="additionalServices" id="booking-info-container">
+                                    <label for="addOns" class="info-label mb-2">Additional Services</label>
+                                    <input type="text" class="form-control" name="addOns" id="addOns"
+                                        value="<?= $additionalServices ?>" readonly>
+                                </div>
+                                <div class="peopleCountContainer" id="booking-info-container">
+                                    <label for="paxNum" class="info-label mb-2">Number of People:</label>
+                                    <input type="text" class="form-control" name="paxNum" id="paxNum"
+                                        value="<?= $totalPax ?>" readonly>
+                                </div>
+                            </div>
                         </div>
-                        <div class="guest-info">
-                            <h4 class="card-title">Additional Request</h4>
-                            <p class="card-text"><?= !empty($AddRequest) ? $AddRequest : 'None' ?> </p>
+
+                    </div>
+
+                    <div class="paymentDetails">
+                        <div class="payment-body">
+                            <h1 class="card-title text-center mt-1 mb-3 me-3">
+                                Payment Details
+                            </h1>
+                            <div class="info-container" id="payment-info">
+                                <label for="paymentMethod" class="mt-2">Payment Method</label>
+                                <input type="text" class="form-control w-50" name="paymentMethod" id="paymentMethod"
+                                    value="<?= $paymentMethod ?>" readonly>
+                            </div>
+                            <?php if ($bookingStatusName === 'Approved') { ?>
+                                <div class="info-container" id="payment-info">
+                                    <label for="paymentStatus" class="mt-2">Payment Status</label>
+                                    <input type="text" class="form-control w-50" name="paymentStatus" id="paymentStatus"
+                                        value="<?= $paymentStatusName ?>" readonly>
+                                </div>
+                            <?php } ?>
+
+                            <div class="info-container" id="payment-info">
+                                <label for="additionalCharge" class="mt-2">Additional Charge</label>
+                                <input type="text" class="form-control w-50" name="additionalCharge" id="additionalCharge"
+                                    value="₱<?= number_format($additionalCharge, 2) ?>" readonly>
+                            </div>
+
+                            <div class="info-container" id="payment-info">
+                                <label for="discountAmount" class="mt-2">Discount</label>
+                                <div class="discountform">
+                                    <input type="text" class="form-control w-100" name="discountAmount"
+                                        id="discountAmount" value="₱<?= number_format($discount, 2) ?>">
+                                    <i class="fa-solid fa-circle-info"
+                                        id="discountTooltip"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="You can change the discount amount manually."
+                                        style="color: #74C0FC;">
+                                    </i>
+
+                                </div>
+                            </div>
+
+                            <?php if ($bookingStatusName === 'Approved') { ?>
+                                <div class="info-container" id="payment-info">
+                                    <label for="paymentDue" class="mt-2">Payment Due Date</label>
+                                    <input type="text" class="form-control w-50" name="paymentDue" id="paymentDue"
+                                        value="<?= $paymentDueDate ?>">
+                                </div>
+                                <div class="info-container" id="payment-info">
+                                    <label for="userBalance" class="mt-2">User Balance</label>
+                                    <input type="text" class="form-control w-50" name="userBalance" id="userBalance"
+                                        value="₱<?= number_format($userBalance, 2) ?>" readonly>
+                                </div>
+                                <div class="info-container" id="payment-info">
+                                    <label for="amountPaid" class="mt-2">Amount Paid</label>
+                                    <input type="text" class="form-control w-50" name="amountPaid" id="amountPaid"
+                                        value="₱<?= number_format($amountPaid, 2) ?>" readonly>
+                                </div>
+                            <?php } ?>
+                            <div class="info-container" id="payment-info">
+                                <label for="downpayment" class="mt-2">Downpayment</label>
+                                <input type="text" class="form-control w-50"
+                                    value="₱<?= number_format($downpayment, 2) ?>" readonly>
+                            </div>
+                            <div class="info-container" id="payment-info">
+                                <label for="totalCost" class="mt-2"> Total Cost</label>
+                                <input type="text" class="form-control w-50" name="totalCost" id="totalCost"
+                                    value="₱<?= number_format($totalBill, 2) ?>" readonly>
+                            </div>
+                        </div>
+
+                        <div class="notesContainer mt-3">
+                            <!-- <h1 class="card-title text-center"> Notes</h1> -->
+                            <div class="info-container">
+                                <label for="req" class="info-label mt-2 mb-2">Additional Request(s)/Note(s)</label>
+                                <!-- <input type="text" class="form-control" name="req" id="req"
+                                    value="<?= $additionalReq ?>"> -->
+                                <textarea class="form-control" rows="4" name="req"
+                                    id="req"><?= $additionalReq ?></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </form>
 
+                <div class="hidden-inputs">
+                    <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                    <input type="hidden" name="bookingStatusID" id="bookingStatusID" value="<?= $bookingStatusID ?>">
+                    <input type="hidden" name="bookingStatusName" id="bookingStatusName" value="<?= $bookingStatusName ?>">
+                    <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus" value="<?= $paymentApprovalStatusName ?>">
+                    <?php foreach ($serviceIDs as $serviceID): ?>
+                        <input type="hidden" name="serviceIDs[]" value="<?= $serviceID ?>">
+                    <?php endforeach; ?>
+                    <input type="hidden" name="endDate" id="endDate" value="<?= $rawEndDate ?>">
+                    <input type="hidden" name="startDate" id="startDate" value="<?= $rawStartDate ?>">
+                    <input type="hidden" name="userRoleID" value="<?= $userRoleID ?>">
+                </div>
+            </form>
         </div>
 
     </div>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
 
+    <!-- Show discount tooltip and border -->
     <script>
-        const videoke = document.getElementById("videoke").value;
-        const bookingType = document.getElementById("bookingType").value;
-        const status = document.getElementById("status").value;
-        const addOns = document.getElementById("addOns").textContent.trim();
+        window.addEventListener('DOMContentLoaded', () => {
+            const discountForm = document.querySelector('.discountform');
+            const tooltipTrigger = document.getElementById('discountTooltip');
+            const tooltip = new bootstrap.Tooltip(tooltipTrigger);
+            tooltip.show();
 
-        const buttonContainer = document.getElementById("button-container")
-        const videokeSelectionContainer = document.getElementById("videokeSelectionContainer");
-        const downpaymentContainer = document.getElementById("downpayment");
-        const paymentStatusContainer = document.getElementById("paymentStatus");
+            discountForm.style.border = "1px solid red";
 
-        if (videoke === 'Videoke') {
-            videokeSelectionContainer.style.display = "block";
-            videokeSelectionContainer.required = true;
-        }
+            discountForm.addEventListener('change', function() {
+                discountForm.style.border = "none";
+            })
 
-        if (bookingType === "Resort") {
-            downpaymentContainer.style.display = "none";
-            document.querySelector(".guest-info.payment").classList.add("fullWidth");
-        }
 
-        if (status === "Approved") {
-            buttonContainer.style.display = "none";
-            videokeSelectionContainer.style.display = "none";
-            document.querySelector(".guest-info.addOns").classList.add("fullWidth");
-            document.querySelector(".guest-info.payment").classList.remove("fullWidth");
-            paymentStatusContainer.style.display = "block";
-        }
+            setTimeout(() => {
+                tooltip.hide();
+            }, 3000);
+        });
+    </script>
 
-        if (addOns === "None") {
-            document.querySelector(".guest-info.addOns").classList.add("fullWidth");
-        }
 
-        if (status === "Cancelled" || status === "Rejected") {
+    <!-- Hiding buttons -->
+    <script>
+        const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
+        const bookingStatus = document.getElementById('bookingStatusName').value;
+
+        const buttonContainer = document.getElementById('button-container');
+
+        if (paymentApprovalStatus === 'Done' ||
+            bookingStatus === 'Expired' ||
+            bookingStatus === 'Rejected' ||
+            bookingStatus === 'Cancelled' ||
+            paymentApprovalStatus === 'Rejected' ||
+            paymentApprovalStatus === 'Cancelled' ||
+            bookingStatus === 'Approved') {
             buttonContainer.style.display = "none";
         }
     </script>

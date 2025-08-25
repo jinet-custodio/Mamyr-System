@@ -50,7 +50,6 @@ nav {
 .navbar-nav {
   display: flex !important;
   list-style: none;
-  margin-top: 5px !important;
 }
 
 .navbar-nav .dropdown-toggle {
@@ -161,7 +160,7 @@ nav {
   align-items: center;
 }
 
-button.btn{
+.notifBtn{
     background-color: transparent;
     border: none;
     padding: 0 !important;  

@@ -1,31 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 
 
 // $customerPayment = $_SESSION['huh']
@@ -91,7 +78,8 @@ $userRole = $_SESSION['userRole'];
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -136,7 +124,7 @@ $userRole = $_SESSION['userRole'];
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="Account/account.php" class="admin">
+            <a href="../Account/account.php" class="admin">
                 <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
             </a>
         </div>
@@ -160,6 +148,11 @@ $userRole = $_SESSION['userRole'];
             <h5>Rooms</h5>
         </a>
 
+        <a class="nav-link" href="services.php">
+            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+            <h5>Services</h5>
+        </a>
+
         <a class="nav-link active" href="#">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
@@ -176,7 +169,7 @@ $userRole = $_SESSION['userRole'];
             <h5>Partnerships</h5>
         </a>
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="editWebsite/editWebsite.php">
             <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
             <h5>Edit Website</h5>
         </a>
@@ -189,7 +182,8 @@ $userRole = $_SESSION['userRole'];
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -205,7 +199,9 @@ $userRole = $_SESSION['userRole'];
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
                                     <?= htmlspecialchars($message) ?>
                                 </li>
                             <?php endforeach; ?>
@@ -239,12 +235,12 @@ $userRole = $_SESSION['userRole'];
                 <!-- Get data and isplay Transaction -->
                 <tbody>
                     <?php
-                    $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
+                    $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, b.paymentMethod, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
                     FROM confirmedBookings cb
                     LEFT JOIN bookings b ON cb.bookingID = b.bookingID
                     LEFT JOIN users u ON b.userID = u.userID
                     LEFT JOIN bookingPaymentStatus bps ON cb.paymentStatus = bps.paymentStatusID
-                    LEFT JOIN statuses stat ON cb.confirmedBookingStatus = stat.statusID
+                    LEFT JOIN statuses stat ON cb.paymentApprovalStatus = stat.statusID
                     ");
                     $payments->execute();
                     $paymentsResult = $payments->get_result();
@@ -253,11 +249,11 @@ $userRole = $_SESSION['userRole'];
                             $guestName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
                             $bookingID = $data['bookingID'];
                             $formattedID = $data['formattedID'];
-                            $totalAmount = $data['CBtotalCost'];
-                            $downpayment = $data['CBdownpayment'];
+                            $totalAmount = $data['confirmedFinalBill'];
+                            // $downpayment = $data['CBdownpayment'];
                             $amountPaid = $data['amountPaid'];
                             $balance = $data['userBalance'];
-                            $CBPaymentMethod = $data['CBpaymentMethod'];
+                            $paymentMethod = $data['paymentMethod'];
                             $paymentStatus = $data['PaymentStatus'];
                             $paymentApprovalStatus = $data['paymentApprovalStatus'];
 
@@ -274,10 +270,11 @@ $userRole = $_SESSION['userRole'];
                             if ($paymentApprovalStatus === "Pending") {
                                 $addClass = "btn btn-warning w-100";
                             } elseif ($paymentApprovalStatus === "Approved") {
-
-                                $addClass = "btn btn-success w-100";
+                                $addClass = "btn btn-primary w-100";
                             } elseif ($paymentApprovalStatus === "Rejected") {
                                 $addClass = "btn btn-danger w-100";
+                            } elseif ($paymentApprovalStatus === "Done") {
+                                $addClass = "btn btn-success w-100";
                             }
 
 
@@ -289,7 +286,7 @@ $userRole = $_SESSION['userRole'];
                                 <!-- <td>₱ <?= number_format($downpayment, 2) ?></td> -->
                                 <!-- <td>₱ <?= number_format($amountPaid, 2) ?></td> -->
                                 <td>₱ <?= number_format($balance, 2) ?></td>
-                                <td><?= htmlspecialchars($CBPaymentMethod) ?></td>
+                                <td><?= htmlspecialchars($paymentMethod) ?></td>
                                 <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
                                 <td><span
                                         class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
@@ -359,6 +356,8 @@ $userRole = $_SESSION['userRole'];
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -372,12 +371,26 @@ $userRole = $_SESSION['userRole'];
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });
         });
     </script>
+
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"

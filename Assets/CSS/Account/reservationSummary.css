@@ -1,0 +1,199 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #e3e3e3;
+}
+
+.container {
+  margin: 2rem auto;
+  /* border: 1px solid red; */
+}
+.statusContainer {
+  width: 100%;
+  display: flex;
+  margin: 1rem;
+  justify-content: space-around;
+}
+
+.leftStatusContainer {
+  /* border: 1px solid red; */
+  width: 35%;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.leftStatusContainer img {
+  height: 80px;
+  width: 80px;
+}
+
+.btn {
+  font-family: "Lora" !important;
+  font-size: 16px !important;
+}
+
+.statusTitle,
+.rightContainerTitle {
+  font-family: "Lora" !important;
+  font-weight: bolder;
+}
+
+.statusSubtitle {
+  font-family: "Poppins";
+}
+
+.rightStatusContainer {
+  border-left: 3px solid rgb(209, 209, 209);
+  /* border: 1px solid red; */
+  padding: 0.5rem;
+  width: 45%;
+}
+
+.rightStatusContainer .header {
+  font-family: "Poppins";
+  font-size: 16px !important;
+}
+
+.rightStatusContainer .content {
+  text-indent: 0.5rem;
+}
+
+.rightStatusContainer .content,
+.cardHeader {
+  font-family: "Poppins";
+  font-size: 14px !important;
+  font-weight: bold;
+}
+
+.rightStatusContainer .firstRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+.rightStatusContainer .card {
+  /* border: 1px solid red; */
+  margin: auto;
+  width: 30rem !important;
+}
+
+.list-group-item {
+  display: flex !important;
+  align-items: center !important;
+  /* padding: 0.5rem 0.5rem; */
+  background-color: #f5f5f5;
+  gap: 0.3rem;
+  height: 3rem !important;
+}
+.list-group-item p {
+  margin-top: 0.5rem;
+}
+.cardContent {
+  font-family: "Poppins";
+  font-size: 14px;
+  margin-left: auto;
+  width: 170px;
+}
+
+.cardContentBill {
+  font-size: 14px;
+}
+
+/* .infoIcon {
+  height: 1.3vw;
+  aspect-ratio: 1;
+} */
+
+#totalAmountSection,
+#promoSection,
+#totalBillSection {
+  display: flex;
+  justify-content: end !important;
+  /* gap: 1.5vw; */
+}
+
+#downPaymentAmount,
+#totalBill {
+  color: #09b800;
+}
+
+.downpayment {
+  display: flex;
+  justify-content: center;
+  gap: 5vw;
+  margin-top: 1.5vw;
+}
+
+.note {
+  width: 90%;
+  position: relative;
+  margin: 0 auto;
+  margin-top: 1.5vw !important;
+  color: #d70b0b;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+#modeofPaymentModalBody {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1vw;
+}
+
+.form-group {
+  margin-top: 2vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 6vw;
+}
+
+#gcashPaymentModal {
+  font-family: "Poppins";
+  font-size: 14px;
+  .modal-title {
+    font-family: "Poppins Black";
+    font-size: 18px;
+  }
+}
+
+#gcashModalBody {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#gcashModalBody img {
+  width: 20vw;
+  height: auto;
+  margin-top: 1vw;
+}

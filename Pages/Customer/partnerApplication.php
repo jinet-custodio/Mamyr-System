@@ -1,31 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 ?>
 
 
@@ -66,14 +53,20 @@ $userRole = $_SESSION['userRole'];
             }
             ?>
             <li class="nav-item account-nav">
-                <a href="Account/account.php">
-                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                <a href="../Account/account.php">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                 </a>
             </li>
 
             <!-- Get notification -->
             <?php
-            $receiver = 'Customer';
+
+            if ($userRole === 1) {
+                $receiver = 'Customer';
+            } elseif ($userRole === 2) {
+                $receiver = 'Partner';
+            }
+
             $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
@@ -632,6 +625,8 @@ $userRole = $_SESSION['userRole'];
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -645,12 +640,26 @@ $userRole = $_SESSION['userRole'];
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });
         });
     </script>
+
 
 
     <!-- Scroll Nav BG -->

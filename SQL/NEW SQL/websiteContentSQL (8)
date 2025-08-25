@@ -26,6 +26,19 @@ CREATE TABLE websiteContentImages (
         ON DELETE CASCADE
 );
 
+ALTER TABLE websiteContentImages
+MODIFY COLUMN imageData VARCHAR(500);
+
+
+CREATE TABLE resortInfo (
+  resortInfoID INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  resortInfoTitle VARCHAR(200) NOT NULL,
+  resortInfoTitle VARCHAR(200) NOT NULL,
+  resortInfoTitle VARCHAR(200) NOT NULL
+);
+
+
+
 -- =========================
 -- AUDIT LOGS
 -- =========================
@@ -36,33 +49,7 @@ CREATE TABLE auditLogs (
     action VARCHAR(255) NOT NULL,
     targetTable VARCHAR(100),
     targetID INT,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (adminID) REFERENCES admins(adminID)
 );
 
-
---
--- ALTER TABLE `websitecontents`
---   ADD PRIMARY KEY (`contentID`),
---   ADD KEY `adminID` (`adminID`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `websitecontents`
---
--- ALTER TABLE `websitecontents`
---   MODIFY `contentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `websitecontents`
---
--- ALTER TABLE `websitecontents`
---   ADD CONSTRAINT `websitecontents_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admins` (`adminID`);
--- COMMIT;

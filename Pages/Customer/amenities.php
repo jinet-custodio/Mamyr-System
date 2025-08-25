@@ -1,31 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 ?>
 
 
@@ -69,15 +56,21 @@ $userRole = $_SESSION['userRole'];
             }
             ?>
             <li class="nav-item account-nav">
-                <a href="Account/account.php">
-                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile">
+                <a href="../Account/account.php">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                 </a>
             </li>
 
 
             <!-- Get notification -->
             <?php
-            $receiver = 'Customer';
+
+            if ($userRole === 1) {
+                $receiver = 'Customer';
+            } elseif ($userRole === 2) {
+                $receiver = 'Partner';
+            }
+
             $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
@@ -102,8 +95,9 @@ $userRole = $_SESSION['userRole'];
                 }
             }
             ?>
+
             <li class="nav-item" id="notifs">
-                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="notifBtn" data-bs-toggle="modal" data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -252,7 +246,7 @@ $userRole = $_SESSION['userRole'];
                             }
                     ?>
 
-                            <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
+                            <!-- <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>"> -->
                     <?php
                             $counter++;
                         }
@@ -260,6 +254,20 @@ $userRole = $_SESSION['userRole'];
                         echo 'No Cottages';
                     }
                     ?>
+
+                     <div class="carousel">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
+                        class="poolPic1">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
+                        class="poolPic2">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3"
+                        class="poolPic3">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
+                        class="poolPic4">
+                    <img src="../../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
+                        class="poolPic5">
+
+                </div>
                 </div>
                 <button class="btn btn-primary prev-btn">&#10094;</button>
                 <button class="btn btn-primary next-btn">&#10095;</button>
@@ -527,6 +535,8 @@ $userRole = $_SESSION['userRole'];
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -540,12 +550,26 @@ $userRole = $_SESSION['userRole'];
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });
         });
     </script>
+
 
 
     <script>

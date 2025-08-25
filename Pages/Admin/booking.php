@@ -1,31 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 
 
 $message = '';
@@ -97,7 +84,8 @@ if (isset($_SESSION['error'])) {
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -143,7 +131,7 @@ if (isset($_SESSION['error'])) {
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="Account/account.php" class="admin">
+            <a href="../Account/account.php" class="admin">
                 <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
             </a>
         </div>
@@ -167,6 +155,11 @@ if (isset($_SESSION['error'])) {
             <h5>Rooms</h5>
         </a>
 
+        <a class="nav-link" href="services.php">
+            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+            <h5>Services</h5>
+        </a>
+
         <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
@@ -184,7 +177,7 @@ if (isset($_SESSION['error'])) {
             <h5>Partnerships</h5>
         </a>
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="editWebsite/editWebsite.php">
             <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
             <h5>Edit Website</h5>
         </a>
@@ -197,7 +190,8 @@ if (isset($_SESSION['error'])) {
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -213,7 +207,9 @@ if (isset($_SESSION['error'])) {
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
                                     <?= htmlspecialchars($notifMessage) ?>
                                 </li>
                             <?php endforeach; ?>
@@ -248,20 +244,13 @@ if (isset($_SESSION['error'])) {
                     <!-- Select booking info -->
                     <?php
                     $getBookingInfo = $conn->prepare("SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID, u.firstName,u.middleInitial, u.lastName, b.*,
-                    cp.*, ec.categoryName AS eventCategoryName,
+                    cp.*,
                     cb.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus
                                     FROM bookings b
                                     INNER JOIN users u ON b.userID = u.userID   -- to get  the firstname, M.I and lastname 
                                     LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID 
-                                    LEFT JOIN statuses s ON cb.confirmedBookingStatus = s.statusID -- to get the status name
-                                    LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID  -- to get the status name
-                                    LEFT JOIN packages p ON b.packageID = p.packageID  -- to get the info of the package na binook 
-                                    LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID    -- to get the event name of the package 
-                                    -- LEFT JOIN bookingsservices bs ON b.bookingID = bs.bookingID
-                                    -- LEFT JOIN services s ON bs.serviceID = s.serviceID   -- to get the info of the service na binook 
-                                    -- LEFT JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID  -- info of service
-                                    -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = rs.RScategoryID  -- status
-                                    -- LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID -- info of service
+                                    LEFT JOIN statuses s ON cb.paymentApprovalStatus = s.statusID -- to get the status name
+                                    LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID  -- to get the status name 
                                     LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
                                     ");
                     $getBookingInfo->execute();
@@ -273,7 +262,7 @@ if (isset($_SESSION['error'])) {
                             // echo "</pre>";
                             $bookingID = $bookings['formattedBookingID'];
                             $startDate = strtotime($bookings['startDate']);
-                            $checkIn = date("d F Y", $startDate);
+                            $checkIn = date("F d, Y", $startDate);
                             $middleInitial = trim($bookings['middleInitial'] ?? '');
                             $name = ucfirst($bookings['firstName']) . " " . ucfirst($middleInitial) . " "  . ucfirst($bookings['lastName']);
 
@@ -294,6 +283,9 @@ if (isset($_SESSION['error'])) {
                                 } elseif ($bookings['confirmedStatus'] === "Rejected") {
                                     $status = "Rejected";
                                     $addClass = "btn btn-danger w-100";
+                                } elseif ($bookings['confirmedStatus'] === "Done") {
+                                    $status = "Done";
+                                    $addClass = "btn btn-success w-100";
                                 }
                             } else {
                                 $confirmedBookingID = NULL;
@@ -314,17 +306,11 @@ if (isset($_SESSION['error'])) {
                                 } elseif ($bookings['bookingStatus'] === "Rejected") {
                                     $status = "Rejected";
                                     $addClass = "btn btn-danger w-100";
+                                } elseif ($bookings['bookingStatus'] === "Expired") {
+                                    $status = "Expired";
+                                    $addClass = "btn btn-secondary w-100";
                                 }
                             }
-                            // $status = $bookings['statusName'];
-                            // if ($bookings['eventCategoryName'] != "") {
-                            //     $bookingType = "Event Booking";
-                            // } elseif ($bookings['customPackageID'] != "") {
-                            //     $bookingType = "Customized Package";
-                            // } else {
-                            //     $bookingType = "Resort Booking";
-                            // }
-
                     ?>
                             <tr>
                                 <td><?= htmlspecialchars($bookingID) ?></td>
@@ -364,6 +350,8 @@ if (isset($_SESSION['error'])) {
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -377,13 +365,25 @@ if (isset($_SESSION['error'])) {
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });
         });
     </script>
-
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"

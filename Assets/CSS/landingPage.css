@@ -10,14 +10,6 @@
   font-family: "Lora";
   src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
-@font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-}
-@font-face {
-  font-family: "Prata";
-  src: url(../Fonts/Prata/Prata-Regular.ttf);
-}
 
 * {
   margin: 0;
@@ -116,7 +108,6 @@ body {
   font-family: "Poppins" !important;
   font-weight: lighter;
   margin-top: 15px;
-  font-size: 1.5vw;
   /* margin-left: 3vw; */
 }
 
@@ -165,7 +156,15 @@ body {
 
 .navbar-collapse {
   text-align: center;
-  padding-bottom: 0.5rem;
+}
+
+ul {
+  font-family: "Poppins";
+  font-weight: lighter;
+  list-style: none;
+  display: table;
+  font-size: 1.3vw !important;
+  text-transform: uppercase;
 }
 
 .navbar-toggler {
@@ -238,17 +237,32 @@ body {
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 
+.checkBoxContainer {
+  display: flex;
+  gap: 1vw;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.3rem;
+}
+
+.form-check-label {
+  font-size: 1.6vw;
+}
+
+.form-check-input {
+  border-color: black !important;
+}
 .label {
   display: flex;
-  gap: 4vw;
+  gap: 5vw;
   margin-top: 3vw;
+  justify-content: center;
 }
 
 .formBoxes {
   width: 100%;
   gap: 4vw;
   display: flex;
-  justify-content: center;
 }
 
 input[type="number"]::-webkit-inner-spin-button {
@@ -566,7 +580,7 @@ footer {
     }
   }
 
-  .navbar.white-bg {
+.white-bg {
     background-color: white;
   }
 
@@ -650,7 +664,11 @@ footer {
     height: clamp(4vh, calc(1.5vw + 4px), 2vh) !important;
     width: auto;
   }
-
+#navUL {
+        position: absolute !important;
+        right: 2vw !important;
+    }
+  
   .emailAddressText {
     margin-top: 0.1vw;
   }
@@ -945,7 +963,7 @@ footer {
     }
   }
 
-  .navbar.white-bg {
+  .white-bg {
     background-color: white;
   }
 

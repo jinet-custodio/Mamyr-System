@@ -9,7 +9,7 @@ CREATE TABLE users (
     birthDate DATE DEFAULT NULL,
     userProfile LONGBLOB,
     password VARCHAR(255) NOT NULL,
-    userRole INT NOT NULL DEFAULT 1,
+    userRole INT NOT NULL DEFAULT 1, 
     userOTP VARCHAR(100),
     OTP_expiration_at DATETIME,
     userStatusID INT NOT NULL DEFAULT 1,
@@ -20,21 +20,21 @@ CREATE TABLE users (
 );
 
 
-DELIMITER $$
+-- DELIMITER $$
 
-CREATE TRIGGER trg_after_user_update_role
-AFTER UPDATE ON users
-FOR EACH ROW
-BEGIN
+-- CREATE TRIGGER trg_after_user_update_role
+-- AFTER UPDATE ON users
+-- FOR EACH ROW
+-- BEGIN
 
-    IF NEW.userRole = 3 AND OLD.userRole <> 3 THEN
-        IF NOT EXISTS (SELECT 1 FROM admins WHERE userID = NEW.userID) THEN
-            INSERT INTO admins (userID, position) VALUES (NEW.userID, 'Administrator');
-        END IF;
-    END IF;
-END $$
+--     IF NEW.userRole = 3 AND OLD.userRole <> 3 THEN
+--         IF NOT EXISTS (SELECT 1 FROM admins WHERE userID = NEW.userID) THEN
+--             INSERT INTO admins (userID, position) VALUES (NEW.userID, 'Administrator');
+--         END IF;
+--     END IF;
+-- END $$
 
-DELIMITER ;
+-- DELIMITER ;
 
 
 
@@ -51,20 +51,22 @@ CREATE TABLE admins (
 CREATE TABLE partnerships (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT DEFAULT NULL,
+    validID varchar(500) NOT NULL,
     companyName varchar(100) not null,
     businessEmail VARCHAR(255) NOT NULL UNIQUE,
     partnerAddress TEXT NOT NULL,
     documentLink VARCHAR(500) NOT NULL,
     partnerTypeID INT NOT NULL,
-    partnerStatus INT NOT NULL DEFAULT 1,
+    partnerStatusID INT NOT NULL DEFAULT 1,
     requestDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     startDate DATE DEFAULT NULL,
     endDate DATE DEFAULT NULL,
 
     FOREIGN KEY (userID) REFERENCES users(userID),
-    FOREIGN KEY (partnerStatus) REFERENCES partnerStatuses(partnerStatusID),
+    FOREIGN KEY (partnerStatusID) REFERENCES partnerStatuses(partnerStatusID),
     FOREIGN KEY (partnerTypeID) REFERENCES partnershipTypes(partnerTypeID)
     -- FOREIGN KEY (partnerStatus) REFERENCES userStatuses(userStatusID)
 );
+
 
 

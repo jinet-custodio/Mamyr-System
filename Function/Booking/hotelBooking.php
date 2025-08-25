@@ -39,30 +39,29 @@ if (isset($_POST['hotelBooking'])) {
     $checkOutDate = mysqli_real_escape_string($conn, $_POST['scheduledEndDate']);
     $arrivalTime = mysqli_real_escape_string($conn, $_POST['arrivalTime']);
 
-    $adultCount = mysqli_real_escape_string($conn, $_POST['adultCount']);
-    $childrenCount = mysqli_real_escape_string($conn, $_POST['childrenCount']);
-    $totalPax = mysqli_real_escape_string($conn, $_POST['totalPax']);
-    $totalCapacity = mysqli_real_escape_string($conn, $_POST['capacity']);
+    $adultCount = (int)$_POST['adultCount'] ?? 0;
+    $childrenCount = (int) $_POST['childrenCount'] ?? 0;
+    $toddlerCount = (int) $_POST['toddlerCount'] ?? 0;
+    $totalPax = (int) $_POST['totalPax'];
+    $totalCapacity = (int) $_POST['capacity'];
+    $additionalGuest = (int) $_POST['additionalGuest'];
 
     $selectedHotels = !empty($_POST['hotelSelections']) ? array_map('trim', explode(', ', $_POST['hotelSelections'])) : [];
 
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
 
-    $downpayment = mysqli_real_escape_string($conn, $_POST['downPayment']);
-    $totalCost = mysqli_real_escape_string($conn, $_POST['totalCost']);
+    $downpayment = (float) $_POST['downPayment'];
+    $totalCost = (float) $_POST['totalCost'];
+    $additionalCharge = (int) $_POST['additionalFee'];
 
-    $excessChargePerPerson = 250;
-    $additionalCharge = 0;
-    $additionalGuest = 0;
     $bookingStatus = 1;
     $serviceIDs = [];
     $hotelPrices = [];
     $hotelCapacity = [];
-    if ($totalPax > $totalCapacity) {
-        $additionalGuest = subtraction($totalPax, $totalCapacity, 0);
-        $additionalCharge = multiplication($additionalGuest, $excessChargePerPerson);
-    }
+
+    $arrivalTimeObj = new DateTime($arrivalTime);
+    $arrivalTime = $arrivalTimeObj->format('H:i:s');
 
     if (empty($selectedHotels)) {
         header("Location: ../../Pages/Customer/hotelBooking.php");
@@ -88,12 +87,15 @@ if (isset($_POST['hotelBooking'])) {
     $hoursNum = str_replace(" hours", "", $hoursSelected);
 
     //Insert Booking
-    $insertBooking = $conn->prepare("INSERT INTO bookings(userID, paxNum, hoursNum, startDate, endDate, 
+    $insertBooking = $conn->prepare("INSERT INTO bookings(userID, toddlerCount, adultCount, kidCount, guestCount, durationCount, startDate, endDate, 
     paymentMethod, additionalCharge, totalCost, downpayment, bookingStatus, bookingType, arrivalTime) 
-    VALUES(?,?,?,?,?,?,?,?,?,?,?, ?)");
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?)");
     $insertBooking->bind_param(
-        "iiisssdddiss",
+        "iiiiiisssdddiss",
         $userID,
+        $toddlerCount,
+        $adultCount,
+        $childrenCount,
         $totalPax,
         $hoursNum,
         $checkInDate,

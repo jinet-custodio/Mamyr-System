@@ -2,7 +2,9 @@
 
 require '../Config/dbcon.php';
 session_start();
-require '../Function/OTPdeletion.php';
+
+require_once '../Function/functions.php';
+resetExpiredOTPs($conn);
 ?>
 
 
@@ -150,14 +152,7 @@ require '../Function/OTPdeletion.php';
 
 
 
-
-
-
-
-
             <!-- error message -->
-
-
 
             <div class="emailErrorMsg">
                 <p>
@@ -334,128 +329,128 @@ require '../Function/OTPdeletion.php';
 
     <!-- Loader function -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const signUpBtn = document.getElementById('signUp');
-        const loginBtn = document.getElementById('login');
-        const loginEmail = document.getElementById('login_email');
-        const loginPassword = document.getElementById('login_password');
-        const loader = document.getElementById('loader');
+        document.addEventListener('DOMContentLoaded', function() {
+            const signUpBtn = document.getElementById('signUp');
+            const loginBtn = document.getElementById('login');
+            const loginEmail = document.getElementById('login_email');
+            const loginPassword = document.getElementById('login_password');
+            const loader = document.getElementById('loader');
 
 
-        // Click event on the button
-        signUpBtn.addEventListener('click', function(e) {
-            document.getElementById('loaderOverlay').style.display = 'flex';
+            // Click event on the button
+            signUpBtn.addEventListener('click', function(e) {
+                document.getElementById('loaderOverlay').style.display = 'flex';
+            });
+            loginBtn.addEventListener('click', function(e) {
+                document.getElementById('loaderOverlay').style.display = 'flex';
+            });
         });
-        loginBtn.addEventListener('click', function(e) {
-            document.getElementById('loaderOverlay').style.display = 'flex';
-        });
-    });
     </script>
 
 
     <script>
-    const container = document.querySelector('.container');
-    const registerBtn = document.querySelector('.register-btn');
-    const loginBtn = document.querySelector('.login-btn');
+        const container = document.querySelector('.container');
+        const registerBtn = document.querySelector('.register-btn');
+        const loginBtn = document.querySelector('.login-btn');
 
-    // registerBtn.addEventListener('click', () => {
-    //     container.classList.add('active');
-    // });
+        // registerBtn.addEventListener('click', () => {
+        //     container.classList.add('active');
+        // });
 
-    loginBtn.addEventListener('click', () => {
-        container.classList.remove('active');
-    });
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = urlParams.get('page');
-    const action = urlParams.get('action');
-
-    if (page === 'register') {
-        container.classList.add('active');
-
-        // 🔽 Remove `?page=register` from URL after activating the form
-        const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
-        window.history.replaceState({}, document.title, urlWithoutParam);
-    } else {
-        container.classList.remove('active');
-    }
-
-    if (action === "deleted") {
-        Swal.fire({
-            title: "Success",
-            text: "Your account has been deleted successfully.",
-            icon: "success"
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove('active');
         });
-    } else if (action === "unauthorized") {
-        Swal.fire({
-            title: "Oops",
-            text: "You are not authorized to access this page.",
-            icon: "warning"
-        })
-    } else if (action === "notVerified") {
-        Swal.fire({
-            title: "Oops",
-            text: "User not verified. Please verify your account.",
-            icon: "warning"
-        })
-    } else if (action === "emailExist") {
-        Swal.fire({
-            title: "Oops",
-            text: "An account with this email already exists.",
-            icon: "warning"
-        })
-    } else if (action === "OTPFailed") {
-        Swal.fire({
-            title: "Oops",
-            text: "We couldn’t send the OTP. Please try again.",
-            icon: "warning"
-        })
-    } else if (action === "successVerification") {
-        Swal.fire({
-            title: "Verified Successfully",
-            text: "Your account has been verified. You may now log in to your account.",
-            icon: "success"
-        })
-    }
-    if (page || action) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get('page');
+        const action = urlParams.get('action');
+
+        if (page === 'register') {
+            container.classList.add('active');
+
+            // 🔽 Remove `?page=register` from URL after activating the form
+            const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({}, document.title, urlWithoutParam);
+        } else {
+            container.classList.remove('active');
+        }
+
+        if (action === "deleted") {
+            Swal.fire({
+                title: "Success",
+                text: "Your account has been deleted successfully.",
+                icon: "success"
+            });
+        } else if (action === "unauthorized") {
+            Swal.fire({
+                title: "Oops",
+                text: "You are not authorized to access this page.",
+                icon: "warning"
+            })
+        } else if (action === "notVerified") {
+            Swal.fire({
+                title: "Oops",
+                text: "User not verified. Please verify your account.",
+                icon: "warning"
+            })
+        } else if (action === "emailExist") {
+            Swal.fire({
+                title: "Oops",
+                text: "An account with this email already exists.",
+                icon: "warning"
+            })
+        } else if (action === "OTPFailed") {
+            Swal.fire({
+                title: "Oops",
+                text: "We couldn’t send the OTP. Please try again.",
+                icon: "warning"
+            })
+        } else if (action === "successVerification") {
+            Swal.fire({
+                title: "Verified Successfully",
+                text: "Your account has been verified. You may now log in to your account.",
+                icon: "success"
+            })
+        }
+        if (page || action) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
     <!-- Eye icon of password show and hide -->
     <script>
-    const passwordField = document.getElementById('login_password');
-    const passwordField1 = document.getElementById('password');
-    const passwordField2 = document.getElementById('confirm_password');
-    const togglePassword = document.getElementById('togglePassword');
-    const togglePassword1 = document.getElementById('togglePassword1');
-    const togglePassword2 = document.getElementById('togglePassword2');
+        const passwordField = document.getElementById('login_password');
+        const passwordField1 = document.getElementById('password');
+        const passwordField2 = document.getElementById('confirm_password');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const togglePassword2 = document.getElementById('togglePassword2');
 
-    function togglePasswordVisibility(passwordField, toggleIcon) {
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleIcon.classList.remove('bxs-hide');
-            toggleIcon.classList.add('bx-show-alt');
-        } else {
-            passwordField.type = 'password';
-            toggleIcon.classList.remove('bx-show-alt');
-            toggleIcon.classList.add('bxs-hide');
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide');
+            }
         }
-    }
 
-    togglePassword.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField, togglePassword);
-    });
+        togglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField, togglePassword);
+        });
 
-    togglePassword1.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField1, togglePassword1);
-    });
+        togglePassword1.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField1, togglePassword1);
+        });
 
-    togglePassword2.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField2, togglePassword2);
-    });
+        togglePassword2.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField2, togglePassword2);
+        });
     </script>
 </body>
 

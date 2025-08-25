@@ -26,17 +26,16 @@
     height: 100%;
     margin: 0;
   }
-*/  
-  body {
-    margin: 0;
-  }
+*/
+body {
+  margin: 0;
+}
 
 .wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
-
 
 main {
   flex: 1;
@@ -157,7 +156,6 @@ ul {
   font-weight: bold;
 }
 
-
 .account-nav {
   height: 100%;
   display: flex;
@@ -172,34 +170,32 @@ ul {
     object-fit: cover;
   }
   a {
-      height: 100%;
-  display: flex;
-  align-items: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 }
 
-
-.notification-container{
+.notification-container {
   margin: 1rem;
   height: 100%;
   display: flex;
   align-items: center;
 }
 
-button.btn{
-    background-color: transparent;
-    border: none;
-    padding: 0 !important;  
-    margin-left: 2vw;
-  }
+button.notifBtn {
+  background-color: transparent;
+  border: none;
+  padding: 0 !important;
+  margin-left: 2vw;
+}
 
 .notificationIcon {
   display: flex;
   align-items: center;
   height: 2.2vw;
   aspect-ratio: 1;
-  }
-
+}
 
 .logoNav {
   /* border: 1px solid black; */
@@ -216,7 +212,7 @@ button.btn{
   text-align: center;
 }
 
-.titleContainer h4{
+.titleContainer h4 {
   font-size: 2vw !important;
 }
 
@@ -228,7 +224,8 @@ button.btn{
   font-size: 1.7vw !important;
 }
 
-.posts, .title {
+.posts,
+.title {
   width: 95%;
   margin: 0 auto;
   display: flex;
@@ -249,10 +246,10 @@ button.btn{
   padding: 1vw;
 }
 
-.blogDescription p, .eventType p{
+.blogDescription p,
+.eventType p {
   font-size: 1.4vw;
 }
-
 
 .featuredpost img {
   width: 45vw;
@@ -268,19 +265,21 @@ button.btn{
   align-items: center;
 }
 
-#featuredReadmore, .othersReadmore {
+#featuredReadmore,
+.othersReadmore {
   font-size: clamp(1.5vw, calc(1.2vw + 2px), 1vw) !important;
 }
 
-.othersEventType p{
+.othersEventType p {
   font-size: 1.3vw !important;
 }
 
-.eventType p, .othersEventType p{
+.eventType p,
+.othersEventType p {
   margin-bottom: 0 !important;
 }
 
-.othersHeading h4{
+.othersHeading h4 {
   font-size: 1.6vw !important;
   font-weight: 800;
 }
@@ -307,9 +306,9 @@ button.btn{
 }
 
 .btn-primary {
-  display:flex;
-  align-self:flex-end;
-  text-align:center;
+  display: flex;
+  align-self: flex-end;
+  text-align: center;
   font-size: 1.2vw !important;
 }
 
@@ -464,8 +463,8 @@ footer {
 }
 
 /* Tablet size */
-@media only screen and (min-width: 600px) and (max-width: 1025px) { 
-   .profile {
+@media only screen and (min-width: 600px) and (max-width: 1025px) {
+  .profile {
     flex-wrap: nowrap !important;
     flex-direction: row !important;
     align-items: center;
@@ -477,10 +476,10 @@ footer {
   }
 
   .notificationIcon {
-  display: flex;
-  align-items: center;
-  height:  clamp(3vw, 3.4vw, 4.1vw);
-  aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    height: clamp(3vw, 3.4vw, 4.1vw);
+    aspect-ratio: 1;
   }
 
   button.btn {
@@ -495,9 +494,7 @@ footer {
   .nav-item {
     font-size: clamp(10px, calc(1.5vh + 4px), 12px);
   }
-
 }
-
 
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
@@ -505,7 +502,7 @@ footer {
     top: 2vw;
   }
 
-   .profile {
+  .profile {
     flex-wrap: nowrap !important;
     flex-direction: row !important;
     align-items: center;
@@ -517,10 +514,10 @@ footer {
   }
 
   .notificationIcon {
-  display: flex;
-  align-items: center;
-  height:  clamp(3vw, 3.8vw, 4.2vw);
-  aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    height: clamp(3vw, 3.8vw, 4.2vw);
+    aspect-ratio: 1;
   }
 
   button.btn {
@@ -570,19 +567,19 @@ footer {
     background-color: none !important;
   }
 
-.titleContainer {
-  margin-top: 16vw;
-}
+  .titleContainer {
+    margin-top: 16vw;
+  }
 
- #maintext{
+  #maintext {
     font-size: clamp(3.2vw, calc(2.9vw + 2px), 2.6vw) !important;
     width: 100% !important;
   }
 
-  .titleContainer h4{
+  .titleContainer h4 {
     font-size: clamp(2.4vw, calc(2.2vw + 2px), 1.8vw) !important;
   }
-  
+
   .posts {
     flex-direction: column;
     width: 80%;
@@ -603,22 +600,24 @@ footer {
   }
   .featuredpost {
     justify-content: center;
-
   }
 
   .featured img {
     width: 65vw;
   }
 
-  .featuredpost, .featured img, .desc, .post img {
+  .featuredpost,
+  .featured img,
+  .desc,
+  .post img {
     margin: 0 auto;
   }
 
   .blogHeading h4 {
-     font-size: clamp(2.8vw, calc(2.4vw + 2px), 2.1vw) !important;
+    font-size: clamp(2.8vw, calc(2.4vw + 2px), 2.1vw) !important;
   }
 
-  .blogDescription p{
+  .blogDescription p {
     font-size: clamp(1.9vw, calc(1.7vw + 2px), 1.4vw) !important;
   }
 
@@ -636,16 +635,18 @@ footer {
   .others {
     width: 90% !important;
   }
-  
+
   .post img {
     width: 25vw;
   }
 
-  .othersEventType p, .othersReadmore {
+  .othersEventType p,
+  .othersReadmore {
     font-size: clamp(1.7vw, calc(1.4vw + 2px), 1.2vw) !important;
   }
 
-  .othersHeading h4, .eventType p {
+  .othersHeading h4,
+  .eventType p {
     font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.4vw) !important;
   }
 
@@ -661,11 +662,14 @@ footer {
     width: 15vw;
   }
 
-  .reservationTitle, .locationTitle {
+  .reservationTitle,
+  .locationTitle {
     font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
   }
 
-  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
     font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
   }
 
@@ -673,11 +677,10 @@ footer {
     justify-items: center;
     align-items: center;
   }
- 
-    .socialIcons a i { 
-      font-size: 3vw;
-    }
 
+  .socialIcons a i {
+    font-size: 3vw;
+  }
 }
 
 /* Tablet landscape */
@@ -694,7 +697,7 @@ footer {
     text-align: center;
     width: 100%;
   }
- .nav-item {
+  .nav-item {
     font-size: clamp(10px, calc(1.5vh + 4px), 12px);
   }
 
@@ -737,7 +740,7 @@ footer {
     background-color: none !important;
   }
 
- #maintext{
+  #maintext {
     font-size: clamp(3.6vw, calc(3.2vw + 2px), 2.9vw) !important;
     width: 100% !important;
   }
@@ -745,7 +748,7 @@ footer {
   .titleContainer {
     margin-top: 15vw !important;
   }
-  .titleContainer h4{
+  .titleContainer h4 {
     font-size: clamp(2.9vw, calc(2vw + 2px), 1.9vw) !important;
   }
 
@@ -761,24 +764,22 @@ footer {
     padding: 0 !important;
   }
 
-   .account-nav img {
+  .account-nav img {
     height: clamp(7.5vw, 8vw, 9.5vw);
     aspect-ratio: 1;
   }
 
   .notificationIcon {
-  display: flex;
-  align-items: center;
-  height:  clamp(4vw, 4.7vw, 5.4vw);
-  aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    height: clamp(4vw, 4.7vw, 5.4vw);
+    aspect-ratio: 1;
   }
 
   #notifs {
     margin-top: 0 !important;
   }
 
-
-  
   .posts {
     flex-direction: column;
     width: 90%;
@@ -800,7 +801,6 @@ footer {
   }
   .featuredpost {
     justify-content: center;
-
   }
 
   .featured img {
@@ -811,15 +811,18 @@ footer {
     padding: 0 !important;
   }
 
-  .featuredpost, .featured img, .desc, .post img {
+  .featuredpost,
+  .featured img,
+  .desc,
+  .post img {
     margin: 0 auto;
   }
 
   .blogHeading h4 {
-     font-size: clamp(3.3vw, calc(2.8vw + 2px), 2.6vw) !important;
+    font-size: clamp(3.3vw, calc(2.8vw + 2px), 2.6vw) !important;
   }
 
-  .blogDescription p{
+  .blogDescription p {
     font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
@@ -834,7 +837,8 @@ footer {
     font-size: clamp(2.7vw, calc(2.3vw + 2px), 2.1vw) !important;
   }
 
-  #featuredReadmore, .othersReadmore {
+  #featuredReadmore,
+  .othersReadmore {
     margin-top: 0 !important;
     padding: 1vw 2vw !important;
   }
@@ -843,20 +847,23 @@ footer {
     width: 90% !important;
     padding: 0 !important;
   }
-  
+
   .post img {
     width: 31vw;
   }
 
-  .othersImg, .othersDesc {
+  .othersImg,
+  .othersDesc {
     width: 50% !important;
   }
 
-  .othersEventType p, .othersReadmore {
+  .othersEventType p,
+  .othersReadmore {
     font-size: clamp(2.1vw, calc(1.7vw + 2px), 1.5vw) !important;
   }
 
-  .othersHeading h4, .eventType p {
+  .othersHeading h4,
+  .eventType p {
     font-size: clamp(2.7vw, calc(2.4vw + 2px), 2.1vw) !important;
   }
 
@@ -864,8 +871,7 @@ footer {
     font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.7vw) !important;
   }
 
-
-.mb-0 {
+  .mb-0 {
     font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
   }
 
@@ -881,11 +887,14 @@ footer {
     width: 50%;
   }
 
-  .reservationTitle, .locationTitle {
+  .reservationTitle,
+  .locationTitle {
     font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
-  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
     font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
   }
 
@@ -894,8 +903,8 @@ footer {
     align-items: center;
     padding: 0.5vw 1.5vw;
   }
- 
-    .socialIcons a i { 
-      font-size: 3.5vw;
-    }  
+
+  .socialIcons a i {
+    font-size: 3.5vw;
+  }
 }

@@ -1,0 +1,233 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 23vw;
+  background-color: #cee4f2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 2px solid #cee4f2;
+  border-top-right-radius: 30px;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.home {
+  /* border: 1px solid red; */
+  padding: 2vw;
+}
+
+.homeIcon {
+  float: right;
+}
+
+.sidebar-header {
+  color: black !important;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem auto;
+  padding-top: 0.5rem;
+  h5 {
+    font-family: "Lora" !important;
+    margin: 0;
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.profileImage {
+  margin: auto;
+  padding: 1rem;
+  img {
+    height: clamp(8vw, 6.5vw, 4vw);
+    border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+}
+.list-group {
+  font-family: "Poppins";
+  font-size: 22px;
+  border: none;
+  list-style: none;
+  margin-top: 0.5rem;
+
+  a {
+    text-decoration: none;
+    color: rgb(0, 0, 0) !important;
+    background-color: #cee4f2;
+  }
+}
+.list-group-item {
+  border: none;
+  margin-top: 1vw;
+}
+
+#paymentBookingHist {
+  text-align: center;
+  margin-left: -1.5vw;
+}
+
+.sidebar li:hover a,
+.list-group-item.active {
+  color: #0000;
+  background-color: rgb(255, 255, 255);
+}
+
+#logoutBtn {
+  display: flex;
+  margin: auto;
+  margin-top: 2rem;
+  text-align: center;
+  color: black;
+  padding-top: 10px;
+}
+
+#logoutBtn:hover {
+  background-color: rgb(219, 53, 69);
+  color: white;
+}
+
+.sidebar-icon {
+  height: 30px;
+  padding-right: 1vw;
+}
+
+/* .home-button {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  right: 3vw;
+  margin-top: -5%;
+} */
+
+.card {
+  display: flex;
+  width: 75%;
+  margin: auto;
+  margin-top: 7rem;
+  margin-left: 20rem;
+  border: none;
+}
+
+.card-header {
+  display: flex;
+  border: none;
+  background-color: transparent;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: capitalize;
+  .card-title {
+    font-family: "Poppins Black";
+    margin-top: 1rem;
+    font-size: 25px;
+  }
+  .add-button {
+    font-family: "Lora";
+    box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem !important;
+    img {
+      height: 24px;
+      width: 24px;
+    }
+  }
+}
+
+.add-button:hover {
+  color: rgb(255, 255, 255) !important;
+  background-color: rgb(49, 181, 247);
+  box-shadow: 0 0 8px 8px rgb(49, 181, 247, 0.5);
+  border: none;
+}
+
+table {
+  text-align: center;
+  border: 1px solid rgb(168, 168, 168, 0.5);
+  font-family: "Poppins";
+  .btn {
+    padding: 0.3rem;
+    font-family: "Lora";
+    font-size: 14px;
+    width: 60px;
+  }
+}
+
+.dt-column-title {
+  width: 2vw !important;
+  text-align: center;
+}
+
+.dt-info,
+.dt-search,
+.dt-layout-cell label {
+  font-family: "Lora";
+  text-transform: capitalize;
+}
+
+/* .badge {
+  margin-top: 0.3rem;
+  letter-spacing: 2px;
+  font-family: "Lora";
+  font-size: 14px;
+} */
+
+.status-image {
+  padding-left: 3px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  button {
+    margin: 3px;
+  }
+}
+
+.swal-custom-title {
+  font-family: "Poppins";
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.swal-custom-text {
+  font-family: "Poppins";
+  font-size: 16px;
+}
+
+.image {
+  padding: 1rem !important;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.modal-text {
+  width: 80%;
+  margin: auto;
+  line-height: 2;
+  font-size: 16px;
+}

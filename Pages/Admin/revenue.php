@@ -1,32 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
-
-
 
 
 //Get the percent of payment methods
@@ -126,7 +112,8 @@ if ($revenueResult->num_rows > 0) {
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -172,7 +159,7 @@ if ($revenueResult->num_rows > 0) {
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="Account/account.php" class="admin">
+            <a href="../Account/account.php" class="admin">
                 <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
             </a>
         </div>
@@ -196,6 +183,11 @@ if ($revenueResult->num_rows > 0) {
             <h5>Rooms</h5>
         </a>
 
+        <a class="nav-link" href="services.php">
+            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+            <h5>Services</h5>
+        </a>
+
         <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
@@ -213,7 +205,7 @@ if ($revenueResult->num_rows > 0) {
             <h5>Partnerships</h5>
         </a>
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="editWebsite/editWebsite.php">
             <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
             <h5>Edit Website</h5>
         </a>
@@ -226,7 +218,8 @@ if ($revenueResult->num_rows > 0) {
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -242,7 +235,9 @@ if ($revenueResult->num_rows > 0) {
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
                                     <?= htmlspecialchars($message) ?>
                                 </li>
                             <?php endforeach; ?>
@@ -281,7 +276,9 @@ if ($revenueResult->num_rows > 0) {
                         <!-- <div class="revenuePie">No data available.</div> -->
                     <?php endif; ?>
                 </div>
-
+                <div class="salesReportBtn">
+                    <a href="salesReport.php" class="btn btn-primary w-50">Sales Report</a>
+                </div>
                 <div class="cards">
                     <div class="display-revenue">
 
@@ -326,19 +323,23 @@ if ($revenueResult->num_rows > 0) {
                         ?>
 
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="todayRevenue" value="₱ <?= number_format($totalToday, 2) ?>" readonly>
+                            <input type="text" class="form-control" id="todayRevenue"
+                                value="₱ <?= number_format($totalToday, 2) ?>" readonly>
                             <label for="floatingInputValue">Today</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="weekRevenue" value="₱ <?= number_format($totalThisWeek, 2) ?>" readonly>
+                            <input type="text" class="form-control" id="weekRevenue"
+                                value="₱ <?= number_format($totalThisWeek, 2) ?>" readonly>
                             <label for="floatingInputValue">This Week</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="monthRevenue" value="₱ <?= number_format($totalThisMonth, 2) ?>" readonly>
+                            <input type="text" class="form-control" id="monthRevenue"
+                                value="₱ <?= number_format($totalThisMonth, 2) ?>" readonly>
                             <label for="floatingInputValue">This Month</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="yearRevenue" value="₱ <?= number_format($totalThisYear, 2) ?>" readonly>
+                            <input type="text" class="form-control" id="yearRevenue"
+                                value="₱ <?= number_format($totalThisYear, 2) ?>" readonly>
                             <label for="floatingInputValue">This Year</label>
                         </div>
                     </div>
@@ -368,15 +369,18 @@ if ($revenueResult->num_rows > 0) {
                         </div> -->
 
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalApprovedBookings) ?>" readonly>
+                            <input type="text" class="form-control" id="bookingMade"
+                                value="<?= htmlspecialchars($totalApprovedBookings) ?>" readonly>
                             <label for="floatingInputValue">Approved Bookings</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalCancelledBookings) ?>" readonly>
+                            <input type="text" class="form-control" id="bookingMade"
+                                value="<?= htmlspecialchars($totalCancelledBookings) ?>" readonly>
                             <label for="floatingInputValue">Cancelled Bookings</label>
                         </div>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($totalRejectedBookings) ?>" readonly>
+                            <input type="text" class="form-control" id="bookingMade"
+                                value="<?= htmlspecialchars($totalRejectedBookings) ?>" readonly>
                             <label for="floatingInputValue">Rejected Bookings</label>
                         </div>
 
@@ -398,7 +402,8 @@ if ($revenueResult->num_rows > 0) {
                         }
                         ?>
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="occupied" value="<?= htmlspecialchars($occupiedRates) ?>%" readonly>
+                            <input type="text" class="form-control" id="occupied"
+                                value="<?= htmlspecialchars($occupiedRates) ?>%" readonly>
                             <label for="floatingInputValue">Occupancy Rates</label>
                         </div>
                     </div>
@@ -410,11 +415,15 @@ if ($revenueResult->num_rows > 0) {
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
+    </script>
 
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -428,7 +437,20 @@ if ($revenueResult->num_rows > 0) {
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });

@@ -57,7 +57,7 @@ body {
 .container-fluid {
   display: flex;
   gap: 2rem;
-  margin: 1rem auto;
+  margin: 1rem auto 0 auto;
   justify-content: center;
   align-items: center;
   font-family: "Poppins";
@@ -143,10 +143,6 @@ li .features {
   /* background-color: rgb(90, 89, 89, 0.5); */
 }
 
-#downpaymentDiv {
-  display: none !important;
-}
-
 .button-container {
   display: flex;
 }
@@ -156,11 +152,12 @@ li .features {
 }
 
 .note {
-  width: 50%;
+  width: 60%;
+  display: flex;
+  justify-content: center;
   margin: 0 auto;
   font-family: "Poppins";
   font-size: 16px;
-  padding: 1rem 0;
 }
 
 .note ul {
@@ -171,6 +168,7 @@ li .features {
   list-style-type: none;
   margin: 0.5rem;
   color: blue;
+  text-align: justify;
 }
 
 /* Footer  */

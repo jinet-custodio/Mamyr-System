@@ -1,0 +1,690 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 25vw;
+  background-color: #cee4f2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 2px solid #cee4f2;
+  border-top-right-radius: 30px;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.sidebar.collapsed {
+  width: 15vw;
+  justify-content: flex-start !important;
+}
+
+.sidebar .sidebar-text {
+  display: inline-block;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .sidebar-text {
+  display: none;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar-icon {
+  font-size: 2vw;
+  min-width: 3vw;
+  text-align: center;
+  margin-right: 10px;
+}
+
+/* Sidebar toggle button */
+.toggle-button {
+  background: none;
+  border: none;
+  margin: 10px;
+}
+
+.sidebar-item,
+.list-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+}
+
+.home {
+  padding: 2vw;
+}
+
+.homeIcon {
+  float: right;
+}
+
+.sidebar-header {
+  color: black !important;
+  display: flex;
+  flex-direction: column;
+  margin: 1vw auto;
+  width: 100%;
+  padding-top: 0.5rem;
+  h5 {
+    font-family: "Lora" !important;
+    margin: 0;
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.profileImage {
+  margin: auto;
+  padding: 1rem;
+  img {
+    height: clamp(8vw, 6.5vw, 4vw);
+    border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+}
+.list-group {
+  font-family: "Poppins";
+  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+  border: none;
+  list-style: none;
+  margin-top: 0.5rem;
+
+  a {
+    text-decoration: none;
+    color: rgb(0, 0, 0) !important;
+    background-color: #cee4f2;
+  }
+}
+.list-group-item {
+  border: none;
+  margin-top: 1vw;
+}
+
+#paymentBookingHist {
+  text-align: center;
+}
+.sidebar li:hover a,
+.list-group-item.active {
+  color: #0000;
+  background-color: rgb(255, 255, 255);
+}
+
+#logoutBtn {
+  text-align: center;
+  color: black;
+  padding: 10px;
+  font-size: clamp(2vw, 1.8vw, 1.6vw);
+}
+
+#logoutBtn:hover {
+  background-color: rgb(219, 53, 69);
+  color: white;
+}
+
+.main-content {
+  /* border: 1px solid red; */
+  margin-left: 26vw;
+  margin-top: 5rem;
+  padding: 1rem;
+  overflow-y: auto;
+  width: 75%;
+}
+
+.title {
+  text-align: center;
+  font-size: clamp(3.5vw, 3.2vw, 3vw);
+  font-family: "Poppins";
+  font-weight: bold;
+  margin-bottom: 2vw;
+}
+
+a {
+  text-decoration: none;
+}
+
+.table-striped {
+  text-align: center;
+  width: 100%;
+  margin: auto;
+  margin-top: 3vw !important;
+}
+
+th {
+  background-color: #cee4f2 !important;
+  font-size: clamp(1.3vw, 1.2vw, 1vw);
+}
+
+td,
+#bookingHistory_info,
+.btn {
+  font-size: clamp(1.2vw, 1vw, 0.9vw);
+}
+
+table.dataTable > tbody > tr > th,
+table.dataTable > tbody > tr > td {
+  padding: 0.9vw 0.6vw !important;
+}
+
+.btn {
+  padding: 0.5vw 0.8vw;
+}
+
+.dt-column-title {
+  text-align: center;
+}
+
+label {
+  margin-left: 1vw;
+  margin-right: 1vw;
+  font-size: clamp(1.3vw, 1.1vw, 1vw);
+}
+
+#cancel-content {
+  padding: 2vw !important;
+}
+
+#cancelModalDesc {
+  font-size: 18px;
+}
+#cancelButtonModal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw;
+  margin-top: 2vw;
+}
+
+.dt-input {
+  font-size: clamp(1.3vw, 1.1vw, 1vw);
+}
+
+/* rate modal */
+
+#rate-modal-header {
+  display: flex;
+  justify-content: center;
+}
+
+.rateSubtitle {
+  text-align: center;
+}
+
+.d-flex {
+  justify-content: center;
+}
+.fa-star {
+  font-size: 3vw;
+  padding: 10px;
+  color: grey;
+  cursor: pointer;
+}
+.fa-star.orange {
+  color: orange;
+}
+/* rate modal */
+
+/* Colors */
+
+.btn-orange {
+  background-color: orange;
+  border: 1px solid orange;
+  color: black;
+}
+
+.btn-orange:hover {
+  background-color: rgb(231, 151, 1);
+  border: 1px solid rgb(231, 151, 1);
+  color: black;
+}
+
+.btn-red {
+  background-color: red;
+  border: 1px solid red;
+  color: rgb(255, 255, 255);
+}
+
+.btn-red:hover {
+  background-color: rgb(221, 4, 4);
+  border: 1px solid rgb(221, 4, 4);
+  color: rgb(255, 255, 255);
+}
+
+.btn-dark-green {
+  background-color: green;
+  border: 1px solid green;
+  color: white;
+}
+
+.btn-dark-green:hover {
+  background-color: rgb(4, 112, 4);
+  border: 1px solid rgb(4, 112, 4);
+  color: white;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+  .sidebar {
+    width: 33vw;
+  }
+
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
+
+  .title {
+    font-size: clamp(5.5vw, 5vw, 4.5vw);
+  }
+
+  div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+    display: flex !important;
+  }
+
+  .sidebar-icon {
+    font-size: clamp(2.6vw, 2.3vw, 2vw);
+  }
+
+  .sidebar-header h5 {
+    margin-top: 2vw !important;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
+
+  .profileImage {
+    img {
+      height: clamp(9vw, 8vw, 7vw);
+    }
+    margin: 1vw auto;
+  }
+
+  .main-content {
+    margin-left: 15vw;
+    padding: 0.4rem;
+    width: 82%;
+  }
+
+  .account-name,
+  .swal2-html-container {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
+
+  .account-contact,
+  .roleName {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  th {
+    background-color: #cee4f2 !important;
+    font-size: clamp(1.7vw, 1.5vw, 1.3vw);
+  }
+
+  td,
+  #bookingHistory_info,
+  .btn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .bookingStatus {
+    font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+  }
+
+  table.dataTable > thead > tr > th,
+  table.dataTable > thead > tr > td {
+    padding: 0.9vw 0.3vw !important;
+  }
+
+  .dt-input {
+    font-size: clamp(2.1vw, 1.9vw, 1.7vw);
+  }
+
+  .btn {
+    padding: 0.5vw 0.8vw;
+  }
+
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .swal2-title {
+    font-size: clamp(3.3vw, 3vw, 2.8vw);
+  }
+
+  table.dataTable > thead > tr > th,
+  table.dataTable > thead > tr > td {
+    padding: 0.9vw 0.3vw !important;
+  }
+
+  .dt-layout-cell {
+    width: 50%;
+  }
+}
+
+/* Tablet landscape */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+  .title {
+    font-size: clamp(5.5vw, 5vw, 4.5vw);
+  }
+
+  div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+    display: flex !important;
+  }
+
+  .dt-layout-cell {
+    width: 50%;
+  }
+
+  .sidebar {
+    width: 35vw;
+  }
+
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
+
+  label {
+    margin-left: 1vw;
+    margin-right: 1vw;
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .dt-input {
+    font-size: clamp(2.1vw, 1.9vw, 1.7vw);
+  }
+
+  th {
+    background-color: #cee4f2 !important;
+    font-size: clamp(1.7vw, 1.5vw, 1.3vw);
+  }
+
+  td,
+  #bookingHistory_info,
+  .btn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .sidebar-icon {
+    font-size: clamp(2.6vw, 2.3vw, 2vw);
+  }
+
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
+
+  .profileImage {
+    img {
+      height: clamp(8vw, 7vw, 6vw);
+    }
+    margin: 1vw auto;
+  }
+
+  .main-content {
+    margin-left: 16vw;
+    width: 85%;
+    margin-top: 3rem;
+  }
+
+  .card {
+    padding: 0;
+  }
+
+  .profile-image {
+    width: 30%;
+  }
+
+  .profile-pic {
+    height: 11vw;
+  }
+
+  #changeEmailBtn,
+  #changePasswordBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+    margin: 1.5vw auto 1vw auto;
+  }
+
+  .profile-info {
+    width: 70%;
+  }
+
+  .swal2-html-container {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
+
+  .card-text {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .swal2-title {
+    font-size: clamp(3.3vw, 3vw, 2.8vw);
+  }
+
+  table.dataTable > thead > tr > th,
+  table.dataTable > thead > tr > td {
+    padding: 0.9vw 0.3vw !important;
+  }
+
+  table.dataTable > thead > tr > td {
+    word-break: break-all;
+  }
+}
+
+/* Phone size */
+@media screen and (max-width: 600px) {
+  .sidebar {
+    width: 45vw;
+  }
+  .main-content {
+    margin-left: 16vw;
+    width: 85%;
+    margin-top: 3rem;
+    padding: 0.3rem;
+  }
+
+  .title {
+    font-size: clamp(5vw, 4.7vw, 4.5vw);
+  }
+
+  .card-body {
+    padding: 0;
+  }
+
+  #toggle-btn {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+  }
+
+  div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+    display: flex !important;
+  }
+
+  .dt-layout-cell {
+    width: 50%;
+    display: flex;
+    justify-content: start;
+  }
+
+  .list-group-item {
+    justify-content: flex-start;
+  }
+
+  .card-text {
+    font-size: clamp(2vw, 1.8vw, 1.6vw);
+  }
+
+  .sidebar-icon {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+    margin-right: 0 !important;
+  }
+
+  label {
+    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  }
+
+  .current {
+    font-size: 2.5vw;
+  }
+
+  .sidebar-text {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+    margin-left: 2vw;
+  }
+
+  .home {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .profile-image {
+    width: 35%;
+  }
+
+  .profile-pic {
+    height: 18vw;
+  }
+
+  #changeEmailBtn,
+  #changePasswordBtn {
+    font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+    margin-left: 2vw;
+  }
+
+  .profile-info {
+    width: 65%;
+  }
+
+  .swal2-html-container {
+    font-size: clamp(3.7vw, 3.5vw, 3.3vw);
+  }
+
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: clamp(3.7vw, 3.5vw, 3.2vw);
+  }
+
+  table.dataTable > thead > tr > th,
+  table.dataTable > thead > tr > td {
+    padding: 0.9vw 0.3vw !important;
+  }
+
+  table.dataTable > thead > tr > td {
+    word-break: break-all;
+  }
+
+  th {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+  }
+
+  .dt-column-order {
+    font-size: clamp(1.3vw, 1.2vw, 1.1vw);
+  }
+
+  td,
+  #bookingHistory_info,
+  .btn {
+    font-size: clamp(2vw, 1.9vw, 1.8vw);
+  }
+
+  .dt-input {
+    font-size: clamp(2.1vw, 1.9vw, 1.7vw);
+  }
+
+  .edit,
+  .swal2-confirm {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+  }
+
+  .swal2-title {
+    font-size: clamp(3.8vw, 3.6vw, 3.4vw);
+  }
+
+  .table-striped {
+    text-align: left;
+  }
+
+  div.dt-container .dt-paging .dt-paging-button {
+    padding: 0.8vw 1.2vw !important;
+  }
+  table.dataTable thead > tr > th div.dt-column-header {
+    justify-content: start !important;
+    gap: 1px !important;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .card {
+    padding: 0;
+  }
+  .card-header {
+    margin-top: 1vw;
+    font-size: clamp(4vw, 3.8vw, 3.6vw);
+  }
+  .card-text {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
+
+  .input-box label,
+  .input-box input {
+    width: 80%;
+  }
+
+  .btn {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
+
+  .form-container {
+    margin-top: 1.5rem;
+  }
+
+  div.dt-container .dt-paging .dt-paging-button {
+    padding: 0.5vw 1vw !important;
+  }
+
+  .dt-input {
+    font-size: clamp(2vw, 1.9vw, 1.8vw);
+  }
+
+  label {
+    font-size: clamp(2.6vw, 2.5vw, 2.4vw);
+  }
+
+  th {
+    font-size: clamp(1.5vw, 1.4vw, 1.3vw);
+  }
+
+  .current {
+    font-size: 3vw;
+  }
+}

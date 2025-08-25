@@ -1,31 +1,18 @@
 <?php
 require '../../Config/dbcon.php';
-
-$session_timeout = 3600;
-
-ini_set('session.gc_maxlifetime', $session_timeout);
-session_set_cookie_params($session_timeout);
-session_start();
 date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
-    $_SESSION['error'] = 'Session Expired';
-
-    session_unset();
-    session_destroy();
-    header("Location: ../register.php?session=expired");
-    exit();
-}
-
-$_SESSION['last_activity'] = time();
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
 
 
 $message = '';
@@ -61,8 +48,8 @@ if (isset($_SESSION['error'])) {
 <body>
     <div class="topSection">
         <div class="dashTitleContainer">
-            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img src="../../Assets/images/MamyrLogo.png" alt=""
-                    class="logo"></a>
+            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
+                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -96,7 +83,8 @@ if (isset($_SESSION['error'])) {
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -142,8 +130,8 @@ if (isset($_SESSION['error'])) {
             }
             ?>
             <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="Account/account.php" class="admin">
-                <img src="<?= $image ?>" alt="home icon">
+            <a href="../Account/account.php" class="admin">
+                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
             </a>
         </div>
     </div>
@@ -166,6 +154,11 @@ if (isset($_SESSION['error'])) {
             <h5>Rooms</h5>
         </a>
 
+        <a class="nav-link" href="services.php">
+            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+            <h5>Services</h5>
+        </a>
+
         <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
@@ -183,7 +176,7 @@ if (isset($_SESSION['error'])) {
             <h5>Partnerships</h5>
         </a>
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="editWebsite/editWebsite.php">
             <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
             <h5>Edit Website</h5>
         </a>
@@ -196,7 +189,8 @@ if (isset($_SESSION['error'])) {
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -212,7 +206,9 @@ if (isset($_SESSION['error'])) {
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
                                     <?= htmlspecialchars($message) ?>
                                 </li>
                             <?php endforeach; ?>
@@ -261,9 +257,11 @@ if (isset($_SESSION['error'])) {
                     ?>
                             <tr>
                                 <td>
-                                    <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p> <?= $roomInfo['RServiceName'] ?>
+                                    <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
+                                    <?= $roomInfo['RServiceName'] ?>
                                 </td>
-                                <td><button type="button" href="#" class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
+                                <td><button type="button" href="#"
+                                        class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
                                 <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
                                 </td>
                                 <td>
@@ -293,13 +291,17 @@ if (isset($_SESSION['error'])) {
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
 
 
 
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
+
             document.querySelectorAll('.notification-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const notificationID = this.dataset.id;
@@ -313,7 +315,20 @@ if (isset($_SESSION['error'])) {
                         })
                         .then(response => response.text())
                         .then(data => {
+
+                            this.style.transition = 'background-color 0.3s ease';
                             this.style.backgroundColor = 'white';
+
+
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
+
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
+                            }
                         });
                 });
             });

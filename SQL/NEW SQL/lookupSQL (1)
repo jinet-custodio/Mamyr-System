@@ -61,7 +61,8 @@ INSERT INTO statuses (statusName) VALUES
 ('Rejected'),
 ('Cancelled'),
 ('Done'),
-('Expired');
+('Expired'),
+('Payment Issue');
 
 
 CREATE TABLE eventCategories (
@@ -76,7 +77,8 @@ INSERT INTO `eventcategories` (`categoryID`, `categoryName`) VALUES
 (NULL, 'Christening/Dedication'), 
 (NULL, 'Thanksgiving Party'), 
 (NULL, 'Christmas Party'), 
-(NULL, 'Other');
+(NULL, 'Kids Party'),
+(NULL, 'Debut');
 
 
 Create Table bookingPaymentStatus (
@@ -98,8 +100,7 @@ INSERT INTO resortServicesCategories (categoryName) VALUES
 ('Hotel'), 
 ('Cottage'), 
 ('Entertainment'),
-('Event Hall'),
-('Mini Pavillion');
+('Event Hall');
 
 CREATE TABLE entranceTimeRanges(
     timeRangeID INT PRIMARY KEY AUTO_INCREMENT,

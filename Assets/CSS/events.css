@@ -31,25 +31,13 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
   text-decoration: none;
-  list-style: none;
 }
 
-/* html,
-  body {
-    height: 100%;
-    margin: 0;
-  }
-  
-  body {
-    display: flex;
-    flex-direction: column;
-  } */
-
 body {
-  background-image: url(../Images/beOurPartnerPhotos/beOurPartnerbg.jpg);
-  background-size: cover;
-  background-position: center;
+  background-image: url(../Images/EventsPhotos/eventHeaderBg2.png);
   background-repeat: no-repeat;
+  background-position: top;
+  background-size: contain;
 }
 
 nav {
@@ -101,7 +89,7 @@ nav {
   }
 }
 
-ul {
+.navbar-nav {
   font-family: "Poppins" !important;
   font-weight: lighter;
   font-size: 1.3vw;
@@ -193,10 +181,10 @@ ul {
   }
 }
 
-.notification-container{
+.notification-container {
   margin: 1rem;
 
-  button{
+  button {
     background-color: transparent;
     border: none;
   }
@@ -350,18 +338,62 @@ footer {
 }
 
 .categories {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  margin-top: 12vw !important;
+  width: 98%;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  margin: auto;
+  padding: 2rem;
 }
 
+.eventsTitleContainer,
+.venueTitleContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+  justify-content: center;
+  margin: auto;
+  width: 70%;
+}
+
+.venueTitleContainer {
+  margin-top: 2vw;
+}
+.eventsTitle,
+.venueTitle {
+  font-family: "Poppins";
+  font-size: 2.4vw;
+  text-align: center;
+  font-weight: bold;
+}
+
+.eventsDescription,
+.venueDescription {
+  font-family: "Poppins";
+  text-align: center;
+  font-size: 1.4vw;
+}
+
+.carousel {
+  width: 70%;
+  margin: auto;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  width: 3.5vw !important;
+  height: 2.5vw !important;
+}
+.cardFlex {
+  /* border: 1px solid red; */
+  display: flex;
+  width: 70%;
+  margin: auto;
+}
 .card {
-  margin: 3vw;
+  margin: auto;
   border-radius: 10vw 10vw 0 0 !important;
   text-align: center;
-  /* display: flex;
-  flex-direction: column;
-  flex-grow: 1; */
   height: 35vw !important;
 }
 
@@ -386,6 +418,77 @@ footer {
 .eventDesc {
   font-family: "Poppins";
   font-size: 1.2vw;
+}
+.mainHall {
+  margin-top: 1vw !important;
+  width: 98%;
+  border-radius: 20px;
+  background-color: #4a93d4;
+  margin: auto;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2vw;
+}
+
+.miniHall {
+  margin-top: 1vw !important;
+  width: 98%;
+  border-radius: 20px;
+  background-color: #f7d5b0;
+  margin: auto;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2vw;
+}
+
+#carouselMainHall,
+#carouselMiniHall {
+  width: 40%;
+}
+
+.d-block {
+  width: 35vw !important;
+}
+
+.mainHallDescContainer,
+.miniHallDescContainer {
+  width: 50%;
+}
+
+.mainHallDescTitle {
+  color: #fff;
+  font-family: "Poppins";
+  font-size: 2.4vw;
+  font-style: normal;
+  text-align: center;
+  margin-top: 2vw;
+}
+
+.miniHallDescTitle {
+  color: #000000;
+  font-family: "Poppins";
+  font-size: 2.4vw;
+  font-style: normal;
+  text-align: center;
+  margin-top: 4vw;
+}
+
+.mainHallDescription {
+  margin-top: 2.5vw;
+  font-family: "Poppins";
+  font-size: 18px;
+  font-style: normal;
+  color: #fff;
+}
+
+.miniHallDescription {
+  margin-top: 2.5vw;
+  font-family: "Poppins";
+  font-size: 18px;
+  font-style: normal;
+  color: #000000;
 }
 
 /* Tablet size */

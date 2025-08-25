@@ -174,7 +174,7 @@ if (isset($_POST['signUp'])) {
             exit;
         }
     } else {
-        $_SESSION['email-message'] =  $email . 'Invalid email format';
+        $_SESSION['email-message'] = 'Invalid email format';
         header("Location: ../Pages/register.php?page=register&email = $email");
         exit;
     }

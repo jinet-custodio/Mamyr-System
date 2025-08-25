@@ -331,7 +331,7 @@ input[type="password"]::-webkit-search-cancel-button {
 
 .emailErrorMsg {
   position: absolute;
-  bottom: 27.5%;
+  bottom: 30.5%;
   width: 80%;
   color: red;
 }

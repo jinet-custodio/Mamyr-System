@@ -66,7 +66,7 @@ if (isset($_POST['submit_request'])) {
         }
 
         if ($userRole ==  1) {
-            $insertQuery = $conn->prepare("INSERT INTO partnerships(userID, partnerAddress, companyName, partnerType, businessEmail, documentLink) VALUES (?,?,?,?,?,?)");
+            $insertQuery = $conn->prepare("INSERT INTO partnerships(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink) VALUES (?,?,?,?,?,?)");
             $insertQuery->bind_param("ississ", $userID, $partnerAddress, $companyName, $partnerTypeID, $businessEmail, $proofLink);
             if ($insertQuery->execute()) {
                 $_SESSION['success'] = 'Partnership Request Sent Successfully';
