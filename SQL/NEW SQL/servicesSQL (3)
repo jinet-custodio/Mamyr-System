@@ -42,8 +42,8 @@ CREATE TABLE entranceRates (
 
 CREATE TABLE services (
     serviceID INT PRIMARY KEY AUTO_INCREMENT,
-    resortServiceID INT DEFAULT NULL,
-    partnershipServiceID INT DEFAULT NULL,
+    resortServiceID INT DEFAULT NULL UNIQUE,
+    partnershipServiceID INT DEFAULT NULL UNIQUE,
     entranceRateID INT DEFAULT NULL,
     serviceType ENUM('Resort', 'Partnership', 'Entrance') NOT NULL,
 

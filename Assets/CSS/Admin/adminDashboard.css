@@ -226,8 +226,8 @@ body {
 }
 
 .revenue-chart {
-  width: 90%;
-  height: 100%;
+  width: 90% !important;
+  height: 100% !important;
 }
 
 /* .revenueImage img {

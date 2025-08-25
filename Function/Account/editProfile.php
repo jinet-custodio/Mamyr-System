@@ -29,7 +29,7 @@ if (isset($_POST['changePfpBtn'])) {
             header("Location: ../../Pages/Account/account.php?message=success-image");
             exit;
         } else {
-            echo "Error: " . mysqli_error($conn);
+            error_log("Error: " . mysqli_error($conn));
         }
     } else {
         header("Location: ../../Pages/Account/account.php?message=error-image");
