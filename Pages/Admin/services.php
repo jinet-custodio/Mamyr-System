@@ -40,7 +40,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <div class="topSection">
         <div class="dashTitleContainer">
             <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
-                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
+                    src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -78,9 +78,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -195,8 +195,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <section id="serviceCategories">
             <button type="button" id="resort-link" class="categoryLink">
                 <div class="card category-card resort-category">
-                    <img class="card-img-top" src="../../Assets/images/amenities/poolPics/poolPic3.jpg"
-                        alt="Wedding Event">
+                    <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Resort">
 
                     <div class="category-body">
                         <h5 class="category-title">RESORT</h5>
@@ -204,10 +203,20 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </button>
 
+            <button type="button" id="resortRates-link" class="categoryLink">
+                <div class="card category-card resort-category">
+                    <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg"
+                        alt="Resort Rates">
+
+                    <div class="category-body">
+                        <h5 class="category-title">RESORT RATES</h5>
+                    </div>
+                </div>
+            </button>
+
             <button type="button" id="event-link" class="categoryLink">
                 <div class="card category-card event-category">
-                    <img class="card-img-top" src="../../Assets/images/amenities/pavilionPics/pav4.jpg"
-                        alt="Wedding Event">
+                    <img class="card-img-top" src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Event">
                     <div class="category-body">
                         <h5 class="category-title">EVENT</h5>
                     </div>
@@ -216,8 +225,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <button type="button" id="catering-link" class="categoryLink">
                 <div class="card category-card event-category">
-                    <img class="card-img-top" src="../../Assets/images//BookNowPhotos/foodCoverImg2.jpg"
-                        alt="Wedding Event">
+                    <img class="card-img-top" src="../../Assets/Images/BookNowPhotos/foodCoverImg2.jpg" alt="Catering">
                     <div class="category-body">
                         <h5 class="category-title">CATERING</h5>
                     </div>
@@ -227,7 +235,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <!-- For Resort -->
         <div class="resortContainer" id="resortContainer" style="display: none;">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addServiceModal" id="addResortServiceBtn">Add a Service</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addServiceModal"
+                id="addResortServiceBtn">Add a Service</button>
             <table class=" table table-striped" id="resortServices">
                 <thead>
                     <th scope="col">Service Name</th>
@@ -264,34 +273,79 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 $serviceAvailability = $row['RSAvailabilityID'];
 
                     ?>
-                                <tr>
-                                    <td><input type="text" class="form-control resortServiceName" value="<?= htmlspecialchars($serviceName) ?>"></td>
-                                    <td><input type="text" class="form-control resortServicePrice" value="<?= htmlspecialchars($servicePrice) ?>"></td>
-                                    <td><input type="text" class="form-control resortServiceCapacity" value="<?= htmlspecialchars($serviceCapacity) ?>"></td>
-                                    <td><input type="text" class="form-control resortServiceDuration" value="<?= htmlspecialchars($serviceDuration) ?>"></td>
-                                    <td><textarea name="serviceDesc"><?= htmlspecialchars($serviceDesc) ?></textarea>
-                                    <td><input type="text" class="form-control resortServiceImage" value="<?= htmlspecialchars($serviceImageName) ?>"></td>
-                                    <td>
-                                        <select name="resortAvailability" class="form-select resortAvailability" required>
-                                            <option value="" disabled <?= $serviceAvailability == "" ? "selected" : "" ?>>Select Availability</option>
-                                            <option value="1" <?= $serviceAvailability == "1" ? "selected" : "" ?>>Available</option>
-                                            <option value="2" <?= $serviceAvailability == "2" ? "selected" : "" ?>>Occupied</option>
-                                            <option value="3" <?= $serviceAvailability == "3" ? "selected" : "" ?>>Maintenance</option>
-                                            <option value="4" <?= $serviceAvailability == "4" ? "selected" : "" ?>>Private</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div class="buttonContainer">
-                                            <button class="btn btn-primary editResortService">Edit</button>
-                                            <button class="btn btn-danger deleteBtn deleteResortService">Delete</button>
-                                        </div>
-                                    </td>
-                                </tr>
+                    <tr>
+                        <td><input type="text" class="form-control resortServiceName"
+                                value="<?= htmlspecialchars($serviceName) ?>"></td>
+                        <td><input type="text" class="form-control resortServicePrice"
+                                value="<?= htmlspecialchars($servicePrice) ?>"></td>
+                        <td><input type="text" class="form-control resortServiceCapacity"
+                                value="<?= htmlspecialchars($serviceCapacity) ?>"></td>
+                        <td><input type="text" class="form-control resortServiceDuration"
+                                value="<?= htmlspecialchars($serviceDuration) ?>"></td>
+                        <td><textarea name="serviceDesc"><?= htmlspecialchars($serviceDesc) ?></textarea>
+                        <td><input type="text" class="form-control resortServiceImage"
+                                value="<?= htmlspecialchars($serviceImageName) ?>"></td>
+                        <td>
+                            <select name="resortAvailability" class="form-select resortAvailability" required>
+                                <option value="" disabled <?= $serviceAvailability == "" ? "selected" : "" ?>>Select
+                                    Availability</option>
+                                <option value="1" <?= $serviceAvailability == "1" ? "selected" : "" ?>>Available
+                                </option>
+                                <option value="2" <?= $serviceAvailability == "2" ? "selected" : "" ?>>Occupied</option>
+                                <option value="3" <?= $serviceAvailability == "3" ? "selected" : "" ?>>Maintenance
+                                </option>
+                                <option value="4" <?= $serviceAvailability == "4" ? "selected" : "" ?>>Private</option>
+                            </select>
+                        </td>
+                        <td>
+                            <div class="buttonContainer">
+                                <button class="btn btn-primary editResortService">Edit</button>
+                                <button class="btn btn-danger deleteBtn deleteResortService">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
                     <?php
                             }
                         }
                     }
                     ?>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- For Resort Rates -->
+
+        <div class="resortRatesContainer" id="resortRatesContainer" style="display: none;">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addResortRatesModal"
+                id="addResortRatesBtn">Add a Service</button>
+            <table class=" table table-striped" id="hotelServices">
+                <thead>
+                    <th scope="col">Tour Type</th>
+                    <th scope="col">Time Range</th>
+                    <th scope="col">Visitor Type</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Action</th>
+
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="form-control" id="tourType"></td>
+                        <td><input type="text" class="form-control" id="timeRange"></td>
+                        <td> <select id="visitorType" name="visitorType" class="form-select" required>
+                                <option value="" disabled selected>Visitor Type</option>
+                                <option value="adult" id="available">Adult</option>
+                                <option value="children" id="available">Children</option>
+
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control" id="entrancePrice"></td>
+
+                        <td class="buttonContainer">
+                            <button class="btn btn-primary" id="editHotelService" onclick="edit()">Edit</button>
+                            <button class="btn btn-danger deleteBtn" id="deleteHotelService">Delete</button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -381,9 +435,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
 
         <!-- FORM MODAL ADDING SERVICE-->
-        <form action="../../Function/Admin/Services/addServices.php" id="addingServiceForm" method="POST" enctype="multipart/form-data">
+        <form action="../../Function/Admin/Services/addServices.php" id="addingServiceForm" method="POST"
+            enctype="multipart/form-data">
             <!-- Modal -->
-            <div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -405,11 +461,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="input-container">
                                 <label for="serviceMaxCapacity">Service Max Capacity</label>
-                                <input type="text" class="form-control" id="serviceMaxCapacity" name="serviceMaxCapacity">
+                                <input type="text" class="form-control" id="serviceMaxCapacity"
+                                    name="serviceMaxCapacity">
                             </div>
                             <div class="input-container">
                                 <label for="serviceDuration">Service Duration</label>
-                                <input type="text" class="form-control" id="serviceDuration" name="serviceDuration" placeholder="e.g, 22 hours">
+                                <input type="text" class="form-control" id="serviceDuration" name="serviceDuration"
+                                    placeholder="e.g, 22 hours">
                             </div>
                             <div class="input-container">
                                 <p>Description</p>
@@ -428,7 +486,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                                <option value="<?= htmlspecialchars($row['categoryID']) ?>" id="available"><?= htmlspecialchars($row['categoryName']) ?></option>
+                                    <option value="<?= htmlspecialchars($row['categoryID']) ?>" id="available">
+                                        <?= htmlspecialchars($row['categoryName']) ?></option>
                                     <?php
                                             }
                                         }
@@ -442,7 +501,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
 
                             <div class="input-container">
-                                <select id="serviceAvailability" name="serviceAvailability" class="form-select" required>
+                                <select id="serviceAvailability" name="serviceAvailability" class="form-select"
+                                    required>
                                     <option value="" disabled selected>Select Availability</option>
                                     <?php
 
@@ -452,7 +512,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>" id="available"><?= htmlspecialchars($row['availabilityName']) ?></option>
+                                    <option value="<?= htmlspecialchars($row['availabilityID']) ?>" id="available">
+                                        <?= htmlspecialchars($row['availabilityName']) ?></option>
                                     <?php
                                             }
                                         }
@@ -461,182 +522,247 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 </select>
                             </div>
 
-                            <!-- <div class="buttonContainer">
-                                <button class="btn btn-primary" id="addResortService" onclick="add()">Add</button>
-                                <button class="btn btn-primary" id="editResortService" onclick="edit()">Edit</button>
-                                <button class="btn btn-danger deleteBtn" id="deleteResortService">Delete</button>
-                            </div> -->
+                            <!-- FORM MODAL ADDING RESORT RATES-->
+                            <!-- <form action="../../Function/Admin/Services/addServices.php" id="addingServiceForm"
+                                method="POST" enctype="multipart/form-data"> -->
+                            <!-- Modal -->
+                            <div class="modal fade" id="addResortRatesModal" tabindex="-1"
+                                aria-labelledby="addResortRatesModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addResortRatesModalLabel">Add a Resort Rate
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-container">
+                                                <label for="tourType">Tour Type</label>
+                                                <input type="text" class="form-control" id="tourType" name="tourType"
+                                                    required>
+                                            </div>
+                                            <div class="input-container">
+                                                <label for="timeRange">Time Range</label>
+                                                <input type="text" class="form-control" id="timeRange" name="timeRange"
+                                                    required>
+                                            </div>
+                                            <div class="input-container">
+                                                <label for="serviceCapacity">Visitor Type</label>
+                                                <select id="visitorType" name="visitorType" class="form-select"
+                                                    required>
+                                                    <option value="" disabled selected>Visitor Type</option>
+                                                    <option value="adult" id="available">Adult</option>
+                                                    <option value="children" id="available">Children</option>
+
+                                                </select>
+                                            </div>
+                                            <div class="input-container">
+                                                <label for="entrancePrice">Price</label>
+                                                <input type="text" class="form-control" id="entrancePrice"
+                                                    name="entrancePrice">
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary" id="saveRate">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- </form> -->
 
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="saveService">Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
 
-    </div>
+                        <!-- Notification Modal -->
+                        <div class="modal fade" id="notificationModal" tabindex="-1"
+                            aria-labelledby="notificationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable">
+                                <div class="modal-content">
 
-    <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
 
-                <div class="modal-header">
-                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body p-0">
-                    <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                                    <div class="modal-body p-0">
+                                        <?php if (!empty($notificationsArray)): ?>
+                                        <ul class="list-group list-group-flush ">
+                                            <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item"
-                                    data-id="<?= htmlspecialchars($notificationID) ?>"
-                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
+                                            <li class="list-group-item mb-2 notification-item"
+                                                data-id="<?= htmlspecialchars($notificationID) ?>"
+                                                style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                                <?= htmlspecialchars($message) ?>
+                                            </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                        <?php else: ?>
+                                        <div class="p-3 text-muted">No new notifications.</div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-    <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
-    </script>
+                        <!-- Bootstrap Link -->
+                        <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+                            crossorigin="anonymous">
+                        </script>
 
-    <!-- Jquery Link -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!-- Data Table Link -->
-    <script src="../../Assets/JS/datatables.min.js"></script>
-
-
-
-
-
-    <!-- Button Adding a service function -->
-    <script>
-        console.log("Script loaded2");
-        const addResortServiceBtn = document.getElementById('addResortServiceBtn');
-        const modalAddServiceBtn = document.getElementById('saveService');
-        const form = document.getElementById('addingServiceForm');
-        let action = '';
-
-        addResortServiceBtn.addEventListener('click', function() {
-            action = 'addResortService';
-            modalAddServiceBtn.setAttribute('name', action);
-        });
-
-        // modalAddServiceBtn.addEventListener('click', function() {
-        //     if (action === 'addResortService') {
-        //         form.action = '../../Function/Admin/Services/addServices.php';
-        //         form.submit();
-        //     }
-        // });
-    </script>
-
-    <!-- Table JS -->
-    <script>
-        console.log("Script loaded1");
-        $(document).ready(function() {
-            $('#resortServices').DataTable({
-                language: {
-                    emptyTable: "No Services"
-                }
-            });
-            $('#eventServices').DataTable({
-                language: {
-                    emptyTable: "No Services"
-                }
-            });
-            $('#cateringServices').DataTable({
-                language: {
-                    emptyTable: "No Services"
-                }
-            });
-        });
-    </script>
-
-    <!-- Changing pages by category -->
-    <script>
-        console.log("Script loaded");
-        document.addEventListener("DOMContentLoaded", function() {
-
-            const resortLink = document.getElementById("resort-link");
-            const eventLink = document.getElementById("event-link");
-            const cateringLink = document.getElementById("catering-link");
-
-            const resortContainer = document.getElementById("resortContainer");
-            const eventContainer = document.getElementById("eventContainer");
-            const cateringContainer = document.getElementById("cateringContainer");
-
-            const backButton = document.getElementById("backArrowContainer");
-            const serviceCategories = document.getElementById("serviceCategories");
-            const headerText = document.getElementById("headerText");
-
-            console.log(resortLink, eventLink, cateringLink, backButton);
-
-            function hideAllContainers() {
-                resortContainer.style.display = "none";
-                eventContainer.style.display = "none";
-                cateringContainer.style.display = "none";
-            }
-
-            resortLink.addEventListener("click", function(e) {
-                e.preventDefault();
-                console.log("Eh");
-                hideAllContainers();
-                serviceCategories.style.display = "none";
-                backButton.style.display = "block";
-                resortContainer.style.display = "block";
-                headerText.innerHTML = "Resort";
-                document.body.style.backgroundColor = "whitesmoke";
-            });
-
-            eventLink.addEventListener("click", function(e) {
-                e.preventDefault();
-                hideAllContainers();
-                serviceCategories.style.display = "none";
-                backButton.style.display = "block";
-                eventContainer.style.display = "block";
-                headerText.innerHTML = "Event";
-                document.body.style.backgroundColor = "whitesmoke";
-            });
-
-            cateringLink.addEventListener("click", function(e) {
-                e.preventDefault();
-                hideAllContainers();
-                serviceCategories.style.display = "none";
-                backButton.style.display = "block";
-                cateringContainer.style.display = "block";
-                headerText.innerHTML = "Catering";
-                document.body.style.backgroundColor = "whitesmoke";
-            });
+                        <!-- Jquery Link -->
+                        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+                            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous">
+                        </script>
+                        <!-- Data Table Link -->
+                        <script src="../../Assets/JS/datatables.min.js"></script>
 
 
-            backButton.addEventListener("click", function() {
-                hideAllContainers();
-                backButton.style.display = "none";
-                serviceCategories.style.display = "flex";
-                headerText.innerHTML = "Services";
-                document.body.style.backgroundColor = "#a1c8c7";
-            });
-        });
-    </script>
+
+
+
+                        <!-- Button Adding a service function -->
+                        <script>
+                        console.log("Script loaded2");
+                        const addResortServiceBtn = document.getElementById('addResortServiceBtn');
+                        const addResortRatesBtn = document.getElementById('addResortRatesBtn');
+                        const modalAddServiceBtn = document.getElementById('saveService');
+                        const modalAddResortRatesBtn = document.getElementById('saveRate');
+                        const form = document.getElementById('addingServiceForm');
+                        let action = '';
+
+                        addResortServiceBtn.addEventListener('click', function() {
+                            action = 'addResortService';
+                            modalAddServiceBtn.setAttribute('name', action);
+                        });
+
+                        addResortRatesBtn.addEventListener('click', function() {
+                            action = 'addResortRates';
+                            modalAddResortRatesBtn.setAttribute('name', action);
+                        });
+
+                        // modalAddServiceBtn.addEventListener('click', function() {
+                        //     if (action === 'addResortService') {
+                        //         form.action = '../../Function/Admin/Services/addServices.php';
+                        //         form.submit();
+                        //     }
+                        // });
+                        </script>
+
+                        <!-- Table JS -->
+                        <script>
+                        console.log("Script loaded1");
+                        $(document).ready(function() {
+                            $('#resortServices').DataTable({
+                                language: {
+                                    emptyTable: "No Services"
+                                }
+                            });
+                            $('#resortRates').DataTable({
+                                language: {
+                                    emptyTable: "No Services"
+                                }
+                            });
+                            $('#eventServices').DataTable({
+                                language: {
+                                    emptyTable: "No Services"
+                                }
+                            });
+                            $('#cateringServices').DataTable({
+                                language: {
+                                    emptyTable: "No Services"
+                                }
+                            });
+                        });
+                        </script>
+
+                        <!-- Changing pages by category -->
+                        <script>
+                        console.log("Script loaded");
+                        document.addEventListener("DOMContentLoaded", function() {
+
+                            const resortLink = document.getElementById("resort-link");
+                            const resortRatesLink = document.getElementById("resortRates-link");
+                            const eventLink = document.getElementById("event-link");
+                            const cateringLink = document.getElementById("catering-link");
+
+                            const resortContainer = document.getElementById("resortContainer");
+                            const resortRatesContainer = document.getElementById("resortRatesContainer");
+                            const eventContainer = document.getElementById("eventContainer");
+                            const cateringContainer = document.getElementById("cateringContainer");
+
+                            const backButton = document.getElementById("backArrowContainer");
+                            const serviceCategories = document.getElementById("serviceCategories");
+                            const headerText = document.getElementById("headerText");
+
+                            console.log(resortLink, resortRatesLink, eventLink, cateringLink, backButton);
+
+                            function hideAllContainers() {
+                                resortContainer.style.display = "none";
+                                resortRatesContainer.style.display = "none";
+                                eventContainer.style.display = "none";
+                                cateringContainer.style.display = "none";
+                            }
+
+                            resortLink.addEventListener("click", function(e) {
+                                e.preventDefault();
+                                console.log("Eh");
+                                hideAllContainers();
+                                serviceCategories.style.display = "none";
+                                backButton.style.display = "block";
+                                resortContainer.style.display = "block";
+                                headerText.innerHTML = "Resort";
+                                document.body.style.backgroundColor = "whitesmoke";
+                            });
+
+                            resortRatesLink.addEventListener("click", function(e) {
+                                e.preventDefault();
+                                console.log("Eh");
+                                hideAllContainers();
+                                serviceCategories.style.display = "none";
+                                backButton.style.display = "block";
+                                resortRatesContainer.style.display = "block";
+                                headerText.innerHTML = "Resort Rates";
+                                document.body.style.backgroundColor = "whitesmoke";
+                            });
+
+                            eventLink.addEventListener("click", function(e) {
+                                e.preventDefault();
+                                hideAllContainers();
+                                serviceCategories.style.display = "none";
+                                backButton.style.display = "block";
+                                eventContainer.style.display = "block";
+                                headerText.innerHTML = "Event";
+                                document.body.style.backgroundColor = "whitesmoke";
+                            });
+
+                            cateringLink.addEventListener("click", function(e) {
+                                e.preventDefault();
+                                hideAllContainers();
+                                serviceCategories.style.display = "none";
+                                backButton.style.display = "block";
+                                cateringContainer.style.display = "block";
+                                headerText.innerHTML = "Catering";
+                                document.body.style.backgroundColor = "whitesmoke";
+                            });
+
+
+                            backButton.addEventListener("click", function() {
+                                hideAllContainers();
+                                backButton.style.display = "none";
+                                serviceCategories.style.display = "flex";
+                                headerText.innerHTML = "Services";
+                                document.body.style.backgroundColor = "#a1c8c7";
+                            });
+                        });
+                        </script>
 
 </body>
 

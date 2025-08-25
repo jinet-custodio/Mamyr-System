@@ -205,7 +205,7 @@ body {
 }
 
 .resortContainer,
-.hotelContainer,
+.resortRatesContainer,
 .eventContainer,
 .cateringContainer {
   width: 90%;
@@ -244,7 +244,7 @@ th {
 }
 
 #addResortServiceBtn,
-#addHotelServiceBtn,
+#addResortRatesBtn,
 #addEventServiceBtn,
 #addCateringServiceBtn {
   width: 10vw;
@@ -255,14 +255,22 @@ th {
 .buttonContainer {
   display: flex;
   gap: 1vw;
+  padding: 10vw;
 }
 
 .saveBtnContainer {
   width: 100%;
   display: flex;
-  justify-content: right;
 }
 
 #saveChanges {
   width: 10vw;
+}
+
+#resort-link,
+#event-link,
+#catering-link,
+#resortRates-link {
+  border: none;
+  background-color: transparent;
 }
