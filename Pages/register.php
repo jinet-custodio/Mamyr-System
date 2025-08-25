@@ -152,14 +152,7 @@ resetExpiredOTPs($conn);
 
 
 
-
-
-
-
-
             <!-- error message -->
-
-
 
             <div class="emailErrorMsg">
                 <p>
