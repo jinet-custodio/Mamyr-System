@@ -215,6 +215,10 @@ body {
   min-height: 10vh;
 }
 
+tbody tr {
+  height: 70px !important;
+}
+
 td,
 th {
   text-align: center !important;

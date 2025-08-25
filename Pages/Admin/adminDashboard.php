@@ -94,8 +94,8 @@ if ($revenueResult->num_rows > 0) {
 }
 
 $hotel = 1;
-// $availabilityCount = [];
-// $availabilityName = ['Available', 'Maintenance', 'Occupied', 'Private'];
+$availabilityCount = [];
+$availabilityName = ['Available', 'Maintenance', 'Occupied', 'Private'];
 $availabilityQuery = $conn->prepare("SELECT
                                         COUNT(CASE WHEN uniqueRooms.RSAvailabilityID = 1 THEN 1 END) AS availableCount,
                                         COUNT(CASE WHEN uniqueRooms.RSAvailabilityID = 2 THEN 1 END) AS occupiedCount,

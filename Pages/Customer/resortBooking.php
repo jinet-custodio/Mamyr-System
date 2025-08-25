@@ -283,8 +283,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                         <div class="entertainmentContainer">
                             <div class="card-body videoke">
+                                <h1> Videoke</h1>
                                 <?php
-                                $entertainmentName = 'Videoke %';
+                                $entertainmentName = 'Videoke';
                                 $categoryID = 3;
                                 $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE  RScategoryID = ? AND  RServiceName LIKE ? LIMIT 1");
                                 $getVideoke->bind_param("is",  $categoryID, $entertainmentName);
@@ -294,15 +295,21 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     while ($row = $getVideokeResult->fetch_assoc()) {
                                         $price = $row['RSprice'];
                                 ?>
-                                        <h1> Videoke</h1>
+
                                         <p><?= htmlspecialchars(number_format($price, 0)) ?> pesos per rent </p>
-                                <?php
+                                    <?php
                                     }
+                                } else {
+                                    ?>
+                                    <p>None</p>
+                                <?php
                                 }
                                 ?>
+
                             </div>
 
                             <div class="card-body massage">
+                                <h1> Massage Chair</h1>
                                 <?php
                                 $entertainmentName = 'Massage Chair';
                                 $categoryID = 3;
@@ -315,15 +322,21 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         $duration = $row['RSduration'];
                                         $price = $row['RSprice'];
                                 ?>
-                                        <h1> Massage Chair</h1>
+
                                         <p><?= htmlspecialchars(number_format($price, 0)) ?> pesos for <?= htmlspecialchars($duration) ?></p>
-                                <?php
+                                    <?php
                                     }
+                                } else {
+                                    ?>
+                                    <p>None</p>
+                                <?php
                                 }
                                 ?>
+
                             </div>
 
                             <div class="card-body billiard">
+                                <h1> Billiard</h1>
                                 <?php
                                 $entertainmentName = 'Billiard';
                                 $categoryID = 3;
@@ -336,10 +349,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         $duration = $row['RSduration'];
                                         $price = $row['RSprice'];
                                 ?>
-                                        <h1> Billiard</h1>
                                         <p><?= htmlspecialchars(number_format($price, 0)) ?> pesos for <?= htmlspecialchars($duration) ?> </p>
-                                <?php
+                                    <?php
                                     }
+                                } else {
+                                    ?>
+                                    <p>None</p>
+                                <?php
                                 }
                                 ?>
                             </div>

@@ -17,7 +17,7 @@ if (isset($_POST['approvePaymentBtn'])) {
 
 
     if ($discount != 0.00) {
-        $bill = $discountedAmount = $totalCost - $discount;
+        $bill = $totalCost - $discount;
     } else {
         $bill = $totalCost;
     }
@@ -42,7 +42,9 @@ if (isset($_POST['approvePaymentBtn'])) {
             $storedUserBalance = floatval($row['userBalance']);
             $storedAmountPaid = floatval($row['amountPaid']);
             $storedBill = floatval($row['confirmedFinalBill']);
+            $storedDiscount = floatval($row['discountAmount']);
 
+            $discount = $storedDiscount + $discount;
 
             $totalBalance = $storeUserBalance - $paymentAmount;
             $amountPaid = $storedAmountPaid + $paymentAmount;

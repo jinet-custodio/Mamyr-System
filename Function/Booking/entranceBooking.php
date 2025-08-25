@@ -201,7 +201,12 @@ if (isset($_POST['bookRates'])) {
 
         if ($adultCount > 0 && isset($adultServiceID)) {
             $insertBookingServices->bind_param("iiid", $bookingID, $adultServiceID, $adultCount, $totalAdultFee);
-            $insertBookingServices->execute();
+
+            if ($insertBookingServices->execute()) {
+                echo 'Services ' . $adultServiceID;
+            } else {
+                echo 'Services ' . $adultServiceID;
+            }
         }
 
 

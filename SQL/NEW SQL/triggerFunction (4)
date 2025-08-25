@@ -1,37 +1,37 @@
 
-DELIMITER $$
+-- DELIMITER $$
 
-CREATE TRIGGER after_insert_entranceRates
-AFTER INSERT ON entranceRates
-FOR EACH ROW
-BEGIN
-    INSERT INTO services (entranceRateID, serviceType)
-    VALUES (NEW.entranceRateID, 'Entrance');
-END$$
+-- CREATE TRIGGER after_insert_entranceRates
+-- AFTER INSERT ON entranceRates
+-- FOR EACH ROW
+-- BEGIN
+--     INSERT INTO services (entranceRateID, serviceType)
+--     VALUES (NEW.entranceRateID, 'Entrance');
+-- END$$
 
-DELIMITER ;
+-- DELIMITER ;
 
-DELIMITER $$
+-- DELIMITER $$
 
-CREATE TRIGGER after_insert_partnership_service
-AFTER INSERT ON partnershipServices
-FOR EACH ROW
-BEGIN
-    INSERT INTO services (partnershipServiceID, serviceType)
-    VALUES (NEW.partnershipServiceID, 'Partnership');
-END$$
+-- CREATE TRIGGER after_insert_partnership_service
+-- AFTER INSERT ON partnershipServices
+-- FOR EACH ROW
+-- BEGIN
+--     INSERT INTO services (partnershipServiceID, serviceType)
+--     VALUES (NEW.partnershipServiceID, 'Partnership');
+-- END$$
 
-DELIMITER ;
+-- DELIMITER ;
 
-DELIMITER $$
+-- DELIMITER $$
 
-CREATE TRIGGER after_insert_resort_service
-AFTER INSERT ON resortAmenities
-FOR EACH ROW
-BEGIN
-    INSERT INTO services (resortServiceID, serviceType)
-    VALUES (NEW.resortServiceID, 'Resort');
-END$$
+-- CREATE TRIGGER after_insert_resort_service
+-- AFTER INSERT ON resortAmenities
+-- FOR EACH ROW
+-- BEGIN
+--     INSERT INTO services (resortServiceID, serviceType)
+--     VALUES (NEW.resortServiceID, 'Resort');
+-- END$$
 
-DELIMITER ;
+-- DELIMITER ;
 
