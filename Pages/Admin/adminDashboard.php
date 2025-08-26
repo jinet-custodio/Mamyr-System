@@ -1,16 +1,36 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 
 session_start();
-require '../../Function/sessionFunction.php';
+require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
-require '../../Function/functions.php';
+require_once '../../Function/functions.php';
 addToAdminTable($conn);
 
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM users WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -22,7 +42,7 @@ $bookingTypes =  $conn->prepare("SELECT
                                 b.bookingType,
                                 COUNT(*) AS totalBookings
                             FROM 
-                                confirmedBookings cb 
+                                confirmedbookings cb 
                             JOIN 
                                 bookings b ON cb.bookingID = b.bookingID 
                             WHERE 
@@ -43,6 +63,9 @@ if ($bookingTypesResult->num_rows > 0) {
         $bookingTypeCount[] = (float) $row['totalBookings'];
     }
 }
+$bookingTypesResult->free();
+$bookingTypes->close();
+
 
 $revenue =  $conn->prepare("SELECT 
                                 CONCAT(
@@ -63,7 +86,7 @@ $revenue =  $conn->prepare("SELECT
                                 SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN cb.confirmedFinalBill ELSE 0 END) AS Sun
 
                             FROM 
-                                confirmedBookings cb
+                                confirmedbookings cb
                             JOIN 
                                 bookings b ON cb.bookingID = b.bookingID
                             WHERE 
@@ -92,6 +115,9 @@ if ($revenueResult->num_rows > 0) {
     $revenues[] = (float) $row['Sat'];
     $revenues[] = (float) $row['Sun'];
 }
+$revenueResult->free();
+$revenue->close();
+
 
 $hotel = 1;
 $availabilityCount = [];
@@ -104,11 +130,11 @@ $availabilityQuery = $conn->prepare("SELECT
                                         sa.availabilityName
                                     FROM (
                                         SELECT RServiceName, RSAvailabilityID
-                                        FROM resortAmenities
+                                        FROM resortamenities
                                         WHERE RScategoryID = ?
                                         GROUP BY RServiceName
                                     ) AS uniqueRooms
-                                    JOIN serviceAvailability sa ON uniqueRooms.RSAvailabilityID = sa.availabilityID
+                                    JOIN serviceavailability sa ON uniqueRooms.RSAvailabilityID = sa.availabilityID
                                     GROUP BY sa.availabilityName
                                     ");
 $availabilityQuery->bind_param("i", $hotel);
@@ -137,6 +163,9 @@ if ($availabilityResult->num_rows > 0) {
     // print_r($availabilityName);
     // print_r($availabilityCount);
 }
+$availabilityResult->free();
+$availabilityQuery->close();
+
 ?>
 
 <!DOCTYPE html>
@@ -348,7 +377,7 @@ if ($availabilityResult->num_rows > 0) {
                                         COUNT(DISTINCT b.bookingID) AS bookingsThisWeek
 
                                     FROM bookings b
-                                    LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID
+                                    LEFT JOIN confirmedbookings cb ON b.bookingID = cb.bookingID
                                     CROSS JOIN (
                                         SELECT
                                             DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS weekStart,

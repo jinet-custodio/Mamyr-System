@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -181,6 +183,8 @@ if ($userRole == 1) {
                             $resultGetBooking = $getBooking->get_result();
                             if ($resultGetBooking->num_rows > 0) {
                                 $bookings = $resultGetBooking->fetch_all(MYSQLI_ASSOC);
+
+
                                 foreach ($bookings as $booking) {
                                     $confirmedBookingID = $booking['confirmedBookingID'];
                                     $bookingID = $booking['bookingID'];
@@ -192,6 +196,10 @@ if ($userRole == 1) {
                                     $totalAmount = $booking['totalCost'];
                                     $balance = $booking['userBalance'] ?? $totalAmount;
                                     $paymentMethod = $booking['paymentMethod'];
+
+                                    // echo '<pre>';
+                                    // print_r("Data " . $booking['confirmedStatus'] . $booking['bookingStatus']);
+                                    // echo '</pre>';
                             ?>
                                     <tr>
                                         <td><?= $checkIn ?></td>
@@ -205,8 +213,7 @@ if ($userRole == 1) {
                                         <!-- Papalitan na lang ng mas magandang term -->
                                         <?php if (!empty($booking['confirmedBookingID'])) {
                                             if ($booking['confirmedStatus'] === "Pending") {
-                                                $confirmedStatus = $booking['confirmedStatus'];
-                                                $bookingStatus = $booking['bookingStatus'];;
+
                                                 if ($paymentMethod === 'Cash') {
                                                     $status = "Onsite payment";
                                                     $class = 'btn btn-primary w-100';
@@ -217,21 +224,14 @@ if ($userRole == 1) {
                                             } elseif ($booking['confirmedStatus'] === "Approved") {
                                                 $status = "Successful";
                                                 $class = 'btn btn-success w-100';
-                                                $confirmedStatus = $booking['confirmedStatus'];
-                                                $bookingStatus = $booking['bookingStatus'];
                                             } elseif ($booking['confirmedStatus'] === "Rejected") {
                                                 $status = "Rejected";
                                                 $class = 'btn btn-red w-100';
-                                                $bookingStatus = $booking['bookingStatus'];
-                                                $confirmedStatus = $booking['confirmedStatus'];
                                             } elseif ($booking['confirmedStatus'] === 'Done') {
                                                 $status = "Success";
                                                 $class = 'btn btn-dark-green w-100';
-                                                $confirmedStatus = $booking['confirmedStatus'];
-                                                $bookingStatus = $booking['bookingStatus'];
                                             } elseif ($booking['confirmedStatus'] === "Cancelled") {
-                                                $confirmedStatus = $booking['confirmedStatus'];
-                                                $bookingStatus = $booking['bookingStatus'];
+
                                                 $status = "Cancelled";
                                                 $class = 'btn btn-orange w-100';
                                             }
@@ -264,8 +264,6 @@ if ($userRole == 1) {
                                                 $class = 'btn btn-danger w-100';
                                             }
                                         }
-
-
                                         ?>
 
                                         <td> <span class="<?= $class ?> font-weight-bold bookingStatus" data-label="<?= $status ?>"><?= $status ?></span></td>
@@ -280,12 +278,12 @@ if ($userRole == 1) {
                                                     <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
                                                 </form>
                                                 <?php if (
-                                                    $confirmedStatus === 'Done'
-                                                    ||  $bookingStatus === 'Cancelled'
-                                                    || $bookingStatus === 'Expired'
-                                                    || $confirmedStatus === 'Approved'
-                                                    || $bookingStatus === 'Rejected'
-                                                    || $confirmedStatus === 'Rejected'
+                                                    $booking['confirmedStatus'] === 'Done'
+                                                    || $booking['bookingStatus'] === 'Cancelled'
+                                                    || $booking['bookingStatus'] === 'Expired'
+                                                    || $booking['confirmedStatus'] === 'Approved'
+                                                    || $booking['bookingStatus'] === 'Rejected'
+                                                    || $booking['confirmedStatus'] === 'Rejected'
                                                 ) { ?>
                                                     <button class="btn btn-outline-primary w-100 rateBtn"
                                                         data-bs-toggle="modal"
@@ -303,14 +301,14 @@ if ($userRole == 1) {
                                                         data-bookingtype="<?= $bookingType ?>"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#confirmationModal" data-label="Cancel"></button>
+                                                <?php } ?>
                                             </div>
                                         </td>
                                     <?php } ?>
                                     </tr>
-                            <?php
-                                }
+                                <?php
                             }
-                            ?>
+                                ?>
 
                         </tbody>
                     </table>

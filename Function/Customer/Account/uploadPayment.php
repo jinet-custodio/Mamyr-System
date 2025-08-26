@@ -38,7 +38,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
     }
 
     if ($imageFileName !== NULL) {
-        $downpaymentImageQuery = $conn->prepare("UPDATE confirmedBookings
+        $downpaymentImageQuery = $conn->prepare("UPDATE confirmedbookings
             SET downpaymentImage = ?
             WHERE bookingID = ? ");
         $null = NULL;

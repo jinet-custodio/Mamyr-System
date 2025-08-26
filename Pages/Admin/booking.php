@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -248,7 +250,7 @@ if (isset($_SESSION['error'])) {
                     cb.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus
                                     FROM bookings b
                                     INNER JOIN users u ON b.userID = u.userID   -- to get  the firstname, M.I and lastname 
-                                    LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID 
+                                    LEFT JOIN confirmedbookings cb ON b.bookingID = cb.bookingID 
                                     LEFT JOIN statuses s ON cb.paymentApprovalStatus = s.statusID -- to get the status name
                                     LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID  -- to get the status name 
                                     LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package

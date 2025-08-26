@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -150,7 +152,7 @@ if (isset($_POST['bookingID'])) {
                                 ra.RServiceName, ra.RSprice, rsc.categoryName AS serviceCategory   
                                     
                                 FROM bookings b
-                                LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID
+                                LEFT JOIN confirmedbookings cb ON b.bookingID = cb.bookingID
                                 LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
 
                                 -- LEFT JOIN statuses stat1 ON stat1.statusID = b.bookingStatus
@@ -168,7 +170,7 @@ if (isset($_POST['bookingID'])) {
                                 LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
                                 LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
 
-                                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
+                                LEFT JOIN entrancerates er ON s.entranceRateID = er.entranceRateID
 
                                 LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
                             WHERE b.bookingID = ?");

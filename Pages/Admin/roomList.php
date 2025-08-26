@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -87,9 +89,9 @@ if (isset($_SESSION['error'])) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -201,20 +203,20 @@ if (isset($_SESSION['error'])) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                    <ul class="list-group list-group-flush ">
-                        <?php foreach ($notificationsArray as $index => $message):
+                        <ul class="list-group list-group-flush ">
+                            <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                        <li class="list-group-item mb-2 notification-item"
-                            data-id="<?= htmlspecialchars($notificationID) ?>"
-                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                            <?= htmlspecialchars($message) ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                    <?= htmlspecialchars($message) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     <?php else: ?>
-                    <div class="p-3 text-muted">No new notifications.</div>
+                        <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -244,7 +246,7 @@ if (isset($_SESSION['error'])) {
                     $hotelCategoryID = 1;
                     $getRoomInfo = $conn->prepare("SELECT rs.*, sa.availabilityName AS roomStatus
                     FROM resortamenities rs 
-                    LEFT JOIN serviceAvailability sa ON rs.RSAvailabilityID = sa.availabilityID
+                    LEFT JOIN serviceavailability sa ON rs.RSAvailabilityID = sa.availabilityID
                     WHERE RScategoryID = ?
                     ORDER  BY resortServiceID");
                     $getRoomInfo->bind_param("i", $hotelCategoryID);
@@ -259,30 +261,30 @@ if (isset($_SESSION['error'])) {
                             // print_r($statColor);
                             // echo '<pre>';
                     ?>
-                    <tr>
-                        <td>
-                            <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
-                            <?= $roomInfo['RServiceName'] ?>
-                        </td>
-                        <td><button type="button" href="#"
-                                class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
-                        <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
-                        </td>
-                        <td>
-                            <form action="roomInfo.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="roomID" value="<?= $roomID ?>">
-                                <input type="hidden" name="actionType" value="edit">
-                                <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                <button type="submit" class="btn btn-secondary w-20">Edit</button>
-                            </form>
-                            <form action="roomInfo.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="roomID" value="<?= $roomID ?>">
-                                <input type="hidden" name="actionType" value="view">
-                                <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                <button type="submit" class="btn btn-secondary w-20">View</button>
-                            </form>
-                        </td>
-                    </tr>
+                            <tr>
+                                <td>
+                                    <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
+                                    <?= $roomInfo['RServiceName'] ?>
+                                </td>
+                                <td><button type="button" href="#"
+                                        class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
+                                <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
+                                </td>
+                                <td>
+                                    <form action="roomInfo.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                        <input type="hidden" name="actionType" value="edit">
+                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
+                                        <button type="submit" class="btn btn-secondary w-20">Edit</button>
+                                    </form>
+                                    <form action="roomInfo.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                        <input type="hidden" name="actionType" value="view">
+                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
+                                        <button type="submit" class="btn btn-secondary w-20">View</button>
+                                    </form>
+                                </td>
+                            </tr>
                     <?php
                         }
                     }
@@ -363,40 +365,40 @@ if (isset($_SESSION['error'])) {
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
 
@@ -408,9 +410,9 @@ if (isset($_SESSION['error'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#bookingTable').DataTable();
-    });
+        $(document).ready(function() {
+            $('#bookingTable').DataTable();
+        });
     </script>
 </body>
 

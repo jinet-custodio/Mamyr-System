@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -191,7 +194,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             $blogPosts = [];
             $imagesByContentID = [];
 
-            $getImagesQuery = "SELECT contentID, imageData, altText FROM websiteContentImages ORDER BY imageOrder ASC";
+            $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimages ORDER BY imageOrder ASC";
             $imageResult = mysqli_query($conn, $getImagesQuery);
 
             if ($imageResult && mysqli_num_rows($imageResult) > 0) {

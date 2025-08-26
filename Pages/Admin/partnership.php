@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -63,7 +65,7 @@ if (!$partnerID) {
                                 FROM partnerships p
                                 INNER JOIN users u ON p.userID = u.userID
                                 INNER JOIN statuses s ON s.statusID = p.partnerStatus
-                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                LEFT JOIN partnershiptypes pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnershipID = ?
                                 ");
         $selectQuery->bind_param("i", $partnerID);
@@ -146,7 +148,7 @@ if (!$partnerID) {
                                 FROM partnerships p
                                 INNER JOIN users u ON p.userID = u.userID
                                 INNER JOIN statuses s ON s.statusID = p.partnerStatus
-                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                LEFT JOIN partnershiptypes pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnershipID = ?
                                 ");
         $selectQuery->bind_param("i", $partnerID);

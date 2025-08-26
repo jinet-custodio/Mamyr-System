@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -262,9 +264,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="button-container">
                     <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
                         onclick="enableEditing()">Edit</button>
-                    <button type="submit" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
+                    <button type="button" onclick="cancelEdit()" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
                         style="display: none;">Cancel</button>
-                    <button type="button" onclick="cancelEdit()" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
+                    <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
                         style="display: none;">Save</button>
                 </div>
             </form>

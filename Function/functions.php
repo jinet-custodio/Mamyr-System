@@ -58,13 +58,13 @@ function changeToDoneStatus($conn)
     $fullyPaidID = 3;
 
     //Select all confirmed bookings that have ended and is fully paid
-    $selectConfirmedBookings = $conn->prepare("SELECT cb.*, b.endDate, b.bookingID FROM confirmedBookings cb 
+    $selectConfirmedBookings = $conn->prepare("SELECT cb.*, b.endDate, b.bookingID FROM confirmedbookings cb 
                             JOIN bookings b ON cb.bookingID = b.bookingID WHERE B.endDate < ? AND paymentStatus = ? AND paymentApprovalStatus = ?");
     $selectConfirmedBookings->bind_param("sii", $dateNow, $fullyPaidID, $approvedStatusID);
     $selectConfirmedBookings->execute();
     $result = $selectConfirmedBookings->get_result();
     if ($result->num_rows > 0) {
-        $updateQuery = $conn->prepare("UPDATE confirmedBookings SET paymentApprovalStatus = ? WHERE bookingID = ?");
+        $updateQuery = $conn->prepare("UPDATE confirmedbookings SET paymentApprovalStatus = ? WHERE bookingID = ?");
         $counter = 0;
         while ($row = $result->fetch_assoc()) {
             $bookingID = (int)$row['bookingID'];
@@ -101,7 +101,7 @@ function getStatuses($conn, $statusID)
 function getPaymentStatus($conn, $paymentStatusID)
 {
 
-    $getPaymentStatus = $conn->prepare("SELECT * FROM bookingPaymentStatus WHERE paymentStatusID = ?");
+    $getPaymentStatus = $conn->prepare("SELECT * FROM bookingpaymentstatus WHERE paymentStatusID = ?");
     $getPaymentStatus->bind_param("i", $paymentStatusID);
     $getPaymentStatus->execute();
     $getPaymentStatusResult = $getPaymentStatus->get_result();

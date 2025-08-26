@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -203,7 +205,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                         <div class="card-body">
                             <?php
-                            $getEntranceRates = $conn->prepare("SELECT er.*, etr.timeRangeID AS primaryID, etr.time_range AS timeRange FROM entranceRates er
+                            $getEntranceRates = $conn->prepare("SELECT er.*, etr.timeRangeID AS primaryID, etr.time_range AS timeRange FROM entrancerates er
                             JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID
                             ORDER BY er.sessionType, etr.time_range, er.ERcategory");
                             $getEntranceRates->execute();
@@ -253,7 +255,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <?php
                                 $cottageCategoryID = 2;
 
-                                $getCottageQuery = $conn->prepare("SELECT DISTINCT RScapacity, RSdescription, RSprice FROM resortAmenities WHERE RScategoryID = ?");
+                                $getCottageQuery = $conn->prepare("SELECT DISTINCT RScapacity, RSdescription, RSprice FROM resortamenities WHERE RScategoryID = ?");
                                 $getCottageQuery->bind_param("i", $cottageCategoryID);
                                 $getCottageQuery->execute();
                                 $getCottageQueryResult =  $getCottageQuery->get_result();
@@ -287,7 +289,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <?php
                                 $entertainmentName = 'Videoke';
                                 $categoryID = 3;
-                                $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE  RScategoryID = ? AND  RServiceName LIKE ? LIMIT 1");
+                                $getVideoke = $conn->prepare("SELECT * FROM resortamenities WHERE  RScategoryID = ? AND  RServiceName LIKE ? LIMIT 1");
                                 $getVideoke->bind_param("is",  $categoryID, $entertainmentName);
                                 $getVideoke->execute();
                                 $getVideokeResult =  $getVideoke->get_result();
@@ -313,7 +315,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <?php
                                 $entertainmentName = 'Massage Chair';
                                 $categoryID = 3;
-                                $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ? AND RScategoryID = ?");
+                                $getVideoke = $conn->prepare("SELECT * FROM resortamenities WHERE RServiceName = ? AND RScategoryID = ?");
                                 $getVideoke->bind_param("si", $entertainmentName, $categoryID);
                                 $getVideoke->execute();
                                 $getVideokeResult =  $getVideoke->get_result();
@@ -340,7 +342,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <?php
                                 $entertainmentName = 'Billiard';
                                 $categoryID = 3;
-                                $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ? AND RScategoryID = ?");
+                                $getVideoke = $conn->prepare("SELECT * FROM resortamenities WHERE RServiceName = ? AND RScategoryID = ?");
                                 $getVideoke->bind_param("si", $entertainmentName, $categoryID);
                                 $getVideoke->execute();
                                 $getVideokeResult =  $getVideoke->get_result();

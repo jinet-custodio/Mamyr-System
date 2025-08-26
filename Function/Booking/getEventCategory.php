@@ -8,7 +8,7 @@ $categories = [];
 $halls = [];
 
 // Get Event Categories
-$getEventCategoryQuery = $conn->prepare("SELECT * FROM eventCategories");
+$getEventCategoryQuery = $conn->prepare("SELECT * FROM eventcategories");
 $getEventCategoryQuery->execute();
 $getEventCategoryResult = $getEventCategoryQuery->get_result();
 
@@ -21,7 +21,7 @@ $getEventCategoryQuery->close();
 
 // Get Event Halls
 $eventHallID = 4;
-$getEventHallQuery = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ?");
+$getEventHallQuery = $conn->prepare("SELECT * FROM resortamenities WHERE RScategoryID = ?");
 $getEventHallQuery->bind_param("i", $eventHallID);
 $getEventHallQuery->execute();
 $getEventHallResult = $getEventHallQuery->get_result();
