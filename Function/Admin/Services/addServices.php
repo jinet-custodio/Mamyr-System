@@ -21,7 +21,7 @@ function getServiceCategory($conn, $id)
     return null;
 }
 
-if (isset($_POST['addResortService'])) {
+if (isset($_POST['addResortService'])) { //Resort Amenities
     $serviceType = 'Resort';
     $serviceName = mysqli_real_escape_string($conn, $_POST['serviceName']);
     $servicePrice = floatval(mysqli_real_escape_string($conn, $_POST['servicePrice']));
@@ -73,8 +73,9 @@ if (isset($_POST['addResortService'])) {
     }
 
 
+    $conn->begin_transaction();
     try {
-        $insertServiceQuery = $conn->prepare("INSERT INTO resortAmenities(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES(?,?,?,?,?,?,?,?,?)");
+        $insertServiceQuery = $conn->prepare("INSERT INTO resortamenities(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES(?,?,?,?,?,?,?,?,?)");
         $insertServiceQuery->bind_param(
             'sdiisissi',
             $serviceName,
@@ -89,26 +90,73 @@ if (isset($_POST['addResortService'])) {
         );
         if ($insertServiceQuery->execute()) {
             $resortServiceID = $conn->insert_id;
-            $insertServiceQuery->close();
+
             $insertIntoService = $conn->prepare("INSERT INTO services(`resortServiceID`, `serviceType`) VALUES(?,?)");
             $insertIntoService->bind_param('is', $resortServiceID, $serviceType);
             if ($insertIntoService->execute()) {
+                $conn->commit();
                 header('Location: ../../../Pages/Admin/services.php?result=added');
                 $insertIntoService->close();
+                exit();
             } else {
+                $conn->rollback();
                 echo 'INSERTING ERROR';
                 error_log("Execution Error: " . $insertIntoService->error);
+                exit();
             }
+            $insertServiceQuery->close();
         } else {
+            $conn->rollback();
             echo 'INSERTING ERROR';
             error_log("Execution Error: " . $insertServiceQuery->error);
         }
     } catch (Exception $e) {
+        $conn->rollback();
         echo 'INSERTING ERROR';
         error_log("Exception: " . $e->getMessage());
         header("Location: ../../../Pages/Admin/services.php?result=error");
         exit();
     }
+} elseif (isset($_POST['addResortRates'])) { //Resort Rates
+    $serviceType = 'Entrance';
+    $tourType = mysqli_real_escape_string($conn, $_POST['tourType']);
+    $timeRange = intval($_POST['timeRange']);
+    $visitorType = mysqli_real_escape_string($conn, $_POST['visitorType']);
+    $entrancePrice = floatval($_POST['entrancePrice']);
+
+
+    $conn->begin_transaction();
+
+    try {
+        $insertRates = $conn->prepare("INSERT INTO entrancerates(`sessionType`, `timeRangeID`, `ERcategory`, `ERprice`) VALUES(?,?,?,?)");
+        $insertRates->bind_param('sisd', $tourType, $timeRange, $visitorType, $entrancePrice);
+        if ($insertRates->execute()) {
+            $entranceRateID = $conn->insert_id;
+
+            $insertIntoService = $conn->prepare("INSERT INTO services(`entranceRateID`, `serviceType`) VALUES(?,?)");
+            $insertIntoService->bind_param('is', $entranceRateID, $serviceType);
+            if ($insertIntoService->execute()) {
+                $conn->commit();
+                header('Location: ../../../Pages/Admin/services.php?result=added');
+                $insertIntoService->close();
+                exit();
+            } else {
+                $conn->rollback();
+                echo 'INSERTING ERROR';
+                error_log("Execution Error: " . $insertIntoService->error);
+                exit();
+            }
+        } else {
+            $conn->rollback();
+            echo 'INSERTING ERROR';
+            error_log("Execution Error: " . $insertIntoService->error);
+            exit();
+        }
+    } catch (Exception $e) {
+        $conn->rollback();
+        header("Location: ../../../Pages/Admin/services.php?result=error");
+    }
 } else {
-    echo 'BUTTON ERROR';
+    header("Location: ../../../Pages/Admin/services.php?result=error");
+    exit();
 }
