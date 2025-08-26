@@ -7,6 +7,7 @@ require '../../../Config/dbcon.php';
 if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
     $data = json_decode(file_get_contents("php://input"), true);
 
+
     if (!$data || !isset($data['sectionName'])) {
         http_response_code(400);
         echo "Invalid input";
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['
         $filename = basename($_FILES['image']['name']);
         $targetDir = "../../../Assets/Images/" . $folder;
         $targetPath = $targetDir . "/" . $filename;
-
+        
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0755, true);
         }

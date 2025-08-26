@@ -119,11 +119,11 @@ function getPaymentStatus($conn, $paymentStatusID)
 
 function addToAdminTable($conn)
 {
-
     $adminID = 3;
     $position = 'Administrator';
 
-    $getAdminQuery = $conn->prepare("SELECT * FROM users WHERE userRole = ?");
+    // Fetch users with userRole = 3
+    $getAdminQuery = $conn->prepare("SELECT userID FROM users WHERE userRole = ?");
     $getAdminQuery->bind_param('i', $adminID);
     $getAdminQuery->execute();
     $adminQueryResult = $getAdminQuery->get_result();
@@ -137,19 +137,26 @@ function addToAdminTable($conn)
             $selectUsers->bind_param('i', $storedUserID);
             $selectUsers->execute();
             $result = $selectUsers->get_result();
+
             if ($result->num_rows < 1) {
+
                 $insertAdminQuery = $conn->prepare("INSERT INTO admins (userID, position) VALUES (?, ?)");
                 $insertAdminQuery->bind_param('is', $storedUserID, $position);
-                if ($insertAdminQuery->execute()) {
-                    $adminQueryResult->close();
-                    $insertAdminQuery->close();
-                } else {
-                    echo "Error: " . $conn->error;
+                if (!$insertAdminQuery->execute()) {
+                    echo "Error inserting admin: " . $insertAdminQuery->error;
                 }
+                $insertAdminQuery->close();
             }
+            $result->free();
+            $selectUsers->close();
         }
     }
+
+
+    $adminQueryResult->free();
+    $getAdminQuery->close();
 }
+
 
 function autoChangeStatus($conn)
 {
@@ -207,4 +214,6 @@ function autoChangeStatus($conn)
             }
         }
     }
+    $result->free();
+    $fetchUnavailableServiceDatesQuery->close();
 }

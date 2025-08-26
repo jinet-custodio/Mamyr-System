@@ -87,9 +87,9 @@ if (isset($_SESSION['error'])) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -201,20 +201,20 @@ if (isset($_SESSION['error'])) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item"
-                                    data-id="<?= htmlspecialchars($notificationID) ?>"
-                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($message) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -226,6 +226,10 @@ if (isset($_SESSION['error'])) {
     <div class="booking-container">
 
         <div class="card " style="width: 80%;">
+            <div class="addHotelContainer">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHotelModal"
+                    id="addHotelBtn">Add Hotel Room</button>
+            </div>
             <table class="table table-striped" id="roomsTable">
 
                 <thead>
@@ -255,30 +259,30 @@ if (isset($_SESSION['error'])) {
                             // print_r($statColor);
                             // echo '<pre>';
                     ?>
-                            <tr>
-                                <td>
-                                    <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
-                                    <?= $roomInfo['RServiceName'] ?>
-                                </td>
-                                <td><button type="button" href="#"
-                                        class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
-                                <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
-                                </td>
-                                <td>
-                                    <form action="roomInfo.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
-                                        <input type="hidden" name="actionType" value="edit">
-                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                        <button type="submit" class="btn btn-secondary w-20">Edit</button>
-                                    </form>
-                                    <form action="roomInfo.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
-                                        <input type="hidden" name="actionType" value="view">
-                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                        <button type="submit" class="btn btn-secondary w-20">View</button>
-                                    </form>
-                                </td>
-                            </tr>
+                    <tr>
+                        <td>
+                            <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
+                            <?= $roomInfo['RServiceName'] ?>
+                        </td>
+                        <td><button type="button" href="#"
+                                class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
+                        <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
+                        </td>
+                        <td>
+                            <form action="roomInfo.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                <input type="hidden" name="actionType" value="edit">
+                                <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
+                                <button type="submit" class="btn btn-secondary w-20">Edit</button>
+                            </form>
+                            <form action="roomInfo.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                <input type="hidden" name="actionType" value="view">
+                                <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
+                                <button type="submit" class="btn btn-secondary w-20">View</button>
+                            </form>
+                        </td>
+                    </tr>
                     <?php
                         }
                     }
@@ -287,6 +291,66 @@ if (isset($_SESSION['error'])) {
             </table>
         </div>
     </div>
+
+
+    <!-- FORM MODAL ADDING SERVICE-->
+
+    <!-- Modal -->
+    <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addHotelModalLabel">Add Hotel Room</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-container">
+                        <label for="roomNo">Room No.</label>
+                        <input type="text" class="form-control" id="roomNo" name="roomNo" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="roomStat">Room Status</label>
+                        <select id="roomStat" name="roomStat" class="form-select" required>
+                            <option value="" disabled selected>Status</option>
+                            <option value="available" id="available">Available</option>
+                            <option value="occupied" id="occupied">Occupied</option>
+                            <option value="maintenance" id="maintenance">Maintenance</option>
+                            <option value="unavailable" id="unavailable">Unavailable</option>
+                        </select>
+                    </div>
+                    <div class="input-container">
+                        <label for="roomRate">RoomRate</label>
+                        <input type="text" class="form-control" id="roomRate" name="roomRate">
+                    </div>
+                    <div class="input-container">
+                        <label for="capacity">Capacity</label>
+                        <input type="text" class="form-control" id="capacity" name="capacity">
+                    </div>
+                    <div class="input-container">
+                        <label for="maxCapacity">Max Capacity</label>
+                        <input type="text" class="form-control" id="maxCapacity" name="maxCapacity">
+                    </div>
+                    <div class="input-container">
+                        <label for="roomDescription">Description</label>
+                        <textarea class="form-control" id="roomDescription" name="roomDescription"></textarea>
+                    </div>
+                    <div class="input-container">
+                        <label for="roomImage">Room Image</label>
+                        <input type="file" class="form-control" id="roomImage" name="roomImage">
+                    </div>
+                    <div class="input-container">
+                        <label for="other">Other</label>
+                        <input type="text" class="form-control" id="other" name="other">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="saveHotelRoom">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- Bootstrap Link -->
@@ -299,40 +363,40 @@ if (isset($_SESSION['error'])) {
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
 
@@ -344,9 +408,9 @@ if (isset($_SESSION['error'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#bookingTable').DataTable();
-        });
+    $(document).ready(function() {
+        $('#bookingTable').DataTable();
+    });
     </script>
 </body>
 
