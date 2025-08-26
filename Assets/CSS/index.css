@@ -95,7 +95,7 @@ body {
 }
 
 .mamyrLogo {
-  height: 70px !important;
+  height: 70px;
   margin-top: 1vw;
 }
 
@@ -405,6 +405,16 @@ input[type="password"]::-webkit-search-cancel-button {
     height: calc(100vh - 40px);
   }
 
+  .welcome {
+    font-size: 20px !important;
+  }
+
+  h1 {
+    font-size: 25px !important;
+  }
+  .mamyrLogo {
+    height: 40px !important;
+  }
   .form-box {
     bottom: 0;
     width: 100%;
