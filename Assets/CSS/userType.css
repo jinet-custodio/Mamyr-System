@@ -96,7 +96,6 @@ nav {
   /* margin-top: 1vw; */
   border-radius: 50px;
   width: 70vw !important;
-  height: 35vw !important;
   margin-bottom: 2vw;
   background-color: #43b2f7;
   display: flex;
@@ -112,7 +111,6 @@ nav {
 }
 
 .category-card {
-  height: 65vh !important;
   width: 50vh !important;
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
@@ -134,8 +132,8 @@ nav {
 .category-card img {
   border-radius: 2vw 2vw 2vw 2vw !important;
   padding: 1vw;
-  height: 18vw !important;
   object-fit: cover;
+  width: 100%;
 }
 
 .category-title {
