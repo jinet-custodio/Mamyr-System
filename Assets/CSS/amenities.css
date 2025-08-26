@@ -665,11 +665,11 @@ footer {
     }
     .nav-item {
     margin-top: 5px;
-    font-size: 3vw;
+    font-size: 2vw;
   }
 
-  .dropdown-item{
-    font-size: 2.5vw !important;
+  a.dropdown-item{
+    font-size: 1.8vw !important;
   }
     #profileAndNotif {
       background-color: transparent;
