@@ -168,7 +168,6 @@ if (isset($_SESSION['error'])) {
                     $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                 }
                 ?>
-
             <div class="right-col">
                 <div class="end" id="image">
                     <div class="room-image-wrapper">
