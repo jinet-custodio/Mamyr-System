@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require 'Config/dbcon.php';
 
 //for edit website, this will enable edit mode from the iframe
@@ -65,7 +67,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </button>
 
         <div class="collapse navbar-collapse " id="navbarNav">
-           <ul class="navbar-nav ms-auto me-10" id="navUL">
+            <ul class="navbar-nav ms-auto me-10" id="navUL">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -173,11 +175,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         $defaultImage = "Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                 <div class="image-wrapper mb-3 pic1">
-                     <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
-                     alt="<?= htmlspecialchars($img['altText']) ?>"
-                        class="img-fluid mb-2 editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                        data-folder="landingPage"
+                    <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                        alt="<?= htmlspecialchars($img['altText']) ?>" class="img-fluid mb-2 editable-img"
+                        style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#editImageModal"
+                        data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="landingPage"
                         data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                         data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                 </div>
@@ -209,6 +210,43 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <?php endif; ?>
             </div>
 
+        </div>
+
+        <div class="gallery">
+            <hr class="line">
+            <h4 class="galleryTitle">Gallery </h4>
+            <?php if (isset($imageMap['FullName'])): ?>
+            <div id="carouselGallery" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner ">
+                    <?php foreach ($imageMap['FullName'] as $index => $img):
+                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
+                        $defaultImage = "Assets/Images/no-picture.png";
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                    <div class="carousel-item  <?= $index === 0 ? 'active' : '' ?> ">
+                        <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                            alt="<?= htmlspecialchars($img['altText']) ?>" class="img-fluid mb-2 editable-img"
+                            style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#editImageModal"
+                            data-folder="landingPage" data-wcimageid="<?= $img['WCImageID'] ?>"
+                            data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                            data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    </div>
+                    <?php endforeach;
+                    ?>
+                </div>
+                <a class="carousel-control-prev" href="#carouselGallery" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselGallery" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+
+            </div>
+            <?php endif; ?>
+            <div class="seeMore">
+                <a href="Pages/amenities.php" class="btn custom-btn ">See More</a>
+            </div>
         </div>
 
         <div class="contact">
@@ -260,34 +298,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="googleMap" id="googleMap"></div>
         </div>
 
-        <div class="gallery">
-            <hr class="line">
-            <h4 class="galleryTitle">Gallery </h4>
-            <?php if (isset($imageMap['FullName'])): ?>
-            <div class="galleryPictures">
-                <?php foreach ($imageMap['FullName'] as $index => $img):
-                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
-                        $defaultImage = "Assets/Images/no-picture.png";
-                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                <div class="image-wrapper mb-3 galleryImg">
-                   <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
-                        alt="<?= htmlspecialchars($img['altText']) ?>"
-                        class="img-fluid mb-2 editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                        data-bs-target="#editImageModal"
-                         data-folder="landingPage"
-                        data-wcimageid="<?= $img['WCImageID'] ?>"
-                        data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-                </div>
-                <?php endforeach;
-                    ?>
-            </div>
-            <?php endif; ?>
-        </div>
 
-        <div class="seeMore">
-            <a href="Pages/amenities.php" class="btn custom-btn ">See More</a>
-        </div>
+
+
 
         <?php if (!$editMode): ?>
         <footer class="py-1 ">
@@ -295,14 +308,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                 <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
-                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
+                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>
+                </h3>
             </div>
 
             <div class="info">
                 <div class="reservation">
                     <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h4>
-                    <h4 class="emailAddressTextFooter"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>
+                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>
+                    </h4>
+                    <h4 class="emailAddressTextFooter">
+                        <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>
                     </h4>
                 </div>
                 <div class="locationFooter">
@@ -393,7 +409,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                     // Save temp image to dataset (so we can upload on final save)
                     activeImageElement.setAttribute('data-tempfile', newFile.name);
-                    activeImageElement.fileObject = newFile; // temporarily attach file to element
+                    activeImageElement.fileObject =
+                        newFile; // temporarily attach file to element
                 };
                 reader.readAsDataURL(newFile);
             }
@@ -440,10 +457,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         },
                         body: JSON.stringify(data)
                     })
-                    .then(res => res.text())
-                    .then(response => {
-                        console.log('Content saved:', response);
-                        alert('Website content saved!');
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log(`Image ${wcImageID} updated successfully.`);
+                        } else {
+                            alert(`Failed to update image ${wcImageID}: ` + data
+                                .message);
+                        }
                     })
                     .catch(err => {
                         console.error('Error saving content:', err);
@@ -526,7 +547,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     // Create a temporary anchor to parse the href
                     const tempAnchor = document.createElement('a');
                     tempAnchor.href = href;
-                    const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
+                    const targetPath = tempAnchor.pathname.replace(/\/+$/, '')
+                        .toLowerCase();
 
                     // If the target is different from the current path, show loader
                     if (targetPath !== currentPath) {

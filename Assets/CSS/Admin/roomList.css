@@ -143,6 +143,12 @@ body {
   padding: 2vw;
 }
 
+#addHotelBtn {
+  width: 12vw;
+  float: right;
+  margin: 0 0 1vw 0;
+}
+
 label {
   margin-left: 1vw;
 }

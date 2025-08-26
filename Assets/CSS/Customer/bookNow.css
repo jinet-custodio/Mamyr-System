@@ -142,22 +142,21 @@ ul {
   margin-left: 1rem;
   /* border: 1px solid white; */
   border-radius: 50%;
-  img {
-    height: 5vw;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
+}
+.account-nav img {
+  height: 5vw;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
 .notification-container {
   margin: 1rem;
-
-  button {
+}
+.notification-container button {
     background-color: transparent;
     border: none;
   }
-}
 
 .logoNav {
   /* border: 1px solid black; */
@@ -322,11 +321,10 @@ footer {
 
 .categoryLink {
   text-decoration: none;
-
-  &:hover {
+}
+.categoryLink:hover {
     text-decoration: none !important;
   }
-}
 
 .categoryLink .category-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -337,27 +335,26 @@ footer {
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
 }
 
-#resort-page {
-  .resortTitle {
+#resort-page .resortTitle {
     font-size: 2.5vw;
     font-family: "Lora";
     color: #000000;
     font-weight: bold;
   }
 
-  .backToSelection {
+#resort-page .backToSelection {
     position: absolute;
     margin: 0 0 0 5rem;
     /* background-color: transparent;
     border: none; */
   }
 
-  .backToSelection img {
+#resort-page .backToSelection img {
     width: 40px;
     height: 40px;
   }
 
-  .container-fluid {
+#resort-page .container-fluid {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -366,14 +363,14 @@ footer {
     margin-top: 2rem;
   }
 
-  .resort-card {
+#resort-page .resort-card {
     padding: 2rem 2rem 0 2rem;
     margin-bottom: 1rem;
     font-family: "Poppins";
     width: 50%;
   }
 
-  .scheduleForm,
+#resort-page .scheduleForm,
   .peopleForm,
   .cottageRoomForm,
   .purposeForm {
@@ -384,49 +381,49 @@ footer {
     margin-bottom: 0.5rem;
   }
 
-  .peopleForm input {
+#resort-page .peopleForm input {
     height: 2.5rem;
   }
 
-  .peopleForm .info-container p {
+#resort-page .peopleForm .info-container p {
     font-size: 12px;
     color: #007bff;
   }
 
-  .peopleForm .info-container {
+#resort-page .peopleForm .info-container {
     display: flex;
     gap: 0.2rem;
     height: 1rem;
   }
 
-  .cottagesForm,
+#resort-page .cottagesForm,
   .roomNumbers,
   .videokeForm {
     width: 100%;
   }
 
-  .modal-body {
+#resort-page .modal-body {
     display: flex;
     flex-direction: column;
   }
 
-  .modal-text {
+#resort-page .modal-text {
     color: rgb(15, 127, 255) !important;
   }
 
-  .modal-text i {
+#resort-page .modal-text i {
     gap: 1rem;
   }
 
-  #entertainmentContainer,
-  #cottagesContainer {
-    /* border: 1px solid red; */
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
+#resort-page #entertainmentContainer,
+#resort-page #cottagesContainer {
+  /* border: 1px solid red; */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
 
-  #roomsContainer {
+#resort-page #roomsContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -434,14 +431,14 @@ footer {
     gap: 1rem;
   }
 
-  #entertainmentContainer label,
-  #cottagesContainer label,
-  #roomsContainer label {
-    margin-left: 0.5rem;
-    font-size: 15px;
-  }
+#resort-page #entertainmentContainer label,
+#resort-page #cottagesContainer label,
+#resort-page #roomsContainer label {
+  margin-left: 0.5rem;
+  font-size: 15px;
+}
 
-  .entrance-rates {
+#resort-page .entrance-rates {
     display: flex;
     flex-direction: column;
     width: 600px;
@@ -449,88 +446,89 @@ footer {
     gap: 1rem;
   }
 
-  .entrance-rates .card-body {
+#resort-page .entrance-rates .card-body {
     padding: 0.5rem;
   }
 
-  .rates {
+#resort-page .rates {
     width: auto;
     height: 280px;
     padding: 0.5rem;
   }
 
-  .rates h1 {
+
+#resort-page .rates h1 {
     font-size: 30px;
     font-family: "Alkatra";
     color: blue;
   }
 
-  .rates h5 {
+#resort-page .rates h5 {
     font-size: 18px;
     text-align: center;
   }
 
-  .rates p {
+#resort-page .rates p {
     font-size: 16px;
     margin: 0;
     text-align: center;
   }
 
-  .rates .card-body {
+#resort-page .rates .card-body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .rates .card-body .data-container:last-child {
+#resort-page .rates .card-body .data-container:last-child {
     grid-column: span 2;
   }
 
-  .cottagesEntertainment {
+#resort-page .cottagesEntertainment {
     width: auto;
     height: 320px;
     display: flex;
     flex-direction: column;
   }
 
-  .cottagesEntertainment .card-body {
+#resort-page .cottagesEntertainment .card-body {
     padding: 0.5rem;
   }
 
-  .cottagesNotes {
+#resort-page .cottagesNotes {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
 
-  .entertainmentContainer {
+#resort-page .entertainmentContainer {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
 
-  .cottagesEntertainment h1 {
+#resort-page .cottagesEntertainment h1 {
     font-size: 20px;
     font-family: "Alkatra";
     text-align: center;
     color: blue;
   }
 
-  .cottagesEntertainment li {
+#resort-page .cottagesEntertainment li {
     font-size: 14px;
   }
 
-  .cottagesEntertainment p {
+#resort-page .cottagesEntertainment p {
     font-size: 14px;
     text-align: center;
     line-height: 1;
   }
 
-  .cottagesEntertainment .note li {
+#resort-page .cottagesEntertainment .note li {
     list-style: circle;
     text-transform: none;
   }
 
-  .schedLabel,
+#resort-page .schedLabel,
   .cottagesFormLabel,
   .entertainmentFormLabel,
   .noOfPeopleLabel,
@@ -542,44 +540,46 @@ footer {
     font-weight: bold;
   }
 
-  .button-container {
+#resort-page .button-container {
     padding: 1rem;
   }
 
-  .additional-info-container ul {
+#resort-page .additional-info-container ul {
     width: 100%;
     margin: 0;
     padding: 0;
   }
 
-  .additional-info-container li {
+#resort-page .additional-info-container li {
     font-size: 12px;
     text-transform: none;
     margin: 0.5rem;
     padding: 0.3rem;
     text-align: justify;
   }
-}
+
+
 
 #hotel-page {
   background-image: unset;
   background-color: rgb(255, 220, 174) !important;
   margin: 0;
   padding: 0;
+}
 
-  .hotelTitle {
+#hotel-page .hotelTitle {
     font-size: 2.5vw;
     font-family: "Lora";
     color: #000000;
     font-weight: bold;
   }
 
-  .backToSelection {
+#hotel-page .backToSelection {
     position: absolute;
     margin: 0 0 0 2.5rem;
   }
 
-  .container-fluid {
+#hotel-page .container-fluid {
     /* border: 2px solid pink; */
     display: flex;
     justify-content: center;
@@ -588,11 +588,11 @@ footer {
     padding: 1rem;
   }
 
-  .hotelIconsContainer {
+#hotel-page .hotelIconsContainer {
     width: 50%;
   }
 
-  .availabilityIcons {
+#hotel-page .availabilityIcons {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -600,17 +600,17 @@ footer {
     margin-top: 20px;
   }
 
-  .availabilityIcon {
+#hotel-page .availabilityIcon {
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .availabilityIcon img {
+#hotel-page .availabilityIcon img {
     margin-right: 0.4vw;
   }
 
-  .icons-container {
+#hotel-page .icons-container {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -618,36 +618,36 @@ footer {
     text-align: center;
   }
 
-  .avail {
+#hotel-page .avail {
     width: 50px;
     height: auto;
     margin-bottom: 8px;
   }
 
-  .hotelIconContainer {
+#hotel-page .hotelIconContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 2.5rem;
+}
 
-    img {
+#hotel-page .hotelIconContainer img {
       width: 60px;
       height: auto;
       margin-bottom: 8px;
     }
-  }
 
-  .hotelIconWithCaption {
+#hotel-page .hotelIconWithCaption {
     flex: 0 0 calc((100% - 3 * 2.5rem) / 4);
   }
 
-  .hotel-card {
+#hotel-page .hotel-card {
     width: 50% !important;
     height: 50%;
     padding: 1.5rem;
   }
 
-  .checkInOut,
+#hotel-page .checkInOut,
   .hotelPeopleForm,
   .paymentTimeDiv {
     display: flex;
@@ -657,85 +657,86 @@ footer {
     align-items: center;
   }
 
-  .hotelPeopleForm .info-container p {
+#hotel-page .hotelPeopleForm .info-container p {
     font-size: 12px;
     color: #007bff;
   }
 
-  .hotelPeopleForm .info-container {
+#hotel-page .hotelPeopleForm .info-container {
     display: flex;
     gap: 0.2rem;
     height: 1rem;
   }
 
-  .checkInOut,
+#hotel-page .checkInOut,
   .paymentTimeDiv {
     justify-content: space-evenly !important;
   }
 
-  .checkIn-container,
+#hotel-page .checkIn-container,
   .checkOut-container,
   .paymentMethod,
   .arrivalTime {
     width: 50% !important  ;
   }
 
-  .checkInOut,
+#hotel-page .checkInOut,
   .hotelPax,
   .roomNumbers,
   .paymentTimeDiv {
     margin: 0.5rem;
   }
 
-  h5 {
+#hotel-page h5 {
     font-size: 18px;
     text-align: center;
     font-weight: 600;
   }
 
-  .hotelRooms {
+#hotel-page .hotelRooms {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
   }
 
-  #selectedHotel .btn {
+#hotel-page #selectedHotel .btn {
     color: #000000 !important;
   }
 
-  /* .NumberOfHours {
+ /* .NumberOfHours {
     width: 30%;
   } */
 
-  #hotelBooking .btn {
+#hotel-page #hotelBooking .btn {
     width: 100%;
     margin: auto;
     margin-top: 0.5rem;
   }
 
-  .additional-info-container {
+#hotel-page .additional-info-container {
     margin: 0;
     margin-top: 0.5rem;
-    li {
+  }
+
+#hotel-page .additional-info-container li {
       text-transform: none !important;
       font-size: 14px;
       margin: 2px;
     }
-  }
 
-  .wrapper {
+#hotel-page .wrapper {
     display: flex !important;
     gap: 2vw !important;
   }
 
-  .content {
+#hotel-page .content {
     display: flex;
     gap: 0.5rem !important;
     justify-content: center;
   }
 
-  .checkbox-item {
+#hotel-page .checkbox-item {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -743,32 +744,32 @@ footer {
     margin-top: 1vw;
   }
 
-  #hotelDisplaySelection {
+#hotel-page #hotelDisplaySelection {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
   }
-}
 
 #event-page {
   background-image: unset;
   background-color: rgb(255, 220, 174) !important;
   margin: 0;
   padding: 0;
+}
 
-  .eventTitle {
+#event-page .eventTitle {
     font-size: 2.5vw;
     font-family: "Lora";
     color: #000000;
     font-weight: bold;
   }
 
-  .backToSelection {
+#event-page .backToSelection {
     position: absolute;
     margin: -1rem 0 0 4rem;
   }
 
-  .container-fluid {
+#event-page .container-fluid {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -777,20 +778,20 @@ footer {
     padding: 2vw;
   }
 
-  .card {
+#event-page .card {
     margin-top: 1rem;
     height: 90vh;
     padding: 2rem;
   }
 
-  #eventBookingCard {
+#event-page #eventBookingCard {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(4, 6vw);
     gap: 8px;
   }
 
-  .eventInfoLabel {
+#event-page .eventInfoLabel {
     font-family: "Poppins";
     font-weight: bold;
     font-size: 20px;
@@ -798,29 +799,30 @@ footer {
     display: block;
     text-align: center;
   }
-  .secondColumn {
+
+#event-page .secondColumn {
     display: grid;
     width: 100%;
   }
 
-  .noteContainer {
+#event-page .noteContainer {
     margin-top: 1.5vw;
     width: 98%;
   }
 
-  .note {
+#event-page .note {
     color: #ff0000;
     text-align: justify;
   }
 
-  #foodSelectionCard,
-  #additionalServicesCard {
+#event-page #foodSelectionCard,
+#event-page #additionalServicesCard {
     padding: 0 !important;
     margin: auto !important;
   }
 
-  #foodSelectionCard,
-  #additionalServicesCard {
+#event-page #foodSelectionCard,
+#event-page #additionalServicesCard {
     display: flex !important;
     flex-direction: row !important;
     align-items: center;
@@ -829,22 +831,23 @@ footer {
     margin-top: 1vw !important;
   }
 
-  #foodSelectionCover,
-  #additionalServicesCover {
+#event-page #foodSelectionCover,
+#event-page #additionalServicesCover {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
 
-  #additionalServicesCover {
+#event-page #additionalServicesCover {
     width: 51vh;
     aspect-ratio: 1;
   }
-  .fw-bold {
+
+#event-page .fw-bold {
     /* margin-top: -2vw; */
     font-family: "Poppins";
   }
 
-  #calendar {
+#event-page #calendar {
     width: 85%;
     height: 80vh;
     margin: auto;
@@ -853,21 +856,22 @@ footer {
     border-radius: 2.5rem;
   }
 
-  .fc table {
+#event-page .fc table {
     font-size: 18px;
   }
 
-  .fc-scrollgrid,
+#event-page .fc-scrollgrid,
   td {
     /* border: 1px solid red !important; */
     border: none;
   }
-  .fc a {
+
+#event-page .fc a {
     text-decoration: none !important;
     color: black;
   }
 
-  .fc-header-toolbar {
+#event-page .fc-header-toolbar {
     /* margin-top: 1rem; */
     height: 5rem !important;
     padding: 2rem;
@@ -877,69 +881,68 @@ footer {
     background-color: #00bbff;
   }
 
-  .fc-button {
+#event-page .fc-button {
     background-color: #ffffff !important;
     color: rgb(0, 0, 0) !important;
     border-radius: 5px;
     font-weight: bold;
   }
 
-  .fc-toolbar-title {
+#event-page .fc-toolbar-title {
     color: #fff;
   }
 
-  .fc-daygrid-day-events {
+#event-page .fc-daygrid-day-events {
     display: none;
   }
 
-  .fc .fc-button-primary:disabled {
+#event-page .fc .fc-button-primary:disabled {
     background-color: #fdfdfd !important;
     opacity: 1 !important;
   }
 
-  .fc .fc-button-primary:disabled:hover {
+#event-page .fc .fc-button-primary:disabled:hover {
     background-color: #f2d8b7 !important;
     opacity: 1 !important;
   }
 
-  .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+#event-page .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
     margin-left: 1vw;
+}
 
-    &:hover {
+#event-page .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child):hover {
       background-color: #91c6ff !important;
       color: #fff !important;
     }
-  }
-
-  .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+#event-page .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
     margin-left: 1vw;
+}
 
-    &:hover {
+#event-page .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child):hover {
       background-color: #91c6ff !important;
       color: #fff !important;
     }
-  }
 
-  .fc .fc-daygrid-day.fc-day-today {
+#event-page .fc .fc-daygrid-day.fc-day-today {
     background-color: #5dccf5 !important;
-    .fc-daygrid-day-number {
+}
+
+#event-page .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
       color: #fff !important;
     }
-  }
 
-  /* di ko sure 'to test nalang pag may event na nalagay*/
-  .fc-event {
+/* di ko sure 'to test nalang pag may event na nalagay*/#event-page .fc-event {
     background-color: #28a745;
     color: white;
     border-radius: 5px;
     padding: 5px;
   }
 
-  .fc-event:hover {
+#event-page .fc-event:hover {
     background-color: #218838;
   }
 
-  #eventContainer {
+#event-page #eventContainer {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     grid-template-rows: repeat(2, 1fr) !important;
@@ -947,26 +950,25 @@ footer {
     margin-top: 2vw !important;
   }
 
-  .modal-body {
+#event-page .modal-body {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     grid-template-rows: repeat(3, 1fr) !important;
     gap: 10px;
   }
 
-  .eventButton-container {
+#event-page .eventButton-container {
     display: flex;
     justify-content: center;
     margin-top: -15vw !important;
   }
 
-  .eventBox {
+#event-page .eventBox {
     display: flex;
   }
 
-  .fa-solid {
+#event-page .fa-solid {
     position: absolute;
     left: 45%;
     top: 32.1%;
   }
-}

@@ -351,6 +351,7 @@ input[type="number"]::-webkit-inner-spin-button {
   display: flex;
   justify-content: space-around;
   margin-top: 7vh;
+  margin-bottom: 5vw;
   background-color: #7dcbf2;
   padding: 5vw;
   height: 90vh;
@@ -397,30 +398,42 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .gallery {
-  /* border: 1px solid black; */
-  margin: 2vw;
+  background-color: #f7d5b0;
+  /* margin: 2vw; */
   margin-bottom: 0;
   padding: 2vw;
-  padding-bottom: 0;
+  padding-bottom: 1vw;
 }
 
 .galleryTitle {
   font-family: "Poppins";
   font-size: 2vw;
+  margin-left: 2vw;
 }
 
-.galleryPictures {
-  /* border: 1px solid black; */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 2vw;
-  margin-top: 2vw;
+.carousel {
+  width: 65%;
+  margin: auto;
+}
+
+.carousel-inner {
+  width: 100% !important;
+}
+
+.carousel-item img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  height: auto;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #007bff !important;
 }
 
 .seeMore {
-  margin: 1vh auto 3vh auto;
+  margin: 5vh auto 3vh auto;
   width: 15vw;
 }
 
@@ -580,7 +593,7 @@ footer {
     }
   }
 
-.white-bg {
+  .white-bg {
     background-color: white;
   }
 
@@ -664,11 +677,11 @@ footer {
     height: clamp(4vh, calc(1.5vw + 4px), 2vh) !important;
     width: auto;
   }
-#navUL {
-        position: absolute !important;
-        right: 2vw !important;
-    }
-  
+  #navUL {
+    position: absolute !important;
+    right: 2vw !important;
+  }
+
   .emailAddressText {
     margin-top: 0.1vw;
   }
