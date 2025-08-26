@@ -161,7 +161,8 @@ if (isset($_SESSION['error'])) {
                 <div class="right-col">
                     <div class="end" id="image">
                         <div class="room-image-wrapper">
-                            <img src="<?= $imgSrc ?>" alt="Room Image" class="room-preview room-image" id="roomImage">
+                            <!-- <img src="<?= $imgSrc ?>" alt="Room Image" class="room-preview room-image" id="roomImage"> -->
+                            <img src="../../Assets/Images/no-picture.jpg" alt="Room Image" class="room-preview room-image" id="roomImage">
                             <div class="image-overlay" id="image-overlay">Change Image</div>
                             <input type="file" name="roomImage" class="roomImageInput">
                         </div>

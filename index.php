@@ -289,7 +289,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <a href="Pages/amenities.php" class="btn custom-btn ">See More</a>
         </div>
 
-
         <?php if (!$editMode): ?>
         <footer class="py-1 ">
             <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
@@ -418,78 +417,78 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const saveBtn = document.getElementById('saveChangesBtn');
+        document.addEventListener('DOMContentLoaded', () => {
+            const saveBtn = document.getElementById('saveChangesBtn');
 
-        saveBtn?.addEventListener('click', () => {
-            // === 1. Save text-based website content ===
-            const inputs = document.querySelectorAll('.editable-input');
-            const data = {
-                sectionName: 'BusinessInformation'
-            };
+            saveBtn?.addEventListener('click', () => {
+                // === 1. Save text-based website content ===
+                const inputs = document.querySelectorAll('.editable-input');
+                const data = {
+                    sectionName: 'BusinessInformation'
+                };
 
-            inputs.forEach(input => {
-                const title = input.getAttribute('data-title');
-                const value = input.value;
-                data[title] = value;
-            });
-
-            fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(res => res.text())
-                .then(response => {
-                    console.log('Content saved:', response);
-                    alert('Website content saved!');
-                })
-                .catch(err => {
-                    console.error('Error saving content:', err);
-                    alert('An error occurred while saving content.');
+                inputs.forEach(input => {
+                    const title = input.getAttribute('data-title');
+                    const value = input.value;
+                    data[title] = value;
                 });
-
-            const editableImages = document.querySelectorAll('.editable-img');
-            editableImages.forEach(img => {
-                const wcImageID = img.dataset.wcimageid;
-                const altText = img.dataset.alttext;
-                const folder = img.dataset.folder || '';
-                const file = img.fileObject || null;
-
-                if (!wcImageID || (!file && !altText)) return;
-
-                const formData = new FormData();
-                formData.append('wcImageID', wcImageID);
-                formData.append('altText', altText);
-                formData.append('folder', folder);
-
-                if (file) {
-                    formData.append('image', file);
-                }
 
                 fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
                         method: 'POST',
-                        body: formData
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
                     })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            console.log(`Image ${wcImageID} updated successfully.`);
-                        } else {
-                            alert(`Failed to update image ${wcImageID}: ` + data.message);
-                        }
+                    .then(res => res.text())
+                    .then(response => {
+                        console.log('Content saved:', response);
+                        alert('Website content saved!');
                     })
                     .catch(err => {
-                        console.error('Image update failed:', err);
-                        alert('An error occurred while updating an image.');
+                        console.error('Error saving content:', err);
+                        alert('An error occurred while saving content.');
                     });
-            });
 
+                const editableImages = document.querySelectorAll('.editable-img');
+                editableImages.forEach(img => {
+                    const wcImageID = img.dataset.wcimageid;
+                    const altText = img.dataset.alttext;
+                    const folder = img.dataset.folder || '';
+                    const file = img.fileObject || null;
+
+                    if (!wcImageID || (!file && !altText)) return;
+
+                    const formData = new FormData();
+                    formData.append('wcImageID', wcImageID);
+                    formData.append('altText', altText);
+                    formData.append('folder', folder);
+
+                    if (file) {
+                        formData.append('image', file);
+                    }
+
+                    fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log(`Image ${wcImageID} updated successfully.`);
+                            } else {
+                                alert(`Failed to update image ${wcImageID}: ` + data.message);
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Image update failed:', err);
+                            alert('An error occurred while updating an image.');
+                        });
+                });
+
+            });
         });
-    });
-    </script>
+        </script>
     <?php endif; ?>
 
     <script>

@@ -12,7 +12,7 @@ $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
 $contentMap = [];
 $imageMap = [];
-
+$defaultImage = "Assets/Images/no-picture.png";
 while ($row = $getWebContentResult->fetch_assoc()) {
     $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
     $contentID = $row['contentID'];
@@ -107,19 +107,19 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="topPicContainer">
             <?php if (isset($imageMap['AboutMamyr'])): ?>
                 <?php foreach ($imageMap['AboutMamyr'] as $index => $img):
-                    $imagePath = $img['imageData'];
+                $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                     $defaultImage = "Assets/Images/no-picture.png";
                     $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                    <img src="<?= htmlspecialchars($img['imageData']) ?>"
+                    <img src="<?= $imagePath ?>"
                         alt="<?= htmlspecialchars($img['altText']) ?>"
                         class="editable-img resortPic"
                         style="cursor: pointer;"
                         data-bs-toggle="modal"
                         data-bs-target="#editImageModal"
                         data-wcimageid="<?= $img['WCImageID'] ?>"
+                        data-folder="aboutImages"
                         data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                         data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
@@ -158,22 +158,24 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="servicesIconContainer">
 
             <div class="resortContainer">
-                <?php if (isset($imageMap['Service1'])): ?>
-                    <?php foreach ($imageMap['Service1'] as $index => $img):
-                        $imagePath = $img['imageData'];
-                        $defaultImage = "Assets/Images/no-picture.png";
+                <?php if (isset($imageMap['Service1Desc'])): ?>
+                    <?php foreach ($imageMap['Service1Desc'] as $index => $img):
+                        $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                        <img src="<?= htmlspecialchars($img['imageData']) ?>"
+                        <img src="<?= htmlspecialchars($finalImage) ?>"
                             alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img resortIcon"
                             style="cursor: pointer;"
                             data-bs-toggle="modal"
                             data-bs-target="#editImageModal"
                             data-wcimageid="<?= $img['WCImageID'] ?>"
+                            data-folder="aboutImages"
                             data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-
+                      
                     <?php endforeach; ?>
+                <?php else: ?>
+                    <img src="<?$defaultImage?>" alt="None Found">
                 <?php endif; ?>
                 <?php if ($editMode): ?>
                     <input type="text" class="services resortIconTitle editable-input form-control" data-title="Service1" value="<?= htmlspecialchars($contentMap['Service1'] ?? 'No description found') ?>">
@@ -188,22 +190,23 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
 
             <div class="eventContainer">
-                <?php if (isset($imageMap['Service2'])): ?>
-                    <?php foreach ($imageMap['Service2'] as $index => $img):
-                        $imagePath = $img['imageData'];
+                <?php if (isset($imageMap['Service2Desc'])): ?>
+                    <?php foreach ($imageMap['Service2Desc'] as $index => $img):
+                         $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
                         $defaultImage = "Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                        <img src="<?= htmlspecialchars($img['imageData']) ?>"
+                        <img src="<?= htmlspecialchars($finalImage) ?>"
                             alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img eventIcon"
                             style="cursor: pointer;"
                             data-bs-toggle="modal"
                             data-bs-target="#editImageModal"
                             data-wcimageid="<?= $img['WCImageID'] ?>"
-                            data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                            data-folder="aboutImages"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-
                     <?php endforeach; ?>
+                <?php else: ?>
+                    <img src="<?$defaultImage?>" alt="None Found">
                 <?php endif; ?>
                 <?php if ($editMode): ?>
                     <input type="text" class="services eventIconTitle editable-input form-control" data-title="Service2" value="<?= htmlspecialchars($contentMap['Service2'] ?? 'No description found') ?>">
@@ -218,18 +221,18 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
 
             <div class="hotelContainer">
-                <?php if (isset($imageMap['Service3'])): ?>
-                    <?php foreach ($imageMap['Service3'] as $index => $img):
-                        $imagePath = $img['imageData'];
-                        $defaultImage = "Assets/Images/no-picture.png";
+                <?php if (isset($imageMap['Service3Desc'])): ?>
+                    <?php foreach ($imageMap['Service3Desc'] as $index => $img):
+                        $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                        <img src="<?= htmlspecialchars($img['imageData']) ?>"
+                        <img src="<?= htmlspecialchars( $finalImage) ?>"
                             alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img hotelIcon"
                             style="cursor: pointer;"
                             data-bs-toggle="modal"
                             data-bs-target="#editImageModal"
                             data-wcimageid="<?= $img['WCImageID'] ?>"
+                            data-folder="aboutImages"
                             data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
 
@@ -308,7 +311,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="firstImageContainer">
                 <?php if (isset($imageMap['HistoryParagraph1'])): ?>
                     <?php foreach ($imageMap['HistoryParagraph1'] as $index => $img):
-                        $imagePath = $img['imageData'];
+                        $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
                         $defaultImage = "Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($img['imageData']) ?>"
@@ -318,9 +321,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             data-bs-toggle="modal"
                             data-bs-target="#editImageModal"
                             data-wcimageid="<?= $img['WCImageID'] ?>"
-                            data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                            data-folder="aboutImages"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
@@ -330,7 +332,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="thirdImageContainer">
                 <?php if (isset($imageMap['HistoryParagraph3'])): ?>
                     <?php foreach ($imageMap['HistoryParagraph3'] as $index => $img):
-                        $imagePath = $img['imageData'];
+                        $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
                         $defaultImage = "Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($img['imageData']) ?>"
@@ -340,7 +342,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             data-bs-toggle="modal"
                             data-bs-target="#editImageModal"
                             data-wcimageid="<?= $img['WCImageID'] ?>"
-                            data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                            data-folder="aboutImages"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
 
                     <?php endforeach; ?>
@@ -523,77 +525,77 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const saveBtn = document.getElementById('saveChangesBtn');
+        document.addEventListener('DOMContentLoaded', () => {
+            const saveBtn = document.getElementById('saveChangesBtn');
 
-                saveBtn?.addEventListener('click', () => {
-                    // === 1. Save text-based website content ===
-                    const inputs = document.querySelectorAll('.editable-input');
-                    const data = {
-                        sectionName: 'About'
-                    };
+            saveBtn?.addEventListener('click', () => {
+                // === 1. Save text-based website content ===
+                const inputs = document.querySelectorAll('.editable-input');
+                const data = {
+                    sectionName: 'About'
+                };
 
-                    inputs.forEach(input => {
-                        const title = input.getAttribute('data-title');
-                        const value = input.value;
-                        data[title] = value;
+                inputs.forEach(input => {
+                    const title = input.getAttribute('data-title');
+                    const value = input.value;
+                    data[title] = value;
+                });
+
+                fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(res => res.text())
+                    .then(response => {
+                        console.log('Content saved:', response);
+                        alert('Website content saved!');
+                    })
+                    .catch(err => {
+                        console.error('Error saving content:', err);
+                        alert('An error occurred while saving content.');
                     });
+
+                const editableImages = document.querySelectorAll('.editable-img');
+                editableImages.forEach(img => {
+                    const wcImageID = img.dataset.wcimageid;
+                    const altText = img.dataset.alttext;
+                    const folder = img.dataset.folder || '';
+                    const file = img.fileObject || null;
+
+                    if (!wcImageID || (!file && !altText)) return;
+
+                    const formData = new FormData();
+                    formData.append('wcImageID', wcImageID);
+                    formData.append('altText', altText);
+                    formData.append('folder', folder);
+
+                    if (file) {
+                        formData.append('image', file);
+                    }
 
                     fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
                             method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
+                            body: formData
                         })
-                        .then(res => res.text())
-                        .then(response => {
-                            console.log('Content saved:', response);
-                            alert('Website content saved!');
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log(`Image ${wcImageID} updated successfully.`);
+                            } else {
+                                alert(`Failed to update image ${wcImageID}: ` + data.message);
+                            }
                         })
                         .catch(err => {
-                            console.error('Error saving content:', err);
-                            alert('An error occurred while saving content.');
+                            console.error('Image update failed:', err);
+                            alert('An error occurred while updating an image.');
                         });
-
-                    const editableImages = document.querySelectorAll('.editable-img');
-                    editableImages.forEach(img => {
-                        const wcImageID = img.dataset.wcimageid;
-                        const altText = img.dataset.alttext;
-                        const file = img.fileObject || null;
-                        const imagePath = img.dataset.imagepath || ''; // Full path like 'Assets/Images/landingPage/resortPic1.png'
-
-                        if (!wcImageID || (!file && !altText)) return;
-
-                        const formData = new FormData();
-                        formData.append('wcImageID', wcImageID);
-                        formData.append('altText', altText);
-                        formData.append('imagePath', imagePath); // ✅ Send full path
-
-                        if (file) {
-                            formData.append('image', file);
-                        }
-
-                        fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (data.success) {
-                                    console.log(`Image ${wcImageID} updated successfully.`);
-                                } else {
-                                    alert(`Failed to update image ${wcImageID}: ` + data.message);
-                                }
-                            })
-                            .catch(err => {
-                                console.error('Image update failed:', err);
-                                alert('An error occurred while updating an image.');
-                            });
-                    });
-
                 });
+
             });
+        });
         </script>
     <?php endif; ?>
 

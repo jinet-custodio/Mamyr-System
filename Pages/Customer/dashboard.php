@@ -60,7 +60,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <input type="hidden" id="userRole" value="<?= $userRole ?>">
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
             <?php
             $getProfile = $conn->prepare("SELECT firstName, userProfile FROM users WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
@@ -134,7 +134,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </button>
 
         <div class="collapse navbar-collapse " id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
+            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -250,17 +250,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <hr class="line">
                 <h4 class="contactTitle">Contact Us </h4>
 
-                <div class="location">
+                <div class="location contacts">
                     <img src="../../Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
                     <h5 class="locationText"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h5>
                 </div>
 
-                <div class="number">
+                <div class="number contacts">
                     <img src="../../Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
                     <h5 class="number"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h5>
                 </div>
 
-                <div class="email">
+                <div class="email contacts">
                     <img src="../../Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
                     <h5 class="emailAddressText"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h5>
                 </div>
@@ -273,12 +273,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <hr class="line">
             <h4 class="galleryTitle">Gallery </h4>
             <div class="galleryPictures">
-                <img src="../../Assets/Images/landingPage/gallery/img1.png" alt="resort View 1" class="img1 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img2.png" alt="resort View 2" class="img2 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img3.png" alt="resort View 3" class="img3 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img4.png" alt="resort View 4" class="img4 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img5.png" alt="resort View 5" class="img5 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img6.png" alt="resort View 6" class="img6 galleryImg">
+                <img src="../../Assets/Images/landingPage/img1.png" alt="resort View 1" class="img1 galleryImg">
+                <img src="../../Assets/Images/landingPage/img2.png" alt="resort View 2" class="img2 galleryImg">
+                <img src="../../Assets/Images/landingPage/img3.png" alt="resort View 3" class="img3 galleryImg">
+                <img src="../../Assets/Images/landingPage/img4.png" alt="resort View 4" class="img4 galleryImg">
+                <img src="../../Assets/Images/landingPage/img5.png" alt="resort View 5" class="img5 galleryImg">
+                <img src="../../Assets/Images/landingPage/img6.png" alt="resort View 6" class="img6 galleryImg">
             </div>
 
             <div class="seeMore">
