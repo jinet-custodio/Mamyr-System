@@ -172,6 +172,7 @@ if (isset($_SESSION['error'])) {
                 }
                 ?>
 
+
                 <div class="right-col">
                     <div class="end" id="image">
                         <div class="room-image-wrapper">
@@ -183,7 +184,8 @@ if (isset($_SESSION['error'])) {
                     <div class="end">
                         <label for="roomDescription"> Description: </label>
                         <textarea rows="4" name="roomDescription" class="roomDescription form-control" id="roomDescription"
-                            style="padding: 0.5vw; font-size: 1.5vw;"><?= $roomInfo['RSdescription'] ?></textarea>
+                            style="padding: 0.5vw; font-size: 1.5vw;"><?= $roomInfo['RSdescription'] ?>
+                      </textarea>
                     </div>
                 </div>
             </div>

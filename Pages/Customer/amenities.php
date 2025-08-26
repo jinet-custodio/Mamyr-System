@@ -43,7 +43,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
 
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav d-flex flex-row align-items-center gap-2">
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
             <?php
             $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
@@ -99,7 +99,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
             ?>
 
-            <li class="nav-item" id="notifs">
+            <li class="nav-item notification-container" id="notifs">
                 <button type="button" class="notifBtn" data-bs-toggle="modal" data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>

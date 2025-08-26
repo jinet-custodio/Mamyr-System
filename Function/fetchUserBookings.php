@@ -40,13 +40,12 @@ $eventsByDate = [];
 while ($row = $result->fetch_assoc()) {
     $date = $row['startDate'];
     $type = $row['bookingType'];
-    // Skip if we already stored an event for this date
+    
     if (isset($eventsByDate[$date])) {
         continue;
     }
 
-    // Decide color & label
-    $color = '#dc3545'; // Default red
+    $color = '#dc3545'; 
 
     if ($type == 'Hotel') {
         $color = '#ffc107'; // Yellow
@@ -54,7 +53,6 @@ while ($row = $result->fetch_assoc()) {
         $color = '#5dccf5'; // Blue
     }
 
-    // Only record the first event per day
     $eventsByDate[$date] = [
         'title' => $type . ' #' . $row['bookingID'],
         'start' => $date,
@@ -64,5 +62,4 @@ while ($row = $result->fetch_assoc()) {
     ];
 }
 
-// Output the filtered list
 echo json_encode(array_values($eventsByDate));
