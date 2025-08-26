@@ -1103,6 +1103,13 @@ footer {
     }
   }
 
+  .nav-link {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
   .nav-item {
     margin-top: 5px;
   }
@@ -1144,6 +1151,14 @@ footer {
     .nav-item {
     margin-top: 5px;
   }
+
+  .nav-link {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
 }
 
 
@@ -1176,7 +1191,7 @@ footer {
     flex-direction: column;
   }
 
-    .ms-auto {
+   #toggledNav {
     position: absolute !important;
     right: 4vw !important;
   }

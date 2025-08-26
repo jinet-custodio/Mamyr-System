@@ -117,7 +117,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <!-- <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"> -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
+            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php"> Home</a>
                 </li>

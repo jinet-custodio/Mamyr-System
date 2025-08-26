@@ -15,7 +15,7 @@ $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
 $contentMap = [];
 $imageMap = [];
-$defaultImage = "Assets/Images/no-picture.png";
+$defaultImage = "../Assets/Images/no-picture.png";
 while ($row = $getWebContentResult->fetch_assoc()) {
     $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
     $contentID = $row['contentID'];
@@ -111,7 +111,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <?php if (isset($imageMap['AboutMamyr'])): ?>
                 <?php foreach ($imageMap['AboutMamyr'] as $index => $img):
                 $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
-                    $defaultImage = "Assets/Images/no-picture.png";
+                    $defaultImage = "../Assets/Images/no-picture.png";
                     $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                     <img src="<?= $imagePath ?>"
                         alt="<?= htmlspecialchars($img['altText']) ?>"
@@ -163,7 +163,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="resortContainer">
                 <?php if (isset($imageMap['Service1Desc'])): ?>
                     <?php foreach ($imageMap['Service1Desc'] as $index => $img):
-                        $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
+                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>"
                             alt="<?= htmlspecialchars($img['altText']) ?>"
@@ -195,8 +195,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="eventContainer">
                 <?php if (isset($imageMap['Service2Desc'])): ?>
                     <?php foreach ($imageMap['Service2Desc'] as $index => $img):
-                         $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
-                        $defaultImage = "Assets/Images/no-picture.png";
+                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                        $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>"
                             alt="<?= htmlspecialchars($img['altText']) ?>"
@@ -226,7 +226,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="hotelContainer">
                 <?php if (isset($imageMap['Service3Desc'])): ?>
                     <?php foreach ($imageMap['Service3Desc'] as $index => $img):
-                        $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
+                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars( $finalImage) ?>"
                             alt="<?= htmlspecialchars($img['altText']) ?>"
@@ -292,7 +292,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
     <div class="backArrowContainer" id="backArrowContainer">
-        <a href="about.php?edit=true"><img src="../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
+        <?php if ($editMode): ?>
+        <a href="about.php?edit=true">
+        <?php else: ?>
+        <a href="about.php?">
+        <?php endif; ?>
+        <img src="../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
     </div>
 
     <div class="mamyrHistoryContainer" id="mamyrHistoryContainer">
@@ -314,10 +319,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="firstImageContainer">
                 <?php if (isset($imageMap['HistoryParagraph1'])): ?>
                     <?php foreach ($imageMap['HistoryParagraph1'] as $index => $img):
-                        $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
-                        $defaultImage = "Assets/Images/no-picture.png";
+                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                        $defaultImage = "../Assets/Images/no-picture.jpg";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                        <img src="<?= htmlspecialchars($img['imageData']) ?>"
+                        <img src="<?= htmlspecialchars($finalImage) ?>"
                             alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img firstParagraphPhoto"
                             style="cursor: pointer;"
@@ -335,10 +340,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="thirdImageContainer">
                 <?php if (isset($imageMap['HistoryParagraph3'])): ?>
                     <?php foreach ($imageMap['HistoryParagraph3'] as $index => $img):
-                        $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
-                        $defaultImage = "Assets/Images/no-picture.png";
+                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                        $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                        <img src="<?= htmlspecialchars($img['imageData']) ?>"
+                        <img src="<?= htmlspecialchars($finalImage) ?>"
                             alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img thirdParagraphPhoto"
                             style="cursor: pointer;"
@@ -347,8 +352,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             data-wcimageid="<?= $img['WCImageID'] ?>"
                             data-folder="aboutImages"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-
                     <?php endforeach; ?>
+                <?php else: ?>
+                    <img src="<?= htmlspecialchars($defaultImage) ?>">
                 <?php endif; ?>
             </div>
 
