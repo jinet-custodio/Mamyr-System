@@ -60,7 +60,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         if ($phoneNumber === NUll || $phoneNumber === "--") {
             $phoneNumber = NULL;
         } else {
-            $phoneNumber = $phoneNumber;
+            $phoneNumber;
         }
     } else {
         echo 'No Email Found';
