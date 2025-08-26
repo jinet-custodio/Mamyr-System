@@ -48,38 +48,42 @@
   flex-direction: column;
   margin: 1rem auto;
   padding-top: 0.5rem;
-  h5 {
-    font-family: "Lora" !important;
-    margin: 0;
-    font-size: 30px;
-    text-align: center;
-    font-weight: bold;
-  }
+}
+
+.sidebar-header h5 {
+  font-family: "Lora" !important;
+  margin: 0;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .profileImage {
   margin: auto;
   padding: 1rem;
-  img {
-    height: clamp(8vw, 6.5vw, 4vw);
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
 }
+
+.profileImage img {
+  height: clamp(8vw, 6.5vw, 4vw);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
 .list-group {
   font-family: "Poppins";
   font-size: 22px;
   border: none;
   list-style: none;
   margin-top: 0.5rem;
-
-  a {
-    text-decoration: none;
-    color: rgb(0, 0, 0) !important;
-    background-color: #cee4f2;
-  }
 }
+
+.list-group a {
+  text-decoration: none;
+  color: rgb(0, 0, 0) !important;
+  background-color: #cee4f2;
+}
+
 .list-group-item {
   border: none;
   margin-top: 1vw;
@@ -139,20 +143,23 @@
   justify-content: space-between;
   align-items: center;
   text-transform: capitalize;
-  .card-title {
-    font-family: "Poppins Black";
-    margin-top: 1rem;
-    font-size: 25px;
-  }
-  .add-button {
-    font-family: "Lora";
-    box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 0.5rem !important;
-    img {
-      height: 24px;
-      width: 24px;
-    }
-  }
+}
+
+.card-header .add-button {
+  font-family: "Lora";
+  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem !important;
+}
+
+.add-button img {
+  height: 24px;
+  width: 24px;
+}
+
+.card-header .card-title {
+  font-family: "Poppins Black";
+  margin-top: 1rem;
+  font-size: 25px;
 }
 
 .add-button:hover {
@@ -166,12 +173,13 @@ table {
   text-align: center;
   border: 1px solid rgb(168, 168, 168, 0.5);
   font-family: "Poppins";
-  .btn {
-    padding: 0.3rem;
-    font-family: "Lora";
-    font-size: 14px;
-    width: 60px;
-  }
+}
+
+table .btn {
+  padding: 0.3rem;
+  font-family: "Lora";
+  font-size: 14px;
+  width: 60px;
 }
 
 .dt-column-title {
@@ -200,9 +208,10 @@ table {
 .button-container {
   display: flex;
   justify-content: center;
-  button {
-    margin: 3px;
-  }
+}
+
+.button-container button {
+  margin: 3px;
 }
 
 .swal-custom-title {

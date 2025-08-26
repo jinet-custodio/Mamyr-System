@@ -37,7 +37,7 @@ if (isset($_POST['editRoom'])) {
         $imgData = file_get_contents($roomImage_tmp_name);
 
 
-        $stmt = $conn->prepare("UPDATE resortAmenities 
+        $stmt = $conn->prepare("UPDATE resortamenities 
     SET RserviceName = ?, RSAvailabilityID = ?, RSprice = ?, RScapacity = ?, RSdescription = ?,RSimageData = ? 
     WHERE resortServiceID = ?");
 
@@ -49,7 +49,7 @@ if (isset($_POST['editRoom'])) {
     } else {
         // No image uploaded, just update other fields
         echo "No image uploaded, updating fields"; // Debugging statement
-        $query = "UPDATE resortAmenities 
+        $query = "UPDATE resortamenities 
             SET RserviceName='$roomName', RSAvailabilityID='$roomStatus', RSprice='$roomRate', RScapacity='$roomCapacity' 
             WHERE resortServiceID='$roomID'";
         $result = mysqli_query($conn, $query);

@@ -48,7 +48,8 @@ INSERT INTO serviceAvailability (availabilityName) VALUES
 ('Available'),
 ('Occupied'),
 ('Maintenance'),
-('Private');
+('Private'),
+('Not Available');
 
 Create Table statuses (
     statusID INT PRIMARY KEY AUTO_INCREMENT,

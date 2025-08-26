@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -104,7 +106,7 @@ require_once '../../Function/functions.php';
                                 LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
                                 LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
 
-                                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
+                                LEFT JOIN entrancerates er ON s.entranceRateID = er.entranceRateID
 
                                 LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
                             WHERE b.bookingID = ?");

@@ -259,7 +259,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <tbody>
                     <?php
-                    $getResortServices = $conn->prepare("SELECT * FROM resortAmenities");
+                    $getResortServices = $conn->prepare("SELECT * FROM resortamenities");
                     if ($getResortServices === false) {
                         throw new Exception("Prepare failed: " . $conn->error);
                     }

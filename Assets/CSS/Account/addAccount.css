@@ -107,9 +107,10 @@ body {
   margin-left: 53%;
   margin-top: 1rem;
   font-family: "Lora" !important;
-  button {
-    width: 200px;
-  }
+}
+
+.button-container button {
+  width: 200px;
 }
 
 .uploadPfpBtn {
