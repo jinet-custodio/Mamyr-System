@@ -82,11 +82,21 @@ body {
   font-family: "Poppins";
   font-weight: bold;
   font-size: 36px;
-  margin: 10px 0;
+  margin: 12px 0;
 }
 
+#signUpTitle {
+  margin-top: 2.2vw !important;
+}
 .welcome {
   font-family: "Alkatra" !important;
+  text-align: center;
+  /* margin-top: -2vw !important; */
+}
+
+.mamyrLogo {
+  height: 70px !important;
+  margin-top: 1vw;
 }
 
 .container p {
@@ -190,7 +200,7 @@ input[type="password"]::-webkit-search-cancel-button {
   width: 100%;
   display: flex !important;
   gap: 2vw;
-  margin-top: 1vw;
+  margin-top: -1vw;
 }
 
 .passwordContainer {
@@ -214,8 +224,8 @@ input[type="password"]::-webkit-search-cancel-button {
   margin: -15px 0 15px;
 }
 .forgot-link a {
+  text-decoration: none;
   font-size: 14.5px;
-  color: #333;
 }
 
 .btn {
@@ -298,11 +308,9 @@ input[type="password"]::-webkit-search-cancel-button {
   box-shadow: none;
 }
 
-.register {
-  button {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
+#signUp {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .loginMessageBox {
@@ -314,9 +322,9 @@ input[type="password"]::-webkit-search-cancel-button {
   left: 50%;
   bottom: 15.9%;
   transform: translateX(-50%);
-  .successMsg {
-    color: green;
-  }
+}
+.successMsg {
+  color: green;
 }
 
 /* .passwordContainerError {
@@ -337,20 +345,13 @@ input[type="password"]::-webkit-search-cancel-button {
 }
 
 .signUpLink {
-  color: #ffff;
-
-  &:hover {
-    text-decoration: none;
-    color: #ffff;
-  }
+  text-decoration: none;
 }
 
 .confirmErrorMsg {
-  /* border: 1px solid black; */
   font-size: 15px;
   position: absolute;
   color: red;
-  /* z-index: 1000; */
   margin-top: 5rem;
 }
 
@@ -365,7 +366,6 @@ input[type="password"]::-webkit-search-cancel-button {
 #termsError {
   position: absolute;
   color: red;
-  /* z-index: 1000; */
   text-align: center !important;
   width: 90%;
   font-size: 15px;
@@ -458,6 +458,10 @@ input[type="password"]::-webkit-search-cancel-button {
 }
 
 @media screen and (max-width: 400px) {
+  .welcome {
+    font-size: 20px !important;
+  }
+
   .form-box {
     padding: 20px;
   }
