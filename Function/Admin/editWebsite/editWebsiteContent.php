@@ -18,7 +18,7 @@ if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
     unset($data['sectionName']);
 
     foreach ($data as $title => $content) {
-        $stmt = $conn->prepare("UPDATE websiteContents SET content = ?, lastUpdated = NOW() WHERE sectionName = ? AND title = ?");
+        $stmt = $conn->prepare("UPDATE websitecontents SET content = ?, lastUpdated = NOW() WHERE sectionName = ? AND title = ?");
         $stmt->bind_param("sss", $content, $sectionName, $title);
         $stmt->execute();
     }
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['
     $altText = trim($_POST['altText']);
 
     // Update alt text
-    $stmt = $conn->prepare("UPDATE websiteContentImages SET altText = ?, uploadedAt = NOW() WHERE WCImageID = ?");
+    $stmt = $conn->prepare("UPDATE websitecontentimages SET altText = ?, uploadedAt = NOW() WHERE WCImageID = ?");
     $stmt->bind_param("si", $altText, $wcImageID);
     $stmt->execute();
 
@@ -42,13 +42,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['
         $filename = basename($_FILES['image']['name']);
         $targetDir = "../../../Assets/Images/" . $folder;
         $targetPath = $targetDir . "/" . $filename;
-        
+
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0755, true);
         }
 
         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
-            $stmt = $conn->prepare("UPDATE websiteContentImages SET imageData = ?, uploadedAt = NOW() WHERE WCImageID = ?");
+            $stmt = $conn->prepare("UPDATE websitecontentimages SET imageData = ?, uploadedAt = NOW() WHERE WCImageID = ?");
             $stmt->bind_param("si", $filename, $wcImageID);
             $stmt->execute();
             $stmt->execute();

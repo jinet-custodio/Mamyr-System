@@ -67,13 +67,12 @@ body {
   font-size: 20px;
 }
 
-.admin {
-  img {
-    height: 70px;
-    width: 70px;
-    border-radius: 3rem;
-  }
+.admin img {
+  height: 70px;
+  width: 70px;
+  border-radius: 3rem;
 }
+
 .navbar {
   font-family: "Lora";
   border-radius: 15px;
@@ -82,9 +81,10 @@ body {
   padding: 1rem !important;
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  h5 {
-    font-size: 20px !important;
-  }
+}
+
+.navbar h5 {
+  font-size: 20px !important;
 }
 
 .nav-link {
@@ -126,13 +126,15 @@ body {
 }
 
 .backArrowContainer {
-  width: 90%;
-  margin: 0 auto;
-  img {
-    width: 2vw;
-    aspect-ratio: 1;
-    margin-top: 1vw;
-  }
+  position: absolute;
+  width: 2%;
+  margin: 0 5rem;
+}
+
+.backArrowContainer img {
+  width: 2vw;
+  aspect-ratio: 1;
+  margin-top: 1vw;
 }
 
 .header {
@@ -140,6 +142,7 @@ body {
   font-size: 3vw;
   margin-top: 2vw;
 }
+
 #serviceCategories {
   width: 100%;
   display: flex;
@@ -189,10 +192,10 @@ body {
 
 .categoryLink {
   text-decoration: none;
+}
 
-  &:hover {
-    text-decoration: none !important;
-  }
+.categoryLink:hover {
+  text-decoration: none !important;
 }
 
 .categoryLink .category-card {
@@ -208,7 +211,7 @@ body {
 .resortRatesContainer,
 .eventContainer,
 .cateringContainer {
-  width: 90%;
+  width: 98%;
   margin: 1vw auto;
   background-color: white;
   padding: 0.5vw;
@@ -243,10 +246,16 @@ th {
   width: 5vw;
 }
 
+.btn-outline-secondary {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
 #addResortServiceBtn,
 #addResortRatesBtn,
-#addEventServiceBtn,
-#addCateringServiceBtn {
+#eventAdd,
+#cateringAdd,
+#addEventModal {
   width: 10vw;
   float: right;
   margin: 1vw 0 1vw 0;
@@ -254,8 +263,16 @@ th {
 
 .buttonContainer {
   display: flex;
+  justify-content: center;
   gap: 1vw;
-  padding: 10vw;
+}
+
+#editPrimary,
+#cancelDanger,
+#addEventService,
+#editEventService,
+#deleteEventService {
+  width: 5vw;
 }
 
 .saveBtnContainer {
@@ -273,4 +290,9 @@ th {
 #resortRates-link {
   border: none;
   background-color: transparent;
+}
+
+label {
+  font-weight: bold;
+  margin: 0.5vw 0 0.5vw 0;
 }

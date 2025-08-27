@@ -58,13 +58,13 @@ function changeToDoneStatus($conn)
     $fullyPaidID = 3;
 
     //Select all confirmed bookings that have ended and is fully paid
-    $selectConfirmedBookings = $conn->prepare("SELECT cb.*, b.endDate, b.bookingID FROM confirmedBookings cb 
+    $selectConfirmedBookings = $conn->prepare("SELECT cb.*, b.endDate, b.bookingID FROM confirmedbookings cb 
                             JOIN bookings b ON cb.bookingID = b.bookingID WHERE B.endDate < ? AND paymentStatus = ? AND paymentApprovalStatus = ?");
     $selectConfirmedBookings->bind_param("sii", $dateNow, $fullyPaidID, $approvedStatusID);
     $selectConfirmedBookings->execute();
     $result = $selectConfirmedBookings->get_result();
     if ($result->num_rows > 0) {
-        $updateQuery = $conn->prepare("UPDATE confirmedBookings SET paymentApprovalStatus = ? WHERE bookingID = ?");
+        $updateQuery = $conn->prepare("UPDATE confirmedbookings SET paymentApprovalStatus = ? WHERE bookingID = ?");
         $counter = 0;
         while ($row = $result->fetch_assoc()) {
             $bookingID = (int)$row['bookingID'];
@@ -101,7 +101,7 @@ function getStatuses($conn, $statusID)
 function getPaymentStatus($conn, $paymentStatusID)
 {
 
-    $getPaymentStatus = $conn->prepare("SELECT * FROM bookingPaymentStatus WHERE paymentStatusID = ?");
+    $getPaymentStatus = $conn->prepare("SELECT * FROM bookingpaymentstatus WHERE paymentStatusID = ?");
     $getPaymentStatus->bind_param("i", $paymentStatusID);
     $getPaymentStatus->execute();
     $getPaymentStatusResult = $getPaymentStatus->get_result();
@@ -119,11 +119,11 @@ function getPaymentStatus($conn, $paymentStatusID)
 
 function addToAdminTable($conn)
 {
-
     $adminID = 3;
     $position = 'Administrator';
 
-    $getAdminQuery = $conn->prepare("SELECT * FROM users WHERE userRole = ?");
+    // Fetch users with userRole = 3
+    $getAdminQuery = $conn->prepare("SELECT userID FROM users WHERE userRole = ?");
     $getAdminQuery->bind_param('i', $adminID);
     $getAdminQuery->execute();
     $adminQueryResult = $getAdminQuery->get_result();
@@ -137,19 +137,26 @@ function addToAdminTable($conn)
             $selectUsers->bind_param('i', $storedUserID);
             $selectUsers->execute();
             $result = $selectUsers->get_result();
+
             if ($result->num_rows < 1) {
+
                 $insertAdminQuery = $conn->prepare("INSERT INTO admins (userID, position) VALUES (?, ?)");
                 $insertAdminQuery->bind_param('is', $storedUserID, $position);
-                if ($insertAdminQuery->execute()) {
-                    $adminQueryResult->close();
-                    $insertAdminQuery->close();
-                } else {
-                    echo "Error: " . $conn->error;
+                if (!$insertAdminQuery->execute()) {
+                    echo "Error inserting admin: " . $insertAdminQuery->error;
                 }
+                $insertAdminQuery->close();
             }
+            $result->free();
+            $selectUsers->close();
         }
     }
+
+
+    $adminQueryResult->free();
+    $getAdminQuery->close();
 }
+
 
 function autoChangeStatus($conn)
 {
@@ -207,4 +214,6 @@ function autoChangeStatus($conn)
             }
         }
     }
+    $result->free();
+    $fetchUnavailableServiceDatesQuery->close();
 }

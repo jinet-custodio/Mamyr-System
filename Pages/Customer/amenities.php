@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -40,7 +43,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
 
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav d-flex flex-row align-items-center gap-2">
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
             <?php
             $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
@@ -96,7 +99,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
             ?>
 
-            <li class="nav-item" id="notifs">
+            <li class="nav-item notification-container" id="notifs">
                 <button type="button" class="notifBtn" data-bs-toggle="modal" data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
@@ -114,7 +117,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <!-- <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"> -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
+            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php"> Home</a>
                 </li>
@@ -229,7 +232,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="carousel">
                     <?php
                     $serviceCategory = 2;
-                    $query = "SELECT * FROM resortAmenities WHERE RScategoryID = $serviceCategory ";
+                    $query = "SELECT * FROM resortamenities WHERE RScategoryID = $serviceCategory ";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
                         $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -255,19 +258,19 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     }
                     ?>
 
-                     <div class="carousel">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
-                        class="poolPic1">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
-                        class="poolPic2">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3"
-                        class="poolPic3">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
-                        class="poolPic4">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
-                        class="poolPic5">
+                    <div class="carousel">
+                        <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
+                            class="poolPic1">
+                        <img src="../../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
+                            class="poolPic2">
+                        <img src="../../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3"
+                            class="poolPic3">
+                        <img src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
+                            class="poolPic4">
+                        <img src="../../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
+                            class="poolPic5">
 
-                </div>
+                    </div>
                 </div>
                 <button class="btn btn-primary prev-btn">&#10094;</button>
                 <button class="btn btn-primary next-btn">&#10095;</button>
@@ -289,7 +292,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <div class="poolPics">
             <?php
             $videokeCategoryID = 3;
-            $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+            $getVideoke = $conn->prepare("SELECT * FROM resortamenities WHERE RScategoryID = ? ");
             $getVideoke->bind_param("i", $videokeCategoryID);
             $getVideoke->execute();
             $getVideokeResult =  $getVideoke->get_result();
@@ -337,7 +340,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <?php
                 $eventHallCategoryID = 6;
-                $getEventHall = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+                $getEventHall = $conn->prepare("SELECT * FROM resortamenities WHERE RScategoryID = ? ");
                 $getEventHall->bind_param("i",  $eventHallCategoryID);
                 $getEventHall->execute();
                 $getEventHallResult =  $getEventHall->get_result();
@@ -395,7 +398,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <div class="carousel">
                 <?php
                 $miniPavCategoryID = 7;
-                $getMiniPav = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
+                $getMiniPav = $conn->prepare("SELECT * FROM resortamenities WHERE RScategoryID = ? ");
                 $getMiniPav->bind_param("i", $miniPavCategoryID);
                 $getMiniPav->execute();
                 $getMiniPavResult =  $getMiniPav->get_result();

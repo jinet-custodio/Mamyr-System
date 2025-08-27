@@ -1,4 +1,8 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -60,7 +64,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         if ($phoneNumber === NUll || $phoneNumber === "--") {
             $phoneNumber = NULL;
         } else {
-            $phoneNumber = $phoneNumber;
+            $phoneNumber;
         }
     } else {
         echo 'No Email Found';

@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -44,7 +46,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <div class="topSection">
         <div class="dashTitleContainer">
             <a href="adminDashboard.php" class="dashboardTitle" id="dashboard">
-                <img src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
+                <img src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -236,10 +238,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <tbody>
                     <?php
                     $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, b.paymentMethod, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
-                    FROM confirmedBookings cb
+                    FROM confirmedbookings cb
                     LEFT JOIN bookings b ON cb.bookingID = b.bookingID
                     LEFT JOIN users u ON b.userID = u.userID
-                    LEFT JOIN bookingPaymentStatus bps ON cb.paymentStatus = bps.paymentStatusID
+                    LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID
                     LEFT JOIN statuses stat ON cb.paymentApprovalStatus = stat.statusID
                     ");
                     $payments->execute();
@@ -306,39 +308,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     }
 
                     ?>
-
-                    <!-- <tr>
-                        <td>Alliah Reyes</td>
-                        <td>3,500 Php</td>
-                        <td>3,500 Php</td>
-                        <td><span class="btn btn-danger w-75" id="unpaidStatus">No Payment</span></td>
-                        <td>Cash</td>
-                        <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>Shan Ignacio</td>
-                        <td>1,500 Php</td>
-                        <td>0</td>
-                        <td><span class="btn btn-primary w-75" id="partiallyPaidStatus">Partially Paid</span></td>
-                        <td>Cash</td>
-                        <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>Jeanette Custodio</td>
-                        <td>1,500 Php</td>
-                        <td>0</td>
-                        <td><span class="btn btn-success w-75" id="fullyPaidStatus">Fully Paid</span></td>
-                        <td>Cash</td>
-                        <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>Jannine Correa</td>
-                        <td>1,500 Php</td>
-                        <td>0</td>
-                        <td><span class="btn btn-success w-75" id="fullyPaidStatus">Fully Paid</span></td>
-                        <td>Cash</td>
-                        <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>

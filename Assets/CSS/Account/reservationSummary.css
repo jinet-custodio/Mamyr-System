@@ -179,10 +179,11 @@ body {
 #gcashPaymentModal {
   font-family: "Poppins";
   font-size: 14px;
-  .modal-title {
-    font-family: "Poppins Black";
-    font-size: 18px;
-  }
+}
+
+#gcashPaymentModal .modal-title {
+  font-family: "Poppins Black";
+  font-size: 18px;
 }
 
 #gcashModalBody {

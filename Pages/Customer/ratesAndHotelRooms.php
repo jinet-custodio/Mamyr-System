@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -22,7 +24,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Rates and Hotel Rooms</title>
-    <link rel="icon" type="image/x-icon" href="../../assets/Images/Icon/favicon.png ">
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/ratesAndHotelRooms.css">
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -189,7 +191,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <a class="categoryLink" onclick="showRates(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
+                    <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
 
                     <div class="card-body">
                         <h5 class="card-title">Resort Rates</h5>
@@ -199,7 +201,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <a class="categoryLink" onclick="showHotels(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
+                    <img class="card-img-top" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
                     <div class="card-body">
                         <h5 class="card-title">Hotel Rooms</h5>
                     </div>
@@ -282,7 +284,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <?php
                 $cottageCategoryID = 2;
                 $availableID = 1;
-                $cottagesql = $conn->prepare("SELECT * FROM resortAmenities WHERE RSCategoryID = ? AND RSAvailabilityID = ?");
+                $cottagesql = $conn->prepare("SELECT * FROM resortamenities WHERE RSCategoryID = ? AND RSAvailabilityID = ?");
                 $cottagesql->bind_param("ii", $cottageCategoryID, $availableID);
                 $cottagesql->execute();
                 $cottresult = $cottagesql->get_result();
@@ -332,7 +334,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
             <?php
             $videoke = 'Videoke 1';
-            $vidsql = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ?");
+            $vidsql = $conn->prepare("SELECT * FROM resortamenities WHERE RServiceName = ?");
             $vidsql->bind_param("s", $videoke);
             $vidsql->execute();
             $vidresult = $vidsql->get_result();
@@ -375,7 +377,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <div class="cottage " id="billiards">
             <?php
             $billiard = 'Billiard';
-            $bilsql = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ?");
+            $bilsql = $conn->prepare("SELECT * FROM resortamenities WHERE RServiceName = ?");
             $bilsql->bind_param("s", $billiard);
             $bilsql->execute();
             $bilresult = $bilsql->get_result();
@@ -417,7 +419,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
             <?php
             $massageChair = 'Massage Chair';
-            $massagesql = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ?");
+            $massagesql = $conn->prepare("SELECT * FROM resortamenities WHERE RServiceName = ?");
             $massagesql->bind_param("s", $massageChair);
             $massagesql->execute();
             $massageresult = $massagesql->get_result();
@@ -538,7 +540,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <div class="hotelRoomList">
                 <?php
-                $roomsql = "SELECT * FROM resortAmenities WHERE RScategoryID = 1";
+                $roomsql = "SELECT * FROM resortamenities WHERE RScategoryID = 1";
                 $roomresult = mysqli_query($conn, $roomsql);
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {

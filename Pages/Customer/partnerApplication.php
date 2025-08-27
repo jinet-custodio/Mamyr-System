@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -270,7 +272,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <select id="partnerType" name="partnerType" class="form-select primary">
                             <option value="" disabled selected>Type of Business</option>
                             <?php
-                            $serviceType = $conn->prepare("SELECT * FROM partnershipTypes");
+                            $serviceType = $conn->prepare("SELECT * FROM partnershiptypes");
                             $serviceType->execute();
                             $serviceTypeResult = $serviceType->get_result();
                             if ($serviceTypeResult->num_rows > 0) {
@@ -420,153 +422,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
         </div>
-
-
-
-
-
-        <!-- <div class="container-fluid center-card d-flex justify-content-center align-items-center">
-            <div class="card" style="width: 50rem;">
-
-                <div class="card-header">
-                    <div class="card-title">
-                        <h5 class="titleCard">Partner Application Form</h5>
-                        <h6 class="titleDesc">Tell us about you and your company</h6>
-                    </div>
-                </div>
-                <input type="hidden" class="form-control" id="userdID" name="userID" value="<?= htmlspecialchars_decode($userID) ?>" placeholder="First Name"
-                    required>
-                <input type="hidden" class="form-control" id="userdID" name="userRole" value="<?= htmlspecialchars_decode($userRole) ?>" placeholder="First Name"
-                    required>
-                <div class="card-body">
-                    <h5 class="repName">Representative Name</h5>
-                    <div class="name">
-                        <input type="text" class="form-control" id="firstName" name="firstName" value="<?= htmlspecialchars_decode($firstName) ?>" placeholder="First Name"
-                            required>
-                        <input type="text" class="form-control" id="middleInitial" name="middleInitial" value="<?= htmlspecialchars_decode($middleInitial) ?>"
-                            placeholder="Middle Initial">
-                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" value="<?= htmlspecialchars_decode($lastName) ?>"
-                            required>
-                    </div>
-
-                    <h5 class="contactInfo">Contact Info</h5>
-                    <div class="contact">
-                        <input type="email" class="form-control" id="emailAddress" name="emailAddress"
-                            placeholder="Business Email">
-                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="<?= htmlspecialchars_decode($phoneNumber) ?>"
-                            placeholder="Phone Number">
-                    </div>
-                </div>
-
-                <hr class="line">
-
-                <div class="card-body">
-
-                    <h5 class="companyName">Company Information</h5>
-                    <div class="name">
-                        <input type="text" class="form-control" id="comapanyName" name="companyName"
-                            placeholder="Company Name" required>
-
-                    </div>
-
-
-                    <div class="businessType">
-                        <h5 class="busTypeName">Type of Business</h5>
-
-                        <select id="service" name="partnerType" class="form-select" required>
-                            <option value="" disabled selected>Select Service</option>
-                            <option value="catering">Catering</option>
-                            <option value="photography">Photography/Videography</option>
-                            <option value="sound-lighting">Sound and Lighting</option>
-                            <option value="event-hosting">Event Hosting</option>
-                            <option value="photo-booth">Photo Booth</option>
-                            <option value="performer">Performer</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-
-                    <div id="other-container" style="display: none; margin-left: 1vw;">
-                        <input type="text" id="other-input" name="other_input" class="form-control "
-                            placeholder="Please specify..." />
-                    </div>
-
-                    <h5 class="busAddress">Business Address</h5>
-                    <div class="busAddForm">
-
-                        <div class="streetAddRow">
-                            <input type="text" class="form-control" id="streetAddress" name="streetAddress"
-                                placeholder="Street Address" required>
-
-                            <input type="text" class="form-control" id="address2" name="address2"
-                                placeholder="Street Address Line 2 (optional)">
-                        </div>
-
-                        <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" required>
-
-                        <input type="text" class="form-control" id="province" name="province" placeholder="Province">
-
-                        <input type="text" class="form-control" id="zip" name="zip" placeholder="ZIP/Postal Code"
-                            required>
-                    </div>
-
-                    <h5 class="docuTitle">Documents for Verification</h5>
-                    <p>To verify your business or talent, please upload the following documents or media:</p>
-
-                    <p><strong>For Business Partners:</strong></p>
-                    <ol type="A" class="BPrequirements">
-                        <li>Business Permit</li>
-                        <li>License to Operate</li>
-                        <li>Valid ID of the Representative</li>
-                        <li>Business Operations Photos (3-5)</li>
-                        <li>Business Operations Video (Optional)</li>
-                    </ol>
-
-                    <p><strong>For Talents & Performers:</strong></p>
-                    <ol type="A" class="TPrequirements">
-                        <li>Social Media Links (Instagram, Facebook, YouTube, etc.)</li>
-                        <li>Performance Photos (3-5)</li>
-                        <li>Performance Videos (at least 1-2)</li>
-                        <li>Introduction Video (Optional)</li>
-                    </ol>
-
-                    <p><strong>Step 1: Create a Google Drive Folder</strong></p>
-                    <p>Sign in to Google Drive and create a new folder with your business or performance name. Then,
-                        upload the required documents or media to this folder.</p>
-
-                    <p><strong>Step 2: Share the Folder</strong></p>
-                    <p>Once your folder is ready, click on the folder, then right-click and select
-                        <strong>"Share"</strong>. Make sure to select <strong>"Anyone with the link"</strong> and set
-                        permissions to <strong>"Viewer" or "Editor"</strong> depending on your preference. Copy the link
-                        to your folder.
-                    </p>
-
-                    <p><strong>Step 3: Paste the Google Drive Link</strong></p>
-                    <p>Paste the link to your shared Google Drive folder in the <strong>"Google Drive Folder
-                            Link"</strong> input box below.</p>
-
-                    <h5 class="importantNotesTitle">Important Notes</h5>
-                    <ol type="1" class="BPrequirements">
-                        <li>Please ensure that all documents and media files are clear and legible.</li>
-                        <li>If you encounter any issues with uploading documents or creating the Google Drive folder,
-                            feel free to contact us at <a
-                                href="mailto:mamyresort128@gmail.com">mamyresort128@gmail.com</a>.
-                        </li>
-                        <li>The information you provide will be kept confidential and used solely for partnership
-                            verification purposes.</li>
-                        <li>Thank you for your interest in partnering with us. We look forward to the possibility of
-                            working together!</li>
-                    </ol>
-
-
-                    <input class="form-control" type="text" name="documentLink"
-                        placeholder="Example: https://drive.google.com/drive/folders/your-folder-id-here">
-                </div>
-
-                <button type="submit" class="btn btn-success btn-md" name="submit_request" id="submit-request">Submit Request</button>
-            </div>
-
-        </div> -->
-
     </form>
 
 

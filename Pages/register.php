@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 require '../Config/dbcon.php';
 session_start();
@@ -49,6 +51,12 @@ resetExpiredOTPs($conn);
                 </div>
                 <button type="submit" class="btn btn-primary" id="login" name="login" disabled>Login</button>
 
+                <div class="signUpSection">
+                    <p>Don't have an account? <a href="userType.php" class="signUpLink">Sign Up
+                        </a></p>
+
+
+                </div>
                 <div class="loginMessageBox">
                     <div class="errorMsg">
                         <!-- (Show under Login Button) -->
@@ -81,8 +89,9 @@ resetExpiredOTPs($conn);
         </div>
 
         <div class="form-box register" id="register">
+
             <form action="../Function/register.php" method="POST">
-                <h1>Sign Up</h1>
+                <h1 id="signUpTitle">Sign Up</h1>
                 <div class="fullName">
                     <div class="input-box">
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
@@ -169,10 +178,11 @@ resetExpiredOTPs($conn);
 
         <div class="toggle-box">
             <div class="toggle-panel toggle-left">
-                <h1 class="welcome">Welcome to Mamyr!</h1>
-                <p>Don't have an account?</p>
+                <h1 class="welcome">Welcome to Mamyr Resort and Events Place!</h1>
+                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" class="mamyrLogo">
+                <!-- <p>Don't have an account?</p>
                 <a href="userType.php" class="btn btn-outline-light signUpLink">Sign Up
-                </a>
+                </a> -->
 
                 <div class="back-icon-container-login">
                     <a href="../index.php">

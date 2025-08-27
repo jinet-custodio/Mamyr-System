@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -124,7 +127,7 @@ unset($_SESSION['formData']);
 
         //Get the rates
         $query = $conn->prepare("SELECT er.*, s.serviceID 
-            FROM entranceRates er
+            FROM entrancerates er
             JOIN services s ON s.entranceRateID = er.entranceRateID
             WHERE er.sessionType = ?");
         $query->bind_param("s", $tourSelections);
@@ -217,7 +220,7 @@ unset($_SESSION['formData']);
 
         if (!empty($cottageChoices)) { //get selected cottages
             $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription FROM services s
-            INNER JOIN resortAmenities rs ON s.resortServiceID = rs.resortServiceID 
+            INNER JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID 
             WHERE RServiceName = ?";
 
             $getServiceChoiceQuery = $conn->prepare($sql);
@@ -253,7 +256,7 @@ unset($_SESSION['formData']);
             $trimmedDuration = trim($duration);
 
             $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription FROM services s
-            INNER JOIN resortAmenities rs ON s.resortServiceID = rs.resortServiceID 
+            INNER JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID 
             WHERE rs.RServiceName = ? AND rs.RSduration = ?";
 
             $getServiceChoiceQuery = $conn->prepare($sql);
@@ -293,7 +296,7 @@ unset($_SESSION['formData']);
         //Get Selected Entertainment 
         $getEntertainment = $conn->prepare("SELECT s.serviceID, rs.RSprice, rs.RServiceName  
             FROM services s
-            INNER JOIN resortAmenities rs ON s.resortServiceID = rs.resortServiceID 
+            INNER JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID 
             WHERE RServiceName = ?");
 
         foreach ($entertainmentChoices as $entertainment) {

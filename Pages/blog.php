@@ -1,4 +1,7 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../Config/dbcon.php'
 ?>
 <!DOCTYPE html>
@@ -261,9 +264,10 @@ require '../Config/dbcon.php'
                                     <div class="blog-full-content">
                                         <?= nl2br(htmlspecialchars($firstPost['Content'] ?? '')) ?>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    </div>
+                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
                                 </div>
 
                             </div>
@@ -272,7 +276,6 @@ require '../Config/dbcon.php'
 
                     <!-- Modal for other posts -->
                     <?php foreach ($blogPosts as $postID => $post): ?>
-                        <?= "<!-- DEBUG: modal ID = modal$postID -->"; ?>
                         <?php
                         $contentID = $post['contentID'] ?? null;
                         $image = null;
@@ -315,6 +318,7 @@ require '../Config/dbcon.php'
                                             <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
                                         </div>
                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
@@ -368,25 +372,16 @@ require '../Config/dbcon.php'
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Sweet Alert -->
-    <!-- <script>
-        const bookButtons = document.querySelectorAll('#bopNav');
-
-        bookButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Want to Become Our Business Partner?',
-                    text: 'You must have an existing account before becoming a business partner.',
-                    icon: 'info',
-                    confirmButtonText: 'Sign Up'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
-                    }
-                });
+    <!-- Redirects User to Book Now -->
+    <script>
+        const bookNowBtns = document.querySelectorAll('.bookNowBtn');
+        
+        bookNowBtns.forEach(bookNowBtn => {
+            bookNowBtn.addEventListener("click", function(e) {
+                window.location.href = "/Pages/register.php"
             });
-        });
-    </script> -->
+        });     
+    </script>
 </body>
 
 </html>

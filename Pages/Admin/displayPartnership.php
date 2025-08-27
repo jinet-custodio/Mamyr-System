@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -278,7 +280,7 @@ if (isset($_SESSION['error-partnership'])) {
                                 FROM partnerships p
                                 INNER JOIN users u ON p.userID = u.userID
                                 INNER JOIN statuses s ON s.statusID = p.partnerStatus
-                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                LEFT JOIN partnershiptypes pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnerStatus != ? AND partnerStatus != ?
                                 ");
                         $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);
@@ -361,7 +363,7 @@ if (isset($_SESSION['error-partnership'])) {
                                 FROM partnerships p
                                 INNER JOIN users u ON p.userID = u.userID
                                 INNER JOIN statuses s ON s.statusID = p.partnerStatus
-                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                LEFT JOIN partnershiptypes pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnerStatus = ? OR partnerStatus = ?
                                 ");
                         $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);

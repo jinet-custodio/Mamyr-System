@@ -1,3 +1,6 @@
+
+-- Insert this if you already have an admin account
+
 INSERT INTO `websitecontents` (`adminID`, `sectionName`, `title`, `content`, `lastUpdated`) VALUES
 (1, 'Blog', 'MainTitle', 'The Mamyr Resort Blog: Stay Infomed, Stay Inspired', '2025-07-01 00:01:44'),
 (1, 'Blog', 'Sub-title', 'Inspiration, Updates, and Insights Straight from Mamyr Resort', '2025-07-01 00:01:44'),
@@ -39,7 +42,8 @@ INSERT INTO `websitecontents` (`adminID`, `sectionName`, `title`, `content`, `la
 (1, 'About', 'HistoryParagraph3', 'Opened in 2022, Mamyr Resort has become a popular and welcoming place for people looking to relax and enjoy nature. The resort is known for its clean swimming pools, spacious function areas, beautiful surroundings, and warm hospitality. Guests can enjoy the resort''s three refreshing swimming pools, two elegant pavilions, cozy cottages to stay in, as well as 11 comfortable hotel rooms for those who prefer a more private stay, and a spacious parking lot to accommodate all guests conveniently.', current_timestamp()),
 (1, 'About', 'HistoryParagraph4', 'At Mamyr Resort, we treat every guest like family, making sure your stay is special and enjoyable. Whether you''re celebrating an important event, spending time with loved ones, or just looking for a peaceful break, we have everything you need to feel comfortable and relaxed. Our team works hard to create a warm and welcoming atmosphere where you can make lasting memories. Visit us and see for yourself why we''re so proud of how much we''ve grown.', current_timestamp()),
 (1, 'BusinessInformation', 'FBLink', 'https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/', current_timestamp()), 
-(1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp()), (1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp());
+(1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp()), 
+(1, 'BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com', current_timestamp());
 
 
 INSERT INTO `websitecontentimages` (`contentID`, `imageData`, `altText`, `imageOrder`, `uploadedAt`) VALUES

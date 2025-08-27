@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -114,7 +117,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Home</a>
                     </li>
@@ -191,7 +194,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             $blogPosts = [];
             $imagesByContentID = [];
 
-            $getImagesQuery = "SELECT contentID, imageData, altText FROM websiteContentImages ORDER BY imageOrder ASC";
+            $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimages ORDER BY imageOrder ASC";
             $imageResult = mysqli_query($conn, $getImagesQuery);
 
             if ($imageResult && mysqli_num_rows($imageResult) > 0) {
@@ -387,10 +390,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     <div class="blog-full-content">
                                         <?= nl2br(htmlspecialchars($firstPost['Content'] ?? '')) ?>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                    </div>
+                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
                                 </div>
 
                             </div>
@@ -445,9 +448,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         <div class="blog-full-content">
                                             <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
+                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
 
@@ -532,7 +535,16 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             });
         });
     </script>
-
+<!-- Redirects User to Book Now -->
+    <script>
+        const bookNowBtns = document.querySelectorAll('.bookNowBtn');
+        
+        bookNowBtns.forEach(bookNowBtn => {
+            bookNowBtn.addEventListener("click", function(e) {
+                window.location.href = "bookNow.php"
+            });
+        });     
+    </script>
 
 </body>
 

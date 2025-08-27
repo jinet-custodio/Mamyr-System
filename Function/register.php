@@ -185,8 +185,8 @@ if (isset($_POST['signUp'])) {
     $loginQuery = $conn->prepare("SELECT u.*, 
     ut.typeName AS roleName, ut.userTypeID AS roleID,
     us.userStatusID AS statusID, us.statusName FROM users u
-    LEFT JOIN userTypes ut ON u.userRole = ut.userTypeID
-    LEFT JOIN userStatuses us ON u.userStatusID = us.userStatusID 
+    LEFT JOIN usertypes ut ON u.userRole = ut.userTypeID
+    LEFT JOIN userstatuses us ON u.userStatusID = us.userStatusID 
     WHERE email = ?");
     $loginQuery->bind_param("s", $email);
     $loginQuery->execute();

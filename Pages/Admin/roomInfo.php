@@ -1,4 +1,7 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -74,7 +77,7 @@ if (isset($_SESSION['error'])) {
     $getRoomStatus = $conn->prepare("SELECT rs.*, 
     sa.availabilityName AS roomStatus 
     FROM resortamenities rs 
-    LEFT JOIN serviceAvailability sa ON rs.RSAvailabilityID = sa.availabilityID 
+    LEFT JOIN serviceavailability sa ON rs.RSAvailabilityID = sa.availabilityID 
     WHERE RScategoryID = ? AND resortServiceID = ?");
     $getRoomStatus->bind_param("ii", $hotelCategoryID, $roomID);
     $getRoomStatus->execute();
@@ -82,7 +85,8 @@ if (isset($_SESSION['error'])) {
     if ($getRoomStatusResult->num_rows > 0) {
         $roomInfo = $getRoomStatusResult->fetch_array();
     ?>
-        <form action="../../Function/Admin/editRoomInfo.php" method="POST" enctype="multipart/form-data" class="information">
+        <form action="../../Function/Admin/editRoomInfo.php" method="POST" enctype="multipart/form-data"
+            class="information">
 
             <div class="bookInfobox">
                 <div class="left-col">
@@ -114,14 +118,16 @@ if (isset($_SESSION['error'])) {
                     ?>
                         <div class="info" id="rentorRow">
                             <label for="rentorName"> Rentor: </label>
-                            <input type="text" name="rentorName" class="rentorName form-control" id="rentorName" value="<?= $rentorName ?>" disabled>
+                            <input type="text" name="rentorName" class="rentorName form-control" id="rentorName"
+                                value="<?= $rentorName ?>" disabled>
                         </div>
                     <?php
                     }
                     ?>
                     <div class="info">
                         <label for="roomName"> Room Name: </label>
-                        <input type="text" name="roomName" class="roomName form-control " id="roomName" value="<?= $roomInfo['RServiceName'] ?>">
+                        <input type="text" name="roomName" class="roomName form-control " id="roomName"
+                            value="<?= $roomInfo['RServiceName'] ?>">
                     </div>
                     <div class="info">
                         <label for="roomStatus">Status:</label>
@@ -138,15 +144,23 @@ if (isset($_SESSION['error'])) {
 
                     <div class="info">
                         <label for="roomRate"> Rate: </label>
-                        <input type="text" name="roomRate" class="roomRate form-control" id="roomRate" value="<?= "₱ " . $roomInfo['RSprice'] ?>">
+                        <input type="text" name="roomRate" class="roomRate form-control" id="roomRate"
+                            value="<?= "₱ " . $roomInfo['RSprice'] ?>">
                     </div>
                     <div class="info">
                         <label for="roomCapacity"> Capacity: </label>
-                        <input type="text" name="roomCapacity" class="roomCapacity form-control" id="roomCapacity" value="<?= $roomInfo['RScapacity'] . " pax" ?>">
+                        <input type="text" name="roomCapacity" class="roomCapacity form-control" id="roomCapacity"
+                            value="<?= $roomInfo['RScapacity'] . " pax" ?>">
+                    </div>
+                    <div class="info">
+                        <label for="roomMaxCapacity">Max Capacity: </label>
+                        <input type="text" name="roomMaxCapacity" class="roomMaxCapacity form-control" id="roomMaxCapacity"
+                            value="<?= $roomInfo['RScapacity'] . " pax" ?>">
                     </div>
                     <div class="end">
                         <label for="others"> Others: </label>
-                        <input type="text" name="others" style="padding: 0.5vw; font-size: 1.5vw;" class="others form-control" id="others">
+                        <input type="text" name="others" style="padding: 0.5vw; font-size: 1.5vw;"
+                            class="others form-control" id="others">
                     </div>
                 </div>
                 <!-- <input type="text" name="roomImage" class="roomImage" id="roomImage"> -->
@@ -158,6 +172,7 @@ if (isset($_SESSION['error'])) {
                 }
                 ?>
 
+
                 <div class="right-col">
                     <div class="end" id="image">
                         <div class="room-image-wrapper">
@@ -168,7 +183,9 @@ if (isset($_SESSION['error'])) {
                     </div>
                     <div class="end">
                         <label for="roomDescription"> Description: </label>
-                        <textarea rows="4" name="roomDescription" class="roomDescription form-control" id="roomDescription" style="padding: 0.5vw; font-size: 1.5vw;"><?= $roomInfo['RSdescription'] ?></textarea>
+                        <textarea rows="4" name="roomDescription" class="roomDescription form-control" id="roomDescription"
+                            style="padding: 0.5vw; font-size: 1.5vw;"><?= $roomInfo['RSdescription'] ?>
+                      </textarea>
                     </div>
                 </div>
             </div>
@@ -203,7 +220,8 @@ if (isset($_SESSION['error'])) {
                     leftCol.style.gridTemplateRows = "repeat(4, 1fr)";
                 }
 
-                const inputs = document.querySelectorAll(".left-col input, .left-col select, .left-col textarea, .right-col input, .right-col textarea");
+                const inputs = document.querySelectorAll(
+                    ".left-col input, .left-col select, .left-col textarea, .right-col input, .right-col textarea");
                 const overlay = document.querySelector(".image-overlay");
                 const rentorName = document.getElementById("rentorName")
                 const btns = document.querySelector(".buttons");

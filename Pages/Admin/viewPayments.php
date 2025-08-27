@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -95,19 +97,19 @@ if ($admin === "Admin") {
                     er.sessionType,
                     ps.PBName,
                     bps.statusName AS paymentStatus
-                FROM confirmedBookings cb
-                LEFT JOIN bookingPaymentStatus bps ON cb.paymentStatus = bps.paymentStatusID
+                FROM confirmedbookings cb
+                LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID
                 LEFT JOIN bookings b ON cb.bookingID = b.bookingID
                 LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
                 LEFT JOIN users u ON b.userID = u.userID
-                LEFT JOIN bookingServices bs ON b.bookingID = bs.bookingID
-                LEFT JOIN customPackages cp ON b.customPackageID = cp.customPackageID
-                LEFT JOIN customPackageItems cpi ON cp.customPackageID = cpi.customPackageID
+                LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID
+                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
+                LEFT JOIN custompackageItems cpi ON cp.customPackageID = cpi.customPackageID
                 --  LEFT JOIN packages p ON b.packageID = p.packageID
                 LEFT JOIN services s ON bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID
                 LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
                 -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
-                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
+                LEFT JOIN entrancerates er ON s.entranceRateID = er.entranceRateID
                 LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
                 WHERE cb.bookingID = ? AND b.bookingStatus = ?
         ");

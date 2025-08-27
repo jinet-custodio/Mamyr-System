@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -226,6 +228,10 @@ if (isset($_SESSION['error'])) {
     <div class="booking-container">
 
         <div class="card " style="width: 80%;">
+            <div class="addHotelContainer">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHotelModal"
+                    id="addHotelBtn">Add Hotel Room</button>
+            </div>
             <table class="table table-striped" id="roomsTable">
 
                 <thead>
@@ -240,7 +246,7 @@ if (isset($_SESSION['error'])) {
                     $hotelCategoryID = 1;
                     $getRoomInfo = $conn->prepare("SELECT rs.*, sa.availabilityName AS roomStatus
                     FROM resortamenities rs 
-                    LEFT JOIN serviceAvailability sa ON rs.RSAvailabilityID = sa.availabilityID
+                    LEFT JOIN serviceavailability sa ON rs.RSAvailabilityID = sa.availabilityID
                     WHERE RScategoryID = ?
                     ORDER  BY resortServiceID");
                     $getRoomInfo->bind_param("i", $hotelCategoryID);
@@ -287,6 +293,66 @@ if (isset($_SESSION['error'])) {
             </table>
         </div>
     </div>
+
+
+    <!-- FORM MODAL ADDING SERVICE-->
+
+    <!-- Modal -->
+    <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addHotelModalLabel">Add Hotel Room</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-container">
+                        <label for="roomNo">Room No.</label>
+                        <input type="text" class="form-control" id="roomNo" name="roomNo" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="roomStat">Room Status</label>
+                        <select id="roomStat" name="roomStat" class="form-select" required>
+                            <option value="" disabled selected>Status</option>
+                            <option value="available" id="available">Available</option>
+                            <option value="occupied" id="occupied">Occupied</option>
+                            <option value="maintenance" id="maintenance">Maintenance</option>
+                            <option value="unavailable" id="unavailable">Unavailable</option>
+                        </select>
+                    </div>
+                    <div class="input-container">
+                        <label for="roomRate">RoomRate</label>
+                        <input type="text" class="form-control" id="roomRate" name="roomRate">
+                    </div>
+                    <div class="input-container">
+                        <label for="capacity">Capacity</label>
+                        <input type="text" class="form-control" id="capacity" name="capacity">
+                    </div>
+                    <div class="input-container">
+                        <label for="maxCapacity">Max Capacity</label>
+                        <input type="text" class="form-control" id="maxCapacity" name="maxCapacity">
+                    </div>
+                    <div class="input-container">
+                        <label for="roomDescription">Description</label>
+                        <textarea class="form-control" id="roomDescription" name="roomDescription"></textarea>
+                    </div>
+                    <div class="input-container">
+                        <label for="roomImage">Room Image</label>
+                        <input type="file" class="form-control" id="roomImage" name="roomImage">
+                    </div>
+                    <div class="input-container">
+                        <label for="other">Other</label>
+                        <input type="text" class="form-control" id="other" name="other">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="saveHotelRoom">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- Bootstrap Link -->

@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require 'Config/dbcon.php';
 
 //for edit website, this will enable edit mode from the iframe
@@ -65,7 +67,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </button>
 
         <div class="collapse navbar-collapse " id="navbarNav">
-           <ul class="navbar-nav ms-auto me-10" id="navUL">
+            <ul class="navbar-nav ms-auto me-10" id="navUL">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -173,11 +175,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         $defaultImage = "Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                 <div class="image-wrapper mb-3 pic1">
-                     <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
-                     alt="<?= htmlspecialchars($img['altText']) ?>"
-                        class="img-fluid mb-2 editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                        data-folder="landingPage"
+                    <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                        alt="<?= htmlspecialchars($img['altText']) ?>" class="img-fluid mb-2 editable-img"
+                        style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#editImageModal"
+                        data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="landingPage"
                         data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                         data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                 </div>
@@ -209,6 +210,43 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <?php endif; ?>
             </div>
 
+        </div>
+
+        <div class="gallery">
+            <hr class="line">
+            <h4 class="galleryTitle">Gallery </h4>
+            <?php if (isset($imageMap['FullName'])): ?>
+            <div id="carouselGallery" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner ">
+                    <?php foreach ($imageMap['FullName'] as $index => $img):
+                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
+                        $defaultImage = "Assets/Images/no-picture.png";
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                    <div class="carousel-item  <?= $index === 0 ? 'active' : '' ?> ">
+                        <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
+                            alt="<?= htmlspecialchars($img['altText']) ?>" class="img-fluid mb-2 editable-img"
+                            style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#editImageModal"
+                            data-folder="landingPage" data-wcimageid="<?= $img['WCImageID'] ?>"
+                            data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                            data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    </div>
+                    <?php endforeach;
+                    ?>
+                </div>
+                <a class="carousel-control-prev" href="#carouselGallery" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselGallery" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+
+            </div>
+            <?php endif; ?>
+            <div class="seeMore">
+                <a href="Pages/amenities.php" class="btn custom-btn ">See More</a>
+            </div>
         </div>
 
         <div class="contact">
@@ -260,34 +298,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="googleMap" id="googleMap"></div>
         </div>
 
-        <div class="gallery">
-            <hr class="line">
-            <h4 class="galleryTitle">Gallery </h4>
-            <?php if (isset($imageMap['FullName'])): ?>
-            <div class="galleryPictures">
-                <?php foreach ($imageMap['FullName'] as $index => $img):
-                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
-                        $defaultImage = "Assets/Images/no-picture.png";
-                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                <div class="image-wrapper mb-3 galleryImg">
-                   <img src="Assets/Images/landingPage/<?= htmlspecialchars($img['imageData']) ?>"
-                        alt="<?= htmlspecialchars($img['altText']) ?>"
-                        class="img-fluid mb-2 editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                        data-bs-target="#editImageModal"
-                         data-folder="landingPage"
-                        data-wcimageid="<?= $img['WCImageID'] ?>"
-                        data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-                </div>
-                <?php endforeach;
-                    ?>
-            </div>
-            <?php endif; ?>
-        </div>
 
-        <div class="seeMore">
-            <a href="Pages/amenities.php" class="btn custom-btn ">See More</a>
-        </div>
+
 
 
         <?php if (!$editMode): ?>
@@ -296,14 +308,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                 <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
-                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
+                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>
+                </h3>
             </div>
 
             <div class="info">
                 <div class="reservation">
                     <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h4>
-                    <h4 class="emailAddressTextFooter"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>
+                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>
+                    </h4>
+                    <h4 class="emailAddressTextFooter">
+                        <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>
                     </h4>
                 </div>
                 <div class="locationFooter">
@@ -394,7 +409,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                     // Save temp image to dataset (so we can upload on final save)
                     activeImageElement.setAttribute('data-tempfile', newFile.name);
-                    activeImageElement.fileObject = newFile; // temporarily attach file to element
+                    activeImageElement.fileObject =
+                        newFile; // temporarily attach file to element
                 };
                 reader.readAsDataURL(newFile);
             }
@@ -418,78 +434,82 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const saveBtn = document.getElementById('saveChangesBtn');
+        document.addEventListener('DOMContentLoaded', () => {
+            const saveBtn = document.getElementById('saveChangesBtn');
 
-        saveBtn?.addEventListener('click', () => {
-            // === 1. Save text-based website content ===
-            const inputs = document.querySelectorAll('.editable-input');
-            const data = {
-                sectionName: 'BusinessInformation'
-            };
+            saveBtn?.addEventListener('click', () => {
+                // === 1. Save text-based website content ===
+                const inputs = document.querySelectorAll('.editable-input');
+                const data = {
+                    sectionName: 'BusinessInformation'
+                };
 
-            inputs.forEach(input => {
-                const title = input.getAttribute('data-title');
-                const value = input.value;
-                data[title] = value;
-            });
-
-            fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(res => res.text())
-                .then(response => {
-                    console.log('Content saved:', response);
-                    alert('Website content saved!');
-                })
-                .catch(err => {
-                    console.error('Error saving content:', err);
-                    alert('An error occurred while saving content.');
+                inputs.forEach(input => {
+                    const title = input.getAttribute('data-title');
+                    const value = input.value;
+                    data[title] = value;
                 });
-
-            const editableImages = document.querySelectorAll('.editable-img');
-            editableImages.forEach(img => {
-                const wcImageID = img.dataset.wcimageid;
-                const altText = img.dataset.alttext;
-                const folder = img.dataset.folder || '';
-                const file = img.fileObject || null;
-
-                if (!wcImageID || (!file && !altText)) return;
-
-                const formData = new FormData();
-                formData.append('wcImageID', wcImageID);
-                formData.append('altText', altText);
-                formData.append('folder', folder);
-
-                if (file) {
-                    formData.append('image', file);
-                }
 
                 fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
                         method: 'POST',
-                        body: formData
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
                     })
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
                             console.log(`Image ${wcImageID} updated successfully.`);
                         } else {
-                            alert(`Failed to update image ${wcImageID}: ` + data.message);
+                            alert(`Failed to update image ${wcImageID}: ` + data
+                                .message);
                         }
                     })
                     .catch(err => {
-                        console.error('Image update failed:', err);
-                        alert('An error occurred while updating an image.');
+                        console.error('Error saving content:', err);
+                        alert('An error occurred while saving content.');
                     });
-            });
 
+                const editableImages = document.querySelectorAll('.editable-img');
+                editableImages.forEach(img => {
+                    const wcImageID = img.dataset.wcimageid;
+                    const altText = img.dataset.alttext;
+                    const folder = img.dataset.folder || '';
+                    const file = img.fileObject || null;
+
+                    if (!wcImageID || (!file && !altText)) return;
+
+                    const formData = new FormData();
+                    formData.append('wcImageID', wcImageID);
+                    formData.append('altText', altText);
+                    formData.append('folder', folder);
+
+                    if (file) {
+                        formData.append('image', file);
+                    }
+
+                    fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log(`Image ${wcImageID} updated successfully.`);
+                            } else {
+                                alert(`Failed to update image ${wcImageID}: ` + data.message);
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Image update failed:', err);
+                            alert('An error occurred while updating an image.');
+                        });
+                });
+
+            });
         });
-    });
-    </script>
+        </script>
     <?php endif; ?>
 
     <script>
@@ -527,7 +547,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     // Create a temporary anchor to parse the href
                     const tempAnchor = document.createElement('a');
                     tempAnchor.href = href;
-                    const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
+                    const targetPath = tempAnchor.pathname.replace(/\/+$/, '')
+                        .toLowerCase();
 
                     // If the target is different from the current path, show loader
                     if (targetPath !== currentPath) {

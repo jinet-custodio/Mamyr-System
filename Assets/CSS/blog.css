@@ -63,6 +63,11 @@ nav {
   margin-top: 5px !important;
 }
 
+#toggledNav {
+    position: absolute !important;
+    right: 2vw !important;
+}
+
 .navbar.scrolled {
   background-color: rgb(255, 255, 255);
   .nav-link {
@@ -263,6 +268,7 @@ button.notifBtn {
   object-fit: contain;
   display: flex;
   align-items: center;
+  margin: 0 auto;
 }
 
 #featuredReadmore,
@@ -309,9 +315,11 @@ button.notifBtn {
   display: flex;
   align-self: flex-end;
   text-align: center;
-  font-size: 1.2vw !important;
 }
 
+ button.btn-primary{
+    font-size: 1.3vw;
+}
 /* end of code for body */
 
 /* code for modal */
@@ -324,28 +332,40 @@ button.notifBtn {
 }
 
 .btn-close {
-  margin-left: -1vw !important;
+  margin-left: -1vw;
+}
+
+.bookNowBtn {
+ width: 15vw;
 }
 
 .modal-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+    padding: 0.8vw;
 }
 
 .modal-body img {
   width: 50%;
-  margin: 2vw auto 1vw auto !important;
+  margin: 1vw auto !important;
+
 }
 
 .blog-full-content {
   width: 80%;
   margin: 1vw auto !important;
   text-align: center;
+  font-size: clamp(1.3vw, 1.1vw, 1vw);
 }
 
 .text-muted {
   text-align: center;
+  margin-bottom: 0;
+}
+
+.modal-footer button {
+  font-size: 1.3vw;
 }
 
 /* end of code for modal */
@@ -541,7 +561,6 @@ footer {
     background-color: white;
     .nav-link {
       color: black !important;
-      text-align: center;
     }
   }
 
@@ -566,6 +585,7 @@ footer {
   .navbar.scrolled {
     background-color: none !important;
   }
+  
 
   .titleContainer {
     margin-top: 16vw;
@@ -593,6 +613,43 @@ footer {
   .title {
     width: 70%;
   }
+
+  /* code for modal */
+
+.modal-header h5 {
+  font-size: clamp(2.5vw, 2.3vw, 2vw);
+}
+
+.btn-close {
+  margin-left: -3vw !important;
+}
+
+.bookNowBtn {
+ width: 12vw;
+}
+
+.modal-body img {
+  width: 50%;
+  margin: 2vw auto 1vw auto !important;
+}
+
+.blog-full-content {
+  width: 80%;
+  margin: 1vw auto !important;
+  text-align: center;
+  font-size: clamp(2.1vw, 1.9vw, 1.7vw);
+}
+
+.text-muted {
+  text-align: center;
+  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+}
+
+.modal-footer button {
+  font-size: 1.7vw;
+}
+
+/* end of code for modal */
 
   .featured {
     width: 90%;
@@ -683,8 +740,56 @@ footer {
   }
 }
 
-/* Tablet landscape */
-/* @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {} */
+@media (max-width: 991.98px) {
+  .nav-link {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
+  .nav-item {
+    margin-top: 5px;
+  }
+
+    #navbarNav .nav-link,
+    #navbarNav .dropdown-item {
+     color: black !important; 
+    }
+
+    #profileAndNotif {
+      background-color: transparent;
+    }
+
+    .navbar-nav {
+      background-color: rgb(251, 250, 250);
+    }
+
+    #navbar-half2 .btn-outline-danger {
+        color: black !important;
+        border-color: white !important;
+        width: 100%;
+        text-align: left;
+    }
+
+    .fc-daygrid-day-top a {
+      font-size: clamp(2vw, 1.8vw, 1.6vw);
+    }
+}
+
+@media (max-width: 991.98px) and (orientation:portrait) {
+  .nav-item {
+    margin-top: 5px;
+  }
+
+  .nav-link {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
+}
 
 /* Phone size */
 @media screen and (max-width: 599px) {
@@ -738,6 +843,11 @@ footer {
 
   .navbar.scrolled {
     background-color: none !important;
+  }
+
+  #toggledNav {
+    position: absolute !important;
+    right: 4vw !important;
   }
 
   #maintext {

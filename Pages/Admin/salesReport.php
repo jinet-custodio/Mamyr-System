@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -99,14 +101,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 $selectedEndDate = DateTime::createFromFormat('F d, Y', trim($dates[1]))->format('Y-m-d') . ' 23:59:59';
 
                                 $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
-                        b.bookingType, u.firstName, b.paxNum AS guest, 
-                        b.startDate, b.endDate, 
-                        b.paymentMethod, b.totalCost
-                        FROM confirmedBookings cb
-                        LEFT JOIN bookings b ON cb.bookingID = b.bookingID
-                        LEFT JOIN users u ON b.userID = u.userID
-                        WHERE cb.confirmedBookingStatus = ? AND b.startDate BETWEEN ? AND ?
-                        ");
+                                            b.bookingType, u.firstName, b.paxNum AS guest, 
+                                            b.startDate, b.endDate, 
+                                            b.paymentMethod, b.totalCost
+                                            FROM confirmedbookings cb
+                                            LEFT JOIN bookings b ON cb.bookingID = b.bookingID
+                                            LEFT JOIN users u ON b.userID = u.userID
+                                            WHERE cb.confirmedbookingstatus = ? AND b.startDate BETWEEN ? AND ?
+                                            ");
 
                                 $getReportData->bind_param("iss", $approvedStatusID, $selectedStartDate, $selectedEndDate);
                                 $getReportData->execute();
