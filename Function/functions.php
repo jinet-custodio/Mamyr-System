@@ -181,60 +181,108 @@ function autoChangeStatus($conn)
     $occupiedStatusID = 2;
     $availableStatusID = 1;
 
-
-    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledates WHERE unavailableStartDate <= NOW() AND unavailableEndDate >=  NOW()");
-    // $fetchUnavailableServiceDatesQuery->bind_param('ss', $today, $today);
+    // Set status to OCCUPIED
+    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledates 
+        WHERE unavailableStartDate <= NOW() AND unavailableEndDate >= NOW()
+    ");
     $fetchUnavailableServiceDatesQuery->execute();
     $result = $fetchUnavailableServiceDatesQuery->get_result();
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $resortServiceID = intval($row['resortServiceID']);
-            $partnershipServiceID = intval($row['partnershipServiceID']);
 
-            if ($resortServiceID  > 0) {
-                $updateStatus = $conn->prepare("UPDATE resortAmenities SET RSAvailabilityID = ? WHERE resortServiceID = ? AND RSAvailabilityID = ?");
-                $updateStatus->bind_param('iii', $occupiedStatusID, $resortServiceID, $availableStatusID);
-                $updateStatus->execute();
-                $updateStatus->close();
-            }
+    while ($row = $result->fetch_assoc()) {
+        $resortServiceID = intval($row['resortServiceID']);
+        $partnershipServiceID = intval($row['partnershipServiceID']);
 
-            if ($partnershipServiceID > 0) {
-                $updateStatus = $conn->prepare("UPDATE partnershipServices SET PSAvailabilityID = ? WHERE partnershipServiceID = ? AND PSAvailabilityID = ?");
-                $updateStatus->bind_param('iii', $occupiedStatusID, $partnershipServiceID, $availableStatusID);
-                $updateStatus->execute();
-                $updateStatus->close();
-            }
+        if ($resortServiceID > 0) {
+
+            $updateStatus = $conn->prepare("UPDATE resortamenities 
+                SET RSAvailabilityID = ? 
+                WHERE resortServiceID = ? AND RSAvailabilityID = ?
+            ");
+            $updateStatus->bind_param('iii', $occupiedStatusID, $resortServiceID, $availableStatusID);
+            $updateStatus->execute();
+            $updateStatus->close();
+
+            $fetchInfo = $conn->prepare("SELECT RServiceName, RScategoryID FROM resortamenities WHERE resortServiceID = ?");
+            $fetchInfo->bind_param('i', $resortServiceID);
+            $fetchInfo->execute();
+            $infoResult = $fetchInfo->get_result()->fetch_assoc();
+            $serviceName = $infoResult['RServiceName'];
+            $hotelCategoryID = $infoResult['RScategoryID'];
+            $fetchInfo->close();
+
+            $updateRelated = $conn->prepare("UPDATE resortamenities 
+                SET RSAvailabilityID = ? 
+                WHERE RServiceName = ? AND RScategoryID = ? AND resortServiceID != ? AND RSAvailabilityID = ?
+            ");
+            $updateRelated->bind_param('isiii', $occupiedStatusID, $serviceName, $hotelCategoryID, $resortServiceID, $availableStatusID);
+            $updateRelated->execute();
+            $updateRelated->close();
+        }
+
+        if ($partnershipServiceID > 0) {
+            $updateStatus = $conn->prepare("UPDATE partnershipservices 
+                SET PSAvailabilityID = ? 
+                WHERE partnershipServiceID = ? AND PSAvailabilityID = ?
+            ");
+            $updateStatus->bind_param('iii', $occupiedStatusID, $partnershipServiceID, $availableStatusID);
+            $updateStatus->execute();
+            $updateStatus->close();
         }
     }
 
-
-    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledates WHERE unavailableStartDate > NOW() OR unavailableEndDate < NOW()");
+    //Set status to AVAILABLE 
+    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledates 
+        WHERE unavailableStartDate > NOW() OR unavailableEndDate < NOW() ");
     $fetchUnavailableServiceDatesQuery->execute();
     $result = $fetchUnavailableServiceDatesQuery->get_result();
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $resortServiceID = intval($row['resortServiceID']);
-            $partnershipServiceID = intval($row['partnershipServiceID']);
 
-            if (!empty($resortServiceID)) {
-                $updateStatus = $conn->prepare("UPDATE resortAmenities SET RSAvailabilityID = ? WHERE resortServiceID = ? AND RSAvailabilityID = ?");
-                $updateStatus->bind_param('iii', $availableStatusID, $resortServiceID, $occupiedStatusID);
-                $updateStatus->execute();
-                $updateStatus->close();
-            }
+    while ($row = $result->fetch_assoc()) {
+        $resortServiceID = intval($row['resortServiceID']);
+        $partnershipServiceID = intval($row['partnershipServiceID']);
 
-            if (!empty($partnershipServiceID)) {
+        if (!empty($resortServiceID)) {
+            $updateStatus = $conn->prepare("UPDATE resortamenities 
+                SET RSAvailabilityID = ? 
+                WHERE resortServiceID = ? AND RSAvailabilityID = ?
+            ");
+            $updateStatus->bind_param('iii', $availableStatusID, $resortServiceID, $occupiedStatusID);
+            $updateStatus->execute();
+            $updateStatus->close();
 
-                $updateStatus = $conn->prepare("UPDATE partnershipServices SET PSAvailabilityID = ? WHERE partnershipServiceID = ? AND PSAvailabilityID = ?");
-                $updateStatus->bind_param('iii', $availableStatusID, $partnershipServiceID, $occupiedStatusID);
-                $updateStatus->execute();
-                $updateStatus->close();
-            }
+            $fetchInfo = $conn->prepare("SELECT RServiceName, RScategoryID FROM resortAmenities WHERE resortServiceID = ?");
+            $fetchInfo->bind_param('i', $resortServiceID);
+            $fetchInfo->execute();
+            $infoResult = $fetchInfo->get_result()->fetch_assoc();
+            $serviceName = $infoResult['RServiceName'];
+            $hotelCategoryID = $infoResult['RScategoryID'];
+            $fetchInfo->close();
+
+            $updateRelated = $conn->prepare("UPDATE resortamenities 
+                SET RSAvailabilityID = ? 
+                WHERE RServiceName = ? AND RScategoryID = ? AND resortServiceID != ? AND RSAvailabilityID = ?
+            ");
+            $updateRelated->bind_param('isiii', $availableStatusID, $serviceName, $hotelCategoryID, $resortServiceID, $occupiedStatusID);
+            $updateRelated->execute();
+            $updateRelated->close();
+        }
+
+        if (!empty($partnershipServiceID)) {
+
+            $updateStatus = $conn->prepare("
+                UPDATE partnershipServices 
+                SET PSAvailabilityID = ? 
+                WHERE partnershipServiceID = ? AND PSAvailabilityID = ?
+            ");
+            $updateStatus->bind_param('iii', $availableStatusID, $partnershipServiceID, $occupiedStatusID);
+            $updateStatus->execute();
+            $updateStatus->close();
         }
     }
+
     $result->free();
     $fetchUnavailableServiceDatesQuery->close();
 }
+
 
 //Function for generating otps
 function generateOTP($length)

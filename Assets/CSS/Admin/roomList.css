@@ -70,12 +70,10 @@ body {
   font-size: 24px;
 }
 
-.admin {
-  img {
-    height: 70px;
-    width: 70px;
-    border-radius: 3rem;
-  }
+.admin img {
+  height: 70px;
+  width: 70px;
+  border-radius: 3rem;
 }
 
 .navbar {
@@ -133,13 +131,13 @@ body {
   object-fit: contain;
 }
 
-.booking-container {
-  /* border: 1px solid black; */
+.room-container {
   display: flex;
   justify-content: center;
 }
 
 .card {
+  width: 90% !important;
   padding: 2vw;
 }
 
@@ -159,15 +157,18 @@ label {
 
 thead {
   font-family: "Lora";
+  font-size: 18px !important;
 }
 
 tbody {
   font-family: "Poppins";
+  font-size: 16px;
 }
 
 td,
 th {
   text-align: center !important;
+  vertical-align: middle;
 }
 
 th {
@@ -189,44 +190,17 @@ th {
   text-transform: capitalize;
 }
 
-.status-btn {
+.statusBtn {
+  font-size: 16px;
   width: 50%;
   color: whitesmoke !important;
-  font-size: 1.2vw !important;
+  cursor: alias !important;
 }
 
-/* .Available {
-  background-color: #28a745 !important;
+.action-column {
+  display: flex;
 }
 
-.Occupied {
-  background-color: #17a2b8 !important;
-}
-
-.Maintenance {
-  background-color: #dc3545 !important;
-}
-
-.Private {
-  background-color: #ff0000 !important;
-} */
-
-.Available {
-  background-color: #28a745 !important;
-}
-
-.Occupied {
-  background-color: #fd7e14 !important;
-}
-
-.Maintenance {
-  background-color: #ffc107 !important;
-}
-
-.Private {
-  background-color: #dc3545 !important;
-}
-
-.btn-secondary {
-  margin-left: 2vw;
+.action-column form {
+  margin: 0.5rem;
 }
