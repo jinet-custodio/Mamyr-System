@@ -37,7 +37,7 @@ resetExpiredOTPs($conn);
                 <h1>Login</h1>
                 <div class="input-box">
                     <input type="text" class="form-control" id="login_email" name="login_email"
-                        value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
+                        value="<?php echo isset($_SESSION['loginFormData']['email']) ? htmlspecialchars(trim($_SESSION['registerFormData']['email'])) : ''; ?>"
                         placeholder="Email" required>
                     <i class='bx bxs-envelope'></i>
                 </div>
@@ -47,7 +47,7 @@ resetExpiredOTPs($conn);
                     <i id="togglePassword" class='bx bxs-hide'></i>
                 </div>
                 <div class="forgot-link">
-                    <a href="../Pages/enterEmail.php">Forgot Password?</a>
+                    <a href="enterEmail.php">Forgot Password?</a>
                 </div>
                 <button type="submit" class="btn btn-primary" id="login" name="login" disabled>Login</button>
 
@@ -66,9 +66,9 @@ resetExpiredOTPs($conn);
                         <!-- (Show under Login Button) -->
                         <?php
                         //Error Message 
-                        if (isset($_SESSION['error'])) {
-                            echo htmlspecialchars(strip_tags($_SESSION['error']));
-                            unset($_SESSION['error']);
+                        if (isset($_SESSION['loginError'])) {
+                            echo htmlspecialchars(strip_tags($_SESSION['loginError']));
+                            unset($_SESSION['loginError']);
                         }
                         //Alert Message 
                         if (isset($_GET['session']) && $_GET['session'] === 'expired') {
@@ -95,14 +95,14 @@ resetExpiredOTPs($conn);
                 <div class="fullName">
                     <div class="input-box">
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
-                            value="<?php echo isset($_SESSION['formData']['firstName']) ? htmlspecialchars(trim($_SESSION['formData']['firstName'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['firstName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['firstName'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user-circle'></i>
                     </div>
                     <div class="input-box">
                         <input type="text" class="form-control" id="middleInitial" name="middleInitial"
                             placeholder="M.I. (Optional)"
-                            value="<?php echo isset($_SESSION['formData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['formData']['middleInitial'])) : ''; ?>">
+                            value="<?php echo isset($_SESSION['registerFormData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['registerFormData']['middleInitial'])) : ''; ?>">
                         <i class='bx bxs-user-circle'></i>
                     </div>
 
@@ -110,24 +110,23 @@ resetExpiredOTPs($conn);
                 <div class="userInfo">
                     <div class="input-box">
                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
-                            value="<?php echo isset($_SESSION['formData']['lastName']) ? htmlspecialchars(trim($_SESSION['formData']['lastName'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['lastName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['lastName'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user-circle'></i>
                     </div>
                     <div class="input-box">
                         <input type="text" class="form-control" id="userAddress" name="userAddress"
                             placeholder="Address"
-                            value="<?php echo isset($_SESSION['formData']['userAddress']) ? htmlspecialchars(trim($_SESSION['formData']['userAddress'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['userAddress']) ? htmlspecialchars(trim($_SESSION['registerFormData']['userAddress'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user'></i>
                     </div>
                     <div class="input-box">
                         <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                            value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['email']) ? htmlspecialchars(trim($_SESSION['registerFormData']['email'])) : ''; ?>"
                             required>
                         <input type="hidden" name="userRole" value="1"> <!-- 1 = customer -->
-                        <input type="hidden" name="registerStatus" value="customer">
-
+                        <input type="hidden" name="registerStatus" value="Customer">
                         <i class='bx bxs-envelope'></i>
                     </div>
 
@@ -166,9 +165,9 @@ resetExpiredOTPs($conn);
             <div class="emailErrorMsg">
                 <p>
                     <?php
-                    if (isset($_SESSION['email-message'])) {
-                        echo htmlspecialchars($_SESSION['email-message']);
-                        unset($_SESSION['email-message']); // aalisin after ma display
+                    if (isset($_SESSION['registerError'])) {
+                        echo htmlspecialchars($_SESSION['registerError']);
+                        unset($_SESSION['registerError']);
                     }
                     ?>
                 </p>

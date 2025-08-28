@@ -44,16 +44,16 @@ session_start();
                     <h4 class="repInfoLabel">Representative Information</h4>
                     <div class="repInfoFormContainer">
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
-                            value="<?php echo isset($_SESSION['formData']['firstName']) ? htmlspecialchars(trim($_SESSION['formData']['firstName'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['firstName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['firstName'])) : ''; ?>"
                             required>
                         <!-- <i class='bx bxs-user-circle'></i> -->
 
                         <input type="text" class="form-control" id="middleInitial" name="middleInitial"
                             placeholder="M.I. (Optional)"
-                            value="<?php echo isset($_SESSION['formData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['formData']['middleInitial'])) : ''; ?>">
+                            value="<?php echo isset($_SESSION['registerFormData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['registerFormData']['middleInitial'])) : ''; ?>">
                         <!-- <i class='bx bxs-user-circle'></i> -->
                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
-                            value="<?php echo isset($_SESSION['formData']['lastName']) ? htmlspecialchars(trim($_SESSION['formData']['lastName'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['lastName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['lastName'])) : ''; ?>"
                             required>
                         <!-- <i class='bx bxs-user-circle'></i> -->
                         <!-- <input type="text" class="form-control" id="email" name="email" placeholder="Email Address"
@@ -79,12 +79,12 @@ session_start();
                         <select id="service" name="partnerType" class="form-select primary">
                             <option value="" disabled selected>Type of Business</option>
                             <?php
-                            $serviceType = $conn->prepare("SELECT * FROM partnershipTypes");
+                            $serviceType = $conn->prepare("SELECT * FROM partnershiptypes");
                             $serviceType->execute();
                             $serviceTypeResult = $serviceType->get_result();
                             if ($serviceTypeResult->num_rows > 0) {
                                 while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
-                                    $partnerType = $serviceTypes['partnerType'];
+                                    $partnerType = $serviceTypes['partnerTypeID'];
                                     $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
                             ?>
                                     <option value="<?= htmlspecialchars($partnerType) ?>">

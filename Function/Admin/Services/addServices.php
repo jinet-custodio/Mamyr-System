@@ -156,7 +156,56 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         $conn->rollback();
         header("Location: ../../../Pages/Admin/services.php?result=error");
     }
+} elseif (isset($_POST['saveHotelRoom'])) {
+    $serviceType = 'Resort';
+    $roomName = mysqli_real_escape_string($conn, $_POST['roomName']);
+    $roomStatus = intval($_POST['roomStat']);
+    $roomRate = floatval($_POST['roomRate']);
+    $capacity = intval($_POST['capacity']);
+    $maxCapacity = intval($_POST['maxCapacity']);
+    $roomDescription = mysqli_real_escape_string($conn, $_POST['roomDescription']);
+    $duration = mysqli_real_escape_string($conn, $_POST['duration']);
+    $categoryID = 1;
+
+    $categoryName = getServiceCategory($conn, $categoryID);
+
+    $servicePath = __DIR__ . '/../../../Assets/Images/Services/' . $categoryName . '/';
+    // echo "Service path: $servicePath";
+    // exit();
+
+    if (!is_dir($servicePath)) {
+        mkdir($servicePath, 0755, true);
+    }
+
+    $imageMaxSize = 64 * 1024 * 1024;
+    if (isset($_FILES['roomImage']) && $_FILES['roomImage']['tmp_error'] === UPLOAD_ERR_OK) {
+        if ($_FILES['roomImage']['size'] <=  $imageMaxSize) {
+            $filePath = $_FILES['roomImage']['tmp_name'];
+            $fileName = $_FILES['roomImage']['name'];
+            $imageName = $categoryName . '_' . $fileName;
+            $image = $servicePath . $imageName;
+            move_uploaded_file($filePath, $image);
+        } else {
+            echo 'IMAGE SIZE';
+            header("Location: ../../../Pages/Admin/roomList.php?action=imageSize&step=1");
+            exit();
+        }
+    } else {
+        echo 'IMAGE ERROR';
+        header("Location: ../../../Pages/Admin/roomList.php?action=imageError&step=1");
+        exit();
+    }
+
+    $conn->begin_transaction();
+    try {
+        $insertHotel = $conn->prepare("INSERT INTO `resortamenities`(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, ) VALUES (?,?,?,?,?,?,?,?)");
+        $insertHotel->bind_param("sdiisiss", $roomName, $roomRate, $capacity, $maxCapacity, $duration, $categoryID, $roomDescription, $imageName);
+        if ($insertHotel->execute()) {
+        }
+    } catch (Exception $e) {
+        $conn->rollback();
+    }
 } else {
-    header("Location: ../../../Pages/Admin/services.php?result=error");
+    header("Location: ../../../Pages/Admin/roomList.php?result=error");
     exit();
 }

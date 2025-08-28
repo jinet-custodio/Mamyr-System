@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Events</title>
-    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
+    <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/events.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images//EventsPhotos/debut.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/debut.jpg"
                                 alt="Debut Event">
                             <div class="card-body">
                                 <h5 class="card-title">Debut</h5>
@@ -125,7 +125,7 @@
                 <div class="carousel-item">
                     <div class="cardFlex">
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images//EventsPhotos/kidsParty.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/kidsParty.jpg"
                                 alt="Kids Party">
                             <div class="card-body">
                                 <h5 class="card-title">Kids Party</h5>
@@ -164,7 +164,7 @@
                 <div class="carousel-item">
                     <div class="cardFlex">
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images/EventsPhotos/christening.jpg"
+                            <img class="card-img-top" src="../../Assets/ImagesEventsPhotos/christening.jpg"
                                 alt="Christening Event">
                             <div class="card-body">
                                 <h5 class="card-title">Christening/Dedication</h5>
@@ -181,7 +181,7 @@
                         </div>
 
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images/EventsPhotos/teamBuilding.jpg"
+                            <img class="card-img-top" src="../../Assets/ImagesEventsPhotos/teamBuilding.jpg"
                                 alt="Team Building Event">
                             <div class="card-body">
                                 <h5 class="card-title">Team Building</h5>
@@ -205,7 +205,7 @@
                 <div class="carousel-item">
                     <div class="cardFlex">
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images/EventsPhotos/thanksgiving.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/thanksgiving.jpg"
                                 alt="Thanksgiving Event">
                             <div class="card-body">
                                 <h5 class="card-title">Thanksgiving Party</h5>
@@ -223,7 +223,7 @@
                         </div>
 
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images/EventsPhotos/xmas.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/xmas.jpg"
                                 alt="Birthday Event">
                             <div class="card-body">
                                 <h5 class="card-title">Christmas Party</h5>
@@ -414,45 +414,45 @@
 
     <!-- Script for loader -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const loaderOverlay = document.getElementById('loaderOverlay');
-        const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
 
-        const navbarLinks = document.querySelectorAll('.navbar a');
+            const navbarLinks = document.querySelectorAll('.navbar a');
 
-        navbarLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                const href = link.getAttribute('href');
+            navbarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = link.getAttribute('href');
 
-                if (href && !href.startsWith('#')) {
-                    // Create a temporary anchor to parse the href
-                    const tempAnchor = document.createElement('a');
-                    tempAnchor.href = href;
-                    const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
+                    if (href && !href.startsWith('#')) {
+                        // Create a temporary anchor to parse the href
+                        const tempAnchor = document.createElement('a');
+                        tempAnchor.href = href;
+                        const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
 
-                    // If the target is different from the current path, show loader
-                    if (targetPath !== currentPath) {
-                        loaderOverlay.style.display = 'flex';
+                        // If the target is different from the current path, show loader
+                        if (targetPath !== currentPath) {
+                            loaderOverlay.style.display = 'flex';
+                        }
                     }
-                }
+                });
             });
         });
-    });
 
-    function hideLoader() {
-        const overlay = document.getElementById('loaderOverlay');
-        if (overlay) overlay.style.display = 'none';
-    }
-
-    // Hide loader on normal load
-    window.addEventListener('load', hideLoader);
-
-    // Hide loader on back/forward navigation (from browser cache)
-    window.addEventListener('pageshow', function(event) {
-        if (event.persisted) {
-            hideLoader();
+        function hideLoader() {
+            const overlay = document.getElementById('loaderOverlay');
+            if (overlay) overlay.style.display = 'none';
         }
-    });
+
+        // Hide loader on normal load
+        window.addEventListener('load', hideLoader);
+
+        // Hide loader on back/forward navigation (from browser cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+            }
+        });
     </script>
 
 </body>

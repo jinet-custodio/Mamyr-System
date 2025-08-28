@@ -14,7 +14,7 @@ require '../Config/dbcon.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Amenities</title>
-    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
+    <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/amenities.css">
     <!-- Link to Bootsrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -115,7 +115,7 @@ require '../Config/dbcon.php';
                 <div class="carousel">
                     <?php
                     $serviceCategory = 2;
-                    $query = "SELECT * FROM resortAmenities WHERE RScategoryID = $serviceCategory ";
+                    $query = "SELECT * FROM resortamenities WHERE RScategoryID = $serviceCategory ";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
                         $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -162,7 +162,7 @@ require '../Config/dbcon.php';
                 $RServiceName = 'Videoke 1';
                 $RServiceName1 = 'Videoke 2';
                 $query = "SELECT ra.*, rsc.*
-                    FROM resortAmenities ra
+                    FROM resortamenities ra
                     INNER JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID 
                     WHERE RSCategoryID = '$serviceCategory' 
                     AND (RServiceName = '$RServiceName' OR RServiceName = '$RServiceName1')";

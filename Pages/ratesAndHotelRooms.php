@@ -52,7 +52,7 @@ require '../Config/dbcon.php';
                     <a class="nav-link active" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="../Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="./about.php">ABOUT</a>
@@ -77,7 +77,7 @@ require '../Config/dbcon.php';
 
             <a class="categoryLink" onclick="showRates(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
+                    <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
 
                     <div class="card-body">
                         <h5 class="card-title">Resort Rates</h5>
@@ -87,7 +87,7 @@ require '../Config/dbcon.php';
 
             <a class="categoryLink" onclick="showHotels(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
+                    <img class="card-img-top" src="../../Assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
                     <div class="card-body">
                         <h5 class="card-title">Hotel Rooms</h5>
                     </div>
@@ -167,7 +167,7 @@ require '../Config/dbcon.php';
 
             <div class="cottages">
                 <?php
-                $cottagesql = "SELECT * FROM resortAmenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
+                $cottagesql = "SELECT * FROM resortamenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
                 $cottresult = mysqli_query($conn, $cottagesql);
                 if (mysqli_num_rows($cottresult) > 0) {
                     foreach ($cottresult as $cottage) {
@@ -210,7 +210,7 @@ require '../Config/dbcon.php';
                 <h4 class="entranceTitle">Videoke for Rent</h4>
             </div>
             <?php
-            $vidsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Videoke 1'";
+            $vidsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Videoke 1'";
             $vidresult = mysqli_query($conn, $vidsql);
             if (mysqli_num_rows($vidresult) > 0) {
                 foreach ($vidresult as $videoke) {
@@ -249,7 +249,7 @@ require '../Config/dbcon.php';
         </div>
         <div class="cottage " id="billiards">
             <?php
-            $bilsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Billiard'";
+            $bilsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Billiard'";
             $bilresult = mysqli_query($conn, $bilsql);
             if (mysqli_num_rows($bilresult) > 0) {
                 foreach ($bilresult as $bill) {
@@ -287,7 +287,7 @@ require '../Config/dbcon.php';
                 <h4 class="entranceTitle">Massage Chair</h4>
             </div>
             <?php
-            $massagesql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Massage Chair'";
+            $massagesql = "SELECT * FROM resortamenities WHERE RServiceName = 'Massage Chair'";
             $massageresult = mysqli_query($conn, $massagesql);
             if (mysqli_num_rows($massageresult) > 0) {
                 foreach ($massageresult as $massage) {
@@ -344,7 +344,7 @@ require '../Config/dbcon.php';
             </div>
             <?php
             $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration 
-            FROM resortAmenities
+            FROM resortamenities
             WHERE RSCategoryID = 1";
 
             $result = mysqli_query($conn, $availsql);
@@ -405,7 +405,7 @@ require '../Config/dbcon.php';
 
             <div class="hotelRoomList">
                 <?php
-                $roomsql = "SELECT * FROM resortAmenities WHERE RScategoryID = 1";
+                $roomsql = "SELECT * FROM resortamenities WHERE RScategoryID = 1";
                 $roomresult = mysqli_query($conn, $roomsql);
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {

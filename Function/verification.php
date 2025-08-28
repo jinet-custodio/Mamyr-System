@@ -1,23 +1,17 @@
 <?php
 
 require '../Config/dbcon.php';
+date_default_timezone_set('Asia/Manila');
 session_start();
 $env = parse_ini_file(__DIR__ . '/../.env');
 require '../vendor/autoload.php';
-
-use PHPMailer\PHPMailer\PHPmailer;
-use PHPMailer\PHPMailer\Exception;
-
-
-// require '../phpmailer/src/PHPMailer.php';
-// require '../phpmailer/src/Exception.php';
-// require '../phpmailer/src/SMTP.php';
+require_once 'emailSenderFunction.php';
+require_once 'functions.php';
 
 
 if (isset($_POST['verify-btn'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
     $action = mysqli_real_escape_string($conn, $_SESSION['action']);
-    echo $action;
     $enteredOTP = mysqli_real_escape_string($conn, $_POST['pin1']) .
         mysqli_real_escape_string($conn, $_POST['pin2']) .
         mysqli_real_escape_string($conn, $_POST['pin3']) .
@@ -31,121 +25,123 @@ if (isset($_POST['verify-btn'])) {
     $storedOTPResult = $getStoredOTP->get_result();
     if ($storedOTPResult->num_rows > 0) {
         $data = $storedOTPResult->fetch_assoc();
-        if ($data) {
-            $storedOTP = $data['userOTP'];
-            $userStatus = $data['userStatusID'];
-            $stored_expiration = $data['OTP_expiration_at'];
-            date_default_timezone_set('Asia/Manila');
-            $time_now = date('Y-m-d H:i:s');
-            if (!empty($storedOTP)) {
-                $userStat = 2;
-                if ($stored_expiration > $time_now) {
-                    if ($storedOTP == $enteredOTP) {
-                        if ($action === 'register') {
-                            $userOTP = NULL;
-                            $otpExpirationDate = NULL;
-                            $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = ?, OTP_expiration_at = ? WHERE email = ?");
-                            $changeStatus->bind_param("isss", $userStat, $userOTP, $otpExpirationDate, $email);
-                            if ($changeStatus->execute()) {
-                                // $_SESSION['success'] = "Verified successfully!";
-                                header("Location: ../Pages/register.php?action=successVerification");
-                                exit;
-                            }
-                        } elseif ($action === 'partner') {
-                            // Fetch the user ID
-                            $getUserID = $conn->prepare("SELECT userID FROM users WHERE email = ?");
-                            $getUserID->bind_param("s", $email);
-                            $getUserID->execute();
-                            $userIDResult = $getUserID->get_result();
 
-                            if ($userIDResult->num_rows > 0) {
-                                $userData = $userIDResult->fetch_assoc();
-                                $storedUserID = $userData['userID'];
+        $storedOTP = $data['userOTP'];
+        $userStatus = intval($data['userStatusID']);
+        $stored_expiration = $data['OTP_expiration_at'];
+        $storedUserID = intval($data['userID']);
+        $time_now = date('Y-m-d H:i:s');
+        if (!empty($storedOTP)) {
+            $userStat = 2; //Verified
+            if ($stored_expiration > $time_now) {
+                if (strtotime($stored_expiration) > strtotime($time_now)) {
+                    if ($action === 'Register') {
+                        $conn->begin_transaction();
+                        $changeStatus = $conn->prepare("UPDATE users SET userStatusID = NULL, userOTP = NULL, OTP_expiration_at = ? WHERE email = ?");
+                        $changeStatus->bind_param("isss", $userStat, $userOTP, $otpExpirationDate, $email);
+                        if ($changeStatus->execute()) {
+                            header("Location: ../Pages/register.php?action=successVerification");
+                            exit;
+                        } else {
+                            error_log('Error Updating Status' . $changeStatus->error);
+                        }
+                        $changeStatus->close();
+                    } elseif ($action === 'Partner') {
+                        // Get partner data from session
+                        $partnerData = $_SESSION['partnerData'] ?? null;
+                        $companyName = mysqli_real_escape_string($conn, $partnerData['companyName']);
+                        $partnerType = intval($_POST['partnerType']);
+                        $partnerAddress = mysqli_real_escape_string($conn, $partnerData['partnerAddress']);
+                        $partnerProofLink = mysqli_real_escape_string($conn, $partnerData['proofLink']);
+                        $partnerPhoneNumber = mysqli_real_escape_string($conn, $partnerData['phoneNumber']);
 
-                                // Get partner data from session
-                                $partnerData = $_SESSION['partnerData'];
-                                $companyName = mysqli_real_escape_string($conn, $partnerData['companyName']);
-                                $partnerType = mysqli_real_escape_string($conn, $partnerData['partnerType']);
-                                $partnerAddress = mysqli_real_escape_string($conn, $partnerData['partnerAddress']);
-                                $partnerProofLink = mysqli_real_escape_string($conn, $partnerData['proofLink']);
-                                $partnerPhoneNumber = mysqli_real_escape_string($conn, $partnerData['phoneNumber']);
-                                $partnerData = $_SESSION['partnerData'] ?? null;
-                                if (!$partnerData) {
-                                    $_SESSION['error'] = "Partner information missing from session.";
-                                    header("Location: ../Pages/register.php");
-                                    exit;
-                                } else {
-                                    $updateUser = $conn->prepare("UPDATE users SET  phoneNumber = ? WHERE userID = ?");
-                                    $updateUser->bind_param("ii",  $partnerPhoneNumber, $storedUserID);
-                                    $updateUser->execute();
-                                    $updateUser->close();
-
-                                    //Select partnerType ID
-                                    $partnerTypes = $conn->prepare("SELECT * FROM partnershipTypes WHERE partnerType = ?");
-                                    $partnerTypes->bind_param("s", $partnerType);
-                                    $partnerTypes->execute();
-                                    $partnerTypeResult = $partnerTypes->get_result();
-                                    if ($partnerTypeResult->num_rows > 0) {
-                                        $data = $partnerTypeResult->fetch_assoc();
-                                        $partnerTypeID = $data['partnerTypeID'];
-                                    }
-
-                                    // Insert into partnerships table
-                                    $insertPartner = $conn->prepare("INSERT INTO partnerships(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink)
-                                        VALUES (?,?,?,?,?,?)");
-                                    $insertPartner->bind_param("ississ", $storedUserID, $partnerAddress, $companyName, $partnerTypeID, $email, $partnerProofLink);
-
-
-                                    // Cleanup
-                                    unset($_SESSION['partnerData']);
-                                    if ($insertPartner->execute()) {
-
-                                        $partnershipID = $conn->insert_id;
-                                        $userOTP = NULL;
-                                        $otpExpirationDate = NULL;
-                                        $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = ?, OTP_expiration_at = ? WHERE email = ?");
-                                        $changeStatus->bind_param("isss", $userStat, $userOTP, $otpExpirationDate, $email);
-
-                                        $receiver = "Customer";
-                                        $message = "Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.";
-                                        $insertNotification = $conn->prepare("INSERT INTO notifications(partnershipID, userID, message, receiver) VALUES(?, ?, ?, ?)");
-                                        $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
-
-                                        if ($changeStatus->execute() && $insertNotification->execute()) {
-                                            $_SESSION['success'] = "Partner registered and verified successfully!";
-                                            header("Location: ../Pages/register.php");
-                                            exit;
-                                        }
-                                    }
-                                }
-                            } else {
-                                $_SESSION['error'] = "User not found after verification.";
-                                header("Location: ../Pages/verify_email.php");
-                                exit;
-                            }
-                        } elseif ($action === 'forgot-password') {
-                            $_SESSION['success'] = "Email Verification Success!";
-                            header("Location: ../Pages/forgotPassword.php");
+                        if (!$partnerData) {
+                            $_SESSION['error'] = "Partner information is missing. Please restart the registration process.";
+                            header("Location: ../Pages/register.php");
                             exit;
                         }
+
+                        $conn->begin_transaction();
+                        try {
+                            // Update the user phonenumber
+                            $updateUser = $conn->prepare("UPDATE users SET phoneNumber = ? WHERE userID = ?");
+                            $updateUser->bind_param("si",  $partnerPhoneNumber, $storedUserID);
+
+                            if (!$updateUser->execute()) {
+                                throw new Exception("Failed to update user");
+                            }
+
+                            // Insert into partnerships table
+                            $insertPartner = $conn->prepare("INSERT INTO partnerships(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink)
+                                                    VALUES (?,?,?,?,?,?)");
+                            $insertPartner->bind_param("ississ", $storedUserID, $partnerAddress, $companyName, $partnerType, $email, $partnerProofLink);
+
+
+                            if (!$insertPartner->execute()) {
+                                throw new Exception("Failed to insert partnership data");
+                            }
+
+                            // Update user status and reset the otps
+                            $partnershipID = $conn->insert_id;
+                            $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
+                            $changeStatus->bind_param("is", $userStat, $email);
+                            if (!$changeStatus->execute()) {
+                                throw new Exception("Failed to change the status");
+                            }
+
+                            // Insert notification
+                            $receiver = "Customer";
+                            $message = "Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.";
+                            $insertNotification = $conn->prepare("INSERT INTO notifications(partnershipID, userID, message, receiver) VALUES(?, ?, ?, ?)");
+                            $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
+                            if (!$insertNotification->execute()) {
+                                throw new Exception("Failed to insert notification");
+                            }
+
+                            $conn->commit();
+
+                            unset($_SESSION['partnerData']);
+                            $_SESSION['success'] = "Partner has been successfully registered and verified.";
+                            header("Location: ../Pages/register.php");
+                            exit;
+                        } catch (Exception $e) {
+                            $conn->rollback();
+                            error_log("Partner Registration Error: " . $e->getMessage());
+                            $_SESSION['error'] = "An error occurred during partner registration. Please try again.";
+                            header("Location: ../Pages/register.php");
+                            exit;
+                        } finally {
+                            $updateUser->close();
+                            $insertPartner->close();
+                            $changeStatus->close();
+                            $insertNotification->close();
+                        }
+                    } elseif ($action === 'forgot-password') {
+                        $_SESSION['email'] = $email;
+                        header("Location: ../Pages/forgotPassword.php");
+                        exit;
                     } else {
-                        // $_SESSION['error'] = "Invalid OTP.";
-                        header("Location: ../Pages/verify_email.php?action=invalidOTP");
+                        $_SESSION['error'] = "Unrecognized action during verification. Please try again.";
+                        header("Location: ../Pages/verify_email.php");
                         exit;
                     }
                 } else {
-                    // $_SESSION['error'] = "Expired OTP.";
-                    header("Location: ../Pages/verify_email.php?action=expiredOTP");
+                    // $_SESSION['error'] = "Invalid OTP.";
+                    header("Location: ../Pages/verify_email.php?action=invalidOTP");
                     exit;
                 }
+            } else {
+                // $_SESSION['error'] = "Expired OTP.";
+                header("Location: ../Pages/verify_email.php?action=expiredOTP");
+                exit;
             }
         } else {
-            $_SESSION['error'] = "Invalid request.";
+            $_SESSION['error'] = "OTP is required. Please enter the code sent to your email.";
             header("Location: ../Pages/verify_email.php");
             exit;
         }
     } else {
-        $_SESSION['error'] = "Email doesn`t exist";
+        $_SESSION['error'] = "The email address provided does not exist. Please try again!";
         header("Location: ../Pages/verify_email.php");
         exit;
     }
@@ -153,9 +149,10 @@ if (isset($_POST['verify-btn'])) {
 
 
 
+
 if (isset($_POST['resend_code'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
-    $newOtp = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+    $newOtp = generateOTP(6);
     date_default_timezone_set('Asia/Manila');
     $new_time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
 
@@ -165,39 +162,25 @@ if (isset($_POST['resend_code'])) {
     $storedDataResult = $storedData->get_result();
     if ($storedDataResult->num_rows > 0) {
         $data = $storedDataResult->fetch_assoc();
-        if ($data) {
-            $stored_expiration = $data['OTP_expiration_at'];
-            $storedFirstName = $data['firstName'];
-            $storedStatus = $data['userStatusID'];
-            $storedOTP = $data['userOTP'];
-            date_default_timezone_set('Asia/Manila');
-            $time_now = date('Y-m-d H:i:s');
-            $time_left = strtotime($stored_expiration) - strtotime($time_now);
-            if ($time_left < 300) {
-                $minutes_left = ceil($time_left / 60);
-                $_SESSION['time'] = "Wait for " . $minutes_left . " more minute(s) to request again.";
-                header("Location: ../Pages/verify_email.php");
-                exit;
-            } else {
+
+        $stored_expiration = $data['OTP_expiration_at'];
+        $storedFirstName = $data['firstName'];
+        $storedStatus = $data['userStatusID'];
+        $storedOTP = $data['userOTP'];
+        $time_now = date('Y-m-d H:i:s');
+        $time_left = strtotime($stored_expiration) - strtotime($time_now);
+        if ($time_left > 0) {
+            $minutes_left = ceil($time_left / 60);
+            $_SESSION['time'] = "Wait for " . $minutes_left . " more minute(s) to request again.";
+            header("Location: ../Pages/verify_email.php");
+            exit;
+        } else {
+
+            try {
                 $updateOTP = $conn->prepare("UPDATE users SET userOTP = ?, OTP_expiration_at = ? WHERE  email = ?");
                 $updateOTP->bind_param("sss", $newOtp, $new_time, $email);
                 if ($updateOTP->execute()) {
-                    $mail = new PHPmailer(true);
-                    try {
-                        $_SESSION['email'] = $email;
-                        $mail->isSMTP();
-                        $mail->Host       =  $env['SMTP_HOST'];
-                        $mail->SMTPAuth   = true;
-                        $mail->Username   = $env['SMTP_USER'];
-                        $mail->Password   =  $env['SMTP_PASS'];
-                        $mail->SMTPSecure = 'tls';
-                        $mail->Port       =  $env['SMTP_PORT'];
-
-
-                        $mail->setFrom($env['SMTP_USER'], 'Mamyr Resort and Event Place');
-                        $mail->addAddress($email, $storedFirstName);
-
-                        $message = '<body style="font-family: Arial, sans-serif;                  background-color: #f4f4f4; padding: 20px; margin: 0;">
+                    $message = '<body style="font-family: Arial, sans-serif;                background-color: #f4f4f4; padding: 20px; margin: 0;">
                                 <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
                                     <tr>
                                     <td style="padding: 30px; text-align: left; color: #333333;">
@@ -220,24 +203,28 @@ if (isset($_POST['resend_code'])) {
                                 </table>
                                 </body>
                                 ';
+                    $subject = 'Here’s Your New OTP Code from Mamyr';
 
-                        $mail->isHTML(true);
-                        $mail->Subject = 'Here’s Your New OTP Code from Mamyr';
-                        $mail->Body    = $message;
-                        // $mail->AltBody = 'Body in plain text for non-HTML mail clients';
-                        if (!$mail->send()) {
-                            $_SESSION['OTP'] = 'Failed to send OTP. Try again.';
-                            header("Location: ../Pages/verify_email.php");
-                            exit;
-                        } else {
-                            header("Location: ../Pages/verify_email.php");
-                            exit;
-                        }
-                    } catch (Exception $e) {
-                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                    if (sendEmail($email, $storedFirstName, $subject, $message, $env)) {
+                        $_SESSION['email'] = $email;
+                        header("Location: ../Pages/verify_email.php");
+                        exit;
+                    } else {
+                        $_SESSION['OTP'] = 'Failed to send OTP. Try again.';
+                        header("Location: ../Pages/verify_email.php");
+                        exit;
                     }
+                } else {
+                    error_log("Error: " . $updateOTP->error);
                 }
+            } catch (Exception $e) {
+                error_log("Error: " . $e->getMessage());
+            } finally {
+                $updateOTP->close();
             }
         }
+    } else {
+        $_SESSION['error'] = 'User Not Found';
+        header('Location: ../Pages/verify_email.php');
     }
 }
