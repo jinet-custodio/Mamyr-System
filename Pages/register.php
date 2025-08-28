@@ -37,7 +37,7 @@ resetExpiredOTPs($conn);
                 <h1>Login</h1>
                 <div class="input-box">
                     <input type="text" class="form-control" id="login_email" name="login_email"
-                        value="<?php echo isset($_SESSION['loginFormData']['email']) ? htmlspecialchars(trim($_SESSION['registerFormData']['email'])) : ''; ?>"
+                        value="<?php echo isset($_SESSION['loginFormData']['email']) ? htmlspecialchars(trim($_SESSION['loginFormData']['email'])) : ''; ?>"
                         placeholder="Email" required>
                     <i class='bx bxs-envelope'></i>
                 </div>

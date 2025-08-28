@@ -23,6 +23,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['unsetRoomID'])) {
     exit(); // No need to render the rest of the page
 }
 
+if (isset($_SESSION['actionType'])) {
+    $actionType = $_SESSION['actionType'];
+} elseif (isset($_POST['actionType'])) {
+    $actionType = mysqli_real_escape_string($conn, $_POST['actionType']);
+}
+
+if (isset($_SESSION['roomID'])) {
+    $_POST['roomID'] = $_SESSION['roomID'];
+}
+
+
 
 $message = '';
 $status = '';
@@ -65,7 +76,7 @@ if (isset($_SESSION['error'])) {
     </div>
     <?php
     $roomID = mysqli_real_escape_string($conn, $_POST['roomID']);
-    $actionType = mysqli_real_escape_string($conn, $_POST['actionType']);
+    $actionType = $actionType;
     $availabilityOptions = [];
     $availabilityQuery = $conn->prepare("SELECT availabilityID, availabilityName FROM serviceavailability");
     $availabilityQuery->execute();
@@ -91,21 +102,21 @@ if (isset($_SESSION['error'])) {
             <div class="bookInfobox">
                 <div class="left-col">
                     <?php
-                    $roomID = mysqli_real_escape_string($conn, $_POST['roomID']);
-                    $_SESSION['roomID'] = $roomID;
-                    $actionType = mysqli_real_escape_string($conn, $_POST['actionType']);
+                    // $roomID = mysqli_real_escape_string($conn, $_POST['roomID']);
+                    // $_SESSION['roomID'] = $roomID;
+                    // $actionType = mysqli_real_escape_string($conn, $_POST['actionType']);
 
                     $userQuery = $conn->prepare("SELECT 
                                 b.*, bs.*, 
                                 u.firstName, u.middleInitial, u.lastName, 
                                 rs.*, 
                                 s.resortServiceID 
-                            FROM bookings b 
-                            LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID                                                                                                          
-                            LEFT JOIN services s ON bs.serviceID = s.serviceID
-                            LEFT JOIN resortamenities rs ON rs.resortServiceID = s.resortServiceID 
-                            LEFT JOIN users u ON u.userID = b.userID 
-                            WHERE 
+                                FROM bookings b 
+                                LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID                                                                                                          
+                                LEFT JOIN services s ON bs.serviceID = s.serviceID
+                                LEFT JOIN resortamenities rs ON rs.resortServiceID = s.resortServiceID 
+                                LEFT JOIN users u ON u.userID = b.userID 
+                                WHERE 
                                 rs.RScategoryID = ?
                                 AND rs.resortServiceID = ?
                                 AND NOW() BETWEEN b.startDate AND b.endDate");
@@ -119,7 +130,7 @@ if (isset($_SESSION['error'])) {
                         <div class="info" id="rentorRow">
                             <label for="rentorName"> Rentor: </label>
                             <input type="text" name="rentorName" class="rentorName form-control" id="rentorName"
-                                value="<?= $rentorName ?>" disabled>
+                                value="<?= htmlspecialchars($rentorName) ?>" disabled>
                         </div>
                     <?php
                     }
@@ -155,20 +166,26 @@ if (isset($_SESSION['error'])) {
                     <div class="info">
                         <label for="roomMaxCapacity">Max Capacity: </label>
                         <input type="text" name="roomMaxCapacity" class="roomMaxCapacity form-control" id="roomMaxCapacity"
-                            value="<?= $roomInfo['RScapacity'] . " pax" ?>">
+                            value="<?= $roomInfo['RSmaxCapacity'] . " pax" ?>">
                     </div>
-                    <div class="end">
+                    <div class="info">
+                        <label for="roomDuration">Duration: </label>
+                        <input type="text" name="roomDuration" class="roomDuration form-control" id="roomDuration"
+                            value="<?= $roomInfo['RSduration'] ?>">
+                    </div>
+                    <!-- <div class="end">
                         <label for="others"> Others: </label>
                         <input type="text" name="others" style="padding: 0.5vw; font-size: 1.5vw;"
                             class="others form-control" id="others">
-                    </div>
+                    </div> -->
                 </div>
                 <!-- <input type="text" name="roomImage" class="roomImage" id="roomImage"> -->
                 <?php
-                $imgSrc = '../../Assets/Images/no-picture.jpg';
-                if (! empty($roomInfo['RSimageData'])) {
-                    $imgData = base64_encode($roomInfo['RSimageData']);
-                    $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                $imgSrc = '../../Assets/Images/Services/Hotel/';
+                if (!empty($roomInfo['RSimageData'])) {
+                    $image = $imgSrc . $roomInfo['RSimageData'];
+                } else {
+                    $image = '../../Assets/Image/no-picture.jpg';
                 }
                 ?>
 
@@ -176,7 +193,7 @@ if (isset($_SESSION['error'])) {
                 <div class="right-col">
                     <div class="end" id="image">
                         <div class="room-image-wrapper">
-                            <img src="<?= $imgSrc ?>" alt="Room Image" class="room-preview room-image" id="roomImage">
+                            <img src="<?= $image ?>" alt="Room Image" class="room-preview room-image" id="roomImage">
                             <div class="image-overlay" id="image-overlay">Change Image</div>
                             <input type="file" name="roomImage" class="roomImageInput">
                         </div>
@@ -193,67 +210,68 @@ if (isset($_SESSION['error'])) {
                 <a href="roomList.php" class="cancelBtn btn btn-danger" type="button">Cancel</a>
                 <button class="saveBtn btn btn-primary" type="submit" name="editRoom"> Save</button>
             </div>
-        <?php
-    }
-        ?>
         </form>
+    <?php
+    }
+    ?>
 
 
-        <!-- Bootstrap Link -->
-        <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
-        <!-- Jquery Link -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Data Table Link -->
-        <script src="../../Assets/JS/datatables.min.js"></script>
+
+    <!-- Bootstrap Link -->
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- Jquery Link -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- Data Table Link -->
+    <script src="../../Assets/JS/datatables.min.js"></script>
 
 
-        <!-- checks whether the action chosen is view or edit, disables or enables input boxes depending on the result -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const rentorRow = document.getElementById("rentorRow");
-                const leftCol = document.querySelector(".left-col");
-                const rightCol = document.querySelector(".right-col");
-                const actionType = "<?= $actionType ?>";
+    <!-- checks whether the action chosen is view or edit, disables or enables input boxes depending on the result -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const rentorRow = document.getElementById("rentorRow");
+            const leftCol = document.querySelector(".left-col");
+            const rightCol = document.querySelector(".right-col");
+            const actionType = "<?= $actionType ?>";
+            console.log(actionType);
+            if (!rentorRow) {
+                leftCol.style.gridTemplateRows = "repeat(4, 1fr)";
+            }
 
-                if (!rentorRow) {
-                    leftCol.style.gridTemplateRows = "repeat(4, 1fr)";
+            const inputs = document.querySelectorAll(
+                ".left-col input, .left-col select, .left-col textarea, .right-col input, .right-col textarea");
+            const overlay = document.querySelector(".image-overlay");
+            const rentorName = document.getElementById("rentorName")
+            const btns = document.querySelector(".buttons");
+            inputs.forEach(input => {
+                if (actionType === "view") {
+                    input.disabled = true;
+                    overlay.style.display = "none";
+                    btns.style.display = "none";
+                } else {
+                    input.disabled = false;
+                    rentorName.disabled = true;
                 }
+            })
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const fileInput = document.querySelector(".roomImageInput");
+            const previewImage = document.getElementById("roomImage");
 
-                const inputs = document.querySelectorAll(
-                    ".left-col input, .left-col select, .left-col textarea, .right-col input, .right-col textarea");
-                const overlay = document.querySelector(".image-overlay");
-                const rentorName = document.getElementById("rentorName")
-                const btns = document.querySelector(".buttons");
-                inputs.forEach(input => {
-                    if (actionType === "view") {
-                        input.disabled = true;
-                        overlay.style.display = "none";
-                        btns.style.display = "none";
-                    } else {
-                        input.disabled = false;
-                        rentorName.disabled = true;
+            fileInput.addEventListener("change", function() {
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
                     }
-                })
+                    reader.readAsDataURL(file);
+                }
             });
-        </script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const fileInput = document.querySelector(".roomImageInput");
-                const previewImage = document.getElementById("roomImage");
-
-                fileInput.addEventListener("change", function() {
-                    const file = fileInput.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            previewImage.src = e.target.result;
-                        }
-                        reader.readAsDataURL(file);
-                    }
-                });
-            });
-        </script>
+        });
+    </script>
 
 
 </body>

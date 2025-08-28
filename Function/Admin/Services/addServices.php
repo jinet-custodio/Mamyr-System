@@ -1,9 +1,10 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 require '../../../Config/dbcon.php';
 session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+
 error_reporting(E_ALL);
 
 function getServiceCategory($conn, $id)
@@ -156,7 +157,7 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         $conn->rollback();
         header("Location: ../../../Pages/Admin/services.php?result=error");
     }
-} elseif (isset($_POST['saveHotelRoom'])) {
+} elseif (isset($_POST['saveHotelRoom'])) { //Hotels
     $serviceType = 'Resort';
     $roomName = mysqli_real_escape_string($conn, $_POST['roomName']);
     $roomStatus = intval($_POST['roomStat']);
@@ -170,19 +171,18 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
     $categoryName = getServiceCategory($conn, $categoryID);
 
     $servicePath = __DIR__ . '/../../../Assets/Images/Services/' . $categoryName . '/';
-    // echo "Service path: $servicePath";
-    // exit();
 
     if (!is_dir($servicePath)) {
         mkdir($servicePath, 0755, true);
     }
 
     $imageMaxSize = 64 * 1024 * 1024;
-    if (isset($_FILES['roomImage']) && $_FILES['roomImage']['tmp_error'] === UPLOAD_ERR_OK) {
+    if (isset($_FILES['roomImage']) && $_FILES['roomImage']['error'] === UPLOAD_ERR_OK) {
         if ($_FILES['roomImage']['size'] <=  $imageMaxSize) {
             $filePath = $_FILES['roomImage']['tmp_name'];
             $fileName = $_FILES['roomImage']['name'];
-            $imageName = $categoryName . '_' . $fileName;
+            $randomNumber = rand(11, 99);
+            $imageName = $categoryName . '_' . $randomNumber . '_' . $fileName;
             $image = $servicePath . $imageName;
             move_uploaded_file($filePath, $image);
         } else {
@@ -192,18 +192,37 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         }
     } else {
         echo 'IMAGE ERROR';
-        header("Location: ../../../Pages/Admin/roomList.php?action=imageError&step=1");
+        header("Location: ../../../Pages/Admin/roomList.php?action=imageError&step=2");
         exit();
     }
 
     $conn->begin_transaction();
     try {
-        $insertHotel = $conn->prepare("INSERT INTO `resortamenities`(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, ) VALUES (?,?,?,?,?,?,?,?)");
-        $insertHotel->bind_param("sdiisiss", $roomName, $roomRate, $capacity, $maxCapacity, $duration, $categoryID, $roomDescription, $imageName);
+        $insertHotel = $conn->prepare("INSERT INTO `resortamenities`(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES (?,?,?,?,?,?,?,?,?)");
+        $insertHotel->bind_param("sdiisissi", $roomName, $roomRate, $capacity, $maxCapacity, $duration, $categoryID, $roomDescription, $imageName, $roomStatus);
         if ($insertHotel->execute()) {
+            $resortServiceID = $conn->insert_id;
+
+            $insertIntoService = $conn->prepare("INSERT INTO `services`(`resortServiceID`,`serviceType`) VALUES (?,?)");
+            $insertIntoService->bind_param("is", $resortServiceID, $serviceType);
+            if (!$insertIntoService) {
+                throw new Exception("Failed to insert in services");
+            }
+            $conn->commit();
+            header("Location: ../../../Pages/Admin/roomList.php");
+            exit();
+        } else {
+            $conn->rollback();
+            error_log("Error: " . $insertHotel->error);
         }
     } catch (Exception $e) {
         $conn->rollback();
+        error_log("Error: " . $e->getMessage());
+        header("Location: ../../../Pages/Admin/roomList.php?result=error");
+        exit();
+    } finally {
+        if (isset($insertHotel)) $insertHotel->close();
+        if (isset($insertIntoService)) $insertIntoService->close();
     }
 } else {
     header("Location: ../../../Pages/Admin/roomList.php?result=error");
