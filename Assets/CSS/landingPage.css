@@ -152,11 +152,9 @@ body {
 
 .dropdown-item {
   font-size: 1.3vw;
+  font-weight: bold;
 }
 
-.navbar-collapse {
-  text-align: center;
-}
 
 ul {
   font-family: "Poppins";
@@ -589,7 +587,6 @@ footer {
     background-color: white;
     .nav-link {
       color: black !important;
-      text-align: center;
     }
   }
 
@@ -770,44 +767,29 @@ footer {
     gap: 3vw;
   }
 
-  .mb-0 {
-    font-size: 2vw;
+ .mb-0 {
+    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
   }
 
-  .locationFooter {
-    width: 50%;
+  .logo {
+    width: 15vw;
   }
 
-  .reservationTitle,
-  .locationTitle {
-    font-size: 2vw;
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
   }
 
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: 1.5vw;
-  }
-
-  .socialIcons {
-    width: 20%;
-    display: flex;
-    margin: auto;
-    justify-content: space-between;
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
   }
 
   .socialIcons a {
-    height: 6vh;
-    padding: 1vw;
-    text-decoration: none;
-    background-color: rgb(255, 255, 255);
-    margin: 5px;
-    border-radius: 50%;
+    justify-items: center;
+    align-items: center;
   }
-
-  .socialIcons a i {
-    font-size: 3.5vw;
-  }
+  .socialIcons a i { 
+      font-size: 3vw;
+    }
 }
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
@@ -933,8 +915,59 @@ footer {
   }
 }
 
+@media (max-width: 991.98px) {
+  .nav-link, #logOutBtn {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
+  .nav-item {
+    margin-top: 5px;
+  }
+
+    #navbarNav .nav-link,
+    #navbarNav .dropdown-item {
+     color: black !important; 
+    }
+
+    #profileAndNotif {
+      background-color: transparent;
+    }
+
+    .navbar-nav {
+      background-color: rgb(251, 250, 250);
+    }
+
+    #navbar-half2 .btn-outline-danger {
+        color: black !important;
+        border-color: white !important;
+        width: 100%;
+        text-align: left;
+    }
+
+    .fc-daygrid-day-top a {
+      font-size: clamp(2vw, 1.8vw, 1.6vw);
+    }
+}
+
+@media (max-width: 991.98px) and (orientation:portrait) {
+  .nav-item {
+    margin-top: 5px;
+  }
+
+  .nav-link, #logOutBtn {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
+}
+
 /* Phone size */
-@media screen and (min-width: 360px) and (max-width: 599px) {
+@media screen and (max-width: 599px) {
   .titleContainer {
     height: calc(100vh - 20vh);
     padding: 12vw;
@@ -1184,42 +1217,44 @@ footer {
     gap: 3vw;
   }
 
-  .mb-0 {
-    font-size: 2vw;
+.mb-0 {
+    font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
+  }
+
+  .logo {
+    width: 18vw;
+  }
+
+  .reservation {
+    width: 20%;
   }
 
   .locationFooter {
     width: 50%;
   }
 
-  .reservationTitle,
-  .locationTitle {
-    font-size: 2.5vw;
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: 2vw;
-  }
-
-  .socialIcons {
-    width: 20%;
-    display: flex;
-    margin: auto;
-    justify-content: space-between;
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
   }
 
   .socialIcons a {
-    height: 6vh;
-    padding: 1vw;
-    text-decoration: none;
-    background-color: rgb(255, 255, 255);
-    margin: 5px;
-    border-radius: 50%;
+    justify-items: center;
+    align-items: center;
+    padding: 0.5vw 1.5vw;
   }
+ 
+  .socialIcons a i { 
+    font-size: 3.5vw;
+  }  
+}
 
-  .socialIcons a i {
-    font-size: 4vw;
+@media (max-width: 400px) {
+  .ms-auto {
+    position: absolute !important;
+    right: 5vw !important;
   }
 }

@@ -33,11 +33,11 @@ require '../Config/dbcon.php'
 
             <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
-                    <li class="nav-item dropdown text-center">
+                    <li class="nav-item dropdown">
                         <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             AMENITIES
