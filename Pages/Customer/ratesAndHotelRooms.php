@@ -309,7 +309,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <p class="font-weight-bold">
                         Price: PHP <?= $cottage['RSprice'] ?>
                     </p>
-                    <a href="bookNow.php" class="btn btn-primary">Book Now</a>
+                    <a href="resortBooking.php" class="btn btn-primary">Book Now</a>
                 </div>
 
             </div>
