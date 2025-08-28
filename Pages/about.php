@@ -111,7 +111,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <?php if (isset($imageMap['AboutMamyr'])): ?>
                 <?php foreach ($imageMap['AboutMamyr'] as $index => $img):
                     $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
-                    $defaultImage = "Assets/Images/no-picture.png";
+                    $defaultImage = "../Assets/Images/no-picture.png";
                     $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                     <img src="<?= $imagePath ?>"
                         alt="<?= htmlspecialchars($img['altText']) ?>"
@@ -195,8 +195,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="eventContainer">
                 <?php if (isset($imageMap['Service2Desc'])): ?>
                     <?php foreach ($imageMap['Service2Desc'] as $index => $img):
-                        $imagePath = "Assets/Images/aboutImages/" . $img['imageData'];
-                        $defaultImage = "Assets/Images/no-picture.png";
+                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                        $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>"
                             alt="<?= htmlspecialchars($img['altText']) ?>"
