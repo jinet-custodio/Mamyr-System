@@ -108,6 +108,7 @@ body {
   position: absolute;
   left: 3vw;
   margin-top: -70vh;
+  z-index: 9999 !important;
 }
 
 .back-icon-container-signup {
@@ -405,26 +406,53 @@ input[type="password"]::-webkit-search-cancel-button {
     height: calc(100vh - 40px);
   }
 
-  .welcome {
-    font-size: 20px !important;
+  .back-icon-container-login {
+    margin: -55vw 0 0 3vw;
+  }
+
+  .form-box {
+    width: 100% !important;
+  }
+
+  .toggle-left {
+    margin-top: 5vw !important;
+    padding: 1vw;
   }
 
   h1 {
     font-size: 25px !important;
   }
   .mamyrLogo {
-    height: 40px !important;
+    height: 45px !important;
+    margin-top: 5vw;
   }
-  .form-box {
+
+  #login-form {
+    bottom: 0;
+    width: 100% !important;
+    height: 20% !important;
+  }
+
+  #register {
     bottom: 0;
     width: 100%;
-    height: 70%;
+    height: 125% !important;
+  }
+
+  .back-icon-container-signup {
+    left: 8%;
+    top: 55%;
+    margin-top: -10vh;
+  }
+  .userInfo,
+  .passwordContainer {
+    margin-top: -7vw !important;
   }
 
   .errorContainer {
     bottom: 0;
     width: 100%;
-    height: 88%;
+    height: 70%;
   }
 
   .container.active .form-box {
@@ -436,13 +464,13 @@ input[type="password"]::-webkit-search-cancel-button {
     left: 0;
     top: -270%;
     width: 100%;
-    height: 300%;
+    height: 305%;
     border-radius: 20vw;
   }
 
   .container.active .toggle-box::before {
     left: 0;
-    top: 70%;
+    top: 75%;
   }
 
   .container.active .toggle-panel.toggle-left {
@@ -458,6 +486,7 @@ input[type="password"]::-webkit-search-cancel-button {
     top: 0;
   }
   .toggle-panel.toggle-right {
+    height: 25%;
     right: 0;
     bottom: -30%;
   }
