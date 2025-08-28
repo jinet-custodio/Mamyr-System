@@ -57,7 +57,7 @@
 }
 
 body {
-  background: url(../images/indexPhotos/Background2.png) lightgray 50% / cover
+  background: url(../Images/indexPhotos/Background2.png) lightgray 50% / cover
     no-repeat;
   display: flex;
   background-color: #88858534 !important;

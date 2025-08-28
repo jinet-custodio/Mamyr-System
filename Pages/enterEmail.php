@@ -5,6 +5,16 @@ ini_set('display_errors', 1);
 
 session_start();
 require '../Config/dbcon.php';
+
+if (isset($_SESSION['email'])) {
+    $email = mysqli_real_escape_string($conn, $_SESSION['email']);
+    $_SESSION['email'] = $email;
+}
+
+if (isset($_SESSION['action'])) {
+    $_SESSION['action'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -14,8 +24,8 @@ require '../Config/dbcon.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
-    <link rel="stylesheet" href="../assets/css/enterEmail.css">
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../Assets/CSS/enterEmail.css">
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">

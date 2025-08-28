@@ -295,63 +295,82 @@ if (isset($_SESSION['error'])) {
     </div>
 
 
-    <!-- FORM MODAL ADDING SERVICE-->
-
+    <!-- FORM MODAL ADDING Hotel-->
     <!-- Modal -->
-    <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addHotelModalLabel">Add Hotel Room</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-container">
-                        <label for="roomNo">Room No.</label>
-                        <input type="text" class="form-control" id="roomNo" name="roomNo" required>
+    <form action="../../Function/Admin/Services/addServices.php" method="POST" enctype="multipart/form-data">
+        <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addHotelModalLabel">Add Hotel Room</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="input-container">
-                        <label for="roomStat">Room Status</label>
-                        <select id="roomStat" name="roomStat" class="form-select" required>
-                            <option value="" disabled selected>Status</option>
-                            <option value="available" id="available">Available</option>
-                            <option value="occupied" id="occupied">Occupied</option>
-                            <option value="maintenance" id="maintenance">Maintenance</option>
-                            <option value="unavailable" id="unavailable">Unavailable</option>
-                        </select>
+                    <div class="modal-body">
+                        <div class="input-container">
+                            <label for="roomName">Room No.</label>
+                            <input type="text" class="form-control" id="roomName" name="roomName" required>
+                        </div>
+                        <div class="input-container">
+                            <label for="roomStat">Room Status</label>
+                            <select id="roomStat" name="roomStat" class="form-select"
+                                required>
+                                <option value="" disabled selected>Select Availability</option>
+                                <?php
+
+                                $getAvailability = $conn->prepare('SELECT * FROM serviceavailability');
+                                if ($getAvailability->execute()) {
+                                    $result = $getAvailability->get_result();
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                ?>
+                                            <option value="<?= htmlspecialchars($row['availabilityID']) ?>" id="available">
+                                                <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                <?php
+                                        }
+                                    }
+                                    $result->free();
+                                    $getAvailability->close();
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="input-container">
+                            <label for="roomRate">RoomRate</label>
+                            <input type="text" class="form-control" id="roomRate" name="roomRate">
+                        </div>
+                        <div class="input-container">
+                            <label for="capacity">Capacity</label>
+                            <input type="number" class="form-control" id="capacity" name="capacity">
+                        </div>
+                        <div class="input-container">
+                            <label for="maxCapacity">Max Capacity</label>
+                            <input type="number" class="form-control" id="maxCapacity" name="maxCapacity">
+                        </div>
+                        <div class="input-container">
+                            <label for="duration">Duration</label>
+                            <input type="number" class="form-control" id="duration" name="duration">
+                        </div>
+                        <div class="input-container">
+                            <label for="roomDescription">Description</label>
+                            <textarea class="form-control" id="roomDescription" name="roomDescription"></textarea>
+                        </div>
+                        <div class="input-container">
+                            <label for="roomImage">Room Image</label>
+                            <input type="file" class="form-control" id="roomImage" name="roomImage">
+                        </div>
+                        <!-- <div class="input-container">
+                            <label for="other">Other</label>
+                            <input type="text" class="form-control" id="other" name="other">
+                        </div> -->
                     </div>
-                    <div class="input-container">
-                        <label for="roomRate">RoomRate</label>
-                        <input type="text" class="form-control" id="roomRate" name="roomRate">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveHotelRoom" name="saveHotelRoom">Save</button>
                     </div>
-                    <div class="input-container">
-                        <label for="capacity">Capacity</label>
-                        <input type="text" class="form-control" id="capacity" name="capacity">
-                    </div>
-                    <div class="input-container">
-                        <label for="maxCapacity">Max Capacity</label>
-                        <input type="text" class="form-control" id="maxCapacity" name="maxCapacity">
-                    </div>
-                    <div class="input-container">
-                        <label for="roomDescription">Description</label>
-                        <textarea class="form-control" id="roomDescription" name="roomDescription"></textarea>
-                    </div>
-                    <div class="input-container">
-                        <label for="roomImage">Room Image</label>
-                        <input type="file" class="form-control" id="roomImage" name="roomImage">
-                    </div>
-                    <div class="input-container">
-                        <label for="other">Other</label>
-                        <input type="text" class="form-control" id="other" name="other">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="saveHotelRoom">Save</button>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 
 
 
@@ -411,7 +430,11 @@ if (isset($_SESSION['error'])) {
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
-            $('#bookingTable').DataTable();
+            $('#roomsTable').DataTable({
+                language: {
+                    emptyTable: "No Hotel Rooms"
+                },
+            })
         });
     </script>
 </body>
