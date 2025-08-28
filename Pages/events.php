@@ -1,3 +1,13 @@
+<?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require '../Config/dbcon.php';
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,7 +27,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -69,15 +79,6 @@
     </div>
 
     <div class="categories">
-
-        <!-- <div class="eventsTitleContainer">
-            <h3 class="eventsTitle">Mamyr Events</h3>
-            <p class="eventsDescription indent">
-                Mamyr Resort and Events Place offers the perfect setting for unforgettable moments, blending elegance,
-                comfort, and natural beauty—ideal for life’s most cherished celebrations and meaningful gatherings of
-                all kinds.
-        </div> -->
-
         <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
 
@@ -96,7 +97,7 @@
                                         dream come true!</p>
                                 </div>
 
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary bookBtn"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
@@ -114,7 +115,7 @@
                                         debut
                                         marks a new chapter of unforgettable memories!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK
+                                <button type="button" class="btn btn-primary bookBtn" style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
                         </div>
@@ -135,7 +136,7 @@
                                         kids'
                                         party is filled with joy, laughter, and unforgettable memories!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK
+                                <button type="button" class="btn btn-primary bookBtn" style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
                         </div>
@@ -152,7 +153,7 @@
                                         year
                                         brings new moments to cherish!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary bookBtn"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
@@ -164,7 +165,7 @@
                 <div class="carousel-item">
                     <div class="cardFlex">
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/ImagesEventsPhotos/christening.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/christening.jpg"
                                 alt="Christening Event">
                             <div class="card-body">
                                 <h5 class="card-title">Christening/Dedication</h5>
@@ -174,14 +175,14 @@
                                         christenings to dedications, is a moment to treasure.</p>
                                 </div>
 
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary bookBtn" id="bookBtn"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
                         </div>
 
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/ImagesEventsPhotos/teamBuilding.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/teamBuilding.jpg"
                                 alt="Team Building Event">
                             <div class="card-body">
                                 <h5 class="card-title">Team Building</h5>
@@ -192,7 +193,7 @@
                                         leadership thrive in inspiring surroundings!
                                     </p>
                                 </div>
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary bookBtn" id="bookBtn"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
@@ -216,7 +217,7 @@
                                         and
                                         great company make every moment unforgettable!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary bookBtn" id="bookBtn"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
@@ -233,7 +234,7 @@
                                         and
                                         unforgettable moments bring joy to all!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary bookBtn" id="bookBtn"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
@@ -298,20 +299,40 @@
             </a>
         </div>
 
+        <?php
+        $eventHallID = 4;
+
+        $getEventHallQuery = $conn->prepare("SELECT * FROM `resortamenities` WHERE `RScategoryID` = ?");
+        $getEventHallQuery->bind_param("i", $eventHallID,);
+        $getEventHallQuery->execute();
+        $result = $getEventHallQuery->get_result();
+        if ($result->num_rows > 0) {
+            $mainHall = '';
+            $miniHall = '';
+            while ($row = $result->fetch_assoc()) {
+                $serviceName = $row['RServiceName'];
+                if (stripos($serviceName, 'Main') !== false) {
+                    $mainHall = $row;
+                } elseif (stripos($serviceName, 'Mini') !== false) {
+                    $miniHall = $row;
+                }
+            }
+        }
+        ?>
 
 
         <div class="mainHallDescContainer">
-            <h3 class="mainHallDescTitle">Main Function Hall</h3>
+            <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
 
             <ul class="mainHallDescription" id="mainHallDesc">
-                <li>Maximum usage of 5 hours; ₱2,000 per hour extension fee.
+                <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
                 <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to 350 guests.</li>
+                <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
                 <li>One (1) air-conditioned private room.</li>
                 <li>Separate powder rooms/restrooms for males and females.</li>
             </ul>
 
-            <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ 30,000</h2>
+            <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
         </div>
 
 
@@ -322,12 +343,12 @@
             <h3 class="miniHallDescTitle">Mini Function Hall</h3>
 
             <ul class="miniHallDescription" id="miniHallDesc">
-                <li>Maximum usage of 5 hours; ₱2,000 per hour extension fee.
+                <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
                 <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to 50 guests.</li>
+                <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
             </ul>
 
-            <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱ 7,000</h2>
+            <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱ <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
         </div>
 
         <div id="carouselMiniHall" class="carousel slide" data-bs-ride="carousel">
@@ -452,6 +473,27 @@
             if (event.persisted) {
                 hideLoader();
             }
+        });
+    </script>
+
+    <!-- Function for book now button -->
+    <script>
+        const bookButtons = document.querySelectorAll('.bookBtn');
+
+        bookButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Login or Create an Account to Book',
+                    text: 'To proceed with a booking, please log in or create an account.',
+                    icon: 'info',
+                    confirmButtonText: 'Okay',
+                    showCancelButton: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'register.php';
+                    }
+                });
+            });
         });
     </script>
 

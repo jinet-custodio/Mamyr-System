@@ -39,7 +39,7 @@ function editRates(editBtn) {
     };
     // console.log(ratesData);
     // console.log(resortData['imageData']);
-    fetch("../../Function/Admin/Services/updateEntranceRates.php", {
+    fetch("../../../Function/Admin/Services/updateEntranceRates.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
