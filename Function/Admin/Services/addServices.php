@@ -205,8 +205,8 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
 
             $insertIntoService = $conn->prepare("INSERT INTO `services`(`resortServiceID`,`serviceType`) VALUES (?,?)");
             $insertIntoService->bind_param("is", $resortServiceID, $serviceType);
-            if (!$insertIntoService) {
-                throw new Exception("Failed to insert in services");
+            if (!$insertIntoService->execute()) {
+                throw new Exception("Failed to insert in services" . $insertIntoService->error());
             }
             $conn->commit();
             header("Location: ../../../Pages/Admin/roomList.php");

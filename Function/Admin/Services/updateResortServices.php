@@ -34,12 +34,14 @@ try {
             'message' => 'Updated Successfully'
         ]);
     } else {
+        error_log("Error Updating" . $updateServiceQuery->error);
         $conn->rollback();
         echo json_encode([
             'success' => false,
         ]);
     }
 } catch (Exception $e) {
+    error_log("Error Updating" . $updateServiceQuery->error);
     $conn->rollback();
     echo json_encode([
         'success' => false,

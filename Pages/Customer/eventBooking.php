@@ -180,94 +180,49 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Chicken</h6>
                             </div>
-                            <div class="dishListContainer" id="chickenContainerA">
-                                <!-- <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cPastil"
-                                        id="cPastil">
-                                    <label class="form-check-label" for="cPastil">
-                                        Chicken Pastil
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cBbq" id="cBbq">
-                                    <label class="form-check-label" for="cBbq">
-                                        Chicken Barbecue Sauce
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cCordonBleu"
-                                        id="cCordonBleu">
-                                    <label class="form-check-label" for="cCordonBleu">
-                                        Chicken Cordon Bleu
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cTeriyaki"
-                                        id="cTeriyaki">
-                                    <label class="form-check-label" for="cTeriyaki">
-                                        Chicken Teriyaki
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cButterGarlic"
-                                        id="cButterGarlic">
-                                    <label class="form-check-label" for="cButterGarlic">
-                                        Butter Garlic Chicken
-                                    </label>
-                                </div> -->
-                            </div>
+                            <div class="dishListContainer" id="chickenContainerA"></div>
                         </div>
                         <div class="pasta">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Pasta</h6>
                             </div>
-                            <div class="dishListContainer" id="pastaContainerA">
-                            </div>
+                            <div class="dishListContainer" id="pastaContainerA"></div>
                         </div>
                         <div class="pork">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Pork</h6>
                             </div>
-                            <div class="dishListContainer" id="porkContainerA">
-                            </div>
+                            <div class="dishListContainer" id="porkContainerA"></div>
                         </div>
                         <div class="veg">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Vegetables</h6>
                             </div>
-                            <div class="dishListContainer" id="vegieContainerA">
-
-                            </div>
+                            <div class="dishListContainer" id="vegieContainerA"></div>
                         </div>
                         <div class="beef">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Beef</h6>
                             </div>
-                            <div class="dishListContainer" id="beefContainerA">
-                            </div>
+                            <div class="dishListContainer" id="beefContainerA"></div>
                         </div>
                         <div class="seafood">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Seafood</h6>
                             </div>
-                            <div class="dishListContainer" id="seafoodContainerA">
-
-                            </div>
+                            <div class="dishListContainer" id="seafoodContainerA"> </div>
                         </div>
                         <div class="drinks">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Drinks</h6>
                             </div>
-                            <div class="dishListContainer" id="drinkContainer">
-
-                            </div>
+                            <div class="dishListContainer" id="drinkContainer"></div>
                         </div>
                         <div class="dessert">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Desserts</h6>
                             </div>
-                            <div class="dishListContainer" id="dessertContainer">
-                            </div>
+                            <div class="dishListContainer" id="dessertContainer"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -447,7 +402,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         // const calIcon = document.getElementById("calendarIcon");
 
         const minDate = new Date();
-        minDate.setDate(minDate.getDate() + 3);
+        minDate.setDate(minDate.getDate() + 9);
 
         //hotel calendar
         flatpickr('#eventDateTime', {
@@ -456,13 +411,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             dateFormat: "Y-m-d H:i",
             minTime: '00:00'
         });
-
-        // flatpickr('#checkOutDate', {
-        //     enableTime: true,
-        //     minDate: minDate,
-        //     dateFormat: "Y-m-d H:i ",
-        //     minTime: '00:00'
-        // });
     </script>
 
     <!-- Event Category and Hall-->
