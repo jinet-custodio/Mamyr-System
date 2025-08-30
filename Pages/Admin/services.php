@@ -158,13 +158,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <h5>Services</h5>
         </a>
 
-
-        <!-- <a href="revenue.php" class="nav-link">
-            <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
-            <h5>Revenue</h5>
-        </a> -->
-
-
         <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
             <h5>Payments</h5>
@@ -491,43 +484,58 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <th scope="col">Category</th>
                     <th scope="col">Availability</th>
                     <th scope="col">Action</th>
-
                 </thead>
 
-                <tbody>
-                    <tr>
-                        <td><input type="text" class="form-control" id="foodName"></td>
-                        <td><input type="text" class="form-control" id="foodPrice"></td>
-                        <td>
-                            <select id="foodCategory" name="foodCategory" class="form-select" required>
-                                <option value="" disabled selected>Category</option>
-                                <option value="chicken">Chicken</option>
-                                <option value="pork">Pork</option>
-                                <option value="beef">Beef</option>
-                                <option value="pasta">Pasta</option>
-                                <option value="vegetables">Vegetables</option>
-                                <option value="seafood">Seafood</option>
-                                <option value="drinks">Drinks</option>
-                                <option value="desserts">Desserts</option>
-                            </select>
-                        </td>
+                <?php
+                $getFoodQuery = $conn->prepare("SELECT mi.*, sa.availabilityName FROM menuitems mi
+                LEFT JOIN  serviceavailability sa ON mi.availabilityID = sa.availabilityID");
+                if ($getFoodQuery->execute()) {
+                    $foodResult = $getFoodQuery->get_result();
+                    if ($foodResult->num_rows > 0) {
+                        while ($row = $foodResult->fetch_assoc()) {
+                ?>
+                            <tbody>
+                                <tr id="menuData">
+                                    <input type="hidden" name="foodID" id="foodID" class="form-control foodID" value="<?= htmlspecialchars($row['foodItemID']) ?>">
+                                    <td><input type="text" class="form-control foodName" name="foodName" id="foodName" value="<?= htmlspecialchars($row['foodName']) ?>" readonly></td>
+                                    <td><input type="text" class="form-control foodPrice" name="foodPrice" id="foodPrice" value="<?= htmlspecialchars($row['foodPrice']) ?>" readonly></td>
+                                    <td>
+                                        <select id="foodCategory" name="foodCategory" class="form-select foodCategory" disabled>
+                                            <option value="" disabled <?= empty($row['foodCategory']) ? 'selected' : '' ?>>Category</option>
+                                            <option value="chicken" <?= strtolower($row['foodCategory']) === 'chicken' ? 'selected' : '' ?>>Chicken</option>
+                                            <option value="pork" <?= strtolower($row['foodCategory']) === 'pork' ? 'selected' : '' ?>>Pork</option>
+                                            <option value="beef" <?= strtolower($row['foodCategory']) === 'beef' ? 'selected' : '' ?>>Beef</option>
+                                            <option value="pasta" <?= strtolower($row['foodCategory']) === 'pasta' ? 'selected' : '' ?>>Pasta</option>
+                                            <option value="vegetables" <?= strtolower($row['foodCategory']) === 'vegetables' ? 'selected' : '' ?>>Vegetables</option>
+                                            <option value="seafood" <?= strtolower($row['foodCategory']) === 'seafood' ? 'selected' : '' ?>>Seafood</option>
+                                            <option value="drink" <?= strtolower($row['foodCategory']) === 'drink' ? 'selected' : '' ?>>Drinks</option>
+                                            <option value="dessert" <?= strtolower($row['foodCategory']) === 'dessert' ? 'selected' : '' ?>>Desserts</option>
+                                        </select>
+                                    </td>
 
 
-                        <td> <select id="foodAvailability" name="foodAvailability" class="form-select" required>
-                                <option value="" disabled selected>Select Availability</option>
-                                <option value="available" id="available">Available</option>
-                                <option value="unavailable" id="unavailable">Unavailable</option>
-
-                            </select>
-                        </td>
-                        <td>
-                            <div class="buttonContainer">
-                                <button class="btn btn-primary" id="editCateringService" onclick="edit()">Edit</button>
-                                <button class="btn btn-danger cancelBtn" id="deleteCateringService">Delete</button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
+                                    <td>
+                                        <select id="foodAvailability" name="foodAvailability" class="form-select foodAvailability" disabled>
+                                            <option value="" disabled <?= empty($row['availabilityName']) ? 'selected' : '' ?>>Select Availability</option>
+                                            <option value="1" <?= $row['availabilityName'] === 'Available' ? 'selected' : '' ?>>Available</option>
+                                            <option value="5" <?= $row['availabilityName'] === 'Unavailable' ? 'selected' : '' ?>>Unavailable</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="buttonContainer">
+                                            <button class="btn btn-primary editMenuItem" onclick="editMenuItem(this)"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
+                                            <button class="btn btn-danger cancelBtn cancelEditItem" onclick="cancelEditItem(this)" disabled><i class="fa-solid fa-delete-left"></i>Cancel</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                    <?php
+                        }
+                    }
+                } else {
+                    error_log("Error executing " . $getFoodQuery->error);
+                }
+                    ?>
+                            </tbody>
             </table>
         </div>
 
@@ -629,7 +637,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="saveService">Save</button>
+                            <button type="submit" class="btn btn-primary" id="saveService" name="addResortService">Save</button>
                         </div>
                     </div>
                 </div>
@@ -715,7 +723,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="saveRate">Save</button>
+                            <button type="submit" class="btn btn-primary" id="saveRate" name="addResortRates">Save</button>
                         </div>
                     </div>
                 </div>
@@ -794,13 +802,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </div>
                         <div class="modal-body">
                             <div class="input-container">
-                                <label for="foodName">Food Name </label>
-                                <input type="text" class="form-control" id="foodName" name="foodName">
+                                <label for="foodName">Food Name</label>
+                                <input type="text" class="form-control" id="foodName" name="foodName" required>
                             </div>
 
                             <div class="input-container">
                                 <label for="foodPrice">Price</label>
-                                <input type="text" class="form-control" id="foodPrice" name="foodPrice">
+                                <input type="text" class="form-control" id="foodPrice" name="foodPrice" required>
                             </div>
 
                             <div class="input-container">
@@ -813,32 +821,45 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     <option value="pasta">Pasta</option>
                                     <option value="vegetables">Vegetables</option>
                                     <option value="seafood">Seafood</option>
-                                    <option value="drinks">Drinks</option>
-                                    <option value="desserts">Desserts</option>
+                                    <option value="drink">Drinks</option>
+                                    <option value="dessert">Desserts</option>
                                 </select>
                             </div>
 
                             <div class="input-container">
                                 <label for="foodAvailability">Food Availability</label>
-                                <select id="foodAvailability" name="foodAvailability" class="form-select" required>
+                                <select id="foodAvailability" name="foodAvailability" class="form-select">
                                     <option value="" disabled selected>Select Availability</option>
-                                    <option value="available">Available</option>
-                                    <option value="unavailable">Unavailable</option>
+                                    <?php
+                                    $UnavailableName = 'Unavailable';
+                                    $AvailableName = 'Available';
+                                    $getAvailability = $conn->prepare('SELECT * FROM serviceavailability WHERE availabilityName = ? OR availabilityName = ?');
+                                    $getAvailability->bind_param("ss", $UnavailableName, $AvailableName);
+                                    if ($getAvailability->execute()) {
+                                        $result = $getAvailability->get_result();
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
+                                                    <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                    <?php
+                                            }
+                                        }
+                                        $result->free();
+                                        $getAvailability->close();
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="saveRate">Save</button>
+                            <button type="submit" class="btn btn-primary" id="saveFood" name="addFoodItem">Save</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
-
-
-
-
     </div>
 
 
@@ -895,7 +916,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
 
     <!-- Button Adding a service function -->
-    <script>
+    <!-- <script>
         // console.log("Script loaded2");
         const addResortServiceBtn = document.getElementById('addResortServiceBtn');
         const addResortRatesBtn = document.getElementById('addResortRatesBtn');
@@ -913,7 +934,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             action = 'addResortRates';
             modalAddResortRatesBtn.setAttribute('name', action);
         });
-    </script>
+    </script> -->
 
     <!-- Table JS -->
     <script>
@@ -1058,7 +1079,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- For editing, cancelling, saving a service -->
     <script src="../../Assets/JS/Services/resortFunc.js"></script>
     <script src="../../Assets/JS/Services/resortRateFunc.js"></script>
-
+    <script src="../../Assets/JS/Services/cateringFunc.js"></script>
 
 
 </body>
