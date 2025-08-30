@@ -2,15 +2,16 @@
 require '../../../Config/dbcon.php';
 
 
-
-// === Handle text content updates (JSON) ===
 if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
     $data = json_decode(file_get_contents("php://input"), true);
 
-
     if (!$data || !isset($data['sectionName'])) {
         http_response_code(400);
-        echo "Invalid input";
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Invalid input'
+        ]);
         exit;
     }
 
@@ -22,6 +23,12 @@ if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
         $stmt->bind_param("sss", $content, $sectionName, $title);
         $stmt->execute();
     }
+ 
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => true,
+        'message' => 'Content updated successfully'
+    ]);
     exit;
 }
 
@@ -61,6 +68,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['
     echo json_encode(['success' => true, 'message' => 'Image updated successfully']);
     exit;
 }
-
-http_response_code(400);
-echo json_encode(['success' => false, 'message' => 'Invalid request']);

@@ -50,6 +50,22 @@
   }
 }
 
+#amenitiesDropdown, .show {
+  width: 100%;
+}
+
+ul.dropdown-menu {
+  margin-top: -3vw !important;
+}
+
+a.dropdown-item {
+  font-size:  1.6vw;
+}
+
+.amenities {
+  margin-top: 0;
+}
+
 .list-group {
   font-family: "Lora";
   font-size: 18px;

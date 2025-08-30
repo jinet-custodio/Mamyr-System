@@ -24,6 +24,8 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     exit();
 }
 
+
+$_SESSION['edit_mode'] = true;
 $_SESSION['last_activity'] = time();
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -60,7 +62,8 @@ $userRole = $_SESSION['userRole'];
 
         <div class="titleContainer">
             <h2 class="pageTitle" id="title">Edit Website</h2>
-            <i class="fa-sharp fa-regular fa-circle-question" style="color: #559cd3;display: none;cursor: pointer;" id="help-circle"></i>
+            <i class="fa-sharp fa-regular fa-circle-question" style="color: #559cd3;display: none;cursor: pointer;"
+                id="help-circle"></i>
         </div>
 
 
@@ -69,9 +72,17 @@ $userRole = $_SESSION['userRole'];
                     src="../../../Assets/Images/Icon/landing-page.png" alt="Landing Page" class="buttonIcon">Landing
                 Page</button>
 
-            <button class="btn btn-info" id="amenities" onclick="amenities()"><img
-                    src="../../../Assets/Images/Icon/amenities.png" alt="Amenities"
-                    class="buttonIcon">Amenities</button>
+            <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" id="amenitiesDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="../../../Assets/Images/Icon/amenities.png" alt="Amenities" class="buttonIcon"> Amenities
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="amenitiesDropdown">
+                    <li><a class="dropdown-item" href="#" onclick="amenities()">Resort Amenities</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="ratesAndHotel()">Rates and Hotel Rooms</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="events()">Events</a></li>
+                </ul>
+            </div>
 
             <button class="btn btn-info" id="blog" onclick="blog()"><img src="../../../Assets/Images/Icon/blog.png"
                     alt="Blog" class="buttonIcon">Blog</button>
@@ -88,10 +99,13 @@ $userRole = $_SESSION['userRole'];
     </div>
 
     <div class="container-fluid landingPage" id="landingPageContainer">
-        <iframe src="../../../index.php?edit=true" id="editFrame" style="width: 100%; height: 768px;"></iframe>
+        <iframe src="../../../index.php?" class="editFrame" style="width: 100%; height: 100vh; "></iframe>
     </div>
     <div class="container-fluid aboutPage" id="aboutContainer">
-        <iframe src="../../about.php?edit=true" id="editFrame" style="width: 100%; height: 768px;"></iframe>
+        <iframe src="../../about.php" class="editFrame" style="width: 100%;  height: 100vh; "></iframe>
+    </div>
+    <div class="container-fluid amenitiesPage" id="amenitiesContainer">
+        <iframe src="../../amenities.php?" class="editFrame" style="width: 100%; height: 100vh;"></iframe>
     </div>
 
     <!-- Bootstrap Link -->
@@ -108,51 +122,68 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        const pagesContainer = document.getElementById("pagesContainer")
-        const landingPageContainer = document.getElementById("landingPageContainer")
-        const icon = document.getElementById("help-circle")
-        const aboutContainer = document.getElementById("aboutContainer")
+    const pagesContainer = document.getElementById("pagesContainer");
+    const landingPageContainer = document.getElementById("landingPageContainer");
+    const icon = document.getElementById("help-circle");
+    const aboutContainer = document.getElementById("aboutContainer");
+    const amenitiesContainer = document.getElementById("amenitiesContainer");
 
+    landingPageContainer.style.display = "none";
+    aboutContainer.style.display = "none";
+    amenitiesContainer.style.display = "none";
+
+    function landingPage() {
+        hideAllContainers();
+        landingPageContainer.style.display = "block";
+        landingPageContainer.querySelector("iframe").style.display = "block";
+        icon.style.display = "block";
+        pagesContainer.style.display = "none";
+        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+        document.getElementById("title").innerHTML = "Landing Page";
+    }
+
+    function about() {
+        hideAllContainers();
+        aboutContainer.style.display = "block";
+        aboutContainer.querySelector("iframe").style.display = "block";
+        icon.style.display = "block";
+        pagesContainer.style.display = "none";
+        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+        document.getElementById("title").innerHTML = "About Page";
+    }
+
+    function amenities() {
+        hideAllContainers();
+        amenitiesContainer.style.display = "block";
+        amenitiesContainer.querySelector("iframe").style.display = "block";
+        icon.style.display = "block";
+        pagesContainer.style.display = "none";
+        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+        document.getElementById("title").innerHTML = "Amenities Page";
+    }
+
+
+    function hideAllContainers() {
         landingPageContainer.style.display = "none";
-        aboutContainer.style.display = "none"
+        aboutContainer.style.display = "none";
+        amenitiesContainer.style.display = "none";
 
-        function landingPage() {
-            if (landingPageContainer.style.display == "none") {
-                landingPageContainer.style.display = "block";
-                icon.style.display = "block";
-                pagesContainer.style.display = "none";
-                document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer"
-                document.getElementById("title").innerHTML = "Landing Page"
-
-            } else {
-                landingPageContainer.style.display = "block";
-            }
-        }
-
-        function about() {
-            if (aboutContainer.style.display == "none") {
-                aboutContainer.style.display = "block";
-                icon.style.display = "block";
-                pagesContainer.style.display = "none";
-                document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer"
-                document.getElementById("title").innerHTML = "About Page"
-
-            } else {
-                about.style.display = "block";
-            }
-        }
+        landingPageContainer.querySelector("iframe").style.display = "none";
+        aboutContainer.querySelector("iframe").style.display = "none";
+        amenitiesContainer.querySelector("iframe").style.display = "none";
+    }
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-        document.getElementById("help-circle").addEventListener("click", function() {
-            Swal.fire({
-                title: "How it works",
-                text: "Texts and images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
-                icon: "info",
-                confirmButtonText: "Got it!"
-            });
+    icon.addEventListener("click", function() {
+        Swal.fire({
+            title: "How it works",
+            text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
+            icon: "info",
+            confirmButtonText: "Got it!"
         });
+    });
     </script>
 
 </body>

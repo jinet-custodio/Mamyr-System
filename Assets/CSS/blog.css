@@ -63,10 +63,6 @@ nav {
   margin-top: 5px !important;
 }
 
-#toggledNav {
-    position: absolute !important;
-    right: 2vw !important;
-}
 
 .navbar.scrolled {
   background-color: rgb(255, 255, 255);
@@ -251,9 +247,9 @@ button.notifBtn {
   padding: 1vw;
 }
 
-.blogDescription p,
+.blogDescription,
 .eventType p {
-  font-size: 1.4vw;
+  font-size: 1.5vw;
 }
 
 .featuredpost img {
@@ -367,100 +363,8 @@ button.notifBtn {
 .modal-footer button {
   font-size: 1.3vw;
 }
-
 /* end of code for modal */
-
-footer {
-  /* border: 1px solid black; */
-  margin-top: auto !important;
-  margin-bottom: 0 !important;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 10vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 1.5vw;
-  font-weight: bold;
-  color: #ffff;
-}
-
-.footerLine {
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  opacity: 1;
-}
-
-.info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5vw;
-}
-.locationFooter {
-  /* border: 1px solid black; */
-  width: 30%;
-}
-
-.reservationTitle,
-.locationTitle {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 1.5vw;
-  color: #fff;
-}
-
-.numberFooter,
-.emailAddressTextFooter,
-.addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: 1vw;
-}
-
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  margin: 0.3vw;
-}
-
-.socialIcons a {
-  text-decoration: none;
-  padding: 0.8vw;
-  background-color: rgb(255, 255, 255);
-  margin: 5px;
-  border-radius: 50%;
-}
-
-.socialIcons a i {
-  font-size: 2vw;
-  color: #3e849e;
-  opacity: 0.9;
-}
-
-.socialIcons a:hover {
-  background-color: white;
-  transition: 0.5s;
-}
-
-.socialIcons a:hover i {
-  color: #c1a534;
-  transition: 0.5s;
-}
-
+ 
 .construction-wrapper {
   margin-top: 8vw;
   margin-bottom: 20vw;
@@ -490,6 +394,10 @@ footer {
     align-items: center;
   }
 
+  .blogDescription {
+    font-size: 2.3vw;
+  }
+
   .account-nav img {
     height: clamp(5vw, 6.5vw, 7.1vw);
     aspect-ratio: 1;
@@ -514,6 +422,13 @@ footer {
   .nav-item {
     font-size: clamp(10px, calc(1.5vh + 4px), 12px);
   }
+
+    .post img {
+    width: 25vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+  }
+
 }
 
 /* Tablet portrait */
@@ -695,6 +610,8 @@ footer {
 
   .post img {
     width: 25vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
   }
 
   .othersEventType p,
@@ -709,34 +626,6 @@ footer {
 
   .othersDescription {
     font-size: clamp(1.7vw, calc(1.4vw + 2px), 1.2vw) !important;
-  }
-
-  .mb-0 {
-    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
-  }
-
-  .logo {
-    width: 15vw;
-  }
-
-  .reservationTitle,
-  .locationTitle {
-    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
-  }
-
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
-  }
-
-  .socialIcons a {
-    justify-items: center;
-    align-items: center;
-  }
-
-  .socialIcons a i {
-    font-size: 3vw;
   }
 }
 
@@ -775,6 +664,11 @@ footer {
     .fc-daygrid-day-top a {
       font-size: clamp(2vw, 1.8vw, 1.6vw);
     }
+    #toggledNav {
+    position: absolute !important;
+    right: 2vw !important;
+}
+
 }
 
 @media (max-width: 991.98px) and (orientation:portrait) {
@@ -788,6 +682,11 @@ footer {
   a.dropdown-item {
     font-size: 1.8vw;
   }
+  #toggledNav {
+    position: absolute !important;
+    right: 2vw !important;
+}
+
 
 }
 
@@ -932,7 +831,7 @@ footer {
     font-size: clamp(3.3vw, calc(2.8vw + 2px), 2.6vw) !important;
   }
 
-  .blogDescription p {
+  .blogDescription {
     font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
@@ -979,42 +878,5 @@ footer {
 
   .othersDescription {
     font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.7vw) !important;
-  }
-
-  .mb-0 {
-    font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
-  }
-
-  .logo {
-    width: 18vw;
-  }
-
-  .reservation {
-    width: 20%;
-  }
-
-  .locationFooter {
-    width: 50%;
-  }
-
-  .reservationTitle,
-  .locationTitle {
-    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
-  }
-
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
-  }
-
-  .socialIcons a {
-    justify-items: center;
-    align-items: center;
-    padding: 0.5vw 1.5vw;
-  }
-
-  .socialIcons a i {
-    font-size: 3.5vw;
   }
 }
