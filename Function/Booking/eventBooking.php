@@ -2,38 +2,58 @@
 
 require '../../Config/dbcon.php';
 session_start();
+date_default_timezone_set('Asia/Manila');
 
-// Made only for event booking, hotel and  resort booking still to follow
-
-// Made only for event booking, hotel and  resort booking still to follow
+$userID = intval($_SESSION['userID']);
+$userRole = intval($_SESSION['userRole']);
 
 if (isset($_POST['eventBook'])) {
     $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
-    $eventPackage = mysqli_real_escape_string($conn, $_POST['eventPackage']);
-    $additionalNotes = mysqli_real_escape_string($conn, $_POST['additionalNotes']);
-    $other_input = mysqli_real_escape_string($conn, $_POST['other_input']);
-    $eventDate = mysqli_real_escape_string($conn, $_POST['eventDate']);
-    $userID =  $_SESSION['userID'];
-    $eventDuration = mysqli_real_escape_string($conn, $_POST['eventDuration']);
+    $guestNo = intval($_POST['guestNo']);
+    $eventVenue = mysqli_real_escape_string($conn, $_POST['eventVenue']);
+    $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
+    $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
 
-    $duration = floatval($eventDuration);
+    //Date and time
+    $eventDate = mysqli_real_escape_string($conn, $_POST['eventDateTime']);
+    $eventStartTime = mysqli_real_escape_string($conn, $_POST['eventStartTime']);
+    $eventEndTime = mysqli_real_escape_string($conn, $_POST['eventEndTime']);
 
-    $startDateTime = new DateTime($eventDate);
-    $intervalSpec = 'PT' . (int)round($duration * 60) . 'M'; // Convert hours to minutes
-    $endDateTime = clone $startDateTime;
-    $endDateTime->add(new DateInterval($intervalSpec));
+    //Food 
+    $chickenSelected = !empty($_POST['chickenSelections']) ? array_map('trim', explode(',', $_POST['chickenSelections'])) : [];
+    $porkSelected = !empty($_POST['porkSelections']) ? array_map('trim', explode(',', $_POST['porkSelections'])) : [];
+    $pastaSelected = !empty($_POST['pastaSelections']) ? array_map('trim', explode(',', $_POST['pastaSelections'])) : [];
+    $beefSelected = !empty($_POST['beefSelections']) ? array_map('trim', explode(',', $_POST['beefSelections'])) : [];
+    $vegieSelected = !empty($_POST['vegieSelections']) ? array_map('trim', explode(',', $_POST['vegieSelections'])) : [];
+    $seafoodSelected = !empty($_POST['seafoodSelections']) ? array_map('trim', explode(',', $_POST['seafoodSelections'])) : [];
+    $drinkSelected = !empty($_POST['drinkSelections']) ? array_map('trim', explode(',', $_POST['drinkSelections'])) : [];
+    $dessertSelected = !empty($_POST['dessertSelections']) ? array_map('trim', explode(',', $_POST['dessertSelections'])) : [];
 
-    $startDateStr = $startDateTime->format('Y-m-d');
-    $endDate = $endDateTime->format('Y-m-d');
+    $startDateObj = new DateTime($eventDate);
+    $endDateObj = clone $startDateObj;
+
+    $startTime = strtotime($eventStartTime);
+    $endTime = strtotime($eventEndTime);
+
+    $startDateObj->setTimestamp($startTime);
+    $endDateObj->setTimestamp($endTime);
+
+    $startDate = $startDateObj->format('Y-m-d H:i:s');
+    $endDate = $endDateObj->format('Y-m-d H:i:s');
+
+
+
+
+
 
     //if  babaguhin yung data type ng dates to datetime, ito magiging code 
     // $startDateStr = $startDateTime->format('Y-m-d H:i:s');
     // $endDateStr = $endDateTime->format('Y-m-d H:i:s');
 
 
-    if ($eventPackage != '' || $additionalNotes != '') {
+    if ($eventPackage != '' || $additionalRequest != '') {
         $booking = "INSERT INTO bookings( `userID`, `packageID`, `additionalRequest`, `startDate`, `endDate`)
-        VALUES('$userID', '$eventPackage', '$additionalNotes', '$eventDate', '$endDate')";
+        VALUES('$userID', '$eventPackage', '$additionalRequest', '$eventDate', '$endDate')";
 
         $bookingResult = mysqli_query($conn, $booking);
 
@@ -44,49 +64,3 @@ if (isset($_POST['eventBook'])) {
         }
     }
 }
-
-//Get all the services
-// function getServices($conn)
-// {
-//     $selectServices = "SELECT * FROM services";
-//     $resultServices = mysqli_query($conn, $selectServices);
-//     if (mysqli_num_rows($resultServices) > 0) {
-//         $servicesData = mysqli_fetch_assoc($resultServices);
-//         while ($servicesData) {
-//             $services[] = $servicesData;
-//         }
-//     }
-
-//     return $services;
-// }
-
-//Get all the packages
-// function getPackages($conn)
-// {
-//     $selectPackages = "SELECT * FROM packages";
-//     $resultPackages = mysqli_query($conn, $selectPackages);
-//     if (mysqli_num_rows($resultPackages) > 0) {
-//         $packagesData = mysqli_fetch_assoc($resultPackages);
-//         while ($packagesData) {
-//             $packages[] = $packagesData;
-//         }
-//     }
-
-//     return $packages;
-// }
-
-
-//Get all the custom packages
-// function getCustomPackages($conn)
-// {
-//     $selectCustomPackages = "SELECT * FROM custompackages";
-//     $resultCustomPackages = mysqli_query($conn, $selectCustomPackages);
-//     if (mysqli_num_rows($resultCustomPackages) > 0) {
-//         $custompackagesData = mysqli_fetch_assoc($resultCustomPackages);
-//         while ($custompackagesData) {
-//             $customPackages[] = $custompackagesData;
-//         }
-//     }
-
-//     return $customPackages;
-// }

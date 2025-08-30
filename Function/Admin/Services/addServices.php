@@ -224,6 +224,25 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         if (isset($insertHotel)) $insertHotel->close();
         if (isset($insertIntoService)) $insertIntoService->close();
     }
+} elseif (isset($_POST['addFoodItem'])) {
+    $foodName = mysqli_real_escape_string($conn, $_POST['foodName']) ?? '';
+    $foodPrice = floatval($_POST['foodPrice']) ?? '';
+    $foodCategory = strtoupper(mysqli_real_escape_string($conn, $_POST['foodCategory'])) ?? '';
+    $foodAvailability = intval($_POST['foodAvailability']) ?? 1;
+
+
+    if (empty($foodName) || empty($foodPrice) || empty($foodCategory)) {
+        header('Location: ../../../Pages/Admin/services.php?action=emptyCateringField');
+    }
+
+    $insertFoodItem = $conn->prepare("INSERT INTO `menuitems`(`foodName`,`foodPrice`, `foodCategory`, `availabilityID`) VALUES (?,?,?,?)");
+    $insertFoodItem->bind_param("sdsi", $foodName, $foodPrice, $foodCategory, $foodAvailability);
+    if ($insertFoodItem->execute()) {
+        header('Location: ../../../Pages/Admin/services.php?action=menuAdded&page=catering');
+    } else {
+        error_log("Error: " . $insertFoodItem->error);
+        header('Location: ../../../Pages/Admin/services.php?action=executionFailed');
+    }
 } else {
     header("Location: ../../../Pages/Admin/roomList.php?result=error");
     exit();
