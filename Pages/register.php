@@ -177,17 +177,16 @@ resetExpiredOTPs($conn);
 
         <div class="toggle-box">
             <div class="toggle-panel toggle-left">
-                <h1 class="welcome" id="welcomeLogin">Welcome to Mamyr Resort and Events Place!</h1>
-                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" class="mamyrLogo">
-                <!-- <p>Don't have an account?</p>
-                <a href="userType.php" class="btn btn-outline-light signUpLink">Sign Up
-                </a> -->
-
                 <div class="back-icon-container-login">
                     <a href="../index.php">
                         <img src="../Assets/Images/Icon/home.png" alt="Go back" class="backArrow">
                     </a>
                 </div>
+                <h1 class="welcome" id="welcomeLogin">Welcome to Mamyr Resort and Events Place!</h1>
+                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" class="mamyrLogo">
+                <!-- <p>Don't have an account?</p>
+                <a href="userType.php" class="btn btn-outline-light signUpLink">Sign Up
+                </a> -->
             </div>
 
 
