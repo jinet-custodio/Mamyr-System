@@ -428,7 +428,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <img id="modalImagePreview" src="" alt="" class="img-thumbnail mb-3" style="max-width: 250px;">
+                    <img id="modalImagePreview" src="" alt="" class="img-thumbnail mb-3">
 
                     <input type="file" id="modalImageUpload" class="form-control mb-2">
 
@@ -667,15 +667,31 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     })
                     .then(res => res.json())
                     .then(response => {
+                        console.log("Full Response:", response);
                         if (response.success) {
-                            console.log(`Image ${wcImageID} updated successfully.`);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Image Updated!',
+                                text: `Image ${altText} has been updated`,
+                                timer: 2000, // Optional: auto-close after 2 seconds
+                                showConfirmButton: false
+                            });
                         } else {
-                            alert(`Failed to update image ${wcImageID}: ` + response.message);
+                            Swal.fire({
+                                icon: 'error',
+                                title: `Update Failed for Image ${wcImageID}`,
+                                text: `Failed to update image ${wcImageID}: ` + response
+                                    .message,
+                            });
                         }
                     })
                     .catch(err => {
                         console.error(`Image update failed for ${wcImageID}:`, err);
-                        alert('An error occurred while updating an image.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'An error occurred!',
+                            text: `Something went wrong while updating the image ${wcImageID}.`,
+                        });
                     });
             });
         }

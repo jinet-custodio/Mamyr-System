@@ -1,5 +1,8 @@
 <?php
 require '../../../Config/dbcon.php';
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+error_reporting(E_ALL);
 
 
 if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
@@ -43,28 +46,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['
     $stmt->execute();
 
     $folder = $_POST['folder'] ?? 'landingPage'; // fallback default
-    $folder = preg_replace('/[^a-zA-Z0-9_\-]/', '', $folder); // sanitize folder name
-
+    if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Image upload error: ' . $_FILES['image']['error']]);
+        exit;
+    }
+        $targetDir = "../../../Assets/Images/" . $folder;
+        $targetPath = $targetDir . "/" . $filename;
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $filename = basename($_FILES['image']['name']);
         $targetDir = "../../../Assets/Images/" . $folder;
         $targetPath = $targetDir . "/" . $filename;
-
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0755, true);
         }
 
         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
             $stmt = $conn->prepare("UPDATE websitecontentimages SET imageData = ?, uploadedAt = NOW() WHERE WCImageID = ?");
+            if (!$stmt) {
+            echo json_encode(['success' => false, 'message' => 'Database prepare failed']);
+            exit;
+            }
             $stmt->bind_param("si", $filename, $wcImageID);
             $stmt->execute();
-            $stmt->execute();
+            if (!$stmt->execute()) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Database execute failed']);
+                exit;
+            }
         } else {
+            header('Content-Type: application/json');
             echo json_encode(['success' => false, 'message' => 'Failed to move uploaded file']);
             exit;
         }
     }
 
-    echo json_encode(['success' => true, 'message' => 'Image updated successfully']);
+    echo json_encode(['success' => true, 'message' => 'Image updated successfully.', 'path_returned' => $targetPath, ]);
     exit;
 }

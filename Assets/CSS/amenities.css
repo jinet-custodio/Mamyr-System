@@ -178,6 +178,33 @@ nav {
   padding: 2px;
 }
 
+/* modal css */
+
+.modal-dialog {
+  max-width: 60% !important;
+}
+.modal-body {
+  max-height: 500px;
+
+  overflow-y: auto !important;
+}
+.modal-title {
+  margin: auto;
+  font-size: 2vw;
+}
+
+.modal-footer {
+  display: flex;
+  margin: auto;
+}
+
+#declineBtn,
+#acceptBtn {
+  width: 15vw;
+  border-radius: 30px;
+}
+/*end of modal css */
+
 /* Div for loader */
 #loaderOverlay {
   position: fixed;

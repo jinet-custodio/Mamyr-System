@@ -399,7 +399,7 @@ input[type="password"]::-webkit-search-cancel-button {
   border-radius: 30px;
 }
 
-/* modal css */
+/*end of modal css */
 
 @media screen and (max-width: 650px) {
   .container {
