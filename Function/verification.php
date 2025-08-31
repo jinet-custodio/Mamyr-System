@@ -37,8 +37,8 @@ if (isset($_POST['verify-btn'])) {
                 if (strtotime($stored_expiration) > strtotime($time_now)) {
                     if ($action === 'Register') {
                         $conn->begin_transaction();
-                        $changeStatus = $conn->prepare("UPDATE users SET userStatusID = NULL, userOTP = NULL, OTP_expiration_at = ? WHERE email = ?");
-                        $changeStatus->bind_param("isss", $userStat, $userOTP, $otpExpirationDate, $email);
+                        $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
+                        $changeStatus->bind_param("is", $userStat, $email);
                         if ($changeStatus->execute()) {
                             header("Location: ../Pages/register.php?action=successVerification");
                             exit;
