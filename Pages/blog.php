@@ -11,7 +11,7 @@ require '../Config/dbcon.php'
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Blog</title>
-    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
+    <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/blog.css">
     <!-- <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css"> -->
     <!-- link for online bootstrap CDN  -->
@@ -33,11 +33,11 @@ require '../Config/dbcon.php'
 
             <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
-                    <li class="nav-item dropdown text-center">
+                    <li class="nav-item dropdown">
                         <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             AMENITIES
@@ -69,14 +69,14 @@ require '../Config/dbcon.php'
 
         <main>
             <?php
-            $getWebContent = "SELECT * FROM websiteContents WHERE sectionName = 'Blog'";
+            $getWebContent = "SELECT * FROM websitecontents WHERE sectionName = 'Blog'";
             $result = mysqli_query($conn, $getWebContent);
 
             $contentMap = [];
             $blogPosts = [];
             $imagesByContentID = [];
 
-            $getImagesQuery = "SELECT contentID, imageData, altText FROM websiteContentImages ORDER BY imageOrder ASC";
+            $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimages ORDER BY imageOrder ASC";
             $imageResult = mysqli_query($conn, $getImagesQuery);
 
             if ($imageResult && mysqli_num_rows($imageResult) > 0) {

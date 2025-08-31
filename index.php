@@ -1,11 +1,11 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+session_start();
 require 'Config/dbcon.php';
 
 //for edit website, this will enable edit mode from the iframe
-$editMode = isset($_GET['edit']) && $_GET['edit'] === 'true';
-
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
 $getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
@@ -44,7 +44,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr Resort and Events Place </title>
-    <link rel="icon" type="image/x-icon" href="assets/Images/Icon/favicon.png ">
+    <link rel="icon" type="image/x-icon" href="Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="Assets/CSS/landingPage.css">
     <!-- <link rel="stylesheet" href="Assets/CSS/bootstrap.min.css"> -->
     <!-- online stylesheet link for bootstrap -->
@@ -108,7 +108,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="mamyrTitle">
                 <?php
                 $businessName = str_split($contentMap['DisplayName']);
-                $display = strtoupper(implode(" ", $businessName))
+                $display = strtoupper(implode(" ", $businessName));
                 ?>
                 <h1 class="name">
                     <?php if ($editMode): ?>
@@ -213,8 +213,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
 
         <div class="gallery">
-            <hr class="line">
-            <h4 class="galleryTitle">Gallery </h4>
+            <div class="galleryTop" style="width:50%">
+                <hr class="line">
+                <h4 class="galleryTitle">Gallery </h4>
+            </div>
             <?php if (isset($imageMap['FullName'])): ?>
             <div id="carouselGallery" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner ">
@@ -298,48 +300,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="googleMap" id="googleMap"></div>
         </div>
 
-
-
-
-
         <?php if (!$editMode): ?>
-        <footer class="py-1 ">
-            <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-
-                <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-
-                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>
-                </h3>
-            </div>
-
-            <div class="info">
-                <div class="reservation">
-                    <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>
-                    </h4>
-                    <h4 class="emailAddressTextFooter">
-                        <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>
-                    </h4>
-                </div>
-                <div class="locationFooter">
-                    <h4 class="locationTitle">Location</h4>
-                    <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>
-                    </h4>
-                </div>
-            </div>
-            <hr class="footerLine">
-            <div class="socialIcons">
-                <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
-                        class='bx bxl-facebook-circle'></i></a>
-                <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>"><i
-                        class='bx bxl-gmail'></i></a>
-                <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
-                    <i class='bx bxs-phone'></i>
-                </a>
-
-            </div>
-        </footer>
+        <?php include 'Pages/footer.php'; ?>
         <?php endif; ?>
+
     </div>
 
 
@@ -434,82 +398,93 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const saveBtn = document.getElementById('saveChangesBtn');
+    document.addEventListener('DOMContentLoaded', () => {
+        const saveBtn = document.getElementById('saveChangesBtn');
+        document.body.style.display = 'block';
 
-            saveBtn?.addEventListener('click', () => {
-                // === 1. Save text-based website content ===
-                const inputs = document.querySelectorAll('.editable-input');
-                const data = {
-                    sectionName: 'BusinessInformation'
-                };
+        saveBtn?.addEventListener('click', () => {
+            saveTextContent();
+            saveEditableImages();
+        });
 
-                inputs.forEach(input => {
-                    const title = input.getAttribute('data-title');
-                    const value = input.value;
-                    data[title] = value;
+        function saveTextContent() {
+            const inputs = document.querySelectorAll('.editable-input');
+            const data = {
+                sectionName: 'BusinessInformation'
+            };
+
+            inputs.forEach(input => {
+                const title = input.getAttribute('data-title');
+                const value = input.value;
+                data[title] = value;
+            });
+
+            fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.text())
+                .then(text => {
+                    if (!text) throw new Error('Empty response');
+                    return JSON.parse(text);
+                })
+                .then(response => {
+                    if (response.success) {
+                        console.log('Text content updated successfully.');
+                    } else {
+                        alert('Failed to update text content: ' + response.message);
+                    }
+                })
+                .catch(err => {
+                    console.error('Error saving content:', err);
+                    alert('An error occurred while saving content.');
                 });
+        }
+
+        function saveEditableImages() {
+            const editableImages = document.querySelectorAll('.editable-img');
+
+            editableImages.forEach(img => {
+                const wcImageID = img.dataset.wcimageid;
+                const altText = img.dataset.alttext;
+                const folder = img.dataset.folder || '';
+                const file = img.fileObject || null;
+
+                if (!wcImageID || (!file && !altText)) return;
+
+                const formData = new FormData();
+                formData.append('wcImageID', wcImageID);
+                formData.append('altText', altText);
+                formData.append('folder', folder);
+
+                if (file) {
+                    formData.append('image', file);
+                }
 
                 fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
+                        body: formData
                     })
                     .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
+                    .then(response => {
+                        if (response.success) {
                             console.log(`Image ${wcImageID} updated successfully.`);
                         } else {
-                            alert(`Failed to update image ${wcImageID}: ` + data
-                                .message);
+                            alert(`Failed to update image ${wcImageID}: ` + response.message);
                         }
                     })
                     .catch(err => {
-                        console.error('Error saving content:', err);
-                        alert('An error occurred while saving content.');
+                        console.error(`Image update failed for ${wcImageID}:`, err);
+                        alert('An error occurred while updating an image.');
                     });
-
-                const editableImages = document.querySelectorAll('.editable-img');
-                editableImages.forEach(img => {
-                    const wcImageID = img.dataset.wcimageid;
-                    const altText = img.dataset.alttext;
-                    const folder = img.dataset.folder || '';
-                    const file = img.fileObject || null;
-
-                    if (!wcImageID || (!file && !altText)) return;
-
-                    const formData = new FormData();
-                    formData.append('wcImageID', wcImageID);
-                    formData.append('altText', altText);
-                    formData.append('folder', folder);
-
-                    if (file) {
-                        formData.append('image', file);
-                    }
-
-                    fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                console.log(`Image ${wcImageID} updated successfully.`);
-                            } else {
-                                alert(`Failed to update image ${wcImageID}: ` + data.message);
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Image update failed:', err);
-                            alert('An error occurred while updating an image.');
-                        });
-                });
-
             });
-        });
-        </script>
+        }
+    });
+    </script>
+
     <?php endif; ?>
 
     <script>
@@ -528,15 +503,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         const loaderOverlay = document.getElementById('loaderOverlay');
         const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
         const navbarLinks = document.querySelectorAll('.navbar a');
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('edit');
+        const editMode =
+            <?php echo isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] ? 'true' : 'false'; ?>;
 
-        if (paramValue) {
-            let editables = document.querySelectorAll('.editable-img');
+        if (editMode) {
+            document.addEventListener("DOMContentLoaded", function() {
+                const editables = document.querySelectorAll(".editable-img");
 
-            editables.forEach(editable => {
-                editable.style.border = "2px solid red";
-            })
+                editables.forEach(el => {
+                    el.style.border = "2px solid red";
+                });
+            });
         };
 
         navbarLinks.forEach(link => {
@@ -581,15 +558,15 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     const navCollapse = document.getElementById('navbarNav');
     const navList = document.getElementById('navUL');
 
-    // Add background when collapse is shown
-    navCollapse.addEventListener('shown.bs.collapse', () => {
-        navList.classList.add('white-bg');
-    });
+    if (navCollapse && navList) {
+        navCollapse.addEventListener('shown.bs.collapse', () => {
+            navList.classList.add('white-bg');
+        });
 
-    // Remove background when collapse is hidden
-    navCollapse.addEventListener('hidden.bs.collapse', () => {
-        navList.classList.remove('white-bg');
-    });
+        navCollapse.addEventListener('hidden.bs.collapse', () => {
+            navList.classList.remove('white-bg');
+        });
+    }
     </script>
     <script>
     const dropdownToggle = document.getElementById('navbarDropdown');

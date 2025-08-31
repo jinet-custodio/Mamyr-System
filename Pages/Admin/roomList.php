@@ -16,6 +16,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+if (isset($_SESSION['actionType'])) {
+    unset($_SESSION['actionType']);
+}
+
 
 $message = '';
 $status = '';
@@ -223,9 +227,9 @@ if (isset($_SESSION['error'])) {
         </div>
     </div>
 
-    <!-- Booking-container -->
+    <!-- Room container -->
 
-    <div class="booking-container">
+    <div class="room-container">
 
         <div class="card " style="width: 80%;">
             <div class="addHotelContainer">
@@ -238,6 +242,7 @@ if (isset($_SESSION['error'])) {
                     <th scope="col">Room No.</th>
                     <th scope="col">Status</th>
                     <th scope="col">Rates</th>
+                    <th scope="col">Duration</th>
                     <th scope="col">Action</th>
                 </thead>
                 <tbody>
@@ -256,7 +261,27 @@ if (isset($_SESSION['error'])) {
                         $rooms = $getRoomInfoResult->fetch_all(MYSQLI_ASSOC);
                         foreach ($rooms as $roomInfo) {
                             $roomID = $roomInfo['resortServiceID'];
-                            $statColor = $roomInfo['roomStatus'];
+                            $roomStatus = $roomInfo['roomStatus'];
+
+                            switch ($roomStatus) {
+                                case 'Available';
+                                    $statColor = 'success';
+                                    break;
+                                case 'Maintenance';
+                                    $statColor = 'info';
+                                    break;
+                                case 'Occupied';
+                                    $statColor = 'warning';
+                                    break;
+                                case 'Private';
+                                    $statColor = 'primary';
+                                    break;
+                                case 'Unavailable';
+                                    $statColor = 'secondary';
+                                    break;
+                                default:
+                                    $statColor = 'light';
+                            }
                             // echo '<pre>';
                             // print_r($statColor);
                             // echo '<pre>';
@@ -266,24 +291,30 @@ if (isset($_SESSION['error'])) {
                                     <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
                                     <?= $roomInfo['RServiceName'] ?>
                                 </td>
-                                <td><button type="button" href="#"
-                                        class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
-                                <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
+                                <td>
+                                    <button type="button" class="btn statusBtn btn-<?= $statColor ?>">
+                                        <?= $roomInfo['roomStatus'] ?>
+                                    </button>
                                 </td>
                                 <td>
-                                    <form action="roomInfo.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                    <?= "₱ " . $roomInfo['RSprice'] ?>
+                                </td>
+                                <td>
+                                    <?= $roomInfo['RSduration'] ?>
+                                </td>
+                                <td class="action-column">
+                                    <form action="roomInfo.php" method="POST" class="w-50">
+                                        <input type="hidden" name="roomID" value="<?= htmlspecialchars($roomID) ?>">
                                         <input type="hidden" name="actionType" value="edit">
-                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                        <button type="submit" class="btn btn-secondary w-20">Edit</button>
+                                        <button type="submit" class="btn btn-primary actionBtn w-100">Edit</button>
                                     </form>
-                                    <form action="roomInfo.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="roomID" value="<?= $roomID ?>">
+                                    <form action="roomInfo.php" method="POST" class="w-50">
+                                        <input type="hidden" name="roomID" value="<?= htmlspecialchars($roomID) ?>">
                                         <input type="hidden" name="actionType" value="view">
-                                        <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                        <button type="submit" class="btn btn-secondary w-20">View</button>
+                                        <button type="submit" class="btn btn-info actionBtn w-100">View</button>
                                     </form>
                                 </td>
+
                             </tr>
                     <?php
                         }
@@ -295,63 +326,82 @@ if (isset($_SESSION['error'])) {
     </div>
 
 
-    <!-- FORM MODAL ADDING SERVICE-->
-
+    <!-- FORM MODAL ADDING Hotel-->
     <!-- Modal -->
-    <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addHotelModalLabel">Add Hotel Room</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-container">
-                        <label for="roomNo">Room No.</label>
-                        <input type="text" class="form-control" id="roomNo" name="roomNo" required>
+    <form action="../../Function/Admin/Services/addServices.php" method="POST" enctype="multipart/form-data">
+        <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addHotelModalLabel">Add Hotel Room</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="input-container">
-                        <label for="roomStat">Room Status</label>
-                        <select id="roomStat" name="roomStat" class="form-select" required>
-                            <option value="" disabled selected>Status</option>
-                            <option value="available" id="available">Available</option>
-                            <option value="occupied" id="occupied">Occupied</option>
-                            <option value="maintenance" id="maintenance">Maintenance</option>
-                            <option value="unavailable" id="unavailable">Unavailable</option>
-                        </select>
+                    <div class="modal-body">
+                        <div class="input-container">
+                            <label for="roomName">Room No.</label>
+                            <input type="text" class="form-control" id="roomName" name="roomName" required>
+                        </div>
+                        <div class="input-container">
+                            <label for="roomStat">Room Status</label>
+                            <select id="roomStat" name="roomStat" class="form-select"
+                                required>
+                                <option value="" disabled selected>Select Availability</option>
+                                <?php
+
+                                $getAvailability = $conn->prepare('SELECT * FROM serviceavailability');
+                                if ($getAvailability->execute()) {
+                                    $result = $getAvailability->get_result();
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                ?>
+                                            <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
+                                                <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                <?php
+                                        }
+                                    }
+                                    $result->free();
+                                    $getAvailability->close();
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="input-container">
+                            <label for="roomRate">RoomRate</label>
+                            <input type="text" class="form-control" id="roomRate" name="roomRate">
+                        </div>
+                        <div class="input-container">
+                            <label for="capacity">Capacity</label>
+                            <input type="number" class="form-control" id="capacity" name="capacity">
+                        </div>
+                        <div class="input-container">
+                            <label for="maxCapacity">Max Capacity</label>
+                            <input type="number" class="form-control" id="maxCapacity" name="maxCapacity">
+                        </div>
+                        <div class="input-container">
+                            <label for="duration">Duration</label>
+                            <input type="text" class="form-control" id="duration" name="duration">
+                        </div>
+                        <div class="input-container">
+                            <label for="roomDescription">Description</label>
+                            <textarea class="form-control" id="roomDescription" name="roomDescription"></textarea>
+                        </div>
+                        <div class="input-container">
+                            <label for="roomImage">Room Image</label>
+                            <input type="file" class="form-control" id="roomImage" name="roomImage">
+                        </div>
+                        <!-- <div class="input-container">
+                            <label for="other">Other</label>
+                            <input type="text" class="form-control" id="other" name="other">
+                        </div> -->
                     </div>
-                    <div class="input-container">
-                        <label for="roomRate">RoomRate</label>
-                        <input type="text" class="form-control" id="roomRate" name="roomRate">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveHotelRoom" name="saveHotelRoom">Save</button>
                     </div>
-                    <div class="input-container">
-                        <label for="capacity">Capacity</label>
-                        <input type="text" class="form-control" id="capacity" name="capacity">
-                    </div>
-                    <div class="input-container">
-                        <label for="maxCapacity">Max Capacity</label>
-                        <input type="text" class="form-control" id="maxCapacity" name="maxCapacity">
-                    </div>
-                    <div class="input-container">
-                        <label for="roomDescription">Description</label>
-                        <textarea class="form-control" id="roomDescription" name="roomDescription"></textarea>
-                    </div>
-                    <div class="input-container">
-                        <label for="roomImage">Room Image</label>
-                        <input type="file" class="form-control" id="roomImage" name="roomImage">
-                    </div>
-                    <div class="input-container">
-                        <label for="other">Other</label>
-                        <input type="text" class="form-control" id="other" name="other">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="saveHotelRoom">Save</button>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 
 
 
@@ -401,8 +451,6 @@ if (isset($_SESSION['error'])) {
         });
     </script>
 
-
-
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -411,7 +459,16 @@ if (isset($_SESSION['error'])) {
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
-            $('#bookingTable').DataTable();
+            $('#roomsTable').DataTable({
+                language: {
+                    emptyTable: "No Hotel Rooms"
+                },
+                columnDefs: [{
+                    width: "30%",
+                    target: 4
+                }]
+
+            })
         });
     </script>
 </body>

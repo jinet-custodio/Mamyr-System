@@ -3,10 +3,19 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 require '../Config/dbcon.php';
-if (isset($_SESSION['formData']['email'])) {
-    $email = mysqli_real_escape_string($conn, $_SESSION['formData']['email']);
+
+if (isset($_SESSION['email'])) {
+    $email = mysqli_real_escape_string($conn, $_SESSION['email']);
+    $_SESSION['email'] = $email;
 } else {
-    echo 'No email in session';
+    error_log("No Email in Session");
+    $_SESSION['loginError'] = "An error occurred. Please try again.";
+    header("Location: register.php");
+    exit;
+}
+
+if (isset($_SESSION['action'])) {
+    $_SESSION['action'];
 }
 ?>
 
@@ -17,7 +26,7 @@ if (isset($_SESSION['formData']['email'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
-    <link rel="stylesheet" href="../assets/css/forgotPassword.css">
+    <link rel="stylesheet" href="../Assets/CSS/forgotPassword.css">
 
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../assets/css/bootstrap.min.css"> -->
@@ -49,7 +58,7 @@ if (isset($_SESSION['formData']['email'])) {
                 </div>
                 <div class="input-box">
                     <input type="email" class="form-control" id="email" name="email"
-                        value="<?= $email ?>" required>
+                        value="<?= htmlspecialchars($email) ?>" required>
                 </div>
                 <div class="input-box">
                     <input type="password" class="form-control" id="newPassword" name="newPassword"

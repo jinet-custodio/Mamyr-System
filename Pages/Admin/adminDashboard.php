@@ -474,7 +474,7 @@ $availabilityQuery->close();
                     </div>
 
                     <div class="card-body">
-                        <h2 class="revenueTotal">₱<?= number_format($totalRevenueThisWeek, 2) ?></h2>
+                        <h2 class="revenueTotal">₱<?= number_format($totalRevenueThisWeek ?? 0, 2) ?></h2>
                     </div>
 
                     <!-- <h6 class="card-footer">This Week</h6> -->

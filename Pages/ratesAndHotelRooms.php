@@ -38,8 +38,8 @@ require '../Config/dbcon.php';
                     <a class="nav-link" href="../index.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown text-center">
-                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -52,7 +52,7 @@ require '../Config/dbcon.php';
                     <a class="nav-link active" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="../Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="./about.php">ABOUT</a>
@@ -77,7 +77,8 @@ require '../Config/dbcon.php';
 
             <a class="categoryLink" onclick="showRates(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../assets/images/amenities/poolPics/poolPic3.jpg" alt="Wedding Event">
+                    <img class="card-img-top category" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg"
+                        alt="Resort Rates">
 
                     <div class="card-body">
                         <h5 class="card-title">Resort Rates</h5>
@@ -87,7 +88,8 @@ require '../Config/dbcon.php';
 
             <a class="categoryLink" onclick="showHotels(event)">
                 <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../assets/images/amenities/hotelPics/hotel1.jpg" alt="Wedding Event">
+                    <img class="card-img-top category" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg"
+                        alt="Hotel Rooms">
                     <div class="card-body">
                         <h5 class="card-title">Hotel Rooms</h5>
                     </div>
@@ -96,6 +98,8 @@ require '../Config/dbcon.php';
 
         </div>
     </div>
+
+
     <div class="rates" id="rates" style="display: none;">
         <div class="backToSelection" id="backToSelection">
             <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
@@ -158,78 +162,73 @@ require '../Config/dbcon.php';
             </div>
         </div>
 
-
-        <div class="cottages">
-            <div class="titleContainer" style="margin-top: 2vw;">
-                <hr class="entranceLine">
-                <h4 class="entranceTitle">Cottages</h4>
-            </div>
-
-            <div class="cottages">
-                <?php
-                $cottagesql = "SELECT * FROM resortAmenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
-                $cottresult = mysqli_query($conn, $cottagesql);
-                if (mysqli_num_rows($cottresult) > 0) {
-                    foreach ($cottresult as $cottage) {
-                ?>
-                        <div class="cottage">
-                            <div class="halfImg">
-                                <?php
-                                $imgSrc = '../../Assets/Images/no-picture.jpg';
-                                if (!empty($cottage['imageData'])) {
-                                    $imgData = base64_encode($cottage['RSimageData']);
-                                    $imgSrc = 'data:image/jpeg;base64,' . $imgData;
-                                }
-                                ?>
-                                <img src="<?= $imgSrc ?>" alt="Cottage Image" class="rounded" id="displayPhoto">
-                            </div>
-                            <div class="Description">
-                                <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
-                                <p>
-                                    <?= $cottage['RSdescription'] ?>
-                                </p>
-                                <p class="font-weight-bold">
-                                    Price: PHP <?= $cottage['RSprice'] ?>
-                                </p>
-                            </div>
-                        </div>
-                <?php
-                    }
-                } else {
-                    echo "<h5> No Record Found </h5>";
-                }
-                ?>
-            </div>
+        <div class="titleContainer" style="margin-top: 2vw;">
+            <hr class="entranceLine">
+            <h4 class="entranceTitle">Cottages</h4>
         </div>
 
 
-        <div class="videoke" style="background-color:whitesmoke; padding: 0vw 0 3vw 0 ">
+        <div class="cottages">
+            <?php
+            $cottagesql = "SELECT * FROM resortamenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
+            $cottresult = mysqli_query($conn, $cottagesql);
+            if (mysqli_num_rows($cottresult) > 0) {
+                foreach ($cottresult as $cottage) {
+            ?>
+                    <div class="card cottage" id="cottageCard">
+                        <?php
+                        $imgSrc = '../../Assets/Images/no-picture.jpg';
+                        if (!empty($cottage['imageData'])) {
+                            $imgData = base64_encode($cottage['RSimageData']);
+                            $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                        }
+                        ?>
+                        <img src="<?= $imgSrc ?>" alt="Cottage Image" class="card-img-top" id="cottageDisplayPhoto">
+                        <div class="card-body description">
+                            <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
+                            <p>
+                                <?= $cottage['RSdescription'] ?>
+                            </p>
+                            <p class="font-weight-bold">
+                                Price: PHP <?= $cottage['RSprice'] ?>
+                            </p>
+                            <a href="register.php" class="btn btn-primary">Book Now</a>
+                        </div>
 
+                    </div>
+            <?php
+                }
+            } else {
+                echo "<h5> No Record Found </h5>";
+            }
+            ?>
+        </div>
+
+
+
+        <div class="videoke" style="background-color:whitesmoke; padding: 0vw 0 3vw 0 ">
             <div class=" videokeTitleContainer" style="padding-top: 2vw;">
                 <hr class="entranceLine">
                 <h4 class="entranceTitle">Videoke for Rent</h4>
             </div>
             <?php
-            $vidsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Videoke 1'";
+            $vidsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Videoke A'";
             $vidresult = mysqli_query($conn, $vidsql);
             if (mysqli_num_rows($vidresult) > 0) {
                 foreach ($vidresult as $videoke) {
             ?>
+
                     <div class="section">
-                        <div class="singleImg" style="width: 40%;">
+                        <div class="singleImg">
                             <?php
-                            $imgSrc = '../../Assets/Images/no-picture.jpg';
-                            if (!empty($videoke['RSimageData'])) {
-                                $imgData = base64_encode($videoke['RSimageData']);
-                                $imgSrc = 'data:image/jpeg;base64,' . $imgData;
-                            }
+                            $imgSrc = '../Assets/Images/no-picture.jpg';
                             ?>
-                            <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="displayPhoto">
+                            <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
 
                         </div>
-                        <div class="Description" id="videokeDesc" style="width: 40%;">
-                            <h2 style="font-size: 3vw;"> PHP <?= $videoke['RSprice'] ?> per Rent </h2>
-                            <p>
+                        <div class="Description" id="videokeDescContainer">
+                            <h2 class="text-center" id="videokePriceDesc"> PHP <?= $videoke['RSprice'] ?> per Rent </h2>
+                            <p class="videokeDesc">
                                 <?= $videoke['RSdescription'] ?>
                             </p>
                         </div>
@@ -243,34 +242,31 @@ require '../Config/dbcon.php';
             }
             ?>
         </div>
+
         <div class=" videokeTitleContainer" id="billiardCont" style="padding-top: 2vw;">
             <hr class="entranceLine">
             <h4 class="entranceTitle">Blliards Table for Rent</h4>
         </div>
         <div class="cottage " id="billiards">
             <?php
-            $bilsql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Billiard'";
+            $bilsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Billiard'";
             $bilresult = mysqli_query($conn, $bilsql);
             if (mysqli_num_rows($bilresult) > 0) {
                 foreach ($bilresult as $bill) {
             ?>
-                    <div class="Description" style="width: 40%;">
-                        <p>
+                    <div class="Description" id="videokeDescContainer">
+                        <p class="videokeDesc">
                             <?= $bill['RSdescription'] ?>
                         </p>
-                        <p class="font-weight-bold">
+                        <p class="text-center" id="videokePriceDesc">
                             Price: PHP<?= $bill['RSprice'] ?> per Hour
                         </p>
                     </div>
-                    <div class="singleImg" style="width: 50%;">
+                    <div class="singleImg" style="width:50%;">
                         <?php
                         $imgSrc = '../../Assets/Images/no-picture.jpg';
-                        if (!empty($bill['RSimageData'])) {
-                            $imgData = base64_encode($bill['RSimageData']);
-                            $imgSrc = 'data:image/jpeg;base64,' . $imgData;
-                        }
                         ?>
-                        <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="displayPhoto">
+                        <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
 
                     </div>
             <?php
@@ -287,26 +283,28 @@ require '../Config/dbcon.php';
                 <h4 class="entranceTitle">Massage Chair</h4>
             </div>
             <?php
-            $massagesql = "SELECT * FROM resortAmenities WHERE RServiceName = 'Massage Chair'";
+            $massagesql = "SELECT * FROM resortamenities WHERE RServiceName = 'Massage Chair'";
             $massageresult = mysqli_query($conn, $massagesql);
             if (mysqli_num_rows($massageresult) > 0) {
                 foreach ($massageresult as $massage) {
             ?>
                     <div class="section" id="massage">
-                        <div class="singleImg" style="width: 50%;">
+                        <div class="singleImg">
                             <?php
                             $imgSrc = '../../Assets/Images/no-picture.jpg';
                             if (!empty($massage['RSimageData'])) {
-                                $imgData = base64_encode($massage['RSimageData']);
-                                $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                                // $imgData = base64_encode($massage['RSimageData']);
+                                // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                             }
                             ?>
-                            <img src="<?= $imgSrc ?>" alt="Massage Chair Image" class="rounded" id="displayPhoto">
+                            <img src="<?= $imgSrc ?>" alt="Massage Chair Image" class="rounded" id="massageChairDisplayPhoto">
 
                         </div>
-                        <div class="Description" id="massageDesc" style="width: 40%;">
-                            <h2 style="font-size: 3vw;"> <?= $massage['RSprice'] ?> pesos for <?= $massage['RSduration'] ?> </h2>
-                            <p>
+                        <div class="Description" id="massageDesc">
+                            <h2 class="text-center" id="videokePriceDesc"> <?= $massage['RSprice'] ?> pesos for
+                                <?= $massage['RSduration'] ?>
+                            </h2>
+                            <p class="text-center">
                                 <?= $massage['RSdescription'] ?>
                             </p>
                         </div>
@@ -327,9 +325,12 @@ require '../Config/dbcon.php';
         <div class="titleContainer" id="hotelTitle">
             <h4 class="title">Hotel Rooms</h4>
             <p class="hotelDescription">Mamyr Resort and Events Place is not only a venue for unforgettable celebrations
-                but also a relaxing retreat, offering 11 air-conditioned hotel rooms for guests seeking comfort and convenience.
-                Every booking at the hotel includes complimentary access to the resort's pool, allowing guests to unwind and
-                enjoy their stay to the fullest. Whether you're here for a grand occasion or a quiet getaway, Mamyr Resort
+                but also a relaxing retreat, offering 11 air-conditioned hotel rooms for guests seeking comfort and
+                convenience.
+                Every booking at the hotel includes complimentary access to the resort's pool, allowing guests to unwind
+                and
+                enjoy their stay to the fullest. Whether you're here for a grand occasion or a quiet getaway, Mamyr
+                Resort
                 offers a beautiful and welcoming environment for all.
 
             </p>
@@ -344,7 +345,7 @@ require '../Config/dbcon.php';
             </div>
             <?php
             $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration 
-            FROM resortAmenities
+            FROM resortamenities
             WHERE RSCategoryID = 1";
 
             $result = mysqli_query($conn, $availsql);
@@ -352,15 +353,18 @@ require '../Config/dbcon.php';
             <div class="hotelIconsContainer">
                 <div class="availabilityIcons">
                     <div class="availabilityIcon" id="allRooms">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1" class="avail" id="allrooms">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 1"
+                            class="avail" id="allrooms">
                         <p>All Rooms</p>
                     </div>
                     <div class="availabilityIcon" id="availableRooms">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2" class="avail">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" alt="Rate Picture 2"
+                            class="avail">
                         <p>Available</p>
                     </div>
                     <div class="availabilityIcon" id="unavailableRooms">
-                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3" class="avail">
+                        <img src="../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png" alt="Rate Picture 3"
+                            class="avail">
                         <p>Not Available</p>
                     </div>
                 </div>
@@ -405,7 +409,7 @@ require '../Config/dbcon.php';
 
             <div class="hotelRoomList">
                 <?php
-                $roomsql = "SELECT * FROM resortAmenities WHERE RScategoryID = 1";
+                $roomsql = "SELECT * FROM resortamenities WHERE RScategoryID = 1";
                 $roomresult = mysqli_query($conn, $roomsql);
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {
@@ -413,10 +417,10 @@ require '../Config/dbcon.php';
                         <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>">
                             <div class="halfImg">
                                 <?php
-                                $imgSrc = '../../Assets/Images/no-picture.jpg';
+                                $imgSrc = '../Assets/Images/amenities/hotelPics/hotel1.jpg';
                                 if (!empty($hotel['imageData'])) {
-                                    $imgData = base64_encode($hotel['RSimageData']);
-                                    $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                                    // $imgData = base64_encode($hotel['RSimageData']);
+                                    // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                 }
                                 ?>
                                 <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
@@ -491,7 +495,9 @@ require '../Config/dbcon.php';
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
 
 
     <!-- Flatpickr for date input -->
@@ -641,7 +647,8 @@ require '../Config/dbcon.php';
 
             allIcons.forEach(icon => {
                 const availability = icon.getAttribute('data-availability');
-                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter === availability);
+                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
+                    availability);
 
                 icon.classList.toggle('hidden', !matchesAvailability);
             });
@@ -673,7 +680,8 @@ require '../Config/dbcon.php';
                         icons.forEach(icon => {
                             const name = icon.querySelector('.roomCaption').textContent.trim();
                             if (name === room.service) {
-                                icon.setAttribute('data-availability', room.available ? 'available' : 'unavailable');
+                                icon.setAttribute('data-availability', room.available ? 'available' :
+                                    'unavailable');
                             }
                         });
                     });

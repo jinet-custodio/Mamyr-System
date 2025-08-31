@@ -235,7 +235,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         foreach ($entries as $entry) {
                                         ?>
                                             <p><strong><?= htmlspecialchars($entry['category']) ?></strong> -
-                                                <?= htmlspecialchars($entry['price']) ?></p>
+                                                ₱ <?= htmlspecialchars($entry['price']) ?></p>
                                         <?php
                                         }
                                         ?>
@@ -254,9 +254,16 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <h1>Cottages</h1>
                                 <?php
                                 $cottageCategoryID = 2;
-
-                                $getCottageQuery = $conn->prepare("SELECT DISTINCT RScapacity, RSdescription, RSprice FROM resortamenities WHERE RScategoryID = ?");
-                                $getCottageQuery->bind_param("i", $cottageCategoryID);
+                                $rowNumber = 1;
+                                $getCottageQuery = $conn->prepare("SELECT *
+                                                                        FROM (
+                                                                            SELECT *, ROW_NUMBER() OVER (PARTITION BY RScapacity ORDER BY RSprice ASC) AS rn
+                                                                            FROM resortamenities
+                                                                            WHERE RScategoryID = ?
+                                                                        ) AS sub
+                                                                        WHERE rn = ?;
+                                                                        ");
+                                $getCottageQuery->bind_param("ii", $cottageCategoryID, $rowNumber);
                                 $getCottageQuery->execute();
                                 $getCottageQueryResult =  $getCottageQuery->get_result();
                                 if ($getCottageQueryResult->num_rows > 0) {
@@ -287,7 +294,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <div class="card-body videoke">
                                 <h1> Videoke</h1>
                                 <?php
-                                $entertainmentName = 'Videoke';
+                                $entertainmentName = 'Videoke %';
                                 $categoryID = 3;
                                 $getVideoke = $conn->prepare("SELECT * FROM resortamenities WHERE  RScategoryID = ? AND  RServiceName LIKE ? LIMIT 1");
                                 $getVideoke->bind_param("is",  $categoryID, $entertainmentName);

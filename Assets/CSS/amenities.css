@@ -75,7 +75,7 @@ nav {
 
 #logOutBtn {
   font-family: "Poppins";
-  font-size: 1.3vw;
+  font-size: 1.5vw;
   margin-right: 2vw;
   border: none;
 }
@@ -163,6 +163,48 @@ nav {
     height: 2.5vw;
     aspect-ratio: 1;
 }
+
+/* Edit mode CSS */
+#saveChangesBtn {
+  margin-top: 8vw !important;
+  margin-left: 80vw;
+  font-size: 1.8vw !important;
+  position: fixed;
+}
+
+.editable-input {
+  background-color: rgba(255, 255, 255, 0) !important;
+  border: 1px solid rgb(255, 13, 13) !important;
+  padding: 2px;
+}
+
+/* modal css */
+
+.modal-dialog {
+  max-width: 60% !important;
+}
+.modal-body {
+  max-height: 500px;
+
+  overflow-y: auto !important;
+}
+.modal-title {
+  margin: auto;
+  font-size: 2vw;
+}
+
+.modal-footer {
+  display: flex;
+  margin: auto;
+}
+
+#declineBtn,
+#acceptBtn {
+  width: 15vw;
+  border-radius: 30px;
+}
+/*end of modal css */
+
 /* Div for loader */
 #loaderOverlay {
   position: fixed;
@@ -175,13 +217,6 @@ nav {
   justify-content: center;
   align-items: center;
   z-index: 9999;
-}
-
-.notificationIcon {
-    display: flex;
-    align-items: center;
-    height: 2.5vw;
-    aspect-ratio: 1;
 }
 
 .loader {
@@ -226,7 +261,7 @@ nav {
 }
 
 .embed-responsive {
-  width: clamp(500px, 50%, 80%) !important;
+  width: clamp(500px, 60%, 80%) !important;
   height: auto;
   margin-top: 2vw !important;
   margin: auto;
@@ -245,12 +280,16 @@ nav {
   opacity: 1;
 }
 
-.amenityTitle {
+.amenityTitle, input.amenityTitle {
   margin-top: 1vw;
   font-size: clamp(2.2vw, calc(2.3vw + 1vh), 2.9vw);
 }
 
-.amenityDescription {
+input.amenityTitle {
+  width: 50%;
+}
+
+.amenityDescription, textarea.amenityDescription {
   margin-top: 1vw;
   font-size: clamp(1vw, calc(1vw + 1vh), 3vw);
   margin-bottom: 0 !important;
@@ -273,57 +312,107 @@ nav {
   margin-top: 1vw !important;
 }
 
-.poolPic1,
-.poolPic2,
-.poolPic3,
-.poolPic4,
-.poolPic5 {
-  height: clamp(15vw, calc(16vw  + 1vh),18vw);
-  width: auto;
-}
 
-.carousel-container {
+.slideshow-container {
   position: relative;
-  width: 60%;
-  height: clamp(28vw, 30vw, 32vw);
-  margin: 20px auto;
-  perspective: 1000px;
+  max-width: 100%;
+  margin: auto;
+  overflow: hidden;
+  padding: 3vw 0;
+  height: 33vw;
 }
 
-.carousel {
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 0;
+  transform: translateX(100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transform: rotateY(0deg);
-  transition: transform 1s ease;
 }
 
-.carousel img {
-  position: absolute;
-  transform-origin: center center;
-  transition: transform 1s ease;
-  image-rendering: crisp-edges !important;
+
+.slide.active {
+  opacity: 1;
+  z-index: 1;
+  transform: translateX(0);  
 }
 
-.poolPic1 {
-  transform: rotateY(0deg) translateZ(300px);
+.fade {
+  animation-name: fade;
+  animation-duration: 1s;
 }
-.poolPic2 {
-  transform: rotateY(72deg) translateZ(300px);
+
+.slide img {
+  height: 90%;
+  object-fit: cover;
+  display: block;
 }
-.poolPic3 {
-  transform: rotateY(144deg) translateZ(300px);
+
+.slide-btn  {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 10px 15px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  user-select: none;
+  transition: 0.3s ease;
+  z-index: 10;
 }
-.poolPic4 {
-  transform: rotateY(216deg) translateZ(300px);
+.slide-in-left {
+  transform: translateX(-100%);
 }
-.poolPic5 {
-  transform: rotateY(288deg) translateZ(300px);
+
+.slide-in-right {
+  transform: translateX(100%);
+} 
+
+.slide-out-left {
+  transform: translateX(-100%);
 }
+
+.slide-out-right {
+  transform: translateX(100%);
+}
+
+.prev-btn {
+  left: 20%;
+  font-size: clamp(20px, 2.2vw, 3.2vw) !important;
+}
+
+.next-btn {
+  right: 20%;
+  font-size: clamp(20px, 2.2vw, 3.2vw) !important;
+}
+
+.btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+@keyframes fade {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+/* @media (max-width: 768px) {
+  .btn {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+} */
+
 
 
 .amenityTitleContainer {
@@ -360,111 +449,16 @@ nav {
   transform: translateY(-50%);
 }
 
-.prev-btn {
-  left: 20px;
-  font-size: clamp(20px, 2.2vw, 3.2vw) !important;
-}
-
-.next-btn {
-  right: 20px;
-  font-size: clamp(20px, 2.2vw, 3.2vw) !important;
-}
-
 .btn-primary:hover {
   background: rgba(0, 0, 0, 0.8);
 }
-
-
-footer {
-  /* border: 1px solid black; */
-  margin-top: auto !important;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 10vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 1.7vw;
-  font-weight: bold;
-  color: #ffff;
-}
-
-.footerLine {
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  opacity: 1;
-}
-
+ 
 .info {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5vw;
 }
-.locationFooter {
-  /* border: 1px solid black; */
-  width: 30%;
-}
-
-.reservationTitle,
-.locationTitle {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 1.5vw;
-  color: #fff;
-}
-
-.numberFooter,
-.emailAddressTextFooter,
-.addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: clamp(1vw, 1.2vw, 1.3vw);
-}
-
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  margin: 0.3vw;
-}
-
-.socialIcons a {
-  text-decoration: none;
-  padding: 0.8vw;
-  background-color: rgb(255, 255, 255);
-  margin: 5px;
-  border-radius: 50%;
-}
-
-.socialIcons a i {
-  font-size: 2vw;
-  color: #3e849e;
-  opacity: 0.9;
-}
-
-.socialIcons a:hover {
-  background-color: white;
-  transition: 0.5s;
-}
-
-.socialIcons a:hover i {
-  color: #c1a534;
-  transition: 0.5s;
-}
-
 
 
 /* Tablet size */
@@ -552,7 +546,7 @@ footer {
     width: auto;
   }
 
-  .carousel-container {
+  .slideshow-container {
     height: clamp(34vw, 36vw, 38vw);
     position: relative;
     width: 80%;
@@ -616,11 +610,13 @@ footer {
   }
 
   .prev-btn {
-    left: 20px;
+  left: 10%;
+  font-size: clamp(20px, 2.2vw, 3.2vw) !important;
   }
 
   .next-btn {
-    right: 20px;
+    right: 10%;
+    font-size: clamp(20px, 2.2vw, 3.2vw) !important;
   }
 
   button:hover {
@@ -629,33 +625,7 @@ footer {
 
     #profileAndNotif {
   padding: 0.6vw;
-}
-
-  
-  .mb-0 {
-    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
-  }
-
-  .logo {
-    width: 15vw;
-  }
-
-  .reservationTitle, .locationTitle {
-    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
-  }
-
-  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
-    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
-  }
-
-  .socialIcons a {
-    justify-items: center;
-    align-items: center;
-  }
- 
-    .socialIcons a i { 
-      font-size: 3vw;
-    }
+} 
 }
 
 @media (max-width: 991.98px) {
@@ -685,6 +655,8 @@ footer {
         width: 100%;
         text-align: left;
     }
+
+    
 }
 
 @media (max-width: 991.98px) and (orientation:portrait) {
@@ -715,14 +687,17 @@ footer {
     aspect-ratio: 1;
   }
 
+  
+   #toggledNav {
+    position: absolute !important;
+    right: 4vw !important;
+   }
   .notificationIcon {
   display: flex;
   align-items: center;
   height:  clamp(4.5vw, 5.1vw, 6vw);
   aspect-ratio: 1;
   }
-
-
 
   .notifBtn {
     margin-left: 1.5vw;
@@ -757,73 +732,23 @@ footer {
     height: 28vw !important;
   }
 
-  .carousel-container {
+  .slideshow-container {
     width: 90%;
     height: 240px;
   }
 
   .carousel img {
-    width: 50%; /* Make images smaller */
+    width: 50%; 
     height: auto;
   }
 
-   .poolPic1 {
-    transform: rotateY(0deg) translateZ(160px);
-  }
-  .poolPic2 {
-    transform: rotateY(72deg) translateZ(160px);
-  }
-  .poolPic3 {
-    transform: rotateY(144deg) translateZ(160px);
-  }
-  .poolPic4 {
-    transform: rotateY(216deg) translateZ(160px);
-  }
-  .poolPic5 {
-    transform: rotateY(288deg) translateZ(160px);
-  }
-
 .navbar-toggler-icon {
-    width: 23px !important; /* Smaller button size */
+    width: 23px !important; 
   }
-
-.mb-0 {
-    font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
-  }
-
-  .logo {
-    width: 18vw;
-  }
-
-  .reservation {
-    width: 20%;
-  }
-
-  .locationFooter {
-    width: 50%;
-  }
-
-  .reservationTitle, .locationTitle {
-    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
-  }
-
-  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
-    font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
-  }
-
-  .socialIcons a {
-    justify-items: center;
-    align-items: center;
-    padding: 0.5vw 1.5vw;
-  }
- 
-    .socialIcons a i { 
-      font-size: 3.5vw;
-    }  
 }
 
 @media (max-width: 400px) {
-  .carousel-container {
+  .slideshow-container {
     width: 95%; /* Reduce width further */
     height: 200px; /* Further reduce height */
   }

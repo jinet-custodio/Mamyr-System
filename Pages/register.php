@@ -37,7 +37,7 @@ resetExpiredOTPs($conn);
                 <h1>Login</h1>
                 <div class="input-box">
                     <input type="text" class="form-control" id="login_email" name="login_email"
-                        value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
+                        value="<?php echo isset($_SESSION['loginFormData']['email']) ? htmlspecialchars(trim($_SESSION['loginFormData']['email'])) : ''; ?>"
                         placeholder="Email" required>
                     <i class='bx bxs-envelope'></i>
                 </div>
@@ -47,7 +47,7 @@ resetExpiredOTPs($conn);
                     <i id="togglePassword" class='bx bxs-hide'></i>
                 </div>
                 <div class="forgot-link">
-                    <a href="../Pages/enterEmail.php">Forgot Password?</a>
+                    <a href="enterEmail.php">Forgot Password?</a>
                 </div>
                 <button type="submit" class="btn btn-primary" id="login" name="login" disabled>Login</button>
 
@@ -66,9 +66,9 @@ resetExpiredOTPs($conn);
                         <!-- (Show under Login Button) -->
                         <?php
                         //Error Message 
-                        if (isset($_SESSION['error'])) {
-                            echo htmlspecialchars(strip_tags($_SESSION['error']));
-                            unset($_SESSION['error']);
+                        if (isset($_SESSION['loginError'])) {
+                            echo htmlspecialchars(strip_tags($_SESSION['loginError']));
+                            unset($_SESSION['loginError']);
                         }
                         //Alert Message 
                         if (isset($_GET['session']) && $_GET['session'] === 'expired') {
@@ -95,14 +95,14 @@ resetExpiredOTPs($conn);
                 <div class="fullName">
                     <div class="input-box">
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
-                            value="<?php echo isset($_SESSION['formData']['firstName']) ? htmlspecialchars(trim($_SESSION['formData']['firstName'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['firstName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['firstName'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user-circle'></i>
                     </div>
                     <div class="input-box">
                         <input type="text" class="form-control" id="middleInitial" name="middleInitial"
                             placeholder="M.I. (Optional)"
-                            value="<?php echo isset($_SESSION['formData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['formData']['middleInitial'])) : ''; ?>">
+                            value="<?php echo isset($_SESSION['registerFormData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['registerFormData']['middleInitial'])) : ''; ?>">
                         <i class='bx bxs-user-circle'></i>
                     </div>
 
@@ -110,24 +110,23 @@ resetExpiredOTPs($conn);
                 <div class="userInfo">
                     <div class="input-box">
                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
-                            value="<?php echo isset($_SESSION['formData']['lastName']) ? htmlspecialchars(trim($_SESSION['formData']['lastName'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['lastName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['lastName'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user-circle'></i>
                     </div>
                     <div class="input-box">
                         <input type="text" class="form-control" id="userAddress" name="userAddress"
                             placeholder="Address"
-                            value="<?php echo isset($_SESSION['formData']['userAddress']) ? htmlspecialchars(trim($_SESSION['formData']['userAddress'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['userAddress']) ? htmlspecialchars(trim($_SESSION['registerFormData']['userAddress'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user'></i>
                     </div>
                     <div class="input-box">
                         <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                            value="<?php echo isset($_SESSION['formData']['email']) ? htmlspecialchars(trim($_SESSION['formData']['email'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['email']) ? htmlspecialchars(trim($_SESSION['registerFormData']['email'])) : ''; ?>"
                             required>
                         <input type="hidden" name="userRole" value="1"> <!-- 1 = customer -->
-                        <input type="hidden" name="registerStatus" value="customer">
-
+                        <input type="hidden" name="registerStatus" value="Customer">
                         <i class='bx bxs-envelope'></i>
                     </div>
 
@@ -166,9 +165,9 @@ resetExpiredOTPs($conn);
             <div class="emailErrorMsg">
                 <p>
                     <?php
-                    if (isset($_SESSION['email-message'])) {
-                        echo htmlspecialchars($_SESSION['email-message']);
-                        unset($_SESSION['email-message']); // aalisin after ma display
+                    if (isset($_SESSION['registerError'])) {
+                        echo htmlspecialchars($_SESSION['registerError']);
+                        unset($_SESSION['registerError']);
                     }
                     ?>
                 </p>
@@ -178,22 +177,21 @@ resetExpiredOTPs($conn);
 
         <div class="toggle-box">
             <div class="toggle-panel toggle-left">
-                <h1 class="welcome">Welcome to Mamyr Resort and Events Place!</h1>
-                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" class="mamyrLogo">
-                <!-- <p>Don't have an account?</p>
-                <a href="userType.php" class="btn btn-outline-light signUpLink">Sign Up
-                </a> -->
-
                 <div class="back-icon-container-login">
                     <a href="../index.php">
                         <img src="../Assets/Images/Icon/home.png" alt="Go back" class="backArrow">
                     </a>
                 </div>
+                <h1 class="welcome" id="welcomeLogin">Welcome to Mamyr Resort and Events Place!</h1>
+                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" class="mamyrLogo">
+                <!-- <p>Don't have an account?</p>
+                <a href="userType.php" class="btn btn-outline-light signUpLink">Sign Up
+                </a> -->
             </div>
 
 
             <div class="toggle-panel toggle-right">
-                <h1 class="welcome">Welcome Back!</h1>
+                <h1 class="welcome" id="welcomeRegister">Welcome Back!</h1>
                 <p>Already have an account?</p>
                 <button class="btn btn-outline-light login-btn">Login</button>
 
@@ -339,128 +337,128 @@ resetExpiredOTPs($conn);
 
     <!-- Loader function -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const signUpBtn = document.getElementById('signUp');
-            const loginBtn = document.getElementById('login');
-            const loginEmail = document.getElementById('login_email');
-            const loginPassword = document.getElementById('login_password');
-            const loader = document.getElementById('loader');
+    document.addEventListener('DOMContentLoaded', function() {
+        const signUpBtn = document.getElementById('signUp');
+        const loginBtn = document.getElementById('login');
+        const loginEmail = document.getElementById('login_email');
+        const loginPassword = document.getElementById('login_password');
+        const loader = document.getElementById('loader');
 
 
-            // Click event on the button
-            signUpBtn.addEventListener('click', function(e) {
-                document.getElementById('loaderOverlay').style.display = 'flex';
-            });
-            loginBtn.addEventListener('click', function(e) {
-                document.getElementById('loaderOverlay').style.display = 'flex';
-            });
+        // Click event on the button
+        signUpBtn.addEventListener('click', function(e) {
+            document.getElementById('loaderOverlay').style.display = 'flex';
         });
+        loginBtn.addEventListener('click', function(e) {
+            document.getElementById('loaderOverlay').style.display = 'flex';
+        });
+    });
     </script>
 
 
     <script>
-        const container = document.querySelector('.container');
-        const registerBtn = document.querySelector('.register-btn');
-        const loginBtn = document.querySelector('.login-btn');
+    const container = document.querySelector('.container');
+    const registerBtn = document.querySelector('.register-btn');
+    const loginBtn = document.querySelector('.login-btn');
 
-        // registerBtn.addEventListener('click', () => {
-        //     container.classList.add('active');
-        // });
+    // registerBtn.addEventListener('click', () => {
+    //     container.classList.add('active');
+    // });
 
-        loginBtn.addEventListener('click', () => {
-            container.classList.remove('active');
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove('active');
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
+    const action = urlParams.get('action');
+
+    if (page === 'register') {
+        container.classList.add('active');
+
+        // 🔽 Remove `?page=register` from URL after activating the form
+        const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({}, document.title, urlWithoutParam);
+    } else {
+        container.classList.remove('active');
+    }
+
+    if (action === "deleted") {
+        Swal.fire({
+            title: "Success",
+            text: "Your account has been deleted successfully.",
+            icon: "success"
         });
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
-        const action = urlParams.get('action');
-
-        if (page === 'register') {
-            container.classList.add('active');
-
-            // 🔽 Remove `?page=register` from URL after activating the form
-            const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({}, document.title, urlWithoutParam);
-        } else {
-            container.classList.remove('active');
-        }
-
-        if (action === "deleted") {
-            Swal.fire({
-                title: "Success",
-                text: "Your account has been deleted successfully.",
-                icon: "success"
-            });
-        } else if (action === "unauthorized") {
-            Swal.fire({
-                title: "Oops",
-                text: "You are not authorized to access this page.",
-                icon: "warning"
-            })
-        } else if (action === "notVerified") {
-            Swal.fire({
-                title: "Oops",
-                text: "User not verified. Please verify your account.",
-                icon: "warning"
-            })
-        } else if (action === "emailExist") {
-            Swal.fire({
-                title: "Oops",
-                text: "An account with this email already exists.",
-                icon: "warning"
-            })
-        } else if (action === "OTPFailed") {
-            Swal.fire({
-                title: "Oops",
-                text: "We couldn’t send the OTP. Please try again.",
-                icon: "warning"
-            })
-        } else if (action === "successVerification") {
-            Swal.fire({
-                title: "Verified Successfully",
-                text: "Your account has been verified. You may now log in to your account.",
-                icon: "success"
-            })
-        }
-        if (page || action) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    } else if (action === "unauthorized") {
+        Swal.fire({
+            title: "Oops",
+            text: "You are not authorized to access this page.",
+            icon: "warning"
+        })
+    } else if (action === "notVerified") {
+        Swal.fire({
+            title: "Oops",
+            text: "User not verified. Please verify your account.",
+            icon: "warning"
+        })
+    } else if (action === "emailExist") {
+        Swal.fire({
+            title: "Oops",
+            text: "An account with this email already exists.",
+            icon: "warning"
+        })
+    } else if (action === "OTPFailed") {
+        Swal.fire({
+            title: "Oops",
+            text: "We couldn’t send the OTP. Please try again.",
+            icon: "warning"
+        })
+    } else if (action === "successVerification") {
+        Swal.fire({
+            title: "Verified Successfully",
+            text: "Your account has been verified. You may now log in to your account.",
+            icon: "success"
+        })
+    }
+    if (page || action) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
     <!-- Eye icon of password show and hide -->
     <script>
-        const passwordField = document.getElementById('login_password');
-        const passwordField1 = document.getElementById('password');
-        const passwordField2 = document.getElementById('confirm_password');
-        const togglePassword = document.getElementById('togglePassword');
-        const togglePassword1 = document.getElementById('togglePassword1');
-        const togglePassword2 = document.getElementById('togglePassword2');
+    const passwordField = document.getElementById('login_password');
+    const passwordField1 = document.getElementById('password');
+    const passwordField2 = document.getElementById('confirm_password');
+    const togglePassword = document.getElementById('togglePassword');
+    const togglePassword1 = document.getElementById('togglePassword1');
+    const togglePassword2 = document.getElementById('togglePassword2');
 
-        function togglePasswordVisibility(passwordField, toggleIcon) {
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('bxs-hide');
-                toggleIcon.classList.add('bx-show-alt');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('bx-show-alt');
-                toggleIcon.classList.add('bxs-hide');
-            }
+    function togglePasswordVisibility(passwordField, toggleIcon) {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('bxs-hide');
+            toggleIcon.classList.add('bx-show-alt');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('bx-show-alt');
+            toggleIcon.classList.add('bxs-hide');
         }
+    }
 
-        togglePassword.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField, togglePassword);
-        });
+    togglePassword.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField, togglePassword);
+    });
 
-        togglePassword1.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField1, togglePassword1);
-        });
+    togglePassword1.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField1, togglePassword1);
+    });
 
-        togglePassword2.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField2, togglePassword2);
-        });
+    togglePassword2.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField2, togglePassword2);
+    });
     </script>
 </body>
 
