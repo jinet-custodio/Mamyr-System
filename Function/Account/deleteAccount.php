@@ -60,7 +60,7 @@ if (isset($_POST['yesDelete'])) {
                                 <p>If you did not request this code, please ignore this email.</p>
                                 <br>
                                 <p>Thank you,</p>
-                                <p><strong>Mamyr</strong></p>
+                                <p><strong>Mamyr Resort and Events Place</strong></p>
                                 ";
 
                 $mail->isHTML(true);
