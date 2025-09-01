@@ -73,7 +73,7 @@ nav {
 
 .titleContainer {
   /* border: 1px solid red; */
-  margin: 0 0 2rem 0;
+  margin: -2rem 0 2rem 0;
   text-align: center;
 }
 
@@ -92,14 +92,12 @@ nav {
 }
 
 .container {
-  /* border: 1px solid red; */
-  /* margin-top: 1vw; */
   border-radius: 50px;
-  width: 70vw !important;
+  width: 65% !important;
   margin-bottom: 2vw;
   background-color: #43b2f7;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
@@ -111,13 +109,13 @@ nav {
 }
 
 .category-card {
-  width: 50vh !important;
+  width: 95%;
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 
 .category-card,
 .category-body {
-  margin: 2vw;
+  margin: 1vw;
   border-radius: 2vw 2vw 2vw 2vw !important;
   text-align: center;
 }
@@ -133,7 +131,8 @@ nav {
   border-radius: 2vw 2vw 2vw 2vw !important;
   padding: 1vw;
   object-fit: cover;
-  width: 100%;
+  width: 90%;
+  margin: 1vw auto;
 }
 
 .category-title {
@@ -146,11 +145,12 @@ nav {
 
 .card-text {
   color: black;
+  font-size: clamp(1.3vw, 1.4vw, 1.5vw);
 }
 
-.categoryLink {
+a.categoryLink {
   text-decoration: none;
-
+  width: 48%;
   &:hover {
     text-decoration: none !important;
   }
