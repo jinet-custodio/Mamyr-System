@@ -51,7 +51,12 @@ if (isset($_POST['signUp'])) {
 
 
     $defaultImage = '../Assets/Images/defaultProfile.png';
-    $userProfile = file_exists($defaultImage) ? file_get_contents($defaultImage) : NULL;
+    if (file_exists($defaultImage)) {
+        $userProfile = file_get_contents($defaultImage);
+    } else {
+        echo 'not found';
+    }
+
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
@@ -83,8 +88,9 @@ if (isset($_POST['signUp'])) {
                 $conn->begin_transaction();
                 try {
                     $insertUser = $conn->prepare("INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at)  VALUES(?,?,?,?,?,?,?,?,?)");
-                    $insertUser->bind_param("bssssssss", $userProfile, $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $otp, $OTP_expiration_at);
-
+                    $dummyBlob = null;
+                    $insertUser->bind_param("bssssssss", $dummyBlob,  $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $otp, $OTP_expiration_at);
+                    $insertUser->send_long_data(0, $userProfile);
                     if ($registerStatus == "partner") {
                         // Save business partner info into session temporarily
                         $_SESSION['partnerData'] = $partnerData;
@@ -94,51 +100,51 @@ if (isset($_POST['signUp'])) {
                         $subject = 'Mamyr Resort and Events Place Account Verification';
                         $message = '<body style="font-family: Arial, sans-serif;         background-color: #f4f4f4; padding: 20px; margin: 0;">
 
-    <table align="center" width="100%" cellpadding="0" cellspacing="0"
-        style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                            <table align="center" width="100%" cellpadding="0" cellspacing="0"
+                                style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
 
-        <tr>
-            <td style="display: flex; justify-content:center; align-items:center; gap: 15px; margin: 10px 0 10px 0"><img
-                    src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" style="height:29.76px; width:130.56px; ">
+                                <tr>
+                                    <td style="display: flex; justify-content:center; align-items:center; gap: 15px; margin: 10px 0 10px 0"><img
+                                            src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" style="height:29.76px; width:130.56px; ">
 
-                <h4>Mamyr Resort and
-                    Events Place</h4>
-            </td>
-        </tr>
+                                        <h4>Mamyr Resort and
+                                            Events Place</h4>
+                                    </td>
+                                </tr>
 
-        <tr style="background-color:#365CCE;">
-            <td style="text-align:center; ">
-                <h4 style="font-family:Poppins Light; color:#ffffff; font-size: 18px;  margin-top: 25px">THANKS FOR
-                    SIGNING UP!</h4>
-                <h2 style="font-family:Poppins Light; color:#ffffff; margin-top: -20px">Verify Your
-                    Email Address </h2>
-            </td>
-        </tr>
+                                <tr style="background-color:#365CCE;">
+                                    <td style="text-align:center; ">
+                                        <h4 style="font-family:Poppins Light; color:#ffffff; font-size: 18px;  margin-top: 25px">THANKS FOR
+                                            SIGNING UP!</h4>
+                                        <h2 style="font-family:Poppins Light; color:#ffffff; margin-top: -20px">Verify Your
+                                            Email Address </h2>
+                                    </td>
+                                </tr>
 
-        <tr>
-            <td style="padding: 30px; text-align: left; color: #333333;">
-                <h2 style="color: #333333; margin-top: 0;">Your OTP Code for Account Verification</h2>
-                <p style="font-size: 16px; margin: 20px 0 10px;">Hello,</p>
-                <p style="font-size: 16px; margin: 10px 0;">Please use the following One Time Password(OTP) to verify
-                    your account:
-                </p>
+                                <tr>
+                                    <td style="padding: 30px; text-align: left; color: #333333;">
+                                        <h2 style="color: #333333; margin-top: 0;">Your OTP Code for Account Verification</h2>
+                                        <p style="font-size: 16px; margin: 20px 0 10px;">Hello,</p>
+                                        <p style="font-size: 16px; margin: 10px 0;">Please use the following One Time Password(OTP) to verify
+                                            your account:
+                                        </p>
 
-                <div style="text-align: center; margin: 30px 0;">
-                    <span
-                        style="display: inline-block; color: #0c0605; font-size: 24px; padding: 15px 30px; border-radius: 6px; font-weight: bold;">
-                        ' . $otp . '
-                    </span>
-                </div>
-                <p style="font-size: 16px; margin: 10px 0;">This OTP is valid for <strong>5 minutes</strong>. Do not
-                    share it with anyone. If you did not request this code, please ignore this email.
-                </p>
-                <br>
-                <p style="font-size: 16px;">Thank you,</p>
-                <p style="font-size: 16px; font-weight: bold;">Mamyr Resort and Events Place.</p>
-            </td>
-        </tr>
-    </table>
-</body>
+                                        <div style="text-align: center; margin: 30px 0;">
+                                            <span
+                                                style="display: inline-block; color: #0c0605; font-size: 24px; padding: 15px 30px; border-radius: 6px; font-weight: bold;">
+                                                ' . $otp . '
+                                            </span>
+                                        </div>
+                                        <p style="font-size: 16px; margin: 10px 0;">This OTP is valid for <strong>5 minutes</strong>. Do not
+                                            share it with anyone. If you did not request this code, please ignore this email.
+                                        </p>
+                                        <br>
+                                        <p style="font-size: 16px;">Thank you,</p>
+                                        <p style="font-size: 16px; font-weight: bold;">Mamyr Resort and Events Place.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </body>
                                 ';
                         if (sendEmail($email, $firstName, $subject, $message, $env)) {
                             $conn->commit();
