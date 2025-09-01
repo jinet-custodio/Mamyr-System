@@ -136,7 +136,7 @@ if (isset($_POST['verify-btn'])) {
                     exit;
                 }
             } else {
-                $_SESSION['error'] = "Incorrect OTP. Please try again.";
+                $_SESSION['error'] = "Invalid OTP. Please try again.";
                 header("Location: ../Pages/verify_email.php");
                 exit;
             }
@@ -212,7 +212,7 @@ if (isset($_POST['resend_code'])) {
     </table>
 </body>
                                 ';
-                    $subject = 'Here’s Your New OTP Code from Mamyr';
+                    $subject = 'Here\'s Your New OTP Code from Mamyr Resort and Events Place';
 
                     if (sendEmail($email, $storedFirstName, $subject, $message, $env)) {
                         $_SESSION['email'] = $email;
