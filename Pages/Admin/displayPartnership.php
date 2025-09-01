@@ -279,9 +279,9 @@ if (isset($_SESSION['error-partnership'])) {
                         $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName, pt.partnerTypeDescription
                                 FROM partnerships p
                                 INNER JOIN users u ON p.userID = u.userID
-                                INNER JOIN statuses s ON s.statusID = p.partnerStatus
+                                INNER JOIN statuses s ON s.statusID = p.partnerStatusID
                                 LEFT JOIN partnershiptypes pt ON p.partnerTypeID = pt.partnerTypeID
-                                WHERE partnerStatus != ? AND partnerStatus != ?
+                                WHERE partnerStatusID != ? AND partnerStatusID != ?
                                 ");
                         $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);
                         $selectQuery->execute();
@@ -362,9 +362,9 @@ if (isset($_SESSION['error-partnership'])) {
                         $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName, pt.partnerTypeDescription
                                 FROM partnerships p
                                 INNER JOIN users u ON p.userID = u.userID
-                                INNER JOIN statuses s ON s.statusID = p.partnerStatus
+                                INNER JOIN statuses s ON s.statusID = p.partnerStatusID
                                 LEFT JOIN partnershiptypes pt ON p.partnerTypeID = pt.partnerTypeID
-                                WHERE partnerStatus = ? OR partnerStatus = ?
+                                WHERE partnerStatusID = ? OR partnerStatusID = ?
                                 ");
                         $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);
                         $selectQuery->execute();

@@ -339,7 +339,7 @@ if (isset($_SESSION['error'])) {
                     <div class="modal-body">
                         <div class="input-container">
                             <label for="roomName">Room No.</label>
-                            <input type="text" class="form-control" id="roomName" name="roomName" required>
+                            <input type="text" class="form-control" id="roomName" name="roomName" placeholder="e.g. Room 1" required>
                         </div>
                         <div class="input-container">
                             <label for="roomStat">Room Status</label>

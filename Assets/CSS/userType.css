@@ -73,7 +73,7 @@ nav {
 
 .titleContainer {
   /* border: 1px solid red; */
-  margin: 0 0 2rem 0;
+  margin: -2rem 0 2rem 0;
   text-align: center;
 }
 
@@ -92,14 +92,12 @@ nav {
 }
 
 .container {
-  /* border: 1px solid red; */
-  /* margin-top: 1vw; */
   border-radius: 50px;
-  width: 70vw !important;
+  width: 65% !important;
   margin-bottom: 2vw;
   background-color: #43b2f7;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
@@ -111,13 +109,13 @@ nav {
 }
 
 .category-card {
-  width: 50vh !important;
+  width: 95%;
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 
 .category-card,
 .category-body {
-  margin: 2vw;
+  margin: 1vw;
   border-radius: 2vw 2vw 2vw 2vw !important;
   text-align: center;
 }
@@ -133,7 +131,8 @@ nav {
   border-radius: 2vw 2vw 2vw 2vw !important;
   padding: 1vw;
   object-fit: cover;
-  width: 100%;
+  width: 90%;
+  margin: 1vw auto;
 }
 
 .category-title {
@@ -146,11 +145,12 @@ nav {
 
 .card-text {
   color: black;
+  font-size: clamp(1.3vw, 1.4vw, 1.5vw);
 }
 
-.categoryLink {
+a.categoryLink {
   text-decoration: none;
-
+  width: 48%;
   &:hover {
     text-decoration: none !important;
   }
@@ -166,9 +166,13 @@ nav {
 }
 
 /* Tablet landscape */
-@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+@media only screen and (min-width: 600px) and (max-width: 1025px) {
   .title {
-    font-size: 25px;
+    font-size: clamp(3vw, 3.1vw, 3.2vw);
+  }
+
+  a.categoryLink {
+    width: 60%;
   }
 
   .subtitle {
@@ -178,33 +182,32 @@ nav {
 
   .container {
     width: 70% !important;
-    padding: 20vw !important;
   }
 
-  .category-card {
-    height: 55vh !important;
-    width: 40vh !important;
+  .category-card { 
+    width: 100% !important;
   }
 
   .category-title {
-    font-size: 1.5vw;
+    font-size: clamp(2.6vw, 2.7vw, 2.8vw);
   }
 
   .card-text {
-    font-size: 14px;
+    font-size: clamp(2vw, 2.1vw, 2.2vw);
   }
+
 }
 
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
   .title {
-    font-size: 25px;
-    margin-top: 17vw;
+    font-size: clamp(3vw, 3.1vw, 3.2vw);
+    margin-top: 12vw;
   }
 
   .subtitle {
-    font-size: 1.1rem;
-    margin-top: 3vw !important;
+    font-size: clamp(2vw, 2.1vw, 2.2vw);
+    margin-top: 1.8vw
   }
 
   .backArrowContainer {
@@ -216,44 +219,36 @@ nav {
   .container {
     flex-direction: column !important;
     width: 80% !important;
-    height: 70vh !important;
-    margin-top: 6vw;
-    /* padding: 20vw !important; */
+    margin-top: 4vw;
+    padding: 3vw 0;
   }
 
   .category-card {
-    height: 30vh !important;
-    width: 35vh !important;
     box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
   }
 
   .category-card img {
-    height: 30vw !important;
-    width: 40vw;
-    margin: auto;
+    width: 60%; 
     object-fit: cover;
-  }
-  .category-title {
-    font-size: 2.5vw;
-  }
-
-  .card-text {
-    font-size: 12px;
   }
 }
 
 /* Phone size */
-@media screen and (min-width: 360px) and (max-width: 599px) {
+@media screen and (max-width: 599px) {
   .title {
     font-size: 20px;
-    margin-top: 30vw !important;
+    margin-top: 20vw !important;
     width: 70%;
     margin: auto;
   }
 
+  .titleContainer {
+    margin-bottom: 5vw;
+  }
+
   .subtitle {
     font-size: 1rem;
-    margin-top: 3vw !important;
+    margin-top: 1vw !important;
   }
 
   .backArrowContainer {
@@ -263,28 +258,28 @@ nav {
     left: 6%;
   }
 
+  a.categoryLink {
+    width: 60%;
+  }
+
   .container {
     flex-direction: column !important;
     width: 75% !important;
-    height: 55vh !important;
-    margin-top: 10vw;
-    /* padding: 20vw !important; */
+    padding: 2vw 0;
   }
 
-  .category-card {
-    height: 25vh !important;
-    width: 22vh !important;
+  .category-card {  
+    width: 100%;
     box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
   }
 
-  .category-card img {
-    height: 30vw !important;
+  .category-card img { 
     width: 40vw;
     margin: auto;
     object-fit: cover;
   }
   .category-title {
-    font-size: 3.5vw !important;
+    font-size: 3.8vw !important;
   }
 
   .card-text {
