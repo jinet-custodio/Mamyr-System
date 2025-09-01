@@ -326,8 +326,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
             <div class="firstImageContainer">
-                <?php if (isset($imageMap['HistoryParagraph1'])): ?>
-                <?php foreach ($imageMap['HistoryParagraph1'] as $index => $img):
+                <?php if (isset($imageMap['HistoryParagraph2'])): ?>
+                <?php foreach ($imageMap['HistoryParagraph2'] as $index => $img):
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $defaultImage = "../Assets/Images/no-picture.jpg";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
@@ -342,8 +342,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="thirdParagraphContainer">
             <div class="thirdImageContainer">
-                <?php if (isset($imageMap['HistoryParagraph3'])): ?>
-                <?php foreach ($imageMap['HistoryParagraph3'] as $index => $img):
+                <?php if (isset($imageMap['HistoryParagraph4'])): ?>
+                <?php foreach ($imageMap['HistoryParagraph4'] as $index => $img):
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
