@@ -35,7 +35,7 @@
 
 
 
-        <a href="register.php?page=register" id="partner-link" class="categoryLink" style="height: 100%;">
+        <a href="register.php?page=register" id="partner-link" class="categoryLink" >
             <div class="card category-card ">
                 <img class="card-img-top" src="../Assets/Images/UserTypePhotos/customer.png" alt="Partners">
 
@@ -47,7 +47,7 @@
             </div>
         </a>
 
-        <a href="busPartnerRegister.php" id="request-link" class="categoryLink" style="height: 100%;">
+        <a href="busPartnerRegister.php" id="request-link" class="categoryLink" >
             <div class="card category-card " >
                 <img class="card-img-top" src="../Assets/Images/UserTypePhotos/businessPartner.png"
                     alt="Business Partner">
