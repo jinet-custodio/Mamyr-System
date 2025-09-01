@@ -32,106 +32,112 @@ if (isset($_POST['verify-btn'])) {
         $storedUserID = intval($data['userID']);
         $time_now = date('Y-m-d H:i:s');
         if (!empty($storedOTP)) {
-            $userStat = 2; //Verified
-            if ($stored_expiration > $time_now) {
-                if (strtotime($stored_expiration) > strtotime($time_now)) {
-                    if ($action === 'Register') {
-                        $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
-                        $changeStatus->bind_param("is", $userStat, $email);
-                        if ($changeStatus->execute()) {
-                            header("Location: ../Pages/register.php?action=successVerification");
-                            exit;
-                        } else {
-                            error_log('Error Updating Status' . $changeStatus->error);
-                        }
-                        $changeStatus->close();
-                    } elseif ($action === 'Partner') {
-                        // Get partner data from session
-                        $partnerData = $_SESSION['partnerData'] ?? null;
-                        $companyName = mysqli_real_escape_string($conn, $partnerData['companyName']);
-                        $partnerType = intval($_POST['partnerType']);
-                        $partnerAddress = mysqli_real_escape_string($conn, $partnerData['partnerAddress']);
-                        $partnerProofLink = mysqli_real_escape_string($conn, $partnerData['proofLink']);
-                        $partnerPhoneNumber = mysqli_real_escape_string($conn, $partnerData['phoneNumber']);
-
-                        if (!$partnerData) {
-                            $_SESSION['error'] = "Partner information is missing. Please restart the registration process.";
-                            header("Location: ../Pages/register.php");
-                            exit;
-                        }
-
-                        $conn->begin_transaction();
-                        try {
-                            // Update the user phonenumber
-                            $updateUser = $conn->prepare("UPDATE users SET phoneNumber = ? WHERE userID = ?");
-                            $updateUser->bind_param("si",  $partnerPhoneNumber, $storedUserID);
-
-                            if (!$updateUser->execute()) {
-                                throw new Exception("Failed to update user");
-                            }
-
-                            // Insert into partnerships table
-                            $insertPartner = $conn->prepare("INSERT INTO partnerships(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink)
-                                                    VALUES (?,?,?,?,?,?)");
-                            $insertPartner->bind_param("ississ", $storedUserID, $partnerAddress, $companyName, $partnerType, $email, $partnerProofLink);
-
-
-                            if (!$insertPartner->execute()) {
-                                throw new Exception("Failed to insert partnership data");
-                            }
-
-                            // Update user status and reset the otps
-                            $partnershipID = $conn->insert_id;
+            if ($storedOTP === $enteredOTP) {
+                $userStat = 2; //Verified
+                if ($stored_expiration > $time_now) {
+                    if (strtotime($stored_expiration) > strtotime($time_now)) {
+                        if ($action === 'Register') {
                             $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
                             $changeStatus->bind_param("is", $userStat, $email);
-                            if (!$changeStatus->execute()) {
-                                throw new Exception("Failed to change the status");
+                            if ($changeStatus->execute()) {
+                                header("Location: ../Pages/register.php?action=successVerification");
+                                exit;
+                            } else {
+                                error_log('Error Updating Status' . $changeStatus->error);
                             }
-
-                            // Insert notification
-                            $receiver = "Customer";
-                            $message = "Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.";
-                            $insertNotification = $conn->prepare("INSERT INTO notifications(partnershipID, userID, message, receiver) VALUES(?, ?, ?, ?)");
-                            $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
-                            if (!$insertNotification->execute()) {
-                                throw new Exception("Failed to insert notification");
-                            }
-
-                            $conn->commit();
-
-                            unset($_SESSION['partnerData']);
-                            $_SESSION['success'] = "Partner has been successfully registered and verified.";
-                            header("Location: ../Pages/register.php");
-                            exit;
-                        } catch (Exception $e) {
-                            $conn->rollback();
-                            error_log("Partner Registration Error: " . $e->getMessage());
-                            $_SESSION['error'] = "An error occurred during partner registration. Please try again.";
-                            header("Location: ../Pages/register.php");
-                            exit;
-                        } finally {
-                            $updateUser->close();
-                            $insertPartner->close();
                             $changeStatus->close();
-                            $insertNotification->close();
+                        } elseif ($action === 'Partner') {
+                            // Get partner data from session
+                            $partnerData = $_SESSION['partnerData'] ?? null;
+                            $companyName = mysqli_real_escape_string($conn, $partnerData['companyName']);
+                            $partnerType = intval($_POST['partnerType']);
+                            $partnerAddress = mysqli_real_escape_string($conn, $partnerData['partnerAddress']);
+                            $partnerProofLink = mysqli_real_escape_string($conn, $partnerData['proofLink']);
+                            $partnerPhoneNumber = mysqli_real_escape_string($conn, $partnerData['phoneNumber']);
+
+                            if (!$partnerData) {
+                                $_SESSION['error'] = "Partner information is missing. Please restart the registration process.";
+                                header("Location: ../Pages/register.php");
+                                exit;
+                            }
+
+                            $conn->begin_transaction();
+                            try {
+                                // Update the user phonenumber
+                                $updateUser = $conn->prepare("UPDATE users SET phoneNumber = ? WHERE userID = ?");
+                                $updateUser->bind_param("si",  $partnerPhoneNumber, $storedUserID);
+
+                                if (!$updateUser->execute()) {
+                                    throw new Exception("Failed to update user");
+                                }
+
+                                // Insert into partnerships table
+                                $insertPartner = $conn->prepare("INSERT INTO partnerships(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink)
+                                                    VALUES (?,?,?,?,?,?)");
+                                $insertPartner->bind_param("ississ", $storedUserID, $partnerAddress, $companyName, $partnerType, $email, $partnerProofLink);
+
+
+                                if (!$insertPartner->execute()) {
+                                    throw new Exception("Failed to insert partnership data");
+                                }
+
+                                // Update user status and reset the otps
+                                $partnershipID = $conn->insert_id;
+                                $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
+                                $changeStatus->bind_param("is", $userStat, $email);
+                                if (!$changeStatus->execute()) {
+                                    throw new Exception("Failed to change the status");
+                                }
+
+                                // Insert notification
+                                $receiver = "Customer";
+                                $message = "Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.";
+                                $insertNotification = $conn->prepare("INSERT INTO notifications(partnershipID, userID, message, receiver) VALUES(?, ?, ?, ?)");
+                                $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
+                                if (!$insertNotification->execute()) {
+                                    throw new Exception("Failed to insert notification");
+                                }
+
+                                $conn->commit();
+
+                                unset($_SESSION['partnerData']);
+                                $_SESSION['success'] = "Partner has been successfully registered and verified.";
+                                header("Location: ../Pages/register.php");
+                                exit;
+                            } catch (Exception $e) {
+                                $conn->rollback();
+                                error_log("Partner Registration Error: " . $e->getMessage());
+                                $_SESSION['error'] = "An error occurred during partner registration. Please try again.";
+                                header("Location: ../Pages/register.php");
+                                exit;
+                            } finally {
+                                $updateUser->close();
+                                $insertPartner->close();
+                                $changeStatus->close();
+                                $insertNotification->close();
+                            }
+                        } elseif ($action === 'forgot-password') {
+                            $_SESSION['email'] = $email;
+                            header("Location: ../Pages/forgotPassword.php");
+                            exit;
+                        } else {
+                            $_SESSION['error'] = "Unrecognized action during verification. Please try again.";
+                            header("Location: ../Pages/verify_email.php");
+                            exit;
                         }
-                    } elseif ($action === 'forgot-password') {
-                        $_SESSION['email'] = $email;
-                        header("Location: ../Pages/forgotPassword.php");
-                        exit;
                     } else {
-                        $_SESSION['error'] = "Unrecognized action during verification. Please try again.";
-                        header("Location: ../Pages/verify_email.php");
+                        // $_SESSION['error'] = "Invalid OTP.";
+                        header("Location: ../Pages/verify_email.php?action=invalidOTP");
                         exit;
                     }
                 } else {
-                    // $_SESSION['error'] = "Invalid OTP.";
-                    header("Location: ../Pages/verify_email.php?action=invalidOTP");
+                    // $_SESSION['error'] = "Expired OTP.";
+                    header("Location: ../Pages/verify_email.php?action=expiredOTP");
                     exit;
                 }
             } else {
-                // $_SESSION['error'] = "Expired OTP.";
-                header("Location: ../Pages/verify_email.php?action=expiredOTP");
+                $_SESSION['error'] = "Incorrect OTP. Please try again.";
+                header("Location: ../Pages/verify_email.php");
                 exit;
             }
         } else {
