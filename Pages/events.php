@@ -39,7 +39,7 @@ require '../Config/dbcon.php';
                     <a class="nav-link" href="../index.php"> HOME</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="amenities.php" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
@@ -311,9 +311,9 @@ require '../Config/dbcon.php';
             $miniHall = '';
             while ($row = $result->fetch_assoc()) {
                 $serviceName = $row['RServiceName'];
-                if (stripos($serviceName, 'Main') !== false) {
+                if (stripos($serviceName, 'Pavilion Hall') !== false) {
                     $mainHall = $row;
-                } elseif (stripos($serviceName, 'Mini') !== false) {
+                } elseif (stripos($serviceName, 'Mini Pavilion Hall') !== false) {
                     $miniHall = $row;
                 }
             }

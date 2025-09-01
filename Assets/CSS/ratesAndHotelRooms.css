@@ -21,17 +21,21 @@
   list-style: none;
 }
 
-/* html,
-
-
-body {
-  display: flex;
-  flex-direction: column;
-} */
 
 body {
   background: #ffd787a0 !important;
 }
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
 
 /* navbar code */
 
@@ -53,9 +57,11 @@ nav {
 
 .navbar.scrolled {
   background-color: white;
+
   .nav-link {
     color: black !important;
   }
+
   .nav-link:not(.dropdown-toggle):after {
     border-bottom: 4px solid rgb(126, 203, 242) !important;
   }
@@ -99,6 +105,7 @@ nav {
 .dropdown-menu {
   background-color: rgb(126, 203, 242, 0.5) !important;
 }
+
 .nav-item.dropdown:hover .dropdown-menu {
   background-color: white !important;
   display: block;
@@ -116,16 +123,19 @@ nav {
   margin-left: 1rem;
   /* border: 1px solid white; */
   border-radius: 50%;
+
   img {
     .account-nav {
       margin: 1px;
       margin-left: 1rem;
       border: 1px solid white;
       border-radius: 50%;
+
       img {
         height: 8vh;
       }
     }
+
     height: 5vw;
     border-radius: 50%;
     aspect-ratio: 1;
@@ -156,7 +166,6 @@ nav {
 }
 
 .navbar-collapse {
-  text-align: center;
   padding-bottom: 0.5rem;
 }
 
@@ -205,7 +214,8 @@ nav {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Gray out effect */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Gray out effect */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -229,6 +239,7 @@ nav {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -237,6 +248,7 @@ nav {
 .selection {
   margin-top: 20vh;
 }
+
 /* body css */
 .titleContainer {
   width: 70%;
@@ -245,7 +257,7 @@ nav {
 }
 
 #mainTitle {
-  margin-top: 10vw !important;
+  margin-top: 10vw ;
 }
 
 .categories {
@@ -271,7 +283,6 @@ nav {
 .card,
 .card-body {
   text-align: center;
-  height: 70vh !important;
   width: 85% !important;
 }
 
@@ -285,13 +296,13 @@ nav {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0 auto;
+  margin: 3vw auto;
 }
 
 .card-img-top.category {
   border-radius: 2vw 2vw 2vw 2vw !important;
   padding: 1vw;
-  height: 25vw !important;
+  height: 25vw;
   object-fit: cover;
   width: 100%;
   margin: 0 auto;
@@ -446,34 +457,6 @@ nav {
   font-family: "Poppins";
 }
 
-/* .halfImg,
-.singleImg {
-  padding: 1vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  object-fit: cover;
-}
-
-
-.halfImg img {
-  width: 18vw;
-  margin: auto;
-} */
-
-/* .singleImg {
-  padding: 1vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  object-fit: cover;
-}
-
-.singleImg img {
-  width: 25vw;
-  margin: auto;
-} */
-
 /* end of cottages code */
 
 /* videoke code  */
@@ -484,6 +467,7 @@ nav {
   background-color: #f5f5f5;
   margin: auto;
 }
+
 .section {
   display: flex;
   width: 90%;
@@ -560,6 +544,7 @@ nav {
   border-radius: 20px;
   margin: auto;
 }
+
 #massage {
   display: flex;
   width: 90%;
@@ -574,6 +559,7 @@ nav {
   padding: 0.8vw;
   width: 75%;
 }
+
 /* end of massage chair  code */
 /* end of rates code */
 
@@ -587,6 +573,10 @@ nav {
   background-color: gray;
   padding: 0.5vw;
   border-radius: 0.2vw;
+}
+
+.halfImg img {
+  width: 100%;
 }
 
 .container-fluid {
@@ -688,6 +678,7 @@ nav {
 #hotelTitle {
   margin-bottom: 4vw;
 }
+
 .ourRooms {
   margin-top: 2vw;
 }
@@ -720,103 +711,14 @@ nav {
 
 /* End of back to top */
 
-/* footer code */
-footer {
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-
-.my-2 {
-  margin-bottom: 0;
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 10vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 1.5vw;
-  font-weight: bold;
-  color: #ffff;
-}
-
-.footerLine {
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  opacity: 1;
-}
-
-.info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5vw;
-}
-.locationFooter {
-  /* border: 1px solid black; */
-  width: 30%;
-}
-
-.reservationTitle,
-.locationTitle {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 1.5vw;
-  color: #fff;
-}
-
-.numberFooter,
-.emailAddressTextFooter,
-.addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: 1vw;
-}
-
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  margin: 0.3vw;
-}
-
-.socialIcons a {
-  text-decoration: none;
-  padding: 0.8vw;
-  background-color: rgb(255, 255, 255);
-  margin: 5px;
-  border-radius: 50%;
-}
-
-.socialIcons a i {
-  font-size: 2vw;
-  color: #3e849e;
-  opacity: 0.9;
-}
-
-.socialIcons a:hover {
-  background-color: white;
-  transition: 0.5s;
-}
-
-.socialIcons a:hover i {
-  color: #c1a534;
-  transition: 0.5s;
-}
-
-/* end of footer code */
-
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
+
+  .navbar {
+    padding: 5px 0;
+    height: 8vh !important;
+  }
+
   .selection {
     margin-top: 5vw;
     height: 100vh;
@@ -835,14 +737,10 @@ footer {
     font-size: 3vw;
   }
 
-  .navbar {
-    padding: 5px 0;
-    height: 8vh !important;
-  }
-
   .poolTitleContainer {
     width: 70%;
   }
+
   .poolTitle {
     font-size: clamp(12px, calc(1.5vh + 4px), 20px);
   }
@@ -881,6 +779,55 @@ footer {
   }
 }
 
+@media (max-width: 991.98px) {
+
+  #navbarNav .nav-link,
+  #navbarNav .dropdown-item {
+    color: black !important;
+  }
+
+  .nav-item {
+    margin-top: 5px;
+    font-size: 2vw;
+  }
+
+  #navbarDropdown {
+    text-align: left;
+  }
+
+  a.dropdown-item {
+    font-size: 1.8vw !important;
+  }
+
+  #profileAndNotif {
+    background-color: transparent;
+  }
+
+  .navbar-nav {
+    background-color: rgb(251, 250, 250);
+  }
+
+  #toggledNav {
+    position: absolute;
+    right: 2vw;
+  }
+
+  #navbar-half2 .btn-outline-danger {
+    color: black !important;
+    border-color: white !important;
+    width: 100%;
+    text-align: left;
+  }
+
+
+}
+
+@media (max-width: 991.98px) and (orientation:portrait) {
+  .nav-item {
+    margin-top: 5px;
+  }
+}
+
 @media (max-width: 600px) {
   .entranceCard span {
     font-size: clamp(10px, calc(1.1vh + 2px), 15px);
@@ -888,7 +835,6 @@ footer {
 
   .selection {
     margin-top: 15vw;
-    height: 100vh;
   }
 
   .entranceLine {
@@ -902,6 +848,7 @@ footer {
   .title {
     font-size: 4vw;
   }
+
   .backToSelection img {
     width: 4.5vw;
   }
@@ -913,6 +860,7 @@ footer {
   body {
     height: 100vh !important;
   }
+
   .rates {
     margin-top: 14vw !important;
   }
@@ -944,10 +892,47 @@ footer {
     align-items: center;
   }
 
-  .navbar {
-    padding: 5px 0;
-    height: 6vh !important;
+  .logoNav {
+    width: 20vw !important;
   }
+
+  .navbar {
+    height: 10vh;
+  }
+
+  .ms-auto {
+    position: absolute !important;
+    right: 4vw !important;
+  }
+
+  .embed-responsive {
+    width: clamp(70vw, 75vw, 80vw) !important;
+  }
+
+  .account-nav img {
+    height: clamp(8.5vw, 9.5vw, 10vw);
+    aspect-ratio: 1;
+  }
+
+
+  #toggledNav {
+    position: absolute !important;
+    right: 4vw !important;
+  }
+
+  .notificationIcon {
+    display: flex;
+    align-items: center;
+    height: clamp(4.5vw, 5.1vw, 6vw);
+    aspect-ratio: 1;
+  }
+
+  .notifBtn {
+    margin-left: 1.5vw;
+    margin-top: 0 !important;
+  }
+
+
   .hotelIconsContainer {
     width: 55%;
   }
@@ -980,9 +965,14 @@ footer {
 }
 
 @media (max-width: 400px) {
+  #mainTitle {
+    margin-top: 20vw;
+  }
+  .title {
+    font-size: 5vw;
+  }
   .selection {
-    margin-top: 15vw;
-    height: 100vh;
+    margin-top: 15vw; 
   }
 
   .cottage {
@@ -1024,25 +1014,28 @@ footer {
   }
 
   .categoryLink {
-    width: 40%;
+    width: 60%;
     height: auto;
   }
 
   .card-body {
-    width: 100%;
-    height: 25vw !important;
-    padding: 3vw !important;
+    width: 100%;  
+    padding: 5vw 0;
   }
 
   .card-body h5 {
     font-size: 4vw;
   }
 
+  .card-img-top.category {
+    height: unset;
+  }
+
   .card {
     margin: 3vw auto;
-    width: 70% !important;
-    height: 40vw !important;
+    width: 70% !important; 
   }
+
   .availabilityIcons p {
     font-size: 2.3vw;
     font-weight: 700;

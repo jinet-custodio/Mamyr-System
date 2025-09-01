@@ -2,14 +2,17 @@
   font-family: "Poppins";
   src: url(../Fonts/Poppins/Poppins-Regular.ttf);
 }
+
 @font-face {
   font-family: "Lora";
   src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
+
 @font-face {
   font-family: "Alkatra";
   src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -40,17 +43,19 @@ nav {
   display: flex !important;
   list-style: none;
 }
+
 #profileAndNotif {
   padding: 0.6vw;
 }
- 
+
 .navbar-nav .dropdown-toggle {
   display: inline-block;
   padding: 10px !important;
   line-height: 1.5;
   vertical-align: middle;
   position: relative;
-  top: 0.1vw; /* para ma-align yung dropdown sa ibang nav-item */
+  top: 0.1vw;
+  /* para ma-align yung dropdown sa ibang nav-item */
 }
 
 
@@ -106,6 +111,7 @@ nav {
 .dropdown-menu {
   background-color: rgb(126, 203, 242, 0.5) !important;
 }
+
 .nav-item.dropdown:hover .dropdown-menu {
   background-color: white !important;
   display: block;
@@ -131,37 +137,41 @@ nav {
   border-radius: 50%;
   margin-left: 1rem;
   margin-top: 0 !important;
+
   img {
     height: 5vw;
     border-radius: 50%;
     aspect-ratio: 1;
     object-fit: cover;
   }
+
   a {
-      height: 100%;
-  display: flex;
-  align-items: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 }
 
 #notifs {
   margin-top: 0;
 }
-.notification-container{
+
+.notification-container {
   height: 100%;
   display: flex;
   align-items: center;
-  button{
+
+  button {
     background-color: transparent;
     border: none;
   }
 }
 
 .notificationIcon {
-    display: flex;
-    align-items: center;
-    height: 2.5vw;
-    aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  height: 2.5vw;
+  aspect-ratio: 1;
 }
 
 /* Edit mode CSS */
@@ -183,11 +193,13 @@ nav {
 .modal-dialog {
   max-width: 60% !important;
 }
+
 .modal-body {
   max-height: 500px;
 
   overflow-y: auto !important;
 }
+
 .modal-title {
   margin: auto;
   font-size: 2vw;
@@ -203,6 +215,7 @@ nav {
   width: 15vw;
   border-radius: 30px;
 }
+
 /*end of modal css */
 
 /* Div for loader */
@@ -212,7 +225,8 @@ nav {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Gray out effect */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Gray out effect */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -236,6 +250,7 @@ nav {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -340,7 +355,7 @@ input.amenityTitle {
 .slide.active {
   opacity: 1;
   z-index: 1;
-  transform: translateX(0);  
+  transform: translateX(0);
 }
 
 .fade {
@@ -354,7 +369,7 @@ input.amenityTitle {
   display: block;
 }
 
-.slide-btn  {
+.slide-btn {
   cursor: pointer;
   position: absolute;
   top: 50%;
@@ -370,13 +385,14 @@ input.amenityTitle {
   transition: 0.3s ease;
   z-index: 10;
 }
+
 .slide-in-left {
   transform: translateX(-100%);
 }
 
 .slide-in-right {
   transform: translateX(100%);
-} 
+}
 
 .slide-out-left {
   transform: translateX(-100%);
@@ -402,8 +418,13 @@ input.amenityTitle {
 
 
 @keyframes fade {
-  from { opacity: 0.4; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* @media (max-width: 768px) {
@@ -427,10 +448,10 @@ input.amenityTitle {
   padding-top: 0.5vw !important;
 }
 
-.pavilion, 
-.minipavilion, 
-.cottage, 
-.videoke, 
+.pavilion,
+.minipavilion,
+.cottage,
+.videoke,
 .hotel {
   padding-bottom: 1vw !important;
 }
@@ -452,7 +473,7 @@ input.amenityTitle {
 .btn-primary:hover {
   background: rgba(0, 0, 0, 0.8);
 }
- 
+
 .info {
   display: flex;
   justify-content: center;
@@ -477,17 +498,17 @@ input.amenityTitle {
     align-items: center;
   }
 
-.account-nav {
-  .profile-pic {
+  .account-nav {
+    .profile-pic {
       height: clamp(6vw, 6.8vw, 7.4vw);
+    }
   }
-}
 
   .notificationIcon {
-  display: flex;
-  align-items: center;
-  height:  clamp(2.8vw, 3.2vw, 4vw);
-  aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    height: clamp(2.8vw, 3.2vw, 4vw);
+    aspect-ratio: 1;
   }
 
   .notifBtn {
@@ -498,7 +519,7 @@ input.amenityTitle {
   .logoNav {
     width: 18vw;
   }
-  
+
   .ms-auto {
     position: absolute !important;
     right: 2vw !important;
@@ -534,7 +555,7 @@ input.amenityTitle {
   .pic1 {
     height: clamp(21vw, 25vw, 28vw);
     width: auto;
-    margin-bottom: 3vw !important ;
+    margin-bottom: 3vw !important;
   }
 
   .poolPic1,
@@ -575,20 +596,24 @@ input.amenityTitle {
   .poolPic1 {
     transform: rotateY(0deg) translateZ(280px);
   }
+
   .poolPic2 {
     transform: rotateY(72deg) translateZ(280px);
   }
+
   .poolPic3 {
     transform: rotateY(144deg) translateZ(280px);
   }
+
   .poolPic4 {
     transform: rotateY(216deg) translateZ(280px);
   }
+
   .poolPic5 {
     transform: rotateY(288deg) translateZ(280px);
   }
 
-  .amenityLine  {
+  .amenityLine {
     border: none;
     border-top: 5px solid #d48d31;
     width: 30%;
@@ -610,8 +635,8 @@ input.amenityTitle {
   }
 
   .prev-btn {
-  left: 10%;
-  font-size: clamp(20px, 2.2vw, 3.2vw) !important;
+    left: 10%;
+    font-size: clamp(20px, 2.2vw, 3.2vw) !important;
   }
 
   .next-btn {
@@ -623,40 +648,43 @@ input.amenityTitle {
     background: rgba(0, 0, 0, 0.8);
   }
 
-    #profileAndNotif {
-  padding: 0.6vw;
-} 
+  #profileAndNotif {
+    padding: 0.6vw;
+  }
 }
 
 @media (max-width: 991.98px) {
-    #navbarNav .nav-link,
-    #navbarNav .dropdown-item {
-     color: black !important; 
-    }
-    .nav-item {
+
+  #navbarNav .nav-link,
+  #navbarNav .dropdown-item {
+    color: black !important;
+  }
+
+  .nav-item {
     margin-top: 5px;
     font-size: 2vw;
   }
 
-  a.dropdown-item{
+  a.dropdown-item {
     font-size: 1.8vw !important;
   }
-    #profileAndNotif {
-      background-color: transparent;
-    }
 
-    .navbar-nav {
-      background-color: rgb(251, 250, 250);
-    }
+  #profileAndNotif {
+    background-color: transparent;
+  }
 
-    #navbar-half2 .btn-outline-danger {
-        color: black !important;
-        border-color: white !important;
-        width: 100%;
-        text-align: left;
-    }
+  .navbar-nav {
+    background-color: rgb(251, 250, 250);
+  }
 
-    
+  #navbar-half2 .btn-outline-danger {
+    color: black !important;
+    border-color: white !important;
+    width: 100%;
+    text-align: left;
+  }
+
+
 }
 
 @media (max-width: 991.98px) and (orientation:portrait) {
@@ -678,6 +706,7 @@ input.amenityTitle {
     position: absolute !important;
     right: 4vw !important;
   }
+
   .embed-responsive {
     width: clamp(70vw, 75vw, 80vw) !important;
   }
@@ -687,16 +716,17 @@ input.amenityTitle {
     aspect-ratio: 1;
   }
 
-  
-   #toggledNav {
+
+  #toggledNav {
     position: absolute !important;
     right: 4vw !important;
-   }
+  }
+
   .notificationIcon {
-  display: flex;
-  align-items: center;
-  height:  clamp(4.5vw, 5.1vw, 6vw);
-  aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    height: clamp(4.5vw, 5.1vw, 6vw);
+    aspect-ratio: 1;
   }
 
   .notifBtn {
@@ -709,14 +739,14 @@ input.amenityTitle {
   }
 
   .title {
-  font-size: clamp(4.5vw, calc(3.3vw + 1vh), 3.8vw);
+    font-size: clamp(4.5vw, calc(3.3vw + 1vh), 3.8vw);
   }
 
   .amenityTitle {
     font-size: clamp(4vw, calc(3vw + 4px), 3vw);
   }
 
-  .amenityLine  {
+  .amenityLine {
     border: none;
     border-top: 3px solid #d48d31;
     width: 30%;
@@ -725,7 +755,7 @@ input.amenityTitle {
   }
 
   .amenityDescription {
-  font-size: clamp(1.9vw, calc(1.3vw + 1vh), 3vw);
+    font-size: clamp(1.9vw, calc(1.3vw + 1vh), 3vw);
   }
 
   .pic1 {
@@ -738,31 +768,35 @@ input.amenityTitle {
   }
 
   .carousel img {
-    width: 50%; 
+    width: 50%;
     height: auto;
   }
 
-.navbar-toggler-icon {
-    width: 23px !important; 
+  .navbar-toggler-icon {
+    width: 23px !important;
   }
 }
 
 @media (max-width: 400px) {
   .slideshow-container {
-    width: 95%; /* Reduce width further */
-    height: 200px; /* Further reduce height */
+    width: 95%;
+    /* Reduce width further */
+    height: 200px;
+    /* Further reduce height */
   }
 
   .carousel img {
-    width: 50%; /* Even smaller images */
+    width: 50%;
+    /* Even smaller images */
   }
 
   .amenityDescription {
-  font-size: clamp(1.7vw, calc(1vw + 1vh), 2.5vw);
+    font-size: clamp(1.7vw, calc(1vw + 1vh), 2.5vw);
   }
 
   button {
-    font-size: 18px; /* Smaller buttons */
+    font-size: 18px;
+    /* Smaller buttons */
   }
 
   .ms-auto {
@@ -770,13 +804,14 @@ input.amenityTitle {
     right: 5vw !important;
   }
 
-    .account-nav {
+  .account-nav {
     .profile-pic {
-     height: clamp(11vw, 10vw, 9vw);
+      height: clamp(11vw, 10vw, 9vw);
     }
   }
+
   .notificationIcon {
-      height: clamp(7vw, 6vw, 5vw);
+    height: clamp(7vw, 6vw, 5vw);
   }
 
 }
