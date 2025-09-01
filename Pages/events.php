@@ -334,8 +334,6 @@ require '../Config/dbcon.php';
 
             <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
         </div>
-
-
     </div>
 
     <div class="miniHall">
@@ -383,10 +381,6 @@ require '../Config/dbcon.php';
                 <span class="sr-only">Next</span>
             </a>
         </div>
-
-
-
-
     </div>
 
 
