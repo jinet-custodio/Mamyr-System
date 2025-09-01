@@ -36,7 +36,6 @@ if (isset($_POST['verify-btn'])) {
             if ($stored_expiration > $time_now) {
                 if (strtotime($stored_expiration) > strtotime($time_now)) {
                     if ($action === 'Register') {
-                        $conn->begin_transaction();
                         $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
                         $changeStatus->bind_param("is", $userStat, $email);
                         if ($changeStatus->execute()) {
