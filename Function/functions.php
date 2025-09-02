@@ -5,7 +5,7 @@ date_default_timezone_set('Asia/Manila');
 //Function for removing otps
 function resetExpiredOTPs($conn)
 {
-    $query = "UPDATE users 
+    $query = "UPDATE user
               SET userOTP = NULL, OTP_expiration_at = NULL 
               WHERE OTP_expiration_at IS NOT NULL 
                 AND OTP_expiration_at < NOW() - INTERVAL 5 MINUTE";
@@ -40,13 +40,13 @@ function changeToExpiredStatus($conn)
     $expiredStatusID = 6;
 
     // Select all bookings that have ended and are still pending
-    $selectBookings = $conn->prepare("SELECT bookingID FROM bookings WHERE endDate < ? AND bookingStatus = ?");
+    $selectBookings = $conn->prepare("SELECT bookingID FROM booking WHERE endDate < ? AND bookingStatus = ?");
     $selectBookings->bind_param("si", $dateNow, $pendingStatusID);
     $selectBookings->execute();
     $result = $selectBookings->get_result();
 
     if ($result->num_rows > 0) {
-        $updateQuery = $conn->prepare("UPDATE bookings SET bookingStatus = ? WHERE bookingID = ?");
+        $updateQuery = $conn->prepare("UPDATE booking SET bookingStatus = ? WHERE bookingID = ?");
         $count = 0;
         while ($row = $result->fetch_assoc()) {
             $bookingID = (int)$row['bookingID'];
@@ -74,13 +74,13 @@ function changeToDoneStatus($conn)
     $fullyPaidID = 3;
 
     //Select all confirmed bookings that have ended and is fully paid
-    $selectConfirmedBookings = $conn->prepare("SELECT cb.*, b.endDate, b.bookingID FROM confirmedbookings cb 
-                            JOIN bookings b ON cb.bookingID = b.bookingID WHERE B.endDate < ? AND paymentStatus = ? AND paymentApprovalStatus = ?");
+    $selectConfirmedBookings = $conn->prepare("SELECT cb.*, b.endDate, b.bookingID FROM confirmedbooking cb 
+                            JOIN booking b ON cb.bookingID = b.bookingID WHERE B.endDate < ? AND paymentStatus = ? AND paymentApprovalStatus = ?");
     $selectConfirmedBookings->bind_param("sii", $dateNow, $fullyPaidID, $approvedStatusID);
     $selectConfirmedBookings->execute();
     $result = $selectConfirmedBookings->get_result();
     if ($result->num_rows > 0) {
-        $updateQuery = $conn->prepare("UPDATE confirmedbookings SET paymentApprovalStatus = ? WHERE bookingID = ?");
+        $updateQuery = $conn->prepare("UPDATE confirmedbooking SET paymentApprovalStatus = ? WHERE bookingID = ?");
         $counter = 0;
         while ($row = $result->fetch_assoc()) {
             $bookingID = (int)$row['bookingID'];
@@ -100,7 +100,7 @@ function changeToDoneStatus($conn)
 function getStatuses($conn, $statusID)
 {
 
-    $getStatus = $conn->prepare("SELECT * FROM statuses WHERE statusID = ?");
+    $getStatus = $conn->prepare("SELECT * FROM status WHERE statusID = ?");
     $getStatus->bind_param("i", $statusID);
     $getStatus->execute();
     $getStatusResult = $getStatus->get_result();
@@ -141,7 +141,7 @@ function addToAdminTable($conn)
     $position = 'Administrator';
 
     // Fetch users with userRole = 3
-    $getAdminQuery = $conn->prepare("SELECT userID FROM users WHERE userRole = ?");
+    $getAdminQuery = $conn->prepare("SELECT userID FROM user WHERE userRole = ?");
     $getAdminQuery->bind_param('i', $adminID);
     $getAdminQuery->execute();
     $adminQueryResult = $getAdminQuery->get_result();
@@ -151,14 +151,14 @@ function addToAdminTable($conn)
             $storedUserID = intval($row['userID']);
 
 
-            $selectUsers = $conn->prepare("SELECT userID FROM admins WHERE userID = ?");
+            $selectUsers = $conn->prepare("SELECT userID FROM admin WHERE userID = ?");
             $selectUsers->bind_param('i', $storedUserID);
             $selectUsers->execute();
             $result = $selectUsers->get_result();
 
             if ($result->num_rows < 1) {
 
-                $insertAdminQuery = $conn->prepare("INSERT INTO admins (userID, position) VALUES (?, ?)");
+                $insertAdminQuery = $conn->prepare("INSERT INTO admin(userID, position) VALUES (?, ?)");
                 $insertAdminQuery->bind_param('is', $storedUserID, $position);
                 if (!$insertAdminQuery->execute()) {
                     echo "Error inserting admin: " . $insertAdminQuery->error;
@@ -182,7 +182,7 @@ function autoChangeStatus($conn)
     $availableStatusID = 1;
 
     // Set status to OCCUPIED
-    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledates 
+    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledate 
         WHERE unavailableStartDate <= NOW() AND unavailableEndDate >= NOW()
     ");
     $fetchUnavailableServiceDatesQuery->execute();
@@ -194,7 +194,7 @@ function autoChangeStatus($conn)
 
         if ($resortServiceID > 0) {
 
-            $updateStatus = $conn->prepare("UPDATE resortamenities 
+            $updateStatus = $conn->prepare("UPDATE resortamenity 
                 SET RSAvailabilityID = ? 
                 WHERE resortServiceID = ? AND RSAvailabilityID = ?
             ");
@@ -202,7 +202,7 @@ function autoChangeStatus($conn)
             $updateStatus->execute();
             $updateStatus->close();
 
-            $fetchInfo = $conn->prepare("SELECT RServiceName, RScategoryID FROM resortamenities WHERE resortServiceID = ?");
+            $fetchInfo = $conn->prepare("SELECT RServiceName, RScategoryID FROM resortamenity WHERE resortServiceID = ?");
             $fetchInfo->bind_param('i', $resortServiceID);
             $fetchInfo->execute();
             $infoResult = $fetchInfo->get_result()->fetch_assoc();
@@ -210,7 +210,7 @@ function autoChangeStatus($conn)
             $hotelCategoryID = $infoResult['RScategoryID'];
             $fetchInfo->close();
 
-            $updateRelated = $conn->prepare("UPDATE resortamenities 
+            $updateRelated = $conn->prepare("UPDATE resortamenity 
                 SET RSAvailabilityID = ? 
                 WHERE RServiceName = ? AND RScategoryID = ? AND resortServiceID != ? AND RSAvailabilityID = ?
             ");
@@ -220,7 +220,7 @@ function autoChangeStatus($conn)
         }
 
         if ($partnershipServiceID > 0) {
-            $updateStatus = $conn->prepare("UPDATE partnershipservices 
+            $updateStatus = $conn->prepare("UPDATE partnershipservice 
                 SET PSAvailabilityID = ? 
                 WHERE partnershipServiceID = ? AND PSAvailabilityID = ?
             ");
@@ -231,7 +231,7 @@ function autoChangeStatus($conn)
     }
 
     //Set status to AVAILABLE 
-    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledates 
+    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledate 
         WHERE unavailableStartDate > NOW() OR unavailableEndDate < NOW() ");
     $fetchUnavailableServiceDatesQuery->execute();
     $result = $fetchUnavailableServiceDatesQuery->get_result();
@@ -241,7 +241,7 @@ function autoChangeStatus($conn)
         $partnershipServiceID = intval($row['partnershipServiceID']);
 
         if (!empty($resortServiceID)) {
-            $updateStatus = $conn->prepare("UPDATE resortamenities 
+            $updateStatus = $conn->prepare("UPDATE resortamenity 
                 SET RSAvailabilityID = ? 
                 WHERE resortServiceID = ? AND RSAvailabilityID = ?
             ");
@@ -249,7 +249,7 @@ function autoChangeStatus($conn)
             $updateStatus->execute();
             $updateStatus->close();
 
-            $fetchInfo = $conn->prepare("SELECT RServiceName, RScategoryID FROM resortAmenities WHERE resortServiceID = ?");
+            $fetchInfo = $conn->prepare("SELECT RServiceName, RScategoryID FROM resortamenity WHERE resortServiceID = ?");
             $fetchInfo->bind_param('i', $resortServiceID);
             $fetchInfo->execute();
             $infoResult = $fetchInfo->get_result()->fetch_assoc();
@@ -257,7 +257,7 @@ function autoChangeStatus($conn)
             $hotelCategoryID = $infoResult['RScategoryID'];
             $fetchInfo->close();
 
-            $updateRelated = $conn->prepare("UPDATE resortamenities 
+            $updateRelated = $conn->prepare("UPDATE resortamenity
                 SET RSAvailabilityID = ? 
                 WHERE RServiceName = ? AND RScategoryID = ? AND resortServiceID != ? AND RSAvailabilityID = ?
             ");
@@ -268,8 +268,7 @@ function autoChangeStatus($conn)
 
         if (!empty($partnershipServiceID)) {
 
-            $updateStatus = $conn->prepare("
-                UPDATE partnershipServices 
+            $updateStatus = $conn->prepare("UPDATE partnershipservice 
                 SET PSAvailabilityID = ? 
                 WHERE partnershipServiceID = ? AND PSAvailabilityID = ?
             ");
@@ -295,7 +294,7 @@ function generateOTP($length)
 function getUserStatus($conn, $userStatusID)
 {
 
-    $getStatus = $conn->prepare("SELECT * FROM userstatuses WHERE userStatusID = ?");
+    $getStatus = $conn->prepare("SELECT * FROM userstatus WHERE userStatusID = ?");
     $getStatus->bind_param("i", $userStatusID);
     $getStatus->execute();
     $getStatusResult = $getStatus->get_result();
@@ -314,7 +313,7 @@ function getUserStatus($conn, $userStatusID)
 function getUserRole($conn, $roleID)
 {
 
-    $getStatus = $conn->prepare("SELECT * FROM usertypes WHERE userTypeID = ?");
+    $getStatus = $conn->prepare("SELECT * FROM usertype WHERE userTypeID = ?");
     $getStatus->bind_param("i", $roleID);
     $getStatus->execute();
     $getStatusResult = $getStatus->get_result();

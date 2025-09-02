@@ -118,11 +118,11 @@ require '../Config/dbcon.php';
                     <div class="entranceFee">
                         <?php
                         // DB query
-                        $rateSql = "SELECT er.*, etr.time_range  FROM entrancerates  er
-                LEFT JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID
-                 ORDER BY 
-                    FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
-                    FIELD(ERcategory, 'Adult', 'Kids')";
+                        $rateSql = "SELECT er.*, etr.time_range  FROM entrancerate  er
+                        LEFT JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID
+                        ORDER BY 
+                            FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
+                            FIELD(ERcategory, 'Adult', 'Kids')";
                         $rateResult = mysqli_query($conn, $rateSql);
 
                         // Organize data into sessions
@@ -171,7 +171,7 @@ require '../Config/dbcon.php';
 
                 <div class="cottages">
                     <?php
-                    $cottagesql = "SELECT * FROM resortamenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
+                    $cottagesql = "SELECT * FROM resortamenity WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
                     $cottresult = mysqli_query($conn, $cottagesql);
                     if (mysqli_num_rows($cottresult) > 0) {
                         foreach ($cottresult as $cottage) {
@@ -213,7 +213,7 @@ require '../Config/dbcon.php';
                         <h4 class="entranceTitle">Videoke for Rent</h4>
                     </div>
                     <?php
-                    $vidsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Videoke A'";
+                    $vidsql = "SELECT * FROM resortamenity WHERE RServiceName = 'Videoke A'";
                     $vidresult = mysqli_query($conn, $vidsql);
                     if (mysqli_num_rows($vidresult) > 0) {
                         foreach ($vidresult as $videoke) {
@@ -250,7 +250,7 @@ require '../Config/dbcon.php';
                 </div>
                 <div class="cottage " id="billiards">
                     <?php
-                    $bilsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Billiard'";
+                    $bilsql = "SELECT * FROM resortamenity WHERE RServiceName = 'Billiard'";
                     $bilresult = mysqli_query($conn, $bilsql);
                     if (mysqli_num_rows($bilresult) > 0) {
                         foreach ($bilresult as $bill) {
@@ -284,7 +284,7 @@ require '../Config/dbcon.php';
                         <h4 class="entranceTitle">Massage Chair</h4>
                     </div>
                     <?php
-                    $massagesql = "SELECT * FROM resortamenities WHERE RServiceName = 'Massage Chair'";
+                    $massagesql = "SELECT * FROM resortamenity WHERE RServiceName = 'Massage Chair'";
                     $massageresult = mysqli_query($conn, $massagesql);
                     if (mysqli_num_rows($massageresult) > 0) {
                         foreach ($massageresult as $massage) {
@@ -346,8 +346,8 @@ require '../Config/dbcon.php';
                     </div>
                     <?php
                     $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration 
-            FROM resortamenities
-            WHERE RSCategoryID = 1";
+                        FROM resortamenity
+                        WHERE RSCategoryID = 1";
 
                     $result = mysqli_query($conn, $availsql);
                     ?>
@@ -410,7 +410,7 @@ require '../Config/dbcon.php';
 
                     <div class="hotelRoomList">
                         <?php
-                        $roomsql = "SELECT * FROM resortamenities WHERE RScategoryID = 1";
+                        $roomsql = "SELECT * FROM resortamenity WHERE RScategoryID = 1";
                         $roomresult = mysqli_query($conn, $roomsql);
                         if (mysqli_num_rows($roomresult) > 0) {
                             foreach ($roomresult as $hotel) {

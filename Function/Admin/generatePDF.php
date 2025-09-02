@@ -18,7 +18,7 @@ if (isset($_POST['generatePDF'])) {
     $startDateFormatted = date('Y-m-d 00:00:00', strtotime($selectedStartDate));
     $endDateFormatted = date('Y-m-d 23:59:59', strtotime($selectedEndDate));
 
-    $getProfile = $conn->prepare("SELECT firstName, middleInitial, lastName FROM users WHERE userID = ? AND userRole = ?");
+    $getProfile = $conn->prepare("SELECT firstName, middleInitial, lastName FROM user WHERE userID = ? AND userRole = ?");
     $getProfile->bind_param("ii", $userID, $userRole);
     $getProfile->execute();
     $getProfileResult = $getProfile->get_result();
@@ -164,13 +164,13 @@ if (isset($_POST['generatePDF'])) {
                             $approvedStatusID = 2;
 
                             $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
-                    b.bookingType, u.firstName, b.paxNum AS guest, 
-                    b.startDate, b.endDate, 
-                    b.paymentMethod, b.totalCost
-                    FROM confirmedBookings cb
-                    LEFT JOIN bookings b ON cb.bookingID = b.bookingID
-                    LEFT JOIN users u ON b.userID = u.userID
-                    WHERE cb.confirmedBookingStatus = ? AND b.startDate BETWEEN ? AND ?");
+                            b.bookingType, u.firstName, b.paxNum AS guest, 
+                            b.startDate, b.endDate, 
+                            b.paymentMethod, b.totalCost
+                            FROM confirmedbooking cb
+                            LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                            LEFT JOIN user u ON b.userID = u.userID
+                            WHERE cb.confirmedBookingStatus = ? AND b.startDate BETWEEN ? AND ?");
 
                             $getReportData->bind_param("iss", $approvedStatusID, $startDateFormatted, $endDateFormatted);
                             $getReportData->execute();

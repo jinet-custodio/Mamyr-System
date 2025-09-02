@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 
 try {
 
-    $getResortServices = $conn->prepare("SELECT * FROM resortamenities");
+    $getResortServices = $conn->prepare("SELECT * FROM resortamenity");
 
     if ($getResortServices === false) {
         throw new Exception("Prepare failed: " . $conn->error);

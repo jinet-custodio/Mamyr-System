@@ -11,6 +11,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -83,7 +100,7 @@ if ($userRole == 1) {
                 <h5 class="sidebar-text">User Account</h5>
 
                 <?php
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -172,12 +189,12 @@ if ($userRole == 1) {
 
                             <?php
 
-                            $getBooking = $conn->prepare("SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM bookings b
-                                LEFT JOIN confirmedbookings cb ON cb.bookingID = b.bookingID
-                                LEFT JOIN statuses s ON cb.paymentApprovalStatus = s.statusID
-                                LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
+                            $getBooking = $conn->prepare("SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM booking b
+                                LEFT JOIN confirmedbooking cb ON cb.bookingID = b.bookingID
+                                LEFT JOIN status s ON cb.paymentApprovalStatus = s.statusID
+                                LEFT JOIN status stat ON b.bookingStatus = stat.statusID
                                 WHERE userID = ?
-                                ORDER BY createdAt");
+                                ORDER BY b.createdAt");
                             $getBooking->bind_param("i", $userID);
                             $getBooking->execute();
                             $resultGetBooking = $getBooking->get_result();

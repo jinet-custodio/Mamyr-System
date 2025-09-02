@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 
 function getServiceCategory($conn, $id)
 {
-    $getCategory = $conn->prepare('SELECT * FROM resortservicescategories WHERE categoryID = ?');
+    $getCategory = $conn->prepare('SELECT * FROM resortservicescategory WHERE categoryID = ?');
     $getCategory->bind_param('i', $id);
     if ($getCategory->execute()) {
         $result =  $getCategory->get_result();
@@ -76,7 +76,7 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
 
     $conn->begin_transaction();
     try {
-        $insertServiceQuery = $conn->prepare("INSERT INTO resortamenities(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES(?,?,?,?,?,?,?,?,?)");
+        $insertServiceQuery = $conn->prepare("INSERT INTO resortamenity(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES(?,?,?,?,?,?,?,?,?)");
         $insertServiceQuery->bind_param(
             'sdiisissi',
             $serviceName,
@@ -92,7 +92,7 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         if ($insertServiceQuery->execute()) {
             $resortServiceID = $conn->insert_id;
 
-            $insertIntoService = $conn->prepare("INSERT INTO services(`resortServiceID`, `serviceType`) VALUES(?,?)");
+            $insertIntoService = $conn->prepare("INSERT INTO service(`resortServiceID`, `serviceType`) VALUES(?,?)");
             $insertIntoService->bind_param('is', $resortServiceID, $serviceType);
             if ($insertIntoService->execute()) {
                 $conn->commit();
@@ -129,12 +129,12 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
     $conn->begin_transaction();
 
     try {
-        $insertRates = $conn->prepare("INSERT INTO entrancerates(`sessionType`, `timeRangeID`, `ERcategory`, `ERprice`) VALUES(?,?,?,?)");
+        $insertRates = $conn->prepare("INSERT INTO entrancerate(`sessionType`, `timeRangeID`, `ERcategory`, `ERprice`) VALUES(?,?,?,?)");
         $insertRates->bind_param('sisd', $tourType, $timeRange, $visitorType, $entrancePrice);
         if ($insertRates->execute()) {
             $entranceRateID = $conn->insert_id;
 
-            $insertIntoService = $conn->prepare("INSERT INTO services(`entranceRateID`, `serviceType`) VALUES(?,?)");
+            $insertIntoService = $conn->prepare("INSERT INTO service(`entranceRateID`, `serviceType`) VALUES(?,?)");
             $insertIntoService->bind_param('is', $entranceRateID, $serviceType);
             if ($insertIntoService->execute()) {
                 $conn->commit();
@@ -198,12 +198,12 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
 
     $conn->begin_transaction();
     try {
-        $insertHotel = $conn->prepare("INSERT INTO `resortamenities`(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES (?,?,?,?,?,?,?,?,?)");
+        $insertHotel = $conn->prepare("INSERT INTO `resortamenity`(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES (?,?,?,?,?,?,?,?,?)");
         $insertHotel->bind_param("sdiisissi", $roomName, $roomRate, $capacity, $maxCapacity, $duration, $categoryID, $roomDescription, $imageName, $roomStatus);
         if ($insertHotel->execute()) {
             $resortServiceID = $conn->insert_id;
 
-            $insertIntoService = $conn->prepare("INSERT INTO `services`(`resortServiceID`,`serviceType`) VALUES (?,?)");
+            $insertIntoService = $conn->prepare("INSERT INTO `service`(`resortServiceID`,`serviceType`) VALUES (?,?)");
             $insertIntoService->bind_param("is", $resortServiceID, $serviceType);
             if (!$insertIntoService->execute()) {
                 throw new Exception("Failed to insert in services" . $insertIntoService->error());
@@ -235,7 +235,7 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         header('Location: ../../../Pages/Admin/services.php?action=emptyCateringField');
     }
 
-    $insertFoodItem = $conn->prepare("INSERT INTO `menuitems`(`foodName`,`foodPrice`, `foodCategory`, `availabilityID`) VALUES (?,?,?,?)");
+    $insertFoodItem = $conn->prepare("INSERT INTO `menuitem`(`foodName`,`foodPrice`, `foodCategory`, `availabilityID`) VALUES (?,?,?,?)");
     $insertFoodItem->bind_param("sdsi", $foodName, $foodPrice, $foodCategory, $foodAvailability);
     if ($insertFoodItem->execute()) {
         header('Location: ../../../Pages/Admin/services.php?action=menuAdded&page=catering');

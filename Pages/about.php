@@ -10,7 +10,7 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'About';
-$getWebContent = $conn->prepare("SELECT * FROM websitecontents WHERE sectionName = ?");
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
@@ -23,7 +23,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     $contentMap[$cleanTitle] = $row['content'];
 
     // Fetch images with this contentID
-    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimages WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
     $getImages->bind_param("i", $contentID);
     $getImages->execute();
     $imageResult = $getImages->get_result();
@@ -58,49 +58,49 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 <body>
     <?php if ($editMode): ?>
-    <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
+        <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
     <?php if (!$editMode): ?>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
-                <li class="nav-item">
-                    <a class="nav-link" href="../index.php"> Home</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        AMENITIES
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Pages/blog.php">BLOG</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="./about.php">ABOUT</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">BOOK NOW</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Sign Up</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-10">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.php"> Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            AMENITIES
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
+                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                            <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Pages/blog.php">BLOG</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="./about.php">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">BOOK NOW</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     <?php endif; ?>
 
     <div class="titleContainer">
@@ -110,16 +110,16 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <div class="aboutTopContainer" id="aboutTopContainer">
         <div class="topPicContainer">
             <?php if (isset($imageMap['AboutMamyr'])): ?>
-            <?php foreach ($imageMap['AboutMamyr'] as $index => $img):
+                <?php foreach ($imageMap['AboutMamyr'] as $index => $img):
                     $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                     $defaultImage = "../Assets/Images/no-picture.png";
                     $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-            <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($img['altText']) ?>" class="editable-img resortPic"
-                style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#editImageModal"
-                data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
-                data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-            <?php endforeach; ?>
+                    <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($img['altText']) ?>" class="editable-img resortPic"
+                        style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#editImageModal"
+                        data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                        data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                <?php endforeach; ?>
             <?php endif; ?>
         </div>
         <!-- <img src="../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Pool Picture" class="resortPic"> -->
@@ -127,18 +127,18 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="topTextContainer">
             <?php if ($editMode): ?>
-            <textarea type="text" class="hook editable-input form-control" style="font-size: 2vw;font-weight:700;"
-                data-title="Header"><?= htmlspecialchars($contentMap['Header'] ?? '') ?></textarea>
+                <textarea type="text" class="hook editable-input form-control" style="font-size: 2vw;font-weight:700;"
+                    data-title="Header"><?= htmlspecialchars($contentMap['Header'] ?? '') ?></textarea>
             <?php else: ?>
-            <h3 class="hook"><?= htmlspecialchars($contentMap['Header'] ?? 'Header Not Found') ?> </h3>
+                <h3 class="hook"><?= htmlspecialchars($contentMap['Header'] ?? 'Header Not Found') ?> </h3>
             <?php endif; ?>
 
             <?php if ($editMode): ?>
-            <textarea type="text" cols="65" rows="8" class="aboutDescription indent editable-input form-control"
-                data-title="AboutMamyr"><?= htmlspecialchars($contentMap['AboutMamyr'] ?? 'No description found') ?></textarea>
+                <textarea type="text" cols="65" rows="8" class="aboutDescription indent editable-input form-control"
+                    data-title="AboutMamyr"><?= htmlspecialchars($contentMap['AboutMamyr'] ?? 'No description found') ?></textarea>
             <?php else: ?>
-            <p class="aboutDescription indent">
-                <?= htmlspecialchars($contentMap['AboutMamyr'] ?? 'No description found') ?></p>
+                <p class="aboutDescription indent">
+                    <?= htmlspecialchars($contentMap['AboutMamyr'] ?? 'No description found') ?></p>
             <?php endif; ?>
 
 
@@ -150,11 +150,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="servicesTitleContainer">
             <h3 class="servicesTitle">Our Services</h3>
             <?php if ($editMode): ?>
-            <textarea type="text" cols="65" class="servicesDescription indent editable-input form-control"
-                data-title="AboutMamyr"><?= htmlspecialchars($contentMap['ServicesDesc'] ?? 'No description found') ?></textarea>
+                <textarea type="text" cols="65" class="servicesDescription indent editable-input form-control"
+                    data-title="AboutMamyr"><?= htmlspecialchars($contentMap['ServicesDesc'] ?? 'No description found') ?></textarea>
             <?php else: ?>
-            <p class="servicesDescription indent">
-                <?= htmlspecialchars($contentMap['ServicesDesc'] ?? 'No description found') ?></p>
+                <p class="servicesDescription indent">
+                    <?= htmlspecialchars($contentMap['ServicesDesc'] ?? 'No description found') ?></p>
             <?php endif; ?>
 
         </div>
@@ -163,94 +163,94 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             <div class="resortContainer">
                 <?php if (isset($imageMap['Service1Desc'])): ?>
-                <?php foreach ($imageMap['Service1Desc'] as $index => $img):
+                    <?php foreach ($imageMap['Service1Desc'] as $index => $img):
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                    class="editable-img resortIcon" style="cursor: pointer;" data-bs-toggle="modal"
-                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
-                    data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="editable-img resortIcon" style="cursor: pointer;" data-bs-toggle="modal"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                            data-alttext="<?= htmlspecialchars($img['altText']) ?>">
 
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
                 <?php else: ?>
-                <img src="<? $defaultImage ?>" alt="None Found">
+                    <img src="<? $defaultImage ?>" alt="None Found">
                 <?php endif; ?>
                 <?php if ($editMode): ?>
-                <input type="text" class="services resortIconTitle editable-input form-control" data-title="Service1"
-                    value="<?= htmlspecialchars($contentMap['Service1'] ?? 'No description found') ?>">
+                    <input type="text" class="services resortIconTitle editable-input form-control" data-title="Service1"
+                        value="<?= htmlspecialchars($contentMap['Service1'] ?? 'No description found') ?>">
                 <?php else: ?>
-                <h4 class="resortIconTitle"><?= htmlspecialchars($contentMap['Service1'] ?? 'No description found') ?>
-                </h4>
+                    <h4 class="resortIconTitle"><?= htmlspecialchars($contentMap['Service1'] ?? 'No description found') ?>
+                    </h4>
                 <?php endif; ?>
                 <?php if ($editMode): ?>
-                <textarea type="text" rows="5"
-                    class="resortIconDescription Service1Desc indent editable-input form-control"
-                    data-title="Service1Desc"><?= htmlspecialchars($contentMap['Service1Desc'] ?? 'No description found') ?></textarea>
+                    <textarea type="text" rows="5"
+                        class="resortIconDescription Service1Desc indent editable-input form-control"
+                        data-title="Service1Desc"><?= htmlspecialchars($contentMap['Service1Desc'] ?? 'No description found') ?></textarea>
                 <?php else: ?>
-                <p class="resortIconDescription">
-                    <?= htmlspecialchars($contentMap['Service1Desc'] ?? 'No description found') ?></p>
+                    <p class="resortIconDescription">
+                        <?= htmlspecialchars($contentMap['Service1Desc'] ?? 'No description found') ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="eventContainer">
                 <?php if (isset($imageMap['Service2Desc'])): ?>
-                <?php foreach ($imageMap['Service2Desc'] as $index => $img):
+                    <?php foreach ($imageMap['Service2Desc'] as $index => $img):
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                    class="editable-img eventIcon" style="cursor: pointer;" data-bs-toggle="modal"
-                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
-                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-                <?php endforeach; ?>
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="editable-img eventIcon" style="cursor: pointer;" data-bs-toggle="modal"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <?php endforeach; ?>
                 <?php else: ?>
-                <img src="<? $defaultImage ?>" alt="None Found">
+                    <img src="<? $defaultImage ?>" alt="None Found">
                 <?php endif; ?>
                 <?php if ($editMode): ?>
-                <input type="text" class="services eventIconTitle editable-input form-control" data-title="Service2"
-                    value="<?= htmlspecialchars($contentMap['Service2'] ?? 'No description found') ?>">
+                    <input type="text" class="services eventIconTitle editable-input form-control" data-title="Service2"
+                        value="<?= htmlspecialchars($contentMap['Service2'] ?? 'No description found') ?>">
                 <?php else: ?>
-                <h4 class="eventIconTitle"><?= htmlspecialchars($contentMap['Service2'] ?? 'No description found') ?>
-                </h4>
+                    <h4 class="eventIconTitle"><?= htmlspecialchars($contentMap['Service2'] ?? 'No description found') ?>
+                    </h4>
                 <?php endif; ?>
                 <?php if ($editMode): ?>
-                <textarea type="text" rows="5"
-                    class="eventIconDescription Service2Desc indent editable-input form-control"
-                    data-title="Service2Desc"><?= htmlspecialchars($contentMap['Service2Desc'] ?? 'No description found') ?></textarea>
+                    <textarea type="text" rows="5"
+                        class="eventIconDescription Service2Desc indent editable-input form-control"
+                        data-title="Service2Desc"><?= htmlspecialchars($contentMap['Service2Desc'] ?? 'No description found') ?></textarea>
                 <?php else: ?>
-                <p class="eventIconDescription">
-                    <?= htmlspecialchars($contentMap['Service2Desc'] ?? 'No description found') ?></p>
+                    <p class="eventIconDescription">
+                        <?= htmlspecialchars($contentMap['Service2Desc'] ?? 'No description found') ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="hotelContainer">
                 <?php if (isset($imageMap['Service3Desc'])): ?>
-                <?php foreach ($imageMap['Service3Desc'] as $index => $img):
+                    <?php foreach ($imageMap['Service3Desc'] as $index => $img):
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                    class="editable-img hotelIcon" style="cursor: pointer;" data-bs-toggle="modal"
-                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
-                    data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="editable-img hotelIcon" style="cursor: pointer;" data-bs-toggle="modal"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                            data-alttext="<?= htmlspecialchars($img['altText']) ?>">
 
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
                 <?php endif; ?>
                 <?php if ($editMode): ?>
-                <input type="text" class="services hotelIconTitle editable-input form-control" data-title="Service3"
-                    value="<?= htmlspecialchars($contentMap['Service3'] ?? 'No description found') ?>">
+                    <input type="text" class="services hotelIconTitle editable-input form-control" data-title="Service3"
+                        value="<?= htmlspecialchars($contentMap['Service3'] ?? 'No description found') ?>">
                 <?php else: ?>
-                <h4 class="hotelIconTitle"><?= htmlspecialchars($contentMap['Service3'] ?? 'No description found') ?>
-                </h4>
+                    <h4 class="hotelIconTitle"><?= htmlspecialchars($contentMap['Service3'] ?? 'No description found') ?>
+                    </h4>
                 <?php endif; ?>
                 <?php if ($editMode): ?>
-                <textarea type="text" rows="5"
-                    class="hotelIconDescription Service3Desc indent editable-input form-control"
-                    data-title="Service3Desc"><?= htmlspecialchars($contentMap['Service3Desc'] ?? 'No description found') ?></textarea>
+                    <textarea type="text" rows="5"
+                        class="hotelIconDescription Service3Desc indent editable-input form-control"
+                        data-title="Service3Desc"><?= htmlspecialchars($contentMap['Service3Desc'] ?? 'No description found') ?></textarea>
                 <?php else: ?>
-                <p class="hotelIconDescription">
-                    <?= htmlspecialchars($contentMap['Service3Desc'] ?? 'No description found') ?></p>
+                    <p class="hotelIconDescription">
+                        <?= htmlspecialchars($contentMap['Service3Desc'] ?? 'No description found') ?></p>
                 <?php endif; ?>
             </div>
         </div>
@@ -261,7 +261,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="videoTextContainer">
             <?php
             $sectionName = 'BusinessInformation';
-            $getWebContent = $conn->prepare("SELECT * FROM websitecontents WHERE sectionName = ?");
+            $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
             $getWebContent->bind_param("s", $sectionName);
             $getWebContent->execute();
             $getWebContentResult = $getWebContent->get_result();
@@ -276,12 +276,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <h3 class="videoTitle">Explore <?= htmlspecialchars($businessInfo['FullName'] ?? 'No description found') ?>
             </h3>
             <?php if ($editMode): ?>
-            <textarea type="text" rows="13" cols="75"
-                class="videoDescription white-text indent editable-input form-control"
-                data-title="Explore"><?= htmlspecialchars($contentMap['Explore'] ?? 'No description found') ?></textarea>
+                <textarea type="text" rows="13" cols="75"
+                    class="videoDescription white-text indent editable-input form-control"
+                    data-title="Explore"><?= htmlspecialchars($contentMap['Explore'] ?? 'No description found') ?></textarea>
             <?php else: ?>
-            <p class="videoDescription indent"><?= htmlspecialchars($contentMap['Explore'] ?? 'No description found') ?>
-            </p>
+                <p class="videoDescription indent"><?= htmlspecialchars($contentMap['Explore'] ?? 'No description found') ?>
+                </p>
             <?php endif; ?>
 
         </div>
@@ -298,9 +298,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <div class="backArrowContainer" id="backArrowContainer">
         <?php if ($editMode): ?>
-        <a href="about.php?edit=true">
+            <a href="about.php?edit=true">
             <?php else: ?>
-            <a href="about.php?">
+                <a href="about.php?">
                 <?php endif; ?>
                 <img src="../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
     </div>
@@ -309,33 +309,33 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="firstParagraphContainer">
             <div class="firstParagraphtextContainer">
                 <?php if ($editMode): ?>
-                <textarea type="text" rows="7" cols="75" class="firstParagraph indent editable-input form-control"
-                    data-title="HistoryParagraph1"><?= htmlspecialchars($contentMap['HistoryParagraph1'] ?? 'No description found') ?></textarea>
+                    <textarea type="text" rows="7" cols="75" class="firstParagraph indent editable-input form-control"
+                        data-title="HistoryParagraph1"><?= htmlspecialchars($contentMap['HistoryParagraph1'] ?? 'No description found') ?></textarea>
                 <?php else: ?>
-                <p class="firstParagraph indent">
-                    <?= htmlspecialchars($contentMap['HistoryParagraph1'] ?? 'No description found') ?></p>
+                    <p class="firstParagraph indent">
+                        <?= htmlspecialchars($contentMap['HistoryParagraph1'] ?? 'No description found') ?></p>
                 <?php endif; ?>
                 <?php if ($editMode): ?>
-                <textarea type="text" rows="8" cols="75" class="secondParagraph indent editable-input form-control"
-                    data-title="HistoryParagraph2"><?= htmlspecialchars($contentMap['HistoryParagraph2'] ?? 'No description found') ?></textarea>
+                    <textarea type="text" rows="8" cols="75" class="secondParagraph indent editable-input form-control"
+                        data-title="HistoryParagraph2"><?= htmlspecialchars($contentMap['HistoryParagraph2'] ?? 'No description found') ?></textarea>
                 <?php else: ?>
-                <p class="secondParagraph indent">
-                    <?= htmlspecialchars($contentMap['HistoryParagraph2'] ?? 'No description found') ?></p>
+                    <p class="secondParagraph indent">
+                        <?= htmlspecialchars($contentMap['HistoryParagraph2'] ?? 'No description found') ?></p>
                 <?php endif; ?>
             </div>
 
 
             <div class="firstImageContainer">
                 <?php if (isset($imageMap['HistoryParagraph2'])): ?>
-                <?php foreach ($imageMap['HistoryParagraph2'] as $index => $img):
+                    <?php foreach ($imageMap['HistoryParagraph2'] as $index => $img):
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $defaultImage = "../Assets/Images/no-picture.jpg";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                    class="editable-img firstParagraphPhoto" style="cursor: pointer;" data-bs-toggle="modal"
-                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
-                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-                <?php endforeach; ?>
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="editable-img firstParagraphPhoto" style="cursor: pointer;" data-bs-toggle="modal"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <?php endforeach; ?>
                 <?php endif; ?>
             </div>
         </div>
@@ -343,38 +343,38 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="thirdParagraphContainer">
             <div class="thirdImageContainer">
                 <?php if (isset($imageMap['HistoryParagraph4'])): ?>
-                <?php foreach ($imageMap['HistoryParagraph4'] as $index => $img):
+                    <?php foreach ($imageMap['HistoryParagraph4'] as $index => $img):
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
-                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                    class="editable-img thirdParagraphPhoto" style="cursor: pointer;" data-bs-toggle="modal"
-                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
-                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
-                <?php endforeach; ?>
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="editable-img thirdParagraphPhoto" style="cursor: pointer;" data-bs-toggle="modal"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <?php endforeach; ?>
                 <?php else: ?>
-                <img src="<?= htmlspecialchars($defaultImage) ?>">
+                    <img src="<?= htmlspecialchars($defaultImage) ?>">
                 <?php endif; ?>
             </div>
 
             <div class="thirdParagraphtextContainer">
                 <?php if ($editMode): ?>
-                <textarea type="text" rows="10" cols="75" class="thirdParagraph indent editable-input form-control"
-                    data-title="HistoryParagraph3"> <?= htmlspecialchars($contentMap['HistoryParagraph3'] ?? 'No description found') ?></textarea>
+                    <textarea type="text" rows="10" cols="75" class="thirdParagraph indent editable-input form-control"
+                        data-title="HistoryParagraph3"> <?= htmlspecialchars($contentMap['HistoryParagraph3'] ?? 'No description found') ?></textarea>
                 <?php else: ?>
-                <p class="thirdParagraph indent">
-                    <?= htmlspecialchars($contentMap['HistoryParagraph3'] ?? 'No description found') ?></p>
+                    <p class="thirdParagraph indent">
+                        <?= htmlspecialchars($contentMap['HistoryParagraph3'] ?? 'No description found') ?></p>
                 <?php endif; ?>
             </div>
         </div>
 
         <div class="fourthParagraphContainer">
             <?php if ($editMode): ?>
-            <textarea type="text" rows="5" cols="75" class="fourthParagraph indent editable-input form-control"
-                data-title="HistoryParagraph4"><?= htmlspecialchars($contentMap['HistoryParagraph4'] ?? 'No description found') ?></textarea>
+                <textarea type="text" rows="5" cols="75" class="fourthParagraph indent editable-input form-control"
+                    data-title="HistoryParagraph4"><?= htmlspecialchars($contentMap['HistoryParagraph4'] ?? 'No description found') ?></textarea>
             <?php else: ?>
-            <p class="fourthParagraph indent">
-                <?= htmlspecialchars($contentMap['HistoryParagraph4'] ?? 'No description found') ?></p>
+                <p class="fourthParagraph indent">
+                    <?= htmlspecialchars($contentMap['HistoryParagraph4'] ?? 'No description found') ?></p>
             <?php endif; ?>
 
         </div>
@@ -387,162 +387,162 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
     <?php if (!$editMode): ?>
-    <?php include 'footer.php'; ?>
+        <?php include 'footer.php'; ?>
     <?php endif; ?>
 
     <!-- Script for loader -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const loaderOverlay = document.getElementById('loaderOverlay');
-        const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
 
-        const navbarLinks = document.querySelectorAll('.navbar a');
+            const navbarLinks = document.querySelectorAll('.navbar a');
 
-        navbarLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                const href = link.getAttribute('href');
+            navbarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = link.getAttribute('href');
 
-                if (href && !href.startsWith('#')) {
-                    // Create a temporary anchor to parse the href
-                    const tempAnchor = document.createElement('a');
-                    tempAnchor.href = href;
-                    const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
+                    if (href && !href.startsWith('#')) {
+                        // Create a temporary anchor to parse the href
+                        const tempAnchor = document.createElement('a');
+                        tempAnchor.href = href;
+                        const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
 
-                    // If the target is different from the current path, show loader
-                    if (targetPath !== currentPath) {
-                        loaderOverlay.style.display = 'flex';
+                        // If the target is different from the current path, show loader
+                        if (targetPath !== currentPath) {
+                            loaderOverlay.style.display = 'flex';
+                        }
                     }
-                }
+                });
             });
         });
-    });
 
-    function hideLoader() {
-        const overlay = document.getElementById('loaderOverlay');
-        if (overlay) overlay.style.display = 'none';
-    }
-
-    // Hide loader on normal load
-    window.addEventListener('load', hideLoader);
-
-    // Hide loader on back/forward navigation (from browser cache)
-    window.addEventListener('pageshow', function(event) {
-        if (event.persisted) {
-            hideLoader();
+        function hideLoader() {
+            const overlay = document.getElementById('loaderOverlay');
+            if (overlay) overlay.style.display = 'none';
         }
-    });
+
+        // Hide loader on normal load
+        window.addEventListener('load', hideLoader);
+
+        // Hide loader on back/forward navigation (from browser cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+            }
+        });
     </script>
 
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const saveBtn = document.getElementById('saveChangesBtn');
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const saveBtn = document.getElementById('saveChangesBtn');
 
 
-        const editables = document.querySelectorAll(".editable-img");
+                const editables = document.querySelectorAll(".editable-img");
 
-        editables.forEach(el => {
-            el.style.border = "2px solid red";
-        });
-
-        saveBtn?.addEventListener('click', () => {
-
-            const inputs = document.querySelectorAll('.editable-input');
-            const data = {
-                sectionName: 'About'
-            };
-
-            inputs.forEach(input => {
-                const title = input.getAttribute('data-title');
-                const value = input.value;
-                data[title] = value;
-            });
-
-            fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(res => res.text())
-                .then(response => {
-                    console.log('Content saved:', response);
-                    alert('Website content saved!');
-                })
-                .catch(err => {
-                    console.error('Error saving content:', err);
-                    alert('An error occurred while saving content.');
+                editables.forEach(el => {
+                    el.style.border = "2px solid red";
                 });
 
-            const editableImages = document.querySelectorAll('.editable-img');
-            editableImages.forEach(img => {
-                const wcImageID = img.dataset.wcimageid;
-                const altText = img.dataset.alttext;
-                const folder = img.dataset.folder || '';
-                const file = img.fileObject || null;
+                saveBtn?.addEventListener('click', () => {
 
-                if (!wcImageID || (!file && !altText)) return;
+                    const inputs = document.querySelectorAll('.editable-input');
+                    const data = {
+                        sectionName: 'About'
+                    };
 
-                const formData = new FormData();
-                formData.append('wcImageID', wcImageID);
-                formData.append('altText', altText);
-                formData.append('folder', folder);
-
-                if (file) {
-                    formData.append('image', file);
-                }
-
-                fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            console.log(`Image ${wcImageID} updated successfully.`);
-                        } else {
-                            alert(`Failed to update image ${wcImageID}: ` + data.message);
-                        }
-                    })
-                    .catch(err => {
-                        console.error('Image update failed:', err);
-                        alert('An error occurred while updating an image.');
+                    inputs.forEach(input => {
+                        const title = input.getAttribute('data-title');
+                        const value = input.value;
+                        data[title] = value;
                     });
-            });
 
-        });
-    });
-    </script>
+                    fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(res => res.text())
+                        .then(response => {
+                            console.log('Content saved:', response);
+                            alert('Website content saved!');
+                        })
+                        .catch(err => {
+                            console.error('Error saving content:', err);
+                            alert('An error occurred while saving content.');
+                        });
+
+                    const editableImages = document.querySelectorAll('.editable-img');
+                    editableImages.forEach(img => {
+                        const wcImageID = img.dataset.wcimageid;
+                        const altText = img.dataset.alttext;
+                        const folder = img.dataset.folder || '';
+                        const file = img.fileObject || null;
+
+                        if (!wcImageID || (!file && !altText)) return;
+
+                        const formData = new FormData();
+                        formData.append('wcImageID', wcImageID);
+                        formData.append('altText', altText);
+                        formData.append('folder', folder);
+
+                        if (file) {
+                            formData.append('image', file);
+                        }
+
+                        fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    console.log(`Image ${wcImageID} updated successfully.`);
+                                } else {
+                                    alert(`Failed to update image ${wcImageID}: ` + data.message);
+                                }
+                            })
+                            .catch(err => {
+                                console.error('Image update failed:', err);
+                                alert('An error occurred while updating an image.');
+                            });
+                    });
+
+                });
+            });
+        </script>
     <?php endif; ?>
 
     <script>
-    const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
-    const backArrowContainer = document.getElementById("backArrowContainer")
-    const aboutTopContainer = document.getElementById("aboutTopContainer")
-    const ourServicesContainer = document.getElementById("ourServicesContainer")
-    const videoContainer = document.getElementById("videoContainer")
+        const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
+        const backArrowContainer = document.getElementById("backArrowContainer")
+        const aboutTopContainer = document.getElementById("aboutTopContainer")
+        const ourServicesContainer = document.getElementById("ourServicesContainer")
+        const videoContainer = document.getElementById("videoContainer")
 
-    mamyrHistoryContainer.style.display = "none"
-    backArrowContainer.style.display = "none"
+        mamyrHistoryContainer.style.display = "none"
+        backArrowContainer.style.display = "none"
 
 
-    function readMore() {
-        if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
+        function readMore() {
+            if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
 
-            mamyrHistoryContainer.style.display = "block";
-            backArrowContainer.style.display = "block"
-            aboutTopContainer.style.display = "none"
-            ourServicesContainer.style.display = "none"
-            videoContainer.style.display = "none"
-            document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
+                mamyrHistoryContainer.style.display = "block";
+                backArrowContainer.style.display = "block"
+                aboutTopContainer.style.display = "none"
+                ourServicesContainer.style.display = "none"
+                videoContainer.style.display = "none"
+                document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
 
-        } else {
-            mamyrHistoryContainer.style.display = "block"
-            backArrowContainer.style.display = "block"
+            } else {
+                mamyrHistoryContainer.style.display = "block"
+                backArrowContainer.style.display = "block"
+            }
         }
-    }
     </script>
 
 

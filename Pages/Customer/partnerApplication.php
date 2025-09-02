@@ -11,6 +11,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -41,7 +58,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
@@ -69,7 +86,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -180,7 +197,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     </div>
 
     <?php
-    $getUserInfo = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ?");
+    $getUserInfo = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ?");
     $getUserInfo->bind_param("ii", $userID, $userRole);
     $getUserInfo->execute();
     $getUserInfoResult = $getUserInfo->get_result();
@@ -191,7 +208,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $firstName = $data['firstName'];
         $middleInitial = $data['middleInitial'];
         $lastName = $data['lastName'];
-        $phoneNumber = $data['phoneNumber'];
+        $phoneNumber = $data['phoneNumber'] ?? '--';
         $email = $data['email'];
 
         if ($phoneNumber === "--") {
@@ -216,7 +233,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         if (isset($_SESSION['message'])): ?>
             <p class="alert alert-danger">
                 <?php
-                echo htmlspecialchars_decode(strip_tags($_SESSION['message']));
+                echo htmlspecialchars(strip_tags($_SESSION['message']));
                 unset($_SESSION['message']);
                 ?>
             </p>
@@ -226,7 +243,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         if (isset($_SESSION['success'])): ?>
             <p class="alert alert-success">
                 <?php
-                echo htmlspecialchars_decode(strip_tags($_SESSION['success']));
+                echo htmlspecialchars(strip_tags($_SESSION['success']));
                 unset($_SESSION['success']);
                 ?>
             </p>
@@ -239,9 +256,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <div class=" container" id="basicInfo">
 
             <input type="hidden" class="form-control" id="userdID" name="userID"
-                value="<?= htmlspecialchars_decode($userID) ?>">
+                value="<?= htmlspecialchars($userID) ?>">
             <input type="hidden" class="form-control" id="userdRole" name="userRole"
-                value="<?= htmlspecialchars_decode($userRole) ?>">
+                value="<?= htmlspecialchars($userRole) ?>">
             <div class="row">
                 <div class="col" id="repInfoContainer">
                     <h4 class="repInfoLabel">Representative Information</h4>
@@ -251,14 +268,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             placeholder="Business Email" required>
 
                         <input type="text" class="form-control" id="firstName" name="firstName"
-                            value="<?= htmlspecialchars_decode($firstName) ?>" placeholder="First Name" required>
+                            value="<?= htmlspecialchars($firstName) ?>" placeholder="First Name" required>
                         <input type="text" class="form-control" id="middleInitial"
-                            value="<?= htmlspecialchars_decode($middleInitial) ?>" name="middleInitial"
+                            value="<?= htmlspecialchars($middleInitial) ?>" name="middleInitial"
                             placeholder="Middle Initial (Optional)">
                         <input type="text" class="form-control" id="lastName" name="lastName"
-                            value="<?= htmlspecialchars_decode($lastName) ?>" placeholder="Last Name" required>
+                            value="<?= htmlspecialchars($lastName) ?>" placeholder="Last Name" required>
                         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                            placeholder="Phone Number" value="<?= htmlspecialchars_decode($phoneNumber) ?>" required>
+                            placeholder="Phone Number" value="<?= htmlspecialchars($phoneNumber) ?>" required>
                     </div>
                 </div>
 
@@ -272,7 +289,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <select id="partnerType" name="partnerType" class="form-select primary">
                             <option value="" disabled selected>Type of Business</option>
                             <?php
-                            $serviceType = $conn->prepare("SELECT * FROM partnershiptypes");
+                            $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
                             $serviceType->execute();
                             $serviceTypeResult = $serviceType->get_result();
                             if ($serviceTypeResult->num_rows > 0) {

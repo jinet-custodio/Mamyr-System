@@ -1,0 +1,56 @@
+USE mamyr;
+
+CREATE TABLE user (
+    userID INT PRIMARY KEY AUTO_INCREMENT,
+    firstName VARCHAR(50) NOT NULL,
+    middleInitial VARCHAR(5) DEFAULT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    userAddress TEXT NOT NULL,
+    phoneNumber VARCHAR(20) DEFAULT NULL,
+    birthDate DATE DEFAULT NULL,
+    userProfile LONGBLOB,
+    password VARCHAR(255) NOT NULL,
+    userRole INT NOT NULL DEFAULT 1, 
+    userOTP VARCHAR(100),
+    OTP_expiration_at DATETIME,
+    userStatusID INT NOT NULL DEFAULT 1,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (userRole) REFERENCES usertype(userTypeID),
+    FOREIGN KEY (userStatusID) REFERENCES userstatus(userStatusID)
+);
+
+
+CREATE TABLE admin (
+    adminID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL UNIQUE,
+    position VARCHAR(100),
+
+    FOREIGN KEY (userID) REFERENCES user(userID)
+);
+
+
+
+CREATE TABLE partnership (
+    partnershipID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT DEFAULT NULL,
+    validID varchar(500) NOT NULL,
+    companyName varchar(100) not null,
+    businessEmail VARCHAR(255) NOT NULL UNIQUE,
+    partnerAddress TEXT NOT NULL,
+    documentLink VARCHAR(500) NOT NULL,
+    partnerTypeID INT NOT NULL,
+    partnerStatusID INT NOT NULL DEFAULT 1,
+    requestDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    startDate DATE DEFAULT NULL,
+    endDate DATE DEFAULT NULL,
+
+    FOREIGN KEY (userID) REFERENCES user(userID),
+    FOREIGN KEY (partnerStatusID) REFERENCES partnerstatus(partnerStatusID),
+    FOREIGN KEY (partnerTypeID) REFERENCES partnershiptype(partnerTypeID)
+    -- FOREIGN KEY (partnerStatus) REFERENCES userstatus(userStatusID)
+);
+
+
+

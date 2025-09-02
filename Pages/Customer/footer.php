@@ -1,11 +1,11 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
- 
+
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
-$getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
@@ -18,7 +18,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     $contentID = $row['contentID'];
     $contentMap[$cleanTitle] = $row['content'];
 
-    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websiteContentImages WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
     $getImages->bind_param("i", $contentID);
     $getImages->execute();
     $imageResult = $getImages->get_result();
@@ -53,42 +53,44 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
 </head>
+
 <body>
-<footer class="py-1 ">
-    <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
+    <footer class="py-1 ">
+        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
 
-        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
-        <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>
-        </h3>
-    </div>
-
-    <div class="info">
-        <div class="reservation">
-            <h4 class="reservationTitle">Reservation</h4>
-            <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>
-            </h4>
-            <h4 class="emailAddressTextFooter">
-                <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>
-            </h4>
+            <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>
+            </h3>
         </div>
-        <div class="locationFooter">
-            <h4 class="locationTitle">Location</h4>
-            <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>
-            </h4>
-        </div>
-    </div>
-    <hr class="footerLine">
-    <div class="socialIcons">
-        <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
-                class='bx bxl-facebook-circle'></i></a>
-        <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>"><i
-                class='bx bxl-gmail'></i></a>
-        <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
-            <i class='bx bxs-phone'></i>
-        </a>
 
-    </div>
-</footer>
+        <div class="info">
+            <div class="reservation">
+                <h4 class="reservationTitle">Reservation</h4>
+                <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>
+                </h4>
+                <h4 class="emailAddressTextFooter">
+                    <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>
+                </h4>
+            </div>
+            <div class="locationFooter">
+                <h4 class="locationTitle">Location</h4>
+                <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>
+                </h4>
+            </div>
+        </div>
+        <hr class="footerLine">
+        <div class="socialIcons">
+            <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
+                    class='bx bxl-facebook-circle'></i></a>
+            <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>"><i
+                    class='bx bxl-gmail'></i></a>
+            <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
+                <i class='bx bxs-phone'></i>
+            </a>
+
+        </div>
+    </footer>
 </body>
+
 </html>

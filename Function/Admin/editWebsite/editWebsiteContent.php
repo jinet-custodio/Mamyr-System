@@ -22,11 +22,11 @@ if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
     unset($data['sectionName']);
 
     foreach ($data as $title => $content) {
-        $stmt = $conn->prepare("UPDATE websitecontents SET content = ?, lastUpdated = NOW() WHERE sectionName = ? AND title = ?");
+        $stmt = $conn->prepare("UPDATE websitecontent SET content = ?, lastUpdated = NOW() WHERE sectionName = ? AND title = ?");
         $stmt->bind_param("sss", $content, $sectionName, $title);
         $stmt->execute();
     }
- 
+
     header('Content-Type: application/json');
     echo json_encode([
         'success' => true,
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['
     $altText = trim($_POST['altText']);
 
     // Update alt text
-    $stmt = $conn->prepare("UPDATE websitecontentimages SET altText = ?, uploadedAt = NOW() WHERE WCImageID = ?");
+    $stmt = $conn->prepare("UPDATE websitecontentimage SET altText = ?, uploadedAt = NOW() WHERE WCImageID = ?");
     $stmt->bind_param("si", $altText, $wcImageID);
     $stmt->execute();
 
@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['
         echo json_encode(['success' => false, 'message' => 'Image upload error: ' . $_FILES['image']['error']]);
         exit;
     }
-        $targetDir = "../../../Assets/Images/" . $folder;
-        $targetPath = $targetDir . "/" . $filename;
+    $targetDir = "../../../Assets/Images/" . $folder;
+    $targetPath = $targetDir . "/" . $filename;
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $filename = basename($_FILES['image']['name']);
         $targetDir = "../../../Assets/Images/" . $folder;
@@ -62,10 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['
         }
 
         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
-            $stmt = $conn->prepare("UPDATE websitecontentimages SET imageData = ?, uploadedAt = NOW() WHERE WCImageID = ?");
+            $stmt = $conn->prepare("UPDATE websitecontentimage SET imageData = ?, uploadedAt = NOW() WHERE WCImageID = ?");
             if (!$stmt) {
-            echo json_encode(['success' => false, 'message' => 'Database prepare failed']);
-            exit;
+                echo json_encode(['success' => false, 'message' => 'Database prepare failed']);
+                exit;
             }
             $stmt->bind_param("si", $filename, $wcImageID);
             $stmt->execute();
@@ -81,6 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['
         }
     }
 
-    echo json_encode(['success' => true, 'message' => 'Image updated successfully.', 'path_returned' => $targetPath, ]);
+    echo json_encode(['success' => true, 'message' => 'Image updated successfully.', 'path_returned' => $targetPath,]);
     exit;
 }

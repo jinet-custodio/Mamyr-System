@@ -69,14 +69,14 @@ require '../Config/dbcon.php'
 
         <main>
             <?php
-            $getWebContent = "SELECT * FROM websitecontents WHERE sectionName = 'Blog'";
+            $getWebContent = "SELECT * FROM websitecontent WHERE sectionName = 'Blog'";
             $result = mysqli_query($conn, $getWebContent);
 
             $contentMap = [];
             $blogPosts = [];
             $imagesByContentID = [];
 
-            $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimages ORDER BY imageOrder ASC";
+            $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimage ORDER BY imageOrder ASC";
             $imageResult = mysqli_query($conn, $getImagesQuery);
 
             if ($imageResult && mysqli_num_rows($imageResult) > 0) {
@@ -264,10 +264,10 @@ require '../Config/dbcon.php'
                                     <div class="blog-full-content">
                                         <?= nl2br(htmlspecialchars($firstPost['Content'] ?? '')) ?>
                                     </div>
-                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
                                 </div>
 
                             </div>
@@ -332,7 +332,7 @@ require '../Config/dbcon.php'
             </div>
         </main>
 
-    <?php include 'footer.php'; ?>
+        <?php include 'footer.php'; ?>
     </div>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
@@ -345,12 +345,12 @@ require '../Config/dbcon.php'
     <!-- Redirects User to Book Now -->
     <script>
         const bookNowBtns = document.querySelectorAll('.bookNowBtn');
-        
+
         bookNowBtns.forEach(bookNowBtn => {
             bookNowBtn.addEventListener("click", function(e) {
                 window.location.href = "/Pages/register.php"
             });
-        });     
+        });
     </script>
 </body>
 
