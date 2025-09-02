@@ -4,6 +4,10 @@ ini_set('display_errors', 1);
 session_start();
 require 'Config/dbcon.php';
 
+
+require_once 'Function/functions.php';
+addToAdminTable($conn);
+
 //for edit website, this will enable edit mode from the iframe
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 //SQL statement for retrieving data for website content from DB
