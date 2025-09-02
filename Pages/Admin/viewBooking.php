@@ -82,7 +82,7 @@ if (isset($_POST['bookingID'])) {
 
 
         <?php
-        $getUserInfo = $conn->prepare("SELECT u.*, b.*  FROM bookings b
+        $getUserInfo = $conn->prepare("SELECT u.*, b.*  FROM booking b
         INNER JOIN user u ON b.userID = u.userID
         WHERE b.bookingID = ?");
         $getUserInfo->bind_param("i", $bookingID);
