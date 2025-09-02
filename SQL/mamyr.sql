@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 02, 2025 at 08:45 AM
+-- Generation Time: Sep 02, 2025 at 09:41 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -147,8 +147,8 @@ CREATE TABLE `confirmedbookings` (
 CREATE TABLE `custompackageitems` (
   `customPackageItemID` int(11) NOT NULL,
   `customPackageID` int(11) NOT NULL,
-  `serviceID` int(11) NOT NULL,
-  `foodItemID` int(11) NOT NULL,
+  `serviceID` int(11) DEFAULT NULL,
+  `foodItemID` int(11) DEFAULT NULL,
   `quantity` int(11) NOT NULL DEFAULT 1,
   `servicePrice` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -455,7 +455,9 @@ INSERT INTO `resortamenities` (`resortServiceID`, `RServiceName`, `RSprice`, `RS
 (7, 'Room 2', 2500.00, 2, 4, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons', 'Hotel_91_hotel3.jpg', 1),
 (8, 'Room 5', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'Hotel_11_hotel4.jpg', 1),
 (9, 'Room 6', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'Hotel_64_hotel5.jpeg', 1),
-(10, 'Room 7', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'Hotel_95_hotel5.jpeg', 1);
+(10, 'Room 7', 3500.00, 3, 6, '22 hours', 1, 'Good for 3, Free access to swimming pool, Queen Size Bed, 1 Free extra bed, Maximum of 6 persons', 'Hotel_95_hotel5.jpeg', 1),
+(11, 'Mini Function Hall', 7000.00, 1, 50, '5 hours', 4, 'An Intimate, fully air-conditioned function room, Can accommodate up to 50 guests. ', 'Event Hall_miniPav5.jpeg', 1),
+(12, 'Main Function Hall', 30000.00, 1, 350, '5 hours', 4, ' An Elegant, fully air-conditioned function room, Free one private air-conditioned room, Powder room with seperate comfort rooms, can accomodate up to 350 guests.', 'Event Hall_pav7.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -547,7 +549,9 @@ INSERT INTO `services` (`serviceID`, `resortServiceID`, `partnershipServiceID`, 
 (13, 7, NULL, NULL, 'Resort'),
 (14, 8, NULL, NULL, 'Resort'),
 (15, 9, NULL, NULL, 'Resort'),
-(16, 10, NULL, NULL, 'Resort');
+(16, 10, NULL, NULL, 'Resort'),
+(17, 11, NULL, NULL, 'Resort'),
+(18, 12, NULL, NULL, 'Resort');
 
 -- --------------------------------------------------------
 
@@ -1099,7 +1103,7 @@ ALTER TABLE `partnerstatuses`
 -- AUTO_INCREMENT for table `resortamenities`
 --
 ALTER TABLE `resortamenities`
-  MODIFY `resortServiceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `resortServiceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `resortinfo`
@@ -1123,7 +1127,7 @@ ALTER TABLE `serviceavailability`
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `serviceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `serviceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `serviceunavailabledates`

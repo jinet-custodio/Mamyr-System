@@ -116,7 +116,7 @@ if (isset($_POST['eventBook'])) {
         header("Location: ../../../../Pages/Customer/bookNow.php?action=success");
     } catch (Exception $e) {
         $conn->rollback();
-        error_log("Error inserting:" . $e->getMessage());
+        error_log("Error inserting: " . $e->getMessage());
         // $_SESSION['eventFormData'] = $_POST;
         // header("Location: ../../../../Pages/Customer/eventBookingConfirmation.php");
     }
