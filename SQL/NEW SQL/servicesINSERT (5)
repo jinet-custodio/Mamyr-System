@@ -128,9 +128,9 @@
 
 
 -- INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSmaxCapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
--- VALUES ('Pavilion Hall','30000.00', '0', '350','An Elegant, fully air-conditioned function room, Free one private air-conditioned room, Powder room with seperate comfort rooms, can accomodate up to 350 guests.,', 4, 'pav2.jpg', NULL, 1);
+-- VALUES ('Pavilion Hall','30000.00', '0', '350','An Elegant, fully air-conditioned function room, Free one private air-conditioned room, Powder room with seperate comfort rooms, can accomodate up to 350 guests.', 4, 'pav2.jpg', NULL, 1);
 -- INSERT INTO resortAmenities( RServiceName, RSprice, RScapacity, RSmaxCapacity, RSduration, RScategoryID, RSdescription, RSimageData, RSAvailabilityID) 
--- VALUES ('Mini Pavilion Hall','7000.00', '0', '50','An Intimate, fully air-conditioned function room, Can acommodate up to 50 guests', 4, 'miniPav.jpg' , NULL, 1);
+-- VALUES ('Mini Pavilion Hall','7000.00', '0', '50','An Intimate, fully air-conditioned function room, Can accommodate up to 50 guests', 4, 'miniPav.jpg' , NULL, 1);
 
 -- -- INSERT INTO packages 
 -- -- (packageName, packageDescription, Pduration, Pcapacity, resortserviceID, Pprice, PcategoryID, packageAvailability)
