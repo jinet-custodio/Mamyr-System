@@ -38,8 +38,8 @@ require '../Config/dbcon.php'
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             AMENITIES
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -68,6 +68,10 @@ require '../Config/dbcon.php'
         </nav>
 
         <main>
+            <!-- Save button, only visible if page is on edit mode -->
+            <?php if ($editMode): ?>
+            <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
+            <?php endif; ?>
             <?php
             $getWebContent = "SELECT * FROM websitecontent WHERE sectionName = 'Blog'";
             $result = mysqli_query($conn, $getWebContent);
@@ -116,7 +120,8 @@ require '../Config/dbcon.php'
 
 
             <div class="titleContainer">
-                <h4 class="title" id="maintext"><?= htmlspecialchars($contentMap['MainTitle'] ?? 'Main Title Not Found') ?></h4>
+                <h4 class="title" id="maintext">
+                    <?= htmlspecialchars($contentMap['MainTitle'] ?? 'Main Title Not Found') ?></h4>
                 <h4><?= htmlspecialchars($contentMap['Sub-title'] ?? '') ?></h4>
             </div>
 
@@ -127,9 +132,9 @@ require '../Config/dbcon.php'
                 <div class="posts">
                     <!-- Featured Post -->
                     <?php if (!empty($firstPost)): ?>
-                        <div class="featured">
-                            <div class="featuredpost">
-                                <?php
+                    <div class="featured">
+                        <div class="featuredpost">
+                            <?php
                                 $featuredContentID = $firstPost['contentID'] ?? null;
 
                                 if ($featuredContentID && isset($imagesByContentID[$featuredContentID])) {
@@ -147,30 +152,31 @@ require '../Config/dbcon.php'
                                 ?>
 
 
-                                <div class="desc">
-                                    <div class="eventType">
-                                        <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
-                                            <p style="color: rgb(43, 43, 43);">
-                                                <?= htmlspecialchars($firstPost['EventType']) ?> •
-                                                <?= htmlspecialchars(date("j F Y", strtotime($firstPost['EventDate']))) ?>
-                                            </p>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="blogHeading">
-                                        <?php if (isset($firstPost['EventHeader'])): ?>
-                                            <h4><?= htmlspecialchars($firstPost['EventHeader']) ?></h4>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="blogDescription">
-                                        <p> <?= htmlspecialchars($firstPost['Content'] ?? '') ?> </p>
-                                    </div>
-                                    <button id="featuredReadmore" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalFeatured">
-                                        Read More
-                                    </button>
-
+                            <div class="desc">
+                                <div class="eventType">
+                                    <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
+                                    <p style="color: rgb(43, 43, 43);">
+                                        <?= htmlspecialchars($firstPost['EventType']) ?> •
+                                        <?= htmlspecialchars(date("j F Y", strtotime($firstPost['EventDate']))) ?>
+                                    </p>
+                                    <?php endif; ?>
                                 </div>
+                                <div class="blogHeading">
+                                    <?php if (isset($firstPost['EventHeader'])): ?>
+                                    <h4><?= htmlspecialchars($firstPost['EventHeader']) ?></h4>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="blogDescription">
+                                    <p> <?= htmlspecialchars($firstPost['Content'] ?? '') ?> </p>
+                                </div>
+                                <button id="featuredReadmore" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                    data-bs-target="#modalFeatured">
+                                    Read More
+                                </button>
+
                             </div>
                         </div>
+                    </div>
                     <?php endif; ?>
 
                     <!-- Other Posts -->
@@ -185,9 +191,9 @@ require '../Config/dbcon.php'
 
                             $contentID = $post['contentID'] ?? null;
                         ?>
-                            <div class="post row">
-                                <div class="othersImg col-md-5">
-                                    <?php
+                        <div class="post row">
+                            <div class="othersImg col-md-5">
+                                <?php
                                     if ($contentID && isset($imagesByContentID[$contentID])) {
                                         $imgData = $imagesByContentID[$contentID][0]['imageData'];
                                         $finfo = finfo_open();
@@ -198,34 +204,37 @@ require '../Config/dbcon.php'
                                         echo "<img src='../Assets/Images/no-picture.jpg' alt='Default blog image'>";
                                     }
                                     ?>
-                                </div>
-                                <div class="othersDesc col-md-7">
-                                    <div class="othersEventType">
-                                        <?php if (isset($post['EventType'], $post['EventDate'])): ?>
-                                            <p style="color: rgb(43, 43, 43);">
-                                                <?= htmlspecialchars($post['EventType']) ?> •
-                                                <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
-                                            </p>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="othersHeading">
-                                        <?php if (isset($post['EventHeader'])): ?>
-                                            <h4><?= htmlspecialchars($post['EventHeader']) ?></h4>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="othersDescription">
-                                        <?= htmlspecialchars($post['Content'] ?? '') ?>
-                                    </div>
-                                    <button class="btn btn-primary mt-3 othersReadmore" style="display:flex;align-self:flex-end;text-align:center" data-bs-toggle="modal" data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
-                                        Read More
-                                    </button>
-                                </div>
                             </div>
+                            <div class="othersDesc col-md-7">
+                                <div class="othersEventType">
+                                    <?php if (isset($post['EventType'], $post['EventDate'])): ?>
+                                    <p style="color: rgb(43, 43, 43);">
+                                        <?= htmlspecialchars($post['EventType']) ?> •
+                                        <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                    </p>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="othersHeading">
+                                    <?php if (isset($post['EventHeader'])): ?>
+                                    <h4><?= htmlspecialchars($post['EventHeader']) ?></h4>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="othersDescription">
+                                    <?= htmlspecialchars($post['Content'] ?? '') ?>
+                                </div>
+                                <button class="btn btn-primary mt-3 othersReadmore"
+                                    style="display:flex;align-self:flex-end;text-align:center" data-bs-toggle="modal"
+                                    data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
+                                    Read More
+                                </button>
+                            </div>
+                        </div>
                         <?php } ?>
                     </div>
 
                     <!-- Modal for featured post -->
-                    <div class="modal fade" id="modalFeatured" tabindex="-1" aria-labelledby="modalFeaturedLabel" aria-hidden="true">
+                    <div class="modal fade" id="modalFeatured" tabindex="-1" aria-labelledby="modalFeaturedLabel"
+                        aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
 
@@ -233,7 +242,8 @@ require '../Config/dbcon.php'
                                     <h5 class="modal-title" id="modalFeaturedLabel">
                                         <?= htmlspecialchars($firstPost['EventHeader'] ?? 'Blog Post') ?>
                                     </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
 
                                 <div class="modal-body">
@@ -254,11 +264,13 @@ require '../Config/dbcon.php'
                                     }
                                     ?>
 
-                                    <img src="<?= htmlspecialchars($featuredImage) ?>" alt="<?= htmlspecialchars($featuredAlt) ?>" class="img-fluid mb-3" />
+                                    <img src="<?= htmlspecialchars($featuredImage) ?>"
+                                        alt="<?= htmlspecialchars($featuredAlt) ?>" class="img-fluid mb-3" />
                                     <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
-                                        <p class="text-muted">
-                                            <?= htmlspecialchars($firstPost['EventType']) ?> • <?= htmlspecialchars(date("j F Y", strtotime($firstPost['EventDate']))) ?>
-                                        </p>
+                                    <p class="text-muted">
+                                        <?= htmlspecialchars($firstPost['EventType']) ?> •
+                                        <?= htmlspecialchars(date("j F Y", strtotime($firstPost['EventDate']))) ?>
+                                    </p>
 
                                     <?php endif; ?>
                                     <div class="blog-full-content">
@@ -266,7 +278,8 @@ require '../Config/dbcon.php'
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
 
@@ -276,7 +289,7 @@ require '../Config/dbcon.php'
 
                     <!-- Modal for other posts -->
                     <?php foreach ($blogPosts as $postID => $post): ?>
-                        <?php
+                    <?php
                         $contentID = $post['contentID'] ?? null;
                         $image = null;
                         $alt = 'Blog image';
@@ -293,39 +306,44 @@ require '../Config/dbcon.php'
                         }
                         ?>
 
-                        <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1" aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
-                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                <div class="modal-content">
+                    <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1"
+                        aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                            <div class="modal-content">
 
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="modalLabel<?= htmlspecialchars($postID) ?>">
-                                            <?= htmlspecialchars($post['EventHeader'] ?? 'Blog Post') ?>
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <!-- Blog Image -->
-                                        <img src="<?= htmlspecialchars($base64Image) ?>" alt="<?= htmlspecialchars($alt) ?>" class="img-fluid mb-3" />
-                                        <!-- Event Info -->
-                                        <?php if (isset($post['EventType'], $post['EventDate'])): ?>
-                                            <p class="text-muted">
-                                                <?= htmlspecialchars($post['EventType']) ?> • <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
-                                            </p>
-                                        <?php endif; ?>
-                                        <!-- Full Content -->
-                                        <div class="blog-full-content">
-                                            <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalLabel<?= htmlspecialchars($postID) ?>">
+                                        <?= htmlspecialchars($post['EventHeader'] ?? 'Blog Post') ?>
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
+
+                                <div class="modal-body">
+                                    <!-- Blog Image -->
+                                    <img src="<?= htmlspecialchars($base64Image) ?>" alt="<?= htmlspecialchars($alt) ?>"
+                                        class="img-fluid mb-3" />
+                                    <!-- Event Info -->
+                                    <?php if (isset($post['EventType'], $post['EventDate'])): ?>
+                                    <p class="text-muted">
+                                        <?= htmlspecialchars($post['EventType']) ?> •
+                                        <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                    </p>
+                                    <?php endif; ?>
+                                    <!-- Full Content -->
+                                    <div class="blog-full-content">
+                                        <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
+                    </div>
                     <?php endforeach; ?>
 
                 </div>
@@ -336,7 +354,9 @@ require '../Config/dbcon.php'
     </div>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
     <script src="../Assets/JS/scrollNavbg.js"></script>
 
     <!-- Sweetalert JS -->
@@ -344,13 +364,13 @@ require '../Config/dbcon.php'
 
     <!-- Redirects User to Book Now -->
     <script>
-        const bookNowBtns = document.querySelectorAll('.bookNowBtn');
+    const bookNowBtns = document.querySelectorAll('.bookNowBtn');
 
-        bookNowBtns.forEach(bookNowBtn => {
-            bookNowBtn.addEventListener("click", function(e) {
-                window.location.href = "/Pages/register.php"
-            });
+    bookNowBtns.forEach(bookNowBtn => {
+        bookNowBtn.addEventListener("click", function(e) {
+            window.location.href = "/Pages/register.php"
         });
+    });
     </script>
 </body>
 
