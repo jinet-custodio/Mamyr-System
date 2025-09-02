@@ -29,7 +29,7 @@ function multiplication($a, $b)
     return $a * $b;
 }
 
-
+unset($_SESSION['hotelFormData']);
 
 if (isset($_POST['hotelBooking'])) {
     $selectedHotels = [];

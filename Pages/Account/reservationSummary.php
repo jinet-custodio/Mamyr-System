@@ -79,7 +79,7 @@ require_once '../../Function/functions.php';
             // $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
             // $status = mysqli_real_escape_string($conn, $_POST['status']);
             $getData = $conn->prepare("SELECT booking.*, user.firstName, user.middleInitial, user.lastName, user.phoneNumber, user.userAddress FROM booking 
-            JOIN user ON bookings.userID = users.userID
+            JOIN user ON booking.userID = user.userID
             WHERE booking.userID = ? AND booking.bookingID =?");
             $getData->bind_param("ii", $userID, $bookingID);
             $getData->execute();

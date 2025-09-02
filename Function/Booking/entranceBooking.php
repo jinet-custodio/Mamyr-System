@@ -19,6 +19,7 @@ function multiplication($a, $b)
     return $a * $b;
 }
 
+unset($_SESSION['resortFormData']);
 
 if (isset($_POST['bookRates'])) {
     $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['scheduledStartDate']);

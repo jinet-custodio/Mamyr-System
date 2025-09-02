@@ -311,15 +311,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             ?>
                     <div class="card cottage" id="cottageCard">
                         <?php
-                        $imgSrc = '../../Assets/Images/no-picture.jpg';
-                        if (!empty($cottage['imageData'])) {
-                            $imgData = base64_encode($cottage['RSimageData']);
-                            $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                        $imgSrc = '../../Assets/Images/Services/Cottage/';
+                        if (!empty($cottage['RSimageData'])) {
+                            $img = $imgSrc . $cottage['RSimageData'];
                         }
                         ?>
-                        <img src="<?= $imgSrc ?>" alt="Cottage Image" class="card-img-top" id="cottageDisplayPhoto">
+                        <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top" id="cottageDisplayPhoto">
                         <div class="card-body description">
-                            <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
+                            <h2> <?= $cottage['RServiceName'] ?> </h2>
                             <p>
                                 <?= $cottage['RSdescription'] ?>
                             </p>
@@ -346,24 +345,30 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <h4 class="entranceTitle">Videoke for Rent</h4>
             </div>
             <?php
-            $vidsql = "SELECT * FROM resortamenity WHERE RServiceName = 'Videoke A'";
-            $vidresult = mysqli_query($conn, $vidsql);
-            if (mysqli_num_rows($vidresult) > 0) {
-                foreach ($vidresult as $videoke) {
+            $videoke = 'Videoke%';
+            $vidsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName LIKE ?");
+            $vidsql->bind_param('s', $videoke);
+            $vidsql->execute();
+            $vidresult = $vidsql->get_result();
+            if ($vidresult->num_rows > 0) {
+                while ($data = $vidresult->fetch_assoc()) {
             ?>
 
                     <div class="section">
                         <div class="singleImg">
                             <?php
-                            $imgSrc = '../../Assets/Images/no-picture.jpg';
+                            $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                            if (!empty($data['RSimageData'])) {
+                                $img = $imgSrc . $data['RSimageData'];
+                            }
                             ?>
-                            <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
+                            <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
 
                         </div>
                         <div class="Description" id="videokeDescContainer">
-                            <h2 class="text-center" id="videokePriceDesc"> PHP <?= $videoke['RSprice'] ?> per Rent </h2>
+                            <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent </h2>
                             <p class="videokeDesc">
-                                <?= $videoke['RSdescription'] ?>
+                                <?= $data['RSdescription'] ?>
                             </p>
                         </div>
 
@@ -383,24 +388,30 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
         <div class="cottage " id="billiards">
             <?php
-            $bilsql = "SELECT * FROM resortamenity WHERE RServiceName = 'Billiard'";
-            $bilresult = mysqli_query($conn, $bilsql);
-            if (mysqli_num_rows($bilresult) > 0) {
-                foreach ($bilresult as $bill) {
+            $billiard = 'Billiard';
+            $bilsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
+            $bilsql->bind_param("s", $billiard);
+            $bilsql->execute();
+            $bilresult = $bilsql->get_result();
+            if ($bilresult->num_rows > 0) {
+                while ($data = $bilresult->fetch_assoc()) {
             ?>
                     <div class="Description" id="videokeDescContainer">
                         <p class="videokeDesc">
-                            <?= $bill['RSdescription'] ?>
+                            <?= $data['RSdescription'] ?>
                         </p>
                         <p class="text-center" id="videokePriceDesc">
-                            Price: PHP<?= $bill['RSprice'] ?> per Hour
+                            Price: PHP<?= $data['RSprice'] ?> per Hour
                         </p>
                     </div>
                     <div class="singleImg" style="width:50%;">
                         <?php
-                        $imgSrc = '../../Assets/Images/no-picture.jpg';
+                        $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                        if (isset($data['RSimageData'])) {
+                            $img = $imgSrc . $data['RSimageData'];
+                        }
                         ?>
-                        <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
+                        <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
 
                     </div>
             <?php
@@ -417,29 +428,31 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <h4 class="entranceTitle">Massage Chair</h4>
             </div>
             <?php
-            $massagesql = "SELECT * FROM resortamenity WHERE RServiceName = 'Massage Chair'";
-            $massageresult = mysqli_query($conn, $massagesql);
-            if (mysqli_num_rows($massageresult) > 0) {
-                foreach ($massageresult as $massage) {
+            $Massage = 'Massage Chair';
+            $massagesql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
+            $massagesql->bind_param('s', $Massage);
+            $massagesql->execute();
+            $massageresult = $massagesql->get_result();
+            if ($massageresult->num_rows > 0) {
+                while ($data = $massageresult->fetch_assoc()) {
             ?>
                     <div class="section" id="massage">
                         <div class="singleImg">
                             <?php
-                            $imgSrc = '../../Assets/Images/no-picture.jpg';
-                            if (!empty($massage['RSimageData'])) {
-                                // $imgData = base64_encode($massage['RSimageData']);
-                                // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                            $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                            if (!empty($data['RSimageData'])) {
+                                $img = $imgSrc . $data['RSimageData'];
                             }
                             ?>
-                            <img src="<?= $imgSrc ?>" alt="Massage Chair Image" class="rounded" id="massageChairDisplayPhoto">
+                            <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded" id="massageChairDisplayPhoto">
 
                         </div>
                         <div class="Description" id="massageDesc">
-                            <h2 class="text-center" id="videokePriceDesc"> <?= $massage['RSprice'] ?> pesos for
-                                <?= $massage['RSduration'] ?>
+                            <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
+                                <?= $data['RSduration'] ?>
                             </h2>
                             <p class="text-center">
-                                <?= $massage['RSdescription'] ?>
+                                <?= $data['RSdescription'] ?>
                             </p>
                         </div>
                     </div>

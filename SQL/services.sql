@@ -39,7 +39,7 @@ CREATE TABLE `services` (
 -- Dumping data for table `services`
 --
 
-INSERT INTO `services` (`serviceID`, `resortServiceID`, `partnershipServiceID`, `entranceRateID`, `serviceType`) VALUES
+INSERT INTO `service` (`serviceID`, `resortServiceID`, `partnershipServiceID`, `entranceRateID`, `serviceType`) VALUES
 (1, 1, NULL, NULL, 'Resort'),
 (2, 2, NULL, NULL, 'Resort'),
 (3, 3, NULL, NULL, 'Resort'),
@@ -66,12 +66,34 @@ INSERT INTO `services` (`serviceID`, `resortServiceID`, `partnershipServiceID`, 
 (24, 24, NULL, NULL, 'Resort'),
 (25, 25, NULL, NULL, 'Resort'),
 (26, 26, NULL, NULL, 'Resort'),
-(27, NULL, NULL, 1, 'Entrance'),
-(28, NULL, NULL, 2, 'Entrance'),
-(29, NULL, NULL, 3, 'Entrance'),
-(30, NULL, NULL, 4, 'Entrance'),
-(31, NULL, NULL, 5, 'Entrance'),
-(32, NULL, NULL, 6, 'Entrance');
+(27, 27, NULL, NULL, 'Resort'),
+(28, 28, NULL, NULL, 'Resort'),
+(29, 29, NULL, NULL, 'Resort'),
+(30, 30, NULL, NULL, 'Resort'),
+(31, 31, NULL, NULL, 'Resort'),
+(32, 32, NULL, NULL, 'Resort'),
+(33, 33, NULL, NULL, 'Resort'),
+(34, 34, NULL, NULL, 'Resort'),
+(35, 35, NULL, NULL, 'Resort'),
+(36, 36, NULL, NULL, 'Resort'),
+(37, 37, NULL, NULL, 'Resort'),
+(38, 38, NULL, NULL, 'Resort'),
+(39, 39, NULL, NULL, 'Resort'),
+(40, 40, NULL, NULL, 'Resort'),
+(41, 41, NULL, NULL, 'Resort'),
+(42, 42, NULL, NULL, 'Resort'),
+(43, 43, NULL, NULL, 'Resort'),
+(44, 44, NULL, NULL, 'Resort'),
+(45, 45, NULL, NULL, 'Resort'),
+(46, 46, NULL, NULL, 'Resort'),
+(47, 47, NULL, NULL, 'Resort'),
+(48, 48, NULL, NULL, 'Resort'),
+(49, NULL, NULL, 1, 'Entrance'),
+(50, NULL, NULL, 2, 'Entrance'),
+(51, NULL, NULL, 3, 'Entrance'),
+(52, NULL, NULL, 4, 'Entrance'),
+(53, NULL, NULL, 5, 'Entrance'),
+(54, NULL, NULL, 6, 'Entrance');
 
 --
 -- Indexes for dumped tables
