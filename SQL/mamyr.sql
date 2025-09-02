@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 02, 2025 at 08:35 AM
+-- Generation Time: Sep 02, 2025 at 08:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -336,18 +336,6 @@ CREATE TABLE `notifications` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `is_read` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `notifications`
---
-
-INSERT INTO `notifications` (`notificationID`, `bookingID`, `partnershipID`, `userID`, `message`, `receiver`, `created_at`, `is_read`) VALUES
-(1, 1, NULL, 2, 'A customer has submitted a new resort booking.', 'Admin', '2025-09-02 06:28:29', 0),
-(2, 1, NULL, 2, 'Payment approved successfully. We have received and reviewed your payment. The service you booked is now reserved. Thank you', 'Customer', '2025-09-02 06:29:32', 0),
-(3, 1, NULL, 2, 'Payment approved successfully. We have received and reviewed your payment. The service you booked is now reserved. Thank you', 'Customer', '2025-09-02 06:31:49', 0),
-(4, 1, NULL, 2, 'Payment approved successfully. We have received and reviewed your payment. The service you booked is now reserved. Thank you', 'Customer', '2025-09-02 06:32:39', 0),
-(5, 1, NULL, 2, 'Payment approved successfully. We have received and reviewed your payment. The service you booked is now reserved. Thank you', 'Customer', '2025-09-02 06:33:52', 0),
-(6, 1, NULL, 2, 'We have successfully deducted your payment of ₱1,000.00 from your balance. Please check your payment history in your account for more details. Your current balance is: 0.00.', 'Customer', '2025-09-02 06:34:05', 0);
 
 -- --------------------------------------------------------
 
@@ -1081,7 +1069,7 @@ ALTER TABLE `menuitems`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `notificationID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `partnerships`
