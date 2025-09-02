@@ -371,12 +371,6 @@ require '../Config/dbcon.php'
             window.location.href = "/Pages/register.php"
         });
     });
-
-    bookNowBtns.forEach(bookNowBtn => {
-        bookNowBtn.addEventListener("click", function(e) {
-            window.location.href = "/Pages/register.php"
-        });
-    });
     </script>
 </body>
 
