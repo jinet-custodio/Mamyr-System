@@ -332,37 +332,7 @@ require '../Config/dbcon.php'
             </div>
         </main>
 
-        <footer class="py-1" style="margin-top: 5vw !important;">
-            <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-                <a href="../index.php">
-                    <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-                </a>
-                <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
-            </div>
-
-            <div class="info">
-                <div class="reservation">
-                    <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter">(0998) 962 4697 </h4>
-                    <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
-                </div>
-                <div class="locationFooter">
-                    <h4 class="locationTitle">Location</h4>
-                    <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
-                </div>
-            </div>
-            <hr class="footerLine">
-            <div class="socialIcons">
-                <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                        class='bx bxl-facebook-circle'></i></a>
-                <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-                <a href="tel:+09989624697">
-                    <i class='bx bxs-phone'></i>
-                </a>
-
-            </div>
-        </footer>
+    <?php include 'footer.php'; ?>
     </div>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
