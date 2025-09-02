@@ -68,3 +68,6 @@ CREATE TABLE confirmedBookings (
 ALTER TABLE confirmedBookings 
 ADD COLUMN paymentDueDate DATETIME NOT NULL
 AFTER paymentStatus;
+
+ALTER TABLE confirmedBookings 
+ADD COLUMN downpaymentDueDate DATETIME NOT NULL;

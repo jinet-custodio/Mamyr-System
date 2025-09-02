@@ -29,7 +29,7 @@ if (isset($_POST['eventBook'])) {
 
     $startDateTime = new DateTime($startDateTimeStr);
     $endDateTime = new DateTime($endDateTimeStr);
-
+    $arrivalTime = $startDateTime->format('H:i:s');
 
     $interval = $startDateTime->diff($endDateTime);
 
@@ -105,8 +105,8 @@ if (isset($_POST['eventBook'])) {
         }
 
         //insert into booking
-        $insertBooking = $conn->prepare("INSERT INTO `bookings`(`userID`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `additionalCharge`, `totalCost`, `downpayment`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-        $insertBooking->bind_param("isisissssddd", $userID, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDateTimeStr, $endDateTimeStr, $paymentMethod, $additionalCharge, $venuePrice, $downpayment);
+        $insertBooking = $conn->prepare("INSERT INTO `bookings`(`userID`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `additionalCharge`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $insertBooking->bind_param("isisissssddds", $userID, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDateTimeStr, $endDateTimeStr, $paymentMethod, $additionalCharge, $venuePrice, $downpayment, $arrivalTime);
         if (!$insertBooking->execute()) {
             $conn->rollback();
             error_log("Error: " . $insertBooking->error);

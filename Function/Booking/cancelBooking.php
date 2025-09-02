@@ -39,9 +39,9 @@ if (isset($_POST['cancelBooking'])) {
     }
 
     $checkBooking = $conn->prepare("SELECT *  FROM bookings 
-    WHERE bookingID = ?  AND bookingStatus = ? AND userID = ?");
+    WHERE bookingID = ? AND userID = ?");
 
-    $checkBooking->bind_param("iii", $bookingID,  $statusID, $userID);
+    $checkBooking->bind_param("ii", $bookingID,  $userID);
     $checkBooking->execute();
     $resultBooking = $checkBooking->get_result();
     if ($resultBooking->num_rows > 0) {
@@ -62,14 +62,15 @@ if (isset($_POST['cancelBooking'])) {
             header("Location: ../../Pages/Account/bookingHistory.php?action=Cancelled");
             $cancelBooking->close();
         } else {
-            header("Location: ../../Pages/Account/bookingHistory.php?action=Error");
+            header("Location: ../../Pages/Account/bookingHistory.php?action=Error3");
             exit();
         }
     } else {
-        header("Location: ../../Pages/Account/bookingHistory.php?action=Error");
+        error_log("Booking not found or doesn't match status/user. BookingID: $bookingID, UserID: $userID, StatusID: $bookingStatus");
+        header("Location: ../../Pages/Account/bookingHistory.php?action=Error2");
         exit();
     }
 } else {
-    header("Location: ../../Pages/Account/bookingHistory.php?action=Error");
+    header("Location: ../../Pages/Account/bookingHistory.php?action=Error1");
     exit();
 }
