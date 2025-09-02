@@ -155,14 +155,15 @@ if (isset($_POST['bookRates'])) {
 
     $scheduledStartDateObj = new DateTime($scheduledStartDate);
     $dateScheduled = $scheduledStartDateObj->format('F');
+    $arrivalTime = $scheduledStartDateObj->format('H:i:s');
 
 
     $insertBooking = $conn->prepare("INSERT INTO 
         bookings(userID, additionalRequest, toddlerCount, kidCount, adultCount, guestCount, durationCount, 
         startDate, endDate, additionalCharge,
         totalCost, downpayment, 
-        addOns, paymentMethod, bookingStatus, bookingType) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        addOns, paymentMethod, bookingStatus, bookingType, arrivalTime) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
     if ($dateScheduled === 'March' || $dateScheduled === 'April' || $dateScheduled === 'May') {
         $bookingStatus = 1;
@@ -172,7 +173,7 @@ if (isset($_POST['bookRates'])) {
 
 
     $insertBooking->bind_param(
-        "isiiiiissdddssis",
+        "isiiiiissdddssiss",
         $userID,
         $additionalRequest,
         $toddlerCount,
@@ -188,7 +189,8 @@ if (isset($_POST['bookRates'])) {
         $addOns,
         $paymentMethod,
         $bookingStatus,
-        $bookingType
+        $bookingType,
+        $arrivalTime
     );
 
     if ($insertBooking->execute()) {

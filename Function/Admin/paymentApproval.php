@@ -46,11 +46,11 @@ if (isset($_POST['approvePaymentBtn'])) {
 
             $discount = $storedDiscount + $discount;
 
-            $totalBalance = $storeUserBalance - $paymentAmount;
+            $totalBalance = $storedUserBalance - $paymentAmount;
             $amountPaid = $storedAmountPaid + $paymentAmount;
 
             if ($totalBalance <= 0) {
-                $totalBalance = 0;
+                $totalBalance;
                 $paymentStatus = 3;
             } elseif ($paymentAmount > 0 && $totalBalance > 0 && $totalBalance < $storedBill) {
                 $paymentStatus = 2;
@@ -179,7 +179,7 @@ if (isset($_POST['approvePaymentBtn'])) {
 
 
             if ($totalBalance <= 0) {
-                $totalBalance = 0;
+                $totalBalance;
                 $paymentStatus = 3;
             } elseif ($paymentAmount > 0 && $totalBalance > 0 && $totalBalance < $storedBill) {
                 $paymentStatus = 2;
