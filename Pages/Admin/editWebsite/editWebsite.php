@@ -142,93 +142,82 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-    const pagesContainer = document.getElementById("pagesContainer");
-    const landingPageContainer = document.getElementById("landingPageContainer");
-    const icon = document.getElementById("help-circle");
-    const aboutContainer = document.getElementById("aboutContainer");
-    const amenitiesContainer = document.getElementById("amenitiesContainer");
+        const pagesContainer = document.getElementById("pagesContainer");
+        const landingPageContainer = document.getElementById("landingPageContainer");
+        const icon = document.getElementById("help-circle");
+        const aboutContainer = document.getElementById("aboutContainer");
+        const amenitiesContainer = document.getElementById("amenitiesContainer");
 
-    landingPageContainer.style.display = "none";
-    aboutContainer.style.display = "none";
-    amenitiesContainer.style.display = "none";
-    blogContainer.style.display = "none";
-    landingPageContainer.style.display = "none";
-    aboutContainer.style.display = "none";
-    amenitiesContainer.style.display = "none";
-
-    function landingPage() {
-        hideAllContainers();
-        landingPageContainer.style.display = "block";
-        landingPageContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "Landing Page";
-    }
-
-    function about() {
-        hideAllContainers();
-        aboutContainer.style.display = "block";
-        aboutContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "About Page";
-    }
-
-    function amenities() {
-        hideAllContainers();
-        amenitiesContainer.style.display = "block";
-        amenitiesContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "Amenities Page";
-    }
-
-    function blog() {
-        hideAllContainers();
-        blogContainer.style.display = "block";
-        blogContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "Blog Page";
-    }
-
-
-    function hideAllContainers() {
         landingPageContainer.style.display = "none";
         aboutContainer.style.display = "none";
         amenitiesContainer.style.display = "none";
         blogContainer.style.display = "none";
 
+
+        function landingPage() {
+            hideAllContainers();
+            landingPageContainer.style.display = "block";
+            landingPageContainer.querySelector("iframe").style.display = "block";
+            icon.style.display = "block";
+            pagesContainer.style.display = "none";
+            document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+            document.getElementById("title").innerHTML = "Landing Page";
+        }
+
+        function about() {
+            hideAllContainers();
+            aboutContainer.style.display = "block";
+            aboutContainer.querySelector("iframe").style.display = "block";
+            icon.style.display = "block";
+            pagesContainer.style.display = "none";
+            document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+            document.getElementById("title").innerHTML = "About Page";
+        }
+
+        function amenities() {
+            hideAllContainers();
+            amenitiesContainer.style.display = "block";
+            amenitiesContainer.querySelector("iframe").style.display = "block";
+            icon.style.display = "block";
+            pagesContainer.style.display = "none";
+            document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+            document.getElementById("title").innerHTML = "Amenities Page";
+        }
+
+        function blog() {
+            hideAllContainers();
+            blogContainer.style.display = "block";
+            blogContainer.querySelector("iframe").style.display = "block";
+            icon.style.display = "block";
+            pagesContainer.style.display = "none";
+            document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+            document.getElementById("title").innerHTML = "Blog Page";
+        }
+
+
         function hideAllContainers() {
             landingPageContainer.style.display = "none";
             aboutContainer.style.display = "none";
             amenitiesContainer.style.display = "none";
+            blogContainer.style.display = "none";
+
 
             landingPageContainer.querySelector("iframe").style.display = "none";
             aboutContainer.querySelector("iframe").style.display = "none";
             amenitiesContainer.querySelector("iframe").style.display = "none";
-            blogContainer.querySelector("iframe").style.display = "none";
         }
-        landingPageContainer.querySelector("iframe").style.display = "none";
-        aboutContainer.querySelector("iframe").style.display = "none";
-        amenitiesContainer.querySelector("iframe").style.display = "none";
-    }
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-    icon.addEventListener("click", function() {
-        Swal.fire({
-            title: "How it works",
-            text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
-            icon: "info",
-            confirmButtonText: "Got it!"
+        icon.addEventListener("click", function() {
+            Swal.fire({
+                title: "How it works",
+                text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
+                icon: "info",
+                confirmButtonText: "Got it!"
+            });
         });
-    });
     </script>
 
 </body>
