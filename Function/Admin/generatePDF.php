@@ -164,13 +164,13 @@ if (isset($_POST['generatePDF'])) {
                             $approvedStatusID = 2;
 
                             $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
-                            b.bookingType, u.firstName, b.paxNum AS guest, 
+                            b.bookingType, u.firstName, b.guestCount AS guest, 
                             b.startDate, b.endDate, 
                             b.paymentMethod, b.totalCost
                             FROM confirmedbooking cb
                             LEFT JOIN booking b ON cb.bookingID = b.bookingID
                             LEFT JOIN user u ON b.userID = u.userID
-                            WHERE cb.confirmedBookingStatus = ? AND b.startDate BETWEEN ? AND ?");
+                            WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?");
 
                             $getReportData->bind_param("iss", $approvedStatusID, $startDateFormatted, $endDateFormatted);
                             $getReportData->execute();

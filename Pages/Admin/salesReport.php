@@ -63,7 +63,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 <body>
     <header class="header">
-        <a href="adminDashboard.php" id="backToDashboard" class="backButton">
+        <a href="revenue.php" id="backToDashboard" class="backButton">
             <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
         </a>
         <div class="pagetitle">
@@ -108,6 +108,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </thead>
                     <tbody>
                         <?php
+                        $enableDownloadBtn = false;
                         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['generateReport'])) {
                             $reportDate = $_POST['reportDate'];
                             $dates = preg_split('/\s*to\s*/', $reportDate);
@@ -118,19 +119,20 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 $selectedEndDate = DateTime::createFromFormat('F d, Y', trim($dates[1]))->format('Y-m-d') . ' 23:59:59';
 
                                 $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
-                                            b.bookingType, u.firstName, b.paxNum AS guest, 
+                                            b.bookingType, u.firstName, b.guestCount AS guest, 
                                             b.startDate, b.endDate, 
-                                            b.paymentMethod, b.totalCost
+                                            b.paymentMethod, b.totalCost, cb.*
                                             FROM confirmedbooking cb
                                             LEFT JOIN booking b ON cb.bookingID = b.bookingID
-                                            LEFT JOIN users u ON b.userID = u.userID
-                                            WHERE cb.confirmedbookingstatus = ? AND b.startDate BETWEEN ? AND ?
+                                            LEFT JOIN user u ON b.userID = u.userID
+                                            WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?
                                             ");
 
                                 $getReportData->bind_param("iss", $approvedStatusID, $selectedStartDate, $selectedEndDate);
                                 $getReportData->execute();
                                 $getReportDataResult = $getReportData->get_result();
                                 if ($getReportDataResult->num_rows > 0) {
+                                    $enableDownloadBtn = true;
                                     while ($row = $getReportDataResult->fetch_assoc()) {
                                         $formattedBookingID = $row['formattedBookingID'];
                                         $bookingType = $row['bookingType'];
@@ -180,10 +182,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </table>
 
                 <div class="button-container">
-                    <form action="../../Function/Admin/generatePDF.php" method="POST">
+                    <form action="../../Function/Admin/generatePDF.php" method="POST" target="_blank">
                         <input type="hidden" name="selectedStartDate" id="selectedStartDate" value="<?= $selectedStartDate ?>">
                         <input type="hidden" name="selectedEndDate" id="selectedEndDate" value="<?= $selectedEndDate ?>">
-                        <button type="submit" name="generatePDF" id="generatePDF" class="btn btn-primary w-100">Download PDF</button>
+                        <button type="submit" name="generatePDF" id="generatePDF" class="btn btn-primary w-100" <?= $enableDownloadBtn ? '' : 'disabled' ?>>Download PDF</button>
                     </form>
                 </div>
             </div>
