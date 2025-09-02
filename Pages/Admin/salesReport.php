@@ -43,7 +43,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Report </title>
 
-
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- CSS LINK -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/salesReport.css">
 
