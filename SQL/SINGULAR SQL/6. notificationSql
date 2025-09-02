@@ -1,0 +1,14 @@
+CREATE TABLE notification (
+    notificationID INT AUTO_INCREMENT PRIMARY KEY,
+    bookingID INT NULL,
+    partnershipID INT NULL,
+    userID INT NOT NULL,
+    message TEXT NOT NULL,
+    receiver ENUM ('Admin', 'Partner', 'Customer') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_read BOOLEAN DEFAULT 0,
+
+    FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
+    FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID),
+    FOREIGN KEY (userID) REFERENCES user(userID)
+    );

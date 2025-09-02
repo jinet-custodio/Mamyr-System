@@ -11,6 +11,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -54,7 +71,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
             $getNotifications->bind_param("s", $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -105,7 +122,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
 
             if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -238,11 +255,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <tbody>
                     <?php
                     $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, b.paymentMethod, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
-                    FROM confirmedbookings cb
-                    LEFT JOIN bookings b ON cb.bookingID = b.bookingID
-                    LEFT JOIN users u ON b.userID = u.userID
+                    FROM confirmedbooking cb
+                    LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                    LEFT JOIN user u ON b.userID = u.userID
                     LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID
-                    LEFT JOIN statuses stat ON cb.paymentApprovalStatus = stat.statusID
+                    LEFT JOIN status stat ON cb.paymentApprovalStatus = stat.statusID
                     ");
                     $payments->execute();
                     $paymentsResult = $payments->get_result();

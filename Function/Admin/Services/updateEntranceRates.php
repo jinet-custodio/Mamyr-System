@@ -22,10 +22,10 @@ $conn->begin_transaction();
 
 try {
 
-    $updateTimeRange = $conn->prepare("UPDATE `entrancetimeranges` SET `session_type`= ?,`time_range`= ? WHERE timeRangeID = ?");
+    $updateTimeRange = $conn->prepare("UPDATE `entrancetimerange` SET `session_type`= ?,`time_range`= ? WHERE timeRangeID = ?");
     $updateTimeRange->bind_param('ssi', $tourType, $timeRange, $timeRangeID);
     if ($updateTimeRange->execute()) {
-        $updateEntranceRate = $conn->prepare("UPDATE `entrancerates` SET `sessionType`= ?,`timeRangeID`= ?,`ERcategory`= ?,`ERprice`= ? WHERE entranceRateID = ?");
+        $updateEntranceRate = $conn->prepare("UPDATE `entrancerate` SET `sessionType`= ?,`timeRangeID`= ?,`ERcategory`= ?,`ERprice`= ? WHERE entranceRateID = ?");
         $updateEntranceRate->bind_param("sisdi", $tourType, $timeRangeID, $visitorType, $price, $entranceRateID);
         if ($updateEntranceRate->execute()) {
             $conn->commit();

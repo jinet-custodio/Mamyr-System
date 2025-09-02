@@ -14,7 +14,7 @@ $foodAvailability = intval($data['availability']);
 
 
 try {
-    $updateMenuItem = $conn->prepare("UPDATE `menuitems` SET `foodName`= ?,`foodPrice`= ?,`foodCategory`= ?,`availabilityID`= ? WHERE `foodItemID`= ? ");
+    $updateMenuItem = $conn->prepare("UPDATE `menuitem` SET `foodName`= ?,`foodPrice`= ?,`foodCategory`= ?,`availabilityID`= ? WHERE `foodItemID`= ? ");
     $updateMenuItem->bind_param("sdsii", $foodName, $foodPrice, $foodCategory, $foodAvailability, $foodID);
 
     if (!$updateMenuItem->execute()) {

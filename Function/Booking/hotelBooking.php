@@ -67,8 +67,8 @@ if (isset($_POST['hotelBooking'])) {
         header("Location: ../../Pages/Customer/hotelBooking.php");
     }
 
-    $selectedHotelQuery = $conn->prepare("SELECT * FROM services s
-            JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
+    $selectedHotelQuery = $conn->prepare("SELECT * FROM service s
+            JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
             WHERE ra.RServiceName = ? AND ra.RSduration = ?");
 
     foreach ($selectedHotels as $selectedHotel) {
@@ -87,7 +87,7 @@ if (isset($_POST['hotelBooking'])) {
     $hoursNum = str_replace(" hours", "", $hoursSelected);
 
     //Insert Booking
-    $insertBooking = $conn->prepare("INSERT INTO bookings(userID, toddlerCount, adultCount, kidCount, guestCount, durationCount, startDate, endDate, 
+    $insertBooking = $conn->prepare("INSERT INTO booking(userID, toddlerCount, adultCount, kidCount, guestCount, durationCount, startDate, endDate, 
     paymentMethod, additionalCharge, totalCost, downpayment, bookingStatus, bookingType, arrivalTime) 
     VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?)");
     $insertBooking->bind_param(
@@ -111,7 +111,7 @@ if (isset($_POST['hotelBooking'])) {
     if ($insertBooking->execute()) {
         $bookingID = $conn->insert_id;
 
-        $insertBookingServices = $conn->prepare("INSERT INTO bookingservices(bookingID, serviceID, guests, bookingServicePrice)
+        $insertBookingServices = $conn->prepare("INSERT INTO bookingservice(bookingID, serviceID, guests, bookingServicePrice)
         VALUES(?,?,?,?)");
         if (!empty($serviceIDs)) {
             for ($i = 0; $i < count($serviceIDs); $i++) {
@@ -127,7 +127,7 @@ if (isset($_POST['hotelBooking'])) {
 
         $receiver = 'Admin';
         $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking request';
-        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
             VALUES(?,?,?,?)");
         $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
         $insertBookingNotificationRequest->execute();

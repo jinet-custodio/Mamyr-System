@@ -19,7 +19,7 @@ if (isset($_POST['verify-btn'])) {
         mysqli_real_escape_string($conn, $_POST['pin5']) .
         mysqli_real_escape_string($conn, $_POST['pin6']);
 
-    $getStoredOTP = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $getStoredOTP = $conn->prepare("SELECT * FROM user WHERE email = ?");
     $getStoredOTP->bind_param("s", $email);
     $getStoredOTP->execute();
     $storedOTPResult = $getStoredOTP->get_result();
@@ -37,7 +37,7 @@ if (isset($_POST['verify-btn'])) {
                 if ($stored_expiration > $time_now) {
                     if (strtotime($stored_expiration) > strtotime($time_now)) {
                         if ($action === 'Register') {
-                            $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
+                            $changeStatus = $conn->prepare("UPDATE user SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
                             $changeStatus->bind_param("is", $userStat, $email);
                             if ($changeStatus->execute()) {
                                 header("Location: ../Pages/register.php?action=successVerification");
@@ -64,7 +64,7 @@ if (isset($_POST['verify-btn'])) {
                             $conn->begin_transaction();
                             try {
                                 // Update the user phonenumber
-                                $updateUser = $conn->prepare("UPDATE users SET phoneNumber = ? WHERE userID = ?");
+                                $updateUser = $conn->prepare("UPDATE user SET phoneNumber = ? WHERE userID = ?");
                                 $updateUser->bind_param("si",  $partnerPhoneNumber, $storedUserID);
 
                                 if (!$updateUser->execute()) {
@@ -72,7 +72,7 @@ if (isset($_POST['verify-btn'])) {
                                 }
 
                                 // Insert into partnerships table
-                                $insertPartner = $conn->prepare("INSERT INTO partnerships(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink)
+                                $insertPartner = $conn->prepare("INSERT INTO partnership(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink)
                                                     VALUES (?,?,?,?,?,?)");
                                 $insertPartner->bind_param("ississ", $storedUserID, $partnerAddress, $companyName, $partnerType, $email, $partnerProofLink);
 
@@ -83,7 +83,7 @@ if (isset($_POST['verify-btn'])) {
 
                                 // Update user status and reset the otps
                                 $partnershipID = $conn->insert_id;
-                                $changeStatus = $conn->prepare("UPDATE users SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
+                                $changeStatus = $conn->prepare("UPDATE user SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
                                 $changeStatus->bind_param("is", $userStat, $email);
                                 if (!$changeStatus->execute()) {
                                     throw new Exception("Failed to change the status");
@@ -92,7 +92,7 @@ if (isset($_POST['verify-btn'])) {
                                 // Insert notification
                                 $receiver = "Customer";
                                 $message = "Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.";
-                                $insertNotification = $conn->prepare("INSERT INTO notifications(partnershipID, userID, message, receiver) VALUES(?, ?, ?, ?)");
+                                $insertNotification = $conn->prepare("INSERT INTO notification(partnershipID, userID, message, receiver) VALUES(?, ?, ?, ?)");
                                 $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
                                 if (!$insertNotification->execute()) {
                                     throw new Exception("Failed to insert notification");
@@ -161,7 +161,7 @@ if (isset($_POST['resend_code'])) {
     date_default_timezone_set('Asia/Manila');
     $new_time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
 
-    $storedData = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $storedData = $conn->prepare("SELECT * FROM user WHERE email = ?");
     $storedData->bind_param("s", $email);
     $storedData->execute();
     $storedDataResult = $storedData->get_result();
@@ -182,35 +182,35 @@ if (isset($_POST['resend_code'])) {
         } else {
 
             try {
-                $updateOTP = $conn->prepare("UPDATE users SET userOTP = ?, OTP_expiration_at = ? WHERE  email = ?");
+                $updateOTP = $conn->prepare("UPDATE user SET userOTP = ?, OTP_expiration_at = ? WHERE  email = ?");
                 $updateOTP->bind_param("sss", $newOtp, $new_time, $email);
                 if ($updateOTP->execute()) {
                     $message = '<body style="font-family: Arial, sans-serif;                background-color: #f4f4f4; padding: 20px; margin: 0;">
-    <table align="center" width="100%" cellpadding="0" cellspacing="0"
-        style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        <tr>
-            <td style="padding: 30px; text-align: left; color: #333333;">
-                <h2 style="color: #333333; margin-top: 0;">Your New One-Time Password (OTP) Code</h2>
-                <p style="font-size: 16px; margin: 20px 0 10px;">Hello,</p>
+                        <table align="center" width="100%" cellpadding="0" cellspacing="0"
+                            style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                            <tr>
+                                <td style="padding: 30px; text-align: left; color: #333333;">
+                                    <h2 style="color: #333333; margin-top: 0;">Your New One-Time Password (OTP) Code</h2>
+                                    <p style="font-size: 16px; margin: 20px 0 10px;">Hello,</p>
 
 
-                <div style="text-align: center; margin: 30px 0;">
-                    <span
-                        style="display: inline-block; background-color: #365CCE; color: #ffff; font-size: 24px; padding: 15px 30px; border-radius: 6px; font-weight: bold;">
-                        ' . $newOtp . '
-                    </span>
-                </div>
-                <p style="font-size: 16px; margin: 10px 0;">This OTP is valid for <strong>5 minutes</strong>. Do not
-                    share it with anyone.</p>
-                <p style="font-size: 16px; margin: 10px 0;">If you did not request this code, please ignore this email.
-                </p>
-                <br>
-                <p style="font-size: 16px;">Thank you,</p>
-                <p style="font-size: 16px; font-weight: bold;">Mamyr.</p>
-            </td>
-        </tr>
-    </table>
-</body>
+                                    <div style="text-align: center; margin: 30px 0;">
+                                        <span
+                                            style="display: inline-block; background-color: #365CCE; color: #ffff; font-size: 24px; padding: 15px 30px; border-radius: 6px; font-weight: bold;">
+                                            ' . $newOtp . '
+                                        </span>
+                                    </div>
+                                    <p style="font-size: 16px; margin: 10px 0;">This OTP is valid for <strong>5 minutes</strong>. Do not
+                                        share it with anyone.</p>
+                                    <p style="font-size: 16px; margin: 10px 0;">If you did not request this code, please ignore this email.
+                                    </p>
+                                    <br>
+                                    <p style="font-size: 16px;">Thank you,</p>
+                                    <p style="font-size: 16px; font-weight: bold;">Mamyr.</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </body>
                                 ';
                     $subject = 'Here\'s Your New OTP Code from Mamyr Resort and Events Place';
 

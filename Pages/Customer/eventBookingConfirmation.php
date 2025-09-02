@@ -11,6 +11,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -32,7 +49,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 <body>
 
     <?php
-    $query = $conn->prepare("SELECT firstName, middleInitial, lastName FROM users WHERE userID = ? AND userRole = ?");
+    $query = $conn->prepare("SELECT firstName, middleInitial, lastName FROM user WHERE userID = ? AND userRole = ?");
     $query->bind_param('ii', $userID, $userRole);
     $query->execute();
     $result =  $query->get_result();
@@ -118,7 +135,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $formattedEventDate = $startDateObj->format('F d, Y');
         $formattedEventTime = date("g:i A", strtotime($eventStartTime)) . " to " . date("g:i A", strtotime($eventEndTime));
 
-        $getMenuItemQuery = $conn->prepare("SELECT * FROM `menuitems` WHERE foodName = ?");
+        $getMenuItemQuery = $conn->prepare("SELECT * FROM `menuitem` WHERE foodName = ?");
         $allMenus = [];
         $allMenus['chicken'] = $chickenItems = getMenuItem($chickenSelected, $getMenuItemQuery);
         $allMenus['pork'] =  $porkItems = getMenuItem($porkSelected, $getMenuItemQuery);
@@ -130,7 +147,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $allMenus['dessert'] =  $dessertItems = getMenuItem($dessertSelected, $getMenuItemQuery);
 
 
-        $getVenuePrice = $conn->prepare('SELECT * FROM `resortamenities` WHERE RServiceName = ?');
+        $getVenuePrice = $conn->prepare('SELECT * FROM `resortamenity` WHERE RServiceName = ?');
         $getVenuePrice->bind_param('s', $eventVenue);
         if ($getVenuePrice->execute()) {
             $result = $getVenuePrice->get_result();

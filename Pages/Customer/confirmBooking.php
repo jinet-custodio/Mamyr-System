@@ -12,6 +12,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -51,7 +68,7 @@ unset($_SESSION['formData']);
     <!-- Get name of customer -->
 
     <?php
-    $getUserInfo = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ?");
+    $getUserInfo = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ?");
     $getUserInfo->bind_param("ii", $userID, $userRole);
     $getUserInfo->execute();
     $getUserInfoResult = $getUserInfo->get_result();
@@ -127,8 +144,8 @@ unset($_SESSION['formData']);
 
         //Get the rates
         $query = $conn->prepare("SELECT er.*, s.serviceID 
-            FROM entrancerates er
-            JOIN services s ON s.entranceRateID = er.entranceRateID
+            FROM entrancerate er
+            JOIN service s ON s.entranceRateID = er.entranceRateID
             WHERE er.sessionType = ?");
         $query->bind_param("s", $tourSelections);
         $query->execute();
@@ -146,7 +163,7 @@ unset($_SESSION['formData']);
         }
 
         //Get the time range
-        $getTimeRange = $conn->prepare("SELECT * FROM entrancetimeranges");
+        $getTimeRange = $conn->prepare("SELECT * FROM entrancetimerange");
         $getTimeRange->execute();
         $resultTimeRange = $getTimeRange->get_result();
         if ($resultTimeRange->num_rows > 0) {
@@ -219,8 +236,8 @@ unset($_SESSION['formData']);
         $scheduledEndDate =  $endDateObj->format('Y-m-d H:i:s');
 
         if (!empty($cottageChoices)) { //get selected cottages
-            $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription FROM services s
-            INNER JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID 
+            $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription FROM service s
+            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
             WHERE RServiceName = ?";
 
             $getServiceChoiceQuery = $conn->prepare($sql);
@@ -255,8 +272,8 @@ unset($_SESSION['formData']);
             $duration = '11 hours';
             $trimmedDuration = trim($duration);
 
-            $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription FROM services s
-            INNER JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID 
+            $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription FROM service s
+            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
             WHERE rs.RServiceName = ? AND rs.RSduration = ?";
 
             $getServiceChoiceQuery = $conn->prepare($sql);
@@ -295,8 +312,8 @@ unset($_SESSION['formData']);
         $addOnsServices = [];
         //Get Selected Entertainment 
         $getEntertainment = $conn->prepare("SELECT s.serviceID, rs.RSprice, rs.RServiceName  
-            FROM services s
-            INNER JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID 
+            FROM service s
+            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
             WHERE RServiceName = ?");
 
         foreach ($entertainmentChoices as $entertainment) {
@@ -379,8 +396,8 @@ unset($_SESSION['formData']);
         $arrivalTimeObj = new DateTime($arrivalTime);
         $arrivalTime = $arrivalTimeObj->format('g:i a');
 
-        $selectedHotelQuery = $conn->prepare("SELECT * FROM services s
-            JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
+        $selectedHotelQuery = $conn->prepare("SELECT * FROM service s
+            JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
             WHERE ra.RServiceName = ? AND ra.RSduration = ?");
 
         foreach ($selectedHotels as $selectedHotel) {

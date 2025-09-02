@@ -12,7 +12,7 @@ echo ($editMode);
 
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'Amenities';
-$getWebContent = $conn->prepare("SELECT * FROM websitecontents WHERE sectionName = ?");
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
@@ -25,7 +25,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     $contentMap[$cleanTitle] = $row['content'];
 
     // Fetch images with this contentID
-    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimages WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
     $getImages->bind_param("i", $contentID);
     $getImages->execute();
     $imageResult = $getImages->get_result();
@@ -499,7 +499,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </div>
     <?php
     $sectionName = 'BusinessInformation';
-    $getWebContent = $conn->prepare("SELECT * FROM websitecontents WHERE sectionName = ?");
+    $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
     $getWebContent->bind_param("s", $sectionName);
     $getWebContent->execute();
     $getWebContentResult = $getWebContent->get_result();

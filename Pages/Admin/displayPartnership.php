@@ -16,6 +16,23 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 $message = '';
 $status = '';
 
@@ -62,7 +79,7 @@ if (isset($_SESSION['error-partnership'])) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
             $getNotifications->bind_param("s", $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -114,7 +131,7 @@ if (isset($_SESSION['error-partnership'])) {
             }
 
             if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -277,10 +294,10 @@ if (isset($_SESSION['error-partnership'])) {
                         $pendingStatus = 1;
                         $rejectedStatus = 3;
                         $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName, pt.partnerTypeDescription
-                                FROM partnerships p
-                                INNER JOIN users u ON p.userID = u.userID
-                                INNER JOIN statuses s ON s.statusID = p.partnerStatusID
-                                LEFT JOIN partnershiptypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                FROM partnership p
+                                INNER JOIN user u ON p.userID = u.userID
+                                INNER JOIN status s ON s.statusID = p.partnerStatusID
+                                LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnerStatusID != ? AND partnerStatusID != ?
                                 ");
                         $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);
@@ -360,10 +377,10 @@ if (isset($_SESSION['error-partnership'])) {
                         $pendingStatus = 1;
                         $rejectedStatus = 3;
                         $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName, pt.partnerTypeDescription
-                                FROM partnerships p
-                                INNER JOIN users u ON p.userID = u.userID
-                                INNER JOIN statuses s ON s.statusID = p.partnerStatusID
-                                LEFT JOIN partnershiptypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                FROM partnership p
+                                INNER JOIN user u ON p.userID = u.userID
+                                INNER JOIN status s ON s.statusID = p.partnerStatusID
+                                LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnerStatusID = ? OR partnerStatusID = ?
                                 ");
                         $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);

@@ -55,7 +55,7 @@ if (isset($_POST['eventBook'])) {
 
     $serviceID = null;
 
-    $getServiceID = $conn->prepare("SELECT * FROM `services` WHERE resortServiceID = ?");
+    $getServiceID = $conn->prepare("SELECT * FROM `service` WHERE resortServiceID = ?");
     $getServiceID->bind_param('i', $venueID);
 
     if ($getServiceID->execute()) {
@@ -74,7 +74,7 @@ if (isset($_POST['eventBook'])) {
     $conn->begin_transaction();
     try {
         //insert the total of all
-        $insertCustomPackage = $conn->prepare("INSERT INTO `custompackages`(`userID`, `customPackageTotalPrice`, `customPackageNotes`) VALUES (?,?,?)");
+        $insertCustomPackage = $conn->prepare("INSERT INTO `custompackage`(`userID`, `customPackageTotalPrice`, `customPackageNotes`) VALUES (?,?,?)");
         $insertCustomPackage->bind_param('ids', $userID, $venuePrice, $additionalRequest);
 
         if (!$insertCustomPackage->execute()) {
@@ -84,7 +84,7 @@ if (isset($_POST['eventBook'])) {
         $customPackageID =   $conn->insert_id;
 
         //insert each item
-        $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitems`( `customPackageID`, `foodItemID`, `quantity`) VALUES (?,?,?)");
+        $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `foodItemID`, `quantity`) VALUES (?,?,?)");
 
         foreach ($menuQuantities as $foodItemID => $quantity) {
             $foodItemID = (int) $foodItemID;
@@ -96,7 +96,7 @@ if (isset($_POST['eventBook'])) {
             }
         }
 
-        $insertServiceVenue = $conn->prepare("INSERT INTO `custompackageitems`( `customPackageID`, `serviceID`, `quantity`, `servicePrice`) VALUES (?,?,?,?)");
+        $insertServiceVenue = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `serviceID`, `quantity`, `servicePrice`) VALUES (?,?,?,?)");
         $insertServiceVenue->bind_param('iiid', $customPackageID, $serviceID, $serviceQuantity, $venuePrice);
 
         if (!$insertServiceVenue->execute()) {
@@ -105,7 +105,7 @@ if (isset($_POST['eventBook'])) {
         }
 
         //insert into booking
-        $insertBooking = $conn->prepare("INSERT INTO `bookings`(`userID`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `additionalCharge`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $insertBooking = $conn->prepare("INSERT INTO `booking`(`userID`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `additionalCharge`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $insertBooking->bind_param("isisissssddds", $userID, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDateTimeStr, $endDateTimeStr, $paymentMethod, $additionalCharge, $venuePrice, $downpayment, $arrivalTime);
         if (!$insertBooking->execute()) {
             $conn->rollback();

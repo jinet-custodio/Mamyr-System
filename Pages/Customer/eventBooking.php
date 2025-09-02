@@ -9,6 +9,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -58,7 +75,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <select class="form-select" name="eventType" id="eventType" required>
                             <option value="" selected disabled>Choose here..</option>
                             <?php
-                            $getEventCategoryQuery = $conn->prepare("SELECT * FROM eventcategories");
+                            $getEventCategoryQuery = $conn->prepare("SELECT * FROM eventcategory");
                             $getEventCategoryQuery->execute();
                             $getEventCategoryResult = $getEventCategoryQuery->get_result();
 

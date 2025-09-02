@@ -58,8 +58,8 @@ if (isset($_POST['bookRates'])) {
     $resortServiceIDs = [];
 
     if (!empty($cottageChoices)) { //get selected cottages
-        $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription, rs.resortServiceID FROM services s
-            INNER JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID 
+        $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription, rs.resortServiceID FROM service s
+            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
             WHERE RServiceName = ?";
 
         $getServiceChoiceQuery = $conn->prepare($sql);
@@ -90,8 +90,8 @@ if (isset($_POST['bookRates'])) {
         $duration = '11 hours';
         $trimmedDuration = trim($duration);
 
-        $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription, rs.resortServiceID FROM services s
-            INNER JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID 
+        $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription, rs.resortServiceID FROM service s
+            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
             WHERE rs.RServiceName = ? AND rs.RSduration = ?";
 
         $getServiceChoiceQuery = $conn->prepare($sql);
@@ -121,8 +121,8 @@ if (isset($_POST['bookRates'])) {
 
     //Get Selected Entertainment 
     $getEntertainment = $conn->prepare("SELECT s.serviceID, rs.RSprice, rs.RServiceName, rs.RScapacity, rs.resortServiceID
-            FROM services s
-            INNER JOIN resortamenities rs ON s.resortServiceID = rs.resortServiceID 
+            FROM service s
+            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
             WHERE RServiceName = ?");
 
     foreach ($addOnsServices as $entertainment) {
@@ -159,7 +159,7 @@ if (isset($_POST['bookRates'])) {
 
 
     $insertBooking = $conn->prepare("INSERT INTO 
-        bookings(userID, additionalRequest, toddlerCount, kidCount, adultCount, guestCount, durationCount, 
+        booking(userID, additionalRequest, toddlerCount, kidCount, adultCount, guestCount, durationCount, 
         startDate, endDate, additionalCharge,
         totalCost, downpayment, 
         addOns, paymentMethod, bookingStatus, bookingType, arrivalTime) 
@@ -197,7 +197,7 @@ if (isset($_POST['bookRates'])) {
         $bookingID = $conn->insert_id;
 
         $insertBookingServices = $conn->prepare("INSERT INTO 
-    bookingservices(bookingID, serviceID, guests, bookingServicePrice)
+    bookingservice(bookingID, serviceID, guests, bookingServicePrice)
     VALUES(?,?,?,?)");
 
 
@@ -235,7 +235,7 @@ if (isset($_POST['bookRates'])) {
         if ($bookingStatus ===  1) {
             $receiver = 'Admin';
             $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking request.';
-            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
             VALUES(?,?,?,?)");
             $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
             $insertBookingNotificationRequest->execute();
@@ -252,13 +252,13 @@ if (isset($_POST['bookRates'])) {
                 $paymentDueDate = $scheduledStartDate;
             }
 
-            $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedbookings(bookingID, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate )
+            $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedbooking(bookingID, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate )
                 VALUES(?,?,?,?,?)");
             $insertConfirmedBooking->bind_param("iddss", $bookingID,  $totalCost, $totalCost, $downpaymentDueDate, $paymentDueDate);
             $insertConfirmedBooking->execute();
             $insertConfirmedBooking->close();
 
-            $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledates(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?,?,?)");
+            $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?,?,?)");
             if (!empty($resortServiceIDs)) {
                 for ($i = 0; $i < count($resortServiceIDs); $i++) {
                     $resortServiceID = $resortServiceIDs[$i];
@@ -270,7 +270,7 @@ if (isset($_POST['bookRates'])) {
 
             $occupiedID = 2;
 
-            $updateAvailabilityID = $conn->prepare("UPDATE resortamenities SET RSAvailabilityID = ? WHERE resortServiceID = ?");
+            $updateAvailabilityID = $conn->prepare("UPDATE resortamenity SET RSAvailabilityID = ? WHERE resortServiceID = ?");
             if (!empty($resortServiceIDs)) {
                 for ($i = 0; $i < count($resortServiceIDs); $i++) {
                     $resortServiceID = $resortServiceIDs[$i];
@@ -282,7 +282,7 @@ if (isset($_POST['bookRates'])) {
 
             $receiver = 'Admin';
             $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking.';
-            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
             VALUES(?,?,?,?)");
             $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
             $insertBookingNotificationRequest->execute();

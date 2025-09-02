@@ -15,13 +15,13 @@ if (isset($_POST['approveBtn'])) {
 
     $partnerID = $_SESSION['partnerID'];
 
-    $query = $conn->prepare("SELECT * FROM partnerships 
+    $query = $conn->prepare("SELECT * FROM partnership
     WHERE partnershipID = ? AND partnerStatus = ?");
     $query->bind_param("ii", $partnerID, $partnerStatus);
     $query->execute();
     $result = $query->get_result();
     if ($result->num_rows > 0) {
-        $updateStatus = $conn->prepare("UPDATE partnerships 
+        $updateStatus = $conn->prepare("UPDATE partnership 
         SET partnerStatus = ?, startDate = ?
         WHERE partnershipID = ?");
         $updateStatus->bind_param("isi", $newPartnerStatus, $startDate, $partnerID);
@@ -70,7 +70,7 @@ if (isset($_POST['declineBtn'])) {
 
     $partnerID = $_SESSION['partnerID'];
 
-    $query = $conn->prepare("SELECT * FROM partnerships 
+    $query = $conn->prepare("SELECT * FROM partnership 
     WHERE partnershipID = ? AND partnerStatus = ?");
     $query->bind_param("ii", $partnerID, $partnerStatus);
     $query->execute();
@@ -88,12 +88,12 @@ if (isset($_POST['declineBtn'])) {
             $bookingID = Null;
         }
 
-        $updateStatus = $conn->prepare("UPDATE partnerships 
+        $updateStatus = $conn->prepare("UPDATE partnership 
         SET partnerStatus = ?
         WHERE partnershipID = ?");
         $updateStatus->bind_param("ii", $newPartnerStatus, $partnerID);
 
-        $insertNotif = $conn->prepare("INSERT INTO notifications(partnershipID, userID, message, bookingID, receiver)
+        $insertNotif = $conn->prepare("INSERT INTO notification(partnershipID, userID, message, bookingID, receiver)
         VALUES(?,?,?,?,?)");
         $insertNotif->bind_param("iisis", $partnerID,  $partnerUserID, $message, $bookingID, $receiver);
 

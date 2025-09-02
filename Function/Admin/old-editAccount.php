@@ -50,7 +50,7 @@ if (isset($_POST['edit'])) {
 
         $imgData = file_get_contents($userProfile_tmp_name);
 
-        $stmt = $conn->prepare("UPDATE users 
+        $stmt = $conn->prepare("UPDATE user 
             SET firstName = ?, middleInitial = ?, lastName = ?, birthDate = ?, email = ?, phoneNumber = ?, userAddress = ?, userProfile = ? 
             WHERE userID = ?");
 
@@ -61,7 +61,7 @@ if (isset($_POST['edit'])) {
     } else {
         // No image uploaded, just update other fields
         echo "No image uploaded, updating fields"; // Debugging statement
-        $query = "UPDATE users 
+        $query = "UPDATE user
             SET firstName='$firstName', middleInitial='$middleInitial', lastName='$lastName', birthDate='$birthDate', 
                 email='$email', phoneNumber='$phoneNumber', userAddress='$userAddress' 
             WHERE userID='$userID'";

@@ -12,6 +12,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -19,7 +36,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'About';
-$getWebContent = $conn->prepare("SELECT * FROM websitecontents WHERE sectionName = ?");
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
@@ -60,7 +77,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <ul class="navbar-nav">
             <?php
 
-            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
@@ -90,7 +107,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -250,7 +267,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="videoTextContainer">
             <?php
             $sectionName = 'BusinessInformation';
-            $getWebContent = $conn->prepare("SELECT * FROM websitecontents WHERE sectionName = ?");
+            $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
             $getWebContent->bind_param("s", $sectionName);
             $getWebContent->execute();
             $getWebContentResult = $getWebContent->get_result();

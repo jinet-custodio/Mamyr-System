@@ -65,7 +65,7 @@ if (isset($_POST['signUp'])) {
 
         if (in_array($domain, $extensions)) {
 
-            $checkEmail = $conn->prepare("SELECT email FROM users WHERE email = ? LIMIT 1");
+            $checkEmail = $conn->prepare("SELECT email FROM user WHERE email = ? LIMIT 1");
             $checkEmail->bind_param("s", $email);
             $checkEmail->execute();
             $checkEmailResult = $checkEmail->get_result();
@@ -87,7 +87,7 @@ if (isset($_POST['signUp'])) {
 
                 $conn->begin_transaction();
                 try {
-                    $insertUser = $conn->prepare("INSERT INTO users(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at)  VALUES(?,?,?,?,?,?,?,?,?)");
+                    $insertUser = $conn->prepare("INSERT INTO user(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at)  VALUES(?,?,?,?,?,?,?,?,?)");
                     $dummyBlob = null;
                     $insertUser->bind_param("bssssssss", $dummyBlob,  $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $otp, $OTP_expiration_at);
                     $insertUser->send_long_data(0, $userProfile);
@@ -196,7 +196,7 @@ elseif (isset($_POST['login'])) {
 
 
 
-    $loginQuery = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $loginQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
     $loginQuery->bind_param("s", $email);
     $loginQuery->execute();
     $loginResult = $loginQuery->get_result();

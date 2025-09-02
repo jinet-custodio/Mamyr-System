@@ -8,7 +8,7 @@ require 'Config/dbcon.php';
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
-$getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
@@ -22,7 +22,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     $contentMap[$cleanTitle] = $row['content'];
 
     // Fetch images with this contentID
-    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websiteContentImages WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
     $getImages->bind_param("i", $contentID);
     $getImages->execute();
     $imageResult = $getImages->get_result();
@@ -551,7 +551,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             }
         });
     </script>
-     <script src="Assets/JS/scrollNavbg.js"></script>
+    <script src="Assets/JS/scrollNavbg.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
 
