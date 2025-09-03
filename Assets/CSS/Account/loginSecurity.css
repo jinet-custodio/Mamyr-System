@@ -128,9 +128,6 @@
   margin-top: 1vw;
 }
 
-#paymentBookingHist {
-  text-align: center;
-}
 
 .sidebar li:hover a,
 .list-group-item.active {
@@ -601,6 +598,10 @@ input[type="password"]::-webkit-search-cancel-button {
     margin-left: 16vw;
     width: 85%;
     margin-top: 3rem;
+  }
+
+    #toggle-btn {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
   }
 
   .card-body {

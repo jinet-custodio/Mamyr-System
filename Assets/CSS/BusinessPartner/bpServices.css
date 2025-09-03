@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Poppins";
-  src: url(../../../Fonts/Poppins/Poppins-Regular.ttf);
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
   font-family: "Alkatra";
@@ -13,62 +13,110 @@
 
 /* sidebar */
 .sidebar {
-  width: 23vw;
+  width: 25vw;
   background-color: #cee4f2;
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
+  overflow-x: hidden;
   overflow-y: auto;
   border-right: 2px solid #cee4f2;
-  /* border-top-right-radius: 30px; */
+  border-top-right-radius: 30px;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
-.home,
-.backArrowContainer {
-  /* border: 1px solid red; */
-  position: absolute;
-  top: 7%;
-  right: 4%;
+.sidebar.collapsed {
+  width: 15vw;
+  justify-content: flex-start !important;
 }
 
-.backArrowContainer {
+.sidebar .sidebar-text {
+  display: inline-block;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .sidebar-text {
+  display: none;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar-icon {
+  font-size: 2vw;
+  min-width: 3vw;
+  text-align: center;
+  margin-right: 10px;
+}
+
+/* Sidebar toggle button */
+.toggle-button {
+  background: none;
+  border: none;
+  margin: 10px;
+}
+
+.sidebar-item,
+.list-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+}
+
+.home {
   /* border: 1px solid red; */
-  position: absolute;
-  top: 5%;
-  right: 4%;
+  padding: 2vw;
 }
 
 .homeIcon {
   float: right;
-  height: 6vh;
 }
 
-.profileContainer {
-  padding: 2vw;
+.sidebar-header {
+  color: black !important;
+  display: flex;
+  flex-direction: column;
+  margin: 1vw auto;
+  width: 100%;
+  padding-top: 0.5rem;
 }
 
-.profilePic {
-  height: 70px;
-  width: 70px;
-  border-radius: 3rem;
+.sidebar-header h5 {
+  font-family: "Lora" !important;
+  margin: 0;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.profileImage {
+  margin: auto;
+  padding: 1rem;
+}
+
+.profileImage img {
+  height: clamp(8vw, 6.5vw, 4vw);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
 .list-group {
   font-family: "Poppins";
-  font-size: 22px;
+  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
   border: none;
   list-style: none;
-  margin-top: 2vw;
-
-  a {
-    text-decoration: none;
-    color: rgb(0, 0, 0) !important;
-    background-color: #cee4f2;
-  }
+  margin-top: 0.5rem;
 }
+
+.list-group a {
+  text-decoration: none;
+  color: rgb(0, 0, 0) !important;
+  background-color: #cee4f2;
+}
+
 .list-group-item {
   border: none;
   margin-top: 1vw;
@@ -81,12 +129,10 @@
 }
 
 #logoutBtn {
-  display: flex;
-  margin: auto;
-  margin-top: 2rem;
   text-align: center;
   color: black;
-  padding-top: 10px;
+  padding: 10px;
+  font-size: clamp(1.6vw, 1.4vw, 1.3vw);
 }
 
 #logoutBtn:hover {
@@ -94,18 +140,14 @@
   color: white;
 }
 
-.sidebar-icon {
-  height: 35px;
-  padding-right: 1vw;
+.main-content { 
+  margin-left: 27vw;
+  margin-top: 5rem;
+  padding: 1rem;
+  overflow-y: auto;
+  width: 75%;
 }
 /* sidebar */
-
-.container {
-  /* border: 1px solid red; */
-  width: 75%;
-  margin-left: 24vw;
-  padding: 2vw;
-}
 
 .welcomeText {
   font-size: 36px;
@@ -206,4 +248,97 @@ label {
 
 #description {
   height: 15vw;
+}
+/* Tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+  .sidebar {
+    width: 35vw;
+  }
+
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
+
+  .sidebar-icon {
+    font-size: clamp(2.6vw, 2.3vw, 2vw);
+  }
+
+  .sidebar-header h5 {
+    margin-top: 2vw !important;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
+
+  .profileImage {
+    margin: 1vw auto;
+  }
+
+  .profileImage img {
+    height: clamp(13vw, 11vw, 10vw);
+  }
+
+  .main-content {
+    margin-left: 34vw;
+  }
+
+}
+
+/* Tablet landscape */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+  .homeIcon {
+    width: 4vw;
+  }
+
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
+
+  .profile-image {
+    width: 30%;
+  }
+}
+
+/* Phone size */
+@media screen and (max-width: 600px) {
+  .sidebar {
+    width: 45vw;
+  }
+  .main-content {
+    margin-left: 16vw;
+    width: 85%;
+  }
+
+  .customer-details {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .list-group-item {
+    justify-content: flex-start;
+  }
+
+  .sidebar-icon {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+    margin-right: 0 !important;
+  }
+
+  .sidebar-text {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+    margin-left: 2vw;
+  }
+
+    #toggle-btn {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+  }
+
+  .home {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .profile-image {
+    width: 35%;
+  }
 }

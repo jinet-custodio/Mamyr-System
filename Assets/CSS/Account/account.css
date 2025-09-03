@@ -122,9 +122,6 @@
   margin-top: 1vw;
 }
 
-#paymentBookingHist {
-  text-align: center;
-}
 .sidebar li:hover a,
 .list-group-item.active {
   color: #0000;
@@ -542,6 +539,10 @@
   .sidebar-text {
     font-size: clamp(2.9vw, 2.7vw, 2.5vw);
     margin-left: 2vw;
+  }
+
+    #toggle-btn {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
   }
 
   .home {

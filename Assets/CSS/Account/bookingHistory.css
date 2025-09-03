@@ -124,9 +124,6 @@
   margin-top: 1vw;
 }
 
-#paymentBookingHist {
-  text-align: center;
-}
 .sidebar li:hover a,
 .list-group-item.active {
   color: #0000;
