@@ -1,0 +1,133 @@
+CREATE DATABASE mamyr;
+
+USE mamyr;
+
+
+CREATE TABLE usertype (
+    userTypeID INT PRIMARY KEY AUTO_INCREMENT,
+    typeName VARCHAR(50) UNIQUE -- 'Customer', 'Partner', 'Admin'
+);
+
+INSERT INTO usertype (typeName) VALUES 
+('Customer'), 
+('Partner'), 
+('Admin'),
+('PartnerRequest);
+
+CREATE TABLE userstatus (
+    userStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE -- 'Pending', 'Verified', 'Non-verified'
+);
+
+INSERT INTO userstatus (statusName) VALUES 
+('Pending'), 
+('Verified'), 
+('NotVerified'),
+('Deleted');
+
+
+CREATE TABLE partnerstatus (
+    partnerStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE NOT NULL
+);
+
+INSERT INTO partnerstatus (statusName) VALUES 
+('Pending'),
+('Approved'),
+('Rejected'),
+('Terminated'),
+('Expired'),
+('Suspended');
+
+
+CREATE TABLE serviceavailability (
+    availabilityID INT PRIMARY KEY AUTO_INCREMENT,
+    availabilityName VARCHAR(50) UNIQUE -- 'Available', 'Occupied', 'Maintenance'
+);
+
+INSERT INTO serviceavailability (availabilityName) VALUES 
+('Available'),
+('Occupied'),
+('Maintenance'),
+('Private'),
+('Not Available');
+
+Create Table status (
+    statusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE -- 'Pending', 'Approved', 'Rejected'
+);
+
+INSERT INTO status (statusName) VALUES 
+('Pending'),
+('Approved'),
+('Rejected'),
+('Cancelled'),
+('Done'),
+('Expired'),
+('Payment Issue');
+
+
+CREATE TABLE eventcategory (
+    categoryID INT PRIMARY KEY AUTO_INCREMENT,
+    categoryName VARCHAR(200) NOT NULL
+);
+
+INSERT INTO `eventcategory` (`categoryID`, `categoryName`) VALUES 
+(NULL, 'Birthday'), 
+(NULL, 'Wedding'), 
+(NULL, 'Team Building'), 
+(NULL, 'Christening/Dedication'), 
+(NULL, 'Thanksgiving Party'), 
+(NULL, 'Christmas Party'), 
+(NULL, 'Kids Party'),
+(NULL, 'Debut');
+
+
+Create Table bookingpaymentstatus (
+    paymentStatusID INT PRIMARY KEY AUTO_INCREMENT,
+    statusName VARCHAR(50) UNIQUE 
+);
+
+INSERT INTO bookingpaymentstatus (statusName) Values 
+('No Payment'),
+('Partially Paid'),
+('Fully Paid');
+
+CREATE TABLE resortservicescategory (
+    categoryID INT PRIMARY KEY AUTO_INCREMENT,
+    categoryName VARCHAR(200) NOT NULL
+);
+
+INSERT INTO resortservicescategory (categoryName) VALUES 
+('Hotel'), 
+('Cottage'), 
+('Entertainment'),
+('Event Hall');
+
+CREATE TABLE entrancetimerange(
+    timeRangeID INT PRIMARY KEY AUTO_INCREMENT,
+    session_type VARCHAR(20),
+    time_range VARCHAR(50)
+    );
+
+INSERT INTO entrancetimerange
+    (session_type, time_range) 
+    VALUES('Day', '9:00 am - 4:00 pm'), 
+    ('Night', '12:00 pm - 8:00 pm'), 
+    ('Overnight', '8:00 pm - 5:00 am');
+
+
+CREATE TABLE partnershiptype (
+    partnerTypeID INT PRIMARY KEY AUTO_INCREMENT,
+    partnerType VARCHAR(50) NOT NULL UNIQUE,
+    partnerTypeDescription VARCHAR(100) NOT NULL
+);
+
+INSERT INTO partnershiptype (partnerType, partnerTypeDescription) VALUES
+('photography', 'Photography/Videography'),
+('sound-lighting', 'Sound and Lighting'),
+('event-hosting', 'Event Hosting'),
+('photo-booth', 'Photo Booth'),
+('performer', 'Performer'),
+('food-cart', 'Food Cart');
+

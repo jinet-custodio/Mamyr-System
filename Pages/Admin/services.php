@@ -13,6 +13,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -57,7 +74,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
             $getNotifications->bind_param("s", $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -108,7 +125,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
 
             if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -255,7 +272,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <tbody>
                     <?php
                     $hotelCategoryID = 1;
-                    $getResortServices = $conn->prepare("SELECT * FROM resortamenities WHERE RScategoryID !=  ?");
+                    $getResortServices = $conn->prepare("SELECT * FROM resortamenity WHERE RScategoryID !=  ?");
 
                     if ($getResortServices === false) {
                         throw new Exception("Prepare failed: " . $conn->error);
@@ -358,8 +375,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <tbody>
                     <?php
-                    $selectRates = $conn->prepare("SELECT er.*, etr.* FROM entrancerates er
-                    JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID");
+                    $selectRates = $conn->prepare("SELECT er.*, etr.* FROM entrancerate er
+                    JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID");
                     if ($selectRates->execute()) {
                         $rateResult = $selectRates->get_result();
                         while ($row = $rateResult->fetch_assoc()) {
@@ -487,7 +504,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </thead>
 
                 <?php
-                $getFoodQuery = $conn->prepare("SELECT mi.*, sa.availabilityName FROM menuitems mi
+                $getFoodQuery = $conn->prepare("SELECT mi.*, sa.availabilityName FROM menuitem mi
                 LEFT JOIN  serviceavailability sa ON mi.availabilityID = sa.availabilityID");
                 if ($getFoodQuery->execute()) {
                     $foodResult = $getFoodQuery->get_result();
@@ -585,7 +602,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     <option value="" disabled selected>Service Category</option>
                                     <?php
                                     $hotel = 'Hotel';
-                                    $getCategory = $conn->prepare('SELECT * FROM resortservicescategories WHERE categoryName != ?');
+                                    $getCategory = $conn->prepare('SELECT * FROM resortservicescategory WHERE categoryName != ?');
                                     $getCategory->bind_param('s', $hotel);
                                     if ($getCategory->execute()) {
                                         $result =  $getCategory->get_result();
@@ -662,7 +679,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <select id="tourType" name="tourType" class="form-select" required>
                                     <option value="" disabled selected>Tour Type</option>
                                     <?php
-                                    $getTourType = $conn->prepare("SELECT timeRangeID, session_type FROM entrancetimeranges");
+                                    $getTourType = $conn->prepare("SELECT timeRangeID, session_type FROM entrancetimerange");
                                     if ($getTourType->execute()) {
                                         $tourTypeResult = $getTourType->get_result();
                                         if ($tourTypeResult->num_rows > 0) {
@@ -687,7 +704,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <select id="timeRange" name="timeRange" class="form-select" required>
                                     <option value="" disabled selected>Tour Type</option>
                                     <?php
-                                    $getTimeRange = $conn->prepare("SELECT timeRangeID, time_range FROM entrancetimeranges");
+                                    $getTimeRange = $conn->prepare("SELECT timeRangeID, time_range FROM entrancetimerange");
                                     if ($getTimeRange->execute()) {
                                         $timeRangeResult =  $getTimeRange->get_result();
                                         if ($timeRangeResult->num_rows > 0) {

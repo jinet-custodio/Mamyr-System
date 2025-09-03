@@ -1,3 +1,5 @@
+USE mamyr;
+
 CREATE TABLE partnershipServices (
     partnershipServiceID INT PRIMARY KEY AUTO_INCREMENT,
     partnershipID INT NOT NULL,

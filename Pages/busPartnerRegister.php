@@ -79,7 +79,7 @@ session_start();
                         <select id="service" name="partnerType" class="form-select primary">
                             <option value="" disabled selected>Type of Business</option>
                             <?php
-                            $serviceType = $conn->prepare("SELECT * FROM partnershiptypes");
+                            $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
                             $serviceType->execute();
                             $serviceTypeResult = $serviceType->get_result();
                             if ($serviceTypeResult->num_rows > 0) {

@@ -13,7 +13,7 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM users WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
@@ -38,7 +38,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
-$getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
@@ -79,7 +79,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
             <?php
-            $getProfile = $conn->prepare("SELECT firstName, userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile = $conn->prepare("SELECT firstName, userProfile FROM user WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
@@ -108,7 +108,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();

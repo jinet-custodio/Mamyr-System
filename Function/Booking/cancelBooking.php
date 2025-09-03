@@ -15,7 +15,7 @@ if (isset($_POST['cancelBooking'])) {
     $confirmedStatus = mysqli_real_escape_string($conn, $_POST['confirmedStatus']);
 
 
-    $getStatusID = $conn->prepare("SELECT * FROM statuses WHERE statusName = ?");
+    $getStatusID = $conn->prepare("SELECT * FROM status WHERE statusName = ?");
 
     //GET STATUS ID 
     if (!empty($bookingStatus) && empty($confirmedStatus)) {
@@ -38,15 +38,15 @@ if (isset($_POST['cancelBooking'])) {
         }
     }
 
-    $checkBooking = $conn->prepare("SELECT *  FROM bookings 
-    WHERE bookingID = ?  AND bookingStatus = ? AND userID = ?");
+    $checkBooking = $conn->prepare("SELECT *  FROM booking 
+    WHERE bookingID = ? AND userID = ?");
 
-    $checkBooking->bind_param("iii", $bookingID,  $statusID, $userID);
+    $checkBooking->bind_param("ii", $bookingID,  $userID);
     $checkBooking->execute();
     $resultBooking = $checkBooking->get_result();
     if ($resultBooking->num_rows > 0) {
         $cancelledStatusID = 4;
-        $cancelBooking = $conn->prepare("UPDATE bookings
+        $cancelBooking = $conn->prepare("UPDATE booking
         SET bookingStatus = ?
         WHERE bookingID = ?  ");
         $cancelBooking->bind_param("ii", $cancelledStatusID, $bookingID);
@@ -54,7 +54,7 @@ if (isset($_POST['cancelBooking'])) {
 
             $receiver = 'Admin';
             $message = 'A customer has cancelled a' . strtolower($bookingType) . ' booking.';
-            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
             VALUES(?,?,?,?)");
             $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
             $insertBookingNotificationRequest->execute();
@@ -62,14 +62,15 @@ if (isset($_POST['cancelBooking'])) {
             header("Location: ../../Pages/Account/bookingHistory.php?action=Cancelled");
             $cancelBooking->close();
         } else {
-            header("Location: ../../Pages/Account/bookingHistory.php?action=Error");
+            header("Location: ../../Pages/Account/bookingHistory.php?action=Error3");
             exit();
         }
     } else {
-        header("Location: ../../Pages/Account/bookingHistory.php?action=Error");
+        error_log("Booking not found or doesn't match status/user.");
+        header("Location: ../../Pages/Account/bookingHistory.php?action=Error2");
         exit();
     }
 } else {
-    header("Location: ../../Pages/Account/bookingHistory.php?action=Error");
+    header("Location: ../../Pages/Account/bookingHistory.php?action=Error1");
     exit();
 }

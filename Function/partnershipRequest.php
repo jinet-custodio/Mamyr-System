@@ -30,7 +30,7 @@ if (isset($_POST['submit_request'])) {
     $proofLink = mysqli_real_escape_string($conn, $_POST['proofLink']);
 
     //Get the partner information based on the business Email
-    $partnerQuery = $conn->prepare("SELECT * from partnerships WHERE businessEmail = ?");
+    $partnerQuery = $conn->prepare("SELECT * from partnership WHERE businessEmail = ?");
     $partnerQuery->bind_param("s", $businessEmail);
     $partnerQuery->execute();
     $partnerResult = $partnerQuery->get_result();
@@ -48,7 +48,7 @@ if (isset($_POST['submit_request'])) {
         //     $data = $partnerResult->fetch_assoc();
 
 
-        $updateQuery = $conn->prepare("UPDATE users SET firstName = ?, middleInitial = ?, lastName = ?, phoneNumber = ? WHERE userID = ?");
+        $updateQuery = $conn->prepare("UPDATE user SET firstName = ?, middleInitial = ?, lastName = ?, phoneNumber = ? WHERE userID = ?");
         $updateQuery->bind_param("ssssi", $firstName, $middleInitial, $lastName, $phoneNumber, $userID);
         if ($updateQuery->execute()) {
             $_SESSION['success'] = "Profile updated successfully.";
@@ -56,7 +56,7 @@ if (isset($_POST['submit_request'])) {
             $_SESSION['message'] = "Failed to update profile.";
         }
         //Select partnerType ID
-        $partnerTypeQuery = $conn->prepare("SELECT * FROM partnershipTypes WHERE partnerType = ?");
+        $partnerTypeQuery = $conn->prepare("SELECT * FROM partnershiptype WHERE partnerType = ?");
         $partnerTypeQuery->bind_param("s", $partnerType);
         $partnerTypeQuery->execute();
         $partnerTypeResult = $partnerTypeQuery->get_result();
@@ -66,7 +66,7 @@ if (isset($_POST['submit_request'])) {
         }
 
         if ($userRole ==  1) {
-            $insertQuery = $conn->prepare("INSERT INTO partnerships(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink) VALUES (?,?,?,?,?,?)");
+            $insertQuery = $conn->prepare("INSERT INTO partnership(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink) VALUES (?,?,?,?,?,?)");
             $insertQuery->bind_param("ississ", $userID, $partnerAddress, $companyName, $partnerTypeID, $businessEmail, $proofLink);
             if ($insertQuery->execute()) {
                 $_SESSION['success'] = 'Partnership Request Sent Successfully';

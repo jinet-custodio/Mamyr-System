@@ -17,7 +17,7 @@ $isVerified = 2;
 if (isset($_POST['verify_email'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
 
-    $emailQuery = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
     $emailQuery->bind_param('s', $email);
     $emailQuery->execute();
     $result = $emailQuery->get_result();
@@ -28,7 +28,7 @@ if (isset($_POST['verify_email'])) {
         {
             $resetPasswordOTP = generateOTP(6);
             $time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
-            $updateOTP = $conn->prepare("UPDATE users SET userOTP = ?, OTP_expiration_at = ? WHERE email = ?");
+            $updateOTP = $conn->prepare("UPDATE user SET userOTP = ?, OTP_expiration_at = ? WHERE email = ?");
             $updateOTP->bind_param("sss", $resetPasswordOTP, $time, $email);
 
             if ($updateOTP->execute()) {
@@ -77,7 +77,7 @@ if (isset($_POST['changePassword'])) {
     $password = mysqli_real_escape_string($conn, $_POST['newPassword']);
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirmPassword']);
 
-    $emailQuery = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
     $emailQuery->bind_param('s', $email);
     $emailQuery->execute();
     $result = $emailQuery->get_result();
@@ -85,7 +85,7 @@ if (isset($_POST['changePassword'])) {
         $storedData = $result->fetch_assoc();
         if ($password == $confirm_password) {
             $hashpassword = password_hash($password, PASSWORD_DEFAULT);
-            $updatePassword = $conn->prepare("UPDATE users SET password = ? WHERE email = ?");
+            $updatePassword = $conn->prepare("UPDATE user SET password = ? WHERE email = ?");
             $updatePassword->bind_param("ss", $hashpassword, $email);
             if ($updatePassword->execute()) {
                 unset($_SESSION['email']);

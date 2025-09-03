@@ -55,7 +55,7 @@ if (isset($_POST['saveChanges'])) {
 
 
 
-    $updateUser = $conn->prepare("UPDATE users SET 
+    $updateUser = $conn->prepare("UPDATE user SET 
     firstName = ?, 
     middleInitial = ?,  
     lastName = ?,

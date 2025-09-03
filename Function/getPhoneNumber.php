@@ -11,7 +11,7 @@ if (isset($_POST['submitPhoneNumber'])) {
 
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
 
-    $checkPhoneNumber = $conn->prepare("SELECT phoneNumber FROM users WHERE userID = ? AND userRole = ?");
+    $checkPhoneNumber = $conn->prepare("SELECT phoneNumber FROM user WHERE userID = ? AND userRole = ?");
     $checkPhoneNumber->bind_param("ii", $userID, $userRole);
     $checkPhoneNumber->execute();
     $checkPhoneNumberResult = $checkPhoneNumber->get_result();
@@ -20,7 +20,7 @@ if (isset($_POST['submitPhoneNumber'])) {
         $storedNumber = $row['phoneNumber'];
 
 
-        $updatePhoneNumber = $conn->prepare("UPDATE users SET phoneNumber = ? WHERE userID = ? AND userRole = ?");
+        $updatePhoneNumber = $conn->prepare("UPDATE user SET phoneNumber = ? WHERE userID = ? AND userRole = ?");
         $updatePhoneNumber->bind_param("sii", $phoneNumber, $userID, $userRole);
         if ($updatePhoneNumber->execute()) {
             header("Location: ../Pages/Customer/bookNow.php?action=bookNow");

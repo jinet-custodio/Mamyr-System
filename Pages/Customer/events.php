@@ -8,6 +8,23 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
@@ -41,7 +58,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
+            $query = "SELECT userProfile FROM user WHERE userID = '$userID' AND userRole = '$userRole'";
             $result = mysqli_query($conn, $query);
             if (mysqli_num_rows($result) > 0) {
                 $data = mysqli_fetch_assoc($result);
@@ -68,7 +85,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -425,14 +442,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <?php
         $eventHallID = 4;
-
-        $getEventHallQuery = $conn->prepare("SELECT * FROM `resortamenities` WHERE `RScategoryID` = ?");
+        $mainHall = '';
+        $miniHall = '';
+        $getEventHallQuery = $conn->prepare("SELECT * FROM `resortamenity` WHERE `RScategoryID` = ?");
         $getEventHallQuery->bind_param("i", $eventHallID,);
         $getEventHallQuery->execute();
         $result = $getEventHallQuery->get_result();
         if ($result->num_rows > 0) {
-            $mainHall = '';
-            $miniHall = '';
+
             while ($row = $result->fetch_assoc()) {
                 $serviceName = $row['RServiceName'];
                 if (stripos($serviceName, 'Main') !== false) {
@@ -446,17 +463,21 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
         <div class="mainHallDescContainer">
-            <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
+            <?php if ($mainHall) { ?>
+                <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
 
-            <ul class="mainHallDescription" id="mainHallDesc">
-                <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
-                <li>One (1) air-conditioned private room.</li>
-                <li>Separate powder rooms/restrooms for males and females.</li>
-            </ul>
+                <ul class="mainHallDescription" id="mainHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
+                    <li>One (1) air-conditioned private room.</li>
+                    <li>Separate powder rooms/restrooms for males and females.</li>
+                </ul>
 
-            <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
+                <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
+            <?php } else { ?>
+                <h3 class="mainHallDescTitle">No Information to Display</h3>
+            <?php } ?>
         </div>
 
 
@@ -464,16 +485,21 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <div class="miniHall">
         <div class="miniHallDescContainer">
-            <h3 class="miniHallDescTitle">Mini Function Hall</h3>
+            <?php if ($miniHall) { ?>
+                <h3 class="miniHallDescTitle">Mini Function Hall</h3>
 
-            <ul class="miniHallDescription" id="miniHallDesc">
-                <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
-            </ul>
+                <ul class="miniHallDescription" id="miniHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
+                </ul>
 
-            <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱ <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
+                <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱ <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
+            <?php } else { ?>
+                <h3 class="miniHallDescTitle">No Information to Display</h3>
+            <?php } ?>
         </div>
+
 
         <div id="carouselMiniHall" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">

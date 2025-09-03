@@ -60,10 +60,10 @@ if (isset($_POST['editRoom'])) {
     }
 
     if ($updateImage) {
-        $updateHotelQuery = $conn->prepare("UPDATE `resortamenities` SET `RServiceName`= ?,`RSprice`= ?,`RScapacity`= ?,`RSmaxCapacity`= ?,`RSduration`= ?,`RSdescription`=?,`RSimageData`= ?,`RSAvailabilityID`= ? WHERE resortServiceID = ?");
+        $updateHotelQuery = $conn->prepare("UPDATE `resortamenity` SET `RServiceName`= ?,`RSprice`= ?,`RScapacity`= ?,`RSmaxCapacity`= ?,`RSduration`= ?,`RSdescription`=?,`RSimageData`= ?,`RSAvailabilityID`= ? WHERE resortServiceID = ?");
         $updateHotelQuery->bind_param("sdiisssii", $roomName, $roomRate, $roomCapacity, $roomMaxCapacity, $roomDuration, $roomDescription, $roomImageName, $roomStatus, $roomID);
     } else {
-        $updateHotelQuery = $conn->prepare("UPDATE `resortamenities` SET `RServiceName`= ?,`RSprice`= ?,`RScapacity`= ?,`RSmaxCapacity`= ?,`RSduration`= ?,`RSdescription`=?,`RSAvailabilityID`= ? WHERE resortServiceID = ?");
+        $updateHotelQuery = $conn->prepare("UPDATE `resortamenity` SET `RServiceName`= ?,`RSprice`= ?,`RScapacity`= ?,`RSmaxCapacity`= ?,`RSduration`= ?,`RSdescription`=?,`RSAvailabilityID`= ? WHERE resortServiceID = ?");
         $updateHotelQuery->bind_param("sdiissii", $roomName, $roomRate, $roomCapacity, $roomMaxCapacity, $roomDuration, $roomDescription,  $roomStatus, $roomID);
     }
 

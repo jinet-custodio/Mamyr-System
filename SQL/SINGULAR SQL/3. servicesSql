@@ -1,0 +1,112 @@
+USE mamyr;
+
+CREATE TABLE partnershipservice (
+    partnershipServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    partnershipID INT NOT NULL,
+    PBName VARCHAR(200) NOT NULL,
+    PBPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    PBDescription TEXT,
+    PBcapacity INT,
+    PSstatus INT DEFAULT 1,
+    PSAvailabilityID INT DEFAULT 1,
+
+    FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID),
+    FOREIGN KEY (PSAvailabilityID) REFERENCES serviceavailability(availabilityID),
+    FOREIGN KEY (PSstatus) REFERENCES status(statusID)
+);
+
+CREATE TABLE resortamenity (
+    resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    RServiceName VARCHAR(200) NOT NULL,
+    RSprice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    RScapacity INT DEFAULT 0,
+    RSmaxCapacity INT DEFAULT 0,
+    RSduration VARCHAR(50) DEFAULT '0',
+    RScategoryID INT NOT NULL,
+    RSdescription TEXT NULL,
+    RSimageData VARCHAR(255) NULL,
+    RSAvailabilityID INT DEFAULT 1,
+
+   FOREIGN KEY (RSAvailabilityID) REFERENCES serviceavailability(availabilityID),
+   FOREIGN KEY (RScategoryID) REFERENCES  resortservicescategory(categoryID) 
+);
+
+CREATE TABLE entrancerate (
+    entranceRateID INT PRIMARY KEY AUTO_INCREMENT,
+    sessionType VARCHAR(20),               
+    timeRangeID INT,                         
+    ERcategory ENUM('Adult', 'Kids') NOT NULL,                 
+    ERprice DECIMAL(10,2) DEFAULT 0.00,      
+
+    FOREIGN KEY (timeRangeID) REFERENCES entrancetimerange(timeRangeID)
+);
+
+
+CREATE TABLE service (
+    serviceID INT PRIMARY KEY AUTO_INCREMENT,
+    resortServiceID INT DEFAULT NULL UNIQUE,
+    partnershipServiceID INT DEFAULT NULL UNIQUE,
+    entranceRateID INT DEFAULT NULL,
+    serviceType ENUM('Resort', 'Partnership', 'Entrance') NOT NULL,
+
+    FOREIGN KEY (partnershipServiceID) REFERENCES partnershipservice(partnershipServiceID),
+    FOREIGN KEY (resortServiceID) REFERENCES resortamenity(resortServiceID),
+    FOREIGN KEY (entranceRateID) REFERENCES entrancerate(entranceRateID)
+);
+
+
+CREATE TABLE menuitem (
+    foodItemID INT PRIMARY KEY AUTO_INCREMENT,
+    foodName VARCHAR(200) NOT NULL,
+    foodDescription TEXT,
+    foodPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    foodCategory VARCHAR(100), 
+    availabilityID INT DEFAULT 1,
+
+    FOREIGN KEY (availabilityID) REFERENCES serviceavailability(availabilityID)
+);
+
+ALTER TABLE menuitem
+ADD COLUMN foodImage varchar(255) NULL
+AFTER foodDescription;
+
+ALTER TABLE menuitem
+ADD COLUMN ageGroup ENUM('Adult', 'Child', 'Both') NOT NULL DEFAULT 'Adult' 
+AFTER foodCategory;
+
+
+CREATE TABLE custompackage (
+    customPackageID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    customPackageTotalPrice DECIMAL(10,2) NOT NULL,
+    customPackageNotes VARCHAR(255),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (userID) REFERENCES user(userID)
+);
+
+CREATE TABLE custompackageitem (
+    customPackageItemID INT PRIMARY KEY AUTO_INCREMENT,
+    customPackageID INT NOT NULL,
+    serviceID INT NULL,
+    foodItemID INT  NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    servicePrice DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (customPackageID) REFERENCES customPackage(customPackageID),
+    FOREIGN KEY (serviceID) REFERENCES service(serviceID),
+    FOREIGN KEY (foodItemID) REFERENCES menuItem(foodItemID) 
+);
+
+CREATE TABLE serviceunavailabledate (
+    serviceUnavailableID INT AUTO_INCREMENT PRIMARY KEY,
+    resortServiceID INT NULL,
+    partnershipServiceID INT NULL,
+    unavailableStartDate DATETIME NOT NULL,
+    unavailableEndDate DATETIME NOT NULL,
+
+
+    FOREIGN KEY (resortServiceID) REFERENCES resortamenity(resortServiceID),
+    FOREIGN KEY(partnershipServiceID) REFERENCES partnershipservice(partnershipServiceID)
+);
+

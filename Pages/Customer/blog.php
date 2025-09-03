@@ -12,6 +12,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -44,7 +61,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <!-- Account Icon on the Left -->
             <ul class="navbar-nav navbar-nav d-flex flex-row align-items-center gap-2">
                 <?php
-                $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -75,7 +92,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     $receiver = 'Partner';
                 }
 
-                $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+                $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
                 $getNotifications->bind_param("is", $userID, $receiver);
                 $getNotifications->execute();
                 $getNotificationsResult = $getNotifications->get_result();
@@ -187,14 +204,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <main>
             <?php
-            $getWebContent = "SELECT * FROM websiteContents WHERE sectionName = 'Blog'";
+            $getWebContent = "SELECT * FROM websitecontent WHERE sectionName = 'Blog'";
             $result = mysqli_query($conn, $getWebContent);
 
             $contentMap = [];
             $blogPosts = [];
             $imagesByContentID = [];
 
-            $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimages ORDER BY imageOrder ASC";
+            $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimage ORDER BY imageOrder ASC";
             $imageResult = mysqli_query($conn, $getImagesQuery);
 
             if ($imageResult && mysqli_num_rows($imageResult) > 0) {
@@ -390,10 +407,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     <div class="blog-full-content">
                                         <?= nl2br(htmlspecialchars($firstPost['Content'] ?? '')) ?>
                                     </div>
-                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
                                 </div>
 
                             </div>
@@ -448,7 +465,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         <div class="blog-full-content">
                                             <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
                                         </div>
-                                         <div class="modal-footer">
+                                        <div class="modal-footer">
                                             <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         </div>
@@ -463,7 +480,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
         </main>
 
-    <?php include 'footer.php'; ?>
+        <?php include 'footer.php'; ?>
     </div>
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>

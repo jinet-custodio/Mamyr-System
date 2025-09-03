@@ -8,6 +8,23 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
@@ -44,7 +61,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
@@ -72,7 +89,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -102,9 +119,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -166,20 +183,20 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                    <ul class="list-group list-group-flush ">
-                        <?php foreach ($notificationsArray as $index => $message):
+                        <ul class="list-group list-group-flush ">
+                            <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                        <li class="list-group-item mb-2 notification-item"
-                            data-id="<?= htmlspecialchars($notificationID) ?>"
-                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                            <?= htmlspecialchars($message) ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                    <?= htmlspecialchars($message) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     <?php else: ?>
-                    <div class="p-3 text-muted">No new notifications.</div>
+                        <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -234,8 +251,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <div class="entranceFee">
                 <?php
                 // DB query
-                $rateSql = "SELECT er.*, etr.time_range  FROM entrancerates  er
-                LEFT JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID
+                $rateSql = "SELECT er.*, etr.time_range  FROM entrancerate  er
+                LEFT JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID
                  ORDER BY 
                     FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
                     FIELD(ERcategory, 'Adult', 'Kids')";
@@ -258,18 +275,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     // Display cards
                     foreach ($sessions as $session => $data) {
                 ?>
-                <div class="entranceCard card">
-                    <div class="entrace-card-body">
-                        <h5 class="entrance-card-title">
-                            <span class="dayNight"><?= strtoupper($session) ?></span><br>
-                            <?= $data['time_range'] ?>
-                        </h5>
-                        <div class="entrance-card-content">
-                            <span class="age">ADULT - PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
-                            <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
+                        <div class="entranceCard card">
+                            <div class="entrace-card-body">
+                                <h5 class="entrance-card-title">
+                                    <span class="dayNight"><?= strtoupper($session) ?></span><br>
+                                    <?= $data['time_range'] ?>
+                                </h5>
+                                <div class="entrance-card-content">
+                                    <span class="age">ADULT - PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
+                                    <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
                 <?php
                     }
                 } else {
@@ -287,38 +304,37 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <div class="cottages">
             <?php
-                $cottagesql = "SELECT * FROM resortamenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
-                $cottresult = mysqli_query($conn, $cottagesql);
-                if (mysqli_num_rows($cottresult) > 0) {
-                    foreach ($cottresult as $cottage) {
-                ?>
-            <div class="card cottage" id="cottageCard">
-                <?php
-                                $imgSrc = '../../Assets/Images/no-picture.jpg';
-                                if (!empty($cottage['imageData'])) {
-                                    $imgData = base64_encode($cottage['RSimageData']);
-                                    $imgSrc = 'data:image/jpeg;base64,' . $imgData;
-                                }
-                                ?>
-                <img src="<?= $imgSrc ?>" alt="Cottage Image" class="card-img-top" id="cottageDisplayPhoto">
-                <div class="card-body description">
-                    <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
-                    <p>
-                        <?= $cottage['RSdescription'] ?>
-                    </p>
-                    <p class="font-weight-bold">
-                        Price: PHP <?= $cottage['RSprice'] ?>
-                    </p>
-                    <a href="resortBooking.php" class="btn btn-primary">Book Now</a>
-                </div>
+            $cottagesql = "SELECT * FROM resortamenity WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
+            $cottresult = mysqli_query($conn, $cottagesql);
+            if (mysqli_num_rows($cottresult) > 0) {
+                foreach ($cottresult as $cottage) {
+            ?>
+                    <div class="card cottage" id="cottageCard">
+                        <?php
+                        $imgSrc = '../../Assets/Images/Services/Cottage/';
+                        if (!empty($cottage['RSimageData'])) {
+                            $img = $imgSrc . $cottage['RSimageData'];
+                        }
+                        ?>
+                        <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top" id="cottageDisplayPhoto">
+                        <div class="card-body description">
+                            <h2> <?= $cottage['RServiceName'] ?> </h2>
+                            <p>
+                                <?= $cottage['RSdescription'] ?>
+                            </p>
+                            <p class="font-weight-bold">
+                                Price: PHP <?= $cottage['RSprice'] ?>
+                            </p>
+                            <a href="resortBooking.php" class="btn btn-primary">Book Now</a>
+                        </div>
 
-            </div>
+                    </div>
             <?php
-                    }
-                } else {
-                    echo "<h5> No Record Found </h5>";
                 }
-                ?>
+            } else {
+                echo "<h5> No Record Found </h5>";
+            }
+            ?>
         </div>
 
 
@@ -329,29 +345,35 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <h4 class="entranceTitle">Videoke for Rent</h4>
             </div>
             <?php
-            $vidsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Videoke A'";
-            $vidresult = mysqli_query($conn, $vidsql);
-            if (mysqli_num_rows($vidresult) > 0) {
-                foreach ($vidresult as $videoke) {
+            $videoke = 'Videoke%';
+            $vidsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName LIKE ?");
+            $vidsql->bind_param('s', $videoke);
+            $vidsql->execute();
+            $vidresult = $vidsql->get_result();
+            if ($vidresult->num_rows > 0) {
+                while ($data = $vidresult->fetch_assoc()) {
             ?>
 
-            <div class="section">
-                <div class="singleImg">
-                    <?php
-                            $imgSrc = '../../Assets/Images/no-picture.jpg';
+                    <div class="section">
+                        <div class="singleImg">
+                            <?php
+                            $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                            if (!empty($data['RSimageData'])) {
+                                $img = $imgSrc . $data['RSimageData'];
+                            }
                             ?>
-                    <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
+                            <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
 
-                </div>
-                <div class="Description" id="videokeDescContainer">
-                    <h2 class="text-center" id="videokePriceDesc"> PHP <?= $videoke['RSprice'] ?> per Rent </h2>
-                    <p class="videokeDesc">
-                        <?= $videoke['RSdescription'] ?>
-                    </p>
-                </div>
+                        </div>
+                        <div class="Description" id="videokeDescContainer">
+                            <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent </h2>
+                            <p class="videokeDesc">
+                                <?= $data['RSdescription'] ?>
+                            </p>
+                        </div>
 
 
-            </div>
+                    </div>
             <?php
                 }
             } else {
@@ -366,26 +388,32 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
         <div class="cottage " id="billiards">
             <?php
-            $bilsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Billiard'";
-            $bilresult = mysqli_query($conn, $bilsql);
-            if (mysqli_num_rows($bilresult) > 0) {
-                foreach ($bilresult as $bill) {
+            $billiard = 'Billiard';
+            $bilsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
+            $bilsql->bind_param("s", $billiard);
+            $bilsql->execute();
+            $bilresult = $bilsql->get_result();
+            if ($bilresult->num_rows > 0) {
+                while ($data = $bilresult->fetch_assoc()) {
             ?>
-            <div class="Description" id="videokeDescContainer">
-                <p class="videokeDesc">
-                    <?= $bill['RSdescription'] ?>
-                </p>
-                <p class="text-center" id="videokePriceDesc">
-                    Price: PHP<?= $bill['RSprice'] ?> per Hour
-                </p>
-            </div>
-            <div class="singleImg" style="width:50%;">
-                <?php
-                        $imgSrc = '../../Assets/Images/no-picture.jpg';
+                    <div class="Description" id="videokeDescContainer">
+                        <p class="videokeDesc">
+                            <?= $data['RSdescription'] ?>
+                        </p>
+                        <p class="text-center" id="videokePriceDesc">
+                            Price: PHP<?= $data['RSprice'] ?> per Hour
+                        </p>
+                    </div>
+                    <div class="singleImg" style="width:50%;">
+                        <?php
+                        $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                        if (isset($data['RSimageData'])) {
+                            $img = $imgSrc . $data['RSimageData'];
+                        }
                         ?>
-                <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
+                        <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
 
-            </div>
+                    </div>
             <?php
                 }
             } else {
@@ -400,32 +428,34 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <h4 class="entranceTitle">Massage Chair</h4>
             </div>
             <?php
-            $massagesql = "SELECT * FROM resortamenities WHERE RServiceName = 'Massage Chair'";
-            $massageresult = mysqli_query($conn, $massagesql);
-            if (mysqli_num_rows($massageresult) > 0) {
-                foreach ($massageresult as $massage) {
+            $Massage = 'Massage Chair';
+            $massagesql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
+            $massagesql->bind_param('s', $Massage);
+            $massagesql->execute();
+            $massageresult = $massagesql->get_result();
+            if ($massageresult->num_rows > 0) {
+                while ($data = $massageresult->fetch_assoc()) {
             ?>
-            <div class="section" id="massage">
-                <div class="singleImg">
-                    <?php
-                            $imgSrc = '../../Assets/Images/no-picture.jpg';
-                            if (!empty($massage['RSimageData'])) {
-                                // $imgData = base64_encode($massage['RSimageData']);
-                                // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                    <div class="section" id="massage">
+                        <div class="singleImg">
+                            <?php
+                            $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                            if (!empty($data['RSimageData'])) {
+                                $img = $imgSrc . $data['RSimageData'];
                             }
                             ?>
-                    <img src="<?= $imgSrc ?>" alt="Massage Chair Image" class="rounded" id="massageChairDisplayPhoto">
+                            <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded" id="massageChairDisplayPhoto">
 
-                </div>
-                <div class="Description" id="massageDesc">
-                    <h2 class="text-center" id="videokePriceDesc"> <?= $massage['RSprice'] ?> pesos for
-                        <?= $massage['RSduration'] ?>
-                    </h2>
-                    <p class="text-center">
-                        <?= $massage['RSdescription'] ?>
-                    </p>
-                </div>
-            </div>
+                        </div>
+                        <div class="Description" id="massageDesc">
+                            <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
+                                <?= $data['RSduration'] ?>
+                            </h2>
+                            <p class="text-center">
+                                <?= $data['RSdescription'] ?>
+                            </p>
+                        </div>
+                    </div>
             <?php
                 }
             } else {
@@ -462,7 +492,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
             <?php
             $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration 
-            FROM resortAmenities
+            FROM resortamenity
             WHERE RSCategoryID = 1";
 
             $result = mysqli_query($conn, $availsql);
@@ -526,36 +556,36 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <div class="hotelRoomList">
                 <?php
-                $roomsql = "SELECT * FROM resortamenities WHERE RScategoryID = 1";
+                $roomsql = "SELECT * FROM resortamenity WHERE RScategoryID = 1";
                 $roomresult = mysqli_query($conn, $roomsql);
                 if (mysqli_num_rows($roomresult) > 0) {
                     foreach ($roomresult as $hotel) {
                 ?>
-                <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>">
-                    <div class="halfImg">
-                        <?php
+                        <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>">
+                            <div class="halfImg">
+                                <?php
                                 $imgSrc = '../../Assets/Images/no-picture.jpg';
                                 if (!empty($hotel['imageData'])) {
                                     $imgData = base64_encode($hotel['RSimageData']);
                                     $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                 }
                                 ?>
-                        <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
-                    </div>
+                                <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
+                            </div>
 
-                    <div class="Description">
-                        <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName']  ?> </h2>
-                        <?php
+                            <div class="Description">
+                                <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName']  ?> </h2>
+                                <?php
                                 $descriptions = explode(',', $hotel['RSdescription']);
                                 foreach ($descriptions as $description) {
                                 ?>
-                        <p><?= "- " . trim($description) ?><br></p>
-                        <?php } ?>
-                        <p class="font-weight-bold">
-                            Price: PHP <?= $hotel['RSprice'] ?>
-                        </p>
-                    </div>
-                </div>
+                                    <p><?= "- " . trim($description) ?><br></p>
+                                <?php } ?>
+                                <p class="font-weight-bold">
+                                    Price: PHP <?= $hotel['RSprice'] ?>
+                                </p>
+                            </div>
+                        </div>
                 <?php
                     }
                 } else {
@@ -584,154 +614,154 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script>
-    const backbtn = document.getElementById("backToSelection");
+        const backbtn = document.getElementById("backToSelection");
 
-    function backToSelection() {
-        document.getElementById('selection').style.display = 'block';
-        document.getElementById('hotelRooms').style.display = 'none';
-        document.getElementById('rates').style.display = 'none';
-        document.getElementById("footer").style.marginTop = "5vw";
-    };
+        function backToSelection() {
+            document.getElementById('selection').style.display = 'block';
+            document.getElementById('hotelRooms').style.display = 'none';
+            document.getElementById('rates').style.display = 'none';
+            document.getElementById("footer").style.marginTop = "5vw";
+        };
 
-    function showRates(event) {
-        event.preventDefault();
-        document.getElementById('selection').style.display = 'none';
-        document.getElementById('hotelRooms').style.display = 'none';
-        document.getElementById('rates').style.display = 'block';
-        document.getElementById("footer").style.marginTop = "3vw";
-    }
-
-    function showHotels(event) {
-        event.preventDefault();
-        document.getElementById('selection').style.display = 'none';
-        document.getElementById('hotelRooms').style.display = 'block';
-        document.getElementById('rates').style.display = 'none';
-        document.getElementById("footer").style.marginTop = "3vw";
-    }
-
-    flatpickr('#hotelDate', {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-    });
-
-    window.onscroll = function() {
-        const btn = document.getElementById("backToTopBtn");
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            btn.style.display = "block";
-        } else {
-            btn.style.display = "none";
+        function showRates(event) {
+            event.preventDefault();
+            document.getElementById('selection').style.display = 'none';
+            document.getElementById('hotelRooms').style.display = 'none';
+            document.getElementById('rates').style.display = 'block';
+            document.getElementById("footer").style.marginTop = "3vw";
         }
-    };
 
-    // Scroll to top
-    document.getElementById("backToTopBtn").addEventListener("click", function(e) {
-        e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+        function showHotels(event) {
+            event.preventDefault();
+            document.getElementById('selection').style.display = 'none';
+            document.getElementById('hotelRooms').style.display = 'block';
+            document.getElementById('rates').style.display = 'none';
+            document.getElementById("footer").style.marginTop = "3vw";
+        }
+
+        flatpickr('#hotelDate', {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
         });
-    });
+
+        window.onscroll = function() {
+            const btn = document.getElementById("backToTopBtn");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+
+        // Scroll to top
+        document.getElementById("backToTopBtn").addEventListener("click", function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     </script>
     <!-- filters hotel rooms by the hour -->
     <script>
-    // State variables
-    let currentAvailabilityFilter = 'all';
+        // State variables
+        let currentAvailabilityFilter = 'all';
 
-    // Initialize filters when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-        // Default 
-        document.getElementById('allRooms').classList.add('selectedIcon');
+        // Initialize filters when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Default 
+            document.getElementById('allRooms').classList.add('selectedIcon');
 
-        // Apply filters 
-        applyFilters();
+            // Apply filters 
+            applyFilters();
 
-        // Click events
-        ['all', 'available', 'unavailable'].forEach(type => {
-            document.getElementById(`${type}Rooms`).addEventListener('click', function() {
-                updateAvailability(type, this);
+            // Click events
+            ['all', 'available', 'unavailable'].forEach(type => {
+                document.getElementById(`${type}Rooms`).addEventListener('click', function() {
+                    updateAvailability(type, this);
+                });
             });
         });
-    });
 
-    function updateAvailability(filterType, button) {
-        currentAvailabilityFilter = filterType;
-        document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
-        button.classList.add('selectedIcon');
+        function updateAvailability(filterType, button) {
+            currentAvailabilityFilter = filterType;
+            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
+            button.classList.add('selectedIcon');
 
-        applyFilters();
-    }
-
-    function filterRooms(filterType) {
-        currentAvailabilityFilter = filterType;
-
-        // Update selected icon
-        document.querySelectorAll('.availabilityIcon').forEach(icon => {
-            icon.classList.remove('selectedIcon');
-        });
-
-        const selectedIcon = document.getElementById(`${filterType}Rooms`);
-        if (selectedIcon) {
-            selectedIcon.classList.add('selectedIcon');
+            applyFilters();
         }
 
-        applyFilters(); // Call the filter logic
-    }
+        function filterRooms(filterType) {
+            currentAvailabilityFilter = filterType;
 
-    function applyFilters() {
-        const allIcons = document.querySelectorAll('.hotelIconWithCaption');
-        const allRooms = document.querySelectorAll('.hotel');
+            // Update selected icon
+            document.querySelectorAll('.availabilityIcon').forEach(icon => {
+                icon.classList.remove('selectedIcon');
+            });
 
-        allIcons.forEach(icon => {
-            const availability = icon.getAttribute('data-availability');
-            const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
-                availability);
+            const selectedIcon = document.getElementById(`${filterType}Rooms`);
+            if (selectedIcon) {
+                selectedIcon.classList.add('selectedIcon');
+            }
 
-            icon.classList.toggle('hidden', !matchesAvailability);
-        });
+            applyFilters(); // Call the filter logic
+        }
 
-        allRooms.forEach(room => {
-            // No duration logic; just show all rooms
-            room.style.display = 'flex';
-        });
-    }
+        function applyFilters() {
+            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
+            const allRooms = document.querySelectorAll('.hotel');
+
+            allIcons.forEach(icon => {
+                const availability = icon.getAttribute('data-availability');
+                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
+                    availability);
+
+                icon.classList.toggle('hidden', !matchesAvailability);
+            });
+
+            allRooms.forEach(room => {
+                // No duration logic; just show all rooms
+                room.style.display = 'flex';
+            });
+        }
     </script>
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
 
@@ -739,36 +769,36 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- AJAX for fetching real time availability -->
     <!-- to be further tested after availability is resolved -->
     <script>
-    function fetchAvailability() {
-        fetch('/Function/Customer/getAvailability.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    dateTime: document.getElementById('hotelDate').value
+        function fetchAvailability() {
+            fetch('/Function/Customer/getAvailability.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        dateTime: document.getElementById('hotelDate').value
+                    })
                 })
-            })
-            .then(res => res.json())
-            .then(json => {
-                json.rooms.forEach(room => {
-                    const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
-                    icons.forEach(icon => {
-                        const name = icon.querySelector('.roomCaption').textContent.trim();
-                        if (name === room.service) {
-                            icon.setAttribute('data-availability', room.available ? 'available' :
-                                'unavailable');
-                        }
+                .then(res => res.json())
+                .then(json => {
+                    json.rooms.forEach(room => {
+                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
+                        icons.forEach(icon => {
+                            const name = icon.querySelector('.roomCaption').textContent.trim();
+                            if (name === room.service) {
+                                icon.setAttribute('data-availability', room.available ? 'available' :
+                                    'unavailable');
+                            }
+                        });
                     });
-                });
-                applyFilters(); // re-apply filtering based on updated availability
-            })
-            .catch(console.error);
-    }
+                    applyFilters(); // re-apply filtering based on updated availability
+                })
+                .catch(console.error);
+        }
 
-    // Re-fetch availability whenever the date changes
-    document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
-    document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
+        // Re-fetch availability whenever the date changes
+        document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
+        document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
     </script>
 
 </body>

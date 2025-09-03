@@ -17,6 +17,23 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 //php for unsetting the roomID variable every time the user leaves the page
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['unsetRoomID'])) {
     unset($_SESSION['roomID']);
@@ -87,7 +104,7 @@ if (isset($_SESSION['error'])) {
     $hotelCategoryID = 1;
     $getRoomStatus = $conn->prepare("SELECT rs.*, 
     sa.availabilityName AS roomStatus 
-    FROM resortamenities rs 
+    FROM resortamenity rs 
     LEFT JOIN serviceavailability sa ON rs.RSAvailabilityID = sa.availabilityID 
     WHERE RScategoryID = ? AND resortServiceID = ?");
     $getRoomStatus->bind_param("ii", $hotelCategoryID, $roomID);
@@ -111,11 +128,11 @@ if (isset($_SESSION['error'])) {
                                 u.firstName, u.middleInitial, u.lastName, 
                                 rs.*, 
                                 s.resortServiceID 
-                                FROM bookings b 
-                                LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID                                                                                                          
-                                LEFT JOIN services s ON bs.serviceID = s.serviceID
-                                LEFT JOIN resortamenities rs ON rs.resortServiceID = s.resortServiceID 
-                                LEFT JOIN users u ON u.userID = b.userID 
+                                FROM booking b 
+                                LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID                                                                                                          
+                                LEFT JOIN service s ON bs.serviceID = s.serviceID
+                                LEFT JOIN resortamenity rs ON rs.resortServiceID = s.resortServiceID 
+                                LEFT JOIN user u ON u.userID = b.userID 
                                 WHERE 
                                 rs.RScategoryID = ?
                                 AND rs.resortServiceID = ?

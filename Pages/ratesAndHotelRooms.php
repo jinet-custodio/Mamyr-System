@@ -118,11 +118,11 @@ require '../Config/dbcon.php';
                     <div class="entranceFee">
                         <?php
                         // DB query
-                        $rateSql = "SELECT er.*, etr.time_range  FROM entrancerates  er
-                LEFT JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID
-                 ORDER BY 
-                    FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
-                    FIELD(ERcategory, 'Adult', 'Kids')";
+                        $rateSql = "SELECT er.*, etr.time_range  FROM entrancerate  er
+                            LEFT JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID
+                            ORDER BY 
+                                FIELD(sessionType, 'Day', 'Night', 'Overnight'), 
+                                FIELD(ERcategory, 'Adult', 'Kids')";
                         $rateResult = mysqli_query($conn, $rateSql);
 
                         // Organize data into sessions
@@ -171,29 +171,28 @@ require '../Config/dbcon.php';
 
                 <div class="cottages">
                     <?php
-                    $cottagesql = "SELECT * FROM resortamenities WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
+                    $cottagesql = "SELECT * FROM resortamenity WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
                     $cottresult = mysqli_query($conn, $cottagesql);
                     if (mysqli_num_rows($cottresult) > 0) {
                         foreach ($cottresult as $cottage) {
                     ?>
                             <div class="card cottage" id="cottageCard">
                                 <?php
-                                $imgSrc = '../../Assets/Images/no-picture.jpg';
-                                if (!empty($cottage['imageData'])) {
-                                    $imgData = base64_encode($cottage['RSimageData']);
-                                    $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                                $imgSrc = '../../Assets/Images/Services/Cottage/';
+                                if (!empty($cottage['RSimageData'])) {
+                                    $img = $imgSrc . $cottage['RSimageData'];
                                 }
                                 ?>
-                                <img src="<?= $imgSrc ?>" alt="Cottage Image" class="card-img-top" id="cottageDisplayPhoto">
+                                <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top" id="cottageDisplayPhoto">
                                 <div class="card-body description">
-                                    <h2> Good for <?= $cottage['RScapacity'] ?> pax </h2>
+                                    <h2> <?= $cottage['RServiceName'] ?> </h2>
                                     <p>
                                         <?= $cottage['RSdescription'] ?>
                                     </p>
                                     <p class="font-weight-bold">
                                         Price: PHP <?= $cottage['RSprice'] ?>
                                     </p>
-                                    <a href="register.php" class="btn btn-primary">Book Now</a>
+                                    <a href="resortBooking.php" class="btn btn-primary">Book Now</a>
                                 </div>
 
                             </div>
@@ -213,24 +212,30 @@ require '../Config/dbcon.php';
                         <h4 class="entranceTitle">Videoke for Rent</h4>
                     </div>
                     <?php
-                    $vidsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Videoke A'";
-                    $vidresult = mysqli_query($conn, $vidsql);
-                    if (mysqli_num_rows($vidresult) > 0) {
-                        foreach ($vidresult as $videoke) {
+                    $videoke = 'Videoke%';
+                    $vidsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName LIKE ?");
+                    $vidsql->bind_param('s', $videoke);
+                    $vidsql->execute();
+                    $vidresult = $vidsql->get_result();
+                    if ($vidresult->num_rows > 0) {
+                        while ($data = $vidresult->fetch_assoc()) {
                     ?>
 
                             <div class="section">
                                 <div class="singleImg">
                                     <?php
-                                    $imgSrc = '../Assets/Images/no-picture.jpg';
+                                    $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                                    if (!empty($data['RSimageData'])) {
+                                        $img = $imgSrc . $data['RSimageData'];
+                                    }
                                     ?>
-                                    <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
+                                    <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
 
                                 </div>
                                 <div class="Description" id="videokeDescContainer">
-                                    <h2 class="text-center" id="videokePriceDesc"> PHP <?= $videoke['RSprice'] ?> per Rent </h2>
+                                    <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent </h2>
                                     <p class="videokeDesc">
-                                        <?= $videoke['RSdescription'] ?>
+                                        <?= $data['RSdescription'] ?>
                                     </p>
                                 </div>
 
@@ -250,24 +255,30 @@ require '../Config/dbcon.php';
                 </div>
                 <div class="cottage " id="billiards">
                     <?php
-                    $bilsql = "SELECT * FROM resortamenities WHERE RServiceName = 'Billiard'";
-                    $bilresult = mysqli_query($conn, $bilsql);
-                    if (mysqli_num_rows($bilresult) > 0) {
-                        foreach ($bilresult as $bill) {
+                    $billiard = 'Billiard';
+                    $bilsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
+                    $bilsql->bind_param("s", $billiard);
+                    $bilsql->execute();
+                    $bilresult = $bilsql->get_result();
+                    if ($bilresult->num_rows > 0) {
+                        while ($data = $bilresult->fetch_assoc()) {
                     ?>
                             <div class="Description" id="videokeDescContainer">
                                 <p class="videokeDesc">
-                                    <?= $bill['RSdescription'] ?>
+                                    <?= $data['RSdescription'] ?>
                                 </p>
                                 <p class="text-center" id="videokePriceDesc">
-                                    Price: PHP<?= $bill['RSprice'] ?> per Hour
+                                    Price: PHP<?= $data['RSprice'] ?> per Hour
                                 </p>
                             </div>
                             <div class="singleImg" style="width:50%;">
                                 <?php
-                                $imgSrc = '../../Assets/Images/no-picture.jpg';
+                                $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                                if (isset($data['RSimageData'])) {
+                                    $img = $imgSrc . $data['RSimageData'];
+                                }
                                 ?>
-                                <img src="<?= $imgSrc ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
+                                <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
 
                             </div>
                     <?php
@@ -284,29 +295,31 @@ require '../Config/dbcon.php';
                         <h4 class="entranceTitle">Massage Chair</h4>
                     </div>
                     <?php
-                    $massagesql = "SELECT * FROM resortamenities WHERE RServiceName = 'Massage Chair'";
-                    $massageresult = mysqli_query($conn, $massagesql);
-                    if (mysqli_num_rows($massageresult) > 0) {
-                        foreach ($massageresult as $massage) {
+                    $Massage = 'Massage Chair';
+                    $massagesql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
+                    $massagesql->bind_param('s', $Massage);
+                    $massagesql->execute();
+                    $massageresult = $massagesql->get_result();
+                    if ($massageresult->num_rows > 0) {
+                        while ($data = $massageresult->fetch_assoc()) {
                     ?>
                             <div class="section" id="massage">
                                 <div class="singleImg">
                                     <?php
-                                    $imgSrc = '../../Assets/Images/no-picture.jpg';
-                                    if (!empty($massage['RSimageData'])) {
-                                        // $imgData = base64_encode($massage['RSimageData']);
-                                        // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                                    $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                                    if (!empty($data['RSimageData'])) {
+                                        $img = $imgSrc . $data['RSimageData'];
                                     }
                                     ?>
-                                    <img src="<?= $imgSrc ?>" alt="Massage Chair Image" class="rounded" id="massageChairDisplayPhoto">
+                                    <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded" id="massageChairDisplayPhoto">
 
                                 </div>
                                 <div class="Description" id="massageDesc">
-                                    <h2 class="text-center" id="videokePriceDesc"> <?= $massage['RSprice'] ?> pesos for
-                                        <?= $massage['RSduration'] ?>
+                                    <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
+                                        <?= $data['RSduration'] ?>
                                     </h2>
                                     <p class="text-center">
-                                        <?= $massage['RSdescription'] ?>
+                                        <?= $data['RSdescription'] ?>
                                     </p>
                                 </div>
                             </div>
@@ -346,8 +359,8 @@ require '../Config/dbcon.php';
                     </div>
                     <?php
                     $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration 
-            FROM resortamenities
-            WHERE RSCategoryID = 1";
+                        FROM resortamenity
+                        WHERE RSCategoryID = 1";
 
                     $result = mysqli_query($conn, $availsql);
                     ?>
@@ -410,7 +423,7 @@ require '../Config/dbcon.php';
 
                     <div class="hotelRoomList">
                         <?php
-                        $roomsql = "SELECT * FROM resortamenities WHERE RScategoryID = 1";
+                        $roomsql = "SELECT * FROM resortamenity WHERE RScategoryID = 1";
                         $roomresult = mysqli_query($conn, $roomsql);
                         if (mysqli_num_rows($roomresult) > 0) {
                             foreach ($roomresult as $hotel) {

@@ -22,7 +22,7 @@ $userID = (int) $_SESSION['userID'];
 if (isset($_POST['yesDelete'])) {
 
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $emailQuery = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
     $emailQuery->bind_param('s', $email);
     $emailQuery->execute();
     $result = $emailQuery->get_result();
@@ -32,7 +32,7 @@ if (isset($_POST['yesDelete'])) {
         date_default_timezone_set('Asia/Manila');
         $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes'));
 
-        $insertOTP = $conn->prepare("UPDATE users SET userOTP = ?, 
+        $insertOTP = $conn->prepare("UPDATE user SET userOTP = ?, 
         OTP_expiration_at = ?
         WHERE userID = ? and userRole = ?");
         $insertOTP->bind_param("ssii", $OTP, $OTP_expiration_at, $userID, $userRole);
@@ -97,7 +97,7 @@ elseif (isset($_POST['verifyCode'])) {
     $enteredOTP = mysqli_real_escape_string($conn, $_POST['enteredOTP']);
 
     if ($enteredOTP !== "") {
-        $emailQuery = $conn->prepare("SELECT * FROM users WHERE email = ?");
+        $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
         $emailQuery->bind_param('s', $email);
         $emailQuery->execute();
         $result = $emailQuery->get_result();
@@ -110,7 +110,7 @@ elseif (isset($_POST['verifyCode'])) {
             if ($timeNow > strtotime($OTP_expiration_at)) {
                 if ($enteredOTP ===  $storedOTP) {
                     $deletedID = 4;
-                    $deleteQuery = $conn->prepare("UPDATE users SET userStatusID = ? WHERE userID = ? and email = ?");
+                    $deleteQuery = $conn->prepare("UPDATE user SET userStatusID = ? WHERE userID = ? and email = ?");
                     $deleteQuery->bind_param("iis", $deletedID, $userID, $email);
                     if ($deleteQuery->execute()) {
                         header("Location: ../../Pages/register.php?action=deleted");

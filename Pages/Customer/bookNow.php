@@ -13,6 +13,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -46,7 +63,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 <body id="body">
 
     <?php
-    $emailQuery = $conn->prepare("SELECT email, phoneNumber,userProfile FROM users WHERE userID = ? and userRole = ?");
+    $emailQuery = $conn->prepare("SELECT email, phoneNumber,userProfile FROM user WHERE userID = ? and userRole = ?");
     $emailQuery->bind_param("ii", $userID, $userRole);
     $emailQuery->execute();
     $emailResult = $emailQuery->get_result();
@@ -91,7 +108,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();

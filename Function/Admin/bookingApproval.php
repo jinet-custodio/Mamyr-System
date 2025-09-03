@@ -31,7 +31,7 @@ if (isset($_POST['approveBtn'])) {
 
     $availabilityID = 2;
 
-    $getServicesQuery = $conn->prepare("SELECT * FROM services WHERE serviceID = ?");
+    $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
     foreach ($serviceIDs as $serviceID) {
         $getServicesQuery->bind_param("i", $serviceID);
         $getServicesQuery->execute();
@@ -41,14 +41,14 @@ if (isset($_POST['approveBtn'])) {
             $serviceType = $row['serviceType'];
             if ($serviceType === 'Resort') {
                 $resortServiceID = $row['resortServiceID'];
-                $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledates(resortServiceID, unavailableStartDate, unavailableEndDate)
+                $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate)
                 VALUES(?,?,?)");
                 $insertToUnavailableDates->bind_param('iss', $resortServiceID, $startDate, $endDate);
                 $insertToUnavailableDates->execute();
                 $insertToUnavailableDates->close();
             } elseif ($serviceType === 'Partner') {
                 $partnershipServiceID = $row['partnershipServiceID'];
-                $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledates(partnershipServiceID, unavailableStartDate, unavailableEndDate)
+                $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(partnershipServiceID, unavailableStartDate, unavailableEndDate)
                 VALUES(?,?,?)");
                 $insertToUnavailableDates->bind_param('iss', $resortServiceID, $startDate, $endDate);
                 $insertToUnavailableDates->execute();
@@ -60,7 +60,7 @@ if (isset($_POST['approveBtn'])) {
 
     //Update Booking Table Status
     $approvedStatus = 2;
-    $updateStatus = $conn->prepare("UPDATE bookings SET bookingStatus = ? WHERE bookingID = ?");
+    $updateStatus = $conn->prepare("UPDATE booking SET bookingStatus = ? WHERE bookingID = ?");
     $updateStatus->bind_param("si", $approvedStatus, $bookingID);
     $updateStatus->execute();
     $updateStatus->close();
@@ -72,7 +72,7 @@ if (isset($_POST['approveBtn'])) {
 
 
     //Insert into Confirmed Booking
-    $insertConfirmed = $conn->prepare("INSERT INTO confirmedbookings(bookingID, discountAmount, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate)
+    $insertConfirmed = $conn->prepare("INSERT INTO confirmedbooking(bookingID, discountAmount, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate)
             VALUES(?,?,?,?,?,?)");
     $insertConfirmed->bind_param(
         "idddss",
@@ -94,7 +94,7 @@ if (isset($_POST['approveBtn'])) {
         }
 
         $message = 'Your booking has been approved.';
-        $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
+        $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
         $insertNotification->bind_param('iiss', $bookingID, $userID, $message, $receiver);
         $insertNotification->execute();
         unset($_SESSION['bookingID']);
@@ -119,14 +119,14 @@ if (isset($_POST['rejectBtn'])) {
     $userRoleID = (int) $_POST['userRoleID'];
 
 
-    $bookingQuery = $conn->prepare("SELECT * FROM bookings WHERE bookingID = ? AND bookingStatus = ?");
+    $bookingQuery = $conn->prepare("SELECT * FROM booking WHERE bookingID = ? AND bookingStatus = ?");
     $bookingQuery->bind_param("is", $bookingID,  $bookingStatusID);
     $bookingQuery->execute();
     $result = $bookingQuery->get_result();
 
     if ($result->num_rows > 0) {
         $rejectedStatus = 3;
-        $updateStatus = $conn->prepare("UPDATE bookings 
+        $updateStatus = $conn->prepare("UPDATE booking
         SET bookingStatus = ?
         WHERE bookingID = ? ");
         $updateStatus->bind_param("ii", $approvedStatus, $bookingID);
@@ -141,7 +141,7 @@ if (isset($_POST['rejectBtn'])) {
                 $receiver = 'Admin';
             }
 
-            $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
+            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
             $insertNotification->bind_param('iiss', $bookingID, $userID, $message, $receiver);
             $insertNotification->execute();
             header('Location: ../../Pages/Admin/booking.php?action=rejected');

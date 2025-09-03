@@ -1,0 +1,61 @@
+CREATE TABLE booking (
+    bookingID INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT NOT NULL,
+    bookingType ENUM('Resort', 'Hotel', 'Event') NOT NULL, 
+    customPackageID INT NULL,
+    addOns VARCHAR(50), 
+    additionalRequest TEXT,
+    toddlerCount INT DEFAULT 0,
+    kidCount INT DEFAULT 0,
+    adultCount INT DEFAULT 0,
+    guestCount INT NOT NULL, 
+    durationCount INT NOT NULL,
+    startDate DATETIME NOT NULL,
+    endDate DATETIME NOT NULL,
+    paymentMethod VARCHAR(50) NOT NULL,
+
+    additionalCharge DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    totalCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    downpayment DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+
+    bookingStatus INT DEFAULT 1,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (userID) REFERENCES user(userID),
+    FOREIGN KEY (bookingStatus) REFERENCES status(statusID),
+    FOREIGN KEY (customPackageID) REFERENCES custompackage(customPackageID)
+);
+
+ALTER TABLE booking
+ADD COLUMN arrivalTime TIME NULL
+AFTER durationCount;
+
+CREATE TABLE bookingService (
+    bookingServiceID INT PRIMARY KEY AUTO_INCREMENT,
+    bookingID INT NOT NULL,
+    serviceID INT NOT NULL,
+    guests INT NOT NULL, 
+    bookingServicePrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    
+    FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
+    FOREIGN KEY (serviceID) REFERENCES service(serviceID)
+);
+
+CREATE TABLE confirmedBooking (
+    confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
+    bookingID INT NOT NULL,
+    downpaymentImage varchar(255) DEFAULT 'defaultDownpayment.png', 
+    discountAmount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    confirmedFinalBill DECIMAL(10,2) NOT NULL DEFAULT 0.00, 
+    amountPaid DECIMAL(10,2) NOT NULL DEFAULT 0.00,  
+    userBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00, 
+    paymentApprovalStatus INT DEFAULT 1,
+    paymentStatus INT DEFAULT 1,
+    paymentDueDate DATETIME,
+    downpaymentDueDate	DATETIME,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
+    FOREIGN KEY (paymentApprovalStatus) REFERENCES status(statusID),
+    FOREIGN KEY (paymentStatus) REFERENCES bookingPaymentStatus(paymentStatusID)
+);            

@@ -301,14 +301,13 @@ require '../Config/dbcon.php';
 
         <?php
         $eventHallID = 4;
-
-        $getEventHallQuery = $conn->prepare("SELECT * FROM `resortamenities` WHERE `RScategoryID` = ?");
+        $mainHall = '';
+        $miniHall = '';
+        $getEventHallQuery = $conn->prepare("SELECT * FROM `resortamenity` WHERE `RScategoryID` = ?");
         $getEventHallQuery->bind_param("i", $eventHallID,);
         $getEventHallQuery->execute();
         $result = $getEventHallQuery->get_result();
         if ($result->num_rows > 0) {
-            $mainHall = '';
-            $miniHall = '';
             while ($row = $result->fetch_assoc()) {
                 $serviceName = $row['RServiceName'];
                 if (stripos($serviceName, 'Pavilion Hall') !== false) {
@@ -322,31 +321,40 @@ require '../Config/dbcon.php';
 
 
         <div class="mainHallDescContainer">
-            <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
+            <?php if ($mainHall) { ?>
+                <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
 
-            <ul class="mainHallDescription" id="mainHallDesc">
-                <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
-                <li>One (1) air-conditioned private room.</li>
-                <li>Separate powder rooms/restrooms for males and females.</li>
-            </ul>
+                <ul class="mainHallDescription" id="mainHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
+                    <li>One (1) air-conditioned private room.</li>
+                    <li>Separate powder rooms/restrooms for males and females.</li>
+                </ul>
 
-            <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
+                <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
+            <?php } else { ?>
+                <h3 class="mainHallDescTitle">No Information to Display</h3>
+            <?php } ?>
         </div>
+
     </div>
 
     <div class="miniHall">
         <div class="miniHallDescContainer">
-            <h3 class="miniHallDescTitle">Mini Function Hall</h3>
+            <?php if ($miniHall) { ?>
+                <h3 class="miniHallDescTitle">Mini Function Hall</h3>
 
-            <ul class="miniHallDescription" id="miniHallDesc">
-                <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
-            </ul>
+                <ul class="miniHallDescription" id="miniHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
+                </ul>
 
-            <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱ <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
+                <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱ <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
+            <?php } else { ?>
+                <h3 class="miniHallDescTitle">No Information to Display</h3>
+            <?php } ?>
         </div>
 
         <div id="carouselMiniHall" class="carousel slide" data-bs-ride="carousel">
