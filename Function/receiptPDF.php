@@ -22,7 +22,9 @@ $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
 //Paki enable na lang yung extension na intl sa php.ini to mga bes
 function convertToWords($number)
 {
-    $formatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+    //$formatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+    $formatter = new \NumberFormatter("en", \NumberFormatter::SPELLOUT);
+
     $pesos = floor($number);
     $centavos = round(($number - $pesos) * 100);
 
