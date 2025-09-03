@@ -148,10 +148,9 @@ $userRole = $_SESSION['userRole'];
     const aboutContainer = document.getElementById("aboutContainer");
     const amenitiesContainer = document.getElementById("amenitiesContainer");
 
-    landingPageContainer.style.display = "none";
-    aboutContainer.style.display = "none";
-    amenitiesContainer.style.display = "none";
-    blogContainer.style.display = "none";
+        landingPageContainer.style.display = "none";
+        aboutContainer.style.display = "none";
+        amenitiesContainer.style.display = "none";
 
     function landingPage() {
         hideAllContainers();
@@ -183,22 +182,11 @@ $userRole = $_SESSION['userRole'];
         document.getElementById("title").innerHTML = "Amenities Page";
     }
 
-    function blog() {
-        hideAllContainers();
-        blogContainer.style.display = "block";
-        blogContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "Blog Page";
-    }
 
-
-    function hideAllContainers() {
-        landingPageContainer.style.display = "none";
-        aboutContainer.style.display = "none";
-        amenitiesContainer.style.display = "none";
-        blogContainer.style.display = "none";
+        function hideAllContainers() {
+            landingPageContainer.style.display = "none";
+            aboutContainer.style.display = "none";
+            amenitiesContainer.style.display = "none";
 
         landingPageContainer.querySelector("iframe").style.display = "none";
         aboutContainer.querySelector("iframe").style.display = "none";
