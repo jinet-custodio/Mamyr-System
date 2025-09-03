@@ -2,7 +2,12 @@
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require '../Config/dbcon.php'
+require '../Config/dbcon.php';
+
+session_start();
+
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 ?>
 <!DOCTYPE html>
 <html lang="en">

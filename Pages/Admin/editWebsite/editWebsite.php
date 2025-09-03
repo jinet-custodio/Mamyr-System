@@ -125,8 +125,58 @@ $userRole = $_SESSION['userRole'];
         <iframe src="../../amenities.php?" class="editFrame" style="width: 100%; height: 100vh;"></iframe>
     </div>
     <div class="container-fluid blogPage" id="blogContainer">
+        <button type="button" class="btn btn-primary" id="newBlogBtn" data-bs-toggle="modal"
+            data-bs-target="#NewBlogPost">Add a New Blog Post</button>
         <iframe src="../../blog.php" class="editFrame" style="width: 100%; height: 100vh;"></iframe>
     </div>
+
+
+    <!-- MODAL FOR ADDING A NEW BLOG POST -->
+    <!-- <form action="../../Function/Admin/Services/addServices.php" id="addingServiceForm" method="POST"
+            enctype="multipart/form-data"> -->
+    <!-- Modal -->
+    <div class="modal fade" id="NewBlogPost" tabindex="-1" aria-labelledby="newBlogPost" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewBlogPost">Add a New Blog Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-container">
+                        <label for="eventName">Type of Event</label>
+                        <input type="text" class="form-control" id="eventName" name="eventName" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="eventDate">Date</label>
+                        <input type="date" class="form-control" id="eventDate" name="eventDate" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="eventTitle">Title/Header</label>
+                        <input type="text" class="form-control" id="eventTitle" name="eventTitle">
+                    </div>
+                    <div class="input-container">
+                        <label for="eventDesc">Event Description</label>
+                        <textarea class="form-control" name="eventDesc" id="eventDesc"> </textarea>
+                    </div>
+                    <div class="input-container">
+                        <label for="eventImage">Event Image</label>
+                        <input type="file" class="form-control" name="eventImage" id="eventImage">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="uploadPost" name="addResortService">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- </form> -->
+
+
+
+
+
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -148,9 +198,11 @@ $userRole = $_SESSION['userRole'];
     const aboutContainer = document.getElementById("aboutContainer");
     const amenitiesContainer = document.getElementById("amenitiesContainer");
 
-        landingPageContainer.style.display = "none";
-        aboutContainer.style.display = "none";
-        amenitiesContainer.style.display = "none";
+    landingPageContainer.style.display = "none";
+    aboutContainer.style.display = "none";
+    amenitiesContainer.style.display = "none";
+    blogContainer.style.display = "none";
+
 
     function landingPage() {
         hideAllContainers();
@@ -182,16 +234,23 @@ $userRole = $_SESSION['userRole'];
         document.getElementById("title").innerHTML = "Amenities Page";
     }
 
+    function blog() {
+        hideAllContainers();
+        blogContainer.style.display = "block";
+        blogContainer.querySelector("iframe").style.display = "block";
+        icon.style.display = "block";
+        pagesContainer.style.display = "none";
+        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+        document.getElementById("title").innerHTML = "Blog Page";
+    }
 
-        function hideAllContainers() {
-            landingPageContainer.style.display = "none";
-            aboutContainer.style.display = "none";
-            amenitiesContainer.style.display = "none";
 
-        landingPageContainer.querySelector("iframe").style.display = "none";
-        aboutContainer.querySelector("iframe").style.display = "none";
-        amenitiesContainer.querySelector("iframe").style.display = "none";
-        blogContainer.querySelector("iframe").style.display = "none";
+    function hideAllContainers() {
+        landingPageContainer.style.display = "none";
+        aboutContainer.style.display = "none";
+        amenitiesContainer.style.display = "none";
+
+
     }
     </script>
 
