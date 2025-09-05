@@ -430,7 +430,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-    <!-- Functions -->
+    <!--Back Functions -->
     <script>
         function backToSelection() {
             location.href = "bookNow.php"
@@ -450,80 +450,107 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     </script>
 
 
-    <!-- Guest Count -->
+    <!-- Guest Count & Food Count to enable the button for booknow-->
     <script>
-        const guestNoInput = document.getElementById('guestNo');
-        const eventVenueInput = document.getElementById('eventVenue');
+        window.addEventListener('DOMContentLoaded', () => {
+            const guestNoInput = document.getElementById('guestNo');
+            const eventVenueInput = document.getElementById('eventVenue');
+            const button = document.getElementById('confirmDishBtn');
+            const bookNowBtn = document.getElementById('bookNowBtn');
 
-        let guestNoValue = 0;
-        let eventVenueValue = '';
+            let guestNoValue = 0;
+            let eventVenueCapacity = '';
 
-        guestNoInput.addEventListener('change', function() {
-            guestNoValue = parseInt(guestNoInput.value);
-            checkCapacity();
-        });
+            let isGuestCountValid = false;
+            let isFoodSelectionValid = false;
 
-        eventVenueInput.addEventListener('change', function() {
-            eventVenueValue = eventVenueInput.value;
-            checkCapacity();
-        });
+            guestNoInput.addEventListener('change', function() {
+                guestNoValue = parseInt(guestNoInput.value);
+                console.log(guestNoValue);
+                checkCapacity();
+            });
 
-        function checkCapacity() {
+            eventVenueInput.addEventListener('change', function() {
+                const selectedVenue = eventVenueInput.options[eventVenueInput.selectedIndex]
+                eventVenueValue = selectedVenue.value;
+                eventVenueCapacity = selectedVenue.dataset.capacity;
+                checkCapacity();
+            });
 
-            if (guestNoValue > 350 && eventVenueValue === 'Main Function Hall') {
-                Swal.fire({
-                    title: 'Sorry',
-                    text: `We're sorry. The resort can't accommodate ${guestNoValue} guests in the ${eventVenueValue}.`,
-                    icon: 'info'
-                });
-            } else if (guestNoValue > 50 && eventVenueValue === 'Mini Function Hall') {
-                Swal.fire({
-                    title: 'Sorry',
-                    text: `We're sorry. The resort can't accommodate ${guestNoValue} guests in the ${eventVenueValue}.`,
-                    icon: 'info'
-                });
+            function checkCapacity() {
+
+                if (guestNoValue > eventVenueCapacity) {
+                    Swal.fire({
+                        title: 'Sorry',
+                        text: `We're sorry. The resort can't accommodate ${guestNoValue} guests in the ${eventVenueValue}.`,
+                        icon: 'info'
+                    });
+                    isGuestCountValid = false;
+                } else {
+                    isGuestCountValid = true;
+                }
+                updateBookNowButton();
             }
-        }
-    </script>
+
+            function countSelected(categoryName) {
+                const selected = document.querySelectorAll(`input[name="${categoryName}Selections[]"]:checked`);
+                return selected.length;
+            }
 
 
-    <!-- Food Count -->
-    <script>
-        function countSelected(categoryName) {
-            const selected = document.querySelectorAll(`input[name="${categoryName}Selections[]"]:checked`);
-            return selected.length;
-        }
-        const button = document.getElementById('confirmDishBtn');
-        const bookNowBtn = document.getElementById('bookNowBtn');
+            button.addEventListener('click', function() {
+                const mainDish = ['chicken', 'pork', 'pasta', 'beef', 'vegie', 'seafood'];
+                const drinkCount = countSelected('drink');
+                const dessertCount = countSelected('dessert');
+                let mainDishCount = 0;
+                mainDish.forEach(category => {
+                    mainDishCount += countSelected(category);
+                })
 
-        button.addEventListener('click', function() {
-            const mainDish = ['chicken', 'pork', 'pasta', 'beef', 'vegie', 'seafood'];
-            const drinkCount = countSelected('drink');
-            const dessertCount = countSelected('dessert');
-            let mainDishCount = 0;
-            mainDish.forEach(category => {
-                mainDishCount += countSelected(category);
-            })
-            if (mainDishCount > 5) {
-                Swal.fire({
-                    title: 'Sorry',
-                    text: `You can select a maximum of 4 dishes.`,
-                    icon: 'info'
-                });
-            } else if (drinkCount > 2) {
-                Swal.fire({
-                    title: 'Sorry',
-                    text: `You may only select 1 drink.`,
-                    icon: 'info'
-                });
-            } else if (dessertCount > 3) {
-                Swal.fire({
-                    title: 'Sorry',
-                    text: `You can select up to 2 kinds of dessert.`,
-                    icon: 'info'
-                });
-            } else {
-                bookNowBtn.disabled = false;
+                let isValid = true;
+                if (mainDishCount > 5) {
+                    Swal.fire({
+                        title: 'Sorry',
+                        text: `You can select a maximum of 4 dishes.`,
+                        icon: 'info'
+                    });
+                    isValid = false;
+                }
+
+                if (mainDishCount == 5) {
+                    Swal.fire({
+                        title: 'Sorry',
+                        text: `You're required to select a dish.`,
+                        icon: 'info'
+                    });
+                    isValid = false;
+                }
+
+
+                if (drinkCount > 2) {
+                    Swal.fire({
+                        title: 'Sorry',
+                        text: `You may only select 1 drink.`,
+                        icon: 'info'
+                    });
+                    isValid = false;
+                }
+                if (dessertCount > 3) {
+                    Swal.fire({
+                        title: 'Sorry',
+                        text: `You can select up to 2 kinds of dessert.`,
+                        icon: 'info'
+                    });
+                    isValid = false;
+                }
+
+
+                isFoodSelectionValid = isValid;
+                updateBookNowButton();
+            });
+
+            function updateBookNowButton() {
+                bookNowBtn.disabled = !(isGuestCountValid && isFoodSelectionValid)
             }
         })
     </script>
@@ -582,6 +609,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     data.Halls.forEach(hall => {
                         const venueOptions = document.createElement('option');
                         venueOptions.value = hall.RServiceName;
+                        venueOptions.dataset.capacity = hall.RSmaxCapacity;
                         venueOptions.textContent = `${hall.RServiceName} - ${hall.RSmaxCapacity} pax`;
                         venueSelect.appendChild(venueOptions);
                     })

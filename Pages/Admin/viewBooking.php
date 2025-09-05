@@ -70,14 +70,21 @@ if (isset($_POST['bookingID'])) {
     <div class="guest-container">
         <!-- Back Button -->
         <div class="page-container">
-            <form action="viewPayments.php" method="POST" style="display:inline;">
-                <input type="hidden" name="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
-                <button type="submit" class="btn btn-primary back">
-                    <img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button">
-                </button>
-            </form>
+            <?php
+            $button = !empty($_POST['button']) ? mysqli_real_escape_string($conn, $_POST['button']) : 'payment';
+            if ($button === 'booking') { ?>
+                <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+            <?php   } elseif ($button === 'payment') {  ?>
+                <form action="viewPayments.php" method="POST" style="display:inline;">
+                    <input type="hidden" name="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
+                    <button type="submit" class="btn btn-primary back">
+                        <img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button">
+                    </button>
+                </form>
+            <?php   } ?>
             <h5 class="page-title">Guest Booking Information</h5>
         </div>
+
         <!-- Information -->
 
 
@@ -164,8 +171,8 @@ if (isset($_POST['bookingID'])) {
                                 cb.paymentApprovalStatus, 
                                 cb.paymentDueDate, cb.paymentStatus,
                                 cb.discountAmount,
-                                bs.*,
-                                s.*, s.serviceType,
+                                bs.*, cp.*, cpi.*, mi.foodName, mi.foodCategory, mi.foodPrice,
+                                s.*, s.serviceType, ec.categoryName as eventType,
                                 er.sessionType AS tourType, er.ERCategory, er.ERprice,
                                 ra.RServiceName, ra.RSprice, rsc.categoryName AS serviceCategory   
                                     
@@ -181,9 +188,11 @@ if (isset($_POST['bookingID'])) {
 
                                 LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
                                 LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
+                                LEFT JOIN eventcategory ec ON cp.eventTypeID = ec.categoryID
 
                                 LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                                 LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+                                LEFT JOIN menuitem mi ON cpi.foodItemID = mi.foodItemID
 
                                 LEFT JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
                                 LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
@@ -209,14 +218,13 @@ if (isset($_POST['bookingID'])) {
                     $userBalance = 0;
                     $amountPaid = 0;
                     $additionalCharge = 0;
+                    $foodList = [];
                     while ($row = $getBookingInfoResult->fetch_assoc()) {
 
                         // echo '<pre>';
                         // print_r($row);
                         // echo '</pre>';
                         $customPackageID = $row['customPackageID'];
-
-
                         $bookingType = $row['bookingType'];
 
                         $rawStartDate = $row['startDate'];
@@ -232,7 +240,7 @@ if (isset($_POST['bookingID'])) {
                             $bookingDate = $startDate . " - " . $endDate;
                         }
 
-                        $bookingCreationDate = date('F d, Y H:i A', strtotime($row['createdAt']));
+                        $bookingCreationDate = !empty($row['createdAt']) ? date('F d, Y H:i A', strtotime($row['createdAt'])) : 'Not Stated';
 
                         $time = date("g:i A", strtotime($rawStartDate)) . " - " . date("g:i A", strtotime($data['endDate']));
                         $duration = $row['durationCount'] . " hours";
@@ -245,11 +253,11 @@ if (isset($_POST['bookingID'])) {
                         $paymentStatus = $row['paymentStatus'] ?? '';
                         $totalCost = $row['totalCost'];
                         $downpayment = $row['downpayment'];
-                        $discount = $row['discountAmount'];
+                        $discount = $row['discountAmount'] ?? 0;
                         $userBalance = $row['userBalance'];
                         $amountPaid = $row['amountPaid'];
                         $finalBill = $row['confirmedFinalBill'];
-                        $paymentDueDate = date('F d, Y g:i A', strtotime($row['paymentDueDate']));
+                        $paymentDueDate = !empty($row['paymentDueDate']) ? date('F d, Y g:i A', strtotime($row['paymentDueDate'])) : 'Not Stated';
                         $additionalCharge = $row['additionalCharge'];
 
                         $toddlerCount = $row['toddlerCount'];
@@ -270,9 +278,22 @@ if (isset($_POST['bookingID'])) {
                         $bookingStatusID = $bookingStatuses['statusID'];
                         $bookingStatusName = $bookingStatuses['statusName'];
 
-                        if (!empty($packageID)) {
-                            echo 'Wala pa';
-                        } elseif (!empty($customPackageID)) {
+                        if (!empty($customPackageID)) {
+                            $eventType = $row['eventType'];
+                            $serviceID = isset($row['serviceID']) ? $row['serviceID'] : '';
+                            $foodItemID = isset($row['foodItemID']) ? $row['foodItemID'] : '';
+                            $totalPax = intval($row['guestCount']) . ' people' ?? 1 . ' person';
+
+                            if (!empty($serviceID)) {
+                                $venue = $row['RServiceName'] ?? 'none';
+                            }
+                            if (!empty($foodItemID)) {
+                                $category = $row['foodCategory'];
+                                $name = $row['foodName'];
+                                $quantity = $row['quantity'];
+
+                                $foodList[$category][$name][$quantity] =  $price = $row['foodPrice'];
+                            }
                         } else {
                             $serviceID = $row['serviceID'];
                             $serviceType = $row['serviceType'];
@@ -314,7 +335,7 @@ if (isset($_POST['bookingID'])) {
                         }
 
                         // echo '<pre>';
-                        // print_r('Data ' . $totalBill);
+                        // print_r($foodList);
                         // echo '</pre>';
                     }
                 }
@@ -340,6 +361,11 @@ if (isset($_POST['bookingID'])) {
                                     <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
                                     <input type="text" class="form-control" name="tourType"
                                         value="<?= $tourType ?> Swimming" readonly>
+                                </div>
+                            <?php } elseif ($bookingType === 'Event') { ?>
+                                <div class="info-container" id="booking-info-container">
+                                    <label for="eventType" class="info-label">Event Type</label>
+                                    <input type="text" name="eventType" id="eventType" class="form-control" readonly value="<?= $eventType ?>">
                                 </div>
                             <?php } ?>
                         </div>
@@ -375,20 +401,46 @@ if (isset($_POST['bookingID'])) {
                         </div>
 
                         <div class="bookingDetails mt-3">
-                            <div class="servicesDetails">
-                                <h1 class="card-title text-center">Services</h1>
-                                <div class="servicesInfo">
-                                    <ul>
-                                        <?php
-                                        foreach ($services as $service) {
-                                        ?>
-                                            <li><?= $service ?></li>
-                                        <?php
-                                        }
-                                        ?>
-                                    </ul>
+                            <?php if ($bookingType !== 'Event') { ?>
+                                <div class="servicesDetails">
+                                    <h1 class="card-title text-center">Services</h1>
+                                    <div class="servicesInfo">
+                                        <ul>
+                                            <?php
+                                            foreach ($services as $service) {
+                                            ?>
+                                                <li><?= $service ?></li>
+                                            <?php
+                                            }
+                                            ?>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
+
+                            <?php } else { ?>
+
+                                <div class="venueDetails">
+                                    <h1 class="card-title text-center">Venue</h1>
+                                    <input type="text" readonly class="form-control" name="venue" id="venue" value="<?= $venue ?>">
+                                </div>
+                                <div class="foodDetails">
+                                    <h1 class="card-title text-center">Menu</h1>
+                                    <?php foreach ($foodList as $category => $items) { ?>
+                                        <p><?= htmlspecialchars($category) ?></p>
+                                        <?php foreach ($items as $name => $quantities) {
+                                            foreach ($quantities as $quantity => $price) { ?>
+                                                <ul>
+                                                    <li>
+                                                        [<?= htmlspecialchars($quantity)  ?>] <?= htmlspecialchars($name) ?> =>
+                                                        <input type="text" name="foodPrice[<?= htmlspecialchars($name) ?>]" class="form-control" value="<?= htmlspecialchars($price)  ?>">
+                                                    </li>
+                                                </ul>
+                                        <?php }
+                                        } ?>
+                                    <?php } ?>
+                                </div>
+
+                            <?php  } ?>
 
                             <div class="row3 mt-4">
                                 <div class="additionalServices" id="booking-info-container">
@@ -479,8 +531,6 @@ if (isset($_POST['bookingID'])) {
                             <!-- <h1 class="card-title text-center"> Notes</h1> -->
                             <div class="info-container">
                                 <label for="req" class="info-label mt-2 mb-2">Additional Request(s)/Note(s)</label>
-                                <!-- <input type="text" class="form-control" name="req" id="req"
-                                    value="<?= $additionalReq ?>"> -->
                                 <textarea class="form-control" rows="4" name="req"
                                     id="req"><?= $additionalReq ?></textarea>
                             </div>

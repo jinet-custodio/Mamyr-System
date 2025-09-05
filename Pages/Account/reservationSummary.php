@@ -96,7 +96,7 @@ require_once '../../Function/functions.php';
             <?php
             $getBookingInfo = $conn->prepare("SELECT 
                                 
-                                b.*, 
+                                b.*, b.createdAt,
                                 cb.confirmedBookingID,
                                 cb.amountPaid, 
                                 cb.confirmedFinalBill, 
@@ -105,8 +105,8 @@ require_once '../../Function/functions.php';
                                 cb.paymentDueDate, cb.paymentStatus,
                                 cb.discountAmount, cb.downpaymentImage,
                                 cb.downpaymentDueDate, 
-                                bs.*,
-                                s.*, s.serviceType,
+                                bs.*, cp.*, cpi.*, mi.foodName, mi.foodCategory,
+                                s.*, s.serviceType, ec.categoryName as eventType,
                                 er.sessionType AS tourType, er.ERCategory, er.ERprice,
                                 ra.RServiceName, ra.RSprice, rsc.categoryName AS serviceCategory   
                                     
@@ -115,10 +115,12 @@ require_once '../../Function/functions.php';
 
                                 LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
                                 LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
+                                LEFT JOIN eventcategory ec ON cp.eventTypeID = ec.categoryID
 
                                 LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                                 LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
-
+                                LEFT JOIN menuitem mi ON cpi.foodItemID = mi.foodItemID
+ 
                                 LEFT JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
                                 LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
 
@@ -145,6 +147,7 @@ require_once '../../Function/functions.php';
                 $serviceVenue = '';
                 $downpaymentNotes = [];
                 $paymentApprovalStatusName = '';
+                $foodList = [];
 
                 while ($row = $getBookingInfoResult->fetch_assoc()) {
 
@@ -152,30 +155,48 @@ require_once '../../Function/functions.php';
                     // print_r($row);
                     // echo '</pre>';
 
-                    $customPackageID = $row['customPackageID'];
-                    $bookingType = $row['bookingType'];
-                    $arrivalTime = date('H:i A', strtotime($row['arrivalTime'])) ?? 'Not Stated';
-                    $startDate = date('M. d, Y', strtotime($row['startDate']));
-                    $endDate = date('M. d, Y', strtotime($row['endDate']));
+                    $customPackageID = $row['customPackageID'] ?? null;
+                    $bookingType = $row['bookingType'] ?? null;
 
-                    if ($startDate === $endDate) {
+                    $arrivalTime = !empty($row['arrivalTime'])
+                        ? date('H:i A', strtotime($row['arrivalTime']))
+                        : 'Not Stated';
+
+                    $startDate = !empty($row['startDate'])
+                        ? date('M. d, Y', strtotime($row['startDate']))
+                        : 'Not Stated';
+
+                    $endDate = !empty($row['endDate'])
+                        ? date('M. d, Y', strtotime($row['endDate']))
+                        : 'Not Stated';
+
+                    $createdAt = $row['createdAt'] ?? null;
+
+
+                    if (!empty($row['startDate']) && $row['startDate'] === $row['endDate']) {
                         $bookingDate = date('F d, Y', strtotime($row['startDate']));
+                    } elseif (!empty($row['startDate']) && !empty($row['endDate'])) {
+                        $bookingDate = $startDate . " to " . $endDate;
                     } else {
-                        $bookingDate = $startDate . "<br>" . $endDate;
+                        $bookingDate = 'Date not available';
                     }
 
-                    $bookingCreationDate = date('F d, Y H:i A', strtotime($row['createdAt'])); //Booking
 
-                    $time = date("g:i A", strtotime($row['startDate'])) . " - " . date("g:i A", strtotime($row['endDate'])); //Booking
-                    $duration = $row['durationCount'] . " hours"; //Booking
+                    $bookingCreationDate = !empty($createdAt)
+                        ? date('F d, Y H:i A', strtotime($createdAt))
+                        : 'Not Available';
 
-                    $bookingStatus = $row['bookingStatus']; //Booking
-                    $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? ''; //Confirmed Booking
-                    $paymentStatus = $row['paymentStatus'] ?? ''; //Confirmed Booking
-                    $additionalServices = $row['addOns'] ?? 'None'; //Booking
-                    $paymentMethod = $row['paymentMethod']; //Booking
-                    $totalCost = $row['totalCost']; //Booking
-                    $downpayment = $row['downpayment']; //Booking
+
+                    $time = date("g:i A", strtotime($row['startDate'])) . " - " . date("g:i A", strtotime($row['endDate']));
+                    $duration = $row['durationCount'] . " hours";
+
+                    $bookingStatus = $row['bookingStatus'];
+                    $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? '';
+                    $paymentStatus = $row['paymentStatus'] ?? '';
+                    $additionalServices = $row['addOns'] ?? 'None';
+                    $paymentMethod = $row['paymentMethod'];
+                    $totalCost = $row['totalCost'];
+                    $downpayment = $row['downpayment'];
 
                     if ($paymentStatus !== '' || $paymentApprovalStatus !== '') {
                         $paymentStatuses = getPaymentStatus($conn, $paymentStatus);
@@ -198,6 +219,7 @@ require_once '../../Function/functions.php';
                     $raw_downpaymentDueDate = $row['downpaymentDueDate'] ?? $startDateObj->format('F d, Y g:i A');
                     $paymentDueDate = date('F d, Y g:i A', strtotime($raw_paymentDueDate));
                     $downpaymentDueDate = date('F d, Y g:i A', strtotime($raw_downpaymentDueDate));
+
                     if ($amountPaid === $downpayment || $amountPaid > $downpayment) {
                         $dueDate =  $paymentDueDate;
                         $buttonName = 'Check Payment';
@@ -205,10 +227,6 @@ require_once '../../Function/functions.php';
                         $dueDate =  $downpaymentDueDate;
                         $buttonName = 'Make a Down Payment';
                     }
-
-
-
-
 
                     $downpaymentImageData = $row['downpaymentImage'];
                     if (!empty($downpaymentImageData)) {
@@ -221,7 +239,7 @@ require_once '../../Function/functions.php';
                     $userBalance = $row['userBalance'] ?? 0;
                     $amountPaid = $row['amountPaid'] ?? 0;
                     $finalBill = $row['confirmedFinalBill'] ?? 0;
-                    $additionalCharge = $row['additionalCharge'];
+                    $additionalCharge = $row['additionalCharge'] ?? 0;
 
                     $toddlerCount = $row['toddlerCount'];
                     $adultCount = $row['adultCount'];
@@ -231,7 +249,21 @@ require_once '../../Function/functions.php';
                     $addOns = $row['addOns'] ?? 'None';
 
                     if (!empty($customPackageID)) {
-                        echo 'Wala pa';
+                        $serviceID = isset($row['serviceID']) ? $row['serviceID'] : '';
+                        $foodItemID = isset($row['foodItemID']) ? $row['foodItemID'] : '';
+                        $totalPax = intval($row['guestCount']) . ' people' ?? 1 . ' person';
+                        $cardHeader = "Type of Event";
+                        $eventType = $row['eventType'];
+                        if (!empty($serviceID)) {
+                            $serviceVenue = $row['RServiceName'] ?? 'none';
+                        }
+                        if (!empty($foodItemID)) {
+                            $category = $row['foodCategory'];
+                            $name = $row['foodName'];
+                            $quantity = $row['quantity'];
+
+                            $foodList[$category][$name] = $quantity;
+                        }
                     } else {
                         $serviceID = $row['serviceID'];
                         $serviceType = $row['serviceType'];
@@ -321,12 +353,10 @@ require_once '../../Function/functions.php';
                     }
 
 
-                    if ($finalBill === 0) {
+                    if ($finalBill === 0 || !isset($finalBill)) {
                         $totalBill = $totalCost;
-                    } elseif ($finalBill <= $totalCost || $finalBill >= $totalCost) {
-                        $totalBill = $finalBill;
                     } else {
-                        $totalBill = $totalCost;
+                        $totalBill = $finalBill;
                     }
                 }
 
@@ -353,6 +383,10 @@ require_once '../../Function/functions.php';
                     }
                 }
             }
+            // echo '<pre>';
+            // print_r('What ' . $serviceID);
+            // echo '</pre>';
+
             ?>
 
             <div class="leftStatusContainer">
@@ -423,6 +457,11 @@ require_once '../../Function/functions.php';
                                 <h6 class="cardHeader"><?= $cardHeader ?></h6>
                                 <p class="cardContent" id="eventDate"><?= $tourType ?></p>
                             </li>
+                        <?php } elseif ($bookingType === 'Event') { ?>
+                            <li class="list-group-item" id="tourType">
+                                <h6 class="cardHeader"><?= $cardHeader ?></h6>
+                                <p class="cardContent" id="eventDate"><?= $eventType ?></p>
+                            </li>
                         <?php } ?>
 
                         <li class="list-group-item">
@@ -437,7 +476,11 @@ require_once '../../Function/functions.php';
 
                         <li class="list-group-item">
                             <h6 class="cardHeader"> Venue </h6>
-                            <p class="cardContent" id="venue"><?= implode(' & ', array_unique($cottageRoom)) ?></p>
+                            <?php if ($bookingType === 'Resort' || $bookingType === 'Hotel') { ?>
+                                <p class="cardContent" id="venue"><?= implode(' & ', array_unique($cottageRoom)) ?></p>
+                            <?php } else { ?>
+                                <p class="cardContent" id="venue"><?= htmlspecialchars($serviceVenue) ?></p>
+                            <?php } ?>
                         </li>
 
                         <li class="list-group-item">
@@ -450,24 +493,27 @@ require_once '../../Function/functions.php';
                             <p class="cardContent" id="guestNo"><?= $totalPax ?></p>
                         </li>
 
+                        <?php if ($bookingType === 'Event') { ?>
+                            <li class="list-group-item">
+                                <h6 class="cardHeader">Menu</h6>
+                                <p class="cardContent" id="packageType">Food List
+                                    <button data-bs-target="#foodListModal" data-bs-toggle="modal"> <img src="../../Assets/Images/Icon/information.png" alt="More Details" class="infoIcon"></button>
+                                </p>
+                            </li>
+                        <?php } ?>
+
                         <li class="list-group-item" id="addOns">
                             <h6 class="cardHeader">Add Ons</h6>
                             <p class="cardContent"><?= !empty($addOns) ? htmlspecialchars($addOns) : "None" ?></p>
                         </li>
 
-                        <li class="list-group-item">
+                        <!-- <li class="list-group-item">
                             <h6 class="cardHeader">Request/Notes</h6>
                             <p class="cardContent" id="request">
-                                <?= !empty($AddRequest) ? htmlspecialchars($AddRequest) : "None" ?>
+                                <?= !empty($additionalReq) ? htmlspecialchars($additionalReq) : "None" ?>
                             </p>
-                        </li>
-                        <!-- <li class="list-group-item">
-                            <h6 class="cardHeader">Package Type</h6>
-                            <p class="cardContent" id="packageType">Wedding <img
-                                    src="../../Assets/Images/Icon/information.png" alt="More Details"
-                                    class="infoIcon">
-        </p>
                         </li> -->
+
                         <li class="list-group-item" id="totalAmountSection">
                             <h6 class="cardHeader">Total Amount:</h6>
                             <h6 class="cardContentBill" id="totalAmount">₱ <?= number_format($totalCost, 2) ?></h6>
@@ -496,6 +542,33 @@ require_once '../../Function/functions.php';
                                 <li><?= $notes ?></li>
                             <?php  }  ?>
                         </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for menu list -->
+        <div class="modal" tabindex="-1" id="foodListModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Event Menu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <?php foreach ($foodList as $category => $items) { ?>
+                            <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
+                            <?php foreach ($items as $name => $quantity) { ?>
+                                <ul>
+                                    <li> <?= htmlspecialchars($name) ?> (<?= htmlspecialchars($quantity) ?>) </li>
+                                </ul>
+                            <?php } ?>
+                        <?php } ?>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -609,21 +682,21 @@ require_once '../../Function/functions.php';
     <script>
         const param = new URLSearchParams(window.location.search);
         const paramValue = param.get('action');
-        if (paramValue === "down$downpaymentImageError") {
+        if (paramValue === "downpaymentImageError") {
             Swal.fire({
                 title: "Oops!",
-                text: "Failed to upload downpayment receipt down$downpaymentImage",
+                text: "Failed to upload downpayment receipt downpaymentImage",
                 icon: "warning",
                 confirmButtonText: "Okay",
             });
-        } else if (paramValue === "down$downpaymentImageFailed") {
+        } else if (paramValue === "downpaymentImageFailed") {
             Swal.fire({
                 title: "Oops!",
-                text: "No downpayment down$downpaymentImage submitted.",
+                text: "No downpayment downpaymentImage submitted.",
                 icon: "warning",
                 confirmButtonText: "Okay",
             });
-        } else if (paramValue === "down$downpaymentImageSize") {
+        } else if (paramValue === "downpaymentImageSize") {
             Swal.fire({
                 title: "Oops!",
                 text: "File is too large. Maximum allowed size is 64MB.",
