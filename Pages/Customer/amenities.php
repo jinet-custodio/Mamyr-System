@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -6,12 +9,61 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
+}
+
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_GET['edit']) && $_GET['edit'] === 'true';
+
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'Amenities';
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+$imageMap = [];
+$defaultImage = "../../Assets/Images/no-picture.jpg";
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
+
+    // Fetch images with this contentID
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages->bind_param("i", $contentID);
+    $getImages->execute();
+    $imageResult = $getImages->get_result();
+
+    $images = [];
+    while ($imageRow = $imageResult->fetch_assoc()) {
+        $images[] = $imageRow;
+    }
+
+    $imageMap[$cleanTitle] = $images;
 }
 ?>
 
@@ -29,7 +81,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
     <!-- Bootstrap Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -40,9 +93,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
 
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav d-flex flex-row align-items-center gap-2">
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
             <?php
-            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
@@ -71,7 +124,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -96,7 +149,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
             ?>
 
-            <li class="nav-item" id="notifs">
+            <li class="nav-item notification-container" id="notifs">
                 <button type="button" class="notifBtn" data-bs-toggle="modal" data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
@@ -114,13 +167,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <!-- <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"> -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
+            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -152,7 +205,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
@@ -168,7 +222,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
                                     <?= htmlspecialchars($message) ?>
                                 </li>
                             <?php endforeach; ?>
@@ -195,336 +251,327 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <div class="pool">
             <div class="amenityTitleContainer">
                 <hr class="amenityLine">
-                <h4 class="amenityTitle">Swimming Pools</h4>
-                <p class="amenityDescription">We offer three spacious pools designed for relaxation and fun. Whether you’re
-                    looking to take a
-                    refreshing dip or lounge by the water, each pool provides a perfect setting to unwind and enjoy your
-                    stay. Dive in and make the most of your resort experience!</p>
+                <!-- <h4 class="amenityTitle">Swimming Pools</h4> -->
+                <?php if ($editMode): ?>
+                    <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity1"
+                        value="<?= htmlspecialchars($contentMap['Amenity1'] ?? 'No Title found') ?>">
+                <?php else: ?>
+                    <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity1'] ?? 'No title found') ?></h4>
+                <?php endif; ?>
+                <?php if ($editMode): ?>
+                    <textarea type="text" rows="5"
+                        class="amenityDescription Amenity1Desc indent editable-input form-control"
+                        data-title="Amenity1Desc"><?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></textarea>
+                <?php else: ?>
+                    <p class="amenityDescription">
+                        <?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></p>
+                <?php endif; ?>
             </div>
 
-            <div class="carousel-container">
-                <div class="carousel">
-                    <img src="../../Assets/Images/amenities/poolPics/poolPic1.png" alt="Pool Picture 1" class="poolPic1">
-                    <img src="../../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Pool Picture 2" class="poolPic2">
-                    <img src="../../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Pool Picture 3" class="poolPic3">
-                    <img src="../../Assets/Images/amenities/poolPics/poolPic4.jpeg" alt="Pool Picture 4" class="poolPic4">
-                    <img src="../../Assets/Images/amenities/poolPics/poolPic5.jpg" alt="Pool Picture 5" class="poolPic5">
-                </div>
-                <button class="btn btn-primary prev-btn">&#10094;</button>
-                <button class="btn btn-primary next-btn">&#10095;</button>
+            <div class="slideshow-container">
+                <?php if (isset($imageMap['Amenity1'])): ?>
+                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
+                        $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                    ?>
+                        <div class="slide">
+                            <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="slide">
+                        <img src="<? $defaultImage ?>" alt="None Found">
+                    </div>
+                <?php endif; ?>
+                <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
             </div>
         </div>
 
         <div class="cottage colored-bg" style="background-color:#f7d5b0;">
             <div class=" amenityTitleContainer">
                 <hr class="amenityLine">
-                <h4 class="amenityTitle">Cottages</h4>
-                <p class="amenityDescription">Our cozy cottages offer a relaxing retreat with spacious porches, secure
-                    surroundings, and a refreshing ambiance. Enjoy a perfect blend of nature and modern facilities
-                    designed for your comfort.</p>
+                <?php if ($editMode): ?>
+                    <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity2"
+                        value="<?= htmlspecialchars($contentMap['Amenity2'] ?? 'No Title found') ?>">
+                <?php else: ?>
+                    <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity2'] ?? 'No title found') ?></h4>
+                <?php endif; ?>
+                <?php if ($editMode): ?>
+                    <textarea type="text" rows="5"
+                        class="amenityDescription Amenity2Desc indent editable-input form-control"
+                        data-title="Amenity2Desc"><?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></textarea>
+                <?php else: ?>
+                    <p class="amenityDescription">
+                        <?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></p>
+                <?php endif; ?>
             </div>
-
-
-            <div class="carousel-container">
-                <div class="carousel">
-                    <?php
-                    $serviceCategory = 2;
-                    $query = "SELECT * FROM resortAmenities WHERE RScategoryID = $serviceCategory ";
-                    $result = mysqli_query($conn, $query);
-                    if (mysqli_num_rows($result) > 0) {
-                        $cottages = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                        $counter = 1;
-                        foreach ($cottages as $cottage) {
-                            $imageData = $cottage['RSimageData'];
-                            if ($imageData) {
-                                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                                $mimeType = finfo_buffer($finfo, $imageData);
-                                finfo_close($finfo);
-                                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                            } else {
-                                $image = '../../Assets/Images/no-picture.jpg';
-                            }
+            <div class="slideshow-container">
+                <?php if (isset($imageMap['Amenity1'])): ?>
+                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
+                        $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                     ?>
+                        <div class="slide">
+                            <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="slide">
+                        <img src="<? $defaultImage ?>" alt="None Found">
+                    </div>
+                <?php endif; ?>
+                <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+            </div>
+        </div>
 
-                            <!-- <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>"> -->
-                    <?php
-                            $counter++;
-                        }
-                    } else {
-                        echo 'No Cottages';
-                    }
+        <div class="videoke">
+            <div class=" amenityTitleContainer">
+                <hr class="amenityLine">
+                <?php if ($editMode): ?>
+                    <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity3"
+                        value="<?= htmlspecialchars($contentMap['Amenity3'] ?? 'No Title found') ?>">
+                <?php else: ?>
+                    <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity3'] ?? 'No title found') ?></h4>
+                <?php endif; ?>
+                <?php if ($editMode): ?>
+                    <textarea type="text" rows="5"
+                        class="amenityDescription Amenity3Desc indent editable-input form-control"
+                        data-title="Amenity3Desc"><?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></textarea>
+                <?php else: ?>
+                    <p class="amenityDescription">
+                        <?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></p>
+                <?php endif; ?>
+            </div>
+
+            <div class="slideshow-container">
+                <?php if (isset($imageMap['Amenity1'])): ?>
+                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
+                        $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                     ?>
-
-                     <div class="carousel">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
-                        class="poolPic1">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
-                        class="poolPic2">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3"
-                        class="poolPic3">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
-                        class="poolPic4">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
-                        class="poolPic5">
-
-                </div>
-                </div>
-                <button class="btn btn-primary prev-btn">&#10094;</button>
-                <button class="btn btn-primary next-btn">&#10095;</button>
+                        <div class="slide">
+                            <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="slide">
+                        <img src="<? $defaultImage ?>" alt="None Found">
+                    </div>
+                <?php endif; ?>
+                <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
             </div>
         </div>
 
-    </div>
-
-    <div class="videoke">
-        <div class=" amenityTitleContainer">
-            <hr class="amenityLine">
-            <h4 class="amenityTitle">Videoke Area</h4>
-            <p class="amenityDescription">Enjoy nonstop fun just steps away from your cottage! Our videoke area is
-                conveniently located beside the cottages, making it easy to sing, laugh, and bond without going far.
-                With a great sound system and cozy setup, it’s the perfect spot for music-filled memories in the
-                heart of the resort.</p>
-        </div>
-
-        <div class="poolPics">
-            <?php
-            $videokeCategoryID = 3;
-            $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
-            $getVideoke->bind_param("i", $videokeCategoryID);
-            $getVideoke->execute();
-            $getVideokeResult =  $getVideoke->get_result();
-            if ($getVideokeResult->num_rows > 0) {
-                // $counter = 1;
-                while ($videoke = $getVideokeResult->fetch_assoc()) {
-                    $imageData = $videoke['RSimageData'];
-                    if ($imageData) {
-                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                        $mimeType = finfo_buffer($finfo, $imageData);
-                        finfo_close($finfo);
-                        $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                    } else {
-                        $image = '../../Assets/Images/no-picture.jpg';
-                    }
-            ?>
-
-                    <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="pic1">
-            <?php
-                    // $counter++;
-                }
-            } else {
-                echo 'No Videoke';
-            }
-            ?>
-            <!-- <img src="../../Assets/Images/amenities/cottagePics/cottage3.jpg" alt="Hotel Picture 1" class="pic1">
-                <img src="../../Assets/Images/amenities/cottagePics/cottage5.jpg" alt="Hotel Picture 1" class="pic1"> -->
-        </div>
-
-    </div>
-
-    <div class="pavilion colored-bg" style="background-color: #7dcbf2;">
-        <div class="amenityTitleContainer">
-            <hr class="amenityLine">
-            <h4 class="amenityTitle">Pavilion Hall</h4>
-            <p class="amenityDescription">Our Pavilion Hall offers the perfect space for events, gatherings, and
-                special occasions. With its spacious and elegant design, it’s ideal for everything from weddings to
-                corporate events, comfortably accommodating up to 350 guests. Included with your rental is exclusive
-                access to one private air-conditioned room and a dedicated powder room with separate comfort rooms
-                for both male and female guests.</p>
-        </div>
-
-        <div class="carousel-container">
-            <div class="carousel">
-
-                <?php
-                $eventHallCategoryID = 6;
-                $getEventHall = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
-                $getEventHall->bind_param("i",  $eventHallCategoryID);
-                $getEventHall->execute();
-                $getEventHallResult =  $getEventHall->get_result();
-                if ($getEventHallResult->num_rows > 0) {
-                    $counter = 1;
-                    while ($eventHall = $getEventHallResult->fetch_assoc()) {
-                        $imageData = $eventHall['RSimageData'];
-                        if ($imageData) {
-                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                            $mimeType = finfo_buffer($finfo, $imageData);
-                            finfo_close($finfo);
-                            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                        } else {
-                            $image = '../../Assets/Images/no-picture.jpg';
-                        }
-                ?>
-
-                        <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="poolPic<?= $counter ?>">
-                <?php
-                        $counter++;
-                    }
-                } else {
-                    echo 'No Event Hall';
-                }
-                ?>
-                <!-- <img src="../../Assets/Images/amenities/pavilionPics/pav1.jpg" alt="Pavilion Picture 1"
-                        class="poolPic1">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav2.jpg" alt="Pavilion Picture 2"
-                        class="poolPic2">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav3.jpg" alt="Pavilion Picture 3"
-                        class="poolPic3">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Pavilion Picture 4"
-                        class="poolPic4">
-                    <img src="../../Assets/Images/amenities/pavilionPics/pav5.jpg" alt="Pavilion Picture 5"
-                        class="poolPic5"> -->
-
+        <div class="pavilion colored-bg" style="background-color: #7dcbf2;">
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <?php if ($editMode): ?>
+                    <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity4"
+                        value="<?= htmlspecialchars($contentMap['Amenity4'] ?? 'No Title found') ?>">
+                <?php else: ?>
+                    <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity4'] ?? 'No title found') ?></h4>
+                <?php endif; ?>
+                <?php if ($editMode): ?>
+                    <textarea type="text" rows="5"
+                        class="amenityDescription Amenity4Desc indent editable-input form-control"
+                        data-title="Amenity4Desc"><?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></textarea>
+                <?php else: ?>
+                    <p class="amenityDescription">
+                        <?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></p>
+                <?php endif; ?>
             </div>
-            <button class="btn btn-primary prev-btn">&#10094;</button>
-            <button class="btn btn-primary next-btn">&#10095;</button>
-        </div>
-    </div>
 
-    <div class="minipavilion">
-        <div class="amenityTitleContainer">
-            <hr class="amenityLine">
-            <h4 class="amenityTitle">Mini Pavilion</h4>
-            <p class="amenityDescription">Our mini pavilion offers an intimate and charming space perfect for
-                small
-                gatherings and special occasions. Designed to comfortably accommodate up to 50 guests, it’s ideal
-                for birthdays, reunions, meetings, or any cozy celebration. Surrounded by a refreshing resort
-                atmosphere, it provides both functionality and a relaxing vibe.</p>
-        </div>
-
-        <div class="carousel-container">
-            <div class="carousel">
-                <?php
-                $miniPavCategoryID = 7;
-                $getMiniPav = $conn->prepare("SELECT * FROM resortAmenities WHERE RScategoryID = ? ");
-                $getMiniPav->bind_param("i", $miniPavCategoryID);
-                $getMiniPav->execute();
-                $getMiniPavResult =  $getMiniPav->get_result();
-                if ($getMiniPavResult->num_rows > 0) {
-                    // $counter = 1;
-                    while ($videoke =  $getMiniPav->fetch_assoc()) {
-                        $imageData = $videoke['RSimageData'];
-                        if ($imageData) {
-                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                            $mimeType = finfo_buffer($finfo, $imageData);
-                            finfo_close($finfo);
-                            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                        } else {
-                            $image = '../../Assets/Images/no-picture.jpg';
-                        }
-                ?>
-
-                        <img src="<?= htmlspecialchars($image) ?>" alt="Cottage Picture" class="pic1">
-                <?php
-                        // $counter++;
-                    }
-                } else {
-                    echo 'No Cottages';
-                }
-                ?>
-                <img src="../../Assets/Images/amenities/miniPavPics/miniPav1.jpg" alt="Mini Pavilion Picture 1"
-                    class="poolPic1">
-                <img src="../../Assets/Images/amenities/miniPavPics/miniPav2.jpg" alt="Mini Pavilion Picture 2"
-                    class="poolPic2">
-                <img src="../../Assets/Images/amenities/miniPavPics/miniPav3.jpeg" alt="Mini Pavilion Picture 3"
-                    class="poolPic3">
-                <img src="../../Assets/Images/amenities/miniPavPics/miniPav4.jpeg" alt="Mini Pavilion Picture 4"
-                    class="poolPic4">
-                <img src="../../Assets/Images/amenities/miniPavPics/miniPav5.jpeg" alt="Mini Pavilion Picture 5"
-                    class="poolPic5">
-
+            <div class="slideshow-container">
+                <?php if (isset($imageMap['Amenity1'])): ?>
+                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
+                        $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                    ?>
+                        <div class="slide">
+                            <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="slide">
+                        <img src="<? $defaultImage ?>" alt="None Found">
+                    </div>
+                <?php endif; ?>
+                <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
             </div>
-            <button class="btn btn-primary prev-btn">&#10094;</button>
-            <button class="btn btn-primary next-btn">&#10095;</button>
-        </div>
-    </div>
 
-    <div class="hotel colored-bg" style="background-color:#f7d5b0;">
-        <div class="amenityTitleContainer">
-            <hr class="amenityLine">
-            <h4 class="amenityTitle">Mamyr Hotel</h4>
-            <p class="amenityDescription">We offer 11 thoughtfully designed hotel rooms, each providing a peaceful and
-                comfortable retreat. Perfect for guests looking for a relaxing space to unwind after a day of
-                exploration, our rooms offer all the essentials for a restful stay with a touch of convenience.</p>
         </div>
 
-        <div class="carousel-container">
-            <div class="carousel">
-                <img src="../../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel Picture 1" class="poolPic1">
-                <img src="../../Assets/Images/amenities/hotelPics/hotel2.jpg" alt="Hotel Picture 2" class="poolPic2">
-                <img src="../../Assets/Images/amenities/hotelPics/hotel3.jpg" alt="Hotel Picture 3" class="poolPic3">
-                <img src="../../Assets/Images/amenities/hotelPics/hotel4.jpg" alt="Hotel Picture 4" class="poolPic4">
-                <img src="../../Assets/Images/amenities/hotelPics/hotel5.jpeg" alt="Hotel Picture 5" class="poolPic5">
-
+        <div class="minipavilion">
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <?php if ($editMode): ?>
+                    <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity5"
+                        value="<?= htmlspecialchars($contentMap['Amenity5'] ?? 'No Title found') ?>">
+                <?php else: ?>
+                    <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity5'] ?? 'No title found') ?></h4>
+                <?php endif; ?>
+                <?php if ($editMode): ?>
+                    <textarea type="text" rows="5"
+                        class="amenityDescription Amenity5Desc indent editable-input form-control"
+                        data-title="Amenity5Desc"><?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></textarea>
+                <?php else: ?>
+                    <p class="amenityDescription">
+                        <?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></p>
+                <?php endif; ?>
             </div>
-            <button class="btn btn-primary prev-btn">&#10094;</button>
-            <button class="btn btn-primary next-btn">&#10095;</button>
-        </div>
-    </div>
 
-    <div class="parking">
-        <div class="amenityTitleContainer">
-            <hr class="amenityLine">
-            <h4 class="amenityTitle">Parking Space</h4>
-            <p class="amenityDescription">We provide ample parking spaces to ensure a hassle-free stay. Whether
-                you’re arriving by car or with a group, our secure parking area is conveniently located, giving you peace
-                of mind throughout your visit.</p>
-        </div>
-
-        <div class="carousel-container">
-            <div class="carousel">
-                <img src="../../Assets/Images/amenities/parkingPics/parking1.jpg" alt="Parking Picture 1"
-                    class="poolPic1">
-                <img src="../../Assets/Images/amenities/parkingPics/parking2.jpg" alt="Parking Picture 2"
-                    class="poolPic2">
-                <img src="../../Assets/Images/amenities/parkingPics/parking3.jpg" alt="Parking Picture 3"
-                    class="poolPic3">
-                <img src="../../Assets/Images/amenities/parkingPics/parking4.jpg" alt="Parking Picture 4"
-                    class="poolPic4">
-                <img src="../../Assets/Images/amenities/parkingPics/parking5.jpg" alt="Parking Picture 5"
-                    class="poolPic5">
-
+            <div class="slideshow-container">
+                <?php if (isset($imageMap['Amenity1'])): ?>
+                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
+                        $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                    ?>
+                        <div class="slide">
+                            <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="slide">
+                        <img src="<? $defaultImage ?>" alt="None Found">
+                    </div>
+                <?php endif; ?>
+                <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
             </div>
-            <button class="btn btn-primary prev-btn">&#10094;</button>
-            <button class="btn btn-primary next-btn">&#10095;</button>
-        </div>
-    </div>
-    </div>
 
-
-    <footer class="py-1" style="margin-top: 5vw !important;">
-        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-            <a href="../index.php">
-                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-            </a>
-            <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
         </div>
 
-        <div class="info">
-            <div class="reservation">
-                <h4 class="reservationTitle">Reservation</h4>
-                <h4 class="numberFooter">(0998) 962 4697 </h4>
-                <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
+        <div class="hotel colored-bg" style="background-color:#f7d5b0;">
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <?php if ($editMode): ?>
+                    <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity6"
+                        value="<?= htmlspecialchars($contentMap['Amenity6'] ?? 'No Title found') ?>">
+                <?php else: ?>
+                    <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity6'] ?? 'No title found') ?></h4>
+                <?php endif; ?>
+                <?php if ($editMode): ?>
+                    <textarea type="text" rows="5"
+                        class="amenityDescription Amenity6Desc indent editable-input form-control"
+                        data-title="Amenity6Desc"><?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></textarea>
+                <?php else: ?>
+                    <p class="amenityDescription">
+                        <?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></p>
+                <?php endif; ?>
             </div>
-            <div class="locationFooter">
-                <h4 class="locationTitle">Location</h4>
-                <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
+            <div class="slideshow-container">
+                <?php if (isset($imageMap['Amenity1'])): ?>
+                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
+                        $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                    ?>
+                        <div class="slide">
+                            <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="slide">
+                        <img src="<? $defaultImage ?>" alt="None Found">
+                    </div>
+                <?php endif; ?>
+                <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+            </div>
+
+        </div>
+
+        <div class="parking">
+            <div class="amenityTitleContainer">
+                <hr class="amenityLine">
+                <?php if ($editMode): ?>
+                    <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity7"
+                        value="<?= htmlspecialchars($contentMap['Amenity7'] ?? 'No Title found') ?>">
+                <?php else: ?>
+                    <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity7'] ?? 'No title found') ?></h4>
+                <?php endif; ?>
+                <?php if ($editMode): ?>
+                    <textarea type="text" rows="5"
+                        class="amenityDescription Amenity7Desc indent editable-input form-control"
+                        data-title="Amenity7Desc"><?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></textarea>
+                <?php else: ?>
+                    <p class="amenityDescription">
+                        <?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></p>
+                <?php endif; ?>
+            </div>
+
+            <div class="slideshow-container">
+                <?php if (isset($imageMap['Amenity7'])): ?>
+                    <?php foreach ($imageMap['Amenity7'] as $index => $img):
+                        $imagePath = "../../Assets/Images/amenities/parkingPics/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                    ?>
+                        <div class="slide">
+                            <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                data-folder="amenities/parkingPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="slide">
+                        <img src="<? $defaultImage ?>" alt="None Found">
+                    </div>
+                <?php endif; ?>
+                <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
             </div>
         </div>
-        <hr class="footerLine">
-        <div class="socialIcons">
-            <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                    class='bx bxl-facebook-circle'></i></a>
-            <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-            <a href="tel:+09989624697">
-                <i class='bx bxs-phone'></i>
-            </a>
+    </div>
 
-        </div>
+    <!-- Div for loader -->
+    <div id="loaderOverlay" style="display: none;">
+        <div class="loader"></div>
+    </div>
+    <?php
+    $sectionName = 'BusinessInformation';
+    $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+    $getWebContent->bind_param("s", $sectionName);
+    $getWebContent->execute();
+    $getWebContentResult = $getWebContent->get_result();
+    $businessInfo = [];
+    while ($row = $getWebContentResult->fetch_assoc()) {
+        $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+        $contentID = $row['contentID'];
 
-    </footer>
+        $businessInfo[$cleanTitle] = $row['content'];
+    }
+    ?>
 
-
-
+    <?php include 'footer.php'; ?>
 
     <!-- Bootstrap Link -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
@@ -595,25 +642,77 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
     <script>
-        const carousels = document.querySelectorAll('.carousel');
+        // JS for slideshow
+        function createSlideshow(container) {
+            const slides = container.querySelectorAll('.slide');
+            const prevBtn = container.querySelector('.prev-btn');
+            const nextBtn = container.querySelector('.next-btn');
+            let index = 0;
 
-
-        carousels.forEach(carousel => {
-            let angle = 0;
-
-            const prevButton = carousel.closest('.carousel-container').querySelector('.prev-btn');
-            const nextButton = carousel.closest('.carousel-container').querySelector('.next-btn');
-
-
-            nextButton.addEventListener('click', () => {
-                angle -= 72;
-                carousel.style.transform = `rotateY(${angle}deg)`;
+            slides.forEach(slide => {
+                slide.style.transform = 'translateX(100%)'; // Start off-screen right
+                slide.style.position = 'absolute';
+                slide.style.top = '0';
+                slide.style.left = '0';
+                slide.style.width = '100%';
+                slide.style.height = '100%';
             });
 
 
-            prevButton.addEventListener('click', () => {
-                angle += 72;
-                carousel.style.transform = `rotateY(${angle}deg)`;
+            slides[index].classList.add('active');
+            slides[index].style.transform = 'translateX(0)';
+            slides[index].style.zIndex = '1';
+
+            function showSlide(newIndex, direction) {
+                if (newIndex === index) return;
+
+                const currentSlide = slides[index];
+                const nextSlide = slides[newIndex];
+
+                nextSlide.classList.add('active');
+                nextSlide.style.transition = 'none';
+                nextSlide.style.transform = direction === 'next' ? 'translateX(100%)' : 'translateX(-100%)';
+                nextSlide.style.zIndex = '2';
+                nextSlide.style.opacity = '1';
+
+                void nextSlide.offsetWidth;
+
+                nextSlide.style.transition = 'transform 0.6s ease';
+                nextSlide.style.transform = 'translateX(0)';
+
+                currentSlide.style.transition = 'transform 0.6s ease, opacity 0.6s ease';
+                currentSlide.style.transform = direction === 'next' ? 'translateX(-100%)' : 'translateX(100%)';
+                currentSlide.style.opacity = '0';
+                currentSlide.style.zIndex = '1';
+
+                setTimeout(() => {
+                    currentSlide.classList.remove('active');
+                    currentSlide.style.transition = '';
+                    currentSlide.style.transform = 'translateX(100%)';
+                    currentSlide.style.opacity = '1';
+                    currentSlide.style.zIndex = '0';
+
+                    nextSlide.style.transition = '';
+                    nextSlide.style.zIndex = '1';
+
+                    index = newIndex;
+                }, 600);
+            }
+
+            nextBtn.addEventListener('click', () => {
+                const newIndex = (index + 1) % slides.length;
+                showSlide(newIndex, 'next');
+            });
+
+            prevBtn.addEventListener('click', () => {
+                const newIndex = (index - 1 + slides.length) % slides.length;
+                showSlide(newIndex, 'prev');
+            });
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const allSlideshows = document.querySelectorAll('.slideshow-container');
+            allSlideshows.forEach(container => {
+                createSlideshow(container);
             });
         });
     </script>

@@ -7,7 +7,7 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
     $selectedDate = $resortBookingDate->format('Y-m-d');
     $availableID = 1;
 
-    $getTimeRange = $conn->prepare("SELECT * FROM entrancetimeranges WHERE session_type = ?");
+    $getTimeRange = $conn->prepare("SELECT * FROM entrancetimerange WHERE session_type = ?");
     $getTimeRange->bind_param("s", $selectedTour);
     $getTimeRange->execute();
     $resultTimeRange = $getTimeRange->get_result();
@@ -38,10 +38,10 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
     $startStr = $startDateTime->format('Y-m-d H:i:s');
     $endStr = $endDateTime->format('Y-m-d H:i:s');
 
-    $getAvailableAmenities = $conn->prepare("SELECT * FROM resortAmenities ra
+    $getAvailableAmenities = $conn->prepare("SELECT * FROM resortamenity ra
         WHERE ra.RSAvailabilityID = ?
         AND NOT EXISTS (
-            SELECT 1 FROM serviceUnavailableDates sud
+            SELECT 1 FROM serviceunavailabledate sud
             WHERE sud.resortServiceID = ra.resortServiceID
             AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate)
         )
@@ -90,9 +90,9 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
     $availableID = 1;
     $hotelCategoryID = 1;
 
-    $getAvailableHotel = $conn->prepare("SELECT * FROM resortAmenities ra WHERE ra.RSAvailabilityID = ? AND ra.RScategoryID = ? AND ra.RSduration = ?
+    $getAvailableHotel = $conn->prepare("SELECT * FROM resortamenity ra WHERE ra.RSAvailabilityID = ? AND ra.RScategoryID = ? AND ra.RSduration = ?
                             AND NOT EXISTS (
-                            SELECT 1 FROM serviceUnavailableDates sud
+                            SELECT 1 FROM serviceunavailabledate sud
                             WHERE sud.resortServiceID = ra.resortServiceID
                             AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate)
                         )");

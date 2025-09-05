@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -8,6 +10,24 @@ checkSessionTimeout($timeout = 3600);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
@@ -62,8 +82,8 @@ if (isset($_POST['bookingID'])) {
 
 
         <?php
-        $getUserInfo = $conn->prepare("SELECT u.*, b.*  FROM bookings b
-        INNER JOIN users u ON b.userID = u.userID
+        $getUserInfo = $conn->prepare("SELECT u.*, b.*  FROM booking b
+        INNER JOIN user u ON b.userID = u.userID
         WHERE b.bookingID = ?");
         $getUserInfo->bind_param("i", $bookingID);
         $getUserInfo->execute();
@@ -149,8 +169,8 @@ if (isset($_POST['bookingID'])) {
                                 er.sessionType AS tourType, er.ERCategory, er.ERprice,
                                 ra.RServiceName, ra.RSprice, rsc.categoryName AS serviceCategory   
                                     
-                                FROM bookings b
-                                LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID
+                                FROM booking b
+                                LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
                                 LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
 
                                 -- LEFT JOIN statuses stat1 ON stat1.statusID = b.bookingStatus
@@ -159,18 +179,18 @@ if (isset($_POST['bookingID'])) {
                                 -- LEFT JOIN packages p ON b.packageID = p.packageID
                                 -- LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
 
-                                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
-                                LEFT JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
+                                LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+                                LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
 
-                                LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID
-                                LEFT JOIN services s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+                                LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
+                                LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
 
-                                LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
-                                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
+                                LEFT JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
+                                LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
 
-                                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
+                                LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
 
-                                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
+                                LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                             WHERE b.bookingID = ?");
                 $getBookingInfo->bind_param("i", $bookingID);
                 $getBookingInfo->execute();

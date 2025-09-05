@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -8,6 +11,23 @@ checkSessionTimeout($timeout = 3600);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
@@ -41,7 +61,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <!-- Account Icon on the Left -->
             <ul class="navbar-nav navbar-nav d-flex flex-row align-items-center gap-2">
                 <?php
-                $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -72,7 +92,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     $receiver = 'Partner';
                 }
 
-                $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+                $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
                 $getNotifications->bind_param("is", $userID, $receiver);
                 $getNotifications->execute();
                 $getNotificationsResult = $getNotifications->get_result();
@@ -184,14 +204,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <main>
             <?php
-            $getWebContent = "SELECT * FROM websiteContents WHERE sectionName = 'Blog'";
+            $getWebContent = "SELECT * FROM websitecontent WHERE sectionName = 'Blog'";
             $result = mysqli_query($conn, $getWebContent);
 
             $contentMap = [];
             $blogPosts = [];
             $imagesByContentID = [];
 
-            $getImagesQuery = "SELECT contentID, imageData, altText FROM websiteContentImages ORDER BY imageOrder ASC";
+            $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimage ORDER BY imageOrder ASC";
             $imageResult = mysqli_query($conn, $getImagesQuery);
 
             if ($imageResult && mysqli_num_rows($imageResult) > 0) {
@@ -388,8 +408,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         <?= nl2br(htmlspecialchars($firstPost['Content'] ?? '')) ?>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
 
@@ -446,8 +466,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
 
@@ -459,36 +479,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
         </main>
-        <footer class="py-1" style="margin-top: 5vw !important;">
-            <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-                <a href="../index.php">
-                    <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-                </a>
-                <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
-            </div>
 
-            <div class="info">
-                <div class="reservation">
-                    <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter">(0998) 962 4697 </h4>
-                    <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
-                </div>
-                <div class="locationFooter">
-                    <h4 class="locationTitle">Location</h4>
-                    <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
-                </div>
-            </div>
-            <hr class="footerLine">
-            <div class="socialIcons">
-                <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                        class='bx bxl-facebook-circle'></i></a>
-                <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-                <a href="tel:+09989624697">
-                    <i class='bx bxs-phone'></i>
-                </a>
-            </div>
-        </footer>
+        <?php include 'footer.php'; ?>
     </div>
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>

@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require '../Config/dbcon.php';
 session_start();
 ?>
@@ -41,16 +44,16 @@ session_start();
                     <h4 class="repInfoLabel">Representative Information</h4>
                     <div class="repInfoFormContainer">
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
-                            value="<?php echo isset($_SESSION['formData']['firstName']) ? htmlspecialchars(trim($_SESSION['formData']['firstName'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['firstName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['firstName'])) : ''; ?>"
                             required>
                         <!-- <i class='bx bxs-user-circle'></i> -->
 
                         <input type="text" class="form-control" id="middleInitial" name="middleInitial"
                             placeholder="M.I. (Optional)"
-                            value="<?php echo isset($_SESSION['formData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['formData']['middleInitial'])) : ''; ?>">
+                            value="<?php echo isset($_SESSION['registerFormData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['registerFormData']['middleInitial'])) : ''; ?>">
                         <!-- <i class='bx bxs-user-circle'></i> -->
                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
-                            value="<?php echo isset($_SESSION['formData']['lastName']) ? htmlspecialchars(trim($_SESSION['formData']['lastName'])) : ''; ?>"
+                            value="<?php echo isset($_SESSION['registerFormData']['lastName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['lastName'])) : ''; ?>"
                             required>
                         <!-- <i class='bx bxs-user-circle'></i> -->
                         <!-- <input type="text" class="form-control" id="email" name="email" placeholder="Email Address"
@@ -76,16 +79,16 @@ session_start();
                         <select id="service" name="partnerType" class="form-select primary">
                             <option value="" disabled selected>Type of Business</option>
                             <?php
-                            $serviceType = $conn->prepare("SELECT * FROM partnershipTypes");
+                            $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
                             $serviceType->execute();
                             $serviceTypeResult = $serviceType->get_result();
                             if ($serviceTypeResult->num_rows > 0) {
                                 while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
-                                    $partnerType = $serviceTypes['partnerType'];
+                                    $partnerType = $serviceTypes['partnerTypeID'];
                                     $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
                             ?>
-                            <option value="<?= htmlspecialchars($partnerType) ?>">
-                                <?= htmlspecialchars($partnerTypeDescription) ?></option>
+                                    <option value="<?= htmlspecialchars($partnerType) ?>">
+                                        <?= htmlspecialchars($partnerTypeDescription) ?></option>
 
                             <?php
                                 }
@@ -529,128 +532,128 @@ session_start();
     </script> -->
     <!-- Script for loader -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const loaderOverlay = document.getElementById('loaderOverlay');
-        const form = document.querySelector('form');
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const form = document.querySelector('form');
 
-        if (form) {
-            form.addEventListener('submit', function() {
-                loaderOverlay.style.display = 'flex';
-            });
+            if (form) {
+                form.addEventListener('submit', function() {
+                    loaderOverlay.style.display = 'flex';
+                });
+            }
+        });
+
+        function hideLoader() {
+            const overlay = document.getElementById('loaderOverlay');
+            if (overlay) overlay.style.display = 'none';
         }
-    });
 
-    function hideLoader() {
-        const overlay = document.getElementById('loaderOverlay');
-        if (overlay) overlay.style.display = 'none';
-    }
+        // Hide loader on normal load
+        window.addEventListener('load', hideLoader);
 
-    // Hide loader on normal load
-    window.addEventListener('load', hideLoader);
-
-    // Hide loader on back/forward navigation (from browser cache)
-    window.addEventListener('pageshow', function(event) {
-        if (event.persisted) {
-            hideLoader();
-        }
-    });
+        // Hide loader on back/forward navigation (from browser cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+            }
+        });
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    const emailPassContainer = document.getElementById("emailPassContainer");
-    const basicInfo = document.getElementById("basicInfo")
+        const emailPassContainer = document.getElementById("emailPassContainer");
+        const basicInfo = document.getElementById("basicInfo")
 
-    emailPassContainer.style.display = "none";
+        emailPassContainer.style.display = "none";
 
-    function openEmailPass() {
+        function openEmailPass() {
 
-        // Get required inputs
-        const requiredFields = [
-            'firstName', 'lastName', 'phoneNumber',
-            'companyName', 'service', 'barangay', 'proofLink'
-        ];
+            // Get required inputs
+            const requiredFields = [
+                'firstName', 'lastName', 'phoneNumber',
+                'companyName', 'service', 'barangay', 'proofLink'
+            ];
 
-        let allValid = true;
+            let allValid = true;
 
-        requiredFields.forEach(id => {
-            const field = document.getElementById(id);
-            if (!field || !field.value.trim()) {
-                field.classList.add('is-invalid');
-                allValid = false;
-            } else {
-                field.classList.remove('is-invalid');
-            }
-        });
-
-        if (!allValid) {
-            Swal.fire({
-                title: 'Oops',
-                text: "Please fill out all required fields before continuing.",
-                icon: 'warning'
+            requiredFields.forEach(id => {
+                const field = document.getElementById(id);
+                if (!field || !field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    allValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
             });
-            return;
-        }
 
-        if (emailPassContainer.style.display == "none") {
-            emailPassContainer.style.display = "block";
-            basicInfo.style.display = "none"
+            if (!allValid) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: "Please fill out all required fields before continuing.",
+                    icon: 'warning'
+                });
+                return;
+            }
 
-        } else {
-            emailPassContainer.style.display = "block"
+            if (emailPassContainer.style.display == "none") {
+                emailPassContainer.style.display = "block";
+                basicInfo.style.display = "none"
+
+            } else {
+                emailPassContainer.style.display = "block"
+            }
         }
-    }
     </script>
 
 
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get("action");
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get("action");
 
-    if (paramValue === 'emailExist') {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Email Already Exist!',
-            text: 'The email address you entered is already registered.'
-        })
-    }
+        if (paramValue === 'emailExist') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Email Already Exist!',
+                text: 'The email address you entered is already registered.'
+            })
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 
 
     <!-- Eye icon of password show and hide -->
     <script>
-    const passwordField1 = document.getElementById('password');
-    const passwordField2 = document.getElementById('confirm_password');
-    const togglePassword1 = document.getElementById('togglePassword1');
-    const togglePassword2 = document.getElementById('togglePassword2');
+        const passwordField1 = document.getElementById('password');
+        const passwordField2 = document.getElementById('confirm_password');
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const togglePassword2 = document.getElementById('togglePassword2');
 
-    function togglePasswordVisibility(passwordField, toggleIcon) {
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleIcon.classList.remove('bxs-hide');
-            toggleIcon.classList.add('bx-show-alt');
-        } else {
-            passwordField.type = 'password';
-            toggleIcon.classList.remove('bx-show-alt');
-            toggleIcon.classList.add('bxs-hide');
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide');
+            }
         }
-    }
 
-    togglePassword1.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField1, togglePassword1);
-    });
+        togglePassword1.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField1, togglePassword1);
+        });
 
-    togglePassword2.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField2, togglePassword2);
-    });
+        togglePassword2.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField2, togglePassword2);
+        });
     </script>
 </body>
 

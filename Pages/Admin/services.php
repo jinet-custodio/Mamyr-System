@@ -13,6 +13,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -39,7 +56,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="stylesheet" href="../../Assets/CSS/Admin/services.css" />
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+        integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -55,7 +74,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
             $getNotifications->bind_param("s", $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -106,7 +125,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
 
             if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -155,13 +174,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
             <h5>Services</h5>
         </a>
-
-
-        <!-- <a href="revenue.php" class="nav-link">
-            <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
-            <h5>Revenue</h5>
-        </a> -->
-
 
         <a class="nav-link" href="transaction.php">
             <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
@@ -259,10 +271,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <tbody>
                     <?php
-                    $getResortServices = $conn->prepare("SELECT * FROM resortAmenities");
+                    $hotelCategoryID = 1;
+                    $getResortServices = $conn->prepare("SELECT * FROM resortamenity WHERE RScategoryID !=  ?");
+
                     if ($getResortServices === false) {
                         throw new Exception("Prepare failed: " . $conn->error);
                     }
+
+                    $getResortServices->bind_param('i', $hotelCategoryID);
 
                     if ($getResortServices->execute()) {
                         $getResult = $getResortServices->get_result();
@@ -281,20 +297,31 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                     ?>
                                 <tr class="resortdata">
-                                    <input type="hidden" class="form-control resortServiceID" name="resortServiceID" value="<?= htmlspecialchars($serviceID) ?>" readonly>
-                                    <td><input type="text" class="form-control resortServiceName" name="resortServiceName" value="<?= htmlspecialchars($serviceName) ?>" readonly></td>
-                                    <td><input type="text" class="form-control resortServicePrice" name="resortServicePrice" value="<?= htmlspecialchars($servicePrice) ?>" readonly></td>
-                                    <td><input type="text" class="form-control resortServiceCapacity" name="resortServiceCapacity" value="<?= htmlspecialchars($serviceCapacity) ?>" readonly></td>
-                                    <td><input type="text" class="form-control resortServiceMaxCapacity" name="resortServiceMaxCapacity" value="<?= htmlspecialchars($serviceMaxCapacity) ?>" readonly></td>
-                                    <td><input type="text" class="form-control resortServiceDuration" name="resortServiceDuration" value="<?= htmlspecialchars($serviceDuration) ?>" readonly></td>
-                                    <td><textarea name="serviceDesc" readonly class="form-control"><?= htmlspecialchars($serviceDesc) ?></textarea></td>
+                                    <input type="hidden" class="form-control resortServiceID" name="resortServiceID"
+                                        value="<?= htmlspecialchars($serviceID) ?>" readonly>
+                                    <td><input type="text" class="form-control resortServiceName" name="resortServiceName"
+                                            value="<?= htmlspecialchars($serviceName) ?>" readonly></td>
+                                    <td><input type="text" class="form-control resortServicePrice" name="resortServicePrice"
+                                            value="<?= htmlspecialchars($servicePrice) ?>" readonly></td>
+                                    <td><input type="text" class="form-control resortServiceCapacity" name="resortServiceCapacity"
+                                            value="<?= htmlspecialchars($serviceCapacity) ?>" readonly></td>
+                                    <td><input type="text" class="form-control resortServiceMaxCapacity"
+                                            name="resortServiceMaxCapacity" value="<?= htmlspecialchars($serviceMaxCapacity) ?>"
+                                            readonly></td>
+                                    <td><input type="text" class="form-control resortServiceDuration" name="resortServiceDuration"
+                                            value="<?= htmlspecialchars($serviceDuration) ?>" readonly></td>
+                                    <td><textarea name="serviceDesc" readonly
+                                            class="form-control"><?= htmlspecialchars($serviceDesc) ?></textarea></td>
                                     <td>
                                         <div class="input-group">
                                             <input type="text" class="form-control resortServiceImage"
-                                                value="<?= htmlspecialchars($serviceImageName) ?>" name="resortServiceImage" readonly>
-                                            <button class="btn btn-outline-secondary editImageBtn" disabled type="button"><i class="fa-solid fa-camera"></i></button>
+                                                value="<?= htmlspecialchars($serviceImageName) ?>" name="resortServiceImage"
+                                                readonly>
+                                            <button class="btn btn-outline-secondary editImageBtn" disabled type="button"><i
+                                                    class="fa-solid fa-camera"></i></button>
                                         </div>
-                                        <input type="file" class="form-control resortServiceImagePicker" name="resortServiceImagePicker" hidden>
+                                        <input type="file" class="form-control resortServiceImagePicker"
+                                            name="resortServiceImagePicker" hidden>
                                     </td>
                                     <td>
                                         <select name="resortAvailability" class="form-select resortAvailability" disabled>
@@ -306,13 +333,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             <option value="3" <?= $serviceAvailability == "3" ? "selected" : "" ?>>Maintenance
                                             </option>
                                             <option value="4" <?= $serviceAvailability == "4" ? "selected" : "" ?>>Private</option>
-                                            <option value="5" <?= $serviceAvailability == "5" ? "selected" : "" ?>>Not Available</option>
+                                            <option value="5" <?= $serviceAvailability == "5" ? "selected" : "" ?>>Not Available
+                                            </option>
                                         </select>
                                     </td>
                                     <td>
                                         <div class="buttonContainer">
-                                            <button class="btn btn-primary editBtn editResortService w-100" onclick="editResortService(this)" data-label="Edit"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
-                                            <button class="btn btn-danger cancelBtn cancelResortService w-100" disabled onclick="cancelResortService(this)"><i class="fa-solid fa-delete-left"></i>Cancel</button>
+                                            <button class="btn btn-primary editBtn editResortService"
+                                                onclick="editResortService(this)" id="editPrimary" data-label="Edit"><i
+                                                    class="fa-solid fa-pen-to-square"></i>Edit</button>
+                                            <button class="btn btn-danger cancelBtn cancelResortService" disabled id="cancelDanger"
+                                                onclick="cancelResortService(this)"><i
+                                                    class="fa-solid fa-delete-left"></i>Cancel</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -343,39 +375,61 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <tbody>
                     <?php
-                    $selectRates = $conn->prepare("SELECT er.*, etr.* FROM entrancerates er
-                    JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID");
+                    $selectRates = $conn->prepare("SELECT er.*, etr.* FROM entrancerate er
+                    JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID");
                     if ($selectRates->execute()) {
                         $rateResult = $selectRates->get_result();
                         while ($row = $rateResult->fetch_assoc()) {
                     ?>
                             <tr class="ratesdata">
-                                <input type="hidden" name="entranceRatesID" class="entranceRateID" value="<?= $row['entranceRateID'] ?>">
-                                <input type="hidden" name="timeRangeID" class="timeRangeID" value="<?= $row['entranceRateID'] ?>">
+                                <input type="hidden" name="entranceRatesID" class="entranceRateID"
+                                    value="<?= $row['entranceRateID'] ?>">
+                                <input type="hidden" name="timeRangeID" class="timeRangeID"
+                                    value="<?= $row['entranceRateID'] ?>">
                                 <td>
                                     <select id="tourType" name="tourType" class="form-select tourType" disabled>
-                                        <option value="" disabled <?= htmlspecialchars($row['sessionType']) == "" ? "selected" : "" ?> selected>Tour Type</option>
-                                        <option value="<?= htmlspecialchars($row['sessionType']) == "Day" ? "Day" : "" ?>" <?= htmlspecialchars($row['sessionType']) == "Day" ? "selected" : "" ?>>Day Swimming</option>
-                                        <option value="<?= htmlspecialchars($row['sessionType']) == "Night" ? "Night" : "" ?>" <?= htmlspecialchars($row['sessionType']) == "Night" ? "selected" : "" ?>>Night Swimming</option>
-                                        <option value="<?= htmlspecialchars($row['sessionType']) == "Overnight" ? "Overnight" : "" ?>" <?= htmlspecialchars($row['sessionType']) == "Overnight" ? "selected" : "" ?>>Overnight Swimming</option>
+                                        <option value="" disabled
+                                            <?= htmlspecialchars($row['sessionType']) == "" ? "selected" : "" ?> selected>Tour
+                                            Type</option>
+                                        <option value="<?= htmlspecialchars($row['sessionType']) == "Day" ? "Day" : "" ?>"
+                                            <?= htmlspecialchars($row['sessionType']) == "Day" ? "selected" : "" ?>>Day Swimming
+                                        </option>
+                                        <option value="<?= htmlspecialchars($row['sessionType']) == "Night" ? "Night" : "" ?>"
+                                            <?= htmlspecialchars($row['sessionType']) == "Night" ? "selected" : "" ?>>Night
+                                            Swimming</option>
+                                        <option
+                                            value="<?= htmlspecialchars($row['sessionType']) == "Overnight" ? "Overnight" : "" ?>"
+                                            <?= htmlspecialchars($row['sessionType']) == "Overnight" ? "selected" : "" ?>>
+                                            Overnight Swimming</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control timeRange" name="timeRange" value="<?= htmlspecialchars($row['time_range']) ?>" readonly>
+                                    <input type="text" class="form-control timeRange" name="timeRange"
+                                        value="<?= htmlspecialchars($row['time_range']) ?>" readonly>
                                 </td>
                                 <td>
                                     <select name="visitorType" class="form-select visitorType" disabled>
-                                        <option value="" disabled <?= htmlspecialchars($row['ERcategory']) == "" ? "selected" : "" ?> selected>Visitor Type</option>
-                                        <option value="adult" <?= htmlspecialchars($row['ERcategory']) == "Adult" ? "selected" : "" ?>>Adult</option>
-                                        <option value="children" <?= htmlspecialchars($row['ERcategory']) == "Kids" ? "selected" : "" ?>>Children</option>
+                                        <option value="" disabled
+                                            <?= htmlspecialchars($row['ERcategory']) == "" ? "selected" : "" ?> selected>Visitor
+                                            Type</option>
+                                        <option value="adult"
+                                            <?= htmlspecialchars($row['ERcategory']) == "Adult" ? "selected" : "" ?>>Adult
+                                        </option>
+                                        <option value="children"
+                                            <?= htmlspecialchars($row['ERcategory']) == "Kids" ? "selected" : "" ?>>Children
+                                        </option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control entrancePrice" name="entrancePrice" value="<?= htmlspecialchars($row['ERprice']) ?>" readonly></td>
+                                <td><input type="text" class="form-control entrancePrice" name="entrancePrice"
+                                        value="<?= htmlspecialchars($row['ERprice']) ?>" readonly></td>
 
                                 <td>
                                     <div class="buttonContainer">
-                                        <button class="btn btn-primary editRatesBtn" onclick="editRates(this)"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
-                                        <button class="btn btn-danger cancelRatesBtn" onclick="cancelEditRates(this)" disabled><i class="fa-solid fa-delete-left"></i>Cancel</button>
+                                        <button class="btn btn-primary editRatesBtn" id="editPrimary"
+                                            onclick="editRates(this)"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
+                                        <button class="btn btn-danger cancelRatesBtn" id="cancelDanger"
+                                            onclick="cancelEditRates(this)" disabled><i
+                                                class="fa-solid fa-delete-left"></i>Cancel</button>
                                     </div>
 
                                 </td>
@@ -392,16 +446,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <!-- For Event -->
         <div class="eventContainer" id="eventContainer" style="display: none;">
-            <button class="btn btn-primary" id="addEventServiceBtn" onclick="addService()">Add a Service</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEventServiceModal"
+                id="eventAdd">Add a Service</button>
             <table class=" table table-striped" id="eventServices">
                 <thead>
-                    <th scope="col">Service Name</th>
+                    <th scope="col">Event Name</th>
                     <th scope="col">Price</th>
                     <th scope="col">Capacity</th>
                     <th scope="col">Duration</th>
                     <th scope="col">Description</th>
                     <th scope="col">Image</th>
-                    <th scope="col">Availability</th>
+                    <th scope="col">Event Status</th>
                     <th scope="col">Action</th>
 
                 </thead>
@@ -415,29 +470,30 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <td><input type="text" class="form-control" id="eventServiceDesc"></td>
                         <td><input type="text" class="form-control" id="eventServiceImage"></td>
                         <td> <select id="eventAvailability" name="eventAvailability" class="form-select" required>
-                                <option value="" disabled selected>Select Availability</option>
+                                <option value="" disabled selected>Select Status</option>
                                 <option value="available" id="available">Available</option>
                                 <option value="occupied" id="available">Occupied</option>
                                 <option value="reserved" id="reserved">Reserved</option>
                                 <option value="maintenance" id="maintenance">Maintenance</option>
                             </select>
                         </td>
-                        <td class="buttonContainer">
-                            <button class="btn btn-primary" id="addEventService" onclick="add()">Add</button>
-                            <button class="btn btn-primary" id="editEventService" onclick="edit()">Edit</button>
-                            <button class="btn btn-danger cancelBtn" id="deleteEventService">Delete</button>
+                        <td>
+                            <div class="buttonContainer">
+                                <button class="btn btn-primary" id="addEventService" onclick="add()">Add</button>
+                                <button class="btn btn-primary" id="editEventService" onclick="edit()">Edit</button>
+                                <button class="btn btn-danger cancelBtn" id="deleteEventService">Delete</button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <div class="saveBtnContainer" id="saveBtnEventContainer">
-                <button type="submit " class="btn btn-success" id="saveChanges" onclick="saveButton()">Save</button>
-            </div>
+
         </div>
 
         <!-- For Catering Food/Drink/Dessert -->
         <div class="cateringContainer" id="cateringContainer" style="display: none;">
-            <button class="btn btn-primary" id="addCateringServiceBtn" onclick="addService()">Add a Service</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#addCateringServiceModal" id="cateringAdd">Add a Service</button>
             <table class=" table table-striped" id="cateringServices">
                 <thead>
                     <th scope="col">Food Name</th>
@@ -445,36 +501,62 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <th scope="col">Category</th>
                     <th scope="col">Availability</th>
                     <th scope="col">Action</th>
-
                 </thead>
 
-                <tbody>
-                    <tr>
-                        <td><input type="text" class="form-control" id="foodName"></td>
-                        <td><input type="text" class="form-control" id="foodPrice"></td>
-                        <td><input type="text" class="form-control" id="foodCategory"></td>
+                <?php
+                $getFoodQuery = $conn->prepare("SELECT mi.*, sa.availabilityName FROM menuitem mi
+                LEFT JOIN  serviceavailability sa ON mi.availabilityID = sa.availabilityID");
+                if ($getFoodQuery->execute()) {
+                    $foodResult = $getFoodQuery->get_result();
+                    if ($foodResult->num_rows > 0) {
+                        while ($row = $foodResult->fetch_assoc()) {
+                ?>
+                            <tbody>
+                                <tr id="menuData">
+                                    <input type="hidden" name="foodID" id="foodID" class="form-control foodID" value="<?= htmlspecialchars($row['foodItemID']) ?>">
+                                    <td><input type="text" class="form-control foodName" name="foodName" id="foodName" value="<?= htmlspecialchars($row['foodName']) ?>" readonly></td>
+                                    <td><input type="text" class="form-control foodPrice" name="foodPrice" id="foodPrice" value="<?= htmlspecialchars($row['foodPrice']) ?>" readonly></td>
+                                    <td>
+                                        <select id="foodCategory" name="foodCategory" class="form-select foodCategory" disabled>
+                                            <option value="" disabled <?= empty($row['foodCategory']) ? 'selected' : '' ?>>Category</option>
+                                            <option value="chicken" <?= strtolower($row['foodCategory']) === 'chicken' ? 'selected' : '' ?>>Chicken</option>
+                                            <option value="pork" <?= strtolower($row['foodCategory']) === 'pork' ? 'selected' : '' ?>>Pork</option>
+                                            <option value="beef" <?= strtolower($row['foodCategory']) === 'beef' ? 'selected' : '' ?>>Beef</option>
+                                            <option value="pasta" <?= strtolower($row['foodCategory']) === 'pasta' ? 'selected' : '' ?>>Pasta</option>
+                                            <option value="vegetables" <?= strtolower($row['foodCategory']) === 'vegetables' ? 'selected' : '' ?>>Vegetables</option>
+                                            <option value="seafood" <?= strtolower($row['foodCategory']) === 'seafood' ? 'selected' : '' ?>>Seafood</option>
+                                            <option value="drink" <?= strtolower($row['foodCategory']) === 'drink' ? 'selected' : '' ?>>Drinks</option>
+                                            <option value="dessert" <?= strtolower($row['foodCategory']) === 'dessert' ? 'selected' : '' ?>>Desserts</option>
+                                        </select>
+                                    </td>
 
 
-                        <td> <select id="foodAvailability" name="foodAvailability" class="form-select" required>
-                                <option value="" disabled selected>Select Availability</option>
-                                <option value="available" id="available">Available</option>
-                                <option value="unavailable" id="unavailable">Unavailable</option>
-
-                            </select>
-                        </td>
-                        <td class="buttonContainer">
-                            <button class="btn btn-primary" id="editCateringService" onclick="edit()">Edit</button>
-                            <button class="btn btn-danger cancelBtn" id="deleteCateringService">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
+                                    <td>
+                                        <select id="foodAvailability" name="foodAvailability" class="form-select foodAvailability" disabled>
+                                            <option value="" disabled <?= empty($row['availabilityName']) ? 'selected' : '' ?>>Select Availability</option>
+                                            <option value="1" <?= $row['availabilityName'] === 'Available' ? 'selected' : '' ?>>Available</option>
+                                            <option value="5" <?= $row['availabilityName'] === 'Unavailable' ? 'selected' : '' ?>>Unavailable</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="buttonContainer">
+                                            <button class="btn btn-primary editMenuItem" onclick="editMenuItem(this)"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
+                                            <button class="btn btn-danger cancelBtn cancelEditItem" onclick="cancelEditItem(this)" disabled><i class="fa-solid fa-delete-left"></i>Cancel</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                    <?php
+                        }
+                    }
+                } else {
+                    error_log("Error executing " . $getFoodQuery->error);
+                }
+                    ?>
+                            </tbody>
             </table>
-            <div class="saveBtnContainer" id="saveBtnCateringContainer">
-                <button type="submit " class="btn btn-success" id="saveChanges" onclick="saveButton()">Save</button>
-            </div>
         </div>
 
-        <!-- FORM MODAL ADDING SERVICE-->
+        <!-- FORM MODAL ADDING COTTAGE, ENTERTAINEMENT, EVENT HALL SERVICE-->
         <form action="../../Function/Admin/Services/addServices.php" id="addingServiceForm" method="POST"
             enctype="multipart/form-data">
             <!-- Modal -->
@@ -510,16 +592,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     placeholder="e.g, 22 hours">
                             </div>
                             <div class="input-container">
-                                <p>Description</p>
+                                <label for="serviceDesc">Description</label>
                                 <textarea class="form-control" name="serviceDesc" id="serviceDesc"> </textarea>
                             </div>
 
                             <div class="input-container">
+                                <label for="serviceCategory">Service Category</label>
                                 <select id="serviceCategory" name="serviceCategory" class="form-select" required>
                                     <option value="" disabled selected>Service Category</option>
                                     <?php
                                     $hotel = 'Hotel';
-                                    $getCategory = $conn->prepare('SELECT * FROM resortservicescategories WHERE categoryName != ?');
+                                    $getCategory = $conn->prepare('SELECT * FROM resortservicescategory WHERE categoryName != ?');
                                     $getCategory->bind_param('s', $hotel);
                                     if ($getCategory->execute()) {
                                         $result =  $getCategory->get_result();
@@ -543,6 +626,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
 
                             <div class="input-container">
+                                <label for="serviceAvailability">Availability</label>
                                 <select id="serviceAvailability" name="serviceAvailability" class="form-select"
                                     required>
                                     <option value="" disabled selected>Select Availability</option>
@@ -569,9 +653,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="saveService">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="saveService" name="addResortService">Save</button>
                         </div>
                     </div>
                 </div>
@@ -579,26 +662,24 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </form>
         <!-- </form> -->
 
-        <!-- Modal -->
+        <!-- Modal for resort rates -->
         <form action="../../Function/Admin/Services/addServices.php" method="POST">
-            <div class="modal fade" id="addResortRatesModal" tabindex="-1"
-                aria-labelledby="addResortRatesModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addResortRatesModal" tabindex="-1" aria-labelledby="addResortRatesModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="addResortRatesModalLabel">Add a Resort Rate
                             </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="input-container">
                                 <label for="tourType">Tour Type</label>
-                                <select id="tourType" name="tourType" class="form-select"
-                                    required>
+                                <select id="tourType" name="tourType" class="form-select" required>
                                     <option value="" disabled selected>Tour Type</option>
                                     <?php
-                                    $getTourType = $conn->prepare("SELECT timeRangeID, session_type FROM entrancetimeranges");
+                                    $getTourType = $conn->prepare("SELECT timeRangeID, session_type FROM entrancetimerange");
                                     if ($getTourType->execute()) {
                                         $tourTypeResult = $getTourType->get_result();
                                         if ($tourTypeResult->num_rows > 0) {
@@ -606,7 +687,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                             while ($row = $tourTypeResult->fetch_assoc()) {
                                     ?>
-                                                <option value="<?= htmlspecialchars($row['session_type']) ?>"><?= htmlspecialchars($row['session_type']) ?></option>
+                                                <option value="<?= htmlspecialchars($row['session_type']) ?>">
+                                                    <?= htmlspecialchars($row['session_type']) ?></option>
 
                                     <?php
                                             }
@@ -619,11 +701,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="input-container">
                                 <label for="timeRange">Time Range</label>
-                                <select id="timeRange" name="timeRange" class="form-select"
-                                    required>
+                                <select id="timeRange" name="timeRange" class="form-select" required>
                                     <option value="" disabled selected>Tour Type</option>
                                     <?php
-                                    $getTimeRange = $conn->prepare("SELECT timeRangeID, time_range FROM entrancetimeranges");
+                                    $getTimeRange = $conn->prepare("SELECT timeRangeID, time_range FROM entrancetimerange");
                                     if ($getTimeRange->execute()) {
                                         $timeRangeResult =  $getTimeRange->get_result();
                                         if ($timeRangeResult->num_rows > 0) {
@@ -631,7 +712,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                             while ($row = $timeRangeResult->fetch_assoc()) {
                                     ?>
-                                                <option value="<?= htmlspecialchars($row['timeRangeID']) ?>"><?= htmlspecialchars($row['time_range']) ?></option>
+                                                <option value="<?= htmlspecialchars($row['timeRangeID']) ?>">
+                                                    <?= htmlspecialchars($row['time_range']) ?></option>
 
                                     <?php
                                             }
@@ -644,8 +726,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="input-container">
                                 <label for="serviceCapacity">Visitor Type</label>
-                                <select id="visitorType" name="visitorType" class="form-select"
-                                    required>
+                                <select id="visitorType" name="visitorType" class="form-select" required>
                                     <option value="" disabled selected>Visitor Type</option>
                                     <option value="Adult">Adult</option>
                                     <option value="Kids">Children</option>
@@ -653,14 +734,71 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="input-container">
                                 <label for="entrancePrice">Price</label>
-                                <input type="text" class="form-control" id="entrancePrice"
-                                    name="entrancePrice">
+                                <input type="text" class="form-control" id="entrancePrice" name="entrancePrice">
                             </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="saveRate" name="addResortRates">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- modal for event services -->
+        <form action="../../Function/Admin/Services/addServices.php" method="POST">
+            <div class="modal fade" id="addEventServiceModal" tabindex="-1" aria-labelledby="addEventServiceModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addEventServiceModalLabel">Add an Event
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-container">
+                                <label for="eventName">Event Name </label>
+                                <input type="text" class="form-control" id="eventName" name="eventName">
+                            </div>
+
+                            <div class="input-container">
+                                <label for="eventPrice">Price</label>
+                                <input type="text" class="form-control" id="eventPrice" name="eventPrice">
+                            </div>
+
+                            <div class="input-container">
+                                <label for="eventCapacity">Event Capacity </label>
+                                <input type="text" class="form-control" id="eventCapacity" name="eventCapacity">
+                            </div>
+
+                            <div class="input-container">
+                                <label for="eventDuration">Event Duration</label>
+                                <input type="text" class="form-control" id="eventDuration" name="eventDuration">
+                            </div>
+
+                            <div class="input-container">
+                                <label for="eventDesc">Event Description</label>
+                                <textarea class="form-control" id="eventDesc" name="eventDesc"></textarea>
+                            </div>
+                            <div class="input-container">
+                                <label for="eventImage">Image</label>
+                                <input type="file" class="form-control" id="eventImage" name="eventImage">
+                            </div>
+
+                            <div class="input-container">
+                                <label for="eventAvailability">Event Status</label>
+                                <select id="eventAvailability" name="eventAvailability" class="form-select" required>
+                                    <option value="" disabled selected>Status</option>
+                                    <option value="available">Available</option>
+                                    <option value="unavailable">Unavailable</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary" id="saveRate">Save</button>
                         </div>
                     </div>
@@ -668,18 +806,91 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
         </form>
 
+        <!-- modal for catering services -->
+        <form action="../../Function/Admin/Services/addServices.php" method="POST">
+            <div class="modal fade" id="addCateringServiceModal" tabindex="-1" aria-labelledby="addCateringModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addCateringServiceModalLabel">Add Catering Option
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-container">
+                                <label for="foodName">Food Name</label>
+                                <input type="text" class="form-control" id="foodName" name="foodName" required>
+                            </div>
+
+                            <div class="input-container">
+                                <label for="foodPrice">Price</label>
+                                <input type="text" class="form-control" id="foodPrice" name="foodPrice" required>
+                            </div>
+
+                            <div class="input-container">
+                                <label for="foodCategory">Food Category</label>
+                                <select id="foodCategory" name="foodCategory" class="form-select" required>
+                                    <option value="" disabled selected>Category</option>
+                                    <option value="chicken">Chicken</option>
+                                    <option value="pork">Pork</option>
+                                    <option value="beef">Beef</option>
+                                    <option value="pasta">Pasta</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="seafood">Seafood</option>
+                                    <option value="drink">Drinks</option>
+                                    <option value="dessert">Desserts</option>
+                                </select>
+                            </div>
+
+                            <div class="input-container">
+                                <label for="foodAvailability">Food Availability</label>
+                                <select id="foodAvailability" name="foodAvailability" class="form-select">
+                                    <option value="" disabled selected>Select Availability</option>
+                                    <?php
+                                    $UnavailableName = 'Unavailable';
+                                    $AvailableName = 'Available';
+                                    $getAvailability = $conn->prepare('SELECT * FROM serviceavailability WHERE availabilityName = ? OR availabilityName = ?');
+                                    $getAvailability->bind_param("ss", $UnavailableName, $AvailableName);
+                                    if ($getAvailability->execute()) {
+                                        $result = $getAvailability->get_result();
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
+                                                    <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                    <?php
+                                            }
+                                        }
+                                        $result->free();
+                                        $getAvailability->close();
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="saveFood" name="addFoodItem">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 
+
+
+
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1"
-        aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body p-0">
@@ -708,8 +919,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous">
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
 
     <!-- Sweetalert Link -->
@@ -723,7 +933,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
 
     <!-- Button Adding a service function -->
-    <script>
+    <!-- <script>
         // console.log("Script loaded2");
         const addResortServiceBtn = document.getElementById('addResortServiceBtn');
         const addResortRatesBtn = document.getElementById('addResortRatesBtn');
@@ -741,7 +951,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             action = 'addResortRates';
             modalAddResortRatesBtn.setAttribute('name', action);
         });
-    </script>
+    </script> -->
 
     <!-- Table JS -->
     <script>
@@ -886,7 +1096,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- For editing, cancelling, saving a service -->
     <script src="../../Assets/JS/Services/resortFunc.js"></script>
     <script src="../../Assets/JS/Services/resortRateFunc.js"></script>
-
+    <script src="../../Assets/JS/Services/cateringFunc.js"></script>
 
 
 </body>

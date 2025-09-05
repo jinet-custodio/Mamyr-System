@@ -2,10 +2,12 @@
   font-family: "Poppins";
   src: url(../Fonts/Poppins/Poppins-Regular.ttf);
 }
+
 @font-face {
   font-family: "Alkatra";
   src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
+
 @font-face {
   font-family: "Lora";
   src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
@@ -21,12 +23,13 @@
 }
 
 body {
-  background-image: url(../images/landingPage/landingPageBg.png);
+  background-image: url(../Images/landingPage/landingPageBg.png);
   background-repeat: no-repeat;
   background-position: fixed;
   background-size: cover;
   display: flex;
   max-height: 100vh;
+  width: 100%;
 }
 
 /* Edit mode CSS */
@@ -58,7 +61,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Gray out effect */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Gray out effect */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,6 +86,7 @@ body {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -96,9 +101,11 @@ body {
 
 .navbar.scrolled {
   background-color: white;
+
   .nav-link {
     color: black !important;
   }
+
   .nav-link:not(.dropdown-toggle):after {
     border-bottom: 4px solid rgb(126, 203, 242) !important;
   }
@@ -141,6 +148,7 @@ body {
 .dropdown-menu {
   background-color: rgb(126, 203, 242, 0.5) !important;
 }
+
 .nav-item.dropdown:hover .dropdown-menu {
   background-color: white !important;
   display: block;
@@ -152,18 +160,16 @@ body {
 
 .dropdown-item {
   font-size: 1.3vw;
+  font-weight: bold;
 }
 
-.navbar-collapse {
-  text-align: center;
-}
 
 ul {
   font-family: "Poppins";
   font-weight: lighter;
   list-style: none;
   display: table;
-  font-size: 1.3vw !important;
+  font-size: 1.5vw !important;
   text-transform: uppercase;
 }
 
@@ -199,6 +205,7 @@ ul {
   /* border: 1px solid black; */
   width: 50%;
 }
+
 .name {
   color: #fff;
   text-align: left;
@@ -252,6 +259,7 @@ ul {
 .form-check-input {
   border-color: black !important;
 }
+
 .label {
   display: flex;
   gap: 5vw;
@@ -351,6 +359,7 @@ input[type="number"]::-webkit-inner-spin-button {
   display: flex;
   justify-content: space-around;
   margin-top: 7vh;
+  margin-bottom: 5vw;
   background-color: #7dcbf2;
   padding: 5vw;
   height: 90vh;
@@ -382,6 +391,7 @@ input[type="number"]::-webkit-inner-spin-button {
   margin-bottom: 2vw;
   font-family: "Poppins";
 }
+
 .locationText {
   margin-top: 0.1vw;
 }
@@ -397,39 +407,50 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .gallery {
-  /* border: 1px solid black; */
-  margin: 2vw;
+  background-color: #f7d5b0;
+  /* margin: 2vw; */
   margin-bottom: 0;
   padding: 2vw;
-  padding-bottom: 0;
+  padding-bottom: 1vw;
 }
 
 .galleryTitle {
   font-family: "Poppins";
   font-size: 2vw;
+  margin-left: 2vw;
 }
 
-.galleryPictures {
-  /* border: 1px solid black; */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 2vw;
-  margin-top: 2vw;
+.carousel {
+  width: 65%;
+  margin: auto;
+}
+
+.carousel-inner {
+  width: 100% !important;
+}
+
+.carousel-item img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #007bff !important;
 }
 
 .seeMore {
-  margin: 1vh auto 3vh auto;
+  margin: 5vh auto 3vh auto;
   width: 15vw;
 }
 
 footer {
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
+  background: linear-gradient(to top,
+      rgba(255, 255, 255, 0.445) -50%,
+      rgb(62, 132, 158) 95%);
 }
 
 .pb-1 {
@@ -441,6 +462,7 @@ footer {
   width: 10vw;
   height: auto;
 }
+
 .mb-0 {
   font-family: "Lora";
   font-size: 1.5vw;
@@ -461,6 +483,7 @@ footer {
   align-items: center;
   gap: 5vw;
 }
+
 .locationFooter {
   /* border: 1px solid black; */
   width: 30%;
@@ -536,6 +559,7 @@ footer {
   .description {
     margin: auto;
   }
+
   .descriptionText {
     text-align: justify;
     font-size: clamp(23px, calc(2vw + 4px), 35px);
@@ -572,15 +596,16 @@ footer {
     font-size: clamp(10px, calc(1.5vh + 4px), 12px);
     text-align: center !important;
   }
+
   .navbar-collapse {
     background-color: white;
+
     .nav-link {
       color: black !important;
-      text-align: center;
     }
   }
 
-.white-bg {
+  .white-bg {
     background-color: white;
   }
 
@@ -631,6 +656,7 @@ footer {
   .wsText {
     margin-top: 8vw !important;
     width: 80%;
+
     .line {
       width: 100%;
     }
@@ -647,12 +673,15 @@ footer {
     justify-content: center;
     align-items: center;
     width: 80%;
+
     .line {
       width: 30%;
     }
+
     h4 {
       font-size: clamp(18px, calc(2vw + 4px), 12px) !important;
     }
+
     h5 {
       font-size: clamp(15px, calc(1.5vw + 4px), 12px) !important;
     }
@@ -664,11 +693,8 @@ footer {
     height: clamp(4vh, calc(1.5vw + 4px), 2vh) !important;
     width: auto;
   }
-#navUL {
-        position: absolute !important;
-        right: 2vw !important;
-    }
-  
+
+
   .emailAddressText {
     margin-top: 0.1vw;
   }
@@ -758,44 +784,31 @@ footer {
   }
 
   .mb-0 {
-    font-size: 2vw;
+    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
   }
 
-  .locationFooter {
-    width: 50%;
+  .logo {
+    width: 15vw;
   }
 
-  .reservationTitle,
-  .locationTitle {
-    font-size: 2vw;
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
   }
 
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: 1.5vw;
-  }
-
-  .socialIcons {
-    width: 20%;
-    display: flex;
-    margin: auto;
-    justify-content: space-between;
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
   }
 
   .socialIcons a {
-    height: 6vh;
-    padding: 1vw;
-    text-decoration: none;
-    background-color: rgb(255, 255, 255);
-    margin: 5px;
-    border-radius: 50%;
+    justify-items: center;
+    align-items: center;
   }
 
   .socialIcons a i {
-    font-size: 3.5vw;
+    font-size: 3vw;
   }
 }
+
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
   .titleContainer {
@@ -833,6 +846,7 @@ footer {
     h4 {
       font-size: clamp(30px, calc(2vw + 4px), 35px) !important;
     }
+
     h5 {
       font-size: clamp(25px, calc(1.5vw + 4px), 20px) !important;
     }
@@ -875,6 +889,7 @@ footer {
     margin: auto;
     margin-top: 2vh;
     width: 30%;
+
     .custom-btn {
       font-size: large !important;
     }
@@ -883,6 +898,7 @@ footer {
   .announcements {
     height: clamp(300px, 90vh, 700px) !important;
   }
+
   .post {
     width: calc(100% - 30vw);
     height: clamp(100px, 90vh, 450px) !important;
@@ -892,8 +908,10 @@ footer {
     justify-content: center;
   }
 }
+
 /* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+
   .img5,
   .img6,
   .img4 {
@@ -920,8 +938,66 @@ footer {
   }
 }
 
+@media (max-width: 991.98px) {
+  .nav-link, #logOutBtn {
+    font-size: 2vw !important;
+  }
+
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
+  #navUL {
+    position: absolute !important;
+    right: 2vw !important;
+  }
+
+  .nav-item {
+    margin-top: 5px;
+  }
+
+  #navbarNav .nav-link,
+  #navbarNav .dropdown-item {
+    color: black !important;
+  }
+
+  #profileAndNotif {
+    background-color: transparent;
+  }
+
+  .navbar-nav {
+    background-color: rgb(251, 250, 250);
+  }
+
+  #navbar-half2 .btn-outline-danger {
+    color: black !important;
+    border-color: white !important;
+    width: 100%;
+    text-align: left;
+  }
+
+  .fc-daygrid-day-top a {
+    font-size: clamp(2vw, 1.8vw, 1.6vw);
+  }
+}
+
+@media (max-width: 991.98px) and (orientation:portrait) {
+  .nav-item {
+    margin-top: 5px;
+  }
+
+  .nav-link, #logOutBtn {
+    font-size: 2vw !important;
+  }
+
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
+}
+
 /* Phone size */
-@media screen and (min-width: 360px) and (max-width: 599px) {
+@media screen and (max-width: 599px) {
   .titleContainer {
     height: calc(100vh - 20vh);
     padding: 12vw;
@@ -955,11 +1031,12 @@ footer {
     font-size: clamp(10px, calc(1.5vh + 4px), 12px);
     text-align: center !important;
   }
+
   .navbar-collapse {
     background-color: white;
+
     .nav-link {
       color: black !important;
-      text-align: center;
     }
   }
 
@@ -967,20 +1044,7 @@ footer {
     background-color: white;
   }
 
-  .navbar-toggler {
-    float: right;
-    background-color: #ffffff !important;
-    margin: 3vw;
-    border: none;
-
-    &:focus,
-    &:active {
-      outline: none !important;
-      box-shadow: none !important;
-      border: none;
-    }
-  }
-
+ 
   .navbar.scrolled {
     background-color: none !important;
   }
@@ -1045,6 +1109,7 @@ footer {
   .wsText {
     margin-top: 8vw !important;
     width: 80%;
+
     .line {
       width: 100%;
     }
@@ -1066,9 +1131,11 @@ footer {
     margin-top: 10vh;
     height: 80vh;
     padding-bottom: 8vh;
+
     h5 {
       font-size: 15px;
     }
+
     img {
       height: 3vh;
     }
@@ -1079,6 +1146,7 @@ footer {
     align-items: center;
     margin: 1vh 3vw 0 0;
     width: 80%;
+
     .line {
       width: 40%;
     }
@@ -1154,10 +1222,12 @@ footer {
   .tomorrowText {
     font-size: clamp(12px, calc(1.5vh + 4px), 20px);
   }
+
   .date,
   .time {
     font-size: clamp(12px, calc(1.5vh + 4px), 20px);
   }
+
   .vr {
     height: 3.5vw;
     margin-top: 2.5vw;
@@ -1172,41 +1242,43 @@ footer {
   }
 
   .mb-0 {
-    font-size: 2vw;
+    font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
+  }
+
+  .logo {
+    width: 18vw;
+  }
+
+  .reservation {
+    width: 20%;
   }
 
   .locationFooter {
     width: 50%;
   }
 
-  .reservationTitle,
-  .locationTitle {
-    font-size: 2.5vw;
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: 2vw;
-  }
-
-  .socialIcons {
-    width: 20%;
-    display: flex;
-    margin: auto;
-    justify-content: space-between;
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
   }
 
   .socialIcons a {
-    height: 6vh;
-    padding: 1vw;
-    text-decoration: none;
-    background-color: rgb(255, 255, 255);
-    margin: 5px;
-    border-radius: 50%;
+    justify-items: center;
+    align-items: center;
+    padding: 0.5vw 1.5vw;
   }
 
   .socialIcons a i {
-    font-size: 4vw;
+    font-size: 3.5vw;
+  }
+}
+
+@media (max-width: 400px) {
+  #navUL {
+    position: absolute !important;
+    right: 2vw !important;
   }
 }

@@ -127,7 +127,7 @@ body {
 
 .backArrowContainer {
   position: absolute;
-  width: 90%;
+  width: 2%;
   margin: 0 5rem;
 }
 
@@ -246,10 +246,16 @@ th {
   width: 5vw;
 }
 
+.btn-outline-secondary {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
 #addResortServiceBtn,
 #addResortRatesBtn,
-#addEventServiceBtn,
-#addCateringServiceBtn {
+#eventAdd,
+#cateringAdd,
+#addEventModal {
   width: 10vw;
   float: right;
   margin: 1vw 0 1vw 0;
@@ -257,8 +263,16 @@ th {
 
 .buttonContainer {
   display: flex;
+  justify-content: center;
   gap: 1vw;
-  /* padding: 10vw; */
+}
+
+#editPrimary,
+#cancelDanger,
+#addEventService,
+#editEventService,
+#deleteEventService {
+  width: 5vw;
 }
 
 .saveBtnContainer {
@@ -276,4 +290,9 @@ th {
 #resortRates-link {
   border: none;
   background-color: transparent;
+}
+
+label {
+  font-weight: bold;
+  margin: 0.5vw 0 0.5vw 0;
 }

@@ -61,17 +61,14 @@ function editResortService(editBtn) {
       availability: thisRow.querySelector(".resortAvailability").value,
     };
     // console.log(resortData['imageData']);
-    fetch(
-      "../../Function/Admin/Services/Function/Admin/Services/updateResortServices.php",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    fetch("../../../Function/Admin/Services/updateResortServices.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
 
-        body: JSON.stringify(resortData),
-      }
-    )
+      body: JSON.stringify(resortData),
+    })
       .then((response) => {
         if (!response.ok) throw new Error("Network error");
         return response.json();

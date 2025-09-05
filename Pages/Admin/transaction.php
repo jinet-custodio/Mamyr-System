@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -8,6 +10,23 @@ checkSessionTimeout($timeout = 3600);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
@@ -44,7 +63,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <div class="topSection">
         <div class="dashTitleContainer">
             <a href="adminDashboard.php" class="dashboardTitle" id="dashboard">
-                <img src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
+                <img src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -52,7 +71,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
             $getNotifications->bind_param("s", $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -103,7 +122,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
 
             if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -236,11 +255,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <tbody>
                     <?php
                     $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, b.paymentMethod, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
-                    FROM confirmedBookings cb
-                    LEFT JOIN bookings b ON cb.bookingID = b.bookingID
-                    LEFT JOIN users u ON b.userID = u.userID
-                    LEFT JOIN bookingPaymentStatus bps ON cb.paymentStatus = bps.paymentStatusID
-                    LEFT JOIN statuses stat ON cb.paymentApprovalStatus = stat.statusID
+                    FROM confirmedbooking cb
+                    LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                    LEFT JOIN user u ON b.userID = u.userID
+                    LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID
+                    LEFT JOIN status stat ON cb.paymentApprovalStatus = stat.statusID
                     ");
                     $payments->execute();
                     $paymentsResult = $payments->get_result();
@@ -306,39 +325,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     }
 
                     ?>
-
-                    <!-- <tr>
-                        <td>Alliah Reyes</td>
-                        <td>3,500 Php</td>
-                        <td>3,500 Php</td>
-                        <td><span class="btn btn-danger w-75" id="unpaidStatus">No Payment</span></td>
-                        <td>Cash</td>
-                        <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>Shan Ignacio</td>
-                        <td>1,500 Php</td>
-                        <td>0</td>
-                        <td><span class="btn btn-primary w-75" id="partiallyPaidStatus">Partially Paid</span></td>
-                        <td>Cash</td>
-                        <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>Jeanette Custodio</td>
-                        <td>1,500 Php</td>
-                        <td>0</td>
-                        <td><span class="btn btn-success w-75" id="fullyPaidStatus">Fully Paid</span></td>
-                        <td>Cash</td>
-                        <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>Jannine Correa</td>
-                        <td>1,500 Php</td>
-                        <td>0</td>
-                        <td><span class="btn btn-success w-75" id="fullyPaidStatus">Fully Paid</span></td>
-                        <td>Cash</td>
-                        <td><button class="btn btn-warning w-75">View</button></td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>

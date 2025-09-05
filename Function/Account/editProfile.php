@@ -22,7 +22,7 @@ if (isset($_POST['changePfpBtn'])) {
     }
 
     if ($imageData !== NULL) {
-        $query = $conn->prepare("UPDATE users SET userProfile = ? WHERE userID = ? AND userRole = ?");
+        $query = $conn->prepare("UPDATE user SET userProfile = ? WHERE userID = ? AND userRole = ?");
         $query->bind_param("sii", $imageData, $userID, $userRole);
 
         if ($query->execute()) {

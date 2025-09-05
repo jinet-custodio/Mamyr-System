@@ -1,16 +1,37 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 
 session_start();
-require '../../Function/sessionFunction.php';
+require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
-require '../../Function/functions.php';
+require_once '../../Function/functions.php';
 addToAdminTable($conn);
 
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -22,9 +43,9 @@ $bookingTypes =  $conn->prepare("SELECT
                                 b.bookingType,
                                 COUNT(*) AS totalBookings
                             FROM 
-                                confirmedBookings cb 
+                                confirmedbooking cb 
                             JOIN 
-                                bookings b ON cb.bookingID = b.bookingID 
+                                booking b ON cb.bookingID = b.bookingID 
                             WHERE 
                                 cb.paymentApprovalStatus = ?
                                 AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)
@@ -43,6 +64,9 @@ if ($bookingTypesResult->num_rows > 0) {
         $bookingTypeCount[] = (float) $row['totalBookings'];
     }
 }
+$bookingTypesResult->free();
+$bookingTypes->close();
+
 
 $revenue =  $conn->prepare("SELECT 
                                 CONCAT(
@@ -63,9 +87,9 @@ $revenue =  $conn->prepare("SELECT
                                 SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN cb.confirmedFinalBill ELSE 0 END) AS Sun
 
                             FROM 
-                                confirmedBookings cb
+                                confirmedbooking cb
                             JOIN 
-                                bookings b ON cb.bookingID = b.bookingID
+                                booking b ON cb.bookingID = b.bookingID
                             WHERE 
                                 cb.paymentApprovalStatus = ?
                                 AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)
@@ -92,6 +116,9 @@ if ($revenueResult->num_rows > 0) {
     $revenues[] = (float) $row['Sat'];
     $revenues[] = (float) $row['Sun'];
 }
+$revenueResult->free();
+$revenue->close();
+
 
 $hotel = 1;
 $availabilityCount = [];
@@ -104,11 +131,11 @@ $availabilityQuery = $conn->prepare("SELECT
                                         sa.availabilityName
                                     FROM (
                                         SELECT RServiceName, RSAvailabilityID
-                                        FROM resortAmenities
+                                        FROM resortamenity
                                         WHERE RScategoryID = ?
                                         GROUP BY RServiceName
                                     ) AS uniqueRooms
-                                    JOIN serviceAvailability sa ON uniqueRooms.RSAvailabilityID = sa.availabilityID
+                                    JOIN serviceavailability sa ON uniqueRooms.RSAvailabilityID = sa.availabilityID
                                     GROUP BY sa.availabilityName
                                     ");
 $availabilityQuery->bind_param("i", $hotel);
@@ -137,6 +164,9 @@ if ($availabilityResult->num_rows > 0) {
     // print_r($availabilityName);
     // print_r($availabilityCount);
 }
+$availabilityResult->free();
+$availabilityQuery->close();
+
 ?>
 
 <!DOCTYPE html>
@@ -170,7 +200,7 @@ if ($availabilityResult->num_rows > 0) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
             $getNotifications->bind_param("s", $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -221,7 +251,7 @@ if ($availabilityResult->num_rows > 0) {
             }
 
             if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -347,8 +377,8 @@ if ($availabilityResult->num_rows > 0) {
                                         --  All bookings this week
                                         COUNT(DISTINCT b.bookingID) AS bookingsThisWeek
 
-                                    FROM bookings b
-                                    LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID
+                                    FROM booking b
+                                    LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
                                     CROSS JOIN (
                                         SELECT
                                             DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS weekStart,
@@ -445,7 +475,7 @@ if ($availabilityResult->num_rows > 0) {
                     </div>
 
                     <div class="card-body">
-                        <h2 class="revenueTotal">₱<?= number_format($totalRevenueThisWeek, 2) ?></h2>
+                        <h2 class="revenueTotal">₱<?= number_format($totalRevenueThisWeek ?? 0, 2) ?></h2>
                     </div>
 
                     <!-- <h6 class="card-footer">This Week</h6> -->

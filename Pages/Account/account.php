@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -8,6 +10,24 @@ checkSessionTimeout($timeout = 3600);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
@@ -57,8 +77,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     }
 
 
-    $getData = $conn->prepare("SELECT u.*, ut.typeName as roleName FROM users u
-            INNER JOIN usertypes ut ON u.userRole = ut.userTypeID
+    $getData = $conn->prepare("SELECT u.*, ut.typeName as roleName FROM user u
+            INNER JOIN usertype ut ON u.userRole = ut.userTypeID
             WHERE u.userID = ? AND userRole = ?");
     $getData->bind_param("ii", $userID, $userRole);
     $getData->execute();
@@ -113,6 +133,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <a href="../Admin/adminDashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
+                <?php } elseif ($role === 'Business Partner') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } ?>
             </div>
             <div class="sidebar-header text-center">
@@ -123,16 +147,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpDashboard.php" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Dashboard</span>
+                        </a>
+                    </li>
+                <?php } ?>
                 <li class="sidebar-item">
                     <a href="account.php" class="list-group-item active">
                         <i class="fa-regular fa-user sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="loginSecurity.php" class="list-group-item">
-                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
-                        <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
 
@@ -151,7 +177,33 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </a>
                     </li>
                 <?php } ?>
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpBookings.php" class="list-group-item">
+                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpServices.php" class="list-group-item">
+                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Revenue</span>
+                        </a>
+                    </li>
+                <?php } ?>
 
+                <li class="sidebar-item">
+                    <a href="loginSecurity.php" class="list-group-item">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
+                    </a>
+                </li>
                 <li class="sidebar-item">
                     <a href="deleteAccount.php" class="list-group-item">
                         <i class="fa-solid fa-user-slash sidebar-icon"></i>
@@ -262,9 +314,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="button-container">
                     <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
                         onclick="enableEditing()">Edit</button>
-                    <button type="submit" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
+                    <button type="button" onclick="cancelEdit()" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
                         style="display: none;">Cancel</button>
-                    <button type="button" onclick="cancelEdit()" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
+                    <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
                         style="display: none;">Save</button>
                 </div>
             </form>

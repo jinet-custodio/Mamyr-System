@@ -50,6 +50,23 @@
   }
 }
 
+#amenitiesDropdown,
+.show {
+  width: 100%;
+}
+
+ul.dropdown-menu {
+  margin-top: -3vw !important;
+}
+
+a.dropdown-item {
+  font-size: 1.6vw;
+}
+
+.amenities {
+  margin-top: 0;
+}
+
 .list-group {
   font-family: "Lora";
   font-size: 18px;
@@ -173,4 +190,25 @@ iframe {
   width: 90%;
   text-align: center;
   margin: 2vw auto;
+}
+
+#newBlogBtn {
+  float: right;
+  margin-right: 6vw;
+}
+
+.modal-header {
+  font-weight: bold;
+  font-family: "Poppins";
+}
+
+label {
+  font-family: "Poppins";
+  margin: 0.5vw 0 0.5vw 0;
+  display: flex;
+  justify-content: center;
+}
+
+.form-control {
+  font-family: "Poppins";
 }

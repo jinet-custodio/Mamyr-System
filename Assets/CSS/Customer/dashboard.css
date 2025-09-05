@@ -37,21 +37,6 @@ body {
   max-height: 100vh;
 }
 
-/* body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: inherit;
-  background-repeat: inherit;
-  background-position: inherit;
-  background-size: inherit;
-  filter: blur(7px);
-  z-index: -1;
-} */
-
 .navbar {
   position: fixed;
   width: 100%;
@@ -62,6 +47,7 @@ body {
   background-color: white;
   .nav-link {
     color: black !important;
+    padding: 10px 15px !important;
   }
   .nav-link:not(.dropdown-toggle):after {
     border-bottom: 4px solid #000000 !important;
@@ -79,24 +65,30 @@ body {
 .nav-item {
   font-family: "Poppins";
   font-weight: lighter;
-  margin-top: 15px;
-  font-size: 1.3vw !important;
+  font-size: 1.5vw;
   /* margin-left: 3vw; */
 }
 
+  .nav-link {
+    padding: 10px 15px !important;
+  }
 .nav-link,
 #logOutBtn {
   text-decoration: none;
   display: inline-block;
-  padding: 10px 15px !important;
+  padding: 10px 15px;
   position: relative;
   color: white !important;
   letter-spacing: 0.1em;
 }
 
+#profileAndNotif {
+  padding: 0.6vw;
+}
+
 #logOutBtn {
   font-family: "Poppins";
-  font-size: 1.3vw;
+  font-size: 1.5vw;
   margin-right: 2vw;
   border: none;
 }
@@ -151,15 +143,23 @@ body {
 
 .notification-container{
   margin: 1rem;
-
   button{
     background-color: transparent;
     border: none;
   }
 }
 
+.notificationIcon {
+    display: flex;
+    align-items: center;
+    height: 2.5vw;
+    aspect-ratio: 1;
+}
 
-
+#toggledNav {
+    position: absolute !important;
+    right: 2vw !important;
+  }
 
 .topContainer {
   display: flex;
@@ -175,8 +175,10 @@ body {
 .titleContainer {
   /* border: 1px solid black; */
   width: 50%;
-  height: 50vh;
   margin-left: 2vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .mamyrTitle {
@@ -223,10 +225,6 @@ body {
   }
 }
 
-.navbar-collapse {
-  text-align: right;
-}
-
 .navbar-toggler {
   float: right;
   background-color: #ffffff !important;
@@ -264,7 +262,7 @@ body {
 }
 
 .calendar-container {
-  width: 48% !important;
+  width: 48%;
 }
 
 a {
@@ -277,7 +275,6 @@ a {
   margin: 0 auto;
   /* background-color: #fffefe; */
   border: none;
-  height: 35vw;
 }
 
 .fc-scroller {
@@ -302,6 +299,11 @@ a {
 .fc .fc-toolbar.fc-header-toolbar {
   margin-bottom: 0;
 }
+
+ thead {
+  font-size: clamp(1.1vw, calc(1.1vw + 3px), 1.5vw);
+}
+
 
 .fc .fc-toolbar-title {
   font-family: "Poppins" !important;
@@ -353,7 +355,7 @@ a {
 }
 
 .fc-daygrid-day-top a {
-  font-size: 1.1vw !important;
+  font-size: 1.3vw;
 }
 
 .fc .fc-daygrid-day-frame {
@@ -401,15 +403,11 @@ a {
   background-color: #218838;
 }
 
-thead {
-  font-size: 1.3vw;
-}
-/* di ko sure 'to test nalang pag may event na nalagay*/
+
 
 .welcomeSection {
   display: flex;
-  margin-top: 10vw;
-  /* border: 1px solid black; */
+  margin-top: clamp(10vw, 12vw, 14vw);
   width: 100%;
 }
 
@@ -442,7 +440,7 @@ thead {
 
 .wsTitle {
   font-family: "Poppins";
-  font-size: 25px;
+  font-size: clamp(2vw, 1.8vw, 1.6vw);
   text-align: center;
   color: rgb(0, 0, 0);
 }
@@ -451,7 +449,7 @@ thead {
   font-family: "Poppins";
   text-align: justify;
   margin-top: 30px;
-  font-size: 20px;
+  font-size: clamp(1.6vw, 1.4vw, 1.2vw);
 }
 
 .contact {
@@ -460,14 +458,22 @@ thead {
   margin-top: 7vh;
   background-color: #7dcbf2;
   padding: 5vw;
-  height: 90vh;
 }
 
 .contactText {
-  /* border: 1px solid black; */
-  justify-content: center;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
   width: 45%;
+}
+
+.contacts h5{
+  font-size: clamp(1.5vw, 1.3vw, 1vw);
+}
+
+.contactTitle {
+    font-size: clamp(2vw, 1.8vw, 1.6vw);
 }
 
 .location,
@@ -475,7 +481,6 @@ thead {
 .email {
   display: flex;
   gap: 3vw;
-  margin-top: 1vw;
 }
 
 .locationIcon,
@@ -500,7 +505,7 @@ thead {
 .googleMap {
   /* border: 1px solid black; */
   width: 45%;
-  height: 60vh;
+  height: 30vw;
 }
 
 .gallery {
@@ -511,17 +516,19 @@ thead {
 
 .galleryTitle {
   font-family: "Poppins";
-  font-size: 2vw;
+  font-size: clamp(2vw, 1.8vw, 1.6vw);
 }
 
 .galleryPictures {
-  /* border: 1px solid black; */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 2vw;
   margin-top: 2vw;
+  img {
+    height: 100%;
+  }
 }
 
 .seeMore {
@@ -532,7 +539,7 @@ thead {
 
 footer {
   /* border: 1px solid black; */
-
+  margin-top: auto !important;
   background: linear-gradient(
     to top,
     rgba(255, 255, 255, 0.445) -50%,
@@ -551,7 +558,7 @@ footer {
 }
 .mb-0 {
   font-family: "Lora";
-  font-size: 1.5vw;
+  font-size: 1.7vw;
   font-weight: bold;
   color: #ffff;
 }
@@ -587,7 +594,7 @@ footer {
 .addressTextFooter {
   font-family: "Poppins ExtraLight";
   color: #fff;
-  font-size: 1vw;
+  font-size: clamp(1vw, 1.2vw, 1.3vw);
 }
 
 .socialIcons {
@@ -616,15 +623,26 @@ footer {
 }
 
 .socialIcons a:hover i {
-  color: #007bff;
+  color: #c1a534;
   transition: 0.5s;
 }
 
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
+  .topContainer {
+    justify-content: start;
+  }
   .titleContainer {
     height: calc(100vh - 15vh);
-    padding: calc(12vh - 3vh);
+    width: 40%;
+  }
+
+  .calendar-container {
+    width: 60%;
+  }
+
+    .fc .fc-toolbar.fc-header-toolbar {
+    padding-bottom: 2vw;
   }
 
   .navbar {
@@ -633,7 +651,6 @@ footer {
 
   .mamyrTitle {
     width: 100%;
-    margin-top: clamp(15vh, 5vh, 2vh) !important;
   }
 
   .name {
@@ -683,6 +700,25 @@ footer {
     margin-top: 3vw;
     box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
   }
+
+  .account-nav {
+    .profile-pic {
+        height: clamp(6vw, 6.8vw, 7.4vw);
+    }
+}
+
+
+  .notification-container {
+    margin: 0.3rem;
+  }
+
+  .notificationIcon {
+    display: flex;
+    align-items: center;
+    height:  clamp(4vw, 4.5vw, 5vw);;
+    aspect-ratio: 1;
+}
+
 
   .label {
     display: flex;
@@ -839,7 +875,7 @@ footer {
 
   
   #calendar {
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
     border: none;
     height: 53vw;
@@ -854,49 +890,44 @@ footer {
   }
 
   .mb-0 {
-    font-size: 2vw;
+    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
   }
 
-  .locationFooter {
-    width: 50%;
+  .logo {
+    width: 15vw;
   }
 
-  .reservationTitle,
-  .locationTitle {
-    font-size: 2vw;
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
   }
 
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: 1.5vw;
-  }
-
-  .socialIcons {
-    width: 20%;
-    display: flex;
-    margin: auto;
-    justify-content: space-between;
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
   }
 
   .socialIcons a {
-    height: 6vh;
-    padding: 1vw;
-    text-decoration: none;
-    background-color: rgb(255, 255, 255);
-    margin: 5px;
-    border-radius: 50%;
+    justify-items: center;
+    align-items: center;
   }
-
-  .socialIcons a i {
-    font-size: 3.5vw;
-  }
+ 
+    .socialIcons a i { 
+      font-size: 3vw;
+    }
 }
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+  .topContainer {
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    .mamyrTitle {
+      margin-top: 0;
+    }
+  }
+
   .titleContainer {
-    height: calc(100vh - 20vh);
-    padding: calc(12vh - 3vh);
+    height: calc(15vh);
+    width: 90%;
   }
 
   .navbar.scrolled {
@@ -923,6 +954,42 @@ footer {
 
   .contact {
     height: 60vh;
+  }
+
+  .contacts {
+    display: flex;
+    justify-content: start;
+    width: 100%;
+  }
+
+  .calendar-container {
+    width: 80%;
+    #calendar {
+      margin-top: 4vw;
+    }
+  }
+
+  div .legend {
+    font-size: 2.7vw !important;
+  }
+
+
+  .fc-daygrid-day-top a {
+    font-size: 2vw;
+  }
+
+  thead {
+    font-size: 2.3vw;
+  }
+
+  .wsTitle {
+    font-size: clamp(2.7vw, 2.5vw, 2.3vw);
+    color: whitesmoke;
+  }
+
+  .wsDescription {
+      font-size: clamp(2.7vw, 2.5vw, 2.3vw);
+      color: whitesmoke;
   }
 
   .contactText {
@@ -1016,11 +1083,9 @@ footer {
   }
 
   #calendar {
-    width: 48%;
+    width: 100%;
     margin: 0 auto;
-    /* background-color: #fffefe; */
-    border: none;
-    height: 53vw;
+    margin-top: 2vw;
   }
 
   .fc .fc-daygrid-day-frame {
@@ -1028,37 +1093,140 @@ footer {
   }
 }
 
-/* Phone size */
-@media screen and (min-width: 370px) and (max-width: 599px) {
+/* for Nav Bar adjustment */
+@media (max-width: 991.98px) {
   .topContainer {
-    display: grid;
-    justify-content: start;
+    margin-top: 0;
+    .mamyrTitle {
+      margin-top: 0;
+    }
+  }
+
+  .nav-link, #logOutBtn {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
+  .nav-item {
+    margin-top: 5px;
+  }
+
+    #navbarNav .nav-link,
+    #navbarNav .dropdown-item {
+     color: black !important; 
+    }
+
+    #profileAndNotif {
+      background-color: transparent;
+    }
+
+    .navbar-nav {
+      background-color: rgb(251, 250, 250);
+    }
+
+    #navbar-half2 .btn-outline-danger {
+        color: black !important;
+        border-color: white !important;
+        width: 100%;
+        text-align: left;
+    }
+
+    .fc-daygrid-day-top a {
+      font-size: clamp(2vw, 1.8vw, 1.6vw);
+    }
+}
+
+@media (max-width: 991.98px) and (orientation:portrait) {
+.topContainer {
+   .mamyrTitle {
+     margin-top: 10vh;
+      }
+    }
+  .calendar-container {
+    margin-top: 3vh;
+  }
+    .nav-item {
+    margin-top: 5px;
+  }
+
+  .nav-link {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+
+}
+
+
+/* Phone size */
+@media screen and (max-width: 600px) {
+  .contacts {
+    width: 100%;
+  }
+
+  .contactTitle{
+    font-size: 18px;
+}
+  .account-nav {
+    .profile-pic {
+     height: clamp(9vw, 8vw, 7vw);
+    }
+  }
+  .notificationIcon {
+      height: clamp(5vw, 4.5vw, 4vw);
+  }
+
+  .nav-item {
+    font-size: 3vw;
+  }
+
+  .notification-container button{
+    padding: 0;
+  }
+  .topContainer {
+    flex-direction: column;
+  }
+
+   #toggledNav {
+    position: absolute !important;
+    right: 4vw !important;
   }
 
   .titleContainer {
-    height: calc(50vh - 20vh);
-    padding: 0;
-    width: 150%;
-    display: grid;
-    justify-content: start;
-    margin-left: 10vw;
+    margin-left: 0;
+    width: 70%;
+    h1 {
+    font-size: clamp(7vw, 6vw, 5vw);
+    }
+  }
+
+  .nameOfUser {
+    font-size: clamp(9vw, 8vw, 7vw);
   }
 
   #calendar {
-    width: 150%;
-    margin: 0 auto 5vw 10vw;
     /* background-color: #fffefe; */
     border: none;
-    height: 70vw;
     overflow-y: hidden;
+  }
+
+  div .legend {
+    font-size: 2.4vw !important;
   }
 
   .fc .fc-button-primary:disabled {
     font-size: clamp(1.9vw, calc(2.1vw + 4px), 2.5vw);
     padding: 0.2vw;
-    height: 4vw;
+    height: 5vw;
     width: 10vw;
     margin-left: -5vw;
+  }
+
+  .fc .fc-button {
+    padding: 0 0.4em;
   }
 
   .fc .fc-daygrid-day-frame {
@@ -1067,7 +1235,7 @@ footer {
   }
 
   .fc-daygrid-day-top a {
-    font-size: clamp(1.7vw, calc(1.9vw + 4px), 2.1vw) !important;
+    font-size: clamp(1.9vw, calc(2vw + 4px), 2.5vw) !important;
   }
 
   .fc .fc-bg-event .fc-event-title {
@@ -1075,7 +1243,7 @@ footer {
   }
 
   thead {
-    font-size: clamp(1.6vw, calc(1.8vw + 2px), 2.1vw);
+    font-size: clamp(1.8vw, calc(2vw + 2px), 2.4vw);
   }
 
   .fc-header-toolbar {
@@ -1089,12 +1257,34 @@ footer {
 
   .fc-button-group {
     font-size: clamp(1.9vw, calc(2.1vw + 4px), 2.5vw);
-    height: 4vw;
+    height: 5vw;
     padding: 0.2vw;
   }
+
+  .fc-button-group > .fc-button {
+    height: 5vw;
+  }
+
   .mamyrTitle {
     width: 100%;
     margin-top: clamp(10vh, 6vh, 2vh) !important;
+  }
+
+  .calendar-container {
+    width: 90%;
+  }
+
+  .legends {
+    width: 80%;
+  }
+
+  .fc .fc-toolbar.fc-header-toolbar {
+    padding-bottom: 3vw;
+  }
+
+  #calendar {
+    width: 90%;
+    margin: 2vw auto
   }
 
   .name {
@@ -1102,9 +1292,6 @@ footer {
     text-align: left;
   }
 
-  .nameOfUser {
-    margin-top: -7vw;
-  }
   .description {
     margin: auto;
   }
@@ -1202,8 +1389,17 @@ footer {
     display: none;
   }
 
+  .wsText {
+    margin-top: 0;
+  }
+
+  .wsTitle {
+    font-size: clamp(4vw, 3.8vw, 3.6vw);
+    color: whitesmoke;    
+  }
   .wsDescription {
-    font-size: 15px;
+    font-size: clamp(3.5vw, 3.2vw, 3vw);
+    text-shadow: 2px 2px 4px rgba(245,245,245, 1) ;
   }
 
   .contact {
@@ -1318,42 +1514,52 @@ footer {
     gap: 3vw;
   }
 
-  .mb-0 {
-    font-size: 2vw;
+.mb-0 {
+    font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
+  }
+
+  .logo {
+    width: 18vw;
+  }
+
+  .reservation {
+    width: 20%;
   }
 
   .locationFooter {
     width: 50%;
   }
 
-  .reservationTitle,
-  .locationTitle {
-    font-size: 2.5vw;
+  .reservationTitle, .locationTitle {
+    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: 2vw;
-  }
-
-  .socialIcons {
-    width: 20%;
-    display: flex;
-    margin: auto;
-    justify-content: space-between;
+  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+    font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
   }
 
   .socialIcons a {
-    height: 6vh;
-    padding: 1vw;
-    text-decoration: none;
-    background-color: rgb(255, 255, 255);
-    margin: 5px;
-    border-radius: 50%;
+    justify-items: center;
+    align-items: center;
+    padding: 0.5vw 1.5vw;
+  }
+ 
+    .socialIcons a i { 
+      font-size: 3.5vw;
+    }  
+}
+
+@media (max-width: 400px) {
+  .account-nav {
+    .profile-pic {
+     height: clamp(11vw, 10vw, 9vw);
+    }
+  }
+  .notificationIcon {
+      height: clamp(7vw, 6vw, 5vw);
+  }
+  .legend.btn{
+    padding: 0.3rem 0.3rem;
   }
 
-  .socialIcons a i {
-    font-size: 4vw;
-  }
 }

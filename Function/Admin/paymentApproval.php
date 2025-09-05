@@ -32,7 +32,7 @@ if (isset($_POST['approvePaymentBtn'])) {
         // $balance = (float) str_replace(['₱', ','], '', $balance);
         $paymentAmount = (float) str_replace(['₱', ','], '', $customerPayment);
 
-        $bookingCheck = $conn->prepare("SELECT * FROM confirmedBookings WHERE bookingID = ? ");
+        $bookingCheck = $conn->prepare("SELECT * FROM confirmedbooking WHERE bookingID = ? ");
         $bookingCheck->bind_param("i", $bookingID);
         $bookingCheck->execute();
         $bookingResult = $bookingCheck->get_result();
@@ -46,11 +46,11 @@ if (isset($_POST['approvePaymentBtn'])) {
 
             $discount = $storedDiscount + $discount;
 
-            $totalBalance = $storeUserBalance - $paymentAmount;
+            $totalBalance = $storedUserBalance - $paymentAmount;
             $amountPaid = $storedAmountPaid + $paymentAmount;
 
             if ($totalBalance <= 0) {
-                $totalBalance = 0;
+                $totalBalance;
                 $paymentStatus = 3;
             } elseif ($paymentAmount > 0 && $totalBalance > 0 && $totalBalance < $storedBill) {
                 $paymentStatus = 2;
@@ -60,7 +60,7 @@ if (isset($_POST['approvePaymentBtn'])) {
 
 
             //Update booking and payment status
-            $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedBookings SET 
+            $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedbooking SET 
                     confirmedFinalBill = ?,
                     discountAmount = ?,
                     amountPaid = ?,
@@ -78,7 +78,7 @@ if (isset($_POST['approvePaymentBtn'])) {
                     $receiver = 'Admin';
                 }
                 $message = 'Payment approved successfully. We have received and reviewed your payment. The service you booked is now reserved. Thank you';
-                $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+                $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
                  VALUES(?,?,?,?)");
                 $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();
@@ -108,14 +108,14 @@ if (isset($_POST['approvePaymentBtn'])) {
         header('Location: ../../Pages/Admin/viewPayments.php?action=reasonFieldEmpty');
         exit();
     } else {
-        $bookingCheck = $conn->prepare("SELECT * FROM confirmedBookings WHERE bookingID = ? ");
+        $bookingCheck = $conn->prepare("SELECT * FROM confirmedbooking WHERE bookingID = ? ");
         $bookingCheck->bind_param("i", $bookingID);
         $bookingCheck->execute();
         $bookingResult = $bookingCheck->get_result();
         if ($bookingResult->num_rows > 0) {
             $row = $bookingResult->fetch_assoc();
 
-            $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedBookings SET
+            $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedbooking SET
             paymentApprovalStatus = ? WHERE bookingID = ?");
             $updateBookingPaymentStatus->bind_param("ii", $paymentRejectedStatus,  $bookingID);
             if ($updateBookingPaymentStatus->execute()) {
@@ -128,7 +128,7 @@ if (isset($_POST['approvePaymentBtn'])) {
                     $receiver = 'Admin';
                 }
 
-                $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+                $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
                     VALUES(?,?,?,?)");
                 $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();
@@ -163,7 +163,7 @@ if (isset($_POST['approvePaymentBtn'])) {
         $paymentAmount = (float) str_replace(['₱', ','], '', $customerPayment);
 
 
-        $bookingCheck = $conn->prepare("SELECT * FROM confirmedBookings WHERE bookingID = ? ");
+        $bookingCheck = $conn->prepare("SELECT * FROM confirmedbooking WHERE bookingID = ? ");
         $bookingCheck->bind_param("i", $bookingID);
         $bookingCheck->execute();
         $bookingResult = $bookingCheck->get_result();
@@ -179,7 +179,7 @@ if (isset($_POST['approvePaymentBtn'])) {
 
 
             if ($totalBalance <= 0) {
-                $totalBalance = 0;
+                $totalBalance;
                 $paymentStatus = 3;
             } elseif ($paymentAmount > 0 && $totalBalance > 0 && $totalBalance < $storedBill) {
                 $paymentStatus = 2;
@@ -189,7 +189,7 @@ if (isset($_POST['approvePaymentBtn'])) {
 
 
             //Update payment amount and payment status
-            $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedBookings SET 
+            $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedbooking SET 
                                 amountPaid = ?,
                                 userBalance = ?,
                                 paymentStatus = ? WHERE bookingID = ?");

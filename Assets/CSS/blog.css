@@ -204,6 +204,20 @@ button.notifBtn {
   margin: 2vw;
 }
 
+/* Edit mode CSS */
+#saveChangesBtn {
+  margin-top: 5.5vw !important;
+  margin-left: 80vw;
+  font-size: 1.8vw !important;
+  position: fixed;
+}
+
+.editable-input {
+  background-color: rgba(255, 255, 255, 0) !important;
+  border: 1px solid rgb(255, 13, 13) !important;
+  padding: 2px;
+}
+
 /* code for body */
 
 .titleContainer {
@@ -246,9 +260,9 @@ button.notifBtn {
   padding: 1vw;
 }
 
-.blogDescription p,
+.blogDescription,
 .eventType p {
-  font-size: 1.4vw;
+  font-size: 1.5vw;
 }
 
 .featuredpost img {
@@ -263,6 +277,7 @@ button.notifBtn {
   object-fit: contain;
   display: flex;
   align-items: center;
+  margin: 0 auto;
 }
 
 #featuredReadmore,
@@ -309,9 +324,11 @@ button.notifBtn {
   display: flex;
   align-self: flex-end;
   text-align: center;
-  font-size: 1.2vw !important;
 }
 
+button.btn-primary {
+  font-size: 1.3vw;
+}
 /* end of code for body */
 
 /* code for modal */
@@ -324,122 +341,41 @@ button.notifBtn {
 }
 
 .btn-close {
-  margin-left: -1vw !important;
+  margin-left: -1vw;
+}
+
+.bookNowBtn {
+  width: 15vw;
 }
 
 .modal-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 0.8vw;
 }
 
 .modal-body img {
   width: 50%;
-  margin: 2vw auto 1vw auto !important;
+  margin: 1vw auto !important;
 }
 
 .blog-full-content {
   width: 80%;
   margin: 1vw auto !important;
   text-align: center;
+  font-size: clamp(1.3vw, 1.1vw, 1vw);
 }
 
 .text-muted {
   text-align: center;
+  margin-bottom: 0;
 }
 
+.modal-footer button {
+  font-size: 1.3vw;
+}
 /* end of code for modal */
-
-footer {
-  /* border: 1px solid black; */
-  margin-top: auto !important;
-  margin-bottom: 0 !important;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 10vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 1.5vw;
-  font-weight: bold;
-  color: #ffff;
-}
-
-.footerLine {
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  opacity: 1;
-}
-
-.info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5vw;
-}
-.locationFooter {
-  /* border: 1px solid black; */
-  width: 30%;
-}
-
-.reservationTitle,
-.locationTitle {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 1.5vw;
-  color: #fff;
-}
-
-.numberFooter,
-.emailAddressTextFooter,
-.addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: 1vw;
-}
-
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  margin: 0.3vw;
-}
-
-.socialIcons a {
-  text-decoration: none;
-  padding: 0.8vw;
-  background-color: rgb(255, 255, 255);
-  margin: 5px;
-  border-radius: 50%;
-}
-
-.socialIcons a i {
-  font-size: 2vw;
-  color: #3e849e;
-  opacity: 0.9;
-}
-
-.socialIcons a:hover {
-  background-color: white;
-  transition: 0.5s;
-}
-
-.socialIcons a:hover i {
-  color: #c1a534;
-  transition: 0.5s;
-}
 
 .construction-wrapper {
   margin-top: 8vw;
@@ -470,6 +406,10 @@ footer {
     align-items: center;
   }
 
+  .blogDescription {
+    font-size: 2.3vw;
+  }
+
   .account-nav img {
     height: clamp(5vw, 6.5vw, 7.1vw);
     aspect-ratio: 1;
@@ -493,6 +433,12 @@ footer {
 
   .nav-item {
     font-size: clamp(10px, calc(1.5vh + 4px), 12px);
+  }
+
+  .post img {
+    width: 25vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
   }
 }
 
@@ -541,7 +487,6 @@ footer {
     background-color: white;
     .nav-link {
       color: black !important;
-      text-align: center;
     }
   }
 
@@ -594,6 +539,43 @@ footer {
     width: 70%;
   }
 
+  /* code for modal */
+
+  .modal-header h5 {
+    font-size: clamp(2.5vw, 2.3vw, 2vw);
+  }
+
+  .btn-close {
+    margin-left: -3vw !important;
+  }
+
+  .bookNowBtn {
+    width: 12vw;
+  }
+
+  .modal-body img {
+    width: 50%;
+    margin: 2vw auto 1vw auto !important;
+  }
+
+  .blog-full-content {
+    width: 80%;
+    margin: 1vw auto !important;
+    text-align: center;
+    font-size: clamp(2.1vw, 1.9vw, 1.7vw);
+  }
+
+  .text-muted {
+    text-align: center;
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .modal-footer button {
+    font-size: 1.7vw;
+  }
+
+  /* end of code for modal */
+
   .featured {
     width: 90%;
     margin: 0 auto;
@@ -638,6 +620,8 @@ footer {
 
   .post img {
     width: 25vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
   }
 
   .othersEventType p,
@@ -653,38 +637,67 @@ footer {
   .othersDescription {
     font-size: clamp(1.7vw, calc(1.4vw + 2px), 1.2vw) !important;
   }
+}
 
-  .mb-0 {
-    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
+@media (max-width: 991.98px) {
+  .nav-link,
+  #logOutBtn {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
   }
 
-  .logo {
-    width: 15vw;
+  .nav-item {
+    margin-top: 5px;
   }
 
-  .reservationTitle,
-  .locationTitle {
-    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
+  #navbarNav .nav-link,
+  #navbarNav .dropdown-item {
+    color: black !important;
   }
 
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
+  #profileAndNotif {
+    background-color: transparent;
   }
 
-  .socialIcons a {
-    justify-items: center;
-    align-items: center;
+  .navbar-nav {
+    background-color: rgb(251, 250, 250);
   }
 
-  .socialIcons a i {
-    font-size: 3vw;
+  #navbar-half2 .btn-outline-danger {
+    color: black !important;
+    border-color: white !important;
+    width: 100%;
+    text-align: left;
+  }
+
+  .fc-daygrid-day-top a {
+    font-size: clamp(2vw, 1.8vw, 1.6vw);
+  }
+  #toggledNav {
+    position: absolute !important;
+    right: 2vw !important;
   }
 }
 
-/* Tablet landscape */
-/* @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {} */
+@media (max-width: 991.98px) and (orientation: portrait) {
+  .nav-item {
+    margin-top: 5px;
+  }
+
+  .nav-link,
+  #logOutBtn {
+    font-size: 2vw !important;
+  }
+  a.dropdown-item {
+    font-size: 1.8vw;
+  }
+  #toggledNav {
+    position: absolute !important;
+    right: 2vw !important;
+  }
+}
 
 /* Phone size */
 @media screen and (max-width: 599px) {
@@ -738,6 +751,11 @@ footer {
 
   .navbar.scrolled {
     background-color: none !important;
+  }
+
+  #toggledNav {
+    position: absolute !important;
+    right: 4vw !important;
   }
 
   #maintext {
@@ -822,7 +840,7 @@ footer {
     font-size: clamp(3.3vw, calc(2.8vw + 2px), 2.6vw) !important;
   }
 
-  .blogDescription p {
+  .blogDescription {
     font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
@@ -869,42 +887,5 @@ footer {
 
   .othersDescription {
     font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.7vw) !important;
-  }
-
-  .mb-0 {
-    font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
-  }
-
-  .logo {
-    width: 18vw;
-  }
-
-  .reservation {
-    width: 20%;
-  }
-
-  .locationFooter {
-    width: 50%;
-  }
-
-  .reservationTitle,
-  .locationTitle {
-    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
-  }
-
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
-  }
-
-  .socialIcons a {
-    justify-items: center;
-    align-items: center;
-    padding: 0.5vw 1.5vw;
-  }
-
-  .socialIcons a i {
-    font-size: 3.5vw;
   }
 }

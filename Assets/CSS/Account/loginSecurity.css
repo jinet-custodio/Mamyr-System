@@ -40,32 +40,32 @@
 }
 
 .sidebar .sidebar-text {
-    display: inline-block;
-    transition: opacity 0.2s ease;
+  display: inline-block;
+  transition: opacity 0.2s ease;
 }
 
 .sidebar.collapsed .sidebar-text {
-    display: none;
-    width: 0;
-    overflow: hidden;
+  display: none;
+  width: 0;
+  overflow: hidden;
 }
 
 .sidebar-icon {
   font-size: 2vw;
-    min-width: 3vw;
-    text-align: center;
-    margin-right: 10px;
+  min-width: 3vw;
+  text-align: center;
+  margin-right: 10px;
 }
-
 
 /* Sidebar toggle button */
 .toggle-button {
-    background: none;
-    border: none;
-    margin: 10px;
+  background: none;
+  border: none;
+  margin: 10px;
 }
 
-.sidebar-item, .list-group-item {
+.sidebar-item,
+.list-group-item {
   display: flex;
   align-items: center;
   justify-content: start;
@@ -80,7 +80,6 @@
   float: right;
 }
 
-
 .sidebar-header {
   color: black !important;
   display: flex;
@@ -88,24 +87,26 @@
   margin: 1vw auto;
   width: 100%;
   padding-top: 0.5rem;
-  h5 {
-    font-family: "Lora" !important;
-    margin: 0;
-    font-size: 30px;
-    text-align: center;
-    font-weight: bold;
-  }
+}
+
+.sidebar-header h5 {
+  font-family: "Lora" !important;
+  margin: 0;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .profileImage {
   margin: auto;
   padding: 1rem;
-  img {
-    height: clamp(8vw, 6.5vw, 4vw);
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
+}
+
+.profileImage img {
+  height: clamp(8vw, 6.5vw, 4vw);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
 .list-group {
@@ -114,21 +115,19 @@
   border: none;
   list-style: none;
   margin-top: 0.5rem;
-
-  a {
-    text-decoration: none;
-    color: rgb(0, 0, 0) !important;
-    background-color: #cee4f2;
-  }
 }
+
+.list-group a {
+  text-decoration: none;
+  color: rgb(0, 0, 0) !important;
+  background-color: #cee4f2;
+}
+
 .list-group-item {
   border: none;
   margin-top: 1vw;
 }
 
-#paymentBookingHist {
-  text-align: center;
-}
 
 .sidebar li:hover a,
 .list-group-item.active {
@@ -182,16 +181,15 @@
   font-size: 1.4vw;
 }
 
-
-
 .form-container {
   margin-top: 3rem;
   /* border: 1px solid rgb(0, 0, 0); */
-  .message-container {
-    text-align: center;
-    width: 80%;
-    margin: auto;
-  }
+}
+
+.form-container .message-container {
+  text-align: center;
+  width: 80%;
+  margin: auto;
 }
 
 .input-box {
@@ -210,7 +208,8 @@
   font-size: 1.4vw;
 }
 
-#changeEmailBtn, #changePasswordBtn  {
+#changeEmailBtn,
+#changePasswordBtn {
   font-size: clamp(1.3vw, 1.1vw, 0.9vw);
 }
 
@@ -233,11 +232,12 @@
 .modal-header {
   border: none;
   border-bottom: 2px solid #dadad6;
-  .btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 3rem;
-  }
+}
+
+.modal-header .btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 3rem;
 }
 
 .closeButtonContainer {
@@ -258,30 +258,34 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  input {
-    width: 70%;
-    height: 2.5rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgb(92, 82, 82);
-    padding-left: 1rem;
-  }
-  #togglePassword {
-    position: absolute;
-    right: 20%;
-    top: 45%;
-    transform: translateY(-40%);
-    font-size: 20px;
-  }
-  .button-container {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-    justify-content: space-around !important;
-    width: 60% !important;
-    .btn {
-      width: 100px;
-    }
-  }
+}
+
+.modal-body #togglePassword {
+  position: absolute;
+  right: 20%;
+  top: 45%;
+  transform: translateY(-40%);
+  font-size: 20px;
+}
+
+.modal-body .button-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: space-around !important;
+  width: 60% !important;
+}
+
+.modal-body .btn {
+  width: 100px;
+}
+
+.modal-body input {
+  width: 70%;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(92, 82, 82);
+  padding-left: 1rem;
 }
 
 input[type="password"]::-ms-reveal,
@@ -387,321 +391,335 @@ input[type="password"]::-webkit-search-cancel-button {
   margin-right: 2vw !important;
 }
 
-
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-.sidebar{
-  width: 33vw;
-}
+  .sidebar {
+    width: 33vw;
+  }
 
-.list-group {
-  font-size: clamp(2.5vw, 2.2vw, 2vw);
-}
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
 
-.sidebar-icon {
-  font-size: clamp(2.6vw, 2.3vw, 2vw);  
-}
+  .sidebar-icon {
+    font-size: clamp(2.6vw, 2.3vw, 2vw);
+  }
 
-.sidebar-header h5, .card-header {
-  margin-top: 2vw;
-  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-}
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
 
-.profileImage {
+  .profileImage {
     img {
       height: clamp(13vw, 11vw, 10vw);
     }
     margin: 1vw auto;
-}
+  }
 
-.main-content {
-  margin-left: 34vw;
-}
+  .main-content {
+    margin-left: 34vw;
+  }
 
-.card {
-  padding: 0;
-}
+  .card {
+    padding: 0;
+  }
 
+  .profile-image {
+    width: 30%;
+  }
 
-.profile-image {
-  width: 30%;
-}
+  .profile-pic {
+    height: 11vw;
+  }
 
-.profile-pic {
-  height: 11vw;
-}
+  #changeEmailBtn,
+  #changePasswordBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+    margin: 1.5vw auto 1vw auto;
+  }
 
-#changeEmailBtn, #changePasswordBtn  {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-  margin: 1.5vw auto 1vw auto;
-}
+  .profile-info {
+    width: 70%;
+  }
 
-.profile-info {
-  width: 70%;
-}
+  .swal2-html-container {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
 
-.swal2-html-container {
-  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
-}
+  .card-text {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.card-text{
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
+  .input-box {
+    width: 90%;
+    flex-wrap: wrap;
+    height: auto;
+  }
 
-.input-box {
-  width: 90%;
-  flex-wrap: wrap;
-  height: auto;
-}
+  .info input:focus + label,
+  .info input:not(:placeholder-shown) + label {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+  }
 
-.info input:focus + label, .info input:not(:placeholder-shown) + label {
-  font-size: clamp(1.9vw, 1.7vw, 1.5vw);
-}
+  .input-box label {
+    width: 25%;
+    font-size: clamp(2.2vw, 2vw, 1.9vw);
+    text-align: center;
+  }
 
-.input-box label {
-  width: 25%;
-  font-size: clamp(2.2vw, 2vw, 1.9vw);
-  text-align: center;
-}
+  .input-box input {
+    font-size: clamp(2.2vw, 2vw, 1.9vw);
+    width: 75%;
+  }
 
-.input-box input {
-  font-size: clamp(2.2vw, 2vw, 1.9vw);
-  width: 75%;
-}
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.edit,.swal2-confirm, #saveBtn, #cancelBtn {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
-
-.swal2-title {
+  .swal2-title {
     font-size: clamp(3.3vw, 3vw, 2.8vw);
-}
+  }
 }
 
 /* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
   .profile-image {
-  width: 30%;
-}
+    width: 30%;
+  }
 
+  .homeIcon {
+    width: 4vw;
+  }
 
-.homeIcon {
-  width: 4vw;
-}
+  .sidebar {
+    width: 35vw;
+  }
 
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
 
-.sidebar{
-  width: 35vw;
-}
+  .sidebar-icon {
+    font-size: clamp(2.6vw, 2.3vw, 2vw);
+  }
 
-.list-group {
-  font-size: clamp(2.5vw, 2.2vw, 2vw);
-}
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
 
-.sidebar-icon {
-  font-size: clamp(2.6vw, 2.3vw, 2vw);  
-}
-
-.sidebar-header h5, .card-header {
-  margin-top: 2vw;
-  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-}
-
-.profileImage {
+  .profileImage {
     img {
       height: clamp(13vw, 11vw, 10vw);
     }
     margin: 1vw auto;
-}
+  }
 
-.main-content {
-  margin-left: 36vw;
-}
+  .main-content {
+    margin-left: 36vw;
+  }
 
-.card {
-  padding: 0;
-}
+  .card {
+    padding: 0;
+  }
 
+  .profile-image {
+    width: 30%;
+  }
 
-.profile-image {
-  width: 30%;
-}
+  .profile-pic {
+    height: 11vw;
+  }
 
-.profile-pic {
-  height: 11vw;
-}
+  #changeEmailBtn,
+  #changePasswordBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+    margin: 1.5vw auto 1vw auto;
+  }
 
-#changeEmailBtn, #changePasswordBtn  {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-  margin: 1.5vw auto 1vw auto;
-}
+  .profile-info {
+    width: 70%;
+  }
 
-.profile-info {
-  width: 70%;
-}
+  .swal2-html-container {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
 
-.swal2-html-container {
-  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
-}
+  .card-text {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.card-text{
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
+  .input-box {
+    width: 90%;
+    flex-wrap: wrap;
+    height: auto;
+  }
 
-.input-box {
-  width: 90%;
-  flex-wrap: wrap;
-  height: auto;
-}
+  .info input:focus + label,
+  .info input:not(:placeholder-shown) + label {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+  }
 
-.info input:focus + label, .info input:not(:placeholder-shown) + label {
-  font-size: clamp(1.9vw, 1.7vw, 1.5vw);
-}
+  .input-box label {
+    width: 25%;
+    font-size: clamp(2.2vw, 2vw, 1.9vw);
+    text-align: center;
+  }
 
-.input-box label {
-  width: 25%;
-  font-size: clamp(2.2vw, 2vw, 1.9vw);
-  text-align: center;
-}
+  .input-box input {
+    font-size: clamp(2.2vw, 2vw, 1.9vw);
+    width: 75%;
+  }
 
-.input-box input {
-  font-size: clamp(2.2vw, 2vw, 1.9vw);
-  width: 75%;
-}
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
 
-.edit,.swal2-confirm, #saveBtn, #cancelBtn {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
-
-.swal2-title {
+  .swal2-title {
     font-size: clamp(3.3vw, 3vw, 2.8vw);
-}
+  }
 }
 
 /* Phone size */
 @media screen and (max-width: 600px) {
+  .sidebar {
+    width: 45vw;
+  }
+  .main-content {
+    margin-left: 16vw;
+    width: 85%;
+    margin-top: 3rem;
+  }
 
-.sidebar {
-  width: 45vw;
-}
-.main-content {
-  margin-left: 16vw;
-  width: 85%;
-  margin-top: 3rem;
-}
+    #toggle-btn {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+  }
 
-.card-body {
-  padding: 0;
-}
+  .card-body {
+    padding: 0;
+  }
 
-.list-group-item{
-  justify-content: flex-start;
-}
+  .list-group-item {
+    justify-content: flex-start;
+  }
 
-.card-text{
-  font-size: clamp(2vw, 1.8vw, 1.6vw);
-}
+  .card-text {
+    font-size: clamp(2vw, 1.8vw, 1.6vw);
+  }
 
-.sidebar-icon {
-  font-size: clamp(4.5vw, 4.2vw, 4vw);  
-  margin-right: 0 !important;
-}
+  .sidebar-icon {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+    margin-right: 0 !important;
+  }
 
-.sidebar-text {
-  font-size: clamp(2.9vw, 2.7vw, 2.5vw);  
-  margin-left: 2vw;
-}
+  .sidebar-text {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+    margin-left: 2vw;
+  }
 
-.home {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
+  .home {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 
-.profile-image {
-  width: 35%;
-}
+  .profile-image {
+    width: 35%;
+  }
 
-.profile-pic {
-  height: 18vw;
-}
+  .profile-pic {
+    height: 18vw;
+  }
 
-#changeEmailBtn, #changePasswordBtn  {
-  font-size: clamp(2.6vw, 2.4vw, 2.2vw);
-  margin-left: 2vw;
-}
+  #changeEmailBtn,
+  #changePasswordBtn {
+    font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+    margin-left: 2vw;
+  }
 
-.profile-info {
-  width: 65%;
-}
+  .profile-info {
+    width: 65%;
+  }
 
-.swal2-html-container {
-  font-size: clamp(3.7vw, 3.5vw, 3.3vw);
-}
+  .swal2-html-container {
+    font-size: clamp(3.7vw, 3.5vw, 3.3vw);
+  }
 
-.sidebar-header h5, .card-header {
-  margin-top: 2vw;
-  font-size: clamp(3.7vw, 3.5vw, 3.2vw);
-}
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: clamp(3.7vw, 3.5vw, 3.2vw);
+  }
 
-.input-box {
-  width: 100%;
-  flex-wrap: wrap;
-  height: auto;
-}
+  .input-box {
+    width: 100%;
+    flex-wrap: wrap;
+    height: auto;
+  }
 
-.input-box label {
-  font-size: clamp(2.3vw, 2.1vw, 1.9vw);
-  width: 18%;
-}
+  .input-box label {
+    font-size: clamp(2.3vw, 2.1vw, 1.9vw);
+    width: 18%;
+  }
 
-.input-box input {
-  width: 50%;
-  font-size: clamp(2.3vw, 2.1vw, 1.9vw);
-}
+  .input-box input {
+    width: 50%;
+    font-size: clamp(2.3vw, 2.1vw, 1.9vw);
+  }
 
-.edit,.swal2-confirm {
-  font-size: clamp(2.9vw, 2.7vw, 2.5vw);
-}
+  .edit,
+  .swal2-confirm {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+  }
 
-.swal2-title {
+  .swal2-title {
     font-size: clamp(3.8vw, 3.6vw, 3.4vw);
-}
-
+  }
 }
 
 @media screen and (max-width: 400px) {
-.card {
- padding: 0; 
-} 
-.card-header {
-  margin-top: 1vw;
-  font-size: clamp(4vw, 3.8vw, 3.6vw);
-}
-.card-text{
-  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
-}
+  .card {
+    padding: 0;
+  }
+  .card-header {
+    margin-top: 1vw;
+    font-size: clamp(4vw, 3.8vw, 3.6vw);
+  }
+  .card-text {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
 
-.input-box label, .input-box input{
-  width: 80%;
-}
+  .input-box label,
+  .input-box input {
+    width: 80%;
+  }
 
-.form-container {
-  margin-top: 1.5rem;
-}
+  .form-container {
+    margin-top: 1.5rem;
+  }
 
-.input-box label {
-  text-align: center;
-  font-size: clamp(3vw, 2.8vw, 2.6vw);
-}
+  .input-box label {
+    text-align: center;
+    font-size: clamp(3vw, 2.8vw, 2.6vw);
+  }
 
-.input-box input {
-  font-size: clamp(3vw, 2.8vw, 2.6vw);
-  margin: 3vw auto;
-}
+  .input-box input {
+    font-size: clamp(3vw, 2.8vw, 2.6vw);
+    margin: 3vw auto;
+  }
 
-#changeEmailBtn, #changePasswordBtn  {
-  font-size: clamp(3vw, 2.8vw, 2.6vw);
-  margin-left: 0;
-}
+  #changeEmailBtn,
+  #changePasswordBtn {
+    font-size: clamp(3vw, 2.8vw, 2.6vw);
+    margin-left: 0;
+  }
 }

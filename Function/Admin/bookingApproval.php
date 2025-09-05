@@ -31,7 +31,7 @@ if (isset($_POST['approveBtn'])) {
 
     $availabilityID = 2;
 
-    $getServicesQuery = $conn->prepare("SELECT * FROM services WHERE serviceID = ?");
+    $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
     foreach ($serviceIDs as $serviceID) {
         $getServicesQuery->bind_param("i", $serviceID);
         $getServicesQuery->execute();
@@ -41,14 +41,14 @@ if (isset($_POST['approveBtn'])) {
             $serviceType = $row['serviceType'];
             if ($serviceType === 'Resort') {
                 $resortServiceID = $row['resortServiceID'];
-                $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledates(resortServiceID, unavailableStartDate, unavailableEndDate)
+                $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate)
                 VALUES(?,?,?)");
                 $insertToUnavailableDates->bind_param('iss', $resortServiceID, $startDate, $endDate);
                 $insertToUnavailableDates->execute();
                 $insertToUnavailableDates->close();
             } elseif ($serviceType === 'Partner') {
                 $partnershipServiceID = $row['partnershipServiceID'];
-                $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledates(partnershipServiceID, unavailableStartDate, unavailableEndDate)
+                $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(partnershipServiceID, unavailableStartDate, unavailableEndDate)
                 VALUES(?,?,?)");
                 $insertToUnavailableDates->bind_param('iss', $resortServiceID, $startDate, $endDate);
                 $insertToUnavailableDates->execute();
@@ -60,7 +60,7 @@ if (isset($_POST['approveBtn'])) {
 
     //Update Booking Table Status
     $approvedStatus = 2;
-    $updateStatus = $conn->prepare("UPDATE bookings SET bookingStatus = ? WHERE bookingID = ?");
+    $updateStatus = $conn->prepare("UPDATE booking SET bookingStatus = ? WHERE bookingID = ?");
     $updateStatus->bind_param("si", $approvedStatus, $bookingID);
     $updateStatus->execute();
     $updateStatus->close();
@@ -72,7 +72,7 @@ if (isset($_POST['approveBtn'])) {
 
 
     //Insert into Confirmed Booking
-    $insertConfirmed = $conn->prepare("INSERT INTO confirmedbookings(bookingID, discountAmount, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate)
+    $insertConfirmed = $conn->prepare("INSERT INTO confirmedbooking(bookingID, discountAmount, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate)
             VALUES(?,?,?,?,?,?)");
     $insertConfirmed->bind_param(
         "idddss",
@@ -94,7 +94,7 @@ if (isset($_POST['approveBtn'])) {
         }
 
         $message = 'Your booking has been approved.';
-        $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
+        $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
         $insertNotification->bind_param('iiss', $bookingID, $userID, $message, $receiver);
         $insertNotification->execute();
         unset($_SESSION['bookingID']);
@@ -119,14 +119,14 @@ if (isset($_POST['rejectBtn'])) {
     $userRoleID = (int) $_POST['userRoleID'];
 
 
-    $bookingQuery = $conn->prepare("SELECT * FROM bookings WHERE bookingID = ? AND bookingStatus = ?");
+    $bookingQuery = $conn->prepare("SELECT * FROM booking WHERE bookingID = ? AND bookingStatus = ?");
     $bookingQuery->bind_param("is", $bookingID,  $bookingStatusID);
     $bookingQuery->execute();
     $result = $bookingQuery->get_result();
 
     if ($result->num_rows > 0) {
         $rejectedStatus = 3;
-        $updateStatus = $conn->prepare("UPDATE bookings 
+        $updateStatus = $conn->prepare("UPDATE booking
         SET bookingStatus = ?
         WHERE bookingID = ? ");
         $updateStatus->bind_param("ii", $approvedStatus, $bookingID);
@@ -141,7 +141,7 @@ if (isset($_POST['rejectBtn'])) {
                 $receiver = 'Admin';
             }
 
-            $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
+            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
             $insertNotification->bind_param('iiss', $bookingID, $userID, $message, $receiver);
             $insertNotification->execute();
             header('Location: ../../Pages/Admin/booking.php?action=rejected');
@@ -165,177 +165,3 @@ if (isset($_POST['rejectBtn'])) {
         </script>";
     exit();
 }
-
-
-
-
-
-// $totalCost = $data['totalCost'];
-// $serviceID = $data['serviceID'];
-// $packageID = $data['packageID'];
-// $customPackageID = $data['customPackageID'];
-
-// //Update Booking Table Status
-// $updateStatus = "UPDATE bookings 
-// SET status = 'Approved'
-// WHERE bookingID ='$bookingID'";
-// $statusResult = mysqli_query($conn, $updateStatus);
-
-// //Update Service Availability
-// if ($serviceID != "") {
-//     $updateAvailability = "UPDATE services SET availabilityID = '2' WHERE serviceID = '$serviceID'";
-//     $availabilityResult = mysqli_query($conn, $updateAvailability);
-// } elseif ($packageID != "") {
-//     $updateAvailability = "UPDATE packages SET availabilityID = '2' WHERE packageID = '$packageID'";
-//     $availabilityResult = mysqli_query($conn, $updateAvailability);
-// } elseif ($customPackageID != "") {
-//     $updateAvailability = "UPDATE custompackages SET availabilityID = '2' WHERE customPackageID = '$customPackageID'";
-//     $availabilityResult = mysqli_query($conn, $updateAvailability);
-// }
-
-// if ($updateStatus && $updateAvailability) {
-//     $insertConfirmed = "INSERT INTO confirmedbookings(bookingID, totalCost)
-//             VALUES('$bookingID','$totalCost')";
-//     $insertConfirmedResult = mysqli_query($conn, $insertConfirmed);
-//     if ($insertConfirmedResult) {
-//         $_SESSION['success'] = 'Booking Approved Successfully';
-//         header('Location: ../../Pages/Admin/booking.php');
-//         exit();
-//     } else {
-//         $_SESSION['error'] = 'The booking request could not be approved. Please try again later.';
-//         header('Location: ../../Pages/Admin/viewBooking.php');
-//         exit();
-//     }
-// } else {
-//     $_SESSION['error'] = 'The booking and availability can`t be updated';
-//     header('Location: ../../Pages/Admin/viewBooking.php');
-//     exit();
-// }
-
-
-// $getBookingInfoQuery = $conn->prepare("SELECT b.*, cp.*, cpi.*, bs.*, s.*, er.*, ra.*, ps.* FROM bookings b
-    // LEFT JOIN customPackages cp ON b.customPackageID = cp.customPackageID
-    // LEFT JOIN custompackageitems cpi ON cp.customPackageID = cp.customPackageID
-
-    // LEFT JOIN bookingServices bs ON b.bookingID = bs.bookingID
-    // LEFT JOIN services s ON bs.serviceID = s.serviceID
-
-    // LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
-    // LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
-    // LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
-
-    // WHERE bs.bookingID = ? ");
-    // $getBookingInfoQuery->bind_param('i', $bookingID);
-    // $getBookingInfoQuery->execute();
-    // $result = $getBookingInfoQuery->get_result();
-    // if ($result->num_rows > 0) {
-    //     while ($data = $result->fetch_assoc()) {
-
-
-
-    //         $serviceID = $data['serviceID'];
-    //         $customPackageID = $data['customPackageID'];
-    //         if (!empty($serviceID)) {
-
-    //             $serviceType = $data['serviceType'];
-
-    //             if ($serviceType === 'Resort') {
-    //                 $updateAvailability = $conn->prepare("UPDATE resortamenities ra
-    //                 JOIN services s ON ra.resortServiceID = s.resortServiceID
-    //                 JOIN bookingServices bs ON s.serviceID = bs.serviceID 
-    //                 SET ra.RSAvailabilityID = ? 
-    //                 WHERE s.serviceID = ?");
-    //                 $updateAvailability->bind_param("ii", $availabilityID, $serviceID);
-    //                 $updateAvailability->execute();
-    //             }
-
-    //             if (!empty($data['partnershipServiceID'])) {
-    //                 $updateAvailability = $conn->prepare("UPDATE partnershipservices ps
-    //                 JOIN services s ON ps.partnershipServiceID = s.partnershipServiceID
-    //                 JOIN bookingsServices bs ON s.serviceID = bs.serviceID 
-    //                 SET ps.PSAvailabilityID = ? 
-    //                 WHERE serviceID = ?");
-    //                 $updateAvailability->bind_param("ii", $availabilityID, $serviceID);
-    //                 $updateAvailability->execute();
-    //             }
-    //         }
-    //         // elseif (!empty($packageID)) {
-    //         //     $updateAvailability = $conn->prepare("UPDATE packages p
-    //         //         JOIN bookings b ON p.packageID = b.packageID 
-    //         //         SET p.packageAvailability = ? 
-    //         //         WHERE packageID = ?");
-    //         //     $updateAvailability->bind_param("ii", $availabilityID, $packageID);
-    //         //     $updateAvailability->execute();
-    //         // } 
-    //         elseif (!empty($customPackageID)) {
-    //             $selectQuery = "SELECT cpi.serviceID, cpi.packageID 
-    //                 FROM custompackages cp
-    //                 JOIN bookings b ON cp.customPackageID = b.customPackageID
-    //                 JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
-    //                 WHERE cp.customPackageID = '$customPackageID'";
-    //             $result = mysqli_query($conn, $selectQuery);
-    //             if (mysqli_num_rows($result) > 0) {
-    //                 while ($row = mysqli_fetch_assoc($result)) {
-    //                     $serviceID = $row['serviceID'];
-    //                     $packageID = $row['packageID'];
-    //                     if (!empty($serviceID)) {
-    //                         $updateAvailability = $conn->prepare("UPDATE resortAmenities ra
-    //                             JOIN services s ON ra.resortServiceID = s.resortServiceID
-    //                             SET ra.RSAvailabilityID = ? WHERE s.serviceID = ?");
-    //                         $updateAvailability->bind_param("ii", $availabilityID, $serviceID);
-    //                         $updateAvailability->execute();
-    //                     }
-    //                     if (!empty($packageID)) {
-    //                         $updateAvailability = $conn->prepare("UPDATE packages 
-    //                         SET packageAvailability = ? WHERE packageID = ?");
-    //                         $updateAvailability->bind_param("ii", $availabilityID, $packageID);
-    //                         $updateAvailability->execute();
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-
-    // $getVideoke = "SELECT ra.resortServiceID, s.serviceID, ra.RServiceName, ra.RSPrice FROM services s
-    // JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
-    // WHERE RServiceName = '$videokeChoice'";
-    // $getVideokeResult = mysqli_query($conn, $getVideoke);
-    // if (mysqli_num_rows($getVideokeResult) > 0) {
-    //     $row = mysqli_fetch_assoc($getVideokeResult);
-    //     $serviceID = $row['serviceID'];
-    //     $resortServiceID = $row['resortServiceID'];
-    //     $price = $row['RSPrice'];
-    // }
-
-    // if (!empty($videokeChoice) && $addOns !== "None") {
-    //     $insertBooking = $conn->prepare("INSERT INTO bookingservices(bookingID, serviceID, bookingServicePrice)
-    //     VALUES(?,?,?)");
-    //     $insertBooking->bind_param("iid", $bookingID, $serviceID, $price);
-    //     $insertBooking->execute();
-    //     $insertBooking->close();
-
-
-    //     $updateAvailability = $conn->prepare("UPDATE resortAmenities SET RSAvailabilityID = ? WHERE resortServiceID = ?");
-    //     $updateAvailability->bind_param("ii", $availabilityID, $resortServiceID);
-    //     $updateAvailability->execute();
-    //     $updateAvailability->close();
-    // } else if ($addOns !== 'None') {
-    //     $_SESSION['bookingID'] = $bookingID;
-    //     header('Location: ../../Pages/Admin/viewBooking.php?action=videoke');
-    //     exit();
-    // }
-
-    //   $getData = $conn->prepare("SELECT * FROM bookings WHERE bookingID = ?");
-    // $getData->bind_param("i", $bookingID);
-    // $getData->execute();
-    // $getDataResult = $getData->get_result();
-    // if ($getDataResult->num_rows > 0) {
-    //     $data = $getDataResult->fetch_assoc();
-    //     $totalCost = $data['totalCost'];
-    //     $downpayment = $data['downpayment'];
-    //     $downpaymentImage = NULL;
-    //     $userBalance = $totalCost;
-    //     $paymentMethod = $data['paymentMethod'];
-    // }

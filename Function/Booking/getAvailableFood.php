@@ -3,7 +3,7 @@ require '../../Config/dbcon.php';
 
 $adultFood = 'Adult';
 $availableID = 1;
-$getFoodItemQuery = $conn->prepare("SELECT * FROM menuItems WHERE ageGroup = ? AND availabilityID = ?");
+$getFoodItemQuery = $conn->prepare("SELECT * FROM menuitem WHERE ageGroup = ? AND availabilityID = ?");
 $getFoodItemQuery->bind_param("si", $adultFood, $availableID);
 $getFoodItemQuery->execute();
 $getFoodItemResult = $getFoodItemQuery->get_result();

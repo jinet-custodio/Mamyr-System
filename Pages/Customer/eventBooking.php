@@ -9,6 +9,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -42,8 +59,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 <body id="event-page">
     <!-- Event Booking -->
-    <form action="../../Function/Booking/eventBooking.php" method="POST">
-        <div class=" event" id="event">
+    <form action="eventBookingConfirmation.php" method="POST">
+        <div class="event" id="event">
             <div class="backToSelection" id="backToSelection">
                 <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
             </div>
@@ -53,10 +70,28 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <div class="container-fluid event-container" id="eventContainer">
                 <div class="card event-card" id="eventBookingCard" style="width: 40rem; flex-shrink: 0; ">
-
                     <div class="eventTypeContainer">
-                        <label for="eventType" class="eventInfoLabel"></label>
+                        <label for="eventType" class="eventInfoLabel">Type of Event</label>
                         <select class="form-select" name="eventType" id="eventType" required>
+                            <option value="" selected disabled>Choose here..</option>
+                            <?php
+                            $getEventCategoryQuery = $conn->prepare("SELECT * FROM eventcategory");
+                            $getEventCategoryQuery->execute();
+                            $getEventCategoryResult = $getEventCategoryQuery->get_result();
+
+                            if ($getEventCategoryResult->num_rows > 0) {
+                                while ($row = $getEventCategoryResult->fetch_assoc()) {
+                                    // $categories[] = $row;
+
+                            ?>
+                                    <option value="<?= htmlspecialchars($row['categoryName']) ?>"><?= htmlspecialchars($row['categoryName']) ?></option>
+                            <?php
+                                }
+                            }
+                            $getEventCategoryResult->free();
+                            $getEventCategoryQuery->close();
+                            ?>
+
                         </select>
                     </div>
 
@@ -67,10 +102,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </div>
 
                     <div class="eventSched">
-                        <label for="eventSched" class="eventInfoLabel">Event Schedule</label>
+                        <label for="eventDateTime" class="eventInfoLabel">Event Schedule</label>
                         <div class="eventBox">
-                            <input type="datetime-local" class="form-control" id="eventDateTime">
-                            <i class="fa-solid fa-calendar-days" style="color: #333333; "></i>
+                            <input type="datetime-local" class="form-control" name="eventDateTime" id="eventDateTime">
+                            <i class=" fa-solid fa-calendar-days" style="color: #333333; "></i>
                         </div>
                     </div>
 
@@ -87,21 +122,19 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                     <div class="eventEndTime">
                         <label for="eventEndTime" class="eventInfoLabel">End Time</label>
-                        <input type="time" class="form-control" name="eventEndTime" id="eventStartTime" required>
+                        <input type="time" class="form-control" name="eventEndTime" id="eventEndTime" required>
                     </div>
 
                     <div class="paymentMethod">
                         <label for="paymentMethod" class="eventInfoLabel">Payment Method</label>
                         <select class="form-select" name="paymentMethod" id="paymentMethod" required>
                             <option value="" disabled selected>Choose...</option>
-                            <option value="gcash">Gcash</option>
-                            <option value="cash">Cash (Onsite Payment)</option>
+                            <option value="GCash">Gcash</option>
+                            <option value="Cash">Cash (Onsite Payment)</option>
                         </select>
 
                         <div class="noteContainer">
-                            <p class="note">Note: For any concerns or details regarding food and other services, contact
-                                us at
-                                (0998) 962 4697.</p>
+                            <p class="note">Note: For any concerns or details regarding food and other services, contact us at (0998) 962 4697.</p>
                         </div>
                     </div>
 
@@ -160,7 +193,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <!--end ng container div-->
 
             <div class=" eventButton-container">
-                <button type="submit" class="btn btn-primary btn-md w-25" name="eventBN">Book Now</button>
+                <button type="submit" class="btn btn-primary btn-md w-25" name="eventBN" id="bookNowBtn" disabled>Book Now</button>
             </div>
 
         </div>
@@ -175,104 +208,66 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <h1 class="modal-title fs-4 fw-bold" id="dishModalLabel">Select Dishes</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="note-container">
+                        <ul>
+                            <li>You can select a maximum of 4 dishes.</li>
+                            <li>You may only select 1 drink.</li>
+                            <li>You can select up to 2 kinds of dessert.</li>
+                        </ul>
+                    </div>
                     <div class="modal-body dishMenu" id="dishMenu">
                         <div class="chicken">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Chicken</h6>
                             </div>
-                            <div class="dishListContainer" id="chickenContainerA">
-                                <!-- <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cPastil"
-                                        id="cPastil">
-                                    <label class="form-check-label" for="cPastil">
-                                        Chicken Pastil
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cBbq" id="cBbq">
-                                    <label class="form-check-label" for="cBbq">
-                                        Chicken Barbecue Sauce
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cCordonBleu"
-                                        id="cCordonBleu">
-                                    <label class="form-check-label" for="cCordonBleu">
-                                        Chicken Cordon Bleu
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cTeriyaki"
-                                        id="cTeriyaki">
-                                    <label class="form-check-label" for="cTeriyaki">
-                                        Chicken Teriyaki
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cButterGarlic"
-                                        id="cButterGarlic">
-                                    <label class="form-check-label" for="cButterGarlic">
-                                        Butter Garlic Chicken
-                                    </label>
-                                </div> -->
-                            </div>
+                            <div class="dishListContainer" id="chickenContainerA"></div>
                         </div>
                         <div class="pasta">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Pasta</h6>
                             </div>
-                            <div class="dishListContainer" id="pastaContainerA">
-                            </div>
+                            <div class="dishListContainer" id="pastaContainerA"></div>
                         </div>
                         <div class="pork">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Pork</h6>
                             </div>
-                            <div class="dishListContainer" id="porkContainerA">
-                            </div>
+                            <div class="dishListContainer" id="porkContainerA"></div>
                         </div>
                         <div class="veg">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Vegetables</h6>
                             </div>
-                            <div class="dishListContainer" id="vegieContainerA">
-
-                            </div>
+                            <div class="dishListContainer" id="vegieContainerA"></div>
                         </div>
                         <div class="beef">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Beef</h6>
                             </div>
-                            <div class="dishListContainer" id="beefContainerA">
-                            </div>
+                            <div class="dishListContainer" id="beefContainerA"></div>
                         </div>
                         <div class="seafood">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Seafood</h6>
                             </div>
-                            <div class="dishListContainer" id="seafoodContainerA">
-
-                            </div>
+                            <div class="dishListContainer" id="seafoodContainerA"> </div>
                         </div>
                         <div class="drinks">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Drinks</h6>
                             </div>
-                            <div class="dishListContainer" id="drinkContainer">
-
-                            </div>
+                            <div class="dishListContainer" id="drinkContainer"></div>
                         </div>
                         <div class="dessert">
                             <div class="dishTypeContainer">
                                 <h6 class="dishType fw-bold">Desserts</h6>
                             </div>
-                            <div class="dishListContainer" id="dessertContainer">
-                            </div>
+                            <div class="dishListContainer" id="dessertContainer"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Confirm</button>
+                        <button type="button" class="btn btn-primary" id="confirmDishBtn" data-bs-dismiss="modal">Confirm</button>
                     </div>
                 </div>
             </div>
@@ -410,7 +405,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Confirm</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
                     </div>
                 </div>
             </div>
@@ -444,28 +439,96 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <!-- Calendar -->
     <script>
-        // const calIcon = document.getElementById("calendarIcon");
-
         const minDate = new Date();
-        minDate.setDate(minDate.getDate() + 3);
+        minDate.setDate(minDate.getDate() + 8);
 
-        //hotel calendar
+        //event calendar
         flatpickr('#eventDateTime', {
-            enableTime: true,
             minDate: minDate,
-            dateFormat: "Y-m-d H:i",
-            minTime: '00:00'
+            dateFormat: "Y-m-d",
         });
-
-        // flatpickr('#checkOutDate', {
-        //     enableTime: true,
-        //     minDate: minDate,
-        //     dateFormat: "Y-m-d H:i ",
-        //     minTime: '00:00'
-        // });
     </script>
 
-    <!-- Event Category and Hall-->
+
+    <!-- Guest Count -->
+    <script>
+        const guestNoInput = document.getElementById('guestNo');
+        const eventVenueInput = document.getElementById('eventVenue');
+
+        let guestNoValue = 0;
+        let eventVenueValue = '';
+
+        guestNoInput.addEventListener('change', function() {
+            guestNoValue = parseInt(guestNoInput.value);
+            checkCapacity();
+        });
+
+        eventVenueInput.addEventListener('change', function() {
+            eventVenueValue = eventVenueInput.value;
+            checkCapacity();
+        });
+
+        function checkCapacity() {
+
+            if (guestNoValue > 350 && eventVenueValue === 'Main Function Hall') {
+                Swal.fire({
+                    title: 'Sorry',
+                    text: `We're sorry. The resort can't accommodate ${guestNoValue} guests in the ${eventVenueValue}.`,
+                    icon: 'info'
+                });
+            } else if (guestNoValue > 50 && eventVenueValue === 'Mini Function Hall') {
+                Swal.fire({
+                    title: 'Sorry',
+                    text: `We're sorry. The resort can't accommodate ${guestNoValue} guests in the ${eventVenueValue}.`,
+                    icon: 'info'
+                });
+            }
+        }
+    </script>
+
+
+    <!-- Food Count -->
+    <script>
+        function countSelected(categoryName) {
+            const selected = document.querySelectorAll(`input[name="${categoryName}Selections[]"]:checked`);
+            return selected.length;
+        }
+        const button = document.getElementById('confirmDishBtn');
+        const bookNowBtn = document.getElementById('bookNowBtn');
+
+        button.addEventListener('click', function() {
+            const mainDish = ['chicken', 'pork', 'pasta', 'beef', 'vegie', 'seafood'];
+            const drinkCount = countSelected('drink');
+            const dessertCount = countSelected('dessert');
+            let mainDishCount = 0;
+            mainDish.forEach(category => {
+                mainDishCount += countSelected(category);
+            })
+            if (mainDishCount > 5) {
+                Swal.fire({
+                    title: 'Sorry',
+                    text: `You can select a maximum of 4 dishes.`,
+                    icon: 'info'
+                });
+            } else if (drinkCount > 2) {
+                Swal.fire({
+                    title: 'Sorry',
+                    text: `You may only select 1 drink.`,
+                    icon: 'info'
+                });
+            } else if (dessertCount > 3) {
+                Swal.fire({
+                    title: 'Sorry',
+                    text: `You can select up to 2 kinds of dessert.`,
+                    icon: 'info'
+                });
+            } else {
+                bookNowBtn.disabled = false;
+            }
+        })
+    </script>
+
+    <!-- Event Hall-->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -480,30 +543,30 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         return;
                     }
 
-                    const eventInfoLabel = document.querySelector(".eventInfoLabel");
-                    const eventTypeSelect = document.getElementById("eventType");
+                    // const eventInfoLabel = document.querySelector(".eventInfoLabel");
+                    // const eventTypeSelect = document.getElementById("eventType");
 
                     const venueInfoLabel = document.querySelector("#venueInfoLabel");
                     const venueSelect = document.getElementById("eventVenue");
 
-                    eventTypeSelect.innerHTML = '';
+                    // eventTypeSelect.innerHTML = '';
 
-                    eventInfoLabel.innerHTML = 'Type of Event';
+                    // eventInfoLabel.innerHTML = 'Type of Event';
 
-                    const typeOption = document.createElement('option');
-                    typeOption.value = "";
-                    typeOption.disabled = true;
-                    typeOption.selected = true;
-                    typeOption.textContent = "Choose here...";
-                    eventTypeSelect.appendChild(typeOption);
+                    // const typeOption = document.createElement('option');
+                    // typeOption.value = "";
+                    // typeOption.disabled = true;
+                    // typeOption.selected = true;
+                    // typeOption.textContent = "Choose here...";
+                    // eventTypeSelect.appendChild(typeOption);
 
 
-                    data.Categories.forEach(category => {
-                        const typeOptions = document.createElement('option');
-                        typeOptions.value = category.categoryName;
-                        typeOptions.textContent = category.categoryName;
-                        eventTypeSelect.appendChild(typeOptions);
-                    })
+                    // data.Categories.forEach(category => {
+                    //     const typeOptions = document.createElement('option');
+                    //     typeOptions.value = category.categoryName;
+                    //     typeOptions.textContent = category.categoryName;
+                    //     eventTypeSelect.appendChild(typeOptions);
+                    // })
 
                     venueSelect.innerHTML = '';
 
@@ -599,6 +662,27 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         });
     </script>
 
+    <!-- Auto select event -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const selectedEvent = params.get('event');
+
+            if (selectedEvent) {
+                const select = document.getElementById('eventType');
+                if (select) {
+                    select.value = selectedEvent;
+                }
+            };
+            // console.log(selectedEvent);
+
+            if (params) {
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+            }
+        });
+    </script>
 
 
 

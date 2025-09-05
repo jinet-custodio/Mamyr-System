@@ -1,4 +1,7 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -9,6 +12,23 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -16,7 +36,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'About';
-$getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
@@ -57,7 +77,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <ul class="navbar-nav">
             <?php
 
-            $getProfile = $conn->prepare("SELECT userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
@@ -87,7 +107,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -247,7 +267,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="videoTextContainer">
             <?php
             $sectionName = 'BusinessInformation';
-            $getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+            $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
             $getWebContent->bind_param("s", $sectionName);
             $getWebContent->execute();
             $getWebContentResult = $getWebContent->get_result();
@@ -312,35 +332,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
     </div>
 
-    <footer class="py-1" style="margin-top: 5vw !important;">
-        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-            <a href="../index.php">
-                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-            </a>
-            <h3 class="mb-0"><?= htmlspecialchars(strtoupper($businessInfo['FullName']) ?? 'Name Not Found') ?></h3>
-        </div>
-
-        <div class="info">
-            <div class="reservation">
-                <h4 class="reservationTitle">Reservation</h4>
-                <h4 class="numberFooter"><?= htmlspecialchars($businessInfo['ContactNum'] ?? 'None Provided') ?></h4>
-                <h4 class="emailAddressTextFooter"><?= htmlspecialchars($businessInfo['Email'] ?? 'None Provided') ?></h4>
-            </div>
-            <div class="locationFooter">
-                <h4 class="locationTitle">Location</h4>
-                <h4 class="addressTextFooter"><?= htmlspecialchars($businessInfo['Address'] ?? 'None Provided') ?></h4>
-            </div>
-        </div>
-        <hr class="footerLine">
-        <div class="socialIcons">
-            <a href="<?= htmlspecialchars($businessInfo['FBLink'] ?? 'None Provided') ?>"><i
-                    class='bx bxl-facebook-circle'></i></a>
-            <a href="mailto: <?= htmlspecialchars($businessInfo['GmailAdd'] ?? 'None Provided') ?>"><i class='bx bxl-gmail'></i></a>
-            <a href="tel:<?= htmlspecialchars($businessInfo['ContactNum'] ?? 'None Provided') ?>">
-                <i class='bx bxs-phone'></i>
-            </a>
-        </div>
-    </footer>
+    <?php include 'footer.php'; ?>
 
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"

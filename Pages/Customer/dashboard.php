@@ -12,6 +12,23 @@ autoChangeStatus($conn);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -21,7 +38,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
-$getWebContent = $conn->prepare("SELECT * FROM websiteContents WHERE sectionName = ?");
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
@@ -60,9 +77,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <input type="hidden" id="userRole" value="<?= $userRole ?>">
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
             <?php
-            $getProfile = $conn->prepare("SELECT firstName, userProfile FROM users WHERE userID = ? AND userRole = ?");
+            $getProfile = $conn->prepare("SELECT firstName, userProfile FROM user WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
@@ -91,7 +108,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -134,7 +151,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </button>
 
         <div class="collapse navbar-collapse " id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
+            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -250,17 +267,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <hr class="line">
                 <h4 class="contactTitle">Contact Us </h4>
 
-                <div class="location">
+                <div class="location contacts">
                     <img src="../../Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
                     <h5 class="locationText"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h5>
                 </div>
 
-                <div class="number">
+                <div class="number contacts">
                     <img src="../../Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
                     <h5 class="number"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h5>
                 </div>
 
-                <div class="email">
+                <div class="email contacts">
                     <img src="../../Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
                     <h5 class="emailAddressText"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h5>
                 </div>
@@ -273,12 +290,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <hr class="line">
             <h4 class="galleryTitle">Gallery </h4>
             <div class="galleryPictures">
-                <img src="../../Assets/Images/landingPage/gallery/img1.png" alt="resort View 1" class="img1 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img2.png" alt="resort View 2" class="img2 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img3.png" alt="resort View 3" class="img3 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img4.png" alt="resort View 4" class="img4 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img5.png" alt="resort View 5" class="img5 galleryImg">
-                <img src="../../Assets/Images/landingPage/gallery/img6.png" alt="resort View 6" class="img6 galleryImg">
+                <img src="../../Assets/Images/landingPage/img1.png" alt="resort View 1" class="img1 galleryImg">
+                <img src="../../Assets/Images/landingPage/img2.png" alt="resort View 2" class="img2 galleryImg">
+                <img src="../../Assets/Images/landingPage/img3.png" alt="resort View 3" class="img3 galleryImg">
+                <img src="../../Assets/Images/landingPage/img4.png" alt="resort View 4" class="img4 galleryImg">
+                <img src="../../Assets/Images/landingPage/img5.png" alt="resort View 5" class="img5 galleryImg">
+                <img src="../../Assets/Images/landingPage/img6.png" alt="resort View 6" class="img6 galleryImg">
             </div>
 
             <div class="seeMore">

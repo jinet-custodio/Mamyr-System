@@ -81,24 +81,26 @@
   margin: 1vw auto;
   width: 100%;
   padding-top: 0.5rem;
-  h5 {
-    font-family: "Lora" !important;
-    margin: 0;
-    font-size: 30px;
-    text-align: center;
-    font-weight: bold;
-  }
+}
+
+.sidebar-header h5 {
+  font-family: "Lora" !important;
+  margin: 0;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .profileImage {
   margin: auto;
   padding: 1rem;
-  img {
-    height: clamp(8vw, 6.5vw, 4vw);
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
+}
+
+.profileImage img {
+  height: clamp(8vw, 6.5vw, 4vw);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
 .list-group {
@@ -107,21 +109,19 @@
   border: none;
   list-style: none;
   margin-top: 0.5rem;
-
-  a {
-    text-decoration: none;
-    color: rgb(0, 0, 0) !important;
-    background-color: #cee4f2;
-  }
 }
+
+.list-group a {
+  text-decoration: none;
+  color: rgb(0, 0, 0) !important;
+  background-color: #cee4f2;
+}
+
 .list-group-item {
   border: none;
   margin-top: 1vw;
 }
 
-#paymentBookingHist {
-  text-align: center;
-}
 .sidebar li:hover a,
 .list-group-item.active {
   color: #0000;
@@ -185,9 +185,10 @@
   margin-top: 0.5rem;
   /* background-color: rgb(33, 148, 209); */
   color: rgb(255, 255, 255);
-  img {
-    height: 35px;
-  }
+}
+
+.changePfpBtn img {
+  height: 35px;
 }
 
 .btn-close {
@@ -225,6 +226,7 @@
 .account-name {
   font-size: clamp(2vw, 1.8vw, 1.7vw);
 }
+
 .account-contact,
 .roleName {
   font-size: clamp(1.5vw, 1.3vw, 1.1vw);
@@ -355,10 +357,11 @@
   }
 
   .profileImage {
-    img {
-      height: clamp(13vw, 11vw, 10vw);
-    }
     margin: 1vw auto;
+  }
+
+  .profileImage img {
+    height: clamp(13vw, 11vw, 10vw);
   }
 
   .main-content {
@@ -463,10 +466,11 @@
   }
 
   .profileImage {
-    img {
-      height: clamp(13vw, 11vw, 10vw);
-    }
     margin: 1vw auto;
+  }
+
+  .profileImage img {
+    height: clamp(13vw, 11vw, 10vw);
   }
 
   .account-name,
@@ -535,6 +539,10 @@
   .sidebar-text {
     font-size: clamp(2.9vw, 2.7vw, 2.5vw);
     margin-left: 2vw;
+  }
+
+    #toggle-btn {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
   }
 
   .home {

@@ -1,3 +1,5 @@
+USE mamyr;
+
 -- Chicken 
 
 INSERT INTO menuitems(foodName, foodCategory, availabilityID) VALUES ('Chicken Pastil','Chicken',1);

@@ -42,7 +42,7 @@ if (isset($_POST['createAccount'])) {
         exit;
     }
 
-    $addUser = $conn->prepare("INSERT INTO users(firstName, middleInitial, lastName, email, userAddress, phoneNumber, birthdate, userProfile, password, userRole, userStatusID) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+    $addUser = $conn->prepare("INSERT INTO user(firstName, middleInitial, lastName, email, userAddress, phoneNumber, birthdate, userProfile, password, userRole, userStatusID) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
     $addUser->bind_param("sssssssssii", $firstName, $middleInitial, $lastName, $email, $address, $phoneNumber, $birthday, $image_data, $hashPassword, $userRole, $userStatusID);
     if ($addUser->execute()) {
         header("Location: ../../Pages/Account/userManagement.php?status=added");

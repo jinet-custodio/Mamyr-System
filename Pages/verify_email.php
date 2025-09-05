@@ -1,13 +1,25 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require '../Config/dbcon.php';
 session_start();
 
 if (isset($_SESSION['email'])) {
   $email = mysqli_real_escape_string($conn, $_SESSION['email']);
+  $_SESSION['email'] = $email;
 } else {
-  echo 'No email in session';
+  error_log("No Email in Session");
+  $_SESSION['loginError'] = "An error occurred. Please try again.";
+  header("Location: register.php");
+  exit;
 }
+
+if (isset($_SESSION['action'])) {
+  $_SESSION['action'];
+}
+
 
 ?>
 
@@ -87,7 +99,9 @@ if (isset($_SESSION['email'])) {
                 Verify
               </button>
 
-              <p class="resendPin">Didn't receive a code? <button type="submit" class="btn btn-link resendLink" name="resend_code">Resend</button></p>
+              <p class="resendPin">Didn't receive a code?
+                <button type="submit" class="btn btn-link resendLink" name="resend_code">Resend</button>
+              </p>
 
             </div>
           </div>

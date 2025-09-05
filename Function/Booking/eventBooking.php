@@ -1,92 +1,123 @@
 <?php
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 session_start();
+date_default_timezone_set('Asia/Manila');
 
-// Made only for event booking, hotel and  resort booking still to follow
-
-// Made only for event booking, hotel and  resort booking still to follow
+$userID = intval($_SESSION['userID']);
+$userRole = intval($_SESSION['userRole']);
 
 if (isset($_POST['eventBook'])) {
+    $bookingType = 'Event';
     $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
-    $eventPackage = mysqli_real_escape_string($conn, $_POST['eventPackage']);
-    $additionalNotes = mysqli_real_escape_string($conn, $_POST['additionalNotes']);
-    $other_input = mysqli_real_escape_string($conn, $_POST['other_input']);
+    $rawPaxNumber = intval($_POST['paxNumber']);
+
+    $guestNo = intval(filter_var($rawPaxNumber, FILTER_SANITIZE_NUMBER_INT));
+
+    $venueID = intval($_POST['venueID']);
+    $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
+
+    //Date and time
     $eventDate = mysqli_real_escape_string($conn, $_POST['eventDate']);
-    $userID =  $_SESSION['userID'];
-    $eventDuration = mysqli_real_escape_string($conn, $_POST['eventDuration']);
+    $eventStartTime = mysqli_real_escape_string($conn, $_POST['eventStartTime']);
+    $eventEndTime = mysqli_real_escape_string($conn, $_POST['eventEndTime']);
 
-    $duration = floatval($eventDuration);
-
-    $startDateTime = new DateTime($eventDate);
-    $intervalSpec = 'PT' . (int)round($duration * 60) . 'M'; // Convert hours to minutes
-    $endDateTime = clone $startDateTime;
-    $endDateTime->add(new DateInterval($intervalSpec));
-
-    $startDateStr = $startDateTime->format('Y-m-d');
-    $endDate = $endDateTime->format('Y-m-d');
-
-    //if  babaguhin yung data type ng dates to datetime, ito magiging code 
-    // $startDateStr = $startDateTime->format('Y-m-d H:i:s');
-    // $endDateStr = $endDateTime->format('Y-m-d H:i:s');
+    $startDateTimeStr = $eventDate . ' ' . $eventStartTime;
+    $endDateTimeStr = $eventDate . ' ' . $eventEndTime;
 
 
-    if ($eventPackage != '' || $additionalNotes != '') {
-        $booking = "INSERT INTO bookings( `userID`, `packageID`, `additionalRequest`, `startDate`, `endDate`)
-        VALUES('$userID', '$eventPackage', '$additionalNotes', '$eventDate', '$endDate')";
+    $startDateTime = new DateTime($startDateTimeStr);
+    $endDateTime = new DateTime($endDateTimeStr);
+    $arrivalTime = $startDateTime->format('H:i:s');
 
-        $bookingResult = mysqli_query($conn, $booking);
+    $interval = $startDateTime->diff($endDateTime);
 
-        if ($bookingResult) {
-            header("Location: ../../Pages/Customer/dashboard.php");
+
+    $hours = $interval->h;
+    $minutes = $interval->i;
+    $totalMinutes = ($hours * 60) + $minutes;
+    $totalHours = $totalMinutes / 60;
+
+    $durationCount = $totalHours . ' hours';
+
+    //Service & Food
+    $menuQuantities =  $_POST['quantities'];
+    $serviceQuantity = 1;
+
+    $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
+    $rawVenuePrice = mysqli_real_escape_string($conn, $_POST['eventVenuePrice']);
+    $rawDownpayment = mysqli_real_escape_string($conn, $_POST['downpayment']);
+
+    $additionalCharge = floatval(0);
+    $venuePrice = floatval(str_replace(['₱', ','], '', $rawVenuePrice));
+    $downpayment = floatval(str_replace(['₱', ','], '', $rawDownpayment));
+
+    $serviceID = null;
+
+    $getServiceID = $conn->prepare("SELECT * FROM `service` WHERE resortServiceID = ?");
+    $getServiceID->bind_param('i', $venueID);
+
+    if ($getServiceID->execute()) {
+        $result = $getServiceID->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $serviceID = $row['serviceID'];
         } else {
-            echo "Ahahha male";
+            error_log("No matching service found for resortServiceID: $venueID");
         }
+    } else {
+        error_log("Query failed: " . $conn->error);
+    }
+
+
+    $conn->begin_transaction();
+    try {
+        //insert the total of all
+        $insertCustomPackage = $conn->prepare("INSERT INTO `custompackage`(`userID`, `customPackageTotalPrice`, `customPackageNotes`) VALUES (?,?,?)");
+        $insertCustomPackage->bind_param('ids', $userID, $venuePrice, $additionalRequest);
+
+        if (!$insertCustomPackage->execute()) {
+            $conn->rollback();
+            error_log("Error: " . $insertCustomPackage->error);
+        }
+        $customPackageID =   $conn->insert_id;
+
+        //insert each item
+        $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `foodItemID`, `quantity`) VALUES (?,?,?)");
+
+        foreach ($menuQuantities as $foodItemID => $quantity) {
+            $foodItemID = (int) $foodItemID;
+            $quantity =  (int) $quantity;
+            $insertCustomPackageItem->bind_param('iii', $customPackageID, $foodItemID, $quantity);
+            if (!$insertCustomPackageItem->execute()) {
+                $conn->rollback();
+                error_log("Error: " . $insertCustomPackageItem->error);
+            }
+        }
+
+        $insertServiceVenue = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `serviceID`, `quantity`, `servicePrice`) VALUES (?,?,?,?)");
+        $insertServiceVenue->bind_param('iiid', $customPackageID, $serviceID, $serviceQuantity, $venuePrice);
+
+        if (!$insertServiceVenue->execute()) {
+            $conn->rollback();
+            error_log("Error: " . $insertServiceVenue->error);
+        }
+
+        //insert into booking
+        $insertBooking = $conn->prepare("INSERT INTO `booking`(`userID`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `additionalCharge`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $insertBooking->bind_param("isisissssddds", $userID, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDateTimeStr, $endDateTimeStr, $paymentMethod, $additionalCharge, $venuePrice, $downpayment, $arrivalTime);
+        if (!$insertBooking->execute()) {
+            $conn->rollback();
+            error_log("Error: " . $insertBooking->error);
+        }
+
+        $conn->commit();
+        header("Location: ../../../../Pages/Customer/bookNow.php?action=success");
+    } catch (Exception $e) {
+        $conn->rollback();
+        error_log("Error inserting: " . $e->getMessage());
+        // $_SESSION['eventFormData'] = $_POST;
+        // header("Location: ../../../../Pages/Customer/eventBookingConfirmation.php");
     }
 }
-
-//Get all the services
-// function getServices($conn)
-// {
-//     $selectServices = "SELECT * FROM services";
-//     $resultServices = mysqli_query($conn, $selectServices);
-//     if (mysqli_num_rows($resultServices) > 0) {
-//         $servicesData = mysqli_fetch_assoc($resultServices);
-//         while ($servicesData) {
-//             $services[] = $servicesData;
-//         }
-//     }
-
-//     return $services;
-// }
-
-//Get all the packages
-// function getPackages($conn)
-// {
-//     $selectPackages = "SELECT * FROM packages";
-//     $resultPackages = mysqli_query($conn, $selectPackages);
-//     if (mysqli_num_rows($resultPackages) > 0) {
-//         $packagesData = mysqli_fetch_assoc($resultPackages);
-//         while ($packagesData) {
-//             $packages[] = $packagesData;
-//         }
-//     }
-
-//     return $packages;
-// }
-
-
-//Get all the custom packages
-// function getCustomPackages($conn)
-// {
-//     $selectCustomPackages = "SELECT * FROM custompackages";
-//     $resultCustomPackages = mysqli_query($conn, $selectCustomPackages);
-//     if (mysqli_num_rows($resultCustomPackages) > 0) {
-//         $custompackagesData = mysqli_fetch_assoc($resultCustomPackages);
-//         while ($custompackagesData) {
-//             $customPackages[] = $custompackagesData;
-//         }
-//     }
-
-//     return $customPackages;
-// }

@@ -5,7 +5,8 @@ require '../../../Config/dbcon.php';
 header('Content-Type: application/json');
 
 try {
-    $getResortServices = $conn->prepare("SELECT * FROM resortAmenties");
+
+    $getResortServices = $conn->prepare("SELECT * FROM resortamenity");
 
     if ($getResortServices === false) {
         throw new Exception("Prepare failed: " . $conn->error);

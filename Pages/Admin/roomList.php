@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -9,9 +11,30 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
+}
+
+if (isset($_SESSION['actionType'])) {
+    unset($_SESSION['actionType']);
 }
 
 
@@ -57,7 +80,7 @@ if (isset($_SESSION['error'])) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
             $getNotifications->bind_param("s", $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -87,9 +110,9 @@ if (isset($_SESSION['error'])) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -109,7 +132,7 @@ if (isset($_SESSION['error'])) {
             }
 
             if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -201,29 +224,29 @@ if (isset($_SESSION['error'])) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                    <ul class="list-group list-group-flush ">
-                        <?php foreach ($notificationsArray as $index => $message):
+                        <ul class="list-group list-group-flush ">
+                            <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                        <li class="list-group-item mb-2 notification-item"
-                            data-id="<?= htmlspecialchars($notificationID) ?>"
-                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                            <?= htmlspecialchars($message) ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                    <?= htmlspecialchars($message) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     <?php else: ?>
-                    <div class="p-3 text-muted">No new notifications.</div>
+                        <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Booking-container -->
+    <!-- Room container -->
 
-    <div class="booking-container">
+    <div class="room-container">
 
         <div class="card " style="width: 80%;">
             <div class="addHotelContainer">
@@ -236,6 +259,7 @@ if (isset($_SESSION['error'])) {
                     <th scope="col">Room No.</th>
                     <th scope="col">Status</th>
                     <th scope="col">Rates</th>
+                    <th scope="col">Duration</th>
                     <th scope="col">Action</th>
                 </thead>
                 <tbody>
@@ -243,8 +267,8 @@ if (isset($_SESSION['error'])) {
                     <?php
                     $hotelCategoryID = 1;
                     $getRoomInfo = $conn->prepare("SELECT rs.*, sa.availabilityName AS roomStatus
-                    FROM resortamenities rs 
-                    LEFT JOIN serviceAvailability sa ON rs.RSAvailabilityID = sa.availabilityID
+                    FROM resortamenity rs 
+                    LEFT JOIN serviceavailability sa ON rs.RSAvailabilityID = sa.availabilityID
                     WHERE RScategoryID = ?
                     ORDER  BY resortServiceID");
                     $getRoomInfo->bind_param("i", $hotelCategoryID);
@@ -254,35 +278,61 @@ if (isset($_SESSION['error'])) {
                         $rooms = $getRoomInfoResult->fetch_all(MYSQLI_ASSOC);
                         foreach ($rooms as $roomInfo) {
                             $roomID = $roomInfo['resortServiceID'];
-                            $statColor = $roomInfo['roomStatus'];
+                            $roomStatus = $roomInfo['roomStatus'];
+
+                            switch ($roomStatus) {
+                                case 'Available';
+                                    $statColor = 'success';
+                                    break;
+                                case 'Maintenance';
+                                    $statColor = 'info';
+                                    break;
+                                case 'Occupied';
+                                    $statColor = 'warning';
+                                    break;
+                                case 'Private';
+                                    $statColor = 'primary';
+                                    break;
+                                case 'Unavailable';
+                                    $statColor = 'secondary';
+                                    break;
+                                default:
+                                    $statColor = 'light';
+                            }
                             // echo '<pre>';
                             // print_r($statColor);
                             // echo '<pre>';
                     ?>
-                    <tr>
-                        <td>
-                            <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
-                            <?= $roomInfo['RServiceName'] ?>
-                        </td>
-                        <td><button type="button" href="#"
-                                class="btn <?= $statColor ?> status-btn"><?= $roomInfo['roomStatus'] ?> </button></td>
-                        <td><?= "₱ " . $roomInfo['RSprice'] ?></td>
-                        </td>
-                        <td>
-                            <form action="roomInfo.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="roomID" value="<?= $roomID ?>">
-                                <input type="hidden" name="actionType" value="edit">
-                                <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                <button type="submit" class="btn btn-secondary w-20">Edit</button>
-                            </form>
-                            <form action="roomInfo.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="roomID" value="<?= $roomID ?>">
-                                <input type="hidden" name="actionType" value="view">
-                                <!-- <input type="hidden" name="userID" value="<?= $userID ?>"> -->
-                                <button type="submit" class="btn btn-secondary w-20">View</button>
-                            </form>
-                        </td>
-                    </tr>
+                            <tr>
+                                <td>
+                                    <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
+                                    <?= $roomInfo['RServiceName'] ?>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn statusBtn btn-<?= $statColor ?>">
+                                        <?= $roomInfo['roomStatus'] ?>
+                                    </button>
+                                </td>
+                                <td>
+                                    <?= "₱ " . $roomInfo['RSprice'] ?>
+                                </td>
+                                <td>
+                                    <?= $roomInfo['RSduration'] ?>
+                                </td>
+                                <td class="action-column">
+                                    <form action="roomInfo.php" method="POST" class="w-50">
+                                        <input type="hidden" name="roomID" value="<?= htmlspecialchars($roomID) ?>">
+                                        <input type="hidden" name="actionType" value="edit">
+                                        <button type="submit" class="btn btn-primary actionBtn w-100">Edit</button>
+                                    </form>
+                                    <form action="roomInfo.php" method="POST" class="w-50">
+                                        <input type="hidden" name="roomID" value="<?= htmlspecialchars($roomID) ?>">
+                                        <input type="hidden" name="actionType" value="view">
+                                        <button type="submit" class="btn btn-info actionBtn w-100">View</button>
+                                    </form>
+                                </td>
+
+                            </tr>
                     <?php
                         }
                     }
@@ -293,63 +343,82 @@ if (isset($_SESSION['error'])) {
     </div>
 
 
-    <!-- FORM MODAL ADDING SERVICE-->
-
+    <!-- FORM MODAL ADDING Hotel-->
     <!-- Modal -->
-    <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addHotelModalLabel">Add Hotel Room</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-container">
-                        <label for="roomNo">Room No.</label>
-                        <input type="text" class="form-control" id="roomNo" name="roomNo" required>
+    <form action="../../Function/Admin/Services/addServices.php" method="POST" enctype="multipart/form-data">
+        <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addHotelModalLabel">Add Hotel Room</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="input-container">
-                        <label for="roomStat">Room Status</label>
-                        <select id="roomStat" name="roomStat" class="form-select" required>
-                            <option value="" disabled selected>Status</option>
-                            <option value="available" id="available">Available</option>
-                            <option value="occupied" id="occupied">Occupied</option>
-                            <option value="maintenance" id="maintenance">Maintenance</option>
-                            <option value="unavailable" id="unavailable">Unavailable</option>
-                        </select>
+                    <div class="modal-body">
+                        <div class="input-container">
+                            <label for="roomName">Room No.</label>
+                            <input type="text" class="form-control" id="roomName" name="roomName" placeholder="e.g. Room 1" required>
+                        </div>
+                        <div class="input-container">
+                            <label for="roomStat">Room Status</label>
+                            <select id="roomStat" name="roomStat" class="form-select"
+                                required>
+                                <option value="" disabled selected>Select Availability</option>
+                                <?php
+
+                                $getAvailability = $conn->prepare('SELECT * FROM serviceavailability');
+                                if ($getAvailability->execute()) {
+                                    $result = $getAvailability->get_result();
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                ?>
+                                            <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
+                                                <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                <?php
+                                        }
+                                    }
+                                    $result->free();
+                                    $getAvailability->close();
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="input-container">
+                            <label for="roomRate">RoomRate</label>
+                            <input type="text" class="form-control" id="roomRate" name="roomRate">
+                        </div>
+                        <div class="input-container">
+                            <label for="capacity">Capacity</label>
+                            <input type="number" class="form-control" id="capacity" name="capacity">
+                        </div>
+                        <div class="input-container">
+                            <label for="maxCapacity">Max Capacity</label>
+                            <input type="number" class="form-control" id="maxCapacity" name="maxCapacity">
+                        </div>
+                        <div class="input-container">
+                            <label for="duration">Duration</label>
+                            <input type="text" class="form-control" id="duration" name="duration">
+                        </div>
+                        <div class="input-container">
+                            <label for="roomDescription">Description</label>
+                            <textarea class="form-control" id="roomDescription" name="roomDescription"></textarea>
+                        </div>
+                        <div class="input-container">
+                            <label for="roomImage">Room Image</label>
+                            <input type="file" class="form-control" id="roomImage" name="roomImage">
+                        </div>
+                        <!-- <div class="input-container">
+                            <label for="other">Other</label>
+                            <input type="text" class="form-control" id="other" name="other">
+                        </div> -->
                     </div>
-                    <div class="input-container">
-                        <label for="roomRate">RoomRate</label>
-                        <input type="text" class="form-control" id="roomRate" name="roomRate">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveHotelRoom" name="saveHotelRoom">Save</button>
                     </div>
-                    <div class="input-container">
-                        <label for="capacity">Capacity</label>
-                        <input type="text" class="form-control" id="capacity" name="capacity">
-                    </div>
-                    <div class="input-container">
-                        <label for="maxCapacity">Max Capacity</label>
-                        <input type="text" class="form-control" id="maxCapacity" name="maxCapacity">
-                    </div>
-                    <div class="input-container">
-                        <label for="roomDescription">Description</label>
-                        <textarea class="form-control" id="roomDescription" name="roomDescription"></textarea>
-                    </div>
-                    <div class="input-container">
-                        <label for="roomImage">Room Image</label>
-                        <input type="file" class="form-control" id="roomImage" name="roomImage">
-                    </div>
-                    <div class="input-container">
-                        <label for="other">Other</label>
-                        <input type="text" class="form-control" id="other" name="other">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="saveHotelRoom">Save</button>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 
 
 
@@ -363,43 +432,41 @@ if (isset($_SESSION['error'])) {
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
-
-
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -408,9 +475,18 @@ if (isset($_SESSION['error'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#bookingTable').DataTable();
-    });
+        $(document).ready(function() {
+            $('#roomsTable').DataTable({
+                language: {
+                    emptyTable: "No Hotel Rooms"
+                },
+                columnDefs: [{
+                    width: "30%",
+                    target: 4
+                }]
+
+            })
+        });
     </script>
 </body>
 

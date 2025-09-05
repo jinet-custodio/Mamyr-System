@@ -1,3 +1,5 @@
+USE mamyr;
+
 CREATE TABLE partnershipServices (
     partnershipServiceID INT PRIMARY KEY AUTO_INCREMENT,
     partnershipID INT NOT NULL,
@@ -125,14 +127,17 @@ CREATE TABLE customPackageItems (
     customPackageItemID INT PRIMARY KEY AUTO_INCREMENT,
     customPackageID INT NOT NULL,
     serviceID INT NOT NULL,
-    -- packageID INT NOT NULL,
+    foodItemID INT NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
     servicePrice DECIMAL(10,2) NOT NULL,
 
     FOREIGN KEY (customPackageID) REFERENCES customPackages(customPackageID),
-    FOREIGN KEY (serviceID) REFERENCES services(serviceID)
+    FOREIGN KEY (serviceID) REFERENCES services(serviceID),
+    FOREIGN KEY (foodItemID) REFERENCES menuItems(foodItemID) 
     -- FOREIGN KEY (packageID) REFERENCES packages(packageID)
 );
+
+
 
 
 

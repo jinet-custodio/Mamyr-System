@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -8,6 +10,23 @@ checkSessionTimeout($timeout = 3600);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
@@ -52,36 +71,40 @@ if ($userRole == 1) {
     <!-- DataTables Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css" />
     <!-- Font Awesome Link -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
     <div class="wrapper d-flex">
         <aside class="sidebar" id="sidebar">
-
-            <div class="home">
-                <?php if ($role === 'Customer') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
-                <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
-                <?php } ?>
-            </div>
-
             <div class="sidebar-header text-center">
                 <div class="d-flex" id="toggle-container">
                     <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </button>
                 </div>
+                <div class="home">
+                    <?php if ($role === 'Customer') { ?>
+                        <a href="../Customer/dashboard.php">
+                            <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                        </a>
+                    <?php } elseif ($role === 'Admin') { ?>
+                        <a href="../Admin/adminDashboard.php">
+                            <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                        </a>
+                    <?php } elseif ($role === 'Business Partner') { ?>
+                        <a href="../Customer/dashboard.php">
+                            <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                        </a>
+                    <?php } ?>
+                </div>
+
                 <h5 class="sidebar-text">User Account</h5>
 
                 <?php
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -100,17 +123,18 @@ if ($userRole == 1) {
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpDashboard.php" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Dashboard</span>
+                        </a>
+                    </li>
+                <?php } ?>
                 <li>
                     <a href="account.php" class="list-group-item">
                         <i class="fa-regular fa-user sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="loginSecurity.php" class="list-group-item">
-                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
-                        <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
 
@@ -130,7 +154,32 @@ if ($userRole == 1) {
                         </a>
                     </li>
                 <?php } ?>
-
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpBookings.php" class="list-group-item">
+                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpServices.php" class="list-group-item">
+                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Revenue</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <li>
+                    <a href="loginSecurity.php" class="list-group-item">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
+                    </a>
+                </li>
                 <li>
                     <a href="deleteAccount.php" class="list-group-item">
                         <i class="fa-solid fa-user-slash sidebar-icon"></i>
@@ -170,17 +219,19 @@ if ($userRole == 1) {
 
                             <?php
 
-                            $getBooking = $conn->prepare("SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM bookings b
-                                LEFT JOIN confirmedbookings cb ON cb.bookingID = b.bookingID
-                                LEFT JOIN statuses s ON cb.paymentApprovalStatus = s.statusID
-                                LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
+                            $getBooking = $conn->prepare("SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM booking b
+                                LEFT JOIN confirmedbooking cb ON cb.bookingID = b.bookingID
+                                LEFT JOIN status s ON cb.paymentApprovalStatus = s.statusID
+                                LEFT JOIN status stat ON b.bookingStatus = stat.statusID
                                 WHERE userID = ?
-                                ORDER BY createdAt");
+                                ORDER BY b.createdAt");
                             $getBooking->bind_param("i", $userID);
                             $getBooking->execute();
                             $resultGetBooking = $getBooking->get_result();
                             if ($resultGetBooking->num_rows > 0) {
                                 $bookings = $resultGetBooking->fetch_all(MYSQLI_ASSOC);
+
+
                                 foreach ($bookings as $booking) {
                                     $confirmedBookingID = $booking['confirmedBookingID'];
                                     $bookingID = $booking['bookingID'];
@@ -192,6 +243,10 @@ if ($userRole == 1) {
                                     $totalAmount = $booking['totalCost'];
                                     $balance = $booking['userBalance'] ?? $totalAmount;
                                     $paymentMethod = $booking['paymentMethod'];
+
+                                    // echo '<pre>';
+                                    // print_r("Data " . $booking['confirmedStatus'] . $booking['bookingStatus']);
+                                    // echo '</pre>';
                             ?>
                                     <tr>
                                         <td><?= $checkIn ?></td>
@@ -205,8 +260,7 @@ if ($userRole == 1) {
                                         <!-- Papalitan na lang ng mas magandang term -->
                                         <?php if (!empty($booking['confirmedBookingID'])) {
                                             if ($booking['confirmedStatus'] === "Pending") {
-                                                $confirmedStatus = $booking['confirmedStatus'];
-                                                $bookingStatus = $booking['bookingStatus'];;
+
                                                 if ($paymentMethod === 'Cash') {
                                                     $status = "Onsite payment";
                                                     $class = 'btn btn-primary w-100';
@@ -217,21 +271,14 @@ if ($userRole == 1) {
                                             } elseif ($booking['confirmedStatus'] === "Approved") {
                                                 $status = "Successful";
                                                 $class = 'btn btn-success w-100';
-                                                $confirmedStatus = $booking['confirmedStatus'];
-                                                $bookingStatus = $booking['bookingStatus'];
                                             } elseif ($booking['confirmedStatus'] === "Rejected") {
                                                 $status = "Rejected";
                                                 $class = 'btn btn-red w-100';
-                                                $bookingStatus = $booking['bookingStatus'];
-                                                $confirmedStatus = $booking['confirmedStatus'];
                                             } elseif ($booking['confirmedStatus'] === 'Done') {
                                                 $status = "Success";
                                                 $class = 'btn btn-dark-green w-100';
-                                                $confirmedStatus = $booking['confirmedStatus'];
-                                                $bookingStatus = $booking['bookingStatus'];
                                             } elseif ($booking['confirmedStatus'] === "Cancelled") {
-                                                $confirmedStatus = $booking['confirmedStatus'];
-                                                $bookingStatus = $booking['bookingStatus'];
+
                                                 $status = "Cancelled";
                                                 $class = 'btn btn-orange w-100';
                                             }
@@ -264,8 +311,6 @@ if ($userRole == 1) {
                                                 $class = 'btn btn-danger w-100';
                                             }
                                         }
-
-
                                         ?>
 
                                         <td> <span class="<?= $class ?> font-weight-bold bookingStatus" data-label="<?= $status ?>"><?= $status ?></span></td>
@@ -280,12 +325,12 @@ if ($userRole == 1) {
                                                     <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
                                                 </form>
                                                 <?php if (
-                                                    $confirmedStatus === 'Done'
-                                                    ||  $bookingStatus === 'Cancelled'
-                                                    || $bookingStatus === 'Expired'
-                                                    || $confirmedStatus === 'Approved'
-                                                    || $bookingStatus === 'Rejected'
-                                                    || $confirmedStatus === 'Rejected'
+                                                    $booking['confirmedStatus'] === 'Done'
+                                                    || $booking['bookingStatus'] === 'Cancelled'
+                                                    || $booking['bookingStatus'] === 'Expired'
+                                                    || $booking['confirmedStatus'] === 'Approved'
+                                                    || $booking['bookingStatus'] === 'Rejected'
+                                                    || $booking['confirmedStatus'] === 'Rejected'
                                                 ) { ?>
                                                     <button class="btn btn-outline-primary w-100 rateBtn"
                                                         data-bs-toggle="modal"
@@ -303,14 +348,14 @@ if ($userRole == 1) {
                                                         data-bookingtype="<?= $bookingType ?>"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#confirmationModal" data-label="Cancel"></button>
+                                                <?php } ?>
                                             </div>
                                         </td>
                                     <?php } ?>
                                     </tr>
-                            <?php
-                                }
+                                <?php
                             }
-                            ?>
+                                ?>
 
                         </tbody>
                     </table>

@@ -1,14 +1,15 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 require '../../../Config/dbcon.php';
 session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+
 error_reporting(E_ALL);
 
 function getServiceCategory($conn, $id)
 {
-    $getCategory = $conn->prepare('SELECT * FROM resortservicescategories WHERE categoryID = ?');
+    $getCategory = $conn->prepare('SELECT * FROM resortservicescategory WHERE categoryID = ?');
     $getCategory->bind_param('i', $id);
     if ($getCategory->execute()) {
         $result =  $getCategory->get_result();
@@ -75,7 +76,7 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
 
     $conn->begin_transaction();
     try {
-        $insertServiceQuery = $conn->prepare("INSERT INTO resortamenities(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES(?,?,?,?,?,?,?,?,?)");
+        $insertServiceQuery = $conn->prepare("INSERT INTO resortamenity(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES(?,?,?,?,?,?,?,?,?)");
         $insertServiceQuery->bind_param(
             'sdiisissi',
             $serviceName,
@@ -91,7 +92,7 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         if ($insertServiceQuery->execute()) {
             $resortServiceID = $conn->insert_id;
 
-            $insertIntoService = $conn->prepare("INSERT INTO services(`resortServiceID`, `serviceType`) VALUES(?,?)");
+            $insertIntoService = $conn->prepare("INSERT INTO service(`resortServiceID`, `serviceType`) VALUES(?,?)");
             $insertIntoService->bind_param('is', $resortServiceID, $serviceType);
             if ($insertIntoService->execute()) {
                 $conn->commit();
@@ -128,12 +129,12 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
     $conn->begin_transaction();
 
     try {
-        $insertRates = $conn->prepare("INSERT INTO entrancerates(`sessionType`, `timeRangeID`, `ERcategory`, `ERprice`) VALUES(?,?,?,?)");
+        $insertRates = $conn->prepare("INSERT INTO entrancerate(`sessionType`, `timeRangeID`, `ERcategory`, `ERprice`) VALUES(?,?,?,?)");
         $insertRates->bind_param('sisd', $tourType, $timeRange, $visitorType, $entrancePrice);
         if ($insertRates->execute()) {
             $entranceRateID = $conn->insert_id;
 
-            $insertIntoService = $conn->prepare("INSERT INTO services(`entranceRateID`, `serviceType`) VALUES(?,?)");
+            $insertIntoService = $conn->prepare("INSERT INTO service(`entranceRateID`, `serviceType`) VALUES(?,?)");
             $insertIntoService->bind_param('is', $entranceRateID, $serviceType);
             if ($insertIntoService->execute()) {
                 $conn->commit();
@@ -156,7 +157,93 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         $conn->rollback();
         header("Location: ../../../Pages/Admin/services.php?result=error");
     }
+} elseif (isset($_POST['saveHotelRoom'])) { //Hotels
+    $serviceType = 'Resort';
+    $roomName = mysqli_real_escape_string($conn, $_POST['roomName']);
+    $roomStatus = intval($_POST['roomStat']);
+    $roomRate = floatval($_POST['roomRate']);
+    $capacity = intval($_POST['capacity']);
+    $maxCapacity = intval($_POST['maxCapacity']);
+    $roomDescription = mysqli_real_escape_string($conn, $_POST['roomDescription']);
+    $duration = mysqli_real_escape_string($conn, $_POST['duration']);
+    $categoryID = 1;
+
+    $categoryName = getServiceCategory($conn, $categoryID);
+
+    $servicePath = __DIR__ . '/../../../Assets/Images/Services/' . $categoryName . '/';
+
+    if (!is_dir($servicePath)) {
+        mkdir($servicePath, 0755, true);
+    }
+
+    $imageMaxSize = 64 * 1024 * 1024;
+    if (isset($_FILES['roomImage']) && $_FILES['roomImage']['error'] === UPLOAD_ERR_OK) {
+        if ($_FILES['roomImage']['size'] <=  $imageMaxSize) {
+            $filePath = $_FILES['roomImage']['tmp_name'];
+            $fileName = $_FILES['roomImage']['name'];
+            $randomNumber = rand(11, 99);
+            $imageName = $categoryName . '_' . $randomNumber . '_' . $fileName;
+            $image = $servicePath . $imageName;
+            move_uploaded_file($filePath, $image);
+        } else {
+            echo 'IMAGE SIZE';
+            header("Location: ../../../Pages/Admin/roomList.php?action=imageSize&step=1");
+            exit();
+        }
+    } else {
+        echo 'IMAGE ERROR';
+        header("Location: ../../../Pages/Admin/roomList.php?action=imageError&step=2");
+        exit();
+    }
+
+    $conn->begin_transaction();
+    try {
+        $insertHotel = $conn->prepare("INSERT INTO `resortamenity`(`RServiceName`, `RSprice`, `RScapacity`, `RSmaxCapacity`, `RSduration`, `RScategoryID`, `RSdescription`, `RSimageData`, `RSAvailabilityID`) VALUES (?,?,?,?,?,?,?,?,?)");
+        $insertHotel->bind_param("sdiisissi", $roomName, $roomRate, $capacity, $maxCapacity, $duration, $categoryID, $roomDescription, $imageName, $roomStatus);
+        if ($insertHotel->execute()) {
+            $resortServiceID = $conn->insert_id;
+
+            $insertIntoService = $conn->prepare("INSERT INTO `service`(`resortServiceID`,`serviceType`) VALUES (?,?)");
+            $insertIntoService->bind_param("is", $resortServiceID, $serviceType);
+            if (!$insertIntoService->execute()) {
+                throw new Exception("Failed to insert in services" . $insertIntoService->error());
+            }
+            $conn->commit();
+            header("Location: ../../../Pages/Admin/roomList.php");
+            exit();
+        } else {
+            $conn->rollback();
+            error_log("Error: " . $insertHotel->error);
+        }
+    } catch (Exception $e) {
+        $conn->rollback();
+        error_log("Error: " . $e->getMessage());
+        header("Location: ../../../Pages/Admin/roomList.php?result=error");
+        exit();
+    } finally {
+        if (isset($insertHotel)) $insertHotel->close();
+        if (isset($insertIntoService)) $insertIntoService->close();
+    }
+} elseif (isset($_POST['addFoodItem'])) {
+    $foodName = mysqli_real_escape_string($conn, $_POST['foodName']) ?? '';
+    $foodPrice = floatval($_POST['foodPrice']) ?? '';
+    $foodCategory = strtoupper(mysqli_real_escape_string($conn, $_POST['foodCategory'])) ?? '';
+    $foodAvailability = intval($_POST['foodAvailability']) ?? 1;
+
+
+    if (empty($foodName) || empty($foodPrice) || empty($foodCategory)) {
+        header('Location: ../../../Pages/Admin/services.php?action=emptyCateringField');
+    }
+
+    $insertFoodItem = $conn->prepare("INSERT INTO `menuitem`(`foodName`,`foodPrice`, `foodCategory`, `availabilityID`) VALUES (?,?,?,?)");
+    $insertFoodItem->bind_param("sdsi", $foodName, $foodPrice, $foodCategory, $foodAvailability);
+    if ($insertFoodItem->execute()) {
+        header('Location: ../../../Pages/Admin/services.php?action=menuAdded&page=catering');
+    } else {
+        error_log("Error: " . $insertFoodItem->error);
+        header('Location: ../../../Pages/Admin/services.php?action=executionFailed');
+    }
 } else {
-    header("Location: ../../../Pages/Admin/services.php?result=error");
+    header("Location: ../../../Pages/Admin/roomList.php?result=error");
     exit();
 }

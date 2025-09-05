@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -14,6 +16,22 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (isset($_POST['view-btn'])) {
     $_SESSION['partnerID'] = mysqli_real_escape_string($conn, $_POST['partnerID']);
@@ -60,10 +78,10 @@ if (!$partnerID) {
         <!-- Get the information to the database -->
         <?php
         $selectQuery = $conn->prepare("SELECT u.*, p.*, s.statusName, pt.partnerTypeDescription
-                                FROM partnerships p
-                                INNER JOIN users u ON p.userID = u.userID
-                                INNER JOIN statuses s ON s.statusID = p.partnerStatus
-                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                FROM partnership p
+                                INNER JOIN user u ON p.userID = u.userID
+                                INNER JOIN status s ON s.statusID = p.partnerStatus
+                                LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnershipID = ?
                                 ");
         $selectQuery->bind_param("i", $partnerID);
@@ -143,10 +161,10 @@ if (!$partnerID) {
         <!-- Get the information to the database -->
         <?php
         $selectQuery = $conn->prepare("SELECT u.*, p.*, s.statusName, pt.partnerTypeDescription
-                                FROM partnerships p
-                                INNER JOIN users u ON p.userID = u.userID
-                                INNER JOIN statuses s ON s.statusID = p.partnerStatus
-                                LEFT JOIN partnershipTypes pt ON p.partnerTypeID = pt.partnerTypeID
+                                FROM partnership p
+                                INNER JOIN user u ON p.userID = u.userID
+                                INNER JOIN status s ON s.statusID = p.partnerStatus
+                                LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnershipID = ?
                                 ");
         $selectQuery->bind_param("i", $partnerID);

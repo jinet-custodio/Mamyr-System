@@ -7,7 +7,7 @@ $dateTime = isset($_POST['dateTime']) ? $_POST['dateTime'] : null;
 // Update this SQL to fetch your availability logic based on time.
 // For now, it returns all rooms with current availability
 $sql = "SELECT RServiceName, RSAvailabilityID, RSduration
-        FROM resortAmenities
+        FROM resortamenities
         WHERE RSCategoryID = 1";
 $res = mysqli_query($conn, $sql);
 

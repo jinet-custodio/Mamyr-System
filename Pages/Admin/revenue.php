@@ -18,9 +18,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 //Get the percent of payment methods
 
 $payments = $conn->prepare("SELECT 
-                    COUNT(CASE WHEN confirmedBookingStatus = '2' AND CBpaymentMethod = 'GCash' THEN 1 END) AS totalPaymentGCash,
-                     COUNT(CASE WHEN confirmedBookingStatus = '2' AND CBpaymentMethod = 'Cash' THEN 1 END) AS totalPaymentCash  
-                     FROM confirmedBookings
+                    COUNT(CASE WHEN cb.paymentApprovalStatus = '2' AND b.paymentMethod = 'GCash' THEN 1 END) AS totalPaymentGCash,
+                     COUNT(CASE WHEN cb.paymentApprovalStatus = '2' AND b.paymentMethod = 'Cash' THEN 1 END) AS totalPaymentCash  
+                     FROM confirmedbooking cb
+                     LEFT JOIN booking b ON cb.bookingID = b.bookingID
                     ");
 $payments->execute();
 $paymentsResult = $payments->get_result();
@@ -33,13 +34,13 @@ if ($paymentsResult->num_rows > 0) {
 $approvedStatus = 2;
 $revenue =  $conn->prepare("SELECT 
                                 MONTHNAME(b.startDate) AS month,
-                                SUM(cb.CBtotalCost) AS monthlyRevenue 
+                                SUM(cb.confirmedFinalBill) AS monthlyRevenue 
                             FROM 
-                                confirmedBookings cb 
+                                confirmedbooking cb 
                             JOIN 
-                                bookings b ON cb.bookingID = b.bookingID 
+                                booking b ON cb.bookingID = b.bookingID 
                             WHERE 
-                                cb.confirmedBookingStatus = ?
+                                cb.paymentApprovalStatus = ?
                             GROUP BY 
                                 month 
                             ORDER  BY 
@@ -86,7 +87,7 @@ if ($revenueResult->num_rows > 0) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
             $getNotifications->bind_param("s", $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -138,7 +139,7 @@ if ($revenueResult->num_rows > 0) {
             }
 
             if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -285,27 +286,27 @@ if ($revenueResult->num_rows > 0) {
                         <?php
                         $getSales = $conn->prepare("SELECT 
                                         CURDATE() AS Today,
-                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 
+                                        SUM(CASE WHEN cb.paymentApprovalStatus = 2 
                                                     AND DATE(b.startDate) = CURDATE() 
                                                     AND DATE(b.endDate) < CURDATE()  
-                                                    THEN cb.CBtotalCost ELSE 0 END) 
+                                                    THEN cb.confirmedFinalBill ELSE 0 END) 
                                                     AS totalToday,
-                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 
+                                        SUM(CASE WHEN cb.paymentApprovalStatus = 2 
                                                     AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)  
                                                     AND DATE(b.startDate) <= CURDATE() 
                                                     AND DATE(b.endDate) < CURDATE() 
-                                                    THEN cb.CBtotalCost ELSE 0 END) 
+                                                    THEN cb.confirmedFinalBill ELSE 0 END) 
                                                     AS totalThisWeek,
-                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 
+                                        SUM(CASE WHEN cb.paymentApprovalStatus = 2 
                                                     AND YEAR(b.startDate) = YEAR(CURDATE()) 
                                                     AND MONTH(b.startDate) = MONTH(CURDATE()) 
                                                     AND DATE(b.endDate) < CURDATE() 
-                                                    THEN cb.CBtotalCost ELSE 0 END) 
+                                                    THEN cb.confirmedFinalBill ELSE 0 END) 
                                                     AS totalThisMonth,
-                                        SUM(CASE WHEN cb.confirmedBookingStatus = 2 
-                                                    THEN cb.CBtotalCost ELSE 0 END) AS totalThisYear                              
-                                    FROM bookings b 
-                                    JOIN confirmedbookings cb ON b.bookingID = cb.bookingID");
+                                        SUM(CASE WHEN cb.paymentApprovalStatus = 2 
+                                                    THEN cb.confirmedFinalBill ELSE 0 END) AS totalThisYear                              
+                                    FROM booking b 
+                                    JOIN confirmedbooking cb ON b.bookingID = cb.bookingID");
                         $getSales->execute();
                         $getSalesResult = $getSales->get_result();
                         if ($getSalesResult->num_rows > 0) {
@@ -347,11 +348,11 @@ if ($revenueResult->num_rows > 0) {
                     <div class="booking-status">
                         <?php
                         $getBookings = $conn->prepare("SELECT
-                                        COUNT(CASE WHEN confirmedBookingStatus = 2 THEN 1 END) AS totalApprovedBookings,
-                                        COUNT(CASE WHEN confirmedBookingStatus = 3 THEN 1 END) AS totalRejectedBookings,
+                                        COUNT(CASE WHEN paymentApprovalStatus = 2 THEN 1 END) AS totalApprovedBookings,
+                                        COUNT(CASE WHEN paymentApprovalStatus = 3 THEN 1 END) AS totalRejectedBookings,
                                          COUNT(CASE WHEN bookingStatus = 4 THEN 1 END) AS totalCancelledBookings                                       
-                                    FROM bookings b 
-                                    JOIN confirmedbookings cb ON b.bookingID = cb.bookingID");
+                                    FROM booking b 
+                                    JOIN confirmedbooking cb ON b.bookingID = cb.bookingID");
                         $getBookings->execute();
                         $getBookingsResult = $getBookings->get_result();
                         if ($getBookingsResult->num_rows > 0) {
@@ -391,7 +392,7 @@ if ($revenueResult->num_rows > 0) {
                                             COUNT(CASE WHEN RSAvailabilityID = '2' THEN 1 END) * 100 / COUNT(*), 
                                             2
                                         ) AS occupiedRates
-                                    FROM resortamenities
+                                    FROM resortamenity
                                     WHERE RScategoryID = ?");
                         $getOccupiedRates->bind_param("i", $hotelCategoryID);
                         $getOccupiedRates->execute();

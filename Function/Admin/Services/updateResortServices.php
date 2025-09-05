@@ -23,7 +23,7 @@ $serviceAvailability = intval($data['availability']);
 $conn->begin_transaction();
 
 try {
-    $updateServiceQuery = $conn->prepare("UPDATE resortamenities SET
+    $updateServiceQuery = $conn->prepare("UPDATE resortamenity SET
     RServiceName = ?, RSprice = ?, RScapacity = ?, RSmaxCapacity = ?, RSdescription = ?, RSimageData = ?, RSAvailabilityID = ?, RSduration = ? WHERE resortServiceID = ?
     ");
     $updateServiceQuery->bind_param("sdiissisi", $serviceName, $servicePrice, $serviceCapacity, $serviceMaxCapacity, $serviceDesc, $serviceImage, $serviceAvailability, $serviceDuration, $serviceID);
@@ -34,12 +34,14 @@ try {
             'message' => 'Updated Successfully'
         ]);
     } else {
+        error_log("Error Updating" . $updateServiceQuery->error);
         $conn->rollback();
         echo json_encode([
             'success' => false,
         ]);
     }
 } catch (Exception $e) {
+    error_log("Error Updating" . $updateServiceQuery->error);
     $conn->rollback();
     echo json_encode([
         'success' => false,

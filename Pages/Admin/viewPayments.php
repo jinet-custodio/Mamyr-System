@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -8,6 +10,23 @@ checkSessionTimeout($timeout = 3600);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
@@ -33,7 +52,7 @@ if ($userRole == 3) {
 }
 
 if ($admin === "Admin") {
-    $getAdminName = $conn->prepare("SELECT firstName,middleInitial, lastName FROM users WHERE userID = ? AND userRole = ?");
+    $getAdminName = $conn->prepare("SELECT firstName,middleInitial, lastName FROM user WHERE userID = ? AND userRole = ?");
     $getAdminName->bind_param("ii", $userID, $userRole);
     $getAdminName->execute();
     $getAdminNameResult = $getAdminName->get_result();
@@ -95,20 +114,20 @@ if ($admin === "Admin") {
                     er.sessionType,
                     ps.PBName,
                     bps.statusName AS paymentStatus
-                FROM confirmedBookings cb
-                LEFT JOIN bookingPaymentStatus bps ON cb.paymentStatus = bps.paymentStatusID
-                LEFT JOIN bookings b ON cb.bookingID = b.bookingID
-                LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID
-                LEFT JOIN users u ON b.userID = u.userID
-                LEFT JOIN bookingServices bs ON b.bookingID = bs.bookingID
-                LEFT JOIN customPackages cp ON b.customPackageID = cp.customPackageID
-                LEFT JOIN customPackageItems cpi ON cp.customPackageID = cpi.customPackageID
+                FROM confirmedbooking cb
+                LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID
+                LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                LEFT JOIN status stat ON b.bookingStatus = stat.statusID
+                LEFT JOIN user u ON b.userID = u.userID
+                LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
+                LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+                LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
                 --  LEFT JOIN packages p ON b.packageID = p.packageID
-                LEFT JOIN services s ON bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID
-                LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
+                LEFT JOIN service s ON bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID
+                LEFT JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
                 -- LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
-                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
-                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
+                LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
+                LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                 WHERE cb.bookingID = ? AND b.bookingStatus = ?
         ");
     $payments->bind_param("ii", $bookingID, $bookingStatus);

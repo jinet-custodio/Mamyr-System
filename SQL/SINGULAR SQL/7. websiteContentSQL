@@ -1,0 +1,55 @@
+-- =========================
+-- WEBSITE CONTENT
+-- =========================
+
+CREATE TABLE websiteContent (
+    contentID INT PRIMARY KEY AUTO_INCREMENT,
+    adminID INT NOT NULL,
+    sectionName VARCHAR(100) NOT NULL,
+    title VARCHAR(255),
+    content TEXT NOT NULL,
+    lastUpdated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (adminID) REFERENCES admin(adminID)
+);
+
+-- ✅ Website Content Images (Weak Entity)
+CREATE TABLE websiteContentImage (
+    WCImageID INT PRIMARY KEY AUTO_INCREMENT,
+    contentID INT NOT NULL,
+    imageData VARCHAR (255) NOT NULL,
+    altText VARCHAR(255),
+    imageOrder INT DEFAULT 1,
+    uploadedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (contentID) REFERENCES websiteContent(contentID)
+        ON DELETE CASCADE
+);
+
+ALTER TABLE websiteContentImage
+MODIFY COLUMN imageData VARCHAR(500);
+
+
+CREATE TABLE resortInfo (
+  resortInfoID INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  resortInfoTitle VARCHAR(200) NOT NULL,
+  resortInfoName VARCHAR(200) NOT NULL,
+  resortInfoDetail VARCHAR(200) NOT NULL
+);
+
+
+
+-- =========================
+-- AUDIT LOGS
+-- =========================
+
+CREATE TABLE auditLog (
+    logID INT PRIMARY KEY AUTO_INCREMENT,
+    adminID INT NOT NULL,
+    action VARCHAR(255) NOT NULL,
+    targetTable VARCHAR(100),
+    targetID INT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (adminID) REFERENCES admin(adminID)
+);
+

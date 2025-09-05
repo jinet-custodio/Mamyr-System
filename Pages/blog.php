@@ -1,5 +1,13 @@
 <?php
-require '../Config/dbcon.php'
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require '../Config/dbcon.php';
+
+session_start();
+
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +16,7 @@ require '../Config/dbcon.php'
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr - Blog</title>
-    <link rel="icon" type="image/x-icon" href="../assets/Images/Icon/favicon.png ">
+    <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/blog.css">
     <!-- <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css"> -->
     <!-- link for online bootstrap CDN  -->
@@ -30,20 +38,23 @@ require '../Config/dbcon.php'
 
             <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
-                    <li class="nav-item dropdown text-center">
-                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            AMENITIES
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                            <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
-                        </ul>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                AMENITIES
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
+                                <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a>
+                                </li>
+                                <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
+                            </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="#">BLOG</a>
@@ -65,15 +76,19 @@ require '../Config/dbcon.php'
         </nav>
 
         <main>
+            <!-- Save button, only visible if page is on edit mode -->
+            <?php if ($editMode): ?>
+            <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
+            <?php endif; ?>
             <?php
-            $getWebContent = "SELECT * FROM websiteContents WHERE sectionName = 'Blog'";
+            $getWebContent = "SELECT * FROM websitecontent WHERE sectionName = 'Blog'";
             $result = mysqli_query($conn, $getWebContent);
 
             $contentMap = [];
             $blogPosts = [];
             $imagesByContentID = [];
 
-            $getImagesQuery = "SELECT contentID, imageData, altText FROM websiteContentImages ORDER BY imageOrder ASC";
+            $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimage ORDER BY imageOrder ASC";
             $imageResult = mysqli_query($conn, $getImagesQuery);
 
             if ($imageResult && mysqli_num_rows($imageResult) > 0) {
@@ -113,7 +128,8 @@ require '../Config/dbcon.php'
 
 
             <div class="titleContainer">
-                <h4 class="title" id="maintext"><?= htmlspecialchars($contentMap['MainTitle'] ?? 'Main Title Not Found') ?></h4>
+                <h4 class="title" id="maintext">
+                    <?= htmlspecialchars($contentMap['MainTitle'] ?? 'Main Title Not Found') ?></h4>
                 <h4><?= htmlspecialchars($contentMap['Sub-title'] ?? '') ?></h4>
             </div>
 
@@ -124,9 +140,9 @@ require '../Config/dbcon.php'
                 <div class="posts">
                     <!-- Featured Post -->
                     <?php if (!empty($firstPost)): ?>
-                        <div class="featured">
-                            <div class="featuredpost">
-                                <?php
+                    <div class="featured">
+                        <div class="featuredpost">
+                            <?php
                                 $featuredContentID = $firstPost['contentID'] ?? null;
 
                                 if ($featuredContentID && isset($imagesByContentID[$featuredContentID])) {
@@ -170,15 +186,15 @@ require '../Config/dbcon.php'
                         </div>
                     <?php endif; ?>
 
-                    <!-- Other Posts -->
-                    <div class="others container">
-                        <?php
-                        $isFirst = true;
-                        foreach ($blogPosts as $postID => $post) {
-                            if ($isFirst) {
-                                $isFirst = false;
-                                continue;
-                            }
+        <!-- Other Posts -->
+        <div class="others container">
+            <?php
+            $isFirst = true;
+            foreach ($blogPosts as $postID => $post) {
+                if ($isFirst) {
+                    $isFirst = false;
+                    continue;
+                }
 
                             $contentID = $post['contentID'] ?? null;
                         ?>
@@ -233,23 +249,23 @@ require '../Config/dbcon.php'
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
-                                <div class="modal-body">
+                <div class="modal-body">
 
-                                    <?php
+                    <?php
 
-                                    $featuredContentID = $firstPost['contentID'] ?? null;
-                                    $featuredImage = '../../Assets/Images/no-picture.jpg'; // default fallback
-                                    $featuredAlt = 'Blog image';
+                    $featuredContentID = $firstPost['contentID'] ?? null;
+                    $featuredImage = '../../Assets/Images/no-picture.jpg'; // default fallback
+                    $featuredAlt = 'Blog image';
 
-                                    if ($featuredContentID && isset($imagesByContentID[$featuredContentID][0])) {
-                                        $imgData = $imagesByContentID[$featuredContentID][0]['imageData'];
-                                        $featuredAlt = $imagesByContentID[$featuredContentID][0]['altText'] ?? 'Blog image';
-                                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                                        $mimeType = finfo_buffer($finfo, $imgData);
-                                        finfo_close($finfo);
-                                        $featuredImage = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
-                                    }
-                                    ?>
+                    if ($featuredContentID && isset($imagesByContentID[$featuredContentID][0])) {
+                        $imgData = $imagesByContentID[$featuredContentID][0]['imageData'];
+                        $featuredAlt = $imagesByContentID[$featuredContentID][0]['altText'] ?? 'Blog image';
+                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                        $mimeType = finfo_buffer($finfo, $imgData);
+                        finfo_close($finfo);
+                        $featuredImage = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
+                    }
+                    ?>
 
                                     <img src="<?= htmlspecialchars($featuredImage) ?>" alt="<?= htmlspecialchars($featuredAlt) ?>" class="img-fluid mb-3" />
                                     <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
@@ -262,33 +278,33 @@ require '../Config/dbcon.php'
                                         <?= nl2br(htmlspecialchars($firstPost['Content'] ?? '')) ?>
                                     </div>
                                     <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
 
-                            </div>
-                        </div>
-                    </div>
+            </div>
+        </div>
+    </div>
 
                     <!-- Modal for other posts -->
                     <?php foreach ($blogPosts as $postID => $post): ?>
-                        <?= "<!-- DEBUG: modal ID = modal$postID -->"; ?>
                         <?php
                         $contentID = $post['contentID'] ?? null;
                         $image = null;
                         $alt = 'Blog image';
 
-                        if ($contentID && isset($imagesByContentID[$contentID][0])) {
-                            $imgData = $imagesByContentID[$contentID][0]['imageData'];
-                            $alt = $imagesByContentID[$contentID][0]['altText'] ?? 'Blog image';
-                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                            $mimeType = finfo_buffer($finfo, $imgData);
-                            finfo_close($finfo);
-                            $base64Image = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
-                        } else {
-                            $base64Image = '../../Assets/Images/no-picture.jpg'; // fallback
-                        }
-                        ?>
+        if ($contentID && isset($imagesByContentID[$contentID][0])) {
+            $imgData = $imagesByContentID[$contentID][0]['imageData'];
+            $alt = $imagesByContentID[$contentID][0]['altText'] ?? 'Blog image';
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_buffer($finfo, $imgData);
+            finfo_close($finfo);
+            $base64Image = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
+        } else {
+            $base64Image = '../../Assets/Images/no-picture.jpg'; // fallback
+        }
+        ?>
 
                         <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1" aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -315,78 +331,41 @@ require '../Config/dbcon.php'
                                             <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
                                         </div>
                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
+                                </div>
 
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
 
-                </div>
-            </div>
-        </main>
+        </div>
+</div>
+</main>
 
-        <footer class="py-1" style="margin-top: 5vw !important;">
-            <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-                <a href="../index.php">
-                    <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-                </a>
-                <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
-            </div>
-
-            <div class="info">
-                <div class="reservation">
-                    <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter">(0998) 962 4697 </h4>
-                    <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
-                </div>
-                <div class="locationFooter">
-                    <h4 class="locationTitle">Location</h4>
-                    <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
-                </div>
-            </div>
-            <hr class="footerLine">
-            <div class="socialIcons">
-                <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                        class='bx bxl-facebook-circle'></i></a>
-                <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-                <a href="tel:+09989624697">
-                    <i class='bx bxs-phone'></i>
-                </a>
-
-            </div>
-        </footer>
+        <?php include 'footer.php'; ?>
     </div>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <script src="../Assets/JS/scrollNavbg.js"></script>
 
-    <!-- Sweetalert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Sweetalert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Sweet Alert -->
-    <!-- <script>
-        const bookButtons = document.querySelectorAll('#bopNav');
+    <!-- Redirects User to Book Now -->
+    <script>
+        const bookNowBtns = document.querySelectorAll('.bookNowBtn');
 
-        bookButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Want to Become Our Business Partner?',
-                    text: 'You must have an existing account before becoming a business partner.',
-                    icon: 'info',
-                    confirmButtonText: 'Sign Up'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'register.php';
-                    }
-                });
-            });
+    bookNowBtns.forEach(bookNowBtn => {
+        bookNowBtn.addEventListener("click", function(e) {
+            window.location.href = "/Pages/register.php"
         });
-    </script> -->
+    });
+</script>
 </body>
 
 </html>

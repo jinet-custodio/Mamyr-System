@@ -9,6 +9,24 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -57,7 +75,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     }
 
 
-    $getUserInfo = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ?");
+    $getUserInfo = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ?");
     $getUserInfo->bind_param("ii", $userID, $userRole);
     $getUserInfo->execute();
     $getUserInfoResult = $getUserInfo->get_result();
@@ -82,13 +100,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <a href="../Admin/adminDashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
+                <?php } elseif ($role === 'Business Partner') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } ?>
             </div>
 
             <div class="sidebar-header text-center">
                 <h5 class="sidebar-text">User Account</h5>
                 <?php
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -108,6 +130,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
             <ul class="list-group">
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpDashboard.php" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Dashboard</span>
+                        </a>
+                    </li>
+                <?php } ?>
                 <li>
                     <a href="account.php" class="list-group-item ">
                         <i class="fa-regular fa-user sidebar-icon"></i>
@@ -115,12 +145,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </a>
                 </li>
 
-                <li>
-                    <a href="loginSecurity.php" class="list-group-item active">
-                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
-                        <span class="sidebar-text">Login & Security</span>
-                    </a>
-                </li>
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
                     <li>
@@ -137,7 +161,32 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </a>
                     </li>
                 <?php } ?>
-
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpBookings.php" class="list-group-item">
+                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpServices.php" class="list-group-item">
+                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Revenue</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <li>
+                    <a href="loginSecurity.php" class="list-group-item active">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
+                    </a>
+                </li>
                 <li>
                     <a href="deleteAccount.php" class="list-group-item">
                         <i class="fa-solid fa-user-slash sidebar-icon"></i>

@@ -9,6 +9,24 @@ checkSessionTimeout($timeout = 3600);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -46,7 +64,9 @@ if ($userRole == 1) {
     <link rel="stylesheet" href="../../Assets/CSS/Account/deleteAccount.css" />
 
     <!-- Font Awesome Link -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 </head>
@@ -56,7 +76,7 @@ if ($userRole == 1) {
     <!-- Get User Info -->
 
     <?php
-    $getUserInfo = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ?");
+    $getUserInfo = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ?");
     $getUserInfo->bind_param("ii", $userID, $userRole);
     $getUserInfo->execute();
     $getUserInfoResult = $getUserInfo->get_result();
@@ -66,6 +86,11 @@ if ($userRole == 1) {
     ?>
     <div class="wrapper d-flex">
         <aside class="sidebar" id="sidebar">
+            <div class="d-flex" id="toggle-container">
+                <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
+            </div>
             <div class="home">
                 <?php if ($role === 'Customer') { ?>
                     <a href="../Customer/dashboard.php">
@@ -75,18 +100,18 @@ if ($userRole == 1) {
                     <a href="../Admin/adminDashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
+                <?php } elseif ($role === 'Business Partner') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } ?>
+
             </div>
 
             <div class="sidebar-header text-center">
-                <div class="d-flex" id="toggle-container">
-                    <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </button>
-                </div>
                 <h5 class="sidebar-text">User Account</h5>
                 <?php
-                $getProfile = $conn->prepare("SELECT firstName,userProfile, email FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile, email FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -106,6 +131,14 @@ if ($userRole == 1) {
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpDashboard.php" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Dashboard</span>
+                        </a>
+                    </li>
+                <?php } ?>
                 <li>
                     <a href="account.php" class="list-group-item ">
                         <i class="fa-regular fa-user sidebar-icon"></i>
@@ -113,12 +146,6 @@ if ($userRole == 1) {
                     </a>
                 </li>
 
-                <li>
-                    <a href="loginSecurity.php" class="list-group-item">
-                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
-                        <span class="sidebar-text">Login & Security</span>
-                    </a>
-                </li>
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
                     <li>
@@ -135,6 +162,32 @@ if ($userRole == 1) {
                         </a>
                     </li>
                 <?php } ?>
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpBookings.php" class="list-group-item">
+                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="../BusinessPartner/bpServices.php" class="list-group-item">
+                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Revenue</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <li>
+                    <a href="loginSecurity.php" class="list-group-item">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
+                    </a>
+                </li>
                 <li>
                     <a href="deleteAccount.php" class="list-group-item active">
                         <i class="fa-solid fa-user-slash sidebar-icon"></i>

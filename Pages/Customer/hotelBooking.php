@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -8,6 +10,23 @@ checkSessionTimeout($timeout = 3600);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
@@ -73,7 +92,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <div class="hotelIconContainer mt-3">
                         <?php
                         $hotelCategoryID = 1;
-                        $getAllHotelQuery = $conn->prepare("SELECT RServiceName, RSduration, RSAvailabilityID FROM resortAmenities 
+                        $getAllHotelQuery = $conn->prepare("SELECT RServiceName, RSduration, RSAvailabilityID FROM resortamenity 
                                                                 WHERE RScategoryID = ? 
                                                                 GROUP BY RServiceName
                                                                 ORDER BY CAST(SUBSTRING(RServiceName, LOCATE(' ', RServiceName) + 1) AS UNSIGNED)");

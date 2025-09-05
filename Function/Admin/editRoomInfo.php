@@ -3,18 +3,18 @@ require '../../Config/dbcon.php';
 session_start();
 
 if (isset($_POST['editRoom'])) {
-    echo "Edit form detected"; // Debugging statement
-
     $firstName = "";
     $middleInitial = "";
     $lastName = "";
 
-    $roomID = mysqli_real_escape_string($conn, $_POST['roomID']);
+    $roomID = intval($_POST['roomID']);
     $roomName = mysqli_real_escape_string($conn, $_POST['roomName']);
     $roomStatus = mysqli_real_escape_string($conn, $_POST['roomStatus']);
-    $roomRateRaw = mysqli_real_escape_string($conn, $_POST['roomRate']);      //resolve
+    $roomRateRaw = mysqli_real_escape_string($conn, $_POST['roomRate']);
     $roomCapacityRaw = mysqli_real_escape_string($conn, $_POST['roomCapacity']);
+    $roomMaxCapacityRaw = mysqli_real_escape_string($conn, $_POST['roomMaxCapacity']);
     $roomDescription = mysqli_real_escape_string($conn, $_POST['roomDescription']);
+    $roomDuration = mysqli_real_escape_string($conn, $_POST['roomDuration']);
 
     //rate and capacity accepts string values, so this will filter only the number inputs of the user
     $roomRate = preg_replace('/[^0-9.]/', '', $roomRateRaw);
@@ -22,56 +22,65 @@ if (isset($_POST['editRoom'])) {
 
     $roomCapacity = preg_replace('/\D/', '', $roomCapacityRaw);
     $roomCapacity = intval($roomCapacity);
-    // Check if an image was uploaded
-    if (!empty($_FILES['roomImage']['tmp_name']) && $_FILES['roomImage']['error'] === 0) {
-        echo "Image detected"; // Debugging statement
-        $roomImage_name = $_FILES['roomImage']['name'];
-        $roomImage_size = $_FILES['roomImage']['size'];
-        $roomImage_tmp_name = $_FILES['roomImage']['tmp_name'];
 
-        if ($roomImage_size > 2000000) {
-            header("Location: ../../Pages/Admin/roomInfo.php?message[]=Image%20is%20too%20large%20(max%202MB)");
-            exit(0);
+    $roomMaxCapacity = preg_replace('/\D/', '', $roomMaxCapacityRaw);
+    $roomMaxCapacity = intval($roomCapacity);
+
+    $servicePath = __DIR__ . '../../../Assets/Images/Services/Hotel/';
+
+    if (!is_dir($servicePath)) {
+        mkdir($servicePath, 0755, true);
+    }
+    $updateImage = false;
+    $_SESSION['roomInfoFormData'] = $_POST;
+    if (!empty($_FILES['roomImage']) && $_FILES['roomImage']['error'] === UPLOAD_ERR_OK) {
+        if ($_FILES['roomImage']['size'] < 64000000) {
+            $randomNumber = rand(11, 99);
+
+            $roomImageName = 'Hotel_' . $randomNumber . '_' . $_FILES['roomImage']['name'];
+            $roomImagePath = $_FILES['roomImage']['tmp_name'];
+            $imagePath = $servicePath . $roomImageName;
+
+            if (!move_uploaded_file($roomImagePath, $imagePath)) {
+                error_log("Failed to move uploaded file to: $imagePath");
+                $_SESSION['actionType'] = 'edit';
+                $_SESSION['roomID'] = $roomID;
+                header("Location: ../../Pages/Admin/roomInfo.php?action=imageMoveFailed");
+                exit();
+            } else {
+                move_uploaded_file($roomImagePath, $imagePath);
+                $updateImage = true;
+            }
+        } else {
+            $_SESSION['actionType'] = 'edit';
+            $_SESSION['roomID'] = $roomID;
+            header("Location: ../../Pages/Admin/roomInfo.php?action=exceedImageLimitSize");
+            exit();
         }
-
-        $imgData = file_get_contents($roomImage_tmp_name);
-
-
-        $stmt = $conn->prepare("UPDATE resortAmenities 
-    SET RserviceName = ?, RSAvailabilityID = ?, RSprice = ?, RScapacity = ?, RSdescription = ?,RSimageData = ? 
-    WHERE resortServiceID = ?");
-
-        $null = NULL;
-        $stmt->bind_param("sidisbi", $roomName, $roomStatus, $roomRate, $roomCapacity, $roomDescription, $null, $roomID);
-        $stmt->send_long_data(5, $imgData);
-
-        $result = $stmt->execute();
-    } else {
-        // No image uploaded, just update other fields
-        echo "No image uploaded, updating fields"; // Debugging statement
-        $query = "UPDATE resortAmenities 
-            SET RserviceName='$roomName', RSAvailabilityID='$roomStatus', RSprice='$roomRate', RScapacity='$roomCapacity' 
-            WHERE resortServiceID='$roomID'";
-        $result = mysqli_query($conn, $query);
     }
 
-    if ($result) {
-        echo "Update successful"; // Debugging statement
-        // Set data you want to POST back
-        $roomID = htmlspecialchars($roomID, ENT_QUOTES, 'UTF-8');
-        $actionType = "edit"; // or whatever context
-        echo <<<HTML
-    <form id="redirectForm" action="../../Pages/Admin/roomInfo.php" method="POST">
-        <input type="hidden" name="roomID" value="$roomID">
-        <input type="hidden" name="actionType" value="$actionType">
-        <input type="hidden" name="status" value="success">
-    </form>
-    <script>
-        document.getElementById("redirectForm").submit();
-    </script>
-HTML;
-        exit;
+    if ($updateImage) {
+        $updateHotelQuery = $conn->prepare("UPDATE `resortamenity` SET `RServiceName`= ?,`RSprice`= ?,`RScapacity`= ?,`RSmaxCapacity`= ?,`RSduration`= ?,`RSdescription`=?,`RSimageData`= ?,`RSAvailabilityID`= ? WHERE resortServiceID = ?");
+        $updateHotelQuery->bind_param("sdiisssii", $roomName, $roomRate, $roomCapacity, $roomMaxCapacity, $roomDuration, $roomDescription, $roomImageName, $roomStatus, $roomID);
     } else {
-        echo "Error: " . mysqli_error($conn);
+        $updateHotelQuery = $conn->prepare("UPDATE `resortamenity` SET `RServiceName`= ?,`RSprice`= ?,`RScapacity`= ?,`RSmaxCapacity`= ?,`RSduration`= ?,`RSdescription`=?,`RSAvailabilityID`= ? WHERE resortServiceID = ?");
+        $updateHotelQuery->bind_param("sdiissii", $roomName, $roomRate, $roomCapacity, $roomMaxCapacity, $roomDuration, $roomDescription,  $roomStatus, $roomID);
     }
+
+    if ($updateHotelQuery->execute()) {
+        unset($_SESSION['actionType']);
+        unset($_SESSION['roomID']);
+        header("Location: ../../Pages/Admin/roomList.php?action=roomUpdated");
+        exit();
+    } else {
+        $_SESSION['actionType'] = 'edit';
+        $_SESSION['roomID'] = $roomID;
+        error_log("Error: " . $updateHotelQuery->error);
+
+        header("Location: ../../Pages/Admin/roomInfo.php?action=updateFailed");
+        exit();
+    }
+    exit;
+} else {
+    error_log("Error: " . mysqli_error($conn));
 }

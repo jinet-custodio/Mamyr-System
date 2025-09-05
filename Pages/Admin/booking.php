@@ -1,10 +1,29 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -58,7 +77,7 @@ if (isset($_SESSION['error'])) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
             $getNotifications->bind_param("s", $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -110,7 +129,7 @@ if (isset($_SESSION['error'])) {
             }
 
             if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM users WHERE userID = ? AND userRole = ?");
+                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
                 $getProfile->execute();
                 $getProfileResult = $getProfile->get_result();
@@ -246,12 +265,12 @@ if (isset($_SESSION['error'])) {
                     $getBookingInfo = $conn->prepare("SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID, u.firstName,u.middleInitial, u.lastName, b.*,
                     cp.*,
                     cb.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus
-                                    FROM bookings b
-                                    INNER JOIN users u ON b.userID = u.userID   -- to get  the firstname, M.I and lastname 
-                                    LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID 
-                                    LEFT JOIN statuses s ON cb.paymentApprovalStatus = s.statusID -- to get the status name
-                                    LEFT JOIN statuses stat ON b.bookingStatus = stat.statusID  -- to get the status name 
-                                    LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
+                                    FROM booking b
+                                    INNER JOIN user u ON b.userID = u.userID   -- to get  the firstname, M.I and lastname 
+                                    LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID 
+                                    LEFT JOIN status s ON cb.paymentApprovalStatus = s.statusID -- to get the status name
+                                    LEFT JOIN status stat ON b.bookingStatus = stat.statusID  -- to get the status name 
+                                    LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
                                     ");
                     $getBookingInfo->execute();
                     $getBookingInfoResult = $getBookingInfo->get_result();

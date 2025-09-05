@@ -65,15 +65,15 @@ body {
   background-color: transparent;
   align-items: center;
   font-family: "Poppins";
+}
 
-  .profile-info {
-    padding: 1rem;
-  }
+.card-header .profile-info {
+  padding: 1rem;
+}
 
-  .roleName {
-    font-size: 16px;
-    font-weight: bold;
-  }
+.card-header .roleName {
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .user-details {

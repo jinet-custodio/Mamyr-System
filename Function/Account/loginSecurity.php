@@ -16,7 +16,7 @@ $userID = (int) $_SESSION['userID'];
 
 function getUserByEmail($conn, $userID, $userRole, $email)
 {
-    $getEmailQuery = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ? AND email = ?");
+    $getEmailQuery = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ? AND email = ?");
     $getEmailQuery->bind_param('iis', $userID, $userRole, $email);
     if ($getEmailQuery->execute()) {
 
@@ -73,7 +73,7 @@ if (isset($_POST['validatePassword'])) {
                     $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes')); //Add a 5mins to the time of creation
                     unset($_SESSION['formData']);
 
-                    $storeData = $conn->prepare("UPDATE users SET userOTP = ?, OTP_expiration_at = ? 
+                    $storeData = $conn->prepare("UPDATE user SET userOTP = ?, OTP_expiration_at = ? 
                         WHERE userID = ? AND userRole = ? AND email = ?");
                     $storeData->bind_param("ssiis", $otp, $OTP_expiration_at, $userID, $userRole, $email);
 
@@ -185,7 +185,7 @@ if (isset($_POST['validatePassword'])) {
         if ($storedOTP !== "") {
             if ($stored_expiration > $time_now) {
                 if ($storedOTP === $enteredOTP) {
-                    $updateEmail = $conn->prepare("UPDATE users SET email = ?, 
+                    $updateEmail = $conn->prepare("UPDATE user SET email = ?, 
                     userOTP = NULL, 
                     OTP_expiration_at = NULL WHERE email = ? AND userID = ?");
                     $updateEmail->bind_param('ssi', $newEmail, $email, $userID);
@@ -218,7 +218,7 @@ if (isset($_POST['validatePassword'])) {
     $newPassword = mysqli_real_escape_string($conn, $_POST['newPassword']);
     $currentPassword = mysqli_real_escape_string($conn, $_POST['currentPassword']);
 
-    $query = $conn->prepare("SELECT * FROM users WHERE userID = ? AND userRole = ?");
+    $query = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ?");
     $query->bind_param('ii', $userID, $userRole);
     if ($query->execute()) {
         $result = $query->get_result();
@@ -228,7 +228,7 @@ if (isset($_POST['validatePassword'])) {
             if (password_verify($currentPassword, $storedPassword)) {
                 $hashPassword = password_hash($newPassword, PASSWORD_DEFAULT);
                 if ($currentPassword !== $newPassword) {
-                    $updatePassword = $conn->prepare("UPDATE users SET 
+                    $updatePassword = $conn->prepare("UPDATE user SET 
                         password = ?
                         WHERE userID = ? AND userRole = ?
                         ");

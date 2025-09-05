@@ -1,10 +1,29 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -39,7 +58,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav">
             <?php
-            $query = "SELECT userProfile FROM users WHERE userID = '$userID' AND userRole = '$userRole'";
+            $query = "SELECT userProfile FROM user WHERE userID = '$userID' AND userRole = '$userRole'";
             $result = mysqli_query($conn, $query);
             if (mysqli_num_rows($result) > 0) {
                 $data = mysqli_fetch_assoc($result);
@@ -66,7 +85,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $receiver = 'Partner';
             }
 
-            $getNotifications = $conn->prepare("SELECT * FROM notifications WHERE userID = ? AND receiver = ? AND is_read = 0");
+            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
             $getNotifications->bind_param("is", $userID, $receiver);
             $getNotifications->execute();
             $getNotificationsResult = $getNotifications->get_result();
@@ -217,14 +236,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         dream come true!</p>
                                 </div>
 
-                                <button type="button" class="btn btn-primary" id="bookBtn"
-                                    style="margin-top: auto;">BOOK
+                                <button type="button" class="btn btn-primary" id="weddingBtn"
+                                    style="margin-top: auto;" onclick="window.location.href='eventbooking.php?event=Wedding'">BOOK
                                     NOW</button>
                             </div>
                         </div>
 
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images//EventsPhotos/debut.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/debut.jpg"
                                 alt="Debut Event">
                             <div class="card-body">
                                 <h5 class="card-title">Debut</h5>
@@ -235,7 +254,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         debut
                                         marks a new chapter of unforgettable memories!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK
+                                <button type="button" class="btn btn-primary" id="debutBtn" onclick="window.location.href='eventbooking.php?event=Debut'" style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
                         </div>
@@ -246,7 +265,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="carousel-item">
                     <div class="cardFlex">
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images//EventsPhotos/kidsParty.jpg"
+                            <img class="card-img-top" src="../../Assets/Images//EventsPhotos/kidsParty.jpg"
                                 alt="Kids Party">
                             <div class="card-body">
                                 <h5 class="card-title">Kids Party</h5>
@@ -256,7 +275,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         kids'
                                         party is filled with joy, laughter, and unforgettable memories!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" style="margin-top: auto;">BOOK
+                                <button type="button" class="btn btn-primary" id="kidPartyBtn" onclick="window.location.href='eventbooking.php?event=' + encodeURIComponent('Kids Party')" style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
                         </div>
@@ -273,8 +292,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         year
                                         brings new moments to cherish!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" id="bookBtn"
-                                    style="margin-top: auto;">BOOK
+                                <button type="button" class="btn btn-primary" id="birthdayBtn"
+                                    style="margin-top: auto;" onclick="window.location.href='eventbooking.php?event=Birthday'">BOOK
                                     NOW</button>
                             </div>
                         </div>
@@ -285,7 +304,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="carousel-item">
                     <div class="cardFlex">
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images/EventsPhotos/christening.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/christening.jpg"
                                 alt="Christening Event">
                             <div class="card-body">
                                 <h5 class="card-title">Christening/Dedication</h5>
@@ -295,14 +314,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         christenings to dedications, is a moment to treasure.</p>
                                 </div>
 
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary" id="christeningBtn" onclick="window.location.href='eventbooking.php?event=Christening/Dedication'"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
                         </div>
 
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images/EventsPhotos/teamBuilding.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/teamBuilding.jpg"
                                 alt="Team Building Event">
                             <div class="card-body">
                                 <h5 class="card-title">Team Building</h5>
@@ -313,7 +332,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         leadership thrive in inspiring surroundings!
                                     </p>
                                 </div>
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary" id="teamBuildingBtn" onclick="window.location.href='eventbooking.php?event='+ encodeURIComponent('Team Building')"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
@@ -326,7 +345,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="carousel-item">
                     <div class="cardFlex">
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images/EventsPhotos/thanksgiving.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/thanksgiving.jpg"
                                 alt="Thanksgiving Event">
                             <div class="card-body">
                                 <h5 class="card-title">Thanksgiving Party</h5>
@@ -337,14 +356,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         and
                                         great company make every moment unforgettable!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary" id="thanksgivingBtn" onclick="window.location.href='eventbooking.php?event='+ encodeURIComponent('Thanksgiving Party')"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
                         </div>
 
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="../../Assets/images/EventsPhotos/xmas.jpg"
+                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/xmas.jpg"
                                 alt="Birthday Event">
                             <div class="card-body">
                                 <h5 class="card-title">Christmas Party</h5>
@@ -354,7 +373,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         and
                                         unforgettable moments bring joy to all!</p>
                                 </div>
-                                <button type="button" class="btn btn-primary" id="bookBtn"
+                                <button type="button" class="btn btn-primary" id="christmasBtn" onclick="window.location.href='eventbooking.php?event=' + encodeURIComponent('Christmas Party')"
                                     style="margin-top: auto;">BOOK
                                     NOW</button>
                             </div>
@@ -421,18 +440,44 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
 
+        <?php
+        $eventHallID = 4;
+        $mainHall = '';
+        $miniHall = '';
+        $getEventHallQuery = $conn->prepare("SELECT * FROM `resortamenity` WHERE `RScategoryID` = ?");
+        $getEventHallQuery->bind_param("i", $eventHallID,);
+        $getEventHallQuery->execute();
+        $result = $getEventHallQuery->get_result();
+        if ($result->num_rows > 0) {
+
+            while ($row = $result->fetch_assoc()) {
+                $serviceName = $row['RServiceName'];
+                if (stripos($serviceName, 'Main') !== false) {
+                    $mainHall = $row;
+                } elseif (stripos($serviceName, 'Mini') !== false) {
+                    $miniHall = $row;
+                }
+            }
+        }
+        ?>
+
+
         <div class="mainHallDescContainer">
-            <h3 class="mainHallDescTitle">Main Function Hall</h3>
+            <?php if ($mainHall) { ?>
+                <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
 
-            <ul class="mainHallDescription" id="mainHallDesc">
-                <li>Maximum usage of 5 hours; ₱2,000 per hour extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to 350 guests.</li>
-                <li>One (1) air-conditioned private room.</li>
-                <li>Separate powder rooms/restrooms for males and females.</li>
-            </ul>
+                <ul class="mainHallDescription" id="mainHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
+                    <li>One (1) air-conditioned private room.</li>
+                    <li>Separate powder rooms/restrooms for males and females.</li>
+                </ul>
 
-            <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ 30,000</h2>
+                <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
+            <?php } else { ?>
+                <h3 class="mainHallDescTitle">No Information to Display</h3>
+            <?php } ?>
         </div>
 
 
@@ -440,16 +485,21 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <div class="miniHall">
         <div class="miniHallDescContainer">
-            <h3 class="miniHallDescTitle">Mini Function Hall</h3>
+            <?php if ($miniHall) { ?>
+                <h3 class="miniHallDescTitle">Mini Function Hall</h3>
 
-            <ul class="miniHallDescription" id="miniHallDesc">
-                <li>Maximum usage of 5 hours; ₱2,000 per hour extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to 50 guests.</li>
-            </ul>
+                <ul class="miniHallDescription" id="miniHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
+                </ul>
 
-            <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱ 7,000</h2>
+                <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱ <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
+            <?php } else { ?>
+                <h3 class="miniHallDescTitle">No Information to Display</h3>
+            <?php } ?>
         </div>
+
 
         <div id="carouselMiniHall" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -522,6 +572,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
 
     </footer>
+
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
@@ -578,8 +629,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             });
         });
     </script>
-
-
     <!-- Scroll Nav BG -->
     <script src="../../Assets/JS/scrollNavbg.js"></script>
 </body>

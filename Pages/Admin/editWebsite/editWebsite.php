@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../../Config/dbcon.php';
 
 $session_timeout = 3600;
@@ -13,6 +15,23 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $session_timeout) {
     $_SESSION['error'] = 'Session Expired';
 
@@ -22,6 +41,8 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     exit();
 }
 
+
+$_SESSION['edit_mode'] = true;
 $_SESSION['last_activity'] = time();
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -58,7 +79,8 @@ $userRole = $_SESSION['userRole'];
 
         <div class="titleContainer">
             <h2 class="pageTitle" id="title">Edit Website</h2>
-            <i class="fa-sharp fa-regular fa-circle-question" style="color: #559cd3;display: none;cursor: pointer;" id="help-circle"></i>
+            <i class="fa-sharp fa-regular fa-circle-question" style="color: #559cd3;display: none;cursor: pointer;"
+                id="help-circle"></i>
         </div>
 
 
@@ -67,9 +89,17 @@ $userRole = $_SESSION['userRole'];
                     src="../../../Assets/Images/Icon/landing-page.png" alt="Landing Page" class="buttonIcon">Landing
                 Page</button>
 
-            <button class="btn btn-info" id="amenities" onclick="amenities()"><img
-                    src="../../../Assets/Images/Icon/amenities.png" alt="Amenities"
-                    class="buttonIcon">Amenities</button>
+            <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" id="amenitiesDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="../../../Assets/Images/Icon/amenities.png" alt="Amenities" class="buttonIcon"> Amenities
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="amenitiesDropdown">
+                    <li><a class="dropdown-item" href="#" onclick="amenities()">Resort Amenities</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="ratesAndHotel()">Rates and Hotel Rooms</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="events()">Events</a></li>
+                </ul>
+            </div>
 
             <button class="btn btn-info" id="blog" onclick="blog()"><img src="../../../Assets/Images/Icon/blog.png"
                     alt="Blog" class="buttonIcon">Blog</button>
@@ -86,11 +116,67 @@ $userRole = $_SESSION['userRole'];
     </div>
 
     <div class="container-fluid landingPage" id="landingPageContainer">
-        <iframe src="../../../index.php?edit=true" id="editFrame" style="width: 100%; height: 768px;"></iframe>
+        <iframe src="../../../index.php?" class="editFrame" style="width: 100%; height: 100vh; "></iframe>
     </div>
     <div class="container-fluid aboutPage" id="aboutContainer">
-        <iframe src="../../about.php?edit=true" id="editFrame" style="width: 100%; height: 768px;"></iframe>
+        <iframe src="../../about.php" class="editFrame" style="width: 100%;  height: 100vh; "></iframe>
     </div>
+    <div class="container-fluid amenitiesPage" id="amenitiesContainer">
+        <iframe src="../../amenities.php?" class="editFrame" style="width: 100%; height: 100vh;"></iframe>
+    </div>
+    <div class="container-fluid blogPage" id="blogContainer">
+        <button type="button" class="btn btn-primary" id="newBlogBtn" data-bs-toggle="modal"
+            data-bs-target="#NewBlogPost">Add a New Blog Post</button>
+        <iframe src="../../blog.php" class="editFrame" style="width: 100%; height: 100vh;"></iframe>
+    </div>
+
+
+    <!-- MODAL FOR ADDING A NEW BLOG POST -->
+    <!-- <form action="../../Function/Admin/Services/addServices.php" id="addingServiceForm" method="POST"
+            enctype="multipart/form-data"> -->
+    <!-- Modal -->
+    <div class="modal fade" id="NewBlogPost" tabindex="-1" aria-labelledby="newBlogPost" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewBlogPost">Add a New Blog Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-container">
+                        <label for="eventName">Type of Event</label>
+                        <input type="text" class="form-control" id="eventName" name="eventName" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="eventDate">Date</label>
+                        <input type="date" class="form-control" id="eventDate" name="eventDate" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="eventTitle">Title/Header</label>
+                        <input type="text" class="form-control" id="eventTitle" name="eventTitle">
+                    </div>
+                    <div class="input-container">
+                        <label for="eventDesc">Event Description</label>
+                        <textarea class="form-control" name="eventDesc" id="eventDesc"> </textarea>
+                    </div>
+                    <div class="input-container">
+                        <label for="eventImage">Event Image</label>
+                        <input type="file" class="form-control" name="eventImage" id="eventImage">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="uploadPost" name="addResortService">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- </form> -->
+
+
+
+
+
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -106,51 +192,78 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        const pagesContainer = document.getElementById("pagesContainer")
-        const landingPageContainer = document.getElementById("landingPageContainer")
-        const icon = document.getElementById("help-circle")
-        const aboutContainer = document.getElementById("aboutContainer")
+    const pagesContainer = document.getElementById("pagesContainer");
+    const landingPageContainer = document.getElementById("landingPageContainer");
+    const icon = document.getElementById("help-circle");
+    const aboutContainer = document.getElementById("aboutContainer");
+    const amenitiesContainer = document.getElementById("amenitiesContainer");
 
+    landingPageContainer.style.display = "none";
+    aboutContainer.style.display = "none";
+    amenitiesContainer.style.display = "none";
+    blogContainer.style.display = "none";
+
+
+    function landingPage() {
+        hideAllContainers();
+        landingPageContainer.style.display = "block";
+        landingPageContainer.querySelector("iframe").style.display = "block";
+        icon.style.display = "block";
+        pagesContainer.style.display = "none";
+        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+        document.getElementById("title").innerHTML = "Landing Page";
+    }
+
+    function about() {
+        hideAllContainers();
+        aboutContainer.style.display = "block";
+        aboutContainer.querySelector("iframe").style.display = "block";
+        icon.style.display = "block";
+        pagesContainer.style.display = "none";
+        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+        document.getElementById("title").innerHTML = "About Page";
+    }
+
+    function amenities() {
+        hideAllContainers();
+        amenitiesContainer.style.display = "block";
+        amenitiesContainer.querySelector("iframe").style.display = "block";
+        icon.style.display = "block";
+        pagesContainer.style.display = "none";
+        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+        document.getElementById("title").innerHTML = "Amenities Page";
+    }
+
+    function blog() {
+        hideAllContainers();
+        blogContainer.style.display = "block";
+        blogContainer.querySelector("iframe").style.display = "block";
+        icon.style.display = "block";
+        pagesContainer.style.display = "none";
+        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+        document.getElementById("title").innerHTML = "Blog Page";
+    }
+
+
+    function hideAllContainers() {
         landingPageContainer.style.display = "none";
-        aboutContainer.style.display = "none"
+        aboutContainer.style.display = "none";
+        amenitiesContainer.style.display = "none";
 
-        function landingPage() {
-            if (landingPageContainer.style.display == "none") {
-                landingPageContainer.style.display = "block";
-                icon.style.display = "block";
-                pagesContainer.style.display = "none";
-                document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer"
-                document.getElementById("title").innerHTML = "Landing Page"
 
-            } else {
-                landingPageContainer.style.display = "block";
-            }
-        }
-
-        function about() {
-            if (aboutContainer.style.display == "none") {
-                aboutContainer.style.display = "block";
-                icon.style.display = "block";
-                pagesContainer.style.display = "none";
-                document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer"
-                document.getElementById("title").innerHTML = "About Page"
-
-            } else {
-                about.style.display = "block";
-            }
-        }
+    }
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-        document.getElementById("help-circle").addEventListener("click", function() {
-            Swal.fire({
-                title: "How it works",
-                text: "Texts and images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
-                icon: "info",
-                confirmButtonText: "Got it!"
-            });
+    icon.addEventListener("click", function() {
+        Swal.fire({
+            title: "How it works",
+            text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
+            icon: "info",
+            confirmButtonText: "Got it!"
         });
+    });
     </script>
 
 </body>

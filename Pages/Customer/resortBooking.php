@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -8,6 +10,23 @@ checkSessionTimeout($timeout = 3600);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
@@ -203,8 +222,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                         <div class="card-body">
                             <?php
-                            $getEntranceRates = $conn->prepare("SELECT er.*, etr.timeRangeID AS primaryID, etr.time_range AS timeRange FROM entranceRates er
-                            JOIN entrancetimeranges etr ON er.timeRangeID = etr.timeRangeID
+                            $getEntranceRates = $conn->prepare("SELECT er.*, etr.timeRangeID AS primaryID, etr.time_range AS timeRange FROM entrancerate er
+                            JOIN entrancetimerange etr ON er.timeRangeID = etr.timeRangeID
                             ORDER BY er.sessionType, etr.time_range, er.ERcategory");
                             $getEntranceRates->execute();
                             $getEntranceRatesResult = $getEntranceRates->get_result();
@@ -233,13 +252,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         foreach ($entries as $entry) {
                                         ?>
                                             <p><strong><?= htmlspecialchars($entry['category']) ?></strong> -
-                                                <?= htmlspecialchars($entry['price']) ?></p>
+                                                ₱ <?= htmlspecialchars($entry['price']) ?></p>
                                         <?php
                                         }
                                         ?>
                                     </div>
-                            <?php
+                                <?php
                                 }
+                            } else {
+                                ?>
+                                <h1 class="error-display">No data to display</h1>
+                            <?php
                             }
                             ?>
                         </div>
@@ -252,9 +275,16 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <h1>Cottages</h1>
                                 <?php
                                 $cottageCategoryID = 2;
-
-                                $getCottageQuery = $conn->prepare("SELECT DISTINCT RScapacity, RSdescription, RSprice FROM resortAmenities WHERE RScategoryID = ?");
-                                $getCottageQuery->bind_param("i", $cottageCategoryID);
+                                $rowNumber = 1;
+                                $getCottageQuery = $conn->prepare("SELECT *
+                                                                        FROM (
+                                                                            SELECT *, ROW_NUMBER() OVER (PARTITION BY RScapacity ORDER BY RSprice ASC) AS rn
+                                                                            FROM resortamenity
+                                                                            WHERE RScategoryID = ?
+                                                                        ) AS sub
+                                                                        WHERE rn = ?;
+                                                                        ");
+                                $getCottageQuery->bind_param("ii", $cottageCategoryID, $rowNumber);
                                 $getCottageQuery->execute();
                                 $getCottageQueryResult =  $getCottageQuery->get_result();
                                 if ($getCottageQueryResult->num_rows > 0) {
@@ -264,8 +294,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 ?>
                                         <p> ₱ <?= htmlspecialchars(number_format($price, 0)) ?> pesos
                                             <?= htmlspecialchars(strtolower($description)) ?> </p>
-                                <?php
+                                    <?php
                                     }
+                                } else {
+                                    ?>
+                                    <p>No Cottages to display</p>
+                                <?php
                                 }
                                 ?>
                             </div>
@@ -285,9 +319,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <div class="card-body videoke">
                                 <h1> Videoke</h1>
                                 <?php
-                                $entertainmentName = 'Videoke';
+                                $entertainmentName = 'Videoke %';
                                 $categoryID = 3;
-                                $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE  RScategoryID = ? AND  RServiceName LIKE ? LIMIT 1");
+                                $getVideoke = $conn->prepare("SELECT * FROM resortamenity WHERE  RScategoryID = ? AND  RServiceName LIKE ? LIMIT 1");
                                 $getVideoke->bind_param("is",  $categoryID, $entertainmentName);
                                 $getVideoke->execute();
                                 $getVideokeResult =  $getVideoke->get_result();
@@ -313,7 +347,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <?php
                                 $entertainmentName = 'Massage Chair';
                                 $categoryID = 3;
-                                $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ? AND RScategoryID = ?");
+                                $getVideoke = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ? AND RScategoryID = ?");
                                 $getVideoke->bind_param("si", $entertainmentName, $categoryID);
                                 $getVideoke->execute();
                                 $getVideokeResult =  $getVideoke->get_result();
@@ -340,7 +374,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <?php
                                 $entertainmentName = 'Billiard';
                                 $categoryID = 3;
-                                $getVideoke = $conn->prepare("SELECT * FROM resortAmenities WHERE RServiceName = ? AND RScategoryID = ?");
+                                $getVideoke = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ? AND RScategoryID = ?");
                                 $getVideoke->bind_param("si", $entertainmentName, $categoryID);
                                 $getVideoke->execute();
                                 $getVideokeResult =  $getVideoke->get_result();

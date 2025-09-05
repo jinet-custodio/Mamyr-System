@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -14,6 +16,22 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 
 if (isset($_POST['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
@@ -60,9 +78,9 @@ require_once '../../Function/functions.php';
             $bookingID = (int) $bookingID;
             // $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
             // $status = mysqli_real_escape_string($conn, $_POST['status']);
-            $getData = $conn->prepare("SELECT bookings.*, users.firstName, users.middleInitial, users.lastName, users.phoneNumber, users.userAddress FROM bookings 
-            JOIN users ON bookings.userID = users.userID
-            WHERE bookings.userID = ? AND bookings.bookingID =?");
+            $getData = $conn->prepare("SELECT booking.*, user.firstName, user.middleInitial, user.lastName, user.phoneNumber, user.userAddress FROM booking 
+            JOIN user ON booking.userID = user.userID
+            WHERE booking.userID = ? AND booking.bookingID =?");
             $getData->bind_param("ii", $userID, $bookingID);
             $getData->execute();
             $resultData = $getData->get_result();
@@ -92,21 +110,21 @@ require_once '../../Function/functions.php';
                                 er.sessionType AS tourType, er.ERCategory, er.ERprice,
                                 ra.RServiceName, ra.RSprice, rsc.categoryName AS serviceCategory   
                                     
-                                FROM bookings b
-                                LEFT JOIN confirmedBookings cb ON b.bookingID = cb.bookingID 
+                                FROM booking b
+                                LEFT JOIN confirmedBooking cb ON b.bookingID = cb.bookingID 
 
-                                LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
-                                LEFT JOIN custompackageitems cpi ON cp.customPackageID = cpi.customPackageID
+                                LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+                                LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
 
-                                LEFT JOIN bookingservices bs ON b.bookingID = bs.bookingID
-                                LEFT JOIN services s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+                                LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
+                                LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
 
-                                LEFT JOIN resortamenities ra ON s.resortServiceID = ra.resortServiceID
-                                LEFT JOIN resortservicescategories rsc ON rsc.categoryID = ra.RScategoryID
+                                LEFT JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
+                                LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
 
-                                LEFT JOIN entranceRates er ON s.entranceRateID = er.entranceRateID
+                                LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
 
-                                LEFT JOIN partnershipservices ps ON s.partnershipServiceID = ps.partnershipServiceID
+                                LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                             WHERE b.bookingID = ?");
             $getBookingInfo->bind_param("i", $bookingID);
             $getBookingInfo->execute();
