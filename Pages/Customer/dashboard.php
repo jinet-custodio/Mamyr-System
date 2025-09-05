@@ -34,6 +34,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+if ($userRole === 2) {
+    header("Location: ../BusinessPartner/bpDashboard.php");
+    exit();
+}
 
 
 //SQL statement for retrieving data for website content from DB
@@ -303,40 +307,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
         </div>
 
-
-
-        <footer class="py-1 my-2">
-            <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-
-                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-
-                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
-            </div>
-
-            <div class="info">
-                <div class="reservation">
-                    <h4 class="reservationTitle">Reservation</h4>
-                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h4>
-                    <h4 class="emailAddressTextFooter"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h4>
-                </div>
-                <div class="locationFooter">
-                    <h4 class="locationTitle">Location</h4>
-                    <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h4>
-
-                </div>
-            </div>
-            <hr class="footerLine">
-            <div class="socialIcons">
-                <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                        class='bx bxl-facebook-circle'></i></a>
-                <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-                <a href="tel:+09989624697">
-                    <i class='bx bxs-phone'></i>
-                </a>
-
-            </div>
-
-        </footer>
+        <?php include 'footer.php'; ?>
     </div>
 
     <!-- Bootstrap Link -->
