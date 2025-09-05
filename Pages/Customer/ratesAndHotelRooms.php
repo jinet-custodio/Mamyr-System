@@ -135,7 +135,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
                 <li class="nav-item">
-                    <a class="nav-link" href="dashboard.php"> Home</a>
+                    <?php if ($userRole !== 2): ?>
+                        <a class="nav-link" href="dashboard.php"> Home</a>
+                    <?php else: ?>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                    <?php endif; ?>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -151,9 +155,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <li class="nav-item">
                     <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
-                </li>
+                <?php if ($userRole !== 2): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">ABOUT</a>
                 </li>

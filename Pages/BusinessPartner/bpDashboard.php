@@ -57,137 +57,151 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 </head>
 
 <body>
-    <!-- Get the information to the database -->
-    <?php
-    if ($userRole == 1) {
-        $role = "Customer";
-    } elseif ($userRole == 2) {
-        $role = "Business Partner";
-    } elseif ($userRole == 3) {
-        $role = "Admin";
-    } else {
-        $_SESSION['error'] = "Unauthorized Access eh!";
-        session_destroy();
-        header("Location: ../register.php");
-        exit();
-    }
-
-
-    $getData = $conn->prepare("SELECT u.*, ut.typeName as roleName FROM user u
-            INNER JOIN usertype ut ON u.userRole = ut.userTypeID
-            WHERE u.userID = ? AND userRole = ?");
-    $getData->bind_param("ii", $userID, $userRole);
-    $getData->execute();
-    $getDataResult = $getData->get_result();
-    if ($getDataResult->num_rows > 0) {
-        $data =  $getDataResult->fetch_assoc();
-        $middleInitial = trim($data['middleInitial'] ?? '');
-        $name = ucfirst($data['firstName'] ?? '') . " " .
-            ucfirst($data['middleInitial'] ?? '') . " " .
-            ucfirst($data['lastName'] ?? '');
-        $profile = $data['userProfile'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mimeType = finfo_buffer($finfo, $profile);
-        finfo_close($finfo);
-        $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
-    }
-
-    ?>
     <div class="wrapper d-flex">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="d-flex" id="toggle-container">
-                <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </button>
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+
+            <input type="hidden" id="userRole" value="<?= $userRole ?>">
+            <!-- Account Icon on the Left -->
+            <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
+                <?php
+                $getProfile = $conn->prepare("SELECT firstName, userProfile FROM user WHERE userID = ? AND userRole = ?");
+                $getProfile->bind_param("ii", $userID, $userRole);
+                $getProfile->execute();
+                $getProfileResult = $getProfile->get_result();
+                if ($getProfileResult->num_rows > 0) {
+                    $data = $getProfileResult->fetch_assoc();
+                    $firstName = $data['firstName'];
+                    $imageData = $data['userProfile'];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_buffer($finfo, $imageData);
+                    finfo_close($finfo);
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+                }
+                ?>
+                <li class="nav-item account-nav">
+                    <a href="../Account/account.php">
+                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
+                    </a>
+                </li>
+
+                <!-- Get notification -->
+                <?php
+
+                if ($userRole === 1) {
+                    $receiver = 'Customer';
+                } elseif ($userRole === 2) {
+                    $receiver = 'Partner';
+                }
+
+                $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
+                $getNotifications->bind_param("is", $userID, $receiver);
+                $getNotifications->execute();
+                $getNotificationsResult = $getNotifications->get_result();
+                if ($getNotificationsResult->num_rows > 0) {
+                    $counter = 0;
+                    $notificationsArray = [];
+                    $color = [];
+                    $notificationIDs = [];
+                    while ($notifications = $getNotificationsResult->fetch_assoc()) {
+                        $is_readValue = $notifications['is_read'];
+                        $notificationIDs[] = $notifications['notificationID'];
+                        if ($is_readValue === 0) {
+                            $notificationsArray[] = $notifications['message'];
+                            $counter++;
+                            $color[] = "rgb(247, 213, 176, .5)";
+                        } elseif ($is_readValue === 1) {
+                            $notificationsArray[] = $notifications['message'];
+                            $counter++;
+                            $color[] = "white";
+                        }
+                    }
+                }
+                ?>
+
+                <div class="notification-container position-relative">
+                    <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                        <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
+                        <?php if (!empty($counter)): ?>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= htmlspecialchars($counter) ?>
+                            </span>
+                        <?php endif; ?>
+                    </button>
+                </div>
+
+
+            </ul>
+            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse " id="navbarNav">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            AMENITIES
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="../Customer/amenities.php">RESORT AMENITIES</a></li>
+                            <li><a class="dropdown-item" href="../Customer/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                            <li><a class="dropdown-item" href="../Customer/events.php">EVENTS</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../Customer/blog.php">BLOG</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="../Customer/about.php">ABOUT</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="../Customer/bookNow.php">BOOK NOW</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
+                    </li>
+
+                </ul>
             </div>
-            <div class="home text-center">
-                <?php if ($role === 'Customer') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
-                <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
-                <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="bpDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
-                <?php } ?>
-            </div>
-            <div class="sidebar-header text-center">
-                <h5 class="sidebar-text">User Account</h5>
-                <div class="profileImage">
-                    <img src="<?= htmlspecialchars($image) ?>"
-                        alt="<?= htmlspecialchars($data['firstName']) ?> Picture">
+        </nav>
+
+
+        <!-- Notification Modal -->
+        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body p-0">
+                        <?php if (!empty($notificationsArray)): ?>
+                            <ul class="list-group list-group-flush ">
+                                <?php foreach ($notificationsArray as $index => $message):
+                                    $bgColor = $color[$index];
+                                    $notificationID = $notificationIDs[$index];
+                                ?>
+                                    <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                        <?= htmlspecialchars($message) ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <div class="p-3 text-muted">No new notifications.</div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
-            <ul class="list-group sidebar-nav">
-                <li class="sidebar-item">
-                    <a href="../Account/account.php" class="list-group-item">
-                        <i class="fa-regular fa-user sidebar-icon"></i>
-                        <span class="sidebar-text">Profile Information</span>
-                    </a>
-                </li>
+        </div>
 
-                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="../Account/bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                            <i class="fa-solid fa-table-list sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
-                        </a>
-                    </li>
-                <?php } elseif ($role === 'Admin') { ?>
-                    <li class="sidebar-item">
-                        <a href="../Account/userManagement.php" class="list-group-item">
-                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
-                            <span class="sidebar-text">Manage Users</span>
-                        </a>
-                    </li>
-                <?php } ?>
-                <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="../Account/bpBookings.php" class="list-group-item">
-                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
-                            <span class="sidebar-text">Bookings</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="../Account/bpServices.php" class="list-group-item">
-                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
-                            <span class="sidebar-text">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Revenue</span>
-                        </a>
-                    </li>
-                <?php } ?>
 
-                <li class="sidebar-item">
-                    <a href="../Account/loginSecurity.php" class="list-group-item">
-                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
-                        <span class="sidebar-text">Login & Security</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="../Account/deleteAccount.php" class="list-group-item">
-                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
-                        <span class="sidebar-text">Delete Account</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
-                        style="margin: 3vw auto;">
-                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
-                        <span class="sidebar-text ms-2">Logout</span>
-                    </button>
-                </li>
-            </ul>
-        </aside> <!-- End Side Bar -->
+
 
         <main class="main-content" id="main-content">
             <div class="container">
@@ -255,7 +269,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
         </main>
     </div>
-
+    <?php include 'footer.php'; ?>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
