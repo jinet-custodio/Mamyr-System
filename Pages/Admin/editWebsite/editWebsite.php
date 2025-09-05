@@ -61,7 +61,7 @@ $userRole = $_SESSION['userRole'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../../Assets/CSS/Admin/editWebsite/landingPageEdit.css" />
+    <link rel="stylesheet" href="../../../Assets/CSS/Admin/editWebsite/editWebsite.css" />
     <!-- icon libraries from font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -192,78 +192,78 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-    const pagesContainer = document.getElementById("pagesContainer");
-    const landingPageContainer = document.getElementById("landingPageContainer");
-    const icon = document.getElementById("help-circle");
-    const aboutContainer = document.getElementById("aboutContainer");
-    const amenitiesContainer = document.getElementById("amenitiesContainer");
+        const pagesContainer = document.getElementById("pagesContainer");
+        const landingPageContainer = document.getElementById("landingPageContainer");
+        const icon = document.getElementById("help-circle");
+        const aboutContainer = document.getElementById("aboutContainer");
+        const amenitiesContainer = document.getElementById("amenitiesContainer");
+        const newBlogBtn = document.getElementById("newBlogBtn");
 
-    landingPageContainer.style.display = "none";
-    aboutContainer.style.display = "none";
-    amenitiesContainer.style.display = "none";
-    blogContainer.style.display = "none";
-
-
-    function landingPage() {
-        hideAllContainers();
-        landingPageContainer.style.display = "block";
-        landingPageContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "Landing Page";
-    }
-
-    function about() {
-        hideAllContainers();
-        aboutContainer.style.display = "block";
-        aboutContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "About Page";
-    }
-
-    function amenities() {
-        hideAllContainers();
-        amenitiesContainer.style.display = "block";
-        amenitiesContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "Amenities Page";
-    }
-
-    function blog() {
-        hideAllContainers();
-        blogContainer.style.display = "block";
-        blogContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "Blog Page";
-    }
-
-
-    function hideAllContainers() {
         landingPageContainer.style.display = "none";
         aboutContainer.style.display = "none";
         amenitiesContainer.style.display = "none";
+        blogContainer.style.display = "none";
 
 
-    }
+        function landingPage() {
+            hideAllContainers();
+            landingPageContainer.style.display = "block";
+            landingPageContainer.querySelector("iframe").style.display = "block";
+            icon.style.display = "block";
+            pagesContainer.style.display = "none";
+            document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+            document.getElementById("title").innerHTML = "Landing Page";
+        }
+
+        function about() {
+            hideAllContainers();
+            aboutContainer.style.display = "block";
+            aboutContainer.querySelector("iframe").style.display = "block";
+            icon.style.display = "block";
+            pagesContainer.style.display = "none";
+            document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+            document.getElementById("title").innerHTML = "About Page";
+        }
+
+        function amenities() {
+            hideAllContainers();
+            amenitiesContainer.style.display = "block";
+            amenitiesContainer.querySelector("iframe").style.display = "block";
+            icon.style.display = "block";
+            pagesContainer.style.display = "none";
+            document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+            document.getElementById("title").innerHTML = "Amenities Page";
+        }
+
+        function blog() {
+            hideAllContainers();
+            blogContainer.style.display = "block";
+            blogContainer.querySelector("iframe").style.display = "block";
+            icon.style.display = "block";
+            pagesContainer.style.display = "none";
+            document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
+            document.getElementById("title").innerHTML = "Blog Page";
+            newBlogBtn.style.position = "absolute";
+        }
+
+
+        function hideAllContainers() {
+            landingPageContainer.style.display = "none";
+            aboutContainer.style.display = "none";
+            amenitiesContainer.style.display = "none";
+        }
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-    icon.addEventListener("click", function() {
-        Swal.fire({
-            title: "How it works",
-            text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
-            icon: "info",
-            confirmButtonText: "Got it!"
+        icon.addEventListener("click", function() {
+            Swal.fire({
+                title: "How it works",
+                text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
+                icon: "info",
+                confirmButtonText: "Got it!"
+            });
         });
-    });
     </script>
 
 </body>

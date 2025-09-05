@@ -111,7 +111,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../Customer/dashboard.php">
+                    <a href="../BusinessPartner/bpDashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
                 <?php } ?>
@@ -124,16 +124,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
-                <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpDashboard.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Dashboard</span>
-                        </a>
-                    </li>
-                <?php } ?>
                 <li class="sidebar-item">
-                    <a href="../Account/account.php" class="list-group-item">
+                    <a href="account.php" class="list-group-item">
                         <i class="fa-regular fa-user sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
@@ -141,7 +133,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="../Account/bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
                             <span class="sidebar-text">Payment & Booking History</span>
                         </a>
@@ -176,13 +168,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <?php } ?>
 
                 <li class="sidebar-item">
-                    <a href="../Account/loginSecurity.php" class="list-group-item">
+                    <a href="loginSecurity.php" class="list-group-item">
                         <i class="fa-solid fa-user-shield sidebar-icon"></i>
                         <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Account/deleteAccount.php" class="list-group-item">
+                    <a href="deleteAccount.php" class="list-group-item">
                         <i class="fa-solid fa-user-slash sidebar-icon"></i>
                         <span class="sidebar-text">Delete Account</span>
                     </a>

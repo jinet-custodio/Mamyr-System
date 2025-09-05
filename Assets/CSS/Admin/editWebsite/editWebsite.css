@@ -116,6 +116,12 @@ a.dropdown-item {
   height: auto;
 }
 
+#newBlogBtn {
+  top: 8.5vw;
+  right: 7vw;
+  font-size: 1.8vw;
+}
+
 .backButtonContainer {
   position: absolute;
   top: 8%;
@@ -190,11 +196,6 @@ iframe {
   width: 90%;
   text-align: center;
   margin: 2vw auto;
-}
-
-#newBlogBtn {
-  float: right;
-  margin-right: 6vw;
 }
 
 .modal-header {
