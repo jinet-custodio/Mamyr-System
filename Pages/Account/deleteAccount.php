@@ -101,7 +101,7 @@ if ($userRole == 1) {
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../Customer/dashboard.php">
+                    <a href="../BusinessPartner/bpDashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
                 <?php } ?>
@@ -131,17 +131,9 @@ if ($userRole == 1) {
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
-                <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="../BusinessPartner/bpDashboard.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Dashboard</span>
-                        </a>
-                    </li>
-                <?php } ?>
                 <li>
                     <a href="account.php" class="list-group-item ">
-                        <i class="fa-regular fa-user sidebar-icon"></i>
+                        <i class="fa-solid fa-user sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
@@ -176,9 +168,9 @@ if ($userRole == 1) {
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="list-group-item">
+                        <a href="bpSales.php" class="list-group-item">
                             <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Revenue</span>
+                            <span class="sidebar-text">Sales</span>
                         </a>
                     </li>
                 <?php } ?>

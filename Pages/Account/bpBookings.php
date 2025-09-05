@@ -127,7 +127,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <ul class="list-group sidebar-nav">
                 <li class="sidebar-item">
                     <a href="account.php" class="list-group-item">
-                        <i class="fa-regular fa-user sidebar-icon"></i>
+                        <i class="fa-solid fa-user sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
