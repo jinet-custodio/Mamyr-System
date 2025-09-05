@@ -430,7 +430,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                         const img = document.createElement('img');
                         img.classList.add('hotel-image');
-                        img.src = `../../Assets/Images/amenities/hotelPics/${hotel.RSimageData}`;
+                        img.src = `../../Assets/Images/Services/Hotel/${hotel.RSimageData}`;
                         img.alt = `${hotel.RServiceName} image`;
                         img.style.width = "200px";
 
