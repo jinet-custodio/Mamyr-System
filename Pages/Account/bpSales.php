@@ -41,13 +41,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Partner Services - Mamyr Resort and Events Place</title>
+    <title>Business Partner Sales - Mamyr Resort and Events Place</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- Bootstrap Link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/BusinessPartner/bpBooking.css">
+    <link rel="stylesheet" href="../../Assets/CSS/BusinessPartner/bpSales.css">
     <!-- DataTables Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css" />
     <!-- icon libraries for font-awesome and box icons -->
@@ -112,7 +112,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../Customer/dashboard.php">
+                    <a href="../BusinessPartner/bpDashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
                 <?php } ?>
@@ -125,16 +125,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
-                <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpDashboard.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Dashboard</span>
-                        </a>
-                    </li>
-                <?php } ?>
                 <li class="sidebar-item">
-                    <a href="../Account/account.php" class="list-group-item">
+                    <a href="account.php" class="list-group-item">
                         <i class="fa-regular fa-user sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
@@ -143,7 +135,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="../Account/bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
                             <span class="sidebar-text">Payment & Booking History</span>
                         </a>
@@ -158,7 +150,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="bpBookings.php" class="list-group-item active">
+                        <a href="bpBookings.php" class="list-group-item">
                             <i class="fa-regular fa-calendar-days sidebar-icon"></i>
                             <span class="sidebar-text">Bookings</span>
                         </a>
@@ -170,7 +162,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="list-group-item">
+                        <a href="#" class="list-group-item active">
                             <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
                             <span class="sidebar-text">Revenue</span>
                         </a>
@@ -178,13 +170,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <?php } ?>
 
                 <li class="sidebar-item">
-                    <a href="../Account/loginSecurity.php" class="list-group-item">
+                    <a href="loginSecurity.php" class="list-group-item">
                         <i class="fa-solid fa-user-shield sidebar-icon"></i>
                         <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Account/deleteAccount.php" class="list-group-item">
+                    <a href="deleteAccount.php" class="list-group-item">
                         <i class="fa-solid fa-user-slash sidebar-icon"></i>
                         <span class="sidebar-text">Delete Account</span>
                     </a>
@@ -199,87 +191,53 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </ul>
         </aside> <!-- End Side Bar -->
 
+
         <main class="main-content" id="main-content">
             <div class="container">
-                <h3 class="welcomeText" id="title">Bookings</h3>
+                <h3 class="welcomeText" id="title">Sales</h3>
+
 
                 <div class="cardContainer">
                     <div class="card">
-                        <div class="card-header fw-bold fs-5" style=" background-color:#cee4f2;">Bookings</div>
+                        <div class="card-header fw-bold fs-5">Total Sales</div>
                         <div class="card-body">
-                            <h2 class="bookingNumber">8</h2>
+                            <h2 class="totalSales">₱80,000</h2>
+                            <a href="salesReport.php" class="btn btn-primary">Sales Report</a>
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-header fw-bold fs-5" style="background-color: #1a8754; color:#ffff">Approved</div>
-                        <div class="card-body">
-                            <h2 class="approvedNumber">5</h2>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header fw-bold fs-5" style="background-color: #ffc108;">Pending</div>
-                        <div class="card-body">
-                            <h2 class="pendingNumber">3</h2>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header fw-bold fs-5" style="background-color: #db3545; color:#ffff">Cancelled</div>
-                        <div class="card-body">
-                            <h2 class="cancelledNumber">1</h2>
-                        </div>
-                    </div>
                 </div>
 
-                <div class="tableContainer" id="bookingTable">
-                    <table class=" table table-striped" id="booking">
-                        <thead>
-                            <th scope="col">Booking ID</th>
-                            <th scope="col">Guest</th>
-                            <th scope="col">Booking Type</th>
-                            <th scope="col">Check-in</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>Customer Ignacio</td>
-                                <td>Event Booking</td>
-                                <td>29 July 2025</td>
-                                <td><span class="btn btn-warning w-75" id="pending">Pending</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
-                            </tr>
-
-                            <tr>
-                                <td>002</td>
-                                <td>Customer Ignacio</td>
-                                <td>Hotel Booking</td>
-                                <td>30 July 2025</td>
-                                <td><span class="btn btn-success w-75" id="approved">Approved</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
-                            </tr>
-
-                            <tr>
-                                <td>003</td>
-                                <td>Customer Ignacio</td>
-                                <td>Event Booking</td>
-                                <td>31 July 2025</td>
-                                <td><span class="btn btn-danger w-75" id="cancelled">Cancelled</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="revenue-chart">
+                    <canvas id="revenueBar"></canvas>
                 </div>
+
+                <!-- <div class="revenueBar">No data available.</div> -->
+                <div class="revenue-chart">
+                    <canvas id="revenueBar"></canvas>
+                </div>
+
+
+
+
             </div>
         </main>
+
+
+
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -319,7 +277,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
             const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container')
+            const toggleCont = document.getElementById('toggle-container');
 
             toggleBtn.addEventListener('click', () => {
                 sidebar.classList.toggle('collapsed');
@@ -328,7 +286,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     items.forEach(item => {
                         item.style.justifyContent = "center";
                     });
-                    toggleCont.style.justifyContent = "center"
+                    toggleCont.style.justifyContent = "center";
                 } else {
                     items.forEach(item => {
                         item.style.justifyContent = "flex-start";
@@ -384,6 +342,64 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 }
             });
         })
+    </script>
+
+    <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script src="path/to/chartjs/dist/chart.umd.js"></script> -->
+
+    <script>
+        Chart.register({
+            id: 'noDataPlugin',
+            beforeDraw(chart) {
+                const dataset = '';
+                const hasData = '';
+
+                if (!hasData) {
+                    const ctx = chart.ctx;
+                    const {
+                        width,
+                        height
+                    } = chart;
+
+                    chart.clear();
+
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = '20px Times New Roman';
+                    ctx.fillStyle = 'gray';
+                    ctx.fillText('No available data', width / 2, height / 2);
+                    ctx.restore();
+                }
+            }
+        });
+
+
+        const bar = document.getElementById("revenueBar").getContext('2d');
+
+        const myBarChart = new Chart(bar, {
+            type: 'bar',
+            data: {
+                labels: 'sales',
+                datasets: [{
+                    label: 'Sales',
+                    data: '100',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+            plugins: ['noDataPlugin']
+        });
     </script>
 </body>
 
