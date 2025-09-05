@@ -482,6 +482,7 @@ footer {
     display: flex;
     align-items: center;
     padding: 0;
+    height: 93vh !important;
   }
   .repInfoLabel {
     font-weight: bold;
@@ -511,7 +512,7 @@ footer {
     transform-origin: top center;
     width: 100%;
     height: 125vh;
-    margin-top: 10vw !important;
+    margin-top: 4vw !important;
   }
   .repInfoLabel {
     font-size: 20px;
@@ -540,8 +541,42 @@ footer {
   .socialIcons a i {
     font-size: 3vw;
   }
+  .moreDetails {
+    text-decoration: none;
+    padding: 0px;
+    margin-left: 1vw;
+    margin-right: 3vw;
+}
 }
 
-/* Tablet portrait */
+/* Tablet */
+@media only screen and (min-width: 600px) and (max-width: 1025px) {
+  .notification-container {
+    margin-top: 7px;
+    margin-left: 1px;
+  }
+  .notification-container img {
+    margin-top: 1px;
+    height: 4vh;
+  }
+}
+
+/* Tablet portrait only */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+  .notification-container {
+    margin-top: 7px;
+    margin-left: 1px;
+  }
+}
+
+/* Tablet landscape only */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+  .notification-container {
+    margin-top: 7px;
+    margin-left: 1px;
+  }
+  .notification-container img {
+    margin-top: 1px;
+    height: 4vh;
+  }
 }

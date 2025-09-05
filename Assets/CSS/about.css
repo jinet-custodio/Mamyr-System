@@ -609,3 +609,39 @@ footer {
   width: 40vw;
   height: auto;
 }
+
+/* Tablet size */
+@media only screen and (min-width: 600px) and (max-width: 1025px) {
+  .title {
+    font-size: 50px;
+  }
+  .aboutTopContainer {
+    margin-top: 25vh;
+    gap: 4vw; 
+  }
+  .ourServicesContainer {
+    margin-top: 1vw;
+    padding-top: 2vw;
+  }
+  .servicesIconContainer {
+    margin-top: 1vw;
+    gap: 4vw;
+  }
+  .resortIconTitle {
+    margin-top: 2vw;  
+  }
+  .videoContainer {
+    margin-top: 5vw !important;
+    gap: 4vw;
+  }
+  .videoTitle {
+    margin-bottom: 1vw;
+  }
+  .videoDescription {
+    margin-top: 0;
+    font-size: 16px;
+  }
+}
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+  
+}
