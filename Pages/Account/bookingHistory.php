@@ -95,7 +95,7 @@ if ($userRole == 1) {
                             <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                         </a>
                     <?php } elseif ($role === 'Business Partner') { ?>
-                        <a href="../Customer/dashboard.php">
+                        <a href="../BusinessPartner/bpDashboard.php">
                             <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                         </a>
                     <?php } ?>
@@ -123,25 +123,15 @@ if ($userRole == 1) {
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
-                <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="../BusinessPartner/bpDashboard.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Dashboard</span>
-                        </a>
-                    </li>
-                <?php } ?>
                 <li>
                     <a href="account.php" class="list-group-item">
-                        <i class="fa-regular fa-user sidebar-icon"></i>
+                        <i class="fa-solid fa-user sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
-
-
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
                     <li>
-                        <a href="bookingHistory.php" class="list-group-item active" id="paymentBookingHist">
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
                             <span class="sidebar-text">Payment & Booking History</span>
                         </a>
@@ -156,21 +146,21 @@ if ($userRole == 1) {
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="../BusinessPartner/bpBookings.php" class="list-group-item">
+                        <a href="bpBookings.php" class="list-group-item">
                             <i class="fa-regular fa-calendar-days sidebar-icon"></i>
                             <span class="sidebar-text">Bookings</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="../BusinessPartner/bpServices.php" class="list-group-item">
+                        <a href="bpServices.php" class="list-group-item">
                             <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
                             <span class="sidebar-text">Services</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="list-group-item">
+                        <a href="bpSales.php" class="list-group-item">
                             <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Revenue</span>
+                            <span class="sidebar-text">Sales</span>
                         </a>
                     </li>
                 <?php } ?>
