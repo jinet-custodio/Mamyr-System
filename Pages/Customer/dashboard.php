@@ -219,8 +219,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
     </div>
 
-
-
     <div class="custom-container">
         <div class="topContainer">
             <div class="titleContainer">
