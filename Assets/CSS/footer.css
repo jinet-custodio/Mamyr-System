@@ -14,7 +14,7 @@
 
 footer {
   /* border: 1px solid black; */
-  margin-top: auto !important;
+  margin-top: 3vw;
   background: linear-gradient(
     to top,
     rgba(255, 255, 255, 0.445) -50%,
@@ -102,6 +102,54 @@ footer {
   color: #c1a534;
   transition: 0.5s;
 }
+
+/* Edit mode CSS */
+#saveChangesBtn {
+  margin-top: -8vw;
+  margin-left: 80vw;
+  font-size: 1.8vw !important;
+  position: fixed;
+}
+
+#fullName {
+  width: 50% !important;
+}
+
+.editable-input {
+  background-color: rgba(245, 244, 244, 0.834) !important;
+  border: 1px solid rgb(255, 13, 13) !important;
+  padding: 2px;
+}
+
+/* modal css */
+
+.modal-dialog {
+  max-width: 60% !important;
+}
+
+.modal-body {
+  max-height: 500px;
+
+  overflow-y: auto !important;
+}
+
+.modal-title {
+  margin: auto;
+  font-size: 2vw;
+}
+
+.modal-footer {
+  display: flex;
+  margin: auto;
+}
+
+#declineBtn,
+#acceptBtn {
+  width: 15vw;
+  border-radius: 30px;
+}
+
+/*end of modal css */
 
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {

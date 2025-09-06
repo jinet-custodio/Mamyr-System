@@ -8,7 +8,6 @@ require '../Config/dbcon.php';
 
 //for edit website, this will enable edit mode from the iframe
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
-echo ($editMode);
 
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'Amenities';
@@ -150,7 +149,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="slide">
-                        <img src="<? $defaultImage ?>" alt="None Found">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                     </div>
                 <?php endif; ?>
                 <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -192,7 +191,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="slide">
-                        <img src="<? $defaultImage ?>" alt="None Found">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                     </div>
                 <?php endif; ?>
                 <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -235,7 +234,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="slide">
-                        <img src="<? $defaultImage ?>" alt="None Found">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                     </div>
                 <?php endif; ?>
                 <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -278,7 +277,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="slide">
-                        <img src="<? $defaultImage ?>" alt="None Found">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                     </div>
                 <?php endif; ?>
                 <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -322,7 +321,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="slide">
-                        <img src="<? $defaultImage ?>" alt="None Found">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                     </div>
                 <?php endif; ?>
                 <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -365,7 +364,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="slide">
-                        <img src="<? $defaultImage ?>" alt="None Found">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                     </div>
                 <?php endif; ?>
                 <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -409,7 +408,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="slide">
-                        <img src="<? $defaultImage ?>" alt="None Found">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                     </div>
                 <?php endif; ?>
                 <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>

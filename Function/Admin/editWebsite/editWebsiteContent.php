@@ -40,7 +40,7 @@ if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['altText'])) {
     $wcImageID = intval($_POST['wcImageID']);
     $altText = trim($_POST['altText']);
-    $folder = $_POST['folder'] ?? 'landingPage';
+    $folder = $_POST['folder'];
 
     // Update alt text first
     $stmt = $conn->prepare("UPDATE websitecontentimage SET altText = ?, uploadedAt = NOW() WHERE WCImageID = ?");

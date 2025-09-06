@@ -305,7 +305,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
 
         <?php if (!$editMode): ?>
-            <?php include 'Pages/footer.php'; ?>
+            <?php include 'Pages/Customer/footer.php'; ?>
         <?php endif; ?>
 
     </div>
