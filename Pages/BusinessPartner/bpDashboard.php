@@ -269,7 +269,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
         </main>
     </div>
-    <?php include 'footer.php'; ?>
+    <?php include '../Customer/footer.php'; ?>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
