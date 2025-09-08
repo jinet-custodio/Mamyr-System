@@ -62,7 +62,6 @@ if (isset($_POST['signUp'])) {
 
         $emailParts = explode('@', $email);
         $domain = strtolower(end($emailParts));
-
         if (in_array($domain, $extensions)) {
 
             $checkEmail = $conn->prepare("SELECT email FROM user WHERE email = ? LIMIT 1");
@@ -87,12 +86,12 @@ if (isset($_POST['signUp'])) {
 
                 $conn->begin_transaction();
                 try {
-                    $insertUser = $conn->prepare("INSERT INTO user(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userOTP, OTP_expiration_at)  VALUES(?,?,?,?,?,?,?,?,?)");
+                    $insertUser = $conn->prepare("INSERT INTO user(userProfile, firstName, middleInitial, lastName, email, userAddress, password, userRole, userOTP, OTP_expiration_at)  VALUES(?,?,?,?,?,?,?,?,?,?)");
                     $dummyBlob = null;
-                    $insertUser->bind_param("bssssssss", $dummyBlob,  $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $otp, $OTP_expiration_at);
+                    $insertUser->bind_param("bssssssiss", $dummyBlob,  $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $userRole, $otp, $OTP_expiration_at);
                     $insertUser->send_long_data(0, $userProfile);
-                    if ($registerStatus == "partner") {
-                        // Save business partner info into session temporarily
+                    if ($registerStatus == "Partner") {
+                        error_log("PartnerTypeID :" .  $_POST['partnerType']);
                         $_SESSION['partnerData'] = $partnerData;
                     }
 
@@ -223,6 +222,9 @@ elseif (isset($_POST['login'])) {
                 $_SESSION['userRole'] = $roleID;
                 switch ($roleName) {
                     case 'Customer':
+                        header("Location: ../Pages/Customer/dashboard.php?action=successLogin");
+                        break;
+                    case 'PartnerRequest':
                         header("Location: ../Pages/Customer/dashboard.php?action=successLogin");
                         break;
                     case 'Partner':

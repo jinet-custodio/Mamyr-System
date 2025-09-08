@@ -69,6 +69,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $role = "Business Partner";
     } elseif ($userRole == 3) {
         $role = "Admin";
+    } elseif ($userRole == 4) {
+        $role = "Partnership Applicant";
     } else {
         $_SESSION['error'] = "Unauthorized Access eh!";
         session_destroy();
@@ -125,7 +127,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </button>
             </div>
             <div class="home text-center">
-                <?php if ($role === 'Customer') { ?>
+                <?php if ($role === 'Customer' || $role === "Partnership Applicant") { ?>
                     <a href="../Customer/dashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>

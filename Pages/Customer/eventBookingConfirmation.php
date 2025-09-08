@@ -81,7 +81,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     while ($data = $result->fetch_assoc()) {
                         $menuItems[] = [
                             'foodItemID' => $data['foodItemID'],
-                            'foodName'   => $data['foodName']
+                            'foodName'   => $data['foodName'],
+                            'foodPrice' => $data['foodPrice']
                         ];
                     }
                 } else {
@@ -99,7 +100,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
         $guestNo = intval($_POST['guestNo']);
-        $eventVenue = mysqli_real_escape_string($conn, $_POST['eventVenue']);
         $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
         $additionalRequest = !empty($_POST['additionalRequest'])
             ? mysqli_real_escape_string($conn, $_POST['additionalRequest'])
@@ -111,15 +111,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $eventStartTime = mysqli_real_escape_string($conn, $_POST['eventStartTime']);
         $eventEndTime = mysqli_real_escape_string($conn, $_POST['eventEndTime']);
 
-        //Food 
-        $chickenSelected = !empty($_POST['chickenSelections']) ? array_map('trim',  $_POST['chickenSelections']) : [];
-        $porkSelected = !empty($_POST['porkSelections']) ? array_map('trim',  $_POST['porkSelections']) : [];
-        $pastaSelected = !empty($_POST['pastaSelections']) ? array_map('trim',  $_POST['pastaSelections']) : [];
-        $beefSelected = !empty($_POST['beefSelections']) ? array_map('trim',  $_POST['beefSelections']) : [];
-        $vegieSelected = !empty($_POST['vegieSelections']) ? array_map('trim',  $_POST['vegieSelections']) : [];
-        $seafoodSelected = !empty($_POST['seafoodSelections']) ? array_map('trim',  $_POST['seafoodSelections']) : [];
-        $drinkSelected = !empty($_POST['drinkSelections']) ? array_map('trim',  $_POST['drinkSelections']) : [];
-        $dessertSelected = !empty($_POST['dessertSelections']) ? array_map('trim',  $_POST['dessertSelections']) : [];
 
         $startDateObj = new DateTime($eventDate);
         $endDateObj = clone $startDateObj;
@@ -135,6 +126,16 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $formattedEventDate = $startDateObj->format('F d, Y');
         $formattedEventTime = date("g:i A", strtotime($eventStartTime)) . " to " . date("g:i A", strtotime($eventEndTime));
 
+        //Food 
+        $chickenSelected = !empty($_POST['chickenSelections']) ? array_map('trim',  $_POST['chickenSelections']) : [];
+        $porkSelected = !empty($_POST['porkSelections']) ? array_map('trim',  $_POST['porkSelections']) : [];
+        $pastaSelected = !empty($_POST['pastaSelections']) ? array_map('trim',  $_POST['pastaSelections']) : [];
+        $beefSelected = !empty($_POST['beefSelections']) ? array_map('trim',  $_POST['beefSelections']) : [];
+        $vegieSelected = !empty($_POST['vegieSelections']) ? array_map('trim',  $_POST['vegieSelections']) : [];
+        $seafoodSelected = !empty($_POST['seafoodSelections']) ? array_map('trim',  $_POST['seafoodSelections']) : [];
+        $drinkSelected = !empty($_POST['drinkSelections']) ? array_map('trim',  $_POST['drinkSelections']) : [];
+        $dessertSelected = !empty($_POST['dessertSelections']) ? array_map('trim',  $_POST['dessertSelections']) : [];
+
         $getMenuItemQuery = $conn->prepare("SELECT * FROM `menuitem` WHERE foodName = ?");
         $allMenus = [];
         $allMenus['chicken'] = $chickenItems = getMenuItem($chickenSelected, $getMenuItemQuery);
@@ -146,6 +147,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $allMenus['drink'] =  $drinkItems = getMenuItem($drinkSelected, $getMenuItemQuery);
         $allMenus['dessert'] =  $dessertItems = getMenuItem($dessertSelected, $getMenuItemQuery);
 
+        //Venue
+        $eventVenue = mysqli_real_escape_string($conn, $_POST['eventVenue']);
 
         $getVenuePrice = $conn->prepare('SELECT * FROM `resortamenity` WHERE RServiceName = ?');
         $getVenuePrice->bind_param('s', $eventVenue);
@@ -160,16 +163,21 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
         }
 
-        if ($guestNo > $venueCapacity) {
+        //Business Partner Service
+        $additionalServiceSelected = !empty($_POST['additionalServiceSelected']) ? array_map('trim', $_POST['additionalServiceSelected']) : [];
+
+        if (!empty($additionalServiceSelected)) {
+            foreach ($additionalServiceSelected as $partnerService) {
+                $partnerServiceID = $partnerService;
+            }
         }
-        $totalCost = 'To be processed...';
-        $downpaymentPrice = $venuePrice * .3;
+
 
         $_SESSION['eventFormData'] = $_POST;
     }
 
     // echo '<pre>';
-    // print_r($menuIDs);
+    // print_r($allMenus);
     // echo '</pre>';
     ?>
 
@@ -238,6 +246,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                     <?php
                     $hasMenuItems = false;
+                    $totalQuantity = 0;
                     foreach ($allMenus as $items) {
                         if (!empty($items)) {
                             $hasMenuItems = true;
@@ -250,11 +259,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <?php foreach ($allMenus as $category => $items) { ?>
                             <?php if (!empty($items)) { ?>
                                 <h5><?= htmlspecialchars(ucfirst($category)) ?></h5>
-                                <?php foreach ($items as $item) { ?>
+                                <?php foreach ($items as $item) {
+                                    $totalQuantity += $item['quantity'] ?>
                                     <label>
-                                        <?= htmlspecialchars($item['foodName']) ?>:
+                                        <input type="number" name="quantities[<?= $item['foodItemID'] ?>][quantity]" value="1" min="1" readonly> <?= htmlspecialchars($item['foodName']) ?>
                                     </label>
-                                    <input type="number" name="quantities[<?= $item['foodItemID'] ?>]" value="1" min="1">
+                                    <input type="text" name="quantities[<?= $item['foodItemID'] ?>][price]" value="<?= $item['foodPrice'] ?>">
                                 <?php } ?>
 
                             <?php } ?>
@@ -264,7 +274,15 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <p>No menu selected.</p>
                     <?php } ?>
                 </section>
-            <?php } ?>
+            <?php }
+            $totalCost =  $totalFoodPrice + $venuePrice;
+            $downpaymentPrice = $totalCost * 0.3;
+            ?>
+
+
+            <section class="additionalServices">
+
+            </section>
 
             <section class="payment-container">
                 <h4>Payment Details</h4>
@@ -277,12 +295,20 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <input type="text" name="eventVenuePrice" value="₱<?= htmlspecialchars(number_format($venuePrice, 2)) ?>">
                 </div>
                 <div class="input-container">
+                    <label for="totalFoodPrice">Menu Price</label>
+                    <input type="text" name="totalFoodPrice" value="₱<?= htmlspecialchars(number_format($totalFoodPrice, 2)) ?>">
+                </div>
+                <div class="input-container">
+                    <label for="additionalServicePrice">Additional Service Price</label>
+                    <input type="text" name="additionalServicePrice" value="₱<?= htmlspecialchars(number_format($additionalServicePrice, 2)) ?>">
+                </div>
+                <div class="input-container">
                     <label for="downpayment">(Tentative) Downpayment (30%): </label>
                     <input type="text" name="downpayment" value="₱<?= htmlspecialchars(number_format($downpaymentPrice, 2)) ?>">
                 </div>
                 <div class="input-container">
-                    <label for="totalCost">Total Cost</label>
-                    <input type="text" name="totalCost" value="<?= $totalCost ?>">
+                    <label for="totalCost">Total Cost (Tentative)</label>
+                    <input type="text" name="totalCost" value="₱<?= htmlspecialchars(number_format($totalCost, 2)) ?>">
                 </div>
             </section>
 

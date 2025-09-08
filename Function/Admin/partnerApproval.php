@@ -16,21 +16,21 @@ if (isset($_POST['approveBtn'])) {
     $partnerID = $_SESSION['partnerID'];
 
     $query = $conn->prepare("SELECT * FROM partnership
-    WHERE partnershipID = ? AND partnerStatus = ?");
+    WHERE partnershipID = ? AND partnerStatusID = ?");
     $query->bind_param("ii", $partnerID, $partnerStatus);
     $query->execute();
     $result = $query->get_result();
     if ($result->num_rows > 0) {
         $updateStatus = $conn->prepare("UPDATE partnership 
-        SET partnerStatus = ?, startDate = ?
+        SET partnerStatusID = ?, startDate = ?
         WHERE partnershipID = ?");
         $updateStatus->bind_param("isi", $newPartnerStatus, $startDate, $partnerID);
 
-        $newUserRole = 2;
-        $updateRole = $conn->prepare("UPDATE users 
+        $partnerRoleID = 2; //PartnerID
+        $updateRole = $conn->prepare("UPDATE user
         SET userRole = ?
         WHERE userID = ?");
-        $updateRole->bind_param("ii", $newUserRole, $partnerUserID);
+        $updateRole->bind_param("ii", $partnerRoleID, $partnerUserID);
 
         if ($updateStatus->execute() && $updateRole->execute()) {
             // $_SESSION['success-partnership'] = 'Request Approved Successfully';
@@ -71,7 +71,7 @@ if (isset($_POST['declineBtn'])) {
     $partnerID = $_SESSION['partnerID'];
 
     $query = $conn->prepare("SELECT * FROM partnership 
-    WHERE partnershipID = ? AND partnerStatus = ?");
+    WHERE partnershipID = ? AND partnerStatusID = ?");
     $query->bind_param("ii", $partnerID, $partnerStatus);
     $query->execute();
     $result = $query->get_result();
@@ -89,7 +89,7 @@ if (isset($_POST['declineBtn'])) {
         }
 
         $updateStatus = $conn->prepare("UPDATE partnership 
-        SET partnerStatus = ?
+        SET partnerStatusID = ?
         WHERE partnershipID = ?");
         $updateStatus->bind_param("ii", $newPartnerStatus, $partnerID);
 

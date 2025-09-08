@@ -50,7 +50,7 @@ if (isset($_POST['verify-btn'])) {
                             // Get partner data from session
                             $partnerData = $_SESSION['partnerData'] ?? null;
                             $companyName = mysqli_real_escape_string($conn, $partnerData['companyName']);
-                            $partnerType = intval($_POST['partnerType']);
+                            $partnerType = intval($partnerData['partnerType']);
                             $partnerAddress = mysqli_real_escape_string($conn, $partnerData['partnerAddress']);
                             $partnerProofLink = mysqli_real_escape_string($conn, $partnerData['proofLink']);
                             $partnerPhoneNumber = mysqli_real_escape_string($conn, $partnerData['phoneNumber']);
@@ -107,7 +107,7 @@ if (isset($_POST['verify-btn'])) {
                             } catch (Exception $e) {
                                 $conn->rollback();
                                 error_log("Partner Registration Error: " . $e->getMessage());
-                                $_SESSION['error'] = "An error occurred during partner registration. Please try again.";
+                                $_SESSION['registerError'] = "An error occurred during partner registration. Please try again.";
                                 header("Location: ../Pages/register.php");
                                 exit;
                             } finally {

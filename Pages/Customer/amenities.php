@@ -118,7 +118,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <!-- Get notification -->
             <?php
 
-            if ($userRole === 1) {
+            if ($userRole === 1 || $userRole === 4) {
                 $receiver = 'Customer';
             } elseif ($userRole === 2) {
                 $receiver = 'Partner';
@@ -149,8 +149,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             }
             ?>
 
-            <li class="nav-item notification-container" id="notifs">
-                <button type="button" class="notifBtn" data-bs-toggle="modal" data-bs-target="#notificationModal">
+            <div class="notification-container position-relative">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -158,7 +158,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         </span>
                     <?php endif; ?>
                 </button>
-            </li>
+            </div>
         </ul>
 
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
