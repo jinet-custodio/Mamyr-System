@@ -8,6 +8,8 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+require_once '../../Function/functions.php';
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
@@ -73,8 +75,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     }
 
 
-    $getData = $conn->prepare("SELECT u.*, ut.typeName as roleName FROM user u
+    $getData = $conn->prepare("SELECT u.firstName, u.lastName, u.middleInitial, u.userProfile, ut.typeName as roleName , p.partnershipID FROM user u
             INNER JOIN usertype ut ON u.userRole = ut.userTypeID
+            LEFT JOIN partnership p ON u.userID = p.userID
             WHERE u.userID = ? AND userRole = ?");
     $getData->bind_param("ii", $userID, $userRole);
     $getData->execute();
@@ -90,6 +93,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $mimeType = finfo_buffer($finfo, $profile);
         finfo_close($finfo);
         $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+
+        $partnershipID = $data['partnershipID'];
     }
 
     ?>
@@ -201,47 +206,79 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="tableContainer" id="servicesTable">
                     <table class=" table table-striped" id="services">
                         <thead>
-                            <th scope="col">Service</th>
+                            <th scope="col">Service Name</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <td>Videoke Rental</td>
-                                <td>₱800</td>
-                                <td><span class="btn btn-warning w-75" id="maintenance">Maintenance</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
+                            <?php
+                            $getPartnerService = $conn->prepare("SELECT * FROM `partnershipservice` WHERE partnershipID = ?");
+                            $getPartnerService->bind_param('i', $partnershipID);
 
-                            </tr>
+                            if (!$getPartnerService->execute()) {
+                                error_log("Error: " . $getPartnerService->error);
+                            }
 
-                            <tr>
-                                <td>Catering</td>
-                                <td>₱50,000</td>
-                                <td><span class="btn btn-success w-75" id="available">Available</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
+                            $result = $getPartnerService->get_result();
 
-                            </tr>
+                            if (!$result->num_rows === 0) {
+                            ?>
+                                <tr>
+                                    <td colspan="8" class="text-center no-data-text">No data available</td>
+                                </tr>
+                            <?php
+                            }
+                            $details = [];
+                            while ($row = $result->fetch_assoc()) {
+                                $details[] = $row;
+                            }
 
-                            <tr>
-                                <td>Performer</td>
-                                <td>₱2,500</td>
-                                <td><span class="btn btn-danger w-75" id="unavailable">Unavailable</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
+                            foreach ($details as $service):
 
-                            </tr>
+                                $storedAvailabilityID = intval($service['PSAvailabilityID']);
 
-                            <tr>
-                                <td>Photography</td>
-                                <td>₱30,000</td>
-                                <td><span class="btn btn-info w-75">Booked</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
-                            </tr>
+                                $availabilityStatus = getAvailabilityStatus($conn, $storedAvailabilityID);
+
+                                $availabilityID = $availabilityStatus['availabilityID'];
+                                $availabilityName = $availabilityStatus['availabilityName'];
+                                switch ($availabilityID) {
+                                    case 1:
+                                        $classcolor = 'success';
+                                        $statusName =  $availabilityName;
+                                        break;
+                                    case 2:
+                                        $classcolor = 'info';
+                                        $statusName =  'Booked';
+                                        break;
+                                    case 3:
+                                        $classcolor = 'warning';
+                                        $statusName =  $availabilityName;
+                                        break;
+                                    case 4:
+                                        $classcolor = 'success';
+                                        $statusName =  $availabilityName;
+                                        break;
+                                    case 5:
+                                        $classcolor = 'danger';
+                                        $statusName =  $availabilityName;
+                                        break;
+                                    default:
+                                        $classcolor = 'secondary';
+                                        $availabilityID;
+                                        $statusName =  $availabilityName;
+                                }
+
+                            ?>
+                                <tr>
+                                    <td><?= htmlspecialchars(ucfirst($service['PBName'])) ?></td>
+                                    <td>₱<?= number_format($service['PBPrice'], 2) ?></td>
+                                    <td><span class="btn btn-<?= $classcolor ?> w-75" id="<?= $statusName ?>"><?= $statusName ?></span>
+                                    </td>
+                                    <td><a href="#" class="btn btn-primary w-75">View</a></td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -252,31 +289,52 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 class="backArrow">
                         </a>
                     </div>
-                    <form action="#" method="POST">
+                    <form action="../../Function/Partner/addService.php" method="POST">
                         <div class="serviceInputContainer">
                             <div class="serviceNameContainer">
                                 <label for="serviceName" id="addServiceLabel">Service Name</label>
-                                <input type="text" class="form-control" id="serviceName" name="serviceName">
+                                <input type="text" class="form-control" id="serviceName" name="serviceName" placeholder="e.g Wedding Photography" required>
                             </div>
                             <div class="AvailabilityContainer">
                                 <label for="availability" id="addServiceLabel">Availability</label>
-                                <select class="form-select" name="availability" id="availability" required>
+                                <select class="form-select" name="availability" id="availability">
                                     <option value="" disabled selected>Select Availability</option>
-                                    <option value="available">Available</option>
-                                    <option value="unavailable">Unavailable</option>
-                                    <option value="booked">Booked</option>
-                                    <option value="maintenance">Maintenance</option>
+                                    <?php
+                                    $getAvailability = $conn->prepare("SELECT * FROM serviceavailability WHERE availabilityName  NOT IN ('Occupied', 'Private')");
+                                    if ($getAvailability->execute()) {
+                                        $result = $getAvailability->get_result();
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>" id="available">
+                                                    <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                    <?php
+                                            }
+                                        }
+                                        $result->free();
+                                        $getAvailability->close();
+                                    }
+                                    ?>
                                 </select>
                             </div>
                             <div class="priceContainer">
                                 <label for="price" id="addServiceLabel">Price</label>
-                                <input type="text" class="form-control" id="price" name="price">
-
+                                <input type="text" class="form-control" id="price" name="price" placeholder="e.g. 1000" required>
+                            </div>
+                            <div class="capacityContainer">
+                                <label for="capacity" id="addServiceLabel">Capacity</label>
+                                <input type="number" class="form-control" id="capacity" name="capacity" placeholder="e.g. 5" min='1'>
+                            </div>
+                            <div class="durationContainer">
+                                <label for="duration" id="addServiceLabel">Duration</label>
+                                <input type="text" class="form-control" id="duration" name="duration" placeholder="e.g. 1 hour">
+                            </div>
+                            <div class="descContainer">
                                 <label for="description" class="description" id="addServiceLabel">Description</label>
                                 <textarea class="form-control" id="description" name="description"
                                     placeholder="Service information/description (Optional)"></textarea>
                             </div>
-                            <div class="imageContainer">
+                            <!-- <div class="imageContainer">
                                 <label for="serviceImage" id="addServiceLabel">Upload Image</label>
                                 <img src="../../Assets/Images/no-picture.jpg" alt="Service Picture" id="preview"
                                     class="serviceImage" name="serviceImage">
@@ -284,10 +342,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <label for="servicePicture" id="choose" class="custom-file-button btn btn-primary w-50 mt-2"
                                     name="choose">Choose
                                     Image</label>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="submitBtnContainer ">
-                            <button type="submit" class="btn btn-success w-25">Add Service</button>
+                            <input type="hidden" name="partnershipID" value="<?= (int) $partnershipID ?>">
+                            <button type="submit" class="btn btn-success w-25" name="addService">Add Service</button>
                         </div>
                     </form>
 
@@ -322,7 +381,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         }
     </script>
 
-
+    <!-- Bootstrap Link -->
+    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
+    </script>
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -337,7 +400,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     emptyTable: "No Services"
                 },
                 columnDefs: [{
-                    width: '15%',
+                    width: '25%',
                     target: 0
 
                 }]
@@ -345,11 +408,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         });
     </script>
 
-    <!-- Bootstrap Link -->
-    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
+
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -427,7 +486,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         })
     </script>
 
-    <script>
+    <!-- <script>
         document.querySelector("input[type='file']").addEventListener("change", function(event) {
             let reader = new FileReader();
             reader.onload = function() {
@@ -437,7 +496,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             };
             reader.readAsDataURL(event.target.files[0]);
         });
-    </script>
+    </script> -->
 
 
 
