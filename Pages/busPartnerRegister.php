@@ -165,8 +165,8 @@ session_start();
                     <div class="input-box">
                         <input type="password" class="form-control" id="confirm_password" name="confirm_password"
                             placeholder="Confirm Password" oninput="validateSignUpForm();" required>
-                        <input type="hidden" name="userRole" value="2"> <!-- 2 = partner -->
-                        <input type="hidden" name="registerStatus" value="partner">
+                        <input type="hidden" name="userRole" value="4"> <!-- 4 = partnership applicant -->
+                        <input type="hidden" name="registerStatus" value="Partner">
 
                         <i id="togglePassword2" class='bx bxs-hide'></i>
                     </div>

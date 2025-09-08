@@ -80,7 +80,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <!-- Get notification -->
             <?php
 
-            if ($userRole === 1) {
+            if ($userRole === 1 || $userRole === 4) {
                 $receiver = 'Customer';
             } elseif ($userRole === 2) {
                 $receiver = 'Partner';
@@ -149,9 +149,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <li class="nav-item">
                     <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">BE OUR PARTNER</a>
-                </li>
+
+                <?php if ($userRole !== 2): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
+                    </li>
+                <?php endif; ?>
+
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">ABOUT</a>
                 </li>
@@ -250,198 +254,199 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <?php endif; ?>
     </div>
 
+    <?php if ($userRole === 1) { ?>
+        <form action="../../Function/partnershipRequest.php" method="POST" enctype="multipart/form-data" onsubmit="return submitRequest();">
 
-    <form action="../../Function/partnershipRequest.php" method="POST" enctype="multipart/form-data" onsubmit="return submitRequest();">
+            <div class=" container" id="basicInfo">
 
-        <div class=" container" id="basicInfo">
+                <input type="hidden" class="form-control" id="userdID" name="userID"
+                    value="<?= htmlspecialchars($userID) ?>">
+                <input type="hidden" class="form-control" id="userdRole" name="userRole"
+                    value="<?= htmlspecialchars($userRole) ?>">
+                <div class="row">
+                    <div class="col" id="repInfoContainer">
+                        <h4 class="repInfoLabel">Representative Information</h4>
 
-            <input type="hidden" class="form-control" id="userdID" name="userID"
-                value="<?= htmlspecialchars($userID) ?>">
-            <input type="hidden" class="form-control" id="userdRole" name="userRole"
-                value="<?= htmlspecialchars($userRole) ?>">
-            <div class="row">
-                <div class="col" id="repInfoContainer">
-                    <h4 class="repInfoLabel">Representative Information</h4>
+                        <div class="repInfoFormContainer">
+                            <input type="email" class="form-control" id="businessEmail" name="businessEmail"
+                                placeholder="Business Email" required>
 
-                    <div class="repInfoFormContainer">
-                        <input type="email" class="form-control" id="businessEmail" name="businessEmail"
-                            placeholder="Business Email" required>
-
-                        <input type="text" class="form-control" id="firstName" name="firstName"
-                            value="<?= htmlspecialchars($firstName) ?>" placeholder="First Name" required>
-                        <input type="text" class="form-control" id="middleInitial"
-                            value="<?= htmlspecialchars($middleInitial) ?>" name="middleInitial"
-                            placeholder="Middle Initial (Optional)">
-                        <input type="text" class="form-control" id="lastName" name="lastName"
-                            value="<?= htmlspecialchars($lastName) ?>" placeholder="Last Name" required>
-                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                            placeholder="Phone Number" value="<?= htmlspecialchars($phoneNumber) ?>" required>
+                            <input type="text" class="form-control" id="firstName" name="firstName"
+                                value="<?= htmlspecialchars($firstName) ?>" placeholder="First Name" required>
+                            <input type="text" class="form-control" id="middleInitial"
+                                value="<?= htmlspecialchars($middleInitial) ?>" name="middleInitial"
+                                placeholder="Middle Initial (Optional)">
+                            <input type="text" class="form-control" id="lastName" name="lastName"
+                                value="<?= htmlspecialchars($lastName) ?>" placeholder="Last Name" required>
+                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                                placeholder="Phone Number" value="<?= htmlspecialchars($phoneNumber) ?>" required>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col" id="busInfoContainer">
-                    <h4 class="busInfoLabel">Business Information</h4>
+                    <div class="col" id="busInfoContainer">
+                        <h4 class="busInfoLabel">Business Information</h4>
 
-                    <div class="busInfoFormContainer">
-                        <!--purpose of this div: going to put margin top para pumantay sa left and right column-->
-                        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Business Name" value="<?php echo isset($_SESSION['partnerData']['companyName']) ? htmlspecialchars(trim($_SESSION['partnerData']['companyName'])) : ''; ?>">
+                        <div class="busInfoFormContainer">
+                            <!--purpose of this div: going to put margin top para pumantay sa left and right column-->
+                            <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Business Name" value="<?php echo isset($_SESSION['partnerData']['companyName']) ? htmlspecialchars(trim($_SESSION['partnerData']['companyName'])) : ''; ?>">
 
-                        <select id="partnerType" name="partnerType" class="form-select primary">
-                            <option value="" disabled selected>Type of Business</option>
-                            <?php
-                            $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
-                            $serviceType->execute();
-                            $serviceTypeResult = $serviceType->get_result();
-                            if ($serviceTypeResult->num_rows > 0) {
-                                while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
-                                    $partnerType = $serviceTypes['partnerType'];
-                                    $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
-                            ?>
-                                    <option value="<?= htmlspecialchars($partnerType) ?>"><?= htmlspecialchars($partnerTypeDescription) ?></option>
+                            <select id="partnerType" name="partnerType" class="form-select primary">
+                                <option value="" disabled selected>Type of Business</option>
+                                <?php
+                                $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
+                                $serviceType->execute();
+                                $serviceTypeResult = $serviceType->get_result();
+                                if ($serviceTypeResult->num_rows > 0) {
+                                    while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
+                                        $partnerType = $serviceTypes['partnerType'];
+                                        $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
+                                ?>
+                                        <option value="<?= htmlspecialchars($partnerType) ?>"><?= htmlspecialchars($partnerTypeDescription) ?></option>
 
-                            <?php
+                                <?php
+                                    }
                                 }
-                            }
-                            ?>
-                        </select>
+                                ?>
+                            </select>
 
-                        <input type="text" class="form-control" id="streetAddress" name="streetAddress"
-                            placeholder="Street Address(optional)" value="<?php echo isset($_SESSION['partnerData']['streetAddress']) ? htmlspecialchars(trim($_SESSION['partnerData']['streetAddress'])) : ''; ?>">
+                            <input type="text" class="form-control" id="streetAddress" name="streetAddress"
+                                placeholder="Street Address(optional)" value="<?php echo isset($_SESSION['partnerData']['streetAddress']) ? htmlspecialchars(trim($_SESSION['partnerData']['streetAddress'])) : ''; ?>">
 
-                        <input type="text" class="form-control" id="barangay" name="barangay"
-                            placeholder="Barangay" value="<?php echo isset($_SESSION['partnerData']['barangay']) ? htmlspecialchars(trim($_SESSION['partnerData']['barangay'])) : ''; ?>" required>
+                            <input type="text" class="form-control" id="barangay" name="barangay"
+                                placeholder="Barangay" value="<?php echo isset($_SESSION['partnerData']['barangay']) ? htmlspecialchars(trim($_SESSION['partnerData']['barangay'])) : ''; ?>" required>
 
-                        <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" value="<?php echo isset($_SESSION['partnerData']['city']) ? htmlspecialchars(trim($_SESSION['partnerData']['city'])) : ''; ?>" required>
+                            <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" value="<?php echo isset($_SESSION['partnerData']['city']) ? htmlspecialchars(trim($_SESSION['partnerData']['city'])) : ''; ?>" required>
 
-                        <div class="row1">
-                            <input type="text" class="form-control" id="province" name="province"
-                                placeholder="Province" value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>" required>
+                            <div class="row1">
+                                <input type="text" class="form-control" id="province" name="province"
+                                    placeholder="Province" value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>" required>
 
-                            <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code" value="<?php echo isset($_SESSION['partnerData']['zip']) ? htmlspecialchars(trim($_SESSION['partnerData']['zip'])) : ''; ?>">
+                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code" value="<?php echo isset($_SESSION['partnerData']['zip']) ? htmlspecialchars(trim($_SESSION['partnerData']['zip'])) : ''; ?>">
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col" id="busProofContainer">
-                    <h4 class="busProofLabel">Proof of Business</h4>
+                    <div class="col" id="busProofContainer">
+                        <h4 class="busProofLabel">Proof of Business</h4>
 
-                    <p class="description">Please provide a link to your Google Drive or social media page as a
-                        proof of your business</p>
+                        <p class="description">Please provide a link to your Google Drive or social media page as a
+                            proof of your business</p>
 
-                    <div class="busProofFormContainer">
+                        <div class="busProofFormContainer">
 
 
-                        <input type="text" class="form-control" id="proofLink" name="proofLink"
-                            placeholder="Paste the link here" value="<?php echo isset($_SESSION['partnerData']['proofLink']) ? htmlspecialchars(trim($_SESSION['partnerData']['proofLink'])) : ''; ?>" required>
+                            <input type="text" class="form-control" id="proofLink" name="proofLink"
+                                placeholder="Paste the link here" value="<?php echo isset($_SESSION['partnerData']['proofLink']) ? htmlspecialchars(trim($_SESSION['partnerData']['proofLink'])) : ''; ?>" required>
 
-                        <a href="#moreDetailsModal" class="moreDetails" data-bs-toggle="modal"
-                            data-bs-target="#openModal">More Details</a>
+                            <a href="#moreDetailsModal" class="moreDetails" data-bs-toggle="modal"
+                                data-bs-target="#openModal">More Details</a>
 
-                        <button type="submit" class="btn btn-primary w-75" name="submit_request"
-                            id="submit-request" onclick="submitRequest()">Submit Request</button>
+                            <button type="submit" class="btn btn-primary w-75" name="submit_request"
+                                id="submit-request" onclick="submitRequest()">Submit Request</button>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- modal -->
+            <!-- modal -->
 
-        <div class="modal fade modal-lg m-auto" id="openModal" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade modal-lg m-auto" id="openModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="instructionLabel">Documents for Verification</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="instructionLabel">Documents for Verification</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
 
-                    <div class="modal-body" style="max-height:400px; overflow-y: auto;">
-                        <p class="modalSubtitle">To verify your business or talent, please upload the following
-                            documents or
-                            media:</p>
+                        <div class="modal-body" style="max-height:400px; overflow-y: auto;">
+                            <p class="modalSubtitle">To verify your business or talent, please upload the following
+                                documents or
+                                media:</p>
 
 
-                        <div class="modalRequirementsContainer">
-                            <div class="busPartnerRequirement">
-                                <p><strong>For Business Partners:</strong></p>
-                                <ol type="A" class="BPrequirements">
-                                    <li>Business Permit</li>
-                                    <li>License to Operate</li>
-                                    <li>Valid ID of the Representative</li>
-                                    <li>Business Operations Photos (3-5)</li>
-                                    <li>Business Operations Video (Optional)</li>
+                            <div class="modalRequirementsContainer">
+                                <div class="busPartnerRequirement">
+                                    <p><strong>For Business Partners:</strong></p>
+                                    <ol type="A" class="BPrequirements">
+                                        <li>Business Permit</li>
+                                        <li>License to Operate</li>
+                                        <li>Valid ID of the Representative</li>
+                                        <li>Business Operations Photos (3-5)</li>
+                                        <li>Business Operations Video (Optional)</li>
+                                    </ol>
+                                </div>
+
+                                <div class="talentsRequirement">
+                                    <p><strong>For Talents & Performers:</strong></p>
+                                    <ol type="A" class="TPrequirements">
+                                        <li>Social Media Links (Instagram, Facebook, </br> YouTube, etc.)</li>
+                                        <li>Performance Photos (3-5)</li>
+                                        <li>Performance Videos (at least 1-2)</li>
+                                        <li>Introduction Video (Optional)</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <div class="stepsContainer">
+                                <ol>
+                                    <li>
+                                        <strong>Upload Your Documents or Media</strong>
+                                        <p>You can either upload your documents/media to Google Drive or share links to your
+                                            social media pages (such as Instagram, Facebook, YouTube, etc.) that showcase
+                                            your
+                                            business or talent.</p>
+                                        <ul>
+                                            <li><strong>Google Drive:</strong> Create a new folder in Google Drive with your
+                                                business or performance name. Upload the required documents or media to this
+                                                folder.</li>
+                                            <li><strong>Social Media Links:</strong> If you have active business pages or
+                                                performance content on social media platforms, feel free to share the links
+                                                to
+                                                your profiles or posts that demonstrate your business or performance.</li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <strong>Share the Folder or Social Media Links</strong>
+                                        <ul>
+                                            <li><strong>Google Drive:</strong> Right-click on the folder, select "Share,"
+                                                and
+                                                choose "Anyone with the link" with permissions set to "Viewer" or "Editor."
+                                                Copy
+                                                the link to your folder.</li>
+                                            <li><strong>Social Media Links:</strong> Simply copy and paste the URLs to your
+                                                active business or performance profiles.</li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <strong>Paste the Link(s)</strong>
+                                        <p>Once your documents/media or social media links are ready, paste the link(s) on
+                                            the
+                                            input box of the “Proof of Business” section.</p>
+                                    </li>
                                 </ol>
                             </div>
 
-                            <div class="talentsRequirement">
-                                <p><strong>For Talents & Performers:</strong></p>
-                                <ol type="A" class="TPrequirements">
-                                    <li>Social Media Links (Instagram, Facebook, </br> YouTube, etc.)</li>
-                                    <li>Performance Photos (3-5)</li>
-                                    <li>Performance Videos (at least 1-2)</li>
-                                    <li>Introduction Video (Optional)</li>
-                                </ol>
-                            </div>
+
                         </div>
-
-                        <div class="stepsContainer">
-                            <ol>
-                                <li>
-                                    <strong>Upload Your Documents or Media</strong>
-                                    <p>You can either upload your documents/media to Google Drive or share links to your
-                                        social media pages (such as Instagram, Facebook, YouTube, etc.) that showcase
-                                        your
-                                        business or talent.</p>
-                                    <ul>
-                                        <li><strong>Google Drive:</strong> Create a new folder in Google Drive with your
-                                            business or performance name. Upload the required documents or media to this
-                                            folder.</li>
-                                        <li><strong>Social Media Links:</strong> If you have active business pages or
-                                            performance content on social media platforms, feel free to share the links
-                                            to
-                                            your profiles or posts that demonstrate your business or performance.</li>
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <strong>Share the Folder or Social Media Links</strong>
-                                    <ul>
-                                        <li><strong>Google Drive:</strong> Right-click on the folder, select "Share,"
-                                            and
-                                            choose "Anyone with the link" with permissions set to "Viewer" or "Editor."
-                                            Copy
-                                            the link to your folder.</li>
-                                        <li><strong>Social Media Links:</strong> Simply copy and paste the URLs to your
-                                            active business or performance profiles.</li>
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <strong>Paste the Link(s)</strong>
-                                    <p>Once your documents/media or social media links are ready, paste the link(s) on
-                                        the
-                                        input box of the “Proof of Business” section.</p>
-                                </li>
-                            </ol>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                aria-label="Close">Close</button>
                         </div>
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                            aria-label="Close">Close</button>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-
-
+        </form>
+    <?php } elseif ($userRole === 4) { ?>
+        <h1>YOU'RE REQUEST HAS BEEN SUBMITTED</h1>
+    <?php } ?>
     <footer class="py-1" style="margin-top: 5vw !important;">
         <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
             <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">

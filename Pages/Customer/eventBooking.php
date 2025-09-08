@@ -289,13 +289,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="partnerListContainer">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="sw" id="sw">
+                                    <input class="form-check-input" type="checkbox" value="1" name="additionalServiceSelected[]" id="sw">
                                     <label class="form-check-label" for="sw">
                                         Shutter Wonders
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="cc" id="cc">
+                                    <input class="form-check-input" type="checkbox" value="2" name="additionalServiceSelected[]" id="cc">
                                     <label class="form-check-label" for="cc">
                                         Captured Creativity
                                     </label>
@@ -309,13 +309,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="partnerListContainer">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="im" id="im">
+                                    <input class="form-check-input" type="checkbox" value="3" name="additionalServiceSelected[]" id="im">
                                     <label class="form-check-label" for="im">
                                         Issang Macchiato
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="mr" id="mr">
+                                    <input class="form-check-input" type="checkbox" value="4" name="additionalServiceSelected[]" id="mr">
                                     <label class="form-check-label" for="mr">
                                         Mango Royal
                                     </label>
@@ -329,13 +329,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="partnerListContainer">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="ss" id="ss">
+                                    <input class="form-check-input" type="checkbox" value="5" name="additionalServiceSelected[]" id="ss">
                                     <label class="form-check-label" for="ss">
                                         Studios Studio
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="tri" id="tri">
+                                    <input class="form-check-input" type="checkbox" value="6" name="additionalServiceSelected[]" id="tri">
                                     <label class="form-check-label" for="tri">
                                         The Right Image
                                     </label>
@@ -349,13 +349,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="partnerListContainer">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="di" id="di">
+                                    <input class="form-check-input" type="checkbox" value="7" name="additionalServiceSelected[]" id="di">
                                     <label class="form-check-label" for="di">
                                         Dirty Ice Cream (Sorbetes)
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="Sf" id="sf">
+                                    <input class="form-check-input" type="checkbox" value="8" name="additionalServiceSelected[]" id="sf">
                                     <label class="form-check-label" for="sf">
                                         Street Food
                                     </label>
@@ -369,13 +369,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="partnerListContainer">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="hh" id="hh">
+                                    <input class="form-check-input" type="checkbox" value="9" name="additionalServiceSelected[]" id="hh">
                                     <label class="form-check-label" for="hh">
                                         The Hosting Hub
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="sh" id="sh">
+                                    <input class="form-check-input" type="checkbox" value="10" name="additionalServiceSelected[]" id="sh">
                                     <label class="form-check-label" for="sh">
                                         Stellar Hosts
                                     </label>
@@ -389,13 +389,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="partnerListContainer">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="lp" id="lp">
+                                    <input class="form-check-input" type="checkbox" value="11" name="additionalServiceSelected[]" id="lp">
                                     <label class="form-check-label" for="lp">
                                         Lightwave Productions
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" name="st" id="st">
+                                    <input class="form-check-input" type="checkbox" value="12" name="additionalServiceSelected[]" id="st">
                                     <label class="form-check-label" for="st">
                                         SoundBeam Technologies
                                     </label>
@@ -517,14 +517,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     isValid = false;
                 }
 
-                if (mainDishCount == 5) {
-                    Swal.fire({
-                        title: 'Sorry',
-                        text: `You're required to select a dish.`,
-                        icon: 'info'
-                    });
-                    isValid = false;
-                }
+                // if (mainDishCount == 0) {
+                //     Swal.fire({
+                //         title: 'Sorry',
+                //         text: `You're required to select a dish.`,
+                //         icon: 'info'
+                //     });
+                //     isValid = false;
+                // }
 
 
                 if (drinkCount > 2) {
@@ -575,25 +575,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                     const venueInfoLabel = document.querySelector("#venueInfoLabel");
                     const venueSelect = document.getElementById("eventVenue");
-
-                    // eventTypeSelect.innerHTML = '';
-
-                    // eventInfoLabel.innerHTML = 'Type of Event';
-
-                    // const typeOption = document.createElement('option');
-                    // typeOption.value = "";
-                    // typeOption.disabled = true;
-                    // typeOption.selected = true;
-                    // typeOption.textContent = "Choose here...";
-                    // eventTypeSelect.appendChild(typeOption);
-
-
-                    // data.Categories.forEach(category => {
-                    //     const typeOptions = document.createElement('option');
-                    //     typeOptions.value = category.categoryName;
-                    //     typeOptions.textContent = category.categoryName;
-                    //     eventTypeSelect.appendChild(typeOptions);
-                    // })
 
                     venueSelect.innerHTML = '';
 

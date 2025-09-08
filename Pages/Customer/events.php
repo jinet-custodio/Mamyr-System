@@ -79,7 +79,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <!-- Get notification -->
             <?php
 
-            if ($userRole === 1) {
+            if ($userRole === 1 || $userRole === 4) {
                 $receiver = 'Customer';
             } elseif ($userRole === 2) {
                 $receiver = 'Partner';
