@@ -8,6 +8,9 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+require_once '../../Function/functions.php';
+changeToDoneStatus($conn);
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
@@ -175,7 +178,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 $getReportDataResult = $getReportData->get_result();
                                 if ($getReportDataResult->num_rows > 0) {
                                     $enableDownloadBtn = true;
+                                    $_SESSION['reportData'] = [];
                                     while ($row = $getReportDataResult->fetch_assoc()) {
+                                        $_SESSION['reportData'][] = $row;
                                         $formattedBookingID = $row['formattedBookingID'];
                                         $bookingType = $row['bookingType'];
                                         $customerName = ucfirst($row['firstName']) . ucfirst($row['lastName']);
@@ -184,9 +189,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         $endDate = $row['endDate'];
                                         $paymentMethod = $row['paymentMethod'];
                                         $totalCost = $row['totalCost'];
-                                        $partnerServiceName = $row['PBName'];
-
-                                        $_SESSION['reportData'] = $row;
+                                        $partnerServiceName = $row['PBName'] ?? null;
                         ?>
                                         <tr>
                                             <td><?= htmlspecialchars($formattedBookingID) ?></td>
@@ -204,6 +207,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         </tr>
                                     <?php
                                     }
+                                    echo '<pre>';
+                                    var_dump($_SESSION['reportData']);
+                                    echo '</pre>';
                                 } else {
                                     ?>
                                     <tr>

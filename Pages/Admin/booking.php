@@ -8,6 +8,8 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+require_once '../../Function/functions.php';
+changeToDoneStatus($conn);
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
