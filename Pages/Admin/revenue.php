@@ -18,8 +18,15 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 //Get the percent of payment methods
 
 $payments = $conn->prepare("SELECT 
-                    COUNT(CASE WHEN cb.paymentApprovalStatus = '2' AND b.paymentMethod = 'GCash' THEN 1 END) AS totalPaymentGCash,
-                     COUNT(CASE WHEN cb.paymentApprovalStatus = '2' AND b.paymentMethod = 'Cash' THEN 1 END) AS totalPaymentCash  
+                    COUNT(CASE WHEN cb.paymentApprovalStatus = '2' AND b.paymentMethod = 'GCash' 
+                        AND YEAR(b.startDate) = YEAR(CURDATE())  
+                        AND DATE(b.endDate) < CURDATE()  
+                        THEN 1 END) 
+                        AS totalPaymentGCash,
+                     COUNT(CASE WHEN cb.paymentApprovalStatus = '2' AND b.paymentMethod = 'Cash'
+                        AND YEAR(b.startDate) = YEAR(CURDATE())  
+                        AND DATE(b.endDate) < CURDATE()
+                        THEN 1 END) AS totalPaymentCash  
                      FROM confirmedbooking cb
                      LEFT JOIN booking b ON cb.bookingID = b.bookingID
                     ");
@@ -41,6 +48,8 @@ $revenue =  $conn->prepare("SELECT
                                 booking b ON cb.bookingID = b.bookingID 
                             WHERE 
                                 cb.paymentApprovalStatus = ?
+                                AND YEAR(b.startDate) = YEAR(CURDATE())  
+                                AND DATE(b.endDate) < CURDATE()        
                             GROUP BY 
                                 month 
                             ORDER  BY 
@@ -304,6 +313,8 @@ if ($revenueResult->num_rows > 0) {
                                                     THEN cb.confirmedFinalBill ELSE 0 END) 
                                                     AS totalThisMonth,
                                         SUM(CASE WHEN cb.paymentApprovalStatus = 2 
+                                                    AND YEAR(b.startDate) = YEAR(CURDATE()) 
+                                                    AND DATE(b.endDate) < CURDATE() 
                                                     THEN cb.confirmedFinalBill ELSE 0 END) AS totalThisYear                              
                                     FROM booking b 
                                     JOIN confirmedbooking cb ON b.bookingID = cb.bookingID");

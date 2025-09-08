@@ -85,6 +85,20 @@ CREATE TABLE custompackage (
     FOREIGN KEY (userID) REFERENCES user(userID)
 );
 
+
+ALTER TABLE custompackage
+ADD COLUMN eventTypeID INT
+AFTER customPackageID;
+
+
+ALTER TABLE custompackage
+ADD CONSTRAINT fk_eventTypeID
+FOREIGN KEY (eventTypeID)
+REFERENCES eventcategory(categoryID)
+ON DELETE SET NULL
+ON UPDATE CASCADE;
+
+
 CREATE TABLE custompackageitem (
     customPackageItemID INT PRIMARY KEY AUTO_INCREMENT,
     customPackageID INT NOT NULL,

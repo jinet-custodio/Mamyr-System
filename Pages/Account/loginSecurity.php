@@ -100,6 +100,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <a href="../Admin/adminDashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
+                <?php } elseif ($role === 'Business Partner') { ?>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } ?>
             </div>
 
@@ -128,17 +132,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <ul class="list-group">
                 <li>
                     <a href="account.php" class="list-group-item ">
-                        <i class="fa-regular fa-user sidebar-icon"></i>
+                        <i class="fa-solid fa-user sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
 
-                <li>
-                    <a href="loginSecurity.php" class="list-group-item active">
-                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
-                        <span class="sidebar-text">Login & Security</span>
-                    </a>
-                </li>
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
                     <li>
@@ -155,7 +153,32 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </a>
                     </li>
                 <?php } ?>
-
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="bpBookings.php" class="list-group-item">
+                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpServices.php" class="list-group-item">
+                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpSales.php" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Sales</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <li>
+                    <a href="loginSecurity.php" class="list-group-item active">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
+                    </a>
+                </li>
                 <li>
                     <a href="deleteAccount.php" class="list-group-item">
                         <i class="fa-solid fa-user-slash sidebar-icon"></i>

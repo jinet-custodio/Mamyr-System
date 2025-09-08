@@ -162,7 +162,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         if ($guestNo > $venueCapacity) {
         }
-        $totalCost = 'To be processed';
+        $totalCost = 'To be processed...';
         $downpaymentPrice = $venuePrice * .3;
 
         $_SESSION['eventFormData'] = $_POST;
@@ -209,7 +209,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
                 <div class="input-container">
                     <p>Venue Description</p>
-                    <textarea cols="30" rows="5" name="venueDescription" id="venueDescription" readonly><?= !empty($venueDescription) ? htmlspecialchars($venueDescription) : '' ?></textarea>
+                    <textarea cols="30" rows="5" name="venueDescription" id="venueDescription" readonly><?= !empty($venueDescription) ? htmlspecialchars(ucfirst(strtolower($venueDescription))) : 'N/A' ?></textarea>
                 </div>
             </section>
 

@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Poppins";
-  src: url(../../../Fonts/Poppins/Poppins-Regular.ttf);
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
   font-family: "Alkatra";
@@ -11,93 +11,135 @@
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
-
-/* sidebar */
-.sidebar {
-  width: 23vw;
-  background-color: #cee4f2;
+.navbar {
   position: fixed;
+  width: 100%;
   top: 0;
-  left: 0;
-  height: 100vh;
-  overflow-y: auto;
-  border-right: 2px solid #cee4f2;
-  /* border-top-right-radius: 30px; */
-  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
 }
 
-.home {
-  /* border: 1px solid red; */
-  position: absolute;
-  top: 7%;
-  right: 4%;
-}
+.navbar.scrolled {
+  background-color: white;
+  .nav-link {
+    color: black !important;
+    padding: 10px 15px !important;
+  }
+  .nav-link:not(.dropdown-toggle):after {
+    border-bottom: 4px solid #000000 !important;
+  }
 
-.homeIcon {
-  float: right;
-  height: 6vh;
-}
+  #logOutBtn {
+    color: #000000 !important;
+  }
 
-.profileContainer {
-  padding: 2vw;
-}
-
-.profilePic {
-  height: 70px;
-  width: 70px;
-  border-radius: 3rem;
-}
-
-.list-group {
-  font-family: "Poppins";
-  font-size: 22px;
-  border: none;
-  list-style: none;
-  margin-top: 2vw;
-
-  a {
-    text-decoration: none;
-    color: rgb(0, 0, 0) !important;
-    background-color: #cee4f2;
+  .profile-pic {
+    border: 2px solid black;
   }
 }
-.list-group-item {
+
+.nav-item {
+  font-family: "Poppins";
+  font-weight: lighter;
+  font-size: 1.5vw;
+  /* margin-left: 3vw; */
+}
+
+  .nav-link {
+    padding: 10px 15px !important;
+  }
+.nav-link,
+#logOutBtn {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px;
+  position: relative;
+  color: black !important;
+  letter-spacing: 0.1em;
+}
+
+#profileAndNotif {
+  padding: 0.6vw;
+}
+
+#logOutBtn {
+  font-family: "Poppins";
+  font-size: 1.5vw;
+  margin-right: 2vw;
   border: none;
-  margin-top: 1vw;
 }
 
-.sidebar li:hover a,
-.list-group-item.active {
-  color: #0000;
-  background-color: rgb(255, 255, 255);
+.nav-link:not(.dropdown-toggle):after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  border-bottom: 4px solid #ffffff !important;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
 }
 
-#logoutBtn {
-  display: flex;
-  margin: auto;
-  margin-top: 2rem;
-  text-align: center;
-  color: black;
-  padding-top: 10px;
+.nav-link:not(.dropdown-toggle):hover:after {
+  width: 100%;
+  left: 0;
 }
 
-#logoutBtn:hover {
-  background-color: rgb(219, 53, 69);
-  color: white;
+.dropdown-menu {
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
+.nav-item.dropdown:hover .dropdown-menu {
+  background-color: black;
+  display: block;
 }
 
-.sidebar-icon {
-  height: 35px;
-  padding-right: 1vw;
+.dropdown-item:hover {
+  background-color: rgb(126, 203, 242, 0.5) !important;
 }
-/* sidebar */
 
-.container {
-  /* border: 1px solid red; */
-  width: 75%;
-  margin-left: 24vw;
-  padding: 2vw;
+.dropdown-item {
+  font-size: 1.3vw;
+  font-weight: bold;
+}
+
+.account-nav {
+  margin: 1px;
+  margin-left: 1rem;
+  border-radius: 50%;
+  .profile-pic {
+    height: 5vw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+
+.notification-container{
+  margin: 1rem;
+  button{
+    background-color: transparent;
+    border: none;
+  }
+}
+
+.notificationIcon {
+    display: flex;
+    align-items: center;
+    height: 2.5vw;
+    aspect-ratio: 1;
+}
+
+#toggledNav {
+    position: absolute !important;
+    right: 2vw !important;
+  }
+
+.main-content { 
+  margin: 10vw auto 0 auto;
+  width: 100%;
+  min-height: 100vh;
+  flex: 1;
 }
 
 .welcomeText {
@@ -141,7 +183,19 @@ section {
   width: 32vw;
 }
 
-li {
-  font-size: 25px;
-  font-weight: 500;
+/* Tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+
+
+}
+
+/* Tablet landscape */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+
+
+}
+
+/* Phone size */
+@media screen and (max-width: 600px) {
+
 }

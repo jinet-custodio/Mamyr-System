@@ -343,6 +343,7 @@ if (isset($_SESSION['error'])) {
                                 </td>
                                 <td>
                                     <form action="viewBooking.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="button" value="booking">
                                         <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
                                         <input type="hidden" name="bookingStatus"
                                             value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($bookings['confirmedStatus'])  ?>">

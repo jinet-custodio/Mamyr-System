@@ -71,11 +71,27 @@ if (isset($_POST['eventBook'])) {
     }
 
 
+
+    $getEventTypeID = $conn->prepare("SELECT * FROM `eventcategory` WHERE categoryName = ?");
+    $getEventTypeID->bind_param('s', $eventType);
+    if ($getEventTypeID->execute()) {
+        $result = $getEventTypeID->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $eventCategoryID = intval($row['categoryID']);
+        } {
+            error_log("No matching service found for $eventType");
+        }
+    } else {
+        error_log("Query failed: " . $conn->error);
+    }
+
+
     $conn->begin_transaction();
     try {
         //insert the total of all
-        $insertCustomPackage = $conn->prepare("INSERT INTO `custompackage`(`userID`, `customPackageTotalPrice`, `customPackageNotes`) VALUES (?,?,?)");
-        $insertCustomPackage->bind_param('ids', $userID, $venuePrice, $additionalRequest);
+        $insertCustomPackage = $conn->prepare("INSERT INTO `custompackage`(`userID`, `eventTypeID`, `customPackageTotalPrice`, `customPackageNotes`) VALUES (?,?,?,?)");
+        $insertCustomPackage->bind_param('iids', $userID, $eventCategoryID, $venuePrice, $additionalRequest);
 
         if (!$insertCustomPackage->execute()) {
             $conn->rollback();

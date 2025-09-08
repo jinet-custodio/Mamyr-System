@@ -1,35 +1,38 @@
+<!-- this is temporary, please remove this page 
+ and replace bpDashboard.php's include footer statement after 
+ the logo has been established in resort information -->
+
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
-$getContent = $conn->prepare("SELECT * FROM resortinfo WHERE resortInfoTitle = ?");
-$getContent->bind_param("s", $sectionName);
-$getContent->execute();
-$getContentResult = $getContent->get_result();
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
 $contentMap = [];
-$logoInfo = [];
-$defaultImage = "../Assets/Images/no-picture.jpg";
-while ($row = $getContentResult->fetch_assoc()) {
-    $cleanTitle = trim(preg_replace('/\s+/', '', $row['resortInfoName']));
-    $contentID = $row['resortInfoID'];
-    $contentMap[$cleanTitle] = $row['resortInfoDetail'];
-}
 
-//fetch Business Logo
-$sectionName = 'Logo';
-$getLogo = $conn->prepare("SELECT * FROM resortinfo WHERE resortInfoTitle = ?");
-$getLogo->bind_param("s", $sectionName);
-$getLogo->execute();
-$getLogoResult = $getLogo->get_result();
+$imageMap = [];
 
-while ($row = $getLogoResult->fetch_assoc()) {
-    $id = $row['resortInfoID'];
-    $title = trim($row['resortInfoName']);
-    $detail = $row['resortInfoDetail'];
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
 
-    $logoInfo[$id] = [$title => $detail];
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages->bind_param("i", $contentID);
+    $getImages->execute();
+    $imageResult = $getImages->get_result();
+
+    $images = [];
+    while ($imageRow = $imageResult->fetch_assoc()) {
+        $images[] = $imageRow;
+    }
+
+    $imageMap[$cleanTitle] = $images;
 }
 
 ?>
@@ -41,7 +44,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr Resort and Events Place </title>
-    <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/footer.css">
     <!-- <link rel="stylesheet" href="Assets/CSS/bootstrap.min.css"> -->
     <!-- online stylesheet link for bootstrap -->
@@ -57,24 +60,9 @@ while ($row = $getLogoResult->fetch_assoc()) {
 
 <body>
     <footer class="py-1 ">
-        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-            <?php
-            foreach ($logoInfo as $id => $logo) {
-                foreach ($logo as $fileName => $altText) {
-                    $imagePath = "../../Assets/Images/" . $fileName;
-                    $indexPath = "Assets/Images/" .  $fileName;
-                    $finalImage = file_exists($imagePath)
-                        ? $imagePath
-                        : (file_exists($indexPath)
-                            ? $indexPath
-                            : $defaultPath);
-            ?>
-                    <img src="<?= htmlspecialchars($finalImage) ?>"
-                        alt="<?= htmlspecialchars($altText) ?>" class="logo">
-            <?php
-                }
-            }
-            ?>
+        <div class=" pb-1 d-flex align-items-center justify-content-start">
+
+            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
             <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>
             </h3>
@@ -107,7 +95,6 @@ while ($row = $getLogoResult->fetch_assoc()) {
 
         </div>
     </footer>
-
 </body>
 
 </html>

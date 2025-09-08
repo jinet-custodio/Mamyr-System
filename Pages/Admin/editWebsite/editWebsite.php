@@ -61,7 +61,7 @@ $userRole = $_SESSION['userRole'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../../Assets/CSS/Admin/editWebsite/landingPageEdit.css" />
+    <link rel="stylesheet" href="../../../Assets/CSS/Admin/editWebsite/editWebsite.css" />
     <!-- icon libraries from font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -85,7 +85,7 @@ $userRole = $_SESSION['userRole'];
 
 
         <div class="pagesContainer" id="pagesContainer">
-            <button class="btn btn-info" id="landingPage" onclick="landingPage()"><img
+            <button class="btn btn-info" id="landingPage"><img
                     src="../../../Assets/Images/Icon/landing-page.png" alt="Landing Page" class="buttonIcon">Landing
                 Page</button>
 
@@ -95,38 +95,91 @@ $userRole = $_SESSION['userRole'];
                     <img src="../../../Assets/Images/Icon/amenities.png" alt="Amenities" class="buttonIcon"> Amenities
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="amenitiesDropdown">
-                    <li><a class="dropdown-item" href="#" onclick="amenities()">Resort Amenities</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="ratesAndHotel()">Rates and Hotel Rooms</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="events()">Events</a></li>
+                    <li><a class="dropdown-item" href="#" id="amenities">Resort Amenities</a></li>
+                    <li><a class="dropdown-item" href="#" id="rates">Rates and Hotel Rooms</a></li>
+                    <li><a class="dropdown-item" href="#" id="events">Events</a></li>
                 </ul>
             </div>
 
-            <button class="btn btn-info" id="blog" onclick="blog()"><img src="../../../Assets/Images/Icon/blog.png"
+            <button class="btn btn-info" id="blog"><img src="../../../Assets/Images/Icon/blog.png"
                     alt="Blog" class="buttonIcon">Blog</button>
 
-            <button class="btn btn-info" id="about" onclick="about()"><img src="../../../Assets/Images/Icon/about.png"
+            <button class="btn btn-info" id="about"><img src="../../../Assets/Images/Icon/about.png"
                     alt="About" class="buttonIcon">About</button>
 
-            <button class="btn btn-info" id="bookNow" onclick="bookNow()"><img
+            <button class="btn btn-info" id="bookNow"><img
                     src="../../../Assets/Images/Icon/bookNow.png" alt="Book Now" class="buttonIcon">Book Now</button>
 
-            <button class="btn btn-info" id="footer" onclick="footer()"><img
+            <button class="btn btn-info" id="footer"><img
                     src="../../../Assets/Images/Icon/footer.png" alt="Footer" class="buttonIcon">Footer</button>
         </div>
     </div>
 
     <div class="container-fluid landingPage" id="landingPageContainer">
-        <iframe src="../../../index.php?" class="editFrame" style="width: 100%; height: 100vh; "></iframe>
+        <iframe src="../../../index.php?" class="editFrame" style="width: 100%; height: 100vh; display:none"></iframe>
     </div>
     <div class="container-fluid aboutPage" id="aboutContainer">
-        <iframe src="../../about.php" class="editFrame" style="width: 100%;  height: 100vh; "></iframe>
+        <iframe src="../../about.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
     </div>
     <div class="container-fluid amenitiesPage" id="amenitiesContainer">
-        <iframe src="../../amenities.php?" class="editFrame" style="width: 100%; height: 100vh;"></iframe>
+        <iframe src="../../amenities.php?" class="editFrame" style="width: 100%; height: 100vh; display:none"></iframe>
     </div>
     <div class="container-fluid blogPage" id="blogContainer">
-        <iframe src="../../blog.php" class="editFrame" style="width: 100%; height: 100vh;"></iframe>
+        <button type="button" class="btn btn-primary" id="newBlogBtn" data-bs-toggle="modal" style="display:none"
+            data-bs-target="#NewBlogPost">Add a New Blog Post</button>
+        <iframe src="../../blog.php" class="editFrame" style="width: 100%; height: 100vh;  display:none"></iframe>
     </div>
+    <div class="container-fluid footerPage" id="footerContainer">
+        <iframe src="../../footer.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
+    </div>
+
+
+    <!-- MODAL FOR ADDING A NEW BLOG POST -->
+    <!-- <form action="../../Function/Admin/Services/addServices.php" id="addingServiceForm" method="POST"
+            enctype="multipart/form-data"> -->
+    <!-- Modal -->
+    <div class="modal fade" id="NewBlogPost" tabindex="-1" aria-labelledby="newBlogPost" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewBlogPost">Add a New Blog Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-container">
+                        <label for="eventName">Type of Event</label>
+                        <input type="text" class="form-control" id="eventName" name="eventName" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="eventDate">Date</label>
+                        <input type="date" class="form-control" id="eventDate" name="eventDate" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="eventTitle">Title/Header</label>
+                        <input type="text" class="form-control" id="eventTitle" name="eventTitle">
+                    </div>
+                    <div class="input-container">
+                        <label for="eventDesc">Event Description</label>
+                        <textarea class="form-control" name="eventDesc" id="eventDesc"> </textarea>
+                    </div>
+                    <div class="input-container">
+                        <label for="eventImage">Event Image</label>
+                        <input type="file" class="form-control" name="eventImage" id="eventImage">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="uploadPost" name="addResortService">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- </form> -->
+
+
+
+
+
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -142,69 +195,108 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-    const pagesContainer = document.getElementById("pagesContainer");
-    const landingPageContainer = document.getElementById("landingPageContainer");
-    const icon = document.getElementById("help-circle");
-    const aboutContainer = document.getElementById("aboutContainer");
-    const amenitiesContainer = document.getElementById("amenitiesContainer");
-
-        landingPageContainer.style.display = "none";
-        aboutContainer.style.display = "none";
-        amenitiesContainer.style.display = "none";
-
-    function landingPage() {
-        hideAllContainers();
-        landingPageContainer.style.display = "block";
-        landingPageContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "Landing Page";
-    }
-
-    function about() {
-        hideAllContainers();
-        aboutContainer.style.display = "block";
-        aboutContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "About Page";
-    }
-
-    function amenities() {
-        hideAllContainers();
-        amenitiesContainer.style.display = "block";
-        amenitiesContainer.querySelector("iframe").style.display = "block";
-        icon.style.display = "block";
-        pagesContainer.style.display = "none";
-        document.getElementById("backBtn").href = "editWebsite.php?pages=pagesContainer";
-        document.getElementById("title").innerHTML = "Amenities Page";
-    }
+        document.addEventListener('DOMContentLoaded', function() {
+            const pagesContainer = document.getElementById("pagesContainer");
+            const landingPageContainer = document.getElementById("landingPageContainer");
+            const icon = document.getElementById("help-circle");
+            const aboutContainer = document.getElementById("aboutContainer");
+            const amenitiesContainer = document.getElementById("amenitiesContainer");
+            const newBlogBtn = document.getElementById("newBlogBtn");
+            const footerContainer = document.getElementById("footerContainer");
+            const landingPageBtn = document.getElementById("landingPage");
+            const aboutPageBtn = document.getElementById("about");
+            const blogPageBtn = document.getElementById("blog");
+            const bookNowPageBtn = document.getElementById("bookNow");
+            const footerPageBtn = document.getElementById("footer");
+            const amenitiesPageBtn = document.getElementById("amenities");
 
 
-        function hideAllContainers() {
-            landingPageContainer.style.display = "none";
-            aboutContainer.style.display = "none";
-            amenitiesContainer.style.display = "none";
+            landingPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                landingPageContainer.style.display = "block";
+                landingPageContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                pagesContainer.style.display = "none";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Landing Page";
+            });
 
-        landingPageContainer.querySelector("iframe").style.display = "none";
-        aboutContainer.querySelector("iframe").style.display = "none";
-        amenitiesContainer.querySelector("iframe").style.display = "none";
-        blogContainer.querySelector("iframe").style.display = "none";
-    }
+            aboutPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                aboutContainer.style.display = "block";
+                aboutContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                pagesContainer.style.display = "none";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "About Page";
+            });
+
+            amenitiesPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                amenitiesContainer.style.display = "block";
+                amenitiesContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                pagesContainer.style.display = "none";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Amenities Page";
+            });
+
+            blogPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                blogContainer.style.display = "block";
+                blogContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                pagesContainer.style.display = "none";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Blog Page";
+                newBlogBtn.style.position = "absolute";
+            });
+
+            footerPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                footerContainer.style.display = "block";
+                footerContainer.querySelector("iframe").style.display = "block";
+                blogContainer.style.display = "none";
+                blogContainer.querySelector("iframe").style.display = "none";
+                icon.style.display = "block";
+                pagesContainer.style.display = "none";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Website Footer";
+                newBlogBtn.style.position = "absolute";
+            });
+
+
+            function hideAllContainers() {
+                landingPageContainer.style.display = "none";
+                aboutContainer.style.display = "none";
+                amenitiesContainer.style.display = "none";
+            }
+        });
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-    icon.addEventListener("click", function() {
-        Swal.fire({
-            title: "How it works",
-            text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
-            icon: "info",
-            confirmButtonText: "Got it!"
+        const icon = document.getElementById("help-circle");
+        icon.addEventListener("click", function() {
+            Swal.fire({
+                title: "How it works",
+                text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
+                icon: "info",
+                confirmButtonText: "Got it!"
+            });
         });
-    });
+
+        // const defaults = document.querySelectorAll(".default");
+        // defaults.forEach(defaultPic => {
+        //     defaultPic.addEventListener("click", function() {
+        //         Swal.fire({
+        //             title: "No images ",
+        //             text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
+        //             icon: "info",
+        //             confirmButtonText: "Got it!"
+        //         });
+        //     });
+        // });
     </script>
 
 </body>

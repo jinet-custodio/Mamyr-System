@@ -50,7 +50,8 @@
   }
 }
 
-#amenitiesDropdown, .show {
+#amenitiesDropdown,
+.show {
   width: 100%;
 }
 
@@ -59,7 +60,7 @@ ul.dropdown-menu {
 }
 
 a.dropdown-item {
-  font-size:  1.6vw;
+  font-size: 1.6vw;
 }
 
 .amenities {
@@ -113,6 +114,12 @@ a.dropdown-item {
 .container-fluid {
   /* border: 1px solid red; */
   height: auto;
+}
+
+#newBlogBtn {
+  top: 8.5vw;
+  right: 7vw;
+  font-size: 1.8vw;
 }
 
 .backButtonContainer {
@@ -189,4 +196,20 @@ iframe {
   width: 90%;
   text-align: center;
   margin: 2vw auto;
+}
+
+.modal-header {
+  font-weight: bold;
+  font-family: "Poppins";
+}
+
+label {
+  font-family: "Poppins";
+  margin: 0.5vw 0 0.5vw 0;
+  display: flex;
+  justify-content: center;
+}
+
+.form-control {
+  font-family: "Poppins";
 }
