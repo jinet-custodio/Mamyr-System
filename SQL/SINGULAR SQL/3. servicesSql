@@ -6,7 +6,7 @@ CREATE TABLE partnershipservice (
     PBName VARCHAR(200) NOT NULL,
     PBPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     PBDescription TEXT,
-    PBcapacity INT,
+    PBcapacity INT DEFAULT 1,
     PSstatus INT DEFAULT 1,
     PSAvailabilityID INT DEFAULT 1,
 
@@ -14,6 +14,10 @@ CREATE TABLE partnershipservice (
     FOREIGN KEY (PSAvailabilityID) REFERENCES serviceavailability(availabilityID),
     FOREIGN KEY (PSstatus) REFERENCES status(statusID)
 );
+
+ALTER TABLE partnershipservice
+ADD COLUMN PBduration varchar(255) NULL
+AFTER PBcapacity;
 
 CREATE TABLE resortamenity (
     resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
