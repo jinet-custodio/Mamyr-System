@@ -17,7 +17,7 @@ if (isset($_POST['eventBook'])) {
 
     $venueID = intval($_POST['venueID']);
     $additionalRequest = mysqli_real_escape_string($conn, $_POST['additionalRequest']);
-
+    $rawtotalFoodPrice = mysqli_real_escape_string($conn, $_POST['totalFoodPrice']);
     //Date and time
     $eventDate = mysqli_real_escape_string($conn, $_POST['eventDate']);
     $eventStartTime = mysqli_real_escape_string($conn, $_POST['eventStartTime']);
@@ -52,6 +52,7 @@ if (isset($_POST['eventBook'])) {
     $additionalCharge = floatval(0);
     $venuePrice = floatval(str_replace(['₱', ','], '', $rawVenuePrice));
     $downpayment = floatval(str_replace(['₱', ','], '', $rawDownpayment));
+    $totalFoodPrice = floatval(str_replace(['₱', ','], '', $rawtotalFoodPrice));
 
     $serviceID = null;
 
@@ -85,13 +86,13 @@ if (isset($_POST['eventBook'])) {
     } else {
         error_log("Query failed: " . $conn->error);
     }
-
+    $totalCost =  $venuePrice +  $totalFoodPrice;
 
     $conn->begin_transaction();
     try {
         //insert the total of all
         $insertCustomPackage = $conn->prepare("INSERT INTO `custompackage`(`userID`, `eventTypeID`, `customPackageTotalPrice`, `customPackageNotes`) VALUES (?,?,?,?)");
-        $insertCustomPackage->bind_param('iids', $userID, $eventCategoryID, $venuePrice, $additionalRequest);
+        $insertCustomPackage->bind_param('iids', $userID, $eventCategoryID,  $totalCost, $additionalRequest);
 
         if (!$insertCustomPackage->execute()) {
             $conn->rollback();
@@ -100,15 +101,20 @@ if (isset($_POST['eventBook'])) {
         $customPackageID =   $conn->insert_id;
 
         //insert each item
-        $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `foodItemID`, `quantity`) VALUES (?,?,?)");
+        $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `foodItemID`, `quantity`,`servicePrice`) VALUES (?,?,?,?)");
 
-        foreach ($menuQuantities as $foodItemID => $quantity) {
+
+        foreach ($menuQuantities as $foodItemID => $itemData) {
             $foodItemID = (int) $foodItemID;
-            $quantity =  (int) $quantity;
-            $insertCustomPackageItem->bind_param('iii', $customPackageID, $foodItemID, $quantity);
+            $quantity = isset($itemData['quantity']) ? (int) $itemData['quantity'] : 0;
+            $foodItemPrice = isset($itemData['price']) ? (float) $itemData['price'] : 0.0;
+
+            $servicePrice = $quantity * $foodItemPrice;
+            $insertCustomPackageItem->bind_param('iiid', $customPackageID, $foodItemID, $quantity, $servicePrice);
+
             if (!$insertCustomPackageItem->execute()) {
                 $conn->rollback();
-                error_log("Error: " . $insertCustomPackageItem->error);
+                error_log("Error inserting item $foodItemID: " . $insertCustomPackageItem->error);
             }
         }
 
@@ -122,18 +128,19 @@ if (isset($_POST['eventBook'])) {
 
         //insert into booking
         $insertBooking = $conn->prepare("INSERT INTO `booking`(`userID`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `additionalCharge`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $insertBooking->bind_param("isisissssddds", $userID, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDateTimeStr, $endDateTimeStr, $paymentMethod, $additionalCharge, $venuePrice, $downpayment, $arrivalTime);
+        $insertBooking->bind_param("isisissssddds", $userID, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDateTimeStr, $endDateTimeStr, $paymentMethod, $additionalCharge, $totalCost, $downpayment, $arrivalTime);
         if (!$insertBooking->execute()) {
             $conn->rollback();
             error_log("Error: " . $insertBooking->error);
         }
 
         $conn->commit();
+        unset($_SESSION['eventFormData']);
         header("Location: ../../../../Pages/Customer/bookNow.php?action=success");
     } catch (Exception $e) {
         $conn->rollback();
         error_log("Error inserting: " . $e->getMessage());
-        // $_SESSION['eventFormData'] = $_POST;
-        // header("Location: ../../../../Pages/Customer/eventBookingConfirmation.php");
+        $_SESSION['eventFormData'] = $_POST;
+        header("Location: ../../../../Pages/Customer/eventBookingConfirmation.php?action=errorBooking");
     }
 }

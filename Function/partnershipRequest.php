@@ -47,9 +47,9 @@ if (isset($_POST['submit_request'])) {
         // if ($partnerResult->num_rows > 0) {
         //     $data = $partnerResult->fetch_assoc();
 
-
-        $updateQuery = $conn->prepare("UPDATE user SET firstName = ?, middleInitial = ?, lastName = ?, phoneNumber = ? WHERE userID = ?");
-        $updateQuery->bind_param("ssssi", $firstName, $middleInitial, $lastName, $phoneNumber, $userID);
+        $userRoleID = 4; //Partner Request
+        $updateQuery = $conn->prepare("UPDATE user SET firstName = ?, middleInitial = ?, lastName = ?, phoneNumber = ?, userRole = ? WHERE userID = ?");
+        $updateQuery->bind_param("ssssii", $firstName, $middleInitial, $lastName, $phoneNumber, $userRoleID, $userID);
         if ($updateQuery->execute()) {
             $_SESSION['success'] = "Profile updated successfully.";
         } else {

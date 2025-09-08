@@ -74,8 +74,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         exit();
     }
 
-    $getData = $conn->prepare("SELECT u.*, ut.typeName as roleName FROM user u
+    $getData = $conn->prepare("SELECT u.firstName, u.lastName, u.middleInitial, u.userProfile, ut.typeName as roleName , p.partnershipID FROM user u
             INNER JOIN usertype ut ON u.userRole = ut.userTypeID
+            LEFT JOIN partnership p ON u.userID = p.userID
             WHERE u.userID = ? AND userRole = ?");
     $getData->bind_param("ii", $userID, $userRole);
     $getData->execute();
@@ -91,6 +92,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $mimeType = finfo_buffer($finfo, $profile);
         finfo_close($finfo);
         $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+
+        $partnershipID = $data['partnershipID'];
+        $encodedPartnershipID = base64_encode($partnershipID);
     }
 
     ?>
@@ -196,13 +200,47 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <div class="container">
                 <h3 class="welcomeText" id="title">Sales</h3>
 
+                <?php
+                $paymentStatusID = 3; //Fully Paid ID
+                $approveStatusID = 5; //Done
+                $getPartnerSalesQuery = $conn->prepare("SELECT b.bookingID, bs.bookingServicePrice, cpi.servicePrice, s.serviceType, s.serviceID  
+                FROM booking b 
+                LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
+                LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
+                LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+                LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
+                LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+                LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
+                LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
+                WHERE p.userID = ? AND cb.paymentApprovalStatus = ? AND cb.paymentStatus = ?
+                ");
+                $getPartnerSalesQuery->bind_param("iii", $userID, $approveStatusID, $paymentStatusID);
+                if (!$getPartnerSalesQuery->execute()) {
+                    error_log("Error executing  the query" . $getPartnerSalesQuery->error);
+                }
+
+                $result = $getPartnerSalesQuery->get_result();
+                $totalSales = 0;
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $serviceID = $row['serviceID'];
+                        $serviceType = $row['serviceType'];
+                        if (!empty($serviceID)) {
+                            if ($serviceType === 'Partnership') {
+                                $price = $row['bookingServicePrice'] ?? $row['servicePrice'];
+                                $totalSales += $price;
+                            }
+                        }
+                    }
+                }
+                ?>
 
                 <div class="cardContainer">
                     <div class="card">
                         <div class="card-header fw-bold fs-5">Total Sales</div>
                         <div class="card-body">
-                            <h2 class="totalSales">₱80,000</h2>
-                            <a href="salesReport.php" class="btn btn-primary">Sales Report</a>
+                            <h2 class="totalSales"><?= ($totalSales !== 0) ? number_format($totalSales, 2) : 'No sales to display' ?></h2>
+                            <a href="../Admin/salesReport.php?id=$encodedPartnershipID" class="btn btn-primary">Sales Report</a>
                         </div>
                     </div>
 
@@ -222,21 +260,42 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             </div>
         </main>
-
-
-
     </div>
 
 
-
-
-
-
-
-
-
-
-
+    <?php
+    $paymentStatusID = 3; //Fully Paid
+    $paymentApprovalID = 5; //Done
+    $getYearlySales = $conn->prepare("SELECT MONTHNAME(b.startDate) AS month,
+                    YEAR(b.startDate) AS year,
+                    SUM(bs.bookingServicePrice + cpi.ServicePrice) AS monthlyRevenue
+                     
+                    FROM booking b
+                    LEFT JOIN  confirmedbooking cb ON b.bookingID = cb.bookingID
+                    LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
+                    LEFT JOIN custompackageitem cpi ON b.customPackageID = cpi.customPackageID
+                    WHERE cb.paymentApprovalStatus = ? AND cb.paymentStatus =? AND YEAR(b.startDate) = YEAR(CURDATE())
+                    AND DATE(b.endDate) < CURDATE()
+                    GROUP BY 
+                     month
+                    ORDER BY 
+                     month");
+    $getYearlySales->bind_param("ii", $paymentApprovalID, $paymentStatusID);
+    if (!$getYearlySales->execute()) {
+        error_log("Failed executing monthly sales in a year. Error: " . $getYearlySales->error);
+    }
+    $months = [];
+    $sales = [];
+    $year = '';
+    $result = $getYearlySales->get_result();
+    if ($result->num_rows > 0) {
+        while ($data = $result->fetch_assoc()) {
+            $months[] = $data['month'];
+            $sales[] = (float) $row['monthlyRevenue'];
+            $year = $data['year'] ?? DATE('Y');
+        }
+    }
+    ?>
 
 
 
@@ -352,8 +411,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         Chart.register({
             id: 'noDataPlugin',
             beforeDraw(chart) {
-                const dataset = '';
-                const hasData = '';
+                const dataset = chart.data.datasets[0];
+                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
 
                 if (!hasData) {
                     const ctx = chart.ctx;
@@ -381,10 +440,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         const myBarChart = new Chart(bar, {
             type: 'bar',
             data: {
-                labels: 'sales',
+                labels: <?= json_encode($months) ?>,
                 datasets: [{
-                    label: 'Sales',
-                    data: '100',
+                    label: "Monthly Sales Report — <?= !empty($year) ? json_encode($year) : DATE('Y') ?>",
+                    data: [<?= json_encode($sales) ?>],
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1

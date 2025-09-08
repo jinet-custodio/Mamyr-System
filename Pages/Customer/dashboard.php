@@ -106,7 +106,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <!-- Get notification -->
             <?php
 
-            if ($userRole === 1) {
+            if ($userRole === 1 || $userRole === 4) {
                 $receiver = 'Customer';
             } elseif ($userRole === 2) {
                 $receiver = 'Partner';
@@ -171,11 +171,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <li class="nav-item">
                     <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
-
-                <li class="nav-item" id="businessPartnerNav">
-                    <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
-                </li>
-
+                <?php if ($userRole !== 2): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">ABOUT</a>
                 </li>

@@ -80,7 +80,7 @@ if (!$partnerID) {
         $selectQuery = $conn->prepare("SELECT u.*, p.*, s.statusName, pt.partnerTypeDescription
                                 FROM partnership p
                                 INNER JOIN user u ON p.userID = u.userID
-                                INNER JOIN status s ON s.statusID = p.partnerStatus
+                                INNER JOIN status s ON s.statusID = p.partnerStatusID
                                 LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnershipID = ?
                                 ");
@@ -163,7 +163,7 @@ if (!$partnerID) {
         $selectQuery = $conn->prepare("SELECT u.*, p.*, s.statusName, pt.partnerTypeDescription
                                 FROM partnership p
                                 INNER JOIN user u ON p.userID = u.userID
-                                INNER JOIN status s ON s.statusID = p.partnerStatus
+                                INNER JOIN status s ON s.statusID = p.partnerStatusID
                                 LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
                                 WHERE partnershipID = ?
                                 ");
@@ -209,7 +209,7 @@ if (!$partnerID) {
                 <div class="button-container">
                     <form action="../../Function/Admin/partnerApproval.php" method="POST">
                         <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                        <input type="hidden" name="partnerStatus" value="<?= $data['partnerStatus'] ?>">
+                        <input type="hidden" name="partnerStatus" value="<?= $data['partnerStatusID'] ?>">
                         <input type="hidden" name="partnerUserID" value="<?= $data['userID'] ?>">
                         <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectionModal">
@@ -253,7 +253,7 @@ if (!$partnerID) {
                 </div>
                 <div class="applicant-info">
                     <h4 class="card-title">Document Link</h4>
-                    <a href="<?= $link ?>"><?= $link ?></a>
+                    <a href="<?= $link ?>" target="_blank"><?= $link ?></a>
                 </div>
             </div>
 

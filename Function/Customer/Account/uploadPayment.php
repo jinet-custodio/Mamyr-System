@@ -10,7 +10,7 @@ $userID = (int) $_SESSION['userID'];
 
 if (isset($_POST['submitDownpaymentImage'])) {
     $bookingID = (int) $_POST['bookingID'];
-    $imageMaxSize = 64 * 1024 * 1024;
+    $imageMaxSize = 24 * 1024 * 1024;
     // $imageData = null;
     $storeProofPath = __DIR__ . '/../../../Assets/Images/PaymentProof/';
 

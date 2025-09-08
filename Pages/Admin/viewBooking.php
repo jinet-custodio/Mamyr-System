@@ -219,6 +219,7 @@ if (isset($_POST['bookingID'])) {
                     $amountPaid = 0;
                     $additionalCharge = 0;
                     $foodList = [];
+                    $foodPriceTotal = 0;
                     while ($row = $getBookingInfoResult->fetch_assoc()) {
 
                         // echo '<pre>';
@@ -286,13 +287,17 @@ if (isset($_POST['bookingID'])) {
 
                             if (!empty($serviceID)) {
                                 $venue = $row['RServiceName'] ?? 'none';
+                                $venuePrice = $row['servicePrice'] ?? 0;
+                                $serviceIDs[] = $row['resortServiceID'];
                             }
                             if (!empty($foodItemID)) {
                                 $category = $row['foodCategory'];
                                 $name = $row['foodName'];
                                 $quantity = $row['quantity'];
+                                $price = $row['servicePrice'];
 
-                                $foodList[$category][$name][$quantity] =  $price = $row['foodPrice'];
+                                $foodList[$category][$name][$quantity] =  $price;
+                                $foodPriceTotal += $price;
                             }
                         } else {
                             $serviceID = $row['serviceID'];
@@ -345,7 +350,7 @@ if (isset($_POST['bookingID'])) {
                 ?>
 
                 <!-- Display the information -->
-
+                <input type="hidden" name="customPackageID" id="customPackageID" value="<?= $customPackageID ?>">
                 <div class="card" id="info-card">
                     <div class="bookingInfoLeft">
                         <div class="row1">
@@ -476,6 +481,19 @@ if (isset($_POST['bookingID'])) {
                                 </div>
                             <?php } ?>
 
+                            <?php if ($bookingType === 'Event') { ?>
+                                <div class="info-container" id="payment-info">
+                                    <label for="venuePrice" class="mt-2">Venue Price</label>
+                                    <input type="text" class="form-control w-50" name="venuePrice" id="venuePrice"
+                                        value="₱<?= number_format($venuePrice, 2) ?>" readonly>
+                                </div>
+                                <div class="info-container" id="payment-info">
+                                    <label for="foodPriceTotal" class="mt-2">Food Price</label>
+                                    <input type="text" class="form-control w-50" name="foodPriceTotal" id="foodPriceTotal"
+                                        value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
+                                </div>
+                            <?php } ?>
+
                             <div class="info-container" id="payment-info">
                                 <label for="additionalCharge" class="mt-2">Additional Charge</label>
                                 <input type="text" class="form-control w-50" name="additionalCharge" id="additionalCharge"
@@ -515,6 +533,7 @@ if (isset($_POST['bookingID'])) {
                                         value="₱<?= number_format($amountPaid, 2) ?>" readonly>
                                 </div>
                             <?php } ?>
+
                             <div class="info-container" id="payment-info">
                                 <label for="downpayment" class="mt-2">Downpayment</label>
                                 <input type="text" class="form-control w-50"
@@ -542,7 +561,7 @@ if (isset($_POST['bookingID'])) {
                     <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
                     <input type="hidden" name="bookingStatusID" id="bookingStatusID" value="<?= $bookingStatusID ?>">
                     <input type="hidden" name="bookingStatusName" id="bookingStatusName" value="<?= $bookingStatusName ?>">
-                    <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus" value="<?= $paymentApprovalStatusName ?>">
+                    <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus" value="<?= $paymentApprovalStatusName ?? 'None' ?>">
                     <?php foreach ($serviceIDs as $serviceID): ?>
                         <input type="hidden" name="serviceIDs[]" value="<?= $serviceID ?>">
                     <?php endforeach; ?>

@@ -63,9 +63,16 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 <body>
     <header class="header">
-        <a href="revenue.php" id="backToDashboard" class="backButton">
-            <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
-        </a>
+
+        <?php if ($userRole === 3) { ?>
+            <a href="revenue.php" id="backToDashboard" class="backButton">
+                <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
+            </a>
+        <?php } elseif ($userRole === 2) { ?>
+            <a href="../Account/bpSales.php" id="backToDashboard" class="backButton">
+                <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
+            </a>
+        <?php } ?>
         <div class="pagetitle">
             <img src="../../Assets/Images/Icon/Statistics.png" alt="" id="sales-logo">
             <h1>Sales Report</h1>
@@ -98,7 +105,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <th>Booking ID</th>
                             <th>Customer Name</th>
                             <th>Booking Type</th>
-                            <th>Total Guest</th>
+                            <?php if ($userRole === 3) { ?>
+                                <th>Total Guest</th>
+                            <?php } elseif ($userRole === 2) { ?>
+                                <th>Service Name</th>
+                            <?php   } ?>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Payment Method</th>
@@ -109,17 +120,24 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <tbody>
                         <?php
                         $enableDownloadBtn = false;
+                        $encodedPartnershipID = $_GET['id'] ?? 0;
+                        $partnershipID = base64_decode($encodedPartnershipID);
+
                         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['generateReport'])) {
                             $reportDate = $_POST['reportDate'];
                             $dates = preg_split('/\s*to\s*/', $reportDate);
-                            $approvedStatusID = 2;
+                            $approvedStatusID = 5; //Done
+                            $paymentStatusID = 1; //No Payment
+
 
                             if (count($dates) === 2) {
                                 $selectedStartDate = DateTime::createFromFormat('F d, Y', trim($dates[0]))->format('Y-m-d') . ' 00:00:00';
                                 $selectedEndDate = DateTime::createFromFormat('F d, Y', trim($dates[1]))->format('Y-m-d') . ' 23:59:59';
 
-                                $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
-                                            b.bookingType, u.firstName, b.guestCount AS guest, 
+
+                                if ($userRole === 3) { //Admin
+                                    $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
+                                            b.bookingType, u.firstName, u.lastName, b.guestCount AS guest, 
                                             b.startDate, b.endDate, 
                                             b.paymentMethod, b.totalCost, cb.*
                                             FROM confirmedbooking cb
@@ -127,8 +145,32 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             LEFT JOIN user u ON b.userID = u.userID
                                             WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?
                                             ");
+                                    $getReportData->bind_param("iss", $approvedStatusID, $selectedStartDate, $selectedEndDate);
+                                } elseif ($userRole === 2) { //Partner
+                                    $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
+                                            cb.paymentApprovalStatus, cb.paymentStatus,
+                                            b.bookingType, b.startDate, b.endDate, b.paymentMethod, b.totalCost,
+                                            bs.serviceID, bs.bookingServicePrice,
+                                            cp.customPackageID, cpi.customPackageID , cpi.serviceID,  
+                                            s.serviceID, s.partnershipServiceID,
+                                            ps.partnershipID, ps.PBName, ps.partnershipServiceID,	
+                                            u.firstName, u.lastName
 
-                                $getReportData->bind_param("iss", $approvedStatusID, $selectedStartDate, $selectedEndDate);
+                                            FROM confirmedbooking cb
+                                            LEFT JOIN booking b ON cb.bookingID = b.bookingID   
+                                            LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
+                                            LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+                                            LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID 
+                                            LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+                                            LEFT JOIN partnershipservice ps  ON s.partnershipServiceID = ps.partnershipServiceID                      
+                                            LEFT JOIN user u ON b.userID = u.userID
+
+                                            WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?  AND partnershipID = ?                         
+                                            ");
+                                    $getReportData->bind_param("issi", $approvedStatusID, $selectedStartDate, $selectedEndDate, $partnershipID);
+                                }
+
+
                                 $getReportData->execute();
                                 $getReportDataResult = $getReportData->get_result();
                                 if ($getReportDataResult->num_rows > 0) {
@@ -136,19 +178,25 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     while ($row = $getReportDataResult->fetch_assoc()) {
                                         $formattedBookingID = $row['formattedBookingID'];
                                         $bookingType = $row['bookingType'];
-                                        $firstName = $row['firstName'];
-                                        $guest = $row['guest'];
+                                        $customerName = ucfirst($row['firstName']) . ucfirst($row['lastName']);
+                                        $guest = $row['guest'] ?? 0;
                                         $startDate = $row['startDate'];
                                         $endDate = $row['endDate'];
                                         $paymentMethod = $row['paymentMethod'];
                                         $totalCost = $row['totalCost'];
+                                        $partnerServiceName = $row['PBName'];
 
+                                        $_SESSION['reportData'] = $row;
                         ?>
                                         <tr>
                                             <td><?= htmlspecialchars($formattedBookingID) ?></td>
-                                            <td><?= htmlspecialchars($firstName) ?></td>
+                                            <td><?= htmlspecialchars($customerName) ?></td>
                                             <td><?= htmlspecialchars($bookingType) ?></td>
-                                            <td><?= htmlspecialchars($guest) ?></td>
+                                            <?php if ($userRole === 3) { ?>
+                                                <td><?= htmlspecialchars($guest) ?></td>
+                                            <?php } elseif ($userRole === 2) { ?>
+                                                <td><?= htmlspecialchars($partnerServiceName) ?></td>
+                                            <?php   } ?>
                                             <td><?= htmlspecialchars($startDate) ?></td>
                                             <td><?= htmlspecialchars($endDate) ?></td>
                                             <td><?= htmlspecialchars($paymentMethod) ?></td>
@@ -185,7 +233,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <form action="../../Function/Admin/generatePDF.php" method="POST" target="_blank">
                         <input type="hidden" name="selectedStartDate" id="selectedStartDate" value="<?= $selectedStartDate ?>">
                         <input type="hidden" name="selectedEndDate" id="selectedEndDate" value="<?= $selectedEndDate ?>">
-                        <button type="submit" name="generatePDF" id="generatePDF" class="btn btn-primary w-100" <?= $enableDownloadBtn ? '' : 'disabled' ?>>Download PDF</button>
+                        <button type="submit" name="generatePDF" id="generatePDF" class="btn btn-primary w-100">Download PDF</button>
                     </form>
                 </div>
             </div>
