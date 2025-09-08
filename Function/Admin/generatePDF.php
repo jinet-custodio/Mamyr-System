@@ -7,7 +7,7 @@ $mpdf = new \Mpdf\Mpdf();
 $userID = intval($_SESSION['userID']);
 $userRole = intval($_SESSION['userRole']);
 if (isset($_POST['generatePDF'])) {
-    $partnershipID = intval($_POST['partnershipID']);
+    $partnershipID = intval($_POST['partnershipID']) ?? null;
     $selectedStartDate  = mysqli_real_escape_string($conn, $_POST['selectedStartDate']);
     $selectedEndDate  = mysqli_real_escape_string($conn, $_POST['selectedEndDate']);
     $dateToday = date("l, F d, Y (g:i A)");

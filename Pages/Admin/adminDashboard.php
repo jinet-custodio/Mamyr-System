@@ -9,7 +9,7 @@ checkSessionTimeout($timeout = 3600);
 
 require_once '../../Function/functions.php';
 addToAdminTable($conn);
-
+changeToDoneStatus($conn);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
