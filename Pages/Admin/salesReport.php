@@ -231,6 +231,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <div class="button-container">
                     <form action="../../Function/Admin/generatePDF.php" method="POST" target="_blank">
+                        <input type="hidden" name="partnershipID" id="partnershipID" value="<?= $partnershipID ?>">
                         <input type="hidden" name="selectedStartDate" id="selectedStartDate" value="<?= $selectedStartDate ?>">
                         <input type="hidden" name="selectedEndDate" id="selectedEndDate" value="<?= $selectedEndDate ?>">
                         <button type="submit" name="generatePDF" id="generatePDF" class="btn btn-primary w-100">Download PDF</button>

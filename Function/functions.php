@@ -327,3 +327,23 @@ function getUserRole($conn, $roleID)
         return NULL;
     }
 }
+
+//Function for getting availability status
+function getAvailabilityStatus($conn, $availabilityID)
+{
+    $query = $conn->prepare("SELECT * FROM `serviceavailability` WHERE availabilityID = ?");
+    $query->bind_param("i", $availabilityID);
+    if (!$query->execute()) {
+        error_log("Failed executing query:" . $query->error);
+    }
+
+    $result = $query->get_result();
+    if (!$result->num_rows === 0) {
+        return null;
+    }
+    $row = $result->fetch_assoc();
+    return [
+        'availabilityID' => $row['availabilityID'],
+        'availabilityName' => $row['availabilityName']
+    ];
+}
