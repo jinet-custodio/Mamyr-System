@@ -1,22 +1,20 @@
 <?php
+session_start();
 require '../../Config/dbcon.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
-session_start();
 date_default_timezone_set('Asia/Manila'); //Set default time zone 
 $mpdf = new \Mpdf\Mpdf();
-$userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
-$userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
+$userID = intval($_SESSION['userID']);
+$userRole = intval($_SESSION['userRole']);
 if (isset($_POST['generatePDF'])) {
-
-
-
+    $partnershipID = intval($_POST['partnershipID']) ?? null;
     $selectedStartDate  = mysqli_real_escape_string($conn, $_POST['selectedStartDate']);
     $selectedEndDate  = mysqli_real_escape_string($conn, $_POST['selectedEndDate']);
     $dateToday = date("l, F d, Y (g:i A)");
 
 
-    $startDateFormatted = date('Y-m-d 00:00:00', strtotime($selectedStartDate));
-    $endDateFormatted = date('Y-m-d 23:59:59', strtotime($selectedEndDate));
+    // $startDateFormatted = date('Y-m-d 00:00:00', strtotime($selectedStartDate));
+    // $endDateFormatted = date('Y-m-d 23:59:59', strtotime($selectedEndDate));
 
     $getProfile = $conn->prepare("SELECT firstName, middleInitial, lastName FROM user WHERE userID = ? AND userRole = ?");
     $getProfile->bind_param("ii", $userID, $userRole);
@@ -29,200 +27,215 @@ if (isset($_POST['generatePDF'])) {
         $name = ucfirst($data['firstName']) . " " . ucfirst($middleInitial) . " " . ucfirst($data['lastName']);
     } else {
         $name = "Unknown User";
+
+        $_SESSION['error'] = "Unauthorized Access!";
+        session_destroy();
+        header("Location: ../../Pages/register.php");
+        exit();
     }
 
-
+    $reportData = $_SESSION['reportData'] ?? [];
     ob_start();
 ?>
 
-<!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+    <html>
 
-<head>
-    <title>Sales Report - Mamyr Resort and Events Place</title>
-    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
+    <head>
+        <title>Sales Report - Mamyr Resort and Events Place</title>
+        <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
 
-    <style>
-    .logo {
-        height: 35px;
-        margin-top: -5px;
+        <style>
+            .logo {
+                height: 35px;
+                margin-top: -5px;
 
-    }
+            }
 
-    .header-title {
-        font-size: 20px;
-        margin-top: -55px;
+            .header-title {
+                font-size: 20px;
+                margin-top: -55px;
 
-    }
+            }
 
-    .headerTextContainer {
-        margin-top: 37px;
-    }
+            .headerTextContainer {
+                margin-top: 37px;
+            }
 
-    h4 {
-        font-family: "Poppins Light";
-        font-size: 12px;
-        margin-top: -30px;
-    }
+            h4 {
+                font-family: "Poppins Light";
+                font-size: 12px;
+                margin-top: -30px;
+            }
 
-    .section-title {
-        text-align: center;
-        font-size: 18px;
-    }
+            .section-title {
+                text-align: center;
+                font-size: 18px;
+            }
 
-    hr {
-        width: 95%;
-        height: 2px;
-        margin-top: -15px;
-        background-color: black;
-    }
+            hr {
+                width: 95%;
+                height: 2px;
+                margin-top: -15px;
+                background-color: black;
+            }
 
-    p {
-        font-size: 12px;
-    }
+            p {
+                font-size: 12px;
+            }
 
-    .request {
-        text-align: right;
-    }
+            .request {
+                text-align: right;
+            }
 
-    .table {
-        width: 100%;
-        margin-top: 75px;
-        border: 1px solid black;
-        border-collapse: collapse;
-        text-align: center;
-        font-size: 12px;
+            .table {
+                width: 100%;
+                margin-top: 75px;
+                border: 1px solid black;
+                border-collapse: collapse;
+                text-align: center;
+                font-size: 12px;
 
-    }
+            }
 
-    tr tr,
-    td,
-    th {
-        border: 1px solid black;
-        padding: 10px;
+            tr tr,
+            td,
+            th {
+                border: 1px solid black;
+                padding: 10px;
 
-    }
+            }
 
-    .no-data-text {
-        font-weight: bold;
-        color: red;
-    }
+            .no-data-text {
+                font-weight: bold;
+                color: red;
+            }
 
-    .signatories {
-        margin-top: 70px;
+            .signatories {
+                margin-top: 70px;
 
-    }
-    </style>
-</head>
+            }
+        </style>
+    </head>
 
-<body>
+    <body>
 
-    <header>
-        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-        <h1 class="header-title" style="text-align: center;">Mamyr Resort & Events Place</h2>
+        <header>
+            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+            <h1 class="header-title" style="text-align: center;">Mamyr Resort & Events Place</h2>
 
-            <div class="headerTextContainer">
-                <h4 style="text-align:center;">Gabihan, San Ildefonso, Bulacan <br> mamyresort@gmail.com | (0998) 962
-                    4697
-                </h4>
+                <div class="headerTextContainer">
+                    <h4 style="text-align:center;">Gabihan, San Ildefonso, Bulacan <br> mamyresort@gmail.com | (0998) 962
+                        4697
+                    </h4>
 
-            </div>
-    </header>
-    <hr>
-    <main>
-        <div class="background-image">
+                </div>
+        </header>
+        <hr>
+        <main>
+            <div class="background-image">
 
-            <section class="contents">
-                <h2 class="section-title">Sales Report</h2>
-                <p style="text-align: left; margin-top: 40px"><strong>Report Generated:</strong> <?= $dateToday ?></p>
-                <p style="text-align: left;"><strong>Date Range:</strong>
-                    <?= date("F d, Y", strtotime($selectedStartDate)) ?> to
-                    <?= date("F d, Y", strtotime($selectedEndDate)) ?></p>
+                <section class="contents">
+                    <h2 class="section-title">Sales Report</h2>
+                    <p style="text-align: left; margin-top: 40px"><strong>Report Generated:</strong> <?= $dateToday ?></p>
+                    <p style="text-align: left;"><strong>Date Range:</strong>
+                        <?= date("F d, Y", strtotime($selectedStartDate)) ?> to
+                        <?= date("F d, Y", strtotime($selectedEndDate)) ?></p>
 
-            </section>
-            <p class="request" style="text-align: right; margin-top: -60px"><strong>Requested By:</strong>
-                <?= htmlspecialchars($name) ?></p>
+                </section>
+                <p class="request" style="text-align: right; margin-top: -60px"><strong>Requested By:</strong>
+                    <?= htmlspecialchars($name) ?></p>
 
-            <section class="contents">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Booking ID</th>
-                            <th>Customer Name</th>
-                            <th>Booking Type</th>
-                            <th>Total Guest</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Payment Method</th>
-                            <th>Total Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+                <section class="contents">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Customer Name</th>
+                                <th>Booking Type</th>
+                                <?php if ($userRole === 3) { ?>
+                                    <th>Total Guest</th>
+                                <?php } elseif ($userRole === 2) { ?>
+                                    <th>Service Name</th>
+                                <?php   } ?>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Payment Method</th>
+                                <th>Total Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
                             $totalBookings = 0;
                             $totalCost = 0;
                             $approvedStatusID = 2;
 
-                            $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
-                    b.bookingType, u.firstName, b.guestCount AS guest, 
-                    b.startDate, b.endDate, 
-                    b.paymentMethod, b.totalCost
-                    FROM confirmedBooking cb
-                    LEFT JOIN booking b ON cb.bookingID = b.bookingID
-                    LEFT JOIN user u ON b.userID = u.userID
-                    WHERE cb.paymentApprovalStatus	 = ? AND b.startDate BETWEEN ? AND ?");
+                            if (!empty($reportData)) {
+                                // $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
+                                // b.bookingType, u.firstName, b.guestCount AS guest, 
+                                // b.startDate, b.endDate, 
+                                // b.paymentMethod, b.totalCost
+                                // FROM confirmedBooking cb
+                                // LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                                // LEFT JOIN user u ON b.userID = u.userID
+                                // WHERE cb.paymentApprovalStatus	 = ? AND b.startDate BETWEEN ? AND ?");
 
-                            $getReportData->bind_param("iss", $approvedStatusID, $startDateFormatted, $endDateFormatted);
-                            $getReportData->execute();
-                            $getReportDataResult = $getReportData->get_result();
+                                // $getReportData->bind_param("iss", $approvedStatusID, $startDateFormatted, $endDateFormatted);
+                                // $getReportData->execute();
+                                // $getReportDataResult = $getReportData->get_result();
 
-                            if ($getReportDataResult->num_rows > 0) {
-                                while ($row = $getReportDataResult->fetch_assoc()) {
-                                    $totalBookings++;
-                                    $totalCost += $row['totalCost'];
+                                // if ($getReportDataResult->num_rows > 0) {
+                                //     while ($row = $getReportDataResult->fetch_assoc()) {
+                                //         $totalBookings++;
+                                //         $totalCost += $row['totalCost'];
+                                foreach ($reportData as $row):
                             ?>
-                        <tr>
-                            <td><?= htmlspecialchars($row['formattedBookingID']) ?></td>
-                            <td><?= htmlspecialchars($row['firstName']) ?></td>
-                            <td><?= htmlspecialchars($row['bookingType']) ?></td>
-                            <td><?= htmlspecialchars($row['guest']) ?></td>
-                            <td><?= date('F d, Y', strtotime($row['startDate'])) ?></td>
-                            <td><?= date('F d, Y', strtotime($row['endDate'])) ?></td>
-                            <td><?= htmlspecialchars($row['paymentMethod']) ?></td>
-                            <td>₱<?= number_format($row['totalCost'], 2) ?></td>
-                        </tr>
-                        <?php
-                                }
+                                    <tr>
+                                        <td><?= htmlspecialchars($row['formattedBookingID']) ?></td>
+                                        <td><?= htmlspecialchars($row['firstName']) ?></td>
+                                        <td><?= htmlspecialchars($row['bookingType']) ?></td>
+                                        <?php if ($userRole === 3) { ?>
+                                            <td><?= htmlspecialchars($row['guest']) ?></td>
+                                        <?php } elseif ($userRole === 2) { ?>
+                                            <td><?= htmlspecialchars($row['PBName']) ?></td>
+                                        <?php   } ?>
+                                        <td><?= date('F d, Y', strtotime($row['startDate'])) ?></td>
+                                        <td><?= date('F d, Y', strtotime($row['endDate'])) ?></td>
+                                        <td><?= htmlspecialchars($row['paymentMethod']) ?></td>
+                                        <td>₱<?= number_format($row['totalCost'], 2) ?></td>
+                                    </tr>
+                                <?php
+                                endforeach;
                             } else {
                                 ?>
-                        <tr>
-                            <td colspan="8" class="no-data-text">No bookings found for selected dates</td>
-                        </tr>
-                        <?php
+                                <tr>
+                                    <td colspan="8" class="no-data-text">No bookings found for selected dates</td>
+                                </tr>
+                            <?php
                             }
                             ?>
-                    </tbody>
-                </table>
-            </section>
+                        </tbody>
+                    </table>
+                </section>
 
-            <section class="contents">
-                <h2 class="section-title" style="margin-top: 50px;">Report Summary</h2>
-                <p style="text-align: left; margin-top: 20px;"><strong>Total Bookings:</strong> <?= $totalBookings ?>
-                </p>
-                <p style="text-align: left;"><strong>Total Cost:</strong> ₱<?= number_format($totalCost, 2) ?></p>
-            </section>
+                <section class="contents">
+                    <h2 class="section-title" style="margin-top: 50px;">Report Summary</h2>
+                    <p style="text-align: left; margin-top: 20px;"><strong>Total Bookings:</strong> <?= $totalBookings ?>
+                    </p>
+                    <p style="text-align: left;"><strong>Total Cost:</strong> ₱<?= number_format($totalCost, 2) ?></p>
+                </section>
 
-            <section class="signatories">
-                <p style="text-align: left; margin-left:60px;"><strong>Signed By:</strong> ________________________</p>
-            </section>
-            <p style="text-align:right; margin-top: -25px; margin-right:60px;"><strong>Submitted By:</strong>
-                ______________________</p>
-        </div>
-    </main>
+                <section class="signatories">
+                    <p style="text-align: left; margin-left:60px;"><strong>Signed By:</strong> ________________________</p>
+                </section>
+                <p style="text-align:right; margin-top: -25px; margin-right:60px;"><strong>Submitted By:</strong>
+                    ______________________</p>
+            </div>
+        </main>
 
-</body>
+    </body>
 
-</html>
+    </html>
 
 <?php
 
