@@ -230,15 +230,16 @@ $availabilityQuery->close();
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                        id="notifCounter">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
 
             <a href="#" class="chat">
-                <img src="../../Assets/Images/Icon/chat.png" alt="home icon">
+                <img src="../../Assets/Images/Icon/chat.png" class="messageIcon" alt="Message icon">
             </a>
             <?php
             if ($userRole == 3) {
@@ -278,62 +279,80 @@ $availabilityQuery->close();
         </div>
     </div>
 
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg ">
+        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <a class="nav-link active" href="adminDashboard.php">
-            <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
-            <h5>Dashboard</h5>
-        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto me-10" id="navUL">
 
-        <a class="nav-link" href="booking.php">
-            <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
-            <h5>Bookings</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link active" href="adminDashboard.php">
+                        <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
+                        <h5>Dashboard</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="booking.php">
+                        <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
+                        <h5>Bookings</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="roomList.php">
-            <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
-            <h5>Rooms</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="roomList.php">
+                        <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
+                        <h5>Rooms</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="services.php">
-            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
-            <h5>Services</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="services.php">
+                        <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
+                        <h5>Services</h5>
+                    </a>
+                </li>
 
-
-        <!-- <a href="revenue.php" class="nav-link">
+                <!-- <a href="revenue.php" class="nav-link">
             <img src="../../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
             <h5>Revenue</h5>
         </a> -->
 
+                <li class="nav-item">
+                    <a class="nav-link" href="transaction.php">
+                        <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
+                        <h5>Payments</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="transaction.php">
-            <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
-            <h5>Payments</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="revenue.php">
+                        <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
+                        <h5>Revenue</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="displayPartnership.php">
+                        <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
+                        <h5>Partnerships</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="revenue.php">
-            <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
-            <h5>Revenue</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="editWebsite/editWebsite.php">
+                        <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
+                        <h5>Edit Website</h5>
+                    </a>
+                </li>
+            </ul>
 
-
-        <a class="nav-link" href="displayPartnership.php">
-            <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
-            <h5>Partnerships</h5>
-        </a>
-
-        <a class="nav-link" href="editWebsite/editWebsite.php">
-            <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
-            <h5>Edit Website</h5>
-        </a>
-
-        <a href="../../Function/Admin/logout.php" class="btn btn-danger">
-            Log Out
-        </a>
-
+            <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
+                Log Out
+            </a>
+        </div>
     </nav>
 
 
@@ -408,7 +427,7 @@ $availabilityQuery->close();
 
         <div class="leftSection">
             <div class="trend-cards">
-                <div class="card">
+                <div class="card" id="trendCardContent">
                     <div class="card-header ">
                         All Bookings
                     </div>
@@ -420,7 +439,7 @@ $availabilityQuery->close();
                     <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
-                <div class="card">
+                <div class="card" id="trendCardContent">
                     <div class="card-header ">
                         Event Bookings
                     </div>
@@ -432,7 +451,7 @@ $availabilityQuery->close();
                     <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
-                <div class="card">
+                <div class="card" id="trendCardContent">
                     <div class="card-header ">
                         Total Guest
                     </div>
@@ -444,8 +463,7 @@ $availabilityQuery->close();
                     <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
-
-                <div class="card">
+                <div class="card" id="trendCardContent">
                     <div class="card-header ">
                         Check In
                     </div>
@@ -457,7 +475,7 @@ $availabilityQuery->close();
                     <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
-                <div class="card">
+                <div class="card" id="trendCardContent">
                     <div class="card-header ">
                         Check Out
                     </div>
@@ -469,7 +487,7 @@ $availabilityQuery->close();
                     <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
-                <div class="card">
+                <div class="card" id="trendCardContent">
                     <div class="card-header ">
                         Revenue
                     </div>
@@ -482,7 +500,7 @@ $availabilityQuery->close();
                 </div>
 
             </div>
-            <div class="card">
+            <div class="card" id="roomAvailabilityCard">
                 <div class="card-header ">
                     Room Availability
                 </div>
@@ -505,15 +523,15 @@ $availabilityQuery->close();
                 <div class="revenueGraphContainer">
                     <h5 class=" revTitle">REVENUE</h5>
                     <?php if (!empty($revenues)): ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
+                    <div class="revenue-chart">
+                        <canvas id="revenueBar"></canvas>
+                    </div>
                     <?php else: ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
-                        <!-- Change this div -->
-                        <!-- <div class="revenueImage"><img src="../../Assets/Images/revenueGraph.png" alt=""></div> -->
+                    <div class="revenue-chart">
+                        <canvas id="revenueBar"></canvas>
+                    </div>
+                    <!-- Change this div -->
+                    <!-- <div class="revenueImage"><img src="../../Assets/Images/revenueGraph.png" alt=""></div> -->
                     <?php endif; ?>
                 </div>
             </div>
@@ -525,15 +543,15 @@ $availabilityQuery->close();
                 </div>
                 <div class="card-body">
                     <?php if (!empty($bookingTypeCount)): ?>
-                        <div class="revenue-chart">
-                            <canvas id="reservationTrendsBar"></canvas>
-                        </div>
+                    <div class="revenue-chart">
+                        <canvas id="reservationTrendsBar"></canvas>
+                    </div>
                     <?php else: ?>
-                        <div class="revenue-chart">
-                            <canvas id="reservationTrendsBar"></canvas>
-                        </div>
-                        <!-- Change this div -->
-                        <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
+                    <div class="revenue-chart">
+                        <canvas id="reservationTrendsBar"></canvas>
+                    </div>
+                    <!-- Change this div -->
+                    <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
                     <?php endif; ?>
                 </div>
             </div>
@@ -555,20 +573,20 @@ $availabilityQuery->close();
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item"
-                                    data-id="<?= htmlspecialchars($notificationID) ?>"
-                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($message) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -590,218 +608,218 @@ $availabilityQuery->close();
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
     <!-- Display if no available data -->
     <script>
-        Chart.register({
-            id: 'noDataPlugin',
-            beforeDraw(chart) {
-                const dataset = chart.data.datasets[0];
-                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
+    Chart.register({
+        id: 'noDataPlugin',
+        beforeDraw(chart) {
+            const dataset = chart.data.datasets[0];
+            const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
 
-                if (!hasData) {
-                    const ctx = chart.ctx;
-                    const {
-                        width,
-                        height
-                    } = chart;
+            if (!hasData) {
+                const ctx = chart.ctx;
+                const {
+                    width,
+                    height
+                } = chart;
 
-                    chart.clear();
+                chart.clear();
 
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.font = '20px Times New Roman';
-                    ctx.fillStyle = 'gray';
-                    ctx.fillText('No available data', width / 2, height / 2);
-                    ctx.restore();
-                }
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = '20px Times New Roman';
+                ctx.fillStyle = 'gray';
+                ctx.fillText('No available data', width / 2, height / 2);
+                ctx.restore();
             }
-        });
+        }
+    });
     </script>
 
 
     <script>
-        //Reservation Trends Bar
-        const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
+    //Reservation Trends Bar
+    const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
 
-        const reservationTrendsChart = new Chart(reservationTrendsBar, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($bookingTypeName) ?>,
-                datasets: [{
-                    data: <?= json_encode($bookingTypeCount) ?>,
-                    backgroundColor: [
-                        'rgba(0, 123, 255, 0.5)',
-                        'rgba(255, 193, 7, 0.5)',
-                        'rgba(40, 167, 69, 0.5)',
-                        'rgba(220, 53, 69, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(0, 123, 255, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(220, 53, 69, 1)'
-                    ],
+    const reservationTrendsChart = new Chart(reservationTrendsBar, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($bookingTypeName) ?>,
+            datasets: [{
+                data: <?= json_encode($bookingTypeCount) ?>,
+                backgroundColor: [
+                    'rgba(0, 123, 255, 0.5)',
+                    'rgba(255, 193, 7, 0.5)',
+                    'rgba(40, 167, 69, 0.5)',
+                    'rgba(220, 53, 69, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(0, 123, 255, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(220, 53, 69, 1)'
+                ],
 
-                    borderWidth: 3
-                }]
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
     </script>
 
 
     <script>
-        // availabilityGraph
-        const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
+    // availabilityGraph
+    const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
 
-        const availabilityChart = new Chart(availabilityGraph, {
-            type: 'doughnut',
-            data: {
-                labels: <?= json_encode($availabilityName) ?>,
-                datasets: [{
-                    data: <?= json_encode($availabilityCount) ?>,
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.5)', // Available
-                        'rgba(255, 193, 7, 0.5)', // Maintenance
-                        'rgba(220, 53, 69, 0.5)', // Occupied
-                        'rgba(0, 123, 255, 0.5)' // Private
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(0, 123, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                cutout: '60%',
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    }
+    const availabilityChart = new Chart(availabilityGraph, {
+        type: 'doughnut',
+        data: {
+            labels: <?= json_encode($availabilityName) ?>,
+            datasets: [{
+                data: <?= json_encode($availabilityCount) ?>,
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.5)', // Available
+                    'rgba(255, 193, 7, 0.5)', // Maintenance
+                    'rgba(220, 53, 69, 0.5)', // Occupied
+                    'rgba(0, 123, 255, 0.5)' // Private
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(0, 123, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            cutout: '60%',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
                 }
             }
-        });
+        }
+    });
     </script>
 
 
     <script>
-        //Revenue Bar
-        const revenueBar = document.getElementById("revenueBar").getContext('2d');
+    //Revenue Bar
+    const revenueBar = document.getElementById("revenueBar").getContext('2d');
 
-        const revenueChart = new Chart(revenueBar, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($days) ?>,
-                datasets: [{
-                    label: <?= json_encode($weekName) ?>,
-                    data: <?= json_encode($revenues) ?>,
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.5)', // Green
-                        'rgba(255, 193, 7, 0.5)', // Yellow
-                        'rgba(220, 53, 69, 0.5)', // Red
-                        'rgba(0, 123, 255, 0.5)', // Blue
-                        'rgba(23, 162, 184, 0.5)', // Cyan
-                        'rgba(108, 117, 125, 0.5)', // Gray
-                        'rgba(255, 99, 132, 0.5)', // Pink
-                        'rgba(153, 102, 255, 0.5)', // Purple
-                        'rgba(255, 159, 64, 0.5)', // Orange
-                        'rgba(75, 192, 192, 0.5)', // Teal
-                        'rgba(201, 203, 207, 0.5)', // Light Gray
-                        'rgba(54, 162, 235, 0.5)' // Light Blue
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(0, 123, 255, 1)',
-                        'rgba(23, 162, 184, 1)',
-                        'rgba(108, 117, 125, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(201, 203, 207, 1)',
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 3
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        labels: {
-                            usePointStyle: true,
-                            pointStyle: 'line',
-                            boxWidth: 0,
-                            font: {
-                                size: 16
-                            }
+    const revenueChart = new Chart(revenueBar, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($days) ?>,
+            datasets: [{
+                label: <?= json_encode($weekName) ?>,
+                data: <?= json_encode($revenues) ?>,
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.5)', // Green
+                    'rgba(255, 193, 7, 0.5)', // Yellow
+                    'rgba(220, 53, 69, 0.5)', // Red
+                    'rgba(0, 123, 255, 0.5)', // Blue
+                    'rgba(23, 162, 184, 0.5)', // Cyan
+                    'rgba(108, 117, 125, 0.5)', // Gray
+                    'rgba(255, 99, 132, 0.5)', // Pink
+                    'rgba(153, 102, 255, 0.5)', // Purple
+                    'rgba(255, 159, 64, 0.5)', // Orange
+                    'rgba(75, 192, 192, 0.5)', // Teal
+                    'rgba(201, 203, 207, 0.5)', // Light Gray
+                    'rgba(54, 162, 235, 0.5)' // Light Blue
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(0, 123, 255, 1)',
+                    'rgba(23, 162, 184, 1)',
+                    'rgba(108, 117, 125, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(201, 203, 207, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'line',
+                        boxWidth: 0,
+                        font: {
+                            size: 16
                         }
                     }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
+        }
 
-        });
+    });
     </script>
 </body>
 
