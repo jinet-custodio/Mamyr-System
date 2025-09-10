@@ -63,3 +63,15 @@ INSERT INTO `websitecontentimage` (`contentID`, `imageData`, `altText`, `imageOr
 
 -- Assets/Images/landingPage/ name
 -- ../Assets/Images/AboutImages/ name
+
+INSERT INTO `resortinfo`(`resortInfoTitle`, `resortInfoName`, `resortInfoDetail`) VALUES 
+('BusinessInformation', 'DisplayName', 'Mamyr'),
+('BusinessInformation', 'FullName', 'Mamyr Resort and Events Place'),
+('BusinessInformation', 'ShortDesc', 'Welcome to Mamyr Resort and Event Place! We\'re more than just a resort, we\'re a place where memories are made. Whether you\'re here for a relaxing getaway, a family gathering, or a special event, we\'re dedicated to making your stay unforgettable.'),
+('BusinessInformation', 'ContactNum', '(0998) 962 4697'),
+('BusinessInformation', 'Email', 'mamyresort128@gmail.com'),
+('BusinessInformation', 'Address', 'Sitio Colonia Gabihan, San Ildefonso, Bulacan'),
+('BusinessInformation', 'ShortDesc2', ' Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional. '),
+('BusinessInformation', 'FBLink', 'https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/'),
+('BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com'),
+('BusinessInformation', 'Logo', 'MamyrLogo.png');
