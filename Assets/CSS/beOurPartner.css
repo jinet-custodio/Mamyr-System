@@ -343,18 +343,36 @@ footer {
 
 .busProofFormContainer {
   margin-top: 4vw;
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5vw;
+  gap: 0.5vw; */
+}
+
+.label {
+  margin-top: 1.5vw !important;
+  font-weight: bold;
+  font-family: "Poppins";
+  text-align: center;
 }
 
 .moreDetails {
   text-decoration: none;
+  text-align: center;
+  display: block;
+  margin: auto;
+  margin-top: 1vw;
 }
 
-.btn-primary {
-  margin-top: 5vw;
+.w-75 {
+  display: block !important;
+  margin: auto !important;
+  margin-top: 1.5vw !important;
+}
+
+.btn-light {
+  width: 100%;
+  margin-top: 1vw;
 }
 
 /* modal css */
@@ -546,7 +564,7 @@ footer {
     padding: 0px;
     margin-left: 1vw;
     margin-right: 3vw;
-}
+  }
 }
 
 /* Tablet */

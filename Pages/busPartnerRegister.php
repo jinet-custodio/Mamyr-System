@@ -76,9 +76,24 @@ session_start();
                             placeholder="Business Name"
                             value="<?php echo isset($_SESSION['partnerData']['companyName']) ? htmlspecialchars(trim($_SESSION['partnerData']['companyName'])) : ''; ?>">
 
-                        <select id="service" name="partnerType" class="form-select primary">
-                            <option value="" disabled selected>Type of Business</option>
-                            <?php
+                        <button type="button" class="btn btn-light" data-bs-toggle="modal"
+                            data-bs-target="#busTypenModal">Type of Business</button>
+
+
+                        <!-- modal for type of business -->
+                        <div class="modal fade" id="busTypenModal" tabindex="-1" aria-labelledby="busTypeModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Type of Business</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body busTypeBody">
+                                        <?php
                             $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
                             $serviceType->execute();
                             $serviceTypeResult = $serviceType->get_result();
@@ -87,14 +102,30 @@ session_start();
                                     $partnerType = $serviceTypes['partnerTypeID'];
                                     $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
                             ?>
-                                    <option value="<?= htmlspecialchars($partnerType) ?>">
-                                        <?= htmlspecialchars($partnerTypeDescription) ?></option>
 
-                            <?php
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="partnerType[]"
+                                                id="partnerType<?= htmlspecialchars($partnerType) ?>"
+                                                value="<?= htmlspecialchars($partnerType) ?>">
+                                            <label class="form-check-label"
+                                                for="partnerType<?= htmlspecialchars($partnerType) ?>">
+                                                <?= htmlspecialchars($partnerTypeDescription) ?>
+                                            </label>
+                                        </div>
+                                        <?php
                                 }
                             }
                             ?>
-                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary">Select</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- modal for type of business -->
 
                         <input type="text" class="form-control" id="streetAddress" name="streetAddress"
                             placeholder="Street Address(optional)"
@@ -120,7 +151,8 @@ session_start();
                 <div class="col" id="busProofContainer">
                     <h4 class="busProofLabel">Proof of Business</h4>
 
-                    <p class="description">Please provide a link to your Google Drive or social media page as a
+                    <p class="description">Please provide a link to your Google Drive or social media page and a valid
+                        ID as a
                         proof of your business</p>
 
                     <div class="busProofFormContainer">
@@ -131,6 +163,9 @@ session_start();
 
                         <a href="#moreDetailsModal" class="moreDetails" data-bs-toggle="modal"
                             data-bs-target="#openModal">More Details</a>
+
+                        <h6 class="label">Upload a Valid ID</h6>
+                        <input type="file" class="form-control validIDFIle" id="validID" name="validID">
 
                         <button class="btn btn-primary w-75" id="nextBtn" onclick="openEmailPass()">Next</button>
                     </div>
@@ -249,6 +284,9 @@ session_start();
                                     <li><strong>Google Drive:</strong> Create a new folder in Google Drive with your
                                         business or performance name. Upload the required documents or media to this
                                         folder.</li>
+                                    <li><strong>Valid ID of the Business Owner/Representative:</strong> Upload a clear
+                                        photo or scanned copy of a valid government-issued ID using the input box
+                                        provided below.</li>
                                     <li><strong>Social Media Links:</strong> If you have active business pages or
                                         performance content on social media platforms, feel free to share the links to
                                         your profiles or posts that demonstrate your business or performance.</li>
@@ -271,6 +309,8 @@ session_start();
                                 <p>Once your documents/media or social media links are ready, paste the link(s) on the
                                     input box of the “Proof of Business” section.</p>
                             </li>
+
+
                         </ol>
                     </div>
 
@@ -532,128 +572,128 @@ session_start();
     </script> -->
     <!-- Script for loader -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loaderOverlay = document.getElementById('loaderOverlay');
-            const form = document.querySelector('form');
+    document.addEventListener('DOMContentLoaded', function() {
+        const loaderOverlay = document.getElementById('loaderOverlay');
+        const form = document.querySelector('form');
 
-            if (form) {
-                form.addEventListener('submit', function() {
-                    loaderOverlay.style.display = 'flex';
-                });
-            }
-        });
-
-        function hideLoader() {
-            const overlay = document.getElementById('loaderOverlay');
-            if (overlay) overlay.style.display = 'none';
+        if (form) {
+            form.addEventListener('submit', function() {
+                loaderOverlay.style.display = 'flex';
+            });
         }
+    });
 
-        // Hide loader on normal load
-        window.addEventListener('load', hideLoader);
+    function hideLoader() {
+        const overlay = document.getElementById('loaderOverlay');
+        if (overlay) overlay.style.display = 'none';
+    }
 
-        // Hide loader on back/forward navigation (from browser cache)
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                hideLoader();
-            }
-        });
+    // Hide loader on normal load
+    window.addEventListener('load', hideLoader);
+
+    // Hide loader on back/forward navigation (from browser cache)
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            hideLoader();
+        }
+    });
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        const emailPassContainer = document.getElementById("emailPassContainer");
-        const basicInfo = document.getElementById("basicInfo")
+    const emailPassContainer = document.getElementById("emailPassContainer");
+    const basicInfo = document.getElementById("basicInfo")
 
-        emailPassContainer.style.display = "none";
+    emailPassContainer.style.display = "none";
 
-        function openEmailPass() {
+    function openEmailPass() {
 
-            // Get required inputs
-            const requiredFields = [
-                'firstName', 'lastName', 'phoneNumber',
-                'companyName', 'service', 'barangay', 'proofLink'
-            ];
+        // Get required inputs
+        const requiredFields = [
+            'firstName', 'lastName', 'phoneNumber',
+            'companyName', 'service', 'barangay', 'proofLink'
+        ];
 
-            let allValid = true;
+        let allValid = true;
 
-            requiredFields.forEach(id => {
-                const field = document.getElementById(id);
-                if (!field || !field.value.trim()) {
-                    field.classList.add('is-invalid');
-                    allValid = false;
-                } else {
-                    field.classList.remove('is-invalid');
-                }
-            });
-
-            if (!allValid) {
-                Swal.fire({
-                    title: 'Oops',
-                    text: "Please fill out all required fields before continuing.",
-                    icon: 'warning'
-                });
-                return;
-            }
-
-            if (emailPassContainer.style.display == "none") {
-                emailPassContainer.style.display = "block";
-                basicInfo.style.display = "none"
-
+        requiredFields.forEach(id => {
+            const field = document.getElementById(id);
+            if (!field || !field.value.trim()) {
+                field.classList.add('is-invalid');
+                allValid = false;
             } else {
-                emailPassContainer.style.display = "block"
+                field.classList.remove('is-invalid');
             }
+        });
+
+        if (!allValid) {
+            Swal.fire({
+                title: 'Oops',
+                text: "Please fill out all required fields before continuing.",
+                icon: 'warning'
+            });
+            return;
         }
+
+        if (emailPassContainer.style.display == "none") {
+            emailPassContainer.style.display = "block";
+            basicInfo.style.display = "none"
+
+        } else {
+            emailPassContainer.style.display = "block"
+        }
+    }
     </script>
 
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get("action");
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get("action");
 
-        if (paramValue === 'emailExist') {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Email Already Exist!',
-                text: 'The email address you entered is already registered.'
-            })
-        }
+    if (paramValue === 'emailExist') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Email Already Exist!',
+            text: 'The email address you entered is already registered.'
+        })
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 
 
     <!-- Eye icon of password show and hide -->
     <script>
-        const passwordField1 = document.getElementById('password');
-        const passwordField2 = document.getElementById('confirm_password');
-        const togglePassword1 = document.getElementById('togglePassword1');
-        const togglePassword2 = document.getElementById('togglePassword2');
+    const passwordField1 = document.getElementById('password');
+    const passwordField2 = document.getElementById('confirm_password');
+    const togglePassword1 = document.getElementById('togglePassword1');
+    const togglePassword2 = document.getElementById('togglePassword2');
 
-        function togglePasswordVisibility(passwordField, toggleIcon) {
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('bxs-hide');
-                toggleIcon.classList.add('bx-show-alt');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('bx-show-alt');
-                toggleIcon.classList.add('bxs-hide');
-            }
+    function togglePasswordVisibility(passwordField, toggleIcon) {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('bxs-hide');
+            toggleIcon.classList.add('bx-show-alt');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('bx-show-alt');
+            toggleIcon.classList.add('bxs-hide');
         }
+    }
 
-        togglePassword1.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField1, togglePassword1);
-        });
+    togglePassword1.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField1, togglePassword1);
+    });
 
-        togglePassword2.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField2, togglePassword2);
-        });
+    togglePassword2.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField2, togglePassword2);
+    });
     </script>
 </body>
 
