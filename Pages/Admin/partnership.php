@@ -55,14 +55,12 @@ if (!$partnerID) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr Resort and Events Place</title>
-    <link
-        rel="icon"
-        type="image/x-icon"
-        href="../../Assets/Images/Icon/favicon.png " />
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/partnership.css">
 </head>
@@ -72,7 +70,8 @@ if (!$partnerID) {
     <div class="partner" id="partner-info" style="display: none;">
         <!-- Back Button -->
         <div class="page-container">
-            <a href="displayPartnership.php?container=1" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+            <a href="displayPartnership.php?container=1" class="btn btn-primary back"><img
+                    src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
             <h3 class="card-title page-title">Partner</h3>
         </div>
         <!-- Get the information to the database -->
@@ -120,7 +119,8 @@ if (!$partnerID) {
         <!-- Display the information -->
         <div class="card mb-3">
             <div class="partner-info-name-pic">
-                <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start" alt="<?= htmlspecialchars($applicantName) ?> ">
+                <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start"
+                    alt="<?= htmlspecialchars($applicantName) ?> ">
                 <div class="partner-info-contact">
                     <!-- <h4 class="card-title name">Name</h4> -->
                     <p class="card-text name"><?= $applicantName ?></p>
@@ -155,7 +155,8 @@ if (!$partnerID) {
     <div class="applicant" id="applicant-request" style="display: none;">
         <!-- Back Button -->
         <div class="page-container">
-            <a href="displayPartnership.php?container=2" class="btn btn-primary back"><img src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
+            <a href="displayPartnership.php?container=2" class="btn btn-primary back"><img
+                    src="../../Assets/Images/Icon/backbtn_black.png" alt="Back Button"></a>
             <h3 class="card-title page-title">Applicant</h3>
         </div>
         <!-- Get the information to the database -->
@@ -200,7 +201,8 @@ if (!$partnerID) {
         <div class="card mb-3">
 
             <div class="applicant-info-name-pic">
-                <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start" alt="<?= htmlspecialchars($applicantName) ?> ">
+                <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start"
+                    alt="<?= htmlspecialchars($applicantName) ?> ">
                 <div class="applicant-info-contact">
                     <!-- <h4 class="card-title name">Name</h4> -->
                     <p class="card-text name"><?= $applicantName ?></p>
@@ -212,20 +214,24 @@ if (!$partnerID) {
                         <input type="hidden" name="partnerStatus" value="<?= $data['partnerStatusID'] ?>">
                         <input type="hidden" name="partnerUserID" value="<?= $data['userID'] ?>">
                         <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectionModal">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#rejectionModal">
                             Decline
                         </button>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel"
+                            aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="rejectionModalLabel">Reason for Rejection</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <label for="rejectionReason">Please provide the reason for rejecting this request</label>
+                                        <label for="rejectionReason">Please provide the reason for rejecting this
+                                            request</label>
                                         <input type="text" name="rejectionReason" id="rejectionReason">
                                     </div>
                                     <div class="modal-footer">
@@ -239,77 +245,113 @@ if (!$partnerID) {
             </div>
 
             <div class="card-body">
-                <div class="applicant-info">
-                    <h4 class="card-title">Company Name</h4>
-                    <p class="card-text"><?= $companyName ?></p>
+                <div class="firstRow">
+                    <div class="applicant-info">
+                        <h4 class="card-title">Company Name</h4>
+                        <p class="card-text"><?= $companyName ?></p>
+                    </div>
+                    <div class="applicant-info">
+                        <h4 class="card-title">Partner Type</h4>
+                        <p class="card-text"><?= ucfirst($partnerType) ?></p>
+                    </div>
                 </div>
-                <div class="applicant-info">
-                    <h4 class="card-title">Partner Type</h4>
-                    <p class="card-text"><?= ucfirst($partnerType) ?></p>
-                </div>
-                <div class="applicant-info">
-                    <h4 class="card-title">Business Address</h4>
-                    <p class="card-text"><?= $address ?></p>
-                </div>
-                <div class="applicant-info">
-                    <h4 class="card-title">Document Link</h4>
-                    <a href="<?= $link ?>" target="_blank"><?= $link ?></a>
+                <div class="secondRow">
+                    <div class="applicant-info">
+                        <h4 class="card-title">Business Address</h4>
+                        <p class="card-text"><?= $address ?></p>
+                    </div>
+                    <div class="applicant-info documentLink">
+                        <h4 class="card-title">Document Link</h4>
+                        <a href="<?= $link ?>" target="_blank"><?= $link ?></a>
+                    </div>
+                    <div class="applicant-info validID">
+                        <h4 class="card-title">Valid ID</h4>
+                        <input type="text" class="form-control validID" value="validID_1.jpg" name="validID" readonly>
+                        <button type="button" class="btn btn-primary viewID" data-bs-toggle="modal"
+                            data-bs-target="#IDModal">View ID</button>
+
+
+                    </div>
                 </div>
             </div>
 
         </div>
+
+        <div class="modal fade" id="IDModal" tabindex="-1" aria-labelledby="IDModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Valid ID</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="../../Assets/Images/amenities/poolPics/poolPic1.png" alt="Valid ID"
+                            class="validIDImg">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
 
     <!-- Search URL -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('container');
-        const action = params.get("action");
-        // const paramValue = atob(encodedParamValue);
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('container');
+    const action = params.get("action");
+    // const paramValue = atob(encodedParamValue);
 
-        const partnerContainer = document.getElementById("partner-info");
-        const requestContainer = document.getElementById("applicant-request");
+    const partnerContainer = document.getElementById("partner-info");
+    const requestContainer = document.getElementById("applicant-request");
 
-        if (paramValue == 3) {
-            partnerContainer.style.display = "block";
-            requestContainer.style.display = "none";
-        } else if (paramValue == 4) {
-            partnerContainer.style.display = "none";
-            requestContainer.style.display = "block";
-        }
+    if (paramValue == 3) {
+        partnerContainer.style.display = "block";
+        requestContainer.style.display = "none";
+    } else if (paramValue == 4) {
+        partnerContainer.style.display = "none";
+        requestContainer.style.display = "block";
+    }
 
-        if (action === "failed1") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Partnership Approval Failed',
-                text: 'There was an issue approving the partnership request. Please try again.'
-            });
-        } else if (action === "failed2") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Partnership Rejection Failed',
-                text: 'There was an issue declining the partnership request. Please try again.'
-            });
-        } else if (action === "failed") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Partnership Approval Failed',
-                text: 'There was an issue approving/rejecting the partnership request. Please try again.'
-            });
-        }
-
-
+    if (action === "failed1") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Partnership Approval Failed',
+            text: 'There was an issue approving the partnership request. Please try again.'
+        });
+    } else if (action === "failed2") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Partnership Rejection Failed',
+            text: 'There was an issue declining the partnership request. Please try again.'
+        });
+    } else if (action === "failed") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Partnership Approval Failed',
+            text: 'There was an issue approving/rejecting the partnership request. Please try again.'
+        });
+    }
 
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+
+
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 </body>
 
