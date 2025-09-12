@@ -64,78 +64,17 @@ body {
 .adminTitle {
   margin-top: 1rem;
   font-family: "Lora" !important;
-  /* font-weight: bold; */
   font-size: 20px;
 }
 
-.admin {
-  img {
-    height: 70px;
-    width: 70px;
-    border-radius: 3rem;
-  }
-}
-.navbar {
-  font-family: "Lora";
-  border-radius: 15px;
-  max-width: 80vw;
-  margin: 20px auto;
-
-  background-color: white;
-
-  h5 {
-    font-size: 20px !important;
-  }
+.graph, .trend-cards {
+  width: 90%;
 }
 
-.nav-link {
-  display: flex !important;
-  margin: auto;
-  flex-direction: column;
-  align-items: center;
-  color: black;
-  text-decoration: none;
-}
-
-.nav-link.active:after {
-  width: 100%;
-  left: 0;
-}
-
-#navUL {
-  margin: auto;
-}
-
-#logOutBtn {
-  margin-right: 3vw;
-}
-.nav-item {
-  display: flex !important;
-  gap: 1vw;
-}
-
-.nav-link:after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 100%;
-  /* position: absolute; */
-  border-bottom: 4px solid rgb(126, 203, 242) !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-
-.nav-link:hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link img {
-  height: 2vw;
-  width: auto;
-  object-fit: contain;
+#roomAvailabilityCard {
+  width: 84%;
+  display: flex;
+  justify-content: center;
 }
 
 .dashboardTitle {
@@ -147,7 +86,6 @@ body {
   display: flex;
   gap: 2rem;
   justify-content: center;
-  align-items: center;
   padding: 1rem;
   padding-top: 0;
 }
@@ -165,8 +103,10 @@ body {
 }
 
 .card-header {
-  font-family: "Poppins" !important;
+  font-family: "Poppins";
+  font-size: 1.3vw;
 }
+
 .card-body {
   text-align: end;
 }
@@ -179,18 +119,18 @@ body {
   margin: 1rem;
 }
 
-#trendCardContent {
+.trendCardContent {
   width: 45%;
-  height: 18vh !important;
   margin: 0.5rem;
 }
 
 .roomAvailabilityGraph {
-  width: 500px;
-  height: 250px;
+  width: 40vw;
+  height: 15vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 auto;
 }
 
 #availabilityGraph {
@@ -202,8 +142,7 @@ body {
   width: 50%;
   display: flex;
   flex-direction: column;
-  margin: 1rem;
-  gap: 1rem;
+  justify-content: space-around;
 }
 
 .salesReportBtn {
@@ -243,12 +182,110 @@ body {
   height: 100% !important;
 }
 
-/* .revenueImage img {
-  width: 550px;
-  height: 250px;
-} */
+/* Tablet Portrait */
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+  .dashboardTitle {
+    font-size: clamp(4vw, 3.8vw, 3.5vw);
+  }
 
-/* Phones */
+  .trendCardContent {
+    width: 30%;
+  }
+
+  #contentsCF {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+  }
+
+  .trend-cards {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 1rem;
+    width: 90vw;
+  }
+
+  .card-header {
+    font-size: 16px !important;
+  }
+
+  h2 {
+    font-size: 14px !important;
+  }
+
+  .roomAvailabilityGraph {
+    width: 100% !important;
+  }
+
+  .rightSection {
+    width: 80%;
+    align-items: center;
+  }
+
+  #revenueGraphCard {
+    margin-bottom: 2vw;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
+  .topSection {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem !important;
+  }
+
+  .menus {
+    margin-right: 10vw;
+  }
+
+  .dashboardTitle {
+    font-size: 30px !important;
+  }
+
+  #contentsCF {
+    gap: 1.5vw !important;
+  }
+
+  .leftSection {
+    gap: 2vw !important;
+  }
+
+  .trend-cards {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 1rem;
+    width: 99.5vw;
+    margin: auto;
+  }
+
+  .trendCardContent {
+    width: 42% !important;
+  }
+
+  .card-header {
+    font-size: 16px !important;
+  }
+
+  h2 {
+    font-size: 14px !important;
+  }
+
+  .rightSection {
+    width: 43vw;
+  }
+
+  #roomAvailabilityCard {
+    width: 42vw !important;
+    margin-left: 6.5vw;
+  }
+
+  .roomAvailabilityGraph {
+    width: 100% !important;
+  }
+}
+
+
 @media only screen and (max-width: 599px) {
   .topSection {
     display: flex;
@@ -258,73 +295,6 @@ body {
 
   .menus {
     margin-right: 20vw;
-  }
-
-  .logo {
-    width: 25vw;
-  }
-
-  .notificationIcon,
-  .messageIcon {
-    height: 25px;
-    width: 25px;
-  }
-  #notifCounter {
-    height: 2vw !important;
-    width: 0.5vw;
-    background-color: transparent !important;
-    color: red;
-    position: absolute !important;
-    top: 1% !important;
-    left: 70% !important;
-  }
-
-  .admin {
-    img {
-      height: 40px;
-      width: 40px;
-      border-radius: 3rem;
-    }
-  }
-
-  .adminTitle {
-    display: none !important;
-  }
-
-  .navbar {
-    font-family: "Lora";
-    background: none !important;
-  }
-
-  h5 {
-    font-size: 12px !important;
-    text-align: left !important;
-  }
-
-  .nav-link img {
-    display: none;
-  }
-  .navbar-collapse {
-    background-color: white;
-
-    padding: 1rem;
-    .nav-link {
-      color: black !important;
-    }
-  }
-
-  .navbar-toggler {
-    background-color: #ffff !important;
-    float: right !important;
-    margin: -28vw -5vw 0 0;
-    /* position: absolute;
-    right: 8%;
-    top: -210%; */
-  }
-
-  #logOutBtn {
-    display: block;
-    margin: auto;
   }
 
   .dashboardTitle {
@@ -345,9 +315,8 @@ body {
     width: 90vw;
   }
 
-  #trendCardContent {
+  .trendCardContent {
     width: 42% !important;
-    height: 20vw !important;
   }
 
   .card-header {
@@ -367,259 +336,12 @@ body {
     width: 100% !important;
   }
 
-  .rightSection {
-    margin-top: -2vw;
-    width: 90vw;
-  }
-}
-
-/* Tablet Portrait */
-@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
-  .topSection {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem !important;
-  }
-
-  .menus {
-    margin-right: 10vw;
-  }
-
-  .logo {
-    width: 20vw;
-  }
-
-  .notificationIcon,
-  .messageIcon {
-    height: 25px;
-    width: 25px;
-  }
-
-  #notifCounter {
-    height: 2vw !important;
-    width: 0.5vw;
-    background-color: transparent !important;
-    color: red;
-    position: absolute !important;
-    top: 1% !important;
-    left: 70% !important;
-  }
-
-  .admin {
-    img {
-      height: 40px;
-      width: 40px;
-      border-radius: 3rem;
-    }
-  }
-
-  .adminTitle {
-    display: none !important;
-  }
-
-  .navbar {
-    font-family: "Lora";
-    background: none !important;
-  }
-
-  h5 {
-    font-size: 12px !important;
-    text-align: left !important;
-  }
-
-  .nav-link img {
-    display: none;
-  }
-  .navbar-collapse {
-    background-color: white;
-
-    padding: 1rem;
-    .nav-link {
-      color: black !important;
-    }
-  }
-
-  .navbar-toggler {
-    background-color: #ffff !important;
-    float: right !important;
-    margin: -18.7vw -8.5vw 0 0;
-    /* position: absolute;
-    right: 8%;
-    top: -210%; */
-  }
-
-  #logOutBtn {
-    display: block;
-    margin: auto;
-  }
-
-  .dashboardTitle {
-    margin-top: -5vw;
-    font-size: 30px !important;
-  }
-
-  #contentsCF {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
-  }
-
-  .trend-cards {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 1rem;
-    width: 90vw;
-  }
-
-  #trendCardContent {
-    width: 42% !important;
-    height: 15vw !important;
-  }
-
-  .card-header {
-    font-size: 16px !important;
-  }
-
-  h2 {
-    font-size: 14px !important;
-  }
-
-  #roomAvailabilityCard {
-    width: 84vw !important;
-  }
-
-  .roomAvailabilityGraph {
-    width: 100% !important;
+  #reservationTrends {
+    margin-top: 2vw;
   }
 
   .rightSection {
-    margin-top: -2vw;
     width: 90vw;
-  }
-}
-
-/* Tablet Landscape */
-@media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
-  .topSection {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem !important;
-  }
-
-  .menus {
-    margin-right: 10vw;
-  }
-
-  .logo {
-    width: 20vw;
-  }
-
-  .notificationIcon,
-  .messageIcon {
-    height: 25px;
-    width: 25px;
-  }
-
-  #notifCounter {
-    height: 2vw !important;
-    width: 0.5vw;
-    background-color: transparent !important;
-    color: red;
-    position: absolute !important;
-    top: 1% !important;
-    left: 70% !important;
-  }
-
-  .admin {
-    img {
-      height: 40px;
-      width: 40px;
-      border-radius: 3rem;
-    }
-  }
-
-  .adminTitle {
-    display: none !important;
-  }
-
-  .navbar {
-    font-family: "Lora";
-    background: none !important;
-  }
-
-  h5 {
-    font-size: 12px !important;
-    text-align: left !important;
-  }
-
-  .nav-link img {
-    display: none;
-  }
-  .navbar-collapse {
-    background-color: white;
-
-    padding: 1rem;
-    .nav-link {
-      color: black !important;
-    }
-  }
-
-  .navbar-toggler {
-    background-color: #ffff !important;
-    float: right !important;
-    margin: -16vw -8vw 0 0;
-    /* position: absolute;
-    right: 8%;
-    top: -210%; */
-  }
-
-  #logOutBtn {
-    display: block;
-    margin: auto;
-  }
-
-  .dashboardTitle {
-    margin-top: -5vw;
-    font-size: 30px !important;
-  }
-
-  #contentsCF {
-    gap: 1.5vw !important;
-  }
-
-  .leftSection {
-    gap: 2vw !important;
-  }
-
-  .trend-cards {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 1rem;
-    width: 99.5vw;
-    margin: auto;
-  }
-  #trendCardContent {
-    width: 42% !important;
-  }
-
-  .card-header {
-    font-size: 16px !important;
-  }
-
-  h2 {
-    font-size: 14px !important;
-  }
-
-  .rightSection {
-    margin-top: 59vw;
-    width: 43vw;
-  }
-
-  #roomAvailabilityCard {
-    width: 42vw !important;
-    margin-left: 6.5vw;
-  }
-  .roomAvailabilityGraph {
-    width: 100% !important;
+    align-items: center;
   }
 }

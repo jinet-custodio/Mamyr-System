@@ -11,14 +11,6 @@
   src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
-@font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-}
-@font-face {
-  font-family: "Prata";
-  src: url(../Fonts/Prata/Prata-Regular.ttf);
-}
 
 @font-face {
   font-family: "Galada";
@@ -46,52 +38,49 @@ nav {
   left: 0;
   width: 100%;
   z-index: 1000;
-  /* background-color: rgb(242, 242, 242); */
+  background-color: rgb(242, 242, 242);
 }
 
 .navbar {
-  position: fixed;
-  width: 100%;
-  top: 0;
-  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* height: 15vh; */
+  padding: 1rem;
 }
+
+#toggledNav {
+    position: absolute !important;
+    right: 2vw !important;
+  }
 
 .navbar-nav {
   display: flex !important;
   list-style: none;
-  margin-top: 10px !important;
+}
+
+#profileAndNotif {
+  padding: 0.6vw;
 }
 
 .navbar-nav .dropdown-toggle {
   display: inline-block;
-  padding: 10px 15px !important;
+  padding: 10px !important;
   line-height: 1.5;
   vertical-align: middle;
   position: relative;
-  top: 0.1vw; /* para ma-align yung dropdown sa ibang nav-item */
+  top: 0.1vw;
+  /* para ma-align yung dropdown sa ibang nav-item */
 }
 
-.navbar.scrolled {
-  background-color: rgb(255, 255, 255, 0.8);
-  .nav-link {
-    color: black !important;
-  }
-  .nav-link:not(.dropdown-toggle):after {
-    border-bottom: 4px solid rgb(126, 203, 242) !important;
-  }
 
-  #logOutBtn {
-    color: #000000 !important;
-  }
-}
-
-.navbar-nav {
+.nav-item {
+  text-transform: uppercase;
   font-family: "Poppins" !important;
   font-weight: lighter;
+  margin-top: 15px;
   font-size: 1.5vw;
-  list-style: none;
-  display: table;
-  text-transform: uppercase;
+  /* margin-left: 3vw; */
 }
 
 .nav-link,
@@ -100,13 +89,13 @@ nav {
   display: inline-block;
   padding: 10px 15px !important;
   position: relative;
-  color: white !important;
+  color: rgb(2, 2, 2) !important;
   letter-spacing: 0.1em;
 }
 
 #logOutBtn {
   font-family: "Poppins";
-  font-size: 1.45vw;
+  font-size: 1.5vw;
   margin-right: 2vw;
   border: none;
 }
@@ -119,7 +108,7 @@ nav {
   height: 2px;
   left: 50%;
   position: absolute;
-  border-bottom: 4px solid rgb(255, 255, 255) !important;
+  border-bottom: 4px solid #93d4f5 !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }
@@ -129,14 +118,13 @@ nav {
   left: 0;
 }
 
-.dropdown-item.active {
-  background-color: rgb(126, 203, 242) !important;
-  color: black !important;
-}
-
 .nav-link:not(.dropdown-toggle):hover:after {
   width: 100%;
   left: 0;
+}
+
+.dropdown-menu {
+  background-color: rgb(126, 203, 242, 0.5) !important;
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
@@ -144,12 +132,13 @@ nav {
   display: block;
 }
 
-.dropdown-menu {
+.dropdown-item:hover {
   background-color: rgb(126, 203, 242, 0.5) !important;
 }
 
-.dropdown-item:hover {
-  background-color: rgb(126, 203, 242, 0.5) !important;
+.dropdown-item.active {
+  background-color: rgb(126, 203, 242) !important;
+  color: black !important;
 }
 
 .dropdown-item {
@@ -157,33 +146,61 @@ nav {
   font-weight: bold;
 }
 
-.logoNav {
-  /* border: 1px solid black; */
-  width: 15vw;
-  position: absolute;
-  margin: 2vw;
-}
-
 .account-nav {
-  margin: 1px;
-  margin-left: 1rem;
-  /* border: 1px solid white; */
+  display: flex;
+  align-items: center;
   border-radius: 50%;
+  margin-left: 1rem;
+  margin-top: 0 !important;
+
   img {
     height: 5vw;
     border-radius: 50%;
     aspect-ratio: 1;
     object-fit: cover;
   }
+
+  a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+}
+
+#notifs {
+  margin-top: 0;
 }
 
 .notification-container {
-  margin: 1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
 
   button {
     background-color: transparent;
     border: none;
   }
+}
+
+.notificationIcon {
+  display: flex;
+  align-items: center;
+  height: 2.5vw;
+  aspect-ratio: 1;
+}
+
+/* Edit mode CSS */
+#saveChangesBtn {
+  margin-top: 8vw !important;
+  margin-left: 80vw;
+  font-size: 1.8vw !important;
+  position: fixed;
+}
+
+.editable-input {
+  background-color: rgba(255, 255, 255, 0) !important;
+  border: 1px solid rgb(255, 13, 13) !important;
+  padding: 2px;
 }
 
 /* Div for loader */

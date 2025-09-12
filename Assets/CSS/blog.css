@@ -39,6 +39,7 @@ body {
 
 main {
   flex: 1;
+  margin-bottom: 3vw;
 }
 
 nav {
@@ -206,7 +207,7 @@ button.notifBtn {
 
 /* Edit mode CSS */
 #saveChangesBtn {
-  margin-top: 5.5vw !important;
+  margin-top: 3vw !important;
   margin-left: 80vw;
   font-size: 1.8vw !important;
   position: fixed;
@@ -226,7 +227,7 @@ button.notifBtn {
   text-align: center;
 }
 
-.titleContainer h4 {
+.titleContainer h4,.descriptionText {
   font-size: 2vw !important;
 }
 
@@ -338,6 +339,14 @@ button.btn-primary {
   font-weight: 700;
   margin: 0 auto !important;
   text-align: center;
+}
+
+.half {
+  width: 45%;
+}
+
+input.headerEdit {
+  width: 30vw;
 }
 
 .btn-close {

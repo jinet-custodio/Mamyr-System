@@ -53,16 +53,45 @@
   font-size: 1.3rem;
 }
 
-.card-body {
-  /* border: 1px solid red; */
+/* .card-body {
+  border: 1px solid red;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+} */
+
+.firstRow {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 1vw;
 }
 
+.secondRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 1vw;
+  gap: 1vw;
+}
+
+.documentLink,
+.validID {
+  width: 100%;
+}
+
+.viewID {
+  margin-top: 1vw;
+  width: 100%;
+}
+
+.validIDImg {
+  width: 28vw;
+  display: block;
+  margin: auto;
+}
 .applicant-info,
 .partner-info {
-  /* width: 100%; */
+  width: 100%;
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 8px;
