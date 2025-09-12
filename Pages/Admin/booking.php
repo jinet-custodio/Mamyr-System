@@ -65,6 +65,11 @@ if (isset($_SESSION['error'])) {
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
+    <!-- Font Awesome and Box Icon links  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
 <body>
@@ -158,55 +163,75 @@ if (isset($_SESSION['error'])) {
         </div>
     </div>
 
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg ">
+        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <a class="nav-link" href="adminDashboard.php">
-            <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
-            <h5>Dashboard</h5>
-        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav w-100 me-10 d-flex justify-content-around" id="navUL">
 
-        <a class="nav-link active" href="booking.php">
-            <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
-            <h5>Bookings</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="adminDashboard.php">
+                        <i class="fa-solid fa-grip navbar-icon"></i>
+                        <h5>Dashboard</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link active" href="booking.php">
+                        <i class="fa-solid fa-calendar-days navbar-icon"></i>
+                        <h5>Bookings</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="roomList.php">
-            <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
-            <h5>Rooms</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="roomList.php">
+                        <i class="fa-solid fa-hotel navbar-icon"></i>
+                        <h5>Rooms</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="services.php">
-            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
-            <h5>Services</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="services.php">
+                        <i class="fa-solid fa-bell-concierge navbar-icon"></i>
+                        <h5>Services</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="transaction.php">
-            <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
-            <h5>Payments</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="transaction.php">
+                        <i class="fa-solid fa-credit-card navbar-icon"></i>
+                        <h5>Payments</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="revenue.php">
+                        <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
+                        <h5>Revenue</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="revenue.php">
-            <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
-            <h5>Revenue</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="displayPartnership.php">
+                        <i class="fa-solid fa-handshake navbar-icon"></i>
+                        <h5>Partnerships</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="editWebsite/editWebsite.php">
+                        <i class="fa-solid fa-pen-to-square navbar-icon"></i>
+                        <h5>Edit Website</h5>
+                    </a>
+                </li>
+            </ul>
 
-        <a class="nav-link" href="displayPartnership.php">
-            <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
-            <h5>Partnerships</h5>
-        </a>
-
-        <a class="nav-link" href="editWebsite/editWebsite.php">
-            <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
-            <h5>Edit Website</h5>
-        </a>
-
-        <a href="../../Function/Admin/logout.php" class="btn btn-danger">
-            Log Out
-        </a>
-
+            <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
+                Log Out
+            </a>
+        </div>
     </nav>
 
 
@@ -246,7 +271,7 @@ if (isset($_SESSION['error'])) {
     <!-- Booking-container -->
 
     <div class="booking-container">
-        <div class="card" style="width: 80rem;">
+        <div class="card" style="width: 80%;">
 
             <div class="btnContainer">
                 <a href="createBooking.php" class="btn btn-primary">Create</a>

@@ -49,14 +49,6 @@ body {
 .logo {
   width: 15vw;
 }
-/* #dashboard {
-  font-family: "Plus Jakarta Sans";
-  text-decoration: none;
-  color: black;
-  font-weight: 800;
-  font-size: 2.3vw;
-  margin-left: 1vw;
-} */
 
 #dashboard {
   text-decoration: none;
@@ -72,22 +64,26 @@ body {
 
 .admin {
   img {
-    height: 70px;
-    width: 70px;
-    border-radius: 3rem;
+    height: 5vw;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
   }
+}
+
+.navbar-icon {
+  font-size: 2vw;
 }
 
 .navbar {
   font-family: "Lora";
-  border-radius: 15px;
+  border-radius: 1vw;
   max-width: 80vw;
-  margin: 20px auto;
-  padding: 1rem !important;
+  margin: 20px auto; 
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   h5 {
-    font-size: 20px !important;
+    font-size: clamp(1.4vw, 1.3vw, 1.2vw);
   }
 }
 
@@ -96,7 +92,6 @@ body {
   margin: auto;
   flex-direction: column;
   align-items: center;
-  color: black;
   text-decoration: none;
 }
 
@@ -120,6 +115,11 @@ body {
   border-bottom: 4px solid rgb(126, 203, 242) !important;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
+}
+#logOutBtn {
+  margin-right: 1vw;
+  font-size: 1.3vw;
+    width: 8vw;
 }
 
 .nav-link:hover:after {
