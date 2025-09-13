@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 08, 2025 at 02:13 PM
+-- Generation Time: Sep 13, 2025 at 03:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -84,6 +84,15 @@ CREATE TABLE `booking` (
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`bookingID`, `userID`, `bookingType`, `customPackageID`, `addOns`, `additionalRequest`, `toddlerCount`, `kidCount`, `adultCount`, `guestCount`, `durationCount`, `arrivalTime`, `startDate`, `endDate`, `paymentMethod`, `additionalCharge`, `totalCost`, `downpayment`, `bookingStatus`, `createdAt`) VALUES
+(2, 2, 'Event', 27, NULL, 'N/A', 0, 0, 0, 350, 5, NULL, '2025-09-29 14:00:00', '2025-09-29 19:00:00', 'Cash', 0.00, 135000.00, 40500.00, 1, '2025-09-13 07:49:53'),
+(3, 2, 'Event', 28, NULL, 'N/A', 0, 0, 0, 50, 5, NULL, '2025-09-24 06:10:00', '2025-09-24 11:10:00', 'Cash', 0.00, 23500.00, 7050.00, 1, '2025-09-13 08:08:22'),
+(4, 2, 'Resort', NULL, 'Massage Chair', 'None', 3, 1, 5, 6, 7, '09:00:00', '2025-09-14 09:00:00', '2025-09-14 16:00:00', 'GCash', 100.00, 1750.00, 800.00, 2, '2025-09-13 08:10:23');
+
 -- --------------------------------------------------------
 
 --
@@ -118,6 +127,16 @@ CREATE TABLE `bookingservice` (
   `bookingServicePrice` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `bookingservice`
+--
+
+INSERT INTO `bookingservice` (`bookingServiceID`, `bookingID`, `serviceID`, `guests`, `bookingServicePrice`) VALUES
+(1, 4, 49, 5, 750.00),
+(2, 4, 50, 1, 100.00),
+(3, 4, 7, 10, 800.00),
+(4, 4, 25, 0, 100.00);
+
 -- --------------------------------------------------------
 
 --
@@ -139,6 +158,13 @@ CREATE TABLE `confirmedbooking` (
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `confirmedbooking`
+--
+
+INSERT INTO `confirmedbooking` (`confirmedBookingID`, `bookingID`, `downpaymentImage`, `discountAmount`, `confirmedFinalBill`, `amountPaid`, `userBalance`, `paymentApprovalStatus`, `paymentStatus`, `paymentDueDate`, `downpaymentDueDate`, `createdAt`) VALUES
+(1, 4, 'defaultDownpayment.png', 0.00, 1750.00, 0.00, 1750.00, 1, 1, '2025-09-14 09:00:00', '2025-09-13 00:00:00', '2025-09-13 08:10:23');
+
 -- --------------------------------------------------------
 
 --
@@ -149,10 +175,22 @@ CREATE TABLE `custompackage` (
   `customPackageID` int(11) NOT NULL,
   `eventTypeID` int(11) DEFAULT NULL,
   `userID` int(11) NOT NULL,
-  `customPackageTotalPrice` decimal(10,2) NOT NULL,
+  `customPackageTotalPrice` decimal(10,2) DEFAULT 0.00,
   `customPackageNotes` varchar(255) DEFAULT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `foodPricingPerHead` int(11) DEFAULT NULL,
+  `totalFoodPrice` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `venuePricing` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `additionalServicePrice` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `custompackage`
+--
+
+INSERT INTO `custompackage` (`customPackageID`, `eventTypeID`, `userID`, `customPackageTotalPrice`, `customPackageNotes`, `createdAt`, `foodPricingPerHead`, `totalFoodPrice`, `venuePricing`, `additionalServicePrice`) VALUES
+(27, 3, 2, 135000.00, 'N/A', '2025-09-13 07:49:53', 1, 105000.00, 30000.00, 0.00),
+(28, 5, 2, 23500.00, 'N/A', '2025-09-13 08:08:22', 1, 15000.00, 7000.00, 1500.00);
 
 -- --------------------------------------------------------
 
@@ -165,9 +203,28 @@ CREATE TABLE `custompackageitem` (
   `customPackageID` int(11) NOT NULL,
   `serviceID` int(11) DEFAULT NULL,
   `foodItemID` int(11) DEFAULT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 1,
-  `servicePrice` decimal(10,2) NOT NULL
+  `servicePrice` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `custompackageitem`
+--
+
+INSERT INTO `custompackageitem` (`customPackageItemID`, `customPackageID`, `serviceID`, `foodItemID`, `servicePrice`) VALUES
+(19, 27, NULL, 4, 0.00),
+(20, 27, NULL, 8, 0.00),
+(21, 27, NULL, 21, 0.00),
+(22, 27, NULL, 51, 0.00),
+(23, 27, NULL, 56, 0.00),
+(24, 27, 21, NULL, 30000.00),
+(25, 28, NULL, 6, 0.00),
+(26, 28, NULL, 19, 0.00),
+(27, 28, NULL, 25, 0.00),
+(28, 28, NULL, 26, 0.00),
+(29, 28, NULL, 50, 0.00),
+(30, 28, NULL, 55, 0.00),
+(31, 28, 22, NULL, 7000.00),
+(32, 28, 55, NULL, 7000.00);
 
 -- --------------------------------------------------------
 
@@ -240,6 +297,27 @@ INSERT INTO `eventcategory` (`categoryID`, `categoryName`) VALUES
 (6, 'Christmas Party'),
 (7, 'Kids Party'),
 (8, 'Debut');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `foodpricing`
+--
+
+CREATE TABLE `foodpricing` (
+  `pricingID` int(11) NOT NULL,
+  `pricePerHead` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `ageGroup` enum('Adult','Child','Both') NOT NULL DEFAULT 'Adult',
+  `notes` text DEFAULT NULL,
+  `createdAT` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `foodpricing`
+--
+
+INSERT INTO `foodpricing` (`pricingID`, `pricePerHead`, `ageGroup`, `notes`, `createdAT`) VALUES
+(1, 300.00, 'Adult', NULL, '2025-09-09 15:17:34');
 
 -- --------------------------------------------------------
 
@@ -344,7 +422,7 @@ CREATE TABLE `notification` (
 --
 
 INSERT INTO `notification` (`notificationID`, `bookingID`, `partnershipID`, `userID`, `message`, `receiver`, `created_at`, `is_read`) VALUES
-(1, NULL, 3, 6, 'Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.', 'Customer', '2025-09-07 06:59:54', 0);
+(2, 4, NULL, 2, 'A customer has submitted a new resort booking.', 'Admin', '2025-09-13 08:10:23', 0);
 
 -- --------------------------------------------------------
 
@@ -387,9 +465,17 @@ CREATE TABLE `partnershipservice` (
   `PBPrice` decimal(10,2) NOT NULL DEFAULT 0.00,
   `PBDescription` text DEFAULT NULL,
   `PBcapacity` int(11) DEFAULT NULL,
+  `PBduration` varchar(255) DEFAULT NULL,
   `PSstatus` int(11) DEFAULT 1,
   `PSAvailabilityID` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `partnershipservice`
+--
+
+INSERT INTO `partnershipservice` (`partnershipServiceID`, `partnershipID`, `PBName`, `PBPrice`, `PBDescription`, `PBcapacity`, `PBduration`, `PSstatus`, `PSAvailabilityID`) VALUES
+(1, 3, 'Wedding photography', 1500.00, '', 0, '4 hours', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -414,6 +500,24 @@ INSERT INTO `partnershiptype` (`partnerTypeID`, `partnerType`, `partnerTypeDescr
 (4, 'photo-booth', 'Photo Booth'),
 (5, 'performer', 'Performer'),
 (6, 'food-cart', 'Food Cart');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `partnership_partnertype`
+--
+
+CREATE TABLE `partnership_partnertype` (
+  `partnershipID` int(11) NOT NULL,
+  `partnerTypeID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `partnership_partnertype`
+--
+
+INSERT INTO `partnership_partnertype` (`partnershipID`, `partnerTypeID`) VALUES
+(3, 1);
 
 -- --------------------------------------------------------
 
@@ -617,7 +721,8 @@ INSERT INTO `service` (`serviceID`, `resortServiceID`, `partnershipServiceID`, `
 (51, NULL, NULL, 3, 'Entrance'),
 (52, NULL, NULL, 4, 'Entrance'),
 (53, NULL, NULL, 5, 'Entrance'),
-(54, NULL, NULL, 6, 'Entrance');
+(54, NULL, NULL, 6, 'Entrance'),
+(55, NULL, 1, NULL, 'Partnership');
 
 -- --------------------------------------------------------
 
@@ -636,10 +741,11 @@ CREATE TABLE `serviceavailability` (
 
 INSERT INTO `serviceavailability` (`availabilityID`, `availabilityName`) VALUES
 (1, 'Available'),
+(6, 'Booked'),
 (3, 'Maintenance'),
-(5, 'Not Available'),
 (2, 'Occupied'),
-(4, 'Private');
+(4, 'Private'),
+(5, 'Unavailable');
 
 -- --------------------------------------------------------
 
@@ -654,6 +760,14 @@ CREATE TABLE `serviceunavailabledate` (
   `unavailableStartDate` datetime NOT NULL,
   `unavailableEndDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `serviceunavailabledate`
+--
+
+INSERT INTO `serviceunavailabledate` (`serviceUnavailableID`, `resortServiceID`, `partnershipServiceID`, `unavailableStartDate`, `unavailableEndDate`) VALUES
+(3, 7, NULL, '2025-09-14 09:00:00', '2025-09-14 16:00:00'),
+(4, 25, NULL, '2025-09-14 09:00:00', '2025-09-14 16:00:00');
 
 -- --------------------------------------------------------
 
@@ -910,7 +1024,8 @@ ALTER TABLE `confirmedbooking`
 ALTER TABLE `custompackage`
   ADD PRIMARY KEY (`customPackageID`),
   ADD KEY `userID` (`userID`),
-  ADD KEY `fk_eventTypeID` (`eventTypeID`);
+  ADD KEY `fk_eventTypeID` (`eventTypeID`),
+  ADD KEY `custompackage_ibfk_2` (`foodPricingPerHead`);
 
 --
 -- Indexes for table `custompackageitem`
@@ -919,7 +1034,7 @@ ALTER TABLE `custompackageitem`
   ADD PRIMARY KEY (`customPackageItemID`),
   ADD KEY `customPackageID` (`customPackageID`),
   ADD KEY `serviceID` (`serviceID`),
-  ADD KEY `foodItemID` (`foodItemID`);
+  ADD KEY `custompackageitem_ibfk_3` (`foodItemID`);
 
 --
 -- Indexes for table `entrancerate`
@@ -939,6 +1054,12 @@ ALTER TABLE `entrancetimerange`
 --
 ALTER TABLE `eventcategory`
   ADD PRIMARY KEY (`categoryID`);
+
+--
+-- Indexes for table `foodpricing`
+--
+ALTER TABLE `foodpricing`
+  ADD PRIMARY KEY (`pricingID`);
 
 --
 -- Indexes for table `menuitem`
@@ -981,6 +1102,13 @@ ALTER TABLE `partnershipservice`
 ALTER TABLE `partnershiptype`
   ADD PRIMARY KEY (`partnerTypeID`),
   ADD UNIQUE KEY `partnerType` (`partnerType`);
+
+--
+-- Indexes for table `partnership_partnertype`
+--
+ALTER TABLE `partnership_partnertype`
+  ADD PRIMARY KEY (`partnershipID`,`partnerTypeID`),
+  ADD KEY `partnerTypeID` (`partnerTypeID`);
 
 --
 -- Indexes for table `partnerstatus`
@@ -1097,7 +1225,7 @@ ALTER TABLE `auditlog`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `bookingID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bookingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `bookingpaymentstatus`
@@ -1109,7 +1237,7 @@ ALTER TABLE `bookingpaymentstatus`
 -- AUTO_INCREMENT for table `bookingservice`
 --
 ALTER TABLE `bookingservice`
-  MODIFY `bookingServiceID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bookingServiceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `confirmedbooking`
@@ -1121,13 +1249,13 @@ ALTER TABLE `confirmedbooking`
 -- AUTO_INCREMENT for table `custompackage`
 --
 ALTER TABLE `custompackage`
-  MODIFY `customPackageID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `customPackageID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `custompackageitem`
 --
 ALTER TABLE `custompackageitem`
-  MODIFY `customPackageItemID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `customPackageItemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `entrancerate`
@@ -1148,6 +1276,12 @@ ALTER TABLE `eventcategory`
   MODIFY `categoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `foodpricing`
+--
+ALTER TABLE `foodpricing`
+  MODIFY `pricingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `menuitem`
 --
 ALTER TABLE `menuitem`
@@ -1157,7 +1291,7 @@ ALTER TABLE `menuitem`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `notificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `partnership`
@@ -1169,7 +1303,7 @@ ALTER TABLE `partnership`
 -- AUTO_INCREMENT for table `partnershipservice`
 --
 ALTER TABLE `partnershipservice`
-  MODIFY `partnershipServiceID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `partnershipServiceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `partnershiptype`
@@ -1205,19 +1339,19 @@ ALTER TABLE `resortservicescategory`
 -- AUTO_INCREMENT for table `service`
 --
 ALTER TABLE `service`
-  MODIFY `serviceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `serviceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `serviceavailability`
 --
 ALTER TABLE `serviceavailability`
-  MODIFY `availabilityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `availabilityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `serviceunavailabledate`
 --
 ALTER TABLE `serviceunavailabledate`
-  MODIFY `serviceUnavailableID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `serviceUnavailableID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `status`
@@ -1299,6 +1433,7 @@ ALTER TABLE `confirmedbooking`
 --
 ALTER TABLE `custompackage`
   ADD CONSTRAINT `custompackage_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`),
+  ADD CONSTRAINT `custompackage_ibfk_2` FOREIGN KEY (`foodPricingPerHead`) REFERENCES `foodpricing` (`pricingID`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_eventTypeID` FOREIGN KEY (`eventTypeID`) REFERENCES `eventcategory` (`categoryID`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -1307,7 +1442,7 @@ ALTER TABLE `custompackage`
 ALTER TABLE `custompackageitem`
   ADD CONSTRAINT `custompackageitem_ibfk_1` FOREIGN KEY (`customPackageID`) REFERENCES `custompackage` (`customPackageID`),
   ADD CONSTRAINT `custompackageitem_ibfk_2` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`),
-  ADD CONSTRAINT `custompackageitem_ibfk_3` FOREIGN KEY (`foodItemID`) REFERENCES `menuitem` (`foodItemID`);
+  ADD CONSTRAINT `custompackageitem_ibfk_3` FOREIGN KEY (`foodItemID`) REFERENCES `menuitem` (`foodItemID`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `entrancerate`
@@ -1344,6 +1479,13 @@ ALTER TABLE `partnershipservice`
   ADD CONSTRAINT `partnershipservice_ibfk_1` FOREIGN KEY (`partnershipID`) REFERENCES `partnership` (`partnershipID`),
   ADD CONSTRAINT `partnershipservice_ibfk_2` FOREIGN KEY (`PSAvailabilityID`) REFERENCES `serviceavailability` (`availabilityID`),
   ADD CONSTRAINT `partnershipservice_ibfk_3` FOREIGN KEY (`PSstatus`) REFERENCES `status` (`statusID`);
+
+--
+-- Constraints for table `partnership_partnertype`
+--
+ALTER TABLE `partnership_partnertype`
+  ADD CONSTRAINT `partnership_partnertype_ibfk_1` FOREIGN KEY (`partnershipID`) REFERENCES `partnership` (`partnershipID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `partnership_partnertype_ibfk_2` FOREIGN KEY (`partnerTypeID`) REFERENCES `partnershiptype` (`partnerTypeID`);
 
 --
 -- Constraints for table `resortamenity`

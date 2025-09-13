@@ -179,7 +179,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <div class="hotelPeopleForm">
                             <div class="input-container ">
                                 <input type="number" class="form-control" placeholder="Adults" id="adultCount"
-                                    name="adultCount" required
+                                    name="adultCount" required min="1"
                                     value="<?php echo isset($_SESSION['hotelFormData']['adultCount']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['adultCount'])) : ''; ?>" />
                                 <div class="info-container mt-1">
                                     <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
@@ -188,7 +188,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="input-container">
                                 <input type="number" class="form-control" placeholder="Kids" id="childrenCount"
-                                    name="childrenCount"
+                                    name="childrenCount" min="1"
                                     value="<?php echo isset($_SESSION['hotelFormData']['childrenCount']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['childrenCount'])) : ''; ?>" />
                                 <div class="info-container mt-1">
                                     <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
@@ -197,7 +197,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="input-container">
                                 <input type="number" class="form-control" placeholder="Toddler/Infant"
-                                    id="toddlerCount" name="toddlerCount"
+                                    id="toddlerCount" name="toddlerCount" min="1"
                                     value="<?php echo isset($_SESSION['hotelFormData']['toddlerCount']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['toddlerCount'])) : ''; ?>" />
                                 <div class="info-container mt-1">
                                     <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
