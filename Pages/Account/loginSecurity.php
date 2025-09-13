@@ -309,7 +309,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     </div>
                                     <div class="modal-body">
                                         <?php
-                                        $newEmail = $_SESSION['newEmail'];
+                                        $newEmail = $_SESSION['newEmail'] ?? '';
                                         if (isset($_SESSION['modal-error'])) {
                                             echo '<div class="message-container alert alert-danger">' . htmlspecialchars($_SESSION['modal-error']) . '</div>';
                                             unset($_SESSION['modal-error']);

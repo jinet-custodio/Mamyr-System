@@ -63,31 +63,39 @@ CREATE TABLE menuitem (
     foodItemID INT PRIMARY KEY AUTO_INCREMENT,
     foodName VARCHAR(200) NOT NULL,
     foodDescription TEXT,
-    foodPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     foodCategory VARCHAR(100), 
     availabilityID INT DEFAULT 1,
+    ageGroup ENUM('Adult', 'Child', 'Both') NOT NULL DEFAULT 'Adult',
 
     FOREIGN KEY (availabilityID) REFERENCES serviceavailability(availabilityID)
 );
 
-ALTER TABLE menuitem
-ADD COLUMN foodImage varchar(255) NULL
-AFTER foodDescription;
-
-ALTER TABLE menuitem
-ADD COLUMN ageGroup ENUM('Adult', 'Child', 'Both') NOT NULL DEFAULT 'Adult' 
-AFTER foodCategory;
+CREATE TABLE foodPricing (
+    pricingID INT PRIMARY KEY AUTO_INCREMENT,
+    pricePerHead DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    ageGroup ENUM('Adult', 'Child', 'Both') NOT NULL DEFAULT 'Adult',
+    notes TEXT,
+    createdAT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 
 CREATE TABLE custompackage (
     customPackageID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
-    customPackageTotalPrice DECIMAL(10,2) NOT NULL,
+    foodPricingPerHeadID INT, 
+    totalFoodPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    venuePricing DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    customPackageTotalPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     customPackageNotes VARCHAR(255),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (userID) REFERENCES user(userID)
+    FOREIGN KEY (userID) REFERENCES user(userID),
+    FOREIGN KEY (foodPricingPerHeadID) REFERENCES foodPricing(pricingID)
 );
+
+ALTER TABLE custompackage 
+ADD COLUMN additionalServicePrice Decimal(10,2) NOT NULL DEFAULT 0.00
+AFTER  venuePricing;
 
 
 ALTER TABLE custompackage
@@ -108,8 +116,7 @@ CREATE TABLE custompackageitem (
     customPackageID INT NOT NULL,
     serviceID INT NULL,
     foodItemID INT  NULL,
-    quantity INT NOT NULL DEFAULT 1,
-    servicePrice DECIMAL(10,2) NOT NULL,
+    servicePrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
 
     FOREIGN KEY (customPackageID) REFERENCES customPackage(customPackageID),
     FOREIGN KEY (serviceID) REFERENCES service(serviceID),

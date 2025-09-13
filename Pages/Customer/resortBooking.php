@@ -92,14 +92,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <h5 class="noOfPeopleLabel">Number of People</h5>
                     <div class="peopleForm">
                         <div class="input-container ">
-                            <input type="number" class="form-control" placeholder="Adults" id="adultCount" name="adultCount" value="<?php echo isset($_SESSION['resortFormData']['adultCount']) ? htmlspecialchars(trim($_SESSION['resortFormData']['adultCount'])) : ''; ?>" />
+                            <input type="number" class="form-control" min="1" placeholder="Adults" id="adultCount" name="adultCount" value="<?php echo isset($_SESSION['resortFormData']['adultCount']) ? htmlspecialchars(trim($_SESSION['resortFormData']['adultCount'])) : ''; ?>" />
                             <div class="info-container mt-1">
                                 <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
                                 <p>Aged 14 and up</p>
                             </div>
                         </div>
                         <div class="input-container">
-                            <input type="number" class="form-control" placeholder="Kids" id="childrenCount" name="childrenCount" value="<?php echo isset($_SESSION['resortFormData']['childrenCount']) ? htmlspecialchars(trim($_SESSION['resortFormData']['childrenCount'])) : ''; ?>" />
+                            <input type="number" class="form-control" min="1" placeholder="Kids" id="childrenCount" name="childrenCount" value="<?php echo isset($_SESSION['resortFormData']['childrenCount']) ? htmlspecialchars(trim($_SESSION['resortFormData']['childrenCount'])) : ''; ?>" />
                             <div class="info-container mt-1">
                                 <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
                                 <p>Aged 13 and below</p>
@@ -107,7 +107,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </div>
 
                         <div class="input-container">
-                            <input type="number" class="form-control" placeholder="Toddler" id="toddlerCount" name="toddlerCount" value="<?php echo isset($_SESSION['resortFormData']['toddlerCount']) ? htmlspecialchars(trim($_SESSION['resortFormData']['toddlerCount'])) : ''; ?>" />
+                            <input type="number" class="form-control" min="1" placeholder="Toddler" id="toddlerCount" name="toddlerCount" value="<?php echo isset($_SESSION['resortFormData']['toddlerCount']) ? htmlspecialchars(trim($_SESSION['resortFormData']['toddlerCount'])) : ''; ?>" />
                             <div class="info-container mt-1">
                                 <i class="fa-solid fa-circle-info" style="color: #007BFF;"></i>
                                 <p>Height 3ft and below</p>
@@ -427,9 +427,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         //resort calendar
         flatpickr('#resortBookingDate', {
-            minDate: 'today',
+            minDate: new Date().fp_incr(1),
             dateFormat: "Y-m-d"
         });
+
         //  calIcon.addEventListener('click', function(event) {
         //      resortBookingDate.click()
         //  });

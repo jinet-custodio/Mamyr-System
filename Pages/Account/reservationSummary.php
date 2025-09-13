@@ -88,7 +88,7 @@ require_once '../../Function/functions.php';
                 $clientInfo = $resultData->fetch_assoc();
                 $middleInitial = trim($clientInfo['middleInitial']);
                 $firstName = $clientInfo['firstName'];
-                $name = ucfirst($firstName) . " " . ucfirst($clientInfo['middleInitial']) . " "  . ucfirst($clientInfo['lastName']);
+                $clientName = ucfirst($firstName) . " " . ucfirst($clientInfo['middleInitial']) . " "  . ucfirst($clientInfo['lastName']);
             }
             ?>
 
@@ -105,6 +105,7 @@ require_once '../../Function/functions.php';
                                 cb.paymentDueDate, cb.paymentStatus,
                                 cb.discountAmount, cb.downpaymentImage,
                                 cb.downpaymentDueDate, 
+                                pt.partnerTypeDescription, ps.PBName,
                                 bs.*, cp.*, cpi.*, mi.foodName, mi.foodCategory,
                                 s.*, s.serviceType, ec.categoryName as eventType,
                                 er.sessionType AS tourType, er.ERCategory, er.ERprice,
@@ -127,6 +128,8 @@ require_once '../../Function/functions.php';
                                 LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
 
                                 LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
+                                LEFT JOIN partnership_partnertype ppt ON ps.partnershipID = ppt.partnershipID
+                                LEFT JOIN partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID
                             WHERE b.bookingID = ?");
             $getBookingInfo->bind_param("i", $bookingID);
             $getBookingInfo->execute();
@@ -148,6 +151,7 @@ require_once '../../Function/functions.php';
                 $downpaymentNotes = [];
                 $paymentApprovalStatusName = '';
                 $foodList = [];
+                $partnerServiceList = [];
 
                 while ($row = $getBookingInfoResult->fetch_assoc()) {
 
@@ -198,15 +202,20 @@ require_once '../../Function/functions.php';
                     $totalCost = $row['totalCost'];
                     $downpayment = $row['downpayment'];
 
+
+                    $paymentStatusName = 'No Payment';
+                    $paymentApprovalStatusName = 'Pending';
+
                     if ($paymentStatus !== '' || $paymentApprovalStatus !== '') {
                         $paymentStatuses = getPaymentStatus($conn, $paymentStatus);
-                        $paymentStatusID = $paymentStatuses['paymentStatusID'];
-                        $paymentStatusName = $paymentStatuses['paymentStatusName'];
+                        $paymentStatusID = $paymentStatuses['paymentStatusID'] ?? '';
+                        $paymentStatusName = $paymentStatuses['paymentStatusName'] ?? 'No Payment';
 
                         $paymentApprovalStatuses = getStatuses($conn, $paymentApprovalStatus);
-                        $paymentApprovalStatusID = $paymentApprovalStatuses['statusID'];
-                        $paymentApprovalStatusName = $paymentApprovalStatuses['statusName'];
+                        $paymentApprovalStatusID = $paymentApprovalStatuses['statusID'] ?? '';
+                        $paymentApprovalStatusName = $paymentApprovalStatuses['statusName'] ?? 'Pending';
                     }
+
 
                     $bookingStatuses = getStatuses($conn, $bookingStatus);
                     $bookingStatusNameID = $bookingStatuses['statusID'];
@@ -254,15 +263,22 @@ require_once '../../Function/functions.php';
                         $totalPax = intval($row['guestCount']) . ' people' ?? 1 . ' person';
                         $cardHeader = "Type of Event";
                         $eventType = $row['eventType'];
+                        $serviceType = $row['serviceType'];
                         if (!empty($serviceID)) {
-                            $serviceVenue = $row['RServiceName'] ?? 'none';
+                            if ($serviceType === 'Resort') {
+                                $serviceVenue = $row['RServiceName'] ?? 'none';
+                            } elseif ($serviceType === 'Partnership') {
+                                $category = $row['partnerTypeDescription'];
+                                $name = $row['PBName'];
+
+                                $partnerServiceList[$category][] = $name;
+                            }
                         }
                         if (!empty($foodItemID)) {
                             $category = $row['foodCategory'];
                             $name = $row['foodName'];
-                            $quantity = $row['quantity'];
 
-                            $foodList[$category][$name] = $quantity;
+                            $foodList[$category][] = $name;
                         }
                     } else {
                         $serviceID = $row['serviceID'];
@@ -384,7 +400,7 @@ require_once '../../Function/functions.php';
                 }
             }
             // echo '<pre>';
-            // print_r('What ' . $serviceID);
+            // print_r($partnerServiceList);
             // echo '</pre>';
 
             ?>
@@ -413,7 +429,7 @@ require_once '../../Function/functions.php';
                         Reservation</a> -->
                     <form action="../../Function/receiptPDF.php" method="POST" target="_blank">
                         <input type="hidden" name="totalCost" value="<?= $totalBill ?>">
-                        <input type="hidden" name="name" value="<?= $name ?>">
+                        <input type="hidden" name="name" value="<?= $clientName ?>">
                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                         <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
                         <input type="hidden" name="services" value="<?= implode(', ', array_unique($services)) ?>">
@@ -428,7 +444,7 @@ require_once '../../Function/functions.php';
                 <div class="firstRow">
                     <div class="clientContainer">
                         <h6 class="header">Client</h6>
-                        <p class="content" id="clientName"><?= htmlspecialchars($name) ?></p>
+                        <p class="content" id="clientName"><?= htmlspecialchars($clientName) ?></p>
                     </div>
 
                     <div class="contactNumContainer">
@@ -493,19 +509,43 @@ require_once '../../Function/functions.php';
                             <p class="cardContent" id="guestNo"><?= $totalPax ?></p>
                         </li>
 
-                        <?php if ($bookingType === 'Event') { ?>
+                        <?php if ($bookingType === 'Event') {  ?>
                             <li class="list-group-item">
                                 <h6 class="cardHeader">Menu</h6>
-                                <p class="cardContent" id="packageType">Food List
-                                    <button data-bs-target="#foodListModal" data-bs-toggle="modal"> <img src="../../Assets/Images/Icon/information.png" alt="More Details" class="infoIcon"></button>
-                                </p>
+                                <?php if ($foodList) { ?>
+                                    <p class="cardContent">Food List
+                                        <button data-bs-target="#foodListModal" data-bs-toggle="modal"> <img src="../../Assets/Images/Icon/information.png" alt="More Details" class="infoIcon"></button>
+                                    </p>
+                                <?php } else {  ?>
+                                    <p class="cardContent">None</p>
+                                <?php
+                                }
+                                ?>
+                            </li>
+                        <?php
+                        } ?>
+
+
+
+                        <?php if ($bookingType === 'Event') { ?>
+                            <li class="list-group-item">
+                                <h6 class="cardHeader">Additional Service</h6>
+                                <?php if ($partnerServiceList) { ?>
+                                    <p class="cardContent">Service List
+                                        <button data-bs-target="#partnerServiceModal" data-bs-toggle="modal"> <img src="../../Assets/Images/Icon/information.png" alt="More Details" class="infoIcon"></button>
+                                    </p>
+                                <?php } else {  ?>
+                                    <p class="cardContent">None</p>
+                                <?php
+                                }
+                                ?>
+                            </li>
+                        <?php } else { ?>
+                            <li class="list-group-item" id="addOns">
+                                <h6 class="cardHeader">Add Ons</h6>
+                                <p class="cardContent"><?= !empty($addOns) ? htmlspecialchars($addOns) : "None" ?></p>
                             </li>
                         <?php } ?>
-
-                        <li class="list-group-item" id="addOns">
-                            <h6 class="cardHeader">Add Ons</h6>
-                            <p class="cardContent"><?= !empty($addOns) ? htmlspecialchars($addOns) : "None" ?></p>
-                        </li>
 
                         <!-- <li class="list-group-item">
                             <h6 class="cardHeader">Request/Notes</h6>
@@ -556,12 +596,37 @@ require_once '../../Function/functions.php';
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-
                         <?php foreach ($foodList as $category => $items) { ?>
                             <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
-                            <?php foreach ($items as $name => $quantity) { ?>
+                            <?php foreach ($items as $name) { ?>
                                 <ul>
-                                    <li> <?= htmlspecialchars($name) ?> (<?= htmlspecialchars($quantity) ?>) </li>
+                                    <li> <?= htmlspecialchars($name) ?></li>
+                                </ul>
+                            <?php } ?>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for partner service list -->
+        <div class="modal" tabindex="-1" id="partnerServiceModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Additional Service</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <?php foreach ($partnerServiceList as $category => $items) { ?>
+                            <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
+                            <?php foreach ($items as $name) { ?>
+                                <ul>
+                                    <li> <?= htmlspecialchars($name) ?></li>
                                 </ul>
                             <?php } ?>
                         <?php } ?>
