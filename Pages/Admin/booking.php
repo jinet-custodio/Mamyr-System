@@ -59,6 +59,7 @@ if (isset($_SESSION['error'])) {
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/booking.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css">
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -163,7 +164,7 @@ if (isset($_SESSION['error'])) {
         </div>
     </div>
 
-    <nav class="navbar navbar-expand-lg ">
+    <nav class="navbar navbar-expand-lg" id="navbar">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -226,11 +227,12 @@ if (isset($_SESSION['error'])) {
                         <h5>Edit Website</h5>
                     </a>
                 </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
+                        Log Out
+                    </a>
+                </li>
             </ul>
-
-            <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
-                Log Out
-            </a>
         </div>
     </nav>
 
@@ -269,6 +271,7 @@ if (isset($_SESSION['error'])) {
     </div>
 
     <!-- Booking-container -->
+    <h1 class="title text-center mb-5" style="display: none;" id="hiddenTitle">Bookings</h1>
 
     <div class="booking-container">
         <div class="card" style="width: 80%;">
@@ -393,7 +396,41 @@ if (isset($_SESSION['error'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
+    <!-- Responsive Navbar -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const icons = document.querySelectorAll('.navbar-icon');
+            const navbarUL = document.getElementById('navUL');
+            const nav = document.getElementById('navbar');
+            const title = document.getElementById('hiddenTitle');
 
+            function handleResponsiveNavbar() {
+                if (window.innerWidth <= 991.98) {
+                    navbarUL.classList.remove('w-100');
+                    navbarUL.style.position = "fixed";
+                    nav.style.margin = "0";
+                    nav.style.maxWidth = "100%";
+                    icons.forEach(icon => {
+                        icon.style.display = "none";
+                    })
+                    title.style.display = "block";
+
+                } else {
+                    navbarUL.classList.add('w-100');
+                    navbarUL.style.position = "relative";
+                    nav.style.margin = "20px auto";
+                    nav.style.maxWidth = "80vw";
+                    icons.forEach(icon => {
+                        icon.style.display = "block";
+                    })
+                    title.style.display = "none";
+                }
+            }
+
+            handleResponsiveNavbar();
+            window.addEventListener('resize', handleResponsiveNavbar);
+        });
+    </script>
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
