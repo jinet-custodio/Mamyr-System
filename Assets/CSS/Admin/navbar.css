@@ -39,7 +39,6 @@
   }
 }
 
-
 .nav-link {
   display: flex !important;
   margin: auto;
@@ -102,7 +101,6 @@
     padding: 1.5vw;
   }
 
-
   .navbar {
     background-color: white;
   }
@@ -117,7 +115,6 @@
     left: 70% !important;
   }
 
-
   .notificationIcon,
   .messageIcon {
     height: 4vw;
@@ -128,7 +125,6 @@
       height: 6vw;
     }
   }
-
 }
 
 /* Tablet Portrait */
@@ -139,6 +135,20 @@
 
   .navbar {
     font-family: "Lora";
+  }
+
+  .navbar-toggler {
+    background-color: #ffff !important;
+    position: absolute !important;
+    top: -55px !important;
+    right: -18vw !important;
+    transition: none !important;
+    padding: 1vw 2vw !important;
+
+    span {
+      height: 3.5vw;
+      width: 3.5vw;
+    }
   }
 
   h5 {
@@ -154,6 +164,7 @@
   #logOutBtn {
     display: block;
     margin: auto;
+    width: 50%;
   }
 }
 
@@ -167,13 +178,12 @@
     font-family: "Lora";
   }
 
-
   .nav-link img {
     display: none;
   }
 
   .navbar-collapse {
-    background-color: white;
+    background-color: none;
 
     padding: 1rem;
 
@@ -185,6 +195,7 @@
   #logOutBtn {
     display: block;
     margin: auto;
+    width: 50%;
   }
 }
 
@@ -204,7 +215,6 @@
     right: -16vw;
     transition: none;
   }
-
 
   .menus {
     margin-right: 10vw;
@@ -257,8 +267,6 @@
     }
   }
 
-
-
   #notifCounter {
     height: 2vw !important;
     width: 0.5vw;
@@ -283,7 +291,7 @@
 
   .navbar {
     font-family: "Lora";
-    background: none !important;
+    background-color: none !important;
   }
 
   h5 {
@@ -296,8 +304,7 @@
   }
 
   .navbar-collapse {
-    background-color: white;
-
+    background-color: none;
     padding: 1rem;
 
     .nav-link {
@@ -305,9 +312,14 @@
     }
   }
 
+  .dashboardTitle {
+    margin-top: 5vw;
+    font-size: 20px;
+  }
+
   #logOutBtn {
     display: block;
     margin: auto;
+    width: 100%;
   }
-
 }
