@@ -78,10 +78,15 @@ if ($revenueResult->num_rows > 0) {
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/revenue.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css">
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
 <body>
@@ -126,9 +131,9 @@ if ($revenueResult->num_rows > 0) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -175,55 +180,76 @@ if ($revenueResult->num_rows > 0) {
         </div>
     </div>
 
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg" id="navbar">
+        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <a class="nav-link" href="adminDashboard.php">
-            <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
-            <h5>Dashboard</h5>
-        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav w-100 me-10 d-flex justify-content-around px-2" id="navUL">
 
-        <a class="nav-link" href="booking.php">
-            <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
-            <h5>Bookings</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="adminDashboard.php">
+                        <i class="fa-solid fa-grip navbar-icon"></i>
+                        <h5>Dashboard</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="booking.php">
+                        <i class="fa-solid fa-calendar-days navbar-icon"></i>
+                        <h5>Bookings</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="roomList.php">
-            <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
-            <h5>Rooms</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="roomList.php">
+                        <i class="fa-solid fa-hotel navbar-icon"></i>
+                        <h5>Rooms</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="services.php">
-            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
-            <h5>Services</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="services.php">
+                        <i class="fa-solid fa-bell-concierge navbar-icon"></i>
+                        <h5>Services</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="transaction.php">
-            <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
-            <h5>Payments</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="transaction.php">
+                        <i class="fa-solid fa-credit-card navbar-icon"></i>
+                        <h5>Payments</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link active" href="revenue.php">
+                        <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
+                        <h5>Revenue</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link active" href="#">
-            <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
-            <h5>Revenue</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="displayPartnership.php">
+                        <i class="fa-solid fa-handshake navbar-icon"></i>
+                        <h5>Partnerships</h5>
+                    </a>
+                </li>
 
-
-        <a class="nav-link" href="displayPartnership.php">
-            <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
-            <h5>Partnerships</h5>
-        </a>
-
-        <a class="nav-link" href="editWebsite/editWebsite.php">
-            <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
-            <h5>Edit Website</h5>
-        </a>
-
-        <a href="../../Function/Admin/logout.php" class="btn btn-danger">
-            Log Out
-        </a>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="editWebsite/editWebsite.php">
+                        <i class="fa-solid fa-pen-to-square navbar-icon"></i>
+                        <h5>Edit Website</h5>
+                    </a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
+                        Log Out
+                    </a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
 
@@ -240,20 +266,20 @@ if ($revenueResult->num_rows > 0) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item"
-                                    data-id="<?= htmlspecialchars($notificationID) ?>"
-                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($message) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -266,24 +292,24 @@ if ($revenueResult->num_rows > 0) {
             <div class="card-body">
                 <div class="charts">
                     <?php if (!empty($revenues)): ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
+                    <div class="revenue-chart">
+                        <canvas id="revenueBar"></canvas>
+                    </div>
                     <?php else: ?>
-                        <!-- <div class="revenueBar">No data available.</div> -->
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
+                    <!-- <div class="revenueBar">No data available.</div> -->
+                    <div class="revenue-chart">
+                        <canvas id="revenueBar"></canvas>
+                    </div>
                     <?php endif; ?>
                     <?php if (($GCashCount ?? 0) > 0 || ($CashCount ?? 0) > 0): ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenuePie"></canvas>
-                        </div>
+                    <div class="revenue-chart">
+                        <canvas id="revenuePie"></canvas>
+                    </div>
                     <?php else: ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenuePie"></canvas>
-                        </div>
-                        <!-- <div class="revenuePie">No data available.</div> -->
+                    <div class="revenue-chart">
+                        <canvas id="revenuePie"></canvas>
+                    </div>
+                    <!-- <div class="revenuePie">No data available.</div> -->
                     <?php endif; ?>
                 </div>
                 <div class="salesReportBtn">
@@ -433,40 +459,40 @@ if ($revenueResult->num_rows > 0) {
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
 
@@ -475,91 +501,91 @@ if ($revenueResult->num_rows > 0) {
     <!-- <script src="path/to/chartjs/dist/chart.umd.js"></script> -->
 
     <script>
-        Chart.register({
-            id: 'noDataPlugin',
-            beforeDraw(chart) {
-                const dataset = chart.data.datasets[0];
-                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
+    Chart.register({
+        id: 'noDataPlugin',
+        beforeDraw(chart) {
+            const dataset = chart.data.datasets[0];
+            const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
 
-                if (!hasData) {
-                    const ctx = chart.ctx;
-                    const {
-                        width,
-                        height
-                    } = chart;
+            if (!hasData) {
+                const ctx = chart.ctx;
+                const {
+                    width,
+                    height
+                } = chart;
 
-                    chart.clear();
+                chart.clear();
 
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.font = '20px Times New Roman';
-                    ctx.fillStyle = 'gray';
-                    ctx.fillText('No available data', width / 2, height / 2);
-                    ctx.restore();
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = '20px Times New Roman';
+                ctx.fillStyle = 'gray';
+                ctx.fillText('No available data', width / 2, height / 2);
+                ctx.restore();
+            }
+        }
+    });
+
+
+    const bar = document.getElementById("revenueBar").getContext('2d');
+
+    const myBarChart = new Chart(bar, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($months) ?>,
+            datasets: [{
+                label: 'Sales',
+                data: <?= json_encode($revenues) ?>,
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        },
+        plugins: ['noDataPlugin']
+    });
 
 
-        const bar = document.getElementById("revenueBar").getContext('2d');
+    const pie = document.getElementById('revenuePie').getContext('2d');
 
-        const myBarChart = new Chart(bar, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($months) ?>,
-                datasets: [{
-                    label: 'Sales',
-                    data: <?= json_encode($revenues) ?>,
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+    const myPieChart = new Chart(pie, {
+        type: 'pie',
+        data: {
+            labels: ['Gcash', 'Cash'],
+            datasets: [{
+                label: 'Payment Methods',
+                data: <?= json_encode([$GCashCount ?? 0, $CashCount ?? 0]) ?>,
+                backgroundColor: [
+                    'rgba(30, 134, 232, 0.6)',
+                    'rgba(129, 204, 196, 0.6)'
+                    // 'rgba(99, 99, 99, 0.6)'
+                ],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                title: {
+                    display: true,
+                    text: 'Payment Methods'
                 }
-            },
-            plugins: ['noDataPlugin']
-        });
-
-
-        const pie = document.getElementById('revenuePie').getContext('2d');
-
-        const myPieChart = new Chart(pie, {
-            type: 'pie',
-            data: {
-                labels: ['Gcash', 'Cash'],
-                datasets: [{
-                    label: 'Payment Methods',
-                    data: <?= json_encode([$GCashCount ?? 0, $CashCount ?? 0]) ?>,
-                    backgroundColor: [
-                        'rgba(30, 134, 232, 0.6)',
-                        'rgba(129, 204, 196, 0.6)'
-                        // 'rgba(99, 99, 99, 0.6)'
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top'
-                    },
-                    title: {
-                        display: true,
-                        text: 'Payment Methods'
-                    }
-                }
-            },
-            plugins: ['noDataPlugin']
-        });
+            }
+        },
+        plugins: ['noDataPlugin']
+    });
     </script>
 </body>
 

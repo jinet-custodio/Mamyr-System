@@ -146,7 +146,7 @@ resetExpiredOTPs($conn);
                     </div>
                 </div>
 
-                <label for="terms">
+                <label for="terms" class="termsSection">
                     <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
                         onchange="validateSignUpForm();"> I agree to the
                     <a href="#termsModal" class="termsLink" data-bs-toggle="modal" data-bs-target="#termsModal">Terms
