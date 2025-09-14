@@ -174,11 +174,11 @@ if (isset($_POST['approvePaymentBtn'])) {
             $storedAmountPaid = floatval($row['amountPaid']);
             $storedBill = floatval($row['confirmedFinalBill']);
 
-            $totalBalance = $storeUserBalance - $paymentAmount;
+            $totalBalance = $storedUserBalance - $paymentAmount;
             $amountPaid = $storedAmountPaid + $paymentAmount;
 
 
-            if ($totalBalance = 0) {
+            if ($totalBalance <= 0) {
                 $totalBalance = 0;
                 $paymentStatus = 3;
             } elseif ($paymentAmount > 0 && $totalBalance > 0 && $totalBalance < $storedBill) {
@@ -186,7 +186,6 @@ if (isset($_POST['approvePaymentBtn'])) {
             } else {
                 $paymentStatus = 1;
             }
-
 
             //Update payment amount and payment status
             $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedbooking SET 
@@ -207,7 +206,7 @@ if (isset($_POST['approvePaymentBtn'])) {
                 $message = "We have successfully deducted your payment of " . $customerPayment .
                     " from your balance. Please check your payment history in your account for more details. " .
                     "Your current balance is: " . ($totalBalance > 0 ? "₱" . number_format($totalBalance, 2) : "0.00") . ".";
-                $insertNotification = $conn->prepare("INSERT INTO notifications(bookingID, userID, message, receiver)
+                $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
             VALUES(?,?,?,?)");
                 $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
                 $insertNotification->execute();

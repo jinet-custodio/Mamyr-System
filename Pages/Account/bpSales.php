@@ -8,6 +8,8 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+require '../../Function/Partner/sales.php';
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
@@ -199,42 +201,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <main class="main-content" id="main-content">
             <div class="container">
                 <h3 class="welcomeText" id="title">Sales</h3>
-
-                <?php
-                $paymentStatusID = 3; //Fully Paid ID
-                $approveStatusID = 5; //Done
-                $getPartnerSalesQuery = $conn->prepare("SELECT b.bookingID, bs.bookingServicePrice, cpi.servicePrice, s.serviceType, s.serviceID  
-                FROM booking b 
-                LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
-                LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
-                LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
-                LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
-                LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
-                LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
-                LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
-                WHERE p.userID = ? AND cb.paymentApprovalStatus = ? AND cb.paymentStatus = ?
-                ");
-                $getPartnerSalesQuery->bind_param("iii", $userID, $approveStatusID, $paymentStatusID);
-                if (!$getPartnerSalesQuery->execute()) {
-                    error_log("Error executing  the query" . $getPartnerSalesQuery->error);
-                }
-
-                $result = $getPartnerSalesQuery->get_result();
-                $totalSales = 0;
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $serviceID = $row['serviceID'];
-                        $serviceType = $row['serviceType'];
-                        if (!empty($serviceID)) {
-                            if ($serviceType === 'Partnership') {
-                                $price = $row['bookingServicePrice'] ?? $row['servicePrice'];
-                                $totalSales += $price;
-                            }
-                        }
-                    }
-                }
-                ?>
-
+                <?php $totalSales = getSales($conn, $userID); ?>
                 <div class="cardContainer">
                     <div class="card">
                         <div class="card-header fw-bold fs-5">Total Sales</div>
@@ -266,32 +233,34 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <?php
     $paymentStatusID = 3; //Fully Paid
     $paymentApprovalID = 5; //Done
-    $getYearlySales = $conn->prepare("SELECT MONTHNAME(b.startDate) AS month,
+    $getYearlySales = $conn->prepare("SELECT
                     YEAR(b.startDate) AS year,
-                    SUM(bs.bookingServicePrice + cpi.ServicePrice) AS monthlyRevenue
+                    SUM(IFNULL(bs.bookingServicePrice, 0) + IFNULL(cpi.ServicePrice, 0)) AS yearlySales
                      
                     FROM booking b
                     LEFT JOIN  confirmedbooking cb ON b.bookingID = cb.bookingID
                     LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                     LEFT JOIN custompackageitem cpi ON b.customPackageID = cpi.customPackageID
-                    WHERE cb.paymentApprovalStatus = ? AND cb.paymentStatus =? AND YEAR(b.startDate) = YEAR(CURDATE())
+                    WHERE cb.paymentApprovalStatus = ?
+                    AND cb.paymentStatus = ? 
+                    AND YEAR(b.startDate) = YEAR(CURDATE())
                     AND DATE(b.endDate) < CURDATE()
                     GROUP BY 
-                     month
+                        YEAR(b.startDate)
                     ORDER BY 
-                     month");
+                        YEAR(b.startDate)
+        ");
     $getYearlySales->bind_param("ii", $paymentApprovalID, $paymentStatusID);
     if (!$getYearlySales->execute()) {
         error_log("Failed executing monthly sales in a year. Error: " . $getYearlySales->error);
     }
-    $months = [];
     $sales = [];
     $year = '';
     $result = $getYearlySales->get_result();
     if ($result->num_rows > 0) {
         while ($data = $result->fetch_assoc()) {
-            $months[] = $data['month'];
-            $sales[] = (float) $row['monthlyRevenue'];
+
+            $sales[] = (float) $data['yearlySales'];
             $year = $data['year'] ?? DATE('Y');
         }
     }
@@ -377,7 +346,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         });
     </script>
 
-    <!-- Show -->
+    <!-- Show  -->
     <script>
         const logoutBtn = document.getElementById('logoutBtn');
         const logoutModal = document.getElementById('logoutModal');
@@ -407,42 +376,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- <script src="path/to/chartjs/dist/chart.umd.js"></script> -->
 
+    <!-- This is shown if no data to display -->
+    <script src="../../Assets/JS/ChartNoData.js"></script>
+
     <script>
-        Chart.register({
-            id: 'noDataPlugin',
-            beforeDraw(chart) {
-                const dataset = chart.data.datasets[0];
-                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
-
-                if (!hasData) {
-                    const ctx = chart.ctx;
-                    const {
-                        width,
-                        height
-                    } = chart;
-
-                    chart.clear();
-
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.font = '20px Times New Roman';
-                    ctx.fillStyle = 'gray';
-                    ctx.fillText('No available data', width / 2, height / 2);
-                    ctx.restore();
-                }
-            }
-        });
-
-
         const bar = document.getElementById("revenueBar").getContext('2d');
 
         const myBarChart = new Chart(bar, {
             type: 'bar',
             data: {
-                labels: <?= json_encode($months) ?>,
+                labels: <?= json_encode($year) ?>,
                 datasets: [{
-                    label: "Monthly Sales Report — <?= !empty($year) ? json_encode($year) : DATE('Y') ?>",
+                    label: "Yearly Sales Report",
                     data: [<?= json_encode($sales) ?>],
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 1)',

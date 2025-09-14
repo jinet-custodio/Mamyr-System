@@ -33,6 +33,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
+require '../../Function/Partner/sales.php';
 
 ?>
 <!DOCTYPE html>
@@ -201,15 +202,43 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
 
 
+        <?php
+        $getPartnershipID = $conn->prepare('SELECT partnershipID FROM `partnership` WHERE userID = ?');
+        $getPartnershipID->bind_param('i', $userID);
+        $getPartnershipID->execute();
+        $result = $getPartnershipID->get_result();
+        if ($result->num_rows > 0) {
+            $data = $result->fetch_assoc();
+            $partnershipID = $data['partnershipID'];
+        }
+        ?>
+        <!-- Get Sales -->
+        <?php $totalSales = getSales($conn, $userID); ?>
 
+        <!-- Get number of booking — approved, pending -->
+        <?php
+
+        $getPartnerBooking = $conn->prepare("SELECT COUNT()
+              FROM booking b
+              LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
+              LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
+              LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+              LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
+              LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+              LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
+              LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
+              WHERE p.userID = ? AND cb.paymentApprovalStatus = ? AND cb.paymentStatus = ?
+              ");
+
+        ?>
 
         <main class="main-content" id="main-content">
             <div class="container">
-                <h3 class="welcomeText">Hello there, Partner!</h3>
+                <h3 class="welcomeText">Hello there, <?= ucfirst($firstName) ?>!</h3>
                 <section>
                     <div class="column1">
                         <div class="card">
-                            <div class="card-header fw-bold fs-5">Bookings</div>
+                            <div class="card-header fw-bold fs-5">All Bookings</div>
                             <div class="card-body">
                                 <h2 class="bookingNumber">8</h2>
                             </div>
@@ -230,52 +259,126 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </div>
 
                         <div class="card">
-                            <div class="card-header fw-bold fs-5">Revenue</div>
+                            <div class="card-header fw-bold fs-5">Total Monthly Sales</div>
                             <div class="card-body">
-                                <h2 class="revenueNumber">₱10,000</h2>
+                                <h2 class="revenueNumber"><?= ($totalSales !== 0) ? number_format($totalSales, 2) : '₱0.00' ?></h2>
                             </div>
                         </div>
 
                     </div>
 
                     <div class="card" id="salesPerformance">
-                        <div class="card-header fw-bold fs-5">Sales Performance</div>
+                        <div class="card-header fw-bold fs-5">Monthly Sales</div>
                         <div class="card-body" id="pieGraph">
-                            <img src="../../Assets/Images/pieGraph.png" alt="Pie" class="pieGraph">
+                            <canvas id="salesGraph"></canvas>
                         </div>
                     </div>
 
-                    <div class="card" id="revenue">
+                    <!-- <div class="card" id="revenue">
                         <div class="card-header fw-bold fs-5">Revenue Overview</div>
                         <div class="card-body" id="revenueGraphContainer">
                             <img src="../../Assets/Images/revenueGraph.png" alt="Pie" class="revenueGraph">
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="card">
                         <div class="card-header fw-bold fs-5">Services</div>
                         <div class="card-body">
+
                             <ul>
-                                <li>Snacks</li>
-                                <li>Photobooth</li>
-                                <li>Videoke</li>
+                                <?php
+                                // Get Services
+                                $getServicesQuery = $conn->prepare('SELECT ps.`PBName`, ps.`PBPrice` FROM `partnershipservice` ps 
+                                WHERE  partnershipID = ?');
+                                $getServicesQuery->bind_param('i', $partnershipID);
+                                if (!$getServicesQuery->execute()) {
+                                    error_log('Failed executing services query: ' . $getServicesQuery->error());
+                                }
+
+                                $result = $getServicesQuery->get_result();
+
+
+                                if (!$result->num_rows === 0) {
+                                ?>
+                                    <li>No Services</li>
+                                <?php
+                                }
+
+                                while ($service = $result->fetch_assoc()) {
+                                    // echo '<pre>';
+                                    // print_r("ID: " . $partnershipID);
+                                    // echo '</pre>';
+                                ?>
+                                    <li class="serviceNamePrice"><?= htmlspecialchars(ucfirst($service['PBName'])) ?> &mdash; ₱<?= number_format($service['PBPrice']) ?></li>
+                                <?php
+                                }
+
+                                ?>
                             </ul>
                         </div>
                         <div class="card-footer">
-                            <a href="#" class="btn btn-primary w-100">View All Services</a>
+                            <a href="../Account/bpServices.php" class="btn btn-primary w-100">View All Services</a>
                         </div>
                     </div>
                 </section>
             </div>
         </main>
     </div>
-    <?php include '../Customer/footer.php'; ?>
+
+    <!-- Footer -->
+    <?php include 'footer.php'; ?>
+
+    <!-- Monthly Sales Graph -->
+    <?php
+    $paymentStatusID = 3; //Fully Paid
+    $paymentApprovalID = 5; //Done
+
+    $getYearlySales = $conn->prepare("SELECT MONTHNAME(b.startDate) AS month,
+                    YEAR(b.startDate) AS year,
+                    SUM(IFNULL(bs.bookingServicePrice, 0) + IFNULL(cpi.ServicePrice, 0)) AS monthlyRevenue,
+                    ps.partnershipID, ps.partnershipServiceID
+                     
+                    FROM booking b
+                    LEFT JOIN  confirmedbooking cb ON b.bookingID = cb.bookingID
+                    LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
+                    LEFT JOIN custompackageitem cpi ON b.customPackageID = cpi.customPackageID
+                    LEFT JOIN service s ON (cpi.serviceID = s.serviceID  OR bs.serviceID = s.serviceID)
+                    LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
+                     
+                    WHERE cb.paymentApprovalStatus = ?
+                    AND cb.paymentStatus = ?
+                    AND YEAR(b.startDate) = YEAR(CURDATE()) 
+                    AND DATE(b.endDate) < CURDATE()
+                    AND ps.partnershipID = ?
+                    GROUP BY 
+                     month
+                    ORDER BY 
+                     month");
+    $getYearlySales->bind_param("iii", $paymentApprovalID, $paymentStatusID, $partnershipID);
+    if (!$getYearlySales->execute()) {
+        error_log("Failed executing monthly sales in a year. Error: " . $getYearlySales->error);
+    }
+    $months = [];
+    $sales = [];
+    $year = '';
+    $result = $getYearlySales->get_result();
+    if ($result->num_rows > 0) {
+        while ($data = $result->fetch_assoc()) {
+            $months[] = $data['month'];
+            $sales[] = (float) $data['monthlyRevenue'];
+            $year = $data['year'] ?? DATE('Y');
+        }
+    }
+    ?>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
     </script>
+
+    <!-- Chart Js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -354,6 +457,39 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     window.location.href = "../../../Function/logout.php";
                 }
             });
+        })
+    </script>
+
+    <!-- This is shown if no data to display -->
+    <script src="../../Assets/JS/ChartNoData.js"></script>
+
+    <!-- Line Chart for sales  -->
+    <script>
+        const salesGraph = document.getElementById('salesGraph').getContext('2d');
+        const labels = <?= json_encode($months) ?>;
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: "Monthly Sales Report — <?= !empty($year) ? json_encode($year) : DATE('Y') ?>",
+                data: <?= json_encode($sales) ?>,
+                fill: true,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
+
+        const lineSalesChart = new Chart(salesGraph, {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+            plugins: ['noDataPlugin']
         })
     </script>
 </body>

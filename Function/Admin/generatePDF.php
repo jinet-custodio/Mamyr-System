@@ -168,31 +168,15 @@ if (isset($_POST['generatePDF'])) {
                             <?php
                             $totalBookings = 0;
                             $totalCost = 0;
-                            $approvedStatusID = 2;
 
                             if (!empty($reportData)) {
-                                // $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
-                                // b.bookingType, u.firstName, b.guestCount AS guest, 
-                                // b.startDate, b.endDate, 
-                                // b.paymentMethod, b.totalCost
-                                // FROM confirmedBooking cb
-                                // LEFT JOIN booking b ON cb.bookingID = b.bookingID
-                                // LEFT JOIN user u ON b.userID = u.userID
-                                // WHERE cb.paymentApprovalStatus	 = ? AND b.startDate BETWEEN ? AND ?");
-
-                                // $getReportData->bind_param("iss", $approvedStatusID, $startDateFormatted, $endDateFormatted);
-                                // $getReportData->execute();
-                                // $getReportDataResult = $getReportData->get_result();
-
-                                // if ($getReportDataResult->num_rows > 0) {
-                                //     while ($row = $getReportDataResult->fetch_assoc()) {
-                                //         $totalBookings++;
-                                //         $totalCost += $row['totalCost'];
                                 foreach ($reportData as $row):
+                                    $totalBookings++;
+                                    $totalCost += $row['confirmedFinalBill'];
                             ?>
                                     <tr>
                                         <td><?= htmlspecialchars($row['formattedBookingID']) ?></td>
-                                        <td><?= htmlspecialchars($row['firstName']) ?></td>
+                                        <td><?= ucfirst($row['firstName']) . ' ' . ucfirst($row['lastName']) ?></td>
                                         <td><?= htmlspecialchars($row['bookingType']) ?></td>
                                         <?php if ($userRole === 3) { ?>
                                             <td><?= htmlspecialchars($row['guest']) ?></td>
@@ -202,7 +186,7 @@ if (isset($_POST['generatePDF'])) {
                                         <td><?= date('F d, Y', strtotime($row['startDate'])) ?></td>
                                         <td><?= date('F d, Y', strtotime($row['endDate'])) ?></td>
                                         <td><?= htmlspecialchars($row['paymentMethod']) ?></td>
-                                        <td>₱<?= number_format($row['totalCost'], 2) ?></td>
+                                        <td>₱<?= number_format($row['confirmedFinalBill'], 2) ?></td>
                                     </tr>
                                 <?php
                                 endforeach;

@@ -18,13 +18,11 @@
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
-.admin {
-  img {
-    height: 5vw;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    object-fit: cover;
-  }
+.admin img {
+  height: 5vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .navbar {
@@ -33,10 +31,10 @@
   max-width: 80vw;
   margin: 20px auto;
   background-color: white;
+}
 
-  h5 {
-    font-size: clamp(1.4vw, 1.3vw, 1.2vw);
-  }
+.navbar h5 {
+  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
 }
 
 .nav-link {

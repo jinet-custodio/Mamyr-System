@@ -46,7 +46,7 @@ if (isset($_POST['eventBook'])) {
     $additionalServicePrice = floatval(str_replace(['₱', ','], '',  $rawAdditionalServicePrice));
     $totalCost = floatval(str_replace(['₱', ','], '',  $rawTotalCost));
 
-    $serviceIDs = [];
+    $services = [];
 
 
     if (!empty($venueID)) {
@@ -56,7 +56,8 @@ if (isset($_POST['eventBook'])) {
             $result = $getServiceID->get_result();
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                $serviceIDs[] = $row['serviceID'];
+                $serviceID = $row['serviceID'];
+                $services[$serviceID] = $venuePrice;
             } else {
                 error_log("No matching service found for resortServiceID: $venueID");
             }
@@ -76,7 +77,8 @@ if (isset($_POST['eventBook'])) {
                 $result = $getServiceID->get_result();
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
-                    $serviceIDs[] = $row['serviceID'];
+                    $serviceID = $row['serviceID'];
+                    $services[$serviceID] = $row['PBPrice'];
                 } else {
                     error_log("No matching service found for resortServiceID: $partershipServiceID");
                 }
@@ -137,14 +139,15 @@ if (isset($_POST['eventBook'])) {
             }
         }
 
-        $insertServiceVenue = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `serviceID`, `servicePrice`) VALUES (?,?,?)");
-        foreach ($serviceIDs as $serviceID) {
+        $insertServicePrices = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `serviceID`, `servicePrice`) VALUES (?,?,?)");
+        foreach ($services as $serviceID => $price) {
             $serviceID = intval($serviceID);
-            $insertServiceVenue->bind_param('iid', $customPackageID, $serviceID, $venuePrice);
+            $price = floatval($price);
+            $insertServicePrices->bind_param('iid', $customPackageID, $serviceID, $price);
 
-            if (!$insertServiceVenue->execute()) {
+            if (! $insertServicePrices->execute()) {
                 $conn->rollback();
-                error_log("Error: " . $insertServiceVenue->error);
+                error_log("Error: " .  $insertServicePrices->error);
             }
         }
 
