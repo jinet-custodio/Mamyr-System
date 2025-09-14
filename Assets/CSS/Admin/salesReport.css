@@ -187,3 +187,125 @@ td {
   /* background-color: rgb(11, 93, 217); */
   color: white;
 }
+
+/* Phones */
+@media only screen and (max-width: 599px) {
+  .backButton {
+    top: -15%;
+    left: -2%;
+  }
+  #back-btn {
+    width: 50px;
+  }
+
+  .pagetitle {
+    margin-top: 50px;
+  }
+
+  .pagetitle img {
+    height: 40px !important;
+  }
+
+  .pagetitle h1 {
+    font-size: 25px;
+  }
+
+  main {
+    width: 100%;
+    padding: 0;
+  }
+
+  .dateRange label {
+    margin-top: 0.5rem;
+    font-size: 16px;
+  }
+
+  .dateRange {
+    width: 120vw;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    width: 75% !important;
+  }
+
+  #generatePDF {
+    width: 2000px !important;
+  }
+
+  .container {
+    width: 95vw !important;
+    max-width: 100%;
+    padding: 0 !important;
+  }
+
+  th,
+  td {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+    text-align: center;
+  }
+}
+
+/* Tablet Portrait */
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+  .pagetitle {
+    margin-top: 150px;
+  }
+
+  .pagetitle img {
+    height: 50px !important;
+  }
+
+  .pagetitle h1 {
+    font-size: 30px;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-top: 90px;
+  }
+
+  #generatePDF {
+    width: 2000px !important;
+    margin-top: -120px;
+  }
+
+  .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .table.table-striped {
+    width: 100%;
+    max-width: 123vw !important;
+  }
+
+  th,
+  td {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+    text-align: center !important;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
+  form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-top: 90px;
+  }
+
+  th,
+  td {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+    text-align: center !important;
+  }
+}
