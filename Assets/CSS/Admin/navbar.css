@@ -18,13 +18,11 @@
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
-.admin {
-  img {
-    height: 5vw;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    object-fit: cover;
-  }
+.admin img {
+  height: 5vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .navbar {
@@ -33,12 +31,11 @@
   max-width: 80vw;
   margin: 20px auto;
   background-color: white;
-
-  h5 {
-    font-size: clamp(1.4vw, 1.3vw, 1.2vw);
-  }
 }
 
+.navbar h5 {
+  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+}
 
 .nav-link {
   display: flex !important;
@@ -102,7 +99,6 @@
     padding: 1.5vw;
   }
 
-
   .navbar {
     background-color: white;
   }
@@ -117,7 +113,6 @@
     left: 70% !important;
   }
 
-
   .notificationIcon,
   .messageIcon {
     height: 4vw;
@@ -128,7 +123,6 @@
       height: 6vw;
     }
   }
-
 }
 
 /* Tablet Portrait */
@@ -167,7 +161,6 @@
     font-family: "Lora";
   }
 
-
   .nav-link img {
     display: none;
   }
@@ -204,7 +197,6 @@
     right: -16vw;
     transition: none;
   }
-
 
   .menus {
     margin-right: 10vw;
@@ -257,8 +249,6 @@
     }
   }
 
-
-
   #notifCounter {
     height: 2vw !important;
     width: 0.5vw;
@@ -309,5 +299,4 @@
     display: block;
     margin: auto;
   }
-
 }

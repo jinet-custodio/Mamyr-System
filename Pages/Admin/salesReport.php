@@ -152,7 +152,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 } elseif ($userRole === 2) { //Partner
                                     $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
                                             cb.paymentApprovalStatus, cb.paymentStatus,
-                                            b.bookingType, b.startDate, b.endDate, b.paymentMethod, b.totalCost,
+                                            b.bookingType, b.startDate, b.endDate, b.paymentMethod, cb.confirmedFinalBill,
                                             bs.serviceID, bs.bookingServicePrice,
                                             cp.customPackageID, cpi.customPackageID , cpi.serviceID,  
                                             s.serviceID, s.partnershipServiceID,
@@ -183,12 +183,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         $_SESSION['reportData'][] = $row;
                                         $formattedBookingID = $row['formattedBookingID'];
                                         $bookingType = $row['bookingType'];
-                                        $customerName = ucfirst($row['firstName']) . ucfirst($row['lastName']);
+                                        $customerName = ucfirst($row['firstName']) . ' ' . ucfirst($row['lastName']);
                                         $guest = $row['guest'] ?? 0;
                                         $startDate = $row['startDate'];
                                         $endDate = $row['endDate'];
                                         $paymentMethod = $row['paymentMethod'];
-                                        $totalCost = $row['totalCost'];
+                                        $totalCost = $row['confirmedFinalBill'];
                                         $partnerServiceName = $row['PBName'] ?? null;
                         ?>
                                         <tr>
@@ -207,9 +207,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         </tr>
                                     <?php
                                     }
-                                    echo '<pre>';
-                                    var_dump($_SESSION['reportData']);
-                                    echo '</pre>';
+                                    // echo '<pre>';
+                                    // var_dump($_SESSION['reportData']);
+                                    // echo '</pre>';
                                 } else {
                                     ?>
                                     <tr>
@@ -240,7 +240,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <input type="hidden" name="partnershipID" id="partnershipID" value="<?= $partnershipID ?>">
                         <input type="hidden" name="selectedStartDate" id="selectedStartDate" value="<?= $selectedStartDate ?>">
                         <input type="hidden" name="selectedEndDate" id="selectedEndDate" value="<?= $selectedEndDate ?>">
-                        <button type="submit" name="generatePDF" id="generatePDF" class="btn btn-primary w-100">Download PDF</button>
+                        <button type="submit" name="generatePDF" id="generatePDF" class="btn btn-primary w-100" <?= $enableDownloadBtn ? '' : 'disabled' ?>>Download PDF</button>
                     </form>
                 </div>
             </div>

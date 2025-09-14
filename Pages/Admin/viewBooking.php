@@ -170,7 +170,7 @@ if (isset($_POST['bookingID'])) {
                                 cb.userBalance, 
                                 cb.paymentApprovalStatus, 
                                 cb.paymentDueDate, cb.paymentStatus,
-                                cb.discountAmount,
+                                cb.discountAmount, ps.PBName, ps.PBPrice, ps.partnershipServiceID,
                                 bs.*, cp.*, cpi.*, mi.foodName, mi.foodCategory, mi.foodPrice,
                                 s.*, s.serviceType, ec.categoryName as eventType,
                                 er.sessionType AS tourType, er.ERCategory, er.ERprice,
@@ -179,12 +179,6 @@ if (isset($_POST['bookingID'])) {
                                 FROM booking b
                                 LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
                                 LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
-
-                                -- LEFT JOIN statuses stat1 ON stat1.statusID = b.bookingStatus
-                                -- LEFT JOIN statuses stat2 ON stat2.statusID = cb.confirmedBookingStatus
-
-                                -- LEFT JOIN packages p ON b.packageID = p.packageID
-                                -- LEFT JOIN eventcategories ec ON p.PcategoryID = ec.categoryID
 
                                 LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
                                 LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
@@ -200,6 +194,8 @@ if (isset($_POST['bookingID'])) {
                                 LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
 
                                 LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
+                                  LEFT JOIN partnership_partnertype ppt ON ps.partnershipID = ppt.partnershipID
+                                LEFT JOIN partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID
                             WHERE b.bookingID = ?");
                 $getBookingInfo->bind_param("i", $bookingID);
                 $getBookingInfo->execute();
@@ -220,6 +216,7 @@ if (isset($_POST['bookingID'])) {
                     $additionalCharge = 0;
                     $foodList = [];
                     $foodPriceTotal = 0;
+                    $partnerServices = [];
                     while ($row = $getBookingInfoResult->fetch_assoc()) {
 
                         // echo '<pre>';
@@ -228,12 +225,31 @@ if (isset($_POST['bookingID'])) {
                         $customPackageID = $row['customPackageID'];
                         $bookingType = $row['bookingType'];
 
-                        $rawStartDate = $row['startDate'];
-                        $rawEndDate = $row['endDate'];
+                        $rawStartDate = $row['startDate'] ?? null;
+                        $rawEndDate = $row['endDate'] ?? null;
 
-                        $arrivalTime = date('H:i A', strtotime($row['arrivalTime'])) ?? 'Not Stated';
-                        $startDate = date('M. d, Y', strtotime($rawStartDate));
-                        $endDate = date('M. d, Y', strtotime($rawEndDate));
+                        $arrivalTime = !empty($row['arrivalTime'])
+                            ? date('H:i A', strtotime($row['arrivalTime']))
+                            : 'Not Stated';
+
+                        $startDate = !empty($rawStartDate)
+                            ? date('M. d, Y', strtotime($rawStartDate))
+                            : 'Not Stated';
+
+                        $endDate = !empty($rawEndDate)
+                            ? date('M. d, Y', strtotime($rawEndDate))
+                            : 'Not Stated';
+
+                        $createdAt = $row['createdAt'] ?? null;
+
+
+                        if (!empty($rawStartDate) && $rawStartDate ===  $rawEndDate) {
+                            $bookingDate = date('F d, Y', strtotime($rawStartDate));
+                        } elseif (!empty($rawStartDate) && !empty($rawStartDate)) {
+                            $bookingDate = $startDate . " to " . $endDate;
+                        } else {
+                            $bookingDate = 'Date not available';
+                        }
 
                         if ($startDate === $endDate) {
                             $bookingDate = date('F d, Y', strtotime($rawStartDate));
@@ -243,7 +259,7 @@ if (isset($_POST['bookingID'])) {
 
                         $bookingCreationDate = !empty($row['createdAt']) ? date('F d, Y H:i A', strtotime($row['createdAt'])) : 'Not Stated';
 
-                        $time = date("g:i A", strtotime($rawStartDate)) . " - " . date("g:i A", strtotime($data['endDate']));
+                        $time = date("g:i A", strtotime($rawStartDate)) . " - " . date("g:i A", strtotime($rawEndDate));
                         $duration = $row['durationCount'] . " hours";
 
                         $bookingStatus = $row['bookingStatus'];
@@ -284,20 +300,32 @@ if (isset($_POST['bookingID'])) {
                             $serviceID = isset($row['serviceID']) ? $row['serviceID'] : '';
                             $foodItemID = isset($row['foodItemID']) ? $row['foodItemID'] : '';
                             $totalPax = intval($row['guestCount']) . ' people' ?? 1 . ' person';
+                            $serviceType = $row['serviceType'];
+                            $additionalServicePrice = floatval($row['additionalServicePrice']);
 
                             if (!empty($serviceID)) {
-                                $venue = $row['RServiceName'] ?? 'none';
-                                $venuePrice = $row['servicePrice'] ?? 0;
-                                $serviceIDs[] = $row['resortServiceID'];
+                                if ($serviceType === 'Resort') {
+                                    $venue = $row['RServiceName'] ?? 'none';
+                                    $venuePrice = $row['servicePrice'] ?? 0;
+                                    $serviceIDs[] = $row['resortServiceID'];
+                                } elseif ($serviceType === 'Partnership') {
+                                    $partnerServicePrice = isset($row['PBPrice']) ? floatval($row['PBPrice']) : null;
+                                    $serviceName = $row['PBName'] ?? 'N/A';
+                                    $partnerServiceID = $row['partnershipServiceID'] ?? null;
+
+                                    if ($partnerServiceID !== null) {
+                                        $partnerServices[$partnerServiceID][$serviceName] = $partnerServicePrice;
+                                    }
+                                }
                             }
                             if (!empty($foodItemID)) {
                                 $category = $row['foodCategory'];
                                 $name = $row['foodName'];
-                                $quantity = $row['quantity'];
+                                $foodID = $row['foodItemID'];
                                 $price = $row['servicePrice'];
 
-                                $foodList[$category][$name][$quantity] =  $price;
-                                $foodPriceTotal += $price;
+                                $foodList[$category] = $name;
+                                $foodPriceTotal = floatval($row['totalFoodPrice']);
                             }
                         } else {
                             $serviceID = $row['serviceID'];
@@ -340,7 +368,7 @@ if (isset($_POST['bookingID'])) {
                         }
 
                         // echo '<pre>';
-                        // print_r($foodList);
+                        // print_r($partnerServices);
                         // echo '</pre>';
                     }
                 }
@@ -430,29 +458,49 @@ if (isset($_POST['bookingID'])) {
                                 </div>
                                 <div class="foodDetails">
                                     <h1 class="card-title text-center">Menu</h1>
-                                    <?php foreach ($foodList as $category => $items) { ?>
-                                        <p><?= htmlspecialchars($category) ?></p>
-                                        <?php foreach ($items as $name => $quantities) {
-                                            foreach ($quantities as $quantity => $price) { ?>
-                                                <ul>
-                                                    <li>
-                                                        [<?= htmlspecialchars($quantity)  ?>] <?= htmlspecialchars($name) ?> =>
-                                                        <input type="text" name="foodPrice[<?= htmlspecialchars($name) ?>]" class="form-control" value="<?= htmlspecialchars($price)  ?>">
-                                                    </li>
-                                                </ul>
-                                        <?php }
-                                        } ?>
+                                    <?php if (!empty($foodList)) { ?>
+                                        <?php foreach ($foodList as $category => $name) { ?>
+                                            <p><?= htmlspecialchars($category) ?></p>
+                                            <ul>
+                                                <li>
+                                                    <input type="text" name="foodPrice[<?= htmlspecialchars($foodID) ?>]" class="form-control" value="<?= htmlspecialchars($name) ?>">
+                                                </li>
+                                            </ul>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <h1 class="text-center">No Food Selected!</h1>
                                     <?php } ?>
                                 </div>
 
+                                <div class="partnerService">
+                                    <h1 class="card-title">Additional Services</h1>
+                                    <?php if (!empty($partnerServices)) { ?>
+                                        <?php foreach ($partnerServices as $partnershipServiceID => $services) {
+                                            foreach ($services as $name => $price) { ?>
+                                                <ul>
+                                                    <li>
+                                                        <input type="hidden" name="partnerServices[<?= $partnerServiceID ?>]" class="form-control" value="<?= htmlspecialchars($name) ?>">
+                                                        <?= htmlspecialchars($name) ?> &mdash; ₱<?= number_format($price, 2) ?>
+                                                    </li>
+                                                </ul>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <h1 class="text-center">No Additional Services Selected!</h1>
+                                    <?php } ?>
+                                </div>
                             <?php  } ?>
 
+
+
                             <div class="row3 mt-4">
-                                <div class="additionalServices" id="booking-info-container">
-                                    <label for="addOns" class="info-label mb-2">Additional Services</label>
-                                    <input type="text" class="form-control" name="addOns" id="addOns"
-                                        value="<?= $additionalServices ?>" readonly>
-                                </div>
+                                <?php if ($bookingType !== 'Event') { ?>
+                                    <div class="additionalServices" id="booking-info-container">
+                                        <label for="addOns" class="info-label mb-2">Additional Services</label>
+                                        <input type="text" class="form-control" name="addOns" id="addOns"
+                                            value="<?= $additionalServices ?>" readonly>
+                                    </div>
+                                <?php  } ?>
                                 <div class="peopleCountContainer" id="booking-info-container">
                                     <label for="paxNum" class="info-label mb-2">Number of People:</label>
                                     <input type="text" class="form-control" name="paxNum" id="paxNum"
@@ -493,6 +541,12 @@ if (isset($_POST['bookingID'])) {
                                         value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
                                 </div>
                             <?php } ?>
+
+                            <div class="info-container" id="payment-info">
+                                <label for="additionalServicePrice" class="mt-2">Additional Services Price</label>
+                                <input type="text" class="form-control w-50" name="additionalServicePrice" id="additionalServicePrice"
+                                    value="₱<?= number_format($additionalServicePrice, 2) ?>" readonly>
+                            </div>
 
                             <div class="info-container" id="payment-info">
                                 <label for="additionalCharge" class="mt-2">Additional Charge</label>

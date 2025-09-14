@@ -268,8 +268,8 @@ require_once '../../Function/functions.php';
                             if ($serviceType === 'Resort') {
                                 $serviceVenue = $row['RServiceName'] ?? 'none';
                             } elseif ($serviceType === 'Partnership') {
-                                $category = $row['partnerTypeDescription'];
-                                $name = $row['PBName'];
+                                $category = $row['partnerTypeDescription'] ?? 'N/A';
+                                $name = $row['PBName'] ?? '';
 
                                 $partnerServiceList[$category][] = $name;
                             }
