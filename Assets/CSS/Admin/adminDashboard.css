@@ -67,7 +67,8 @@ body {
   font-size: 20px;
 }
 
-.graph, .trend-cards {
+.graph,
+.trend-cards {
   width: 90%;
 }
 
@@ -284,7 +285,6 @@ body {
     width: 100% !important;
   }
 }
-
 
 @media only screen and (max-width: 599px) {
   .topSection {
