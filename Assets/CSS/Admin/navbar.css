@@ -123,6 +123,11 @@
       height: 6vw;
     }
   }
+
+    #logOutBtn {
+    display: block;
+    margin: auto;
+  }
 }
 
 /* Tablet Portrait */
@@ -135,19 +140,6 @@
     font-family: "Lora";
   }
 
-  .navbar-toggler {
-    background-color: #ffff !important;
-    position: absolute !important;
-    top: -55px !important;
-    right: -18vw !important;
-    transition: none !important;
-    padding: 1vw 2vw !important;
-
-    span {
-      height: 3.5vw;
-      width: 3.5vw;
-    }
-  }
 
   h5 {
     text-align: left !important;
@@ -159,11 +151,6 @@
     }
   }
 
-  #logOutBtn {
-    display: block;
-    margin: auto;
-    width: 50%;
-  }
 }
 
 /* Tablet Landscape */
@@ -190,11 +177,6 @@
     }
   }
 
-  #logOutBtn {
-    display: block;
-    margin: auto;
-    width: 50%;
-  }
 }
 
 @media (max-width: 991.98px) {
@@ -208,10 +190,21 @@
 
   .navbar-toggler {
     background-color: #ffff !important;
-    position: absolute;
-    top: -7vw;
-    right: -16vw;
-    transition: none;
+    position: fixed;
+    top: 2vw ;
+    right: 2vw;
+    transition: none ;
+    padding: 1vw 2vw ;
+
+    span {
+      height: 3.5vw;
+      width: 3.5vw;
+    }
+  }
+
+  .title {
+    font-size: clamp(3vw, 3.2vw, 3.4vw);
+    font-family: "Lora";
   }
 
   .menus {
@@ -229,6 +222,11 @@
     h5 {
       font-size: clamp(2.1vw, 2vw, 1.8vw);
     }
+  }
+
+  #logOutBtn {
+    font-size: clamp(2.1vw, 2vw, 1.8vw);
+    width: 100%;
   }
 
   .collapse {
@@ -253,9 +251,9 @@
 
   .navbar-toggler {
     background-color: #ffff !important;
-    position: absolute;
-    top: -45px;
-    right: -18vw;
+    position: fixed;
+    top: 2.5vw;
+    right: 2vw;
     transition: none;
     padding: 1vw 2vw !important;
 
@@ -288,13 +286,12 @@
   }
 
   .navbar {
-    font-family: "Lora";
     background-color: none !important;
-  }
+    position: fixed;
 
-  h5 {
-    font-size: 12px;
-    text-align: left !important;
+    h5{
+      font-size: clamp(3vw, 3.1vw, 3.3vw);
+    }
   }
 
   .nav-link img {
@@ -319,5 +316,6 @@
     display: block;
     margin: auto;
     width: 100%;
+    font-size: clamp(3vw, 3.1vw, 3.3vw);
   }
 }

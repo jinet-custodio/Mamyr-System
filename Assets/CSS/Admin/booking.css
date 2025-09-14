@@ -71,68 +71,6 @@ body {
   }
 }
 
-.navbar-icon {
-  font-size: 2vw;
-}
-
-.navbar {
-  font-family: "Lora";
-  border-radius: 1vw;
-  max-width: 80vw;
-  margin: 20px auto; 
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  h5 {
-    font-size: clamp(1.4vw, 1.3vw, 1.2vw);
-  }
-}
-
-.nav-link {
-  display: flex !important;
-  margin: auto;
-  flex-direction: column;
-  align-items: center;
-  text-decoration: none;
-}
-
-.me-2 {
-  margin-left: 2vw;
-}
-
-.nav-link.active:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link:after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 100%;
-  /* position: absolute; */
-  border-bottom: 4px solid rgb(126, 203, 242) !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-#logOutBtn {
-  margin-right: 1vw;
-  font-size: 1.3vw;
-    width: 8vw;
-}
-
-.nav-link:hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link img {
-  height: 2vw;
-  width: auto;
-  object-fit: contain;
-}
-
 .booking-container {
   /* border: 1px solid black; */
   display: flex;
@@ -163,10 +101,6 @@ th {
 
 th {
   background-color: #91d2f2 !important;
-}
-
-.text-center {
-  color: rgb(255, 0, 0) !important;
 }
 
 .dt-column-title {
