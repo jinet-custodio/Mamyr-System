@@ -141,23 +141,21 @@ nav {
   margin-left: 1rem;
   /* border: 1px solid white; */
   border-radius: 50%;
-  img {
+}
+.account-nav img {
     height: 5vw;
     border-radius: 50%;
     aspect-ratio: 1;
     object-fit: cover;
   }
-}
 
 .notification-container {
-  margin: 1rem;
-
-  button {
+  margin: 1rem;  
+}
+.notification-container button {
     background-color: transparent;
     border: none;
   }
-}
-
 .logoNav {
   /* border: 1px solid black; */
   width: 15vw;
@@ -413,42 +411,267 @@ footer {
   }
 }
 
-/*Laptop*/
-@media screen and (min-width: 1200px) and (max-width: 1280px) {
+/* Phone size */
+@media screen and (min-width: 360px) and (max-width: 599px) {
+
   .title {
-    margin-top: 1vw !important;
-    font-size: 2.4vw;
-    font-family: "Lora";
-    color: #fff;
+    margin-top: clamp(2rem, 6vw, 4rem);
+    font-size: clamp(16px, 5vw, 28px);
+    padding-top: 3rem;
+  }
+
+  .titleDescription {
+    width: 100% !important;
+    margin: 3vw auto 0 auto !important;
+    font-size: clamp(12px, calc(1.5vw + 4px), 25px)!important;
+  }
+
+  .ms-auto {
+    margin-left: auto !important;
+    margin-bottom: 0 !important;
+    background-color: white !important;
+  }
+
+  .navbar-toggler {
+    padding: 1vw;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-right: 2vw;
+  }
+
+  .navbar-nav {
+    display: flex !important;
+    list-style: none;
+    background-color: white;
+    padding-right: 1vw;
+    margin-top: 5vw !important;
+  }
+
+  .navbar.scrolled {
+    background-color: white !important;
+  }
+
+  .navbar-nav .nav-link {
+    color: #000000 !important;
+  }
+
+  .navbar .nav-link {
+    color: black !important;
+  }
+  .dropdown-item {
+    font-size: clamp(12px, 4vw, 20px);
+  }
+
+  #logOutBtn {
+    color: black !important;
+    font-size: 16px;
+  }
+
+  .nav-link.active:after {
+    border-bottom: 4px solid rgb(126, 203, 242) !important;
+  }
+
+  .fixed-top {
+    background-color: rgb(255, 255, 255) !important;
+    padding: 0.3rem 1rem !important;
+    height: auto !important;
+    display: flex;
+    align-items: center;
+  }
+  .right-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .account-nav {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 0.5rem;
+    vertical-align: middle;
+    border-radius: 50%;
+  }
+
+  .notification-container img {
+    height: clamp(20px, 5vw, 32px);
+    width: clamp(20px, 5vw, 32px);
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+  }
+  .account-nav img {
+    height: clamp(20px, 5vw, 36px);
+    width: clamp(20px, 5vw, 32px);
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+  }
+
+  .notification-container {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 0.5rem;
+    vertical-align: middle;
+  }
+
+  .notification-container button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin-left: 8vw;
+    top: -5.4vw;
+  }
+
+  #basicInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    height: auto !important;
+  }
+
+  .row {
+    flex-direction: column;
+    width: 100% !important;
+    margin: 0 !important;
+    height: 100%;
+    margin-top: 5vw !important;
+  }
+
+  .container-wrapper {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .container {
+    width: 100%;
+    height: auto;
+    margin-top: clamp(8px, 4vw, 24px) !important;
+    transform: scale(0.95);
+    transform-origin: top center;
+  }
+
+  #busInfoContainer {
+    background-color: #78aeff;
+    width: 100%;
+    margin-top: -10px;
+  }
+
+  .busInfoLabel,
+  .busProofLabel,
+  .repInfoLabel{
+    font-size: clamp(14px, 4vw, 20px);
+    margin-top: 1vw;
     font-weight: bold;
     text-align: center;
   }
 
-  .titleDescription {
-    max-width: 1200px !important;
-    margin: 2vw auto 0 auto !important;
-    font-size: 1.4vw;
-    color: #fff;
+  .busProofFormContainer {
+    margin-top: 1rem !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5vw;
   }
-  .container {
-    margin-top: 2vw !important;
+
+  #repInfoContainer {
+    padding-bottom: 5vw;
   }
-  .repInfoFormContainer {
-    gap: 1vw;
-    margin-top: 2vw !important;
+
+  #busInfoContainer {
+    padding-bottom: 2vw;
   }
+
+  #busProofContainer {
+    padding-bottom: 2vw;
+  }
+
   .btn-primary {
-    margin-top: 5.5vw !important;
+    margin-top: 2vw !important;
   }
+
+  .socialIcons a {
+    margin: 5px;
+    border-radius: 50%;
+    padding-left: 2vw;
+    padding-right: 2vw;
+  }
+
+  .socialIcons a i {
+    font-size: 3vw;
+  }
+
+  .moreDetails {
+    text-decoration: none;
+    padding: 0px;
+    margin-left: 1vw;
+    margin-right: 3vw;
+  }
+  .logoNav {
+  /* border: 1px solid black; */
+  width: 15vw;
+  position: absolute;
+  margin: 2vw;
 }
 
-/* Phone size */
-@media screen and (min-width: 360px) and (max-width: 599px) {
+footer {
+  /* border: 1px solid black; */
+  margin-top: auto !important;
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.445) -50%,
+    rgb(62, 132, 158) 95%
+  );
+}
+
+.pb-1 {
+  gap: 2vw;
+  padding: 1vw 0 0 2vw;
+}
+
+.logo {
+  width: 20vw;
+  height: auto;
+}
+.mb-0 {
+  font-family: "Lora";
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffff;
+}
+.reservationTitle {
+  font-size: 8px;
+}
+.locationTitle {
+  font-size: 8px;
+}
+.locationFooter {
+  margin-bottom: 1.2rem !important;
+}
+.numberFooter, .emailAddressTextFooter, .addressTextFooter {
+  font-size: 7px;
+}
+}
+
+
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+      body {
+    outline: 5px solid orange !important; /* 🟠 Tablet Portrait */
+  }
   .title {
+    margin-top: 6rem;
     font-size: 5vw;
   }
   .titleDescription {
-    max-width: 1200px !important;
+    width: 100% !important;
     margin: 3vw auto 0 auto !important;
     margin-top: 3vw;
     font-size: 1.5vw;
@@ -457,50 +680,73 @@ footer {
     margin-left: auto !important;
     margin-bottom: 11vw !important;
   }
+  #navbar-half2 {
+    padding-bottom: 0px !important;
+  }
   .navbar-toggler {
     padding: 1vw;
     padding-top: 0;
     padding-bottom: 0;
     margin-right: 2vw;
   }
+  .navbar.scrolled {
+    background-color: white !important;
+  }
+  .navbar-nav .nav-link {
+    color: #000000 !important;
+  }
   .navbar-nav {
     display: flex !important;
     list-style: none;
-    margin-top: 10px !important;
+    margin-top: 2vw !important;
+  }
+  .navbar .nav-link {
+    color: black !important;
+  }
+  #logOutBtn {
+    color: black !important;
+    font-size: 16px;
+  }
+  .nav-link.active:after {
+    border-bottom: 4px solid rgb(126, 203, 242) !important;
+  }
+  .fixed-top {
+    background-color: rgb(255, 255, 255) !important;
+    height: 5rem;
   }
   .account-nav {
     margin: 1px;
     margin-left: 1rem;
     /* border: 1px solid white; */
     border-radius: 50%;
-    img {
+  }
+  .account-nav img {
       height: 7vw;
       border-radius: 50%;
       aspect-ratio: 1;
       object-fit: cover;
     }
-  }
   .notification-container {
     margin: 1rem;
-
-    button {
+  }
+  .notification-container button {
       background-color: transparent;
       border: none;
       padding: 0;
       margin-left: 8vw;
-      top: -9.5vw;
+      top: -8.9vw;
     }
-    img {
-      height: 5vw;
-      aspect-ratio: 1;
+  .notification-container img {
+      height: 7vw;
+      padding-bottom: 2vw;
       object-fit: cover;
     }
-  }
   #basicInfo {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     padding: 0;
-    height: 93vh !important;
+    height: auto !important;
   }
   .repInfoLabel {
     font-weight: bold;
@@ -529,6 +775,7 @@ footer {
     transform: scale(0.9);
     transform-origin: top center;
     width: 100%;
+    max-width: 1200px;
     height: 125vh;
     margin-top: 4vw !important;
   }
@@ -544,11 +791,36 @@ footer {
   }
   .busInfoLabel {
     font-size: 20px;
-    margin-top: 1vw;
+    margin-top: 2vw;
   }
   .busProofLabel {
     font-size: 20px;
-    margin-top: 1vw;
+    margin-top: 1rem;
+    display: block;
+  }
+  .busProofFormContainer {
+    margin-top: 1rem !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5vw;
+  }
+  #repInfoContainer {
+    padding-bottom: 2vw;
+    top: -3vw;
+  }
+  #busInfoContainer {
+    padding-bottom: 2vw;
+  }
+  #busProofContainer {
+    padding-bottom: 5vw;
+  }
+  #submit-request{
+    display: block !important;
+    margin: 0 auto !important;
+    margin-top: 5vw !important;
+    width: 100% !important;
+    
   }
   .socialIcons a {
     margin: 5px;
@@ -560,32 +832,129 @@ footer {
     font-size: 3vw;
   }
   .moreDetails {
+    margin-top: 2vw;
     text-decoration: none;
-    padding: 0px;
+    padding: 0px;    
+}
+.mb-0 {
+  margin-bottom: 2vw !important;
+}
+.locationFooter {
+  margin-bottom: 1rem !important;
+}
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  body {
+    outline: 5px solid blue !important; /* 🔵 Tablet Landscape */
+  }
+
+  .title {
+    margin-top: 5rem;
+    font-size: clamp(18px, 3vw, 26px);
+  }
+
+  .titleDescription {
+    width: 90% !important;
+    margin: 2vw auto 0 auto !important;
+    font-size: clamp(14px, 1.8vw, 20px);
+    text-align: center;
+  }
+
+  .container {
+    transform: scale(0.92);
+    transform-origin: top center;
+    margin-top: 2vw !important;
+  }
+
+  /* Form container auto adjust */
+  .repInfoFormContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem !important;
+  }
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .account-nav img {
+    height: clamp(28px, 3.5vw, 40px);
+    width: clamp(28px, 3.5vw, 40px); /* pantay height at width */
+    margin-top: 1vw;
     margin-left: 1vw;
+<<<<<<< Updated upstream
     margin-right: 3vw;
   }
 }
 
 /* Tablet */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
+=======
+  }
+>>>>>>> Stashed changes
   .notification-container {
-    margin-top: 7px;
-    margin-left: 1px;
+    display: flex;
+    align-items: center;
+    margin-left: 2vw;
   }
   .notification-container img {
-    margin-top: 1px;
-    height: 4vh;
+    height: clamp(24px, 3vw, 34px);
+    width: clamp(24px, 4vw, 34px);
+    margin-top: 0.5vw;
+  }
+
+  #logOutBtn {
+    font-size: clamp(14px, 1.5vw, 16px)!important;
+    margin-left: 1rem;
+  }
+
+  .locationFooter {
+    margin-bottom: 1.2rem !important;
   }
 }
 
-/* Tablet portrait only */
-@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-  .notification-container {
-    margin-top: 7px;
-    margin-left: 1px;
+/* Laptop */
+@media screen and (min-width: 1025px) and (max-width: 1280px) {
+  body {
+    outline: 5px solid green !important; /* 🟢 Laptop */
+  }
+
+  .title {
+    margin-top: 1vw !important;
+    font-size: 2.4vw;
+    font-family: "Lora";
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .titleDescription {
+    max-width: 1200px !important;
+    margin: 2vw auto 0 auto !important;
+    font-size: 1.4vw;
+    color: #fff;
+  }
+
+  .container {
+    margin-top: 2vw !important;
+  }
+
+  /* Same grid system for consistency */
+  .repInfoFormContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem !important;
+  }
+
+  .btn-primary {
+    margin-top: 5.5vw !important;
   }
 }
+<<<<<<< Updated upstream
 
 /* Tablet landscape only */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
@@ -598,3 +967,5 @@ footer {
     height: 4vh;
   }
 }
+=======
+>>>>>>> Stashed changes
