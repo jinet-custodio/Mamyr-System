@@ -61,12 +61,6 @@ body {
   margin-left: 1vw;
 }
 
-.adminTitle {
-  margin-top: 1rem;
-  font-family: "Lora" !important;
-  font-size: 20px;
-}
-
 .graph,
 .trend-cards {
   width: 90%;
@@ -226,16 +220,16 @@ body {
   #revenueGraphCard {
     margin-bottom: 2vw;
   }
-}
 
-/* Tablet Landscape */
-@media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
   .topSection {
     display: flex;
     justify-content: space-between;
     padding: 0.5rem !important;
   }
+}
 
+/* Tablet Landscape */
+@media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
   .menus {
     margin-right: 10vw;
   }
@@ -287,12 +281,6 @@ body {
 }
 
 @media only screen and (max-width: 599px) {
-  .topSection {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem !important;
-  }
-
   .menus {
     margin-right: 20vw;
   }

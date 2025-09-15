@@ -27,7 +27,6 @@ body {
 }
 
 .topSection {
-  /* border: 1px solid black; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -50,32 +49,16 @@ body {
 .logo {
   width: 15vw;
 }
-/* #dashboard {
-  font-family: "Plus Jakarta Sans";
-  text-decoration: none;
-  color: black;
-  font-weight: 800;
-  font-size: 2.3vw;
-  margin-left: 1vw;
-} */
 
 #dashboard {
   text-decoration: none;
   margin-left: 1vw;
 }
 
-.adminTitle {
-  margin-top: 1rem;
-  font-family: "Lora" !important;
-  /* font-weight: bold; */
-  font-size: 24px;
-}
-
 .wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   margin: auto;
   width: 90vw;
   text-align: center;
@@ -150,7 +133,7 @@ body {
 
 .cards {
   /* border: 1px solid rgb(0, 255, 136); */
-  width: 70vw;
+  width: 80vw;
   display: flex;
   justify-content: center;
   gap: 2rem;
@@ -169,35 +152,24 @@ body {
   font-size: 22px;
 }
 
-/* Phones */
-@media only screen and (max-width: 599px) {
-  .wrapper {
-    height: 950px !important;
+.form-floating {
+  label {
+    font-size: clamp(1.4vw, 1.5vw, 1.7vw);
+    padding-top: 0.4vw !important;
   }
-
-  .card-title {
-    text-align: center !important;
+  input {
+    font-size: clamp(1.4vw, 1.5vw, 1.7vw);
+    padding-bottom: 0 !important;
   }
-  .charts {
-    flex-wrap: wrap;
-  }
-
+}
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
   .revenue-chart {
-    width: 100% !important;
-    height: 20% !important;
-  }
-
-  .cards {
-    flex-wrap: wrap;
+    border: 1px solid black;
   }
 }
 
 /* Tablet Portrait */
 @media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
-  .wrapper {
-    height: 1350px !important;
-  }
-
   .card-title {
     text-align: center !important;
   }
@@ -218,13 +190,23 @@ body {
   .booking-status {
     width: 100%;
   }
+
+  .form-floating {
+    label {
+      font-size: clamp(1.8vw, 2vw, 2.2vw);
+      padding-top: 0.7vw !important;
+    }
+    input {
+      font-size: clamp(2vw, 2.2vw, 2.4vw);
+      padding-bottom: 0.2vw !important;
+    }
+  }
 }
 
 /* Tablet Landscape */
 @media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
   .wrapper {
     width: 80vw !important;
-    height: 700px;
   }
 
   #logOutBtn {
@@ -232,9 +214,21 @@ body {
   }
 }
 
-/* @media (max-width: 991.98px) {
-  .wrapper {
-    width: 80vw !important;
-    height: 850px !important;
+/* Phones */
+@media only screen and (max-width: 599px) {
+  .card-title {
+    text-align: center !important;
   }
-} */
+  .charts {
+    flex-wrap: wrap;
+  }
+
+  .revenue-chart {
+    width: 100% !important;
+    height: 20% !important;
+  }
+
+  .cards {
+    flex-wrap: wrap;
+  }
+}

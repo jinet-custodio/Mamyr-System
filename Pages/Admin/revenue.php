@@ -131,9 +131,9 @@ if ($revenueResult->num_rows > 0) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -266,50 +266,50 @@ if ($revenueResult->num_rows > 0) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                    <ul class="list-group list-group-flush ">
-                        <?php foreach ($notificationsArray as $index => $message):
+                        <ul class="list-group list-group-flush ">
+                            <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                        <li class="list-group-item mb-2 notification-item"
-                            data-id="<?= htmlspecialchars($notificationID) ?>"
-                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                            <?= htmlspecialchars($message) ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                    <?= htmlspecialchars($message) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     <?php else: ?>
-                    <div class="p-3 text-muted">No new notifications.</div>
+                        <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper mb-5">
         <div class="card">
             <h5 class="card-title">Revenue</h5>
             <div class="card-body">
                 <div class="charts">
                     <?php if (!empty($revenues)): ?>
-                    <div class="revenue-chart">
-                        <canvas id="revenueBar"></canvas>
-                    </div>
+                        <div class="revenue-chart">
+                            <canvas id="revenueBar"></canvas>
+                        </div>
                     <?php else: ?>
-                    <!-- <div class="revenueBar">No data available.</div> -->
-                    <div class="revenue-chart">
-                        <canvas id="revenueBar"></canvas>
-                    </div>
+                        <!-- <div class="revenueBar">No data available.</div> -->
+                        <div class="revenue-chart">
+                            <canvas id="revenueBar"></canvas>
+                        </div>
                     <?php endif; ?>
                     <?php if (($GCashCount ?? 0) > 0 || ($CashCount ?? 0) > 0): ?>
-                    <div class="revenue-chart">
-                        <canvas id="revenuePie"></canvas>
-                    </div>
+                        <div class="revenue-chart">
+                            <canvas id="revenuePie"></canvas>
+                        </div>
                     <?php else: ?>
-                    <div class="revenue-chart">
-                        <canvas id="revenuePie"></canvas>
-                    </div>
-                    <!-- <div class="revenuePie">No data available.</div> -->
+                        <div class="revenue-chart">
+                            <canvas id="revenuePie"></canvas>
+                        </div>
+                        <!-- <div class="revenuePie">No data available.</div> -->
                     <?php endif; ?>
                 </div>
                 <div class="salesReportBtn">
@@ -459,40 +459,40 @@ if ($revenueResult->num_rows > 0) {
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
 
@@ -501,91 +501,123 @@ if ($revenueResult->num_rows > 0) {
     <!-- <script src="path/to/chartjs/dist/chart.umd.js"></script> -->
 
     <script>
-    Chart.register({
-        id: 'noDataPlugin',
-        beforeDraw(chart) {
-            const dataset = chart.data.datasets[0];
-            const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
+        Chart.register({
+            id: 'noDataPlugin',
+            beforeDraw(chart) {
+                const dataset = chart.data.datasets[0];
+                const hasData = dataset && dataset.data && dataset.data.some(value => value > 0);
 
-            if (!hasData) {
-                const ctx = chart.ctx;
-                const {
-                    width,
-                    height
-                } = chart;
+                if (!hasData) {
+                    const ctx = chart.ctx;
+                    const {
+                        width,
+                        height
+                    } = chart;
 
-                chart.clear();
+                    chart.clear();
 
-                ctx.save();
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.font = '20px Times New Roman';
-                ctx.fillStyle = 'gray';
-                ctx.fillText('No available data', width / 2, height / 2);
-                ctx.restore();
-            }
-        }
-    });
-
-
-    const bar = document.getElementById("revenueBar").getContext('2d');
-
-    const myBarChart = new Chart(bar, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($months) ?>,
-            datasets: [{
-                label: 'Sales',
-                data: <?= json_encode($revenues) ?>,
-                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = '20px Times New Roman';
+                    ctx.fillStyle = 'gray';
+                    ctx.fillText('No available data', width / 2, height / 2);
+                    ctx.restore();
                 }
             }
-        },
-        plugins: ['noDataPlugin']
-    });
+        });
 
 
-    const pie = document.getElementById('revenuePie').getContext('2d');
+        const bar = document.getElementById("revenueBar").getContext('2d');
 
-    const myPieChart = new Chart(pie, {
-        type: 'pie',
-        data: {
-            labels: ['Gcash', 'Cash'],
-            datasets: [{
-                label: 'Payment Methods',
-                data: <?= json_encode([$GCashCount ?? 0, $CashCount ?? 0]) ?>,
-                backgroundColor: [
-                    'rgba(30, 134, 232, 0.6)',
-                    'rgba(129, 204, 196, 0.6)'
-                    // 'rgba(99, 99, 99, 0.6)'
-                ],
-                borderColor: '#fff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top'
-                },
-                title: {
-                    display: true,
-                    text: 'Payment Methods'
+        const myBarChart = new Chart(bar, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode($months) ?>,
+                datasets: [{
+                    label: 'Sales',
+                    data: <?= json_encode($revenues) ?>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+            plugins: ['noDataPlugin']
+        });
+
+
+        const pie = document.getElementById('revenuePie').getContext('2d');
+
+        const myPieChart = new Chart(pie, {
+            type: 'pie',
+            data: {
+                labels: ['Gcash', 'Cash'],
+                datasets: [{
+                    label: 'Payment Methods',
+                    data: <?= json_encode([$GCashCount ?? 0, $CashCount ?? 0]) ?>,
+                    backgroundColor: [
+                        'rgba(30, 134, 232, 0.6)',
+                        'rgba(129, 204, 196, 0.6)'
+                        // 'rgba(99, 99, 99, 0.6)'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Payment Methods'
+                    }
+                }
+            },
+            plugins: ['noDataPlugin']
+        });
+    </script>
+
+    <!-- Responsive Navbar -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const icons = document.querySelectorAll('.navbar-icon');
+            const navbarUL = document.getElementById('navUL');
+            const nav = document.getElementById('navbar')
+
+            function handleResponsiveNavbar() {
+                if (window.innerWidth <= 991.98) {
+                    navbarUL.classList.remove('w-100');
+                    navbarUL.style.position = "fixed";
+                    nav.style.margin = "0";
+                    nav.style.maxWidth = "100%";
+                    icons.forEach(icon => {
+                        icon.style.display = "none";
+                    })
+                } else {
+                    navbarUL.classList.add('w-100');
+                    navbarUL.style.position = "relative";
+                    nav.style.margin = "20px auto";
+                    nav.style.maxWidth = "80vw";
+                    icons.forEach(icon => {
+                        icon.style.display = "block";
+                    })
                 }
             }
-        },
-        plugins: ['noDataPlugin']
-    });
+
+            handleResponsiveNavbar();
+            window.addEventListener('resize', handleResponsiveNavbar);
+        });
     </script>
 </body>
 
