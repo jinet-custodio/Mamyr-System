@@ -19,21 +19,23 @@
 
 .navbar.scrolled {
   background-color: white;
-  .nav-link {
-    color: black !important;
-    padding: 10px 15px !important;
-  }
-  .nav-link:not(.dropdown-toggle):after {
-    border-bottom: 4px solid #000000 !important;
-  }
+}
 
-  #logOutBtn {
-    color: #000000 !important;
-  }
+.navbar.scrolled #logOutBtn {
+  color: #000000 !important;
+}
 
-  .profile-pic {
-    border: 2px solid black;
-  }
+.navbar.scrolled .profile-pic {
+  border: 2px solid black;
+}
+
+.navbar.scrolled .nav-link {
+  color: black !important;
+  padding: 10px 15px !important;
+}
+
+.navbar.scrolled .nav-link:not(.dropdown-toggle):after {
+  border-bottom: 4px solid #000000 !important;
 }
 
 .nav-item {
@@ -43,9 +45,9 @@
   /* margin-left: 3vw; */
 }
 
-  .nav-link {
-    padding: 10px 15px !important;
-  }
+.nav-link {
+  padding: 10px 15px !important;
+}
 .nav-link,
 #logOutBtn {
   text-decoration: none;
@@ -106,36 +108,37 @@
   margin: 1px;
   margin-left: 1rem;
   border-radius: 50%;
-  .profile-pic {
-    height: 5vw;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    object-fit: cover;
-  }
 }
 
+.account-nav .profile-pic {
+  height: 5vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-.notification-container{
+.notification-container {
   margin: 1rem;
-  button{
-    background-color: transparent;
-    border: none;
-  }
+}
+
+.notification-container button {
+  background-color: transparent;
+  border: none;
 }
 
 .notificationIcon {
-    display: flex;
-    align-items: center;
-    height: 2.5vw;
-    aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  height: 2.5vw;
+  aspect-ratio: 1;
 }
 
 #toggledNav {
-    position: absolute !important;
-    right: 2vw !important;
-  }
+  position: absolute !important;
+  right: 2vw !important;
+}
 
-.main-content { 
+.main-content {
   margin: 10vw auto 0 auto;
   width: 100%;
   min-height: 100vh;
@@ -185,17 +188,12 @@ section {
 
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-
-
 }
 
 /* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
-
-
 }
 
 /* Phone size */
 @media screen and (max-width: 600px) {
-
 }

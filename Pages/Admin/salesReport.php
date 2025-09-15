@@ -69,13 +69,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <header class="header">
 
         <?php if ($userRole === 3) { ?>
-        <a href="revenue.php" id="backToDashboard" class="backButton">
-            <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
-        </a>
+            <a href="revenue.php" id="backToDashboard" class="backButton">
+                <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
+            </a>
         <?php } elseif ($userRole === 2) { ?>
-        <a href="../Account/bpSales.php" id="backToDashboard" class="backButton">
-            <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
-        </a>
+            <a href="../Account/bpSales.php" id="backToDashboard" class="backButton">
+                <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
+            </a>
         <?php } ?>
         <div class="pagetitle">
             <img src="../../Assets/Images/Icon/Statistics.png" alt="" id="sales-logo">
@@ -110,9 +110,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <th>Customer Name</th>
                             <th>Booking Type</th>
                             <?php if ($userRole === 3) { ?>
-                            <th>Total Guest</th>
+                                <th>Total Guest</th>
                             <?php } elseif ($userRole === 2) { ?>
-                            <th>Service Name</th>
+                                <th>Service Name</th>
                             <?php   } ?>
                             <th>Start Date</th>
                             <th>End Date</th>
@@ -125,13 +125,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <?php
                         $enableDownloadBtn = false;
                         $encodedPartnershipID = $_GET['id'] ?? 0;
-                        $partnershipID = base64_decode($encodedPartnershipID);
+                        $partnershipID = (int) base64_decode($encodedPartnershipID);
 
                         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['generateReport'])) {
                             $reportDate = $_POST['reportDate'];
                             $dates = preg_split('/\s*to\s*/', $reportDate);
                             $approvedStatusID = 5; //Done
-                            $paymentStatusID = 1; //No Payment
+                            $paymentStatusID = 3; //Fully Paid
 
 
                             if (count($dates) === 2) {
@@ -169,12 +169,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             LEFT JOIN partnershipservice ps  ON s.partnershipServiceID = ps.partnershipServiceID                      
                                             LEFT JOIN user u ON b.userID = u.userID
 
-                                            WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?  AND partnershipID = ?                         
+                                            WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?  AND ps.partnershipID = ?                         
                                             ");
                                     $getReportData->bind_param("issi", $approvedStatusID, $selectedStartDate, $selectedEndDate, $partnershipID);
                                 }
-
-
                                 $getReportData->execute();
                                 $getReportDataResult = $getReportData->get_result();
                                 if ($getReportDataResult->num_rows > 0) {
@@ -186,7 +184,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         $bookingType = $row['bookingType'];
                                         $customerName = ucfirst($row['firstName']) . ' ' . ucfirst($row['lastName']);
                                         $guest = $row['guest'] ?? 0;
-                                       $rawStartDate = $row['startDate'] ?? null;
+                                        $rawStartDate = $row['startDate'] ?? null;
                                         $rawEndDate = $row['endDate'] ?? null;
                                         $startDate = date('Y-m-d h:i A', strtotime($rawStartDate));
                                         $endDate = date('Y-m-d h:i A', strtotime($rawEndDate));
@@ -194,44 +192,41 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         $totalCost = $row['confirmedFinalBill'];
                                         $partnerServiceName = $row['PBName'] ?? null;
                         ?>
-                        <tr>
-                            <td><?= htmlspecialchars($formattedBookingID) ?></td>
-                            <td><?= htmlspecialchars($customerName) ?></td>
-                            <td><?= htmlspecialchars($bookingType) ?></td>
-                            <?php if ($userRole === 3) { ?>
-                            <td><?= htmlspecialchars($guest) ?></td>
-                            <?php } elseif ($userRole === 2) { ?>
-                            <td><?= htmlspecialchars($partnerServiceName) ?></td>
-                            <?php   } ?>
-                            <td><?= htmlspecialchars($startDate) ?></td>
-                            <td><?= htmlspecialchars($endDate) ?></td>
-                            <td><?= htmlspecialchars($paymentMethod) ?></td>
-                            <td>₱<?= number_format($totalCost, 2) ?></td>
-                        </tr>
-                        <?php
+                                        <tr>
+                                            <td><?= htmlspecialchars($formattedBookingID) ?></td>
+                                            <td><?= htmlspecialchars($customerName) ?></td>
+                                            <td><?= htmlspecialchars($bookingType) ?></td>
+                                            <?php if ($userRole === 3) { ?>
+                                                <td><?= htmlspecialchars($guest) ?></td>
+                                            <?php } elseif ($userRole === 2) { ?>
+                                                <td><?= htmlspecialchars($partnerServiceName) ?></td>
+                                            <?php   } ?>
+                                            <td><?= $startDate ?></td>
+                                            <td><?= $endDate ?></td>
+                                            <td><?= htmlspecialchars($paymentMethod) ?></td>
+                                            <td>₱<?= number_format($totalCost, 2) ?></td>
+                                        </tr>
+                                    <?php
                                     }
-                                    // echo '<pre>';
-                                    // var_dump($_SESSION['reportData']);
-                                    // echo '</pre>';
                                 } else {
                                     ?>
-                        <tr>
-                            <td colspan="8" class="text-center no-data-text">No bookings found for selected dates</td>
-                        </tr>
-                        <?php
+                                    <tr>
+                                        <td colspan="8" class="text-center no-data-text">No bookings found for selected dates</td>
+                                    </tr>
+                                <?php
                                 }
                             } else {
                                 ?>
-                        <tr>
-                            <td colspan="8" class="text-center no-data-text">Invalid Date Format</td>
-                        </tr>
-                        <?php
+                                <tr>
+                                    <td colspan="8" class="text-center no-data-text">Invalid Date Format</td>
+                                </tr>
+                            <?php
                             }
                         } else {
                             ?>
-                        <tr>
-                            <td colspan="8" class="text-center no-data-text">No data available</td>
-                        </tr>
+                            <tr>
+                                <td colspan="8" class="text-center no-data-text">No data available</td>
+                            </tr>
                         <?php
                         }
                         ?>
@@ -263,35 +258,35 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- Flatpickr Link -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-    flatpickr('#reportDate', {
-        mode: "range",
-        minDate: null,
-        maxDate: "today",
-        dateFormat: "F d, Y"
-    });
+        flatpickr('#reportDate', {
+            mode: "range",
+            minDate: null,
+            maxDate: "today",
+            dateFormat: "F d, Y"
+        });
 
-    const calIcon = document.getElementById("calendarIcon");
-    const reportDate = document.getElementById("reportDate");
+        const calIcon = document.getElementById("calendarIcon");
+        const reportDate = document.getElementById("reportDate");
 
-    calIcon.addEventListener('click', function(event) {
-        reportDate.click()
-    })
+        calIcon.addEventListener('click', function(event) {
+            reportDate.click()
+        })
 
-    const generateReportBtn = document.getElementById("generateReport");
-    const errorMessage = document.querySelector(".error-message");
+        const generateReportBtn = document.getElementById("generateReport");
+        const errorMessage = document.querySelector(".error-message");
 
 
-    generateReportBtn.addEventListener("click", function(event) {
-        const reportDateValue = reportDate.value.trim();
+        generateReportBtn.addEventListener("click", function(event) {
+            const reportDateValue = reportDate.value.trim();
 
-        if (reportDateValue === '') {
-            event.preventDefault();
-            errorMessage.innerHTML = 'Please choose the date range you want for the report';
-        } else {
-            errorMessage.innerHTML = '';
-            errorMessage.style.border = "none";
-        };
-    });
+            if (reportDateValue === '') {
+                event.preventDefault();
+                errorMessage.innerHTML = 'Please choose the date range you want for the report';
+            } else {
+                errorMessage.innerHTML = '';
+                errorMessage.style.border = "none";
+            };
+        });
     </script>
 
 </body>

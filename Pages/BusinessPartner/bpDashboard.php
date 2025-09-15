@@ -34,6 +34,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 require '../../Function/Partner/sales.php';
+require '../../Function/Partner/getBookings.php';
 
 ?>
 <!DOCTYPE html>
@@ -217,19 +218,7 @@ require '../../Function/Partner/sales.php';
 
         <!-- Get number of booking — approved, pending -->
         <?php
-
-        $getPartnerBooking = $conn->prepare("SELECT COUNT()
-              FROM booking b
-              LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
-              LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
-              LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
-              LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
-              LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
-              LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
-              LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
-              WHERE p.userID = ? AND cb.paymentApprovalStatus = ? AND cb.paymentStatus = ?
-              ");
-
+        $row = getBookingsCount($conn, $userID);
         ?>
 
         <main class="main-content" id="main-content">
@@ -240,21 +229,21 @@ require '../../Function/Partner/sales.php';
                         <div class="card">
                             <div class="card-header fw-bold fs-5">All Bookings</div>
                             <div class="card-body">
-                                <h2 class="bookingNumber">8</h2>
+                                <h2 class="bookingNumber"><?= $row['allBookingStatus'] ?></h2>
                             </div>
                         </div>
 
                         <div class="card">
                             <div class="card-header fw-bold fs-5">Approved</div>
                             <div class="card-body">
-                                <h2 class="approvedNumber">5</h2>
+                                <h2 class="approvedNumber"><?= $row['approvedBookings']  ?></h2>
                             </div>
                         </div>
 
                         <div class="card">
                             <div class="card-header fw-bold fs-5">Pending</div>
                             <div class="card-body">
-                                <h2 class="pendingNumber">3</h2>
+                                <h2 class="pendingNumber"><?= $row['totalPendingBooking']  ?></h2>
                             </div>
                         </div>
 
@@ -333,7 +322,7 @@ require '../../Function/Partner/sales.php';
     $paymentStatusID = 3; //Fully Paid
     $paymentApprovalID = 5; //Done
 
-    $getYearlySales = $conn->prepare("SELECT MONTHNAME(b.startDate) AS month,
+    $getMonthlySalesQuery = $conn->prepare("SELECT MONTHNAME(b.startDate) AS month,
                     YEAR(b.startDate) AS year,
                     SUM(IFNULL(bs.bookingServicePrice, 0) + IFNULL(cpi.ServicePrice, 0)) AS monthlyRevenue,
                     ps.partnershipID, ps.partnershipServiceID
@@ -354,14 +343,14 @@ require '../../Function/Partner/sales.php';
                      month
                     ORDER BY 
                      month");
-    $getYearlySales->bind_param("iii", $paymentApprovalID, $paymentStatusID, $partnershipID);
-    if (!$getYearlySales->execute()) {
-        error_log("Failed executing monthly sales in a year. Error: " . $getYearlySales->error);
+    $getMonthlySalesQuery->bind_param("iii", $paymentApprovalID, $paymentStatusID, $partnershipID);
+    if (!$getMonthlySalesQuery->execute()) {
+        error_log("Failed executing monthly sales in a year. Error: " . $getMonthlySalesQuery->error);
     }
     $months = [];
     $sales = [];
     $year = '';
-    $result = $getYearlySales->get_result();
+    $result = $getMonthlySalesQuery->get_result();
     if ($result->num_rows > 0) {
         while ($data = $result->fetch_assoc()) {
             $months[] = $data['month'];
@@ -472,14 +461,15 @@ require '../../Function/Partner/sales.php';
             datasets: [{
                 label: "Monthly Sales Report — <?= !empty($year) ? json_encode($year) : DATE('Y') ?>",
                 data: <?= json_encode($sales) ?>,
-                fill: true,
-                borderColor: 'rgb(75, 192, 192)',
+                fill: false,
+                backgroundColor: 'rgb(33, 148, 209, .5)',
+                borderColor: 'rgb(33, 148, 209, 1)',
                 tension: 0.1
             }]
         };
 
         const lineSalesChart = new Chart(salesGraph, {
-            type: 'line',
+            type: 'bar',
             data: data,
             options: {
                 responsive: true,

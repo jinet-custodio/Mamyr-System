@@ -138,7 +138,7 @@
   color: white;
 }
 
-.main-content { 
+.main-content {
   margin-left: 27vw;
   margin-top: 5rem;
   padding: 1rem;
@@ -147,7 +147,6 @@
 }
 
 /* sidebar */
-
 
 .welcomeText {
   font-size: 36px;
@@ -196,6 +195,27 @@ td {
 .dt-type-numeric {
   text-align: center !important;
 }
+
+.btn-red {
+  background-color: rgb(204, 30, 20);
+  color: white;
+}
+
+.btn-red:hover {
+  background-color: rgb(150, 10, 3);
+  color: white;
+}
+
+.btn-light-green {
+  background-color: rgb(71, 139, 10);
+  color: white;
+}
+
+.btn-light-green:hover {
+  background-color: rgb(58, 112, 10);
+  color: white;
+}
+
 /* table css */
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
@@ -227,7 +247,6 @@ td {
   .main-content {
     margin-left: 34vw;
   }
-
 }
 
 /* Tablet landscape */

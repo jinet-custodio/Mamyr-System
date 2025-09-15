@@ -123,7 +123,8 @@ $formData = $_SESSION['eventFormData'] ?? [];
                             <?php
                             $eventCategory = getEventCategory($conn);
                             foreach ($eventCategory as $category) {
-                                $isSelected = (htmlspecialchars($category['categoryName']) === $formData['eventType']) ? 'selected' : '';
+                                $eventType =  isset($formData['eventType']) ?  $formData['eventType'] : '';
+                                $isSelected = (htmlspecialchars($category['categoryName']) === $eventType) ? 'selected' : '';
                             ?>
                                 <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>><?= htmlspecialchars($category['categoryName']) ?></option>
                             <?php
@@ -507,7 +508,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
         const cardText = document.createElement('h5');
         cardText.classList.add('card-text');
-        cardText.innerHTML = 'No Additional Services Available';
+        cardText.innerHTML = 'Choose the date and time';
 
         div.appendChild(cardText);
         mainContainer.appendChild(div);

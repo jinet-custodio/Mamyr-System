@@ -2,86 +2,86 @@ USE mamyr;
 
 -- Chicken 
 
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Chicken Pastil','Chicken',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Chicken Barbecue Sauce','Chicken',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Chicken Cordon Bleu','Chicken',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Chicken Teriyaki','Chicken',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Butter Garlic Chicken','Chicken',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Chicken Pastil','Chicken',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Chicken Barbecue Sauce','Chicken',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Chicken Cordon Bleu','Chicken',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Chicken Teriyaki','Chicken',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Butter Garlic Chicken','Chicken',1);
 
 -- Pork
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Pork Asado','Pork', 1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Pork Mechado Roll','Pork', 1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Pork Caldereta','Pork', 1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Pork Hamonado','Pork', 1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Roasted Pork','Pork', 1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Pork Asado','Pork', 1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Pork Mechado Roll','Pork', 1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Pork Caldereta','Pork', 1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Pork Hamonado','Pork', 1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Roasted Pork','Pork', 1);
 
 -- Beef
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Beef Spicy Caldereta','Beef',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Beef Broccolli','Beef',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Roast Beef','Beef',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Beef Teriyaki','Beef',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Beef Creamy Mushroom Sauce','Beef',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Beef Spicy Caldereta','Beef',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Beef Broccolli','Beef',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Roast Beef','Beef',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Beef Teriyaki','Beef',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Beef Creamy Mushroom Sauce','Beef',1);
 
 -- Pasta
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Creamy Carbonara','Pasta',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Filipino Style Spaghetti','Pasta',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Pasta Pesto Sauce','Pasta',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Canton and Bihon Guisado','Pasta',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Japchae Noodles','Pasta',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Creamy Carbonara','Pasta',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Filipino Style Spaghetti','Pasta',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Pasta Pesto Sauce','Pasta',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Canton and Bihon Guisado','Pasta',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Japchae Noodles','Pasta',1);
 
 -- Vegetables 
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Mixed Veggies Saute','Vegetables',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Oriental Mix Veggies','Vegetables',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Chopsuey','Vegetables',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Chinese Chopsuey','Vegetables',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Butter Creamy Veggies','Vegetables',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Mixed Veggies Saute','Vegetables',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Oriental Mix Veggies','Vegetables',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Chopsuey','Vegetables',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Chinese Chopsuey','Vegetables',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Butter Creamy Veggies','Vegetables',1);
 
 -- Seafood
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Crispy Fish Fillet with Creamy Mayo','Seafood',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Shrimp Tempura','Seafood',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Butter Garlic Shrimp','Seafood',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Squid Gambas','Seafood',1);
-INSERT INTO menuItem(foodName, foodCategory, availabilityID) VALUES ('Nut Crushed Fish Fillet with Sweet Chili Sauce','Seafood',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Crispy Fish Fillet with Creamy Mayo','Seafood',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Shrimp Tempura','Seafood',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Butter Garlic Shrimp','Seafood',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Squid Gambas','Seafood',1);
+INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Nut Crushed Fish Fillet with Sweet Chili Sauce','Seafood',1);
 
 -- Chicken 
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Chicken Lollipop','Chicken',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fried Chicken','Chicken',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Chicken Nuggets','Chicken',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Chicken Cordon Bleu','Chicken',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Chicken Lollipop','Chicken',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fried Chicken','Chicken',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Chicken Nuggets','Chicken',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Chicken Cordon Bleu','Chicken',1, 'Child');
 
 
 -- Pork
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pork Shanghai','Pork', 1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pork Pintsik','Pork', 1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pork Bbq Stick','Pork', 1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pork Shanghai','Pork', 1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pork Pintsik','Pork', 1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pork Bbq Stick','Pork', 1, 'Child');
 
 -- Pasta
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Carbonara','Pasta',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Sweet Cheesy','Pasta',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Spaghetti','Pasta',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Bake Macaroni','Pasta',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Carbonara','Pasta',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Sweet Cheesy','Pasta',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Spaghetti','Pasta',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Bake Macaroni','Pasta',1, 'Child');
 
 -- Finger Foods Cocktail 
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Hotdog Cocktail','Finger Foods Cocktail',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Ham Cheese Cocktail','Finger Foods Cocktail',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Finger Troupes','Finger Foods Cocktail',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Cheesy Nachos','Finger Foods Cocktail',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Toasted Bread','Finger Foods Cocktail',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Hotdog Cocktail','Finger Foods Cocktail',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Ham Cheese Cocktail','Finger Foods Cocktail',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Finger Troupes','Finger Foods Cocktail',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Cheesy Nachos','Finger Foods Cocktail',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Toasted Bread','Finger Foods Cocktail',1, 'Child');
 
 -- Seafood
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fish Fillet Nuggets','Seafood',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Shrimp Tempura','Seafood',1, 'Child');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fish Tempura','Seafood',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fish Fillet Nuggets','Seafood',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Shrimp Tempura','Seafood',1, 'Child');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fish Tempura','Seafood',1, 'Child');
 
 -- Drinks
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Lemon Iced Tea','Drink',1, 'Adult');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Orange Juice','Drink',1, 'Adult');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pineapple Juice','Drink',1, 'Adult');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Red Iced Tea','Drink',1, 'Adult');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Lemonade','Drink',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Lemon Iced Tea','Drink',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Orange Juice','Drink',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pineapple Juice','Drink',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Red Iced Tea','Drink',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Lemonade','Drink',1, 'Adult');
 
 -- Desserts
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fruit Salad','Dessert',1, 'Adult');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Buko Pandan','Dessert',1, 'Adult');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Buko Salad','Dessert',1, 'Adult');
-INSERT INTO menuItem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Coffee Jelly','Dessert',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fruit Salad','Dessert',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Buko Pandan','Dessert',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Buko Salad','Dessert',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Coffee Jelly','Dessert',1, 'Adult');

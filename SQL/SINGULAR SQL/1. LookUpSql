@@ -12,7 +12,7 @@ INSERT INTO usertype (typeName) VALUES
 ('Customer'), 
 ('Partner'), 
 ('Admin'),
-('PartnerRequest);
+('PartnerRequest');
 
 CREATE TABLE userstatus (
     userStatusID INT PRIMARY KEY AUTO_INCREMENT,

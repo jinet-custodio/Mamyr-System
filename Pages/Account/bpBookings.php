@@ -34,6 +34,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+require '../../Function/Partner/getBookings.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -191,36 +193,41 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </ul>
         </aside> <!-- End Side Bar -->
 
+        <!-- Get number of booking — approved, pending -->
+        <?php
+        $row = getBookingsCount($conn, $userID);
+        ?>
+
         <main class="main-content" id="main-content">
             <div class="container">
                 <h3 class="welcomeText" id="title">Bookings</h3>
 
-                <div class="cardContainer">
+                <div class="cardContainer" id="bookingCountDisplayContainer">
                     <div class="card">
                         <div class="card-header fw-bold fs-5" style=" background-color:#cee4f2;">Bookings</div>
                         <div class="card-body">
-                            <h2 class="bookingNumber">8</h2>
+                            <h2 class="bookingNumber"><?= $row['allBookingStatus'] ?></h2>
                         </div>
                     </div>
 
                     <div class="card">
                         <div class="card-header fw-bold fs-5" style="background-color: #1a8754; color:#ffff">Approved</div>
                         <div class="card-body">
-                            <h2 class="approvedNumber">5</h2>
+                            <h2 class="approvedNumber"><?= $row['approvedBookings'] ?></h2>
                         </div>
                     </div>
 
                     <div class="card">
                         <div class="card-header fw-bold fs-5" style="background-color: #ffc108;">Pending</div>
                         <div class="card-body">
-                            <h2 class="pendingNumber">3</h2>
+                            <h2 class="pendingNumber"><?= $row['totalPendingBooking'] ?></h2>
                         </div>
                     </div>
 
                     <div class="card">
                         <div class="card-header fw-bold fs-5" style="background-color: #db3545; color:#ffff">Cancelled</div>
                         <div class="card-body">
-                            <h2 class="cancelledNumber">1</h2>
+                            <h2 class="cancelledNumber"><?= $row['cancelledBooking'] ?></h2>
                         </div>
                     </div>
                 </div>
@@ -235,37 +242,94 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </thead>
-
                         <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>Customer Ignacio</td>
-                                <td>Event Booking</td>
-                                <td>29 July 2025</td>
-                                <td><span class="btn btn-warning w-75" id="pending">Pending</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
-                            </tr>
+                            <!-- Get availed service -->
+                            <?php
+                            try {
+                                $getAvailedService = $conn->prepare("SELECT b.bookingID, LPAD(b.bookingID , 4, '0') AS formattedBookingID,
+                        u.firstName, u.lastName, b.bookingType, ps.PBName, b.startDate, b.endDate, bpas.approvalStatus as statusID, s.statusName as approvalStatus
+                        FROM businesspartneravailedservice bpas
+                        LEFT JOIN booking b ON bpas.bookingID = b.bookingID
+                        LEFT JOIN user u ON u.userID = b.userID
+                        LEFT JOIN partnershipservice ps ON bpas.partnershipServiceID = ps.partnershipServiceID
+                        LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
+                        LEFT JOIN status s ON bpas.approvalStatus = s.statusID
+                        WHERE p.userID = ?");
+                                $getAvailedService->bind_param('i', $userID);
+                                if (!$getAvailedService->execute()) {
+                                    throw new Exception("Error executing availed service: User ID: $userID. Error=>" . $getAvailedService->error);
+                                }
 
-                            <tr>
-                                <td>002</td>
-                                <td>Customer Ignacio</td>
-                                <td>Hotel Booking</td>
-                                <td>30 July 2025</td>
-                                <td><span class="btn btn-success w-75" id="approved">Approved</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
-                            </tr>
+                                $result = $getAvailedService->get_result();
 
-                            <tr>
-                                <td>003</td>
-                                <td>Customer Ignacio</td>
-                                <td>Event Booking</td>
-                                <td>31 July 2025</td>
-                                <td><span class="btn btn-danger w-75" id="cancelled">Cancelled</span>
-                                </td>
-                                <td><a href="#" class="btn btn-primary w-75">View</a></td>
-                            </tr>
+                                if ($result->num_rows === 0) {
+                            ?>
+                                    <tr>
+                                        <td colspan="6">No booking to display</td>
+                                    </tr>
+                                <?php
+                                }
+                                $bookings = [];
+                                while ($row = $result->fetch_assoc()) {
+                                    $rawStartDate = $row['startDate'] ?? null;
+                                    $startDate = DATE('m-d-y g:i A', strtotime($rawStartDate));
+                                    $bookings[] = [
+                                        'formattedBookingID' => $row['formattedBookingID'],
+                                        'guestName' => $row['firstName'] . ' ' . $row['lastName'],
+                                        'bookingType' => $row['bookingType'] . ' Booking',
+                                        'bookingDate' => $startDate,
+                                        'approvalStatus' => $row['approvalStatus']
+                                    ];
+                                }
+                            } catch (Exception $e) {
+                                error_log("An error occured. Error-> " . $e->getMessage());
+                            }
+
+
+                            foreach ($bookings as $booking) {
+                                ?>
+                                <tr>
+                                    <td><?= $booking['formattedBookingID'] ?></td>
+                                    <td><?= $booking['guestName'] ?></td>
+                                    <td><?= $booking['bookingType'] ?></td>
+                                    <td><?= $booking['bookingDate'] ?></td>
+                                    <?php
+                                    $statusName = ucwords($booking['approvalStatus']);
+                                    switch ($statusName) {
+                                        case 'Pending':
+                                            $className = 'warning';
+                                            break;
+                                        case 'Approved':
+                                            $className = 'success';
+                                            break;
+                                        case 'Cancelled':
+                                            $className = 'red';
+                                            break;
+                                        case 'Rejected':
+                                            $className = 'danger';
+                                            break;
+                                        case 'Done':
+                                            $className = 'light-green';
+                                            break;
+                                        case 'Expired':
+                                            $className = 'secondary';
+                                            break;
+                                        default:
+                                            $className = 'warning';
+                                            break;
+                                    }
+                                    ?>
+                                    <td><span class="btn btn-<?= $className ?> w-75"><?= $statusName ?></span>
+                                    </td>
+                                    <td><a href="#" class="btn btn-primary w-75">View</a></td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
+
+
+
+
                         </tbody>
                     </table>
                 </div>
