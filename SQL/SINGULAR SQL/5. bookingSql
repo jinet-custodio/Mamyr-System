@@ -30,7 +30,7 @@ ALTER TABLE booking
 ADD COLUMN arrivalTime TIME NULL
 AFTER durationCount;
 
-CREATE TABLE bookingService (
+CREATE TABLE bookingservice (
     bookingServiceID INT PRIMARY KEY AUTO_INCREMENT,
     bookingID INT NOT NULL,
     serviceID INT NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE bookingService (
     FOREIGN KEY (serviceID) REFERENCES service(serviceID)
 );
 
-CREATE TABLE confirmedBooking (
+CREATE TABLE confirmedbooking (
     confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
     bookingID INT NOT NULL,
     downpaymentImage varchar(255) DEFAULT 'defaultDownpayment.png', 
@@ -57,5 +57,17 @@ CREATE TABLE confirmedBooking (
     
     FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
     FOREIGN KEY (paymentApprovalStatus) REFERENCES status(statusID),
-    FOREIGN KEY (paymentStatus) REFERENCES bookingPaymentStatus(paymentStatusID)
+    FOREIGN KEY (paymentStatus) REFERENCES bookingpaymentstatus(paymentStatusID)
 );            
+
+CREATE TABLE businesspartneravailedservice(
+    BPavailedService INT PRIMARY KEY AUTO_INCREMENT,
+    partnershipServiceID INT NOT NULL,
+    bookingID INT NOT NULL,
+    approvalStatus INT,
+    availedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY(partnershipserviceID) REFERENCES partnershipservice(partnershipServiceID),
+    FOREIGN KEY(bookingID) REFERENCES booking(bookingID),
+    FOREIGN KEY(approvalStatus) REFERENCES status(statusID)
+);

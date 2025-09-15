@@ -207,7 +207,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <div class="card-header fw-bold fs-5">Total Sales</div>
                         <div class="card-body">
                             <h2 class="totalSales"><?= ($totalSales !== 0) ? number_format($totalSales, 2) : 'No sales to display' ?></h2>
-                            <a href="../Admin/salesReport.php?id=$encodedPartnershipID" class="btn btn-primary">Sales Report</a>
+                            <a href="../Admin/salesReport.php?id=<?= $encodedPartnershipID ?>" class="btn btn-primary">Sales Report</a>
                         </div>
                     </div>
 
@@ -216,58 +216,62 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="revenue-chart">
                     <canvas id="revenueBar"></canvas>
                 </div>
-
-                <!-- <div class="revenueBar">No data available.</div> -->
-                <div class="revenue-chart">
-                    <canvas id="revenueBar"></canvas>
-                </div>
-
-
-
-
             </div>
         </main>
     </div>
 
+    <?php
+    $getPartnershipID = $conn->prepare('SELECT partnershipID FROM `partnership` WHERE userID = ?');
+    $getPartnershipID->bind_param('i', $userID);
+    $getPartnershipID->execute();
+    $result = $getPartnershipID->get_result();
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_assoc();
+        $partnershipID = $data['partnershipID'];
+    }
+    ?>
 
     <?php
     $paymentStatusID = 3; //Fully Paid
     $paymentApprovalID = 5; //Done
-    $getYearlySales = $conn->prepare("SELECT
+    $getYearlySales = $conn->prepare("SELECT 
                     YEAR(b.startDate) AS year,
-                    SUM(IFNULL(bs.bookingServicePrice, 0) + IFNULL(cpi.ServicePrice, 0)) AS yearlySales
+                    SUM(IFNULL(bs.bookingServicePrice, 0) + IFNULL(cpi.ServicePrice, 0)) AS yearlySales,
+                    ps.partnershipID
                      
                     FROM booking b
                     LEFT JOIN  confirmedbooking cb ON b.bookingID = cb.bookingID
                     LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                     LEFT JOIN custompackageitem cpi ON b.customPackageID = cpi.customPackageID
+                    LEFT JOIN service s ON (cpi.serviceID = s.serviceID  OR bs.serviceID = s.serviceID)
+                    LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
+                     
                     WHERE cb.paymentApprovalStatus = ?
-                    AND cb.paymentStatus = ? 
-                    AND YEAR(b.startDate) = YEAR(CURDATE())
+                    AND cb.paymentStatus = ?
+                    AND YEAR(b.startDate) = YEAR(CURDATE()) 
                     AND DATE(b.endDate) < CURDATE()
+                    AND ps.partnershipID = ?
                     GROUP BY 
-                        YEAR(b.startDate)
+                     year
                     ORDER BY 
-                        YEAR(b.startDate)
+                     year
         ");
-    $getYearlySales->bind_param("ii", $paymentApprovalID, $paymentStatusID);
+    $getYearlySales->bind_param("iii", $paymentApprovalID, $paymentStatusID,  $partnershipID);
     if (!$getYearlySales->execute()) {
         error_log("Failed executing monthly sales in a year. Error: " . $getYearlySales->error);
     }
     $sales = [];
-    $year = '';
+    $years = [];
     $result = $getYearlySales->get_result();
     if ($result->num_rows > 0) {
         while ($data = $result->fetch_assoc()) {
-
             $sales[] = (float) $data['yearlySales'];
-            $year = $data['year'] ?? DATE('Y');
+            $years[] = 'Year —' . $data['year'] ?? 'Year —' . DATE('Y');
         }
+    } else {
+        error_log("No data " . $getYearlySales->error);
     }
     ?>
-
-
-
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -377,7 +381,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- <script src="path/to/chartjs/dist/chart.umd.js"></script> -->
 
     <!-- This is shown if no data to display -->
-    <script src="../../Assets/JS/ChartNoData.js"></script>
+    <!-- <script src="../../Assets/JS/ChartNoData.js"></script> -->
 
     <script>
         const bar = document.getElementById("revenueBar").getContext('2d');
@@ -385,11 +389,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         const myBarChart = new Chart(bar, {
             type: 'bar',
             data: {
-                labels: <?= json_encode($year) ?>,
+                labels: <?= json_encode($years) ?>,
                 datasets: [{
                     label: "Yearly Sales Report",
-                    data: [<?= json_encode($sales) ?>],
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    data: <?= json_encode($sales) ?>,
+                    backgroundColor: 'rgba(14, 194, 194, 1)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1
                 }]

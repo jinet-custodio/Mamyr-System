@@ -242,7 +242,7 @@ if (isset($_SESSION['error-partnership'])) {
 
         <a href="#" id="partner-link" class="categoryLink">
             <div class="card category-card " style="width: 20rem; display: flex; flex-direction: column;">
-                <img class="card-img-top" src="../../Assets/images/AdminImages/DisplayPartnershipImages/partners.jpg"
+                <img class="card-img-top" src="../../Assets/Images/AdminImages/DisplayPartnershipImages/partners.jpg"
                     alt="Partners">
 
                 <div class="category-body m-auto">
@@ -253,7 +253,7 @@ if (isset($_SESSION['error-partnership'])) {
 
         <a href="#" id="request-link" class="categoryLink">
             <div class="card category-card " style="width: 20rem; display: flex; flex-direction: column;">
-                <img class="card-img-top" src="../../Assets/images/AdminImages/DisplayPartnershipImages/request.jpg"
+                <img class="card-img-top" src="../../Assets/Images/AdminImages/DisplayPartnershipImages/request.jpg"
                     alt="Requests">
 
                 <div class="category-body m-auto">

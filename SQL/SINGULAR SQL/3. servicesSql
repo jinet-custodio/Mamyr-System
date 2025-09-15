@@ -70,7 +70,7 @@ CREATE TABLE menuitem (
     FOREIGN KEY (availabilityID) REFERENCES serviceavailability(availabilityID)
 );
 
-CREATE TABLE foodPricing (
+CREATE TABLE foodpricing (
     pricingID INT PRIMARY KEY AUTO_INCREMENT,
     pricePerHead DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     ageGroup ENUM('Adult', 'Child', 'Both') NOT NULL DEFAULT 'Adult',
@@ -90,7 +90,7 @@ CREATE TABLE custompackage (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (userID) REFERENCES user(userID),
-    FOREIGN KEY (foodPricingPerHeadID) REFERENCES foodPricing(pricingID)
+    FOREIGN KEY (foodPricingPerHeadID) REFERENCES foodpricing(pricingID)
 );
 
 ALTER TABLE custompackage 
@@ -118,9 +118,9 @@ CREATE TABLE custompackageitem (
     foodItemID INT  NULL,
     servicePrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
 
-    FOREIGN KEY (customPackageID) REFERENCES customPackage(customPackageID),
+    FOREIGN KEY (customPackageID) REFERENCES custompackage(customPackageID),
     FOREIGN KEY (serviceID) REFERENCES service(serviceID),
-    FOREIGN KEY (foodItemID) REFERENCES menuItem(foodItemID) 
+    FOREIGN KEY (foodItemID) REFERENCES menuitem(foodItemID) 
 );
 
 CREATE TABLE serviceunavailabledate (

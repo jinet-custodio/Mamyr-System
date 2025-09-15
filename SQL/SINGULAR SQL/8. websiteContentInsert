@@ -74,4 +74,4 @@ INSERT INTO `resortinfo`(`resortInfoTitle`, `resortInfoName`, `resortInfoDetail`
 ('BusinessInformation', 'ShortDesc2', ' Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional. '),
 ('BusinessInformation', 'FBLink', 'https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/'),
 ('BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com'),
-('BusinessInformation', 'Logo', 'MamyrLogo.png');
+('Logo', 'MamyrLogo.png', 'Mamyr Logo');
