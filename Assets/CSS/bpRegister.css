@@ -412,19 +412,17 @@ input[type="password"]::-webkit-search-cancel-button {
     padding-bottom: 2vw;
   }
 
-<<<<<<< Updated upstream
   .repInfoFormContainer {
     padding: 0vw !important;
     gap: 1vw;
     margin-top: 4vw !important;
-=======
+}
   .busInfoLabel,
   .busProofLabel {
     font-size: clamp(14px, 4vw, 20px);
     margin-top: 1vw;
     font-weight: bold;
     text-align: center;
->>>>>>> Stashed changes
   }
   
   .repInfoLabel {
