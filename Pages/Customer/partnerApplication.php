@@ -111,9 +111,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
             ?>
 
+<<<<<<< Updated upstream
             <div class="notification-container position-relative">
                 <button type="button" class="btn position-relative" data-bs-toggle="modal"
                     data-bs-target="#notificationModal">
+=======
+            <div class="nav-item notification-container position-relative">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+>>>>>>> Stashed changes
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -126,7 +131,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </ul>
 
 
-        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
