@@ -61,11 +61,17 @@ if (isset($_SESSION['error'])) {
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/roomList.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css">
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
+    <!-- Link to Box Icons and Fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
 <body>
@@ -159,57 +165,77 @@ if (isset($_SESSION['error'])) {
         </div>
     </div>
 
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg" id="navbar">
+        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <a class="nav-link" href="adminDashboard.php">
-            <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
-            <h5>Dashboard</h5>
-        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav w-100 me-10 d-flex justify-content-around px-2" id="navUL">
 
-        <a class="nav-link" href="booking.php">
-            <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
-            <h5>Bookings</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link " href="adminDashboard.php">
+                        <i class="fa-solid fa-grip navbar-icon"></i>
+                        <h5>Dashboard</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="booking.php">
+                        <i class="fa-solid fa-calendar-days navbar-icon"></i>
+                        <h5>Bookings</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link active" href="#">
-            <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
-            <h5>Rooms</h5>
-        </a>
+                <li class="nav-item ">
+                    <a class="nav-link active" href="roomList.php">
+                        <i class="fa-solid fa-hotel navbar-icon"></i>
+                        <h5>Rooms</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="services.php">
-            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
-            <h5>Services</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="services.php">
+                        <i class="fa-solid fa-bell-concierge navbar-icon"></i>
+                        <h5>Services</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="transaction.php">
-            <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
-            <h5>Payments</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="transaction.php">
+                        <i class="fa-solid fa-credit-card navbar-icon"></i>
+                        <h5>Payments</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="revenue.php">
+                        <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
+                        <h5>Revenue</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="revenue.php">
-            <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
-            <h5>Revenue</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="displayPartnership.php">
+                        <i class="fa-solid fa-handshake navbar-icon"></i>
+                        <h5>Partnerships</h5>
+                    </a>
+                </li>
 
-
-        <a class="nav-link" href="displayPartnership.php">
-            <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
-            <h5>Partnerships</h5>
-        </a>
-
-        <a class="nav-link" href="editWebsite/editWebsite.php">
-            <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
-            <h5>Edit Website</h5>
-        </a>
-
-        <a href="../../Function/Admin/logout.php" class="btn btn-danger">
-            Log Out
-        </a>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="editWebsite/editWebsite.php">
+                        <i class="fa-solid fa-pen-to-square navbar-icon"></i>
+                        <h5>Edit Website</h5>
+                    </a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
+                        Log Out
+                    </a>
+                </li>
+            </ul>
+        </div>
     </nav>
-
 
     <!-- Notification Modal -->
     <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
@@ -427,7 +453,37 @@ if (isset($_SESSION['error'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
+    <!-- Responsive Navbar -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const icons = document.querySelectorAll('.navbar-icon');
+            const navbarUL = document.getElementById('navUL');
+            const nav = document.getElementById('navbar')
 
+            function handleResponsiveNavbar() {
+                if (window.innerWidth <= 991.98) {
+                    navbarUL.classList.remove('w-100');
+                    navbarUL.style.position = "fixed";
+                    nav.style.margin = "0";
+                    nav.style.maxWidth = "100%";
+                    icons.forEach(icon => {
+                        icon.style.display = "none";
+                    })
+                } else {
+                    navbarUL.classList.add('w-100');
+                    navbarUL.style.position = "relative";
+                    nav.style.margin = "20px auto";
+                    nav.style.maxWidth = "80vw";
+                    icons.forEach(icon => {
+                        icon.style.display = "block";
+                    })
+                }
+            }
+
+            handleResponsiveNavbar();
+            window.addEventListener('resize', handleResponsiveNavbar);
+        });
+    </script>
 
 
     <!-- Notification Ajax -->
