@@ -52,6 +52,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
+
+    <!-- icon libraries for font-awesome and box icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
 <body>
@@ -89,167 +95,198 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     }
     ?>
 
-    <!-- Side Bar -->
-    <div class="sidebar">
-        <div class="home">
-            <a href="../Admin/adminDashboard.php">
-                <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-            </a>
-        </div>
-        <div class="sidebar-header">
-            <h5>User Account</h5>
-            <div class="profileImage">
-                <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="d-flex justify-content-center" id="toggle-container">
+                <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
             </div>
-        </div>
-        <ul class="list-group">
-            <li>
-                <a href="account.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/user.png" alt="" class="sidebar-icon">
-                    Profile Information
-                </a>
-            </li>
-            <li>
-                <a href="loginSecurity.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/login_security.png" alt="" class="sidebar-icon">
-                    Login & Security
-                </a>
-            </li>
+            <div class="home">
+                <?php if ($role === 'Customer') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } elseif ($role === 'Admin') { ?>
+                    <a href="../Admin/adminDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } elseif ($role === 'Business Partner') { ?>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } ?>
+            </div>
 
-            <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                <li>
-                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                        <img src="../../Assets/Images/Icon/bookingHistory.png" alt="Booking History"
-                            class="sidebar-icon">
-                        Payment & Booking History
+            <div class="sidebar-header text-center">
+                <h5 class="sidebar-text">User Account</h5>
+                <div class="profileImage">
+                    <img src="<?= htmlspecialchars($image) ?>"
+                        alt="<?= htmlspecialchars($data['firstName']) ?> Picture">
+                </div>
+            </div>
+            <ul class="list-group sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="account.php" class="list-group-item ">
+                        <i class="fa-solid fa-user sidebar-icon"></i>
+                        <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
-            <?php } elseif ($role === 'Admin') { ?>
-                <li>
-                    <a href="userManagement.php" class="list-group-item active">
-                        <img src="../../Assets/Images/Icon/usermanagement.png" alt="" class="sidebar-icon">
-                        Manage Users
+
+                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                            <i class="fa-solid fa-table-list sidebar-icon"></i>
+                            <span class="sidebar-text">Payment & Booking History</span>
+                        </a>
+                    </li>
+                <?php } elseif ($role === 'Admin') { ?>
+                    <li class="sidebar-item">
+                        <a href="userManagement.php" class="list-group-item active">
+                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if ($role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="bpBookings.php" class="list-group-item">
+                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpServices.php" class="list-group-item">
+                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpSales.php" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Sales</span>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <li class="sidebar-item">
+                    <a href="loginSecurity.php" class="list-group-item">
+                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
-            <?php } ?>
-            <!-- <li>
-                <a href="" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/systempreferences.png" alt="" class="sidebar-icon">
-                    System Preferences
-                </a>
-            </li> -->
-            <!-- <li>
-                <a href="revenue.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/revenue.png" alt="" class="sidebar-icon">
-                    Revenue
-                </a>
-            </li> -->
-            <li>
-                <a href="deleteAccount.php" class="list-group-item">
-                    <img src="../../Assets/Images/Icon/delete-user.png" alt="" class="sidebar-icon">
-                    Delete Account
-                </a>
-            </li>
-            <li>
-                <button type="button" class="btn btn-outline-danger" id="logoutBtn"> <img src="../../Assets/Images/Icon/logout.png" alt="" class="sidebar-icon">
-                    Logout</button>
-            </li>
-        </ul>
-    </div>
-    <!-- End Side Bar -->
-
-    <div class="wrapper">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title">User Management</h5>
-                <a href="addAccount.php" class="btn btn-light add-button"><img src="../../Assets/Images/Icon/addUser.png" alt=""> Add an Account</a>
-            </div>
-            <div class="card-body">
-                <table class="table" id="usertable">
-                    <thead>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Date Created</th>
-                        <th scope="col">Action</th>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $userStatusID = 4;
-                        $selectUsers = $conn->prepare("SELECT u.*, ut.typeName as roleName, stat.statusName as status
+                <li class="sidebar-item">
+                    <a href="deleteAccount.php" class="list-group-item">
+                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
+                        <span class="sidebar-text">Delete Account</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
+                        style="margin: 3vw auto;">
+                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                        <span class="sidebar-text ms-2">Logout</span>
+                    </button>
+                </li>
+            </ul>
+        </aside> <!-- End Side Bar -->
+        <!-- End Side Bar -->
+        <!-- Customer Information Container -->
+        <main class="main-content" id="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">User Management</h5>
+                    <a href="addAccount.php" class="btn btn-light add-button"><img src="../../Assets/Images/Icon/addUser.png" alt=""> Add an Account</a>
+                </div>
+                <div class="card-body">
+                    <table class="table" id="usertable">
+                        <thead>
+                            <th scope="col">Name</th>
+                            <th scope="col" class="emailCol">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date Created</th>
+                            <th scope="col">Action</th>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $userStatusID = 4;
+                            $selectUsers = $conn->prepare("SELECT u.*, ut.typeName as roleName, stat.statusName as status
                             FROM user u
                             INNER JOIN usertype ut ON u.userRole = ut.userTypeID
                             INNER JOIN userstatus stat ON u.userStatusID = stat.userStatusID
                             WHERE u.userID != ? AND u.userRole != ? AND u.userStatusID != ?
                             ORDER BY u.userRole DESC");
-                        $selectUsers->bind_param("iii", $userID, $userRole, $userStatusID);
-                        $selectUsers->execute();
-                        $selectUsersResult = $selectUsers->get_result();
-                        if ($selectUsersResult->num_rows > 0) {
-                            $users = $selectUsersResult->fetch_all(MYSQLI_ASSOC);
-                            foreach ($users as $userData) {
-                                $middleInitial = trim($userData['middleInitial']);
-                                $name = ucfirst($userData['firstName']) . ($middleInitial ? " " . ucfirst($middleInitial) . "." : "") . " " . ucfirst($userData['lastName']);
-                                $status =  $userData['status'];
-                                $role = $userData['roleName'];
-                                $dataCreated = date("F d, Y", strtotime($userData['createdAt']));
-                                if ($status === 'Verified') {
-                                    // $class = 'badge rounded-pill bg-success text-light';
-                                    $image = '../../Assets/Images/Icon/greencircle.png';
-                                } elseif ($status === 'Pending') {
-                                    // $class = 'badge  rounded-pill bg-warning text-dark';
-                                    $image = '../../Assets/Images/Icon/yellowcircle.png';
+                            $selectUsers->bind_param("iii", $userID, $userRole, $userStatusID);
+                            $selectUsers->execute();
+                            $selectUsersResult = $selectUsers->get_result();
+                            if ($selectUsersResult->num_rows > 0) {
+                                $users = $selectUsersResult->fetch_all(MYSQLI_ASSOC);
+                                foreach ($users as $userData) {
+                                    $middleInitial = trim($userData['middleInitial']);
+                                    $name = ucfirst($userData['firstName']) . ($middleInitial ? " " . ucfirst($middleInitial) . "." : "") . " " . ucfirst($userData['lastName']);
+                                    $status =  $userData['status'];
+                                    $role = $userData['roleName'];
+                                    $dataCreated = date("F d, Y", strtotime($userData['createdAt']));
+                                    if ($status === 'Verified') {
+                                        $image = '../../Assets/Images/Icon/greencircle.png';
+                                    } elseif ($status === 'Pending') {
+                                        $image = '../../Assets/Images/Icon/yellowcircle.png';
+                                    }
+                            ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($name) ?></td>
+                                        <td class="emailCol"><?= htmlspecialchars($userData['email']) ?> </td>
+                                        <td class="user-role"><?= htmlspecialchars($role) ?></td>
+                                        <td class="statusText">
+                                            <span class="status-label"><?= htmlspecialchars(ucfirst($userData['status'])) ?></span>
+                                            <img src="<?= $image ?>" alt="" class="status-image">
+                                        </td>
+                                        <td><?= htmlspecialchars($dataCreated) ?> </td>
+                                        <td>
+                                            <div class="button-container">
+                                                <form action="viewUser.php" method="POST" id="viewForm">
+                                                    <input type="hidden" name="selectedUserID" value="<?= htmlspecialchars($userData['userID']) ?>">
+                                                    <button type="submit" class="btn btn-info viewBtn" name="viewUser">View</button>
+                                                </form>
+                                                <button type="button" class="btn btn-danger deleteUserAccount" data-userid="<?= $userData['userID'] ?>">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                            <?php
                                 }
-                        ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($name) ?></td>
-                                    <td><?= htmlspecialchars($userData['email']) ?> </td>
-                                    <td><?= htmlspecialchars($role) ?> </td>
-                                    <td><?= htmlspecialchars(ucfirst($userData['status'])) ?><img src="<?= $image ?>" alt="" class="status-image"></td>
-                                    <td><?= htmlspecialchars($dataCreated) ?> </td>
-                                    <td>
-                                        <div class="button-container">
-                                            <form action="viewUser.php" method="POST">
-                                                <input type="hidden" name="selectedUserID" value="<?= htmlspecialchars($userData['userID']) ?>">
-                                                <button type="submit" class="btn btn-info" name="viewUser">View</button>
-                                            </form>
-                                            <button type="button" class="btn btn-danger deleteUserAccount" data-userid="<?= $userData['userID'] ?>">Delete</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                        <?php
                             }
-                        }
-                        ?>
+                            ?>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
-                <!-- Confirmation Modal -->
-                <form action="../../Function/Account/deleteUserAccount.php" method="POST">
-                    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="image w-100 text-center">
-                                    <img src="../../Assets/Images/Icon/warningRed.png" alt="warning icon" class="warning-image">
-                                </div>
-                                <input type="hidden" name="selectedUserID" value="<?= htmlspecialchars($userData['userID']) ?>">
-                                <div class="modal-body">
-                                    <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
-                                    <p class="modal-title text-center mb-2">Are you sure?</p>
-                                    <p class="modal-text text-center mb-2">Deleting this account will remove all of their data from the system. This action cannot be reverted.</p>
-                                    <div class="button-container">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                        <button type="submit" class="btn btn-primary" name="yesDelete" id="yesDelete">Yes</button>
+                    <!-- Confirmation Modal -->
+                    <form action="../../Function/Account/deleteUserAccount.php" method="POST">
+                        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="image w-100 text-center">
+                                        <img src="../../Assets/Images/Icon/warningRed.png" alt="warning icon" class="warning-image">
+                                    </div>
+                                    <input type="hidden" name="selectedUserID" value="<?= htmlspecialchars($userData['userID']) ?>">
+                                    <div class="modal-body">
+                                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                        <p class="modal-title text-center mb-2">Are you sure?</p>
+                                        <p class="modal-text text-center mb-2">Deleting this account will remove all of their data from the system. This action cannot be reverted.</p>
+                                        <div class="button-container modal-buttons">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                            <button type="submit" class="btn btn-primary" name="yesDelete" id="yesDelete">Yes</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Bootstrap Link -->
@@ -269,13 +306,122 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     emptyTable: "No users found."
                 },
                 columnDefs: [{
-                    width: "20%",
-                    target: 4
-                }]
+                        targets: 0,
+                        width: "15%"
+                    },
+                    {
+                        targets: 1,
+                        width: "23%"
+                    },
+                    {
+                        targets: 2,
+                        width: "13%"
+                    },
+                    {
+                        targets: 3,
+                        width: "15%"
+                    },
+                    {
+                        targets: 4,
+                        width: "17%"
+                    },
+                    {
+                        targets: 5,
+                        width: "17%"
+                    }
+                ]
             });
         });
     </script>
+    <script>
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container');
+            const viewBtns = document.querySelectorAll('.viewBtn');
+            const deleteBtns = document.querySelectorAll('.deleteUserAccount');
+            const roles = document.querySelectorAll('.user-role');
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
 
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 600) {
+                    sidebar.classList.add('collapsed');
+                    viewBtns.forEach(viewBtn => {
+                        viewBtn.innerHTML = '<i class="fa-regular fa-eye"></i>';
+                    })
+                    deleteBtns.forEach(deleteBtn => {
+                        deleteBtn.innerHTML = '<i class="fa-solid fa-user-xmark"></i>';
+                    })
+                    roles.forEach(role => {
+                        console.log(role.innerHTML);
+                        if (role.innerHTML == "Customer") {
+                            role.innerHTML = '<i class="fa-solid fa-user status-icon"></i>';
+                        } else if (role.innerHTML == "Partner") {
+                            role.innerHTML = '<i class="fa-solid fa-handshake status-icon"></i>';
+                        } else if (role.innerHTML == "Admin") {
+                            role.innerHTML = '<i class="fa-solid fa-user-tie status-icon"></i>';
+                        } else if (role.innerHTML == "PartnerRequest") {
+                            role.innerHTML = '<i class="fa-solid fa-hourglass-half status-icon"></i>';
+                        }
+                    })
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    })
+                    sidebar.classList.remove('collapsed');
+                    viewBtns.forEach(viewBtn => {
+                        viewBtn.innerHTML = 'View';
+                    })
+                    deleteBtns.forEach(deleteBtn => {
+                        deleteBtn.innerHTML = 'Delete';
+                    })
+                    roles.forEach(role => {
+                        console.log(role.innerHTML);
+                        if (role.innerHTML == '<i class="fa-solid fa-user status-icon"></i>') {
+                            role.innerHTML = 'Customer';
+                        } else if (role.innerHTML == '<i class="fa-solid fa-handshake status-icon"></i>') {
+                            role.innerHTML = 'Partner';
+                        } else if (role.innerHTML == '<i class="fa-solid fa-user-tie status-icon"></i>') {
+                            role.innerHTML = 'Admin';
+                        } else if (role.innerHTML == '<i class="fa-solid fa-hourglass-half status-icon"></i>') {
+                            role.innerHTML = 'PartnerRequest';
+                        }
+                    })
+                }
+                //change the text into icons when the screen width shrinks to below 1024px
+                if (window.innerWidth <= 1024) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                }
+            }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
+        });
+    </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
