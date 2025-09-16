@@ -24,23 +24,6 @@ body {
   background: #a1c8c7 !important;
 }
 
-.topSection {
-  /* border: 1px solid black; */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5vw;
-}
-
-.menus {
-  /* border: 1px solid black; */
-  padding: 0.5vw;
-  margin-right: 2vw;
-  display: flex;
-  align-items: center;
-  gap: 2vw;
-}
-
 .dashTitleContainer {
   margin-left: 1vw;
 }
@@ -54,81 +37,15 @@ body {
   margin-left: 1vw;
 }
 
-.adminTitle {
-  margin-top: 1rem;
-  font-family: "Lora" !important;
-  /* font-weight: bold; */
-  font-size: 24px;
-}
-
-.admin {
-  img {
-    height: 70px;
-    width: 70px;
-    border-radius: 3rem;
-  }
-}
-
-.navbar {
-  font-family: "Lora";
-  border-radius: 15px;
-  max-width: 80vw;
-  margin: 20px auto;
-  padding: 1rem !important;
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  h5 {
-    font-size: 20px !important;
-  }
-}
-
-.nav-link {
-  display: flex !important;
-  margin: auto;
-  flex-direction: column;
-  align-items: center;
-  color: black;
-  text-decoration: none;
-}
-
-.nav-link.active:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link:after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 100%;
-  /* position: absolute; */
-  border-bottom: 4px solid rgb(126, 203, 242) !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-
-.nav-link:hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link img {
-  height: 2vw;
-  width: auto;
-  object-fit: contain;
-}
-
 .categories {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  /* margin-top: 5vw; */
+  justify-content: space-around;
+  width: 85%;
+  margin: 0 auto;
 }
 
 .category-card {
-  height: 60vh !important;
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 
@@ -148,7 +65,7 @@ body {
 .category-card img {
   border-radius: 2vw 2vw 2vw 2vw !important;
   padding: 1vw;
-  height: 18vw !important;
+  width: 100%;
   object-fit: cover;
 }
 
@@ -162,7 +79,7 @@ body {
 
 .categoryLink {
   text-decoration: none;
-
+  width: 48%;
   &:hover {
     text-decoration: none !important;
   }
@@ -230,74 +147,47 @@ h4 {
 }
 
 /* Tablet portrait */
-@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-.logo {
-  width: 15vw;
-  margin-left: 4px;
-}
-
-  .admin {
-  img {
-    margin-top: 1rem;
-    height: 70px;
-    width: 70px;
-    border-radius: 3rem;
-  }
-}
-
-  .navbar {
-    max-width: 90vw;
-    height: 12vw;
-    margin: 18px auto;
-    h5 {
-    font-size: 14.5px !important;
-    margin-top: 10px;  }
+@media only screen and (min-width: 600px) and (max-width: 1025px) {
+  .category-card img {
+    border-radius: 2vw !important;
+    padding: 1vw;
+    height: 70% !important;
+    object-fit: cover;
   }
 
-  .nav-link img {
-    height: 2.8vw;
-    width: auto;
-    object-fit: contain;
-    margin-top: 12px;
-}
+  .category-title {
+    font-size: clamp(3.5vw, 3.3vw, 3.1vw);
+  }
 
-.category-card img {
-  border-radius: 2vw 2vw 2vw 2vw !important;
-  padding: 1vw;
-  height: 35vw !important;
-  object-fit: cover;
-}
-  .card {
-    padding: 1.5vw;
-    max-width: 85vw;
-    height: 300px !important;
-}
+  .category-card {
+    height: 50vh !important;
+  }
 
-td,
+  td,
   th {
     text-align: center !important;
     vertical-align: middle !important;
     font-size: 1.8vw;
-}
+  }
 
   h4 {
     text-align: center;
     margin-top: -4vw !important;
-}
+  }
 }
 
 /* Phones */
 @media only screen and (max-width: 599px) {
-td,
+  td,
   th {
     text-align: center !important;
     vertical-align: middle !important;
     font-size: 2.5vw;
-}
+  }
   .page-title {
-  font-family: "Lora";
-  margin-top: -15px !important;
-}
+    font-family: "Lora";
+    margin-top: -15px !important;
+  }
   .topSection {
     display: flex !important;
     justify-content: space-between !important;
@@ -311,7 +201,6 @@ td,
   .logo {
     width: 25vw;
   }
-
 
   .notificationIcon,
   .messageIcon {
@@ -341,79 +230,31 @@ td,
     display: none !important;
   }
 
-  .navbar {
-    font-family: "Lora";
-    background: none !important;
-    background-color: white !important;
-    margin-top: 30px;
+  .categories {
+    margin-top: 10vh;
   }
 
-  h5 {
-    font-size: 12px !important;
-    text-align: left !important;
+  .category-card {
+    padding: 1vw !important;
+    max-width: 100% !important;
+    height: 30vh !important;
   }
-
-  .nav-link img {
-    display: none;
+  .category-card img {
+    height: 70% !important;
+    object-fit: cover;
   }
-  .navbar-collapse {
-    background-color: white;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column !important;   
-    align-items: center !important;     
-                 
+  .category-title {
+    font-size: clamp(4.6vw, 4.8vw, 5vw) !important;
   }
-  .nav-link {
-    color: black !important;
-    text-align: center;
-    width: 100%;             
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 14px;
-    gap: 1.8vw;
-    margin-top: 5px;
-  }
-  .nav-link.active:after {
-  width: 130px;
-  left: 0;
-  margin-top: -2vw;
-  margin-bottom: 15px;
-}
-  .navbar-toggler {
-    position: absolute;
-    top: 15px;      
-    right: 15px;   
-    background-color: #fff !important;
-    border: 1px solid #ccc;
-    z-index: 1050; 
-  }
-
-  .navbar .nav-link .btn-danger {
-  display: block;
-  width: 100%;        
-  margin: 10px;  
-  padding: 7px 0;
-  margin-top: -1px;
-  margin: -6px 0 -8px 0;
-}
-.category-card {
-  padding: 1vw !important;
-    max-width: 45vw !important;
-    height: 50vw !important;
-}
-.category-card img {
-  height: 250px !important;     
-  object-fit: cover; 
-}
-.category-title {
-  font-size: 18px !important;   
-  margin-top: 10px !important;
-}
-#partner-card {
-  max-width: 410px !important;   
-  width: 90%;       
-  margin: auto;     
 }
 
+@media only screen and (max-width: 400px) {
+  .categoryLink {
+    width: 70%;
+    height: 40vh;
+  }
+
+  .category-card {
+    height: 80% !important;
+  }
 }
