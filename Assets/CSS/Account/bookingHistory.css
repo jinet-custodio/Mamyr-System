@@ -283,10 +283,6 @@ label {
 }
 
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-  .sidebar {
-    width: 33vw;
-  }
-
   .list-group {
     font-size: clamp(2.5vw, 2.2vw, 2vw);
   }

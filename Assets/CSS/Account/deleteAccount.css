@@ -40,37 +40,37 @@
 }
 
 .sidebar .sidebar-text {
-    display: inline-block;
-    transition: opacity 0.2s ease;
+  display: inline-block;
+  transition: opacity 0.2s ease;
 }
 
 .sidebar.collapsed .sidebar-text {
-    display: none;
-    width: 0;
-    overflow: hidden;
+  display: none;
+  width: 0;
+  overflow: hidden;
 }
 
 .sidebar-icon {
   font-size: 2vw;
-    min-width: 3vw;
-    text-align: center;
-    margin-right: 10px;
+  min-width: 3vw;
+  text-align: center;
+  margin-right: 10px;
 }
 
 /* Sidebar toggle button */
 .toggle-button {
-    background: none;
-    border: none;
-    margin: 10px;
+  background: none;
+  border: none;
+  margin: 10px;
 }
 
-.sidebar-item, .list-group-item {
+.sidebar-item,
+.list-group-item {
   display: flex;
   align-items: center;
   justify-content: start;
   width: 100%;
 }
-
 
 .home {
   padding: 2vw;
@@ -134,7 +134,7 @@
   text-align: center;
   color: black;
   padding: 10px;
-  font-size: clamp(2vw, 1.8vw, 1.6vw);
+  font-size: clamp(1.6vw, 1.4vw, 1.3vw);
 }
 
 #logoutBtn:hover {
@@ -183,12 +183,12 @@
   }
   .modal-title {
     font-family: "Poppins Black";
-    font-size: clamp(2.3vw, 2.1vw, 2vw) ;
+    font-size: clamp(2.3vw, 2.1vw, 2vw);
   }
 
   .modal-text {
     font-family: "Poppins";
-    font-size: clamp(1.7vw, 1.5vw, 1.4vw) ;
+    font-size: clamp(1.7vw, 1.5vw, 1.4vw);
   }
 
   .button-container {
@@ -198,7 +198,7 @@
     justify-content: space-around;
     button {
       width: 8vw;
-      font-size: clamp(1.5vw, 1.4vw, 1.3vw) ;
+      font-size: clamp(1.5vw, 1.4vw, 1.3vw);
     }
   }
 }
@@ -261,307 +261,307 @@
 }
 
 #confirmationBtn {
- font-size: clamp(1.4vw, 1.2vw, 1.1vw);
+  font-size: clamp(1.4vw, 1.2vw, 1.1vw);
 }
-
 
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-.sidebar{
-  width: 33vw;
-}
+  .sidebar {
+    width: 33vw;
+  }
 
-.list-group {
-  font-size: clamp(2.5vw, 2.2vw, 2vw);
-}
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
 
-.card-title {
-  font-size: clamp(4vw, 3.9vw, 3.8vw);
-}
+  .card-title {
+    font-size: clamp(4vw, 3.9vw, 3.8vw);
+  }
 
-div.dt-container div.dt-layout-row:not(.dt-layout-table) {
-  display: flex !important;
-}
+  div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+    display: flex !important;
+  }
 
-.sidebar-icon {
-  font-size: clamp(2.6vw, 2.3vw, 2vw);  
-}
+  .sidebar-icon {
+    font-size: clamp(2.6vw, 2.3vw, 2vw);
+  }
 
-.sidebar-header h5 {
-  margin-top: 2vw !important;
-  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-}
+  .sidebar-header h5 {
+    margin-top: 2vw !important;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
 
-.profileImage {
+  .profileImage {
     img {
       height: clamp(9vw, 8vw, 7vw);
     }
     margin: 1vw auto;
   }
 
-.card-text{
-  font-size: clamp(2vw, 1.8vw, 1.6vw);
-}
-
-.main-content {
-  margin-left: 37vw;
-  margin-top: 10vh;
-  padding: 0.4rem;
-  width: 82%;
-}
-
-#confirmationModal {
-  .modal-title {
-  font-size: clamp(3vw, 2.9vw, 2.8vw);
-  }    
-  .modal-text {
-    font-size: clamp(2.7vw, 2.5vw, 2.3vw);
+  .card-text {
+    font-size: clamp(2vw, 1.8vw, 1.6vw);
   }
-  .button-container button {
-    width: 9vw !important;
-    font-size: clamp(2.7vw, 2.5vw, 2.3vw);
-  }
-}
 
-.card-body {
-  .button-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 3.5vw;
+  .main-content {
+    margin-left: 37vw;
+    margin-top: 10vh;
+    padding: 0.4rem;
+    width: 82%;
   }
-  .btn-primary, .btn-secondary {
-    width: 30%;
+
+  #confirmationModal {
+    .modal-title {
+      font-size: clamp(3vw, 2.9vw, 2.8vw);
+    }
+    .modal-text {
+      font-size: clamp(2.7vw, 2.5vw, 2.3vw);
+    }
+    .button-container button {
+      width: 9vw !important;
+      font-size: clamp(2.7vw, 2.5vw, 2.3vw);
+    }
   }
-}
-.swal2-html-container {
-  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
-}
 
-.edit,.swal2-confirm, #saveBtn, #cancelBtn {
-  font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-}
+  .card-body {
+    .button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 3.5vw;
+    }
+    .btn-primary,
+    .btn-secondary {
+      width: 30%;
+    }
+  }
+  .swal2-html-container {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
 
-.swal2-title {
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .swal2-title {
     font-size: clamp(3.3vw, 3vw, 2.8vw);
-}
-
-#confirmationBtn {
- font-size: clamp(2.4vw, 2.2vw, 2vw); 
-}
-
-.modal-header {
-  h5 {
-   font-size: clamp(2.8vw, 2.6vw, 2.4vw);  
   }
-  h6 {
-    font-size: clamp(2.2vw, 2vw, 1.8vw);
+
+  #confirmationBtn {
+    font-size: clamp(2.4vw, 2.2vw, 2vw);
   }
-}
 
-.modal-body {
-  p, input, button {
-    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  .modal-header {
+    h5 {
+      font-size: clamp(2.8vw, 2.6vw, 2.4vw);
+    }
+    h6 {
+      font-size: clamp(2.2vw, 2vw, 1.8vw);
+    }
   }
-}
 
-
+  .modal-body {
+    p,
+    input,
+    button {
+      font-size: clamp(2.2vw, 2vw, 1.8vw);
+    }
+  }
 }
 
 /* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
-.card-title {
-  font-size: clamp(5.5vw, 5vw, 4.5vw);
-}
+  .card-title {
+    font-size: clamp(5.5vw, 5vw, 4.5vw);
+  }
 
-.sidebar{
-  width: 35vw;
-}
+  .sidebar {
+    width: 35vw;
+  }
 
-.list-group {
-  font-size: clamp(2.5vw, 2.2vw, 2vw);
-}
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
 
-.sidebar-icon {
-  font-size: clamp(2.6vw, 2.3vw, 2vw);  
-}
+  .sidebar-icon {
+    font-size: clamp(2.6vw, 2.3vw, 2vw);
+  }
 
-.sidebar-header h5, .card-header {
-  margin-top: 2vw;
-  font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-}
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
 
-.profileImage {
+  .profileImage {
     img {
-       height: clamp(8vw, 7vw, 6vw);
+      height: clamp(8vw, 7vw, 6vw);
     }
     margin: 1vw auto;
-}
-.modal-header {
-  h5 {
-   font-size: clamp(2.8vw, 2.6vw, 2.4vw);  
   }
-  h6 {
-    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  .modal-header {
+    h5 {
+      font-size: clamp(2.8vw, 2.6vw, 2.4vw);
+    }
+    h6 {
+      font-size: clamp(2.2vw, 2vw, 1.8vw);
+    }
   }
-}
 
-.modal-body {
-  p, input, button {
-    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  .modal-body {
+    p,
+    input,
+    button {
+      font-size: clamp(2.2vw, 2vw, 1.8vw);
+    }
   }
-}
-.swal2-html-container {
-  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
-}
-
-.card-text{
-  font-size: clamp(2vw, 1.8vw, 1.6vw);
-}
-
-.main-content {
-  margin-left: 37vw;
-  margin-top: 10vh;
-  padding: 0.4rem;
-  width: 82%;
-}
-
-#confirmationModal {
-  .modal-title {
-  font-size: clamp(3vw, 2.9vw, 2.8vw);
-  }    
-  .modal-text {
-    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  .swal2-html-container {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
   }
-  button {
-    width: 9vw !important;
-    font-size: clamp(2.2vw, 2vw, 1.8vw);
-    margin-top: 1vw;
-  }
-}
 
-
-.card-body {
-  .button-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 3.5vw;
+  .card-text {
+    font-size: clamp(2vw, 1.8vw, 1.6vw);
   }
-  button {
-    width: 60%;
-  }
-}
 
-.swal2-title {
+  .main-content {
+    margin-left: 37vw;
+    margin-top: 10vh;
+    padding: 0.4rem;
+    width: 82%;
+  }
+
+  #confirmationModal {
+    .modal-title {
+      font-size: clamp(3vw, 2.9vw, 2.8vw);
+    }
+    .modal-text {
+      font-size: clamp(2.2vw, 2vw, 1.8vw);
+    }
+    button {
+      width: 9vw !important;
+      font-size: clamp(2.2vw, 2vw, 1.8vw);
+      margin-top: 1vw;
+    }
+  }
+
+  .card-body {
+    .button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 3.5vw;
+    }
+    button {
+      width: 60%;
+    }
+  }
+
+  .swal2-title {
     font-size: clamp(3.3vw, 3vw, 2.8vw);
-}
-#confirmationBtn {
- font-size: clamp(1.7vw, 1.5vw, 1.3vw);
-}
-
-
+  }
+  #confirmationBtn {
+    font-size: clamp(1.7vw, 1.5vw, 1.3vw);
+  }
 }
 
 /* Phone size */
 @media screen and (max-width: 600px) {
+  .sidebar {
+    width: 45vw;
+  }
+  .main-content {
+    margin-left: 17vw;
+    width: 85%;
+    margin-top: 10vh;
+    padding: 0.3rem;
+  }
 
-.sidebar {
-  width: 45vw;
-}
-.main-content {
-  margin-left: 17vw;
-  width: 85%;
-  margin-top: 10vh;
-  padding: 0.3rem;
-}
+  .card-title {
+    font-size: clamp(5.1vw, 5vw, 4.8vw);
+  }
 
-.card-title {
-  font-size: clamp(5.1vw, 5vw, 4.8vw);
-}
+  #confirmationBtn {
+    font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+  }
 
-#confirmationBtn {
- font-size: clamp(2.6vw, 2.4vw, 2.2vw);
-}
+  #toggle-btn {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+  }
 
-#toggle-btn {
-  font-size: clamp(4.5vw, 4.2vw, 4vw);  
-}
+  .list-group-item {
+    justify-content: flex-start;
+  }
 
-.list-group-item{
-  justify-content: flex-start;
-}
+  .card-text {
+    font-size: clamp(2.8vw, 2.7vw, 2.6vw);
+  }
 
-.card-text{
-  font-size: clamp(2.8vw, 2.7vw, 2.6vw);
-}
+  .sidebar-icon {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+    margin-right: 0 !important;
+  }
 
-.sidebar-icon {
-  font-size: clamp(4.5vw, 4.2vw, 4vw);  
-  margin-right: 0 !important;
-}
+  label {
+    font-size: clamp(2.2vw, 2vw, 1.8vw);
+  }
 
-label {
-  font-size: clamp(2.2vw, 2vw, 1.8vw);
-}
+  .current {
+    font-size: 2.5vw;
+  }
 
-.current {
-  font-size: 2.5vw;
-}
+  .sidebar-text {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+    margin-left: 2vw;
+  }
 
-.sidebar-text {
-  font-size: clamp(2.9vw, 2.7vw, 2.5vw);  
-  margin-left: 2vw;
-}
+  .home {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 
-.home {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-#confirmationModal {
+  #confirmationModal {
     & .button-container {
       justify-content: space-between;
-        button {
-            width: 40%;
-        }
+      button {
+        width: 40%;
+      }
     }
-}
+  }
 
-.swal2-html-container {
-  font-size: clamp(3.7vw, 3.5vw, 3.3vw);
-}
+  .swal2-html-container {
+    font-size: clamp(3.7vw, 3.5vw, 3.3vw);
+  }
 
-.button-container {
-  display: flex;
-  justify-content: space-around;
-}
+  .button-container {
+    display: flex;
+    justify-content: space-around;
+  }
 
-.sidebar-header h5, .card-header {
-  margin-top: 2vw;
-  font-size: clamp(3.7vw, 3.5vw, 3.2vw);
-}
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: clamp(3.7vw, 3.5vw, 3.2vw);
+  }
 
-.edit,.swal2-confirm {
-  font-size: clamp(2.9vw, 2.7vw, 2.5vw);
-}
+  .edit,
+  .swal2-confirm {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+  }
 
-.swal2-title {
+  .swal2-title {
     font-size: clamp(3.8vw, 3.6vw, 3.4vw);
-} 
-
-
+  }
 }
 
 @media screen and (max-width: 400px) {
-.card {
- padding: 0; 
-} 
-.card-header {
-  margin-top: 1vw;
-  font-size: clamp(4vw, 3.8vw, 3.6vw);
-}
-.card-text{
-  font-size: clamp(2.5vw, 2.3vw, 2.1vw);
-}
-
-
+  .card {
+    padding: 0;
+  }
+  .card-header {
+    margin-top: 1vw;
+    font-size: clamp(4vw, 3.8vw, 3.6vw);
+  }
+  .card-text {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
 }
