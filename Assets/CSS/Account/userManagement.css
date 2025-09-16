@@ -20,17 +20,56 @@
 }
 
 .sidebar {
-  width: 23vw;
+  width: 25vw;
   background-color: #cee4f2;
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
+  overflow-x: hidden;
   overflow-y: auto;
   border-right: 2px solid #cee4f2;
   border-top-right-radius: 30px;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
+}
+
+.sidebar.collapsed {
+  width: 15vw;
+  justify-content: flex-start !important;
+}
+
+.sidebar .sidebar-text {
+  display: inline-block;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .sidebar-text {
+  display: none;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar-icon {
+  font-size: 2vw;
+  min-width: 3vw;
+  text-align: center;
+  margin-right: 10px;
+}
+
+/* Sidebar toggle button */
+.toggle-button {
+  background: none;
+  border: none;
+  margin: 10px;
+}
+
+.sidebar-item,
+.list-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
 }
 
 .home {
@@ -46,7 +85,8 @@
   color: black !important;
   display: flex;
   flex-direction: column;
-  margin: 1rem auto;
+  margin: 1vw auto;
+  width: 100%;
   padding-top: 0.5rem;
 }
 
@@ -72,7 +112,7 @@
 
 .list-group {
   font-family: "Poppins";
-  font-size: 22px;
+  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
   border: none;
   list-style: none;
   margin-top: 0.5rem;
@@ -89,11 +129,6 @@
   margin-top: 1vw;
 }
 
-#paymentBookingHist {
-  text-align: center;
-  margin-left: -1.5vw;
-}
-
 .sidebar li:hover a,
 .list-group-item.active {
   color: #0000;
@@ -101,12 +136,10 @@
 }
 
 #logoutBtn {
-  display: flex;
-  margin: auto;
-  margin-top: 2rem;
   text-align: center;
   color: black;
-  padding-top: 10px;
+  padding: 10px;
+  font-size: clamp(1.6vw, 1.4vw, 1.3vw);
 }
 
 #logoutBtn:hover {
@@ -114,25 +147,15 @@
   color: white;
 }
 
-.sidebar-icon {
-  height: 30px;
-  padding-right: 1vw;
-}
-
-/* .home-button {
-  position: absolute;
-  background-color: transparent;
-  border: none;
-  right: 3vw;
-  margin-top: -5%;
-} */
-
-.card {
-  display: flex;
+.main-content {
+  /* border: 1px solid red; */
+  margin-left: 25vw;
+  margin-top: 5rem;
+  padding: 1rem;
+  overflow-y: auto;
   width: 75%;
-  margin: auto;
-  margin-top: 7rem;
-  margin-left: 20rem;
+}
+.card {
   border: none;
 }
 
@@ -159,7 +182,7 @@
 .card-header .card-title {
   font-family: "Poppins Black";
   margin-top: 1rem;
-  font-size: 25px;
+  font-size: clamp(2.6vw, 2.8vw, 3vw);
 }
 
 .add-button:hover {
@@ -171,17 +194,33 @@
 
 table {
   text-align: center;
-  border: 1px solid rgb(168, 168, 168, 0.5);
+  border: 1px solid rgba(168, 168, 168, 0.5);
   font-family: "Poppins";
+  table-layout: fixed;
+  width: 100%;
+}
+
+#viewForm {
+  width: 100%;
 }
 
 table .btn {
   padding: 0.3rem;
   font-family: "Lora";
-  font-size: 14px;
-  width: 60px;
+  width: 100%;
 }
 
+.deleteUserAccount {
+  width: 50%;
+  margin-left: 0.5vw;
+}
+
+.emailCol {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
 .dt-column-title {
   width: 2vw !important;
   text-align: center;
@@ -192,6 +231,23 @@ table .btn {
 .dt-layout-cell label {
   font-family: "Lora";
   text-transform: capitalize;
+}
+
+div.dt-container .dt-search input {
+  margin-left: 1vw !important;
+}
+
+div.dt-container select.dt-input {
+  margin-right: 1vw !important;
+}
+
+td,
+.btn {
+  font-size: clamp(1.2vw, 1.1vw, 1vw);
+}
+
+th {
+  font-size: clamp(1.2vw, 1.1vw, 1vw);
 }
 
 /* .badge {
@@ -208,10 +264,6 @@ table .btn {
 .button-container {
   display: flex;
   justify-content: center;
-}
-
-.button-container button {
-  margin: 3px;
 }
 
 .swal-custom-title {
@@ -239,4 +291,309 @@ table .btn {
   margin: auto;
   line-height: 2;
   font-size: 16px;
+}
+
+/* Tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) {
+  .list-group {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
+
+  .title {
+    font-size: clamp(5.5vw, 5vw, 4.5vw);
+  }
+
+  .home {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+    display: flex !important;
+  }
+
+  .sidebar-icon {
+    font-size: clamp(2.6vw, 2.3vw, 2vw);
+  }
+
+  .sidebar-header h5 {
+    margin-top: 2vw !important;
+    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  }
+
+  .profileImage {
+    margin: 1vw auto;
+  }
+
+  .profileImage img {
+    height: clamp(9vw, 8vw, 7vw);
+  }
+
+  .main-content {
+    margin-left: 15vw;
+    padding: 0.4rem;
+    width: 85%;
+  }
+
+  .card-header .card-title {
+    font-size: clamp(4.3vw, 3.8vw, 4vw) !important;
+    margin-top: 0 !important;
+  }
+
+  td,
+  label {
+    font-size: clamp(1.7vw, 1.5vw, 1.6vw);
+  }
+  th,
+  .btn {
+    font-size: clamp(1.9vw, 2vw, 2.1vw);
+  }
+
+  .swal2-html-container {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
+
+  .info input:focus + label,
+  .info input:not(:placeholder-shown) + label {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+  }
+
+  .info input {
+    font-size: clamp(2.2vw, 2vw, 1.9vw);
+    padding-top: 2rem;
+  }
+
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .swal2-title {
+    font-size: clamp(3.3vw, 3vw, 2.8vw);
+  }
+
+  .button-container {
+    flex-wrap: wrap;
+  }
+
+  .button-container .btn {
+    width: 90%;
+    margin-bottom: 1vw;
+  }
+
+  .modal-title {
+    font-size: clamp(3.3vw, 3vw, 2.8vw);
+  }
+
+  .modal-text {
+    font-size: clamp(2.4vw, 2.6vw, 2.8vw);
+    line-height: 1;
+  }
+}
+
+/* Phone size */
+@media screen and (max-width: 600px) {
+  .sidebar {
+    width: 45vw;
+  }
+  .main-content {
+    margin-left: 16vw;
+    width: 85%;
+    margin-top: 3rem;
+  }
+
+  td {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  i.status-icon {
+    font-size: 3vw !important;
+  }
+
+  .card-header .card-title {
+    font-size: clamp(4.3vw, 3.8vw, 4vw) !important;
+  }
+
+  .dt-info,
+  .dt-search,
+  .dt-layout-cell label {
+    font-size: 2.5vw;
+  }
+
+  .card-body {
+    padding: 0;
+  }
+  .list-group-item {
+    justify-content: flex-start;
+  }
+  .status-label {
+    display: none;
+  }
+
+  .sidebar-icon {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+    margin-right: 0 !important;
+  }
+
+  .sidebar-text {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+    margin-left: 2vw;
+  }
+
+  #toggle-btn {
+    font-size: clamp(4.5vw, 4.2vw, 4vw);
+  }
+
+  .home {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .modal-content {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .modal-buttons {
+    justify-content: space-around;
+  }
+
+  .modal-buttons .btn {
+    width: 30% !important;
+  }
+  .swal2-html-container {
+    font-size: clamp(3.7vw, 3.5vw, 3.3vw);
+  }
+
+  .account-contact,
+  .roleName {
+    font-size: clamp(2.5vw, 2.2vw, 2vw);
+  }
+
+  table .btn,
+  .deleteUserAccount {
+    padding: 1vw 0.5vw;
+    font-size: 2vw;
+  }
+
+  .add-button img {
+    height: 2vw;
+    width: 2vw;
+  }
+
+  .info input:focus + label,
+  .info input:not(:placeholder-shown) + label {
+    font-size: clamp(2.6vw, 2.4vw, 2.2vw);
+  }
+
+  .info input {
+    font-size: clamp(3vw, 2.8vw, 2.6vw);
+    padding-top: 4.5vw;
+  }
+
+  .edit,
+  .swal2-confirm,
+  #saveBtn,
+  #cancelBtn {
+    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
+  }
+
+  .swal2-title {
+    font-size: clamp(3.8vw, 3.6vw, 3.4vw);
+  }
+  .info input:focus + label,
+  .info input:not(:placeholder-shown) + label {
+    top: 0.7rem;
+    left: 0.8rem;
+  }
+  td {
+    font-size: clamp(2.1vw, 2.4vw, 2.2vw);
+  }
+  th,
+  .btn {
+    font-size: clamp(1.9vw, 2vw, 2.1vw);
+  }
+
+  th {
+    padding: 0 !important;
+  }
+
+  .button-container .btn {
+    width: 50%;
+    margin-bottom: 1vw;
+  }
+
+  .button-container {
+    flex-wrap: wrap;
+  }
+
+  div.dt-container select.dt-input,
+  div.dt-container .dt-search input {
+    padding: 0 !important;
+    font-size: 3vw !important;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .card {
+    padding: 0;
+  }
+  .card-header {
+    margin-top: 1vw;
+    padding: 0;
+  }
+  .card-title {
+    font-size: clamp(4.5vw, 4.8vw, 5vw) !important;
+    margin-top: 0 !important;
+  }
+  .card-text {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
+  .card-header .add-button {
+    box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.2);
+    padding: 1vw;
+    font-size: clamp(2.1vw, 2.2vw, 2.4vw);
+  }
+
+  .input-box label,
+  .input-box input {
+    width: 80%;
+  }
+
+  .btn {
+    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
+  }
+
+  .form-container {
+    margin-top: 1.5rem;
+  }
+
+  div.dt-container .dt-paging .dt-paging-button {
+    padding: 0.5vw 1vw !important;
+  }
+
+  .dt-input {
+    font-size: clamp(2vw, 1.9vw, 1.8vw);
+  }
+
+  label {
+    font-size: clamp(2.6vw, 2.5vw, 2.4vw);
+  }
+
+  th {
+    font-size: clamp(2.1vw, 1.9vw, 1.7vw);
+  }
+
+  td {
+    font-size: clamp(2.3vw, 2.4vw, 2.2vw);
+  }
+
+  .current {
+    font-size: 3vw;
+  }
 }
