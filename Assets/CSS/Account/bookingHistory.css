@@ -204,6 +204,10 @@ label {
   padding: 2vw !important;
 }
 
+.fa-star.checked {
+  color: gold;
+}
+
 #cancelModalDesc {
   font-size: 18px;
 }
