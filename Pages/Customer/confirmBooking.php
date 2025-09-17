@@ -74,8 +74,8 @@ unset($_SESSION['formData']);
     $getUserInfoResult = $getUserInfo->get_result();
     if ($getUserInfoResult->num_rows > 0) {
         $data =  $getUserInfoResult->fetch_assoc();
-        $middleInitial = trim($data['middleInitial']);
-        $name = ucfirst($data['firstName']) . " " . ucfirst($data['middleInitial']) . " "  . ucfirst($data['lastName']);
+        $middleInitial = trim($data['middleInitial']  ?? "");
+        $name = ucfirst($data['firstName']) ?? "" . " " . ucfirst($data['middleInitial']) ?? "" . " "  . ucfirst($data['lastName']) ?? "";
     }
     ?>
 

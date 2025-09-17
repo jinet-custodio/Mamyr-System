@@ -33,6 +33,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+// Get all bookingIDs with a submitted review
+$getReviews = $conn->prepare("SELECT bookingID FROM userReview WHERE bookingID IN (SELECT bookingID FROM booking WHERE userID = ?)");
+$getReviews->bind_param("i", $userID);
+$getReviews->execute();
+$reviewResult = $getReviews->get_result();
+
+$reviewedBookingIDs = [];
+while ($row = $reviewResult->fetch_assoc()) {
+    $reviewedBookingIDs[] = $row['bookingID'];
+}
+
 require_once '../../Function/functions.php';
 //Changing Status function to ah galing sa file na functions.php
 changeToExpiredStatus($conn);
@@ -79,26 +90,27 @@ if ($userRole == 1) {
 <body>
     <div class="wrapper d-flex">
         <aside class="sidebar" id="sidebar">
+            <div class="home">
+                <?php if ($role === 'Customer') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } elseif ($role === 'Admin') { ?>
+                    <a href="../Admin/adminDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } elseif ($role === 'Business Partner') { ?>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
+                <?php } ?>
+            </div>
+
             <div class="sidebar-header text-center">
                 <div class="d-flex" id="toggle-container">
                     <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </button>
-                </div>
-                <div class="home">
-                    <?php if ($role === 'Customer') { ?>
-                        <a href="../Customer/dashboard.php">
-                            <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                        </a>
-                    <?php } elseif ($role === 'Admin') { ?>
-                        <a href="../Admin/adminDashboard.php">
-                            <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                        </a>
-                    <?php } elseif ($role === 'Business Partner') { ?>
-                        <a href="../BusinessPartner/bpDashboard.php">
-                            <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                        </a>
-                    <?php } ?>
                 </div>
 
                 <h5 class="sidebar-text">User Account</h5>
@@ -191,7 +203,10 @@ if ($userRole == 1) {
                     <h2 class="title">Booking History</h2>
                 </div>
 
-
+                <script>
+                    const reviewedBookingIDs = <?= json_encode($reviewedBookingIDs) ?>;
+                    console.log(reviewedBookingIDs);
+                </script>
                 <div class="tableContainer">
                     <table class=" table table-striped" id="bookingHistory">
                         <thead>
@@ -314,6 +329,12 @@ if ($userRole == 1) {
                                                     <input type="hidden" name="status" value="<?= $status ?>">
                                                     <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
                                                 </form>
+                                                <?php
+                                                $isReviewed = in_array($bookingID, $reviewedBookingIDs);
+                                                ?>
+                                                <?php
+                                                echo "<!-- DEBUG: bookingID={$bookingID}, bookingType={$bookingType}, isReviewed=" . ($isReviewed ? 'yes' : 'no') . " -->";
+                                                ?>
                                                 <?php if (
                                                     $booking['confirmedStatus'] === 'Done'
                                                     || $booking['bookingStatus'] === 'Cancelled'
@@ -322,12 +343,25 @@ if ($userRole == 1) {
                                                     || $booking['bookingStatus'] === 'Rejected'
                                                     || $booking['confirmedStatus'] === 'Rejected'
                                                 ) { ?>
-                                                    <button class="btn btn-outline-primary w-100 rateBtn"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#rateModal"
-                                                        data-bookingid="<?= $bookingID ?>"
-                                                        data-label="Rate">
-                                                    </button>
+                                                    <?php if ($isReviewed): ?>
+                                                        <button class="btn btn-outline-secondary px-0 w-100 rateBtn"
+                                                            title="You have already reviewed this booking/reservation"
+                                                            disabled
+                                                            data-label="Reviewed">
+                                                            Reviewed
+                                                        </button>
+
+                                                    <?php else: ?>
+                                                        <button class="btn btn-outline-primary px-0 w-100 rateBtn"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#rateModal"
+                                                            data-bookingid="<?= $bookingID ?>"
+                                                            data-bookingtype="<?= $bookingType ?>"
+                                                            data-label="Review">
+                                                            Review
+                                                        </button>
+                                                    <?php endif; ?>
+
                                                 <?php } else { ?>
                                                     <button type="button" class="btn btn-danger w-100 cancelBooking"
                                                         data-bookingid="<?= $bookingID ?>"
@@ -354,35 +388,40 @@ if ($userRole == 1) {
                     <!-- rate Modal -->
                     <div class="modal fade" id="rateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header" id="rate-modal-header">
-                                    <h4 class="modal-title" id="rateModalLabel">Please Rate Your Mamyr Experience</h4>
-
-                                </div>
-                                <div class="modal-body">
-                                    <p class="rateSubtitle">We value your feedback! Share your thoughts to help us improve and
-                                        offer better experiences.</p>
-                                    <div class="d-flex">
-                                        <span class="fa fa-star" id="star1" onclick="toggleStars(1)"></span>
-                                        <span class="fa fa-star" id="star2" onclick="toggleStars(2)"></span>
-                                        <span class="fa fa-star" id="star3" onclick="toggleStars(3)"></span>
-                                        <span class="fa fa-star" id="star4" onclick="toggleStars(4)"></span>
-                                        <span class="fa fa-star" id="star5" onclick="toggleStars(5)"></span>
+                            <form id="reviewForm" method="POST">
+                                <div class="modal-content">
+                                    <div class="modal-header" id="rate-modal-header">
+                                        <h4 class="modal-title" id="rateModalLabel">Please Rate Your Mamyr Experience</h4>
                                     </div>
 
+                                    <div class="modal-body">
+                                        <p class="rateSubtitle">We value your feedback! Share your thoughts to help us improve and offer better experiences.</p>
 
-                                    <textarea class="form-control w-100 mt-3" id="purpose-additionalNotes"
-                                        name="additionalRequest" rows="5" placeholder="Additional Feedback"></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary w-25">Rate</button>
+                                        <!-- Stars -->
+                                        <div class="d-flex" id="starContainer"></div>
 
+                                        <!-- Hidden rating value -->
+                                        <input type="hidden" id="reviewRating" name="reviewRating" value="0">
+
+                                        <!-- Feedback -->
+                                        <textarea class="form-control w-100 mt-3" id="purpose-additionalNotes"
+                                            name="reviewComment" rows="5" placeholder="Additional Feedback"></textarea>
+
+                                        <!-- Booking Info -->
+                                        <!-- Booking Info -->
+                                        <input type="hidden" id="modalBookingID" name="bookingID" value="">
+                                        <input type="hidden" id="modalBookingType" name="bookingType" value="">
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary w-25">Review</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-
 
                     <!-- Confirmation Modal -->
                     <form action="../../Function/Booking/cancelBooking.php" method="POST">
@@ -436,7 +475,7 @@ if ($userRole == 1) {
         $(document).ready(function() {
             $('#bookingHistory').DataTable({
                 language: {
-                    emptyTable: "No Bookings Made" //Pakipalitan na lang din ng magandang term
+                    emptyTable: "You have not made any bookings yet" //Pakipalitan na lang din ng magandang term
                 },
                 columnDefs: [{
                     width: '15%',
@@ -495,9 +534,13 @@ if ($userRole == 1) {
                         cancelBtn.innerHTML = '<i class="fa-solid fa-ban" style="color: #f4ebeb;"></i>';
                         cancelBtn.style.width = '70%';
                     });
-                    rateBtns.forEach(rateBtns => {
-                        rateBtns.innerHTML = '<i class="fa-solid fa-star" style="color: #FFD43B;padding:0;"></i>';
-                        rateBtns.classList.remove('btn-outline-primary')
+                    rateBtns.forEach(rateBtn => {
+                        rateBtn.innerHTML = '<i class="fa-solid fa-star" style="color: #FFD43B;padding:0;"></i>';
+                        if (rateBtn.classList == 'btn-outline-primary') {
+                            rateBtn.classList.remove('btn-outline-primary')
+                        } else {
+                            rateBtn.classList.remove('btn-outline-secondary')
+                        }
                     })
                 } else {
                     toggleBtn.style.display = "none";
@@ -514,7 +557,11 @@ if ($userRole == 1) {
                     })
                     rateBtns.forEach(rateBtn => {
                         rateBtn.innerHTML = `${rateBtn.getAttribute('data-label')}`;
-                        rateBtn.classList.add('btn-outline-primary')
+                        if (rateBtn.innerHTML == 'Review') {
+                            rateBtn.classList.add('btn-outline-primary')
+                        } else {
+                            rateBtn.classList.add('btn-outline-secondary')
+                        }
                     })
                 }
                 //change the text into icons when the screen width shrinks to below 1024px
@@ -632,26 +679,78 @@ if ($userRole == 1) {
                 confirmButtonText: "OK"
             });
         };
-
-        // if (paramValue) {
-        //     const url = new URL(window.location);
-        //     url.search = "";
-        //     history.replaceState({}, document.title, url.toString());
-        // };
     </script>
 
     <!-- rate JS -->
     <script>
-        function toggleStars(starNumber) {
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById('star' + i).classList.remove('orange');
+        $(document).ready(function() {
+            const starContainer = $("#starContainer");
+            const ratingInput = $("#reviewRating");
+            let currentRating = 0;
+
+            function renderStars(rating) {
+                starContainer.empty();
+                for (let i = 1; i <= 5; i++) {
+                    const star = $('<i class="fa fa-star star"></i>');
+                    star.attr("data-value", i);
+                    if (i <= rating) {
+                        star.addClass("checked");
+                    }
+                    star.on("click", function() {
+                        currentRating = i;
+                        ratingInput.val(currentRating);
+                        renderStars(currentRating);
+                    });
+                    star.on("dblclick", function() {
+                        currentRating = i - 0.5;
+                        ratingInput.val(currentRating);
+                        renderStars(currentRating);
+                    });
+                    starContainer.append(star);
+                }
             }
 
-            for (let i = 1; i <= starNumber; i++) {
-                document.getElementById('star' + i).classList.add('orange');
-            }
-        }
+            renderStars(currentRating);
+
+
+            $('.rateBtn').on('click', function() {
+                const bookingID = $(this).data('bookingid');
+                const bookingType = $(this).data('bookingtype');
+
+                $('#modalBookingID').val(bookingID);
+                $('#modalBookingType').val(bookingType);
+            });
+
+            // AJAX form submission
+            $("#reviewForm").on("submit", function(e) {
+                e.preventDefault();
+                console.log("Submitting review:", {
+                    bookingID: $('#modalBookingID').val(),
+                    bookingType: $('#modalBookingType').val(),
+                    rating: $('#reviewRating').val(),
+                    comment: $('#purpose-additionalNotes').val()
+                });
+
+                $.ajax({
+                    url: "../../Function/Account/submitReview.php",
+                    method: "POST",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        alert("Review submitted successfully!");
+                        $("#rateModal").modal("hide");
+                        $("#reviewForm")[0].reset();
+                        renderStars(0);
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error submitting review: " + error);
+                    }
+                });
+            });
+
+
+        });
     </script>
+
 </body>
 
 
