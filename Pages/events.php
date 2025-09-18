@@ -28,13 +28,15 @@ require '../Config/dbcon.php';
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
-        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-2">
+            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+        </ul>
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
+            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <a class="nav-link" href="../index.php"> HOME</a>
                 </li>
@@ -84,7 +86,7 @@ require '../Config/dbcon.php';
 
                 <div class="carousel-item active">
                     <div class="cardFlex">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card event-card">
                             <img class="card-img-top" src="../../Assets/Images/amenities/pavilionPics/pav4.jpg"
                                 alt="Wedding Event">
                             <div class="card-body">
@@ -103,7 +105,7 @@ require '../Config/dbcon.php';
                             </div>
                         </div>
 
-                        <div class="card" style="width: 18rem;">
+                        <div class="card event-card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/debut.jpg"
                                 alt="Debut Event">
                             <div class="card-body">
@@ -125,7 +127,7 @@ require '../Config/dbcon.php';
 
                 <div class="carousel-item">
                     <div class="cardFlex">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card event-card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/kidsParty.jpg"
                                 alt="Kids Party">
                             <div class="card-body">
@@ -141,7 +143,7 @@ require '../Config/dbcon.php';
                             </div>
                         </div>
 
-                        <div class="card" style="width: 18rem;">
+                        <div class="card event-card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/birthday.jpg"
                                 alt="Birthday Event">
                             <div class="card-body">
@@ -164,7 +166,7 @@ require '../Config/dbcon.php';
 
                 <div class="carousel-item">
                     <div class="cardFlex">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card event-card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/christening.jpg"
                                 alt="Christening Event">
                             <div class="card-body">
@@ -181,7 +183,7 @@ require '../Config/dbcon.php';
                             </div>
                         </div>
 
-                        <div class="card" style="width: 18rem;">
+                        <div class="card event-card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/teamBuilding.jpg"
                                 alt="Team Building Event">
                             <div class="card-body">
@@ -205,7 +207,7 @@ require '../Config/dbcon.php';
 
                 <div class="carousel-item">
                     <div class="cardFlex">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card event-card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/thanksgiving.jpg"
                                 alt="Thanksgiving Event">
                             <div class="card-body">
@@ -223,7 +225,7 @@ require '../Config/dbcon.php';
                             </div>
                         </div>
 
-                        <div class="card" style="width: 18rem;">
+                        <div class="card event-card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/xmas.jpg"
                                 alt="Birthday Event">
                             <div class="card-body">
@@ -335,12 +337,17 @@ require '../Config/dbcon.php';
                 <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱ <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
             <?php } else { ?>
                 <h3 class="mainHallDescTitle">No Information to Display</h3>
+                <ul class="mainHallDescription" id="mainHallDesc">
+                    <li>Maximum usage of ???; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to ??? guests.</li>
+                </ul>
             <?php } ?>
         </div>
 
     </div>
 
-    <div class="miniHall">
+    <div class="miniHall mb-5">
         <div class="miniHallDescContainer">
             <?php if ($miniHall) { ?>
                 <h3 class="miniHallDescTitle">Mini Function Hall</h3>
@@ -354,6 +361,11 @@ require '../Config/dbcon.php';
                 <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱ <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
             <?php } else { ?>
                 <h3 class="miniHallDescTitle">No Information to Display</h3>
+                <ul class="miniHallDescription" id="miniHallDesc">
+                    <li>Maximum usage of ???; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to ??? guests.</li>
+                </ul>
             <?php } ?>
         </div>
 
@@ -397,37 +409,8 @@ require '../Config/dbcon.php';
         <div class="loader"></div>
     </div>
 
-    <footer class="py-1" style="margin-top: 10vw !important;">
-        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-            <a href="../index.php">
-                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-            </a>
-            <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
-        </div>
+    <?php include 'footer.php'; ?>
 
-        <div class="info">
-            <div class="reservation">
-                <h4 class="reservationTitle">Reservation</h4>
-                <h4 class="numberFooter">(0998) 962 4697 </h4>
-                <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
-            </div>
-            <div class="locationFooter">
-                <h4 class="locationTitle">Location</h4>
-                <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
-            </div>
-        </div>
-        <hr class="footerLine">
-        <div class="socialIcons">
-            <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                    class='bx bxl-facebook-circle'></i></a>
-            <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-            <a href="tel:+09989624697">
-                <i class='bx bxs-phone'></i>
-            </a>
-        </div>
-
-    </footer>
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap JS -->
