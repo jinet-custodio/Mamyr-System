@@ -229,7 +229,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <div class="carousel-item active">
                     <div class="cardFlex">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <img class="card-img-top" src="../../Assets/Images/amenities/pavilionPics/pav4.jpg"
                                 alt="Wedding Event">
                             <div class="card-body">
@@ -248,7 +248,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                         </div>
 
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/debut.jpg"
                                 alt="Debut Event">
                             <div class="card-body">
@@ -270,7 +270,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <div class="carousel-item">
                     <div class="cardFlex">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <img class="card-img-top" src="../../Assets/Images//EventsPhotos/kidsParty.jpg"
                                 alt="Kids Party">
                             <div class="card-body">
@@ -286,7 +286,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                         </div>
 
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/birthday.jpg"
                                 alt="Birthday Event">
                             <div class="card-body">
@@ -309,7 +309,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <div class="carousel-item">
                     <div class="cardFlex">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/christening.jpg"
                                 alt="Christening Event">
                             <div class="card-body">
@@ -326,7 +326,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                         </div>
 
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/teamBuilding.jpg"
                                 alt="Team Building Event">
                             <div class="card-body">
@@ -350,7 +350,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <div class="carousel-item">
                     <div class="cardFlex">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/thanksgiving.jpg"
                                 alt="Thanksgiving Event">
                             <div class="card-body">
@@ -368,7 +368,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                         </div>
 
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <img class="card-img-top" src="../../Assets/Images/EventsPhotos/xmas.jpg"
                                 alt="Birthday Event">
                             <div class="card-body">
