@@ -44,11 +44,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <title>Mamyr - Events</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/events.css">
-    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
+    <!-- Bootstrap Link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
@@ -56,7 +55,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 <body>
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
             <?php
             $query = "SELECT userProfile FROM user WHERE userID = '$userID' AND userRole = '$userRole'";
             $result = mysqli_query($conn, $query);
@@ -122,15 +121,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
 
         </ul>
-
-
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"> -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
+            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <?php if ($userRole !== 2): ?>
                         <a class="nav-link" href="dashboard.php"> Home</a>
@@ -224,8 +221,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 all kinds.
         </div> -->
 
-        <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
+        <div id="eventCarousel" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-inner" id="eventsInner">
 
                 <div class="carousel-item active">
                     <div class="cardFlex">
@@ -534,53 +531,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next" href="#carouselMiniHall" role="button" data-bs-slide="next">
+            <a class="carousel-control-next mb-5" href="#carouselMiniHall" role="button" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
         </div>
 
-
-
-
     </div>
 
-
-
-    <footer class="py-1" style="margin-top: 15vh !important;">
-        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-            <a href="../index.php">
-                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-            </a>
-            <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
-        </div>
-
-        <div class="info">
-            <div class="reservation">
-                <h4 class="reservationTitle">Reservation</h4>
-                <h4 class="numberFooter">(0998) 962 4697 </h4>
-                <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
-            </div>
-            <div class="locationFooter">
-                <h4 class="locationTitle">Location</h4>
-                <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
-            </div>
-        </div>
-        <hr class="footerLine">
-        <div class="socialIcons">
-            <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                    class='bx bxl-facebook-circle'></i></a>
-            <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-            <a href="tel:+09989624697">
-                <i class='bx bxs-phone'></i>
-            </a>
-        </div>
-
-    </footer>
+    <?php include 'footer.php'; ?>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
@@ -627,14 +588,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         });
     </script>
 
-    <!-- interval of the event carousel -->
-    <script>
-        $(document).ready(function() {
-            $('#eventCarousel').carousel({
-                interval: 1000 * 5
-            });
-        });
-    </script>
     <!-- Scroll Nav BG -->
     <script src="../../Assets/JS/scrollNavbg.js"></script>
 </body>

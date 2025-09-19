@@ -4,6 +4,11 @@
 }
 
 @font-face {
+  font-family: "Poppins Black";
+  src: url(../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+@font-face {
   font-family: "Lora";
   src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }

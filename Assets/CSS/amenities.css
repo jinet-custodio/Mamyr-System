@@ -442,10 +442,6 @@ textarea.amenityDescription {
   button:hover {
     background: rgba(0, 0, 0, 0.8);
   }
-
-  #profileAndNotif {
-    padding: 0.6vw;
-  }
 }
 
 @media (max-width: 600px) {

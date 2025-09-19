@@ -12,6 +12,7 @@ nav {
   align-items: center;
   /* height: 15vh; */
   padding: 1rem;
+  background-color: white;
 }
 
 .navbar-nav {
@@ -158,6 +159,7 @@ nav {
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   .navbar {
     height: 10vh;
+    background-color: transparent;
   }
 
   button.position-relative {
@@ -247,7 +249,7 @@ nav {
     width: 20vw !important;
   }
   a.dropdown-item {
-    font-size: 2.5vw !important;
+    font-size: 2.8vw !important;
   }
 
   .navbar {
