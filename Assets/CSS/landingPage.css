@@ -91,106 +91,6 @@ body {
     transform: rotate(360deg);
   }
 }
-
-.navbar {
-  position: fixed;
-  width: 100%;
-  top: 0;
-  text-transform: uppercase;
-}
-
-.navbar.scrolled {
-  background-color: white;
-
-  .nav-link {
-    color: black !important;
-  }
-
-  .nav-link:not(.dropdown-toggle):after {
-    border-bottom: 4px solid rgb(126, 203, 242) !important;
-  }
-}
-
-.nav-item {
-  font-family: "Poppins" !important;
-  font-weight: lighter;
-  margin-top: 15px;
-  /* margin-left: 3vw; */
-}
-
-.nav-link {
-  text-decoration: none;
-  display: inline-block;
-  padding: 10px 15px !important;
-  position: relative;
-  color: rgb(255, 255, 255) !important;
-  letter-spacing: 0.1em;
-}
-
-.nav-link:not(.dropdown-toggle):after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 50%;
-  position: absolute;
-  border-bottom: 4px solid rgb(126, 203, 242) !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-
-.nav-link:not(.dropdown-toggle):hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.dropdown-menu {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.nav-item.dropdown:hover .dropdown-menu {
-  background-color: white !important;
-  display: block;
-}
-
-.dropdown-item:hover {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.dropdown-item {
-  font-size: 1.3vw;
-  font-weight: bold;
-}
-
-ul {
-  font-family: "Poppins";
-  font-weight: lighter;
-  list-style: none;
-  display: table;
-  font-size: 1.5vw !important;
-  text-transform: uppercase;
-}
-
-.navbar-toggler {
-  float: right;
-  background-color: #ffffff !important;
-  margin: 5vw;
-  border: none;
-
-  &:focus,
-  &:active {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none;
-  }
-
-  .custom-btn {
-    width: 2vw !important;
-    font-size: 1.5vw !important;
-  }
-}
-
 .titleContainer {
   /* margin-top: 20vh; */
   /* border: 1px solid black; */
@@ -542,11 +442,6 @@ footer {
     height: calc(100vh - 15vh);
     padding: calc(12vh - 3vh);
   }
-
-  .navbar {
-    --bs-navbar-padding-y: 0 !important;
-  }
-
   .mamyrTitle {
     width: 100%;
     margin-top: clamp(15vh, 5vh, 2vh) !important;
@@ -566,53 +461,9 @@ footer {
     font-size: clamp(23px, calc(2vw + 4px), 35px);
   }
 
-  .navbar-toggler {
-    float: right;
-    background-color: #ffffff !important;
-    margin: 3vw;
-    border: none;
-
-    &:focus,
-    &:active {
-      outline: none !important;
-      box-shadow: none !important;
-      border: none;
-    }
-  }
-
-  .nav-item.dropdown:hover .dropdown-menu {
-    background-color: white !important;
-    display: block;
-  }
-
-  .navbar.scrolled {
-    background-color: transparent !important;
-  }
-
-  .nav-item {
-    font-size: clamp(10px, calc(1.5vh + 4px), 12px);
-  }
-
-  .dropdown-item {
-    font-size: clamp(10px, calc(1.5vh + 4px), 12px);
-    text-align: center !important;
-  }
-
-  .navbar-collapse {
-    background-color: white;
-
-    .nav-link {
-      color: black !important;
-    }
-  }
-
   .white-bg {
     background-color: white;
   }
-
-  /* .navbar-collapse {
-    text-align: right;
-  } */
 
   .containerBook {
     width: 95%;
@@ -819,10 +670,6 @@ footer {
     padding: calc(12vh - 3vh);
   }
 
-  .navbar.scrolled {
-    background-color: none !important;
-  }
-
   .name {
     font-size: clamp(40px, calc(4vw + 10px), 60px) !important;
   }
@@ -934,68 +781,11 @@ footer {
     flex-direction: column;
     justify-content: center;
   }
-
-  .navbar.scrolled {
-    background-color: none !important;
-  }
 }
 
 @media (max-width: 991.98px) {
-  .nav-link,
-  #logOutBtn {
-    font-size: 2vw;
-  }
-
-  a.dropdown-item {
-    font-size: 1.8vw;
-  }
-
-  #navUL {
-    position: absolute !important;
-    right: 2vw !important;
-  }
-
-  .nav-item {
-    margin-top: 5px;
-  }
-
-  #navbarNav .nav-link,
-  #navbarNav .dropdown-item {
-    color: black !important;
-  }
-
-  #profileAndNotif {
-    background-color: transparent;
-  }
-
-  .navbar-nav {
-    background-color: rgb(251, 250, 250);
-  }
-
-  #navbar-half2 .btn-outline-danger {
-    color: black !important;
-    border-color: white !important;
-    width: 100%;
-    text-align: left;
-  }
-
   .fc-daygrid-day-top a {
     font-size: clamp(2vw, 1.8vw, 1.6vw);
-  }
-}
-
-@media (max-width: 991.98px) and (orientation: portrait) {
-  .nav-item {
-    margin-top: 5px;
-  }
-
-  .nav-link,
-  #logOutBtn {
-    font-size: 2vw;
-  }
-
-  a.dropdown-item {
-    font-size: 1.8vw;
   }
 }
 
@@ -1004,14 +794,6 @@ footer {
   .titleContainer {
     height: calc(100vh - 20vh);
     padding: 12vw;
-  }
-
-  .nav-link {
-    font-size: 3vw;
-  }
-
-  a.dropdown-item {
-    font-size: 2.8vw;
   }
 
   .mamyrTitle {
@@ -1032,31 +814,6 @@ footer {
     font-size: clamp(15px, calc(1.5vw + 4px), 35px) !important;
     text-align: justify;
     letter-spacing: 0;
-  }
-
-  .nav-item {
-    font-size: clamp(10px, calc(1.5vh + 4px), 12px);
-  }
-
-  .dropdown-item {
-    font-size: clamp(10px, calc(1.5vh + 4px), 12px);
-    text-align: center !important;
-  }
-
-  .navbar-collapse {
-    background-color: white;
-
-    .nav-link {
-      color: black !important;
-    }
-  }
-
-  .white-bg {
-    background-color: white;
-  }
-
-  .navbar.scrolled {
-    background-color: none !important;
   }
 
   .containerBook {
@@ -1249,49 +1006,5 @@ footer {
 
   .pb-1 {
     gap: 3vw;
-  }
-
-  .mb-0 {
-    font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
-  }
-
-  .logo {
-    width: 18vw;
-  }
-
-  .reservation {
-    width: 20%;
-  }
-
-  .locationFooter {
-    width: 50%;
-  }
-
-  .reservationTitle,
-  .locationTitle {
-    font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
-  }
-
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
-  }
-
-  .socialIcons a {
-    justify-items: center;
-    align-items: center;
-    padding: 0.5vw 1.5vw;
-  }
-
-  .socialIcons a i {
-    font-size: 3.5vw;
-  }
-}
-
-@media (max-width: 400px) {
-  #navUL {
-    position: absolute !important;
-    right: 2vw !important;
   }
 }

@@ -45,6 +45,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <title>Mamyr - About</title>
     <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/about.css">
+    <link rel="stylesheet" href="../Assets/CSS/navbar.css">
     <!-- <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css"> -->
     <!-- Online link for Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -62,13 +63,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <?php endif; ?>
     <?php if (!$editMode): ?>
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>

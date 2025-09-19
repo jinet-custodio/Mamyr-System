@@ -26,7 +26,6 @@
   list-style: none;
 }
 
-
 body {
   background: #ffd787a0 !important;
 }
@@ -40,177 +39,6 @@ body {
 main {
   flex: 1;
 }
-
-
-/* navbar code */
-
-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  /* background-color: rgb(242, 242, 242); */
-}
-
-.navbar {
-  position: fixed;
-  width: 100%;
-  top: 0;
-  text-transform: uppercase;
-}
-
-.navbar.scrolled {
-  background-color: white;
-
-  .nav-link {
-    color: black !important;
-  }
-
-  .nav-link:not(.dropdown-toggle):after {
-    border-bottom: 4px solid rgb(126, 203, 242) !important;
-  }
-}
-
-.nav-item {
-  font-family: "Poppins" !important;
-  font-weight: lighter;
-  margin-top: 15px;
-  font-size: 1.3vw;
-  /* margin-left: 3vw; */
-}
-
-.nav-link {
-  text-decoration: none;
-  display: inline-block;
-  padding: 10px 15px !important;
-  position: relative;
-  color: rgb(0, 0, 0) !important;
-  letter-spacing: 0.1em;
-}
-
-.nav-link:not(.dropdown-toggle):after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 50%;
-  position: absolute;
-  border-bottom: 4px solid rgb(0, 178, 209) !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-
-.nav-link:not(.dropdown-toggle):hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.dropdown-menu {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.nav-item.dropdown:hover .dropdown-menu {
-  background-color: white !important;
-  display: block;
-}
-
-.logoNav {
-  /* border: 1px solid black; */
-  width: 15vw;
-  position: absolute;
-  margin: 2vw;
-}
-
-.account-nav {
-  margin: 1px;
-  margin-left: 1rem;
-  /* border: 1px solid white; */
-  border-radius: 50%;
-
-  img {
-    .account-nav {
-      margin: 1px;
-      margin-left: 1rem;
-      border: 1px solid white;
-      border-radius: 50%;
-
-      img {
-        height: 8vh;
-      }
-    }
-
-    height: 5vw;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
-}
-
-.notification-container {
-  margin: 1rem;
-
-  button {
-    background-color: transparent;
-    border: none;
-  }
-}
-
-.dropdown-item:hover {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.dropdown-item.active {
-  background-color: rgb(126, 203, 242) !important;
-  color: black !important;
-}
-
-.dropdown-item {
-  font-size: 1.3vw;
-}
-
-.navbar-collapse {
-  padding-bottom: 0.5rem;
-}
-
-.navbar-toggler {
-  float: right;
-  background-color: #ffffff !important;
-  margin: 3vw;
-  border: none;
-
-  &:focus,
-  &:active {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none;
-  }
-
-  .custom-btn {
-    width: 2vw !important;
-    font-size: 1.5vw !important;
-  }
-}
-
-.nav-link,
-#logOutBtn {
-  text-decoration: none;
-  display: inline-block;
-  padding: 10px 15px !important;
-  position: relative;
-  color: rgb(2, 2, 2) !important;
-  letter-spacing: 0.1em;
-}
-
-#logOutBtn {
-  font-family: "Poppins";
-  font-size: 1.3vw;
-  margin-right: 2vw;
-  border: none;
-}
-
-/* end of navbar code */
 
 /* Div for loader */
 #loaderOverlay {
@@ -262,7 +90,7 @@ nav {
 }
 
 #mainTitle {
-  margin-top: 10vw ;
+  margin-top: 10vw;
 }
 
 .categories {
@@ -718,12 +546,6 @@ nav {
 
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
-
-  .navbar {
-    padding: 5px 0;
-    height: 8vh !important;
-  }
-
   .selection {
     margin-top: 5vw;
     height: 100vh;
@@ -781,55 +603,6 @@ nav {
 
   .hotelDescription {
     font-size: 2vw;
-  }
-}
-
-@media (max-width: 991.98px) {
-
-  #navbarNav .nav-link,
-  #navbarNav .dropdown-item {
-    color: black !important;
-  }
-
-  .nav-item {
-    margin-top: 5px;
-    font-size: 2vw;
-  }
-
-  #navbarDropdown {
-    text-align: left;
-  }
-
-  a.dropdown-item {
-    font-size: 1.8vw !important;
-  }
-
-  #profileAndNotif {
-    background-color: transparent;
-  }
-
-  .navbar-nav {
-    background-color: rgb(251, 250, 250);
-  }
-
-  #toggledNav {
-    position: absolute;
-    right: 2vw;
-  }
-
-  #navbar-half2 .btn-outline-danger {
-    color: black !important;
-    border-color: white !important;
-    width: 100%;
-    text-align: left;
-  }
-
-
-}
-
-@media (max-width: 991.98px) and (orientation:portrait) {
-  .nav-item {
-    margin-top: 5px;
   }
 }
 
@@ -896,47 +669,9 @@ nav {
     display: grid !important;
     align-items: center;
   }
-
-  .logoNav {
-    width: 20vw !important;
-  }
-
-  .navbar {
-    height: 10vh;
-  }
-
-  .ms-auto {
-    position: absolute !important;
-    right: 4vw !important;
-  }
-
   .embed-responsive {
     width: clamp(70vw, 75vw, 80vw) !important;
   }
-
-  .account-nav img {
-    height: clamp(8.5vw, 9.5vw, 10vw);
-    aspect-ratio: 1;
-  }
-
-
-  #toggledNav {
-    position: absolute !important;
-    right: 4vw !important;
-  }
-
-  .notificationIcon {
-    display: flex;
-    align-items: center;
-    height: clamp(4.5vw, 5.1vw, 6vw);
-    aspect-ratio: 1;
-  }
-
-  .notifBtn {
-    margin-left: 1.5vw;
-    margin-top: 0 !important;
-  }
-
 
   .hotelIconsContainer {
     width: 55%;
@@ -977,7 +712,7 @@ nav {
     font-size: 5vw;
   }
   .selection {
-    margin-top: 15vw; 
+    margin-top: 15vw;
   }
 
   .cottage {
@@ -1024,7 +759,7 @@ nav {
   }
 
   .card-body {
-    width: 100%;  
+    width: 100%;
     padding: 5vw 0;
   }
 
@@ -1038,7 +773,7 @@ nav {
 
   .card {
     margin: 3vw auto;
-    width: 70% !important; 
+    width: 70% !important;
   }
 
   .availabilityIcons p {

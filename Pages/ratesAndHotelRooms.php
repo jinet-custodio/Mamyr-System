@@ -13,7 +13,7 @@ require '../Config/dbcon.php';
     <title>Mamyr - Rates and Hotel Rooms</title>
     <link rel="icon" type="image/x-icon" href="/Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/ratesAndHotelRooms.css">
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="stylesheet" href="../Assets/CSS/navbar.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -28,17 +28,18 @@ require '../Config/dbcon.php';
 <body>
     <div class="wrapper">
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
-                    <li class="nav-item dropdown text-center">
+                    <li class="nav-item dropdown">
                         <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             AMENITIES

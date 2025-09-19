@@ -341,6 +341,10 @@ body {
     font-size: 6vw;
   }
 
+  .titleContainer {
+    margin-top: 10vh !important;
+  }
+
   .venueTitleContainer {
     margin-top: 4vh;
   }
@@ -418,34 +422,34 @@ body {
   }
 
   .bookBtn {
-    font-size: 2vw !important;
+    font-size: 1.8vw !important;
   }
 
   .mainHall,
   .miniHall {
     padding-left: 0;
     padding-right: 0;
+    width: 95% !important;
+  }
+  .mainHall {
+    flex-direction: column;
   }
 
   .miniHall {
     margin-top: 3vw;
+    flex-direction: column-reverse;
   }
 
-  .mainHallDescContainer {
-    padding-right: 2vw;
-  }
-
-  .miniHallDescContainer {
-    padding-left: 2vw;
-  }
   .mainHallDescContainer,
   .miniHallDescContainer {
-    width: 40%;
+    width: 95%;
+    margin: auto;
   }
 
   #carouselMainHall,
   #carouselMiniHall {
-    width: 50%;
+    width: 60%;
+    margin-bottom: 0 !important;
   }
 
   .mainHallDescTitle,
@@ -459,6 +463,50 @@ body {
   }
 
   img.d-block {
-    width: 40vw !important;
+    width: 50vw !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .title,
+  .venueTitle {
+    font-size: 7vw;
+  }
+
+  .venueTitleContainer {
+    margin-top: 4vh;
+  }
+  .description,
+  .venueDescription {
+    font-size: 3.5vw;
+  }
+  .card-title {
+    font-size: 5vw;
+  }
+
+  .eventDesc {
+    font-size: 3vw;
+  }
+
+  .card-body {
+    padding: 1.9vw !important;
+  }
+
+  .bookBtn {
+    font-size: 2vw !important;
+  }
+
+  .mainHallDescTitle,
+  .miniHallDescTitle {
+    font-size: 4.2vw;
+  }
+
+  .miniHallDescription,
+  .mainHallDescription {
+    font-size: 3.3vw !important;
+  }
+
+  .mt-5 {
+    margin-top: 1vw !important;
   }
 }

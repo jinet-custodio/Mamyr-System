@@ -50,7 +50,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <title>Mamyr Resort and Events Place </title>
     <link rel="icon" type="image/x-icon" href="Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="Assets/CSS/landingPage.css">
-    <!-- <link rel="stylesheet" href="Assets/CSS/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="Assets/CSS/navbar.css">
     <!-- online stylesheet link for bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -65,7 +65,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 <body>
     <?php if (!$editMode): ?>
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-            <button class=" navbar-toggler ms-auto" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
+            <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -73,7 +73,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="collapse navbar-collapse " id="navbarNav">
                 <ul class="navbar-nav ms-auto me-10" id="navUL">
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link  dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             AMENITIES
                         </a>
@@ -84,19 +84,19 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Pages/blog.php">Blog</a>
+                        <a class="nav-link text-white" href="Pages/blog.php">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Pages/busPartnerRegister.php" id="bopNav">Be Our Partner</a>
+                        <a class="nav-link text-white" href="/Pages/busPartnerRegister.php" id="bopNav">Be Our Partner</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Pages/about.php">About</a>
+                        <a class="nav-link text-white" href="Pages/about.php">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Pages/register.php">Book Now</a>
+                        <a class="nav-link text-white" href="Pages/register.php">Book Now</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Pages/register.php">Sign Up</a>
+                        <a class="nav-link text-white" href="Pages/register.php">Sign Up</a>
                     </li>
                 </ul>
             </div>

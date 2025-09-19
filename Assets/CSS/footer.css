@@ -11,7 +11,6 @@
   src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
-
 footer {
   /* border: 1px solid black; */
   margin-top: 3vw;
@@ -154,34 +153,36 @@ footer {
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   .mb-0 {
-    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
+    font-size: clamp(2.5vw, calc(1.9vh + 4px), 1.8vw) !important;
   }
 
   .logo {
     width: 15vw;
   }
 
-  .reservationTitle, .locationTitle {
+  .reservationTitle,
+  .locationTitle {
     font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
   }
 
-  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
-    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
+    font-size: clamp(2.2vw, calc(1.8vw + 4px), 1.8vw) !important;
   }
 
   .socialIcons a {
     justify-items: center;
     align-items: center;
   }
- 
-    .socialIcons a i { 
-      font-size: 3vw;
-    }
+
+  .socialIcons a i {
+    font-size: 3vw;
+  }
 }
 
 @media (max-width: 600px) {
-
-.mb-0 {
+  .mb-0 {
     font-size: clamp(2.7vw, calc(2.2vw + 4px), 2vw) !important;
   }
 
@@ -197,11 +198,14 @@ footer {
     width: 50%;
   }
 
-  .reservationTitle, .locationTitle {
+  .reservationTitle,
+  .locationTitle {
     font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
-  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
     font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
   }
 
@@ -210,8 +214,8 @@ footer {
     align-items: center;
     padding: 0.5vw 1.5vw;
   }
- 
-.socialIcons a i { 
-      font-size: 3.5vw;
-    } 
-} 
+
+  .socialIcons a i {
+    font-size: 3.5vw;
+  }
+}
