@@ -1,22 +1,11 @@
-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* height: 15vh; */
   padding: 1rem;
-  background-color: white;
 }
 
 .navbar-nav {
-  display: flex !important;
   list-style: none;
 }
 
@@ -31,7 +20,6 @@ nav {
   vertical-align: middle;
   position: relative;
   top: 0.1vw;
-  /* para ma-align yung dropdown sa ibang nav-item */
 }
 
 .nav-item {
@@ -40,7 +28,11 @@ nav {
   font-weight: lighter;
   margin-top: 15px;
   font-size: 1.5vw;
-  /* margin-left: 3vw; */
+}
+
+#navbar-half2 a {
+  color: white !important;
+  background-color: transparent !important;
 }
 
 .nav-link,
@@ -89,6 +81,7 @@ nav {
 
 .nav-item.dropdown:hover .dropdown-menu {
   background-color: white !important;
+  color: black !important;
   display: block;
 }
 
@@ -101,9 +94,17 @@ nav {
   color: black !important;
 }
 
+#navbar.scrolled {
+  background-color: white;
+}
+
 .dropdown-item {
   font-size: 1.3vw;
   font-weight: bold;
+}
+
+.navbar {
+  transition: all 0.4s ease-in-out;
 }
 
 .account-nav {
@@ -135,6 +136,7 @@ nav {
   height: 100%;
   display: flex;
   align-items: center;
+  margin-left: 1vw;
 
   button {
     background-color: transparent;
@@ -145,21 +147,23 @@ nav {
 .notificationIcon {
   display: flex;
   align-items: center;
-  height: 2.5vw;
+  height: clamp(2.9vw, 2.8vw, 2.7vw);
   aspect-ratio: 1;
 }
 
 .logoNav {
   width: 15vw;
-  position: absolute;
   margin: 1vw;
 }
 
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
+  .notification-container {
+    margin-left: 2vw;
+  }
   .navbar {
-    height: 10vh;
     background-color: transparent;
+    --bs-navbar-padding-y: 0 !important;
   }
 
   button.position-relative {
@@ -174,14 +178,27 @@ nav {
 
   .account-nav {
     .profile-pic {
-      height: clamp(6vw, 6.8vw, 7.4vw);
+      height: clamp(6.5vw, 6.8vw, 7.4vw);
+    }
+  }
+  .navbar-toggler {
+    float: right;
+    background-color: #ffffff !important;
+    margin: 3vw;
+    border: none;
+
+    &:focus,
+    &:active {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none;
     }
   }
 
   .notificationIcon {
     display: flex;
     align-items: center;
-    height: clamp(2.8vw, 3.2vw, 4vw);
+    height: clamp(3.5vw, 3.8vw, 4vw);
     aspect-ratio: 1;
   }
 
@@ -194,16 +211,35 @@ nav {
     width: 18vw;
   }
 
-  .ms-auto {
-    position: absolute !important;
-    right: 2vw !important;
+  .nav-item,
+  #logOutBtn {
+    font-size: 2vw;
+  }
+
+  #logOutBtn {
+    display: flex;
+    align-items: center;
+  }
+
+  a.nav-link {
+    padding: 0;
+  }
+
+  #logOutBtn {
+    margin-right: 0 !important;
   }
 }
 
 @media (max-width: 991.98px) {
+  .navbar {
+    background-color: transparent !important;
+  }
   #navbarNav .nav-link,
   #navbarNav .dropdown-item {
     color: black !important;
+  }
+  .nav-item.dropdown {
+    position: relative;
   }
 
   .nav-item {
@@ -219,8 +255,8 @@ nav {
     background-color: transparent;
   }
 
-  .navbar-nav {
-    background-color: rgb(251, 250, 250);
+  .navbar-collapse {
+    background-color: transparent;
   }
 
   #navbar-half2 .btn-outline-danger {
@@ -233,6 +269,13 @@ nav {
   .navbar-toggler {
     background-color: white !important;
   }
+
+  #toggledNav,
+  #navUL {
+    width: 25%;
+    margin-right: 2vw;
+    background-color: whitesmoke;
+  }
 }
 
 @media (max-width: 991.98px) and (orientation: portrait) {
@@ -242,7 +285,8 @@ nav {
 }
 
 @media (max-width: 600px) {
-  .nav-link {
+  .nav-link,
+  #logOutBtn {
     font-size: 3vw !important;
   }
   .logoNav {
@@ -252,22 +296,9 @@ nav {
     font-size: 2.8vw !important;
   }
 
-  .navbar {
-    height: 10vh;
-  }
-
-  .ms-auto {
-    position: absolute !important;
-    right: 4vw !important;
-  }
   .account-nav img {
     height: clamp(8.5vw, 9.5vw, 10vw);
     aspect-ratio: 1;
-  }
-
-  #toggledNav {
-    position: absolute !important;
-    right: 4vw !important;
   }
 
   .notificationIcon {
@@ -285,20 +316,21 @@ nav {
     margin-left: 1.5vw;
     margin-top: 0 !important;
   }
+
+  #toggledNav,
+  #navUL {
+    width: 35%;
+    margin-right: 2vw;
+    background-color: whitesmoke;
+  }
 }
 
 @media (max-width: 400px) {
-  .ms-auto {
-    position: absolute !important;
-    right: 5vw !important;
-  }
-
   .account-nav {
     .profile-pic {
       height: clamp(11vw, 10vw, 9vw);
     }
   }
-
   .notificationIcon {
     height: clamp(7vw, 6vw, 5vw);
   }

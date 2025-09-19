@@ -64,21 +64,23 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <?php endif; ?>
     <?php if (!$editMode): ?>
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+
+            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" onclick="event.preventDefault()">
                             AMENITIES
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        <ul class="dropdown-menu  dropdown-menu-start" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item active" href="amenities.php">RESORT AMENITIES</a></li>
                             <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                             <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
@@ -97,7 +99,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <a class="nav-link" href="register.php">BOOK NOW</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="register.php">Sign Up</a>
+                        <a class="nav-link" href="register.php" id="logOutBtn">Sign Up</a>
                     </li>
                 </ul>
             </div>
