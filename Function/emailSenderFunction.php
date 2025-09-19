@@ -10,9 +10,9 @@ function sendEmail($toUserEmail, $userName, $subject, $body, $env)
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host = $env['SMTP_HOST'];
         $mail->SMTPAuth = true;
         $mail->Username = $env['SMTP_USER'];
+        $mail->Host = $env['SMTP_HOST'];
         $mail->Password = $env['SMTP_PASS'];
         // $mail->SMTPSecure = 'tls';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
@@ -20,7 +20,6 @@ function sendEmail($toUserEmail, $userName, $subject, $body, $env)
 
         $mail->setFrom($env['SMTP_USER'], 'Mamyr Resort and Event Place');
         $mail->addReplyTo($env['SMTP_USER'], 'No Reply');
-
         $mail->addAddress($toUserEmail, $userName);
 
         $mail->isHTML(true);

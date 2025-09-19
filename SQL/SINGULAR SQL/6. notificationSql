@@ -12,3 +12,13 @@ CREATE TABLE notification (
     FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID),
     FOREIGN KEY (userID) REFERENCES user(userID)
     );
+
+
+CREATE TABLE userreview (
+    userReviewID INT PRIMARY KEY AUTO_INCREMENT,
+    bookingID INT,
+    bookingType VARCHAR(50),
+    reviewRating DECIMAL(2,1),
+    reviewComment TEXT,
+    FOREIGN KEY (bookingID) REFERENCES booking(bookingID)
+);

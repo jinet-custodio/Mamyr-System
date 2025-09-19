@@ -48,13 +48,15 @@ if (isset($_POST['verify-btn'])) {
                             $changeStatus->close();
                         } elseif ($action === 'Partner') {
                             // Get partner data from session
-                            $partnerData = $_SESSION['partnerData'] ?? null;
+                            $partnerData = $_SESSION['partnerData'] ?? [];
                             $companyName = mysqli_real_escape_string($conn, $partnerData['companyName']);
-                            $partnerType = intval($partnerData['partnerType']);
+                            $partnerType = $partnerData['partnerType'] ?? [];;
                             $partnerAddress = mysqli_real_escape_string($conn, $partnerData['partnerAddress']);
                             $partnerProofLink = mysqli_real_escape_string($conn, $partnerData['proofLink']);
                             $partnerPhoneNumber = mysqli_real_escape_string($conn, $partnerData['phoneNumber']);
+                            $validIDImage = mysqli_real_escape_string($conn, $partnerData['imageName']);
 
+                            // error_log($partnerType);
                             if (!$partnerData) {
                                 $_SESSION['error'] = "Partner information is missing. Please restart the registration process.";
                                 header("Location: ../Pages/register.php");
@@ -68,24 +70,38 @@ if (isset($_POST['verify-btn'])) {
                                 $updateUser->bind_param("si",  $partnerPhoneNumber, $storedUserID);
 
                                 if (!$updateUser->execute()) {
+                                    $conn->rollback();
                                     throw new Exception("Failed to update user");
                                 }
 
                                 // Insert into partnerships table
-                                $insertPartner = $conn->prepare("INSERT INTO partnership(userID, partnerAddress, companyName, partnerTypeID, businessEmail, documentLink)
+                                $insertPartner = $conn->prepare("INSERT INTO partnership(userID, validIDImage, partnerAddress, companyName, businessEmail, documentLink)
                                                     VALUES (?,?,?,?,?,?)");
-                                $insertPartner->bind_param("ississ", $storedUserID, $partnerAddress, $companyName, $partnerType, $email, $partnerProofLink);
-
+                                $insertPartner->bind_param("isssss", $storedUserID, $validIDImage, $partnerAddress, $companyName, $email, $partnerProofLink);
 
                                 if (!$insertPartner->execute()) {
+                                    $conn->rollback();
                                     throw new Exception("Failed to insert partnership data");
                                 }
 
-                                // Update user status and reset the otps
                                 $partnershipID = $conn->insert_id;
+
+                                //Insert the partnershiptype
+                                $insertPartnerType = $conn->prepare("INSERT INTO `partnership_partnertype`(`partnershipID`, `partnerTypeID`) VALUES (?,?)");
+                                foreach ($partnerType as $id) {
+                                    $id = intval($id);
+                                    $insertPartnerType->bind_param('ii', $partnershipID, $id);
+                                    if (!$insertPartnerType->execute()) {
+                                        $conn->rollback();
+                                        throw new Exception("Failed to insert partnership type");
+                                    }
+                                }
+
+                                // Update user status and reset the otps
                                 $changeStatus = $conn->prepare("UPDATE user SET userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
                                 $changeStatus->bind_param("is", $userStat, $email);
                                 if (!$changeStatus->execute()) {
+                                    $conn->rollback();
                                     throw new Exception("Failed to change the status");
                                 }
 
@@ -95,6 +111,7 @@ if (isset($_POST['verify-btn'])) {
                                 $insertNotification = $conn->prepare("INSERT INTO notification(partnershipID, userID, message, receiver) VALUES(?, ?, ?, ?)");
                                 $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
                                 if (!$insertNotification->execute()) {
+                                    $conn->rollback();
                                     throw new Exception("Failed to insert notification");
                                 }
 
@@ -107,8 +124,21 @@ if (isset($_POST['verify-btn'])) {
                             } catch (Exception $e) {
                                 $conn->rollback();
                                 error_log("Partner Registration Error: " . $e->getMessage());
+
+                                if (isset($storedUserID)) {
+                                    $deletePartnerQuery = $conn->prepare("DELETE FROM `user` WHERE userID = ?");
+                                    if ($deletePartnerQuery) {
+                                        $deletePartnerQuery->bind_param('i', $storedUserID);
+                                        $deletePartnerQuery->execute();
+                                        $deletePartnerQuery->close();
+                                    } else {
+                                        error_log("Failed to prepare delete statement for userID: $storedUserID");
+                                    }
+                                }
+
                                 $_SESSION['registerError'] = "An error occurred during partner registration. Please try again.";
                                 header("Location: ../Pages/register.php");
+                                $deletePartnerQuery->close();
                                 exit;
                             } finally {
                                 $updateUser->close();

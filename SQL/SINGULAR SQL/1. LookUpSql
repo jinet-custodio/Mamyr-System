@@ -5,24 +5,24 @@ USE mamyr;
 
 CREATE TABLE usertype (
     userTypeID INT PRIMARY KEY AUTO_INCREMENT,
-    typeName VARCHAR(50) UNIQUE -- 'Customer', 'Partner', 'Admin'
+    typeName VARCHAR(50) UNIQUE 
 );
 
 INSERT INTO usertype (typeName) VALUES 
 ('Customer'), 
 ('Partner'), 
 ('Admin'),
-('PartnerRequest');
+('Partner Request');
 
 CREATE TABLE userstatus (
     userStatusID INT PRIMARY KEY AUTO_INCREMENT,
-    statusName VARCHAR(50) UNIQUE -- 'Pending', 'Verified', 'Non-verified'
+    statusName VARCHAR(50) UNIQUE 
 );
 
 INSERT INTO userstatus (statusName) VALUES 
 ('Pending'), 
 ('Verified'), 
-('NotVerified'),
+('Not Verified'),
 ('Deleted');
 
 
@@ -63,8 +63,7 @@ INSERT INTO status (statusName) VALUES
 ('Rejected'),
 ('Cancelled'),
 ('Done'),
-('Expired'),
-('Payment Issue');
+('Expired');
 
 
 CREATE TABLE eventcategory (
@@ -91,7 +90,8 @@ Create Table bookingpaymentstatus (
 INSERT INTO bookingpaymentstatus (statusName) Values 
 ('No Payment'),
 ('Partially Paid'),
-('Fully Paid');
+('Fully Paid'),
+('Payment Issue');
 
 CREATE TABLE resortservicescategory (
     categoryID INT PRIMARY KEY AUTO_INCREMENT,

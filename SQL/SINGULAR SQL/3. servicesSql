@@ -9,10 +9,13 @@ CREATE TABLE partnershipservice (
     PBcapacity INT DEFAULT 1,
     PSstatus INT DEFAULT 1,
     PSAvailabilityID INT DEFAULT 1,
+    approvedBy INT,
+    approvedDate DATETIME NULL,
 
     FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID),
     FOREIGN KEY (PSAvailabilityID) REFERENCES serviceavailability(availabilityID),
-    FOREIGN KEY (PSstatus) REFERENCES status(statusID)
+    FOREIGN KEY (PSstatus) REFERENCES status(statusID),
+    FOREIGN KEY (approvedBy) REFERENCES admin(adminID)
 );
 
 ALTER TABLE partnershipservice
