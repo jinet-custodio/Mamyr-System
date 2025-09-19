@@ -46,14 +46,14 @@ if (isset($_POST['hotelBooking'])) {
     $totalCapacity = (int) $_POST['capacity'];
     $additionalGuest = (int) $_POST['additionalGuest'];
 
-    $selectedHotels = !empty($_POST['hotelSelections']) ? array_map('trim', explode(', ', $_POST['hotelSelections'])) : [];
+    $selectedHotels = !empty($_POST['hotelSelections']) ? $_POST['hotelSelections'] : [];
 
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
 
     $downpayment = (float) $_POST['downPayment'];
     $totalCost = (float) $_POST['totalCost'];
-    $additionalCharge = (int) $_POST['additionalFee'];
+    // $additionalCharge = (int) $_POST['additionalFee'];
 
     $bookingStatus = 1;
     $serviceIDs = [];
@@ -86,29 +86,36 @@ if (isset($_POST['hotelBooking'])) {
 
     $hoursNum = str_replace(" hours", "", $hoursSelected);
 
-    //Insert Booking
-    $insertBooking = $conn->prepare("INSERT INTO booking(userID, toddlerCount, adultCount, kidCount, guestCount, durationCount, startDate, endDate, 
-    paymentMethod, additionalCharge, totalCost, downpayment, bookingStatus, bookingType, arrivalTime) 
-    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?)");
-    $insertBooking->bind_param(
-        "iiiiiisssdddiss",
-        $userID,
-        $toddlerCount,
-        $adultCount,
-        $childrenCount,
-        $totalPax,
-        $hoursNum,
-        $checkInDate,
-        $checkOutDate,
-        $paymentMethod,
-        $additionalCharge,
-        $totalCost,
-        $downpayment,
-        $bookingStatus,
-        $bookingType,
-        $arrivalTime
-    );
-    if ($insertBooking->execute()) {
+    $conn->begin_transaction();
+    try {
+
+        //Insert Booking
+        $insertBooking = $conn->prepare("INSERT INTO booking(userID, toddlerCount, adultCount, kidCount, guestCount, durationCount, startDate, endDate, 
+                    paymentMethod,  totalCost, downpayment, bookingStatus, bookingType, arrivalTime) 
+                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?, ?)");
+        $insertBooking->bind_param(
+            "iiiiiisssddiss",
+            $userID,
+            $toddlerCount,
+            $adultCount,
+            $childrenCount,
+            $totalPax,
+            $hoursNum,
+            $checkInDate,
+            $checkOutDate,
+            $paymentMethod,
+            // $additionalCharge,
+            $totalCost,
+            $downpayment,
+            $bookingStatus,
+            $bookingType,
+            $arrivalTime
+        );
+        if (!$insertBooking->execute()) {
+            $conn->rollback();
+            throw new Exception('Error: ' . $insertBooking->error);
+        }
+
         $bookingID = $conn->insert_id;
 
         $insertBookingServices = $conn->prepare("INSERT INTO bookingservice(bookingID, serviceID, guests, bookingServicePrice)
@@ -120,7 +127,10 @@ if (isset($_POST['hotelBooking'])) {
                 $serviceCapacity = $hotelCapacity[$i];
 
                 $insertBookingServices->bind_param("iiid", $bookingID, $serviceID, $serviceCapacity, $servicePrice);
-                $insertBookingServices->execute();
+                if (!$insertBookingServices->execute()) {
+                    $conn->rollback();
+                    throw new Exception('Error: ' . $insertBookingServices->error);
+                }
             }
         }
         $insertBookingServices->close();
@@ -130,11 +140,19 @@ if (isset($_POST['hotelBooking'])) {
         $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
             VALUES(?,?,?,?)");
         $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
-        $insertBookingNotificationRequest->execute();
+        if (! $insertBookingNotificationRequest->execute()) {
+            $conn->rollback();
+            throw new Exception('Error: ' .  $insertBookingNotificationRequest->error);
+        }
         $insertBookingNotificationRequest->close();
+
+        $conn->commit();
         header('Location: ../../Pages/Customer/bookNow.php?action=success');
         exit();
-    } else {
-        echo "Booking failed: " . $insertBooking->error;
+    } catch (Exception $e) {
+        $conn->rollback();
+        error_log('Error: ' . $e->getMessage());
+        $_SESSION['hotelFormData'] = $_POST;
+        header('Location: ../../../../Pages/Customer/hotelBooking.php?action=errorBooking');
     }
 }

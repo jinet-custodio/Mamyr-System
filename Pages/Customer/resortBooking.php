@@ -453,6 +453,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                                 : '[]'
                                             ?>;
         const addOnsServicesSession = <?= isset($_SESSION['resortFormData']['addOnsServices']) ? json_encode($_SESSION['resortFormData']['addOnsServices']) : '[]' ?>;
+
+        const roomSelectionSession = <?= isset($_SESSION['resortFormData']['roomSelections']) ? json_encode($_SESSION['resortFormData']['roomSelections']) : '[]' ?>;
         // console.log(cottageSelectionsSession);
         document.addEventListener("DOMContentLoaded", function() {
             const dateInput = document.getElementById('resortBookingDate');
@@ -572,6 +574,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             const label = document.createElement('label');
                             label.setAttribute('for', checkbox.id);
                             label.innerHTML = `<strong>${room.RServiceName} </strong> for ₱${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
+
+                            const roomSelection = roomSelectionSession.map(String);
+                            if (roomSection.includes(String(room.RServiceName))) {
+                                checkbox.checked = true;
+                            }
 
                             wrapper.appendChild(checkbox);
                             wrapper.appendChild(label);
