@@ -22,158 +22,6 @@
   list-style: none;
 }
 
-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  /* background-color: rgb(242, 242, 242); */
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* height: 15vh; */
-  padding: 1rem;
-}
-
-.navbar-nav {
-  display: flex !important;
-  list-style: none;
-}
-
-#profileAndNotif {
-  padding: 0.6vw;
-}
-
-.navbar-nav .dropdown-toggle {
-  display: inline-block;
-  padding: 10px !important;
-  line-height: 1.5;
-  vertical-align: middle;
-  position: relative;
-  top: 0.1vw;
-  /* para ma-align yung dropdown sa ibang nav-item */
-}
-
-
-.nav-item {
-  text-transform: uppercase;
-  font-family: "Poppins" !important;
-  font-weight: lighter;
-  margin-top: 15px;
-  font-size: 1.5vw;
-  /* margin-left: 3vw; */
-}
-
-.nav-link,
-#logOutBtn {
-  text-decoration: none;
-  display: inline-block;
-  padding: 10px 15px !important;
-  position: relative;
-  color: rgb(2, 2, 2) !important;
-  letter-spacing: 0.1em;
-}
-
-#logOutBtn {
-  font-family: "Poppins";
-  font-size: 1.5vw;
-  margin-right: 2vw;
-  border: none;
-}
-
-.nav-link:not(.dropdown-toggle):after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 50%;
-  position: absolute;
-  border-bottom: 4px solid #93d4f5 !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-
-.nav-link.active:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link:not(.dropdown-toggle):hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.dropdown-menu {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.nav-item.dropdown:hover .dropdown-menu {
-  background-color: white !important;
-  display: block;
-}
-
-.dropdown-item:hover {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.dropdown-item.active {
-  background-color: rgb(126, 203, 242) !important;
-  color: black !important;
-}
-
-.dropdown-item {
-  font-size: 1.3vw;
-  font-weight: bold;
-}
-
-.account-nav {
-  display: flex;
-  align-items: center;
-  border-radius: 50%;
-  margin-left: 1rem;
-  margin-top: 0 !important;
-
-  img {
-    height: 5vw;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
-
-  a {
-    height: 100%;
-    display: flex;
-    align-items: center;
-  }
-}
-
-#notifs {
-  margin-top: 0;
-}
-
-.notification-container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-
-  button {
-    background-color: transparent;
-    border: none;
-  }
-}
-
-.notificationIcon {
-  display: flex;
-  align-items: center;
-  height: 2.5vw;
-  aspect-ratio: 1;
-}
-
 /* Edit mode CSS */
 #saveChangesBtn {
   margin-top: 8vw !important;
@@ -256,13 +104,6 @@ nav {
   }
 }
 
-.logoNav {
-  /* border: 1px solid black; */
-  width: 15vw;
-  position: absolute;
-  margin: 1vw;
-}
-
 .amenities {
   margin-top: 9vw;
 }
@@ -295,7 +136,8 @@ nav {
   opacity: 1;
 }
 
-.amenityTitle, input.amenityTitle {
+.amenityTitle,
+input.amenityTitle {
   margin-top: 1vw;
   font-size: clamp(2.2vw, calc(2.3vw + 1vh), 2.9vw);
 }
@@ -304,12 +146,12 @@ input.amenityTitle {
   width: 50%;
 }
 
-.amenityDescription, textarea.amenityDescription {
+.amenityDescription,
+textarea.amenityDescription {
   margin-top: 1vw;
   font-size: clamp(1vw, calc(1vw + 1vh), 3vw);
   margin-bottom: 0 !important;
 }
-
 
 .poolPics {
   display: flex;
@@ -326,7 +168,6 @@ input.amenityTitle {
   margin-bottom: 3vw;
   margin-top: 1vw !important;
 }
-
 
 .slideshow-container {
   position: relative;
@@ -350,7 +191,6 @@ input.amenityTitle {
   justify-content: center;
   align-items: center;
 }
-
 
 .slide.active {
   opacity: 1;
@@ -416,7 +256,6 @@ input.amenityTitle {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-
 @keyframes fade {
   from {
     opacity: 0.4;
@@ -433,8 +272,6 @@ input.amenityTitle {
     padding: 8px 12px;
   }
 } */
-
-
 
 .amenityTitleContainer {
   width: 85%;
@@ -455,7 +292,6 @@ input.amenityTitle {
 .hotel {
   padding-bottom: 1vw !important;
 }
-
 
 .btn-primary {
   position: absolute;
@@ -481,50 +317,8 @@ input.amenityTitle {
   gap: 5vw;
 }
 
-
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
-  .navbar {
-    height: 10vh;
-  }
-
-  button.position-relative {
-    padding: 0 !important;
-  }
-
-  .profile {
-    flex-wrap: nowrap !important;
-    flex-direction: row !important;
-    align-items: center;
-  }
-
-  .account-nav {
-    .profile-pic {
-      height: clamp(6vw, 6.8vw, 7.4vw);
-    }
-  }
-
-  .notificationIcon {
-    display: flex;
-    align-items: center;
-    height: clamp(2.8vw, 3.2vw, 4vw);
-    aspect-ratio: 1;
-  }
-
-  .notifBtn {
-    margin-left: 1vw;
-    height: 100%;
-  }
-
-  .logoNav {
-    width: 18vw;
-  }
-
-  .ms-auto {
-    position: absolute !important;
-    right: 2vw !important;
-  }
-
   .title {
     margin-top: clamp(2vw, calc(1.5vh + 4px), 4vw);
   }
@@ -621,7 +415,8 @@ input.amenityTitle {
     opacity: 1;
   }
 
-  .prev-btn, .next-btn {
+  .prev-btn,
+  .next-btn {
     position: absolute;
     top: 50%;
     z-index: 10;
@@ -653,85 +448,9 @@ input.amenityTitle {
   }
 }
 
-@media (max-width: 991.98px) {
-
-  #navbarNav .nav-link,
-  #navbarNav .dropdown-item {
-    color: black !important;
-  }
-
-  .nav-item {
-    margin-top: 5px;
-    font-size: 2vw;
-  }
-
-  a.dropdown-item {
-    font-size: 1.8vw !important;
-  }
-
-  #profileAndNotif {
-    background-color: transparent;
-  }
-
-  .navbar-nav {
-    background-color: rgb(251, 250, 250);
-  }
-
-  #navbar-half2 .btn-outline-danger {
-    color: black !important;
-    border-color: white !important;
-    width: 100%;
-    text-align: left;
-  }
-
-
-}
-
-@media (max-width: 991.98px) and (orientation:portrait) {
-  .nav-item {
-    margin-top: 5px;
-  }
-}
-
 @media (max-width: 600px) {
-  .logoNav {
-    width: 20vw !important;
-  }
-
-  .navbar {
-    height: 10vh;
-  }
-
-  .ms-auto {
-    position: absolute !important;
-    right: 4vw !important;
-  }
-
   .embed-responsive {
     width: clamp(70vw, 75vw, 80vw) !important;
-  }
-
-  .account-nav img {
-    height: clamp(8.5vw, 9.5vw, 10vw);
-    aspect-ratio: 1;
-  }
-
-
-  #toggledNav {
-    position: absolute !important;
-    right: 4vw !important;
-  }
-
-  .notificationIcon {
-    display: flex;
-    align-items: center;
-    height: clamp(4.5vw, 5.1vw, 6vw);
-    aspect-ratio: 1;
-  }
-
-  .notifBtn {
-    margin-left: 1.5vw;
-    margin-top: 0 !important;
   }
 
   .amenities {
@@ -772,22 +491,23 @@ input.amenityTitle {
     height: auto;
   }
 
-  .navbar-toggler-icon {
-    width: 23px !important;
+  .prev-btn {
+    left: 15%;
+  }
+
+  .next-btn {
+    right: 15%;
   }
 }
 
 @media (max-width: 400px) {
   .slideshow-container {
     width: 95%;
-    /* Reduce width further */
     height: 200px;
-    /* Further reduce height */
   }
 
   .carousel img {
     width: 50%;
-    /* Even smaller images */
   }
 
   .amenityDescription {
@@ -796,22 +516,13 @@ input.amenityTitle {
 
   button {
     font-size: 18px;
-    /* Smaller buttons */
   }
 
-  .ms-auto {
-    position: absolute !important;
-    right: 5vw !important;
+  .prev-btn {
+    left: 10%;
   }
 
-  .account-nav {
-    .profile-pic {
-      height: clamp(11vw, 10vw, 9vw);
-    }
+  .next-btn {
+    right: 10%;
   }
-
-  .notificationIcon {
-    height: clamp(7vw, 6vw, 5vw);
-  }
-
 }
