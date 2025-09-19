@@ -22,6 +22,13 @@ function multiplication($a, $b)
 unset($_SESSION['resortFormData']);
 
 if (isset($_POST['bookRates'])) {
+    $serviceIDs = [];
+    $servicePrices = [];
+    $serviceCapacity = [];
+    $services = [];
+    $resortServiceIDs = [];
+
+    $resortBookingDate = mysqli_real_escape_string($conn, $_POST['resortBookingDate']);
     $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['scheduledStartDate']);
     $scheduledEndDate = mysqli_real_escape_string($conn, $_POST['scheduledEndDate']);
     $hoursNumber = mysqli_real_escape_string($conn, $_POST['hoursNumber']);
@@ -35,7 +42,7 @@ if (isset($_POST['bookRates'])) {
 
     $totalCost = (float) $_POST['totalCost'];
     $downpayment = (float) $_POST['downPayment'];
-    $additionalCharge = (float) $_POST['additionalServiceFee'];
+    // $additionalCharge = (float) $_POST['additionalServiceFee'];
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
 
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
@@ -47,16 +54,11 @@ if (isset($_POST['bookRates'])) {
     $childrenServiceID = (int) $_POST['childrenServiceID'];
     $adultServiceID = (int) $_POST['adultServiceID'];
 
-    $cottageChoices = !empty($_POST['cottageSelections']) ? array_map('trim', explode(', ', $_POST['cottageSelections'])) : [];
-    $roomChoices = !empty($_POST['roomSelections']) ? array_map('trim', explode(', ', $_POST['roomSelections'])) : [];
-    $addOnsServices = !empty($_POST['addOnsServices']) ? array_map('trim', explode(', ', $_POST['addOnsServices'])) : [];
+    $cottageChoices = !empty($_POST['cottageSelections']) ? $_POST['cottageSelections'] : [];
+    $roomChoices = !empty($_POST['roomSelections']) ?  $_POST['roomSelections'] : [];
+    $addOnsServices = !empty($_POST['addOnsServices']) ?  $_POST['addOnsServices'] : [];
 
 
-    $serviceIDs = [];
-    $servicePrices = [];
-    $serviceCapacity = [];
-    $services = [];
-    $resortServiceIDs = [];
 
     if (!empty($cottageChoices)) { //get selected cottages
         $sql = "SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription, rs.resortServiceID FROM service s
@@ -156,66 +158,67 @@ if (isset($_POST['bookRates'])) {
 
     $scheduledStartDateObj = new DateTime($scheduledStartDate);
     $dateScheduled = $scheduledStartDateObj->format('F');
-    $arrivalTime = $scheduledStartDateObj->format('H:i:s');
+    $arrivalTime = $scheduledStartDateObj->format('h:i:s');
+    $conn->begin_transaction();
 
+    try {
 
-    $insertBooking = $conn->prepare("INSERT INTO 
+        $bookingStatus = ($dateScheduled === 'March' || $dateScheduled === 'April' || $dateScheduled === 'May') ? 1 : 2;
+
+        $insertBooking = $conn->prepare("INSERT INTO 
         booking(userID, additionalRequest, toddlerCount, kidCount, adultCount, guestCount, durationCount, 
-        startDate, endDate, additionalCharge,
+        startDate, endDate,
         totalCost, downpayment, 
         addOns, paymentMethod, bookingStatus, bookingType, arrivalTime) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-    if ($dateScheduled === 'March' || $dateScheduled === 'April' || $dateScheduled === 'May') {
-        $bookingStatus = 1;
-    } else {
-        $bookingStatus = 2;
-    }
+        $insertBooking->bind_param(
+            "isiiiiissddssiss",
+            $userID,
+            $additionalRequest,
+            $toddlerCount,
+            $childrenCount,
+            $adultCount,
+            $totalPax,
+            $hoursNumber,
+            $scheduledStartDate,
+            $scheduledEndDate,
+            // $additionalCharge,
+            $totalCost,
+            $downpayment,
+            $addOns,
+            $paymentMethod,
+            $bookingStatus,
+            $bookingType,
+            $arrivalTime
+        );
 
+        if (!$insertBooking->execute()) {
+            $conn->rollback();
+            throw new Exception('Error executing: ' . $insertBooking->error);
+        }
 
-    $insertBooking->bind_param(
-        "isiiiiissdddssiss",
-        $userID,
-        $additionalRequest,
-        $toddlerCount,
-        $childrenCount,
-        $adultCount,
-        $totalPax,
-        $hoursNumber,
-        $scheduledStartDate,
-        $scheduledEndDate,
-        $additionalCharge,
-        $totalCost,
-        $downpayment,
-        $addOns,
-        $paymentMethod,
-        $bookingStatus,
-        $bookingType,
-        $arrivalTime
-    );
-
-    if ($insertBooking->execute()) {
         $bookingID = $conn->insert_id;
 
         $insertBookingServices = $conn->prepare("INSERT INTO 
-    bookingservice(bookingID, serviceID, guests, bookingServicePrice)
-    VALUES(?,?,?,?)");
-
+                    bookingservice(bookingID, serviceID, guests, bookingServicePrice)
+                    VALUES(?,?,?,?)");
 
         if ($adultCount > 0 && isset($adultServiceID)) {
             $insertBookingServices->bind_param("iiid", $bookingID, $adultServiceID, $adultCount, $totalAdultFee);
-
-            if ($insertBookingServices->execute()) {
-                echo 'Services ' . $adultServiceID;
-            } else {
-                echo 'Services ' . $adultServiceID;
+            if (!$insertBookingServices->execute()) {
+                $conn->rollback();
+                throw new Exception('Error insertion of services:' . $insertBookingServices->error);
             }
         }
 
 
         if ($childrenCount > 0 && isset($childrenServiceID)) {
             $insertBookingServices->bind_param("iiid", $bookingID, $childrenServiceID, $childrenCount, $totalChildFee);
-            $insertBookingServices->execute();
+            if (!$insertBookingServices->execute()) {
+                $conn->rollback();
+                throw new Exception('Error insertion of services:' . $insertBookingServices->error);
+            }
         }
 
 
@@ -226,24 +229,25 @@ if (isset($_POST['bookRates'])) {
                 $servicePrice = $servicePrices[$i];
 
                 $insertBookingServices->bind_param("iiid", $bookingID, $serviceID, $capacity, $servicePrice);
-                $insertBookingServices->execute();
+                if (!$insertBookingServices->execute()) {
+                    $conn->rollback();
+                    throw new Exception('Error insertion of services:' . $insertBookingServices->error);
+                }
             }
         }
 
-        $insertBookingServices->close();
-
-
-        if ($bookingStatus ===  1) {
-            $receiver = 'Admin';
-            $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking request.';
-            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
+        $receiver = 'Admin';
+        $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking request.';
+        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
             VALUES(?,?,?,?)");
-            $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
-            $insertBookingNotificationRequest->execute();
+        $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
 
-            header('Location: ../../Pages/Customer/bookNow.php?action=success');
-            exit();
-        } elseif ($bookingStatus === 2) {
+        if (!$insertBookingNotificationRequest->execute()) {
+            $conn->rollback();
+            throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
+        }
+
+        if ($bookingStatus === 2) {
             $today = date('Y m d');
             if ($today === $scheduledStartDate) {
                 $paymentDueDate = $downpaymentDueDate = $today;
@@ -256,43 +260,44 @@ if (isset($_POST['bookRates'])) {
             $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedbooking(bookingID, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate )
                 VALUES(?,?,?,?,?)");
             $insertConfirmedBooking->bind_param("iddss", $bookingID,  $totalCost, $totalCost, $downpaymentDueDate, $paymentDueDate);
-            $insertConfirmedBooking->execute();
+            if (!$insertConfirmedBooking->execute()) {
+                $conn->rollback();
+                throw new Exception('Error :' . $insertConfirmedBooking->error);
+            }
             $insertConfirmedBooking->close();
+
 
             $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?,?,?)");
             if (!empty($resortServiceIDs)) {
                 for ($i = 0; $i < count($resortServiceIDs); $i++) {
                     $resortServiceID = $resortServiceIDs[$i];
                     $insertUnavailableService->bind_param("iss", $resortServiceID, $scheduledStartDate, $scheduledEndDate);
-                    $insertUnavailableService->execute();
+                    if (!$insertUnavailableService->execute()) {
+                        $conn->rollback();
+                        throw new Exception('Error :' . $insertUnavailableService->error);
+                    }
                 }
             }
             $insertUnavailableService->close();
-
-            $occupiedID = 2;
-
-            $updateAvailabilityID = $conn->prepare("UPDATE resortamenity SET RSAvailabilityID = ? WHERE resortServiceID = ?");
-            if (!empty($resortServiceIDs)) {
-                for ($i = 0; $i < count($resortServiceIDs); $i++) {
-                    $resortServiceID = $resortServiceIDs[$i];
-                    $updateAvailabilityID->bind_param("ii", $occupiedID, $resortServiceID);
-                    $updateAvailabilityID->execute();
-                }
-            }
-
-
-            $receiver = 'Admin';
-            $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking.';
-            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
-            VALUES(?,?,?,?)");
-            $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
-            $insertBookingNotificationRequest->execute();
-
-            header('Location: ../../Pages/Customer/bookNow.php?action=success');
-            exit();
+            // $occupiedID = 2;
+            // $updateAvailabilityID = $conn->prepare("UPDATE resortamenity SET RSAvailabilityID = ? WHERE resortServiceID = ?");
+            // if (!empty($resortServiceIDs)) {
+            //     for ($i = 0; $i < count($resortServiceIDs); $i++) {
+            //         $resortServiceID = $resortServiceIDs[$i];
+            //         $updateAvailabilityID->bind_param("ii", $occupiedID, $resortServiceID);
+            //         $updateAvailabilityID->execute();
+            //     }
+            // }
         }
-        $conn->close();
-    } else {
-        echo "Booking failed: " . $insertBooking->error;
+        $conn->commit();
+        header('Location: ../../Pages/Customer/bookNow.php?action=success');
+        exit();
+    } catch (Exception $e) {
+        $conn->rollback();
+        error_log('Error: ' . $e->getMessage());
+        $_SESSION['resortFormData'] = $_POST;
+        header('Location: ../../../../Pages/Customer/resortBooking.php?action=errorBooking');
+    } finally {
+        $insertBookingServices->close();
     }
 }
