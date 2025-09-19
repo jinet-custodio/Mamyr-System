@@ -328,7 +328,7 @@ unset($_SESSION['formData']);
                     $entertainmentName[] = $row['RServiceName'];
                     $entertainmentIDs[] = $row['serviceID'];
                     $addOnsServices[] = $row['RServiceName'];
-                    $addOns[] = $row['RServiceName'];
+                    // $addOns[] = $row['RServiceName'] . ' - ₱' . number_format($row['RSprice'], 2);
                 }
             }
         }
@@ -539,7 +539,9 @@ unset($_SESSION['formData']);
                     <div class="card-info">
                         <h5 class="info-title">Additional Services:</h5>
                         <p class="card-text"><?= !empty($addOnsServices) ? htmlspecialchars(implode(', ', $addOnsServices)) : 'None' ?></p>
-                        <input type="hidden" name="addOnsServices" value="<?= !empty($addOnsServices) ? htmlspecialchars(implode(', ', $addOnsServices)) : 'None' ?>">
+                        <?php foreach ($addOnsServices as $addOns): ?>
+                            <input type="hidden" name="addOnsServices[]" value="<?= htmlspecialchars($addOns) ?>">
+                        <?php endforeach; ?>
                     </div>
                 <?php } else if ($bookingType === 'Hotel') { ?>
                     <div class="card-info">
@@ -659,11 +661,18 @@ unset($_SESSION['formData']);
         </div>
 
         <div style="display: none;">
+            <input type="hidden" name="resortBookingDate" value="<?= $scheduledDate ?>">
             <input type="hidden" name="scheduledStartDate" value="<?= htmlspecialchars($scheduledStartDate ?? '') ?>">
             <input type="hidden" name="scheduledEndDate" value="<?= htmlspecialchars($scheduledEndDate ?? '') ?>">
-            <input type="hidden" name="cottageSelections" value="<?= htmlspecialchars(implode(', ', $cottageChoices ?? [])) ?>">
-            <input type="hidden" name="roomSelections" value="<?= htmlspecialchars(implode(', ', $roomChoices ?? [])) ?>">
-            <input type="hidden" name="hotelSelections" value="<?= htmlspecialchars(implode(', ', $selectedHotels ?? [])) ?>">
+            <?php foreach ($cottageChoices as $choice): ?>
+                <input type="hidden" name="cottageSelections[]" value="<?= htmlspecialchars($choice) ?>">
+            <?php endforeach; ?>
+            <?php foreach ($roomChoices as $choice): ?>
+                <input type="hidden" name="roomSelections[]" value="<?= htmlspecialchars($choice) ?>">
+            <?php endforeach; ?>
+            <?php foreach ($selectedHotels as $choice): ?>
+                <input type="hidden" name="hotelSelections[]" value="<?= htmlspecialchars($choice) ?>">
+            <?php endforeach; ?>
             <input type="hidden" name="hoursSelected" value="<?= htmlspecialchars($hoursSelected ?? '') ?>">
             <input type="hidden" name="hoursNumber" value="<?= htmlspecialchars($numHours ?? '') ?>">
 
@@ -681,39 +690,7 @@ unset($_SESSION['formData']);
 
     </form>
 
-
-
-    <footer class="py-1" id="footer" style="margin-top: 5rem;">
-        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-            <a href="../index.php">
-                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-            </a>
-            <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
-        </div>
-
-        <div class="info">
-            <div class="reservation">
-                <h4 class="reservationTitle">Reservation</h4>
-                <h4 class="numberFooter">(0998) 962 4697 </h4>
-                <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
-            </div>
-            <div class="locationFooter">
-                <h4 class="locationTitle">Location</h4>
-                <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
-            </div>
-        </div>
-        <hr class="footerLine">
-        <div class="socialIcons">
-            <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                    class='bx bxl-facebook-circle'></i></a>
-            <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-            <a href="tel:+09989624697">
-                <i class='bx bxs-phone'></i>
-            </a>
-        </div>
-
-    </footer>
+    <?php include 'footer.php' ?>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->

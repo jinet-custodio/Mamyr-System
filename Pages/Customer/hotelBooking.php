@@ -32,6 +32,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
+
+// echo '<pre';
+// print_r($_SESSION['hotelFormData']);
+// echo '</pre>';
+
 ?>
 
 <!DOCTYPE html>
@@ -136,21 +141,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </div>
                 </div>
 
-
                 <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
-                    <!-- <div class="hoursRoom">
-                          <div class="NumberOfHours">
-                             <h5 class="numberOfHoursLabel">Number of Hours</h5>
-                             <div class="input-group">
-                                 <select class="form-select" name="hoursSelected" id="hoursSelected" required>
-                                     <option value="" disabled selected>Choose...</option>
-                                     <option value="11 hours">11 Hours</option>
-                                     <option value="22 hours">22 Hours</option>
-                                 </select>
-                             </div>
-                         </div> 
-                 </div> -->
-
                     <div class="checkInOut">
                         <div class="checkIn-container">
                             <h5 class="containerLabel">Check-In Date</h5>
@@ -368,6 +359,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <!-- Get the available hotel/room depends on the customer selected date -->
     <script>
+        hotelSelectionSession = <?= isset($_SESSION['hotelFormData']) ? json_encode($_SESSION['hotelFormData']['hotelSelections']) : '[]' ?>;
+
         document.addEventListener("DOMContentLoaded", function() {
             const checkInDate = document.getElementById('checkInDate');
             const checkOutDate = document.getElementById('checkOutDate');
@@ -433,6 +426,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         img.src = `../../Assets/Images/Services/Hotel/${hotel.RSimageData}`;
                         img.alt = `${hotel.RServiceName} image`;
                         img.style.width = "200px";
+
+                        const hotelSelection = hotelSelectionSession.map(String);
+
+                        if (hotelSelectionSession.includes(String(hotel.RServiceName))) {
+                            checkbox.checked = true;
+                        }
 
                         content.appendChild(checkbox);
                         content.appendChild(label);
