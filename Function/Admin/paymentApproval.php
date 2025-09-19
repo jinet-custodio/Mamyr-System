@@ -50,7 +50,7 @@ if (isset($_POST['approvePaymentBtn'])) {
             $amountPaid = $storedAmountPaid + $paymentAmount;
 
             if ($totalBalance <= 0) {
-                $totalBalance;
+                $totalBalance = 0;
                 $paymentStatus = 3;
             } elseif ($paymentAmount > 0 && $totalBalance > 0 && $totalBalance < $storedBill) {
                 $paymentStatus = 2;

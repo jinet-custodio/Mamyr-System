@@ -106,11 +106,9 @@ if ($admin === "Admin") {
                     u.firstName, u.lastName, u.phoneNumber, u.userID AS customerID, u.userRole,
                     bs.*,
                     cp.*,
-                    cpi.*,
-                    -- p.packageName,
+                    cpi.*,   
                     s.*,
                     ra.RServiceName ,
-                    -- rsc.categoryName,
                     er.sessionType,
                     ps.PBName,
                     bps.statusName AS paymentStatus
@@ -144,6 +142,7 @@ if ($admin === "Admin") {
             $userRoleID = $row['userRole'];
 
             //booking info
+            $originalBill = $row['totalCost'];
             $bookingType = $row['bookingType'];
             $formattedBookingID = $row['formattedID'];
             $totalAmount = $row['confirmedFinalBill'];
@@ -277,6 +276,11 @@ if ($admin === "Admin") {
                         </div>
                         <!-- 
                 <div class="costContainer"> -->
+                        <div class="payment-input-container">
+                            <label for="originalBill" id="paymentLabel">Total Amount </label>
+                            <input type="text" class="form-control" id="payment-form" name="originalBill"
+                                value="₱<?= number_format($originalBill, 2) ?>" readonly>
+                        </div>
                         <div class="payment-input-container">
                             <label for="totalAmount" id="paymentLabel">Total Amount </label>
                             <input type="text" class="form-control" id="payment-form" name="totalAmount"

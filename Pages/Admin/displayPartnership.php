@@ -322,16 +322,19 @@ if (isset($_SESSION['error-partnership'])) {
                     <tbody class="table-body">
                         <!-- Select to display all the applicants  -->
                         <?php
-                        $pendingStatus = 1;
-                        $rejectedStatus = 3;
-                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName, pt.partnerTypeDescription
+                        $partner = 2;
+                        // $rejectedStatus = 3;
+                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName,  GROUP_CONCAT(pt.partnerTypeDescription SEPARATOR ' & ') AS partnerTypeDescription
                                 FROM partnership p
                                 INNER JOIN user u ON p.userID = u.userID
                                 INNER JOIN status s ON s.statusID = p.partnerStatusID
-                                LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
-                                WHERE partnerStatusID != ? AND partnerStatusID != ?
+                                LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
+                                LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
+                                WHERE u.userRole = ?
+                                GROUP BY 
+                                p.partnershipID
                                 ");
-                        $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);
+                        $selectQuery->bind_param("i", $partner);
                         $selectQuery->execute();
                         $result = $selectQuery->get_result();
                         if ($result->num_rows > 0) {
@@ -407,14 +410,18 @@ if (isset($_SESSION['error-partnership'])) {
                         <?php
                         $pendingStatus = 1;
                         $rejectedStatus = 3;
-                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName, pt.partnerTypeDescription
+                        $applicant = 4;
+                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName,  GROUP_CONCAT(pt.partnerTypeDescription SEPARATOR ' & ') AS partnerTypeDescription
                                 FROM partnership p
                                 INNER JOIN user u ON p.userID = u.userID
                                 INNER JOIN status s ON s.statusID = p.partnerStatusID
-                                LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
-                                WHERE partnerStatusID = ? OR partnerStatusID = ?
+                                LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
+                                LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
+                                WHERE p.partnerStatusID = ? OR p.partnerStatusID = ? AND u.userRole = ?
+                                GROUP BY 
+                                p.partnershipID
                                 ");
-                        $selectQuery->bind_param("ii", $pendingStatus, $rejectedStatus);
+                        $selectQuery->bind_param("iii", $pendingStatus, $rejectedStatus, $applicant);
                         $selectQuery->execute();
                         $result = $selectQuery->get_result();
                         if ($result->num_rows > 0) {

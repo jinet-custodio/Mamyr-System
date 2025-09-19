@@ -292,15 +292,14 @@ if (isset($_SESSION['error'])) {
                 <tbody>
                     <!-- Select booking info -->
                     <?php
-                    $getBookingInfo = $conn->prepare("SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID, u.firstName,u.middleInitial, u.lastName, b.*,
-                    cp.*,
-                    cb.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus
+                    $getBookingInfo = $conn->prepare("SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID,  
+                                            b.bookingID, b.bookingID, b.bookingType, b.userID, b.startDate, b.bookingStatus,
+                                            u.firstName,u.middleInitial, u.lastName, 
+                                            b.customPackageID, 
+                                            cb.paymentApprovalStatus, cb.confirmedBookingID
                                     FROM booking b
                                     INNER JOIN user u ON b.userID = u.userID   -- to get  the firstname, M.I and lastname 
                                     LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID 
-                                    LEFT JOIN status s ON cb.paymentApprovalStatus = s.statusID -- to get the status name
-                                    LEFT JOIN status stat ON b.bookingStatus = stat.statusID  -- to get the status name 
-                                    LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID  -- info of the custom package
                                     ");
                     $getBookingInfo->execute();
                     $getBookingInfoResult = $getBookingInfo->get_result();
@@ -309,66 +308,91 @@ if (isset($_SESSION['error'])) {
                             // echo "<pre>";
                             // print_r($bookings);
                             // echo "</pre>";
-                            $bookingID = $bookings['formattedBookingID'];
-                            $startDate = strtotime($bookings['startDate']);
+                            $formattedBookingID = $bookings['formattedBookingID'];
+                            $startDate = strtotime($bookings['startDate']) ?? null;
                             $checkIn = date("F d, Y", $startDate);
                             $middleInitial = trim($bookings['middleInitial'] ?? '');
                             $name = ucfirst($bookings['firstName']) . " " . ucfirst($middleInitial) . " "  . ucfirst($bookings['lastName']);
 
                             $bookingType = $bookings['bookingType'];
+                            $confirmedBookingID =  $bookings['confirmedBookingID'];
+                            $bookingID = $bookings['bookingID'];
+                            $paymentApprovalStatusID = $bookings['paymentApprovalStatus'] ?? null;
+                            $bookingStatusID = $bookings['bookingStatus'] ?? null;
 
-                            if (!empty($bookings['confirmedBookingID'])) {
-                                if ($bookings['confirmedStatus'] === "Pending") {
-                                    if ($bookingType === 'Resort') {
-                                        $status = "Onsite payment";
-                                        $addClass = "btn btn-info w-100";
-                                    } else {
-                                        $status = "Downpayment";
-                                        $addClass = "btn btn-primary w-100";
+                            $paymentApprovalStatus = getStatuses($conn, $paymentApprovalStatusID) ?? null;
+                            $bookingStatus = getStatuses($conn, $bookingStatusID) ?? null;
+
+                            // echo "<pre>";
+                            // print_r($paymentApprovalStatus);
+                            // echo "</pre>";
+                            if ($bookingID) {
+                                if (!empty($confirmedBookingID)) {
+                                    $status = $paymentApprovalStatus['statusName'];
+                                    switch ($paymentApprovalStatus['statusID']) {
+                                        case 1: //Pending
+                                            $status = 'Downpayment';
+                                            $class = 'info';
+                                            break;
+                                        case 2: //Approved
+                                            $class = 'success';
+                                            break;
+                                        case 3: //Rejected
+                                            $class = 'danger';
+                                            break;
+                                        case 4: //Cancelled
+                                            $class = 'red';
+                                            break;
+                                        case 5: //Done
+                                            $class = 'light-green';
+                                            break;
+                                        case 6: //Expired
+                                            $class = 'secondary';
+                                            break;
+                                        default:
+                                            $class = 'warning';
+                                            break;
                                     }
-                                } elseif ($bookings['confirmedStatus'] === "Approved") {
-                                    $status = "Successful";
-                                    $addClass = "btn btn-success w-100";
-                                } elseif ($bookings['confirmedStatus'] === "Rejected") {
-                                    $status = "Rejected";
-                                    $addClass = "btn btn-danger w-100";
-                                } elseif ($bookings['confirmedStatus'] === "Done") {
-                                    $status = "Done";
-                                    $addClass = "btn btn-success w-100";
-                                }
-                            } else {
-                                $confirmedBookingID = NULL;
-                                if ($bookings['bookingStatus'] === "Pending") {
-                                    $status = "Pending";
-                                    $addClass = "btn btn-warning w-100";
-                                } else if ($bookings['bookingStatus'] === "Approved") {
-                                    if ($bookingType === 'Resort') {
-                                        $status = "Onsite payment";
-                                        $addClass = "btn btn-info w-100";
-                                    } else {
-                                        $status = "Downpayment";
-                                        $addClass = "btn btn-primary w-100";
+                                } else {
+                                    $status = $bookingStatus['statusName'];
+                                    switch ($bookingStatus['statusID']) {
+                                        case 1: //Pending
+                                            $class = 'warning';
+                                            break;
+                                        case 2: //Approved
+                                            $status = 'Downpayment';
+                                            $class = 'info';
+                                            break;
+                                        case 3: //Rejected
+                                            $class = 'danger';
+                                            break;
+                                        case 4: //Cancelled
+                                            $class = 'red';
+                                            break;
+                                        case 5: //Done
+                                            $class = 'light-green';
+                                            break;
+                                        case 6: //Expired
+                                            $class = 'secondary';
+                                            break;
+                                        default:
+                                            $class = 'warning';
+                                            break;
                                     }
-                                } elseif ($bookings['bookingStatus'] === "Cancelled") {
-                                    $status = "Cancelled";
-                                    $addClass = "btn btn-dark w-100";
-                                } elseif ($bookings['bookingStatus'] === "Rejected") {
-                                    $status = "Rejected";
-                                    $addClass = "btn btn-danger w-100";
-                                } elseif ($bookings['bookingStatus'] === "Expired") {
-                                    $status = "Expired";
-                                    $addClass = "btn btn-secondary w-100";
                                 }
                             }
+
+
+
                     ?>
                             <tr>
-                                <td><?= htmlspecialchars($bookingID) ?></td>
+                                <td><?= htmlspecialchars($formattedBookingID) ?></td>
                                 <td><?= htmlspecialchars($name) ?></td>
                                 <td><?= htmlspecialchars($bookingType) ?>&nbsp;Booking</td>
                                 <td><?= $checkIn ?></td>
                                 <td>
-                                    <a class=" <?= $addClass ?>">
-                                        <?= htmlspecialchars($status) ?>
+                                    <a class="btn btn-<?= $class ?> w-100">
+                                        <?= $status ?>
                                     </a>
                                 </td>
                                 <td>
@@ -376,7 +400,7 @@ if (isset($_SESSION['error'])) {
                                         <input type="hidden" name="button" value="booking">
                                         <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
                                         <input type="hidden" name="bookingStatus"
-                                            value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($bookings['confirmedStatus'])  ?>">
+                                            value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($paymentApprovalStatusName)  ?>">
                                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                                         <button type="submit" class="btn btn-primary w-75">View</button>
                                     </form>
@@ -385,6 +409,7 @@ if (isset($_SESSION['error'])) {
                     <?php
                         }
                     }
+
                     ?>
                 </tbody>
             </table>

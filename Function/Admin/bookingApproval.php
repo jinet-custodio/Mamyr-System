@@ -17,12 +17,14 @@ if (isset($_POST['approveBtn'])) {
     $startDate = mysqli_real_escape_string($conn, $_POST['startDate']);
     $endDate = mysqli_real_escape_string($conn, $_POST['endDate']);
     $discountAmount = mysqli_real_escape_string($conn, $_POST['discountAmount']);
-    $totalCost = mysqli_real_escape_string($conn, $_POST['totalCost']);
+    $rawOriginalBill = mysqli_real_escape_string($conn, $_POST['originalBill']);
+    $rawFinalBill = mysqli_real_escape_string($conn, $_POST['originalBill']);
     $rawVenuePrice = mysqli_real_escape_string($conn, $_POST['venuePrice']);
-    $rawTotalFoodPrice = mysqli_real_escape_string($conn, $_POST['foodPriceTotal']) ?? 0;
+    $rawTotalFoodPrice = mysqli_real_escape_string($conn, $_POST['foodPriceTotal']);
 
     $discount = (float) str_replace(['₱', ','], '', $discountAmount);
-    $bill = (float) str_replace(['₱', ','], '', $totalCost);
+    $originalBill = (float) str_replace(['₱', ','], '', $rawOriginalBill);
+    $finalBill = (float) str_replace(['₱', ','], '', $rawFinalBill);
     $venuePrice = (float) str_replace(['₱', ','], '', $rawVenuePrice) ?? 0;
     $foodPriceTotal = (float) str_replace(['₱', ','], '', $rawTotalFoodPrice) ?? 0;
     $foodPrices = !empty($_POST['foodPrice']) ? array_map('trim',  $_POST['foodPrice']) : [];
@@ -93,8 +95,9 @@ if (isset($_POST['approveBtn'])) {
         }
     }
 
+    $discountedFinalBill = $originalBill - $discount;
 
-    $finalBill = $bill - $discount;
+    $confirmedFinalBill = ($discountedFinalBill === $finalBill) ? $finalBill : $discountedFinalBill;
 
     $availabilityID = 2;
     $conn->begin_transaction();
@@ -162,8 +165,8 @@ if (isset($_POST['approveBtn'])) {
             "idddss",
             $bookingID,
             $discount,
-            $finalBill,
-            $finalBill,
+            $confirmedFinalBill,
+            $confirmedFinalBill,
             $downpaymentDueDate,
             $startDate
         );

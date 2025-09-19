@@ -76,12 +76,13 @@ if (!$partnerID) {
         </div>
         <!-- Get the information to the database -->
         <?php
-        $selectQuery = $conn->prepare("SELECT u.*, p.*, s.statusName, pt.partnerTypeDescription
+        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, u.phoneNumber, u.userProfile, p.validIDImage, p.*, s.statusName, pt.partnerTypeDescription 
                                 FROM partnership p
                                 INNER JOIN user u ON p.userID = u.userID
                                 INNER JOIN status s ON s.statusID = p.partnerStatusID
-                                LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
-                                WHERE partnershipID = ?
+                                LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
+                                LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
+                                WHERE  p.partnershipID = ?
                                 ");
         $selectQuery->bind_param("i", $partnerID);
         $selectQuery->execute();
@@ -110,6 +111,8 @@ if (!$partnerID) {
             } else {
                 $image = '../../Assets/Images/defaultProfile.png';
             }
+
+            $imageName = $data['validIDImage'];
 
             // echo '<pre>';
             // print_r($data);
@@ -145,6 +148,12 @@ if (!$partnerID) {
                     <h4 class="card-title">Partner Type</h4>
                     <p class="card-text"><?= ucfirst($partnerType) ?></p>
                 </div>
+                <div class="applicant-info validID">
+                    <h4 class="card-title">Valid ID</h4>
+                    <input type="text" class="form-control validID" value="<?= htmlspecialchars($imageName) ?>" name="validID" readonly>
+                    <button type="button" class="btn btn-primary viewID" data-bs-toggle="modal"
+                        data-bs-target="#IDModal">View ID</button>
+                </div>
             </div>
         </div>
     </div>
@@ -161,12 +170,13 @@ if (!$partnerID) {
         </div>
         <!-- Get the information to the database -->
         <?php
-        $selectQuery = $conn->prepare("SELECT u.*, p.*, s.statusName, pt.partnerTypeDescription
+        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, u.phoneNumber, u.userProfile, p.validIDImage, p.*, s.statusName, pt.partnerTypeDescription 
                                 FROM partnership p
                                 INNER JOIN user u ON p.userID = u.userID
                                 INNER JOIN status s ON s.statusID = p.partnerStatusID
-                                LEFT JOIN partnershiptype pt ON p.partnerTypeID = pt.partnerTypeID
-                                WHERE partnershipID = ?
+                                LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
+                                LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
+                                WHERE  p.partnershipID = ?
                                 ");
         $selectQuery->bind_param("i", $partnerID);
         $selectQuery->execute();
@@ -266,11 +276,9 @@ if (!$partnerID) {
                     </div>
                     <div class="applicant-info validID">
                         <h4 class="card-title">Valid ID</h4>
-                        <input type="text" class="form-control validID" value="validID_1.jpg" name="validID" readonly>
+                        <input type="text" class="form-control validID" value="<?= htmlspecialchars($imageName) ?>" name="validID" readonly>
                         <button type="button" class="btn btn-primary viewID" data-bs-toggle="modal"
                             data-bs-target="#IDModal">View ID</button>
-
-
                     </div>
                 </div>
             </div>
@@ -288,7 +296,7 @@ if (!$partnerID) {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <img src="../../Assets/Images/amenities/poolPics/poolPic1.png" alt="Valid ID"
+                        <img src="../../Assets/Images/BusinessPartnerIDs/<?= $imageName ?>" alt="Valid ID"
                             class="validIDImg">
                     </div>
                     <div class="modal-footer">
@@ -308,50 +316,50 @@ if (!$partnerID) {
 
     <!-- Search URL -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('container');
-    const action = params.get("action");
-    // const paramValue = atob(encodedParamValue);
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('container');
+        const action = params.get("action");
+        // const paramValue = atob(encodedParamValue);
 
-    const partnerContainer = document.getElementById("partner-info");
-    const requestContainer = document.getElementById("applicant-request");
+        const partnerContainer = document.getElementById("partner-info");
+        const requestContainer = document.getElementById("applicant-request");
 
-    if (paramValue == 3) {
-        partnerContainer.style.display = "block";
-        requestContainer.style.display = "none";
-    } else if (paramValue == 4) {
-        partnerContainer.style.display = "none";
-        requestContainer.style.display = "block";
-    }
+        if (paramValue == 3) {
+            partnerContainer.style.display = "block";
+            requestContainer.style.display = "none";
+        } else if (paramValue == 4) {
+            partnerContainer.style.display = "none";
+            requestContainer.style.display = "block";
+        }
 
-    if (action === "failed1") {
-        Swal.fire({
-            icon: 'error',
-            title: 'Partnership Approval Failed',
-            text: 'There was an issue approving the partnership request. Please try again.'
-        });
-    } else if (action === "failed2") {
-        Swal.fire({
-            icon: 'error',
-            title: 'Partnership Rejection Failed',
-            text: 'There was an issue declining the partnership request. Please try again.'
-        });
-    } else if (action === "failed") {
-        Swal.fire({
-            icon: 'error',
-            title: 'Partnership Approval Failed',
-            text: 'There was an issue approving/rejecting the partnership request. Please try again.'
-        });
-    }
-
-
+        if (action === "failed1") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Partnership Approval Failed',
+                text: 'There was an issue approving the partnership request. Please try again.'
+            });
+        } else if (action === "failed2") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Partnership Rejection Failed',
+                text: 'There was an issue declining the partnership request. Please try again.'
+            });
+        } else if (action === "failed") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Partnership Approval Failed',
+                text: 'There was an issue approving/rejecting the partnership request. Please try again.'
+            });
+        }
 
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    };
+
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 </body>
 

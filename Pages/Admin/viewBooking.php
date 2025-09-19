@@ -8,6 +8,8 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+require '../../Function/functions.php';
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
@@ -33,7 +35,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-require_once '../../Function/functions.php';
 
 if (isset($_POST['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
@@ -163,40 +164,102 @@ if (isset($_POST['bookingID'])) {
                 <?php
 
                 $getBookingInfo = $conn->prepare("SELECT 
-                                
-                                b.*, 
-                                cb.amountPaid, 
-                                cb.confirmedFinalBill, 
-                                cb.userBalance, 
-                                cb.paymentApprovalStatus, 
-                                cb.paymentDueDate, cb.paymentStatus,
-                                cb.discountAmount, ps.PBName, ps.PBPrice, ps.partnershipServiceID,
-                                bs.*, cp.*, cpi.*, mi.foodName, mi.foodCategory, mi.foodPrice,
-                                s.*, s.serviceType, ec.categoryName as eventType,
-                                er.sessionType AS tourType, er.ERCategory, er.ERprice,
-                                ra.RServiceName, ra.RSprice, rsc.categoryName AS serviceCategory   
-                                    
-                                FROM booking b
-                                LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
-                                LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
+                                                    b.bookingID, 
+                                                    b.bookingType, 
+                                                    b.customPackageID, 
+                                                    b.additionalRequest, 
+                                                    b.toddlerCount, 
+                                                    b.kidCount, 
+                                                    b.adultCount, 
+                                                    b.guestCount, 
+                                                    b.durationCount, 
+                                                    b.arrivalTime, 
+                                                    b.startDate, 
+                                                    b.endDate, 
+                                                    b.paymentMethod, 
+                                                    b.totalCost AS originalBill, 
+                                                    b.downpayment, 
+                                                    b.bookingStatus, 
+                                                    b.createdAt,  
 
-                                LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
-                                LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
-                                LEFT JOIN eventcategory ec ON cp.eventTypeID = ec.categoryID
+                                                    cp.eventTypeID, 
+                                                    cp.customPackageTotalPrice, 
+                                                    cp.customPackageNotes, 
+                                                    cp.totalFoodPrice, 
+                                                    cp.venuePricing, 
+                                                    cp.additionalServicePrice, 
 
-                                LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
-                                LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
-                                LEFT JOIN menuitem mi ON cpi.foodItemID = mi.foodItemID
+                                                    fp.pricePerHead, 
 
-                                LEFT JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
-                                LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
+                                                    mi.foodItemID,
+                                                    mi.foodName,
+                                                    mi.foodCategory,
 
-                                LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
+                                                    s.serviceID, 
+                                                    s.resortServiceID, 
+                                                    s.partnershipServiceID, 
+                                                    s.entranceRateID, 
+                                                    s.serviceType, 
 
-                                LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
-                                  LEFT JOIN partnership_partnertype ppt ON ps.partnershipID = ppt.partnershipID
-                                LEFT JOIN partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID
-                            WHERE b.bookingID = ?");
+                                                    ra.RServiceName, 
+                                                    ra.RSprice, 
+
+                                                    ps.PBName, 
+                                                    ps.PBPrice, 
+                                                    ps.PBduration, 
+                                                    ps.partnershipID, 
+
+                                                    ppt.partnerTypeID,
+                                                    er.sessionType as tourType,
+                                                    ec.categoryName as eventType,
+
+                                                    cb.confirmedBookingID,
+                                                    cb.amountPaid, 
+                                                    cb.confirmedFinalBill, 
+                                                    cb.userBalance, 
+                                                    cb.confirmedBookingID, 
+                                                    cb.discountAmount, 
+                                                    cb.paymentApprovalStatus, 
+                                                    cb.paymentStatus,  
+                                                    cb.paymentDueDate, 
+                                                    cb.downpaymentDueDate,
+                                                    cb.additionalCharge
+                                                FROM booking b
+                                                LEFT JOIN confirmedbooking cb 
+                                                    ON b.bookingID = cb.bookingID
+                                                -- LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
+
+                                                LEFT JOIN custompackage cp 
+                                                    ON b.customPackageID = cp.customPackageID
+                                                LEFT JOIN foodpricing fp 
+                                                    ON cp.foodPricingPerHeadID = fp.pricingID
+                                                LEFT JOIN custompackageitem cpi 
+                                                    ON cp.customPackageID = cpi.customPackageID
+                                                LEFT JOIN eventcategory ec 
+                                                    ON cp.eventTypeID = ec.categoryID
+
+                                                LEFT JOIN bookingservice bs 
+                                                    ON b.bookingID = bs.bookingID
+                                                LEFT JOIN service s 
+                                                    ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+                                                LEFT JOIN menuitem mi 
+                                                    ON cpi.foodItemID = mi.foodItemID
+
+                                                LEFT JOIN resortamenity ra 
+                                                    ON s.resortServiceID = ra.resortServiceID
+                                                -- LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
+
+                                                LEFT JOIN entrancerate er 
+                                                    ON s.entranceRateID = er.entranceRateID
+
+                                                LEFT JOIN partnershipservice ps 
+                                                    ON s.partnershipServiceID = ps.partnershipServiceID
+                                                LEFT JOIN partnership_partnertype ppt 
+                                                    ON ps.partnershipID = ppt.partnershipID
+                                                LEFT JOIN partnershiptype pt 
+                                                    ON ppt.partnerTypeID = pt.partnerTypeID
+                                                WHERE b.bookingID = ?
+                                                ");
                 $getBookingInfo->bind_param("i", $bookingID);
                 $getBookingInfo->execute();
                 $getBookingInfoResult = $getBookingInfo->get_result();
@@ -204,7 +267,7 @@ if (isset($_POST['bookingID'])) {
 
                     $services = [];
                     $serviceIDs = [];
-                    $totalCost = 0;
+                    $originalBill = 0;
                     $downpayment = 0;
                     $discount = 0;
                     $totalPax = 0;
@@ -222,9 +285,8 @@ if (isset($_POST['bookingID'])) {
                         // echo '<pre>';
                         // print_r($row);
                         // echo '</pre>';
-                        $customPackageID = $row['customPackageID'];
-                        $bookingType = $row['bookingType'];
 
+                        // Date and Time
                         $rawStartDate = $row['startDate'] ?? null;
                         $rawEndDate = $row['endDate'] ?? null;
 
@@ -242,71 +304,81 @@ if (isset($_POST['bookingID'])) {
 
                         $createdAt = $row['createdAt'] ?? null;
 
-
-                        if (!empty($rawStartDate) && $rawStartDate ===  $rawEndDate) {
+                        if (!empty($rawStartDate) || $rawStartDate ===  $rawEndDate) {
                             $bookingDate = date('F d, Y', strtotime($rawStartDate));
-                        } elseif (!empty($rawStartDate) && !empty($rawStartDate)) {
+                        } elseif (!empty($rawStartDate) && !empty($rawEndDate)) {
                             $bookingDate = $startDate . " to " . $endDate;
                         } else {
                             $bookingDate = 'Date not available';
                         }
 
-                        if ($startDate === $endDate) {
-                            $bookingDate = date('F d, Y', strtotime($rawStartDate));
-                        } else {
-                            $bookingDate = $startDate . " - " . $endDate;
-                        }
-
-                        $bookingCreationDate = !empty($row['createdAt']) ? date('F d, Y H:i A', strtotime($row['createdAt'])) : 'Not Stated';
+                        $bookingCreationDate = !empty($row['createdAt']) ? date('F d, Y h:i A', strtotime($row['createdAt'])) : 'Not Stated';
 
                         $time = date("g:i A", strtotime($rawStartDate)) . " - " . date("g:i A", strtotime($rawEndDate));
                         $duration = $row['durationCount'] . " hours";
 
-                        $bookingStatus = $row['bookingStatus'];
-                        $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? '';
 
-                        $additionalServices = $row['addOns'] ?? 'None';
-                        $paymentMethod = $row['paymentMethod'];
-                        $paymentStatus = $row['paymentStatus'] ?? '';
-                        $totalCost = $row['totalCost'];
-                        $downpayment = $row['downpayment'];
-                        $discount = $row['discountAmount'] ?? 0;
-                        $userBalance = $row['userBalance'];
-                        $amountPaid = $row['amountPaid'];
-                        $finalBill = $row['confirmedFinalBill'];
-                        $paymentDueDate = !empty($row['paymentDueDate']) ? date('F d, Y g:i A', strtotime($row['paymentDueDate'])) : 'Not Stated';
-                        $additionalCharge = $row['additionalCharge'];
+                        //IDs
+                        $customPackageID =  (int) $row['customPackageID'];
+                        $confirmedBookingID = (int) $row['confirmedBookingID'] ?? null;
+                        $serviceID = isset($row['serviceID']) ? $row['serviceID'] : '';
 
-                        $toddlerCount = $row['toddlerCount'];
-                        $additionalReq = $row['additionalRequest'];
+                        if (!empty($confirmedBookingID)) {
+                            $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? null;
+                            $paymentStatus = $row['paymentStatus'] ?? null;
+                            $finalBill = (float) $row['confirmedFinalBill'] ?? null;
+                            $paymentDueDate = !empty($row['paymentDueDate']) ? date('F d, Y h:i A', strtotime($row['paymentDueDate'])) : 'Not Stated';
+                            $amountPaid = (float) $row['amountPaid'];
+                            $userBalance =  (float) $row['userBalance'];
 
+                            if (!empty($paymentStatus) || !empty($paymentApprovalStatus)) {
+                                $paymentStatuses = getPaymentStatus($conn, $paymentStatus);
+                                $paymentStatusID = $paymentStatuses['paymentStatusID'];
+                                $paymentStatusName = $paymentStatuses['paymentStatusName'];
 
-                        if ($paymentStatus !== '' || $paymentApprovalStatus !== '') {
-                            $paymentStatuses = getPaymentStatus($conn, $paymentStatus);
-                            $paymentStatusID = $paymentStatuses['paymentStatusID'];
-                            $paymentStatusName = $paymentStatuses['paymentStatusName'];
-
-                            $paymentApprovalStatuses = getStatuses($conn, $paymentApprovalStatus);
-                            $paymentApprovalStatusID = $paymentApprovalStatuses['statusID'];
-                            $paymentApprovalStatusName = $paymentApprovalStatuses['statusName'];
+                                $paymentApprovalStatuses = getStatuses($conn, $paymentApprovalStatus);
+                                $paymentApprovalStatusID = $paymentApprovalStatuses['statusID'];
+                                $paymentApprovalStatusName = $paymentApprovalStatuses['statusName'];
+                            }
                         }
 
+                        //Types
+                        $bookingType = $row['bookingType'] ?? null;
+                        $serviceType = $row['serviceType'] ?? null;
+
+                        //Status of Booking
+                        $bookingStatus = $row['bookingStatus'];
                         $bookingStatuses = getStatuses($conn, $bookingStatus);
                         $bookingStatusID = $bookingStatuses['statusID'];
                         $bookingStatusName = $bookingStatuses['statusName'];
 
+                        //Payment Details
+                        $paymentMethod =  $row['paymentMethod'];
+                        $discount =  (float) $row['discountAmount'] ?? 0;
+                        $originalBill =  (float) $row['originalBill'];
+                        $downpayment =  (float) $row['downpayment'];
+                        $additionalCharge =  (float) $row['additionalCharge'];
+
+                        //Pax Details
+                        $toddlerCount = (int) $row['toddlerCount'];
+                        $kidCount = (int) $row['kidCount'];
+                        $adultCount = (int) $row['adultCount'];
+                        $guestCount = intval($row['guestCount']);
+
+                        //Additionals
+                        $additionalReq = $row['additionalRequest'];
+                        $additionalServices = $row['addOns'] ?? 'None';
+
                         if (!empty($customPackageID)) {
-                            $eventType = $row['eventType'];
-                            $serviceID = isset($row['serviceID']) ? $row['serviceID'] : '';
-                            $foodItemID = isset($row['foodItemID']) ? $row['foodItemID'] : '';
-                            $totalPax = intval($row['guestCount']) . ' people' ?? 1 . ' person';
-                            $serviceType = $row['serviceType'];
+                            $eventType = $row['eventType'] ?? null;
+                            $foodItemID = isset($row['foodItemID']) ? $row['foodItemID'] : null;
+                            $totalPax = $guestCount . ' people' ?? 1 . ' person';
                             $additionalServicePrice = floatval($row['additionalServicePrice']);
 
                             if (!empty($serviceID)) {
                                 if ($serviceType === 'Resort') {
                                     $venue = $row['RServiceName'] ?? 'none';
-                                    $venuePrice = $row['servicePrice'] ?? 0;
+                                    $venuePrice = $row['venuePricing'] ?? 0;
                                     $serviceIDs[] = $row['resortServiceID'];
                                 } elseif ($serviceType === 'Partnership') {
                                     $partnerServicePrice = isset($row['PBPrice']) ? floatval($row['PBPrice']) : null;
@@ -322,65 +394,35 @@ if (isset($_POST['bookingID'])) {
                                 $category = $row['foodCategory'];
                                 $name = $row['foodName'];
                                 $foodID = $row['foodItemID'];
-                                $price = $row['servicePrice'];
-
                                 $foodList[$category] = $name;
                                 $foodPriceTotal = floatval($row['totalFoodPrice']);
+                                $pricePerHead = (int) $row['pricePerHead'];
                             }
                         } else {
-                            $serviceID = $row['serviceID'];
-                            $serviceType = $row['serviceType'];
-                            $pax = $row['guestCount'];
-
-
+                            if ($serviceType !== 'Event') {
+                                $totalPax =  ($adultCount > 0 ? "{$adultCount}" . ($adultCount === 1 ? ' adult' : ' adults') : '') .
+                                    ($kidCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidCount}" . ($kidCount === 1 ? ' child' : 'childs') : '') .
+                                    ($toddlerCount > 0 ? (($adultCount > 0 || $kidCount > 0) ? ' & ' : '') . "{$toddlerCount}" . ($toddlerCount === 1 ? ' toddler' : 'toddlers') : '');
+                            }
                             if ($serviceType === 'Resort') {
                                 $services[] = $row['RServiceName'] . " - ₱"  . number_format($row['RSprice'], 2);
                                 $serviceIDs[] = $row['resortServiceID'];
-                                $totalPax = $pax . ($toddlerCount > 0 ? " & {$toddlerCount} toddlers" : '');
                             }
-
                             if ($serviceType === 'Entrance') {
                                 $tourType = $row['tourType'];
-                                if ($row['ERCategory'] === "Kids") {
-                                    $kidsCount = $row['guests'];
-                                } elseif ($row['ERCategory'] === "Adult") {
-                                    $adultCount = $row['guests'];
-                                }
-
-                                $entrancePax =  ($adultCount > 0 ? "{$adultCount} Adults" : '') .
-                                    ($kidsCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidsCount} Kids" : '') .
-                                    ($toddlerCount > 0 ? (($adultCount > 0 || $kidsCount > 0) ? ' & ' : '') . "{$toddlerCount} toddlers" : '');
-                            }
-
-                            if ($bookingType === 'Resort') {
-                                $totalPax = $entrancePax;
-                            } elseif ($bookingType === 'Hotel') {
-                                $totalPax;
                             }
                         }
-
-                        if ($finalBill === 0.00) {
-                            $totalBill = $totalCost;
-                        } elseif ($finalBill >= $totalCost || ($finalBill <= $totalCost && $finalBill === 0.00)) {
-                            $totalBill = $finalBill;
-                        } else {
-                            $totalBill = $totalCost;
-                        }
-
                         // echo '<pre>';
                         // print_r($partnerServices);
                         // echo '</pre>';
                     }
                 }
-
-
-
                 ?>
 
                 <!-- Display the information -->
                 <input type="hidden" name="customPackageID" id="customPackageID" value="<?= $customPackageID ?>">
                 <div class="card" id="info-card">
-                    <div class="bookingInfoLeft">
+                    <div class="bookingInfoLeft" id="bookingInformation">
                         <div class="row1">
                             <div class="info-container" id="booking-info-container">
                                 <label for="bookingType" class="info-label">Booking Type</label>
@@ -424,6 +466,7 @@ if (isset($_POST['bookingID'])) {
                                     <input type="text" class="form-control inputDetail" name="bookingDate" id="bookingDate"
                                         value="<?= $bookingDate ?>" readonly>
                                 </div>
+
                                 <div class="info-container mt-2" id="booking-info-container">
                                     <label for="bookingCreationDate" class="info-label mb-2">Booking Creation
                                         Date</label>
@@ -456,7 +499,7 @@ if (isset($_POST['bookingID'])) {
                                     <h1 class="card-title text-center">Venue</h1>
                                     <input type="text" readonly class="form-control inputDetail" name="venue" id="venue" value="<?= $venue ?>">
                                 </div>
-                                <h1 class="card-title text-center">Menu</h1>
+                                <h1 class="card-title text-center">Selected Menu</h1>
                                 <div class="foodDetails">
                                     <?php if (!empty($foodList)) { ?>
                                         <?php foreach ($foodList as $category => $name) { ?>
@@ -538,37 +581,27 @@ if (isset($_POST['bookingID'])) {
                                         value="₱<?= number_format($venuePrice, 2) ?>" readonly>
                                 </div>
                                 <div class="info-container paymentInfo" id="payment-info">
+                                    <label for="pricePerHead" class="mt-2">Price Per Head</label>
+                                    <input type="text" class="form-control inputDetail w-50" name="pricePerHead" id="pricePerHead"
+                                        value="₱<?= number_format($pricePerHead, 2) ?>" readonly>
+                                </div>
+                                <div class="info-container paymentInfo" id="payment-info">
                                     <label for="foodPriceTotal" class="mt-2">Food Price</label>
                                     <input type="text" class="form-control inputDetail w-50" name="foodPriceTotal" id="foodPriceTotal"
                                         value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
                                 </div>
-                            <?php } ?>
+                                <div class="info-container paymentInfo" id="payment-info">
+                                    <label for="additionalServicePrice" class="mt-2">Additional Services Price</label>
+                                    <input type="text" class="form-control inputDetail w-50" name="additionalServicePrice" id="additionalServicePrice"
+                                        value="₱<?= number_format($additionalServicePrice, 2) ?>" readonly>
+                                </div>
 
-                            <div class="info-container paymentInfo" id="payment-info">
-                                <label for="additionalServicePrice" class="mt-2">Additional Services Price</label>
-                                <input type="text" class="form-control inputDetail w-50" name="additionalServicePrice" id="additionalServicePrice"
-                                    value="₱<?= number_format($additionalServicePrice, 2) ?>" readonly>
-                            </div>
+                            <?php } ?>
 
                             <div class="info-container paymentInfo" id="payment-info">
                                 <label for="additionalCharge" class="mt-2">Additional Charge</label>
                                 <input type="text" class="form-control inputDetail w-50" name="additionalCharge" id="additionalCharge"
                                     value="₱<?= number_format($additionalCharge, 2) ?>" readonly>
-                            </div>
-
-                            <div class="info-container paymentInfo" id="payment-info">
-                                <label for="discountAmount" class="mt-2">Discount</label>
-                                <div class="discountform">
-                                    <input type="text" class="form-control inputDetail w-100" name="discountAmount"
-                                        id="discountAmount" value="₱<?= number_format($discount, 2) ?>">
-                                    <i class="fa-solid fa-circle-info"
-                                        id="discountTooltip"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="right"
-                                        title="You can change the discount amount manually."
-                                        style="color: #74C0FC;">
-                                    </i>
-                                </div>
                             </div>
 
                             <?php if ($bookingStatusName === 'Approved') { ?>
@@ -595,10 +628,31 @@ if (isset($_POST['bookingID'])) {
                                     value="₱<?= number_format($downpayment, 2) ?>" readonly>
                             </div>
                             <div class="info-container paymentInfo" id="payment-info">
-                                <label for="totalCost" class="mt-2"> Total Cost</label>
-                                <input type="text" class="form-control inputDetail w-50" name="totalCost" id="totalCost"
-                                    value="₱<?= number_format($totalBill, 2) ?>" readonly>
+                                <label for="originalBill" class="mt-2">Original Bill</label>
+                                <input type="text" class="form-control inputDetail w-50" name="originalBill" id="originalBill"
+                                    value="₱<?= number_format($originalBill, 2) ?>" readonly>
                             </div>
+
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="discountAmount" class="mt-2">Discount </label>
+                                <div class="discountform">
+                                    <input type="text" class="form-control inputDetail w-100" name="discountAmount"
+                                        id="discountAmount" value="₱<?= number_format($discount, 2) ?>">
+                                    <i class="fa-solid fa-circle-info"
+                                        id="discountTooltip"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="You can change the discount amount manually."
+                                        style="color: #74C0FC;">
+                                    </i>
+                                </div>
+                            </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="finalBill" class="mt-2">Final Bill</label>
+                                <input type="text" class="form-control inputDetail w-50" name="finalBill" id="finalBill"
+                                    value="₱<?= number_format($originalBill, 2) ?>" readonly>
+                            </div>
+
                         </div>
 
                         <div class="notesContainer mt-3">

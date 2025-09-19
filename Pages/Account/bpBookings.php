@@ -238,6 +238,7 @@ require '../../Function/Partner/getBookings.php';
                             <th scope="col">Booking ID</th>
                             <th scope="col">Guest</th>
                             <th scope="col">Booking Type</th>
+                            <th scope="col">Service</th>
                             <th scope="col">Check-in</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
@@ -277,6 +278,7 @@ require '../../Function/Partner/getBookings.php';
                                         'formattedBookingID' => $row['formattedBookingID'],
                                         'guestName' => $row['firstName'] . ' ' . $row['lastName'],
                                         'bookingType' => $row['bookingType'] . ' Booking',
+                                        'service' => $row['PBName'],
                                         'bookingDate' => $startDate,
                                         'approvalStatus' => $row['approvalStatus']
                                     ];
@@ -292,6 +294,7 @@ require '../../Function/Partner/getBookings.php';
                                     <td><?= $booking['formattedBookingID'] ?></td>
                                     <td><?= $booking['guestName'] ?></td>
                                     <td><?= $booking['bookingType'] ?></td>
+                                    <td><?= $booking['service'] ?></td>
                                     <td><?= $booking['bookingDate'] ?></td>
                                     <?php
                                     $statusName = ucwords($booking['approvalStatus']);
@@ -319,17 +322,16 @@ require '../../Function/Partner/getBookings.php';
                                             break;
                                     }
                                     ?>
-                                    <td><span class="btn btn-<?= $className ?> w-75"><?= $statusName ?></span>
+                                    <td>
+                                        <span class="btn btn-<?= $className ?> w-75"><?= $statusName ?></span>
                                     </td>
-                                    <td><a href="#" class="btn btn-primary w-75">View</a></td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary w-75">View</button>
+                                    </td>
                                 </tr>
                             <?php
                             }
                             ?>
-
-
-
-
                         </tbody>
                     </table>
                 </div>
