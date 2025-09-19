@@ -78,7 +78,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <title>Mamyr - Amenities</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/amenities.css">
-
+    <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
 
     <!-- Bootstrap Link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -164,8 +164,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <!-- <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"> -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
