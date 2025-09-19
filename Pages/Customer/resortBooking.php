@@ -32,6 +32,16 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
+
+// echo '<pre>';
+// print_r($_SESSION['resortFormData']);
+// echo '</pre>';
+
+// echo '<pre>SESSION cottageSelections: ';
+// var_dump($_SESSION['resortFormData']['cottageSelections'] ?? 'Not Set');
+// echo '</pre>';
+
+
 ?>
 
 <!DOCTYPE html>
@@ -438,6 +448,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <!-- Fetch Info -->
     <script>
+        const cottageSelectionsSession = <?= isset($_SESSION['resortFormData']['cottageSelections'])
+                                                ? json_encode($_SESSION['resortFormData']['cottageSelections'])
+                                                : '[]'
+                                            ?>;
+        const addOnsServicesSession = <?= isset($_SESSION['resortFormData']['addOnsServices']) ? json_encode($_SESSION['resortFormData']['addOnsServices']) : '[]' ?>;
+        // console.log(cottageSelectionsSession);
         document.addEventListener("DOMContentLoaded", function() {
             const dateInput = document.getElementById('resortBookingDate');
             const form = document.querySelector('form');
@@ -519,6 +535,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             label.setAttribute('for', checkbox.id);
                             label.textContent = `${cottage.RServiceName} - (${cottage.RScapacity} pax)`;
 
+                            const cottageSelections = cottageSelectionsSession.map(String);
+                            // console.log(cottageSelections);
+                            if (cottageSelections.includes(String(cottage.RServiceName))) {
+                                checkbox.checked = true;
+                            }
+
                             wrapper.appendChild(checkbox);
                             wrapper.appendChild(label);
 
@@ -585,6 +607,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             label.setAttribute('for', checkbox.id);
                             label.textContent = `${ent.RServiceName} - ₱${Number(ent.RSprice).toLocaleString()}.00`;
 
+                            const addOnsServices = addOnsServicesSession.map(String);
+                            if (addOnsServices.includes(String(ent.RServiceName))) {
+                                checkbox.checked = true;
+                            }
+
                             wrapper.appendChild(checkbox);
                             wrapper.appendChild(label);
                             entertainmentContainer.appendChild(wrapper);
@@ -592,7 +619,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     }
                 })
                 .catch(error => {
-                    console.error(error);
+                    // console.error(error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -616,6 +643,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             startDate.addEventListener("change", () => {
                 fetchAmenities();
             });
+            fetchAmenities();
         }
         if (tourSelect) {
             document.getElementById("cottageBtn").disabled = false;
@@ -627,6 +655,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 document.getElementById("entertainmentBtn").disabled = false;
                 document.getElementById("hotelBtn").disabled = false;
             });
+            fetchAmenities();
         }
         const bookRatesBTN = document.getElementById('bookRatesBTN')
 
