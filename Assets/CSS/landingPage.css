@@ -163,7 +163,6 @@ body {
   font-weight: bold;
 }
 
-
 ul {
   font-family: "Poppins";
   font-weight: lighter;
@@ -448,9 +447,11 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 footer {
-  background: linear-gradient(to top,
-      rgba(255, 255, 255, 0.445) -50%,
-      rgb(62, 132, 158) 95%);
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.445) -50%,
+    rgb(62, 132, 158) 95%
+  );
 }
 
 .pb-1 {
@@ -694,7 +695,6 @@ footer {
     width: auto;
   }
 
-
   .emailAddressText {
     margin-top: 0.1vw;
   }
@@ -791,11 +791,14 @@ footer {
     width: 15vw;
   }
 
-  .reservationTitle, .locationTitle {
+  .reservationTitle,
+  .locationTitle {
     font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
   }
 
-  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
     font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
   }
 
@@ -911,7 +914,6 @@ footer {
 
 /* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
-
   .img5,
   .img6,
   .img4 {
@@ -939,8 +941,9 @@ footer {
 }
 
 @media (max-width: 991.98px) {
-  .nav-link, #logOutBtn {
-    font-size: 2vw !important;
+  .nav-link,
+  #logOutBtn {
+    font-size: 2vw;
   }
 
   a.dropdown-item {
@@ -981,19 +984,19 @@ footer {
   }
 }
 
-@media (max-width: 991.98px) and (orientation:portrait) {
+@media (max-width: 991.98px) and (orientation: portrait) {
   .nav-item {
     margin-top: 5px;
   }
 
-  .nav-link, #logOutBtn {
-    font-size: 2vw !important;
+  .nav-link,
+  #logOutBtn {
+    font-size: 2vw;
   }
 
   a.dropdown-item {
     font-size: 1.8vw;
   }
-
 }
 
 /* Phone size */
@@ -1001,6 +1004,14 @@ footer {
   .titleContainer {
     height: calc(100vh - 20vh);
     padding: 12vw;
+  }
+
+  .nav-link {
+    font-size: 3vw;
+  }
+
+  a.dropdown-item {
+    font-size: 2.8vw;
   }
 
   .mamyrTitle {
@@ -1044,7 +1055,6 @@ footer {
     background-color: white;
   }
 
- 
   .navbar.scrolled {
     background-color: none !important;
   }
@@ -1257,11 +1267,14 @@ footer {
     width: 50%;
   }
 
-  .reservationTitle, .locationTitle {
+  .reservationTitle,
+  .locationTitle {
     font-size: clamp(2.4vw, calc(2vw + 2px), 1.8vw) !important;
   }
 
-  .numberFooter, .emailAddressTextFooter, .addressTextFooter {
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
     font-size: clamp(2.5vw, calc(2vw + 2px), 1.9vw) !important;
   }
 

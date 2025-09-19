@@ -18,6 +18,7 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
     <title>Mamyr - Blog</title>
     <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/blog.css">
+    <link rel="stylesheet" href="../Assets/CSS/navbar.css">
     <!-- <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css"> -->
     <!-- link for online bootstrap CDN  -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -45,16 +46,13 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                     <li class="nav-item dropdown">
                         <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                AMENITIES
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                                <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a>
-                                </li>
-                                <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
-                            </ul>
+                            AMENITIES
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
+                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                            <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="#">BLOG</a>
@@ -78,7 +76,7 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
         <main>
             <!-- Save button, only visible if page is on edit mode -->
             <?php if ($editMode): ?>
-            <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
+                <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
             <?php endif; ?>
             <?php
             $getWebContent = "SELECT * FROM websitecontent WHERE sectionName = 'Blog'";
@@ -140,9 +138,9 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                 <div class="posts">
                     <!-- Featured Post -->
                     <?php if (!empty($firstPost)): ?>
-                    <div class="featured">
-                        <div class="featuredpost">
-                            <?php
+                        <div class="featured">
+                            <div class="featuredpost">
+                                <?php
                                 $featuredContentID = $firstPost['contentID'] ?? null;
 
                                 if ($featuredContentID && isset($imagesByContentID[$featuredContentID])) {
@@ -186,15 +184,15 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                         </div>
                     <?php endif; ?>
 
-        <!-- Other Posts -->
-        <div class="others container">
-            <?php
-            $isFirst = true;
-            foreach ($blogPosts as $postID => $post) {
-                if ($isFirst) {
-                    $isFirst = false;
-                    continue;
-                }
+                    <!-- Other Posts -->
+                    <div class="others container">
+                        <?php
+                        $isFirst = true;
+                        foreach ($blogPosts as $postID => $post) {
+                            if ($isFirst) {
+                                $isFirst = false;
+                                continue;
+                            }
 
                             $contentID = $post['contentID'] ?? null;
                         ?>
@@ -249,23 +247,23 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
-                <div class="modal-body">
+                                <div class="modal-body">
 
-                    <?php
+                                    <?php
 
-                    $featuredContentID = $firstPost['contentID'] ?? null;
-                    $featuredImage = '../../Assets/Images/no-picture.jpg'; // default fallback
-                    $featuredAlt = 'Blog image';
+                                    $featuredContentID = $firstPost['contentID'] ?? null;
+                                    $featuredImage = '../../Assets/Images/no-picture.jpg'; // default fallback
+                                    $featuredAlt = 'Blog image';
 
-                    if ($featuredContentID && isset($imagesByContentID[$featuredContentID][0])) {
-                        $imgData = $imagesByContentID[$featuredContentID][0]['imageData'];
-                        $featuredAlt = $imagesByContentID[$featuredContentID][0]['altText'] ?? 'Blog image';
-                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                        $mimeType = finfo_buffer($finfo, $imgData);
-                        finfo_close($finfo);
-                        $featuredImage = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
-                    }
-                    ?>
+                                    if ($featuredContentID && isset($imagesByContentID[$featuredContentID][0])) {
+                                        $imgData = $imagesByContentID[$featuredContentID][0]['imageData'];
+                                        $featuredAlt = $imagesByContentID[$featuredContentID][0]['altText'] ?? 'Blog image';
+                                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                                        $mimeType = finfo_buffer($finfo, $imgData);
+                                        finfo_close($finfo);
+                                        $featuredImage = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
+                                    }
+                                    ?>
 
                                     <img src="<?= htmlspecialchars($featuredImage) ?>" alt="<?= htmlspecialchars($featuredAlt) ?>" class="img-fluid mb-3" />
                                     <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
@@ -283,9 +281,9 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                                     </div>
                                 </div>
 
-            </div>
-        </div>
-    </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Modal for other posts -->
                     <?php foreach ($blogPosts as $postID => $post): ?>
@@ -294,17 +292,17 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                         $image = null;
                         $alt = 'Blog image';
 
-        if ($contentID && isset($imagesByContentID[$contentID][0])) {
-            $imgData = $imagesByContentID[$contentID][0]['imageData'];
-            $alt = $imagesByContentID[$contentID][0]['altText'] ?? 'Blog image';
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_buffer($finfo, $imgData);
-            finfo_close($finfo);
-            $base64Image = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
-        } else {
-            $base64Image = '../../Assets/Images/no-picture.jpg'; // fallback
-        }
-        ?>
+                        if ($contentID && isset($imagesByContentID[$contentID][0])) {
+                            $imgData = $imagesByContentID[$contentID][0]['imageData'];
+                            $alt = $imagesByContentID[$contentID][0]['altText'] ?? 'Blog image';
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                            $mimeType = finfo_buffer($finfo, $imgData);
+                            finfo_close($finfo);
+                            $base64Image = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
+                        } else {
+                            $base64Image = '../../Assets/Images/no-picture.jpg'; // fallback
+                        }
+                        ?>
 
                         <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1" aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -337,35 +335,35 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                                     </div>
                                 </div>
 
-                                </div>
                             </div>
                         </div>
-                    <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
 
-        </div>
-</div>
-</main>
+            </div>
+    </div>
+    </main>
 
-        <?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>
     </div>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <script src="../Assets/JS/scrollNavbg.js"></script>
 
-<!-- Sweetalert JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Redirects User to Book Now -->
     <script>
         const bookNowBtns = document.querySelectorAll('.bookNowBtn');
 
-    bookNowBtns.forEach(bookNowBtn => {
-        bookNowBtn.addEventListener("click", function(e) {
-            window.location.href = "/Pages/register.php"
+        bookNowBtns.forEach(bookNowBtn => {
+            bookNowBtn.addEventListener("click", function(e) {
+                window.location.href = "/Pages/register.php"
+            });
         });
-    });
-</script>
+    </script>
 </body>
 
 </html>

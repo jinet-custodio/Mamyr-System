@@ -17,6 +17,7 @@ require '../Config/dbcon.php';
     <title>Mamyr - Events</title>
     <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/events.css">
+    <link rel="stylesheet" href="../Assets/CSS/navbar.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -28,12 +29,11 @@ require '../Config/dbcon.php';
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
-        <ul class="navbar-nav d-flex flex-row align-items-center gap-2">
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
-        </ul>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+        <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
@@ -81,8 +81,8 @@ require '../Config/dbcon.php';
     </div>
 
     <div class="categories">
-        <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
+        <div id="eventCarousel" class="carousel" data-bs-ride="false">
+            <div class="carousel-inner" id="eventsInner">
 
                 <div class="carousel-item active">
                     <div class="cardFlex">
@@ -410,6 +410,9 @@ require '../Config/dbcon.php';
     </div>
 
     <?php include 'footer.php'; ?>
+    <!-- Jquery Link -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -483,5 +486,12 @@ require '../Config/dbcon.php';
     </script>
 
 </body>
+<script>
+    $(document).ready(function() {
+        $('#eventCarousel').carousel({
+            interval: 1000000 * 5
+        });
+    });
+</script>
 
 </html>

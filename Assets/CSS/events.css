@@ -2,19 +2,25 @@
   font-family: "Poppins";
   src: url(../Fonts/Poppins/Poppins-Regular.ttf);
 }
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../Fonts/Poppins/Poppins-Black.ttf);
+}
+
 @font-face {
   font-family: "Lora";
   src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
+
+@font-face {
+  font-family: "Agbalumo";
+  src: url(../Fonts/Agbalumo/Agbalumo-Regular.ttf);
+}
+
 @font-face {
   font-family: "Alkatra";
   src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
-}
-
-
-@font-face {
-  font-family: "Galada";
-  src: url(../Fonts/Galada/Galada-Regular.ttf);
 }
 
 * {
@@ -30,177 +36,6 @@ body {
   background-repeat: no-repeat;
   background-position: top;
   background-size: contain;
-}
-
-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background-color: rgb(242, 242, 242);
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* height: 15vh; */
-  padding: 1rem;
-}
-
-#toggledNav {
-    position: absolute !important;
-    right: 2vw !important;
-  }
-
-.navbar-nav {
-  display: flex !important;
-  list-style: none;
-}
-
-#profileAndNotif {
-  padding: 0.6vw;
-}
-
-.navbar-nav .dropdown-toggle {
-  display: inline-block;
-  padding: 10px !important;
-  line-height: 1.5;
-  vertical-align: middle;
-  position: relative;
-  top: 0.1vw;
-  /* para ma-align yung dropdown sa ibang nav-item */
-}
-
-
-.nav-item {
-  text-transform: uppercase;
-  font-family: "Poppins" !important;
-  font-weight: lighter;
-  margin-top: 15px;
-  font-size: 1.5vw;
-  /* margin-left: 3vw; */
-}
-
-.nav-link,
-#logOutBtn {
-  text-decoration: none;
-  display: inline-block;
-  padding: 10px 15px !important;
-  position: relative;
-  color: rgb(2, 2, 2) !important;
-  letter-spacing: 0.1em;
-}
-
-#logOutBtn {
-  font-family: "Poppins";
-  font-size: 1.5vw;
-  margin-right: 2vw;
-  border: none;
-}
-
-.nav-link:not(.dropdown-toggle):after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 50%;
-  position: absolute;
-  border-bottom: 4px solid #93d4f5 !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-
-.nav-link.active:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link:not(.dropdown-toggle):hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.dropdown-menu {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.nav-item.dropdown:hover .dropdown-menu {
-  background-color: white !important;
-  display: block;
-}
-
-.dropdown-item:hover {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.dropdown-item.active {
-  background-color: rgb(126, 203, 242) !important;
-  color: black !important;
-}
-
-.dropdown-item {
-  font-size: 1.3vw;
-  font-weight: bold;
-}
-
-.account-nav {
-  display: flex;
-  align-items: center;
-  border-radius: 50%;
-  margin-left: 1rem;
-  margin-top: 0 !important;
-
-  img {
-    height: 5vw;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
-
-  a {
-    height: 100%;
-    display: flex;
-    align-items: center;
-  }
-}
-
-#notifs {
-  margin-top: 0;
-}
-
-.notification-container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-
-  button {
-    background-color: transparent;
-    border: none;
-  }
-}
-
-.notificationIcon {
-  display: flex;
-  align-items: center;
-  height: 2.5vw;
-  aspect-ratio: 1;
-}
-
-/* Edit mode CSS */
-#saveChangesBtn {
-  margin-top: 8vw !important;
-  margin-left: 80vw;
-  font-size: 1.8vw !important;
-  position: fixed;
-}
-
-.editable-input {
-  background-color: rgba(255, 255, 255, 0) !important;
-  border: 1px solid rgb(255, 13, 13) !important;
-  padding: 2px;
 }
 
 /* Div for loader */
@@ -237,96 +72,6 @@ nav {
   100% {
     transform: rotate(360deg);
   }
-}
-
-footer {
-  /* border: 1px solid black; */
-  margin-top: auto !important;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 10vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 1.5vw;
-  font-weight: bold;
-  color: #ffff;
-}
-
-.footerLine {
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  opacity: 1;
-}
-
-.info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5vw;
-}
-.locationFooter {
-  /* border: 1px solid black; */
-  width: 30%;
-}
-
-.reservationTitle,
-.locationTitle {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 1.5vw;
-  color: #fff;
-}
-
-.numberFooter,
-.emailAddressTextFooter,
-.addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: 1vw;
-}
-
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  margin: 0.3vw;
-}
-
-.socialIcons a {
-  text-decoration: none;
-  padding: 0.8vw;
-  background-color: rgb(255, 255, 255);
-  margin: 5px;
-  border-radius: 50%;
-}
-
-.socialIcons a i {
-  font-size: 2vw;
-  color: #3e849e;
-  opacity: 0.9;
-}
-
-.socialIcons a:hover {
-  background-color: white;
-  transition: 0.5s;
-}
-
-.socialIcons a:hover i {
-  color: #c1a534;
-  transition: 0.5s;
 }
 
 .titleContainer {
@@ -404,10 +149,16 @@ footer {
   margin: auto;
 }
 .card {
-  margin: auto;
   border-radius: 10vw 10vw 0 0 !important;
   text-align: center;
-  height: 35vw !important;
+}
+
+.carousel-inner {
+  padding-top: 2vw;
+}
+
+.event-card {
+  width: 50%;
 }
 
 .card-body {
@@ -420,6 +171,7 @@ footer {
   border-radius: 10vw 10vw 0 0 !important;
   padding: 1vw;
   height: 15vw;
+  aspect-ratio: 1;
   object-fit: cover;
 }
 
@@ -445,7 +197,7 @@ footer {
 }
 
 .miniHall {
-  margin-top: 1vw !important;
+  margin-top: 1vw;
   width: 98%;
   border-radius: 20px;
   background-color: #f7d5b0;
@@ -508,15 +260,46 @@ footer {
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   .titleContainer {
     width: 80%;
-    margin-top: clamp(18vh, calc(1.25vh + 4px), 10vh) !important;
+    margin-top: clamp(11vh, calc(1.25vh + 4px), 9.5vw);
   }
 
-  .title {
-    font-size: clamp(30px, calc(1.25vh + 4px), 35px) !important;
+  .carousel {
+    width: 90%;
   }
 
-  .description {
-    font-size: clamp(20px, calc(1.25vh + 4px), 20px) !important;
+  .mainHallDescContainer,
+  .miniHallDescContainer {
+    width: 35%;
+  }
+
+  .cardFlex {
+    width: 80%;
+  }
+
+  .event-card {
+    width: 90%;
+    margin: 0 1vw;
+    img {
+      object-fit: contain;
+    }
+  }
+
+  .categories {
+    padding: 0;
+  }
+
+  #carouselMainHall {
+    width: 55%;
+  }
+
+  .title,
+  .venueTitle {
+    font-size: clamp(4vw, calc(3.8vw + 4px), 3.7vw) !important;
+  }
+
+  .description,
+  .venueDescription {
+    font-size: clamp(1.8vw, calc(1.7vw + 4px), 2.5vw) !important;
   }
 
   .card {
@@ -528,11 +311,154 @@ footer {
     object-fit: cover;
   }
 
+  .carousel-control-next-icon,
+  .carousel-control-prev-icon {
+    height: 4vw !important;
+    width: 4vw !important;
+  }
+
   .card-title {
-    font-size: clamp(25px, calc(1.5vh + 4px), 30px);
+    font-size: clamp(3.3vw, calc(3.5vw + 4px), 3.6vw);
   }
 
   .eventDesc {
-    font-size: clamp(15px, calc(1.5vh + 4px), 12px);
+    font-size: clamp(2.3vw, calc(2.5vw + 4px), 2vw);
+  }
+
+  .carousel-item {
+    img {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    background-size: auto;
+  }
+  .title,
+  .venueTitle {
+    font-size: 6vw;
+  }
+
+  .venueTitleContainer {
+    margin-top: 4vh;
+  }
+  .description,
+  .venueDescription {
+    font-size: 3vw;
+  }
+  .carousel {
+    width: 85%;
+  }
+  .categories {
+    padding: 1vw 0 0 0;
+  }
+
+  .cardFlex {
+    width: 90%;
+  }
+
+  #eventsInner {
+    overflow: visible !important;
+  }
+
+  .card {
+    height: auto;
+  }
+
+  .event-card {
+    width: 50%;
+  }
+
+  img.card-img-top {
+    height: 15vh !important;
+    object-fit: cover;
+  }
+
+  .carousel-control-next {
+    justify-content: end !important;
+    right: -4vw !important;
+  }
+  .carousel-control-prev {
+    justify-content: start !important;
+    left: -4vw !important;
+  }
+
+  .carousel-control-next,
+  .carousel-control-prev {
+    z-index: 100 !important;
+    position: absolute;
+  }
+
+  .carousel-control-next-icon,
+  .carousel-control-prev-icon {
+    width: 7vw !important;
+    height: 5vw !important;
+    padding: 0 !important;
+  }
+  .carousel-control-next-icon {
+    right: -5vw !important;
+  }
+
+  .carousel-control-prev-icon {
+    left: -5vw !important;
+  }
+
+  .card-title {
+    font-size: 3.5vw;
+  }
+
+  .eventDesc {
+    font-size: 2vw;
+  }
+
+  .card-body {
+    padding: 1.5vw !important;
+  }
+
+  .bookBtn {
+    font-size: 2vw !important;
+  }
+
+  .mainHall,
+  .miniHall {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .miniHall {
+    margin-top: 3vw;
+  }
+
+  .mainHallDescContainer {
+    padding-right: 2vw;
+  }
+
+  .miniHallDescContainer {
+    padding-left: 2vw;
+  }
+  .mainHallDescContainer,
+  .miniHallDescContainer {
+    width: 40%;
+  }
+
+  #carouselMainHall,
+  #carouselMiniHall {
+    width: 50%;
+  }
+
+  .mainHallDescTitle,
+  .miniHallDescTitle {
+    font-size: 3.8vw;
+  }
+
+  .miniHallDescription,
+  .mainHallDescription {
+    font-size: 3vw !important;
+  }
+
+  img.d-block {
+    width: 40vw !important;
   }
 }
