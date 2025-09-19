@@ -19,10 +19,9 @@ $userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
 $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
 
 //Function for turning the number format to word format
-//Paki enable na lang yung extension na intl sa php.ini to mga bes
+// TODO: Paki enable na lang yung extension na intl sa php.ini 
 function convertToWords($number)
 {
-    //$formatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
     $formatter = new \NumberFormatter("en", \NumberFormatter::SPELLOUT);
 
     $pesos = floor($number);

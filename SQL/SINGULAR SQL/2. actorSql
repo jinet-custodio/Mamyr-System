@@ -16,10 +16,23 @@ CREATE TABLE user (
     OTP_expiration_at DATETIME,
     userStatusID INT NOT NULL DEFAULT 1,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
 
     FOREIGN KEY (userRole) REFERENCES usertype(userTypeID),
     FOREIGN KEY (userStatusID) REFERENCES userstatus(userStatusID)
 );
+
+ALTER TABLE user
+ADD COLUMN isTermsAccepted Boolean
+AFTER userStatusID;
+
+ALTER TABLE user 
+ADD COLUMN isDeleted Boolean DEFAULT false
+AFTER createdAT;
+
+ALTER TABLE user
+ADD COLUMN dateDeleted DATE NULL
+AFTER isDeleted;
 
 
 CREATE TABLE admin (
@@ -29,7 +42,6 @@ CREATE TABLE admin (
 
     FOREIGN KEY (userID) REFERENCES user(userID)
 );
-
 
 
 CREATE TABLE partnership (
@@ -47,7 +59,6 @@ CREATE TABLE partnership (
 
     FOREIGN KEY (userID) REFERENCES user(userID),
     FOREIGN KEY (partnerStatusID) REFERENCES partnerstatus(partnerStatusID)
-    -- FOREIGN KEY (partnerStatus) REFERENCES userstatus(userStatusID)
 );
 
 CREATE TABLE partnership_partnertype(
@@ -57,7 +68,6 @@ CREATE TABLE partnership_partnertype(
     
     FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID) ON DELETE CASCADE,
     FOREIGN KEY (partnerTypeID) REFERENCES partnershiptype(partnerTypeID)
-)
-
+);
 
 

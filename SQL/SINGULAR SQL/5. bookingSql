@@ -13,22 +13,27 @@ CREATE TABLE booking (
     startDate DATETIME NOT NULL,
     endDate DATETIME NOT NULL,
     paymentMethod VARCHAR(50) NOT NULL,
-
-    additionalCharge DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     totalCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     downpayment DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-
     bookingStatus INT DEFAULT 1,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    approvedBy INT,
+    approvedDate DATETIME NULL,
 
     FOREIGN KEY (userID) REFERENCES user(userID),
     FOREIGN KEY (bookingStatus) REFERENCES status(statusID),
-    FOREIGN KEY (customPackageID) REFERENCES custompackage(customPackageID)
+    FOREIGN KEY (customPackageID) REFERENCES custompackage(customPackageID),
+    FOREIGN KEY (approvedBy) REFERENCES admin(adminID)
 );
 
 ALTER TABLE booking
 ADD COLUMN arrivalTime TIME NULL
 AFTER durationCount;
+
+ALTER TABLE booking
+ADD COLUMN bookingOrigin ENUM('Online', 'Walk-In') NOT NULL DEFAULT 'Online'
+AFTER paymentMethod;
+
 
 CREATE TABLE bookingservice (
     bookingServiceID INT PRIMARY KEY AUTO_INCREMENT,
@@ -46,6 +51,7 @@ CREATE TABLE confirmedbooking (
     bookingID INT NOT NULL,
     downpaymentImage varchar(255) DEFAULT 'defaultDownpayment.png', 
     discountAmount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    additionalCharge DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     confirmedFinalBill DECIMAL(10,2) NOT NULL DEFAULT 0.00, 
     amountPaid DECIMAL(10,2) NOT NULL DEFAULT 0.00,  
     userBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00, 
@@ -54,10 +60,13 @@ CREATE TABLE confirmedbooking (
     paymentDueDate DATETIME,
     downpaymentDueDate	DATETIME,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    approvedBy INT,
+    approvedDate DATETIME NULL,
     
     FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
     FOREIGN KEY (paymentApprovalStatus) REFERENCES status(statusID),
-    FOREIGN KEY (paymentStatus) REFERENCES bookingpaymentstatus(paymentStatusID)
+    FOREIGN KEY (paymentStatus) REFERENCES bookingpaymentstatus(paymentStatusID),
+    FOREIGN KEY (approvedBy) REFERENCES admin(adminID)
 );            
 
 CREATE TABLE businesspartneravailedservice(
@@ -67,7 +76,7 @@ CREATE TABLE businesspartneravailedservice(
     approvalStatus INT,
     availedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY(partnershipserviceID) REFERENCES partnershipservice(partnershipServiceID),
+   FOREIGN KEY(partnershipServiceID) REFERENCES partnershipservice(partnershipServiceID),
     FOREIGN KEY(bookingID) REFERENCES booking(bookingID),
     FOREIGN KEY(approvalStatus) REFERENCES status(statusID)
 );

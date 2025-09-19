@@ -10,9 +10,10 @@ require_once 'functions.php';
 
 date_default_timezone_set('Asia/Manila'); //Set default time zone 
 
+$imageName = '';
 // For sign up
 if (isset($_POST['signUp'])) {
-    $terms = mysqli_real_escape_string($conn, $_POST['terms']);
+    $terms = isset($_POST['terms']); //isset lang to kasi true or false lang naman need 
     $userRole = isset($_POST['userRole']) ? intval($_POST['userRole']) : 1;
     $registerStatus = mysqli_real_escape_string($conn, $_POST['registerStatus']);
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
@@ -22,19 +23,45 @@ if (isset($_POST['signUp'])) {
     //If the user is directly signing up as business partner, their personal address will not be provided
     if ($registerStatus === "Partner") {
         $userAddress = "Personal address not provided";
+
+        //For validID
+
+        $partnerFilePath = __DIR__ . '../../Assets/Images/BusinessPartnerIDs/';
+
+        if (!is_dir($partnerFilePath)) {
+            mkdir($partnerFilePath, 0755, true);
+        }
+        $imageMaxSize = 10 * 1024 * 1024; //10mb
+        if (isset($_FILES['validID']) && $_FILES['validID']['error'] === UPLOAD_ERR_OK) {
+            if ($_FILES['validID']['size'] <= $imageMaxSize) {
+                $filePath = $_FILES['validID']['tmp_name'];
+                $fileName = $_FILES['validID']['name'];
+                $imageName = $firstName . '_' . $fileName;
+                $image = $partnerFilePath . $imageName;
+                move_uploaded_file($filePath, $image);
+            } else {
+                $_SESSION['registerFormData'] = $_POST;
+                $_SESSION['partnerData'] = $_POST;
+                error_log(print_r($_POST, true));
+                header('Location: ../../../Pages/busPartnerRegister.php?action=exceedImageSize');
+            }
+        }
     } else {
         $userAddress = mysqli_real_escape_string($conn, $_POST['userAddress']);
+        $imageName = null;
     }
 
-    $partnerType = mysqli_real_escape_string($conn, $_POST['partnerType']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
     $extensions = ['gmail.com', 'yahoo.com', 'outlook.com', 'protonmail.com', 'icloud.com'];
 
+
+
     $partnerData = [
+        'imageName' => $imageName,
+        'partnerType' => $_POST['partnerType'] ?? [],
         'companyName'    => trim($_POST['companyName']),
-        'partnerType'    => trim($_POST['partnerType']),
         'phoneNumber'    => trim($_POST['phoneNumber']),
         'barangay'       => trim($_POST['barangay']),
         'streetAddress'  => trim($_POST['streetAddress']),
@@ -91,7 +118,7 @@ if (isset($_POST['signUp'])) {
                     $insertUser->bind_param("bssssssiss", $dummyBlob,  $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $userRole, $otp, $OTP_expiration_at);
                     $insertUser->send_long_data(0, $userProfile);
                     if ($registerStatus == "Partner") {
-                        error_log("PartnerTypeID :" .  $_POST['partnerType']);
+                        // error_log("PartnerTypeID :" .  $_POST['partnerType']);
                         $_SESSION['partnerData'] = $partnerData;
                     }
 
@@ -193,13 +220,12 @@ elseif (isset($_POST['login'])) {
     $email = mysqli_real_escape_string($conn, $_POST['login_email']);
     $password = mysqli_real_escape_string($conn, $_POST['login_password']);
 
-
-
     $loginQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
     $loginQuery->bind_param("s", $email);
     $loginQuery->execute();
     $loginResult = $loginQuery->get_result();
     $_SESSION['loginFormData']['email'] = $email;
+
     if ($loginResult->num_rows > 0) {
         $data = $loginResult->fetch_assoc();
         $storedPassword = $data['password'];
@@ -224,7 +250,7 @@ elseif (isset($_POST['login'])) {
                     case 'Customer':
                         header("Location: ../Pages/Customer/dashboard.php?action=successLogin");
                         break;
-                    case 'PartnerRequest':
+                    case 'Partner Request':
                         header("Location: ../Pages/Customer/dashboard.php?action=successLogin");
                         break;
                     case 'Partner':
@@ -243,12 +269,12 @@ elseif (isset($_POST['login'])) {
                 exit;
             }
         } else {
-            $_SESSION['loginError'] = 'Invalid username or password. Please try again.';
+            $_SESSION['loginError'] = 'Invalid email or password. Please try again.';
             header("Location: ../Pages/register.php?page=login");
             exit;
         }
     } else {
-        $_SESSION['loginError'] = 'Invalid username or password. Please try again.';
+        $_SESSION['loginError'] = 'Invalid email or password. Please try again.';
         header("Location: ../Pages/register.php?page=login");
         exit;
     }

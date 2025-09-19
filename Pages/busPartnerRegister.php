@@ -37,7 +37,7 @@ session_start();
 
         </a>
     </div>
-    <form action="../Function/register.php" method="POST">
+    <form action="../Function/register.php" method="POST" enctype="multipart/form-data">
         <div class="container" id="basicInfo">
             <div class="row">
                 <div class="col" id="repInfoContainer">
@@ -77,50 +77,46 @@ session_start();
                             value="<?php echo isset($_SESSION['partnerData']['companyName']) ? htmlspecialchars(trim($_SESSION['partnerData']['companyName'])) : ''; ?>">
 
                         <button type="button" class="btn btn-light" data-bs-toggle="modal"
-                            data-bs-target="#busTypenModal">Type of Business</button>
+                            data-bs-target="#busTypenModal" id="partnerTypeButton" require>Type of your Business</button>
 
 
                         <!-- modal for type of business -->
-                        <div class="modal fade" id="busTypenModal" tabindex="-1" aria-labelledby="busTypeModalLabel"
-                            aria-hidden="true">
+                        <div class="modal fade" id="busTypenModal" tabindex="-1" aria-labelledby="busTypeModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-scrollable">
                                 <div class="modal-content">
 
                                     <div class="modal-header">
                                         <h5 class="modal-title">Type of Business</h5>
-                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body busTypeBody">
                                         <?php
-                            $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
-                            $serviceType->execute();
-                            $serviceTypeResult = $serviceType->get_result();
-                            if ($serviceTypeResult->num_rows > 0) {
-                                while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
-                                    $partnerType = $serviceTypes['partnerTypeID'];
-                                    $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
-                            ?>
+                                        $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
+                                        $serviceType->execute();
+                                        $serviceTypeResult = $serviceType->get_result();
+                                        if ($serviceTypeResult->num_rows > 0) {
+                                            while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
+                                                $partnerType = $serviceTypes['partnerTypeID'];
+                                                $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
+                                        ?>
 
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="partnerType[]"
-                                                id="partnerType<?= htmlspecialchars($partnerType) ?>"
-                                                value="<?= htmlspecialchars($partnerType) ?>">
-                                            <label class="form-check-label"
-                                                for="partnerType<?= htmlspecialchars($partnerType) ?>">
-                                                <?= htmlspecialchars($partnerTypeDescription) ?>
-                                            </label>
-                                        </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="partnerType[]"
+                                                        id="partnerType<?= htmlspecialchars($partnerType) ?>"
+                                                        value="<?= htmlspecialchars($partnerType) ?>"
+                                                        <?= (isset($_SESSION['partnerData']) && in_array($partnerType, $_SESSION['partnerData']['partnerType'])) ? 'checked' : '' ?>>
+                                                    <label class="form-check-label"
+                                                        for="partnerType<?= htmlspecialchars($partnerType) ?>">
+                                                        <?= htmlspecialchars($partnerTypeDescription) ?>
+                                                    </label>
+                                                </div>
                                         <?php
-                                }
-                            }
-                            ?>
+                                            }
+                                        }
+                                        ?>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary">Select</button>
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" id="selectPartnerBtn" data-bs-dismiss="modal">Okay</button>
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +163,7 @@ session_start();
                         <h6 class="label">Upload a Valid ID</h6>
                         <input type="file" class="form-control validIDFIle" id="validID" name="validID">
 
-                        <button class="btn btn-primary w-75" id="nextBtn" onclick="openEmailPass()">Next</button>
+                        <button class="btn btn-primary w-75" id="nextBtn" onclick="openEmailPass(event)">Next</button>
                     </div>
                 </div>
             </div>
@@ -208,11 +204,6 @@ session_start();
                     <div class="confirmErrorMsg" id="passwordMatch"></div>
 
                     <div class="bottomPart">
-                        <!-- <label for="terms">
-                            <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
-                                onchange="validateSignUpForm()"> I agree to the
-                            <a href="#" id="open-modal" style="text-decoration: none;">Terms and Conditions</a>.
-                        </label><br> -->
                         <div class="termsContainer">
                             <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
                                 onchange="validateSignUpForm();"> I agree to the
@@ -240,9 +231,7 @@ session_start();
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="instructionLabel">Documents for Verification</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body" style="max-height:400px; overflow-y: auto;">
@@ -537,18 +526,6 @@ session_start();
     </div>
     <!-- terms and conditions modal -->
 
-
-
-
-
-
-
-
-
-
-
-
-
     <!-- Div for loader -->
     <div id="loaderOverlay" style="display: none;">
         <div class="loader"></div>
@@ -572,128 +549,147 @@ session_start();
     </script> -->
     <!-- Script for loader -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const loaderOverlay = document.getElementById('loaderOverlay');
-        const form = document.querySelector('form');
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const form = document.querySelector('form');
 
-        if (form) {
-            form.addEventListener('submit', function() {
-                loaderOverlay.style.display = 'flex';
-            });
+            if (form) {
+                form.addEventListener('submit', function() {
+                    loaderOverlay.style.display = 'flex';
+                });
+            }
+        });
+
+        function hideLoader() {
+            const overlay = document.getElementById('loaderOverlay');
+            if (overlay) overlay.style.display = 'none';
         }
-    });
 
-    function hideLoader() {
-        const overlay = document.getElementById('loaderOverlay');
-        if (overlay) overlay.style.display = 'none';
-    }
+        // Hide loader on normal load
+        window.addEventListener('load', hideLoader);
 
-    // Hide loader on normal load
-    window.addEventListener('load', hideLoader);
-
-    // Hide loader on back/forward navigation (from browser cache)
-    window.addEventListener('pageshow', function(event) {
-        if (event.persisted) {
-            hideLoader();
-        }
-    });
+        // Hide loader on back/forward navigation (from browser cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+            }
+        });
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- For validation -->
     <script>
-    const emailPassContainer = document.getElementById("emailPassContainer");
-    const basicInfo = document.getElementById("basicInfo")
+        const emailPassContainer = document.getElementById("emailPassContainer");
+        const basicInfo = document.getElementById("basicInfo")
 
-    emailPassContainer.style.display = "none";
+        emailPassContainer.style.display = "none";
 
-    function openEmailPass() {
+        function openEmailPass(event) {
+            event.preventDefault(); // Prevent form from submitting
 
-        // Get required inputs
-        const requiredFields = [
-            'firstName', 'lastName', 'phoneNumber',
-            'companyName', 'service', 'barangay', 'proofLink'
-        ];
+            const requiredFields = [
+                'firstName', 'lastName', 'phoneNumber',
+                'companyName', 'barangay', 'proofLink', 'validID'
+            ];
 
-        let allValid = true;
+            let allValid = true;
 
-        requiredFields.forEach(id => {
-            const field = document.getElementById(id);
-            if (!field || !field.value.trim()) {
-                field.classList.add('is-invalid');
-                allValid = false;
-            } else {
-                field.classList.remove('is-invalid');
-            }
-        });
-
-        if (!allValid) {
-            Swal.fire({
-                title: 'Oops',
-                text: "Please fill out all required fields before continuing.",
-                icon: 'warning'
+            requiredFields.forEach(id => {
+                const field = document.getElementById(id);
+                if (!field || !field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    allValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
             });
-            return;
-        }
 
-        if (emailPassContainer.style.display == "none") {
+            // Validate business type selection
+            const checkboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
+            if (checkboxes.length < 1 || checkboxes.length > 2) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: 'You must select 1 or 2 business types.',
+                });
+                allValid = false;
+
+                const typeModal = document.getElementById('busTypenModal');
+                const modal = new bootstrap.Modal(typeModal);
+                modal.show();
+            }
+
+            if (!allValid) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: "Please fill out all required fields before continuing.",
+                    icon: 'warning'
+                });
+                return;
+            }
             emailPassContainer.style.display = "block";
-            basicInfo.style.display = "none"
-
-        } else {
-            emailPassContainer.style.display = "block"
+            basicInfo.style.display = "none";
         }
-    }
     </script>
 
-
+    <!-- For Messages -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get("action");
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get("action");
 
-    if (paramValue === 'emailExist') {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Email Already Exist!',
-            text: 'The email address you entered is already registered.'
-        })
-    }
+        if (paramValue === 'emailExist') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Email Already Exist!',
+                text: 'The email address you entered is already registered.'
+            })
+        }
+        if (paramValue === 'exceedImageSize') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Exceed Image Size!',
+                text: 'The image you uploaded exceeds the allowed size limit. Please upload an image smaller than 15 MB.'
+            });
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 
 
     <!-- Eye icon of password show and hide -->
     <script>
-    const passwordField1 = document.getElementById('password');
-    const passwordField2 = document.getElementById('confirm_password');
-    const togglePassword1 = document.getElementById('togglePassword1');
-    const togglePassword2 = document.getElementById('togglePassword2');
+        const passwordField1 = document.getElementById('password');
+        const passwordField2 = document.getElementById('confirm_password');
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const togglePassword2 = document.getElementById('togglePassword2');
 
-    function togglePasswordVisibility(passwordField, toggleIcon) {
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleIcon.classList.remove('bxs-hide');
-            toggleIcon.classList.add('bx-show-alt');
-        } else {
-            passwordField.type = 'password';
-            toggleIcon.classList.remove('bx-show-alt');
-            toggleIcon.classList.add('bxs-hide');
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide');
+            }
         }
-    }
 
-    togglePassword1.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField1, togglePassword1);
-    });
+        togglePassword1.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField1, togglePassword1);
+        });
 
-    togglePassword2.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField2, togglePassword2);
-    });
+        togglePassword2.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField2, togglePassword2);
+        });
     </script>
 </body>
 
