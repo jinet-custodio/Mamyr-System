@@ -34,11 +34,11 @@
 
 body {
   background-image: url(../Images/AboutImages/aboutbg.jpg);
-    background-repeat: no-repeat;
-    background-position: top;
-    background-size: contain;
-    overflow-x: hidden;
-    box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: contain;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 nav {
@@ -163,21 +163,22 @@ ul {
   margin-left: 1rem;
   /* border: 1px solid white; */
   border-radius: 50%;
-  img {
-    height: 5vw;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
+}
+
+.account-nav img {
+  height: 5vw;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
 .notification-container {
   margin: 1rem;
 }
-  button {
-    background-color: transparent;
-    border: none;
-  }
+button {
+  background-color: transparent;
+  border: none;
+}
 
 .logoNav {
   /* border: 1px solid black; */
@@ -278,7 +279,6 @@ ul {
 .white-text {
   color: whitesmoke !important;
 }
-
 
 .title {
   color: #fff;
@@ -639,27 +639,27 @@ footer {
 /* Phones */
 @media only screen and (max-width: 599px) {
   .notification-container {
-  margin-top: 0.3vw;
-  margin-left: 0.5vw;
-}
-  .navbar-nav{
-      display: flex !important;
+    margin-top: 0.3vw;
+    margin-left: 0.5vw;
+  }
+  .navbar-nav {
+    display: flex !important;
     flex-direction: row !important;
     justify-content: space-between;
   }
   .account-nav {
     margin-top: 1vw !important;
-  margin: 1px;
-  margin-left: 1rem;
-  /* border: 1px solid white; */
-  border-radius: 50%;
-  img {
-    height: 8vw;
+    margin: 1px;
+    margin-left: 1rem;
+    /* border: 1px solid white; */
     border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
+    img {
+      height: 8vw;
+      border-radius: 50%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
   }
-}
   .aboutTopContainer {
     flex-direction: column;
     margin-top: 7vh;
@@ -718,9 +718,9 @@ footer {
 
 /* Tablet Portrait */
 @media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
-.notification-container {
-  margin-top: 0.5vw;
-}
+  .notification-container {
+    margin-top: 0.5vw;
+  }
   .title {
     font-size: 50px;
   }
@@ -759,25 +759,25 @@ footer {
 /* Tablet Landscape */
 @media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
   .notification-container {
-  margin-top: 0vw;
-}
-   .navbar-nav{
-      display: flex !important;
+    margin-top: 0vw;
+  }
+  .navbar-nav {
+    display: flex !important;
     flex-direction: row !important;
     justify-content: space-between;
   }
   .account-nav {
-  margin: 1px;
-  margin-left: 1rem;
-  /* border: 1px solid white; */
-  border-radius: 50%;
-  img {
-    height: 5vw;
+    margin: 1px;
+    margin-left: 1rem;
+    /* border: 1px solid white; */
     border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
+    img {
+      height: 5vw;
+      border-radius: 50%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
   }
-}
   .aboutTopContainer {
     margin-top: 20vh;
     gap: 4vw;

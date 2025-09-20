@@ -576,7 +576,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             label.innerHTML = `<strong>${room.RServiceName} </strong> for ₱${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
 
                             const roomSelection = roomSelectionSession.map(String);
-                            if (roomSection.includes(String(room.RServiceName))) {
+                            if (roomSelection.includes(String(room.RServiceName))) {
                                 checkbox.checked = true;
                             }
 
@@ -590,6 +590,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     if (selectedTour === 'Day' || selectedTour === 'Night') {
                         getCottages();
                     }
+                    // console.log(selectedTour);
 
                     // Show rooms for Overnight
                     if (selectedTour === 'Overnight') {
@@ -649,8 +650,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         if (startDate) {
             startDate.addEventListener("change", () => {
                 fetchAmenities();
+                startDate.style.border = '1px solid rgb(223, 226, 230)';
             });
             fetchAmenities();
+            startDate.style.border = '1px solid rgb(223, 226, 230)';
+
         }
         if (tourSelect) {
             document.getElementById("cottageBtn").disabled = false;
