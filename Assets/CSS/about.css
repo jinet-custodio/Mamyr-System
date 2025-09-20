@@ -39,6 +39,11 @@ body {
   background-size: contain;
   overflow-x: hidden;
   box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: contain;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 nav {
@@ -452,18 +457,15 @@ button {
 }
 
 .backArrowContainer {
-  /* border: 1px solid red; */
   position: absolute;
   top: 20%;
   left: 3%;
 }
 .mamyrHistoryContainer {
-  /* border: 1px solid red; */
   margin-top: 35vh;
 }
 
 .firstParagraphContainer {
-  /* border: 1px solid red; */
   padding: 3vw;
   width: 90%;
   margin: auto;
@@ -523,99 +525,6 @@ button {
   margin-top: -3vw !important;
 }
 
-footer {
-  /* border: 1px solid black; */
-  margin-top: auto !important;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-.py-1 {
-  margin-top: 2vw !important;
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 10vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 1.5vw;
-  font-weight: bold;
-  color: #ffff;
-}
-
-.footerLine {
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  opacity: 1;
-}
-
-.info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5vw;
-}
-.locationFooter {
-  /* border: 1px solid black; */
-  width: 30%;
-}
-
-.reservationTitle,
-.locationTitle {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 1.5vw;
-  color: #fff;
-}
-
-.numberFooter,
-.emailAddressTextFooter,
-.addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: 1vw;
-}
-
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  margin: 0.3vw;
-}
-
-.socialIcons a {
-  text-decoration: none;
-  padding: 0.8vw;
-  background-color: rgb(255, 255, 255);
-  margin: 5px;
-  border-radius: 50%;
-}
-
-.socialIcons a i {
-  font-size: 2vw;
-  color: #3e849e;
-  opacity: 0.9;
-}
-
-.socialIcons a:hover {
-  background-color: white;
-  transition: 0.5s;
-}
-
-.socialIcons a:hover i {
-  color: #c1a534;
-  transition: 0.5s;
-}
-
 .construction-wrapper {
   margin-top: 8vw;
   margin-bottom: 20vw;
@@ -636,30 +545,144 @@ footer {
   width: 40vw;
   height: auto;
 }
+
+/* Tablet Portrait */
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+  .mamyrHistoryContainer {
+    margin-top: 20vh;
+  }
+
+  .notification-container {
+    margin-top: 0.5vw;
+  }
+  .title {
+    font-size: 50px;
+  }
+  .aboutTopContainer {
+    margin-top: 10vh;
+    gap: 4vw;
+    flex-wrap: wrap;
+  }
+  .resortPic {
+    width: 60vw;
+    border-radius: 60px;
+  }
+  .hook {
+    font-size: 30px;
+    text-align: center;
+  }
+  .aboutDescription,
+  .servicesDescription {
+    font-size: 2.5vw;
+  }
+  .resortIconDescription,
+  .hotelIconDescription,
+  .eventIconDescription {
+    font-size: 2vw;
+  }
+  .videoContainer {
+    flex-direction: column-reverse;
+    margin-top: 5vw !important;
+  }
+  .videoTitle {
+    font-size: 4vw;
+    margin-bottom: 2vw;
+  }
+  .videoDescription {
+    font-size: 2.3vw;
+  }
+
+  .btn-primary {
+    font-size: 3vw !important;
+  }
+
+  .firstParagraphContainer {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .firstImageContainer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .firstParagraphPhoto {
+    width: 50vw;
+  }
+
+  .firstParagraph,
+  .secondParagraph,
+  .thirdParagraph,
+  .fourthParagraph {
+    font-size: 2.4vw;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
+  .aboutTopContainer {
+    margin-top: 20vh;
+    gap: 4vw;
+  }
+  .resortPic {
+    width: 50vw;
+    border-radius: 60px;
+  }
+  .hook {
+    font-size: 25px;
+  }
+  .aboutDescription,
+  .servicesDescription {
+    font-size: 2.5vw;
+  }
+  .resortIconDescription,
+  .hotelIconDescription,
+  .eventIconDescription {
+    font-size: 2vw;
+  }
+  .videoTitle {
+    font-size: 4vw;
+    margin-bottom: 2vw;
+  }
+  .videoDescription {
+    font-size: 2.3vw;
+    width: 110%;
+  }
+  .videoContainer {
+    margin-top: 7vw !important;
+  }
+  .embed-responsive {
+    margin-left: 3vw;
+  }
+
+  .btn-primary {
+    font-size: 3vw !important;
+  }
+
+  .firstParagraphContainer {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .firstImageContainer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .firstParagraphPhoto {
+    width: 50vw;
+  }
+
+  .firstParagraph,
+  .secondParagraph,
+  .thirdParagraph,
+  .fourthParagraph {
+    font-size: 2.4vw;
+  }
+}
+
 /* Phones */
 @media only screen and (max-width: 599px) {
-  .notification-container {
-    margin-top: 0.3vw;
-    margin-left: 0.5vw;
-  }
-  .navbar-nav {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-between;
-  }
-  .account-nav {
-    margin-top: 1vw !important;
-    margin: 1px;
-    margin-left: 1rem;
-    /* border: 1px solid white; */
-    border-radius: 50%;
-    img {
-      height: 8vw;
-      border-radius: 50%;
-      aspect-ratio: 1;
-      object-fit: cover;
-    }
-  }
   .aboutTopContainer {
     flex-direction: column;
     margin-top: 7vh;

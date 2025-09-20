@@ -32,13 +32,13 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
 <body>
     <div class="wrapper">
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2" style="background-color: white;">
-            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: white;">
+            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+            <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-collapse collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"> Home</a>
@@ -346,9 +346,10 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
     <?php include 'footer.php'; ?>
     </div>
-    <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
     <script src="../Assets/JS/scrollNavbg.js"></script>
 
     <!-- Sweetalert JS -->
