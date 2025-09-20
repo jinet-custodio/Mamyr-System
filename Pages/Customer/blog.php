@@ -414,7 +414,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         <?= nl2br(htmlspecialchars($firstPost['Content'] ?? '')) ?>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                        <!-- <button type="button" class="btn btn-primary bookNowBtn">Book Now</button> -->
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
@@ -472,7 +472,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                            <!-- <button type="button" class="btn btn-primary bookNowBtn">Book Now</button> -->
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>

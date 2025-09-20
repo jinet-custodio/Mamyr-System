@@ -519,7 +519,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <table class=" table table-striped" id="cateringServices">
                 <thead>
                     <th scope="col">Food Name</th>
-                    <th scope="col">Price</th>
+                    <!-- <th scope="col">Price</th> -->
                     <th scope="col">Category</th>
                     <th scope="col">Availability</th>
                     <th scope="col">Action</th>
@@ -537,7 +537,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <tr id="menuData">
                                     <input type="hidden" name="foodID" id="foodID" class="form-control foodID" value="<?= htmlspecialchars($row['foodItemID']) ?>">
                                     <td><input type="text" class="form-control foodName" name="foodName" id="foodName" value="<?= htmlspecialchars($row['foodName']) ?>" readonly></td>
-                                    <td><input type="text" class="form-control foodPrice" name="foodPrice" id="foodPrice" value="<?= htmlspecialchars($row['foodPrice']) ?>" readonly></td>
+                                    <!-- <td><input type="text" class="form-control foodPrice" name="foodPrice" id="foodPrice" value="<?= htmlspecialchars($row['foodPrice']) ?>" readonly></td> -->
                                     <td>
                                         <select id="foodCategory" name="foodCategory" class="form-select foodCategory" disabled>
                                             <option value="" disabled <?= empty($row['foodCategory']) ? 'selected' : '' ?>>Category</option>

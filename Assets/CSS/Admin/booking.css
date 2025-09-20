@@ -62,13 +62,11 @@ body {
   font-size: 24px;
 }
 
-.admin {
-  img {
-    height: 5vw;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    object-fit: cover;
-  }
+.admin img {
+  height: 5vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .booking-container {
@@ -122,4 +120,24 @@ th {
 .btn-primary {
   float: right;
   width: 16%;
+}
+
+.btn-red {
+  background-color: rgb(204, 30, 20) !important;
+  color: white;
+}
+
+.btn-red:hover {
+  background-color: rgb(150, 10, 3) !important;
+  color: white;
+}
+
+.btn-light-green {
+  background-color: rgb(71, 139, 10) !important;
+  color: white;
+}
+
+.btn-light-green:hover {
+  background-color: rgb(58, 112, 10) !important;
+  color: white;
 }

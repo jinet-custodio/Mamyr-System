@@ -34,7 +34,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 }
 
 // Get all bookingIDs with a submitted review
-$getReviews = $conn->prepare("SELECT bookingID FROM userReview WHERE bookingID IN (SELECT bookingID FROM booking WHERE userID = ?)");
+$getReviews = $conn->prepare("SELECT bookingID FROM userreview WHERE bookingID IN (SELECT bookingID FROM booking WHERE userID = ?)");
 $getReviews->bind_param("i", $userID);
 $getReviews->execute();
 $reviewResult = $getReviews->get_result();

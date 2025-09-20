@@ -302,8 +302,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <td><?= htmlspecialchars($formattedID) ?></td>
                                 <td><?= htmlspecialchars($guestName) ?></td>
                                 <td>₱ <?= number_format($totalAmount, 2) ?></td>
-                                <!-- <td>₱ <?= number_format($downpayment, 2) ?></td> -->
-                                <!-- <td>₱ <?= number_format($amountPaid, 2) ?></td> -->
                                 <td>₱ <?= number_format($balance, 2) ?></td>
                                 <td><?= htmlspecialchars($paymentMethod) ?></td>
                                 <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>

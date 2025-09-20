@@ -39,6 +39,157 @@ body {
   background-size: contain;
   overflow-x: hidden;
   box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: contain;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  /* background-color: rgb(242, 242, 242); */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* height: 15vh; */
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.69);
+}
+
+.navbar-nav {
+  display: flex !important;
+  list-style: none;
+  margin-top: 10px !important;
+}
+
+.navbar.scrolled {
+  background-color: rgb(255, 255, 255);
+  .nav-link {
+    color: black !important;
+  }
+  .nav-link:not(.dropdown-toggle):after {
+    border-bottom: 4px solid #000000 !important;
+  }
+
+  #logOutBtn {
+    color: #000000 !important;
+  }
+}
+
+.navbar-nav .dropdown-toggle {
+  display: inline-block;
+  padding: 10px 15px !important;
+  line-height: 1.5;
+  vertical-align: middle;
+  position: relative;
+  top: 0.1vw; /* para ma-align yung dropdown sa ibang nav-item */
+}
+
+ul {
+  font-family: "Poppins";
+  font-weight: lighter;
+  font-size: 1.3vw;
+  list-style: none;
+  display: table;
+  text-transform: uppercase;
+}
+
+.nav-link,
+#logOutBtn {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px !important;
+  position: relative;
+  color: rgb(2, 2, 2) !important;
+  letter-spacing: 0.1em;
+}
+
+#logOutBtn {
+  font-family: "Poppins";
+  font-size: 1.3vw;
+  margin-right: 2vw;
+  border: none;
+}
+.nav-link:not(.dropdown-toggle):after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  border-bottom: 4px solid #93d4f5 !important;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.nav-link.active:after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-link:not(.dropdown-toggle):hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.dropdown-menu {
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
+.nav-item.dropdown:hover .dropdown-menu {
+  background-color: white !important;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: rgb(126, 203, 242, 0.5) !important;
+}
+
+.dropdown-item.active {
+  background-color: rgb(126, 203, 242) !important;
+  color: black !important;
+}
+
+.dropdown-item {
+  font-size: 1.3vw;
+  font-weight: bold;
+}
+
+.account-nav {
+  margin: 1px;
+  margin-left: 1rem;
+  /* border: 1px solid white; */
+  border-radius: 50%;
+}
+
+.account-nav img {
+  height: 5vw;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.notification-container {
+  margin: 1rem;
+}
+button {
+  background-color: transparent;
+  border: none;
+}
+
+.logoNav {
+  /* border: 1px solid black; */
+  width: 15vw;
+  position: absolute;
+  margin: 2vw;
 }
 
 /* Div for loader */
@@ -585,5 +736,100 @@ body {
   .videoTextContainer {
     width: 95%;
     margin-top: 0;
+  }
+}
+
+/* Tablet Portrait */
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+  .notification-container {
+    margin-top: 0.5vw;
+  }
+  .title {
+    font-size: 50px;
+  }
+  .aboutTopContainer {
+    margin-top: 20vh;
+    gap: 4vw;
+    flex-wrap: wrap;
+  }
+  .resortPic {
+    width: 60vw;
+    border-radius: 60px;
+  }
+  .hook {
+    font-size: 30px;
+    text-align: center;
+  }
+  .aboutDescription {
+    font-size: 15px;
+  }
+  .servicesDescription {
+    font-size: 17px;
+  }
+  .videoContainer {
+    flex-direction: column-reverse;
+    margin-top: 5vw !important;
+  }
+  .videoTitle {
+    font-size: 25px;
+    margin-bottom: 2vw;
+  }
+  .videoDescription {
+    font-size: 13px;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
+  .notification-container {
+    margin-top: 0vw;
+  }
+  .navbar-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between;
+  }
+  .account-nav {
+    margin: 1px;
+    margin-left: 1rem;
+    /* border: 1px solid white; */
+    border-radius: 50%;
+    img {
+      height: 5vw;
+      border-radius: 50%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+  }
+  .aboutTopContainer {
+    margin-top: 20vh;
+    gap: 4vw;
+  }
+  .resortPic {
+    width: 50vw;
+    border-radius: 60px;
+  }
+  .hook {
+    font-size: 25px;
+  }
+  .aboutDescription {
+    font-size: 15px;
+  }
+  .servicesDescription {
+    font-size: 17px;
+  }
+  .videoTitle {
+    font-size: 18px !important;
+    margin-bottom: 0;
+  }
+  .videoDescription {
+    font-size: 12px !important;
+    width: 110%;
+  }
+  .videoContainer {
+    margin-top: 7vw !important;
+  }
+  .embed-responsive {
+    margin-left: 3vw;
   }
 }
