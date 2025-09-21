@@ -60,6 +60,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <title>Mamyr - About</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/about.css">
+    <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
     <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
     <!-- Online link for Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -72,9 +73,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: white;">
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
             <?php
 
             $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
@@ -151,7 +152,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10">
+            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <?php if ($userRole !== 2): ?>
                         <a class="nav-link" href="dashboard.php"> Home</a>
@@ -236,7 +237,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             <p class="aboutDescription indent"><?= htmlspecialchars($contentMap['AboutMamyr'] ?? 'No description Not Found') ?></p>
 
-            <a href="#backArrowContainer"><button class="btn btn-primary" onclick="readMore()">Read More</button></a>
+            <a href="#backArrowContainer"><button class="btn btn-primary" id="readMoreBtn">Read More</button></a>
         </div>
     </div>
 
@@ -300,8 +301,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </div>
 
 
-    <div class="backArrowContainer" id="backArrowContainer">
-        <a href="about.php"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
+    <div class="backArrowContainer" id="backArrowContainer" style="display: none;">
+        <a href="about.php?">
+            <i class="fa-solid fa-arrow-left" style="color: #ededed;"></i>
+        </a>
     </div>
 
     <div class="mamyrHistoryContainer" id="mamyrHistoryContainer">
@@ -345,33 +348,33 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
     </script>
     <script>
-        const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
-        const backArrowContainer = document.getElementById("backArrowContainer")
-        const aboutTopContainer = document.getElementById("aboutTopContainer")
-        const ourServicesContainer = document.getElementById("ourServicesContainer")
-        const videoContainer = document.getElementById("videoContainer")
+        document.addEventListener('DOMContentLoaded', () => {
+            const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
+            const backArrowContainer = document.getElementById("backArrowContainer")
+            const aboutTopContainer = document.getElementById("aboutTopContainer")
+            const readMoreBtn = document.getElementById("readMoreBtn")
+            const ourServicesContainer = document.getElementById("ourServicesContainer")
+            const videoContainer = document.getElementById("videoContainer")
 
-        mamyrHistoryContainer.style.display = "none"
-        backArrowContainer.style.display = "none"
+            mamyrHistoryContainer.style.display = "none"
 
+            readMoreBtn.addEventListener('click', function() {
+                if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
 
-        function readMore() {
-            if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
+                    mamyrHistoryContainer.style.display = "block";
+                    backArrowContainer.style.display = "block"
+                    aboutTopContainer.style.display = "none"
+                    ourServicesContainer.style.display = "none"
+                    videoContainer.style.display = "none"
+                    document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
 
-                mamyrHistoryContainer.style.display = "block";
-                backArrowContainer.style.display = "block"
-                aboutTopContainer.style.display = "none"
-                ourServicesContainer.style.display = "none"
-                videoContainer.style.display = "none"
-                document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
-
-            } else {
-                mamyrHistoryContainer.style.display = "block"
-                backArrowContainer.style.display = "block"
-            }
-        }
+                } else {
+                    mamyrHistoryContainer.style.display = "block"
+                    backArrowContainer.style.display = "block"
+                }
+            })
+        })
     </script>
-
 
     <!-- Notification Ajax -->
     <script>
