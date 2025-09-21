@@ -29,14 +29,15 @@ session_start();
 
 <body>
 
-    <h2 class="title">Business Partner Sign Up </h2>
+
 
     <div class="back-icon-container">
         <a href="../index.php">
-            <img src="../Assets/Images/Icon/backbtn_black.png" alt="Go back" class="backArrow" style="width: 3vw;">
+            <img src="../Assets/Images/Icon/backbtn_black.png" alt="Go back" class="backArrow">
 
         </a>
     </div>
+    <h2 class="title">Business Partner Sign Up </h2>
     <form action="../Function/register.php" method="POST" enctype="multipart/form-data">
         <div class="container" id="basicInfo">
             <div class="row">
