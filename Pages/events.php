@@ -28,7 +28,7 @@ require '../Config/dbcon.php';
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half">
         <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -46,7 +46,7 @@ require '../Config/dbcon.php';
                         AMENITIES
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item" href="amenities.php" style="color: black;">RESORT AMENITIES</a></li>
                         <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                         <li><a class="dropdown-item active" href="#">EVENTS</a></li>
                     </ul>
