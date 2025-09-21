@@ -44,13 +44,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Pages/blog.php">BLOG</a>
+                    <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link active" href="#" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./about.php">ABOUT</a>
+                    <a class="nav-link" href="about.php">ABOUT</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">BOOK NOW</a>
@@ -231,13 +231,13 @@
 
     <!-- Redirects User to Book Now -->
     <script>
-    const bookNowBtns = document.querySelectorAll('.bookNowBtn');
+        const bookNowBtns = document.querySelectorAll('.bookNowBtn');
 
-    bookNowBtns.forEach(bookNowBtn => {
-        bookNowBtn.addEventListener("click", function(e) {
-            window.location.href = "/Pages/register.php"
+        bookNowBtns.forEach(bookNowBtn => {
+            bookNowBtn.addEventListener("click", function(e) {
+                window.location.href = "/Pages/register.php"
+            });
         });
-    });
     </script>
 
 </body>

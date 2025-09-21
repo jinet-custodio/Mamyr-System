@@ -55,7 +55,7 @@ require '../Config/dbcon.php';
                     <a class="nav-link" href="blog.php">BLOG</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">BE OUR PARTNER</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">About</a>
