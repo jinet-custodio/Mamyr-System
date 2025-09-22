@@ -44,6 +44,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <title>Mamyr - Blog</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/blog.css">
+    <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <!-- link for online bootstrap CDN  -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -59,7 +60,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <div class="wrapper">
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2" style="background-color: white;">
             <!-- Account Icon on the Left -->
-            <ul class="navbar-nav navbar-nav d-flex flex-row align-items-center gap-2">
+            <ul class="navbar-nav navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
                 <?php
                 $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
@@ -148,7 +149,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             AMENITIES
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item active" href="amenities.php">RESORT AMENITIES</a></li>
+                            <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
                             <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                             <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                         </ul>
