@@ -212,3 +212,169 @@ label {
   margin: auto !important;
   margin-top: 1vw !important;
 }
+
+/* Tablet Portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+  .back-button {
+    top: 2.3% !important;
+    left: 5%;
+  }
+
+  main {
+    margin-top: 3rem;
+  }
+
+  .firstRow {
+    gap: 20px;
+  }
+
+  #gridForm,
+  .input-container {
+    width: 100% !important;
+  }
+
+  .form-control {
+    height: 40px;
+  }
+
+  .payment-input-container {
+    display: grid;
+    grid-template-columns: repeat(2, 20vw);
+    grid-template-rows: repeat(5, 0.1vw);
+    column-gap: 100px;
+    row-gap: 10px;
+  }
+
+  #paymentLabel {
+    display: block;
+    text-align: left;
+    margin-top: 1.2vw;
+    font-size: 16px;
+    width: 100% !important;
+  }
+
+  #payment-form,
+  #paymentMethod {
+    width: 100% !important;
+  }
+
+  .button-container {
+    margin-top: 0.1rem;
+  }
+
+  button {
+    margin-top: 10px !important;
+  }
+
+  #genReceipt {
+    margin-top: 10px !important;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+  .payment-input-container {
+    display: grid;
+    grid-template-columns: repeat(2, 20vw);
+    grid-template-rows: repeat(5, 0.1vw);
+    column-gap: 100px;
+    row-gap: 10px;
+  }
+
+  #paymentLabel {
+    display: block;
+    text-align: left;
+    margin-top: 1.2vw;
+    font-size: 16px;
+    width: 100% !important;
+  }
+
+  #payment-form,
+  #paymentMethod {
+    width: 100% !important;
+  }
+
+  button {
+    margin-top: 10px !important;
+  }
+
+  #genReceipt {
+    margin-top: 10px !important;
+  }
+
+  .button-container {
+    margin-top: 0.1rem;
+  }
+
+  button {
+    margin-top: 10px !important;
+  }
+
+  #genReceipt {
+    margin-top: 10px !important;
+  }
+}
+
+/* Phones */
+@media only screen and (max-width: 600px) {
+  .back-button {
+    top: 2.3% !important;
+    left: 5%;
+  }
+
+  main {
+    margin-top: 3rem;
+  }
+
+  .firstRow {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  #gridForm,
+  .input-container {
+    width: 100% !important;
+  }
+
+  .scheduleInputBox {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .scheduleInputBox .form-control {
+    width: 100% !important;
+  }
+
+  .payment-input-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #payment-form,
+  #paymentMethod {
+    width: 40% !important;
+  }
+
+  #paymentLabel {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  .button-container {
+    margin-top: 0.1rem;
+  }
+
+  button {
+    margin-top: 10px !important;
+  }
+
+  #genReceipt {
+    margin-top: 5px !important;
+  }
+}
