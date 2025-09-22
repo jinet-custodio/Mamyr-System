@@ -7,7 +7,8 @@ date_default_timezone_set('Asia/Manila');
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
-
+require_once '../../Function/functions.php';
+resetExpiredOTPs($conn);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 

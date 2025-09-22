@@ -62,7 +62,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
     <?php if (!$editMode): ?>
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: white;">
             <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -144,7 +144,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <?php endif; ?>
 
 
-            <a href="#backArrowContainer"><button class="btn btn-primary" onclick="readMore()">Read More</button></a>
+            <a href="#backArrowContainer"><button class="btn btn-primary" id="readMoreBtn">Read More</button></a>
         </div>
     </div>
 
@@ -298,13 +298,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </div>
 
 
-    <div class="backArrowContainer" id="backArrowContainer">
+    <div class="backArrowContainer" id="backArrowContainer" style="display: none;">
         <?php if ($editMode): ?>
             <a href="about.php?edit=true">
             <?php else: ?>
                 <a href="about.php?">
                 <?php endif; ?>
-                <img src="../Assets/Images/Icon/whiteArrow.png" alt="Back Button" class="backArrow"> </a>
+                <i class="fa-solid fa-arrow-left" style="color: #ededed;"></i>
+                </a>
     </div>
 
     <div class="mamyrHistoryContainer" id="mamyrHistoryContainer">
@@ -520,34 +521,33 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <?php endif; ?>
 
     <script>
-        const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
-        const backArrowContainer = document.getElementById("backArrowContainer")
-        const aboutTopContainer = document.getElementById("aboutTopContainer")
-        const ourServicesContainer = document.getElementById("ourServicesContainer")
-        const videoContainer = document.getElementById("videoContainer")
+        document.addEventListener('DOMContentLoaded', () => {
+            const mamyrHistoryContainer = document.getElementById("mamyrHistoryContainer")
+            const backArrowContainer = document.getElementById("backArrowContainer")
+            const aboutTopContainer = document.getElementById("aboutTopContainer")
+            const readMoreBtn = document.getElementById("readMoreBtn")
+            const ourServicesContainer = document.getElementById("ourServicesContainer")
+            const videoContainer = document.getElementById("videoContainer")
 
-        mamyrHistoryContainer.style.display = "none"
-        backArrowContainer.style.display = "none"
+            mamyrHistoryContainer.style.display = "none"
 
+            readMoreBtn.addEventListener('click', function() {
+                if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
 
-        function readMore() {
-            if (mamyrHistoryContainer.style.display == "none" && backArrowContainer.style.display == "none") {
+                    mamyrHistoryContainer.style.display = "block";
+                    backArrowContainer.style.display = "block"
+                    aboutTopContainer.style.display = "none"
+                    ourServicesContainer.style.display = "none"
+                    videoContainer.style.display = "none"
+                    document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
 
-                mamyrHistoryContainer.style.display = "block";
-                backArrowContainer.style.display = "block"
-                aboutTopContainer.style.display = "none"
-                ourServicesContainer.style.display = "none"
-                videoContainer.style.display = "none"
-                document.getElementById("title").innerHTML = "ABOUT US - HISTORY"
-
-            } else {
-                mamyrHistoryContainer.style.display = "block"
-                backArrowContainer.style.display = "block"
-            }
-        }
+                } else {
+                    mamyrHistoryContainer.style.display = "block"
+                    backArrowContainer.style.display = "block"
+                }
+            })
+        })
     </script>
-
-
 
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="../Assets/JS/scrollNavbg.js"></script>

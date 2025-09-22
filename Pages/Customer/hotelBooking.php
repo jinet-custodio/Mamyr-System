@@ -33,9 +33,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
-// echo '<pre';
-// print_r($_SESSION['hotelFormData']);
-// echo '</pre>';
 
 ?>
 
@@ -48,7 +45,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <title>Mamyr - Book Now</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/Customer/bookNow.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Customer/hotelBooking.css">
 
     <!-- Bootstrap Link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -74,10 +71,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <form action="confirmBooking.php" method="POST">
         <div class="hotel" id="hotel">
             <div class="backToSelection" id="backToSelection">
-                <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
+                <img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="back button" onclick="backToSelection()">
             </div>
             <div class="titleContainer">
-                <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>
+                <h4 class="hotelTitle text-center" id="hotelTitle">HOTEL BOOKING</h4>
             </div>
             <div class="container-fluid" id="hotelContainerFluid">
                 <div class="hotelIconsContainer">

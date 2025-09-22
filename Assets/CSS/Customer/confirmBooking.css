@@ -29,6 +29,10 @@ body {
   box-sizing: border-box;
 }
 
+body {
+  background-color: #eeeeeed2 !important;
+}
+
 .page-header {
   display: flex;
   align-items: center;
@@ -52,6 +56,7 @@ body {
   width: 100%;
   font-size: 32px;
   font-family: "Poppins Black" !important;
+  color: rgb(23, 143, 235);
 }
 
 .container-fluid {
@@ -107,6 +112,7 @@ li .features {
 }
 
 .payment-summary {
+  /* border: 1px solid red; */
   padding: 1rem;
   border: none !important;
 }

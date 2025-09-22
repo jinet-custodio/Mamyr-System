@@ -50,6 +50,7 @@ unset($_SESSION['eventFormData']);
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Customer/bookNow.css">
+    <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
@@ -94,9 +95,9 @@ unset($_SESSION['eventFormData']);
 
     <input type="hidden" name="phoneNumber" id="phoneNumber" value="<?= $phoneNumber ?>">
 
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: rgba(255, 255, 255, 0.562);">
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
             <li class="nav-item account-nav">
                 <a href="../Account/account.php">
                     <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
@@ -157,11 +158,13 @@ unset($_SESSION['eventFormData']);
         <!-- <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"> -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10">
-                <?php if ($userRole !== 2): ?>
-                    <a class="nav-link" href="dashboard.php"> Home</a>
-                <?php else: ?>
-                    <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
-                <?php endif; ?>
+                <li class="nav-item">
+                    <?php if ($userRole !== 2): ?>
+                        <a class="nav-link" href="dashboard.php"> Home</a>
+                    <?php else: ?>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                    <?php endif; ?>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -295,37 +298,10 @@ unset($_SESSION['eventFormData']);
         </div>
     </form>
 
-    <footer class="py-1 " id="footer" style="margin-top: 5vw !important;">
-        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
-            <a href="../index.php">
-                <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-            </a>
-            <h3 class="mb-0">MAMYR RESORT AND EVENTS PLACE</h3>
-        </div>
+    <?php
+    include 'footer.php'
+    ?>
 
-        <div class="info">
-            <div class="reservation">
-                <h4 class="reservationTitle">Reservation</h4>
-                <h4 class="numberFooter">(0998) 962 4697 </h4>
-                <h4 class="emailAddressTextFooter">mamyr@gmail.com</h4>
-            </div>
-            <div class="locationFooter">
-                <h4 class="locationTitle">Location</h4>
-                <h4 class="addressTextFooter">Sitio Colonia, Gabihan, San Ildefonso, Bulacan</h4>
-
-            </div>
-        </div>
-        <hr class="footerLine">
-        <div class="socialIcons">
-            <a href="https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/"><i
-                    class='bx bxl-facebook-circle'></i></a>
-            <a href="https://workspace.google.com/intl/en-US/gmail/"><i class='bx bxl-gmail'></i></a>
-            <a href="tel:+09989624697">
-                <i class='bx bxs-phone'></i>
-            </a>
-        </div>
-
-    </footer>
     <!-- Full Calendar for Date display -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script src="../../Assets/JS/fullCalendar.js"></script>

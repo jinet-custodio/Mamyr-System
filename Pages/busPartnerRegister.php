@@ -29,14 +29,15 @@ session_start();
 
 <body>
 
-    <h2 class="title">Business Partner Sign Up </h2>
+
 
     <div class="back-icon-container">
         <a href="../index.php">
-            <img src="../Assets/Images/Icon/backbtn_black.png" alt="Go back" class="backArrow" style="width: 3vw;">
+            <img src="../Assets/Images/Icon/backbtn_black.png" alt="Go back" class="backArrow">
 
         </a>
     </div>
+    <h2 class="title">Business Partner Sign Up </h2>
     <form action="../Function/register.php" method="POST" enctype="multipart/form-data">
         <div class="container" id="basicInfo">
             <div class="row">
@@ -147,9 +148,7 @@ session_start();
                 <div class="col" id="busProofContainer">
                     <h4 class="busProofLabel">Proof of Business</h4>
 
-                    <p class="description">Please provide a link to your Google Drive or social media page and a valid
-                        ID as a
-                        proof of your business</p>
+                    <p class="description">Please provide a link to your Google Drive or social media page and a valid ID as a proof of your business</p>
 
                     <div class="busProofFormContainer">
                         <input type="text" class="form-control" id="proofLink" name="proofLink"
@@ -175,7 +174,6 @@ session_start();
                     <a href="busPartnerRegister.php?page=basicInfo">
                         <img src="../Assets/Images/Icon/arrow.png" style="height: 4vw" alt="Go back" class="backArrow"
                             id="emailBackArrow">
-
                     </a>
                 </div>
                 <h5 class="accountCreationLabel m-6">Create an Account</h5>

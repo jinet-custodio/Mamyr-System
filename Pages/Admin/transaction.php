@@ -51,11 +51,19 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 
+    <!-- Icons Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/transaction.css" />
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css" />
+
 
 </head>
 
@@ -101,9 +109,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -149,54 +157,77 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
     </div>
 
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg" id="navbar">
+        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <a class="nav-link" href="adminDashboard.php">
-            <img src="../../Assets/Images/Icon/Dashboard.png" alt="Dashboard">
-            <h5>Dashboard</h5>
-        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav w-100 me-10 d-flex justify-content-around px-2" id="navUL">
 
-        <a class="nav-link" href="booking.php">
-            <img src="../../Assets/Images/Icon/uim-schedule.png" alt="Bookings">
-            <h5>Bookings</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="adminDashboard.php">
+                        <i class="fa-solid fa-grip navbar-icon"></i>
+                        <h5>Dashboard</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="booking.php">
+                        <i class="fa-solid fa-calendar-days navbar-icon"></i>
+                        <h5>Bookings</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="roomList.php">
-            <img src="../../Assets/Images/Icon/Hotel.png" alt="Rooms">
-            <h5>Rooms</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link active" href="reviews.php">
+                        <i class="fa-solid fa-star navbar-icon"></i>
+                        <h5>Reviews</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="services.php">
-            <img src="../../Assets/Images/Icon/servicesAdminNav.png" alt="Services">
-            <h5>Services</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="services.php">
+                        <i class="fa-solid fa-bell-concierge navbar-icon"></i>
+                        <h5>Services</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link active" href="#">
-            <img src="../../Assets/Images/Icon/Credit card.png" alt="Payments">
-            <h5>Payments</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="transaction.php">
+                        <i class="fa-solid fa-credit-card navbar-icon"></i>
+                        <h5>Payments</h5>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="revenue.php">
+                        <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
+                        <h5>Revenue</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="revenue.php">
-            <img src="../../Assets/Images/Icon/Profits.png" alt="Revenue">
-            <h5>Revenue</h5>
-        </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="displayPartnership.php">
+                        <i class="fa-solid fa-handshake navbar-icon"></i>
+                        <h5>Partnerships</h5>
+                    </a>
+                </li>
 
-        <a class="nav-link" href="displayPartnership.php">
-            <img src="../../Assets/Images/Icon/partnership.png" alt="Partnerships">
-            <h5>Partnerships</h5>
-        </a>
-
-        <a class="nav-link" href="editWebsite/editWebsite.php">
-            <img src="../../Assets/Images/Icon/Edit Button.png" alt="Edit Website">
-            <h5>Edit Website</h5>
-        </a>
-
-        <a href="../../Function/Admin/logout.php" class="btn btn-danger">
-            Log Out
-        </a>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="editWebsite/editWebsite.php">
+                        <i class="fa-solid fa-pen-to-square navbar-icon"></i>
+                        <h5>Edit Website</h5>
+                    </a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a href="../../Function/Admin/logout.php" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
+                        <h5 style="color: red;">Log Out</h5>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
 
@@ -213,20 +244,20 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item"
-                                    data-id="<?= htmlspecialchars($notificationID) ?>"
-                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($message) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -238,7 +269,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <div class="titleContainer">
                 <h3 class="title">Transaction</h3>
             </div>
-            <table class=" table table-striped" id="transactionTable">
+            <table class="table table-striped" id="transactionTable">
                 <thead>
                     <th scope="col">Booking ID</th>
                     <th scope="col">Guest</th>
@@ -298,25 +329,25 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
                     ?>
-                            <tr>
-                                <td><?= htmlspecialchars($formattedID) ?></td>
-                                <td><?= htmlspecialchars($guestName) ?></td>
-                                <td>₱ <?= number_format($totalAmount, 2) ?></td>
-                                <td>₱ <?= number_format($balance, 2) ?></td>
-                                <td><?= htmlspecialchars($paymentMethod) ?></td>
-                                <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
-                                <td><span
-                                        class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
-                                </td>
+                    <tr>
+                        <td><?= htmlspecialchars($formattedID) ?></td>
+                        <td><?= htmlspecialchars($guestName) ?></td>
+                        <td>₱ <?= number_format($totalAmount, 2) ?></td>
+                        <td>₱ <?= number_format($balance, 2) ?></td>
+                        <td><?= htmlspecialchars($paymentMethod) ?></td>
+                        <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
+                        <td><span
+                                class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
+                        </td>
 
-                                <td>
-                                    <form action="viewPayments.php" method="POST">
-                                        <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
-                                        <button type="submit" name="viewIndividualPayment"
-                                            class="btn btn-info w-100">View</button>
-                                    </form>
-                                </td>
-                            </tr>
+                        <td>
+                            <form action="viewPayments.php" method="POST">
+                                <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                                <button type="submit" name="viewIndividualPayment"
+                                    class="btn btn-info w-100">View</button>
+                            </form>
+                        </td>
+                    </tr>
 
                     <?php
                         }
@@ -339,40 +370,40 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
 
@@ -383,84 +414,84 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#transactionTable').DataTable({
-                columnDefs: [{
-                        width: '9%',
-                        target: 0,
-                    },
-                    {
-                        width: '15%',
-                        target: 1,
-                    },
-                    {
-                        width: '15%',
-                        target: 2,
-                    },
-                    {
-                        width: '10%',
-                        target: 4,
-                    },
-                    {
-                        width: '15%',
-                        target: 5,
-                    },
-                    {
-                        width: '15%',
-                        target: 6,
-                    },
-                    {
-                        width: '10%',
-                        target: 7,
-                    }
-                ]
-            });
+    $(document).ready(function() {
+        $('#transactionTable').DataTable({
+            columnDefs: [{
+                    width: '9%',
+                    target: 0,
+                },
+                {
+                    width: '15%',
+                    target: 1,
+                },
+                {
+                    width: '15%',
+                    target: 2,
+                },
+                {
+                    width: '10%',
+                    target: 4,
+                },
+                {
+                    width: '15%',
+                    target: 5,
+                },
+                {
+                    width: '15%',
+                    target: 6,
+                },
+                {
+                    width: '10%',
+                    target: 7,
+                }
+            ]
         });
+    });
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
-        if (paramValue === "approved") {
-            Swal.fire({
-                title: "Payment Approved",
-                text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
-                icon: 'success',
-            });
-        } else if (paramValue === "rejected") {
-            Swal.fire({
-                title: "Payment Rejected",
-                text: "You have reviewed and rejected the payment.",
-                icon: 'success',
-            });
-        } else if (paramValue === "failed") {
-            Swal.fire({
-                title: "Payment Approval Failed",
-                text: "Unable to approve or reject the payment. Please try again later.",
-                icon: 'error',
-            });
-        } else if (paramValue === "paymentSuccess") {
-            Swal.fire({
-                title: "Payment Added",
-                text: "Payment was successfully added and processed.",
-                icon: 'success',
-            });
-        } else if (paramValue === "paymentFailed") {
-            Swal.fire({
-                title: "Payment Failed",
-                text: "Failed to deduct the payment. Please try again later.",
-                icon: 'error',
-            });
-        }
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
+    if (paramValue === "approved") {
+        Swal.fire({
+            title: "Payment Approved",
+            text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
+            icon: 'success',
+        });
+    } else if (paramValue === "rejected") {
+        Swal.fire({
+            title: "Payment Rejected",
+            text: "You have reviewed and rejected the payment.",
+            icon: 'success',
+        });
+    } else if (paramValue === "failed") {
+        Swal.fire({
+            title: "Payment Approval Failed",
+            text: "Unable to approve or reject the payment. Please try again later.",
+            icon: 'error',
+        });
+    } else if (paramValue === "paymentSuccess") {
+        Swal.fire({
+            title: "Payment Added",
+            text: "Payment was successfully added and processed.",
+            icon: 'success',
+        });
+    } else if (paramValue === "paymentFailed") {
+        Swal.fire({
+            title: "Payment Failed",
+            text: "Failed to deduct the payment. Please try again later.",
+            icon: 'error',
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location.href);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location.href);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 

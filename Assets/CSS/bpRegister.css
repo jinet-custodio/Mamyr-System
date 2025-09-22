@@ -28,10 +28,7 @@ body {
   background-color: #88858534 !important;
   background-blend-mode: darken !important;
   background-position: center;
-  /* justify-content: center;
-  align-items: center; */
   min-height: 100vh;
-  overflow-y: hidden;
 }
 
 .title {
@@ -40,7 +37,7 @@ body {
   margin-bottom: 3vw;
   font-family: "Lora";
   font-weight: bold;
-  font-size: 40px;
+  font-size: clamp(3vw, 3.5vw, 3.3vw);
 }
 
 /* .column {
@@ -57,6 +54,7 @@ body {
 #basicInfo {
   display: flex;
   align-items: center;
+  max-width: 95%;
 }
 
 .container {
@@ -74,7 +72,7 @@ body {
 }
 
 .col {
-  padding: 1vw 0 3vw 0;
+  padding: 1vw 0;
 }
 
 #busInfoContainer {
@@ -82,25 +80,21 @@ body {
 }
 
 .repInfoLabel,
-.busProofLabel {
-  /* font-family: "Poppins"; */
+.busProofLabel,
+.busInfoLabel,
+.accountCreationLabel {
   font-weight: bold;
-  font-size: 25.5px;
+  font-size: clamp(1.7vw, 1.6vw, 1.8vw);
   text-align: center;
   margin-top: 1.5vw;
 }
 .busInfoLabel {
-  /* font-family: "Poppins"; */
-  font-weight: bold;
-  font-size: 25.5px;
-  text-align: center;
-  margin-top: 1.5vw;
   color: #ffff;
 }
 
 .repInfoFormContainer {
   /* border: 1px solid black !important; */
-  padding: 2vw;
+  padding: 1vw;
   gap: 1vw;
   margin-top: 2.5vw;
 }
@@ -109,8 +103,10 @@ body {
   margin-top: 2vw;
 }
 
-.form-control {
+.form-control,
+#partnerTypeButton {
   margin-top: 1vw;
+  font-size: clamp(1.1vw, 1.2vw, 1.4vw) !important;
 }
 
 .form-select {
@@ -124,29 +120,27 @@ body {
 }
 
 .description {
-  /* font-family: "Poppins"; */
-  font-size: 14px;
+  font-size: clamp(1.2vw, 1vw, 1.1vw);
   text-align: center;
-  margin-top: 2vw;
+  margin-top: 1vw;
 }
 
 #nextBtn {
   width: 75%;
-  margin: 2vw auto;
+  margin: 2vw auto 1vw auto;
 }
 
 .busProofFormContainer {
-  margin-top: 4vw;
+  margin-top: 1vw;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5vw;
 }
 
 .label {
-  margin-top: 1vw !important;
   font-weight: bold;
   font-family: "Poppins";
+  margin-top: 1.5vw !important;
 }
 
 .moreDetails {
@@ -154,6 +148,7 @@ body {
   width: 100%;
   text-align: center;
   margin-top: 0.5vw;
+  font-size: 1vw !important;
 }
 
 .btn-light {
@@ -226,6 +221,11 @@ body {
   width: 100%;
 }
 
+.form-check-label,
+.form-check-input {
+  font-size: clamp(1.4vw, 1.1vw, 1vw);
+}
+
 .modalSubtitle {
   text-align: center;
 }
@@ -237,6 +237,16 @@ body {
   gap: 5vw;
 }
 
+.form-check {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+}
+
+button#selectPartnerBtn {
+  font-size: 1.4vw !important;
+}
+
 .stepsContainer {
   margin-top: 1vw;
 }
@@ -244,13 +254,10 @@ body {
 
 #emailPassContainer {
   width: 50%;
-  /* font-family: "Poppins"; */
 }
 
 .accountCreationLabel {
-  /* font-family: "Poppins"; */
   font-weight: bold;
-  font-size: 25.5px;
   text-align: center;
   padding-top: 1.5vw;
 }
@@ -268,6 +275,11 @@ body {
   position: absolute;
   right: 8vw;
   top: 4vw;
+}
+
+.back-icon-container img {
+  height: 4vw;
+  width: 4vw;
 }
 
 .input-box input {
@@ -328,11 +340,11 @@ input[type="password"]::-webkit-search-cancel-button {
 /* modal css */
 
 .modal-dialog {
-  max-width: 60% !important;
+  max-width: 60%;
 }
 .modal-body {
   max-height: 500px;
-
+  font-size: clamp(1.1vw, 1vw, 1.2vw);
   overflow-y: auto !important;
 }
 .modal-title {
@@ -343,26 +355,19 @@ input[type="password"]::-webkit-search-cancel-button {
 .modal-footer {
   display: flex;
   margin: auto;
+  align-items: center;
 }
 
 #declineBtn,
 #acceptBtn {
   width: 15vw;
   border-radius: 30px;
+  margin-top: 0 !important;
 }
 
-/* modal css */
-
-/* .passwordContainerError {
-  position: absolute;
-  left: 50%;
-  bottom: 24%;
-  transform: translateX(-50%);
-  width: 50%;
-  color: red;
-  padding: 0;
-  text-align: center;
-} */
+#termsModal.modal-content.modal-body {
+  font-size: 2vw !important;
+}
 
 .back-icon-container-login {
   margin: 1px solid black;
@@ -392,362 +397,14 @@ input[type="password"]::-webkit-search-cancel-button {
   }
 }
 
-/* Phone size */
-@media screen and (min-width: 360px) and (max-width: 599px) {
-  .title {
-  font-size: 20px;
-}
-  #busInfoContainer {
-    background-color: #78aeff;
-    width: 100%;
-    margin-top: -10px;
-    padding-bottom: 2vw;
-  }
-
-  #repInfoContainer {
-    padding-bottom: 5vw;
-  }
-
-  #busProofContainer {
-    padding-bottom: 2vw;
-  }
-
-  .repInfoFormContainer {
-    padding: 0vw !important;
-    gap: 1vw;
-    margin-top: 4vw !important;
-}
-  .busInfoLabel,
-  .busProofLabel {
-    font-size: clamp(14px, 4vw, 20px);
-    margin-top: 1vw;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .repInfoLabel {
-    font-size: clamp(14px, 4vw, 20px);
-    margin-top: 1vw;
-    font-weight: bold;
-    text-align: center;
-  }
-
-  .busProofFormContainer {
-    margin-top: 1rem !important;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5vw;
-  }
-
-  .btn-primary {
-    margin-top: 2vw !important;
-  }
-
-  .container-wrapper {
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .container {
-    width: 100%;
-    height: auto;
-    margin-top: clamp(8px, 0vw, 24px) !important;
-    transform: scale(0.95);
-    transform-origin: top center;
-  }
-
-  .row {
-    flex-direction: column;
-    width: 100% !important;
-    margin: 0 !important;
-    min-height: 100%;
-    margin-top: 5vw !important;
-  }
-
-  #basicInfo {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0;
-    height: auto !important;
-  }
-}
-
-
-/* Tablet portrait only */
-@media only screen and (min-width: 600px) and (max-width: 768px) {
-      body {
-    outline: 5px solid orange !important; /* 🟠 Tablet Portrait */
-  }
-  .title {
-    margin-top: 6rem;
-    font-size: 5vw;
-  }
-  .titleDescription {
-    width: 100% !important;
-    margin: 3vw auto 0 auto !important;
-    margin-top: 3vw;
-    font-size: 1.5vw;
-  }
-  .ms-auto {
-    margin-left: auto !important;
-    margin-bottom: 11vw !important;
-  }
-  #navbar-half2 {
-    padding-bottom: 0px !important;
-  }
-  .navbar-toggler {
-    padding: 1vw;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-right: 2vw;
-  }
-  .navbar.scrolled {
-    background-color: white !important;
-  }
-  .navbar-nav .nav-link {
-    color: #000000 !important;
-  }
-  .navbar-nav {
-    display: flex !important;
-    list-style: none;
-    margin-top: 2vw !important;
-  }
-  .navbar .nav-link {
-    color: black !important;
-  }
-  #logOutBtn {
-    color: black !important;
-    font-size: 16px;
-  }
-  .nav-link.active:after {
-    border-bottom: 4px solid rgb(126, 203, 242) !important;
-  }
-  .fixed-top {
-    background-color: rgb(255, 255, 255) !important;
-    height: 5rem;
-  }
-  .account-nav {
-    margin: 1px;
-    margin-left: 1rem;
-    /* border: 1px solid white; */
-    border-radius: 50%;
-  }
-  .account-nav img {
-      height: 7vw;
-      border-radius: 50%;
-      aspect-ratio: 1;
-      object-fit: cover;
-    }
-  .notification-container {
-    margin: 1rem;
-  }
-  .notification-container button {
-      background-color: transparent;
-      border: none;
-      padding: 0;
-      margin-left: 8vw;
-      top: -8.9vw;
-    }
-  .notification-container img {
-      height: 7vw;
-      padding-bottom: 2vw;
-      object-fit: cover;
-    }
-  #basicInfo {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0;
-    height: auto !important;
-  }
-  .repInfoLabel {
-    font-weight: bold;
-    font-size: 15px;
-    text-align: center;
-    margin-top: 1.5vw;
-  }
-  .row {
-    flex-direction: column;
-    width: 100% !important;
-    margin: 0 !important;
-    height: 100%;
-    margin-top: 5vw !important;
-  }
-  .container-wrapper {
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .container {
-    transform: scale(0.9);
-    transform-origin: top center;
-    width: 100%;
-    max-width: 1200px;
-    height: 125vh;
-    margin-top: 4vw !important;
-  }
-  .repInfoLabel {
-    font-size: 20px;
-    margin-top: 1vw;
-  }
-  #busInfoContainer {
-    background-color: #78aeff;
-    width: 100%;
-    margin-top: -10px;
-    /* padding: 15px; */
-  }
-  .busInfoLabel {
-    font-size: 20px;
-    margin-top: 2vw;
-  }
-  .busProofLabel {
-    font-size: 20px;
-    margin-top: 1rem;
-    display: block;
-  }
-  .busProofFormContainer {
-    margin-top: 1rem !important;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5vw;
-  }
-  #repInfoContainer {
-    padding-bottom: 2vw;
-    top: -3vw;
-  }
-  #busInfoContainer {
-    padding-bottom: 2vw;
-  }
-  #busProofContainer {
-    padding-bottom: 5vw;
-  }
-  #submit-request{
-    display: block !important;
-    margin: 0 auto !important;
-    margin-top: 5vw !important;
-    width: 100% !important;
-    
-  }
-  .socialIcons a {
-    margin: 5px;
-    border-radius: 50%;
-    padding-left: 1.5vw;
-    padding-right: 1.5vw;
-  }
-  .socialIcons a i {
-    font-size: 3vw;
-  }
-  .moreDetails {
-    margin-top: 2vw;
-    text-decoration: none;
-    padding: 0px;    
-}
-.mb-0 {
-  margin-bottom: 2vw !important;
-}
-.locationFooter {
-  margin-bottom: 1rem !important;
-}
-}
-
-/* Tablet Landscape */
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  body {
-    outline: 5px solid blue !important; /* 🔵 Tablet Landscape */
-  }
-
-  .title {
-    margin-top: 5rem;
-    font-size: clamp(18px, 3vw, 26px);
-  }
-
-  .titleDescription {
-    width: 90% !important;
-    margin: 2vw auto 0 auto !important;
-    font-size: clamp(14px, 1.8vw, 20px);
-    text-align: center;
-  }
-
-  .container {
-    transform: scale(0.92);
-    transform-origin: top center;
-    margin-top: 2vw !important;
-  }
-
-  /* Form container auto adjust */
-  .repInfoFormContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem !important;
-  }
-  .navbar-nav {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .account-nav img {
-    height: clamp(28px, 3.5vw, 40px);
-    width: clamp(28px, 3.5vw, 40px); /* pantay height at width */
-    margin-top: 1vw;
-    margin-left: 1vw;
-  }
-  .notification-container {
-    display: flex;
-    align-items: center;
-    margin-left: 2vw;
-  }
-  .notification-container img {
-    height: clamp(24px, 3vw, 34px);
-    width: clamp(24px, 4vw, 34px);
-    margin-top: 0.5vw;
-  }
-
-  #logOutBtn {
-    font-size: clamp(14px, 1.5vw, 16px)!important;
-    margin-left: 1rem;
-  }
-
-  .locationFooter {
-    margin-bottom: 1.2rem !important;
-  }
-}
-
 /* Laptop */
 @media screen and (min-width: 1025px) and (max-width: 1280px) {
-  body {
-    outline: 5px solid green !important; /* 🟢 Laptop */
-  }
-
-  .title {
-    margin-top: 1vw !important;
-    font-size: 2.4vw;
+  h2.title {
+    margin-top: 10vh;
     font-family: "Lora";
-    color: #fff;
     font-weight: bold;
     text-align: center;
   }
-
-  .titleDescription {
-    max-width: 1200px !important;
-    margin: 2vw auto 0 auto !important;
-    font-size: 1.4vw;
-    color: #fff;
-  }
-
   .container {
     margin-top: 2vw !important;
   }
@@ -762,4 +419,525 @@ input[type="password"]::-webkit-search-cancel-button {
   .btn-primary {
     margin-top: 5.5vw !important;
   }
+
+  #basicInfo {
+    max-width: 98% !important;
+  }
+
+  .repInfoLabel,
+  .busProofLabel,
+  .busInfoLabel,
+  .accountCreationLabel {
+    font-weight: bold;
+    font-size: clamp(2.2vw, 2.6vw, 2.4vw);
+  }
+
+  .form-control,
+  .description,
+  .btn-light,
+  .moreDetails,
+  h6.label {
+    margin-top: 2vw;
+    font-size: clamp(1.6vw, 1.8vw, 1.7vw) !important;
+  }
+
+  .busInfoFormContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  #basicInfo {
+    justify-content: center;
+    width: 80%;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  #emailPassContainer {
+    max-width: 80% !important;
+    width: 80%;
+  }
+
+  .modal-body {
+    font-size: 1.7vw !important;
+  }
+
+  .modal-dialog {
+    width: 80% !important;
+  }
+
+  /* modal css */
+
+  #termsModal.modal-body {
+    font-size: 2vw !important;
+  }
+
+  .busTypeBody {
+    gap: 2vw;
+    justify-content: center;
+    width: 90%;
+    margin: auto;
+  }
+
+  .modal-title {
+    margin-left: 2vw;
+    font-size: clamp(2.4vw, 2.6vw, 2.8vw);
+  }
+
+  .form-check-label,
+  .form-check-input {
+    font-size: clamp(2.4vw, 2.1vw, 2.3vw);
+  }
+
+  .modalRequirementsContainer {
+    margin-top: 2vw;
+    gap: 5vw;
+  }
+
+  button#selectPartnerBtn {
+    font-size: 1.4vw !important;
+  }
+  button#selectPartnerBtn {
+    font-size: 2.1vw !important;
+  }
+  /* modal css */
+
+  .col {
+    padding: 2vw 4vw 5vw 4vw !important;
+  }
+
+  .row {
+    flex-direction: column !important;
+    width: 100%;
+    align-items: center;
+  }
+
+  #repInfoContainer,
+  #busInfoContainer,
+  #busProofContainer {
+    width: 100% !important;
+  }
+
+  .repInfoFormContainer {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .repInfoLabel,
+  .busProofLabel,
+  .busInfoLabel,
+  .accountCreationLabel {
+    font-weight: bold;
+    font-size: clamp(2.7vw, 2.6vw, 2.8vw);
+  }
+
+  .form-control,
+  .description,
+  .btn-light,
+  .moreDetails,
+  h6.label,
+  #partnerTypeButton {
+    margin-top: 2vw;
+    font-size: clamp(2vw, 2.1vw, 2.2vw) !important;
+  }
+
+  #nextBtn {
+    font-size: 2.8vw;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  .title {
+    font-size: clamp(40px, 35px, 38px);
+  }
+
+  #basicInfo {
+    max-width: 95% !important;
+    margin-bottom: 5vw !important;
+  }
+
+  #emailPassContainer {
+    max-width: 80% !important;
+    width: 80%;
+    padding: 3vw;
+  }
+  .modal-body {
+    font-size: 2vw !important;
+  }
+
+  .modal-dialog {
+    width: 80% !important;
+  }
+  .container {
+    transform-origin: top center;
+    margin-top: 2vw !important;
+  }
+
+  #repInfoContainer,
+  #busInfoContainer,
+  #busProofContainer {
+    width: 33%;
+  }
+  .repInfoFormContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem !important;
+  }
+
+  .repInfoLabel,
+  .busProofLabel,
+  .busInfoLabel,
+  .accountCreationLabel {
+    font-weight: bold;
+    font-size: clamp(3vw, 3vw, 3.2vw);
+  }
+
+  .form-control,
+  .description,
+  .btn-light,
+  .moreDetails,
+  h6.label,
+  #partnerTypeButton {
+    margin-top: 3vw;
+    font-size: clamp(2vw, 2.1vw, 2.2vw) !important;
+  }
+
+  .back-icon-container-login {
+    left: 13vw;
+  }
+
+  /* modal css */
+
+  #termsModal.modal-body {
+    font-size: 2vw !important;
+  }
+
+  .busTypeBody {
+    gap: 2vw;
+    justify-content: center;
+    width: 90%;
+    margin: auto;
+  }
+
+  .modal-title {
+    margin-left: 2vw;
+    font-size: clamp(2.4vw, 2.6vw, 2.8vw);
+  }
+
+  .form-check-label,
+  .form-check-input {
+    font-size: clamp(2vw, 2.1vw, 2.3vw);
+  }
+
+  .modalRequirementsContainer {
+    margin-top: 2vw;
+    gap: 5vw;
+  }
+
+  button#selectPartnerBtn {
+    font-size: 1.4vw !important;
+  }
+  button#selectPartnerBtn {
+    font-size: 2.1vw !important;
+  }
+  /* modal css */
+}
+
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .title {
+    margin-top: 3rem;
+    font-size: 5vw;
+  }
+
+  #emailPassContainer {
+    max-width: 80% !important;
+    width: 80%;
+    padding: 2vw;
+    margin-top: 6vw !important;
+  }
+
+  .back-icon-container-login {
+    left: 13vw;
+  }
+
+  .back-icon-container-login {
+    height: 5vw !important;
+    width: 5vw;
+  }
+
+  .repInfoLabel,
+  .busProofLabel,
+  .busInfoLabel,
+  .accountCreationLabel {
+    font-weight: bold;
+    font-size: clamp(3.2vw, 3.6vw, 3.4vw);
+  }
+
+  .form-control,
+  .description,
+  .btn-light,
+  .moreDetails,
+  h6.label,
+  #partnerTypeButton {
+    margin-top: 2vw;
+    font-size: clamp(2.6vw, 2.8vw, 2.7vw) !important;
+  }
+
+  #basicInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 85%;
+    padding: 0 !important;
+  }
+
+  .row {
+    flex-direction: column;
+    width: 100% !important;
+    margin: 0 !important;
+    height: 100%;
+  }
+
+  .container {
+    width: 100%;
+    margin-top: 4vw !important;
+  }
+
+  .busProofFormContainer {
+    margin-top: 1rem !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5vw;
+  }
+
+  .repInfoFormContainer {
+    width: 90%;
+  }
+
+  .repInfoFormContainer input {
+    margin-top: 3vw !important;
+  }
+  #repInfoContainer,
+  #busInfoContainer,
+  #busProofContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 0.8;
+  }
+
+  #busInfoContainer {
+    padding-bottom: 3vw;
+  }
+  #submit-request {
+    display: block !important;
+    margin: 0 auto !important;
+    margin-top: 5vw !important;
+    width: 100% !important;
+  }
+
+  .back-icon-container img {
+    width: 6vw;
+    height: 6vw;
+  }
+
+  #nextBtn {
+    font-size: 3vw;
+  }
+
+  .modal-body {
+    font-size: 2vw !important;
+  }
+
+  /* modal css */
+
+  #termsModal.modal-body {
+    font-size: 2vw !important;
+  }
+
+  .busTypeBody {
+    gap: 2vw;
+    justify-content: center;
+    width: 90%;
+    margin: auto;
+  }
+
+  .modal-title {
+    margin-left: 2vw;
+    font-size: clamp(2.4vw, 2.6vw, 2.8vw);
+  }
+
+  .form-check-label,
+  .form-check-input {
+    font-size: clamp(2vw, 2.1vw, 2.3vw);
+  }
+
+  .modalRequirementsContainer {
+    margin-top: 2vw;
+    gap: 5vw;
+  }
+
+  button#selectPartnerBtn {
+    font-size: 1.4vw !important;
+  }
+  button#selectPartnerBtn {
+    font-size: 2.1vw !important;
+  }
+  /* modal css */
+}
+/* Phone size */
+@media screen and (max-width: 599px) {
+  .title {
+    margin-top: 4rem;
+    font-size: clamp(6vw, 6.5vw, 7vw);
+  }
+
+  #emailPassContainer {
+    max-width: 90% !important;
+    width: 85%;
+    margin-top: 10vw;
+    padding: 3vw !important;
+  }
+
+  .modal-dialog {
+    width: 95% !important;
+    max-width: 95% !important;
+  }
+
+  .modal-body {
+    font-size: 3vw !important;
+  }
+
+  .back-icon-container-login {
+    left: 15vw;
+  }
+
+  .back-icon-container-login img {
+    height: 6vw !important;
+    width: 6vw;
+  }
+
+  .repInfoLabel,
+  .busProofLabel,
+  .busInfoLabel,
+  .accountCreationLabel {
+    font-weight: bold;
+    font-size: clamp(4.2vw, 4.6vw, 4.4vw);
+  }
+
+  .form-control,
+  .description,
+  .btn-light,
+  .moreDetails,
+  h6.label,
+  #partnerTypeButton {
+    margin-top: 2vw;
+    font-size: clamp(3.6vw, 3.4vw, 3.7vw) !important;
+  }
+
+  #basicInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 95%;
+    padding: 2vw 0 3vw 0 !important;
+    margin-bottom: 10vw !important;
+  }
+
+  .row {
+    flex-direction: column;
+    width: 100% !important;
+    margin: 0 !important;
+    height: 100%;
+  }
+
+  .container {
+    width: 100%;
+    margin-top: 4vw !important;
+  }
+
+  .busProofFormContainer {
+    margin-top: 1rem !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5vw;
+  }
+
+  .repInfoFormContainer {
+    width: 90%;
+  }
+
+  .repInfoFormContainer input {
+    margin-top: 3vw !important;
+  }
+  #repInfoContainer,
+  #busInfoContainer,
+  #busProofContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 0.8;
+  }
+
+  #busInfoContainer {
+    padding-bottom: 3vw;
+  }
+  #submit-request {
+    display: block !important;
+    margin: 0 auto !important;
+    margin-top: 5vw !important;
+    width: 100% !important;
+  }
+
+  .back-icon-container img {
+    width: 6vw;
+    height: 6vw;
+  }
+
+  #nextBtn {
+    font-size: 3vw;
+  }
+
+  /* modal css */
+
+  #termsModal.modal-body {
+    font-size: 2vw !important;
+  }
+
+  .busTypeBody {
+    gap: 2vw;
+    justify-content: center;
+    width: 90%;
+    margin: auto;
+  }
+
+  .modal-title {
+    margin-left: 2vw;
+    font-size: clamp(3vw, 3.2vw, 2.8vw);
+  }
+
+  .form-check-label,
+  .form-check-input {
+    font-size: clamp(2.4vw, 2.6vw, 2.8vw);
+  }
+
+  .modalRequirementsContainer {
+    margin-top: 2vw;
+    gap: 5vw;
+  }
+
+  button#selectPartnerBtn {
+    font-size: 2.6vw !important;
+  }
+  /* modal css */
 }

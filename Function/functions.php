@@ -2,7 +2,7 @@
 
 date_default_timezone_set('Asia/Manila');
 
-//Function for removing otps
+//*Function for removing otps
 function resetExpiredOTPs($conn)
 {
     $query = "UPDATE user
@@ -30,7 +30,7 @@ function resetExpiredOTPs($conn)
 }
 
 
-//Function for changing the status into expired when still pending and passed the booking date
+//*Function for changing the status into expired when still pending and passed the booking date
 function changeToExpiredStatus($conn)
 {
     date_default_timezone_set('Asia/Manila');
@@ -63,7 +63,7 @@ function changeToExpiredStatus($conn)
     $selectBookings->close();
 }
 
-//Function for all the fully paid and finished event status will changed to done.
+//*Function for all the fully paid and finished event status will changed to done.
 function changeToDoneStatus($conn)
 {
     date_default_timezone_set('Asia/Manila');
@@ -96,7 +96,7 @@ function changeToDoneStatus($conn)
     $selectConfirmedBookings->close();
 }
 
-//Func for getting statuses
+//*Func for getting statuses
 function getStatuses($conn, $statusID)
 {
 
@@ -115,7 +115,7 @@ function getStatuses($conn, $statusID)
     }
 }
 
-//Function for getting the status of payments
+//*Function for getting the status of payments
 function getPaymentStatus($conn, $paymentStatusID)
 {
 
@@ -141,7 +141,7 @@ function addToAdminTable($conn)
     $position = 'Administrator';
 
     // Fetch users with userRole = 3
-    $getAdminQuery = $conn->prepare("SELECT userID FROM user WHERE userRole = ?");
+    $getAdminQuery = $conn->prepare("SELECT userID, firstName, middleInitial, lastName FROM user WHERE userRole = ?");
     $getAdminQuery->bind_param('i', $adminID);
     $getAdminQuery->execute();
     $adminQueryResult = $getAdminQuery->get_result();
@@ -149,7 +149,10 @@ function addToAdminTable($conn)
     if ($adminQueryResult->num_rows > 0) {
         while ($row = $adminQueryResult->fetch_assoc()) {
             $storedUserID = intval($row['userID']);
-
+            $firstName = ucfirst($row['firstName']);
+            $middleInitial = ucfirst($row['middleInitial']) . '.' ?? ' ';
+            $lastName = ucfirst($row['lastName']);
+            $fullName = $firstName . ' ' . $middleInitial . ' ' . $lastName;
 
             $selectUsers = $conn->prepare("SELECT userID FROM admin WHERE userID = ?");
             $selectUsers->bind_param('i', $storedUserID);
@@ -158,8 +161,8 @@ function addToAdminTable($conn)
 
             if ($result->num_rows < 1) {
 
-                $insertAdminQuery = $conn->prepare("INSERT INTO admin(userID, position) VALUES (?, ?)");
-                $insertAdminQuery->bind_param('is', $storedUserID, $position);
+                $insertAdminQuery = $conn->prepare("INSERT INTO admin(userID, position, fullName) VALUES (?, ?,?)");
+                $insertAdminQuery->bind_param('iss', $storedUserID, $position, $fullName);
                 if (!$insertAdminQuery->execute()) {
                     echo "Error inserting admin: " . $insertAdminQuery->error;
                 }

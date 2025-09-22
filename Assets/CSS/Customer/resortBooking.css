@@ -1,0 +1,258 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Alkatra";
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins";
+  text-decoration: none;
+}
+
+body {
+  background-image: url(../../Images/BookNowPhotos/bookNowBg.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-color 0.5s ease;
+}
+
+#resortBookingForm {
+  margin-top: 6vw;
+}
+
+.resortTitle {
+  font-size: clamp(3.5vw, 3.2vw, 3vw);
+  font-family: "Lora";
+  color: #000000;
+  font-weight: bold;
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.backToSelection {
+  position: absolute;
+  margin: 0 0 0 5rem;
+  /* background-color: transparent;
+    border: none; */
+}
+
+.backToSelection img {
+  width: 40px;
+  height: 40px;
+}
+
+.resort-card {
+  padding: 2rem 2rem 0 2rem;
+  margin-bottom: 1rem;
+  font-family: "Poppins";
+  width: 50%;
+}
+
+.scheduleForm,
+.peopleForm,
+.cottageRoomForm,
+.purposeForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.peopleForm input {
+  height: 2.5rem;
+}
+
+.peopleForm .info-container p {
+  font-size: 12px;
+  color: #007bff;
+}
+
+.peopleForm .info-container {
+  display: flex;
+  gap: 0.2rem;
+  height: 1rem;
+}
+
+.cottagesForm,
+.roomNumbers,
+.videokeForm {
+  width: 100%;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-text {
+  color: rgb(15, 127, 255) !important;
+}
+
+.modal-text i {
+  gap: 1rem;
+}
+
+#entertainmentContainer,
+#cottagesContainer {
+  /* border: 1px solid red; */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+#roomsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+#entertainmentContainer label,
+#cottagesContainer label {
+  margin-left: 0.5rem;
+  font-size: 15px;
+}
+
+.entrance-rates {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  padding: 0.5rem;
+  gap: 1rem;
+}
+
+.entrance-rates .card-body {
+  padding: 0.5rem;
+}
+
+.rates {
+  width: auto;
+  height: 280px;
+  padding: 0.5rem;
+}
+
+.rates h1 {
+  font-size: 30px;
+  font-family: "Alkatra";
+  color: blue;
+}
+
+.rates h5 {
+  font-size: 18px;
+  text-align: center;
+}
+
+.rates p {
+  font-size: 16px;
+  margin: 0;
+  text-align: center;
+}
+
+.rates .card-body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.rates .card-body .data-container:last-child {
+  grid-column: span 2;
+}
+
+.cottagesEntertainment {
+  width: auto;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cottagesEntertainment .card-body {
+  padding: 0.5rem;
+}
+
+.cottagesNotes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.entertainmentContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.cottagesEntertainment h1 {
+  font-size: 20px;
+  font-family: "Alkatra";
+  text-align: center;
+  color: blue;
+}
+
+.cottagesEntertainment li {
+  font-size: 14px;
+}
+
+.cottagesEntertainment p {
+  font-size: 14px;
+  text-align: center;
+  line-height: 1;
+}
+
+.cottagesEntertainment .note li {
+  list-style: circle;
+  text-transform: none;
+}
+
+.schedLabel,
+.cottagesFormLabel,
+.entertainmentFormLabel,
+.noOfPeopleLabel,
+.purposeLabel,
+.roomLabel,
+.paymentLabel {
+  text-align: center;
+  margin: 0.5rem 0 0.5rem 0;
+  font-weight: bold;
+}
+
+.button-container {
+  padding: 1rem;
+}
+
+.additional-info-container ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.additional-info-container li {
+  font-size: 12px;
+  text-transform: none;
+  margin: 0.5rem;
+  padding: 0.3rem;
+  text-align: justify;
+}

@@ -32,18 +32,27 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
-if ($userRole == 1) {
-    $role = "Customer";
-} elseif ($userRole == 2) {
-    $role = "Business Partner";
-} elseif ($userRole == 3) {
-    $role = "Admin";
-} else {
-    $_SESSION['error'] = "Unauthorized Access eh!";
-    session_destroy();
-    header("Location: ../register.php");
-    exit();
+
+switch ($userRole) {
+    case 1: //customer
+        $role = "Customer";
+        break;
+    case 2:
+        $role = "Business Partner";
+        break;
+    case 3:
+        $role = "Admin";
+        break;
+    case 4:
+        $role = "Partnership Applicant";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -92,7 +101,7 @@ if ($userRole == 1) {
                 </button>
             </div>
             <div class="home">
-                <?php if ($role === 'Customer') { ?>
+                <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
                     <a href="../Customer/dashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
@@ -139,7 +148,7 @@ if ($userRole == 1) {
                 </li>
 
 
-                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                <?php if ($role === 'Customer' || $role === 'Business Partner' || $role === 'Partnership Applicant') { ?>
                     <li>
                         <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
@@ -154,7 +163,9 @@ if ($userRole == 1) {
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($role === 'Business Partner') { ?>
+                <?php
+                //* For business partner nav
+                if ($role === 'Business Partner') { ?>
                     <li class="sidebar-item">
                         <a href="../BusinessPartner/bpBookings.php" class="list-group-item">
                             <i class="fa-regular fa-calendar-days sidebar-icon"></i>
@@ -276,7 +287,7 @@ if ($userRole == 1) {
                                             }
                                             ?>
 
-                                            <input type="hidden" name="newEmail" value="<?= htmlspecialchars($newEmail) ?>">
+
 
                                             <p class="modal-text text-center mb-2">Please enter the verification code</p>
 

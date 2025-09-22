@@ -54,88 +54,10 @@ body {
 .logo {
   width: 15vw;
 }
-/* #dashboard {
-  font-family: "Plus Jakarta Sans";
-  text-decoration: none;
-  color: black;
-  font-weight: 800;
-  font-size: 2.3vw;
-  margin-left: 1vw;
-} */
 
 #dashboard {
   text-decoration: none;
   margin-left: 1vw;
-}
-
-.adminTitle {
-  margin-top: 1rem;
-  font-family: "Lora" !important;
-  /* font-weight: bold; */
-  font-size: 24px;
-}
-
-.admin {
-  img {
-    height: 70px;
-    width: 70px;
-    border-radius: 3rem;
-  }
-}
-
-.navbar {
-  font-family: "Lora";
-  border-radius: 15px;
-  max-width: 80vw;
-  margin: 20px auto;
-  padding: 1rem !important;
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  h5 {
-    font-size: 20px !important;
-  }
-}
-
-.nav-link {
-  display: flex !important;
-  margin: auto;
-  flex-direction: column;
-  align-items: center;
-  color: black;
-  text-decoration: none;
-}
-
-.me-2 {
-  margin-left: 2vw;
-}
-
-.nav-link.active:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link:after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 100%;
-  /* position: absolute; */
-  border-bottom: 4px solid rgb(126, 203, 242) !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-
-.nav-link:hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link img {
-  height: 2vw;
-  width: auto;
-  object-fit: contain;
 }
 
 .transactionContainer {
@@ -191,4 +113,227 @@ th {
 .dt-layout-row {
   font-family: "Lora";
   text-transform: capitalize;
+}
+
+/* Tablet Portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+  .transactionContainer {
+    margin-top: 3rem;
+  }
+
+  .transactionContainer .title {
+    font-size: 30px;
+    font-family: "Poppins Black";
+    text-align: center;
+  }
+
+  .dt-layout-row {
+    margin-top: 1.5rem !important;
+  }
+  .dt-search {
+    margin-top: 1rem !important;
+  }
+
+  label,
+  .dt-info {
+    font-size: 18px;
+  }
+
+  table.dataTable > thead > tr > th,
+  table.dataTable > thead > tr > td {
+    padding: 0.9vw 0.3vw !important;
+  }
+
+  div.dt-container div.dt-layout-row div.dt-layout-cell {
+    overflow: auto;
+  }
+
+  td,
+  .btn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .btn-danger {
+    height: 1.5rem !important;
+    width: 90px !important;
+  }
+
+  /* .btn {
+    height: 1.5rem;
+    width: 65px;
+  } */
+
+  .dt-input {
+    font-size: clamp(2.1vw, 1.9vw, 1.7vw);
+  }
+
+  th {
+    font-size: clamp(1.7vw, 1.5vw, 1.3vw);
+  }
+
+  .dt-column-order {
+    font-size: clamp(1.3vw, 1.2vw, 1.1vw);
+  }
+
+  .dt-column-header {
+    word-wrap: normal;
+    text-align: center;
+    width: 90px;
+  }
+
+  table.dataTable th.dt-type-numeric div.dt-column-header {
+    width: 70px;
+    padding: 0.3vw;
+  }
+
+  div.dt-container .dt-paging {
+    font-size: 18px !important;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+  .transactionContainer .title {
+    font-size: 30px;
+    font-family: "Poppins Black";
+  }
+
+  .dt-layout-row {
+    margin-top: 1.5rem !important;
+  }
+  .dt-search {
+    margin-top: 1rem !important;
+  }
+
+  label,
+  .dt-info {
+    font-size: 18px;
+  }
+
+  table.dataTable > thead > tr > th,
+  table.dataTable > thead > tr > td {
+    padding: 0.9vw 0.3vw !important;
+  }
+
+  div.dt-container div.dt-layout-row div.dt-layout-cell {
+    overflow: auto;
+  }
+
+  td,
+  .btn {
+    font-size: clamp(1.8vw, 1.6vw, 1.4vw);
+  }
+
+  .btn-danger {
+    height: 1.5rem !important;
+    width: 90px !important;
+  }
+
+  /* .btn {
+    height: 1.5rem;
+    width: 65px;
+  } */
+
+  .dt-input {
+    font-size: clamp(2.1vw, 1.9vw, 1.7vw);
+  }
+
+  th {
+    font-size: clamp(1.7vw, 1.5vw, 1.3vw);
+  }
+
+  .dt-column-order {
+    font-size: clamp(1.3vw, 1.2vw, 1.1vw);
+  }
+
+  .dt-column-header {
+    word-wrap: normal;
+    text-align: center;
+    width: 90px;
+  }
+
+  table.dataTable th.dt-type-numeric div.dt-column-header {
+    width: 70px;
+    padding: 0.3vw;
+  }
+
+  div.dt-container .dt-paging {
+    font-size: 18px !important;
+  }
+}
+
+/* Phones */
+@media only screen and (max-width: 600px) {
+  .transactionContainer {
+    margin-top: 3rem;
+  }
+
+  .transactionContainer .title {
+    font-size: 25px;
+    font-family: "Poppins Black";
+    text-align: center;
+  }
+
+  .dt-layout-row {
+    margin-top: 1.5rem !important;
+  }
+  .dt-search {
+    margin-top: 1rem !important;
+  }
+
+  label,
+  .dt-info {
+    font-size: 14px;
+  }
+
+  table.dataTable > thead > tr > th,
+  table.dataTable > thead > tr > td {
+    padding: 0.9vw 0.3vw !important;
+  }
+
+  div.dt-container div.dt-layout-row div.dt-layout-cell {
+    overflow: auto;
+  }
+
+  td,
+  .btn {
+    font-size: clamp(2vw, 1.9vw, 1.8vw);
+  }
+
+  .btn-danger {
+    height: 1.5rem !important;
+    width: 90px !important;
+  }
+
+  /* .btn {
+    height: 1.5rem;
+    width: 65px;
+  } */
+
+  .dt-input {
+    font-size: clamp(2.1vw, 1.9vw, 1.7vw);
+  }
+
+  th {
+    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+  }
+
+  .dt-column-order {
+    font-size: clamp(1.3vw, 1.2vw, 1.1vw);
+  }
+
+  .dt-column-header {
+    word-wrap: normal;
+    text-align: center;
+    width: 70px;
+  }
+
+  table.dataTable th.dt-type-numeric div.dt-column-header {
+    width: 70px;
+    padding: 0.3vw;
+  }
+
+  div.dt-container .dt-paging {
+    font-size: 14px !important;
+  }
 }

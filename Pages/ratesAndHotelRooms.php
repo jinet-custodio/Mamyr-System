@@ -46,18 +46,18 @@ require '../Config/dbcon.php';
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
-                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                            <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                             <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="blog.php">BLOG</a>
+                        <a class="nav-link" href="blog.php">BLOG</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../Pages/busPartnerRegister.php" id="bopNav">BE OUR PARTNER</a>
+                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">BE OUR PARTNER</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="./about.php">ABOUT</a>
+                        <a class="nav-link " href="about.php">ABOUT</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="register.php">BOOK NOW</a>
