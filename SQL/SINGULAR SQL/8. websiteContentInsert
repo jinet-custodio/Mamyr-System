@@ -75,3 +75,5 @@ INSERT INTO `resortinfo`(`resortInfoTitle`, `resortInfoName`, `resortInfoDetail`
 ('BusinessInformation', 'FBLink', 'https://www.facebook.com/p/Mamyr-Resort-Restaurant-Events-Place-100083298304476/'),
 ('BusinessInformation', 'GmailAdd', 'mamyresort128@gmail.com'),
 ('Logo', 'MamyrLogo.png', 'Mamyr Logo');
+
+INSERT INTO `resortinfo` (`resortInfoID`, `resortInfoTitle`, `resortInfoName`, `resortInfoDetail`) VALUES (NULL, 'Resort Owner', 'Owner Full Name', 'Myrna C. Dela Cruz - Prop.');

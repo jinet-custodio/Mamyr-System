@@ -108,7 +108,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
     <form action="eventBookingConfirmation.php" method="POST">
         <div class="event" id="event">
             <div class="backToSelection" id="backToSelection">
-                <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
+                <img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="back button" onclick="backToSelection()">
             </div>
             <div class="titleContainer">
                 <h4 class="eventTitle" id="eventTitle">EVENT BOOKING</h4>
@@ -116,6 +116,8 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
             <div class="container-fluid event-container" id="eventContainer">
                 <div class="card event-card" id="eventBookingCard" style="width: 40rem; flex-shrink: 0; ">
+
+                    <!-- For Event Types -->
                     <div class="eventTypeContainer">
                         <label for="eventType" class="eventInfoLabel">Type of Event</label>
                         <select class="form-select" name="eventType" id="eventType" required>
@@ -133,6 +135,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         </select>
                     </div>
 
+                    <!-- Payment Method -->
                     <div class="paymentMethod">
                         <label for="paymentMethod" class="eventInfoLabel">Payment Method</label>
                         <select class="form-select" name="paymentMethod" id="paymentMethod" required>
@@ -328,7 +331,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         <h1 class="modal-title fs-4 fw-bold" id="additionalServicesModalLabel">Business Partners</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <p>You can view the included their detailed service in {page}</p>
+                    <p class="note" style="color: blue">Before including additional services from our partners, please make sure to contact them and discuss the details of the event.</p>
                     <div class="modal-body additionalService" id="additionalService">
                     </div>
                     <div class="modal-footer">
@@ -360,6 +363,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
     <!-- Format the date to Y-M-D h:i:s -->
     <script src="../../Assets/JS/formatDateTime.js" type="text/javascript"> </script>
 
+    <script src="../../Assets/JS/EventJS/getFoodByCategory.js"></script>
+
+    <!-- Guest Count & Food Count to enable the button for booknow-->
+    <script src="../../Assets/JS/EventJS/countingGuestFood.js"> </script>
+
     <!--Back Functions -->
     <script>
         function backToSelection() {
@@ -381,91 +389,95 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
     <!-- Event Hall-->
     <script>
-        const date = document.getElementById('eventDate');
-        const startTime = document.getElementById('eventStartTime');
-        const sessionSelectedVenue = <?= isset($formData['eventVenue']) ? json_encode($formData['eventVenue']) : '""' ?>;
-        const venueSelect = document.getElementById('eventVenue');
+        document.addEventListener('DOMContentLoaded', () => {
+            const date = document.getElementById('eventDate');
+            const startTime = document.getElementById('eventStartTime');
+            const venueSelect = document.getElementById('eventVenue');
 
-        function getAvailableVenue() {
-            const selectedDate = date.value;
-            const selectedStartTime = startTime.value;
 
-            if (!selectedDate || !selectedStartTime) return;
+            const sessionSelectedVenue = <?= isset($formData['eventVenue']) ? json_encode($formData['eventVenue']) : '""' ?>;
 
-            const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
-            const endDateTimeObj = new Date(startDateTimeObj.getTime() + 5 * 60 * 60 * 1000);
+            function getAvailableVenue() {
+                const selectedDate = date.value;
+                const selectedStartTime = startTime.value;
 
-            const formattedStartDateTime = formatDateTime(startDateTimeObj);
-            const formattedEndDateTime = formatDateTime(endDateTimeObj);
+                if (!selectedDate || !selectedStartTime) return;
 
-            console.log(formattedStartDateTime);
-            console.log(formattedEndDateTime);
+                const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
+                const endDateTimeObj = new Date(startDateTimeObj.getTime() + 5 * 60 * 60 * 1000);
 
-            fetch(`../../Function/Booking/getEventVenue.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`)
-                .then(response => {
-                    if (!response.ok) throw new Error('Network Error');
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        alert("Error: " + data.error);
-                        return;
-                    }
+                const formattedStartDateTime = formatDateTime(startDateTimeObj);
+                const formattedEndDateTime = formatDateTime(endDateTimeObj);
 
-                    // const venueSelect = document.getElementById("eventVenue");
-                    venueSelect.innerHTML = '';
+                // console.log(formattedStartDateTime);
+                // console.log(formattedEndDateTime);
 
-                    const venueOption = document.createElement('option')
-                    venueOption.value = "";
-                    venueOption.disabled = true;
-                    venueOption.selected = true;
-                    venueOption.textContent = "Choose...";
-                    venueSelect.appendChild(venueOption);
-
-                    data.Halls.forEach(hall => {
-                        const venueOptions = document.createElement('option');
-                        venueOptions.value = hall.RServiceName;
-                        venueOptions.dataset.capacity = hall.RSmaxCapacity;
-                        venueOptions.textContent = `${hall.RServiceName} - ${hall.RSmaxCapacity} pax`;
-
-                        if (hall.RServiceName === sessionSelectedVenue) {
-                            venueOptions.selected = true;
+                fetch(`../../Function/Booking/getEventVenue.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network Error');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            alert("Error: " + data.error);
+                            return;
                         }
 
-                        venueSelect.appendChild(venueOptions);
+                        // const venueSelect = document.getElementById("eventVenue");
+                        venueSelect.innerHTML = '';
+
+                        const venueOption = document.createElement('option')
+                        venueOption.value = "";
+                        venueOption.disabled = true;
+                        venueOption.selected = true;
+                        venueOption.textContent = "Choose...";
+                        venueSelect.appendChild(venueOption);
+
+                        data.Halls.forEach(hall => {
+                            const venueOptions = document.createElement('option');
+                            venueOptions.value = hall.RServiceName;
+                            venueOptions.dataset.capacity = hall.RSmaxCapacity;
+                            venueOptions.textContent = `${hall.RServiceName} - ${hall.RSmaxCapacity} pax`;
+
+                            if (hall.RServiceName === sessionSelectedVenue) {
+                                venueOptions.selected = true;
+                            }
+
+                            venueSelect.appendChild(venueOptions);
+                        })
+
+                        venueSelect.dispatchEvent(new Event('change'));
+
                     })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation', error);
+                        alert("Failed to load available venues. Please try again later.");
+                    });
+            }
 
-                    venueSelect.dispatchEvent(new Event('change'));
-
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation', error);
-                    alert("Failed to load available venues. Please try again later.");
-                });
-        }
-
-        if (date && startTime) {
-            date.addEventListener("change", getAvailableVenue);
-            startTime.addEventListener("change", getAvailableVenue);
-            getAvailableVenue();
-        }
+            if (date && startTime) {
+                date.addEventListener("change", getAvailableVenue);
+                startTime.addEventListener("change", getAvailableVenue);
+                getAvailableVenue();
+            }
+        });
     </script>
 
-    <script src="../../Assets/JS/EventJS/getFoodByCategory.js"></script>
     <!-- For event food -->
     <script>
-        const sessionSelectedChicken = <?= isset($formData['chickenSelections']) ? json_encode($formData['chickenSelections']) : '[]' ?>;
-        const sessionSelectedPork = <?= isset($formData['porkSelections']) ? json_encode($formData['porkSelections']) : '[]' ?>;
-        const sessionSelectedPasta = <?= isset($formData['pastaSelections']) ? json_encode($formData['pastaSelections']) : '[]' ?>;
-        const sessionSelectedBeef = <?= isset($formData['beefSelections']) ? json_encode($formData['beefSelections']) : '[]' ?>;
-        const sessionSelectedVegie = <?= isset($formData['vegieSelections']) ? json_encode($formData['vegieSelections']) : '[]' ?>;
-        const sessionSelectedSeafood = <?= isset($formData['seafoodSelections']) ? json_encode($formData['seafoodSelections']) : '[]' ?>;
-        const sessionSelectedDrink = <?= isset($formData['drinkSelections']) ? json_encode($formData['drinkSelections']) : '[]' ?>;
-        const sessionSelectedDessert = <?= isset($formData['dessertSelections']) ? json_encode($formData['dessertSelections']) : '[]' ?>;
-
-        const sessionFoodIDs = <?= isset($formData['foodIDs']) ? json_encode($formData['foodIDs']) : '[]' ?>;
-
         document.addEventListener('DOMContentLoaded', function() {
+            const sessionSelectedChicken = <?= isset($formData['chickenSelections']) ? json_encode($formData['chickenSelections']) : '[]' ?>;
+            const sessionSelectedPork = <?= isset($formData['porkSelections']) ? json_encode($formData['porkSelections']) : '[]' ?>;
+            const sessionSelectedPasta = <?= isset($formData['pastaSelections']) ? json_encode($formData['pastaSelections']) : '[]' ?>;
+            const sessionSelectedBeef = <?= isset($formData['beefSelections']) ? json_encode($formData['beefSelections']) : '[]' ?>;
+            const sessionSelectedVegie = <?= isset($formData['vegieSelections']) ? json_encode($formData['vegieSelections']) : '[]' ?>;
+            const sessionSelectedSeafood = <?= isset($formData['seafoodSelections']) ? json_encode($formData['seafoodSelections']) : '[]' ?>;
+            const sessionSelectedDrink = <?= isset($formData['drinkSelections']) ? json_encode($formData['drinkSelections']) : '[]' ?>;
+            const sessionSelectedDessert = <?= isset($formData['dessertSelections']) ? json_encode($formData['dessertSelections']) : '[]' ?>;
+
+            const sessionFoodIDs = <?= isset($formData['foodIDs']) ? json_encode($formData['foodIDs']) : '[]' ?>;
+
+
             fetch('../../Function/Booking/getAvailableFood.php')
                 .then(response => {
                     if (!response.ok) throw new Error('Network Error');
@@ -500,147 +512,155 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
     <!-- Fetch Partner service -->
     <script>
-        const mainContainer = document.getElementById('additionalService');
-        const sessionSelectedServices = <?= isset($formData['additionalServiceSelected']) ? json_encode($formData['additionalServiceSelected']) : '[]' ?>;
+        document.addEventListener('DOMContentLoaded', function() {
+            const date = document.getElementById('eventDate');
+            const startTime = document.getElementById('eventStartTime');
+            const mainContainer = document.getElementById('additionalService');
+            const sessionSelectedServices = <?= isset($formData['additionalServiceSelected']) ? json_encode($formData['additionalServiceSelected']) : '[]' ?>;
 
-        const div = document.createElement('div');
-        div.classList.add('no-data-container');
+            function showDefaultText() {
+                const div = document.createElement('div');
+                div.classList.add('no-data-container');
 
-        const cardText = document.createElement('h5');
-        cardText.classList.add('card-text');
-        cardText.innerHTML = 'Choose the date and time';
+                const cardText = document.createElement('h5');
+                cardText.classList.add('card-text');
+                cardText.innerHTML = 'Choose the date and time';
 
-        div.appendChild(cardText);
-        mainContainer.appendChild(div);
+                div.appendChild(cardText);
+                mainContainer.appendChild(div);
+            }
 
-        function getAvailablePartnerService() {
+            date.addEventListener('change', getAvailablePartnerService);
+            startTime.addEventListener('change', getAvailablePartnerService);
 
-            const selectedDate = date.value;
-            const selectedStartTime = startTime.value;
+            if (date.value === '' && startTime.value === '') {
+                showDefaultText();
+            } else {
 
-            if (!selectedDate || !selectedStartTime) return;
+                getAvailablePartnerService();
+            }
 
-            const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
-            const endDateTimeObj = new Date(startDateTimeObj.getTime() + 5 * 60 * 60 * 1000); // +5 hours
+            // console.log('Date value:', date.value);
+            // console.log('StartTime value:', startTime.value);
 
-            const formattedStartDateTime = formatDateTime(startDateTimeObj);
-            const formattedEndDateTime = formatDateTime(endDateTimeObj);
 
-            fetch(`../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network Error');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
+            function getAvailablePartnerService() {
+
+                const selectedDate = date.value;
+                const selectedStartTime = startTime.value;
+
+                if (!selectedDate || !selectedStartTime) return;
+
+                const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
+                const endDateTimeObj = new Date(startDateTimeObj.getTime() + 5 * 60 * 60 * 1000); // +5 hours
+
+                const formattedStartDateTime = formatDateTime(startDateTimeObj);
+                const formattedEndDateTime = formatDateTime(endDateTimeObj);
+
+                fetch(`../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network Error');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Error: ' + data.error,
+                                icon: 'error'
+                            });
+                            return;
+                        }
+                        mainContainer.innerHTML = '';
+                        if (data.Categories && data.Categories.length > 0) {
+                            data.Categories.forEach(category => {
+                                const wrapper = document.createElement('div');
+                                wrapper.classList.add('photography');
+
+                                // Create and append category label
+                                const bpTypeContainer = document.createElement('div');
+                                bpTypeContainer.classList.add('bpTypeContainer');
+
+                                const categoryHeading = document.createElement('h6');
+                                categoryHeading.classList.add('bpCategory', 'fw-bold');
+                                categoryHeading.innerText = category.eventCategory || 'Category Name'; // fallback if undefined
+
+                                bpTypeContainer.appendChild(categoryHeading);
+                                wrapper.appendChild(bpTypeContainer);
+
+
+                                const partnerListContainer = document.createElement('div');
+                                partnerListContainer.classList.add('partnerListContainer');
+
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.classList.add('form-check-input');
+                                checkbox.name = `additionalServiceSelected[${category.partnershipServiceID}][selected]`;
+                                checkbox.value = category.partnershipServiceID;
+
+
+                                const inputPBName = document.createElement('input');
+                                inputPBName.type = 'hidden';
+                                inputPBName.name = `additionalServiceSelected[${category.partnershipServiceID}][PBName]`;
+                                inputPBName.value = category.PBName;
+
+                                const inputPBPrice = document.createElement('input');
+                                inputPBPrice.type = 'hidden';
+                                inputPBPrice.name = `additionalServiceSelected[${category.partnershipServiceID}][PBPrice]`;
+                                inputPBPrice.value = category.PBPrice;
+
+                                const inputServiceID = document.createElement('input');
+                                inputServiceID.type = 'hidden';
+                                inputServiceID.name = `additionalServiceSelected[${category.partnershipServiceID}][partnershipServiceID]`;
+                                inputServiceID.value = category.partnershipServiceID;
+
+
+                                const label = document.createElement('label');
+                                label.classList.add('form-check-label');
+                                label.innerHTML = `${category.companyName} - ${category.PBName} &mdash; ₱ ${Number(category.PBPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} &mdash; ${category.phoneNumber}`;
+
+                                const selectedServiceIDs = Object.keys(sessionSelectedServices).map(String);
+
+                                if (selectedServiceIDs.includes(String(category.partnershipServiceID))) {
+                                    checkbox.checked = true;
+                                }
+
+
+                                partnerListContainer.appendChild(checkbox);
+                                partnerListContainer.appendChild(inputPBName);
+                                partnerListContainer.appendChild(inputPBPrice);
+                                partnerListContainer.appendChild(inputServiceID);
+                                partnerListContainer.appendChild(label);
+
+                                wrapper.appendChild(partnerListContainer);
+                                mainContainer.appendChild(wrapper);
+                            });
+                        } else {
+                            const div = document.createElement('div');
+                            div.classList.add('no-data-container');
+
+                            const cardText = document.createElement('h3');
+                            cardText.classList.add('card-text');
+                            cardText.innerHTML = 'No Additional Services Available';
+
+                            div.appendChild(cardText);
+                            mainContainer.appendChild(div);
+                        }
+
+
+                    }).catch(error => {
                         Swal.fire({
                             title: 'Error',
-                            text: 'Error: ' + data.error,
+                            text: error.Message,
                             icon: 'error'
-                        });
-                        return;
-                    }
-
-
-                    mainContainer.innerHTML = '';
-                    if (data.Categories && data.Categories.length > 0) {
-                        data.Categories.forEach(category => {
-                            const wrapper = document.createElement('div');
-                            wrapper.classList.add('photography');
-
-                            // Create and append category label
-                            const bpTypeContainer = document.createElement('div');
-                            bpTypeContainer.classList.add('bpTypeContainer');
-
-                            const categoryHeading = document.createElement('h6');
-                            categoryHeading.classList.add('bpCategory', 'fw-bold');
-                            categoryHeading.innerText = category.eventCategory || 'Category Name'; // fallback if undefined
-
-                            bpTypeContainer.appendChild(categoryHeading);
-                            wrapper.appendChild(bpTypeContainer);
-
-
-                            const partnerListContainer = document.createElement('div');
-                            partnerListContainer.classList.add('partnerListContainer');
-
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.classList.add('form-check-input');
-                            checkbox.name = `additionalServiceSelected[${category.partnershipServiceID}][selected]`;
-                            checkbox.value = category.partnershipServiceID;
-
-
-                            const inputPBName = document.createElement('input');
-                            inputPBName.type = 'hidden';
-                            inputPBName.name = `additionalServiceSelected[${category.partnershipServiceID}][PBName]`;
-                            inputPBName.value = category.PBName;
-
-                            const inputPBPrice = document.createElement('input');
-                            inputPBPrice.type = 'hidden';
-                            inputPBPrice.name = `additionalServiceSelected[${category.partnershipServiceID}][PBPrice]`;
-                            inputPBPrice.value = category.PBPrice;
-
-                            const inputServiceID = document.createElement('input');
-                            inputServiceID.type = 'hidden';
-                            inputServiceID.name = `additionalServiceSelected[${category.partnershipServiceID}][partnershipServiceID]`;
-                            inputServiceID.value = category.partnershipServiceID;
-
-
-                            const label = document.createElement('label');
-                            label.classList.add('form-check-label');
-                            label.innerHTML = `${category.companyName} - ${category.PBName} &mdash; ₱ ${Number(category.PBPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-                            const selectedServiceIDs = Object.keys(sessionSelectedServices).map(String);
-
-                            if (selectedServiceIDs.includes(String(category.partnershipServiceID))) {
-                                checkbox.checked = true;
-                            }
-
-
-                            partnerListContainer.appendChild(checkbox);
-                            partnerListContainer.appendChild(inputPBName);
-                            partnerListContainer.appendChild(inputPBPrice);
-                            partnerListContainer.appendChild(inputServiceID);
-                            partnerListContainer.appendChild(label);
-
-                            wrapper.appendChild(partnerListContainer);
-                            mainContainer.appendChild(wrapper);
-                        });
-                    } else {
-                        const div = document.createElement('div');
-                        div.classList.add('no-data-container');
-
-                        const cardText = document.createElement('h3');
-                        cardText.classList.add('card-text');
-                        cardText.innerHTML = 'No Additional Services Available';
-
-                        div.appendChild(cardText);
-                        mainContainer.appendChild(div);
-                    }
-
-
-                }).catch(error => {
-                    Swal.fire({
-                        title: 'Error',
-                        text: error.Message,
-                        icon: 'error'
+                        })
+                        console.error('There was a problem with the fetch operation', error);
                     })
-                    console.error('There was a problem with the fetch operation', error);
-                })
-        };
-
-        if (date) {
-            date.addEventListener('change', () => {
-                getAvailablePartnerService();
-            })
-            getAvailablePartnerService();
-        }
+            };
+        });
     </script>
-
-    <!-- Guest Count & Food Count to enable the button for booknow-->
-    <script src="../../Assets/JS/EventJS/countingGuestFood.js"> </script>
 
     <!-- Auto select event -->
     <script>

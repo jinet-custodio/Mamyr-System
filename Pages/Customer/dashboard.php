@@ -7,6 +7,7 @@ require '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
 require '../../Function/functions.php';
+resetExpiredOTPs($conn);
 addToAdminTable($conn);
 autoChangeStatus($conn);
 $userID = $_SESSION['userID'];

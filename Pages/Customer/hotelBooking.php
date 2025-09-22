@@ -74,7 +74,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <form action="confirmBooking.php" method="POST">
         <div class="hotel" id="hotel">
             <div class="backToSelection" id="backToSelection">
-                <img src="../../Assets/Images/Icon/arrow.png" alt="back button" onclick="backToSelection()">
+                <img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="back button" onclick="backToSelection()">
             </div>
             <div class="titleContainer">
                 <h4 class="hotelTitle" id="hotelTitle">HOTEL BOOKING</h4>

@@ -34,7 +34,8 @@ function convertToWords($number)
 }
 
 if (isset($_POST['downloadReceiptBtn'])) {
-    $bookingID = str_pad($_POST['bookingID'], 4, '0', STR_PAD_LEFT);
+    $bookingID = intval($_POST['bookingID']);
+    $formattedBookingID = str_pad($bookingID, 4, '0', STR_PAD_LEFT);
     $totalBill = (float) $_POST['totalCost'];
     $name = !empty($_POST['name']) ? mysqli_real_escape_string($conn, $_POST['name']) : mysqli_real_escape_string($conn, $_POST['guestName']);
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
@@ -43,7 +44,39 @@ if (isset($_POST['downloadReceiptBtn'])) {
     $businessName = "Mamyr Resort & Event Place";
     $resortOwner = "Myrna C. Dela Cruz - Prop.";
     $date = date('F d, Y g:i A');
-    $services =  $_POST['services'];
+    $services =  $_POST['services'] ?? [];
+    $amountPaid = 0;
+    $isFullPayment = false;
+
+    $selectBookingQuery = $conn->prepare("SELECT bookingID,confirmedFinalBill, amountPaid, userBalance FROM confirmedbooking
+    WHERE bookingID = ? ");
+    $selectBookingQuery->bind_param('s', $bookingID);
+    if (!$selectBookingQuery->execute()) {
+        error_log('Failed Executing query for booking: ' . $selectBookingQuery->error);
+    }
+
+    $result = $selectBookingQuery->get_result();
+
+    if ($result->num_rows === 0) {
+        $amountPaid = 'No payment yet';
+    }
+
+    $row = $result->fetch_assoc();
+
+    $storedAmountPaid = floatval($row['amountPaid']);
+    $storedUserBalance = floatval($row['userBalance']);
+    // $confirmedFinalBill = floatval($row['confirmedFinalBill']);
+
+
+    if ($storedAmountPaid == 0) {
+        $isPaid = false;
+        $isFullPayment = false;
+        $payment = '0.00';
+    } else {
+        $isPaid = true;
+        $isFullPayment = ($storedAmountPaid >= $totalBill);
+        $payment = '₱ ' . number_format($storedAmountPaid, 2) . ($isFullPayment ? ' (Fully Paid)' : ' (Partially Paid)');
+    }
 
 
 
@@ -63,6 +96,10 @@ if (isset($_POST['downloadReceiptBtn'])) {
 
 
         <style>
+            .contents p {
+                line-height: 1rem;
+            }
+
             .logo {
                 height: 35px;
                 margin-top: 5px;
@@ -74,6 +111,13 @@ if (isset($_POST['downloadReceiptBtn'])) {
                 margin-top: -30px;
                 margin-right: 20px;
             }
+
+            .underlined {
+                display: inline-block;
+                border-bottom: 1px solid black;
+                padding-bottom: 3px;
+                min-width: 200px;
+            }
         </style>
     </head>
 
@@ -83,7 +127,7 @@ if (isset($_POST['downloadReceiptBtn'])) {
             <img src="' . __DIR__ . '/../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 
             <div>
-                <h3 style="text-align: right;">Receipt No. <?= $bookingID ?></h3>
+                <h3 style="text-align: right;">Receipt No. <?= $formattedBookingID ?></h3>
                 <h4 style="text-align: left; margin-top:20px; margin-left:5px"><?= $resortOwner ?></h4>
             </div>
             <p style="text-align:right; margin-top: -35px; margin-right:21px;"><strong>Date:</strong> <?= $date ?></p>
@@ -91,28 +135,42 @@ if (isset($_POST['downloadReceiptBtn'])) {
         </header>
 
         <hr style="height:5px; color: #09a7eb; margin-top:-20px">
-        <div class="contents" style="margin-top: 25px; padding: 15px">
-            <h3 style="text-align: center; margin-top:-40px">Mamyr Resort and Events Place</h3>
+        <div class="contents" style="margin-top: 25px; padding: 15px; font-family: Arial, sans-serif; font-size: 15px; line-height: 1.6;">
+            <h3 style="text-align: center; margin-top: -40px;"><?= htmlspecialchars($businessName)  ?></h3>
 
-            <p style="text-align: justify; font-size: 15px; margin-top: 35px"><strong>Received from </strong>
-                <?= $name ?></p>
+            <p><strong>Received from</strong> <span class="underlined"><?= htmlspecialchars($name) ?></span></p>
 
-            <p><strong>Address</strong> <?= $mamyrAddress ?></p>
+            <p><strong>Address </strong> <span class="underlined"><?= htmlspecialchars($mamyrAddress) ?></span></p>
 
-            <p><strong>Bus. Style/Name </strong><?= $businessName ?></p>
+            <p><strong>Business Name/Style </strong> <span class="underlined"><?= htmlspecialchars($businessName) ?></span></p>
 
-            <p><strong>Amount</strong> of <?= ucwords($amountInWords) ?> (<strong>₱ <?= number_format($totalBill, 2) ?></strong>)</p>
-
-            <p><strong>In partial/full payment for</strong> <?= $bookingType ?> Booking </p>
-
-            <p><strong>Included services</strong> such as <?= $services ?>
+            <p>
+                <strong>Total Amount:</strong> <span class="underlined"><?= ucwords($amountInWords) ?>
+                    (<strong>₱ <?= number_format($totalBill, 2) ?></strong>) </span>
             </p>
-            <p><strong>Requested by:</strong> <?= $adminName ?></p>
-            <hr style="width:200px; height:1px; color:black; text-align:right; margin-top:20px">
-            <p style="text-align: right; margin-top:1px; margin-right: 30px">Authorized Signature</p>
+
+            <p>
+                <strong>Amount Paid of </strong> <span class="underlined"> <?= $payment ?> </span> &nbsp;
+                <strong>Payment For:</strong> <span class="underlined"><?= htmlspecialchars($bookingType) ?> Booking</span>
+            </p>
+
+            <?php if (!empty($services)): ?>
+                <p><strong>Included Services:</strong>
+                    <span class="underlined">
+                        <?= htmlspecialchars(implode(', ', array_unique($services))) ?>
+                    </span>
+                </p>
+            <?php endif; ?>
+
+
+            <p><strong>Requested By:</strong> <span class="underlined"><?= htmlspecialchars($adminName) ?></span></p>
+
+            <hr style="width: 200px; height: 1px; background-color: black; border: none; margin-top: 15px; margin-left: auto;" />
+
+            <p style="text-align: right; margin-top: 3px; margin-right: 30px;">
+                Authorized Signature
+            </p>
         </div>
-
-
     </body>
 
 

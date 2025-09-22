@@ -87,7 +87,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <a class="nav-link text-white" href="Pages/blog.php">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/Pages/busPartnerRegister.php" id="bopNav">Be Our Partner</a>
+                        <a class="nav-link text-white" href="Pages/beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="Pages/about.php">About</a>

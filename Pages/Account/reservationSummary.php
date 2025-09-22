@@ -66,7 +66,7 @@ require_once '../../Function/functions.php';
 <body>
     <div class="container">
         <div class="backButtonContainer">
-            <a href="bookingHistory.php"><img src="../../Assets/Images/Icon/arrow.png" alt="Back Button"
+            <a href="bookingHistory.php"><img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="Back Button"
                     class="backButton"></a>
         </div>
 
@@ -95,49 +95,113 @@ require_once '../../Function/functions.php';
             <!-- Get booking info -->
             <?php
             $getBookingInfo = $conn->prepare("SELECT 
-                                
-                                b.*, b.createdAt,
-                                cb.confirmedBookingID,
-                                cb.amountPaid, 
-                                cb.confirmedFinalBill, 
-                                cb.userBalance, 
-                                cb.paymentApprovalStatus, 
-                                cb.paymentDueDate, cb.paymentStatus,
-                                cb.discountAmount, cb.downpaymentImage,
-                                cb.downpaymentDueDate, 
-                                pt.partnerTypeDescription, ps.PBName,
-                                bs.*, cp.*, cpi.*, mi.foodName, mi.foodCategory,
-                                s.*, s.serviceType, ec.categoryName as eventType,
-                                er.sessionType AS tourType, er.ERCategory, er.ERprice,
-                                ra.RServiceName, ra.RSprice, rsc.categoryName AS serviceCategory   
-                                    
-                                FROM booking b
-                                LEFT JOIN confirmedBooking cb ON b.bookingID = cb.bookingID 
+                                                    b.bookingID, 
+                                                    b.bookingType, 
+                                                    b.customPackageID, 
+                                                    b.additionalRequest,
+                                                    b.addOns, 
+                                                    b.toddlerCount, 
+                                                    b.kidCount, 
+                                                    b.adultCount, 
+                                                    b.guestCount, 
+                                                    b.durationCount, 
+                                                    b.arrivalTime, 
+                                                    b.startDate, 
+                                                    b.endDate, 
+                                                    b.paymentMethod, 
+                                                    b.totalCost AS originalBill, 
+                                                    b.downpayment, 
+                                                    b.bookingStatus, 
+                                                    b.createdAt,  
 
-                                LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
-                                LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID
-                                LEFT JOIN eventcategory ec ON cp.eventTypeID = ec.categoryID
+                                                    cp.eventTypeID, 
+                                                    cp.customPackageTotalPrice, 
+                                                    cp.customPackageNotes, 
+                                                    cp.totalFoodPrice, 
+                                                    cp.venuePricing, 
+                                                    cp.additionalServicePrice, 
 
-                                LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
-                                LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
-                                LEFT JOIN menuitem mi ON cpi.foodItemID = mi.foodItemID
- 
-                                LEFT JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
-                                LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
+                                                    sp.price, 
 
-                                LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
+                                                    mi.foodItemID,
+                                                    mi.foodName,
+                                                    mi.foodCategory,
 
-                                LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
-                                LEFT JOIN partnership_partnertype ppt ON ps.partnershipID = ppt.partnershipID
-                                LEFT JOIN partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID
-                            WHERE b.bookingID = ?");
+                                                    s.serviceID, 
+                                                    s.resortServiceID, 
+                                                    s.partnershipServiceID, 
+                                                    s.entranceRateID, 
+                                                    s.serviceType, 
+
+                                                    ra.RServiceName, 
+                                                    ra.RSprice, 
+
+                                                    ps.PBName, 
+                                                    ps.PBPrice, 
+                                                    ps.PBduration, 
+                                                    ps.partnershipID, 
+
+                                                    ppt.partnerTypeID,
+                                                    pt.partnerTypeDescription as category,
+                                                    er.sessionType as tourType,
+                                                    ec.categoryName as eventType,
+
+                                                    cb.confirmedBookingID,
+                                                    cb.amountPaid, 
+                                                    cb.confirmedFinalBill, 
+                                                    cb.userBalance, 
+                                                    cb.confirmedBookingID, 
+                                                    cb.discountAmount, 
+                                                    cb.paymentApprovalStatus, 
+                                                    cb.paymentStatus,  
+                                                    cb.paymentDueDate, 
+                                                    cb.downpaymentDueDate,
+                                                    cb.downpaymentImage,
+                                                    cb.additionalCharge
+                                                FROM booking b
+                                                LEFT JOIN confirmedbooking cb 
+                                                    ON b.bookingID = cb.bookingID
+                                                -- LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
+
+                                                LEFT JOIN custompackage cp 
+                                                    ON b.customPackageID = cp.customPackageID
+                                                LEFT JOIN servicepricing sp 
+                                                    ON cp.foodPricingPerHeadID = sp.pricingID
+                                                LEFT JOIN custompackageitem cpi 
+                                                    ON cp.customPackageID = cpi.customPackageID
+                                                LEFT JOIN eventcategory ec 
+                                                    ON cp.eventTypeID = ec.categoryID
+
+                                                LEFT JOIN bookingservice bs 
+                                                    ON b.bookingID = bs.bookingID
+                                                LEFT JOIN service s 
+                                                    ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+                                                LEFT JOIN menuitem mi 
+                                                    ON cpi.foodItemID = mi.foodItemID
+
+                                                LEFT JOIN resortamenity ra 
+                                                    ON s.resortServiceID = ra.resortServiceID
+                                                -- LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
+
+                                                LEFT JOIN entrancerate er 
+                                                    ON s.entranceRateID = er.entranceRateID
+
+                                                LEFT JOIN partnershipservice ps 
+                                                    ON s.partnershipServiceID = ps.partnershipServiceID
+                                                LEFT JOIN partnership_partnertype ppt 
+                                                    ON ps.partnershipID = ppt.partnershipID
+                                                LEFT JOIN partnershiptype pt 
+                                                    ON ppt.partnerTypeID = pt.partnerTypeID
+                                                WHERE b.bookingID = ?
+                                                ");
             $getBookingInfo->bind_param("i", $bookingID);
             $getBookingInfo->execute();
             $getBookingInfoResult = $getBookingInfo->get_result();
             if ($getBookingInfoResult->num_rows > 0) {
 
                 $services = [];
-                $totalCost = 0;
+                $serviceIDs = [];
+                $originalBill = 0;
                 $downpayment = 0;
                 $discount = 0;
                 $totalPax = 0;
@@ -147,248 +211,234 @@ require_once '../../Function/functions.php';
                 $userBalance = 0;
                 $amountPaid = 0;
                 $additionalCharge = 0;
-                $serviceVenue = '';
-                $downpaymentNotes = [];
-                $paymentApprovalStatusName = '';
                 $foodList = [];
+                $foodPriceTotal = 0;
                 $partnerServiceList = [];
-
+                $downpaymentNotes = [];
                 while ($row = $getBookingInfoResult->fetch_assoc()) {
 
                     // echo '<pre>';
                     // print_r($row);
                     // echo '</pre>';
 
-                    $customPackageID = $row['customPackageID'] ?? null;
-                    $bookingType = $row['bookingType'] ?? null;
+                    // Date and Time
+                    $rawStartDate = $row['startDate'] ?? null;
+                    $rawEndDate = $row['endDate'] ?? null;
 
                     $arrivalTime = !empty($row['arrivalTime'])
                         ? date('H:i A', strtotime($row['arrivalTime']))
                         : 'Not Stated';
 
-                    $startDate = !empty($row['startDate'])
-                        ? date('M. d, Y', strtotime($row['startDate']))
+                    $startDate = !empty($rawStartDate)
+                        ? date('M. d, Y', strtotime($rawStartDate))
                         : 'Not Stated';
 
-                    $endDate = !empty($row['endDate'])
-                        ? date('M. d, Y', strtotime($row['endDate']))
+                    $endDate = !empty($rawEndDate)
+                        ? date('M. d, Y', strtotime($rawEndDate))
                         : 'Not Stated';
 
                     $createdAt = $row['createdAt'] ?? null;
 
-
-                    if (!empty($row['startDate']) && $row['startDate'] === $row['endDate']) {
-                        $bookingDate = date('F d, Y', strtotime($row['startDate']));
-                    } elseif (!empty($row['startDate']) && !empty($row['endDate'])) {
+                    if (!empty($rawStartDate) || $rawStartDate ===  $rawEndDate) {
+                        $bookingDate = date('F d, Y', strtotime($rawStartDate));
+                    } elseif (!empty($rawStartDate) && !empty($rawEndDate)) {
                         $bookingDate = $startDate . " to " . $endDate;
                     } else {
                         $bookingDate = 'Date not available';
                     }
 
+                    $bookingCreationDate = !empty($row['createdAt']) ? date('F d, Y h:i A', strtotime($row['createdAt'])) : 'Not Stated';
 
-                    $bookingCreationDate = !empty($createdAt)
-                        ? date('F d, Y H:i A', strtotime($createdAt))
-                        : 'Not Available';
-
-
-                    $time = date("g:i A", strtotime($row['startDate'])) . " - " . date("g:i A", strtotime($row['endDate']));
+                    $time = date("g:i A", strtotime($rawStartDate)) . " - " . date("g:i A", strtotime($rawEndDate));
                     $duration = $row['durationCount'] . " hours";
 
-                    $bookingStatus = $row['bookingStatus'];
-                    $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? '';
-                    $paymentStatus = $row['paymentStatus'] ?? '';
-                    $additionalServices = $row['addOns'] ?? 'None';
-                    $paymentMethod = $row['paymentMethod'];
-                    $totalCost = $row['totalCost'];
-                    $downpayment = $row['downpayment'];
 
+                    //IDs
+                    $customPackageID =  (int) $row['customPackageID'];
+                    $confirmedBookingID = (int) $row['confirmedBookingID'] ?? null;
+                    $serviceID = isset($row['serviceID']) ? $row['serviceID'] : '';
 
-                    $paymentStatusName = 'No Payment';
-                    $paymentApprovalStatusName = 'Pending';
+                    //Types
+                    $bookingType = $row['bookingType'] ?? null;
+                    $serviceType = $row['serviceType'] ?? null;
 
-                    if ($paymentStatus !== '' || $paymentApprovalStatus !== '') {
-                        $paymentStatuses = getPaymentStatus($conn, $paymentStatus);
-                        $paymentStatusID = $paymentStatuses['paymentStatusID'] ?? '';
-                        $paymentStatusName = $paymentStatuses['paymentStatusName'] ?? 'No Payment';
-
-                        $paymentApprovalStatuses = getStatuses($conn, $paymentApprovalStatus);
-                        $paymentApprovalStatusID = $paymentApprovalStatuses['statusID'] ?? '';
-                        $paymentApprovalStatusName = $paymentApprovalStatuses['statusName'] ?? 'Pending';
-                    }
-
-
-                    $bookingStatuses = getStatuses($conn, $bookingStatus);
-                    $bookingStatusNameID = $bookingStatuses['statusID'];
-                    $bookingStatusName = $bookingStatuses['statusName'];
-
-                    $startDateObj = new DateTime($row['startDate']);
-                    $startDateObj->modify('-1 day');
-
-                    $raw_paymentDueDate = $row['paymentDueDate'] ?? $startDate;
-                    $raw_downpaymentDueDate = $row['downpaymentDueDate'] ?? $startDateObj->format('F d, Y g:i A');
-                    $paymentDueDate = date('F d, Y g:i A', strtotime($raw_paymentDueDate));
-                    $downpaymentDueDate = date('F d, Y g:i A', strtotime($raw_downpaymentDueDate));
-
-                    if ($amountPaid === $downpayment || $amountPaid > $downpayment) {
-                        $dueDate =  $paymentDueDate;
-                        $buttonName = 'Check Payment';
-                    } else {
-                        $dueDate =  $downpaymentDueDate;
-                        $buttonName = 'Make a Down Payment';
-                    }
-
+                    //Payment Details
+                    $paymentMethod =  $row['paymentMethod'];
+                    $discount =  (float) $row['discountAmount'] ?? 0;
+                    $originalBill =  (float) $row['originalBill'];
+                    $downpayment =  (float) $row['downpayment'];
+                    $additionalCharge =  (float) $row['additionalCharge'];
                     $downpaymentImageData = $row['downpaymentImage'];
                     if (!empty($downpaymentImageData)) {
                         $downpaymentImage = "../../Assets/Images/PaymentProof/" . $downpaymentImageData;
                     } else {
                         $downpaymentImage = "../../Assets/Images/PaymentProof/defaultDownpayment.png";
                     }
+                    $bookingStatusID = $row['bookingStatus'] ?? null;
+                    $bookingStatus = getStatuses($conn, $bookingStatusID);
 
-                    $discount = $row['discountAmount'] ?? 0;
-                    $userBalance = $row['userBalance'] ?? 0;
-                    $amountPaid = $row['amountPaid'] ?? 0;
-                    $finalBill = $row['confirmedFinalBill'] ?? 0;
-                    $additionalCharge = $row['additionalCharge'] ?? 0;
+                    if (!empty($confirmedBookingID)) {
+                        $paymentApprovalStatusID = $row['paymentApprovalStatus'] ?? null;
+                        $paymentStatusID = $row['paymentStatus'] ?? null;
+                        $finalBill = (float) $row['confirmedFinalBill'] ?? null;
+                        $downpaymentDueDate = !empty($row['downpaymentDueDate']) ? date('F d, Y h:i A', strtotime($row['downpaymentDueDate'])) : 'Not Stated';
+                        $paymentDueDate = !empty($row['paymentDueDate']) ? date('F d, Y h:i A', strtotime($row['paymentDueDate'])) : 'Not Stated';
+                        $dueDate = ($amountPaid === $downpayment || $amountPaid > $downpayment) ? $paymentDueDate : $downpaymentDueDate;
+                        $amountPaid = (float) $row['amountPaid'];
+                        $userBalance =  (float) $row['userBalance'];
 
-                    $toddlerCount = $row['toddlerCount'];
-                    $adultCount = $row['adultCount'];
-                    $kidsCount = $row['kidCount'];
+                        if (!empty($paymentStatusID) || !empty($paymentApprovalStatusID)) {
+                            $paymentStatus = getPaymentStatus($conn, $paymentStatusID);
+                            $paymentApprovalStatus = getStatuses($conn, $paymentApprovalStatusID) ?? null;
+                        }
+                    } else {
+                        $finalBill = $originalBill;
+                        $dueDate = 'Wait for approval before paying';
+                    }
 
+                    $buttonName = ($amountPaid === $downpayment || $amountPaid > $downpayment) ? 'Check Payment' : 'Make a downpayment';
+
+
+                    //Pax Details
+                    $toddlerCount = (int) $row['toddlerCount'];
+                    $kidCount = (int) $row['kidCount'];
+                    $adultCount = (int) $row['adultCount'];
+                    $guestCount = intval($row['guestCount']);
+
+                    //Additionals
                     $additionalReq = $row['additionalRequest'];
-                    $addOns = $row['addOns'] ?? 'None';
+                    $additionalServices = $row['addOns'] ?? 'None';
+
+                    $status = strtolower($bookingStatus['statusName']);
+                    switch ($bookingStatus['statusID']) {
+                        case 1: //Pending
+                            $statusTitle = 'Reservation Pending Approval';
+                            $statusSubtitle = 'Your request has been sent to the admin. You will be notified once it is approved.';
+                            break;
+                        case 2: //Approved
+                            $status = strtolower($paymentApprovalStatus['statusName']);
+                            switch ($paymentApprovalStatus['statusID']) {
+                                case 1: //Pending
+                                    $statusTitle = 'Your reservation has been approved.';
+                                    if ($paymentMethod === 'GCash') {
+                                        $statusSubtitle = 'You may now proceed with the down payment via GCash.';
+                                    } elseif ($paymentMethod === 'Cash' && $bookingType === 'Resort') {
+                                        $statusSubtitle = 'Please proceed on your scheduled swimming date and complete the payment on that day.';
+                                    } else {
+                                        $statusSubtitle = "You may now proceed to the resort to make your downpayment.";
+                                    }
+
+
+                                    break;
+                                case 2: //Rejected
+                                    $statusTitle = 'Payment was declined';
+                                    $statusSubtitle = 'Please check the payment details and try again, or contact the admin for assistance.';
+                                    break;
+                            }
+                            switch ($paymentStatus['paymentStatusID']) {
+                                case 2: //Partially Paid
+                                    $statusTitle = "Payment approved successfully.";
+                                    $statusSubtitle = "We have received and reviewed your payment. The service you booked is now reserved. Thank you!";
+                                    break;
+                                case 3: //Fully Paid
+                                    $statusTitle = "Payment done successfully.";
+                                    $statusSubtitle = "Thank you! We have received your full payment. You may now enjoy your stay at the resort.";
+                                    break;
+                            }
+                            break;
+                        case 3: //Rejected
+                            $statusTitle = 'Booking Rejected';
+                            $statusSubtitle = 'We regret to inform you that your reservation has been rejected. Please contact us for more details.';
+                            break;
+                        case 4: //Cancelled
+                            $statusTitle = 'Booking Cancelled';
+                            $statusSubtitle = 'You have cancelled your reservation. If this was a mistake or you wish to rebook, please contact us.';
+                            break;
+                        case 5: //Done
+                            $status = strtolower($paymentStatus['statusName']);
+                            switch ($paymentStatus['statusID']) {
+                                case 3: //Fully Paid
+                                    $statusTitle = 'Booking Completed';
+                                    $statusSubtitle = 'Thank you for staying with us! Your booking is fully paid and successfully completed. We hope you had a wonderful time.';
+                                    break;
+                            }
+                            break;
+                        case 6: //Expired
+                            $statusTitle = "Expired Booking";
+                            $statusSubtitle = "Sorry. The scheduled time for this booking has passed.";
+                            break;
+                    }
+
 
                     if (!empty($customPackageID)) {
-                        $serviceID = isset($row['serviceID']) ? $row['serviceID'] : '';
-                        $foodItemID = isset($row['foodItemID']) ? $row['foodItemID'] : '';
-                        $totalPax = intval($row['guestCount']) . ' people' ?? 1 . ' person';
+                        $eventType = $row['eventType'] ?? null;
+                        $foodItemID = isset($row['foodItemID']) ? $row['foodItemID'] : null;
+                        $totalPax = $guestCount . ' people' ?? 1 . ' person';
                         $cardHeader = "Type of Event";
                         $eventType = $row['eventType'];
-                        $serviceType = $row['serviceType'];
+                        $additionalServicePrice = floatval($row['additionalServicePrice']);
+
+                        $downpaymentNotes[] = 'Any additional services offered by our business partners require separate approval and are not included in the reservation unless specifically requested and confirmed.';
+                        $downpaymentNotes[] = 'The displayed price on the summary is only rough estimate. The price can change depending on the customer\'s discussions with the admin.';
                         if (!empty($serviceID)) {
                             if ($serviceType === 'Resort') {
-                                $serviceVenue = $row['RServiceName'] ?? 'none';
+                                $services[] = $venue = $row['RServiceName'] ?? 'none';
+                                $venuePrice = $row['venuePricing'] ?? 0;
+                                $serviceIDs[] = $row['resortServiceID'];
                             } elseif ($serviceType === 'Partnership') {
-                                $category = $row['partnerTypeDescription'] ?? 'N/A';
-                                $name = $row['PBName'] ?? '';
+                                $partnerServicePrice = isset($row['PBPrice']) ? floatval($row['PBPrice']) : null;
+                                $services[]  = $serviceName = $row['PBName'] ?? 'N/A';
+                                $partnerServiceID = $row['partnershipServiceID'] ?? null;
+                                $category = $row['category'] ?? null;
 
-                                $partnerServiceList[$category][] = $name;
+                                if ($partnerServiceID !== null) {
+                                    $partnerServiceList[$category][$serviceName] = $partnerServicePrice;
+                                }
                             }
                         }
                         if (!empty($foodItemID)) {
+                            $services[]  = 'Catering with drinks & dessert';
                             $category = $row['foodCategory'];
                             $name = $row['foodName'];
-
+                            $foodID = $row['foodItemID'];
                             $foodList[$category][] = $name;
+                            $foodPriceTotal = floatval($row['totalFoodPrice']);
+                            $pricePerHead = (int) $row['price'];
                         }
                     } else {
-                        $serviceID = $row['serviceID'];
-                        $serviceType = $row['serviceType'];
-                        $pax = $row['guestCount'];
-
                         $downpaymentNotes[] = 'Wait for the approval before paying the downpayment.';
                         $downpaymentNotes[] = 'Your booking is considered confirmed only after the downpayment is received and proof of payment verified';
                         $downpaymentNotes[] = 'You can check the payment due date by clicking the "Make a Down Payment" button';
 
-                        if ($bookingType === 'Resort') {
-                            $downpaymentNotes[] = 'Required to pay for 1 cottage/room for reservation';
+                        if ($serviceType !== 'Event') {
+                            $totalPax =  ($adultCount > 0 ? "{$adultCount}" . ($adultCount === 1 ? ' adult' : ' adults') : '') .
+                                ($kidCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidCount}" . ($kidCount === 1 ? ' child' : 'childs') : '') .
+                                ($toddlerCount > 0 ? (($adultCount > 0 || $kidCount > 0) ? ' & ' : '') . "{$toddlerCount}" . ($toddlerCount === 1 ? ' toddler' : 'toddlers') : '');
                         }
-
-                        if ($bookingType === 'Hotel') {
-                            $downpaymentNotes[] = 'Please pay for the down payment amount for the approval of your booking
-                            withinseven (7) business days.';
-                        }
-
                         if ($serviceType === 'Resort') {
                             $services[] = $row['RServiceName'];
-                            $totalPax = ($adultCount > 0 ? "{$adultCount} Adults" : '') .
-                                ($kidsCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidsCount} Kids" : '') .
-                                ($toddlerCount > 0 ? (($adultCount > 0 || $kidsCount > 0) ? ' & ' : '') . "{$toddlerCount} toddlers" : '');
+                            $serviceIDs[] = $row['resortServiceID'];
                         }
-
                         if ($serviceType === 'Entrance') {
-                            $tourType = $row['tourType'];
                             $cardHeader = "Type of Tour";
-
-                            if ($row['ERCategory'] === "Kids") {
-                                $kidsCount = $row['guests'];
-                            } elseif ($row['ERCategory'] === "Adult") {
-                                $adultCount = $row['guests'];
-                            }
-
-                            $totalPax =  ($adultCount > 0 ? "{$adultCount} Adults" : '') .
-                                ($kidsCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidsCount} Kids" : '') .
-                                ($toddlerCount > 0 ? (($adultCount > 0 || $kidsCount > 0) ? ' & ' : '') . "{$toddlerCount} toddlers" : '');
+                            $tourType = $row['tourType'];
                         }
-                    }
-
-                    if ($bookingStatusName === 'Pending') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
-                        $statusTitle = "Your reservation is pending for approval";
-                        $statusSubtitle = 'Your request has been sent to the admin. Please wait for the approval of
-                    your reservation.';
-                    } elseif ($bookingStatusName === 'Rejected') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
-                        $statusTitle = "Booking Rejected!";
-                        $statusSubtitle = "We regret to inform you that your reservation has been rejected. Please contact us for more details.";
-                    } elseif ($bookingStatusName === 'Cancelled') {
-                        $status = strtolower($bookingStatusName) ?? null;
-                        $statusTitle = "Booking Cancelled";
-                        $statusSubtitle = "You have cancelled your reservation. If this was a mistake or you wish to rebook, please contact us.";
-                    } elseif ($bookingStatusName === 'Expired') {
-                        $status = strtolower($bookingStatusName) ?? null;
-                        $statusTitle = "Expired Booking";
-                        $statusSubtitle = "Sorry. The scheduled time for this booking has passed.";
-                    } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Rejected') {
-                        $status = strtolower($paymentApprovalStatusName) ?? null;
-                        $statusTitle = "Payment Rejected";
-                        $statusSubtitle = "Your reservation was approved, but the submitted payment was rejected. Please check the payment details and try again, or contact the admin for assistance.";
-                    } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Pending') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
-                        $statusTitle = "Your reservation has been approved.";
-                        if ($paymentMethod === 'GCash') {
-                            $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed with the down payment via GCash.";
-                        } elseif ($paymentMethod === 'Cash') {
-                            if ($bookingType === 'Resort') {
-                                $statusSubtitle = "Your reservation has been approved by the admin. Please proceed on your scheduled swimming date and complete the payment on that day.";
-                            } else {
-                                $statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed to the resort to make your downpayment.";
-                            }
-                        }
-                    } elseif ($paymentApprovalStatusName === 'Approved' && $paymentStatusName === 'Partially Paid') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
-                        $statusTitle = "Payment approved successfully.";
-                        $statusSubtitle = "We have received and reviewed your payment. The service you booked is now reserved. Thank you!";
-                    } elseif ($paymentApprovalStatusName === 'Approved' && $paymentStatusName === 'Fully Paid') {
-                        $status = strtolower($bookingStatusName) ?? NUll;
-                        $statusTitle = "Payment done successfully.";
-                        $statusSubtitle = "Thank you! We have received your full payment. You may now enjoy your stay at the resort.";
-                    } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Done' && $paymentStatusName === 'Fully Paid') {
-                        $statusTitle = "Booking Completed";
-                        $status = strtolower($bookingStatusName) ?? NUll;
-                        $statusSubtitle = "Thank you for staying with us! Your booking is fully paid and successfully completed. We hope you had a wonderful time.";
-                    }
-
-
-                    if ($finalBill === 0 || !isset($finalBill)) {
-                        $totalBill = $totalCost;
-                    } else {
-                        $totalBill = $finalBill;
                     }
                 }
 
-                //Get the room or cottage
-                $cottageRoom = [];
+                // echo '<pre>';
+                // print_r($services);
+                // echo '</pre>';
+
+                $serviceVenue = [];
 
                 foreach ($services as $service) {
                     if (stripos($service, 'cottage') !== false) {
-                        $serviceVenue = "Cottage";
-                        $cottageRoom[] = $service;
+                        $serviceVenue[] = $service;
                     } elseif (stripos($service, 'room') !== false) {
-                        $serviceVenue = "Room";
-                        $cottageRoom[] = $service;
+                        $serviceVenue[] = $service;
                     } elseif (stripos($service, 'umbrella') !== false) {
-                        $serviceVenue = "Umbrella";
-                        $cottageRoom[] = $service;
+                        $serviceVenue[] = $service;
                     }
                     if (stripos($service, 'Day') !== false) {
                         $tourType = "Day Tour";
@@ -399,20 +449,18 @@ require_once '../../Function/functions.php';
                     }
                 }
             }
-            // echo '<pre>';
-            // print_r($partnerServiceList);
-            // echo '</pre>';
-
             ?>
+
+
 
             <div class="leftStatusContainer">
 
                 <input type="hidden" name="bookingStatus" id="bookingStatus"
-                    value="<?= htmlspecialchars($bookingStatusName) ?>">
+                    value="<?= !empty($bookingStatus['statusName']) ? htmlspecialchars($bookingStatus['statusName']) : '' ?>">
                 <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus"
-                    value="<?= htmlspecialchars($paymentApprovalStatusName) ?>">
+                    value="<?= !empty($paymentApprovalStatus['statusName']) ? htmlspecialchars($paymentApprovalStatus['statusName']) : '' ?>">
                 <input type="hidden" name="paymentStatus" id="paymentStatus"
-                    value="<?= htmlspecialchars($paymentStatusName) ?>">
+                    value="<?= !empty($paymentStatus['statusName']) ?  htmlspecialchars($paymentStatus['statusName']) : '' ?>">
                 <input type="hidden" name="paymentMethod" id="paymentMethod"
                     value="<?= htmlspecialchars($paymentMethod) ?>">
 
@@ -428,11 +476,13 @@ require_once '../../Function/functions.php';
                     <!-- <a href="../bookNow.php" class="btn btn-primary w-100 mt-3" id="newReservationBtn">Make Another
                         Reservation</a> -->
                     <form action="../../Function/receiptPDF.php" method="POST" target="_blank">
-                        <input type="hidden" name="totalCost" value="<?= $totalBill ?>">
+                        <input type="hidden" name="totalCost" value="<?= $finalBill ?>">
                         <input type="hidden" name="name" value="<?= $clientName ?>">
                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                         <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
-                        <input type="hidden" name="services" value="<?= implode(', ', array_unique($services)) ?>">
+                        <?php foreach ($services as $service): ?>
+                            <input type="hidden" name="services[]" value="<?= $service ?>">
+                        <?php endforeach; ?>
                         <button type="submit" class="btn btn-primary w-100 mt-3" name="downloadReceiptBtn" id="downloadReceiptBtn">Download Receipt </button>
                     </form>
                 </div>
@@ -443,7 +493,7 @@ require_once '../../Function/functions.php';
 
                 <div class="firstRow">
                     <div class="clientContainer">
-                        <h6 class="header">Client</h6>
+                        <h6 class="header">Customer Name</h6>
                         <p class="content" id="clientName"><?= htmlspecialchars($clientName) ?></p>
                     </div>
 
@@ -492,10 +542,12 @@ require_once '../../Function/functions.php';
 
                         <li class="list-group-item">
                             <h6 class="cardHeader"> Venue </h6>
-                            <?php if ($bookingType === 'Resort' || $bookingType === 'Hotel') { ?>
-                                <p class="cardContent" id="venue"><?= implode(' & ', array_unique($cottageRoom)) ?></p>
-                            <?php } else { ?>
-                                <p class="cardContent" id="venue"><?= htmlspecialchars($serviceVenue) ?></p>
+                            <?php if ($bookingType === 'Resort' || $bookingType === 'Hotel') {
+                                foreach ($serviceVenue as $venue): ?>
+                                    <p class="cardContent" id="venue"><?= $venue ?></p>
+                                <?php endforeach;
+                            } else { ?>
+                                <p class="cardContent" id="venue"><?= htmlspecialchars($venue) ?></p>
                             <?php } ?>
                         </li>
 
@@ -522,12 +574,7 @@ require_once '../../Function/functions.php';
                                 }
                                 ?>
                             </li>
-                        <?php
-                        } ?>
 
-
-
-                        <?php if ($bookingType === 'Event') { ?>
                             <li class="list-group-item">
                                 <h6 class="cardHeader">Additional Service</h6>
                                 <?php if ($partnerServiceList) { ?>
@@ -543,20 +590,13 @@ require_once '../../Function/functions.php';
                         <?php } else { ?>
                             <li class="list-group-item" id="addOns">
                                 <h6 class="cardHeader">Add Ons</h6>
-                                <p class="cardContent"><?= !empty($addOns) ? htmlspecialchars($addOns) : "None" ?></p>
+                                <p class="cardContent"><?= $additionalServices ?></p>
                             </li>
                         <?php } ?>
 
-                        <!-- <li class="list-group-item">
-                            <h6 class="cardHeader">Request/Notes</h6>
-                            <p class="cardContent" id="request">
-                                <?= !empty($additionalReq) ? htmlspecialchars($additionalReq) : "None" ?>
-                            </p>
-                        </li> -->
-
                         <li class="list-group-item" id="totalAmountSection">
                             <h6 class="cardHeader">Total Amount:</h6>
-                            <h6 class="cardContentBill" id="totalAmount">₱ <?= number_format($totalCost, 2) ?></h6>
+                            <h6 class="cardContentBill" id="originalBill">₱ <?= number_format($originalBill, 2) ?></h6>
                         </li>
 
                         <li class="list-group-item" id="promoSection">
@@ -566,7 +606,7 @@ require_once '../../Function/functions.php';
 
                         <li class="list-group-item" id="totalBillSection">
                             <h6 class="cardHeader">Grand Total:</h6>
-                            <h6 class="cardContentBill" id="totalBill">₱ <?= number_format($totalCost, 2) ?></h6>
+                            <h6 class="cardContentBill" id="grandTotal">₱ <?= number_format($finalBill, 2) ?></h6>
                         </li>
                     </ul>
                 </div>
@@ -624,9 +664,9 @@ require_once '../../Function/functions.php';
 
                         <?php foreach ($partnerServiceList as $category => $items) { ?>
                             <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
-                            <?php foreach ($items as $name) { ?>
+                            <?php foreach ($items as $name => $price) { ?>
                                 <ul>
-                                    <li> <?= htmlspecialchars($name) ?></li>
+                                    <li> <?= htmlspecialchars($name) ?> — ₱<?= number_format($price, 2) ?> </li>
                                 </ul>
                             <?php } ?>
                         <?php } ?>
@@ -639,6 +679,7 @@ require_once '../../Function/functions.php';
             </div>
         </div>
 
+        <!-- Form for payment -->
         <form action="../../Function/Customer/Account/uploadPayment.php" method="POST" enctype="multipart/form-data">
             <div class="modal fade" id="gcashPaymentModal" aria-hidden="true" aria-labelledby="gcashPaymentModal"
                 tabindex="-1">
@@ -687,8 +728,8 @@ require_once '../../Function/functions.php';
         const paymentApprovalStatus = document.getElementById("paymentApprovalStatus").value;
         const paymentMethod = document.getElementById("paymentMethod").value;
 
-        console.log("Booking Stat: " + bookingStatus);
-        console.log("payment App Stat" + paymentApprovalStatus);
+        // console.log("Booking Stat: " + bookingStatus);
+        // console.log("payment App Stat" + paymentApprovalStatus);
         if (bookingStatus === "Pending" && paymentApprovalStatus === '') {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
         } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && paymentStatus === "Unpaid") {

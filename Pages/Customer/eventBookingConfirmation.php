@@ -190,7 +190,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <header>
         <div class="backToSelection" id="backToSelection">
-            <a href="eventBooking.php" class="btn"><img src="../../Assets/Images/Icon/back-button.png"
+            <a href="eventBooking.php" class="btn"><img src="../../Assets/Images/Icon/arrowBtnBlue.png"
                     alt="Back Button Image"></a>
         </div>
         <div class="titleContainer">
@@ -307,15 +307,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
         <?php
-
-        $getPricingID = $conn->prepare("SELECT * FROM `foodpricing` WHERE 1");
+        $chargeType = 'Food';
+        $pricingType = 'Per Head';
+        $getPricingID = $conn->prepare("SELECT pricingID, price FROM `servicepricing` WHERE chargeType = ? AND pricingType = ?");
+        $getPricingID->bind_param('ss',  $chargeType, $pricingType);
         if ($getPricingID->execute()) {
             $result =  $getPricingID->get_result();
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
 
                 $pricingID = intval($row['pricingID']);
-                $pricePerHead = (float) $row['pricePerHead'];
+                $pricePerHead = (float) $row['price'];
             }
         }
 

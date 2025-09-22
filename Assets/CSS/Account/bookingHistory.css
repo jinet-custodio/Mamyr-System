@@ -263,8 +263,8 @@ label {
 }
 
 .btn-red {
-  background-color: red;
-  border: 1px solid red;
+  background-color: red !important;
+  border: 1px solid red !important;
   color: rgb(255, 255, 255);
 }
 

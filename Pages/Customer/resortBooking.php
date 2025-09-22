@@ -74,10 +74,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 <body id="resort-page">
 
     <!-- Resort Booking -->
-    <form action="confirmBooking.php" method="POST">
+    <form action="confirmBooking.php" method="POST" id="resortBookingForm">
         <div class="resort" id="resort">
             <button type="button" class="backToSelection btn btn-light" id="backToSelection">
-                <img src="../../Assets/Images/Icon/arrow.png" alt="back button" />
+                <img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="back button" />
             </button>
             <div class="titleContainer">
                 <h4 class="resortTitle" id="resortTitle">RESORT BOOKING</h4>
@@ -433,17 +433,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- Calendar -->
     <script>
         const calIcon = document.getElementById("calendarIcon");
-
-
         //resort calendar
         flatpickr('#resortBookingDate', {
             minDate: new Date().fp_incr(1),
             dateFormat: "Y-m-d"
         });
-
-        //  calIcon.addEventListener('click', function(event) {
-        //      resortBookingDate.click()
-        //  });
     </script>
 
     <!-- Fetch Info -->
@@ -454,8 +448,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             ?>;
         const addOnsServicesSession = <?= isset($_SESSION['resortFormData']['addOnsServices']) ? json_encode($_SESSION['resortFormData']['addOnsServices']) : '[]' ?>;
 
-        const roomSelectionSession = <?= isset($_SESSION['resortFormData']['roomSelections']) ? json_encode($_SESSION['resortFormData']['roomSelections']) : '[]' ?>;
-        // console.log(cottageSelectionsSession);
+        const roomSelectionSession = <?= isset($_SESSION['resortFormData']['roomOptions']) ? json_encode($_SESSION['resortFormData']['roomOptions']) : '[]' ?>;
+        // console.log(roomSelectionSession);
         document.addEventListener("DOMContentLoaded", function() {
             const dateInput = document.getElementById('resortBookingDate');
             const form = document.querySelector('form');
@@ -552,13 +546,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                     function getRooms() {
                         roomSection.style.display = 'block';
-                        //  roomLabel.innerHTML = "Available Rooms"
-                        //  const defaultOption = document.createElement('option');
-                        //  defaultOption.value = "";
-                        //  defaultOption.disabled = true;
-                        //  defaultOption.selected = true;
-                        //  defaultOption.textContent = "Please select a room";
-                        //  roomsContainer.appendChild(defaultOption);
 
                         data.rooms.forEach(room => {
                             const wrapper = document.createElement('div');
@@ -643,7 +630,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 startDate.style.border = '1px solid rgb(223, 226, 230)';
             }
 
-            console.log("startDate.value at DOMContentLoaded:", startDate?.value);
+            // console.log("startDate.value at DOMContentLoaded:", startDate?.value);
 
         });
 
@@ -672,45 +659,87 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
         bookRatesBTN.addEventListener("click", function() {
+            // e.preventDefault();
 
             let totalCapacity = 0;
+            const totalPax = getTotalPax();
 
             const cottageSelected = document.querySelectorAll('input[name="cottageOptions[]"]:checked');
             cottageSelected.forEach(item => {
                 totalCapacity += parseInt(item.dataset.capacity) || 0;
-
             });
 
+            let roomSelectedCount = 0;
+            let roomTotalCapacity = 0;
             const roomSelected = document.querySelectorAll('input[name="roomOptions[]"]:checked');
             roomSelected.forEach(item => {
-                totalCapacity += parseInt(item.dataset.capacity) || 0;
+                roomTotalCapacity += parseInt(item.dataset.capacity) || 0;
+                roomSelectedCount++;
             });
-            if (getTotalPax() === 0) {
+
+            let isValid = true;
+            if (tourSelect.value === 'Overnight' && roomSelectedCount === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops!',
+                    text: 'Room is required. Please select a room(s).',
+                });
+                isValid = false;
+            }
+
+            if (totalPax === 0) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Oops',
                     text: 'Please enter the number of guests.',
-
                 });
-                bookRatesBTN.type = 'button';
-            } else if (totalCapacity === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops',
-                    text: 'Select a cottage(s) or room(s)',
-                });
-                bookRatesBTN.type = 'button';
-            } else if (getTotalPax() <= totalCapacity) {
-                bookRatesBTN.type = 'submit';
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops',
-                    text: 'The number of guests exceeds the capacity of the selected cottage(s) or room(s). Please adjust your selection.',
-                });
-                bookRatesBTN.type = 'button';
+                isValid = false;
             }
-        })
+
+            if (tourSelect.value === 'Night' || tourSelect.value === 'Day') {
+                if (totalCapacity === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops',
+                        text: 'Select a cottage(s) or room(s)',
+                    });
+                    isValid = false;
+                }
+                if (totalPax > totalCapacity) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops',
+                        text: 'The number of guests exceeds the capacity of the selected cottage(s) or room(s). Please adjust your selection.',
+                    });
+                    isValid = false;
+                }
+            }
+
+            bookRatesBTN.type = isValid ? 'submit' : 'button';
+        });
+    </script>
+
+
+    <script>
+        // * For Messages Popup
+
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+
+        switch (paramValue) {
+            case 'errorBooking':
+                Swal.fire({
+                    icon: 'error',
+                    text: 'An error occurred. Please try again.',
+                    title: 'Oops'
+                })
+                break;
+            default:
+                const url = new URLSearchParams(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+                break;
+        }
     </script>
 
 
