@@ -43,6 +43,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <title>Mamyr - Rates and Hotel Rooms</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/ratesAndHotelRooms.css">
+    <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -59,7 +60,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
 
         <!-- Account Icon on the Left -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
             <?php
             $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);

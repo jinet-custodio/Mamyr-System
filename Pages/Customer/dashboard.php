@@ -78,7 +78,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half">
 
         <input type="hidden" id="userRole" value="<?= $userRole ?>">
         <!-- Account Icon on the Left -->

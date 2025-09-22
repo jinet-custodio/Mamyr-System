@@ -30,9 +30,9 @@
   font-size: 1.5vw;
 }
 
-#navbar-half .nav-link {
+#navbar-half .nav-link,
+#navbar-half #logOutBtn {
   color: white !important;
-  background-color: transparent !important;
 }
 
 #navbar-half.scrolled.dropdown-menu a {
@@ -106,6 +106,10 @@
 }
 
 #navbar.scrolled {
+  background-color: white;
+}
+
+#navbar-half2.scrolled {
   background-color: white;
 }
 
