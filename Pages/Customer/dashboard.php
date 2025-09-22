@@ -334,22 +334,24 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 events: '../../Function/fetchUserBookings.php',
+                eventsSet: function(events) {
+                    console.log('Fetched events:', events);
+                    events.forEach(event => {
+                        console.log(`Title: ${event.title}, Start: ${event.startStr}`);
+                    });
+                },
                 eventClick: function(info) {
                     window.location.href = "/Pages/Customer/Account/bookingHistory.php";
                 },
                 eventDidMount: function(info) {
                     if (info.event.allDay) {
-                        const dateStr = info.event.startStr; // e.g. "2025-07-15"
+                        const dateStr = info.event.startStr;
                         const dayCell = document.querySelector(`.fc-daygrid-day[data-date="${dateStr}"]`);
-
                         if (dayCell) {
-                            // Base color
                             let baseColor = info.event.backgroundColor || info.event.extendedProps.color || '#dc3545';
                             dayCell.style.backgroundColor = baseColor;
                             dayCell.style.color = '#000';
                         }
-
-                        // Hide the small event block if you only want background color
                         if (info.el) {
                             info.el.style.display = 'none';
                         }
@@ -357,12 +359,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 }
             });
 
-
             calendar.render();
         });
     </script>
-
-    <script src="../../Assets/JS/scrollNavbg.js"></script>
+    <script src="../../Assets/JS/scrollNavbg.js">
+    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
 

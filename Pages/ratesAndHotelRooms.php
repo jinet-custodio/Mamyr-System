@@ -104,7 +104,7 @@ require '../Config/dbcon.php';
 
             <div class="rates" id="rates" style="display: none;">
                 <div class="backToSelection" id="backToSelection">
-                    <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+                    <i class="fa-solid fa-arrow-left" style="color: #121212;" onclick="backToSelection()"></i>
                 </div>
                 <div class="titleContainer">
                     <h4 class="title">Our Rates</h4>
@@ -335,7 +335,7 @@ require '../Config/dbcon.php';
 
             <div class="hotelRooms" id="hotelRooms" style="display: none;">
                 <div class="backToSelection" id="backToSelection">
-                    <img src="../../Assets/Images/Icon/back-button.png" alt="back button" onclick="backToSelection()">
+                    <i class="fa-solid fa-arrow-left" style="color: #121212;" onclick="backToSelection()"></i>
                 </div>
                 <div class="titleContainer" id="hotelTitle">
                     <h4 class="title">Hotel Rooms</h4>
@@ -533,6 +533,7 @@ require '../Config/dbcon.php';
                 top: 0,
                 behavior: 'smooth'
             });
+
         });
     </script>
 
