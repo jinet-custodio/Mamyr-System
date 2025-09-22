@@ -1,0 +1,256 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Alkatra";
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins";
+  text-decoration: none;
+}
+
+#event-page {
+  background-image: unset;
+  background-color: rgb(255, 220, 174) !important;
+  margin: 0;
+  padding: 0;
+}
+
+.eventTitle {
+  font-size: clamp(3.5vw, 3.2vw, 3vw);
+  font-family: "Lora";
+  color: #000000;
+  font-weight: bold;
+  margin-top: 6vw;
+}
+
+.backToSelection {
+  position: absolute;
+  margin: -1rem 0 0 4rem;
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 2vw;
+}
+
+.card {
+  margin-top: 1rem;
+  height: 90vh;
+  padding: 2rem;
+}
+
+#eventBookingCard {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 6vw);
+  gap: 8px;
+}
+
+.eventInfoLabel {
+  font-family: "Poppins";
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 0.7vw;
+  display: block;
+  text-align: center;
+}
+
+.secondColumn {
+  display: grid;
+  width: 100%;
+}
+
+.noteContainer {
+  margin-top: 1.5vw;
+  width: 98%;
+}
+
+.note {
+  color: #ff0000;
+  text-align: justify;
+}
+
+#foodSelectionCard,
+#additionalServicesCard {
+  padding: 0 !important;
+  margin: auto !important;
+}
+
+#foodSelectionCard,
+#additionalServicesCard {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: center;
+  height: 56vh !important;
+  margin-top: 1vw !important;
+}
+
+#foodSelectionCover,
+#additionalServicesCover {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+#additionalServicesCover {
+  width: 51vh;
+  aspect-ratio: 1;
+}
+
+.fw-bold {
+  /* margin-top: -2vw; */
+  font-family: "Poppins";
+}
+
+#calendar {
+  width: 85%;
+  height: 80vh;
+  margin: auto;
+  margin-top: 1vw !important;
+  background-color: #fffefe;
+  border-radius: 2.5rem;
+}
+
+.fc table {
+  font-size: 18px;
+}
+
+.fc-scrollgrid,
+td {
+  /* border: 1px solid red !important; */
+  border: none;
+}
+
+.fc a {
+  text-decoration: none !important;
+  color: black;
+}
+
+.fc-header-toolbar {
+  /* margin-top: 1rem; */
+  height: 5rem !important;
+  padding: 2rem;
+  border-top-left-radius: 3vw;
+  border-top-right-radius: 3vw;
+  margin-bottom: 0;
+  background-color: #00bbff;
+}
+
+.fc-button {
+  background-color: #ffffff !important;
+  color: rgb(0, 0, 0) !important;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.fc-toolbar-title {
+  color: #fff;
+}
+
+.fc-daygrid-day-events {
+  display: none;
+}
+
+.fc .fc-button-primary:disabled {
+  background-color: #fdfdfd !important;
+  opacity: 1 !important;
+}
+
+.fc .fc-button-primary:disabled:hover {
+  background-color: #f2d8b7 !important;
+  opacity: 1 !important;
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+  margin-left: 1vw;
+}
+
+#event-page
+  .fc-direction-ltr
+  .fc-button-group
+  > .fc-button:not(:first-child):hover {
+  background-color: #91c6ff !important;
+  color: #fff !important;
+}
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+  margin-left: 1vw;
+}
+
+#event-page
+  .fc-direction-ltr
+  .fc-button-group
+  > .fc-button:not(:last-child):hover {
+  background-color: #91c6ff !important;
+  color: #fff !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #5dccf5 !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  color: #fff !important;
+}
+
+/* di ko sure 'to test nalang pag may event na nalagay*/
+.fc-event {
+  background-color: #28a745;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.fc-event:hover {
+  background-color: #218838;
+}
+
+#eventContainer {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-rows: repeat(2, 1fr) !important;
+  gap: 8px !important;
+  margin-top: 2vw !important;
+}
+
+.modal-body {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-rows: repeat(3, 1fr) !important;
+  gap: 10px;
+}
+
+.eventButton-container {
+  display: flex;
+  justify-content: center;
+  margin-top: -15vw !important;
+}
+
+.eventBox {
+  display: flex;
+}
+
+.fa-solid {
+  position: absolute;
+  left: 45%;
+  top: 32.1%;
+}

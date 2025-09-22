@@ -32,16 +32,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-
-// echo '<pre>';
-// print_r($_SESSION['resortFormData']);
-// echo '</pre>';
-
-// echo '<pre>SESSION cottageSelections: ';
-// var_dump($_SESSION['resortFormData']['cottageSelections'] ?? 'Not Set');
-// echo '</pre>';
-
-
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +43,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <title>Mamyr - Book Now</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/Customer/bookNow.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Customer/resortBooking.css">
 
     <!-- Bootstrap Link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
@@ -80,7 +70,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="back button" />
             </button>
             <div class="titleContainer">
-                <h4 class="resortTitle" id="resortTitle">RESORT BOOKING</h4>
+                <h4 class="resortTitle text-center" id="resortTitle">RESORT BOOKING</h4>
             </div>
 
             <div class="container-fluid">
@@ -735,9 +725,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 })
                 break;
             default:
-                const url = new URLSearchParams(window.location);
-                url.search = '';
-                history.replaceState({}, document.title, url.toString());
+                const cleanUrl = window.location.origin + window.location.pathname;
+                history.replaceState({}, document.title, cleanUrl);
                 break;
         }
     </script>
