@@ -82,7 +82,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
     <title>Mamyr - Book Now</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/Customer/bookNow.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Customer/eventBooking.css">
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -111,7 +111,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 <img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="back button" onclick="backToSelection()">
             </div>
             <div class="titleContainer">
-                <h4 class="eventTitle" id="eventTitle">EVENT BOOKING</h4>
+                <h4 class="eventTitle text-center" id="eventTitle">EVENT BOOKING</h4>
             </div>
 
             <div class="container-fluid event-container" id="eventContainer">

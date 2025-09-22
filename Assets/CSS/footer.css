@@ -146,7 +146,7 @@ footer {
   }
 
   .socialIcons {
-    margin: 1vw auto;
+    margin: 0.5vw auto;
   }
 
   .socialIcons a {
@@ -156,7 +156,7 @@ footer {
 
   .socialIcons a i {
     font-size: 3.5vw;
-    margin: clamp(0.8vw, 1vw, 1.1vw) !important;
+    margin: clamp(0.2vw, 0.1vw, 0.3vw) !important;
   }
 }
 
