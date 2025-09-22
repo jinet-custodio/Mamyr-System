@@ -12,6 +12,7 @@ if (!isset($_SESSION['userID'])) {
 $userID = intval($_SESSION['userID']);
 
 $partiallyPaid = 2;
+$fullyPaid = 3;
 $fetchUserBookingQuery = $conn->prepare("SELECT 
                                     cb.bookingID,
                                     b.startDate,
@@ -28,9 +29,9 @@ $fetchUserBookingQuery = $conn->prepare("SELECT
                                 LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
                                 LEFT JOIN bookingservice bs ON bs.bookingID = b.bookingID
                                 LEFT JOIN service s ON bs.serviceID = s.serviceID
-                                WHERE cb.paymentStatus = ? AND u.userID = ?
+                                WHERE cb.paymentStatus = ? OR cb.paymentStatus = ? AND u.userID = ?
                             ");
-$fetchUserBookingQuery->bind_param("ii", $userID, $partiallyPaid);
+$fetchUserBookingQuery->bind_param("iii", $fullyPaid, $partiallyPaid, $userID);
 $fetchUserBookingQuery->execute();
 $result = $fetchUserBookingQuery->get_result();
 $eventsByDate = [];
