@@ -110,6 +110,9 @@ unset($_SESSION['formData']);
 
     <!-- For Resort Booking -->
     <?php
+    $cottageChoices = [];
+    $roomChoices = [];
+    $entertainmentChoices = [];
     if (isset($_POST['bookRates'])) {
         $scheduledDate = mysqli_real_escape_string($conn, $_POST['resortBookingDate']);
         $tourSelections = mysqli_real_escape_string($conn, $_POST['tourSelections']);
@@ -361,8 +364,8 @@ unset($_SESSION['formData']);
     <!-- For Hotel Booking -->
 
     <?php
+    $selectedHotels = [];
     if (isset($_POST['hotelBooking'])) {
-
         $hoursSelected = "22 hours";
         $arrivalTime = mysqli_real_escape_string($conn, $_POST['arrivalTime']);
         $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['checkInDate']);
@@ -465,7 +468,8 @@ unset($_SESSION['formData']);
     <form action="../../Function/Booking/<?= htmlspecialchars($bookingFunctionPage) ?>" method="POST">
 
         <div class="page-header">
-            <a href="<?= $page ?>" class="btn"><img src="../../Assets/Images/Icon/back-button.png"
+
+            <a href="<?= $page ?>" class="btn"><img src="../../Assets/Images/Icon/arrowBtnBlue.png"
                     alt="Back Button Image"></a>
 
             <h2 class="page-header-title">Booking Summary</h2>
@@ -621,6 +625,25 @@ unset($_SESSION['formData']);
 
         </div>
 
+        <!--  Get mamyr contacts -->
+
+        <?php
+        $find = 'ContactNum';
+        $getContactQuery = $conn->prepare("SELECT resortInfoName, resortInfoDetail FROM resortinfo WHERE resortInfoName = ?");
+        $getContactQuery->bind_param('s', $find);
+        if (!$getContactQuery->execute()) {
+            error_log('Error: ' . $getContactQuery->error);
+        }
+
+        $result = $getContactQuery->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+
+            $contactNumber = $row['resortInfoDetail'] ?? 'Not Stated';
+        }
+
+        ?>
+
         <div class="note">
             <?php if ($bookingType === "Resort") { ?>
                 <ul>
@@ -642,7 +665,7 @@ unset($_SESSION['formData']);
                     </li>
                     <li>
                         <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        For any questions, please contact <strong>0900-000-0000</strong>.
+                        For any questions, please contact <strong><?= $contactNumber ?></strong>.
                     </li>
 
                 </ul>
@@ -654,7 +677,7 @@ unset($_SESSION['formData']);
                     </li>
                     <li>
                         <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        For any questions, contact <strong>0900-000-0000</strong>.
+                        For any questions, contact <strong><?= $contactNumber ?></strong>.
                     </li>
                 </ul>
             <?php } ?>

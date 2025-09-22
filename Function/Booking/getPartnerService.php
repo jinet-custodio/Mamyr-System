@@ -13,6 +13,8 @@
         try {
             $getPartnerService = $conn->prepare(
                 "SELECT 
+                    u.phoneNumber,
+                    p.businessEmail,
                     ppt.partnerTypeID, 
                     p.companyName,
                     ps.partnershipServiceID, 
@@ -21,16 +23,18 @@
                     pt.partnerTypeDescription AS eventCategory
                 FROM `partnership` p
                 LEFT JOIN `partnershipservice` ps ON p.partnershipID = ps.partnershipID
-                LEFT JOIN `partnershiptype` pt ON p.partnerTypeID = pt.partnerTypeID
+                LEFT JOIN  `user` u ON p.userID = u.userID
                 LEFT JOIN `partnership_partnertype` ppt ON p.partnershipID = ppt.partnershipID
+                LEFT JOIN `partnershiptype` pt ON ppt.partnerTypeID = pt.partnerTypeID
                 WHERE ps.PSAvailabilityID = ?
-                AND NOT EXISTS (
+                AND NOT EXISTS 
+                (
                     SELECT 1 
                     FROM `serviceunavailabledate` sud 
                     WHERE sud.partnershipServiceID = ps.partnershipServiceID
                     AND (? < sud.unavailableEndDate 
                     AND ? > sud.unavailableStartDate)
-                             )
+                )
                 GROUP BY partnerTypeID"
             );
             if (!$getPartnerService) {

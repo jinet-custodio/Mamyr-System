@@ -43,6 +43,9 @@ CREATE TABLE admin (
     FOREIGN KEY (userID) REFERENCES user(userID)
 );
 
+ALTER TABLE admin
+ADD COLUMN fullName VArchar(50)
+AFTER userID 
 
 CREATE TABLE partnership (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,
@@ -64,6 +67,7 @@ CREATE TABLE partnership (
 CREATE TABLE partnership_partnertype(
     partnershipID INT NOT NULL,
     partnerTypeID INT NOT NULL,
+    isApproved Boolean DEFAULT false,   
     PRIMARY KEY (partnershipID, partnerTypeID),
     
     FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID) ON DELETE CASCADE,

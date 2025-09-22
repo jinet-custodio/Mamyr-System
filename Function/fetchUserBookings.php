@@ -9,43 +9,41 @@ if (!isset($_SESSION['userID'])) {
     exit;
 }
 
-$userID = $_SESSION['userID'];
+$userID = intval($_SESSION['userID']);
 
-$sql = "
-    SELECT 
-        cb.bookingID,
-        b.startDate,
-        b.bookingType,
-        u.firstName,
-        u.lastName,
-        s.resortServiceID,
-        s.entranceRateID,
-        cp.customPackageID,
-        s.partnershipServiceID
-    FROM confirmedbookings cb
-    INNER JOIN bookings b ON cb.bookingID = b.bookingID
-    INNER JOIN users u ON b.userID = u.userID
-    LEFT JOIN custompackages cp ON b.customPackageID = cp.customPackageID
-    LEFT JOIN bookingservices bs ON bs.bookingID = b.bookingID
-    LEFT JOIN services s ON bs.serviceID = s.serviceID
-    WHERE cb.paymentStatus = 2 AND u.userID = ?
-";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $userID);
-$stmt->execute();
-$result = $stmt->get_result();
+$partiallyPaid = 2;
+$fetchUserBookingQuery = $conn->prepare("SELECT 
+                                    cb.bookingID,
+                                    b.startDate,
+                                    b.bookingType,
+                                    u.firstName,
+                                    u.lastName,
+                                    s.resortServiceID,
+                                    s.entranceRateID,
+                                    cp.customPackageID,
+                                    s.partnershipServiceID
+                                FROM confirmedbooking cb
+                                INNER JOIN booking b ON cb.bookingID = b.bookingID
+                                INNER JOIN user u ON b.userID = u.userID
+                                LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+                                LEFT JOIN bookingservice bs ON bs.bookingID = b.bookingID
+                                LEFT JOIN service s ON bs.serviceID = s.serviceID
+                                WHERE cb.paymentStatus = ? AND u.userID = ?
+                            ");
+$fetchUserBookingQuery->bind_param("ii", $userID, $partiallyPaid);
+$fetchUserBookingQuery->execute();
+$result = $fetchUserBookingQuery->get_result();
 $eventsByDate = [];
 
 while ($row = $result->fetch_assoc()) {
     $date = $row['startDate'];
     $type = $row['bookingType'];
-    
+
     if (isset($eventsByDate[$date])) {
         continue;
     }
 
-    $color = '#dc3545'; 
+    $color = '#dc3545';
 
     if ($type == 'Hotel') {
         $color = '#ffc107'; // Yellow

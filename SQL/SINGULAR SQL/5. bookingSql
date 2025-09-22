@@ -1,3 +1,5 @@
+Use mamyr;
+
 CREATE TABLE booking (
     bookingID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
@@ -17,13 +19,12 @@ CREATE TABLE booking (
     downpayment DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     bookingStatus INT DEFAULT 1,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    approvedBy INT,
+    approvedBy VARCHAR(25) DEFAUL NULL ,
     approvedDate DATETIME NULL,
 
     FOREIGN KEY (userID) REFERENCES user(userID),
     FOREIGN KEY (bookingStatus) REFERENCES status(statusID),
-    FOREIGN KEY (customPackageID) REFERENCES custompackage(customPackageID),
-    FOREIGN KEY (approvedBy) REFERENCES admin(adminID)
+    FOREIGN KEY (customPackageID) REFERENCES custompackage(customPackageID)
 );
 
 ALTER TABLE booking

@@ -19,8 +19,6 @@ function multiplication($a, $b)
     return $a * $b;
 }
 
-unset($_SESSION['resortFormData']);
-
 if (isset($_POST['bookRates'])) {
     $serviceIDs = [];
     $servicePrices = [];
@@ -257,6 +255,15 @@ if (isset($_POST['bookRates'])) {
                 $paymentDueDate = $scheduledStartDate;
             }
 
+            $approvedBy = 'System';
+            $today = date('Y-m-d h:i:s');
+            $updateApproval = $conn->prepare("UPDATE `booking` SET `approvedBy`= ?,`approvedDate`= ? WHERE bookingID = ?");
+            $updateApproval->bind_param('ssi', $approvedBy, $today, $bookingID);
+            if (!$updateApproval->execute()) {
+                $conn->rollback();
+                throw new Exception('Error :' . $insertConfirmedBooking->error);
+            }
+            $updateApproval->close();
             $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedbooking(bookingID, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate )
                 VALUES(?,?,?,?,?)");
             $insertConfirmedBooking->bind_param("iddss", $bookingID,  $totalCost, $totalCost, $downpaymentDueDate, $paymentDueDate);
@@ -279,16 +286,9 @@ if (isset($_POST['bookRates'])) {
                 }
             }
             $insertUnavailableService->close();
-            // $occupiedID = 2;
-            // $updateAvailabilityID = $conn->prepare("UPDATE resortamenity SET RSAvailabilityID = ? WHERE resortServiceID = ?");
-            // if (!empty($resortServiceIDs)) {
-            //     for ($i = 0; $i < count($resortServiceIDs); $i++) {
-            //         $resortServiceID = $resortServiceIDs[$i];
-            //         $updateAvailabilityID->bind_param("ii", $occupiedID, $resortServiceID);
-            //         $updateAvailabilityID->execute();
-            //     }
-            // }
         }
+
+        unset($_SESSION['resortFormData']);
         $conn->commit();
         header('Location: ../../Pages/Customer/bookNow.php?action=success');
         exit();

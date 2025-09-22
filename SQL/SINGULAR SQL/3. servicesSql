@@ -3,24 +3,20 @@ USE mamyr;
 CREATE TABLE partnershipservice (
     partnershipServiceID INT PRIMARY KEY AUTO_INCREMENT,
     partnershipID INT NOT NULL,
+    partnerTypeID INT NOT NULL,
     PBName VARCHAR(200) NOT NULL,
     PBPrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     PBDescription TEXT,
     PBcapacity INT DEFAULT 1,
-    PSstatus INT DEFAULT 1,
+    PBduration varchar(255) NULL,
     PSAvailabilityID INT DEFAULT 1,
-    approvedBy INT,
-    approvedDate DATETIME NULL,
+    createdAT DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID),
     FOREIGN KEY (PSAvailabilityID) REFERENCES serviceavailability(availabilityID),
-    FOREIGN KEY (PSstatus) REFERENCES status(statusID),
-    FOREIGN KEY (approvedBy) REFERENCES admin(adminID)
+    FOREIGN KEY (partnerTypeID) REFERENCES partnershiptype(partnerTypeID) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-ALTER TABLE partnershipservice
-ADD COLUMN PBduration varchar(255) NULL
-AFTER PBcapacity;
 
 CREATE TABLE resortamenity (
     resortServiceID INT PRIMARY KEY AUTO_INCREMENT,
@@ -73,13 +69,19 @@ CREATE TABLE menuitem (
     FOREIGN KEY (availabilityID) REFERENCES serviceavailability(availabilityID)
 );
 
-CREATE TABLE foodpricing (
+CREATE TABLE servicePricing (
     pricingID INT PRIMARY KEY AUTO_INCREMENT,
-    pricePerHead DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    ageGroup ENUM('Adult', 'Child', 'Both') NOT NULL DEFAULT 'Adult',
+    
+    pricingType varchar(50) NOT NULL, -- e.g. per head, per hour
+    price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    
+    chargeType VARCHAR(50) NOT NULL, -- e.g. "Food", "Extra Hour", "Overnight"
+    
+    ageGroup ENUM('Adult', 'Child', 'Both') DEFAULT NULL,   
     notes TEXT,
-    createdAT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 
 CREATE TABLE custompackage (
@@ -93,7 +95,7 @@ CREATE TABLE custompackage (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (userID) REFERENCES user(userID),
-    FOREIGN KEY (foodPricingPerHeadID) REFERENCES foodpricing(pricingID)
+    FOREIGN KEY (foodPricingPerHeadID) REFERENCES servicePricing(pricingID)
 );
 
 ALTER TABLE custompackage 

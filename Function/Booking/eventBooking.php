@@ -112,7 +112,7 @@ if (isset($_POST['eventBook'])) {
     $conn->begin_transaction();
     try {
         //insert the total of all
-        $insertCustomPackage = $conn->prepare("INSERT INTO `custompackage`(`userID`, `eventTypeID`, `customPackageTotalPrice`, `customPackageNotes`, `foodPricingPerHead`, `totalFoodPrice`, `venuePricing`, `additionalServicePrice`) VALUES (?,?,?,?,?,?,?,?)");
+        $insertCustomPackage = $conn->prepare("INSERT INTO `custompackage`(`userID`, `eventTypeID`, `customPackageTotalPrice`, `customPackageNotes`, `foodPricingPerHeadID`, `totalFoodPrice`, `venuePricing`, `additionalServicePrice`) VALUES (?,?,?,?,?,?,?,?)");
         $insertCustomPackage->bind_param('iidsiddd', $userID, $eventCategoryID,  $totalCost, $additionalRequest, $pricingID, $totalFoodPrice, $venuePrice, $additionalServicePrice);
 
         if (!$insertCustomPackage->execute()) {
@@ -123,7 +123,6 @@ if (isset($_POST['eventBook'])) {
 
         //insert each item
         $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `foodItemID`, `servicePrice`) VALUES (?,?,?)");
-
 
         foreach ($foodList as $foodItemID) {
             error_log('Food ID: ' . $foodItemID);
@@ -152,11 +151,22 @@ if (isset($_POST['eventBook'])) {
         }
 
         //insert into booking
-        $insertBooking = $conn->prepare("INSERT INTO `booking`(`userID`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `additionalCharge`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $insertBooking->bind_param("isisissssddds", $userID, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDate, $endDate, $paymentMethod, $additionalCharge, $totalCost, $downpayment, $arrivalTime);
+        $insertBooking = $conn->prepare("INSERT INTO `booking`(`userID`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+        $insertBooking->bind_param("isisissssdds", $userID, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDate, $endDate, $paymentMethod, $totalCost, $downpayment, $arrivalTime);
         if (!$insertBooking->execute()) {
             $conn->rollback();
             error_log("Error: " . $insertBooking->error);
+        }
+
+        $bookingID = $insertBooking->insert_id;
+
+        $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`) VALUES (?,?)");
+        foreach ($partnerIDs as $partershipServiceID) {
+            $insertBPavailedService->bind_param('ii', $partershipServiceID, $bookingID);
+            if (!$insertBPavailedService->execute()) {
+                $conn->rollback();
+                error_log("Error: " . $insertBooking->error);
+            }
         }
 
         $conn->commit();
