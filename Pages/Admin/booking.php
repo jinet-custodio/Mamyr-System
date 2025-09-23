@@ -115,9 +115,9 @@ if (isset($_SESSION['error'])) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -250,20 +250,20 @@ if (isset($_SESSION['error'])) {
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $notifMessage):
+                    <ul class="list-group list-group-flush ">
+                        <?php foreach ($notificationsArray as $index => $notifMessage):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                                <li class="list-group-item mb-2 notification-item"
-                                    data-id="<?= htmlspecialchars($notificationID) ?>"
-                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($notifMessage) ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <li class="list-group-item mb-2 notification-item"
+                            data-id="<?= htmlspecialchars($notificationID) ?>"
+                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                            <?= htmlspecialchars($notifMessage) ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
                     <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
+                    <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -277,7 +277,7 @@ if (isset($_SESSION['error'])) {
         <div class="card" style="width: 80%;">
 
             <div class="btnContainer">
-                <a href="createBooking.php" class="btn btn-primary">Create</a>
+                <a href="createBooking.php" class="btn btn-primary">Add</a>
             </div>
 
             <table class="table table-striped" id="bookingTable">
@@ -385,27 +385,27 @@ if (isset($_SESSION['error'])) {
 
 
                     ?>
-                            <tr>
-                                <td><?= htmlspecialchars($formattedBookingID) ?></td>
-                                <td><?= htmlspecialchars($name) ?></td>
-                                <td><?= htmlspecialchars($bookingType) ?>&nbsp;Booking</td>
-                                <td><?= $checkIn ?></td>
-                                <td>
-                                    <a class="btn btn-<?= $class ?> w-100">
-                                        <?= $status ?>
-                                    </a>
-                                </td>
-                                <td>
-                                    <form action="viewBooking.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="button" value="booking">
-                                        <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
-                                        <input type="hidden" name="bookingStatus"
-                                            value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($paymentApprovalStatusName)  ?>">
-                                        <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                                        <button type="submit" class="btn btn-primary w-75">View</button>
-                                    </form>
-                                </td>
-                            </tr>
+                    <tr>
+                        <td><?= htmlspecialchars($formattedBookingID) ?></td>
+                        <td><?= htmlspecialchars($name) ?></td>
+                        <td><?= htmlspecialchars($bookingType) ?>&nbsp;Booking</td>
+                        <td><?= $checkIn ?></td>
+                        <td>
+                            <a class="btn btn-<?= $class ?> w-100">
+                                <?= $status ?>
+                            </a>
+                        </td>
+                        <td>
+                            <form action="viewBooking.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="button" value="booking">
+                                <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                                <input type="hidden" name="bookingStatus"
+                                    value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($paymentApprovalStatusName)  ?>">
+                                <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                <button type="submit" class="btn btn-primary w-75">View</button>
+                            </form>
+                        </td>
+                    </tr>
                     <?php
                         }
                     }
@@ -423,75 +423,75 @@ if (isset($_SESSION['error'])) {
     </script>
     <!-- Responsive Navbar -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const icons = document.querySelectorAll('.navbar-icon');
-            const navbarUL = document.getElementById('navUL');
-            const nav = document.getElementById('navbar');
-            const title = document.getElementById('hiddenTitle');
+    document.addEventListener("DOMContentLoaded", function() {
+        const icons = document.querySelectorAll('.navbar-icon');
+        const navbarUL = document.getElementById('navUL');
+        const nav = document.getElementById('navbar');
+        const title = document.getElementById('hiddenTitle');
 
-            function handleResponsiveNavbar() {
-                if (window.innerWidth <= 991.98) {
-                    navbarUL.classList.remove('w-100');
-                    navbarUL.style.position = "fixed";
-                    nav.style.margin = "0";
-                    nav.style.maxWidth = "100%";
-                    icons.forEach(icon => {
-                        icon.style.display = "none";
-                    })
-                    title.style.display = "block";
+        function handleResponsiveNavbar() {
+            if (window.innerWidth <= 991.98) {
+                navbarUL.classList.remove('w-100');
+                navbarUL.style.position = "fixed";
+                nav.style.margin = "0";
+                nav.style.maxWidth = "100%";
+                icons.forEach(icon => {
+                    icon.style.display = "none";
+                })
+                title.style.display = "block";
 
-                } else {
-                    navbarUL.classList.add('w-100');
-                    navbarUL.style.position = "relative";
-                    nav.style.margin = "20px auto";
-                    nav.style.maxWidth = "80vw";
-                    icons.forEach(icon => {
-                        icon.style.display = "block";
-                    })
-                    title.style.display = "none";
-                }
+            } else {
+                navbarUL.classList.add('w-100');
+                navbarUL.style.position = "relative";
+                nav.style.margin = "20px auto";
+                nav.style.maxWidth = "80vw";
+                icons.forEach(icon => {
+                    icon.style.display = "block";
+                })
+                title.style.display = "none";
             }
+        }
 
-            handleResponsiveNavbar();
-            window.addEventListener('resize', handleResponsiveNavbar);
-        });
+        handleResponsiveNavbar();
+        window.addEventListener('resize', handleResponsiveNavbar);
+    });
     </script>
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
     <!-- Jquery Link -->
@@ -501,65 +501,65 @@ if (isset($_SESSION['error'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#bookingTable').DataTable({
-                columnDefs: [{
-                        width: '10%',
-                        targets: 0
-                    },
-                    {
-                        width: '15%',
-                        targets: 2
-                    },
-                    {
-                        width: '15%',
-                        targets: 4
-                    },
-                ],
-            });
+    $(document).ready(function() {
+        $('#bookingTable').DataTable({
+            columnDefs: [{
+                    width: '10%',
+                    targets: 0
+                },
+                {
+                    width: '15%',
+                    targets: 2
+                },
+                {
+                    width: '15%',
+                    targets: 4
+                },
+            ],
         });
+    });
     </script>
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        <?php if (!empty($message)): ?>
-            Swal.fire({
-                icon: '<?= $status ?>',
-                title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
-                text: '<?= $message ?>'
-            });
-        <?php endif; ?>
+    <?php if (!empty($message)): ?>
+    Swal.fire({
+        icon: '<?= $status ?>',
+        title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
+        text: '<?= $message ?>'
+    });
+    <?php endif; ?>
 
 
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
 
-        if (paramValue === "success") {
-            Swal.fire({
-                title: "Booking Approved!",
-                text: "The booking has been successfully approved.",
-                icon: 'success',
-            });
-        } else if (paramValue === "error") {
-            Swal.fire({
-                title: "Action Failed!",
-                text: "The booking could not be approved or rejected. Please try again later.",
-                icon: 'error',
-            });
-        } else if (paramValue === 'rejected') {
-            Swal.fire({
-                title: "Booking Rejected!",
-                text: "The booking has been successfully rejected.",
-                icon: 'success',
-            });
-        }
+    if (paramValue === "success") {
+        Swal.fire({
+            title: "Booking Approved!",
+            text: "The booking has been successfully approved.",
+            icon: 'success',
+        });
+    } else if (paramValue === "error") {
+        Swal.fire({
+            title: "Action Failed!",
+            text: "The booking could not be approved or rejected. Please try again later.",
+            icon: 'error',
+        });
+    } else if (paramValue === 'rejected') {
+        Swal.fire({
+            title: "Booking Rejected!",
+            text: "The booking has been successfully rejected.",
+            icon: 'success',
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(windows.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString)
-        }
+    if (paramValue) {
+        const url = new URL(windows.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString)
+    }
     </script>
 </body>
 
