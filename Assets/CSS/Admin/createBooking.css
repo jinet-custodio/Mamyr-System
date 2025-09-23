@@ -16,37 +16,6 @@
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
-body {
-  background: #a1c8c7 !important;
-}
-
-/* .button-container {
-  padding: 1rem;
-} */
-
-.container {
-  /* border: 1px solid black !important; */
-  background-color: #ffff;
-  display: block;
-  border-radius: 2vw;
-  margin: 0 auto !important;
-  margin-top: 1vw !important;
-  margin-bottom: 1vw !important;
-}
-
-.button-container {
-  height: 3vw;
-  display: flex;
-  align-items: flex-end;
-
-}
-
-
-/* resort css */
-#resortInfoContainer {
-  height: 100%;
-}
-
 .backBtnContainer {
   margin: 1vw;
 }
@@ -59,89 +28,142 @@ body {
 .title {
   text-align: center;
   font-family: "Poppins Black";
-  color: #ffffff;
-  -webkit-text-stroke: 1px black;
+  color: black;
   letter-spacing: 0.5px;
 }
 
-/* resort css */
+.container-fluid {
+  background-color: #f5f5f5;
+  width: 98% !important;
+  border-radius: 20px;
+  padding: 2rem;
+}
 
-.inputLabel {
+.topSection {
+  display: flex;
+  gap: 5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftSide,
+.bsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftSide,
+.rightSide {
+  padding: 1rem;
+}
+
+.infoLabelContainer,
+.bsLabelContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+label {
+  font-size: 18px;
+  font-family: "Lora";
+}
+
+.infoInput,
+.bsInput {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 50%;
+  height: 10%;
+  margin-right: 90px;
+}
+
+.date-picker {
+  width: 100%;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper input {
+  font-size: 16px;
+  border-radius: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.input-wrapper i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0.5rem;
+  pointer-events: none;
+  color: #666;
+}
+
+.bsTitle {
   text-align: center;
-  margin: 0.5rem 0 0.5rem 0 !important;
-}
-
-
-
-/* resort css */
-
-/* hotel css */
-#hotelInfoContainer {
-  background-color: #78aeff;
-}
-
-.hotelLabel, .resortLabel, .eventLabel {
-  font-family: "Poppins";
-  text-transform: uppercase;
+  font-size: 25px;
   font-weight: bold;
-  font-size: 25.5px;
-  text-align: center;
-  margin-top: 1.5vw;
+  margin-bottom: 2rem;
 }
 
+.bsButtons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
 
-.additional-info-container {
-  margin: 0;
+button {
+  width: 30%;
+}
+
+.addButton {
   margin-top: 0.5rem;
-
-  li {
-    text-transform: none !important;
-    font-size: 13px;
-    margin: 2px;
-    list-style: none;
-  }
 }
 
-/* .button-container {
-  padding: 1vw;
-} */
-
-.custom-btn {
-  background-color: #ffff !important;
-  color: #0d6dfc !important;
-  /* margin-top: 1.5vw; */
-
-  &:hover {
-    background-color: #0d6dfc !important;
-    color: #ffff !important;
-  }
-}
-/* hotel css */
-
-/* event css */
-.eventForm {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+#addBooking {
+  display: block;
+  margin: auto;
 }
 
-.eventTypeLabel,
-.dateLabel,
-.startLabel,
-.endLabel,
-.guestLabel,
-.venueLabel,
-.packageLabel {
-  text-align: center;
-  margin: 0.5rem 0 0.5rem 0;
+thead {
+  font-family: "Lora";
 }
 
-.timeOfEventContainer,
-.peopleVenueContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+tbody {
+  font-family: "Poppins";
 }
-/* event css */
+
+td,
+th {
+  text-align: center !important;
+}
+
+th {
+  background-color: #91d2f2 !important;
+}
+
+.dt-column-title {
+  display: inline-block;
+  width: 2vw !important;
+}
+
+.dt-info,
+.dt-layout-row {
+  font-family: "Lora";
+  text-transform: capitalize;
+}
+
+.tableContainer {
+  margin-top: 3rem;
+}
+
+.dt-paging-button {
+  width: 10%;
+}
