@@ -109,6 +109,10 @@
   background-color: white;
 }
 
+#navbar.scrolled a {
+  color: black !important;
+}
+
 #navbar-half2.scrolled {
   background-color: white;
 }

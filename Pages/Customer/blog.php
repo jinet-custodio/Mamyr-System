@@ -135,7 +135,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <?php if ($userRole !== 2): ?>
                             <a class="nav-link" href="dashboard.php"> Home</a>
@@ -489,7 +489,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <?php include 'footer.php'; ?>
     </div>
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
 
 
