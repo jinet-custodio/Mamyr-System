@@ -23,18 +23,16 @@ session_start();
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
-
-
-
     <div class="back-icon-container">
         <a href="../index.php">
-            <img src="../Assets/Images/Icon/backbtn_black.png" alt="Go back" class="backArrow">
-
+            <i class="fa-solid fa-arrow-left backArrow" style="color: #121212;"></i>
         </a>
     </div>
     <h2 class="title">Business Partner Sign Up </h2>
@@ -172,8 +170,7 @@ session_start();
             <div class="labelAndArrow">
                 <div class="back-icon-container-login">
                     <a href="busPartnerRegister.php?page=basicInfo">
-                        <img src="../Assets/Images/Icon/arrow.png" style="height: 4vw" alt="Go back" class="backArrow"
-                            id="emailBackArrow">
+                        <i class="fa-solid fa-arrow-left backArrow" style="color: #121212;" id="emailBackArrow"></i>
                     </a>
                 </div>
                 <h5 class="accountCreationLabel m-6">Create an Account</h5>
