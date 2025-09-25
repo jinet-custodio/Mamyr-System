@@ -10,8 +10,8 @@ checkSessionTimeout($timeout = 3600);
 
 require '../../Function/functions.php';
 
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
+$userID = $_SESSION['userID'] ?? '';
+$userRole = $_SESSION['userRole'] ?? '';
 
 
 if (isset($_SESSION['userID'])) {
@@ -74,12 +74,12 @@ if (isset($_POST['bookingID'])) {
             <?php
             $button = !empty($_POST['button']) ? mysqli_real_escape_string($conn, $_POST['button']) : 'payment';
             if ($button === 'booking') { ?>
-                <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+                <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/arrowBtnWhite.png" alt="Back Button"></a>
             <?php   } elseif ($button === 'payment') {  ?>
                 <form action="viewPayments.php" method="POST" style="display:inline;">
                     <input type="hidden" name="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
                     <button type="submit" class="btn btn-primary back">
-                        <img src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button">
+                        <img src="../../Assets/Images/Icon/arrowBtnWhite.png" alt="Back Button">
                     </button>
                 </form>
             <?php   } ?>
@@ -135,30 +135,11 @@ if (isset($_POST['bookingID'])) {
                     </div>
 
                     <div class="button-container" id="button-container">
-                        <button type="submit" class="btn btn-primary approveReject" name="approveBtn">Approve</button>
+                        <button type="button" class="btn btn-primary approveReject" data-bs-toggle="modal" data-bs-target="#approvalModal">Approve</button>
                         <button type="button" class="btn btn-danger approveReject" data-bs-toggle="modal" data-bs-target="#rejectionModal">Reject</button>
                     </div>
                 </div>
 
-                <!--Rejection Modal -->
-                <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="rejectionModalLabel">Rejection</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>State the reason for rejection</p>
-                                <textarea rows="4" cols="50" name="rejectionReason" id="rejectionReason"></textarea>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Get booking information to the database -->
                 <?php
@@ -189,7 +170,9 @@ if (isset($_POST['bookingID'])) {
                                                     cp.venuePricing, 
                                                     cp.additionalServicePrice, 
 
-                                                    fp.pricePerHead, 
+                                                    sp.price, 
+                                                    sp.chargeType,
+                                                    sp.pricingType,
 
                                                     mi.foodItemID,
                                                     mi.foodName,
@@ -231,8 +214,8 @@ if (isset($_POST['bookingID'])) {
 
                                                 LEFT JOIN custompackage cp 
                                                     ON b.customPackageID = cp.customPackageID
-                                                LEFT JOIN foodpricing fp 
-                                                    ON cp.foodPricingPerHeadID = fp.pricingID
+                                                LEFT JOIN servicepricing sp 
+                                                    ON cp.foodPricingPerHeadID = sp.pricingID
                                                 LEFT JOIN custompackageitem cpi 
                                                     ON cp.customPackageID = cpi.customPackageID
                                                 LEFT JOIN eventcategory ec 
@@ -396,12 +379,12 @@ if (isset($_POST['bookingID'])) {
                                 $foodID = $row['foodItemID'];
                                 $foodList[$category] = $name;
                                 $foodPriceTotal = floatval($row['totalFoodPrice']);
-                                $pricePerHead = (int) $row['pricePerHead'];
+                                $pricePerHead = (int) $row['price'];
                             }
                         } else {
                             if ($serviceType !== 'Event') {
                                 $totalPax =  ($adultCount > 0 ? "{$adultCount}" . ($adultCount === 1 ? ' adult' : ' adults') : '') .
-                                    ($kidCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidCount}" . ($kidCount === 1 ? ' child' : 'childs') : '') .
+                                    ($kidCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidCount}" . ($kidCount === 1 ? ' child' : ' childs') : '') .
                                     ($toddlerCount > 0 ? (($adultCount > 0 || $kidCount > 0) ? ' & ' : '') . "{$toddlerCount}" . ($toddlerCount === 1 ? ' toddler' : 'toddlers') : '');
                             }
                             if ($serviceType === 'Resort') {
@@ -412,12 +395,95 @@ if (isset($_POST['bookingID'])) {
                                 $tourType = $row['tourType'];
                             }
                         }
+
+
+                        $finalBill = ($finalBill === 0) ?  $originalBill : $finalBill;
                         // echo '<pre>';
                         // print_r($partnerServices);
                         // echo '</pre>';
                     }
                 }
                 ?>
+
+                <!--Rejection Modal -->
+                <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rejectionModalLabel">Rejection</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>State the reason for rejection</p>
+                                <textarea rows="4" cols="50" name="rejectionReason" id="rejectionReason"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approval Modal -->
+                <div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rejectionModalLabel">Booking Approval</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- // TODO -> Pakipalitan yung notes na they can change the final bill or the discount amount (pacheck grammary na lang) try nyo dark red -->
+                                <p>
+                                    Note: You can either change the total amount or apply a discount, not both.
+                                </p>
+                                <div class="input-container">
+                                    <label for="finalBill">Final Bill:</label>
+                                    <input type="text" placeholder="e.g. 100" name="finalBill" min="0" value="₱<?= number_format($finalBill, 2) ?>" readonly>
+                                </div>
+                                <label>
+                                    <input type="radio" name="adjustOption" value="editBill" id="change-final-bill">
+                                    Edit Total Amount
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="adjustOption" value="discount" id="offer-discount">
+                                    Enable discount
+                                </label>
+                                <!-- // TODO -> Palitan nyo label pag di madali intindihin -->
+                                <div class="input-container">
+                                    <label for="editedFinalBill">Enter Final Bill:</label>
+                                    <input type="number" placeholder="e.g. 100" id="editedFinalBill" name="editedFinalBill" min="0" readonly>
+                                </div>
+                                <div class="input-container">
+                                    <label for="discountAmount">Enter discount amount:</label>
+                                    <input type="number" placeholder="e.g. 100" id="discountAmount" name="discountAmount" min="0" readonly>
+                                </div>
+
+                                <label>
+                                    <input type="checkbox" name="applyAdditionalCharge" id="add-charge">
+                                    Enable Additional Charge
+                                </label>
+
+                                <div class="input-container">
+                                    <label for="additionalCharge">Additional Charge:</label>
+                                    <input type="number" placeholder="e.g. 100" id="additionalCharge" name="additionalCharge" min="0" readonly>
+                                </div>
+
+                                <div class="input-container">
+                                    <label for="approvalNotes">Approval Notes</label>
+                                    <textarea rows="4" cols="50" name="approvalNotes" maxlength="50" id="approvalNotes" placeholder=" Optional"></textarea>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Display the information -->
                 <input type="hidden" name="customPackageID" id="customPackageID" value="<?= $customPackageID ?>">
@@ -427,7 +493,7 @@ if (isset($_POST['bookingID'])) {
                             <div class="info-container" id="booking-info-container">
                                 <label for="bookingType" class="info-label">Booking Type</label>
                                 <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
-                                <input type="text" class="form-control inputDetail" name="bookingType"
+                                <input type="text" class="form-control inputDetail"
                                     value="<?= $bookingType ?> Booking" readonly>
                             </div>
                             <?php if ($bookingType === 'Resort') { ?>
@@ -507,7 +573,7 @@ if (isset($_POST['bookingID'])) {
                                                 <p><?= htmlspecialchars($category) ?></p>
                                                 <ul>
                                                     <li>
-                                                        <input type="text" name="foodPrice[<?= htmlspecialchars($foodID) ?>]" class="form-control inputDetail" value="<?= htmlspecialchars($name) ?>">
+                                                        <input type="text" name="foodIDs[<?= htmlspecialchars($foodID) ?>]" class="form-control inputDetail" value="<?= htmlspecialchars($name) ?>">
                                                     </li>
                                                 </ul>
                                             </div>
@@ -586,7 +652,7 @@ if (isset($_POST['bookingID'])) {
                                         value="₱<?= number_format($pricePerHead, 2) ?>" readonly>
                                 </div>
                                 <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="foodPriceTotal" class="mt-2">Food Price</label>
+                                    <label for="foodPriceTotal" class="mt-2">Total Food Price</label>
                                     <input type="text" class="form-control inputDetail w-50" name="foodPriceTotal" id="foodPriceTotal"
                                         value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
                                 </div>
@@ -600,24 +666,24 @@ if (isset($_POST['bookingID'])) {
 
                             <div class="info-container paymentInfo" id="payment-info">
                                 <label for="additionalCharge" class="mt-2">Additional Charge</label>
-                                <input type="text" class="form-control inputDetail w-50" name="additionalCharge" id="additionalCharge"
+                                <input type="text" class="form-control inputDetail w-50"
                                     value="₱<?= number_format($additionalCharge, 2) ?>" readonly>
                             </div>
 
                             <?php if ($bookingStatusName === 'Approved') { ?>
                                 <div class="info-container paymentInfo" id="payment-info">
                                     <label for="paymentDue" class="mt-2">Payment Due Date</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="paymentDue" id="paymentDue"
-                                        value="<?= $paymentDueDate ?>">
+                                    <input type="text" class="form-control inputDetail w-50"
+                                        value="<?= $paymentDueDate ?>" readonly>
                                 </div>
                                 <div class="info-container paymentInfo" id="payment-info">
                                     <label for="userBalance" class="mt-2">User Balance</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="userBalance" id="userBalance"
+                                    <input type="text" class="form-control inputDetail w-50"
                                         value="₱<?= number_format($userBalance, 2) ?>" readonly>
                                 </div>
                                 <div class="info-container paymentInfo" id="payment-info">
                                     <label for="amountPaid" class="mt-2">Amount Paid</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="amountPaid" id="amountPaid"
+                                    <input type="text" class="form-control inputDetail w-50"
                                         value="₱<?= number_format($amountPaid, 2) ?>" readonly>
                                 </div>
                             <?php } ?>
@@ -629,28 +695,28 @@ if (isset($_POST['bookingID'])) {
                             </div>
                             <div class="info-container paymentInfo" id="payment-info">
                                 <label for="originalBill" class="mt-2">Original Bill</label>
-                                <input type="text" class="form-control inputDetail w-50" name="originalBill" id="originalBill"
+                                <input type="text" class="form-control inputDetail w-50" id="originalBill"
                                     value="₱<?= number_format($originalBill, 2) ?>" readonly>
                             </div>
 
                             <div class="info-container paymentInfo" id="payment-info">
                                 <label for="discountAmount" class="mt-2">Discount </label>
                                 <div class="discountform">
-                                    <input type="text" class="form-control inputDetail w-100" name="discountAmount"
-                                        id="discountAmount" value="₱<?= number_format($discount, 2) ?>">
-                                    <i class="fa-solid fa-circle-info"
+                                    <input type="text" class="form-control inputDetail w-100"
+                                        value="₱<?= number_format($discount, 2) ?>" readonly>
+                                    <!-- <i class="fa-solid fa-circle-info"
                                         id="discountTooltip"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="right"
                                         title="You can change the discount amount manually."
                                         style="color: #74C0FC;">
-                                    </i>
+                                    </i> -->
                                 </div>
                             </div>
                             <div class="info-container paymentInfo" id="payment-info">
                                 <label for="finalBill" class="mt-2">Final Bill</label>
                                 <input type="text" class="form-control inputDetail w-50" name="finalBill" id="finalBill"
-                                    value="₱<?= number_format($originalBill, 2) ?>" readonly>
+                                    value="₱<?= number_format($finalBill, 2) ?>" readonly>
                             </div>
 
                         </div>
@@ -660,7 +726,7 @@ if (isset($_POST['bookingID'])) {
                             <div class="info-container notes">
                                 <label for="req" class="info-label mt-2 mb-2">Additional Request(s)/Note(s)</label>
                                 <textarea class="form-control inputDetail" rows="4" name="req"
-                                    id="req"><?= $additionalReq ?></textarea>
+                                    id="req" readonly><?= $additionalReq ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -689,8 +755,8 @@ if (isset($_POST['bookingID'])) {
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
 
-    <!-- Show discount tooltip and border -->
-    <script>
+    <!--//* Show discount tooltip and border -->
+    <!-- <script>
         window.addEventListener('DOMContentLoaded', () => {
             const discountForm = document.querySelector('.discountform');
             const tooltipTrigger = document.getElementById('discountTooltip');
@@ -708,10 +774,64 @@ if (isset($_POST['bookingID'])) {
                 tooltip.hide();
             }, 3000);
         });
+    </script> -->
+
+    <!-- Allow adding discount and changing final bill -->
+    <script>
+        const changeFinalBillRadio = document.getElementById('change-final-bill');
+        const offerDiscountRadio = document.getElementById('offer-discount');
+        const finalBillInput = document.getElementById('editedFinalBill');
+        const discountInput = document.getElementById('discountAmount');
+        const addChargeCheckBox = document.getElementById('add-charge');
+        const additionalChargeInput = document.getElementById('additionalCharge');
+
+        function resetInputs() {
+            finalBillInput.readOnly = true;
+            finalBillInput.style.border = '';
+            discountInput.readOnly = true;
+            discountInput.style.border = '';
+        }
+
+        function updateInputs() {
+            resetInputs();
+
+            if (changeFinalBillRadio.checked) {
+                // Enable and highlight final bill input
+                finalBillInput.readOnly = false;
+                finalBillInput.style.border = '1px solid red';
+
+                // Clear discount input
+                discountInput.value = '';
+            } else if (offerDiscountRadio.checked) {
+                // Enable and highlight discount input
+                discountInput.readOnly = false;
+                discountInput.style.border = '1px solid red';
+
+                // Clear final bill input
+                finalBillInput.value = '';
+            }
+        }
+
+        addChargeCheckBox.addEventListener('change', function() {
+            if (addChargeCheckBox.checked) {
+                additionalChargeInput.readOnly = !this.checked;
+                additionalChargeInput.style.border = '1px solid red';
+            } else {
+                additionalChargeInput.value = '';
+                additionalChargeInput.style.border = '1px solid rgb(117, 117, 117)';
+            }
+        })
+
+
+
+        // Listen for changes on both radios
+        changeFinalBillRadio.addEventListener('change', updateInputs);
+        offerDiscountRadio.addEventListener('change', updateInputs);
     </script>
 
 
-    <!-- Hiding buttons -->
+
+    <!--//* Hiding buttons -->
     <script>
         const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
         const bookingStatus = document.getElementById('bookingStatusName').value;
