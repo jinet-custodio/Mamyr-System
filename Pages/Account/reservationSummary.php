@@ -34,9 +34,9 @@ if (isset($_SESSION['userID'])) {
 }
 
 if (isset($_POST['bookingID'])) {
-    $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
+    $bookingID = intval($_POST['bookingID']);
 } elseif (isset($_SESSION['bookingID'])) {
-    $bookingID = mysqli_real_escape_string($conn, $_SESSION['bookingID']);
+    $bookingID = intval($_SESSION['bookingID']);
 }
 
 require_once '../../Function/functions.php';
@@ -73,8 +73,7 @@ require_once '../../Function/functions.php';
         <div class="statusContainer">
             <!-- Get user data -->
             <?php
-            $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
-            $confirmedBookingID = (int) $_POST['confirmedBookingID'];
+            // $confirmedBookingID = (int) $_POST['confirmedBookingID'] ?? $_SESSION['confirmedBookingID'];
             $bookingID = (int) $bookingID;
             // $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
             // $status = mysqli_real_escape_string($conn, $_POST['status']);
@@ -542,13 +541,15 @@ require_once '../../Function/functions.php';
 
                         <li class="list-group-item">
                             <h6 class="cardHeader"> Venue </h6>
-                            <?php if ($bookingType === 'Resort' || $bookingType === 'Hotel') {
-                                foreach ($serviceVenue as $venue): ?>
-                                    <p class="cardContent" id="venue"><?= $venue ?></p>
-                                <?php endforeach;
-                            } else { ?>
-                                <p class="cardContent" id="venue"><?= htmlspecialchars($venue) ?></p>
-                            <?php } ?>
+                            <div class="venues">
+                                <?php if ($bookingType === 'Resort' || $bookingType === 'Hotel') {
+                                    foreach ($serviceVenue as $venue): ?>
+                                        <p class="cardContent" id="venue"><?= $venue ?></p>
+                                    <?php endforeach;
+                                } else { ?>
+                                    <p class="cardContent" id="venue"><?= htmlspecialchars($venue) ?></p>
+                                <?php } ?>
+                            </div>
                         </li>
 
                         <li class="list-group-item">
@@ -696,7 +697,7 @@ require_once '../../Function/functions.php';
                             <img src="<?= $downpaymentImage ?>" alt="Downpayment Image" id="preview"
                                 class="downpaymentPic">
                             <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
-
+                            <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
                             <input type="text" name="paymentDueDate" value="<?= $dueDate ?>">
                             <input type="file" name="downpaymentPic" id="downpaymentPic" hidden>
                             <label for="downpaymentPic" class="custom-file-button btn btn-outline-primary mt-2">
@@ -788,27 +789,20 @@ require_once '../../Function/functions.php';
     <script>
         const param = new URLSearchParams(window.location.search);
         const paramValue = param.get('action');
-        if (paramValue === "downpaymentImageError") {
-            Swal.fire({
-                title: "Oops!",
-                text: "Failed to upload downpayment receipt downpaymentImage",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        } else if (paramValue === "downpaymentImageFailed") {
-            Swal.fire({
-                title: "Oops!",
-                text: "No downpayment downpaymentImage submitted.",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        } else if (paramValue === "downpaymentImageSize") {
+        if (paramValue === "imageSize") {
             Swal.fire({
                 title: "Oops!",
                 text: "File is too large. Maximum allowed size is 64MB.",
                 icon: "warning",
                 confirmButtonText: "Okay",
             });
+        } else if (paramValue === 'error') {
+            Swal.fire({
+                title: 'Oops',
+                text: 'There was an error while processing your request. Please try again later.',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            })
         }
 
 
