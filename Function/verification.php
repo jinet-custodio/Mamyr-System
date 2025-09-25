@@ -75,7 +75,7 @@ if (isset($_POST['verify-btn'])) {
                                 }
 
                                 // Insert into partnerships table
-                                $insertPartner = $conn->prepare("INSERT INTO partnership(userID, validIDImage, partnerAddress, companyName, businessEmail, documentLink)
+                                $insertPartner = $conn->prepare("INSERT INTO partnership(userID, validID, partnerAddress, companyName, businessEmail, documentLink)
                                                     VALUES (?,?,?,?,?,?)");
                                 $insertPartner->bind_param("isssss", $storedUserID, $validIDImage, $partnerAddress, $companyName, $email, $partnerProofLink);
 
@@ -120,6 +120,11 @@ if (isset($_POST['verify-btn'])) {
                                 unset($_SESSION['partnerData']);
                                 $_SESSION['success'] = "Partner has been successfully registered and verified.";
                                 header("Location: ../Pages/register.php");
+
+                                $updateUser->close();
+                                $insertPartner->close();
+                                $changeStatus->close();
+                                $insertNotification->close();
                                 exit;
                             } catch (Exception $e) {
                                 $conn->rollback();
@@ -140,11 +145,6 @@ if (isset($_POST['verify-btn'])) {
                                 header("Location: ../Pages/register.php");
                                 $deletePartnerQuery->close();
                                 exit;
-                            } finally {
-                                $updateUser->close();
-                                $insertPartner->close();
-                                $changeStatus->close();
-                                $insertNotification->close();
                             }
                         } elseif ($action === 'forgot-password') {
                             $_SESSION['email'] = $email;
