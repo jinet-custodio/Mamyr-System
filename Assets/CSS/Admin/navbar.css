@@ -45,7 +45,8 @@
 .navbar {
   font-family: "Lora";
   border-radius: 1vw;
-  max-width: 80vw;
+  max-width: 90% !important;
+  width: 90% !important;
   margin: 20px auto;
   background-color: white;
 }

@@ -73,11 +73,29 @@ body {
   /* border: 1px solid black; */
   display: flex;
   justify-content: center;
+  width: 100% !important;
+  max-width: 100%;
 }
 
 .card {
   padding: 1rem 2rem 0.5rem 2rem;
   margin-bottom: 2rem;
+  width: 90% !important;
+  max-width: 90%;
+}
+
+table {
+  width: 100% !important;
+  max-width: 100%;
+}
+
+#bookingTable_filter,
+#bookingTable_length {
+  margin-bottom: 2vw !important;
+}
+
+.dataTables_scrollBody {
+  margin-top: 0 !important;
 }
 
 label {
@@ -117,7 +135,7 @@ th {
   font-family: "Poppins";
 }
 
-.btn-primary {
+#addBookings {
   float: right;
   width: 16%;
 }
@@ -140,4 +158,130 @@ th {
 .btn-light-green:hover {
   background-color: rgb(58, 112, 10) !important;
   color: white;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+  #addBookings {
+    font-size: clamp(20px, calc(2.1vh + 2px), 24px);
+    width: 20% !important;
+  }
+  thead {
+    font-size: clamp(21px, calc(2.3vh + 2px), 23px);
+  }
+
+  tbody {
+    font-size: clamp(20px, calc(1.9vh + 2px), 23px);
+  }
+  td a.btn-info,
+  td a.btn-success,
+  td a.btn-warning,
+  td a.btn-danger,
+  td a.btn-secondary,
+  td button.btn-primary {
+    font-size: clamp(18px, calc(2vh + 2px), 22px);
+  }
+  #bookingTable_length {
+    margin-bottom: 5vw !important;
+  }
+  #hiddenTitle {
+    font-size: clamp(40px, calc(4vh + 2px), 34px);
+  }
+
+  label,
+  .dataTables_info,
+  .dataTables_paginate {
+    font-size: clamp(20px, calc(2vh + 2px), 24px);
+  }
+
+  label select,
+  label input,
+  a.paginate_button.current {
+    margin: 1vw !important;
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .card {
+    padding: 1.5vw !important;
+  }
+  #bookingTable_filter {
+    margin-bottom: 8vw !important;
+  }
+  #hiddenTitle {
+    font-size: clamp(40px, calc(4vh + 2px), 34px);
+    margin-top: 3vh !important;
+  }
+
+  #addBookings {
+    font-size: clamp(20px, calc(2.1vh + 2px), 24px);
+    width: 30%;
+  }
+  thead {
+    font-size: clamp(18px, calc(2.1vh + 2px), 20px);
+  }
+
+  tbody {
+    font-size: clamp(18px, calc(2.2vh + 2px), 23px);
+  }
+  td a.btn-info,
+  td a.btn-success,
+  td a.btn-warning,
+  td a.btn-danger,
+  td a.btn-secondary,
+  td button.btn-primary {
+    font-size: clamp(18px, calc(1.9vh + 2px), 19px);
+  }
+
+  label,
+  .dataTables_info,
+  .dataTables_paginate {
+    font-size: clamp(20px, calc(2.1vh + 2px), 24px);
+  }
+
+  label select,
+  label input,
+  a.paginate_button.current {
+    margin: 1vw !important;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  #bookingTable_filter {
+    margin-bottom: 8vw !important;
+  }
+  #hiddenTitle {
+    font-size: clamp(40px, calc(4vh + 2px), 34px);
+  }
+
+  #addBookings {
+    font-size: clamp(14px, calc(1.2vh + 2px), 16px);
+    text-align: center;
+    width: 30%;
+  }
+  thead {
+    font-size: clamp(18px, calc(2.3vh + 2px), 16px);
+  }
+
+  tbody {
+    font-size: clamp(13px, calc(1.9vh + 2px), 15px);
+  }
+  td a.btn-info,
+  td a.btn-success,
+  td a.btn-warning,
+  td a.btn-danger,
+  td a.btn-secondary,
+  td button.btn-primary {
+    font-size: clamp(15px, calc(2.1vh + 2px), 13px);
+  }
+
+  label,
+  .dataTables_info,
+  .dataTables_paginate {
+    font-size: clamp(15px, calc(2vh + 2px), 19px);
+  }
+
+  .paginate_button.previous,
+  .paginate_button.next {
+    padding: 2vw !important;
+  }
 }
