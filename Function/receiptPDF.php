@@ -59,16 +59,20 @@ if (isset($_POST['downloadReceiptBtn'])) {
 
     if ($result->num_rows === 0) {
         $amountPaid = 'No payment yet';
+        $storedAmountPaid = 0.00;
+        $storedUserBalance = 0.00;
+        $isPaid = false;
+        $isFullPayment = false;
+        $payment = '0.00';
+    } else {
+        $row = $result->fetch_assoc();
+
+        $storedAmountPaid = floatval($row['amountPaid']) ?? 0.00;
+        $storedUserBalance = floatval($row['userBalance']) ?? 0.00;
     }
 
-    $row = $result->fetch_assoc();
-
-    $storedAmountPaid = floatval($row['amountPaid']);
-    $storedUserBalance = floatval($row['userBalance']);
     // $confirmedFinalBill = floatval($row['confirmedFinalBill']);
-
-
-    if ($storedAmountPaid == 0) {
+    if ($storedAmountPaid == 0.00) {
         $isPaid = false;
         $isFullPayment = false;
         $payment = '0.00';
