@@ -34,20 +34,20 @@ require '../Config/dbcon.php';
             </button>
 
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             AMENITIES
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="../Pages/amenities.php">RESORT AMENITIES</a></li>
+                            <li><a class="dropdown-item " href="amenities.php">RESORT AMENITIES</a></li>
                             <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                            <li><a class="dropdown-item" href="../Pages/events.php">EVENTS</a></li>
+                            <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

@@ -109,8 +109,8 @@ main {
   margin: 0 auto;
 }
 
-.backToSelection img {
-  width: 3.5vw;
+.backToSelection i {
+  font-size: 3.5vw;
 }
 
 .card,
@@ -171,7 +171,7 @@ main {
 
 .rates,
 .hotelRooms {
-  margin-top: 9vw;
+  margin-top: 10vw;
 }
 
 /* entrance */
@@ -206,11 +206,10 @@ main {
 }
 
 .entranceCard {
-  padding: 2vw;
+  padding: 3vw;
   font-size: 1.5vw;
   width: 22vw !important;
-  height: 20vw !important;
-  display: grid !important;
+  display: grid;
   align-items: center;
 }
 
@@ -251,6 +250,8 @@ main {
 .cottages {
   display: flex;
   flex-wrap: wrap;
+  width: 95%;
+  margin: 2vw auto;
   column-gap: 5px;
   row-gap: 2vw;
   padding: 2vw;
@@ -258,14 +259,13 @@ main {
 
 #cottageCard {
   width: 23% !important;
-  height: 65vh !important;
   margin: auto;
   justify-content: center !important;
 }
 
-#cottageDisplayPhoto {
+.cottageDisplayPhoto {
   object-fit: cover;
-  width: 15vw;
+  width: 90% !important;
   padding-top: 1vw;
   aspect-ratio: 1;
   margin: auto;
@@ -274,19 +274,19 @@ main {
 .card-body.description {
   display: flex;
   width: 100%;
-
   flex-direction: column;
   justify-content: center;
   text-align: center;
 }
 
-.card-body.description h2 {
-  font-size: 1.5vw !important;
+.card-body.description h2,
+.card-body.description a {
+  font-size: clamp(2vw, 1.8vw, 1.9vw);
   font-family: "Poppins";
 }
 
 .card-body.description p {
-  font-size: 1.2vw;
+  font-size: clamp(1.4vw, 1.5vw, 1.6vw);
   font-family: "Poppins";
 }
 
@@ -323,7 +323,7 @@ main {
 .videokeDesc {
   text-align: center;
   font-family: "Poppins";
-  font-size: 1.5vw;
+  font-size: clamp(1.7vw, 1.8vw, 1.9vw);
   margin-top: 2vw;
 }
 
@@ -399,7 +399,7 @@ main {
 /* start of hotel code */
 .hotelDescription {
   margin-top: 1vw;
-  font-size: 1.5vw;
+  font-size: clamp(1.5vw, 1.7vw, 1.9vw);
 }
 
 #allrooms {
@@ -428,7 +428,7 @@ main {
 
 .hotelIconWithCaption {
   transition: all 0.3s ease;
-  width: 22%;
+  width: 19%;
 }
 
 .hotelIconContainer {
@@ -436,13 +436,13 @@ main {
   justify-content: space-evenly;
   flex-wrap: wrap;
   margin: 0 auto;
-  width: 50%;
+  width: 80%;
   gap: 1vw;
   padding: 1vw;
 }
 
 .hotelIcon {
-  width: 6vw;
+  width: clamp(8vw, 9vw, 10vw);
 }
 
 .filterBtns button.selected {
@@ -464,7 +464,7 @@ main {
 }
 
 .roomCaption {
-  font-size: 1.2vw;
+  font-size: clamp(1.8vw, 1.5vw, 1.6vw);
   font-family: "Lora";
 }
 
@@ -473,7 +473,7 @@ main {
 }
 
 .availabilityIcons p {
-  font-size: 1.3vw;
+  font-size: clamp(1.3vw, 1.5vw, 1.6vw);
   font-weight: 700;
   font-family: "Lora";
   margin: 0 2vw 0 1vw;
@@ -498,7 +498,7 @@ main {
 }
 
 .hotel {
-  width: 35%;
+  width: 30%;
   flex-wrap: wrap;
   background-color: whitesmoke;
   padding: 0.5vw;
@@ -512,12 +512,26 @@ main {
   margin-bottom: 4vw;
 }
 
+.Description {
+  text-align: center;
+}
+
+.Description h2 {
+  font-size: clamp(2.3vw, 2.4vw, 2.1vw);
+}
+
+.Description p {
+  font-size: clamp(1.6vw, 1.4vw, 1.3vw);
+  margin-bottom: 0.5vw !important;
+}
+
 .ourRooms {
   margin-top: 2vw;
 }
 
 /* end of hotel  code */
 
+/* Back to top button */
 /* Back to top button */
 #backToTopBtn {
   position: fixed;
@@ -529,14 +543,16 @@ main {
   padding: 12px 15px;
   border-radius: 50%;
   text-align: center;
-  font-size: 2.5vw !important;
+  font-size: 3.5vw !important;
   text-decoration: none;
   display: none;
   aspect-ratio: 1 !important;
-  width: 5vw;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
+#backToTopBtn i {
+  margin: 0.5vw;
+}
 #backToTopBtn:hover {
   background-color: #555;
   transform: scale(1.1);
@@ -547,21 +563,94 @@ main {
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
   .selection {
-    margin-top: 5vw;
-    height: 100vh;
+    margin-top: 15vw;
   }
 
-  .backToSelection img {
-    width: 4vw;
+  .card-title {
+    font-size: clamp(3vw, 3.2vw, 3.5vw);
+  }
+
+  #rates {
+    margin-top: 10vh;
+  }
+
+  .backToSelection i {
+    font-size: 4vw;
     border-radius: 50%;
   }
 
   .title {
-    font-size: 4vw;
+    font-size: clamp(4.5vw, 4.3vw, 4.1vw);
+    margin-bottom: 2vw !important;
+  }
+
+  .entranceTitleContainer {
+    padding-top: 0 !important;
   }
 
   .entranceTitle {
-    font-size: 3vw;
+    font-size: clamp(3.9vw, 3.5vw, 3.7vw);
+  }
+
+  .entrance {
+    padding-top: 2vw !important;
+  }
+
+  .entranceFee {
+    margin: 4vw auto;
+    width: 95%;
+  }
+
+  .entrance-card-title {
+    font-size: clamp(26px, calc(1.8vh + 2px), 23px);
+  }
+
+  .cottages {
+    width: 100%;
+  }
+
+  #cottageCard {
+    width: 32% !important;
+    margin: auto;
+    justify-content: center !important;
+    border-radius: 10% !important;
+    padding: 1vw;
+  }
+
+  .card-body.description h2 {
+    font-size: clamp(24px, calc(1.8vh + 2px), 26px);
+  }
+
+  #videokePriceDesc {
+    font-size: clamp(24px, calc(1.6vh + 2px), 20px);
+  }
+
+  .card-body.description p,
+  .card-body.description a {
+    font-size: clamp(20px, calc(1.8vh + 2px), 18px);
+  }
+
+  .videokeDesc {
+    font-size: clamp(27px, calc(1.8vh + 2px), 24px);
+  }
+
+  .card-body.description {
+    margin: 0 auto;
+  }
+
+  .entranceCard {
+    border-radius: 2vw !important;
+    padding: 3vw 2vw;
+    width: 30% !important;
+    margin: 0 !important;
+  }
+
+  .entranceCard span.age {
+    font-size: clamp(20px, calc(1.8vh + 2px), 23px);
+  }
+
+  .cottageDisplayPhoto {
+    width: 80% !important;
   }
 
   .poolTitleContainer {
@@ -572,12 +661,33 @@ main {
     font-size: clamp(12px, calc(1.5vh + 4px), 20px);
   }
 
+  #videokeDescContainer {
+    width: 35%;
+  }
+
+  .singleImg {
+    width: 65%;
+  }
+
+  #videokeDisplayPhoto,
+  #billardsDisplayPhoto,
+  #massageChairDisplayPhoto {
+    width: 90%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+  }
+
   .Description h2 {
-    font-size: clamp(18px, calc(3vh + 4px), 27px);
+    font-size: clamp(26px, calc(3vh + 4px), 30px);
   }
 
   .Description {
-    font-size: clamp(12px, calc(1.5vh + 4px), 18px);
+    text-align: center;
+  }
+
+  .Description p {
+    font-size: clamp(23px, calc(1.9vh + 4px), 21px);
+    margin-bottom: 0.5vw !important;
   }
 
   .singleImg img {
@@ -589,26 +699,122 @@ main {
     font-size: 1.8vw;
   }
 
+  .availabilityIcons {
+    width: 80%;
+  }
+
+  input {
+    font-size: clamp(2.1vw, 2.3vw, 2.5vw) !important;
+    width: 100%;
+  }
   .hotelIconsContainer {
-    width: 45%;
+    width: 100%;
+  }
+
+  .hotelIconContainer {
+    width: 80%;
+  }
+
+  .hotelIconWithCaption {
+    width: 23%;
   }
 
   .hotelIcon {
-    width: 7vw;
+    width: clamp(10vw, 11vw, 9vw);
+  }
+
+  .hotel {
+    width: 43%;
+    align-items: baseline;
   }
 
   .roomCaption {
-    font-size: clamp(13px, calc(1.2vh + 2px), 18px);
+    font-size: clamp(2.3vw, calc(2.4vh + 2px), 2.5vw);
+  }
+
+  .availabilityIcons p {
+    font-size: clamp(2.3vw, calc(2.1vh + 2px), 2.1vw);
   }
 
   .hotelDescription {
-    font-size: 2vw;
+    font-size: clamp(2.3vw, 2.4vw, 2.5vw);
+  }
+
+  /* Back to top button */
+  #backToTopBtn {
+    bottom: 20px;
+    right: 30px;
+    font-size: 3.5vw !important;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  #backToTopBtn i {
+    margin: 0.8vw;
+  }
+}
+
+@media (max-width: 800px) {
+  .title {
+    font-size: clamp(6.5vw, 6.8vw, 7.2vw);
+  }
+
+  .titleContainer {
+    width: 80%;
+  }
+
+  #mainTitle {
+    font-size: clamp(5.5vw, 5.6vw, 5.8vw);
+  }
+  #cottageCard {
+    width: 45% !important;
+    margin: auto;
+    justify-content: center !important;
+    border-radius: 10% !important;
+    padding: 2.2vw;
+  }
+
+  .backToSelection i {
+    font-size: 5vw;
+  }
+
+  .hotelIconWithCaption {
+    width: 30%;
+  }
+
+  .hotelIcon {
+    width: 70%;
+  }
+
+  .availabilityIcon img {
+    width: 4vw;
+  }
+  .availabilityIcons p,
+  .hotelDescription {
+    font-size: clamp(3.5vw, 3.8vw, 3.2vw);
+  }
+
+  input {
+    font-size: clamp(3.5vw, 3.8vw, 4vw);
+  }
+
+  .roomCaption,
+  .Description h2 {
+    font-size: clamp(23px, calc(2vh + 4px), 25px);
+  }
+
+  .Description p {
+    font-size: clamp(3.1vw, 3vw, 3.2vw);
   }
 }
 
 @media (max-width: 600px) {
-  .entranceCard span {
-    font-size: clamp(10px, calc(1.1vh + 2px), 15px);
+  .rates,
+  .hotelRooms {
+    margin-top: 8vh;
+  }
+
+  .entranceCard {
+    padding: 1vw;
   }
 
   .selection {
@@ -624,32 +830,36 @@ main {
   }
 
   .title {
-    font-size: 4vw;
+    font-size: clamp(7.5vw, 6.8vw, 7.2vw);
+    margin-bottom: 3vw !important;
   }
 
-  .backToSelection img {
-    width: 4.5vw;
+  .backToSelection i {
+    font-size: 7vw;
+  }
+
+  .entranceTitleContainer {
+    width: 90%;
   }
 
   .entranceTitle {
-    font-size: 3.3vw;
+    font-size: clamp(26px, calc(3.5vh + 4px), 30px);
+    margin: 3vw auto 5vw auto !important;
   }
 
-  body {
-    height: 100vh !important;
+  span.age {
+    font-size: clamp(3.2vw, 2.7vw, 3vw);
   }
-
-  .rates {
-    margin-top: 14vw !important;
-  }
-
   .Description h2 {
-    font-size: clamp(12px, calc(2.5vh + 4px), 14px) !important;
+    font-size: clamp(28px, calc(2.5vh + 4px), 34px) !important;
   }
 
-  .Description p,
-  #videokeDesc p {
-    font-size: clamp(8px, calc(0.9vh + 2px), 12px);
+  .entrance-card-title {
+    font-size: clamp(3.7vw, 3.9vw, 3.5vw);
+  }
+
+  .videokeTitleContainer {
+    width: 90%;
   }
 
   .entranceFee {
@@ -657,104 +867,187 @@ main {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(1, 1fr);
     gap: 8px;
-    width: 90%;
-    margin: 0 auto;
+    width: 98%;
+    margin: 5vw auto;
   }
 
   .entranceCard {
-    padding: 1vw;
+    padding: 2vw;
     font-size: 1.5vw;
     width: 90% !important;
-    height: 20vw !important;
     display: grid !important;
     align-items: center;
+  }
+
+  .card-body.description h2,
+  #videokePriceDesc {
+    font-size: clamp(5vw, 4.8vw, 4.5vw) !important;
+  }
+
+  .card-body.description {
+    padding: 0 !important;
+  }
+
+  .card-body.description a {
+    font-size: clamp(4vw, 3.8vw, 3.5vw);
+    margin-top: 2.5vw !important;
+  }
+
+  .card-body.description p,
+  .Description p,
+  #videokeDesc p {
+    font-size: clamp(5vw, calc(3vh + 2px), 4.7vw) !important;
+    margin-bottom: 0 !important;
+  }
+
+  #cottageCard {
+    width: 49% !important;
+    padding: 2vw !important;
+    margin: 0 auto !important;
+    border-radius: 5% !important;
+  }
+
+  .section,
+  #billiards,
+  #massage {
+    flex-direction: column;
+  }
+
+  .singleImg,
+  #videokeDescContainer,
+  #massageDesc {
+    width: 90% !important;
+    margin: 0 auto;
+  }
+
+  .singleImg {
+    display: flex;
+    justify-content: center;
+  }
+
+  #videokeDisplayPhoto,
+  #billardsDisplayPhoto,
+  #massageChairDisplayPhoto {
+    width: 80% !important;
+    margin: 0 auto;
   }
   .embed-responsive {
     width: clamp(70vw, 75vw, 80vw) !important;
   }
 
   .hotelIconsContainer {
-    width: 55%;
+    width: 95%;
+  }
+
+  .hotelIconContainer {
+    width: 95%;
   }
 
   .hotelDescription {
-    font-size: 2.1vw;
+    font-size: clamp(23px, calc(1.7vh + 2px), 28px);
+  }
+
+  .availabilityIcons {
+    width: 90%;
   }
 
   .hotelIcon {
-    width: 7vw;
+    width: 70%;
   }
 
   .roomCaption {
-    font-size: clamp(8px, calc(0.9vh + 2px), 15px);
+    font-size: clamp(22px, calc(1.6vh + 2px), 25px);
   }
 
   .availabilityIcons p {
-    font-size: 1.9vw;
-    font-weight: 700;
+    font-size: clamp(20px, calc(1.3vh + 2px), 22px);
     font-family: "Lora";
     margin: 0 2vw 0 1vw;
   }
 
+  input {
+    font-size: clamp(28px, calc(2vh + 2px), 30px) !important;
+  }
+
+  .filterBtns {
+    justify-content: center;
+  }
+
+  /* Back to top button */
   #backToTopBtn {
-    padding: 10px 12px;
-    font-size: 16px;
-    bottom: 20px;
-    right: 20px;
+    font-size: 5vw !important;
+  }
+
+  #backToTopBtn i {
+    margin: 1.2vw;
+  }
+
+  .hotel {
+    width: 80%;
+    align-items: baseline !important;
+    padding: 2vw;
   }
 }
 
 @media (max-width: 400px) {
+  #rates,
+  .hotelRooms {
+    margin-top: 10vh;
+  }
   #mainTitle {
     margin-top: 20vw;
   }
   .title {
-    font-size: 5vw;
+    font-size: clamp(35px, calc(5vh + 4px), 30px);
   }
   .selection {
     margin-top: 15vw;
+  }
+  .hotelDescription,
+  input {
+    font-size: clamp(15px, calc(1.5vh + 4px), 16px) !important;
+  }
+
+  .availabilityIcon img {
+    width: 7vw;
+  }
+
+  .availabilityIcons p {
+    font-size: clamp(15px, calc(1.5vh + 4px), 16px) !important;
+    line-height: normal;
   }
 
   .cottage {
     margin: 0 auto 2vw auto;
   }
 
-  .backToSelection img {
-    width: 4.8vw;
+  .backToSelection i {
+    font-size: 6vw;
   }
 
   .Description h2 {
-    font-size: clamp(9px, calc(1vh + 2px), 12px) !important;
+    font-size: clamp(25px, calc(2.5vh + 4px), 28px) !important;
+  }
+
+  .roomCaption {
+    font-size: clamp(17px, calc(2.9vh + 4px), 16px);
+  }
+
+  .hotel {
+    padding-bottom: 4vw !important;
   }
 
   .Description p,
   #videokeDesc p {
-    font-size: clamp(6px, calc(0.9vh + 2px), 11px);
+    font-size: clamp(17px, calc(1.8vh + 2px), 16px) !important;
   }
 
   .entranceFee {
     width: 100%;
   }
 
-  .entranceCard span {
-    font-size: clamp(7px, calc(0.8vh + 2px), 11px);
-  }
-
-  .entrance-card-title .dayNight {
-    font-size: clamp(7px, calc(1.1vh + 3px), 17px) !important;
-  }
-
-  .entrance-card-title {
-    font-size: clamp(8px, calc(0.8vh + 2px), 11px) !important;
-  }
-
-  .entranceTitle {
-    font-size: 3.5vw;
-    margin-bottom: 5vw;
-  }
-
   .categoryLink {
-    width: 60%;
+    width: 70%;
     height: auto;
   }
 
@@ -764,7 +1057,7 @@ main {
   }
 
   .card-body h5 {
-    font-size: 4vw;
+    font-size: clamp(22px, calc(2vh + 2px), 19px);
   }
 
   .card-img-top.category {
@@ -773,7 +1066,6 @@ main {
 
   .card {
     margin: 3vw auto;
-    width: 70% !important;
   }
 
   .availabilityIcons p {
@@ -781,5 +1073,12 @@ main {
     font-weight: 700;
     font-family: "Lora";
     margin: 0 2vw 0 1vw;
+  }
+
+  /* Back to top button */
+  #backToTopBtn {
+    right: 10px;
+    bottom: 10px;
+    font-size: 5.6vw !important;
   }
 }
