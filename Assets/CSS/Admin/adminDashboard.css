@@ -167,13 +167,13 @@ body {
   display: inline-block;
   border: 1px;
   word-wrap: break-word;
-  width: 1vw;
-  text-transform: capitalize;
+  width: 5px;
+  text-transform: uppercase;
 }
 
 .revenue-chart {
-  width: 90% !important;
-  height: 100% !important;
+  width: 500px !important;
+  height: 250px !important;
 }
 
 /* Tablet Portrait */

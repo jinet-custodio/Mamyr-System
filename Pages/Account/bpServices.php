@@ -331,7 +331,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="descContainer">
                                 <label for="description" class="description" id="addServiceLabel">Description</label>
-                                <textarea class="form-control" id="description" name="description"
+                                <textarea class="form-control" id="description" name="serviceDesc"
                                     placeholder="Service information/description (Optional)"></textarea>
                             </div>
                             <!-- <div class="imageContainer">

@@ -49,17 +49,24 @@ require_once '../../Function/functions.php';
 changeToExpiredStatus($conn);
 changeToDoneStatus($conn);
 
-if ($userRole == 1) {
-    $role = "Customer";
-} elseif ($userRole == 2) {
-    $role = "Business Partner";
-} elseif ($userRole == 3) {
-    $role = "Admin";
-} else {
-    $_SESSION['error'] = "Unauthorized Access eh!";
-    session_destroy();
-    header("Location: ../register.php");
-    exit();
+switch ($userRole) {
+    case 1: //customer
+        $role = "Customer";
+        break;
+    case 2:
+        $role = "Business Partner";
+        break;
+    case 3:
+        $role = "Admin";
+        break;
+    case 4:
+        $role = "Partnership Applicant";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
 }
 ?>
 
@@ -141,7 +148,7 @@ if ($userRole == 1) {
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
-                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                <?php if ($role !== 'Admin') { ?>
                     <li>
                         <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
@@ -205,7 +212,7 @@ if ($userRole == 1) {
 
                 <script>
                     const reviewedBookingIDs = <?= json_encode($reviewedBookingIDs) ?>;
-                    console.log(reviewedBookingIDs);
+                    // console.log(reviewedBookingIDs);
                 </script>
                 <div class="tableContainer">
                     <table class=" table table-striped" id="bookingHistory">
@@ -264,7 +271,7 @@ if ($userRole == 1) {
 
                                         <!-- Papalitan na lang ng mas magandang term -->
                                         <?php if (!empty($booking['confirmedBookingID'])) {
-                                            if ($booking['confirmedStatus'] === "Pending") {
+                                            if ($booking['confirmedStatus'] === "Pending" && $booking['paymentStatus'] === 1) {
 
                                                 if ($paymentMethod === 'Cash') {
                                                     $status = "Onsite payment";
@@ -274,18 +281,20 @@ if ($userRole == 1) {
                                                     $class = 'btn btn-primary w-100';
                                                 }
                                             } elseif ($booking['confirmedStatus'] === "Approved") {
-                                                $status = "Successful";
+                                                $status = "Success";
                                                 $class = 'btn btn-success w-100';
                                             } elseif ($booking['confirmedStatus'] === "Rejected") {
                                                 $status = "Rejected";
                                                 $class = 'btn btn-red w-100';
                                             } elseif ($booking['confirmedStatus'] === 'Done') {
-                                                $status = "Success";
+                                                $status = "Finished";
                                                 $class = 'btn btn-dark-green w-100';
                                             } elseif ($booking['confirmedStatus'] === "Cancelled") {
-
                                                 $status = "Cancelled";
-                                                $class = 'btn btn-orange w-100';
+                                                $class = 'btn btn-red w-100';
+                                            } elseif ($booking['paymentStatus'] === 5) {
+                                                $status = "Payment Sent";
+                                                $class = 'btn btn-red w-100';
                                             }
                                         } else {
                                             $confirmedBookingID = NULL;
@@ -309,7 +318,7 @@ if ($userRole == 1) {
                                             } elseif ($booking['bookingStatus'] === "Cancelled") {
                                                 $bookingStatus = $booking['bookingStatus'];
                                                 $status = "Cancelled";
-                                                $class = 'btn btn-orange w-100';
+                                                $class = 'btn btn-red w-100';
                                             } elseif ($booking['bookingStatus'] === "Expired") {
                                                 $bookingStatus = $booking['bookingStatus'];
                                                 $status = "Expired";
@@ -724,12 +733,12 @@ if ($userRole == 1) {
             // AJAX form submission
             $("#reviewForm").on("submit", function(e) {
                 e.preventDefault();
-                console.log("Submitting review:", {
-                    bookingID: $('#modalBookingID').val(),
-                    bookingType: $('#modalBookingType').val(),
-                    rating: $('#reviewRating').val(),
-                    comment: $('#purpose-additionalNotes').val()
-                });
+                // console.log("Submitting review:", {
+                //     bookingID: $('#modalBookingID').val(),
+                //     bookingType: $('#modalBookingType').val(),
+                //     rating: $('#reviewRating').val(),
+                //     comment: $('#purpose-additionalNotes').val()
+                // });
 
                 $.ajax({
                     url: "../../Function/Account/submitReview.php",

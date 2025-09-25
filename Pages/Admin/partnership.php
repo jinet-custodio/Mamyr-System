@@ -76,15 +76,18 @@ if (!$partnerID) {
         </div>
         <!-- Get the information to the database -->
         <?php
-        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, u.phoneNumber, u.userProfile, p.validIDImage, p.*, s.statusName, pt.partnerTypeDescription 
+        $partnerStatusID = 2;
+        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, u.phoneNumber, u.userProfile, 
+                                p.validID, p.companyName, p.businessEmail, p.partnerAddress, p.documentLink, p.partnerStatusID, p.userID,
+                                s.statusName, pt.partnerTypeDescription 
                                 FROM partnership p
                                 INNER JOIN user u ON p.userID = u.userID
                                 INNER JOIN status s ON s.statusID = p.partnerStatusID
                                 LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
                                 LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
-                                WHERE  p.partnershipID = ?
+                                WHERE  p.partnershipID = ? AND p.partnerStatusID = ?
                                 ");
-        $selectQuery->bind_param("i", $partnerID);
+        $selectQuery->bind_param("ii", $partnerID, $partnerStatusID);
         $selectQuery->execute();
         $result = $selectQuery->get_result();
         if ($result->num_rows > 0) {
@@ -112,7 +115,7 @@ if (!$partnerID) {
                 $image = '../../Assets/Images/defaultProfile.png';
             }
 
-            $imageName = $data['validIDImage'];
+            $imageName = $data['validID'];
 
             // echo '<pre>';
             // print_r($data);
@@ -170,15 +173,18 @@ if (!$partnerID) {
         </div>
         <!-- Get the information to the database -->
         <?php
-        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, u.phoneNumber, u.userProfile, p.validIDImage, p.*, s.statusName, pt.partnerTypeDescription 
+        $partnerStatusID = 1;
+        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, u.phoneNumber, u.userProfile, 
+                                p.validID, p.companyName, p.businessEmail, p.partnerAddress, p.documentLink, p.partnerStatusID, p.userID,
+                                s.statusName, pt.partnerTypeDescription 
                                 FROM partnership p
                                 INNER JOIN user u ON p.userID = u.userID
                                 INNER JOIN status s ON s.statusID = p.partnerStatusID
                                 LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
                                 LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
-                                WHERE  p.partnershipID = ?
+                                WHERE  p.partnershipID = ? AND p.partnerStatusID = ?
                                 ");
-        $selectQuery->bind_param("i", $partnerID);
+        $selectQuery->bind_param("ii", $partnerID, $partnerStatusID);
         $selectQuery->execute();
         $result = $selectQuery->get_result();
         if ($result->num_rows > 0) {
@@ -205,6 +211,8 @@ if (!$partnerID) {
             } else {
                 $image = '../../Assets/Images/defaultProfile.png';
             }
+
+            $imageName = $data['validID'];
         }
         ?>
         <!-- Display the information -->

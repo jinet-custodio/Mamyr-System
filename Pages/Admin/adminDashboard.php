@@ -85,6 +85,7 @@ $revenue =  $conn->prepare("SELECT
                                 SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN cb.confirmedFinalBill ELSE 0 END) AS Fri,
                                 SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN cb.confirmedFinalBill ELSE 0 END) AS Sat,
                                 SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN cb.confirmedFinalBill ELSE 0 END) AS Sun
+                                -- b.bookingType,
 
                             FROM 
                                 confirmedbooking cb
@@ -108,13 +109,23 @@ $weekName = "";
 if ($revenueResult->num_rows > 0) {
     $row = $revenueResult->fetch_assoc();
     $weekName = $row['weekName'];
-    $revenues[] = (float) $row['Mon'];
-    $revenues[] = (float) $row['Tue'];
-    $revenues[] = (float) $row['Wed'];
-    $revenues[] = (float) $row['Thu'];
-    $revenues[] = (float) $row['Fri'];
-    $revenues[] = (float) $row['Sat'];
-    $revenues[] = (float) $row['Sun'];
+    // $bookingType = $row['bookingType'];
+    // $revenues[$bookingType][] = (float) $row['Mon'];
+    // $revenues[$bookingType][] = (float) $row['Tue'];
+    // $revenues[$bookingType][] = (float) $row['Wed'];
+    // $revenues[$bookingType][] = (float) $row['Thu'];
+    // $revenues[$bookingType][] = (float) $row['Fri'];
+    // $revenues[$bookingType][] = (float) $row['Sat'];
+    // $revenues[$bookingType][] = (float) $row['Sun'];
+    $revenues[] = [
+        (float) $row['Mon'],
+        (float) $row['Tue'],
+        (float) $row['Wed'],
+        (float) $row['Thu'],
+        (float) $row['Fri'],
+        (float) $row['Sat'],
+        (float) $row['Sun']
+    ];
 }
 $revenueResult->free();
 $revenue->close();
@@ -230,10 +241,10 @@ $availabilityQuery->close();
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                        id="notifCounter">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notifCounter">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -485,7 +496,7 @@ $availabilityQuery->close();
 
                 <div class="card trendCardContent">
                     <div class="card-header">
-                        Revenue
+                        Sales
                     </div>
 
                     <div class="card-body">
@@ -498,13 +509,16 @@ $availabilityQuery->close();
             </div>
             <div class="card mt-2" id="roomAvailabilityCard">
                 <div class="card-header">
-                    Room Availability
+                    Room Availability Today
                 </div>
                 <div class="card-body availabilityGraph">
                     <div class="roomAvailabilityGraph">
                         <canvas id="availabilityGraph"></canvas>
                     </div>
                 </div>
+                <!-- <div class="card-footer">
+                    today
+                </div> -->
             </div>
         </div>
 
@@ -514,17 +528,17 @@ $availabilityQuery->close();
 
 
                 <div class="revenueGraphContainer mb-3">
-                    <h5 class=" revTitle">REVENUE</h5>
+                    <h5 class="revTitle">Sales</h5>
                     <?php if (!empty($revenues)): ?>
-                    <div class="revenue-chart">
-                        <canvas id="revenueBar"></canvas>
-                    </div>
+                        <div class="revenue-chart">
+                            <canvas id="revenueBar"></canvas>
+                        </div>
                     <?php else: ?>
-                    <div class="revenue-chart">
-                        <canvas id="revenueBar"></canvas>
-                    </div>
-                    <!-- Change this div -->
-                    <!-- <div class="revenueImage"><img src="../../Assets/Images/revenueGraph.png" alt=""></div> -->
+                        <div class="revenue-chart">
+                            <canvas id="revenueBar"></canvas>
+                        </div>
+                        <!-- Change this div -->
+                        <!-- <div class="revenueImage"><img src="../../Assets/Images/revenueGraph.png" alt=""></div> -->
                     <?php endif; ?>
                 </div>
             </div>
@@ -536,15 +550,15 @@ $availabilityQuery->close();
                 </div>
                 <div class="card-body">
                     <?php if (!empty($bookingTypeCount)): ?>
-                    <div class="revenue-chart">
-                        <canvas id="reservationTrendsBar"></canvas>
-                    </div>
+                        <div class="revenue-chart">
+                            <canvas id="reservationTrendsBar"></canvas>
+                        </div>
                     <?php else: ?>
-                    <div class="revenue-chart">
-                        <canvas id="reservationTrendsBar"></canvas>
-                    </div>
-                    <!-- Change this div -->
-                    <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
+                        <div class="revenue-chart">
+                            <canvas id="reservationTrendsBar"></canvas>
+                        </div>
+                        <!-- Change this div -->
+                        <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
                     <?php endif; ?>
                 </div>
             </div>
@@ -566,20 +580,20 @@ $availabilityQuery->close();
 
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
-                    <ul class="list-group list-group-flush ">
-                        <?php foreach ($notificationsArray as $index => $message):
+                        <ul class="list-group list-group-flush ">
+                            <?php foreach ($notificationsArray as $index => $message):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
-                        <li class="list-group-item mb-2 notification-item"
-                            data-id="<?= htmlspecialchars($notificationID) ?>"
-                            style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                            <?= htmlspecialchars($message) ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
+                                <li class="list-group-item mb-2 notification-item"
+                                    data-id="<?= htmlspecialchars($notificationID) ?>"
+                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
+                                    <?= htmlspecialchars($message) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     <?php else: ?>
-                    <div class="p-3 text-muted">No new notifications.</div>
+                        <div class="p-3 text-muted">No new notifications.</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -594,34 +608,34 @@ $availabilityQuery->close();
 
     <!-- Responsive Navbar -->
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const icons = document.querySelectorAll('.navbar-icon');
-        const navbarUL = document.getElementById('navUL');
-        const nav = document.getElementById('navbar')
+        document.addEventListener("DOMContentLoaded", function() {
+            const icons = document.querySelectorAll('.navbar-icon');
+            const navbarUL = document.getElementById('navUL');
+            const nav = document.getElementById('navbar')
 
-        function handleResponsiveNavbar() {
-            if (window.innerWidth <= 991.98) {
-                navbarUL.classList.remove('w-100');
-                navbarUL.style.position = "fixed";
-                nav.style.margin = "0";
-                nav.style.maxWidth = "100%";
-                icons.forEach(icon => {
-                    icon.style.display = "none";
-                })
-            } else {
-                navbarUL.classList.add('w-100');
-                navbarUL.style.position = "relative";
-                nav.style.margin = "20px auto";
-                nav.style.maxWidth = "80vw";
-                icons.forEach(icon => {
-                    icon.style.display = "block";
-                })
+            function handleResponsiveNavbar() {
+                if (window.innerWidth <= 991.98) {
+                    navbarUL.classList.remove('w-100');
+                    navbarUL.style.position = "fixed";
+                    nav.style.margin = "0";
+                    nav.style.maxWidth = "100%";
+                    icons.forEach(icon => {
+                        icon.style.display = "none";
+                    })
+                } else {
+                    navbarUL.classList.add('w-100');
+                    navbarUL.style.position = "relative";
+                    nav.style.margin = "20px auto";
+                    nav.style.maxWidth = "80vw";
+                    icons.forEach(icon => {
+                        icon.style.display = "block";
+                    })
+                }
             }
-        }
 
-        handleResponsiveNavbar();
-        window.addEventListener('resize', handleResponsiveNavbar);
-    });
+            handleResponsiveNavbar();
+            window.addEventListener('resize', handleResponsiveNavbar);
+        });
     </script>
 
     <!-- Chart JS -->
@@ -630,189 +644,189 @@ $availabilityQuery->close();
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
     <!-- Display if no available data -->
     <script src="../../Assets/JS/ChartNoData.js"> </script>
 
     <script>
-    //Reservation Trends Bar
-    const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
+        //* Reservation Trends Bar
+        const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
 
-    const reservationTrendsChart = new Chart(reservationTrendsBar, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($bookingTypeName) ?>,
-            datasets: [{
-                data: <?= json_encode($bookingTypeCount) ?>,
-                backgroundColor: [
-                    'rgba(0, 123, 255, 0.5)',
-                    'rgba(255, 193, 7, 0.5)',
-                    'rgba(40, 167, 69, 0.5)',
-                    'rgba(220, 53, 69, 0.5)'
-                ],
-                borderColor: [
-                    'rgba(0, 123, 255, 1)',
-                    'rgba(255, 193, 7, 1)',
-                    'rgba(40, 167, 69, 1)',
-                    'rgba(220, 53, 69, 1)'
-                ],
+        const reservationTrendsChart = new Chart(reservationTrendsBar, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode($bookingTypeName) ?>,
+                datasets: [{
+                    data: <?= json_encode($bookingTypeCount) ?>,
+                    backgroundColor: [
+                        'rgba(0, 123, 255, 0.5)',
+                        'rgba(255, 193, 7, 0.5)',
+                        'rgba(40, 167, 69, 0.5)',
+                        'rgba(220, 53, 69, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(0, 123, 255, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)'
+                    ],
 
-                borderWidth: 3
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
+                    borderWidth: 3
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-    </script>
-
-    <script>
-    // availabilityGraph
-    const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
-
-    const availabilityChart = new Chart(availabilityGraph, {
-        type: 'doughnut',
-        data: {
-            labels: <?= json_encode($availabilityName) ?>,
-            datasets: [{
-                data: <?= json_encode($availabilityCount) ?>,
-                backgroundColor: [
-                    'rgba(40, 167, 69, 0.5)', // Available
-                    'rgba(255, 193, 7, 0.5)', // Maintenance
-                    'rgba(220, 53, 69, 0.5)', // Occupied
-                    'rgba(0, 123, 255, 0.5)' // Private
-                ],
-                borderColor: [
-                    'rgba(40, 167, 69, 1)',
-                    'rgba(255, 193, 7, 1)',
-                    'rgba(220, 53, 69, 1)',
-                    'rgba(0, 123, 255, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            cutout: '60%',
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                }
-            }
-        }
-    });
-    </script>
-
-    <script>
-    //Revenue Bar
-    const revenueBar = document.getElementById("revenueBar").getContext('2d');
-
-    const revenueChart = new Chart(revenueBar, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($days) ?>,
-            datasets: [{
-                label: <?= json_encode($weekName) ?>,
-                data: <?= json_encode($revenues) ?>,
-                backgroundColor: [
-                    'rgba(40, 167, 69, 0.5)', // Green
-                    'rgba(255, 193, 7, 0.5)', // Yellow
-                    'rgba(220, 53, 69, 0.5)', // Red
-                    'rgba(0, 123, 255, 0.5)', // Blue
-                    'rgba(23, 162, 184, 0.5)', // Cyan
-                    'rgba(108, 117, 125, 0.5)', // Gray
-                    'rgba(255, 99, 132, 0.5)', // Pink
-                    'rgba(153, 102, 255, 0.5)', // Purple
-                    'rgba(255, 159, 64, 0.5)', // Orange
-                    'rgba(75, 192, 192, 0.5)', // Teal
-                    'rgba(201, 203, 207, 0.5)', // Light Gray
-                    'rgba(54, 162, 235, 0.5)' // Light Blue
-                ],
-                borderColor: [
-                    'rgba(40, 167, 69, 1)',
-                    'rgba(255, 193, 7, 1)',
-                    'rgba(220, 53, 69, 1)',
-                    'rgba(0, 123, 255, 1)',
-                    'rgba(23, 162, 184, 1)',
-                    'rgba(108, 117, 125, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(201, 203, 207, 1)',
-                    'rgba(54, 162, 235, 1)'
-                ],
-                borderWidth: 3
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        usePointStyle: true,
-                        pointStyle: 'line',
-                        boxWidth: 0,
-                        font: {
-                            size: 16
-                        }
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
+            }
+        });
+    </script>
+
+    <script>
+        //* availabilityGraph
+        const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
+
+        const availabilityChart = new Chart(availabilityGraph, {
+            type: 'doughnut',
+            data: {
+                labels: <?= json_encode($availabilityName) ?>,
+                datasets: [{
+                    data: <?= json_encode($availabilityCount) ?>,
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.5)', // Available
+                        'rgba(255, 193, 7, 0.5)', // Maintenance
+                        'rgba(220, 53, 69, 0.5)', // Occupied
+                        'rgba(0, 123, 255, 0.5)' // Private
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(0, 123, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true
+            options: {
+                cutout: '60%',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
                 }
             }
-        }
+        });
+    </script>
 
-    });
+    <script>
+        //* Revenue Bar
+        const revenueBar = document.getElementById("revenueBar").getContext('2d');
+
+        const revenueChart = new Chart(revenueBar, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode($days) ?>,
+                datasets: [{
+                    label: <?= json_encode($weekName) ?>,
+                    data: <?= json_encode($revenues) ?>,
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.5)', // Green
+                        'rgba(255, 193, 7, 0.5)', // Yellow
+                        'rgba(220, 53, 69, 0.5)', // Red
+                        'rgba(0, 123, 255, 0.5)', // Blue
+                        'rgba(23, 162, 184, 0.5)', // Cyan
+                        'rgba(108, 117, 125, 0.5)', // Gray
+                        'rgba(255, 99, 132, 0.5)', // Pink
+                        'rgba(153, 102, 255, 0.5)', // Purple
+                        'rgba(255, 159, 64, 0.5)', // Orange
+                        'rgba(75, 192, 192, 0.5)', // Teal
+                        'rgba(201, 203, 207, 0.5)', // Light Gray
+                        'rgba(54, 162, 235, 0.5)' // Light Blue
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(0, 123, 255, 1)',
+                        'rgba(23, 162, 184, 1)',
+                        'rgba(108, 117, 125, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(201, 203, 207, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: 'line',
+                            boxWidth: 0,
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+
+        });
     </script>
 </body>
 
