@@ -277,9 +277,8 @@ button#selectPartnerBtn {
   top: 4vw;
 }
 
-.back-icon-container img {
-  height: 4vw;
-  width: 4vw;
+.back-icon-container i {
+  font-size: 3vw;
 }
 
 .input-box input {
@@ -375,6 +374,10 @@ input[type="password"]::-webkit-search-cancel-button {
   left: 26.5vw;
   font-family: "Lora";
   margin-top: 1vh;
+}
+
+.back-icon-container-login i {
+  font-size: 3vw;
 }
 
 .confirmErrorMsg {
@@ -744,9 +747,8 @@ input[type="password"]::-webkit-search-cancel-button {
     width: 100% !important;
   }
 
-  .back-icon-container img {
-    width: 6vw;
-    height: 6vw;
+  .back-icon-container i {
+    font-size: 6vw !important;
   }
 
   #nextBtn {
@@ -899,9 +901,8 @@ input[type="password"]::-webkit-search-cancel-button {
     width: 100% !important;
   }
 
-  .back-icon-container img {
-    width: 6vw;
-    height: 6vw;
+  .back-icon-container i {
+    font-size: 7vw;
   }
 
   #nextBtn {
