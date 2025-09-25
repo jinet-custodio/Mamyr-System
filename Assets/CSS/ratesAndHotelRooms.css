@@ -145,7 +145,7 @@ main {
   font-family: "Poppins Black";
   font-style: italic;
   font-weight: bold;
-  font-size: 2.3vw;
+  font-size: clamp(3vw, 2.8vw, 2.5vw);
   color: #00b3d1 !important;
   text-align: center;
 }
@@ -238,7 +238,7 @@ main {
   text-align: center;
   margin-top: -3vw;
   margin-bottom: 1vw;
-  font-size: 3vw;
+  font-size: clamp(3.7vw, 3.6vw, 3.5vw);
   font-family: "Lora";
   color: #000000;
 }
@@ -758,6 +758,14 @@ main {
     font-size: clamp(6.5vw, 6.8vw, 7.2vw);
   }
 
+  .categoryLink {
+    width: 60%;
+  }
+
+  .card-body h5 {
+    font-size: clamp(24px, calc(2vh + 2px), 27px);
+  }
+
   .titleContainer {
     width: 80%;
   }
@@ -811,6 +819,14 @@ main {
   .rates,
   .hotelRooms {
     margin-top: 8vh;
+  }
+
+  .categories {
+    margin-top: 7vh;
+  }
+
+  .categoryLink {
+    width: 80%;
   }
 
   .entranceCard {
@@ -901,7 +917,7 @@ main {
   }
 
   #cottageCard {
-    width: 49% !important;
+    width: 89% !important;
     padding: 2vw !important;
     margin: 0 auto !important;
     border-radius: 5% !important;
@@ -944,7 +960,7 @@ main {
   }
 
   .hotelDescription {
-    font-size: clamp(23px, calc(1.7vh + 2px), 28px);
+    font-size: clamp(18px, calc(1.7vh + 2px), 24px);
   }
 
   .availabilityIcons {
@@ -955,18 +971,15 @@ main {
     width: 70%;
   }
 
-  .roomCaption {
-    font-size: clamp(22px, calc(1.6vh + 2px), 25px);
+  .roomCaption,
+  input {
+    font-size: clamp(20px, calc(1.8vh + 2px), 22px);
   }
 
   .availabilityIcons p {
-    font-size: clamp(20px, calc(1.3vh + 2px), 22px);
+    font-size: clamp(17px, calc(1.6vh + 2px), 20px);
     font-family: "Lora";
     margin: 0 2vw 0 1vw;
-  }
-
-  input {
-    font-size: clamp(28px, calc(2vh + 2px), 30px) !important;
   }
 
   .filterBtns {
@@ -1000,10 +1013,15 @@ main {
   .title {
     font-size: clamp(35px, calc(5vh + 4px), 30px);
   }
+
+  .hotelDescription {
+    font-size: clamp(18px, calc(1.4vh + 2px), 16px);
+  }
+
   .selection {
     margin-top: 15vw;
   }
-  .hotelDescription,
+
   input {
     font-size: clamp(15px, calc(1.5vh + 4px), 16px) !important;
   }
@@ -1038,8 +1056,11 @@ main {
   }
 
   .Description p,
+  #videokeDesc p,
+  .card-body.description p,
+  .Description p,
   #videokeDesc p {
-    font-size: clamp(17px, calc(1.8vh + 2px), 16px) !important;
+    font-size: clamp(15px, calc(1.8vh + 2px), 14px) !important;
   }
 
   .entranceFee {

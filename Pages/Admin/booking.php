@@ -64,8 +64,9 @@ if (isset($_SESSION['error'])) {
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <!-- Data Table Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
     <!-- Font Awesome and Box Icon links  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -187,6 +188,13 @@ if (isset($_SESSION['error'])) {
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link" href="reviews.php">
+                        <i class="fa-solid fa-star navbar-icon"></i>
+                        <h5>Reviews</h5>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link" href="roomList.php">
                         <i class="fa-solid fa-hotel navbar-icon"></i>
                         <h5>Rooms</h5>
@@ -271,16 +279,15 @@ if (isset($_SESSION['error'])) {
     </div>
 
     <!-- Booking-container -->
-    <h1 class="title text-center mb-5" style="display: none;" id="hiddenTitle">Bookings</h1>
+    <h1 class="title text-center my-3" style="display: none;" id="hiddenTitle">Bookings</h1>
 
     <div class="booking-container">
-        <div class="card" style="width: 80%;">
-
+        <div class="card">
             <div class="btnContainer">
-                <a href="createBooking.php" class="btn btn-primary">Add</a>
+                <a href="createBooking.php" class="btn btn-primary" id="addBookings">Add</a>
             </div>
 
-            <table class="table table-striped" id="bookingTable">
+            <table class="table table-striped display nowrap" id="bookingTable">
                 <thead>
                     <th scope="col">Booking ID</th>
                     <th scope="col">Guest</th>
@@ -402,7 +409,7 @@ if (isset($_SESSION['error'])) {
                                         <input type="hidden" name="bookingStatus"
                                             value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($paymentApprovalStatusName)  ?>">
                                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                                        <button type="submit" class="btn btn-primary w-75">View</button>
+                                        <button type="submit" class="btn btn-primary">View</button>
                                     </form>
                                 </td>
                             </tr>
@@ -415,6 +422,14 @@ if (isset($_SESSION['error'])) {
             </table>
         </div>
     </div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+    <!-- DataTables Responsive extension -->
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -494,29 +509,36 @@ if (isset($_SESSION['error'])) {
         });
     </script>
 
-    <!-- Jquery Link -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!-- Data Table Link -->
-    <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#bookingTable').DataTable({
-                columnDefs: [{
-                        width: '10%',
-                        targets: 0
-                    },
-                    {
-                        width: '15%',
-                        targets: 2
-                    },
-                    {
-                        width: '15%',
-                        targets: 4
-                    },
-                ],
-            });
+        $('#bookingTable').DataTable({
+            responsive: false,
+            scrollX: true,
+            columnDefs: [{
+                    width: '10%',
+                    targets: 0
+                },
+                {
+                    width: '20%',
+                    targets: 1
+                },
+                {
+                    width: '15%',
+                    targets: 2
+                },
+                {
+                    width: '20%',
+                    targets: 3
+                },
+                {
+                    width: '15%',
+                    targets: 4
+                },
+                {
+                    width: '20%',
+                    targets: 5
+                },
+            ],
         });
     </script>
     <!-- Sweetalert Link -->
