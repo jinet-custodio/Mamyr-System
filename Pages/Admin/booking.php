@@ -10,6 +10,7 @@ checkSessionTimeout($timeout = 3600);
 
 require_once '../../Function/functions.php';
 changeToDoneStatus($conn);
+changeToExpiredStatus($conn);
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
