@@ -32,7 +32,7 @@ session_start();
 <body>
     <div class="back-icon-container">
         <a href="../index.php">
-            <i class="fa-solid fa-arrow-left backArrow" style="color: #121212;"></i>
+            <i class="fa-solid fa-arrow-left backArrow" style="color: #f9f9f9ff;"></i>
         </a>
     </div>
     <h2 class="title">Business Partner Sign Up </h2>

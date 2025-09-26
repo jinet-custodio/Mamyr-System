@@ -62,6 +62,8 @@ if (isset($_SESSION['error-partnership'])) {
     <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Link to Box Icons and Fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -71,8 +73,6 @@ if (isset($_SESSION['error-partnership'])) {
 </head>
 
 <body>
-
-
 
     <div class="topSection">
         <div class="dashTitleContainer">
@@ -228,8 +228,9 @@ if (isset($_SESSION['error-partnership'])) {
                     </a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
-                        Log Out
+                    <a href="../../Function/Admin/logout.php" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
+                        <h5 style="color: red;">Log Out</h5>
                     </a>
                 </li>
             </ul>
@@ -276,7 +277,7 @@ if (isset($_SESSION['error-partnership'])) {
                 <img class="card-img-top" src="../../Assets/Images/AdminImages/DisplayPartnershipImages/partners.jpg"
                     alt="Partners">
 
-                <div class="category-body m-auto">
+                <div class="category-body">
                     <h5 class="category-title m-auto">PARTNERS</h5>
                 </div>
             </div>
@@ -287,7 +288,7 @@ if (isset($_SESSION['error-partnership'])) {
                 <img class="card-img-top" src="../../Assets/Images/AdminImages/DisplayPartnershipImages/request.jpg"
                     alt="Requests">
 
-                <div class="category-body m-auto">
+                <div class="category-body">
                     <h5 class="category-title m-auto">REQUESTS</h5>
                 </div>
             </div>
@@ -304,18 +305,19 @@ if (isset($_SESSION['error-partnership'])) {
             <div class="card" id="partner-card" style="width: 80rem;">
 
                 <!-- Back Button -->
-                <div>
-                    <a href="#" id="choice1-link" class="btn btn-primary"><img
-                            src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+                <div class="back-btn-container">
+                    <a href="#" id="choice1-link" class="btn btn-primary">
+                        <i class="fa-solid fa-arrow-left backArrow" style="color: #f6f6f6ff;"></i>
+                    </a>
 
                 </div>
                 <h4 class="fw-bold page-title">Partners</h4>
-                <table class="table table-striped">
+                <table class="table table-striped display nowrap" id="partnersTable">
                     <thead>
                         <tr>
-                            <th class="table-header" scope="col">Name</th>
+                            <th class="table-header wrap-date" scope="col">Name</th>
                             <th class="table-header" scope="col">Partner Type</th>
-                            <th class="table-header" scope="col">Date Applied</th>
+                            <th class="table-header wrap-date" scope="col">Date Applied</th>
                             <th class="table-header" scope="col">Action</th>
                         </tr>
                     </thead>
@@ -339,18 +341,19 @@ if (isset($_SESSION['error-partnership'])) {
                         $result = $selectQuery->get_result();
                         if ($result->num_rows > 0) {
                             foreach ($result as $applicants) {
-                                $name = ucwords($applicants['firstName']) . " " . ucwords($applicants['lastName']);
+                                $name = ucwords($applicants['firstName'] ?? "") . " Secret" . ucwords($applicants['lastName'] ?? "");
                                 $partnerID = $applicants['partnershipID'];
                                 $status = $applicants['statusName'];
                                 $date = $applicants['startDate'];
-                                $startDate = date("F d, Y — g:i A", strtotime($date));
+                                $startDate = !empty($date) ? date("F d, Y - g:i A", strtotime($date)) : "N/A";
+
                         ?>
                                 <tr>
-                                    <td scope="row"><?= $name ?></td>
+                                    <td scope="row" class="wrap-date" id="nameTD"><?= $name ?></td>
 
-                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
+                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'] ?? "Photographer")  ?></td>
 
-                                    <td scope="row">
+                                    <td scope="row" class="wrap-date">
                                         <?= $startDate ?>
                                     </td>
 
@@ -362,18 +365,21 @@ if (isset($_SESSION['error-partnership'])) {
                                         <form action="partnership.php?container=<?= $partner ?>" method="POST"
                                             style="display:inline;">
                                             <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                            <button type="submit" class="btn btn-info" name="view-btn">View</button>
+                                            <button type="submit" class="btn btn-info w-100" name="view-btn">View</button>
                                         </form>
                                     </td>
-                                    </td>
-                                <?php
+                                </tr>
+                            <?php
                             }
                         } else {
-                                ?>
-                                <td colspan="5">
-                                    <h5 scope="row" class="text-center">No Record Found!</h5>
+                            ?>
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    <h5>No Record Found!</h5>
                                 </td>
-                            <?php
+                            </tr>
+
+                        <?php
                         } ?>
                     </tbody>
                 </table>
@@ -389,18 +395,19 @@ if (isset($_SESSION['error-partnership'])) {
 
             <div class="card" id="request-card" style="width: 80rem;">
                 <!-- Back Button -->
-                <div class="buttonContainer">
-                    <a href="#" id="choice2-link" class="btn btn-primary "><img
-                            src="../../Assets/Images/Icon/whiteArrow.png" alt="Back Button"></a>
+                <div class="back-btn-container">
+                    <a href="#" id="choice2-link" class="btn btn-primary ">
+                        <i class="fa-solid fa-arrow-left backArrow" style="color: #f7f7f7ff;" id="emailBackArrow"></i>
+                    </a>
 
                 </div>
-                <h4 class="fw-bold page-title">Applicant Request</h4>
-                <table class="table table-striped">
+                <h4 class="fw-bold page-title">Applicant Requests</h4>
+                <table class="table table-striped display nowrap" id="requestTable">
                     <thead>
                         <tr>
                             <th class="table-header" scope="col">Name</th>
                             <th class="table-header" scope="col">Partner Type</th>
-                            <th class="table-header" scope="col">Request Date</th>
+                            <th class="table-header wrap-date" scope="col">Request Date</th>
                             <th class="table-header" scope="col">Status</th>
                             <th class="table-header" scope="col">Action</th>
                         </tr>
@@ -426,28 +433,28 @@ if (isset($_SESSION['error-partnership'])) {
                         $result = $selectQuery->get_result();
                         if ($result->num_rows > 0) {
                             foreach ($result as $applicants) {
-                                $name = ucwords($applicants['firstName']) . " " . ucwords($applicants['lastName']);
+                                $name = ucwords($applicants['firstName'] ?? "") . " " . ucwords($applicants['lastName'] ?? "");
                                 $partnerID = $applicants['partnershipID'];
                                 $status = $applicants['statusName'];
                                 $date = $applicants['requestDate'];
-                                $requestDate = date("F d, Y — g:i A", strtotime($date));
+                                $requestDate = date("F d, Y - g:i A", strtotime($date));
                         ?>
                                 <tr>
-                                    <td scope="row"><?= $name ?></td>
+                                    <td scope="row" class="wrap-date"><?= $name ?></td>
 
-                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
-                                    <td scope="row"><?= htmlspecialchars($requestDate) ?></td>
+                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'] ?? "Photographer & Videographer")  ?></td>
+                                    <td scope="row" class="wrap-date"><?= htmlspecialchars($requestDate) ?></td>
                                     <?php
                                     if ($status == "Pending") {
                                     ?>
-                                        <td scope="row" class="btn btn-warning w-75 d-block m-auto mt-1"
+                                        <td scope="row" class="btn btn-warning w-100 d-block m-auto mt-1"
                                             style="background-color:#ffc108 ;">
                                             <?= $status ?>
                                         </td>
                                     <?php
                                     } else if ($status == "Rejected") {
                                     ?>
-                                        <td scope="row" class="btn btn-danger w-75 d-block m-auto mt-1"
+                                        <td scope="row" class="btn btn-danger w-100 d-block m-auto mt-1"
                                             style="background-color:#FF0000; color:#ffff ;">
                                             <?= $status ?>
                                         </td>
@@ -462,7 +469,7 @@ if (isset($_SESSION['error-partnership'])) {
                                         <form action="partnership.php?container=<?= $applicant ?>" method="POST"
                                             style="display:inline;">
                                             <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                            <button type="submit" class="btn btn-info w-75" name="view-partner">View</button>
+                                            <button type="submit" class="btn btn-info w-100" name="view-partner">View</button>
                                         </form>
 
                                     </td>
@@ -525,11 +532,64 @@ if (isset($_SESSION['error-partnership'])) {
             });
         });
     </script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
+    <!-- DataTables -->
+    <script src="../../Assets/JS/datatables.min.js"></script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $('#requestTable').DataTable({
+            responsive: false,
+            scrollX: true,
+            columnDefs: [{
+                    width: '20%',
+                    targets: 0
+                },
+                {
+                    width: '20%',
+                    targets: 1
+                },
+                {
+                    width: '25%',
+                    targets: 2
+                },
+                {
+                    width: '20%',
+                    targets: 3
+                },
+                {
+                    width: '15%',
+                    targets: 4
+                },
 
+            ],
+        });
+
+        $('#partnersTable').DataTable({
+            responsive: false,
+            scrollX: true,
+            columnDefs: [{
+                    width: '25%',
+                    targets: 0
+                },
+                {
+                    width: '25%',
+                    targets: 1
+                },
+                {
+                    width: '25%',
+                    targets: 2
+                },
+                {
+                    width: '25%',
+                    targets: 3
+                }
+            ],
+        });
+    </script>
     <!-- Pages hide/show -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -584,37 +644,7 @@ if (isset($_SESSION['error-partnership'])) {
             });
         });
     </script>
-    <!-- Responsive Navbar -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const icons = document.querySelectorAll('.navbar-icon');
-            const navbarUL = document.getElementById('navUL');
-            const nav = document.getElementById('navbar')
-
-            function handleResponsiveNavbar() {
-                if (window.innerWidth <= 991.98) {
-                    navbarUL.classList.remove('w-100');
-                    navbarUL.style.position = "fixed";
-                    nav.style.margin = "0";
-                    nav.style.maxWidth = "100%";
-                    icons.forEach(icon => {
-                        icon.style.display = "none";
-                    })
-                } else {
-                    navbarUL.classList.add('w-100');
-                    navbarUL.style.position = "relative";
-                    nav.style.margin = "20px auto";
-                    nav.style.maxWidth = "80vw";
-                    icons.forEach(icon => {
-                        icon.style.display = "block";
-                    })
-                }
-            }
-
-            handleResponsiveNavbar();
-            window.addEventListener('resize', handleResponsiveNavbar);
-        });
-    </script>
+    <script src="../../Assets/JS/adminNavbar.js"></script>
     <!-- Search URL -->
     <script>
         const params = new URLSearchParams(window.location.search);
