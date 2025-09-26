@@ -15,12 +15,13 @@ if (isset($_POST['addService'])) {
     $serviceCapacity = intval($_POST['capacity']);
     $serviceDuration = mysqli_real_escape_string($conn, $_POST['duration']);
     $serviceDesc = mysqli_real_escape_string($conn, $_POST['serviceDesc']) ?? 'N/A';
+    $partnerTypeID = (int) $_POST['partnerTypeID'];
 
 
     $conn->begin_transaction();
     try {
-        $insertPartnerServiceQuery = $conn->prepare("INSERT INTO `partnershipservice`(`partnershipID`, `PBName`, `PBPrice`, `PBDescription`, `PBcapacity`, `PBduration`, `PSAvailabilityID`) VALUES (?,?,?,?,?,?,?)");
-        $insertPartnerServiceQuery->bind_param("isdsisi", $partnershipID, $serviceName, $servicePrice, $serviceDesc, $serviceCapacity, $serviceDuration, $availabilityID);
+        $insertPartnerServiceQuery = $conn->prepare("INSERT INTO `partnershipservice`(`partnershipID`, `PBName`, `PBPrice`, `PBDescription`, `PBcapacity`, `PBduration`, `PSAvailabilityID`, `partnerTypeID`) VALUES (?,?,?,?,?,?,?,?)");
+        $insertPartnerServiceQuery->bind_param("isdsisii", $partnershipID, $serviceName, $servicePrice, $serviceDesc, $serviceCapacity, $serviceDuration, $availabilityID, $partnerTypeID);
 
         if (!$insertPartnerServiceQuery->execute()) {
             $conn->rollback();

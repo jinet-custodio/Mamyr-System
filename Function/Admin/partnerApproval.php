@@ -1,113 +1,184 @@
 <?php
 
 require '../../Config/dbcon.php';
+date_default_timezone_set('Asia/Manila');
 session_start();
+
+require '../functions.php';
 
 //Approve Button is Click
 if (isset($_POST['approveBtn'])) {
-    $_SESSION['partnerID'] = mysqli_real_escape_string($conn, $_POST['partnerID']);
-    $partnerStatus = mysqli_real_escape_string($conn, $_POST['partnerStatus']);
-    $partnerUserID = mysqli_real_escape_string($conn, $_POST['partnerUserID']);
-    date_default_timezone_set('Asia/Manila');
+    $_SESSION['partnerID'] = (int) $_POST['partnerID'];
+    $partnerStatusID = intval($_POST['partnerStatus']);
+    $partnerUserID = intval($_POST['partnerUserID']);
     $startDate = date('Y-m-d');
-
-    $newPartnerStatus = 2;
 
     $partnerID = $_SESSION['partnerID'];
 
-    $query = $conn->prepare("SELECT * FROM partnership
-    WHERE partnershipID = ? AND partnerStatusID = ?");
-    $query->bind_param("ii", $partnerID, $partnerStatus);
-    $query->execute();
-    $result = $query->get_result();
-    if ($result->num_rows > 0) {
-        $updateStatus = $conn->prepare("UPDATE partnership 
-        SET partnerStatusID = ?, startDate = ?
-        WHERE partnershipID = ?");
-        $updateStatus->bind_param("isi", $newPartnerStatus, $startDate, $partnerID);
+    $partnerTypes = isset($_POST['partnerTypes']) ? array_map('trim', $_POST['partnerTypes']) : [];
 
-        $partnerRoleID = 2; //PartnerID
+    if (empty($partnerTypes)) {
+        header('Location: ../../Pages/Admin/partnership.php?container=4&action=emptyPartnerTypes');
+        exit();
+    }
+    $conn->begin_transaction();
+    try {
+        $findPartnerQuery = $conn->prepare("SELECT * FROM partnership
+    WHERE partnershipID = ? AND partnerStatusID = ?");
+        $findPartnerQuery->bind_param("ii", $partnerID, $partnerStatusID);
+
+        if (!$findPartnerQuery->execute()) {
+            throw new Exception("Error: " . $findPartnerQuery->error);
+        }
+        $result = $findPartnerQuery->get_result();
+
+        if ($result->num_rows === 0) {
+            $_SESSION['partnerID'] =  $partnerID;
+            header('Location: ../../Pages/Admin/partnership.php?container=4&action=failed');
+            exit();
+        }
+
+        //Approved
+        $updatePartnerTypeTrue = $conn->prepare("UPDATE `partnership_partnertype` SET `isApproved`= ? WHERE partnershipID = ? AND partnerTypeID = ?");
+        foreach ($partnerTypes as $id) {
+            $isApproved = true;
+            $updatePartnerTypeTrue->bind_param("iii", $isApproved, $partnerID, $id);
+
+            if (!$updatePartnerTypeTrue->execute()) {
+                $conn->rollback();
+                throw new Exception("Updating partner type failed: " . $updatePartnerTypeTrue->error);
+            }
+        }
+
+        //Not Approved
+        $updatePartnerTypeFalse = $conn->prepare("UPDATE `partnership_partnertype` SET `isApproved`= ? WHERE partnershipID = ? AND partnerTypeID != ?");
+        foreach ($partnerTypes as $id) {
+            $isApproved = false;
+            $updatePartnerTypeFalse->bind_param("iii", $isApproved, $partnerID, $id);
+
+            if (!$updatePartnerTypeFalse->execute()) {
+                $conn->rollback();
+                throw new Exception("Updating partner type failed: " . $updatePartnerTypeFalse->error);
+            }
+        }
+
+        $approvedPartnerID = 2;
+        $updatePartnerStatus = $conn->prepare("UPDATE partnership 
+                        SET partnerStatusID = ?, startDate = ?
+                        WHERE partnershipID = ?");
+        $updatePartnerStatus->bind_param("isi", $approvedPartnerID, $startDate, $partnerID);
+        if (!$updatePartnerStatus->execute()) {
+            $conn->rollback();
+            throw new Exception("Updating partner approval status: " . $updatePartnerStatus->error);
+        }
+
+        $partnerRoleID = 2;
         $updateRole = $conn->prepare("UPDATE user
         SET userRole = ?
         WHERE userID = ?");
         $updateRole->bind_param("ii", $partnerRoleID, $partnerUserID);
 
-        if ($updateStatus->execute() && $updateRole->execute()) {
-            // $_SESSION['success-partnership'] = 'Request Approved Successfully';
-            header('Location: ../../Pages/Admin/displayPartnership.php?action=approved');
-            unset($_SESSION['partnerID']);
-            exit();
-        } else {
-            $_SESSION['partnerID'] =  $partnerID;
-            // $_SESSION['error-partnership'] = 'The request could not be approved. Please try again later.';
-            header('Location: ../../Pages/Admin/partnership.php?container=4&action=failed1');
-            exit();
+        if (!$updateRole->execute()) {
+            $conn->rollback();
+            throw new Exception("Updating partner role failed: " .  $updateRole->error);
         }
-    } else {
+
+        $roles = getUserRole($conn, $partnerRoleID);
+        $receiver = $roles['userTypeName'];
+        $message = 'Your request for a business partner has been reviewed and approved. You can now proceed to add your services: <a href="../Account/bpServices.php">Click here.</a>';
+        $insertNotification = $conn->prepare("INSERT INTO `notification`(`partnershipID`, `userID`, `message`, `receiver`) VALUES (?,?,?,?)");
+        $insertNotification->bind_param('iiss', $partnerID, $partnerUserID, $message, $receiver);
+
+        if (!$insertNotification->execute()) {
+            $conn->rollback();
+            throw new Exception("Failed inserting notification: " .  $insertNotification->error);
+        }
+        $conn->commit();
+        unset($_SESSION['partnerID']);
+        header('Location: ../../Pages/Admin/displayPartnership.php?action=approved');
+    } catch (Exception $e) {
         $_SESSION['partnerID'] =  $partnerID;
+        error_log('Error: ' . $e->getMessage());
         // $_SESSION['error-partnership'] = 'The request could not be approved. Please try again later.';
-        header('Location: ../../Pages/Admin/partnership.php?container=4&action=failed');
+        header('Location: ../../Pages/Admin/partnership.php?container=4&action=failed1');
         exit();
     }
-} else {
-    $_SESSION['partnerID'] =  $partnerID;
-    // $_SESSION['error-partnership'] = 'The request could not be approved. Please try again later.';
-    header('Location: ../../Pages/Admin/partnership.php?container=4&action=failed');
-    exit();
 }
+
 
 
 //Decline Button is Click
 if (isset($_POST['declineBtn'])) {
-    $_SESSION['partnerID'] = mysqli_real_escape_string($conn, $_POST['partnerID']);
-    $partnerStatus = mysqli_real_escape_string($conn, $_POST['partnerStatus']);
+    $_SESSION['partnerID'] = intval($_POST['partnerID']);
+    $partnerStatusID = intval($_POST['partnerStatus']);
     $rejectionReason = mysqli_real_escape_string($conn, $_POST['rejectionReason']);
-    $partnerUserID = mysqli_real_escape_string($conn, $_POST['partnerUserID']);
-    date_default_timezone_set('Asia/Manila');
-    // $endDate = date('Y-m-d');
-
-    $newPartnerStatus = 3;
-
+    $partnerUserID = intval($_POST['partnerUserID']);
     $partnerID = $_SESSION['partnerID'];
 
-    $query = $conn->prepare("SELECT * FROM partnership 
-    WHERE partnershipID = ? AND partnerStatusID = ?");
-    $query->bind_param("ii", $partnerID, $partnerStatus);
-    $query->execute();
-    $result = $query->get_result();
-    if ($result->num_rows > 0) {
+
+    $conn->begin_transaction();
+    try {
+        $findPartnerQuery = $conn->prepare("SELECT * FROM partnership 
+            WHERE partnershipID = ? AND partnerStatusID = ?");
+        $findPartnerQuery->bind_param("ii", $partnerID, $partnerStatusID);
+        if (!$findPartnerQuery->execute()) {
+            throw new Exception("Error: " . $findPartnerQuery->error);
+        }
+
+        $result = $findPartnerQuery->get_result();
+
+        if ($result->num_rows === 0) {
+            $_SESSION['partnerID'] =  $partnerID;
+            header('Location: ../../Pages/Admin/partnership.php?container=4&action=failed');
+            exit();
+        }
+
+        //Not Approved
+        $updatePartnerTypeFalse = $conn->prepare("UPDATE `partnership_partnertype` SET `isApproved`= ? WHERE partnershipID = ?");
+        $isApproved = false;
+        $updatePartnerTypeFalse->bind_param("ii", $isApproved, $partnerID);
+
+        if (!$updatePartnerTypeFalse->execute()) {
+            $conn->rollback();
+            throw new Exception("Updating partner type failed: " . $updatePartnerTypeFalse->error);
+        }
+        $rejectedStatusID = 3;
+        $updatePartnerStatus = $conn->prepare("UPDATE partnership SET partnerStatusID = ? WHERE partnershipID = ?");
+        $updatePartnerStatus->bind_param("ii", $rejectedStatusID, $partnerID);
+        if (!$updatePartnerStatus->execute()) {
+            $conn->rollback();
+            throw new Exception("Updating partner rejected status: " . $updatePartnerStatus->error);
+        }
+
 
         if ($rejectionReason !== "") {
-            $receiver = 'Partner';
+            $receiver = 'Partner Applicant';
             $message = $rejectionReason;
             $bookingID = Null;
         } else {
-            //pakipalitan si gpt gumawa
-            $receiver = 'Partner';
+            // TODO: Please change the message! Gpt be
+            $receiver =  'Partner Applicant';
             $message = "Thank you for reaching out and considering our venue for your project. We’re currently being selective with partnerships to ensure alignment with our brand and guest experience. At this time, we won’t be moving forward with this opportunity, but we truly appreciate your interest and wish you all the best.";
             $bookingID = Null;
         }
-
-        $updateStatus = $conn->prepare("UPDATE partnership 
-        SET partnerStatusID = ?
-        WHERE partnershipID = ?");
-        $updateStatus->bind_param("ii", $newPartnerStatus, $partnerID);
 
         $insertNotif = $conn->prepare("INSERT INTO notification(partnershipID, userID, message, bookingID, receiver)
         VALUES(?,?,?,?,?)");
         $insertNotif->bind_param("iisis", $partnerID,  $partnerUserID, $message, $bookingID, $receiver);
 
-
-        if ($updateStatus->execute() && $insertNotif->execute()) {
-            // $_SESSION['success-partnership'] = 'The request has been declined successfully.';
-            header('Location: ../../Pages/Admin/displayPartnership.php?action=rejected');
-            unset($_SESSION['partnerID']);
-            exit();
-        } else {
-            // $_SESSION['error-partnership'] = 'The request could not be declined. Please try again later.';
-            header('Location: ../../Pages/Admin/partnership.php?container=4&action=failed2');
-            unset($_SESSION['partnerID']);
-            exit();
+        if (!$insertNotif->execute()) {
+            $conn->rollback();
+            throw new Exception("Failed inserting notification: " .  $insertNotif->error);
         }
+        $conn->commit();
+        unset($_SESSION['partnerID']);
+        header('Location: ../../Pages/Admin/displayPartnership.php?action=rejected');
+        exit();
+    } catch (Exception $e) {
+        $conn->rollback();
+        $_SESSION['partnerID'] = $partnerID;
+        error_log("Error: " . $e->getMessage());
+        header('Location: ../../Pages/Admin/partnership.php?container=4&action=failed2');
+        exit();
     }
 }

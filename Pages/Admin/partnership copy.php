@@ -47,7 +47,7 @@ if (!$partnerID) {
     echo "<script>console.log('PHP says: " . addslashes($partnerID) . "'); </script>";
 }
 
-// print_r($partnerID);
+print_r($partnerID);
 
 ?>
 
@@ -69,8 +69,6 @@ if (!$partnerID) {
 </head>
 
 <body>
-
-
     <!-- View Individual Partner -->
     <div class="partner" id="partner-info" style="display: none;">
         <!-- Back Button -->
@@ -151,7 +149,7 @@ if (!$partnerID) {
                 </div>
                 <div class="partner-info">
                     <h4 class="card-title">Document Link</h4>
-                    <a href="<?= $link ?>" target="_blank"><?= $link ?></a>
+                    <a class="stretched-link" href="<?= $link ?>"><?= $link ?></a>
                 </div>
                 <div class="applicant-info">
                     <h4 class="card-title">Partner Type</h4>
@@ -161,33 +159,14 @@ if (!$partnerID) {
                 </div>
                 <div class="applicant-info validID">
                     <h4 class="card-title">Valid ID</h4>
-                    <input type="text" class="form-control validID" value="<?= $imageName ?>" name="validID" readonly>
+                    <input type="text" class="form-control validID" value="<?= htmlspecialchars($imageName) ?>" name="validID" readonly>
                     <button type="button" class="btn btn-primary viewID" data-bs-toggle="modal"
-                        data-bs-target="#partnerModal">View ID</button>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="partnerModal" tabindex="-1" aria-labelledby="partnerModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title">Valid ID</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <img src="../../Assets/Images/BusinessPartnerIDs/<?= $imageName ?>" alt="Valid ID"
-                            class="validIDImg">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
+                        data-bs-target="#IDModal">View ID</button>
                 </div>
             </div>
         </div>
     </div>
+
 
 
     <!-- View Individual Applicant -->
@@ -200,19 +179,18 @@ if (!$partnerID) {
         </div>
         <!-- Get the information to the database -->
         <?php
-        $pendingStatusID = 1;
-        $rejectedStatusID = 3;
-        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, u.phoneNumber, u.userProfile,
+        $partnerStatusID = 1;
+        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, u.phoneNumber, u.userProfile, 
                                 p.validID, p.companyName, p.businessEmail, p.partnerAddress, p.documentLink, p.partnerStatusID, p.userID,
-                                s.statusName, pt.partnerTypeDescription, ppt.partnerTypeID 
+                                s.statusName, pt.partnerTypeDescription 
                                 FROM partnership p
                                 INNER JOIN user u ON p.userID = u.userID
                                 INNER JOIN status s ON s.statusID = p.partnerStatusID
                                 LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
                                 LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
-                                WHERE  p.partnershipID = ? AND (p.partnerStatusID = ? OR  p.partnerStatusID = ?)
+                                WHERE  p.partnershipID = ? AND p.partnerStatusID = ?
                                 ");
-        $selectQuery->bind_param("iii", $partnerID, $pendingStatusID, $rejectedStatusID);
+        $selectQuery->bind_param("ii", $partnerID, $partnerStatusID);
         $selectQuery->execute();
         $result = $selectQuery->get_result();
         if ($result->num_rows === 0) {
@@ -223,8 +201,7 @@ if (!$partnerID) {
             $applicantID = (int) $data['userID'];
             $applicantName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
             $companyName = $data['companyName'];
-            $partnerTypeID = (int) $data['partnerTypeID'];
-            $partnerTypes[$partnerTypeID] = $data['partnerTypeDescription'];
+            $partnerTypes[] = $data['partnerTypeDescription'];
             $businessEmail = $data['businessEmail'];
             $phoneNumber = $data['phoneNumber'];
             if ($phoneNumber === NULL) {
@@ -249,32 +226,52 @@ if (!$partnerID) {
         }
 
         ?>
+        <form action="../../Function/Admin/partnerApproval.php" method="POST">
+            <!-- Display the information -->
+            <div class="card mb-3">
 
-        <div class="card mb-3">
-            <form action="../../Function/Admin/partnerApproval.php" method="POST">
-                <!-- Display the information -->
                 <div class="applicant-info-name-pic">
                     <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-start"
                         alt="<?= htmlspecialchars($applicantName) ?> ">
                     <div class="applicant-info-contact">
                         <!-- <h4 class="card-title name">Name</h4> -->
-                        <p class="card-text name"><?= $applicantName ?> </p>
+                        <p class="card-text name"><?= $applicantName ?></p>
                         <p class="card-text sub-name"><?= $businessEmail ?> | <?= $phoneNumber ?> </p>
                     </div>
-                    <?php if ($partnerStatus === 1) { ?>
-                        <div class="button-container">
-                            <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+                    <div class="button-container">
 
-                            <button type="button" class="btn btn-danger" id="declineBtn" data-bs-toggle="modal"
-                                data-bs-target="#rejectionModal">
-                                Decline
-                            </button>
+                        <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                        <input type="hidden" name="partnerStatus" value="<?= $partnerStatus ?>">
+                        <input type="hidden" name="partnerUserID" value="<?= $applicantID ?>">
+                        <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#rejectionModal">
+                            Decline
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="rejectionModalLabel">Reason for Rejection</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="rejectionReason">Please provide the reason for rejecting this
+                                            request</label>
+                                        <input type="text" name="rejectionReason" id="rejectionReason">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-danger" name="declineBtn">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    <?php } else { ?>
-                        <div class="rejected-image">
-                            <img src="../../Assets/Images/Icon/rejected.png" alt="Rejected Image">
-                        </div>
-                    <?php } ?>
+
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -283,14 +280,10 @@ if (!$partnerID) {
                             <h4 class="card-title">Company Name</h4>
                             <p class="card-text"><?= $companyName ?></p>
                         </div>
-                        <div class="applicant-info" id="partnerType-container">
+                        <div class="applicant-info">
                             <h4 class="card-title">Partner Type</h4>
-                            <?php foreach ($partnerTypes as  $id => $name): ?>
-                                <div class="partnertype-container">
-                                    <input type="checkbox" name="partnerTypes[]" value="<?= $id ?>">
-                                    <label> <?= $name ?></label>
-                                </div>
-
+                            <?php foreach ($partnerTypes as  $partnerType): ?>
+                                <p class="card-text"><?= ($partnerType) ?></p>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -307,41 +300,15 @@ if (!$partnerID) {
                             <h4 class="card-title">Valid ID</h4>
                             <input type="text" class="form-control validID" value="<?= htmlspecialchars($imageName) ?>" name="validID" readonly>
                             <button type="button" class="btn btn-primary viewID" data-bs-toggle="modal"
-                                data-bs-target="#applicantModal">View ID</button>
+                                data-bs-target="#IDModal">View ID</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="hidden-inputs">
-                    <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                    <input type="hidden" name="partnerStatus" id="partnerStatusID" value="<?= $partnerStatus ?>">
-                    <input type="hidden" name="partnerUserID" value="<?= $applicantID ?>">
-                </div>
+            </div>
+        </form>
 
-                <!-- Modal -->
-                <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="rejectionModalLabel">Reason for Rejection</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <label for="rejectionReason">Please provide the reason for rejecting this
-                                    request</label>
-                                <textarea name="rejectionReason" id="rejectionReason" cols="50" rows="5"> </textarea>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-danger" name="declineBtn">Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal fade" id="applicantModal" tabindex="-1" aria-labelledby="applicantModalLabel" aria-hidden="true">
+        <div class="modal fade" id="IDModal" tabindex="-1" aria-labelledby="IDModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
 
@@ -364,17 +331,11 @@ if (!$partnerID) {
     </div>
 
 
-
-
-
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
-
-    <!-- Sweetalert Link -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Search URL -->
     <script>
@@ -412,27 +373,17 @@ if (!$partnerID) {
                 title: 'Partnership Approval Failed',
                 text: 'There was an issue approving/rejecting the partnership request. Please try again.'
             });
-        } else if (action === "emptyPartnerTypes") {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops',
-                text: 'Please choose a partner type to approve!',
-                confirmButtonText: 'Okay'
-            }).then(() => {
-                document.getElementById('partnerType-container').style.border = '1px solid red';
-            })
         }
 
 
 
 
-        if (action) {
+        if (paramValue) {
             const url = new URL(window.location);
-            url.searchParams.delete('action');
+            url.search = '';
             history.replaceState({}, document.title, url.toString());
-        }
+        };
     </script>
-
 </body>
 
 </html>

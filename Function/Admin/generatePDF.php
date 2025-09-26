@@ -170,14 +170,35 @@ if (isset($_POST['generatePDF'])) {
                             $totalCost = 0;
 
                             if (!empty($reportData)) {
+
                                 foreach ($reportData as $row):
                                     $totalBookings++;
+                                    $resortTotalSales = 0;
+                                    $eventTotalSales = 0;
+                                    $hotelTotalSales = 0;
                                     $totalCost += $row['confirmedFinalBill'];
+                                    $bookingType = $row['bookingType'];
+
+                                    switch ($bookingType) {
+                                        case 'Resort':
+                                            $resortTotalSales += $row['confirmedFinalBill'];
+                                            break;
+                                        case 'Event':
+                                            $eventTotalSales += $row['confirmedFinalBill'];
+                                            break;
+                                        case 'Hotel':
+                                            $hotelTotalSales += $row['confirmedFinalBill'];
+                                            break;
+                                        default:
+                                            $resortTotalSales =  $row['confirmedFinalBill'];
+                                            $eventTotalSales =  $row['confirmedFinalBill'];
+                                            $hotelTotalSales = $row['confirmedFinalBill'];
+                                    }
                             ?>
                                     <tr>
                                         <td><?= htmlspecialchars($row['formattedBookingID']) ?></td>
                                         <td><?= ucfirst($row['firstName']) . ' ' . ucfirst($row['lastName']) ?></td>
-                                        <td><?= htmlspecialchars($row['bookingType']) ?></td>
+                                        <td><?= htmlspecialchars($bookingType) ?> Booking</td>
                                         <?php if ($userRole === 3) { ?>
                                             <td><?= htmlspecialchars($row['guest']) ?></td>
                                         <?php } elseif ($userRole === 2) { ?>
@@ -206,7 +227,13 @@ if (isset($_POST['generatePDF'])) {
                     <h2 class="section-title" style="margin-top: 50px;">Report Summary</h2>
                     <p style="text-align: left; margin-top: 20px;"><strong>Total Bookings:</strong> <?= $totalBookings ?>
                     </p>
-                    <p style="text-align: left;"><strong>Total Cost:</strong> ₱<?= number_format($totalCost, 2) ?></p>
+                    <p style="text-align: left; margin-top: 20px;"><strong>Total Hotel Sales:</strong> ₱<?= number_format($hotelTotalSales, 2) ?>
+                    </p>
+                    <p style="text-align: left; margin-top: 20px;"><strong>Total Resort Sales:</strong> ₱<?= number_format($resortTotalSales, 2) ?>
+                    </p>
+                    <p style="text-align: left; margin-top: 20px;"><strong>Total Event Sales:</strong> ₱<?= number_format($eventTotalSales, 2) ?>
+                    </p>
+                    <p style="text-align: left;"><strong>Grand Total:</strong> ₱<?= number_format($totalCost, 2) ?></p>
                 </section>
 
                 <section class="signatories">

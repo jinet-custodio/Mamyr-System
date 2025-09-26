@@ -250,7 +250,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <li class="list-group-item mb-2 notification-item"
                                     data-id="<?= htmlspecialchars($notificationID) ?>"
                                     style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?= htmlspecialchars($message) ?>
+                                    <?php echo $message ?>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
@@ -413,42 +413,35 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script>
         $(document).ready(function() {
             $('#transactionTable').DataTable({
-                responsive: false,
-                scrollX: true,
                 columnDefs: [{
-                        width: '10%',
-                        targets: 0
+                        width: '9%',
+                        target: 0,
                     },
                     {
                         width: '15%',
-                        targets: 1
+                        target: 1,
                     },
                     {
                         width: '15%',
-                        targets: 2
-                    },
-                    {
-                        width: '15%',
-                        targets: 3
+                        target: 2,
                     },
                     {
                         width: '10%',
-                        targets: 4
+                        target: 4,
                     },
                     {
                         width: '15%',
-                        targets: 5
+                        target: 5,
                     },
                     {
                         width: '15%',
-                        targets: 6
+                        target: 6,
                     },
                     {
                         width: '10%',
-                        targets: 7
+                        target: 7,
                     }
-                ],
-
+                ]
             });
         });
     </script>

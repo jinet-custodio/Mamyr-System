@@ -235,27 +235,31 @@ require '../../Function/Partner/getBookings.php';
                 <div class="tableContainer" id="bookingTable">
                     <table class=" table table-striped" id="booking">
                         <thead>
-                            <th scope="col">Booking ID</th>
-                            <th scope="col">Guest</th>
-                            <th scope="col">Booking Type</th>
-                            <th scope="col">Service</th>
-                            <th scope="col">Check-in</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <tr>
+                                <th scope="col">Booking ID</th>
+                                <th scope="col">Guest</th>
+                                <th scope="col">Booking Type</th>
+                                <th scope="col">Service</th>
+                                <th scope="col">Check-in</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
+                            </tr>
+
                         </thead>
                         <tbody>
                             <!-- Get availed service -->
                             <?php
+                            $message = '';
                             try {
                                 $getAvailedService = $conn->prepare("SELECT b.bookingID, LPAD(b.bookingID , 4, '0') AS formattedBookingID,
-                        u.firstName, u.lastName, b.bookingType, ps.PBName, b.startDate, b.endDate, bpas.approvalStatus as statusID, s.statusName as approvalStatus
-                        FROM businesspartneravailedservice bpas
-                        LEFT JOIN booking b ON bpas.bookingID = b.bookingID
-                        LEFT JOIN user u ON u.userID = b.userID
-                        LEFT JOIN partnershipservice ps ON bpas.partnershipServiceID = ps.partnershipServiceID
-                        LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
-                        LEFT JOIN status s ON bpas.approvalStatus = s.statusID
-                        WHERE p.userID = ?");
+                                        u.firstName, u.lastName, b.bookingType, ps.PBName, b.startDate, b.endDate, bpas.approvalStatus as statusID, s.statusName as approvalStatus
+                                        FROM businesspartneravailedservice bpas
+                                        LEFT JOIN booking b ON bpas.bookingID = b.bookingID
+                                        LEFT JOIN user u ON u.userID = b.userID
+                                        LEFT JOIN partnershipservice ps ON bpas.partnershipServiceID = ps.partnershipServiceID
+                                        LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
+                                        LEFT JOIN status s ON bpas.approvalStatus = s.statusID
+                                        WHERE p.userID = ?");
                                 $getAvailedService->bind_param('i', $userID);
                                 if (!$getAvailedService->execute()) {
                                     throw new Exception("Error executing availed service: User ID: $userID. Error=>" . $getAvailedService->error);
@@ -264,11 +268,7 @@ require '../../Function/Partner/getBookings.php';
                                 $result = $getAvailedService->get_result();
 
                                 if ($result->num_rows === 0) {
-                            ?>
-                                    <tr>
-                                        <td colspan="6">No booking to display</td>
-                                    </tr>
-                                <?php
+                                    $message =  'No booking to display';
                                 }
                                 $bookings = [];
                                 while ($row = $result->fetch_assoc()) {
@@ -289,7 +289,7 @@ require '../../Function/Partner/getBookings.php';
 
 
                             foreach ($bookings as $booking) {
-                                ?>
+                            ?>
                                 <tr>
                                     <td><?= $booking['formattedBookingID'] ?></td>
                                     <td><?= $booking['guestName'] ?></td>
@@ -351,7 +351,7 @@ require '../../Function/Partner/getBookings.php';
         $(document).ready(function() {
             $('#booking').DataTable({
                 language: {
-                    emptyTable: "No Services"
+                    emptyTable: <?= json_encode($message ?: "No data available") ?>
                 },
                 columnDefs: [{
                     width: '15%',

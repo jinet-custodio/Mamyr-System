@@ -62,7 +62,6 @@ require '../../Function/Partner/getBookings.php';
 <body>
     <div class="wrapper d-flex">
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
-
             <input type="hidden" id="userRole" value="<?= $userRole ?>">
             <!-- Account Icon on the Left -->
             <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
@@ -191,7 +190,7 @@ require '../../Function/Partner/getBookings.php';
                                     $notificationID = $notificationIDs[$index];
                                 ?>
                                     <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                        <?= htmlspecialchars($message) ?>
+                                        <?php echo $message ?>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>

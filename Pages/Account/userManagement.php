@@ -370,7 +370,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         deleteBtn.innerHTML = '<i class="fa-solid fa-user-xmark"></i>';
                     })
                     roles.forEach(role => {
-                        console.log(role.innerHTML);
+                        // console.log(role.innerHTML);
                         if (role.innerHTML == "Customer") {
                             role.innerHTML = '<i class="fa-solid fa-user status-icon"></i>';
                         } else if (role.innerHTML == "Partner") {
@@ -394,7 +394,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         deleteBtn.innerHTML = 'Delete';
                     })
                     roles.forEach(role => {
-                        console.log(role.innerHTML);
+                        // console.log(role.innerHTML);
                         if (role.innerHTML == '<i class="fa-solid fa-user status-icon"></i>') {
                             role.innerHTML = 'Customer';
                         } else if (role.innerHTML == '<i class="fa-solid fa-handshake status-icon"></i>') {
