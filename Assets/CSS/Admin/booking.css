@@ -25,14 +25,6 @@ body {
   background: #a1c8c7 !important;
 }
 
-.topSection {
-  /* border: 1px solid black; */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5vw;
-}
-
 .menus {
   /* border: 1px solid black; */
   padding: 0.5vw;
@@ -53,20 +45,6 @@ body {
 #dashboard {
   text-decoration: none;
   margin-left: 1vw;
-}
-
-.adminTitle {
-  margin-top: 1rem;
-  font-family: "Lora" !important;
-  /* font-weight: bold; */
-  font-size: 24px;
-}
-
-.admin img {
-  height: 5vw;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .booking-container {
@@ -104,6 +82,7 @@ label {
 
 thead {
   font-family: "Lora";
+  overflow: auto;
 }
 
 tbody {

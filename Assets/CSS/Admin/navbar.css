@@ -18,6 +18,10 @@
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
+body {
+  box-sizing: border-box;
+}
+
 .admin img {
   height: 5vw;
   aspect-ratio: 1;
@@ -198,11 +202,16 @@
 
 @media (max-width: 991.98px) {
   #navUL {
+    position: fixed;
     top: 5vh;
     right: 3vw;
-    z-index: 100;
-    width: 30%;
+    z-index: 9999;
+    width: 30% !important;
     padding: 1vw;
+  }
+
+  .nav-item {
+    z-index: 10000;
   }
 
   .navbar-toggler {
@@ -286,6 +295,10 @@
     }
   }
 
+  #navUL {
+    width: 40% !important;
+  }
+
   #notifCounter {
     height: 2vw !important;
     width: 0.5vw;
@@ -322,7 +335,7 @@
   }
 
   .navbar-collapse {
-    background-color: none;
+    background-color: transparent;
 
     .nav-link {
       color: black !important;
@@ -409,7 +422,7 @@
   }
 
   .navbar-collapse {
-    background-color: none;
+    background-color: transparent;
 
     .nav-link {
       color: black !important;
