@@ -1,0 +1,207 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Alkatra";
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins";
+  text-decoration: none;
+}
+
+body {
+  background-color: #f5f5f5 !important;
+}
+
+.backToSelection {
+  position: absolute;
+  top: 2%;
+  left: 3%;
+}
+
+.titleContainer {
+  margin-top: 2rem;
+}
+
+.eventTitle {
+  font-family: "Poppins Black";
+  font-size: 36px;
+  text-align: center;
+}
+
+.card {
+  display: block;
+  margin: auto;
+  margin-top: 2rem !important;
+  margin-bottom: 2rem !important;
+  width: 80%;
+  padding: 1rem;
+  border-radius: 2rem !important;
+}
+
+.input-container {
+  width: 100%;
+}
+
+/* Event Details */
+h4 {
+  text-align: center;
+  font-family: "Poppins";
+  font-weight: bold !important;
+  font-size: 26px;
+}
+
+.event-details {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.event-details-container .input-container {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.input-container label {
+  display: block;
+  margin: auto;
+  font-size: 18px;
+  margin-bottom: 0.55rem;
+}
+
+.input-container .form-control {
+  width: 100%;
+}
+/* Event Details */
+
+/* Venue details */
+
+.venue-details {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.textareaContainer {
+  display: flex;
+  gap: 2rem;
+}
+
+.textareaContainer p {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 0.55rem;
+}
+/* Venue details */
+
+/* Date details */
+.date-container {
+  margin-top: 1rem;
+}
+
+.date-details {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.date-details .input-container {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+textarea {
+  width: 100% !important;
+}
+/* Date details */
+
+/* Food details */
+.food-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.food-info {
+  display: flex;
+  justify-content: space-between;
+  width: 45%;
+  margin-top: 0.5rem;
+}
+
+.foodCategory {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Poppins";
+}
+
+.foodName {
+  display: block;
+  text-align: right;
+}
+
+.text-center {
+  color: red;
+  margin-top: 1rem;
+}
+/* Food details */
+
+/* Additional Services details */
+.additional-container {
+  margin-top: 1rem;
+}
+/* Additional Services details */
+
+/* Payment details */
+.payment-container {
+  margin-top: 1rem;
+}
+
+.payment-details-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+/* Payment details */
+
+/* Note details */
+.notes-container {
+  margin-top: 2rem;
+}
+
+.button-container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-primary {
+  width: 25%;
+}
+/* Note details */
