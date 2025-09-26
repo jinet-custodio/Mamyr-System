@@ -329,7 +329,7 @@ require_once '../../Function/functions.php';
 
 
                                     break;
-                                case 2: //Rejected
+                                case 3: //Rejected
                                     $statusTitle = 'Payment was declined';
                                     $statusSubtitle = 'Please check the payment details and try again, or contact the admin for assistance.';
                                     break;

@@ -61,12 +61,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 <body> <!-- Get the information to the database -->
     <?php
-    if ($userRole == 1) {
-        $role = "Customer";
-    } elseif ($userRole == 2) {
+    if ($userRole == 2) {
         $role = "Business Partner";
-    } elseif ($userRole == 3) {
-        $role = "Admin";
     } else {
         $_SESSION['error'] = "Unauthorized Access eh!";
         session_destroy();
@@ -285,18 +281,44 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <div class="addServiceContainer" id="addServiceContainer">
                     <div class="backArrowContainer" id="backArrowContainer">
-                        <a href="bpServices.php"><img src="../../Assets/Images/Icon/arrow.png" alt="Back Button"
+                        <a href="bpServices.php"><img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="Back Button"
                                 class="backArrow">
                         </a>
                     </div>
                     <form action="../../Function/Partner/addService.php" method="POST">
                         <div class="serviceInputContainer">
                             <div class="serviceNameContainer">
-                                <label for="serviceName" id="addServiceLabel">Service Name</label>
+                                <label for="serviceName" class="addServiceLabel">Service Name</label>
                                 <input type="text" class="form-control" id="serviceName" name="serviceName" placeholder="e.g Wedding Photography" required>
                             </div>
+                            <div class="partnerTypeContainer">
+                                <label for="partnerType" class="addServiceLabel">Partner Type</label>
+                                <select name="partnerTypeID" id="partnerTypeID" class="form-select">
+                                    <option value="" disabled selected>Select Partner Service Type</option>
+                                    <?php
+                                    $isApproved = true;
+                                    $getPartnerTypes = $conn->prepare("SELECT pt.partnerTypeDescription as description, pt.partnerTypeID FROM partnership_partnertype ppt 
+                                                        LEFT JOIN partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID 
+                                                        WHERE  ppt.isApproved = ? AND ppt.partnershipID = ?");
+                                    $getPartnerTypes->bind_param('ii', $isApproved, $partnershipID);
+                                    if ($getPartnerTypes->execute()) {
+                                        $result = $getPartnerTypes->get_result();
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                                <option value="<?= htmlspecialchars($row['partnerTypeID']) ?>">
+                                                    <?= htmlspecialchars($row['description']) ?></option>
+                                    <?php
+                                            }
+                                        }
+                                        $result->free();
+                                        $getPartnerTypes->close();
+                                    }
+                                    ?>
+                                </select>
+                            </div>
                             <div class="AvailabilityContainer">
-                                <label for="availability" id="addServiceLabel">Availability</label>
+                                <label for="availability" class="addServiceLabel">Availability</label>
                                 <select class="form-select" name="availability" id="availability">
                                     <option value="" disabled selected>Select Availability</option>
                                     <?php
@@ -306,7 +328,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>" id="available">
+                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
                                                     <?= htmlspecialchars($row['availabilityName']) ?></option>
                                     <?php
                                             }
@@ -317,25 +339,26 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     ?>
                                 </select>
                             </div>
+
                             <div class="priceContainer">
-                                <label for="price" id="addServiceLabel">Price</label>
+                                <label for="price" class="addServiceLabel">Price</label>
                                 <input type="text" class="form-control" id="price" name="price" placeholder="e.g. 1000" required>
                             </div>
                             <div class="capacityContainer">
-                                <label for="capacity" id="addServiceLabel">Capacity</label>
+                                <label for="capacity" class="addServiceLabel">Capacity</label>
                                 <input type="number" class="form-control" id="capacity" name="capacity" placeholder="e.g. 5" min='1'>
                             </div>
                             <div class="durationContainer">
-                                <label for="duration" id="addServiceLabel">Duration</label>
+                                <label for="duration" class="addServiceLabel">Duration</label>
                                 <input type="text" class="form-control" id="duration" name="duration" placeholder="e.g. 1 hour">
                             </div>
                             <div class="descContainer">
-                                <label for="description" class="description" id="addServiceLabel">Description</label>
+                                <label for="description" class="description" class="addServiceLabel">Description</label>
                                 <textarea class="form-control" id="description" name="serviceDesc"
                                     placeholder="Service information/description (Optional)"></textarea>
                             </div>
                             <!-- <div class="imageContainer">
-                                <label for="serviceImage" id="addServiceLabel">Upload Image</label>
+                                <label for="serviceImage"  class="addServiceLabel">Upload Image</label>
                                 <img src="../../Assets/Images/no-picture.jpg" alt="Service Picture" id="preview"
                                     class="serviceImage" name="serviceImage">
                                 <input type="file" id="servicePicture" name="servicePicture" hidden>
@@ -359,6 +382,20 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </main>
     </div>
 
+
+
+    <!-- Bootstrap Link -->
+    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
+    </script>
+
+    <!-- Jquery Link -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- DataTables Link -->
+    <script src="../../../Assets/JS/datatables.min.js"></script>
+
     <script>
         const servicesTable = document.getElementById("servicesTable")
         const addServiceContainer = document.getElementById("addServiceContainer")
@@ -381,17 +418,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         }
     </script>
 
-    <!-- Bootstrap Link -->
-    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
-
-    <!-- Jquery Link -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!-- DataTables Link -->
-    <script src="../../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
@@ -407,8 +433,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             });
         });
     </script>
-
-
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -460,7 +484,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         });
     </script>
 
-    <!-- Show -->
+    <!-- Show when want to logout-->
     <script>
         const logoutBtn = document.getElementById('logoutBtn');
         const logoutModal = document.getElementById('logoutModal');
@@ -497,8 +521,30 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             reader.readAsDataURL(event.target.files[0]);
         });
     </script> -->
+    <!-- Message pop up -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
+        if (paramValue === 'success') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Service Added Successfully',
+                text: ''
+            })
+        } else if (paramValue === 'error') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to Add Service',
+                text: 'Please try again later.'
+            })
+        }
 
-
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
+    </script>
 
 
 

@@ -699,6 +699,12 @@ if ($admin === "Admin") {
                 text: "Please provide a reason for rejection.",
                 icon: "warning",
                 confirmButtonText: "Okay",
+            }).then(() => {
+                const rejectModal = document.getElementById('rejectModal');
+                const rejectionReason = document.getElementById('rejectionReason');
+                const modal = new bootstrap.Modal(rejectModal);
+                modal.show();
+                rejectionReason.style.border = '1px solid red';
             });
         }
 

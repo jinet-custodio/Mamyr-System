@@ -63,19 +63,24 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <!-- Get the information to the database -->
     <?php
-    if ($userRole == 1) {
-        $role = "Customer";
-    } elseif ($userRole == 2) {
-        $role = "Business Partner";
-    } elseif ($userRole == 3) {
-        $role = "Admin";
-    } elseif ($userRole == 4) {
-        $role = "Partnership Applicant";
-    } else {
-        $_SESSION['error'] = "Unauthorized Access eh!";
-        session_destroy();
-        header("Location: ../register.php");
-        exit();
+    switch ($userRole) {
+        case 1: //customer
+            $role = "Customer";
+            break;
+        case 2:
+            $role = "Business Partner";
+            break;
+        case 3:
+            $role = "Admin";
+            break;
+        case 4:
+            $role = "Partnership Applicant";
+            break;
+        default:
+            $_SESSION['error'] = "Unauthorized Access eh!";
+            session_destroy();
+            header("Location: ../register.php");
+            exit();
     }
 
 
@@ -156,7 +161,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </a>
                 </li>
 
-                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                <?php if ($role !== 'Admin') { ?>
                     <li class="sidebar-item">
                         <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
