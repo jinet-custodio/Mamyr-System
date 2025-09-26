@@ -250,14 +250,14 @@ if (isset($_SESSION['error-partnership'])) {
                 <div class="modal-body p-0">
                     <?php if (!empty($notificationsArray)): ?>
                         <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
+                            <?php foreach ($notificationsArray as $index => $notifMessage):
                                 $bgColor = $color[$index];
                                 $notificationID = $notificationIDs[$index];
                             ?>
                                 <li class="list-group-item mb-2 notification-item"
                                     data-id="<?= htmlspecialchars($notificationID) ?>"
                                     style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?php echo $message ?>
+                                    <?= htmlspecialchars($notifMessage) ?>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
@@ -315,16 +315,67 @@ if (isset($_SESSION['error-partnership'])) {
                         <tr>
                             <th class="table-header" scope="col">Name</th>
                             <th class="table-header" scope="col">Partner Type</th>
-                            <th class="table-header" scope="col">Date Started</th>
+                            <th class="table-header" scope="col">Date Applied</th>
                             <th class="table-header" scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="table-body" id="partners-table-body">
-                        <tr>
-                            <td colspan="4" class="text-center">Loading...</td>
-                        </tr>
-                    </tbody>
+                    <tbody class="table-body">
+                        <!-- Select to display all the applicants  -->
+                        <?php
+                        $partner = 2;
+                        // $rejectedStatus = 3;
+                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName,  GROUP_CONCAT(pt.partnerTypeDescription SEPARATOR ' & ') AS partnerTypeDescription
+                                FROM partnership p
+                                INNER JOIN user u ON p.userID = u.userID
+                                INNER JOIN status s ON s.statusID = p.partnerStatusID
+                                LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
+                                LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
+                                WHERE u.userRole = ?
+                                GROUP BY 
+                                p.partnershipID
+                                ");
+                        $selectQuery->bind_param("i", $partner);
+                        $selectQuery->execute();
+                        $result = $selectQuery->get_result();
+                        if ($result->num_rows > 0) {
+                            foreach ($result as $applicants) {
+                                $name = ucwords($applicants['firstName']) . " " . ucwords($applicants['lastName']);
+                                $partnerID = $applicants['partnershipID'];
+                                $status = $applicants['statusName'];
+                                $date = $applicants['startDate'];
+                                $startDate = date("F d, Y — g:i A", strtotime($date));
+                        ?>
+                                <tr>
+                                    <td scope="row"><?= $name ?></td>
 
+                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
+
+                                    <td scope="row">
+                                        <?= $startDate ?>
+                                    </td>
+
+                                    <td scope="row">
+                                        <?php
+                                        $partner = 3;
+                                        // $partnerContainer = base64_encode($partner);
+                                        ?>
+                                        <form action="partnership.php?container=<?= $partner ?>" method="POST"
+                                            style="display:inline;">
+                                            <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                            <button type="submit" class="btn btn-info" name="view-btn">View</button>
+                                        </form>
+                                    </td>
+                                    </td>
+                                <?php
+                            }
+                        } else {
+                                ?>
+                                <td colspan="5">
+                                    <h5 scope="row" class="text-center">No Record Found!</h5>
+                                </td>
+                            <?php
+                        } ?>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -354,12 +405,78 @@ if (isset($_SESSION['error-partnership'])) {
                             <th class="table-header" scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="table-body" id="requests-table-body">
-                        <tr>
-                            <td colspan="5" class="text-center">Loading...</td>
-                        </tr>
-                    </tbody>
+                    <tbody class="table-body">
+                        <!-- Select to display all the applicants  -->
+                        <?php
+                        $pendingStatus = 1;
+                        $rejectedStatus = 3;
+                        $applicant = 4;
+                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName,  GROUP_CONCAT(pt.partnerTypeDescription SEPARATOR ' & ') AS partnerTypeDescription
+                                FROM partnership p
+                                INNER JOIN user u ON p.userID = u.userID
+                                INNER JOIN status s ON s.statusID = p.partnerStatusID
+                                LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
+                                LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
+                                WHERE p.partnerStatusID = ? OR p.partnerStatusID = ? AND u.userRole = ?
+                                GROUP BY 
+                                p.partnershipID
+                                ");
+                        $selectQuery->bind_param("iii", $pendingStatus, $rejectedStatus, $applicant);
+                        $selectQuery->execute();
+                        $result = $selectQuery->get_result();
+                        if ($result->num_rows > 0) {
+                            foreach ($result as $applicants) {
+                                $name = ucwords($applicants['firstName']) . " " . ucwords($applicants['lastName']);
+                                $partnerID = $applicants['partnershipID'];
+                                $status = $applicants['statusName'];
+                                $date = $applicants['requestDate'];
+                                $requestDate = date("F d, Y — g:i A", strtotime($date));
+                        ?>
+                                <tr>
+                                    <td scope="row"><?= $name ?></td>
 
+                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'])  ?></td>
+                                    <td scope="row"><?= htmlspecialchars($requestDate) ?></td>
+                                    <?php
+                                    if ($status == "Pending") {
+                                    ?>
+                                        <td scope="row" class="btn btn-warning w-75 d-block m-auto mt-1"
+                                            style="background-color:#ffc108 ;">
+                                            <?= $status ?>
+                                        </td>
+                                    <?php
+                                    } else if ($status == "Rejected") {
+                                    ?>
+                                        <td scope="row" class="btn btn-danger w-75 d-block m-auto mt-1"
+                                            style="background-color:#FF0000; color:#ffff ;">
+                                            <?= $status ?>
+                                        </td>
+                                    <?php
+                                    }
+                                    ?>
+                                    <td scope="row">
+                                        <?php
+                                        $applicant = 4;
+                                        // $applicantContainer = base64_encode($applicant);
+                                        ?>
+                                        <form action="partnership.php?container=<?= $applicant ?>" method="POST"
+                                            style="display:inline;">
+                                            <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
+                                            <button type="submit" class="btn btn-info w-75" name="view-partner">View</button>
+                                        </form>
+
+                                    </td>
+                                    </td>
+                                <?php
+                            }
+                        } else {
+                                ?>
+                                <td colspan="5">
+                                    <h5 scope="row" class="text-center">No Record Found!</h5>
+                                </td>
+                            <?php
+                        } ?>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -524,21 +641,17 @@ if (isset($_SESSION['error-partnership'])) {
             requestCard.style.display = "block";
         }
 
+
+
         if (action === "approved") {
             Swal.fire({
                 icon: 'success',
                 title: 'Partnership Approved',
                 text: 'The partnership request has been approved successfully.'
             });
-        } else if (action === 'rejected') {
-            Swal.fire({
-                icon: 'success',
-                title: 'Partnership Rejected',
-                text: 'The partnership request has been rejected successfully.'
-            });
         }
 
-        if (action) {
+        if (paramValue || action) {
             const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url.toString());
@@ -555,52 +668,6 @@ if (isset($_SESSION['error-partnership'])) {
             });
         <?php endif; ?>
     </script>
-
-    <!-- Ajax fort request adn partner -->
-    <script>
-        function loadPartners() {
-            const tableBody = document.getElementById("partners-table-body");
-            tableBody.innerHTML = "<tr><td colspan='4' class='text-center'>Loading...</td></tr>";
-
-            fetch('../../Function/Admin/Partnership/getPartner.php')
-                .then(res => res.text())
-                .then(html => {
-                    tableBody.innerHTML = html;
-                }).catch(err => {
-                    tableBody.innerHTML = "<tr><td colspan='4' class='text-danger text-center'>Error loading data.</td></tr>";
-                });
-        }
-
-        function loadRequests() {
-            const tableBody = document.getElementById("requests-table-body");
-            tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Loading...</td></tr>";
-
-            fetch('../../Function/Admin/Partnership/getApplicant.php')
-                .then(res => res.text())
-                .then(html => {
-                    tableBody.innerHTML = html;
-                }).catch(err => {
-                    tableBody.innerHTML = "<tr><td colspan='5' class='text-danger text-center'>Error loading data.</td></tr>";
-                });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("partner-link").addEventListener("click", function() {
-                loadPartners();
-            });
-
-            document.getElementById("request-link").addEventListener("click", function() {
-                loadRequests();
-            });
-
-            const params = new URLSearchParams(window.location.search);
-            const paramValue = params.get('container');
-
-            if (paramValue == 1) loadPartners();
-            else if (paramValue == 2) loadRequests();
-        });
-    </script>
-
 
 
 

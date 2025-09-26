@@ -158,47 +158,53 @@ if (isset($_POST['approvePaymentBtn'])) {
     $userRoleID = (int) $_POST['userRoleID'];
     $customerID = (int) $_POST['customerID'];
     $message = mysqli_real_escape_string($conn, $_POST['rejectionReason']);
-    $paymentRejectedStatus = 3;  //Rejected Status
+
 
     if (empty($message)) {
         $_SESSION['bookingID'] = $bookingID;
         header('Location: ../../Pages/Admin/viewPayments.php?action=reasonFieldEmpty');
         exit();
     } else {
-        $bookingCheck = $conn->prepare("SELECT * FROM confirmedbooking WHERE bookingID = ? ");
-        $bookingCheck->bind_param("i", $bookingID);
-        $bookingCheck->execute();
-        $bookingResult = $bookingCheck->get_result();
-        if ($bookingResult->num_rows > 0) {
+        $conn->begin_transaction();
+        try {
+            $bookingCheck = $conn->prepare("SELECT * FROM confirmedbooking WHERE bookingID = ? ");
+            $bookingCheck->bind_param("i", $bookingID);
+            if (!$bookingCheck->execute()) {
+                throw new Exception('Error executing booking check query!' . $bookingCheck->error);
+            }
+            $bookingResult = $bookingCheck->get_result();
+
+            if ($bookingResult->num_rows === 0) {
+                error_log('No bookings found: BookingID -> ' . $bookingID);
+                throw new Exception('No found data!' . $bookingCheck->error);
+            }
             $row = $bookingResult->fetch_assoc();
 
+            // $paymenIssueID = 4;
+            $paymentRejectedStatus = 3;  //Rejected Status
             $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedbooking SET
             paymentApprovalStatus = ? WHERE bookingID = ?");
             $updateBookingPaymentStatus->bind_param("ii", $paymentRejectedStatus,  $bookingID);
-            if ($updateBookingPaymentStatus->execute()) {
-
-                if ($userRoleID === 1) {
-                    $receiver = 'Customer';
-                } elseif ($userRoleID === 2) {
-                    $receiver = 'Partner';
-                } elseif ($userRoleID === 3) {
-                    $receiver = 'Admin';
-                }
-
-                $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
-                    VALUES(?,?,?,?)");
-                $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
-                $insertNotification->execute();
-
-                header('Location: ../../Pages/Admin/transaction.php?action=rejected');
-                exit();
-            } else {
-                header('Location: ../../Pages/Admin/transaction.php?action=failed');
-                exit();
+            if (!$updateBookingPaymentStatus->execute()) {
+                $conn->rollback();
+                throw new Exception('Failed Updating Payment Approval Status' . $updateBookingPaymentStatus->error);
             }
-        } else {
-            header('Location: ../../Pages/Admin/transaction.php?action=failed');
+
+            $receiver = getMessageReceiver($userRoleID);
+            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
+                    VALUES(?,?,?,?)");
+            $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
+            if (!$insertNotification->execute()) {
+                $conn->rollback();
+                throw new Exception('Insert Notification failed' . $insertNotification->error);
+            }
+            $conn->commit();
+            header('Location: ../../Pages/Admin/transaction.php?action=rejected');
             exit();
+        } catch (Exception $e) {
+            $conn->rollback();
+            error_log("Error: " . $e->getMessage());
+            header('Location: ../../Pages/Admin/transaction.php?action=failed');
         }
     }
 } elseif (isset($_POST['submitPaymentBtn'])) {

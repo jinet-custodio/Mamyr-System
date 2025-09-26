@@ -229,7 +229,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <li class="list-group-item mb-2 notification-item"
                                         data-id="<?= htmlspecialchars($notificationID) ?>"
                                         style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                        <?= htmlspecialchars($message) ?>
+                                        <?php echo $message ?>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
