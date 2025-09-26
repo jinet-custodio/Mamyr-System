@@ -57,14 +57,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
-    <!-- Data Table Link -->
+    <!-- DataTables CSS -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/transaction.css" />
     <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css" />
-
-
 </head>
 
 <body>
@@ -180,7 +178,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="reviews.php">
+                    <a class="nav-link" href="reviews.php">
                         <i class="fa-solid fa-star navbar-icon"></i>
                         <h5>Reviews</h5>
                     </a>
@@ -194,7 +192,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="transaction.php">
+                    <a class="nav-link active" href="transaction.php">
                         <i class="fa-solid fa-credit-card navbar-icon"></i>
                         <h5>Payments</h5>
                     </a>
@@ -264,104 +262,109 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
     </div>
 
-    <div class="transactionContainer">
-        <div class="card" style="width: 80rem;">
-            <div class="titleContainer">
-                <h3 class="title">Transaction</h3>
-            </div>
-            <table class="table table-striped" id="transactionTable">
-                <thead>
-                    <th scope="col">Booking ID</th>
-                    <th scope="col">Guest</th>
-                    <th scope="col">Total Payment</th>
-                    <!-- <th scope="col">Downpayment (30%)</th> -->
-                    <!-- <th scope="col">Amount Paid</th> -->
-                    <th scope="col">Balance</th>
-                    <th scope="col">Payment Method</th>
-                    <th scope="col">Payment Approval</th>
-                    <th scope="col">Payment Status</th>
-                    <th scope="col">Action</th>
-                </thead>
-                <!-- Get data and isplay Transaction -->
-                <tbody>
-                    <?php
-                    $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, b.paymentMethod, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
+    <main>
+        <div class="transactionContainer">
+            <div class="card" id="tableContainer">
+                <div class="titleContainer">
+                    <h3 class="title fw-bold">Transactions</h3>
+                </div>
+                <table class="table table-striped display nowrap" id="transactionTable">
+                    <thead>
+                        <th scope="col">Booking ID</th>
+                        <th scope="col">Guest</th>
+                        <th scope="col">Total Payment</th>
+                        <th scope="col">Balance</th>
+                        <th scope="col">Payment Method</th>
+                        <th scope="col">Payment Approval</th>
+                        <th scope="col">Payment Status</th>
+                        <th scope="col">Action</th>
+                    </thead>
+                    <!-- Get data and isplay Transaction -->
+                    <tbody>
+                        <?php
+                        $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, b.paymentMethod, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
                     FROM confirmedbooking cb
                     LEFT JOIN booking b ON cb.bookingID = b.bookingID
                     LEFT JOIN user u ON b.userID = u.userID
                     LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID
                     LEFT JOIN status stat ON cb.paymentApprovalStatus = stat.statusID
                     ");
-                    $payments->execute();
-                    $paymentsResult = $payments->get_result();
-                    if ($paymentsResult->num_rows > 0) {
-                        while ($data = $paymentsResult->fetch_assoc()) {
-                            $guestName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
-                            $bookingID = $data['bookingID'];
-                            $formattedID = $data['formattedID'];
-                            $totalAmount = $data['confirmedFinalBill'];
-                            // $downpayment = $data['CBdownpayment'];
-                            $amountPaid = $data['amountPaid'];
-                            $balance = $data['userBalance'];
-                            $paymentMethod = $data['paymentMethod'];
-                            $paymentStatus = $data['PaymentStatus'];
-                            $paymentApprovalStatus = $data['paymentApprovalStatus'];
+                        $payments->execute();
+                        $paymentsResult = $payments->get_result();
+                        if ($paymentsResult->num_rows > 0) {
+                            while ($data = $paymentsResult->fetch_assoc()) {
+                                $guestName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
+                                $bookingID = $data['bookingID'];
+                                $formattedID = $data['formattedID'];
+                                $totalAmount = $data['confirmedFinalBill'];
+                                // $downpayment = $data['CBdownpayment'];
+                                $amountPaid = $data['amountPaid'];
+                                $balance = $data['userBalance'];
+                                $paymentMethod = $data['paymentMethod'];
+                                $paymentStatus = $data['PaymentStatus'];
+                                $paymentApprovalStatus = $data['paymentApprovalStatus'];
 
-                            if ($paymentStatus === 'Fully Paid') {
-                                $classColor = 'success';
-                            } elseif ($paymentStatus === 'No Payment') {
-                                $classColor = 'danger';
-                            } elseif ($paymentStatus === 'Partially Paid') {
-                                $classColor = 'primary';
+                                if ($paymentStatus === 'Fully Paid') {
+                                    $classColor = 'success';
+                                } elseif ($paymentStatus === 'No Payment') {
+                                    $classColor = 'danger';
+                                } elseif ($paymentStatus === 'Partially Paid') {
+                                    $classColor = 'primary';
+                                }
+
+
+
+                                if ($paymentApprovalStatus === "Pending") {
+                                    $addClass = "btn btn-warning w-100";
+                                } elseif ($paymentApprovalStatus === "Approved") {
+                                    $addClass = "btn btn-primary w-100";
+                                } elseif ($paymentApprovalStatus === "Rejected") {
+                                    $addClass = "btn btn-danger w-100";
+                                } elseif ($paymentApprovalStatus === "Done") {
+                                    $addClass = "btn btn-success w-100";
+                                }
+
+
+                        ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($formattedID) ?></td>
+                                    <td><?= htmlspecialchars($guestName) ?></td>
+                                    <td>₱ <?= number_format($totalAmount, 2) ?></td>
+                                    <td>₱ <?= number_format($balance, 2) ?></td>
+                                    <td><?= htmlspecialchars($paymentMethod) ?></td>
+                                    <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
+                                    <td><span
+                                            class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
+                                    </td>
+
+                                    <td>
+                                        <form action="viewPayments.php" method="POST">
+                                            <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                                            <button type="submit" name="viewIndividualPayment"
+                                                class="btn btn-info w-100">View</button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                        <?php
                             }
-
-
-
-                            if ($paymentApprovalStatus === "Pending") {
-                                $addClass = "btn btn-warning w-100";
-                            } elseif ($paymentApprovalStatus === "Approved") {
-                                $addClass = "btn btn-primary w-100";
-                            } elseif ($paymentApprovalStatus === "Rejected") {
-                                $addClass = "btn btn-danger w-100";
-                            } elseif ($paymentApprovalStatus === "Done") {
-                                $addClass = "btn btn-success w-100";
-                            }
-
-
-                    ?>
-                            <tr>
-                                <td><?= htmlspecialchars($formattedID) ?></td>
-                                <td><?= htmlspecialchars($guestName) ?></td>
-                                <td>₱ <?= number_format($totalAmount, 2) ?></td>
-                                <td>₱ <?= number_format($balance, 2) ?></td>
-                                <td><?= htmlspecialchars($paymentMethod) ?></td>
-                                <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
-                                <td><span
-                                        class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
-                                </td>
-
-                                <td>
-                                    <form action="viewPayments.php" method="POST">
-                                        <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
-                                        <button type="submit" name="viewIndividualPayment"
-                                            class="btn btn-info w-100">View</button>
-                                    </form>
-                                </td>
-                            </tr>
-
-                    <?php
                         }
-                    }
 
-                    ?>
-                </tbody>
-            </table>
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    </main>
+    <!-- Jquery Link -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
+    <!-- DataTables -->
+    <script src="../../Assets/JS/datatables.min.js"></script>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src=" ../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
@@ -406,12 +409,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         });
     </script>
 
-
-    <!-- Jquery Link -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!-- Data Table Link -->
-    <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
@@ -448,7 +445,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             });
         });
     </script>
-
+    <script src="../../Assets/JS/adminNavbar.js"></script>
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->

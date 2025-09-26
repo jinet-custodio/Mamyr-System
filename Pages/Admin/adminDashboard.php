@@ -354,8 +354,9 @@ $availabilityQuery->close();
                     </a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
-                        Log Out
+                    <a href="../../Function/Admin/logout.php" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
+                        <h5 style="color: red;">Log Out</h5>
                     </a>
                 </li>
             </ul>
@@ -607,40 +608,10 @@ $availabilityQuery->close();
     </script>
 
     <!-- Responsive Navbar -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const icons = document.querySelectorAll('.navbar-icon');
-            const navbarUL = document.getElementById('navUL');
-            const nav = document.getElementById('navbar')
-
-            function handleResponsiveNavbar() {
-                if (window.innerWidth <= 991.98) {
-                    navbarUL.classList.remove('w-100');
-                    navbarUL.style.position = "fixed";
-                    nav.style.margin = "0";
-                    nav.style.maxWidth = "100%";
-                    icons.forEach(icon => {
-                        icon.style.display = "none";
-                    })
-                } else {
-                    navbarUL.classList.add('w-100');
-                    navbarUL.style.position = "relative";
-                    nav.style.margin = "20px auto";
-                    nav.style.maxWidth = "80vw";
-                    icons.forEach(icon => {
-                        icon.style.display = "block";
-                    })
-                }
-            }
-
-            handleResponsiveNavbar();
-            window.addEventListener('resize', handleResponsiveNavbar);
-        });
-    </script>
+    <script src="../../Assets/JS/adminNavbar.js"></script>
 
     <!-- Chart JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 
     <!-- Notification Ajax -->
     <script>

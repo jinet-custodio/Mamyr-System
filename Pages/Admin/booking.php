@@ -66,8 +66,7 @@ if (isset($_SESSION['error'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
     <!-- Font Awesome and Box Icon links  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -427,51 +426,14 @@ if (isset($_SESSION['error'])) {
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
-
-    <!-- DataTables Responsive extension -->
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="../../Assets/JS/datatables.min.js"></script>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
-    <!-- Responsive Navbar -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const icons = document.querySelectorAll('.navbar-icon');
-            const navbarUL = document.getElementById('navUL');
-            const nav = document.getElementById('navbar');
-            const title = document.getElementById('hiddenTitle');
-
-            function handleResponsiveNavbar() {
-                if (window.innerWidth <= 991.98) {
-                    navbarUL.classList.remove('w-100');
-                    navbarUL.style.position = "fixed";
-                    nav.style.margin = "0";
-                    nav.style.maxWidth = "100%";
-                    icons.forEach(icon => {
-                        icon.style.display = "none";
-                    })
-                    title.style.display = "block";
-
-                } else {
-                    navbarUL.classList.add('w-100');
-                    navbarUL.style.position = "relative";
-                    nav.style.margin = "20px auto";
-                    nav.style.maxWidth = "80vw";
-                    icons.forEach(icon => {
-                        icon.style.display = "block";
-                    })
-                    title.style.display = "none";
-                }
-            }
-
-            handleResponsiveNavbar();
-            window.addEventListener('resize', handleResponsiveNavbar);
-        });
-    </script>
+    <script src="../../Assets/JS/adminNavbar.js"></script>
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -542,6 +504,7 @@ if (isset($_SESSION['error'])) {
             ],
         });
     </script>
+
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->

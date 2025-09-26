@@ -40,8 +40,8 @@ body {
 .categories {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  width: 85%;
+  justify-content: space-evenly;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -60,6 +60,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin: auto;
 }
 
 .category-card img {
@@ -79,10 +80,23 @@ body {
 
 .categoryLink {
   text-decoration: none;
-  width: 48%;
+  width: 40%;
   &:hover {
     text-decoration: none !important;
   }
+}
+
+a.choice2-link,
+a.choice1-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.request-container,
+.partner-container {
+  width: 95%;
+  margin: 4vw auto;
 }
 
 .categoryLink .category-card {
@@ -101,13 +115,22 @@ body {
   justify-content: center;
 }
 
+#partnersTable,
+#requestTable {
+  table-layout: fixed;
+  width: 98% !important;
+}
+
 .card {
-  padding: 2vw;
+  padding: 0.5vw;
+}
+
+.category-body {
+  margin: 3vw auto;
 }
 
 .card-header {
   display: flex;
-
   border: 1px solid black;
 }
 
@@ -117,11 +140,16 @@ body {
 td,
 th {
   text-align: center !important;
-  font-size: 1.5vw;
 }
 
 th {
   background-color: #91d2f2 !important;
+}
+
+.dt-length select,
+.dt-search input,
+a.paginate_button.current {
+  margin: 0.5vw;
 }
 
 h4 {
@@ -129,12 +157,18 @@ h4 {
   margin-top: -3vw !important;
 }
 
-.buttonContainer {
-  z-index: 1;
+.back-btn-container {
+  z-index: 5;
+  margin-bottom: 1vw;
+}
+
+.back-btn-container i {
+  font-size: clamp(2vw, 2.1vw, 2.2vw);
 }
 
 .page-title {
-  font-family: "Lora";
+  font-family: "Poppins";
+  font-size: clamp(3vw, 2.5vw, 2.3vw);
 }
 
 .table-body {
@@ -148,6 +182,10 @@ h4 {
 
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
+  .categories {
+    margin-top: 5vw;
+    width: 100%;
+  }
   .category-card img {
     border-radius: 2vw !important;
     padding: 1vw;
@@ -155,89 +193,101 @@ h4 {
     object-fit: cover;
   }
 
+  .categoryLink {
+    width: 48%;
+  }
+
+  .card {
+    padding: 2vw;
+  }
+
+  .back-btn-container i {
+    font-size: clamp(3vw, 3.5vw, 3.8vw);
+  }
+
   .category-title {
     font-size: clamp(3.5vw, 3.3vw, 3.1vw);
   }
 
-  .category-card {
-    height: 50vh !important;
+  .category-body {
+    margin: 5vw auto !important;
   }
 
-  td,
-  th {
-    text-align: center !important;
-    vertical-align: middle !important;
-    font-size: 1.8vw;
+  .page-title {
+    font-size: clamp(40px, calc(3.5vh + 2px), 34px);
+    margin-top: -2vw !important;
   }
 
-  h4 {
-    text-align: center;
-    margin-top: -4vw !important;
+  thead {
+    font-size: clamp(25px, calc(2.6vh + 2px), 27px);
+  }
+
+  tbody {
+    font-size: clamp(22px, calc(3.1vh + 2px), 23px);
+  }
+
+  td.wrap-date,
+  th.wrap-date {
+    white-space: normal !important;
+  }
+
+  td button.btn-info,
+  td a.btn-success,
+  td a.btn-warning,
+  td a.btn-danger,
+  td a.btn-secondary,
+  td button.btn-primary,
+  td.btn {
+    font-size: clamp(20px, calc(2.2vh + 2px), 23px);
+    font-weight: 800;
+  }
+  #bookingTable_length {
+    margin-bottom: 5vw !important;
+  }
+  #hiddenTitle {
+    font-size: clamp(40px, calc(4vh + 2px), 34px);
+  }
+
+  label,
+  .dataTables_info,
+  .dataTables_paginate,
+  .dt-info {
+    font-size: clamp(20px, calc(2vh + 2px), 24px);
+  }
+
+  .dt-length select,
+  .dt-search input,
+  a.paginate_button.current {
+    margin: 1vw !important;
   }
 }
 
 /* Phones */
 @media only screen and (max-width: 599px) {
-  td,
-  th {
-    text-align: center !important;
-    vertical-align: middle !important;
-    font-size: 2.5vw;
+  .categoryLink {
+    width: 90% !important;
+    margin-bottom: 4vw !important;
+  }
+
+  .category-body {
+    margin: 4vw auto !important;
   }
   .page-title {
-    font-family: "Lora";
-    margin-top: -15px !important;
-  }
-  .topSection {
-    display: flex !important;
-    justify-content: space-between !important;
-    padding: 0.5rem !important;
+    margin-top: -25px !important;
+    font-size: clamp(45px, calc(5.7vh + 2px), 40px);
   }
 
-  .menus {
-    margin-right: 20vw !important;
-  }
-
-  .logo {
-    width: 25vw;
-  }
-
-  .notificationIcon,
-  .messageIcon {
-    height: 25px;
-    width: 25px;
-  }
-  #notifCounter {
-    height: 2vw !important;
-    width: 0.5vw;
-    background-color: transparent !important;
-    color: red;
-    position: absolute !important;
-    top: 1% !important;
-    left: 70% !important;
-  }
-
-  .admin {
-    img {
-      height: 40px;
-      width: 40px;
-      border-radius: 3rem;
-      margin-right: -1vw;
-    }
-  }
-
-  .adminTitle {
-    display: none !important;
+  .card {
+    padding: 3vw;
   }
 
   .categories {
-    margin-top: 10vh;
+    margin-top: 5vh;
   }
 
   .category-card {
     padding: 1vw !important;
     max-width: 100% !important;
-    height: 30vh !important;
   }
   .category-card img {
     height: 70% !important;
@@ -246,15 +296,74 @@ h4 {
   .category-title {
     font-size: clamp(4.6vw, 4.8vw, 5vw) !important;
   }
+
+  .back-btn-container i {
+    font-size: clamp(5vw, 4.5vw, 4.2vw);
+  }
+
+  td.wrap-date,
+  th.wrap-date {
+    white-space: normal !important;
+  }
+
+  thead {
+    font-size: clamp(18px, calc(1.7vh + 2px), 17px);
+  }
+
+  tbody {
+    font-size: clamp(19px, calc(1.5vh + 2px), 17px);
+  }
+  td button.btn-info,
+  td a.btn-success,
+  td a.btn-warning,
+  td a.btn-danger,
+  td a.btn-secondary,
+  td button.btn-primary,
+  td.btn {
+    font-size: clamp(18px, calc(1.9vh + 2px), 19px);
+  }
+
+  .dt-length select,
+  .dt-search input,
+  a.paginate_button.current {
+    font-size: clamp(20px, calc(2.1vh + 2px), 24px);
+  }
+
+  label select,
+  label input,
+  a.paginate_button.current {
+    margin: 1vw !important;
+  }
 }
 
 @media only screen and (max-width: 400px) {
+  .card {
+    padding: 3.5vw;
+  }
   .categoryLink {
     width: 70%;
-    height: 40vh;
+    height: 44vh;
+    margin-bottom: 1vw !important;
+  }
+
+  .page-title {
+    margin-top: -35px !important;
+    font-size: clamp(35px, calc(5.1vh + 2px), 40px);
+  }
+
+  .back-btn-container i {
+    font-size: clamp(5.5vw, 5vw, 5.2vw);
   }
 
   .category-card {
     height: 80% !important;
+  }
+
+  .category-body {
+    margin: auto !important;
+  }
+
+  .category-title {
+    font-size: clamp(23px, calc(3.7vh + 2px), 26px) !important;
   }
 }

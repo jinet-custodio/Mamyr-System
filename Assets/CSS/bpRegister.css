@@ -273,7 +273,7 @@ button#selectPartnerBtn {
 
 .back-icon-container {
   position: absolute;
-  right: 8vw;
+  left: 6vw;
   top: 4vw;
 }
 
@@ -670,8 +670,7 @@ input[type="password"]::-webkit-search-cancel-button {
   }
 
   .back-icon-container-login {
-    height: 5vw !important;
-    width: 5vw;
+    font: 5vw !important;
   }
 
   .repInfoLabel,
