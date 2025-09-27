@@ -28,7 +28,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="stylesheet" href="../../Assets/CSS/Admin/reviews.css">
     <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css">
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -204,9 +203,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <main>
         <section class="container filter-section">
-            <select class="form-select monthSelection" aria-label="timeRangeSelection">
-                <option value="" disabled selected>Select a Time Range</option>
-                <option value="1">Last 30 days</option>
+            <select class="form-select monthSelection" id="filterSelect">
+                <option value="" disabled>Select a Time Range</option>
+                <option value="1" selected>Last 30 days</option>
                 <option value="2">Last 3 months</option>
                 <option value="3">Last 6 months</option>
                 <option value="4">This year</option>
@@ -215,159 +214,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </select>
         </section>
 
-        <section class="container cardContainer">
-
-            <div class="card reviewCard">
-                <div class="card-header">
-                    <h5 class="bookingTypeText" id="bookingType">Resort Booking</h5>
-                </div>
-
-                <div class="card-body">
-                    <section class="dateContainer">
-                        <h5 class="reviewdateText" id="reviewDate">17 September 2025</h5>
-                    </section>
-
-                    <section class="starContainer">
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </section>
-
-                    <section class="reviewInfo">
-                        <h6 class="reviewInfoLabel">Additional Feedback</h6>
-                        <textarea class="form-control" name="feedback" id="additionalFeedback"></textarea>
-                    </section>
-                </div>
-            </div>
-
-            <div class="card reviewCard">
-                <div class="card-header">
-                    <h5 class="bookingTypeText" id="bookingType">Resort Booking</h5>
-                </div>
-
-                <div class="card-body">
-                    <section class="dateContainer">
-                        <h5 class="reviewdateText" id="reviewDate">17 September 2025</h5>
-                    </section>
-
-                    <section class="starContainer">
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </section>
-
-                    <section class="reviewInfo">
-                        <h6 class="reviewInfoLabel">Additional Feedback</h6>
-                        <textarea class="form-control" name="feedback" id="additionalFeedback"></textarea>
-                    </section>
-                </div>
-            </div>
-
-            <div class="card reviewCard">
-                <div class="card-header">
-                    <h5 class="bookingTypeText" id="bookingType">Resort Booking</h5>
-                </div>
-
-                <div class="card-body">
-                    <section class="dateContainer">
-                        <h5 class="reviewdateText" id="reviewDate">17 September 2025</h5>
-                    </section>
-
-                    <section class="starContainer">
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </section>
-
-                    <section class="reviewInfo">
-                        <h6 class="reviewInfoLabel">Additional Feedback</h6>
-                        <textarea class="form-control" name="feedback" id="additionalFeedback"></textarea>
-                    </section>
-                </div>
-            </div>
-
-            <div class="card reviewCard">
-                <div class="card-header">
-                    <h5 class="bookingTypeText" id="bookingType">Resort Booking</h5>
-                </div>
-
-                <div class="card-body">
-                    <section class="dateContainer">
-                        <h5 class="reviewdateText" id="reviewDate">17 September 2025</h5>
-                    </section>
-
-                    <section class="starContainer">
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </section>
-
-                    <section class="reviewInfo">
-                        <h6 class="reviewInfoLabel">Additional Feedback</h6>
-                        <textarea class="form-control" name="feedback" id="additionalFeedback"></textarea>
-                    </section>
-                </div>
-            </div>
-
-            <div class="card reviewCard">
-                <div class="card-header">
-                    <h5 class="bookingTypeText" id="bookingType">Resort Booking</h5>
-                </div>
-
-                <div class="card-body">
-                    <section class="dateContainer">
-                        <h5 class="reviewdateText" id="reviewDate">17 September 2025</h5>
-                    </section>
-
-                    <section class="starContainer">
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </section>
-
-                    <section class="reviewInfo">
-                        <h6 class="reviewInfoLabel">Additional Feedback</h6>
-                        <textarea class="form-control" name="feedback" id="additionalFeedback"></textarea>
-                    </section>
-                </div>
-            </div>
-
-            <div class="card reviewCard">
-                <div class="card-header">
-                    <h5 class="bookingTypeText" id="bookingType">Resort Booking</h5>
-                </div>
-
-                <div class="card-body">
-                    <section class="dateContainer">
-                        <h5 class="reviewdateText" id="reviewDate">17 September 2025</h5>
-                    </section>
-
-                    <section class="starContainer">
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </section>
-
-                    <section class="reviewInfo">
-                        <h6 class="reviewInfoLabel">Additional Feedback</h6>
-                        <textarea class="form-control" name="feedback" id="additionalFeedback"></textarea>
-                    </section>
-                </div>
-            </div>
+        <section class="container cardContainer" id="reviewsContainer">
         </section>
-
     </main>
 
 
@@ -448,37 +296,38 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         });
     </script>
 
-    <!-- Responsive Navbar -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const icons = document.querySelectorAll('.navbar-icon');
-            const navbarUL = document.getElementById('navUL');
-            const nav = document.getElementById('navbar')
+        function fetchReviews(filterValue) {
+            fetch('../../Function/Admin/fetchReviews.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'filter=' + encodeURIComponent(filterValue)
+                })
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('reviewsContainer').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error fetching reviews:', error);
+                });
+        }
 
-            function handleResponsiveNavbar() {
-                if (window.innerWidth <= 991.98) {
-                    navbarUL.classList.remove('w-100');
-                    navbarUL.style.position = "fixed";
-                    nav.style.margin = "0";
-                    nav.style.maxWidth = "100%";
-                    icons.forEach(icon => {
-                        icon.style.display = "none";
-                    })
-                } else {
-                    navbarUL.classList.add('w-100');
-                    navbarUL.style.position = "relative";
-                    nav.style.margin = "20px auto";
-                    nav.style.maxWidth = "80vw";
-                    icons.forEach(icon => {
-                        icon.style.display = "block";
-                    })
-                }
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectBox = document.getElementById('filterSelect');
 
-            handleResponsiveNavbar();
-            window.addEventListener('resize', handleResponsiveNavbar);
+            fetchReviews(1); // "Last 30 days"
+
+            selectBox.addEventListener('change', function() {
+                fetchReviews(this.value);
+            });
         });
     </script>
+
+
+    <!-- Responsive Navbar -->
+    <script src="../../Assets/JS/adminNavbar.js"></script>
 </body>
 
 </html>
