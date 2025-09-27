@@ -43,7 +43,7 @@ body {
   font-weight: bold;
 }
 
-.container-fluid {
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -255,4 +255,74 @@ body {
   margin: 0.5rem;
   padding: 0.3rem;
   text-align: justify;
+}
+
+/* Tablet Portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
+  .backToSelection {
+    top: 3%;
+    left: -5%;
+  }
+
+  .titleContainer {
+    margin-top: 6rem;
+  }
+
+  .resortTitle {
+    font-size: 30px;
+  }
+  .container {
+    flex-direction: column;
+  }
+
+  .resort-card {
+    width: 100%;
+  }
+
+  .entrance-rates {
+    width: 100%;
+  }
+
+  .scheduleForm,
+  .peopleForm,
+  .cottageRoomForm,
+  .purposeForm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+  }
+  .purposeLabel {
+    margin-top: 1rem;
+  }
+
+  .rates .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
+  .backToSelection {
+    top: 3%;
+    left: -5%;
+  }
+
+  .titleContainer {
+    margin-top: 6rem;
+  }
+
+  .resortTitle {
+    font-size: 30px;
+  }
+  .container {
+    flex-direction: column !important;
+  }
+}
+
+/* Phones */
+@media only screen and (max-width: 600px) {
 }
