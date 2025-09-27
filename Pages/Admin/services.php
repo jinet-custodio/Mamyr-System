@@ -29,7 +29,7 @@ if (isset($_SESSION['userID'])) {
         exit();
     }
 }
-
+require '../../Function/notification.php';
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -75,29 +75,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
-            $getNotifications->bind_param("s", $receiver);
-            $getNotifications->execute();
-            $getNotificationsResult = $getNotifications->get_result();
-            if ($getNotificationsResult->num_rows > 0) {
-                $counter = 0;
-                $notificationsArray = [];
-                $color = [];
-                $notificationIDs = [];
-                while ($notifications = $getNotificationsResult->fetch_assoc()) {
-                    $is_readValue = $notifications['is_read'];
-                    $notificationIDs[] = $notifications['notificationID'];
-                    if ($is_readValue === 0) {
-                        $notificationsArray[] = $notifications['message'];
-                        $counter++;
-                        $color[] = "rgb(247, 213, 176, .5)";
-                    } elseif ($is_readValue === 1) {
-                        $notificationsArray[] = $notifications['message'];
-                        $counter++;
-                        $color[] = "white";
-                    }
-                }
-            }
+            $notifications = getNotification($conn, $userID, $receiver);
+            $counter = $notifications['count'];
+            $notificationsArray = $notifications['messages'];
+            $color = $notifications['colors'];
+            $notificationIDs = $notifications['ids'];
             ?>
 
             <div class="notification-container position-relative">
@@ -391,6 +373,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <th scope="col">Time Range</th>
                     <th scope="col">Visitor Type</th>
                     <th scope="col">Price</th>
+                    <th scope="col">Availability</th>
                     <th scope="col">Action</th>
 
                 </thead>
@@ -442,9 +425,22 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         </option>
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control entrancePrice" name="entrancePrice"
-                                        value="<?= htmlspecialchars($row['ERprice']) ?>" readonly></td>
-
+                                <td>
+                                    <input type="text" class="form-control entrancePrice" name="entrancePrice"
+                                        value="<?= htmlspecialchars($row['ERprice']) ?>" readonly>
+                                </td>
+                                <td>
+                                    <select name="availability" class="form-select availability" disabled>
+                                        <option value="" disabled
+                                            <?= htmlspecialchars($row['availability']) == "" ? "selected" : "" ?> selected>Select Availability</option>
+                                        <option value="Enabled"
+                                            <?= htmlspecialchars($row['availability']) == "Enabled" ? "selected" : "" ?>>Enabled
+                                        </option>
+                                        <option value="Disabled"
+                                            <?= htmlspecialchars($row['availability']) == "Disabled" ? "selected" : "" ?>>Disabled
+                                        </option>
+                                    </select>
+                                </td>
                                 <td>
                                     <div class="buttonContainer">
                                         <button class="btn btn-primary editRatesBtn" id="editPrimary"
@@ -537,7 +533,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <tr id="menuData">
                                     <input type="hidden" name="foodID" id="foodID" class="form-control foodID" value="<?= htmlspecialchars($row['foodItemID']) ?>">
                                     <td><input type="text" class="form-control foodName" name="foodName" id="foodName" value="<?= htmlspecialchars($row['foodName']) ?>" readonly></td>
-                                    <!-- <td><input type="text" class="form-control foodPrice" name="foodPrice" id="foodPrice" value="<?= htmlspecialchars($row['foodPrice']) ?>" readonly></td> -->
                                     <td>
                                         <select id="foodCategory" name="foodCategory" class="form-select foodCategory" disabled>
                                             <option value="" disabled <?= empty($row['foodCategory']) ? 'selected' : '' ?>>Category</option>
@@ -758,7 +753,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <label for="entrancePrice">Price</label>
                                 <input type="text" class="form-control" id="entrancePrice" name="entrancePrice">
                             </div>
-
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -845,10 +839,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <input type="text" class="form-control" id="foodName" name="foodName" required>
                             </div>
 
-                            <div class="input-container">
+                            <!-- <div class="input-container">
                                 <label for="foodPrice">Price</label>
                                 <input type="text" class="form-control" id="foodPrice" name="foodPrice" required>
-                            </div>
+                            </div> -->
 
                             <div class="input-container">
                                 <label for="foodCategory">Food Category</label>
@@ -905,38 +899,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body p-0">
-                    <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
-                                $bgColor = $color[$index];
-                                $notificationID = $notificationIDs[$index];
-                            ?>
-                                <li class="list-group-item mb-2 notification-item"
-                                    data-id="<?= htmlspecialchars($notificationID) ?>"
-                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?php echo $message ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <?php include '../notificationModal.php' ?>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->

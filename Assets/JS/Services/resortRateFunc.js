@@ -5,6 +5,7 @@ function editRates(editBtn) {
   const formControl = thisRow.querySelectorAll(".form-control");
   const formSelect = thisRow.querySelectorAll(".form-select");
   const entrancePrice = thisRow.querySelector(".entrancePrice");
+  const availability = thisRow.querySelector(".availability");
   const cancelBtn = thisRow.querySelector(".cancelRatesBtn");
   cancelBtn.disabled = false;
   if (
@@ -26,6 +27,14 @@ function editRates(editBtn) {
       element.disabled = true;
     });
 
+    availability.disabled = false;
+    // console.log(availability.disabled);
+    availability.style.setProperty(
+      "border",
+      "1px solid rgba(253, 10, 10, 1)",
+      "important"
+    );
+
     editBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i>Save';
     cancelBtn.innerHTML = '<i class="fa-solid fa-ban"></i>Cancel';
   } else {
@@ -36,9 +45,9 @@ function editRates(editBtn) {
       time: thisRow.querySelector(".timeRange").value,
       visitorType: thisRow.querySelector(".visitorType").value,
       price: thisRow.querySelector(".entrancePrice").value,
+      availability: thisRow.querySelector(".availability").value,
     };
-    // console.log(ratesData);
-    // console.log(resortData['imageData']);
+    // console.log(ratesData.availability);
     fetch("../../../Function/Admin/Services/updateEntranceRates.php", {
       method: "POST",
       headers: {

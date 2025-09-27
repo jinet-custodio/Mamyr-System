@@ -38,7 +38,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 }
 
 
+$partiallyPaid = 2;
+$fullyPaid = 3;
 $approvedStatus = 2;
+$doneStatus = 5;
 $bookingTypes =  $conn->prepare("SELECT 
                                 b.bookingType,
                                 COUNT(*) AS totalBookings
@@ -47,12 +50,12 @@ $bookingTypes =  $conn->prepare("SELECT
                             JOIN 
                                 booking b ON cb.bookingID = b.bookingID 
                             WHERE 
-                                cb.paymentApprovalStatus = ?
+                                cb.paymentStatus = ? OR cb.paymentStatus = ?
                                 AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)
                             GROUP BY 
                                 b.bookingType 
                     ");
-$bookingTypes->bind_param("i", $approvedStatus);
+$bookingTypes->bind_param("ii", $partiallyPaid, $fullyPaid);
 $bookingTypes->execute();
 $bookingTypesResult = $bookingTypes->get_result();
 
@@ -68,56 +71,65 @@ $bookingTypesResult->free();
 $bookingTypes->close();
 
 
-$revenue =  $conn->prepare("SELECT 
-                                CONCAT(
-                                    'Week ', WEEK(b.startDate, 1),
-                                    ' (',
-                                    DATE_FORMAT(DATE_SUB(b.startDate, INTERVAL WEEKDAY(b.startDate) DAY), '%b %e'),
-                                    ' - ',
-                                    DATE_FORMAT(DATE_ADD(b.startDate, INTERVAL (6 - WEEKDAY(b.startDate)) DAY), '%b %e'),
-                                    ')'
-                                ) AS weekName,
+$selectedWeek = $_GET['week'] ?? 'month';
 
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 0 THEN cb.confirmedFinalBill ELSE 0 END) AS Mon,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 1 THEN cb.confirmedFinalBill ELSE 0 END) AS Tue,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 2 THEN cb.confirmedFinalBill ELSE 0 END) AS Wed,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 3 THEN cb.confirmedFinalBill ELSE 0 END) AS Thu,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN cb.confirmedFinalBill ELSE 0 END) AS Fri,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN cb.confirmedFinalBill ELSE 0 END) AS Sat,
-                                SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN cb.confirmedFinalBill ELSE 0 END) AS Sun
-                                -- b.bookingType,
+$dateCondition = '';
+if ($selectedWeek === 'month') {
+    $dateCondition = "MONTH(b.startDate) = MONTH(CURDATE()) AND YEAR(b.startDate) = YEAR(CURDATE())";
+} elseif (preg_match('/^w(\d)$/', $selectedWeek, $matches)) {
+    $weekNum = (int)$matches[1];
+    $firstDayOfMonth = date('Y-m-01');
+    $startOfWeek = date('Y-m-d', strtotime("+" . (($weekNum - 1) * 7) . " days", strtotime($firstDayOfMonth)));
+    $endOfWeek = date('Y-m-d', strtotime("+6 days", strtotime($startOfWeek)));
 
-                            FROM 
-                                confirmedbooking cb
-                            JOIN 
-                                booking b ON cb.bookingID = b.bookingID
-                            WHERE 
-                                cb.paymentApprovalStatus = ?
-                                AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)
-                            GROUP BY 
-                                weekName
-                            ORDER BY 
-                                MIN(b.startDate)
-                    ");
-$revenue->bind_param("i", $approvedStatus);
-$revenue->execute();
-$revenueResult = $revenue->get_result();
+    $dateCondition = "b.startDate BETWEEN '$startOfWeek' AND '$endOfWeek'";
+}
+
+// SQL query
+$salesQuery = $conn->prepare("
+    SELECT 
+        CONCAT(
+            'Week ', FLOOR((DAYOFMONTH(b.startDate) - 1 ) / 7 ) + 1,
+            ' (',
+            DATE_FORMAT(DATE_SUB(b.startDate, INTERVAL WEEKDAY(b.startDate) DAY), '%b %e'),
+            ' - ',
+            DATE_FORMAT(DATE_ADD(b.startDate, INTERVAL (6 - WEEKDAY(b.startDate)) DAY), '%b %e'),
+            ')'
+        ) AS weekName,
+        SUM(CASE WHEN WEEKDAY(b.startDate) = 0 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Mon,
+        SUM(CASE WHEN WEEKDAY(b.startDate) = 1 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Tue,
+        SUM(CASE WHEN WEEKDAY(b.startDate) = 2 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Wed,
+        SUM(CASE WHEN WEEKDAY(b.startDate) = 3 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Thu,
+        SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Fri,
+        SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Sat,
+        SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Sun
+    FROM 
+        confirmedbooking cb
+    LEFT JOIN 
+        booking b ON cb.bookingID = b.bookingID
+    LEFT JOIN 
+        businesspartneravailedservice bpas ON b.bookingID = cb.bookingID
+    WHERE 
+        (
+            cb.paymentStatus IN (?, ?) OR 
+            cb.paymentApprovalStatus IN (?, ?)
+        ) AND $dateCondition
+    GROUP BY weekName
+    ORDER BY MIN(b.startDate)
+");
+
+$salesQuery->bind_param("iiii", $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus);
+$salesQuery->execute();
+$salesResult = $salesQuery->get_result();
 
 $days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-$revenues = [];
+$sales = [];
 $weekName = "";
-if ($revenueResult->num_rows > 0) {
-    $row = $revenueResult->fetch_assoc();
+
+if ($salesResult->num_rows > 0) {
+    $row = $salesResult->fetch_assoc();
     $weekName = $row['weekName'];
-    // $bookingType = $row['bookingType'];
-    // $revenues[$bookingType][] = (float) $row['Mon'];
-    // $revenues[$bookingType][] = (float) $row['Tue'];
-    // $revenues[$bookingType][] = (float) $row['Wed'];
-    // $revenues[$bookingType][] = (float) $row['Thu'];
-    // $revenues[$bookingType][] = (float) $row['Fri'];
-    // $revenues[$bookingType][] = (float) $row['Sat'];
-    // $revenues[$bookingType][] = (float) $row['Sun'];
-    $revenues[] = [
+    $sales = [
         (float) $row['Mon'],
         (float) $row['Tue'],
         (float) $row['Wed'],
@@ -127,9 +139,8 @@ if ($revenueResult->num_rows > 0) {
         (float) $row['Sun']
     ];
 }
-$revenueResult->free();
-$revenue->close();
-
+$salesResult->free();
+$salesQuery->close();
 
 $hotel = 1;
 $availabilityCount = [];
@@ -177,7 +188,7 @@ if ($availabilityResult->num_rows > 0) {
 }
 $availabilityResult->free();
 $availabilityQuery->close();
-
+require '../../Function/notification.php';
 ?>
 
 <!DOCTYPE html>
@@ -211,29 +222,11 @@ $availabilityQuery->close();
             <?php
 
             $receiver = 'Admin';
-            $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiver = ? AND is_read = 0");
-            $getNotifications->bind_param("s", $receiver);
-            $getNotifications->execute();
-            $getNotificationsResult = $getNotifications->get_result();
-            if ($getNotificationsResult->num_rows > 0) {
-                $counter = 0;
-                $notificationsArray = [];
-                $color = [];
-                $notificationIDs = [];
-                while ($notifications = $getNotificationsResult->fetch_assoc()) {
-                    $is_readValue = $notifications['is_read'];
-                    $notificationIDs[] = $notifications['notificationID'];
-                    if ($is_readValue === 0) {
-                        $notificationsArray[] = $notifications['message'];
-                        $counter++;
-                        $color[] = "rgb(247, 213, 176, .5)";
-                    } elseif ($is_readValue === 1) {
-                        $notificationsArray[] = $notifications['message'];
-                        $counter++;
-                        $color[] = "white";
-                    }
-                }
-            }
+            $notifications = getNotification($conn, $userID, $receiver);
+            $counter = $notifications['count'];
+            $notificationsArray = $notifications['messages'];
+            $color = $notifications['colors'];
+            $notificationIDs = $notifications['ids'];
             ?>
 
             <div class="notification-container position-relative">
@@ -334,9 +327,9 @@ $availabilityQuery->close();
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="revenue.php">
+                    <a class="nav-link" href="sales.php">
                         <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
-                        <h5>Revenue</h5>
+                        <h5>sales</h5>
                     </a>
                 </li>
 
@@ -368,34 +361,34 @@ $availabilityQuery->close();
     $weeklyReport = $conn->prepare("SELECT 
                                         -- Total guests 
                                         SUM(CASE 
-                                            WHEN cb.paymentApprovalStatus = 2 
+                                            WHEN cb.paymentApprovalStatus = 5 
                                             THEN b.guestCount 
                                             ELSE 0 
                                             END) AS totalGuests,
 
-                                        -- Total revenue
+                                        -- Total sales
                                         SUM(CASE 
-                                                WHEN cb.paymentApprovalStatus = 2 THEN cb.confirmedFinalBill
+                                                WHEN cb.paymentApprovalStatus = 5 THEN cb.confirmedFinalBill
                                                 ELSE 0 
-                                                END) AS totalRevenueThisWeek,
+                                                END) AS totalsalesThisWeek,
 
                                         -- Check-outs this week
                                         COUNT(CASE 
-                                                WHEN b.endDate >= weekStart AND b.endDate < weekEnd AND cb.paymentApprovalStatus = 2 
+                                                WHEN b.endDate >= weekStart AND b.endDate < weekEnd AND cb.paymentApprovalStatus = 5 
                                                 THEN 1 
                                                 ELSE NULL 
                                                 END) AS checkOutsThisWeek,
 
                                         -- Check-ins this week
                                         COUNT(CASE 
-                                                WHEN b.startDate >= weekStart AND b.startDate < weekEnd AND cb.paymentApprovalStatus = 2 
+                                                WHEN b.startDate >= weekStart AND b.startDate < weekEnd AND cb.paymentApprovalStatus = 5 
                                                 THEN 1 
                                                 ELSE NULL 
                                                 END) AS checkInsThisWeek,
                                         -- Check-ins this week
                                         COUNT(CASE 
                                                 WHEN b.bookingType = 'Event' AND
-                                                cb.paymentApprovalStatus = 2 
+                                                cb.paymentApprovalStatus = 5 
                                                 THEN 1 
                                                 ELSE NULL 
                                                 END) AS eventBooking,
@@ -426,7 +419,7 @@ $availabilityQuery->close();
         $checkOutsThisWeek = $data['checkOutsThisWeek'];
         $checkInsThisWeek = $data['checkInsThisWeek'];
         $totalGuests = $data['totalGuests'] ?? '0';
-        $totalRevenueThisWeek = $data['totalRevenueThisWeek'];
+        $totalsalesThisWeek = $data['totalsalesThisWeek'];
         $eventBooking = $data['eventBooking'];
     }
     ?>
@@ -501,7 +494,7 @@ $availabilityQuery->close();
                     </div>
 
                     <div class="card-body">
-                        <h2 class="revenueTotal">₱<?= number_format($totalRevenueThisWeek ?? 0, 2) ?></h2>
+                        <h2 class="salesTotal">₱<?= number_format($totalsalesThisWeek ?? 0, 2) ?></h2>
                     </div>
 
                     <!-- <h6 class="card-footer">This Week</h6> -->
@@ -525,24 +518,26 @@ $availabilityQuery->close();
 
 
         <div class="rightSection">
-            <div class="card graph" id="revenueGraphCard">
+            <div class="filter-select" id="filter-select">
+                <select name="sales-filter-select" id="sales-filter-select">
+                    <option value="month" <?= $selectedWeek === 'month' ? 'selected' : '' ?>>This Month</option>
+                    <option value="w1" <?= $selectedWeek === 'w1' ? 'selected' : '' ?>>Week 1</option>
+                    <option value="w2" <?= $selectedWeek === 'w2' ? 'selected' : '' ?>>Week 2</option>
+                    <option value="w3" <?= $selectedWeek === 'w3' ? 'selected' : '' ?>>Week 3</option>
+                    <option value="w4" <?= $selectedWeek === 'w4' ? 'selected' : '' ?>>Week 4</option>
+                    <option value="w5" <?= $selectedWeek === 'w5' ? 'selected' : '' ?>>Week 5</option>
+                </select>
+            </div>
 
-
-                <div class="revenueGraphContainer mb-3">
+            <div class="card graph" id="salesGraphCard">
+                <div class="salesGraphContainer mb-3">
                     <h5 class="revTitle">Sales</h5>
-                    <?php if (!empty($revenues)): ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
-                    <?php else: ?>
-                        <div class="revenue-chart">
-                            <canvas id="revenueBar"></canvas>
-                        </div>
-                        <!-- Change this div -->
-                        <!-- <div class="revenueImage"><img src="../../Assets/Images/revenueGraph.png" alt=""></div> -->
-                    <?php endif; ?>
+                    <div class="sales-chart">
+                        <canvas id="salesBar"></canvas>
+                    </div>
                 </div>
             </div>
+
 
             <div class="card graph" id="reservationTrends">
                 <div class="card-header ">
@@ -551,11 +546,11 @@ $availabilityQuery->close();
                 </div>
                 <div class="card-body">
                     <?php if (!empty($bookingTypeCount)): ?>
-                        <div class="revenue-chart">
+                        <div class="sales-chart">
                             <canvas id="reservationTrendsBar"></canvas>
                         </div>
                     <?php else: ?>
-                        <div class="revenue-chart">
+                        <div class="sales-chart">
                             <canvas id="reservationTrendsBar"></canvas>
                         </div>
                         <!-- Change this div -->
@@ -569,37 +564,7 @@ $availabilityQuery->close();
 
 
     <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body p-0">
-                    <?php if (!empty($notificationsArray)): ?>
-                        <ul class="list-group list-group-flush ">
-                            <?php foreach ($notificationsArray as $index => $message):
-                                $bgColor = $color[$index];
-                                $notificationID = $notificationIDs[$index];
-                            ?>
-                                <li class="list-group-item mb-2 notification-item"
-                                    data-id="<?= htmlspecialchars($notificationID) ?>"
-                                    style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                    <?php echo $message ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    <?php else: ?>
-                        <div class="p-3 text-muted">No new notifications.</div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php include '../notificationModal.php' ?>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -735,43 +700,29 @@ $availabilityQuery->close();
     </script>
 
     <script>
-        //* Revenue Bar
-        const revenueBar = document.getElementById("revenueBar").getContext('2d');
+        document.getElementById("sales-filter-select").addEventListener("change", function() {
+            const selectedValue = this.value;
+            window.location.href = `?week=${selectedValue}`;
+        });
 
-        const revenueChart = new Chart(revenueBar, {
+        const salesBar = document.getElementById("salesBar").getContext('2d');
+
+        const salesChart = new Chart(salesBar, {
             type: 'bar',
             data: {
                 labels: <?= json_encode($days) ?>,
                 datasets: [{
-                    label: <?= json_encode($weekName) ?>,
-                    data: <?= json_encode($revenues) ?>,
+                    label: <?= json_encode($weekName ?: 'No data') ?>,
+                    data: <?= json_encode($sales) ?>,
                     backgroundColor: [
-                        'rgba(40, 167, 69, 0.5)', // Green
-                        'rgba(255, 193, 7, 0.5)', // Yellow
-                        'rgba(220, 53, 69, 0.5)', // Red
-                        'rgba(0, 123, 255, 0.5)', // Blue
-                        'rgba(23, 162, 184, 0.5)', // Cyan
-                        'rgba(108, 117, 125, 0.5)', // Gray
-                        'rgba(255, 99, 132, 0.5)', // Pink
-                        'rgba(153, 102, 255, 0.5)', // Purple
-                        'rgba(255, 159, 64, 0.5)', // Orange
-                        'rgba(75, 192, 192, 0.5)', // Teal
-                        'rgba(201, 203, 207, 0.5)', // Light Gray
-                        'rgba(54, 162, 235, 0.5)' // Light Blue
+                        'rgba(40, 167, 69, 0.5)', 'rgba(255, 193, 7, 0.5)', 'rgba(220, 53, 69, 0.5)',
+                        'rgba(0, 123, 255, 0.5)', 'rgba(23, 162, 184, 0.5)', 'rgba(108, 117, 125, 0.5)',
+                        'rgba(255, 99, 132, 0.5)'
                     ],
                     borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(0, 123, 255, 1)',
-                        'rgba(23, 162, 184, 1)',
-                        'rgba(108, 117, 125, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(201, 203, 207, 1)',
-                        'rgba(54, 162, 235, 1)'
+                        'rgba(40, 167, 69, 1)', 'rgba(255, 193, 7, 1)', 'rgba(220, 53, 69, 1)',
+                        'rgba(0, 123, 255, 1)', 'rgba(23, 162, 184, 1)', 'rgba(108, 117, 125, 1)',
+                        'rgba(255, 99, 132, 1)'
                     ],
                     borderWidth: 3
                 }]
@@ -796,7 +747,6 @@ $availabilityQuery->close();
                     }
                 }
             }
-
         });
     </script>
 </body>

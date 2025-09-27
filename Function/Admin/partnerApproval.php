@@ -6,6 +6,8 @@ session_start();
 
 require '../functions.php';
 
+$userID = (int)$_SESSION['userID'];
+$userRole = (int) $_SESSION['userRole'];
 //Approve Button is Click
 if (isset($_POST['approveBtn'])) {
     $_SESSION['partnerID'] = (int) $_POST['partnerID'];
@@ -86,8 +88,8 @@ if (isset($_POST['approveBtn'])) {
         $roles = getUserRole($conn, $partnerRoleID);
         $receiver = $roles['userTypeName'];
         $message = 'Your request for a business partner has been reviewed and approved. You can now proceed to add your services: <a href="../Account/bpServices.php">Click here.</a>';
-        $insertNotification = $conn->prepare("INSERT INTO `notification`(`partnershipID`, `userID`, `message`, `receiver`) VALUES (?,?,?,?)");
-        $insertNotification->bind_param('iiss', $partnerID, $partnerUserID, $message, $receiver);
+        $insertNotification = $conn->prepare("INSERT INTO `notification`(`partnershipID`, `receiverID`, `senderID`, `message`, `receiver`) VALUES (?,?,?,?,?)");
+        $insertNotification->bind_param('iiiss', $partnerID, $partnerUserID, $userID,  $message, $receiver);
 
         if (!$insertNotification->execute()) {
             $conn->rollback();
@@ -162,9 +164,9 @@ if (isset($_POST['declineBtn'])) {
             $bookingID = Null;
         }
 
-        $insertNotif = $conn->prepare("INSERT INTO notification(partnershipID, userID, message, bookingID, receiver)
-        VALUES(?,?,?,?,?)");
-        $insertNotif->bind_param("iisis", $partnerID,  $partnerUserID, $message, $bookingID, $receiver);
+        $insertNotif = $conn->prepare("INSERT INTO notification(partnershipID, senderID, receiverID, message, bookingID, receiver)
+        VALUES(?,?,?,?,?,?)");
+        $insertNotif->bind_param("iiisis", $partnerID,  $partnerUserID, $userID, $message, $bookingID, $receiver);
 
         if (!$insertNotif->execute()) {
             $conn->rollback();

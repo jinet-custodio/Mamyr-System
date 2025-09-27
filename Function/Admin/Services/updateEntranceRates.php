@@ -17,6 +17,7 @@ $timeRange = $data['time'];
 $visitorType = $data['visitorType'];
 $price = floatval($data['price']);
 $timeRangeID = intval($data['timeRangeID']);
+$availability = $data['availability'];
 
 $conn->begin_transaction();
 
@@ -25,8 +26,9 @@ try {
     $updateTimeRange = $conn->prepare("UPDATE `entrancetimerange` SET `session_type`= ?,`time_range`= ? WHERE timeRangeID = ?");
     $updateTimeRange->bind_param('ssi', $tourType, $timeRange, $timeRangeID);
     if ($updateTimeRange->execute()) {
-        $updateEntranceRate = $conn->prepare("UPDATE `entrancerate` SET `sessionType`= ?,`timeRangeID`= ?,`ERcategory`= ?,`ERprice`= ? WHERE entranceRateID = ?");
-        $updateEntranceRate->bind_param("sisdi", $tourType, $timeRangeID, $visitorType, $price, $entranceRateID);
+        $updateEntranceRate = $conn->prepare("UPDATE `entrancerate` SET `sessionType`= ?,`timeRangeID`= ?,`ERcategory`= ?,`ERprice`= ?, `availability` = ? WHERE entranceRateID = ?");
+        $updateEntranceRate->bind_param("sisdsi", $tourType, $timeRangeID, $visitorType, $price, $availability, $entranceRateID);
+        // error_log("SQL Query: " . $updateEntranceRate->error);
         if ($updateEntranceRate->execute()) {
             $conn->commit();
             echo json_encode([

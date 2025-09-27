@@ -44,6 +44,9 @@ CREATE TABLE entrancerate (
     FOREIGN KEY (timeRangeID) REFERENCES entrancetimerange(timeRangeID)
 );
 
+ALTER TABLE entrancerate
+ADD COLUMN availability ENUM ('Enabled', 'Disabled') DEFAULT 'Enabled'
+
 
 CREATE TABLE service (
     serviceID INT PRIMARY KEY AUTO_INCREMENT,

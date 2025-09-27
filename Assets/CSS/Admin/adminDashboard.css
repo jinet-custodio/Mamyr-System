@@ -153,7 +153,7 @@ body {
   font-family: "Lora" !important;
 }
 
-.revenueGraphContainer {
+.salesGraphContainer {
   /* border: 1px solid black; */
   display: flex;
   justify-content: center;
@@ -171,7 +171,7 @@ body {
   text-transform: uppercase;
 }
 
-.revenue-chart {
+.sales-chart {
   width: 500px !important;
   height: 250px !important;
 }
@@ -216,7 +216,7 @@ body {
     align-items: center;
   }
 
-  #revenueGraphCard {
+  #salesGraphCard {
     margin-bottom: 2vw;
   }
 

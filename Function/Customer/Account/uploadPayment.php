@@ -56,7 +56,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
 
         $receiver = 'Admin';
         $message = 'A payment proof has been uploaded for Booking ID:' . $bookingID . '. Please review and verify the payment.';
-        $insertNotificationQuery = $conn->prepare("INSERT INTO notification(receiver, userID, bookingID, message) VALUES(?,?,?,?)");
+        $insertNotificationQuery = $conn->prepare("INSERT INTO notification(receiver, senderID, bookingID, message) VALUES(?,?,?,?)");
         $insertNotificationQuery->bind_param('siis', $receiver, $userID, $bookingID, $message);
 
         if (!$insertNotificationQuery->execute()) {

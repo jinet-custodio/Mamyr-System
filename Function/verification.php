@@ -108,7 +108,7 @@ if (isset($_POST['verify-btn'])) {
                                 // Insert notification
                                 $receiver = "Customer";
                                 $message = "Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.";
-                                $insertNotification = $conn->prepare("INSERT INTO notification(partnershipID, userID, message, receiver) VALUES(?, ?, ?, ?)");
+                                $insertNotification = $conn->prepare("INSERT INTO notification(partnershipID, receiverID, message, receiver) VALUES(?, ?, ?, ?)");
                                 $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
                                 if (!$insertNotification->execute()) {
                                     $conn->rollback();

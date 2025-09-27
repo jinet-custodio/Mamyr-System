@@ -133,8 +133,8 @@ if (isset($_POST['approvePaymentBtn'])) {
 
             $receiver = getMessageReceiver($userRoleID);
             $message = 'Payment approved successfully. We have received ₱' . $paymentAmount . ' and reviewed your payment. The service you booked is now reserved. Thank you';
-            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
-            $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
+            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, receiverID, senderID, message, receiver) VALUES(?,?,?,?,?)");
+            $insertNotification->bind_param("iiiss", $bookingID, $customerID, $userID, $message, $receiver);
             if (! $insertNotification->execute()) {
                 $conn->rollback();
                 throw new Exception('Error executing notification query!' . $insertNotification->error);
@@ -191,9 +191,8 @@ if (isset($_POST['approvePaymentBtn'])) {
             }
 
             $receiver = getMessageReceiver($userRoleID);
-            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
-                    VALUES(?,?,?,?)");
-            $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
+            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, receiverID, senderID, message, receiver) VALUES(?,?,?,?,?)");
+            $insertNotification->bind_param("iiiss", $bookingID, $customerID, $userID, $message, $receiver);
             if (!$insertNotification->execute()) {
                 $conn->rollback();
                 throw new Exception('Insert Notification failed' . $insertNotification->error);
@@ -298,9 +297,8 @@ if (isset($_POST['approvePaymentBtn'])) {
             $message = "We have successfully deducted your payment of " . $customerPayment .
                 " from your balance. Please check your payment history in your account for more details. " .
                 "Your current balance is: " . ($totalBalance > 0 ? "₱" . number_format($totalBalance, 2) : "0.00") . ".";
-            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
-            VALUES(?,?,?,?)");
-            $insertNotification->bind_param("iiss", $bookingID, $customerID, $message, $receiver);
+            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, receiverID, senderID, message, receiver) VALUES(?,?,?,?,?)");
+            $insertNotification->bind_param("iiiss", $bookingID, $customerID, $userID, $message, $receiver);
 
             if (!$insertNotification->execute()) {
                 $conn->rollback();
