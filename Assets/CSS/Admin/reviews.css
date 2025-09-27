@@ -122,7 +122,8 @@ body {
   gap: 0.5rem;
 }
 
-.fa-regular {
+.fa-regular,
+.fa-solid {
   font-size: 25px;
 }
 
