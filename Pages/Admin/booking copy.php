@@ -248,7 +248,129 @@ if (isset($_SESSION['error'])) {
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
                 </thead>
-                <tbody id='booking-display-body'></tbody>
+                <tbody>
+                    <!-- Select booking info -->
+                    <?php
+                    $getBookingInfo = $conn->prepare("SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID,  
+                                            b.bookingID, b.bookingID, b.bookingType, b.userID, b.startDate, b.bookingStatus,
+                                            u.firstName,u.middleInitial, u.lastName, 
+                                            b.customPackageID, 
+                                            cb.paymentApprovalStatus, cb.confirmedBookingID
+                                    FROM booking b
+                                    INNER JOIN user u ON b.userID = u.userID   -- to get  the firstname, M.I and lastname 
+                                    LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID 
+                                    ");
+                    $getBookingInfo->execute();
+                    $getBookingInfoResult = $getBookingInfo->get_result();
+                    if ($getBookingInfoResult->num_rows > 0) {
+                        while ($bookings = $getBookingInfoResult->fetch_assoc()) {
+                            // echo "<pre>";
+                            // print_r($bookings);
+                            // echo "</pre>";
+                            $formattedBookingID = $bookings['formattedBookingID'];
+                            $startDate = strtotime($bookings['startDate']) ?? null;
+                            $checkIn = date("F d, Y", $startDate);
+                            $middleInitial = trim($bookings['middleInitial'] ?? '');
+                            $name = ucfirst($bookings['firstName']) . " " . ucfirst($middleInitial) . " "  . ucfirst($bookings['lastName']);
+
+                            $bookingType = $bookings['bookingType'];
+                            $confirmedBookingID =  $bookings['confirmedBookingID'];
+                            $bookingID = $bookings['bookingID'];
+                            $paymentApprovalStatusID = $bookings['paymentApprovalStatus'] ?? null;
+                            $bookingStatusID = $bookings['bookingStatus'] ?? null;
+
+                            $paymentApprovalStatus = getStatuses($conn, $paymentApprovalStatusID) ?? null;
+                            $bookingStatus = getStatuses($conn, $bookingStatusID) ?? null;
+
+                            // echo "<pre>";
+                            // print_r($paymentApprovalStatus);
+                            // echo "</pre>";
+                            if ($bookingID) {
+                                if (!empty($confirmedBookingID)) {
+                                    $status = $paymentApprovalStatus['statusName'];
+                                    switch ($paymentApprovalStatus['statusID']) {
+                                        case 1: //Pending
+                                            $status = 'Downpayment';
+                                            $class = 'info';
+                                            break;
+                                        case 2: //Approved
+                                            $class = 'success';
+                                            break;
+                                        case 3: //Rejected
+                                            $class = 'danger';
+                                            break;
+                                        case 4: //Cancelled
+                                            $class = 'red';
+                                            break;
+                                        case 5: //Done
+                                            $class = 'light-green';
+                                            break;
+                                        case 6: //Expired
+                                            $class = 'secondary';
+                                            break;
+                                        default:
+                                            $class = 'warning';
+                                            break;
+                                    }
+                                } else {
+                                    $status = $bookingStatus['statusName'];
+                                    switch ($bookingStatus['statusID']) {
+                                        case 1: //Pending
+                                            $class = 'warning';
+                                            break;
+                                        case 2: //Approved
+                                            $status = 'Downpayment';
+                                            $class = 'info';
+                                            break;
+                                        case 3: //Rejected
+                                            $class = 'danger';
+                                            break;
+                                        case 4: //Cancelled
+                                            $class = 'red';
+                                            break;
+                                        case 5: //Done
+                                            $class = 'light-green';
+                                            break;
+                                        case 6: //Expired
+                                            $class = 'secondary';
+                                            break;
+                                        default:
+                                            $class = 'warning';
+                                            break;
+                                    }
+                                }
+                            }
+
+
+
+                    ?>
+                            <tr>
+                                <td><?= htmlspecialchars($formattedBookingID) ?></td>
+                                <td><?= htmlspecialchars($name) ?></td>
+                                <td><?= htmlspecialchars($bookingType) ?>&nbsp;Booking</td>
+                                <td><?= $checkIn ?></td>
+                                <td>
+                                    <a class="btn btn-<?= $class ?> w-100">
+                                        <?= $status ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="viewBooking.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="button" value="booking">
+                                        <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                                        <input type="hidden" name="bookingStatus"
+                                            value="<?= !empty($bookings['bookingStatus']) ? !empty($bookings['bookingStatus']) : !empty($paymentApprovalStatusName)  ?>">
+                                        <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                        <button type="submit" class="btn btn-primary">View</button>
+                                    </form>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    }
+
+                    ?>
+                </tbody>
             </table>
         </div>
     </div>
@@ -263,67 +385,6 @@ if (isset($_SESSION['error'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
-
-    <!-- Booking Ajax -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("../../Function/Admin/Ajax/getBookingsJSON.php")
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        console.error("Failed to load bookings.");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'An unknown error occurred.'
-                        });
-                        return;
-                    }
-                    const bookings = data.bookings;
-                    const tbody = document.querySelector('#booking-display-body');
-                    tbody.innerHTML = "";
-
-                    if (bookings && bookings.length > 0) {
-                        bookings.forEach(booking => {
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
-                                                <td>${booking.formattedBookingID}</td>
-                                                <td>${booking.name}</td>
-                                                <td>${booking.bookingType} Booking</td>
-                                                <td>${booking.checkIn}</td>
-                                                <td>
-                                                    <a class="btn btn-${booking.statusClass} w-100">
-                                                        ${booking.status}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <form action="viewBooking.php" method="POST">
-                                                        <input type="hidden" name="button" value="booking">
-                                                        <input type="hidden" name="bookingType" value="${booking.bookingType}">
-                                                        <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
-                                                        <input type="hidden" name="bookingID" value="${booking.bookingID}">
-                                                        <button type="submit" class="btn btn-primary">View</button>
-                                                    </form>
-                                                </td>
-                                            `;
-                            tbody.appendChild(row);
-                        })
-                    } else {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `<td colspan="6" class="text-center">No bookings to display</td>`;
-                        tbody.appendChild(row);
-                    }
-                }).catch(error => {
-                    console.error("Error loading bookings:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: error.message || 'Failed to load data from the server.'
-                    })
-                })
-        })
-    </script>
-
     <script src="../../Assets/JS/adminNavbar.js"></script>
     <!-- Notification Ajax -->
     <script>

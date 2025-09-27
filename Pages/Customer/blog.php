@@ -33,6 +33,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
+require '../../Function/notification.php';
 ?>
 
 <!DOCTYPE html>
@@ -93,29 +94,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     $receiver = 'Partner';
                 }
 
-                $getNotifications = $conn->prepare("SELECT * FROM notification WHERE userID = ? AND receiver = ? AND is_read = 0");
-                $getNotifications->bind_param("is", $userID, $receiver);
-                $getNotifications->execute();
-                $getNotificationsResult = $getNotifications->get_result();
-                if ($getNotificationsResult->num_rows > 0) {
-                    $counter = 0;
-                    $notificationsArray = [];
-                    $color = [];
-                    $notificationIDs = [];
-                    while ($notifications = $getNotificationsResult->fetch_assoc()) {
-                        $is_readValue = $notifications['is_read'];
-                        $notificationIDs[] = $notifications['notificationID'];
-                        if ($is_readValue === 0) {
-                            $notificationsArray[] = $notifications['message'];
-                            $counter++;
-                            $color[] = "rgb(247, 213, 176, .5)";
-                        } elseif ($is_readValue === 1) {
-                            $notificationsArray[] = $notifications['message'];
-                            $counter++;
-                            $color[] = "white";
-                        }
-                    }
-                }
+                $notifications = getNotification($conn, $userID, $receiver);
+                $counter = $notifications['count'];
+                $notificationsArray = $notifications['messages'];
+                $color = $notifications['colors'];
+                $notificationIDs = $notifications['ids'];
                 ?>
 
                 <div class="notification-container position-relative">
@@ -177,37 +160,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
         <!-- Notification Modal -->
-        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <div class="modal-body p-0">
-                        <?php if (!empty($notificationsArray)): ?>
-                            <ul class="list-group list-group-flush ">
-                                <?php foreach ($notificationsArray as $index => $message):
-                                    $bgColor = $color[$index];
-                                    $notificationID = $notificationIDs[$index];
-                                ?>
-                                    <li class="list-group-item mb-2 notification-item"
-                                        data-id="<?= htmlspecialchars($notificationID) ?>"
-                                        style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgb(84, 87, 92, .5)">
-                                        <?php echo $message ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php else: ?>
-                            <div class="p-3 text-muted">No new notifications.</div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php include '../notificationModal.php' ?>
 
         <main>
             <?php

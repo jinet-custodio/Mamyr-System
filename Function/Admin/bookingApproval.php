@@ -191,8 +191,8 @@ if (isset($_POST['approveBtn'])) {
 
         $receiver = getMessageReceiver($userRoleID);
         $message = 'Your ' . $bookingType . ' booking has been approved successfully.';
-        $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
-        $insertNotification->bind_param('iiss', $bookingID, $userID, $message, $receiver);
+        $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, senderID, receiverID, message, receiver) VALUES(?,?,?,?,?)");
+        $insertNotification->bind_param('iiiss', $bookingID, $userID, $customerID, $message, $receiver);
 
         if (!$insertNotification->execute()) {
             throw new Exception("Failed to insert in notifcation table");
@@ -220,6 +220,7 @@ if (isset($_POST['approveBtn'])) {
 if (isset($_POST['rejectBtn'])) {
     $bookingID = (int) $_POST['bookingID'];
     $bookingStatusID = (int) $_POST['bookingStatus'];
+    $customerID = (int) $_POST['customerID'];
     $message = mysqli_real_escape_string($conn, $_POST['rejectionReason']);
     $userRoleID = (int) $_POST['userRoleID'];
     $conn->begin_transaction();
@@ -243,8 +244,8 @@ if (isset($_POST['rejectBtn'])) {
 
         $receiver = getMessageReceiver($userRoleID);
 
-        $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
-        $insertNotification->bind_param('iiss', $bookingID, $userID, $message, $receiver);
+        $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, senderID, receiverID,  message, receiver) VALUES(?,?,?,?,?)");
+        $insertNotification->bind_param('iiss', $bookingID, $userID, $customerID, $message, $receiver);
 
         if (!$insertNotification->execute()) {
             throw new Exception("Failed to insert notification.");
