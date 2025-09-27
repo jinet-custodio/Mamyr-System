@@ -254,3 +254,16 @@ td {
   left: 45%;
   top: 32.1%;
 }
+
+#additionalServiceNote {
+  padding: 0.7rem !important;
+  text-align: center;
+}
+
+.note-container {
+  padding: 0.7rem;
+}
+
+.note-container li {
+  color: #0d6dfc;
+}

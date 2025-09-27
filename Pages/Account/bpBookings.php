@@ -106,17 +106,17 @@ require '../../Function/Partner/getBookings.php';
             </div>
             <div class="home text-center">
                 <?php if ($role === 'Customer') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Customer/dashboard.php">
+                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Admin/adminDashboard.php">
+                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../BusinessPartner/bpDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../BusinessPartner/bpDashboard.php">
+                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                </a>
                 <?php } ?>
             </div>
             <div class="sidebar-header text-center">
@@ -136,39 +136,39 @@ require '../../Function/Partner/getBookings.php';
 
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                            <i class="fa-solid fa-table-list sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <i class="fa-solid fa-table-list sidebar-icon"></i>
+                        <span class="sidebar-text">Payment & Booking History</span>
+                    </a>
+                </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li class="sidebar-item">
-                        <a href="userManagement.php" class="list-group-item">
-                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
-                            <span class="sidebar-text">Manage Users</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="userManagement.php" class="list-group-item">
+                        <i class="fa-solid fa-people-roof sidebar-icon"></i>
+                        <span class="sidebar-text">Manage Users</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpBookings.php" class="list-group-item active">
-                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
-                            <span class="sidebar-text">Bookings</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpServices.php" class="list-group-item">
-                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
-                            <span class="sidebar-text">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bpBookings.php" class="list-group-item active">
+                        <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                        <span class="sidebar-text">Bookings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpServices.php" class="list-group-item">
+                        <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                        <span class="sidebar-text">Services</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpSales.php" class="list-group-item">
+                        <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                        <span class="sidebar-text">Sales</span>
+                    </a>
+                </li>
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -211,7 +211,8 @@ require '../../Function/Partner/getBookings.php';
                     </div>
 
                     <div class="card">
-                        <div class="card-header fw-bold fs-5" style="background-color: #1a8754; color:#ffff">Approved</div>
+                        <div class="card-header fw-bold fs-5" style="background-color: #1a8754; color:#ffff">Approved
+                        </div>
                         <div class="card-body">
                             <h2 class="approvedNumber"><?= $row['approvedBookings'] ?></h2>
                         </div>
@@ -225,7 +226,8 @@ require '../../Function/Partner/getBookings.php';
                     </div>
 
                     <div class="card">
-                        <div class="card-header fw-bold fs-5" style="background-color: #db3545; color:#ffff">Cancelled</div>
+                        <div class="card-header fw-bold fs-5" style="background-color: #db3545; color:#ffff">Cancelled
+                        </div>
                         <div class="card-body">
                             <h2 class="cancelledNumber"><?= $row['cancelledBooking'] ?></h2>
                         </div>
@@ -290,13 +292,13 @@ require '../../Function/Partner/getBookings.php';
 
                             foreach ($bookings as $booking) {
                             ?>
-                                <tr>
-                                    <td><?= $booking['formattedBookingID'] ?></td>
-                                    <td><?= $booking['guestName'] ?></td>
-                                    <td><?= $booking['bookingType'] ?></td>
-                                    <td><?= $booking['service'] ?></td>
-                                    <td><?= $booking['bookingDate'] ?></td>
-                                    <?php
+                            <tr>
+                                <td><?= $booking['formattedBookingID'] ?></td>
+                                <td><?= $booking['guestName'] ?></td>
+                                <td><?= $booking['bookingType'] ?></td>
+                                <td><?= $booking['service'] ?></td>
+                                <td><?= $booking['bookingDate'] ?></td>
+                                <?php
                                     $statusName = ucwords($booking['approvalStatus']);
                                     switch ($statusName) {
                                         case 'Pending':
@@ -322,13 +324,14 @@ require '../../Function/Partner/getBookings.php';
                                             break;
                                     }
                                     ?>
-                                    <td>
-                                        <span class="btn btn-<?= $className ?> w-75"><?= $statusName ?></span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary w-75">View</button>
-                                    </td>
-                                </tr>
+                                <td>
+                                    <span class="btn btn-<?= $className ?> w-75"><?= $statusName ?></span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#bookingModal">View</button>
+                                </td>
+                            </tr>
                             <?php
                             }
                             ?>
@@ -336,6 +339,148 @@ require '../../Function/Partner/getBookings.php';
                     </table>
                 </div>
             </div>
+
+            <!-- bookingModal -->
+            <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="booking"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Booking Info</h4>
+                        </div>
+                        <div class="modal-body">
+                            <section class="user-info-container">
+                                <div class="booking-info-name-pic-btn">
+                                    <div class="user-info">
+                                        <img src="../../Assets/Images/defaultProfile.png"
+                                            class="img-fluid rounded-start" alt="Profile Image">
+                                        <div class="booking-info-contact">
+                                            <p class="card-text name">Mica Lee</p>
+                                            <p class="card-text sub-name">micalee.bini@gmail.com |
+                                                09235467831 </p>
+                                            <p class="card-text sub-name">243, E. Viudez St., Poblacion, San Ildefonso,
+                                                Bulacan</p>
+                                        </div>
+                                    </div>
+                            </section>
+
+                            <section class="booking-info-container">
+                                <div class="booking-info">
+                                    <label for="eventType">Event Type</label>
+                                    <input type="text" class="form-control" name="eventType" id="eventType"
+                                        value="Birthday" readonly>
+                                </div>
+
+                                <div class="booking-info">
+                                    <label for="eventDate">Booking Date</label>
+                                    <input type="text" class="form-control" name="eventDate" id="eventDate"
+                                        value="October 08, 2025" readonly>
+                                </div>
+
+                                <div class="booking-info">
+                                    <label for="eventDuration">Time Duration</label>
+                                    <input type="text" class="form-control" name="eventDuration" id="eventDuration"
+                                        value="2:00 PM - 7:00 PM (5 hours)" readonly>
+                                </div>
+
+                                <div class="booking-info">
+                                    <label for="eventVenue">Venue</label>
+                                    <input type="text" class="form-control" name="eventVenue" id="eventVenue"
+                                        value="Mini Function Hall" readonly>
+                                </div>
+                            </section>
+
+                            <section class="additionalServiceContainer">
+                                <label for="additionalService">Addtional Service</label>
+                                <div class="additionalService-info">
+                                    <p class="additionalServiceName">Snapshot Photography - Photography</p>
+                                    <p class="additionalServiceprice">₱2000</p>
+                                </div>
+                            </section>
+
+                            <section class="additionalNotesContainer">
+                                <label for="eventVenue">Addtional Notes</label>
+                                <textarea name="additionalNotes" class="form-control" id="additionalNotes"></textarea>
+                            </section>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="btnContainer">
+                                <button type="submit" class="btn btn-primary">Approve</button>
+                                <button type="submit" class="btn btn-danger" data-bs-dismiss="modal"
+                                    aria-label="Close">Reject</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- bookingModal -->
+            <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Service Info</h4>
+                        </div>
+                        <div class="modal-body">
+                            <section class="pic-info">
+                                <div class="picContainer">
+                                    <img src="../../Assets/Images/no-picture.jpg" alt="Service Picture"
+                                        class="servicePic">
+                                </div>
+
+                                <div class="infoContainer">
+                                    <div class="info-container">
+                                        <label for="serviceName">Service Name</label>
+                                        <input type="text" class="form-control" name="serviceName" id="serviceName"
+                                            value="Snapshot Photography" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="servicePrice">Price</label>
+                                        <input type="text" class="form-control" name="servicePrice" id="servicePrice"
+                                            value="₱2000" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceCapacity">Capacity</label>
+                                        <input type="text" class="form-control" name="serviceCapacity"
+                                            id="serviceCapacity" value="Unlimited Shots" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceDuration">Service Duration</label>
+                                        <input type="text" class="form-control" name="serviceDuration"
+                                            id="serviceDuration" value="5 hours" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceAvailable">Service Availability</label>
+                                        <input type="text" class="form-control" name="serviceAvailability"
+                                            id="serviceAvalability" value="Available" readonly>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="descContainer">
+                                <div class="form-group">
+                                    <label for="serviceDescription">Service Description</label>
+                                    <textarea class="form-control" name="serviceDescription" id="serviceDescription"
+                                        rows="60">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque expedita maxime quo obcaecati, corporis, sunt mollitia similique suscipit dolorem ipsam quia iure laborum, esse ducimus explicabo voluptatum autem temporibus quidem!</textarea>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="declineBtnContainer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- bookingModal -->
         </main>
     </div>
 
@@ -348,18 +493,18 @@ require '../../Function/Partner/getBookings.php';
     <script src="../../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#booking').DataTable({
-                language: {
-                    emptyTable: <?= json_encode($message ?: "No data available") ?>
-                },
-                columnDefs: [{
-                    width: '15%',
-                    target: 0
+    $(document).ready(function() {
+        $('#booking').DataTable({
+            language: {
+                emptyTable: <?= json_encode($message ?: "No data available") ?>
+            },
+            columnDefs: [{
+                width: '15%',
+                target: 0
 
-                }]
-            });
+            }]
         });
+    });
     </script>
 
     <!-- Bootstrap Link -->
@@ -371,77 +516,77 @@ require '../../Function/Partner/getBookings.php';
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        //Handle sidebar for responsiveness
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.getElementById('toggle-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container')
+    //Handle sidebar for responsiveness
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const items = document.querySelectorAll('.list-group-item');
+        const toggleCont = document.getElementById('toggle-container')
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    });
-                    toggleCont.style.justifyContent = "center"
-                } else {
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    toggleCont.style.justifyContent = "flex-end"
-                }
-            });
-
-            function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
-                    sidebar.classList.add('collapsed');
-                    toggleBtn.style.display = "flex";
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    })
-
-                } else {
-                    toggleBtn.style.display = "none";
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    })
-                    sidebar.classList.remove('collapsed');
-                }
+            if (sidebar.classList.contains('collapsed')) {
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                });
+                toggleCont.style.justifyContent = "center"
+            } else {
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                toggleCont.style.justifyContent = "flex-end"
             }
-
-            // Run on load and when window resizes
-            handleResponsiveSidebar();
-            window.addEventListener('resize', handleResponsiveSidebar);
         });
+
+        function handleResponsiveSidebar() {
+            if (window.innerWidth <= 600) {
+                sidebar.classList.add('collapsed');
+                toggleBtn.style.display = "flex";
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                })
+
+            } else {
+                toggleBtn.style.display = "none";
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                })
+                sidebar.classList.remove('collapsed');
+            }
+        }
+
+        // Run on load and when window resizes
+        handleResponsiveSidebar();
+        window.addEventListener('resize', handleResponsiveSidebar);
+    });
     </script>
 
     <!-- Show -->
     <script>
-        const logoutBtn = document.getElementById('logoutBtn');
-        const logoutModal = document.getElementById('logoutModal');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../../Function/logout.php";
-                }
-            });
-        })
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../../Function/logout.php";
+            }
+        });
+    })
     </script>
 </body>
 

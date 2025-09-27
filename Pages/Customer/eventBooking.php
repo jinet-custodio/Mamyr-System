@@ -336,8 +336,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         <h1 class="modal-title fs-4 fw-bold" id="additionalServicesModalLabel">Business Partners</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <p class="note" style="color: blue">Before including additional services from our partners, please
-                        make sure to contact them and discuss the details of the event.</p>
+                    <p class="note" id="additionalServiceNote" style="color: #0d6dfc">Before including additional
+                        services from our partners,
+                        <strong> please
+                            make sure to contact them</strong> and discuss the details of the event.
+                    </p>
                     <div class="modal-body additionalService" id="additionalService">
                     </div>
                     <div class="modal-footer">
@@ -420,7 +423,8 @@ $formData = $_SESSION['eventFormData'] ?? [];
             // console.log(formattedEndDateTime);
 
             fetch(
-                    `../../Function/Booking/getEventVenue.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`)
+                    `../../Function/Booking/getEventVenue.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`
+                )
                 .then(response => {
                     if (!response.ok) throw new Error('Network Error');
                     return response.json();
@@ -579,7 +583,8 @@ $formData = $_SESSION['eventFormData'] ?? [];
             const formattedEndDateTime = formatDateTime(endDateTimeObj);
 
             fetch(
-                    `../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`)
+                    `../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`
+                )
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network Error');
@@ -608,7 +613,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                             const categoryHeading = document.createElement('h6');
                             categoryHeading.classList.add('bpCategory', 'fw-bold');
                             categoryHeading.innerText = category.eventCategory ||
-                            'Category Name'; // fallback if undefined
+                                'Category Name'; // fallback if undefined
 
                             bpTypeContainer.appendChild(categoryHeading);
                             wrapper.appendChild(bpTypeContainer);
@@ -653,7 +658,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                 String);
 
                             if (selectedServiceIDs.includes(String(category
-                                .partnershipServiceID))) {
+                                    .partnershipServiceID))) {
                                 checkbox.checked = true;
                             }
 

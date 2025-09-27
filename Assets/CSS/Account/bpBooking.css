@@ -217,6 +217,86 @@ td {
 }
 
 /* table css */
+
+/* modal */
+.modal-dialog {
+  max-width: 50% !important;
+}
+
+.booking-info-name-pic-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.booking-info-contact p {
+  font-size: 18px;
+}
+
+.card-text.name {
+  font-weight: bold;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.img-fluid {
+  height: 90px;
+  width: 90px;
+  object-fit: cover;
+  border-radius: 4rem;
+}
+
+.booking-info-container {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  text-align: center;
+}
+
+.additionalServiceContainer {
+  margin-top: 1rem;
+}
+
+.additionalService-info {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.additionalService-info p {
+  font-size: 18px;
+}
+
+textarea {
+  width: 100% !important;
+}
+
+.btnContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.btnContainer button {
+  width: 25%;
+}
+/* modal */
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
   .sidebar {

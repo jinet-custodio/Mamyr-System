@@ -59,7 +59,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
-<body> <!-- Get the information to the database -->
+<body>
+    <!-- Get the information to the database -->
     <?php
     if ($userRole == 2) {
         $role = "Business Partner";
@@ -104,17 +105,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
             <div class="home text-center">
                 <?php if ($role === 'Customer') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Customer/dashboard.php">
+                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Admin/adminDashboard.php">
+                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../BusinessPartner/bpDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../BusinessPartner/bpDashboard.php">
+                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                </a>
                 <?php } ?>
             </div>
             <div class="sidebar-header text-center">
@@ -133,39 +134,39 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </li>
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                            <i class="fa-solid fa-table-list sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <i class="fa-solid fa-table-list sidebar-icon"></i>
+                        <span class="sidebar-text">Payment & Booking History</span>
+                    </a>
+                </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li class="sidebar-item">
-                        <a href="userManagement.php" class="list-group-item">
-                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
-                            <span class="sidebar-text">Manage Users</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="userManagement.php" class="list-group-item">
+                        <i class="fa-solid fa-people-roof sidebar-icon"></i>
+                        <span class="sidebar-text">Manage Users</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpBookings.php" class="list-group-item">
-                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
-                            <span class="sidebar-text">Bookings</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpServices.php" class="list-group-item active">
-                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
-                            <span class="sidebar-text">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bpBookings.php" class="list-group-item">
+                        <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                        <span class="sidebar-text">Bookings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpServices.php" class="list-group-item active">
+                        <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                        <span class="sidebar-text">Services</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpSales.php" class="list-group-item">
+                        <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                        <span class="sidebar-text">Sales</span>
+                    </a>
+                </li>
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -221,9 +222,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                             if (!$result->num_rows === 0) {
                             ?>
-                                <tr>
-                                    <td colspan="8" class="text-center no-data-text">No data available</td>
-                                </tr>
+                            <tr>
+                                <td colspan="8" class="text-center no-data-text">No data available</td>
+                            </tr>
                             <?php
                             }
                             $details = [];
@@ -267,13 +268,15 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 }
 
                             ?>
-                                <tr>
-                                    <td><?= htmlspecialchars(ucfirst($service['PBName'])) ?></td>
-                                    <td>₱<?= number_format($service['PBPrice'], 2) ?></td>
-                                    <td><span class="btn btn-<?= $classcolor ?> w-75" id="<?= $statusName ?>"><?= $statusName ?></span>
-                                    </td>
-                                    <td><a href="#" class="btn btn-primary w-75">View</a></td>
-                                </tr>
+                            <tr>
+                                <td><?= htmlspecialchars(ucfirst($service['PBName'])) ?></td>
+                                <td>₱<?= number_format($service['PBPrice'], 2) ?></td>
+                                <td><span class="btn btn-<?= $classcolor ?> w-75"
+                                        id="<?= $statusName ?>"><?= $statusName ?></span>
+                                </td>
+                                <td><button type="button" class="btn btn-primary w-75" data-bs-toggle="modal"
+                                        data-bs-target="#serviceModal">View</button></td>
+                            </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -289,7 +292,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <div class="serviceInputContainer">
                             <div class="serviceNameContainer">
                                 <label for="serviceName" class="addServiceLabel">Service Name</label>
-                                <input type="text" class="form-control" id="serviceName" name="serviceName" placeholder="e.g Wedding Photography" required>
+                                <input type="text" class="form-control" id="serviceName" name="serviceName"
+                                    placeholder="e.g Wedding Photography" required>
                             </div>
                             <div class="partnerTypeContainer">
                                 <label for="partnerType" class="addServiceLabel">Partner Type</label>
@@ -306,8 +310,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                                <option value="<?= htmlspecialchars($row['partnerTypeID']) ?>">
-                                                    <?= htmlspecialchars($row['description']) ?></option>
+                                    <option value="<?= htmlspecialchars($row['partnerTypeID']) ?>">
+                                        <?= htmlspecialchars($row['description']) ?></option>
                                     <?php
                                             }
                                         }
@@ -328,8 +332,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
-                                                    <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                    <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
+                                        <?= htmlspecialchars($row['availabilityName']) ?></option>
                                     <?php
                                             }
                                         }
@@ -342,15 +346,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                             <div class="priceContainer">
                                 <label for="price" class="addServiceLabel">Price</label>
-                                <input type="text" class="form-control" id="price" name="price" placeholder="e.g. 1000" required>
+                                <input type="text" class="form-control" id="price" name="price" placeholder="e.g. 1000"
+                                    required>
                             </div>
                             <div class="capacityContainer">
                                 <label for="capacity" class="addServiceLabel">Capacity</label>
-                                <input type="number" class="form-control" id="capacity" name="capacity" placeholder="e.g. 5" min='1'>
+                                <input type="number" class="form-control" id="capacity" name="capacity"
+                                    placeholder="e.g. 5" min='1'>
                             </div>
                             <div class="durationContainer">
                                 <label for="duration" class="addServiceLabel">Duration</label>
-                                <input type="text" class="form-control" id="duration" name="duration" placeholder="e.g. 1 hour">
+                                <input type="text" class="form-control" id="duration" name="duration"
+                                    placeholder="e.g. 1 hour">
                             </div>
                             <div class="descContainer">
                                 <label for="description" class="description" class="addServiceLabel">Description</label>
@@ -379,6 +386,69 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             </div>
 
+            <!-- serviceModal -->
+            <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Service Info</h4>
+                        </div>
+                        <div class="modal-body">
+                            <section class="pic-info">
+                                <div class="picContainer">
+                                    <img src="../../Assets/Images/no-picture.jpg" alt="Service Picture"
+                                        class="servicePic">
+                                </div>
+
+                                <div class="infoContainer">
+                                    <div class="info-container">
+                                        <label for="serviceName">Service Name</label>
+                                        <input type="text" class="form-control" name="serviceName" id="serviceName"
+                                            value="Snapshot Photography" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="servicePrice">Price</label>
+                                        <input type="text" class="form-control" name="servicePrice" id="servicePrice"
+                                            value="₱2000" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceCapacity">Capacity</label>
+                                        <input type="text" class="form-control" name="serviceCapacity"
+                                            id="serviceCapacity" value="Unlimited Shots" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceDuration">Service Duration</label>
+                                        <input type="text" class="form-control" name="serviceDuration"
+                                            id="serviceDuration" value="5 hours" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceAvailable">Service Availability</label>
+                                        <input type="text" class="form-control" name="serviceAvailability"
+                                            id="serviceAvalability" value="Available" readonly>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="descContainer">
+                                <div class="form-group">
+                                    <label for="serviceDescription">Service Description</label>
+                                    <textarea class="form-control" name="serviceDescription" id="serviceDescription"
+                                        rows="60">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque expedita maxime quo obcaecati, corporis, sunt mollitia similique suscipit dolorem ipsam quia iure laborum, esse ducimus explicabo voluptatum autem temporibus quidem!</textarea>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="declineBtnContainer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- serviceModal -->
         </main>
     </div>
 
@@ -397,117 +467,117 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../../Assets/JS/datatables.min.js"></script>
 
     <script>
-        const servicesTable = document.getElementById("servicesTable")
-        const addServiceContainer = document.getElementById("addServiceContainer")
-        const addServiceButtonContainer = document.getElementById("addServiceButtonContainer")
-        const homeBtnContainer = document.getElementById("homeBtnContainer")
+    const servicesTable = document.getElementById("servicesTable")
+    const addServiceContainer = document.getElementById("addServiceContainer")
+    const addServiceButtonContainer = document.getElementById("addServiceButtonContainer")
+    const homeBtnContainer = document.getElementById("homeBtnContainer")
 
-        addServiceContainer.style.display = "none"
+    addServiceContainer.style.display = "none"
 
-        function addService() {
-            if (addServiceContainer.style.display == "none") {
-                addServiceContainer.style.display = "block";
-                servicesTable.style.display = "none";
-                addServiceButtonContainer.style.display = "none";
-                homeBtnContainer.style.display = "none";
-                document.getElementById("title").innerHTML = "Add Service"
+    function addService() {
+        if (addServiceContainer.style.display == "none") {
+            addServiceContainer.style.display = "block";
+            servicesTable.style.display = "none";
+            addServiceButtonContainer.style.display = "none";
+            homeBtnContainer.style.display = "none";
+            document.getElementById("title").innerHTML = "Add Service"
 
-            } else {
-                addServiceContainer.style.display = "block";
-            }
+        } else {
+            addServiceContainer.style.display = "block";
         }
+    }
     </script>
 
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#services').DataTable({
-                language: {
-                    emptyTable: "No Services"
-                },
-                columnDefs: [{
-                    width: '25%',
-                    target: 0
+    $(document).ready(function() {
+        $('#services').DataTable({
+            language: {
+                emptyTable: "No Services"
+            },
+            columnDefs: [{
+                width: '25%',
+                target: 0
 
-                }]
-            });
+            }]
         });
+    });
     </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        //Handle sidebar for responsiveness
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.getElementById('toggle-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container')
+    //Handle sidebar for responsiveness
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const items = document.querySelectorAll('.list-group-item');
+        const toggleCont = document.getElementById('toggle-container')
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    });
-                    toggleCont.style.justifyContent = "center"
-                } else {
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    toggleCont.style.justifyContent = "flex-end"
-                }
-            });
-
-            function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
-                    sidebar.classList.add('collapsed');
-                    toggleBtn.style.display = "flex";
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    })
-
-                } else {
-                    toggleBtn.style.display = "none";
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    })
-                    sidebar.classList.remove('collapsed');
-                }
+            if (sidebar.classList.contains('collapsed')) {
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                });
+                toggleCont.style.justifyContent = "center"
+            } else {
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                toggleCont.style.justifyContent = "flex-end"
             }
-
-            // Run on load and when window resizes
-            handleResponsiveSidebar();
-            window.addEventListener('resize', handleResponsiveSidebar);
         });
+
+        function handleResponsiveSidebar() {
+            if (window.innerWidth <= 600) {
+                sidebar.classList.add('collapsed');
+                toggleBtn.style.display = "flex";
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                })
+
+            } else {
+                toggleBtn.style.display = "none";
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                })
+                sidebar.classList.remove('collapsed');
+            }
+        }
+
+        // Run on load and when window resizes
+        handleResponsiveSidebar();
+        window.addEventListener('resize', handleResponsiveSidebar);
+    });
     </script>
 
     <!-- Show when want to logout-->
     <script>
-        const logoutBtn = document.getElementById('logoutBtn');
-        const logoutModal = document.getElementById('logoutModal');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../../Function/logout.php";
-                }
-            });
-        })
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../../Function/logout.php";
+            }
+        });
+    })
     </script>
 
     <!-- <script>
@@ -523,27 +593,27 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     </script> -->
     <!-- Message pop up -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('action');
-        if (paramValue === 'success') {
-            Swal.fire({
-                icon: 'success',
-                title: 'Service Added Successfully',
-                text: ''
-            })
-        } else if (paramValue === 'error') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Failed to Add Service',
-                text: 'Please try again later.'
-            })
-        }
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('action');
+    if (paramValue === 'success') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Service Added Successfully',
+            text: ''
+        })
+    } else if (paramValue === 'error') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Failed to Add Service',
+            text: 'Please try again later.'
+        })
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 
