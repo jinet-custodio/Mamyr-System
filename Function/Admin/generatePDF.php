@@ -168,14 +168,14 @@ if (isset($_POST['generatePDF'])) {
                             <?php
                             $totalBookings = 0;
                             $totalCost = 0;
-
+                            $resortTotalSales = 0;
+                            $eventTotalSales = 0;
+                            $hotelTotalSales = 0;
                             if (!empty($reportData)) {
 
                                 foreach ($reportData as $row):
                                     $totalBookings++;
-                                    $resortTotalSales = 0;
-                                    $eventTotalSales = 0;
-                                    $hotelTotalSales = 0;
+
                                     $totalCost += $row['confirmedFinalBill'];
                                     $bookingType = $row['bookingType'];
 
@@ -190,9 +190,7 @@ if (isset($_POST['generatePDF'])) {
                                             $hotelTotalSales += $row['confirmedFinalBill'];
                                             break;
                                         default:
-                                            $resortTotalSales =  $row['confirmedFinalBill'];
-                                            $eventTotalSales =  $row['confirmedFinalBill'];
-                                            $hotelTotalSales = $row['confirmedFinalBill'];
+                                            break;
                                     }
                             ?>
                                     <tr>

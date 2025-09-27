@@ -50,6 +50,7 @@ $approvedBy = $data['fullName'];
 if (isset($_POST['approveBtn'])) {
     $bookingID = (int) $_POST['bookingID'];
     $userRoleID = (int) $_POST['userRoleID'];
+    $customerID = (int) $_POST['customerID'];
     $customPackageID = (int) $_POST['customPackageID'];
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     $serviceIDs = [];
@@ -189,7 +190,7 @@ if (isset($_POST['approveBtn'])) {
         }
 
         $receiver = getMessageReceiver($userRoleID);
-        $message = 'The booking has been approved successfully.';
+        $message = 'Your ' . $bookingType . ' booking has been approved successfully.';
         $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver) VALUES(?,?,?,?)");
         $insertNotification->bind_param('iiss', $bookingID, $userID, $message, $receiver);
 

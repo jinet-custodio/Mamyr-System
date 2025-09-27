@@ -11,6 +11,7 @@
         $endDate = $_GET['endDate'];
         $availableID = 1;
         $approvedPartner = 2;
+        $isApproved = true;
         try {
             $getPartnerService = $conn->prepare(
                 "SELECT 
@@ -27,7 +28,7 @@
                 LEFT JOIN  `user` u ON p.userID = u.userID
                 LEFT JOIN `partnership_partnertype` ppt ON p.partnershipID = ppt.partnershipID
                 LEFT JOIN `partnershiptype` pt ON ppt.partnerTypeID = pt.partnerTypeID
-                WHERE ps.PSAvailabilityID = ? AND p.partnerStatusID = ?
+                WHERE ps.PSAvailabilityID = ? AND p.partnerStatusID = ? AND ppt.isApproved = ?
                 AND NOT EXISTS 
                 (
                     SELECT 1 
@@ -42,7 +43,7 @@
                 throw new Exception("Error at query Partner Service: " . $getPartnerService->error);
             }
 
-            $getPartnerService->bind_param('iiss', $availableID, $approvedPartner, $startDate, $endDate);
+            $getPartnerService->bind_param('iiiss', $availableID, $approvedPartner, $isApproved, $startDate, $endDate);
 
             if (!$getPartnerService->execute()) {
                 throw new Exception("Error at query Partner Service execution: " . $getPartnerService->error);

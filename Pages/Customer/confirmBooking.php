@@ -367,7 +367,7 @@ unset($_SESSION['formData']);
     $selectedHotels = [];
     if (isset($_POST['hotelBooking'])) {
         $hoursSelected = "22 hours";
-        $arrivalTime = mysqli_real_escape_string($conn, $_POST['arrivalTime']);
+        $arrivalTime = mysqli_real_escape_string($conn, $_POST['arrivalTime']) ?? '';
         $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['checkInDate']);
         $scheduledEndDate = mysqli_real_escape_string($conn, $_POST['checkOutDate']);
 
@@ -395,9 +395,14 @@ unset($_SESSION['formData']);
         $hotelPrices = [];
         $descriptions = [];
         $items = [];
+        if ($arrivalTime) {
+            $arrivalTimeObj = new DateTime($arrivalTime);
+            $arrivalTimeText = $arrivalTime = $arrivalTimeObj->format('g:i a');
+        } else {
+            $arrivalTimeText = 'Not Stated';
+            $arrivalTime = '00:00:00';
+        }
 
-        $arrivalTimeObj = new DateTime($arrivalTime);
-        $arrivalTime = $arrivalTimeObj->format('g:i a');
 
         $selectedHotelQuery = $conn->prepare("SELECT * FROM service s
             JOIN resortamenity ra ON s.resortServiceID = ra.resortServiceID
@@ -508,7 +513,7 @@ unset($_SESSION['formData']);
                 <?php if ($bookingType === 'Hotel') { ?>
                     <div class="card-info">
                         <h5 class="info-title">Arrival Time:</h5>
-                        <p class="card-text"><?= $arrivalTime ?></p>
+                        <p class="card-text"><?= $arrivalTimeText ?></p>
                         <input type="hidden" name="arrivalTime" value="<?= $arrivalTime ?>">
                     </div>
                 <?php } ?>

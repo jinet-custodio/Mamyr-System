@@ -66,7 +66,7 @@ if (isset($_POST['eventBook'])) {
         }
         $getServiceID->close();
     }
-
+    $partnerService = [];
     if (!empty($partnerIDs)) {
         $getServiceID = $conn->prepare("SELECT * FROM `service` WHERE partnershipServiceID = ?");
         foreach ($partnerIDs as $partershipServiceID) {
@@ -78,7 +78,9 @@ if (isset($_POST['eventBook'])) {
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
                     $serviceID = $row['serviceID'];
-                    $services[$serviceID] = $row['PBPrice'];
+                    $price =  $row['PBPrice'];
+                    $services[$serviceID] = $price;
+                    $partnerService[$partershipServiceID] = $price;
                 } else {
                     error_log("No matching service found for resortServiceID: $partershipServiceID");
                 }
@@ -160,9 +162,10 @@ if (isset($_POST['eventBook'])) {
 
         $bookingID = $insertBooking->insert_id;
 
-        $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`) VALUES (?,?)");
-        foreach ($partnerIDs as $partershipServiceID) {
-            $insertBPavailedService->bind_param('ii', $partershipServiceID, $bookingID);
+        //insert into bp availed service
+        $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`, `price`) VALUES (?,?,?)");
+        foreach ($partnerIDs as $partershipServiceID => $price) {
+            $insertBPavailedService->bind_param('iid', $partershipServiceID, $bookingID, $price);
             if (!$insertBPavailedService->execute()) {
                 $conn->rollback();
                 error_log("Error: " . $insertBooking->error);
