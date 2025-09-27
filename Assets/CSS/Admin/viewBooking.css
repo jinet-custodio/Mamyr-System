@@ -145,6 +145,13 @@ body {
 
 .foodList {
   width: 48%;
+  text-align: center;
+}
+
+.foodList p {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
 ul {
@@ -241,7 +248,7 @@ label {
     margin-bottom: 1rem;
   }
   .servicesInfo {
-    padding-right: 5.5rem; 
+    padding-right: 5.5rem;
     text-align: center;
   }
 }
@@ -303,27 +310,26 @@ label {
 
 /* Tablet portrait only */
 @media only screen and (min-width: 600px) and (max-width: 768px) {
-    .page-title {
+  .page-title {
     font-size: 20px;
   }
   .user-info {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    flex-wrap: nowrap;         
+    flex-wrap: nowrap;
     justify-content: flex-start;
-    gap: 4px;                 
+    gap: 4px;
     white-space: normal;
-}
+  }
   .name {
     font-size: 16px !important;
   }
   .sub-name {
-
     margin-bottom: 8px;
     font-size: 11px !important;
   }
-    .back {
+  .back {
     margin-top: 2rem;
     height: 6vh;
   }
@@ -337,7 +343,7 @@ label {
     gap: 3px;
     margin-bottom: 1rem;
   }
-    .btn-danger {
+  .btn-danger {
     margin-left: 0 !important;
   }
   .approveReject {
@@ -394,7 +400,6 @@ label {
 }
 /* Phone size */
 @media screen and (max-width: 599px) {
-
   .page-title {
     font-size: 16px;
   }
@@ -473,9 +478,6 @@ label {
     font-size: 10px;
   }
 }
-
-
-
 
 /*
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
