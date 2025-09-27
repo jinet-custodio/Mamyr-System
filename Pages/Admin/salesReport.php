@@ -70,11 +70,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <?php if ($userRole === 3) { ?>
             <a href="revenue.php" id="backToDashboard" class="backButton">
-                <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
+                <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="back to dashboard" id="back-btn">
             </a>
         <?php } elseif ($userRole === 2) { ?>
             <a href="../Account/bpSales.php" id="backToDashboard" class="backButton">
-                <img src="../../Assets/Images/Icon/arrow.png" alt="back to dashboard" id="back-btn">
+                <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="back to dashboard" id="back-btn">
             </a>
         <?php } ?>
         <div class="pagetitle">
@@ -134,6 +134,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             $paymentStatusID = 3; //Fully Paid
 
 
+
                             if (count($dates) === 2) {
                                 $selectedStartDate = DateTime::createFromFormat('F d, Y', trim($dates[0]))->format('Y-m-d') . ' 00:00:00';
                                 $selectedEndDate = DateTime::createFromFormat('F d, Y', trim($dates[1]))->format('Y-m-d') . ' 23:59:59';
@@ -142,12 +143,25 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 if ($userRole === 3) { //Admin
                                     $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
                                             b.bookingType, u.firstName, u.lastName, b.guestCount AS guest, 
-                                            b.startDate, b.endDate, 
-                                            b.paymentMethod, b.totalCost, cb.*
+                                            b.startDate, b.endDate, b.paymentMethod, b.totalCost, 
+                                            cb.paymentApprovalStatus, cb.paymentStatus, 
+                                            CASE WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill 
+                                            ELSE cb.confirmedFinalBill - bpas.price
+                                            END AS confirmedFinalBill
                                             FROM confirmedbooking cb
                                             LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                                            LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
+                                            LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
                                             LEFT JOIN user u ON b.userID = u.userID
+                                            LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+                                            LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID 
+                                            LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
+                                            LEFT JOIN partnershipservice ps  ON s.partnershipServiceID = ps.partnershipServiceID  
                                             WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?
+                                            GROUP BY 
+                                            b.bookingID, b.bookingType, u.firstName, u.lastName, b.guestCount, 
+                                            b.startDate, b.endDate, b.paymentMethod, b.totalCost, 
+                                            cb.paymentApprovalStatus, cb.paymentStatus, cb.confirmedFinalBill
                                             ");
                                     $getReportData->bind_param("iss", $approvedStatusID, $selectedStartDate, $selectedEndDate);
                                 } elseif ($userRole === 2) { //Partner
@@ -166,12 +180,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
                                             LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID 
                                             LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
-                                            LEFT JOIN partnershipservice ps  ON s.partnershipServiceID = ps.partnershipServiceID                      
+                                            LEFT JOIN partnershipservice ps  ON s.partnershipServiceID = ps.partnershipServiceID 
+                                            LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID                     
                                             LEFT JOIN user u ON b.userID = u.userID
 
-                                            WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?  AND ps.partnershipID = ?                         
+                                            WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?  AND ps.partnershipID = ?  AND bpas.approvalStatus = ?                       
                                             ");
-                                    $getReportData->bind_param("issi", $approvedStatusID, $selectedStartDate, $selectedEndDate, $partnershipID);
+                                    $getReportData->bind_param("issi", $approvedStatusID, $selectedStartDate, $selectedEndDate, $partnershipID, $approvedStatusID);
                                 }
                                 $getReportData->execute();
                                 $getReportDataResult = $getReportData->get_result();

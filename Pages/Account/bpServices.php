@@ -364,15 +364,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <textarea class="form-control" id="description" name="serviceDesc"
                                     placeholder="Service information/description (Optional)"></textarea>
                             </div>
-                            <!-- <div class="imageContainer">
-                                <label for="serviceImage"  class="addServiceLabel">Upload Image</label>
-                                <img src="../../Assets/Images/no-picture.jpg" alt="Service Picture" id="preview"
-                                    class="serviceImage" name="serviceImage">
-                                <input type="file" id="servicePicture" name="servicePicture" hidden>
-                                <label for="servicePicture" id="choose" class="custom-file-button btn btn-primary w-50 mt-2"
-                                    name="choose">Choose
-                                    Image</label>
-                            </div> -->
                         </div>
                         <div class="submitBtnContainer ">
                             <input type="hidden" name="partnershipID" value="<?= (int) $partnershipID ?>">

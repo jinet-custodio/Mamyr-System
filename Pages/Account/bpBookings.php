@@ -35,6 +35,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 }
 
 require '../../Function/Partner/getBookings.php';
+require '../../Function/functions.php';
 
 ?>
 <!DOCTYPE html>
@@ -106,17 +107,17 @@ require '../../Function/Partner/getBookings.php';
             </div>
             <div class="home text-center">
                 <?php if ($role === 'Customer') { ?>
-                <a href="../Customer/dashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
+                    <a href="../Admin/adminDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                <a href="../BusinessPartner/bpDashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } ?>
             </div>
             <div class="sidebar-header text-center">
@@ -136,39 +137,39 @@ require '../../Function/Partner/getBookings.php';
 
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                        <i class="fa-solid fa-table-list sidebar-icon"></i>
-                        <span class="sidebar-text">Payment & Booking History</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                            <i class="fa-solid fa-table-list sidebar-icon"></i>
+                            <span class="sidebar-text">Payment & Booking History</span>
+                        </a>
+                    </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                <li class="sidebar-item">
-                    <a href="userManagement.php" class="list-group-item">
-                        <i class="fa-solid fa-people-roof sidebar-icon"></i>
-                        <span class="sidebar-text">Manage Users</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bpBookings.php" class="list-group-item active">
-                        <i class="fa-regular fa-calendar-days sidebar-icon"></i>
-                        <span class="sidebar-text">Bookings</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpServices.php" class="list-group-item">
-                        <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
-                        <span class="sidebar-text">Services</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpSales.php" class="list-group-item">
-                        <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                        <span class="sidebar-text">Sales</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bpBookings.php" class="list-group-item active">
+                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpServices.php" class="list-group-item">
+                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpSales.php" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Sales</span>
+                        </a>
+                    </li>
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -254,13 +255,12 @@ require '../../Function/Partner/getBookings.php';
                             $message = '';
                             try {
                                 $getAvailedService = $conn->prepare("SELECT b.bookingID, LPAD(b.bookingID , 4, '0') AS formattedBookingID,
-                                        u.firstName, u.lastName, b.bookingType, ps.PBName, b.startDate, b.endDate, bpas.approvalStatus as statusID, s.statusName as approvalStatus
+                                        u.firstName, u.lastName, b.bookingType, ps.PBName, b.startDate, b.endDate, bpas.approvalStatus
                                         FROM businesspartneravailedservice bpas
                                         LEFT JOIN booking b ON bpas.bookingID = b.bookingID
                                         LEFT JOIN user u ON u.userID = b.userID
                                         LEFT JOIN partnershipservice ps ON bpas.partnershipServiceID = ps.partnershipServiceID
                                         LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
-                                        LEFT JOIN status s ON bpas.approvalStatus = s.statusID
                                         WHERE p.userID = ?");
                                 $getAvailedService->bind_param('i', $userID);
                                 if (!$getAvailedService->execute()) {
@@ -282,7 +282,7 @@ require '../../Function/Partner/getBookings.php';
                                         'bookingType' => $row['bookingType'] . ' Booking',
                                         'service' => $row['PBName'],
                                         'bookingDate' => $startDate,
-                                        'approvalStatus' => $row['approvalStatus']
+                                        'approvalStatusID' => $row['approvalStatus']
                                     ];
                                 }
                             } catch (Exception $e) {
@@ -292,14 +292,15 @@ require '../../Function/Partner/getBookings.php';
 
                             foreach ($bookings as $booking) {
                             ?>
-                            <tr>
-                                <td><?= $booking['formattedBookingID'] ?></td>
-                                <td><?= $booking['guestName'] ?></td>
-                                <td><?= $booking['bookingType'] ?></td>
-                                <td><?= $booking['service'] ?></td>
-                                <td><?= $booking['bookingDate'] ?></td>
-                                <?php
-                                    $statusName = ucwords($booking['approvalStatus']);
+                                <tr>
+                                    <td><?= $booking['formattedBookingID'] ?></td>
+                                    <td><?= $booking['guestName'] ?></td>
+                                    <td><?= $booking['bookingType'] ?></td>
+                                    <td><?= $booking['service'] ?></td>
+                                    <td><?= $booking['bookingDate'] ?></td>
+                                    <?php
+                                    $status = getStatuses($conn, $booking['approvalStatusID']);
+                                    $statusName = ucwords($status['statusName']);
                                     switch ($statusName) {
                                         case 'Pending':
                                             $className = 'warning';
@@ -324,14 +325,14 @@ require '../../Function/Partner/getBookings.php';
                                             break;
                                     }
                                     ?>
-                                <td>
-                                    <span class="btn btn-<?= $className ?> w-75"><?= $statusName ?></span>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#bookingModal">View</button>
-                                </td>
-                            </tr>
+                                    <td>
+                                        <span class="btn btn-<?= $className ?> w-75"><?= $statusName ?></span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#bookingModal">View</button>
+                                    </td>
+                                </tr>
                             <?php
                             }
                             ?>
@@ -493,18 +494,18 @@ require '../../Function/Partner/getBookings.php';
     <script src="../../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#booking').DataTable({
-            language: {
-                emptyTable: <?= json_encode($message ?: "No data available") ?>
-            },
-            columnDefs: [{
-                width: '15%',
-                target: 0
+        $(document).ready(function() {
+            $('#booking').DataTable({
+                language: {
+                    emptyTable: <?= json_encode($message ?: "No data available") ?>
+                },
+                columnDefs: [{
+                    width: '15%',
+                    target: 0
 
-            }]
+                }]
+            });
         });
-    });
     </script>
 
     <!-- Bootstrap Link -->
@@ -516,77 +517,77 @@ require '../../Function/Partner/getBookings.php';
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    //Handle sidebar for responsiveness
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('toggle-btn');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const items = document.querySelectorAll('.list-group-item');
-        const toggleCont = document.getElementById('toggle-container')
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container')
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
 
-            if (sidebar.classList.contains('collapsed')) {
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                });
-                toggleCont.style.justifyContent = "center"
-            } else {
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                toggleCont.style.justifyContent = "flex-end"
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 600) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    })
+                    sidebar.classList.remove('collapsed');
+                }
             }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
         });
-
-        function handleResponsiveSidebar() {
-            if (window.innerWidth <= 600) {
-                sidebar.classList.add('collapsed');
-                toggleBtn.style.display = "flex";
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                })
-
-            } else {
-                toggleBtn.style.display = "none";
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                })
-                sidebar.classList.remove('collapsed');
-            }
-        }
-
-        // Run on load and when window resizes
-        handleResponsiveSidebar();
-        window.addEventListener('resize', handleResponsiveSidebar);
-    });
     </script>
 
     <!-- Show -->
     <script>
-    const logoutBtn = document.getElementById('logoutBtn');
-    const logoutModal = document.getElementById('logoutModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/logout.php";
-            }
-        });
-    })
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/logout.php";
+                }
+            });
+        })
     </script>
 </body>
 
