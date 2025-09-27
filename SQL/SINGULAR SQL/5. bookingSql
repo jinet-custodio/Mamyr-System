@@ -77,7 +77,13 @@ CREATE TABLE businesspartneravailedservice(
     approvalStatus INT,
     availedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
 
+    
+
    FOREIGN KEY(partnershipServiceID) REFERENCES partnershipservice(partnershipServiceID),
     FOREIGN KEY(bookingID) REFERENCES booking(bookingID),
     FOREIGN KEY(approvalStatus) REFERENCES status(statusID)
 );
+
+ALTER TABLE businesspartneravailedservice
+ADD COLUMN price DECIMAL(10,2) DEFAULT 0.00
+BEFORE availedDate

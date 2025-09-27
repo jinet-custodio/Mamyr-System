@@ -18,17 +18,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 //Get the percent of payment methods
 
 $payments = $conn->prepare("SELECT 
-                    COUNT(CASE WHEN cb.paymentApprovalStatus = '2' AND b.paymentMethod = 'GCash' 
+                    COUNT(CASE WHEN cb.paymentApprovalStatus = 5 AND b.paymentMethod = 'GCash' 
                         AND YEAR(b.startDate) = YEAR(CURDATE())  
                         AND DATE(b.endDate) < CURDATE()  
                         THEN 1 END) 
                         AS totalPaymentGCash,
-                     COUNT(CASE WHEN cb.paymentApprovalStatus = '2' AND b.paymentMethod = 'Cash'
+                    COUNT(CASE WHEN cb.paymentApprovalStatus = 5 AND b.paymentMethod = 'Cash'
                         AND YEAR(b.startDate) = YEAR(CURDATE())  
                         AND DATE(b.endDate) < CURDATE()
                         THEN 1 END) AS totalPaymentCash  
-                     FROM confirmedbooking cb
-                     LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                    FROM confirmedbooking cb
+                    LEFT JOIN booking b ON cb.bookingID = b.bookingID
                     ");
 $payments->execute();
 $paymentsResult = $payments->get_result();
@@ -38,14 +38,22 @@ if ($paymentsResult->num_rows > 0) {
     $CashCount = $row['totalPaymentCash'];
 }
 
-$approvedStatus = 2;
+$approvedStatus = 5;
 $revenue =  $conn->prepare("SELECT 
                                 MONTHNAME(b.startDate) AS month,
-                                SUM(cb.confirmedFinalBill) AS monthlyRevenue 
+                                SUM(CASE WHEN bpas.bookingID IS NULL 
+                                THEN 
+                                    cb.confirmedFinalBill 
+                                ELSE 
+                                    cb.confirmedFinalBill - bpas.price
+                                END) 
+                                AS monthlyRevenue
                             FROM 
                                 confirmedbooking cb 
-                            JOIN 
+                            LEFT JOIN 
                                 booking b ON cb.bookingID = b.bookingID 
+                            LEFT JOIN
+                                businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
                             WHERE 
                                 cb.paymentApprovalStatus = ?
                                 AND YEAR(b.startDate) = YEAR(CURDATE())  
@@ -321,29 +329,56 @@ if ($revenueResult->num_rows > 0) {
                         <?php
                         $getSales = $conn->prepare("SELECT 
                                         CURDATE() AS Today,
-                                        SUM(CASE WHEN cb.paymentApprovalStatus = 2 
+                                        SUM(
+                                            CASE 
+                                                WHEN cb.paymentApprovalStatus = 5 
                                                     AND DATE(b.startDate) = CURDATE() 
                                                     AND DATE(b.endDate) < CURDATE()  
-                                                    THEN cb.confirmedFinalBill ELSE 0 END) 
-                                                    AS totalToday,
-                                        SUM(CASE WHEN cb.paymentApprovalStatus = 2 
+                                                THEN 
+                                                    CASE 
+                                                        WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill 
+                                                        ELSE cb.confirmedFinalBill - bpas.price 
+                                                    END
+                                                ELSE 0 END
+                                            ) AS totalToday,
+                                        SUM(CASE 
+                                                WHEN cb.paymentApprovalStatus = 5 
                                                     AND YEARWEEK(b.startDate, 1) = YEARWEEK(CURDATE(), 1)  
                                                     AND DATE(b.startDate) <= CURDATE() 
                                                     AND DATE(b.endDate) < CURDATE() 
-                                                    THEN cb.confirmedFinalBill ELSE 0 END) 
-                                                    AS totalThisWeek,
-                                        SUM(CASE WHEN cb.paymentApprovalStatus = 2 
+                                                THEN 
+                                                    CASE 
+                                                        WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill 
+                                                        ELSE cb.confirmedFinalBill - bpas.price 
+                                                    END
+                                                ELSE 0 END
+                                            )AS totalThisWeek,
+                                        SUM(CASE 
+                                                WHEN cb.paymentApprovalStatus = 5
                                                     AND YEAR(b.startDate) = YEAR(CURDATE()) 
                                                     AND MONTH(b.startDate) = MONTH(CURDATE()) 
                                                     AND DATE(b.endDate) < CURDATE() 
-                                                    THEN cb.confirmedFinalBill ELSE 0 END) 
-                                                    AS totalThisMonth,
-                                        SUM(CASE WHEN cb.paymentApprovalStatus = 2 
+                                                THEN 
+                                                    CASE 
+                                                        WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill 
+                                                        ELSE cb.confirmedFinalBill - bpas.price 
+                                                    END
+                                                ELSE 0 END
+                                            )AS totalThisMonth,
+                                        SUM(CASE 
+                                                WHEN cb.paymentApprovalStatus = 5 
                                                     AND YEAR(b.startDate) = YEAR(CURDATE()) 
                                                     AND DATE(b.endDate) < CURDATE() 
-                                                    THEN cb.confirmedFinalBill ELSE 0 END) AS totalThisYear                              
+                                                THEN 
+                                                    CASE 
+                                                        WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill 
+                                                        ELSE cb.confirmedFinalBill - bpas.price 
+                                                    END 
+                                                ELSE 0 END
+                                            ) AS totalThisYear                              
                                     FROM booking b 
-                                    JOIN confirmedbooking cb ON b.bookingID = cb.bookingID");
+                                    LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
+                                    LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID");
                         $getSales->execute();
                         $getSalesResult = $getSales->get_result();
                         if ($getSalesResult->num_rows > 0) {
@@ -385,9 +420,10 @@ if ($revenueResult->num_rows > 0) {
                     <div class="booking-status">
                         <?php
                         $getBookings = $conn->prepare("SELECT
-                                        COUNT(CASE WHEN paymentApprovalStatus = 2 THEN 1 END) AS totalApprovedBookings,
+                                        COUNT(CASE WHEN paymentApprovalStatus = 5 THEN 1 END) AS totalApprovedBookings,
                                         COUNT(CASE WHEN paymentApprovalStatus = 3 THEN 1 END) AS totalRejectedBookings,
-                                         COUNT(CASE WHEN bookingStatus = 4 THEN 1 END) AS totalCancelledBookings                                       
+                                        COUNT(CASE WHEN bookingStatus = 4 THEN 1 END) AS totalCancelledBookings,
+                                        COUNT(CASE WHEN paymentApprovalStatus != 1 THEN 1 END)  AS allBookingsMade                              
                                     FROM booking b 
                                     JOIN confirmedbooking cb ON b.bookingID = cb.bookingID");
                         $getBookings->execute();
@@ -397,14 +433,14 @@ if ($revenueResult->num_rows > 0) {
                             $totalApprovedBookings = $data['totalApprovedBookings'];
                             $totalRejectedBookings = $data['totalRejectedBookings'];
                             $totalCancelledBookings = $data['totalCancelledBookings'];
-                            // $allBookingsMade = $data['allBookingsMade'];
+                            $allBookingsMade = $data['allBookingsMade'];
                         }
                         ?>
 
-                        <!-- <div class="form-floating">
+                        <div class="form-floating">
                             <input type="text" class="form-control" id="bookingMade" value="<?= htmlspecialchars($allBookingsMade) ?>">
                             <label for="floatingInputValue">All Bookings</label>
-                        </div> -->
+                        </div>
 
                         <div class="form-floating">
                             <input type="text" class="form-control" id="bookingMade"
@@ -422,28 +458,28 @@ if ($revenueResult->num_rows > 0) {
                             <label for="floatingInputValue">Rejected Bookings</label>
                         </div>
 
-                        <?php
-                        $hotelCategoryID = 1;
-                        $getOccupiedRates = $conn->prepare("SELECT 
+                        <!-- <?php
+                                $hotelCategoryID = 1;
+                                $getOccupiedRates = $conn->prepare("SELECT 
                                         ROUND(
                                             COUNT(CASE WHEN RSAvailabilityID = '2' THEN 1 END) * 100 / COUNT(*), 
                                             2
                                         ) AS occupiedRates
                                     FROM resortamenity
                                     WHERE RScategoryID = ?");
-                        $getOccupiedRates->bind_param("i", $hotelCategoryID);
-                        $getOccupiedRates->execute();
-                        $getOccupiedRatesResult = $getOccupiedRates->get_result();
-                        if ($getOccupiedRatesResult->num_rows > 0) {
-                            $data = $getOccupiedRatesResult->fetch_assoc();
-                            $occupiedRates = $data['occupiedRates'];
-                        }
-                        ?>
+                                $getOccupiedRates->bind_param("i", $hotelCategoryID);
+                                $getOccupiedRates->execute();
+                                $getOccupiedRatesResult = $getOccupiedRates->get_result();
+                                if ($getOccupiedRatesResult->num_rows > 0) {
+                                    $data = $getOccupiedRatesResult->fetch_assoc();
+                                    $occupiedRates = $data['occupiedRates'];
+                                }
+                                ?>
                         <div class="form-floating">
                             <input type="text" class="form-control" id="occupied"
                                 value="<?= htmlspecialchars($occupiedRates) ?>%" readonly>
                             <label for="floatingInputValue">Occupancy Rates</label>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

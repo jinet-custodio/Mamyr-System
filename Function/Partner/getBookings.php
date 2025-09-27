@@ -5,8 +5,8 @@ function getBookingsCount($conn, $userID)
     $paymentStatus = 3;
     try {
         $getPartnerBooking = $conn->prepare("SELECT 
-                COUNT(CASE WHEN b.bookingStatus = 2 THEN 1 END) AS totalBookings,
-                COUNT(CASE WHEN cb.paymentApprovalStatus = 5 THEN 1 END) AS totalApprovedBooking,
+                COUNT(bpas.bookingID) AS totalBookings,
+                COUNT(CASE WHEN bpas.approvalStatus = 2 THEN 1 END) AS totalApprovedBooking,
                 COUNT(CASE WHEN b.bookingStatus = 1 THEN 1 END) AS totalPendingBooking,
                 COUNT(CASE WHEN b.bookingStatus = 4 THEN 1 END) AS totalCancelledBooking
               FROM booking b
@@ -17,6 +17,7 @@ function getBookingsCount($conn, $userID)
               LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
               LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
               LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
+              LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
               WHERE p.userID = ? AND cb.paymentStatus = ?
               ");
         $getPartnerBooking->bind_param('ii', $userID, $paymentStatus);

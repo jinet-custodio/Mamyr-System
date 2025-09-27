@@ -326,23 +326,23 @@ require '../../Function/Partner/getBookings.php';
                     YEAR(b.startDate) AS year,
                     SUM(IFNULL(bs.bookingServicePrice, 0) + IFNULL(cpi.ServicePrice, 0)) AS monthlyRevenue,
                     ps.partnershipID, ps.partnershipServiceID
-                     
                     FROM booking b
                     LEFT JOIN  confirmedbooking cb ON b.bookingID = cb.bookingID
                     LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                     LEFT JOIN custompackageitem cpi ON b.customPackageID = cpi.customPackageID
                     LEFT JOIN service s ON (cpi.serviceID = s.serviceID  OR bs.serviceID = s.serviceID)
                     LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
-                     
+                    LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
                     WHERE cb.paymentApprovalStatus = ?
                     AND cb.paymentStatus = ?
                     AND YEAR(b.startDate) = YEAR(CURDATE()) 
                     AND DATE(b.endDate) < CURDATE()
                     AND ps.partnershipID = ?
+                    AND bpas.approvalStatus = 2
                     GROUP BY 
-                     month
+                        month
                     ORDER BY 
-                     month");
+                        month");
     $getMonthlySalesQuery->bind_param("iii", $paymentApprovalID, $paymentStatusID, $partnershipID);
     if (!$getMonthlySalesQuery->execute()) {
         error_log("Failed executing monthly sales in a year. Error: " . $getMonthlySalesQuery->error);

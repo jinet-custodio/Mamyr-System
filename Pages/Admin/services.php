@@ -228,7 +228,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <div class="headerContainer">
             <div class="backArrowContainer" id="backArrowContainer" style="display: none;">
-                <img src="../../Assets/Images/icon/back-button.png" alt="Back Arrow" class="backArrow">
+                <img src="../../Assets/Images/icon/arrowBtnBlack.png" alt="Back Arrow" class="backArrow">
             </div>
             <h2 class="header text-center" id="headerText">Services</h2>
         </div>
@@ -286,7 +286,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <th scope="col">Max Capacity</th>
                     <th scope="col">Duration</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Image</th>
+                    <!-- <th scope="col">Image</th> -->
                     <th scope="col">Availability</th>
                     <th scope="col">Action</th>
                 </thead>
@@ -334,7 +334,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             value="<?= htmlspecialchars($serviceDuration) ?>" readonly></td>
                                     <td><textarea name="serviceDesc" readonly
                                             class="form-control"><?= htmlspecialchars($serviceDesc) ?></textarea></td>
-                                    <td>
+                                    <!-- <td>
                                         <div class="input-group">
                                             <input type="text" class="form-control resortServiceImage"
                                                 value="<?= htmlspecialchars($serviceImageName) ?>" name="resortServiceImage"
@@ -344,7 +344,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         </div>
                                         <input type="file" class="form-control resortServiceImagePicker"
                                             name="resortServiceImagePicker" hidden>
-                                    </td>
+                                    </td> -->
                                     <td>
                                         <select name="resortAvailability" class="form-select resortAvailability" disabled>
                                             <option value="" disabled <?= $serviceAvailability == "" ? "selected" : "" ?>>Select
@@ -642,10 +642,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     ?>
                                 </select>
                             </div>
-                            <div class="input-container">
+                            <!-- <div class="input-container">
                                 <label for="serviceImage">Service Image</label>
                                 <input type="file" class="form-control" name="serviceImage" id="serviceImage">
-                            </div>
+                            </div> -->
 
                             <div class="input-container">
                                 <label for="serviceAvailability">Availability</label>
@@ -1041,9 +1041,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     {
                         width: '15%',
                         targets: 7
-                    }, {
-                        width: '15%',
-                        targets: 8
                     }
 
                 ]
