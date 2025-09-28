@@ -31,7 +31,7 @@
 }
 
 #navbar-half .nav-link,
-#navbar-half #logOutBtn {
+#navbar-half {
   color: white !important;
 }
 
@@ -264,6 +264,10 @@
   }
   .nav-item.dropdown {
     position: relative;
+  }
+
+  #navbar-half.scrolled {
+    background-color: transparent !important;
   }
 
   .nav-item {

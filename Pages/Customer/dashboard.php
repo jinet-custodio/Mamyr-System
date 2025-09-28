@@ -170,7 +170,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 </li>
 
                 <li class="nav-item">
-                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
+                    <a href="../../Function/logout.php" class="btn btn-outline-danger nav-link" id="logOutBtn">LOG OUT</a>
                 </li>
 
             </ul>

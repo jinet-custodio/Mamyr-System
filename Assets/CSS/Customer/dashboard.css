@@ -319,6 +319,7 @@ thead {
 .number,
 .email {
   display: flex;
+  align-items: center;
   gap: 3vw;
 }
 
@@ -327,6 +328,7 @@ thead {
 .phoneIcon {
   height: 4vw;
   width: auto;
+  margin-bottom: 1vw;
 }
 
 .contactTitle {
@@ -335,10 +337,6 @@ thead {
 }
 .locationText {
   margin-top: 0.1vw;
-}
-
-.emailAddressText {
-  margin-top: 1vw;
 }
 
 .googleMap {
@@ -590,12 +588,16 @@ thead {
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
   .topContainer {
-    margin-top: 10vh;
+    margin-top: 13vh;
     display: flex;
     flex-direction: column;
     .mamyrTitle {
       margin-top: 0;
     }
+  }
+
+  .welcomeSection {
+    margin-top: 10vh;
   }
 
   .titleContainer {
@@ -651,13 +653,11 @@ thead {
   }
 
   .wsTitle {
-    font-size: clamp(2.7vw, 2.5vw, 2.3vw);
-    color: whitesmoke;
+    font-size: clamp(30px, calc(2.4vh + 4px), 28px);
   }
 
   .wsDescription {
     font-size: clamp(2.7vw, 2.5vw, 2.3vw);
-    color: whitesmoke;
   }
 
   .contactText {
@@ -759,13 +759,6 @@ thead {
 
 /* for Nav Bar adjustment */
 @media (max-width: 991.98px) {
-  .topContainer {
-    margin-top: 0;
-    .mamyrTitle {
-      margin-top: 0;
-    }
-  }
-
   .fc-daygrid-day-top a {
     font-size: clamp(2vw, 1.8vw, 1.6vw);
   }
@@ -784,6 +777,10 @@ thead {
 
 /* Phone size */
 @media screen and (max-width: 600px) {
+  body {
+    background-position-y: -25vh;
+    background-size: cover;
+  }
   .contacts {
     width: 100%;
   }
@@ -951,7 +948,7 @@ thead {
   .welcomeSection {
     display: flex;
     flex-direction: column-reverse;
-    margin: 0 auto;
+    margin: 5vh auto 0 auto;
     width: 100%;
   }
 
@@ -1107,15 +1104,11 @@ thead {
 }
 @media (max-width: 500px) {
   .wsText {
-    margin-top: 15vh;
+    margin-top: 10vh;
   }
 }
 
 @media (max-width: 400px) {
-  .wsText {
-    margin-top: 35vh;
-  }
-
   .legend.btn {
     padding: 0.3rem 0.3rem;
   }
