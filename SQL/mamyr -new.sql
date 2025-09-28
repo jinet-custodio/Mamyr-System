@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 27, 2025 at 07:55 PM
+-- Generation Time: Sep 28, 2025 at 11:23 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -378,7 +378,7 @@ CREATE TABLE `menuitem` (
 --
 
 INSERT INTO `menuitem` (`foodItemID`, `foodName`, `foodDescription`, `foodCategory`, `availabilityID`, `ageGroup`) VALUES
-(1, 'Chicken Pastil', NULL, 'Chicken', 1, 'Adult'),
+(1, 'Chicken Pastil', NULL, 'CHICKEN', 5, 'Adult'),
 (2, 'Chicken Barbecue Sauce', NULL, 'Chicken', 1, 'Adult'),
 (3, 'Chicken Cordon Bleu', NULL, 'Chicken', 1, 'Adult'),
 (4, 'Chicken Teriyaki', NULL, 'Chicken', 1, 'Adult'),
@@ -621,8 +621,8 @@ INSERT INTO `resortamenity` (`resortServiceID`, `RServiceName`, `RSprice`, `RSca
 (18, 'Cottage 13', 1000.00, 15, 15, '0', 2, '  Good for 15 pax', 'Cottage_cottage5.jpg', 1),
 (19, 'Cottage 14', 1000.00, 15, 15, '0', 2, '   Good for 15 pax', 'Cottage_cottage3.jpg', 1),
 (20, 'Cottage Stage', 2000.00, 25, 25, '0', 2, ' Good for 25 pax', 'Cottage_cottage5.jpg', 1),
-(21, 'Main Function Hall', 30000.00, 1, 350, 'An Elegant, fully air-conditioned function room, F', 4, ' None', 'Event Hall_pav5.jpg', 1),
-(22, 'Mini Function Hall', 7000.00, 1, 50, 'An Intimate, fully air-conditioned function room, ', 4, ' None', 'Event Hall_miniPav5.jpeg', 1),
+(21, 'Main Function Hall', 30000.00, 1, 350, '5 hours', 4, '\'An Elegant, fully air-conditioned function room, Free one private air-conditioned room, Powder room with seperate comfort rooms, can accomodate up to 350 guests', 'Event Hall_pav5.jpg', 1),
+(22, 'Mini Function Hall', 7000.00, 1, 50, '5 hours', 4, 'An Intimate, fully air-conditioned function room, Can accommodate up to 50 guests', 'Event Hall_miniPav5.jpeg', 1),
 (23, 'Videoke A', 800.00, 0, 0, 'None', 3, ' None', 'Entertainment_videoke1.jpg', 1),
 (24, 'Billiard', 200.00, 0, 0, '1 hour', 3, ' None', 'Entertainment_billiardPic3.png', 1),
 (25, 'Massage Chair', 100.00, 0, 0, '40 minutes', 3, ' None', 'Entertainment_massageChair.png', 1),
@@ -807,9 +807,9 @@ INSERT INTO `serviceavailability` (`availabilityID`, `availabilityName`) VALUES
 
 CREATE TABLE `servicepricing` (
   `pricingID` int(11) NOT NULL,
-  `pricingType` varchar(50) NOT NULL,
+  `pricingType` enum('Per Head','Per Hour') DEFAULT NULL,
   `price` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `chargeType` varchar(50) NOT NULL,
+  `chargeType` enum('Room','Food') NOT NULL,
   `ageGroup` enum('Adult','Child','Both') DEFAULT NULL,
   `notes` text DEFAULT NULL,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
@@ -820,7 +820,8 @@ CREATE TABLE `servicepricing` (
 --
 
 INSERT INTO `servicepricing` (`pricingID`, `pricingType`, `price`, `chargeType`, `ageGroup`, `notes`, `createdAt`) VALUES
-(1, 'Per Head', 300.00, 'Food', 'Both', NULL, '2025-09-22 03:55:23');
+(1, 'Per Head', 300.00, 'Food', 'Both', 'Meal charges calculated at ₱300.00 per person', '2025-09-28 07:53:34'),
+(2, 'Per Head', 250.00, 'Room', 'Both', 'Extra charge per person if the room occupancy limit is exceeded.', '2025-09-28 07:54:14');
 
 -- --------------------------------------------------------
 
@@ -930,15 +931,16 @@ CREATE TABLE `userreview` (
   `bookingID` int(11) DEFAULT NULL,
   `bookingType` varchar(50) DEFAULT NULL,
   `reviewRating` decimal(2,1) DEFAULT NULL,
-  `reviewComment` text DEFAULT NULL
+  `reviewComment` text DEFAULT NULL,
+  `dateReviewed` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `userreview`
 --
 
-INSERT INTO `userreview` (`userReviewID`, `bookingID`, `bookingType`, `reviewRating`, `reviewComment`) VALUES
-(1, 1, 'Resort', 4.0, '');
+INSERT INTO `userreview` (`userReviewID`, `bookingID`, `bookingType`, `reviewRating`, `reviewComment`, `dateReviewed`) VALUES
+(1, 1, 'Resort', 4.0, '', '2025-09-28 08:24:54');
 
 -- --------------------------------------------------------
 
@@ -1020,13 +1022,13 @@ INSERT INTO `websitecontent` (`contentID`, `adminID`, `sectionName`, `title`, `c
 (16, 1, 'Blog', 'BlogPost4-EventDate', '2024-09-02', '2025-07-01 01:31:50'),
 (17, 1, 'Blog', 'BlogPost4-EventHeader', 'Jannah\'s 18th Birthday', '2025-07-01 01:31:50'),
 (18, 1, 'Blog', 'BlogPost4-Content', 'Jannah\'s 18th Birthday: A Joyous Celebration Marking the Transition into Adulthood with Laughter, Love, and Unforgettable Memories. Surrounded by family and friends, this milestone birthday was a beautiful blend of cherished moments, heartfelt wishes, and the excitement of new beginnings.', '2025-07-01 01:31:50'),
-(19, 1, 'BusinessInformation', 'DisplayName', 'Mamyr', '2025-07-03 00:29:44'),
-(20, 1, 'BusinessInformation', 'FullName', 'Mamyr Resort and Events Place', '2025-07-03 00:29:44'),
-(21, 1, 'BusinessInformation', 'ShortDesc', 'Welcome to Mamyr Resort and Event Place! We\'re more than just a resort, we\'re a place where memories are made. Whether you\'re here for a relaxing getaway, a family gathering, or a special event, we\'re dedicated to making your stay unforgettable.', '2025-07-03 00:38:51'),
-(22, 1, 'BusinessInformation', 'ContactNum', '(0998) 962 4697', '2025-07-03 00:38:51'),
-(23, 1, 'BusinessInformation', 'Email', 'mamyresort128@gmail.com', '2025-07-03 00:38:51'),
-(24, 1, 'BusinessInformation', 'Address', 'Sitio Colonia Gabihan, San Ildefonso, Bulacan', '2025-07-03 00:38:51'),
-(25, 1, 'BusinessInformation', 'ShortDesc2', 'Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional.', '2025-09-21 18:03:34'),
+(19, 1, 'BusinessInformation', 'DisplayName', 'Mamyr', '2025-09-28 15:58:20'),
+(20, 1, 'BusinessInformation', 'FullName', 'Mamyr Resort and Events Place', '2025-09-28 15:58:20'),
+(21, 1, 'BusinessInformation', 'ShortDesc', 'Welcome to Mamyr Resort and Event Place! We\'re more than just a resort, we\'re a place where memories are made. Whether you\'re here for a relaxing getaway, a family gathering, or a special event, we\'re dedicated to making your stay unforgettable.', '2025-09-28 15:58:20'),
+(22, 1, 'BusinessInformation', 'ContactNum', '(0998) 962 4697', '2025-09-28 15:58:20'),
+(23, 1, 'BusinessInformation', 'Email', 'mamyresort128@gmail.com', '2025-09-28 15:58:20'),
+(24, 1, 'BusinessInformation', 'Address', 'Sitio Colonia Gabihan, San Ildefonso, Bulacan', '2025-09-28 15:58:20'),
+(25, 1, 'BusinessInformation', 'ShortDesc2', ' Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional.  ', '2025-09-28 15:58:20'),
 (26, 1, 'About', 'Header', 'Compassionate Service, Unforgettable Family Moments', '2025-09-21 18:03:34'),
 (27, 1, 'About', 'AboutMamyr', 'Mamyr Resort and Events Place is a peaceful getaway located in Gabihan, San Ildefonso, Bulacan, built on a story of resilience, love, and family. Before it became a resort, the land was used for pig farming. When the business faced financial challenges, owners Mamerto Dela Cruz and Myrna Dela Cruz looked for a new opportunity—something that would not only support their family but also bring joy to others.', '2025-09-21 18:03:34'),
 (28, 1, 'About', 'ServicesDesc', 'Mamyr isn’t just a resort; it’s a family-oriented getaway with comfortable rooms and a versatile event venue for gatherings and celebrations. It offers a relaxed, fun environment for all ages to enjoy.', '2025-09-21 18:03:34'),
@@ -1065,13 +1067,13 @@ CREATE TABLE `websitecontentimage` (
 --
 
 INSERT INTO `websitecontentimage` (`WCImageID`, `contentID`, `imageData`, `altText`, `imageOrder`, `uploadedAt`) VALUES
-(1, 19, 'resortPic1.png', 'Mamyr Resort Image', 1, '2025-07-30 00:44:24'),
-(2, 20, 'img1.png', 'Mamyr Gallery Image 1', 1, '2025-07-30 00:44:23'),
-(3, 20, 'img2.png', 'Mamyr Gallery Image 2', 2, '2025-07-30 00:44:23'),
-(4, 20, 'img3.png', 'Mamyr Gallery Image 3', 3, '2025-07-30 00:44:23'),
-(5, 20, 'img4.png', 'Mamyr Gallery Image 4', 4, '2025-07-30 00:44:23'),
-(6, 20, 'img5.png', 'Mamyr Gallery Image 5', 5, '2025-07-30 00:44:23'),
-(7, 20, 'img6.png', 'Mamyr Gallery Image 6', 6, '2025-07-30 00:44:24'),
+(1, 19, 'resortPic1.png', 'Mamyr Resort Image', 1, '2025-09-28 15:58:20'),
+(2, 20, 'img1.png', 'Mamyr Gallery Image 1', 1, '2025-09-28 15:58:20'),
+(3, 20, 'img2.png', 'Mamyr Gallery Image 2', 2, '2025-09-28 15:58:20'),
+(4, 20, 'img3.png', 'Mamyr Gallery Image 3', 3, '2025-09-28 15:58:20'),
+(5, 20, 'img4.png', 'Mamyr Gallery Image 4', 4, '2025-09-28 15:58:20'),
+(6, 20, 'img5.png', 'Mamyr Gallery Image 5', 5, '2025-09-28 15:58:20'),
+(7, 20, 'img6.png', 'Mamyr Gallery Image 6', 6, '2025-09-28 15:58:20'),
 (8, 27, 'firstPic.jpg', 'About Image 1', 1, '2025-08-06 17:54:49'),
 (9, 30, 'resort.png', 'Resort Logo', 1, '2025-08-06 17:54:49'),
 (10, 32, 'events.png', 'Events Logo', 1, '2025-08-06 17:54:49'),
@@ -1481,7 +1483,7 @@ ALTER TABLE `serviceavailability`
 -- AUTO_INCREMENT for table `servicepricing`
 --
 ALTER TABLE `servicepricing`
-  MODIFY `pricingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pricingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `serviceunavailabledate`

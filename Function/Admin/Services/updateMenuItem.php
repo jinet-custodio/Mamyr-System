@@ -8,14 +8,14 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 $foodName = $data['name'];
 $foodID = intval($data['id']);
-$foodPrice = floatval($data['price']);
+// $foodPrice = floatval($data['price']);
 $foodCategory = strtoupper($data['category']);
 $foodAvailability = intval($data['availability']);
 
 
 try {
-    $updateMenuItem = $conn->prepare("UPDATE `menuitem` SET `foodName`= ?,`foodPrice`= ?,`foodCategory`= ?,`availabilityID`= ? WHERE `foodItemID`= ? ");
-    $updateMenuItem->bind_param("sdsii", $foodName, $foodPrice, $foodCategory, $foodAvailability, $foodID);
+    $updateMenuItem = $conn->prepare("UPDATE `menuitem` SET `foodName`= ?,`foodCategory`= ?,`availabilityID`= ? WHERE `foodItemID`= ? ");
+    $updateMenuItem->bind_param("ssii", $foodName, $foodCategory, $foodAvailability, $foodID);
 
     if (!$updateMenuItem->execute()) {
         echo json_encode([
