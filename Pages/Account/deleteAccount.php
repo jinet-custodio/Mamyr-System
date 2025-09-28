@@ -167,13 +167,13 @@ switch ($userRole) {
                 //* For business partner nav
                 if ($role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="../BusinessPartner/bpBookings.php" class="list-group-item">
+                        <a href="bpBookings.php" class="list-group-item">
                             <i class="fa-regular fa-calendar-days sidebar-icon"></i>
                             <span class="sidebar-text">Bookings</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="../BusinessPartner/bpServices.php" class="list-group-item">
+                        <a href="bpServices.php" class="list-group-item">
                             <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
                             <span class="sidebar-text">Services</span>
                         </a>
