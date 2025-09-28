@@ -184,7 +184,7 @@ a.categoryLink {
     width: 70% !important;
   }
 
-  .category-card { 
+  .category-card {
     width: 100% !important;
   }
 
@@ -195,7 +195,6 @@ a.categoryLink {
   .card-text {
     font-size: clamp(2vw, 2.1vw, 2.2vw);
   }
-
 }
 
 /* Tablet portrait */
@@ -207,7 +206,7 @@ a.categoryLink {
 
   .subtitle {
     font-size: clamp(2vw, 2.1vw, 2.2vw);
-    margin-top: 1.8vw
+    margin-top: 1.8vw;
   }
 
   .backArrowContainer {
@@ -228,7 +227,7 @@ a.categoryLink {
   }
 
   .category-card img {
-    width: 60%; 
+    width: 60%;
     object-fit: cover;
   }
 }
@@ -259,7 +258,7 @@ a.categoryLink {
   }
 
   a.categoryLink {
-    width: 60%;
+    width: 80%;
   }
 
   .container {
@@ -268,12 +267,12 @@ a.categoryLink {
     padding: 2vw 0;
   }
 
-  .category-card {  
+  .category-card {
     width: 100%;
     box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
   }
 
-  .category-card img { 
+  .category-card img {
     width: 40vw;
     margin: auto;
     object-fit: cover;

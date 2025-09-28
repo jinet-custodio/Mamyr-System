@@ -58,7 +58,7 @@ resetExpiredOTPs($conn);
 
                 </div>
                 <div class="loginMessageBox">
-                    <div class="errorMsg">
+                    <div class="errorMsg" style="display: none;">
                         <!-- (Show under Login Button) -->
                         <div class="login-error" id="passwordLValidation"></div>
                     </div>
