@@ -102,9 +102,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         data-bs-target="#notificationModal">
                         <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                         <?php if (!empty($counter)): ?>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?= htmlspecialchars($counter) ?>
-                            </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                         <?php endif; ?>
                     </button>
                 </div>
@@ -119,9 +119,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <?php if ($userRole !== 2): ?>
-                            <a class="nav-link" href="dashboard.php"> Home</a>
+                        <a class="nav-link" href="dashboard.php"> Home</a>
                         <?php else: ?>
-                            <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                         <?php endif; ?>
                     </li>
                     <li class="nav-item dropdown">
@@ -131,7 +131,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item " href="amenities.php">RESORT AMENITIES</a></li>
-                            <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                            <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a>
+                            </li>
                             <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                         </ul>
                     </li>
@@ -139,9 +140,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <a class="nav-link" href="blog.php">BLOG</a>
                     </li>
                     <?php if ($userRole !== 2): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
+                    </li>
                     <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="about.php">ABOUT</a>
@@ -182,7 +183,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                     <a class="categoryLink" onclick="showHotels(event)">
                         <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
-                            <img class="card-img-top category" src="../../Assets/images/amenities/hotelPics/hotel1.jpg"
+                            <img class="card-img-top category" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg"
                                 alt="Hotel Rooms">
                             <div class="card-body">
                                 <h5 class="card-title">Hotel Rooms</h5>
@@ -234,18 +235,19 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             // Display cards
                             foreach ($sessions as $session => $data) {
                         ?>
-                                <div class="entranceCard card">
-                                    <div class="entrace-card-body">
-                                        <h5 class="entrance-card-title">
-                                            <span class="dayNight"><?= strtoupper($session) ?></span><br>
-                                            <?= $data['time_range'] ?>
-                                        </h5>
-                                        <div class="entrance-card-content">
-                                            <span class="age">ADULT - PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
-                                            <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
-                                        </div>
-                                    </div>
+                        <div class="entranceCard card">
+                            <div class="entrace-card-body">
+                                <h5 class="entrance-card-title">
+                                    <span class="dayNight"><?= strtoupper($session) ?></span><br>
+                                    <?= $data['time_range'] ?>
+                                </h5>
+                                <div class="entrance-card-content">
+                                    <span class="age">ADULT -
+                                        PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
+                                    <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
                                 </div>
+                            </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -268,26 +270,27 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     if (mysqli_num_rows($cottresult) > 0) {
                         foreach ($cottresult as $cottage) {
                     ?>
-                            <div class="card cottage" id="cottageCard">
-                                <?php
+                    <div class="card cottage" id="cottageCard">
+                        <?php
                                 $imgSrc = '../../Assets/Images/Services/Cottage/';
                                 if (!empty($cottage['RSimageData'])) {
                                     $img = $imgSrc . $cottage['RSimageData'];
                                 }
                                 ?>
-                                <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top cottageDisplayPhoto" id="cottageDisplayPhoto">
-                                <div class="card-body description">
-                                    <h2> <?= $cottage['RServiceName'] ?> </h2>
-                                    <p>
-                                        <?= $cottage['RSdescription'] ?>
-                                    </p>
-                                    <p class="font-weight-bold">
-                                        Price: PHP <?= $cottage['RSprice'] ?>
-                                    </p>
-                                    <a href="resortBooking.php" class="btn btn-primary">Book Now</a>
-                                </div>
+                        <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top cottageDisplayPhoto"
+                            id="cottageDisplayPhoto">
+                        <div class="card-body description">
+                            <h2> <?= $cottage['RServiceName'] ?> </h2>
+                            <p>
+                                <?= $cottage['RSdescription'] ?>
+                            </p>
+                            <p class="font-weight-bold">
+                                Price: PHP <?= $cottage['RSprice'] ?>
+                            </p>
+                            <a href="resortBooking.php" class="btn btn-primary">Book Now</a>
+                        </div>
 
-                            </div>
+                    </div>
                     <?php
                         }
                     } else {
@@ -313,26 +316,26 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         while ($data = $vidresult->fetch_assoc()) {
                     ?>
 
-                            <div class="section">
-                                <div class="singleImg">
-                                    <?php
+                    <div class="section">
+                        <div class="singleImg">
+                            <?php
                                     $imgSrc = '../../Assets/Images/Services/Entertainment/';
                                     if (!empty($data['RSimageData'])) {
                                         $img = $imgSrc . $data['RSimageData'];
                                     }
                                     ?>
-                                    <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
+                            <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
 
-                                </div>
-                                <div class="Description" id="videokeDescContainer">
-                                    <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent </h2>
-                                    <p class="videokeDesc">
-                                        <?= $data['RSdescription'] ?>
-                                    </p>
-                                </div>
+                        </div>
+                        <div class="Description" id="videokeDescContainer">
+                            <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent </h2>
+                            <p class="videokeDesc">
+                                <?= $data['RSdescription'] ?>
+                            </p>
+                        </div>
 
 
-                            </div>
+                    </div>
                     <?php
                         }
                     } else {
@@ -355,24 +358,24 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     if ($bilresult->num_rows > 0) {
                         while ($data = $bilresult->fetch_assoc()) {
                     ?>
-                            <div class="Description" id="videokeDescContainer">
-                                <p class="videokeDesc">
-                                    <?= $data['RSdescription'] ?>
-                                </p>
-                                <p class="text-center" id="videokePriceDesc">
-                                    Price: PHP<?= $data['RSprice'] ?> per Hour
-                                </p>
-                            </div>
-                            <div class="singleImg" style="width:50%;">
-                                <?php
+                    <div class="Description" id="videokeDescContainer">
+                        <p class="videokeDesc">
+                            <?= $data['RSdescription'] ?>
+                        </p>
+                        <p class="text-center" id="videokePriceDesc">
+                            Price: PHP<?= $data['RSprice'] ?> per Hour
+                        </p>
+                    </div>
+                    <div class="singleImg" style="width:50%;">
+                        <?php
                                 $imgSrc = '../../Assets/Images/Services/Entertainment/';
                                 if (isset($data['RSimageData'])) {
                                     $img = $imgSrc . $data['RSimageData'];
                                 }
                                 ?>
-                                <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
+                        <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
 
-                            </div>
+                    </div>
                     <?php
                         }
                     } else {
@@ -381,7 +384,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     ?>
 
                 </div>
-                <div class="massage" style="background-color:rgba(125, 203, 242, 1); padding: 0vw 0 3vw 0; margin-bottom:3vw; ">
+                <div class="massage"
+                    style="background-color:rgba(125, 203, 242, 1); padding: 0vw 0 3vw 0; margin-bottom:3vw; ">
                     <div class=" videokeTitleContainer" style="padding-top: 2vw;">
                         <hr class="entranceLine">
                         <h4 class="entranceTitle">Massage Chair</h4>
@@ -395,26 +399,27 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     if ($massageresult->num_rows > 0) {
                         while ($data = $massageresult->fetch_assoc()) {
                     ?>
-                            <div class="section" id="massage">
-                                <div class="singleImg">
-                                    <?php
+                    <div class="section" id="massage">
+                        <div class="singleImg">
+                            <?php
                                     $imgSrc = '../../Assets/Images/Services/Entertainment/';
                                     if (!empty($data['RSimageData'])) {
                                         $img = $imgSrc . $data['RSimageData'];
                                     }
                                     ?>
-                                    <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded" id="massageChairDisplayPhoto">
+                            <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded"
+                                id="massageChairDisplayPhoto">
 
-                                </div>
-                                <div class="Description" id="massageDesc">
-                                    <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
-                                        <?= $data['RSduration'] ?>
-                                    </h2>
-                                    <p class="text-center videokeDesc">
-                                        <?= $data['RSdescription'] ?>
-                                    </p>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="Description" id="massageDesc">
+                            <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
+                                <?= $data['RSduration'] ?>
+                            </h2>
+                            <p class="text-center videokeDesc">
+                                <?= $data['RSdescription'] ?>
+                            </p>
+                        </div>
+                    </div>
                     <?php
                         }
                     } else {
@@ -430,12 +435,16 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
                 <div class="titleContainer" id="hotelTitle">
                     <h4 class="title">Hotel Rooms</h4>
-                    <p class="hotelDescription">Mamyr Resort and Events Place is not only a venue for unforgettable celebrations
-                        but also a relaxing retreat, offering 11 air-conditioned hotel rooms for guests seeking comfort and
-                        convenience.
-                        Every booking at the hotel includes complimentary access to the resort's pool, allowing guests to unwind
+                    <p class="hotelDescription">Mamyr Resort and Events Place is not only a venue for unforgettable
+                        celebrations
+                        but also a relaxing retreat, offering 11 air-conditioned hotel rooms for guests seeking comfort
                         and
-                        enjoy their stay to the fullest. Whether you're here for a grand occasion or a quiet getaway, Mamyr
+                        convenience.
+                        Every booking at the hotel includes complimentary access to the resort's pool, allowing guests
+                        to unwind
+                        and
+                        enjoy their stay to the fullest. Whether you're here for a grand occasion or a quiet getaway,
+                        Mamyr
                         Resort
                         offers a beautiful and welcoming environment for all.
 
@@ -520,31 +529,31 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         if (mysqli_num_rows($roomresult) > 0) {
                             foreach ($roomresult as $hotel) {
                         ?>
-                                <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>">
-                                    <div class="halfImg">
-                                        <?php
+                        <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>">
+                            <div class="halfImg">
+                                <?php
                                         $imgSrc = '../../Assets/Images/no-picture.jpg';
                                         if (!empty($hotel['imageData'])) {
                                             $imgData = base64_encode($hotel['RSimageData']);
                                             $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                         }
                                         ?>
-                                        <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
-                                    </div>
+                                <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
+                            </div>
 
-                                    <div class="Description">
-                                        <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName']  ?> </h2>
-                                        <?php
+                            <div class="Description">
+                                <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName']  ?> </h2>
+                                <?php
                                         $descriptions = explode(',', $hotel['RSdescription']);
                                         foreach ($descriptions as $description) {
                                         ?>
-                                            <p><?= "- " . trim($description) ?><br></p>
-                                        <?php } ?>
-                                        <p class="fw-bold">
-                                            Price: PHP <?= $hotel['RSprice'] ?>
-                                        </p>
-                                    </div>
-                                </div>
+                                <p><?= "- " . trim($description) ?><br></p>
+                                <?php } ?>
+                                <p class="fw-bold">
+                                    Price: PHP <?= $hotel['RSprice'] ?>
+                                </p>
+                            </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -574,154 +583,154 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script>
-        const backbtn = document.getElementById("backToSelection");
+    const backbtn = document.getElementById("backToSelection");
 
-        function backToSelection() {
-            document.getElementById('selection').style.display = 'block';
-            document.getElementById('hotelRooms').style.display = 'none';
-            document.getElementById('rates').style.display = 'none';
-            document.getElementById("footer").style.marginTop = "5vw";
-        };
+    function backToSelection() {
+        document.getElementById('selection').style.display = 'block';
+        document.getElementById('hotelRooms').style.display = 'none';
+        document.getElementById('rates').style.display = 'none';
+        document.getElementById("footer").style.marginTop = "5vw";
+    };
 
-        function showRates(event) {
-            event.preventDefault();
-            document.getElementById('selection').style.display = 'none';
-            document.getElementById('hotelRooms').style.display = 'none';
-            document.getElementById('rates').style.display = 'block';
-            document.getElementById("footer").style.marginTop = "3vw";
+    function showRates(event) {
+        event.preventDefault();
+        document.getElementById('selection').style.display = 'none';
+        document.getElementById('hotelRooms').style.display = 'none';
+        document.getElementById('rates').style.display = 'block';
+        document.getElementById("footer").style.marginTop = "3vw";
+    }
+
+    function showHotels(event) {
+        event.preventDefault();
+        document.getElementById('selection').style.display = 'none';
+        document.getElementById('hotelRooms').style.display = 'block';
+        document.getElementById('rates').style.display = 'none';
+        document.getElementById("footer").style.marginTop = "3vw";
+    }
+
+    flatpickr('#hotelDate', {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+    });
+
+    window.onscroll = function() {
+        const btn = document.getElementById("backToTopBtn");
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
         }
+    };
 
-        function showHotels(event) {
-            event.preventDefault();
-            document.getElementById('selection').style.display = 'none';
-            document.getElementById('hotelRooms').style.display = 'block';
-            document.getElementById('rates').style.display = 'none';
-            document.getElementById("footer").style.marginTop = "3vw";
-        }
-
-        flatpickr('#hotelDate', {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
+    // Scroll to top
+    document.getElementById("backToTopBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
         });
-
-        window.onscroll = function() {
-            const btn = document.getElementById("backToTopBtn");
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                btn.style.display = "block";
-            } else {
-                btn.style.display = "none";
-            }
-        };
-
-        // Scroll to top
-        document.getElementById("backToTopBtn").addEventListener("click", function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
+    });
     </script>
     <!-- filters hotel rooms by the hour -->
     <script>
-        // State variables
-        let currentAvailabilityFilter = 'all';
+    // State variables
+    let currentAvailabilityFilter = 'all';
 
-        // Initialize filters when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            // Default 
-            document.getElementById('allRooms').classList.add('selectedIcon');
+    // Initialize filters when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        // Default 
+        document.getElementById('allRooms').classList.add('selectedIcon');
 
-            // Apply filters 
-            applyFilters();
+        // Apply filters 
+        applyFilters();
 
-            // Click events
-            ['all', 'available', 'unavailable'].forEach(type => {
-                document.getElementById(`${type}Rooms`).addEventListener('click', function() {
-                    updateAvailability(type, this);
-                });
+        // Click events
+        ['all', 'available', 'unavailable'].forEach(type => {
+            document.getElementById(`${type}Rooms`).addEventListener('click', function() {
+                updateAvailability(type, this);
             });
         });
+    });
 
-        function updateAvailability(filterType, button) {
-            currentAvailabilityFilter = filterType;
-            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
-            button.classList.add('selectedIcon');
+    function updateAvailability(filterType, button) {
+        currentAvailabilityFilter = filterType;
+        document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
+        button.classList.add('selectedIcon');
 
-            applyFilters();
+        applyFilters();
+    }
+
+    function filterRooms(filterType) {
+        currentAvailabilityFilter = filterType;
+
+        // Update selected icon
+        document.querySelectorAll('.availabilityIcon').forEach(icon => {
+            icon.classList.remove('selectedIcon');
+        });
+
+        const selectedIcon = document.getElementById(`${filterType}Rooms`);
+        if (selectedIcon) {
+            selectedIcon.classList.add('selectedIcon');
         }
 
-        function filterRooms(filterType) {
-            currentAvailabilityFilter = filterType;
+        applyFilters(); // Call the filter logic
+    }
 
-            // Update selected icon
-            document.querySelectorAll('.availabilityIcon').forEach(icon => {
-                icon.classList.remove('selectedIcon');
-            });
+    function applyFilters() {
+        const allIcons = document.querySelectorAll('.hotelIconWithCaption');
+        const allRooms = document.querySelectorAll('.hotel');
 
-            const selectedIcon = document.getElementById(`${filterType}Rooms`);
-            if (selectedIcon) {
-                selectedIcon.classList.add('selectedIcon');
-            }
+        allIcons.forEach(icon => {
+            const availability = icon.getAttribute('data-availability');
+            const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
+                availability);
 
-            applyFilters(); // Call the filter logic
-        }
+            icon.classList.toggle('hidden', !matchesAvailability);
+        });
 
-        function applyFilters() {
-            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
-            const allRooms = document.querySelectorAll('.hotel');
-
-            allIcons.forEach(icon => {
-                const availability = icon.getAttribute('data-availability');
-                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
-                    availability);
-
-                icon.classList.toggle('hidden', !matchesAvailability);
-            });
-
-            allRooms.forEach(room => {
-                // No duration logic; just show all rooms
-                room.style.display = 'flex';
-            });
-        }
+        allRooms.forEach(room => {
+            // No duration logic; just show all rooms
+            room.style.display = 'flex';
+        });
+    }
     </script>
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
 
@@ -729,36 +738,36 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- AJAX for fetching real time availability -->
     <!-- to be further tested after availability is resolved -->
     <script>
-        function fetchAvailability() {
-            fetch('/Function/Customer/getAvailability.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        dateTime: document.getElementById('hotelDate').value
-                    })
+    function fetchAvailability() {
+        fetch('/Function/Customer/getAvailability.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    dateTime: document.getElementById('hotelDate').value
                 })
-                .then(res => res.json())
-                .then(json => {
-                    json.rooms.forEach(room => {
-                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
-                        icons.forEach(icon => {
-                            const name = icon.querySelector('.roomCaption').textContent.trim();
-                            if (name === room.service) {
-                                icon.setAttribute('data-availability', room.available ? 'available' :
-                                    'unavailable');
-                            }
-                        });
+            })
+            .then(res => res.json())
+            .then(json => {
+                json.rooms.forEach(room => {
+                    const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
+                    icons.forEach(icon => {
+                        const name = icon.querySelector('.roomCaption').textContent.trim();
+                        if (name === room.service) {
+                            icon.setAttribute('data-availability', room.available ? 'available' :
+                                'unavailable');
+                        }
                     });
-                    applyFilters(); // re-apply filtering based on updated availability
-                })
-                .catch(console.error);
-        }
+                });
+                applyFilters(); // re-apply filtering based on updated availability
+            })
+            .catch(console.error);
+    }
 
-        // Re-fetch availability whenever the date changes
-        document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
-        document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
+    // Re-fetch availability whenever the date changes
+    document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
+    document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
     </script>
 
 </body>
