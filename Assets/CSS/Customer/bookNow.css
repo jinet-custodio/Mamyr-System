@@ -258,7 +258,7 @@ body {
   }
 
   .title {
-    font-size: 22px;
+    font-size: 30px;
   }
 
   .categories {
@@ -279,6 +279,6 @@ body {
   }
 
   .category-title {
-    font-size: 15px;
+    font-size: 25px;
   }
 }
