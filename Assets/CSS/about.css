@@ -309,7 +309,7 @@ body {
 
 .backArrowContainer {
   position: absolute;
-  top: 15vh;
+  top: 20vh;
   left: 3%;
 }
 .mamyrHistoryContainer {
@@ -545,17 +545,26 @@ body {
 
 /* Phones */
 @media only screen and (max-width: 599px) {
+  .titleContainer {
+    margin-top: 7vh;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .title {
+    font-size: clamp(30px, calc(2.9vh + 4px), 27px);
+  }
   .aboutTopContainer {
     flex-direction: column;
     margin-top: 7vh;
     gap: 4vw;
   }
   .fa-arrow-left {
-    font-size: 5vw;
+    font-size: clamp(24px, calc(2.2vh + 4px), 22px);
   }
 
   .backArrowContainer {
-    top: 8vh;
+    top: 10vh;
   }
   .mamyrHistoryContainer {
     margin-top: 10vh;
@@ -602,7 +611,7 @@ body {
     font-size: 25px;
   }
   .videoDescription {
-    font-size: 15px;
+    font-size: 16px;
   }
   .videoTextContainer {
     width: 95%;
@@ -618,7 +627,7 @@ body {
   .eventIconDescription,
   .hotelIconDescription,
   #readMoreBtn {
-    font-size: clamp(2.8vw, 2.4vw, 2.6vw) !important;
+    font-size: clamp(17px, calc(1.7vh + 4px), 15px) !important;
   }
 
   .firstParagraph,
@@ -627,12 +636,24 @@ body {
   .fourthParagraph,
   .aboutDescription,
   .servicesDescription {
-    font-size: clamp(2.6vw, 2.4vw, 2.8vw);
+    font-size: clamp(17px, calc(1.8vh + 4px), 19px);
   }
   .firstParagraphContainer,
   .thirdParagraphContainer {
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
+  }
+
+  .firstParagraphPhoto,
+  .thirdParagraphPhoto {
+    width: 70%;
+    margin: 2vw auto;
+  }
+
+  .firstImageContainer,
+  .thirdImageContainer {
+    display: flex;
+    justify-content: center;
   }
 }
