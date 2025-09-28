@@ -42,7 +42,8 @@
 #navbar-half.scrolled {
   background-color: white !important;
 }
-#navbar-half.scrolled a {
+#navbar-half.scrolled a,
+#navbar-half.scrolled #logOutBtn {
   color: black !important;
 }
 

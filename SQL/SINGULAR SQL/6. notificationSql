@@ -35,3 +35,6 @@ CREATE TABLE userreview (
     reviewComment TEXT,
     FOREIGN KEY (bookingID) REFERENCES booking(bookingID)
 );
+
+ALTER TABLE `userreview`
+ADD dateReviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
