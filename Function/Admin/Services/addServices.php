@@ -22,7 +22,7 @@ function getServiceCategory($conn, $id)
     return null;
 }
 
-if (isset($_POST['addResortService'])) { //Resort Amenities
+if (isset($_POST['addResortService'])) { //*Resort Amenities
     $serviceType = 'Resort';
     $serviceName = mysqli_real_escape_string($conn, $_POST['serviceName']);
     $servicePrice = floatval(mysqli_real_escape_string($conn, $_POST['servicePrice']));
@@ -118,7 +118,7 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         header("Location: ../../../Pages/Admin/services.php?result=error");
         exit();
     }
-} elseif (isset($_POST['addResortRates'])) { //Resort Rates
+} elseif (isset($_POST['addResortRates'])) { //*Resort Rates
     $serviceType = 'Entrance';
     $tourType = mysqli_real_escape_string($conn, $_POST['tourType']);
     $timeRange = intval($_POST['timeRange']);
@@ -157,7 +157,7 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         $conn->rollback();
         header("Location: ../../../Pages/Admin/services.php?result=error");
     }
-} elseif (isset($_POST['saveHotelRoom'])) { //Hotels
+} elseif (isset($_POST['saveHotelRoom'])) { //*Hotels
     $serviceType = 'Resort';
     $roomName = mysqli_real_escape_string($conn, $_POST['roomName']);
     $roomStatus = intval($_POST['roomStat']);
@@ -224,26 +224,42 @@ if (isset($_POST['addResortService'])) { //Resort Amenities
         if (isset($insertHotel)) $insertHotel->close();
         if (isset($insertIntoService)) $insertIntoService->close();
     }
-} elseif (isset($_POST['addFoodItem'])) {
+} elseif (isset($_POST['addFoodItem'])) { //* Catering Food
     $foodName = mysqli_real_escape_string($conn, $_POST['foodName']) ?? '';
-    $foodPrice = floatval($_POST['foodPrice']) ?? '';
     $foodCategory = strtoupper(mysqli_real_escape_string($conn, $_POST['foodCategory'])) ?? '';
     $foodAvailability = intval($_POST['foodAvailability']) ?? 1;
 
 
-    if (empty($foodName) || empty($foodPrice) || empty($foodCategory)) {
-        header('Location: ../../../Pages/Admin/services.php?action=emptyCateringField');
+    if (empty($foodName) || empty($foodCategory)) {
+        header('Location: ../../../Pages/Admin/services.php?page=catering&result=emptyCateringField');
     }
 
-    $insertFoodItem = $conn->prepare("INSERT INTO `menuitem`(`foodName`,`foodPrice`, `foodCategory`, `availabilityID`) VALUES (?,?,?,?)");
-    $insertFoodItem->bind_param("sdsi", $foodName, $foodPrice, $foodCategory, $foodAvailability);
+    $insertFoodItem = $conn->prepare("INSERT INTO `menuitem`(`foodName`, `foodCategory`, `availabilityID`) VALUES (?,?,?,?)");
+    $insertFoodItem->bind_param("sdsi", $foodName, $foodCategory, $foodAvailability);
     if ($insertFoodItem->execute()) {
-        header('Location: ../../../Pages/Admin/services.php?action=menuAdded&page=catering');
+        header('Location: ../../../Pages/Admin/services.php?page=catering&result=menuAdded');
     } else {
         error_log("Error: " . $insertFoodItem->error);
-        header('Location: ../../../Pages/Admin/services.php?action=executionFailed');
+        header('Location: ../../../Pages/Admin/services.php?page=catering&result=executionFailed');
     }
+} elseif (isset($_POST['addServicePrice'])) { //*Service Pricing
+
+    $pricingType = mysqli_real_escape_string($conn, $_POST['pricingType']);
+    $price = (float) $_POST['SPservicePrice'];
+    $chargeType = mysqli_real_escape_string($conn, $_POST['SPchargeType']);
+    $ageGroup = mysqli_real_escape_string($conn, $_POST['ageGroup']);
+    $notes = mysqli_real_escape_string($conn, $_POST['SPNotes']);
+
+    $insertServicePricingQuery = $conn->prepare("INSERT INTO `servicepricing`(`pricingType`, `price`, `chargeType`, `ageGroup`, `notes`) VALUES (?,?,?,?,?)");
+    $insertServicePricingQuery->bind_param("sdsss", $pricingType, $price, $chargeType, $ageGroup, $notes);
+
+    if (!$insertServicePricingQuery->execute()) {
+        error_log("Error: " . $insertServicePricingQuery->error);
+        header("Location: ../../../../../Pages/Admin/services.php?page=servicePrice&result=error");
+    }
+
+    header("Location: ../../../../../Pages/Admin/services.php?page=servicePrice&result=added");
 } else {
-    header("Location: ../../../Pages/Admin/roomList.php?result=error");
+    header("Location: ../../../../../Pages/Admin/services.php?result=error");
     exit();
 }

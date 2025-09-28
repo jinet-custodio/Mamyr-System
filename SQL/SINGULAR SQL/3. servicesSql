@@ -85,6 +85,8 @@ CREATE TABLE servicePricing (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE `servicepricing` CHANGE `pricingType` `pricingType` ENUM('Per Head', 'Per Hour') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL, CHANGE `chargeType` `chargeType` ENUM('Room', 'Food') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
 
 
 CREATE TABLE custompackage (

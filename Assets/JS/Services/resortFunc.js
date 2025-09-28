@@ -56,8 +56,8 @@ function editResortService(editBtn) {
       maxCapacity: thisRow.querySelector(".resortServiceMaxCapacity").value,
       duration: thisRow.querySelector(".resortServiceDuration").value,
       description: thisRow.querySelector("textarea").value,
-      image: thisRow.querySelector(".resortServiceImage").value,
-      imageData: thisRow.querySelector(".resortServiceImagePicker").value,
+      // image: thisRow.querySelector(".resortServiceImage").value,
+      // imageData: thisRow.querySelector(".resortServiceImagePicker").value,
       availability: thisRow.querySelector(".resortAvailability").value,
     };
     // console.log(resortData['imageData']);

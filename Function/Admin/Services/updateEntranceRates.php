@@ -33,7 +33,7 @@ try {
             $conn->commit();
             echo json_encode([
                 'success' => true,
-                'message' => 'Updated Successfully'
+                'message' => 'Resort Entrance Rates Updated Successfully'
             ]);
         } else {
             $conn->rollback();
@@ -57,6 +57,6 @@ try {
     $conn->rollback();
     echo json_encode([
         'success' => false,
-        'message' => 'Update Failed'
+        'message' => 'An error occured'
     ]);
 }

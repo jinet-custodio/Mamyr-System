@@ -17,16 +17,16 @@ $serviceCapacity = intval($data['capacity']);
 $serviceMaxCapacity = intval($data['maxCapacity']);
 $serviceDuration = $data['duration'];
 $serviceDesc = $data['description'];
-$serviceImage = $data['image'];
+// $serviceImage = $data['image'];
 $serviceAvailability = intval($data['availability']);
 
 $conn->begin_transaction();
 
 try {
     $updateServiceQuery = $conn->prepare("UPDATE resortamenity SET
-    RServiceName = ?, RSprice = ?, RScapacity = ?, RSmaxCapacity = ?, RSdescription = ?, RSimageData = ?, RSAvailabilityID = ?, RSduration = ? WHERE resortServiceID = ?
+    RServiceName = ?, RSprice = ?, RScapacity = ?, RSmaxCapacity = ?, RSdescription = ?, RSAvailabilityID = ?, RSduration = ? WHERE resortServiceID = ?
     ");
-    $updateServiceQuery->bind_param("sdiissisi", $serviceName, $servicePrice, $serviceCapacity, $serviceMaxCapacity, $serviceDesc, $serviceImage, $serviceAvailability, $serviceDuration, $serviceID);
+    $updateServiceQuery->bind_param("sdiisisi", $serviceName, $servicePrice, $serviceCapacity, $serviceMaxCapacity, $serviceDesc,  $serviceAvailability, $serviceDuration, $serviceID);
     if ($updateServiceQuery->execute()) {
         $conn->commit();
         echo json_encode([
