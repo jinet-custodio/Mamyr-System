@@ -32,47 +32,48 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
 <body>
     <div class="wrapper">
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: white;">
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
-            <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.php"> Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            AMENITIES
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
-                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                            <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">BLOG</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">BE OUR PARTNER</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="about.php">ABOUT</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php">BOOK NOW</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php">Sign Up</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
+        <?php if (!$editMode): ?>
+            <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: white;">
+                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+                <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.php"> Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                AMENITIES
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
+                                <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                                <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">BLOG</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">BE OUR PARTNER</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="about.php">ABOUT</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="register.php">BOOK NOW</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="register.php">Sign Up</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        <?php endif; ?>
         <main>
             <!-- Save button, only visible if page is on edit mode -->
             <?php if ($editMode): ?>

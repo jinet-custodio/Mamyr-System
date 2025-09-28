@@ -264,7 +264,7 @@ thead {
   justify-content: center;
   align-items: center;
   margin: auto;
-  margin-top: 5vw !important;
+  margin-top: 5vw;
   width: 50%;
 }
 
@@ -964,7 +964,7 @@ thead {
   }
 
   .wsText {
-    margin-top: 8vw !important;
+    margin-top: 8vw;
     width: 80%;
     .line {
       width: 100%;
@@ -982,7 +982,6 @@ thead {
 
   .wsTitle {
     font-size: clamp(4vw, 3.8vw, 3.6vw);
-    color: whitesmoke;
   }
   .wsDescription {
     font-size: clamp(3.5vw, 3.2vw, 3vw);
@@ -1106,8 +1105,17 @@ thead {
     color: white !important;
   }
 }
+@media (max-width: 500px) {
+  .wsText {
+    margin-top: 15vh;
+  }
+}
 
 @media (max-width: 400px) {
+  .wsText {
+    margin-top: 35vh;
+  }
+
   .legend.btn {
     padding: 0.3rem 0.3rem;
   }

@@ -323,7 +323,7 @@ input[type="password"]::-webkit-search-cancel-button {
   height: 5vh;
   position: absolute;
   left: 50%;
-  bottom: 15.9%;
+  bottom: 10.9%;
   transform: translateX(-50%);
 }
 .successMsg {
@@ -412,14 +412,22 @@ input[type="password"]::-webkit-search-cancel-button {
 
 @media screen and (max-width: 650px) {
   .container {
-    height: calc(100vh - 40px);
+    height: calc(110vh - 40px);
   }
 
   .form-box {
     width: 100% !important;
   }
 
-  .toggle-left {
+  .login {
+    height: 100%;
+  }
+
+  #register {
+    align-items: baseline !important;
+  }
+
+  .form-box .toggle-left {
     margin-top: 5vw !important;
     padding: 1vw;
   }
@@ -441,7 +449,8 @@ input[type="password"]::-webkit-search-cancel-button {
   #register {
     bottom: 0;
     width: 100%;
-    height: 125% !important;
+    padding-top: 1vw;
+    overflow-y: auto;
   }
 
   .back-icon-container-signup {
@@ -500,10 +509,6 @@ input[type="password"]::-webkit-search-cancel-button {
     bottom: 0;
   }
 
-  .signUpSection {
-    margin-top: 10vw;
-  }
-
   .signUpLink {
     font-size: 16px;
     margin-left: 1vw;
@@ -547,7 +552,17 @@ input[type="password"]::-webkit-search-cancel-button {
   }
 }
 
+@media screen and (max-width: 500px) {
+  .container {
+    height: calc(120vh - 40px);
+  }
+}
+
 @media screen and (max-width: 400px) {
+  .container {
+    height: calc(130vh - 40px);
+  }
+
   .welcome {
     font-size: clamp(20px, 18px, 16px);
   }
@@ -560,7 +575,7 @@ input[type="password"]::-webkit-search-cancel-button {
     top: 0;
     img {
       width: 6vw;
-      margin-bottom: 4vw;
+      margin-bottom: -1vw;
     }
   }
 
@@ -582,6 +597,7 @@ input[type="password"]::-webkit-search-cancel-button {
   .container {
     width: 95% !important;
     padding: 0;
+    padding-top: 2vw;
   }
   .errorContainer {
     padding: 19px;

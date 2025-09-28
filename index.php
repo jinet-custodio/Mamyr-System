@@ -396,6 +396,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="loader"></div>
     </div>
 
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
@@ -406,6 +408,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             document.addEventListener('DOMContentLoaded', () => {
                 const saveBtn = document.getElementById('saveChangesBtn');
                 document.body.style.display = 'block';
+                let hasAlertShown = false;
 
                 saveBtn?.addEventListener('click', () => {
                     saveTextContent();
@@ -438,9 +441,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         })
                         .then(response => {
                             if (response.success) {
-                                console.log('Text content updated successfully.');
+                                Swal.fire({
+                                    title: "Successful!",
+                                    text: "Text content updated successfully.",
+                                    icon: "success",
+                                });
                             } else {
-                                alert('Failed to update text content: ' + response.message);
+                                Swal.fire({
+                                    title: "Failed!",
+                                    text: "Failed to update text content.",
+                                    icon: "error",
+                                });
                             }
                         })
                         .catch(err => {
@@ -475,10 +486,22 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             })
                             .then(res => res.json())
                             .then(response => {
-                                if (response.success) {
-                                    console.log(`Image ${wcImageID} updated successfully.`);
-                                } else {
-                                    alert(`Failed to update image ${wcImageID}: ` + response.message);
+                                if (!hasAlertShown) { // Check if alert has been shown already
+                                    if (response.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: `Success!`,
+                                            text: `Image/s updated successfully.`,
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: `Failed to update image ${wcImageID}`,
+                                            text: response.message,
+                                            showConfirmButton: true
+                                        });
+                                    }
+                                    hasAlertShown = true; // Set flag to true after showing the alert
                                 }
                             })
                             .catch(err => {
@@ -560,8 +583,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
 
-    <!-- Sweetalert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </body>
