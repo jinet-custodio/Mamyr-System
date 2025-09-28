@@ -234,10 +234,10 @@ require '../../Function/notification.php';
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                            id="notifCounter">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                        id="notifCounter">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -519,7 +519,7 @@ require '../../Function/notification.php';
 
         <div class="rightSection">
             <div class="filter-select" id="filter-select">
-                <select name="sales-filter-select" id="sales-filter-select">
+                <select name="sales-filter-select" class="form-select" id="sales-filter-select">
                     <option value="month" <?= $selectedWeek === 'month' ? 'selected' : '' ?>>This Month</option>
                     <option value="w1" <?= $selectedWeek === 'w1' ? 'selected' : '' ?>>Week 1</option>
                     <option value="w2" <?= $selectedWeek === 'w2' ? 'selected' : '' ?>>Week 2</option>
@@ -546,15 +546,15 @@ require '../../Function/notification.php';
                 </div>
                 <div class="card-body">
                     <?php if (!empty($bookingTypeCount)): ?>
-                        <div class="sales-chart">
-                            <canvas id="reservationTrendsBar"></canvas>
-                        </div>
+                    <div class="sales-chart">
+                        <canvas id="reservationTrendsBar"></canvas>
+                    </div>
                     <?php else: ?>
-                        <div class="sales-chart">
-                            <canvas id="reservationTrendsBar"></canvas>
-                        </div>
-                        <!-- Change this div -->
-                        <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
+                    <div class="sales-chart">
+                        <canvas id="reservationTrendsBar"></canvas>
+                    </div>
+                    <!-- Change this div -->
+                    <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
                     <?php endif; ?>
                 </div>
             </div>
@@ -580,174 +580,174 @@ require '../../Function/notification.php';
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
     <!-- Display if no available data -->
     <script src="../../Assets/JS/ChartNoData.js"> </script>
 
     <script>
-        //* Reservation Trends Bar
-        const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
+    //* Reservation Trends Bar
+    const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
 
-        const reservationTrendsChart = new Chart(reservationTrendsBar, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($bookingTypeName) ?>,
-                datasets: [{
-                    data: <?= json_encode($bookingTypeCount) ?>,
-                    backgroundColor: [
-                        'rgba(0, 123, 255, 0.5)',
-                        'rgba(255, 193, 7, 0.5)',
-                        'rgba(40, 167, 69, 0.5)',
-                        'rgba(220, 53, 69, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(0, 123, 255, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(220, 53, 69, 1)'
-                    ],
+    const reservationTrendsChart = new Chart(reservationTrendsBar, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($bookingTypeName) ?>,
+            datasets: [{
+                data: <?= json_encode($bookingTypeCount) ?>,
+                backgroundColor: [
+                    'rgba(0, 123, 255, 0.5)',
+                    'rgba(255, 193, 7, 0.5)',
+                    'rgba(40, 167, 69, 0.5)',
+                    'rgba(220, 53, 69, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(0, 123, 255, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(220, 53, 69, 1)'
+                ],
 
-                    borderWidth: 3
-                }]
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
     </script>
 
     <script>
-        //* availabilityGraph
-        const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
+    //* availabilityGraph
+    const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
 
-        const availabilityChart = new Chart(availabilityGraph, {
-            type: 'doughnut',
-            data: {
-                labels: <?= json_encode($availabilityName) ?>,
-                datasets: [{
-                    data: <?= json_encode($availabilityCount) ?>,
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.5)', // Available
-                        'rgba(255, 193, 7, 0.5)', // Maintenance
-                        'rgba(220, 53, 69, 0.5)', // Occupied
-                        'rgba(0, 123, 255, 0.5)' // Private
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(0, 123, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                cutout: '60%',
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    }
+    const availabilityChart = new Chart(availabilityGraph, {
+        type: 'doughnut',
+        data: {
+            labels: <?= json_encode($availabilityName) ?>,
+            datasets: [{
+                data: <?= json_encode($availabilityCount) ?>,
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.5)', // Available
+                    'rgba(255, 193, 7, 0.5)', // Maintenance
+                    'rgba(220, 53, 69, 0.5)', // Occupied
+                    'rgba(0, 123, 255, 0.5)' // Private
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(0, 123, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            cutout: '60%',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
                 }
             }
-        });
+        }
+    });
     </script>
 
     <script>
-        document.getElementById("sales-filter-select").addEventListener("change", function() {
-            const selectedValue = this.value;
-            window.location.href = `?week=${selectedValue}`;
-        });
+    document.getElementById("sales-filter-select").addEventListener("change", function() {
+        const selectedValue = this.value;
+        window.location.href = `?week=${selectedValue}`;
+    });
 
-        const salesBar = document.getElementById("salesBar").getContext('2d');
+    const salesBar = document.getElementById("salesBar").getContext('2d');
 
-        const salesChart = new Chart(salesBar, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($days) ?>,
-                datasets: [{
-                    label: <?= json_encode($weekName ?: 'No data') ?>,
-                    data: <?= json_encode($sales) ?>,
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.5)', 'rgba(255, 193, 7, 0.5)', 'rgba(220, 53, 69, 0.5)',
-                        'rgba(0, 123, 255, 0.5)', 'rgba(23, 162, 184, 0.5)', 'rgba(108, 117, 125, 0.5)',
-                        'rgba(255, 99, 132, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)', 'rgba(255, 193, 7, 1)', 'rgba(220, 53, 69, 1)',
-                        'rgba(0, 123, 255, 1)', 'rgba(23, 162, 184, 1)', 'rgba(108, 117, 125, 1)',
-                        'rgba(255, 99, 132, 1)'
-                    ],
-                    borderWidth: 3
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        labels: {
-                            usePointStyle: true,
-                            pointStyle: 'line',
-                            boxWidth: 0,
-                            font: {
-                                size: 16
-                            }
+    const salesChart = new Chart(salesBar, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($days) ?>,
+            datasets: [{
+                label: <?= json_encode($weekName ?: 'No data') ?>,
+                data: <?= json_encode($sales) ?>,
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.5)', 'rgba(255, 193, 7, 0.5)', 'rgba(220, 53, 69, 0.5)',
+                    'rgba(0, 123, 255, 0.5)', 'rgba(23, 162, 184, 0.5)', 'rgba(108, 117, 125, 0.5)',
+                    'rgba(255, 99, 132, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)', 'rgba(255, 193, 7, 1)', 'rgba(220, 53, 69, 1)',
+                    'rgba(0, 123, 255, 1)', 'rgba(23, 162, 184, 1)', 'rgba(108, 117, 125, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'line',
+                        boxWidth: 0,
+                        font: {
+                            size: 16
                         }
                     }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
     </script>
 </body>
 

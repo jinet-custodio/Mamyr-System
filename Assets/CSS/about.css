@@ -562,7 +562,7 @@ body {
   }
 
   .resortPic {
-    width: 85vw;
+    width: 100%;
     border-radius: 50px;
     margin: 2vw auto;
   }
@@ -602,7 +602,7 @@ body {
     font-size: 25px;
   }
   .videoDescription {
-    font-size: 15px;
+    font-size: 16px;
   }
   .videoTextContainer {
     width: 95%;
@@ -611,6 +611,7 @@ body {
 
   .firstParagraphPhoto,
   .thirdParagraphPhoto {
+    width: 12rem;
     border-radius: 2vw;
   }
 
@@ -618,7 +619,7 @@ body {
   .eventIconDescription,
   .hotelIconDescription,
   #readMoreBtn {
-    font-size: clamp(2.8vw, 2.4vw, 2.6vw) !important;
+    font-size: clamp(16px, 18px, 14px) !important;
   }
 
   .firstParagraph,
@@ -627,7 +628,7 @@ body {
   .fourthParagraph,
   .aboutDescription,
   .servicesDescription {
-    font-size: clamp(2.6vw, 2.4vw, 2.8vw);
+    font-size: clamp(16px, 18px, 14px);
   }
   .firstParagraphContainer,
   .thirdParagraphContainer {
