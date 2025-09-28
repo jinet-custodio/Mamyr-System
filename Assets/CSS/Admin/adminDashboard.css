@@ -176,6 +176,10 @@ body {
   height: 250px !important;
 }
 
+.filter-select {
+  width: 25%;
+}
+
 /* Tablet Portrait */
 @media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
   .dashboardTitle {
@@ -224,6 +228,17 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 0.5rem !important;
+  }
+
+  #salesBar,
+  #reservationTrendsBar {
+    width: 100% !important;
+  }
+
+  .sales-chart,
+  #reservationTrendsBar {
+    width: 100% !important;
+    height: 100% !important;
   }
 }
 
@@ -276,6 +291,17 @@ body {
 
   .roomAvailabilityGraph {
     width: 100% !important;
+  }
+
+  #salesBar,
+  #reservationTrendsBar {
+    width: 100% !important;
+  }
+
+  .sales-chart,
+  #reservationTrendsBar {
+    width: 100% !important;
+    height: 100% !important;
   }
 }
 
@@ -330,5 +356,16 @@ body {
   .rightSection {
     width: 90vw;
     align-items: center;
+  }
+
+  #salesBar,
+  #reservationTrendsBar {
+    width: 100% !important;
+  }
+
+  .sales-chart,
+  #reservationTrendsBar {
+    width: 100% !important;
+    height: 100% !important;
   }
 }
