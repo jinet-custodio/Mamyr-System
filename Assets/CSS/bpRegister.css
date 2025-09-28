@@ -266,6 +266,12 @@ button#selectPartnerBtn {
   margin-top: 3vw;
 }
 
+.passwordContainer {
+  display: flex;
+  flex-direction: column;
+  gap: -1.5rem;
+  margin-top: -3vw;
+}
 .input-box {
   position: relative;
   margin: 30px 0;
@@ -383,7 +389,7 @@ input[type="password"]::-webkit-search-cancel-button {
 .confirmErrorMsg {
   color: red;
   margin-top: -1.7rem;
-  text-indent: 1rem;
+  text-align: center;
 }
 
 #termsError {
