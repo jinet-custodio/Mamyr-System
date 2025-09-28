@@ -71,6 +71,17 @@ body {
   width: 50%;
 }
 
+.scheduleInputContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+#calendarIcon {
+  position: absolute;
+  right: 57%;
+}
+
 .scheduleForm,
 .peopleForm,
 .cottageRoomForm,
@@ -321,8 +332,142 @@ body {
   .container {
     flex-direction: column !important;
   }
+
+  .resort-card {
+    width: 100%;
+  }
+
+  .entrance-rates {
+    width: 100%;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .backToSelection {
+    top: 3%;
+    left: -5%;
+  }
+
+  .titleContainer {
+    margin-top: 6rem;
+  }
+
+  .resortTitle {
+    font-size: 30px;
+  }
+
+  .container {
+    flex-direction: column !important;
+  }
+
+  .resort-card {
+    width: 100%;
+  }
+
+  .entrance-rates {
+    width: 100%;
+  }
+
+  .scheduleForm,
+  .peopleForm,
+  .cottageRoomForm,
+  .purposeForm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+  }
+  .purposeLabel {
+    margin-top: 1rem;
+  }
+
+  .scheduleInputContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  #calendarIcon {
+    position: absolute;
+    right: 57%;
+  }
+
+  .rates .card-body {
+    gap: 2rem;
+  }
+
+  .cottagesNotes,
+  .entertainmentContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 /* Phones */
 @media only screen and (max-width: 600px) {
+  .backToSelection {
+    top: 3%;
+    left: -15%;
+  }
+
+  .titleContainer {
+    margin-top: 6rem;
+  }
+
+  .resortTitle {
+    font-size: 30px;
+  }
+  .container {
+    flex-direction: column;
+  }
+
+  .resort-card {
+    width: 100%;
+  }
+
+  .entrance-rates {
+    width: 100%;
+  }
+
+  .scheduleInputContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  #calendarIcon {
+    position: absolute;
+    right: 12.5%;
+  }
+
+  .peopleForm .input-container {
+    width: 100%;
+  }
+  .scheduleForm,
+  .peopleForm,
+  .cottageRoomForm,
+  .purposeForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .purposeLabel {
+    margin-top: 1rem;
+  }
+
+  .rates .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .cottagesNotes,
+  .entertainmentContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
