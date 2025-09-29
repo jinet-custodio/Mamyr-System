@@ -470,8 +470,9 @@ require_once '../../Function/functions.php';
                 <h6 class="statusSubtitle"><?= htmlspecialchars($statusSubtitle) ?></h6>
 
                 <div class="button-container">
-                    <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn" style="display: none;"
-                        data-bs-toggle="modal" data-bs-target="#gcashPaymentModal"><?= $buttonName ?></button>
+                    <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn"
+                        style="display: none;" data-bs-toggle="modal"
+                        data-bs-target="#gcashPaymentModal"><?= $buttonName ?></button>
                     <!-- <a href="../bookNow.php" class="btn btn-primary w-100 mt-3" id="newReservationBtn">Make Another
                         Reservation</a> -->
                     <form action="../../Function/receiptPDF.php" method="POST" target="_blank">
@@ -480,9 +481,10 @@ require_once '../../Function/functions.php';
                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                         <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
                         <?php foreach ($services as $service): ?>
-                            <input type="hidden" name="services[]" value="<?= $service ?>">
+                        <input type="hidden" name="services[]" value="<?= $service ?>">
                         <?php endforeach; ?>
-                        <button type="submit" class="btn btn-primary w-100 mt-3" name="downloadReceiptBtn" id="downloadReceiptBtn">Download Receipt </button>
+                        <button type="submit" class="btn btn-primary w-100 mt-3" name="downloadReceiptBtn"
+                            id="downloadReceiptBtn">Download Receipt </button>
                     </form>
                 </div>
             </div>
@@ -518,15 +520,15 @@ require_once '../../Function/functions.php';
                 <div class="card" id="summaryDetails">
                     <ul class="list-group list-group-flush">
                         <?php if ($bookingType === 'Resort') { ?>
-                            <li class="list-group-item" id="tourType">
-                                <h6 class="cardHeader"><?= $cardHeader ?></h6>
-                                <p class="cardContent" id="eventDate"><?= $tourType ?></p>
-                            </li>
+                        <li class="list-group-item" id="tourType">
+                            <h6 class="cardHeader"><?= $cardHeader ?></h6>
+                            <p class="cardContent" id="eventDate"><?= $tourType ?></p>
+                        </li>
                         <?php } elseif ($bookingType === 'Event') { ?>
-                            <li class="list-group-item" id="tourType">
-                                <h6 class="cardHeader"><?= $cardHeader ?></h6>
-                                <p class="cardContent" id="eventDate"><?= $eventType ?></p>
-                            </li>
+                        <li class="list-group-item" id="tourType">
+                            <h6 class="cardHeader"><?= $cardHeader ?></h6>
+                            <p class="cardContent" id="eventDate"><?= $eventType ?></p>
+                        </li>
                         <?php } ?>
 
                         <li class="list-group-item">
@@ -544,10 +546,10 @@ require_once '../../Function/functions.php';
                             <div class="venues">
                                 <?php if ($bookingType === 'Resort' || $bookingType === 'Hotel') {
                                     foreach ($serviceVenue as $venue): ?>
-                                        <p class="cardContent" id="venue"><?= $venue ?></p>
-                                    <?php endforeach;
+                                <p class="cardContent" id="venue"><?= $venue ?></p>
+                                <?php endforeach;
                                 } else { ?>
-                                    <p class="cardContent" id="venue"><?= htmlspecialchars($venue) ?></p>
+                                <p class="cardContent" id="venue"><?= htmlspecialchars($venue) ?></p>
                                 <?php } ?>
                             </div>
                         </li>
@@ -563,36 +565,40 @@ require_once '../../Function/functions.php';
                         </li>
 
                         <?php if ($bookingType === 'Event') {  ?>
-                            <li class="list-group-item">
-                                <h6 class="cardHeader">Menu</h6>
-                                <?php if ($foodList) { ?>
-                                    <p class="cardContent">Food List
-                                        <button data-bs-target="#foodListModal" data-bs-toggle="modal"> <img src="../../Assets/Images/Icon/information.png" alt="More Details" class="infoIcon"></button>
-                                    </p>
-                                <?php } else {  ?>
-                                    <p class="cardContent">None</p>
-                                <?php
+                        <li class="list-group-item">
+                            <h6 class="cardHeader">Menu</h6>
+                            <?php if ($foodList) { ?>
+                            <p class="cardContent">Food List
+                                <button data-bs-target="#foodListModal" class="foodModalBtn" data-bs-toggle="modal">
+                                    <img src="../../Assets/Images/Icon/information.png" alt="More Details"
+                                        class="infoIcon"></button>
+                            </p>
+                            <?php } else {  ?>
+                            <p class="cardContent">None</p>
+                            <?php
                                 }
                                 ?>
-                            </li>
+                        </li>
 
-                            <li class="list-group-item">
-                                <h6 class="cardHeader">Additional Service</h6>
-                                <?php if ($partnerServiceList) { ?>
-                                    <p class="cardContent">Service List
-                                        <button data-bs-target="#partnerServiceModal" data-bs-toggle="modal"> <img src="../../Assets/Images/Icon/information.png" alt="More Details" class="infoIcon"></button>
-                                    </p>
-                                <?php } else {  ?>
-                                    <p class="cardContent">None</p>
-                                <?php
+                        <li class="list-group-item">
+                            <h6 class="cardHeader">Additional Service</h6>
+                            <?php if ($partnerServiceList) { ?>
+                            <p class="cardContent">Service List
+                                <button data-bs-target="#partnerServiceModal" data-bs-toggle="modal"> <img
+                                        src="../../Assets/Images/Icon/information.png" alt="More Details"
+                                        class="infoIcon"></button>
+                            </p>
+                            <?php } else {  ?>
+                            <p class="cardContent">None</p>
+                            <?php
                                 }
                                 ?>
-                            </li>
+                        </li>
                         <?php } else { ?>
-                            <li class="list-group-item" id="addOns">
-                                <h6 class="cardHeader">Add Ons</h6>
-                                <p class="cardContent"><?= $additionalServices ?></p>
-                            </li>
+                        <li class="list-group-item" id="addOns">
+                            <h6 class="cardHeader">Add Ons</h6>
+                            <p class="cardContent"><?= $additionalServices ?></p>
+                        </li>
                         <?php } ?>
 
                         <li class="list-group-item" id="totalAmountSection">
@@ -620,7 +626,7 @@ require_once '../../Function/functions.php';
                     <div class="note">
                         <ul>
                             <?php foreach (array_unique($downpaymentNotes) as $notes) {  ?>
-                                <li><?= $notes ?></li>
+                            <li><?= $notes ?></li>
                             <?php  }  ?>
                         </ul>
                     </div>
@@ -638,12 +644,12 @@ require_once '../../Function/functions.php';
                     </div>
                     <div class="modal-body">
                         <?php foreach ($foodList as $category => $items) { ?>
-                            <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
-                            <?php foreach ($items as $name) { ?>
-                                <ul>
-                                    <li> <?= htmlspecialchars($name) ?></li>
-                                </ul>
-                            <?php } ?>
+                        <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
+                        <?php foreach ($items as $name) { ?>
+                        <ul>
+                            <li> <?= htmlspecialchars($name) ?></li>
+                        </ul>
+                        <?php } ?>
                         <?php } ?>
                     </div>
                     <div class="modal-footer">
@@ -664,12 +670,12 @@ require_once '../../Function/functions.php';
                     <div class="modal-body">
 
                         <?php foreach ($partnerServiceList as $category => $items) { ?>
-                            <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
-                            <?php foreach ($items as $name => $price) { ?>
-                                <ul>
-                                    <li> <?= htmlspecialchars($name) ?> — ₱<?= number_format($price, 2) ?> </li>
-                                </ul>
-                            <?php } ?>
+                        <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
+                        <?php foreach ($items as $name => $price) { ?>
+                        <ul>
+                            <li> <?= htmlspecialchars($name) ?> — ₱<?= number_format($price, 2) ?> </li>
+                        </ul>
+                        <?php } ?>
                         <?php } ?>
 
                     </div>
@@ -723,63 +729,63 @@ require_once '../../Function/functions.php';
 
 
     <script>
-        //Hide the make a downpayment button
-        const paymentStatus = document.getElementById("paymentStatus").value;
-        const bookingStatus = document.getElementById("bookingStatus").value;
-        const paymentApprovalStatus = document.getElementById("paymentApprovalStatus").value;
-        const paymentMethod = document.getElementById("paymentMethod").value;
+    //Hide the make a downpayment button
+    const paymentStatus = document.getElementById("paymentStatus").value;
+    const bookingStatus = document.getElementById("bookingStatus").value;
+    const paymentApprovalStatus = document.getElementById("paymentApprovalStatus").value;
+    const paymentMethod = document.getElementById("paymentMethod").value;
 
-        // console.log("Booking Stat: " + bookingStatus);
-        // console.log("payment App Stat" + paymentApprovalStatus);
-        if (bookingStatus === "Pending" && paymentApprovalStatus === '') {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-        } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && paymentStatus === "Unpaid") {
-            document.getElementById("makeDownpaymentBtn").style.display = "show";
-        } else if (paymentApprovalStatus === "Approved" && paymentStatus === "Partially Paid") {
-            document.getElementById("makeDownpaymentBtn").style.display = "show";
-        } else if (paymentApprovalStatus === "Done" && paymentStatus === "Fully Paid") {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-        } else if (paymentMethod === 'Cash') {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-        } else if (paymentMethod === 'GCash') {
-            document.getElementById("makeDownpaymentBtn").style.display = "block";
+    // console.log("Booking Stat: " + bookingStatus);
+    // console.log("payment App Stat" + paymentApprovalStatus);
+    if (bookingStatus === "Pending" && paymentApprovalStatus === '') {
+        document.getElementById("makeDownpaymentBtn").style.display = "none";
+    } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && paymentStatus === "Unpaid") {
+        document.getElementById("makeDownpaymentBtn").style.display = "show";
+    } else if (paymentApprovalStatus === "Approved" && paymentStatus === "Partially Paid") {
+        document.getElementById("makeDownpaymentBtn").style.display = "show";
+    } else if (paymentApprovalStatus === "Done" && paymentStatus === "Fully Paid") {
+        document.getElementById("makeDownpaymentBtn").style.display = "none";
+    } else if (paymentMethod === 'Cash') {
+        document.getElementById("makeDownpaymentBtn").style.display = "none";
+    } else if (paymentMethod === 'GCash') {
+        document.getElementById("makeDownpaymentBtn").style.display = "block";
+    } else {
+        document.getElementById("makeDownpaymentBtn").style.display = "none";
+    }
+    </script>
+
+
+    <script>
+    //Show the preview of image
+    document.querySelector("input[type='file']").addEventListener("change", function(event) {
+        let reader = new FileReader();
+        reader.onload = function() {
+            let preview = document.getElementById("preview");
+            preview.src = reader.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const bookingType = document.getElementById("bookingType").value;
+
+        // const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
+        const addOnsContainer = document.getElementById("addOns");
+        // const tourTypeContainer = document.getElementById("tourType");
+
+        if (bookingType === "Resort") {
+            addOnsContainer.style.display = "flex";
+            // tourTypeContainer.style.display = "flex";
+        } else if (bookingType === "Hotel") {
+            addOnsContainer.style.display = "none";
+            // tourTypeContainer.style.display = "none";
         } else {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
+            addOnsContainer.style.display = "none";
         }
-    </script>
-
-
-    <script>
-        //Show the preview of image
-        document.querySelector("input[type='file']").addEventListener("change", function(event) {
-            let reader = new FileReader();
-            reader.onload = function() {
-                let preview = document.getElementById("preview");
-                preview.src = reader.result;
-                preview.style.display = "block";
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const bookingType = document.getElementById("bookingType").value;
-
-            // const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
-            const addOnsContainer = document.getElementById("addOns");
-            // const tourTypeContainer = document.getElementById("tourType");
-
-            if (bookingType === "Resort") {
-                addOnsContainer.style.display = "flex";
-                // tourTypeContainer.style.display = "flex";
-            } else if (bookingType === "Hotel") {
-                addOnsContainer.style.display = "none";
-                // tourTypeContainer.style.display = "none";
-            } else {
-                addOnsContainer.style.display = "none";
-            }
-        });
+    });
     </script>
 
 
@@ -787,30 +793,30 @@ require_once '../../Function/functions.php';
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
-        if (paramValue === "imageSize") {
-            Swal.fire({
-                title: "Oops!",
-                text: "File is too large. Maximum allowed size is 64MB.",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        } else if (paramValue === 'error') {
-            Swal.fire({
-                title: 'Oops',
-                text: 'There was an error while processing your request. Please try again later.',
-                icon: 'warning',
-                confirmButtonText: 'Okay'
-            })
-        }
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
+    if (paramValue === "imageSize") {
+        Swal.fire({
+            title: "Oops!",
+            text: "File is too large. Maximum allowed size is 64MB.",
+            icon: "warning",
+            confirmButtonText: "Okay",
+        });
+    } else if (paramValue === 'error') {
+        Swal.fire({
+            title: 'Oops',
+            text: 'There was an error while processing your request. Please try again later.',
+            icon: 'warning',
+            confirmButtonText: 'Okay'
+        })
+    }
 
 
-        if (paramValue) {
-            const url = new URL(window.location.href);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location.href);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 

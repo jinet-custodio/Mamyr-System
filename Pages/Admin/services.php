@@ -702,10 +702,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     ?>
                                 </select>
                             </div>
-                            <!-- <div class="input-container">
+                            <div class="input-container">
                                 <label for="serviceImage">Service Image</label>
                                 <input type="file" class="form-control" name="serviceImage" id="serviceImage">
-                            </div> -->
+                            </div>
 
                             <div class="input-container">
                                 <label for="serviceAvailability">Availability</label>
@@ -906,11 +906,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <label for="foodName">Food Name</label>
                                 <input type="text" class="form-control" id="foodName" name="foodName" required>
                             </div>
-
-                            <!-- <div class="input-container">
-                                <label for="foodPrice">Price</label>
-                                <input type="text" class="form-control" id="foodPrice" name="foodPrice" required>
-                            </div> -->
 
                             <div class="input-container">
                                 <label for="foodCategory">Food Category</label>

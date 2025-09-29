@@ -8,9 +8,9 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
-require_once '../../Function/functions.php';
-changeToDoneStatus($conn);
-changeToExpiredStatus($conn);
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
@@ -28,28 +28,15 @@ if (isset($_SESSION['userID'])) {
     }
 }
 
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
-
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
 require '../../Function/notification.php';
 
-$message = '';
-$status = '';
-
-if (isset($_SESSION['error'])) {
-    $message = htmlspecialchars(strip_tags($_SESSION['error']));
-    $status = 'error';
-    unset($_SESSION['error']);
-} elseif (isset($_SESSION['success'])) {
-    $message = htmlspecialchars(strip_tags($_SESSION['success']));
-    $status = 'success';
-    unset($_SESSION['success']);
-}
+// $customerPayment = $_SESSION['huh']
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,28 +44,32 @@ if (isset($_SESSION['error'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr Resort and Events Place</title>
-    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
-    <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/Admin/booking.css">
-    <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css">
+    <link rel="icon" type="image/x-icon" href="../../../Assets/Images/Icon/favicon.png " />
+
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
-    <!-- Font Awesome and Box Icon links  -->
+    <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+
+    <!-- Icons Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
+
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/transaction.css" />
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css" />
 </head>
 
 <body>
     <div class="topSection">
         <div class="dashTitleContainer">
-            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
-                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
+            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard">
+                <img src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -108,7 +99,6 @@ if (isset($_SESSION['error'])) {
             <a href="#" class="chat">
                 <img src="../../Assets/Images/Icon/chat.png" alt="home icon">
             </a>
-
             <?php
             if ($userRole == 3) {
                 $admin = "Admin";
@@ -153,7 +143,7 @@ if (isset($_SESSION['error'])) {
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav w-100 me-10 d-flex justify-content-around" id="navUL">
+            <ul class="navbar-nav w-100 me-10 d-flex justify-content-around px-2" id="navUL">
 
                 <li class="nav-item">
                     <a class="nav-link" href="adminDashboard.php">
@@ -163,7 +153,7 @@ if (isset($_SESSION['error'])) {
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="booking.php">
+                    <a class="nav-link" href="booking.php">
                         <i class="fa-solid fa-calendar-days navbar-icon"></i>
                         <h5>Bookings</h5>
                     </a>
@@ -177,13 +167,6 @@ if (isset($_SESSION['error'])) {
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="roomList.php">
-                        <i class="fa-solid fa-hotel navbar-icon"></i>
-                        <h5>Rooms</h5>
-                    </a>
-                </li>
-
-                <li class="nav-item">
                     <a class="nav-link" href="services.php">
                         <i class="fa-solid fa-bell-concierge navbar-icon"></i>
                         <h5>Services</h5>
@@ -191,7 +174,7 @@ if (isset($_SESSION['error'])) {
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="transaction.php">
+                    <a class="nav-link active" href="transaction.php">
                         <i class="fa-solid fa-credit-card navbar-icon"></i>
                         <h5>Payments</h5>
                     </a>
@@ -218,8 +201,9 @@ if (isset($_SESSION['error'])) {
                     </a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
-                        Log Out
+                    <a href="../../Function/Admin/logout.php" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
+                        <h5 style="color: red;">Log Out</h5>
                     </a>
                 </li>
             </ul>
@@ -230,101 +214,115 @@ if (isset($_SESSION['error'])) {
     <!-- Notification Modal -->
     <?php include '../notificationModal.php' ?>
 
-    <!-- Booking-container -->
-    <h1 class="title text-center my-3" style="display: none;" id="hiddenTitle">Bookings</h1>
+    <main>
+        <div class="transactionContainer">
+            <div class="card" id="tableContainer">
+                <div class="titleContainer">
+                    <h3 class="title fw-bold">Transactions</h3>
+                </div>
+                <table class="table table-striped display nowrap" id="transactionTable">
+                    <thead>
+                        <th scope="col">Booking ID</th>
+                        <th scope="col">Guest</th>
+                        <th scope="col">Total Payment</th>
+                        <th scope="col">Balance</th>
+                        <th scope="col">Payment Method</th>
+                        <th scope="col">Payment Approval</th>
+                        <th scope="col">Payment Status</th>
+                        <th scope="col">Action</th>
+                    </thead>
+                    <!-- Get data and isplay Transaction -->
+                    <tbody>
+                        <?php
+                        $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, b.paymentMethod, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
+                    FROM confirmedbooking cb
+                    LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                    LEFT JOIN user u ON b.userID = u.userID
+                    LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID
+                    LEFT JOIN status stat ON cb.paymentApprovalStatus = stat.statusID
+                    ");
+                        $payments->execute();
+                        $paymentsResult = $payments->get_result();
+                        if ($paymentsResult->num_rows > 0) {
+                            while ($data = $paymentsResult->fetch_assoc()) {
+                                $guestName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
+                                $bookingID = $data['bookingID'];
+                                $formattedID = $data['formattedID'];
+                                $totalAmount = $data['confirmedFinalBill'];
+                                // $downpayment = $data['CBdownpayment'];
+                                $amountPaid = $data['amountPaid'];
+                                $balance = $data['userBalance'];
+                                $paymentMethod = $data['paymentMethod'];
+                                $paymentStatus = $data['PaymentStatus'];
+                                $paymentApprovalStatus = $data['paymentApprovalStatus'];
 
-    <div class="booking-container">
-        <div class="card">
-            <div class="btnContainer">
-                <a href="createBooking.php" class="btn btn-primary" id="addBookings">Add</a>
+                                if ($paymentStatus === 'Fully Paid') {
+                                    $classColor = 'success';
+                                } elseif ($paymentStatus === 'No Payment') {
+                                    $classColor = 'danger';
+                                } elseif ($paymentStatus === 'Partially Paid') {
+                                    $classColor = 'primary';
+                                }
+
+
+
+                                if ($paymentApprovalStatus === "Pending") {
+                                    $addClass = "btn btn-warning w-100";
+                                } elseif ($paymentApprovalStatus === "Approved") {
+                                    $addClass = "btn btn-primary w-100";
+                                } elseif ($paymentApprovalStatus === "Rejected") {
+                                    $addClass = "btn btn-danger w-100";
+                                } elseif ($paymentApprovalStatus === "Done") {
+                                    $addClass = "btn btn-success w-100";
+                                }
+
+
+                        ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($formattedID) ?></td>
+                                    <td><?= htmlspecialchars($guestName) ?></td>
+                                    <td>₱ <?= number_format($totalAmount, 2) ?></td>
+                                    <td>₱ <?= number_format($balance, 2) ?></td>
+                                    <td><?= htmlspecialchars($paymentMethod) ?></td>
+                                    <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
+                                    <td><span
+                                            class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
+                                    </td>
+
+                                    <td>
+                                        <form action="viewPayments.php" method="POST">
+                                            <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                                            <button type="submit" name="viewIndividualPayment"
+                                                class="btn btn-info w-100">View</button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                        <?php
+                            }
+                        }
+
+                        ?>
+                    </tbody>
+                </table>
             </div>
-
-            <table class="table table-striped display nowrap" id="bookingTable">
-                <thead>
-                    <th scope="col">Booking ID</th>
-                    <th scope="col">Guest</th>
-                    <th scope="col">Booking Type</th>
-                    <th scope="col">Check-in</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Action</th>
-                </thead>
-                <tbody id='booking-display-body'></tbody>
-            </table>
         </div>
-    </div>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    </main>
+    <!-- Jquery Link -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <!-- DataTables -->
     <script src="../../Assets/JS/datatables.min.js"></script>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src=" ../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
 
-    <!-- Booking Ajax -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("../../Function/Admin/Ajax/getBookingsJSON.php")
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        console.error("Failed to load bookings.");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'An unknown error occurred.'
-                        });
-                        return;
-                    }
-                    const bookings = data.bookings;
-                    const tbody = document.querySelector('#booking-display-body');
-                    tbody.innerHTML = "";
 
-                    if (bookings && bookings.length > 0) {
-                        bookings.forEach(booking => {
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
-                                                <td>${booking.formattedBookingID}</td>
-                                                <td>${booking.name}</td>
-                                                <td>${booking.bookingType} Booking</td>
-                                                <td>${booking.checkIn}</td>
-                                                <td>
-                                                    <a class="btn btn-${booking.statusClass} w-100">
-                                                        ${booking.status}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <form action="viewBooking.php" method="POST">
-                                                        <input type="hidden" name="button" value="booking">
-                                                        <input type="hidden" name="bookingType" value="${booking.bookingType}">
-                                                        <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
-                                                        <input type="hidden" name="bookingID" value="${booking.bookingID}">
-                                                        <button type="submit" class="btn btn-primary">View</button>
-                                                    </form>
-                                                </td>
-                                            `;
-                            tbody.appendChild(row);
-                        })
-                    } else {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `<td colspan="6" class="text-center">No bookings to display</td>`;
-                        tbody.appendChild(row);
-                    }
-                }).catch(error => {
-                    console.error("Error loading bookings:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: error.message || 'Failed to load data from the server.'
-                    })
-                })
-        })
-    </script>
 
-    <script src="../../Assets/JS/adminNavbar.js"></script>
     <!-- Notification Ajax -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -365,79 +363,87 @@ if (isset($_SESSION['error'])) {
 
     <!-- Table JS -->
     <script>
-        $('#bookingTable').DataTable({
-            responsive: false,
-            scrollX: true,
-            columnDefs: [{
-                    width: '10%',
-                    targets: 0
-                },
-                {
-                    width: '20%',
-                    targets: 1
-                },
-                {
-                    width: '15%',
-                    targets: 2
-                },
-                {
-                    width: '20%',
-                    targets: 3
-                },
-                {
-                    width: '15%',
-                    targets: 4
-                },
-                {
-                    width: '20%',
-                    targets: 5
-                },
-            ],
+        $(document).ready(function() {
+            $('#transactionTable').DataTable({
+                columnDefs: [{
+                        width: '9%',
+                        target: 0,
+                    },
+                    {
+                        width: '15%',
+                        target: 1,
+                    },
+                    {
+                        width: '15%',
+                        target: 2,
+                    },
+                    {
+                        width: '10%',
+                        target: 4,
+                    },
+                    {
+                        width: '15%',
+                        target: 5,
+                    },
+                    {
+                        width: '15%',
+                        target: 6,
+                    },
+                    {
+                        width: '10%',
+                        target: 7,
+                    }
+                ]
+            });
         });
     </script>
-
+    <script src="../../Assets/JS/adminNavbar.js"></script>
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        <?php if (!empty($message)): ?>
-            Swal.fire({
-                icon: '<?= $status ?>',
-                title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
-                text: '<?= $message ?>'
-            });
-        <?php endif; ?>
-
-
         const param = new URLSearchParams(window.location.search);
         const paramValue = param.get('action');
-
-        if (paramValue === "approvedSuccess") {
+        if (paramValue === "approved") {
             Swal.fire({
-                position: "top-end",
-                title: "Booking Approved!",
-                text: "The booking has been successfully approved.",
+                title: "Payment Approved",
+                text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
                 icon: 'success',
-                showConfirmButton: false,
-                timer: 1500
             });
-        } else if (paramValue === 'rejectedSuccess') {
+        } else if (paramValue === "rejected") {
             Swal.fire({
-                position: "top-end",
-                title: "Booking Rejected!",
-                text: "The booking has been successfully rejected.",
+                title: "Payment Rejected",
+                text: "You have reviewed and rejected the payment.",
                 icon: 'success',
-                showConfirmButton: false,
-                timer: 1500
+            });
+        } else if (paramValue === "failed") {
+            Swal.fire({
+                title: "Payment Approval Failed",
+                text: "Unable to approve or reject the payment. Please try again later.",
+                icon: 'error',
+            });
+        } else if (paramValue === "paymentSuccess") {
+            Swal.fire({
+                title: "Payment Added",
+                text: "Payment was successfully added and processed.",
+                icon: 'success',
+            });
+        } else if (paramValue === "paymentFailed") {
+            Swal.fire({
+                title: "Payment Failed",
+                text: "Failed to deduct the payment. Please try again later.",
+                icon: 'error',
             });
         }
 
         if (paramValue) {
-            const url = new URL(window.location);
+            const url = new URL(window.location.href);
             url.search = '';
             history.replaceState({}, document.title, url.toString());
         }
     </script>
+
+
 </body>
 
 </html>

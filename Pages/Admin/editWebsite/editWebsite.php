@@ -73,7 +73,7 @@ $userRole = $_SESSION['userRole'];
 <body>
     <div class="container-fluid">
         <div class="backButtonContainer">
-            <a href="../adminDashboard.php" id="backBtn"><img src="../../../Assets/Images/Icon/back-button.png"
+            <a href="../adminDashboard.php" id="backBtn"><img src="../../../Assets/Images/Icon/arrowBtnBlue.png"
                     alt="Back Button" class="backBtn"></a>
         </div>
 

@@ -86,7 +86,7 @@ function validateSignUpForm() {
   const passwordMatchMessage = document.getElementById("passwordMatch");
   const termsErrorMessage = document.getElementById("termsError");
 
-  const checkbox = document.getElementById("terms");
+  const checkbox = document.getElementById("terms-condition");
   const signUpButton = document.getElementById("signUp");
 
   const isPasswordValid = passwordValidation(
@@ -151,4 +151,27 @@ function checkCreateAccountPassword() {
   if (isValid) {
     createAccountBtn.disabled = false;
   }
+}
+
+function AcceptTerms() {
+  const termsCheckbox = document.getElementById("terms-condition");
+  const termsModal = document.getElementById("termsModal");
+
+  if (termsCheckbox) {
+    termsCheckbox.checked = true;
+  }
+
+  let modalInstance = bootstrap.Modal.getInstance(termsModal);
+  if (!modalInstance) {
+    modalInstance = new bootstrap.Modal(termsModal);
+  }
+  modalInstance.hide();
+
+  const backdrop = document.querySelector(".modal-backdrop");
+  if (backdrop) {
+    backdrop.parentNode.removeChild(backdrop);
+    document.body.classList.remove("modal-open");
+  }
+
+  validateSignUpForm();
 }

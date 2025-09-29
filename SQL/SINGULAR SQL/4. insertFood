@@ -43,6 +43,21 @@ INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Butter Gar
 INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Squid Gambas','Seafood',1);
 INSERT INTO menuitem(foodName, foodCategory, availabilityID) VALUES ('Nut Crushed Fish Fillet with Sweet Chili Sauce','Seafood',1);
 
+-- Drinks
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Lemon Iced Tea','Drink',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Orange Juice','Drink',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pineapple Juice','Drink',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Red Iced Tea','Drink',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Lemonade','Drink',1, 'Adult');
+
+-- Desserts
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fruit Salad','Dessert',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Buko Pandan','Dessert',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Buko Salad','Dessert',1, 'Adult');
+INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Coffee Jelly','Dessert',1, 'Adult');
+
+
+
 -- Chicken 
 INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Chicken Lollipop','Chicken',1, 'Child');
 INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fried Chicken','Chicken',1, 'Child');
@@ -72,16 +87,3 @@ INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('
 INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fish Fillet Nuggets','Seafood',1, 'Child');
 INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Shrimp Tempura','Seafood',1, 'Child');
 INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fish Tempura','Seafood',1, 'Child');
-
--- Drinks
-INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Lemon Iced Tea','Drink',1, 'Adult');
-INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Orange Juice','Drink',1, 'Adult');
-INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Pineapple Juice','Drink',1, 'Adult');
-INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Red Iced Tea','Drink',1, 'Adult');
-INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Lemonade','Drink',1, 'Adult');
-
--- Desserts
-INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Fruit Salad','Dessert',1, 'Adult');
-INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Buko Pandan','Dessert',1, 'Adult');
-INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Buko Salad','Dessert',1, 'Adult');
-INSERT INTO menuitem(foodName, foodCategory, availabilityID, ageGroup) VALUES ('Coffee Jelly','Dessert',1, 'Adult');

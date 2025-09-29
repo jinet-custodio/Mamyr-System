@@ -104,6 +104,8 @@
   justify-content: center;
   height: 56vh !important;
   margin-top: 1vw !important;
+  padding: 0.8rem !important;
+  overflow: hidden;
 }
 
 #foodSelectionCover,
@@ -112,11 +114,11 @@
   border-bottom-right-radius: 5px;
 }
 
-#additionalServicesCover {
-  width: 51vh;
-  aspect-ratio: 1;
+.card-img-top {
+  width: 100%;
+  height: 23vw;
+  object-fit: cover;
 }
-
 .fw-bold {
   /* margin-top: -2vw; */
   font-family: "Poppins";
@@ -266,4 +268,449 @@ td {
 
 .note-container li {
   color: #0d6dfc;
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  .backToSelection {
+    top: 1%;
+    left: 3%;
+    margin: unset;
+  }
+
+  .titleContainer {
+    border: 1px solid transparent;
+  }
+
+  .eventTitle {
+    font-size: 36px;
+    margin-top: 6rem !important;
+  }
+  #eventContainer {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -1rem !important;
+  }
+
+  .card {
+    width: 100% !important;
+  }
+
+  #eventBookingCard {
+    display: flex !important;
+  }
+
+  .eventBox {
+    display: flex;
+  }
+  .fa-calendar-days {
+    margin-top: -3rem;
+    margin-left: 21.6rem;
+  }
+
+  .note {
+    margin-top: -3rem;
+    text-align: center;
+  }
+
+  .secondColumn {
+    width: 100%;
+  }
+  #calendar {
+    width: 100%;
+    margin: 2vw auto;
+  }
+
+  #foodSelectionCard,
+  #additionalServicesCard {
+    flex-direction: column !important;
+    align-items: center;
+    padding-top: 2rem !important;
+    width: 30rem !important;
+    height: 35rem !important;
+  }
+
+  #foodSelectionCover {
+    margin-top: -1.3rem;
+    height: 17rem !important;
+  }
+
+  .card-img-top {
+    height: 30vw;
+    object-fit: cover;
+  }
+
+  #additionalServiceNote {
+    padding: 0.7rem !important;
+    text-align: center;
+    margin-top: 0.5rem !important;
+  }
+
+  .modal-body.additionalService {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .eventButton-container {
+    margin-top: 1rem !important;
+  }
+
+  #bookNowBtn {
+    width: 50% !important;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  .backToSelection {
+    top: 1%;
+    left: 3%;
+    margin: unset;
+  }
+
+  .titleContainer {
+    border: 1px solid transparent;
+  }
+
+  .eventTitle {
+    font-size: 36px;
+    margin-top: 6rem !important;
+  }
+
+  .card {
+    width: 100% !important;
+  }
+
+  #eventBookingCard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .eventBox {
+    display: flex;
+  }
+  .fa-calendar-days {
+    margin-top: 0.6rem;
+    margin-left: -1rem;
+  }
+
+  .note {
+    margin-top: -3rem;
+    text-align: center;
+  }
+
+  .secondColumn {
+    width: 100%;
+  }
+  #calendar {
+    width: 100%;
+    margin: 2vw auto;
+  }
+
+  #foodSelectionCard,
+  #additionalServicesCard {
+    flex-direction: column !important;
+    align-items: center;
+    padding-top: 2rem !important;
+    width: 30rem !important;
+    height: 35rem !important;
+  }
+
+  #foodSelectionCover {
+    margin-top: -1.3rem;
+    height: 17rem !important;
+  }
+
+  .card-img-top {
+    height: 30vw;
+    object-fit: cover;
+  }
+
+  #additionalServiceNote {
+    padding: 0.7rem !important;
+    text-align: center;
+    margin-top: 0.5rem !important;
+  }
+
+  .modal-body.additionalService {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .eventButton-container {
+    margin-top: 1rem !important;
+  }
+
+  #bookNowBtn {
+    width: 50% !important;
+  }
+
+  .fc .fc-button-primary:disabled {
+    font-size: clamp(1rem, calc(0.8rem + 4px), 1rem);
+    padding: 0.2vw;
+    height: 2rem;
+    width: 5rem;
+  }
+
+  .fc-toolbar-chunk {
+    display: flex;
+  }
+
+  .fc .fc-toolbar-title {
+    text-align: center;
+  }
+}
+
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .backToSelection {
+    top: 1%;
+    left: 3%;
+    margin: unset;
+  }
+
+  .titleContainer {
+    border: 1px solid transparent;
+  }
+
+  .eventTitle {
+    font-size: 36px;
+    margin-top: 6rem !important;
+  }
+  #eventContainer {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -1rem !important;
+  }
+
+  .card {
+    width: 100% !important;
+  }
+
+  #eventBookingCard {
+    display: flex !important;
+  }
+
+  .eventBox {
+    display: flex;
+  }
+  .fa-calendar-days {
+    margin-top: -3rem;
+    margin-left: 21.6rem;
+  }
+
+  .note {
+    margin-top: -3rem;
+    text-align: center;
+  }
+
+  .secondColumn {
+    width: 100%;
+  }
+  #calendar {
+    width: 100%;
+    margin: 2vw auto;
+  }
+
+  #foodSelectionCard,
+  #additionalServicesCard {
+    flex-direction: column !important;
+    align-items: center;
+    padding-top: 2rem !important;
+    width: 30rem !important;
+    height: 35rem !important;
+  }
+
+  #foodSelectionCover {
+    margin-top: -1.3rem;
+    height: 17rem !important;
+  }
+
+  .card-img-top {
+    height: 30vw;
+    object-fit: cover;
+  }
+
+  #additionalServiceNote {
+    padding: 0.7rem !important;
+    text-align: center;
+    margin-top: 0.5rem !important;
+  }
+
+  .modal-body.additionalService {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .eventButton-container {
+    margin-top: 1rem !important;
+  }
+
+  #bookNowBtn {
+    width: 50% !important;
+  }
+}
+
+/* Phone size */
+@media screen and (max-width: 599px) {
+  .backToSelection {
+    top: 1%;
+    left: 3%;
+    margin: unset;
+  }
+
+  .titleContainer {
+    border: 1px solid transparent;
+  }
+
+  .eventTitle {
+    font-size: 36px;
+    margin-top: 6rem !important;
+  }
+  #eventContainer {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -1rem !important;
+  }
+
+  .card {
+    width: 100% !important;
+  }
+
+  #eventBookingCard {
+    display: flex !important;
+  }
+
+  .eventBox {
+    display: flex;
+  }
+  .fa-calendar-days {
+    margin-top: -1.8rem;
+    margin-left: 9.31rem;
+  }
+
+  .note {
+    margin-top: -3rem;
+  }
+
+  .secondColumn {
+    width: 100%;
+  }
+
+  .legends {
+    width: 80%;
+  }
+
+  .fc .fc-toolbar.fc-header-toolbar {
+    padding-bottom: 0.5rem;
+  }
+
+  #calendar {
+    width: 100%;
+    margin: 2vw auto;
+  }
+
+  #calendar {
+    border: none;
+    overflow-y: hidden;
+  }
+
+  .fc .fc-button-primary:disabled {
+    font-size: clamp(1rem, calc(0.8rem + 4px), 1rem);
+    padding: 0.2vw;
+    height: 2rem;
+    width: 5rem;
+  }
+
+  .fc .fc-button {
+    padding: 0 0.4em;
+  }
+
+  .fc .fc-daygrid-day-frame {
+    height: 3vw;
+    padding: 0;
+  }
+
+  .fc .fc-bg-event .fc-event-title {
+    font-size: 15px;
+  }
+
+  thead {
+    font-size: clamp(14px, calc(16 + 4px), 16px);
+  }
+
+  .fc-header-toolbar {
+    padding: 1vw;
+    height: 10vw;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 18px;
+    margin-left: 1rem;
+  }
+
+  .fc .fc-col-header-cell-cushion,
+  .fc-daygrid-day-top a {
+    font-size: 14px;
+  }
+
+  .fc-button-group {
+    font-size: clamp(1.9vw, calc(2.1vw + 4px), 2.5vw);
+    height: 5vw;
+    padding: 0.2vw;
+  }
+
+  .fc-button-group > .fc-button {
+    height: 5vw;
+  }
+
+  #foodSelectionCard,
+  #additionalServicesCard {
+    flex-direction: column !important;
+    align-items: center;
+    padding-top: 2rem !important;
+  }
+
+  #foodSelectionCover {
+    /* margin-top: -1.3rem; */
+    height: 17rem !important;
+  }
+
+  #foodSelectionCard,
+  #additionalServicesCard {
+    height: auto !important;
+    padding: 1rem !important;
+  }
+
+  .card-img-top {
+    height: 50vw;
+    object-fit: cover;
+  }
+
+  #additionalServiceNote {
+    padding: 0.7rem !important;
+    text-align: center;
+    margin-top: 0.5rem !important;
+  }
+
+  .modal-body.additionalService {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .eventButton-container {
+    margin-top: 1rem !important;
+  }
+
+  #bookNowBtn {
+    width: 50% !important;
+  }
 }
