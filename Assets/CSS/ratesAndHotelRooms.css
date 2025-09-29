@@ -571,12 +571,12 @@ main {
   }
 
   #rates {
-    margin-top: 10vh;
+    margin-top: 10vw;
   }
 
   .backToSelection i {
     font-size: 4vw;
-    border-radius: 50%;
+    margin-top: 3vw;
   }
 
   .title {
@@ -783,6 +783,7 @@ main {
 
   .backToSelection i {
     font-size: 5vw;
+    margin-top: 5vw;
   }
 
   .hotelIconWithCaption {
@@ -818,11 +819,11 @@ main {
 @media (max-width: 600px) {
   .rates,
   .hotelRooms {
-    margin-top: 8vh;
+    margin-top: 13vw;
   }
 
   .categories {
-    margin-top: 7vh;
+    margin-top: 10vw;
   }
 
   .categoryLink {
@@ -1005,8 +1006,9 @@ main {
 @media (max-width: 400px) {
   #rates,
   .hotelRooms {
-    margin-top: 10vh;
+    margin-top: 5vh;
   }
+
   #mainTitle {
     margin-top: 20vw;
   }
@@ -1049,6 +1051,7 @@ main {
 
   .backToSelection i {
     font-size: 7.5vw;
+    margin-top: 8vw;
   }
 
   .Description h2 {
