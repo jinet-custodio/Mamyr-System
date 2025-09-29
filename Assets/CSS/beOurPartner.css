@@ -143,19 +143,19 @@ nav {
   border-radius: 50%;
 }
 .account-nav img {
-    height: 5vw;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
+  height: 5vw;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
 
 .notification-container {
-  margin: 1rem;  
+  margin: 1rem;
 }
 .notification-container button {
-    background-color: transparent;
-    border: none;
-  }
+  background-color: transparent;
+  border: none;
+}
 .logoNav {
   /* border: 1px solid black; */
   width: 15vw;
@@ -413,7 +413,6 @@ footer {
 
 /* Laptop */
 @media screen and (min-width: 1025px) {
-
   .title {
     margin-top: 1vw !important;
     font-size: 2.4vw;
@@ -454,11 +453,11 @@ footer {
     margin-top: 1.5rem !important;
   }
 
-  .btn-primary {
+  #submit-request {
     margin-top: 2rem !important;
   }
 
-    .account-nav,
+  .account-nav,
   .notification-container {
     display: flex;
     align-items: center;
@@ -548,8 +547,7 @@ footer {
     color: #000 !important;
     white-space: nowrap;
     font-size: clamp(12px, 1.5vw, 16px); /* kusang adjust text size */
-    padding: 0 clamp(4px, 0.8vw, 12px);   /* kusang adjust gap */
-    
+    padding: 0 clamp(4px, 0.8vw, 12px); /* kusang adjust gap */
   }
 
   #logOutBtn {
@@ -568,7 +566,7 @@ footer {
     display: block;
     top: 100%;
     left: 0;
-    margin-top: 0.30rem;
+    margin-top: 0.3rem;
   }
 
   .fixed-top {
@@ -609,10 +607,9 @@ footer {
   }
 }
 
-
 /* Tablet portrait only */
 @media only screen and (min-width: 600px) and (max-width: 768px) {
-      body {
+  body {
     outline: 5px solid orange !important; /* 🟠 Tablet Portrait */
   }
   .title {
@@ -705,9 +702,9 @@ footer {
     margin: 0;
     padding: 0;
   }
-  .account-nav, .notification-container {
+  .account-nav,
+  .notification-container {
     display: flex;
-
   }
   .account-nav img {
     height: 31px !important;
@@ -732,7 +729,6 @@ footer {
     border: none;
     padding: 0;
     margin-left: 1rem;
-
   }
 
   #basicInfo {
@@ -814,14 +810,13 @@ footer {
     margin-top: 3vw !important;
   }
   .form-control {
-  margin-top: 10px !important;
-}
-  #submit-request{
+    margin-top: 10px !important;
+  }
+  #submit-request {
     display: block !important;
     margin: 0 auto !important;
     margin-top: 2rem !important;
     width: 100% !important;
-    
   }
   .socialIcons a {
     margin: 5px;
@@ -835,19 +830,18 @@ footer {
   .moreDetails {
     margin-top: 2vw;
     text-decoration: none;
-    padding: 0px;    
-}
-.mb-0 {
-  margin-bottom: 2vw !important;
-}
-.locationFooter {
-  margin-bottom: 1rem !important;
-}
+    padding: 0px;
+  }
+  .mb-0 {
+    margin-bottom: 2vw !important;
+  }
+  .locationFooter {
+    margin-bottom: 1rem !important;
+  }
 }
 
 /* Phone size */
 @media screen and (max-width: 599px) {
-
   .title {
     margin-top: clamp(2rem, 6vw, 4rem);
     font-size: clamp(16px, 5vw, 28px);
@@ -857,7 +851,7 @@ footer {
   .titleDescription {
     width: 100% !important;
     margin: 3vw auto 0 auto !important;
-    font-size: clamp(12px, calc(1.5vw + 4px), 25px)!important;
+    font-size: clamp(12px, calc(1.5vw + 4px), 25px) !important;
   }
 
   .ms-auto {
@@ -1000,7 +994,7 @@ footer {
 
   .busInfoLabel,
   .busProofLabel,
-  .repInfoLabel{
+  .repInfoLabel {
     font-size: clamp(14px, 4vw, 20px);
     margin-top: 1vw;
     font-weight: bold;
@@ -1049,58 +1043,49 @@ footer {
     margin-right: 3vw;
   }
   .logoNav {
-  /* border: 1px solid black; */
-  width: 15vw;
-  position: absolute;
-  margin: 2vw;
+    /* border: 1px solid black; */
+    width: 15vw;
+    position: absolute;
+    margin: 2vw;
+  }
+
+  footer {
+    /* border: 1px solid black; */
+    margin-top: auto !important;
+    background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.445) -50%,
+      rgb(62, 132, 158) 95%
+    );
+  }
+
+  .pb-1 {
+    gap: 2vw;
+    padding: 1vw 0 0 2vw;
+  }
+
+  .logo {
+    width: 20vw;
+    height: auto;
+  }
+  .mb-0 {
+    font-family: "Lora";
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffff;
+  }
+  .reservationTitle {
+    font-size: 8px;
+  }
+  .locationTitle {
+    font-size: 8px;
+  }
+  .locationFooter {
+    margin-bottom: 1.2rem !important;
+  }
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
+    font-size: 7px;
+  }
 }
-
-footer {
-  /* border: 1px solid black; */
-  margin-top: auto !important;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 20vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 12px;
-  font-weight: bold;
-  color: #ffff;
-}
-.reservationTitle {
-  font-size: 8px;
-}
-.locationTitle {
-  font-size: 8px;
-}
-.locationFooter {
-  margin-bottom: 1.2rem !important;
-}
-.numberFooter, .emailAddressTextFooter, .addressTextFooter {
-  font-size: 7px;
-}
-}
-
-
-
-
-
-
-
-
-
-
-
