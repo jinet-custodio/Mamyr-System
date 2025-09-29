@@ -11,22 +11,6 @@
   list-style: none;
 }
 
-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  /* background-color: rgb(242, 242, 242); */
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 15vh;
-  padding: 1rem;
-}
 /*
 .logoNav {
  border: 1px solid black; 
@@ -82,6 +66,10 @@ nav {
   width: 80%;
   justify-content: start;
   margin: 3vw auto 1vw auto !important;
+}
+
+.backArrow {
+  font-size: 3.5vw;
 }
 
 .title {
@@ -171,6 +159,10 @@ a.categoryLink {
     font-size: clamp(3vw, 3.1vw, 3.2vw);
   }
 
+  .backArrow {
+    font-size: 4.2vw;
+  }
+
   a.categoryLink {
     width: 60%;
   }
@@ -239,6 +231,10 @@ a.categoryLink {
     margin-top: 20vw !important;
     width: 70%;
     margin: auto;
+  }
+
+  .backArrow {
+    font-size: 5.5vw;
   }
 
   .titleContainer {
