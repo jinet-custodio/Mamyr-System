@@ -138,3 +138,94 @@ form {
     margin: 0.5rem !important;
   }
 }
+
+/* Tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 1025px) {
+  .card {
+    width: 90% !important;
+  }
+
+  .img-fluid {
+    height: 25vh;
+    width: 25vh;
+  }
+
+  .name {
+    font-size: 2rem !important;
+  }
+
+  .card-text {
+    font-size: 1.1rem;
+  }
+
+  .firstRow,
+  .secondRow {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .documentLink,
+  .validID {
+    width: 48%;
+  }
+
+  .validIDImg {
+    width: 60%;
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .card {
+    width: 95% !important;
+  }
+
+  .partner-info-name-pic,
+  .applicant-info-name-pic {
+    flex-direction: column; 
+    align-items: center;
+    text-align: center;
+  }
+
+  .img-fluid {
+    height: 20vh;
+    width: 20vh;
+  }
+
+  .firstRow,
+  .secondRow {
+    flex-direction: column; 
+    gap: 0.8rem;
+  }
+
+  .documentLink,
+  .validID {
+    width: 100%;
+  }
+
+  .validIDImg {
+    width: 90%; 
+  }
+
+  .name {
+    font-size: 1.8rem !important;
+  }
+
+  .card-text {
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .img-fluid {
+    height: 18vh;
+    width: 18vh;
+  }
+
+  .name {
+    font-size: 1.5rem !important;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+  }
+}
