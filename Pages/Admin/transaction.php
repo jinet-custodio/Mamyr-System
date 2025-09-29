@@ -166,6 +166,13 @@ require '../../Function/notification.php';
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link" href="roomList.php">
+                        <i class="fa-solid fa-hotel navbar-icon"></i>
+                        <h5>Rooms</h5>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link" href="services.php">
                         <i class="fa-solid fa-bell-concierge navbar-icon"></i>
                         <h5>Services</h5>

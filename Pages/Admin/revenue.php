@@ -195,6 +195,13 @@ require '../../Function/notification.php';
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link" href="reviews.php">
+                        <i class="fa-solid fa-star navbar-icon"></i>
+                        <h5>Reviews</h5>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link" href="roomList.php">
                         <i class="fa-solid fa-hotel navbar-icon"></i>
                         <h5>Rooms</h5>
@@ -236,8 +243,9 @@ require '../../Function/notification.php';
                     </a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
-                        Log Out
+                    <a href="../../Function/Admin/logout.php" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
+                        <h5 style="color: red;">Log Out</h5>
                     </a>
                 </li>
             </ul>
