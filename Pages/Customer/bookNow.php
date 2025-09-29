@@ -204,7 +204,7 @@ unset($_SESSION['eventFormData']);
             <a href="hotelBooking.php" id="hotel-link" class="categoryLink">
                 <div class="card category-card hotel-category"
                     style="width: 20rem; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../Assets/images/amenities/hotelPics/hotel1.jpg" alt="Hotel">
+                    <img class="card-img-top" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel">
                     <div class="category-body">
                         <h5 class="category-title">HOTEL</h5>
                     </div>
