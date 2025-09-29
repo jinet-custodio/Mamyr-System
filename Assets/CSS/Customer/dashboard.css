@@ -28,9 +28,8 @@
 
 body {
   background-image: url(../../Images/landingPage/landingPageBg.png);
-  /* background-image: url(../images/BookNowPhotos/bookNowBg.jpg); */
   background-repeat: no-repeat;
-  background-position: fixed;
+  background-position-y: -2vw;
   background-size: cover;
   display: flex;
   max-height: 100vh;
@@ -117,6 +116,7 @@ a {
   margin: 0 auto;
   /* background-color: #fffefe; */
   border: none;
+  overflow: hidden;
 }
 
 .fc-scroller {
