@@ -137,7 +137,7 @@ if (isset($_POST['hotelBooking'])) {
 
         $receiver = 'Admin';
         $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking request';
-        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
+        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, senderID, message, receiver)
             VALUES(?,?,?,?)");
         $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
         if (! $insertBookingNotificationRequest->execute()) {

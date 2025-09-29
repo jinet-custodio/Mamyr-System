@@ -776,26 +776,6 @@ if (isset($_POST['bookingID'])) {
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
 
-    <!--//* Show discount tooltip and border -->
-    <!-- <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const discountForm = document.querySelector('.discountform');
-            const tooltipTrigger = document.getElementById('discountTooltip');
-            const tooltip = new bootstrap.Tooltip(tooltipTrigger);
-            tooltip.show();
-
-            discountForm.style.border = "1px solid red";
-
-            discountForm.addEventListener('change', function() {
-                discountForm.style.border = "none";
-            })
-
-
-            setTimeout(() => {
-                tooltip.hide();
-            }, 3000);
-        });
-    </script> -->
 
     <!-- Allow adding discount and changing final bill -->
     <script>
@@ -877,18 +857,37 @@ if (isset($_POST['bookingID'])) {
         const param = new URLSearchParams(window.location.search);
         const paramValue = param.get('action');
 
-        if (paramValue === "videoke") {
-            Swal.fire({
-                title: "Oops!",
-                text: "Please assign a videoke.",
-                icon: 'warning',
-            });
-        } else if (paramValue === "error") {
+        if (paramValue === "approvalFailed") {
             Swal.fire({
                 title: "Failed!",
                 text: "The booking request could not be approved. Please try again later.",
                 icon: 'error',
             });
+        } else if (paramValue === 'rejectionEmpty') {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please provide the reason for your rejection",
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+            }).then((result) => {
+                const rejectionModal = document.getElementById('rejectionModal');
+                const modal = new bootstrap.modal(rejectionModal);
+                modal.show();
+
+                document.getElementById('rejectionReason').style.border = '1px solid red';
+            });
+        } else if (paramValue === 'rejectionFailed') {
+            Swal.fire({
+                title: "Failed!",
+                text: "The booking request could not be rejected. Please try again later.",
+                icon: 'error',
+            });
+        }
+
+        if (paramValue) {
+            const url = new URLSearchParams(window.location);
+            url.search = '';
+            history.replaceState({}, document.title.url.toString());
         }
     </script>
 

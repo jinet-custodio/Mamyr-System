@@ -147,7 +147,7 @@ resetExpiredOTPs($conn);
                 </div>
 
                 <label for="terms" class="termsSection">
-                    <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
+                    <input type="checkbox" id="terms-condition" name="terms" class="terms-checkbox" value=""
                         onchange="validateSignUpForm();"> I agree to the
                     <a href="#termsModal" class="termsLink" data-bs-toggle="modal" data-bs-target="#termsModal">Terms
                         and
@@ -210,8 +210,7 @@ resetExpiredOTPs($conn);
 
 
     <!-- terms and conditions modal -->
-    <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="termsModal" role=" dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -300,11 +299,11 @@ resetExpiredOTPs($conn);
                 </div>
                 <div class="modal-footer">
                     <div class="declineBtnContainer">
-                        <button type="button" class="btn btn-secondary" id="declineBtn" data-bs-dismiss="modal"
+                        <button type="button" class="btn btn-secondary" id="declineTermsBtn" data-bs-dismiss="modal"
                             aria-label="Close">Decline</button>
                     </div>
                     <div class="acceptBtnContainer">
-                        <button type="button" class="btn btn-primary" id="acceptBtn">Accept</button>
+                        <button type="button" class="btn btn-primary" id="acceptTermsBtn" onclick="AcceptTerms()">Accept</button>
                     </div>
                 </div>
             </div>
@@ -320,8 +319,9 @@ resetExpiredOTPs($conn);
 
 
 
-    <!--Password Validation JS -->
+    <!--Password Validation JS & terms and condition-->
     <script src="../Assets/JS/passwordValidation.js"></script>
+    <!-- <script src="../Assets/JS/terms-condition.js"></script> -->
 
     <!-- Check if user agree to the terms and condition -->
     <!-- <script src="../Assets/JS/checkbox.js"></script> -->

@@ -82,3 +82,45 @@ function editServicePricing(editBtn) {
       });
   }
 }
+
+function cancelEditServicePricing(cancelBtn) {
+  const thisRow = cancelBtn.closest("#service-pricing");
+  const formControl = thisRow.querySelectorAll(".form-control");
+  const formSelect = thisRow.querySelectorAll(".form-select");
+  const editBtn = thisRow.querySelector(".editServicePricing");
+  // const cancelBtn = thisRow.querySelectorAll('.cancelResortService');
+  // const OriginalRatesValues = {};
+  // cancelBtn.forEach(btn => btn.disabled = false);
+
+  formControl.forEach((element) => {
+    if (element.type === "file") {
+      element.value = "";
+    } else {
+      element.value = originalPriceValues[element.name];
+    }
+    element.setAttribute("readOnly", true);
+    element.style.setProperty(
+      "border",
+      "1px solid rgb(223, 226, 230)",
+      "important"
+    );
+  });
+
+  formSelect.forEach((element) => {
+    if (element.type === "file") {
+      element.value = "";
+    } else {
+      element.value = OriginalRatesValues[element.name];
+    }
+    element.disabled = true;
+    element.style.setProperty(
+      "border",
+      "1px solid rgb(223, 226, 230)",
+      "important"
+    );
+  });
+
+  editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>Edit';
+  cancelBtn.innerHTML = '<i class="fa-solid fa-delete-left"></i>Cancel';
+  cancelBtn.disabled = true;
+}

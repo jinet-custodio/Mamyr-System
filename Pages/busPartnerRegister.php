@@ -200,7 +200,7 @@ session_start();
 
                     <div class="bottomPart">
                         <div class="termsContainer">
-                            <input type="checkbox" id="terms" name="terms" class="terms-checkbox" value="1"
+                            <input type="checkbox" id="terms-condition" name="terms" class="terms-checkbox" value="1"
                                 onchange="validateSignUpForm();"> I agree to the
                             <a href="#termsModal" class="termsLink" id="open-modal" style="text-decoration: none;"
                                 data-bs-toggle="modal" data-bs-target="#termsModal">Terms
@@ -218,7 +218,7 @@ session_start();
 
     <!-- modal -->
 
-    <div class="modal fade modal-lg m-auto" id="openModal" tabindex="-1" role="dialog"
+    <div class="modal fade modal-lg m-auto" id="termsModal" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
 
         <div class="modal-dialog" role="document">
@@ -301,8 +301,13 @@ session_start();
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                        aria-label="Close">Close</button>
+                    <div class="declineBtnContainer">
+                        <button type="button" class="btn btn-secondary" id="declineTermsBtn" data-bs-dismiss="modal"
+                            aria-label="Close">Decline</button>
+                    </div>
+                    <div class="acceptBtnContainer">
+                        <button type="button" class="btn btn-primary" id="acceptTermsBtn" onclick="AcceptTerms()">Accept</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -531,7 +536,7 @@ session_start();
     <!-- Password and terms Validation -->
     <script src="../Assets/JS/passwordValidation.js"></script>
 
-
+    <script src="../Assets/JS/terms-condition.js"></script>
     <!-- <script>
         function validateStepOne() {
             const partnerType = document.getElementById('service').value;

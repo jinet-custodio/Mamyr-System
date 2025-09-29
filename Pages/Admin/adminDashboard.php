@@ -71,77 +71,6 @@ $bookingTypesResult->free();
 $bookingTypes->close();
 
 
-$selectedWeek = $_GET['week'] ?? 'month';
-
-$dateCondition = '';
-if ($selectedWeek === 'month') {
-    $dateCondition = "MONTH(b.startDate) = MONTH(CURDATE()) AND YEAR(b.startDate) = YEAR(CURDATE())";
-} elseif (preg_match('/^w(\d)$/', $selectedWeek, $matches)) {
-    $weekNum = (int)$matches[1];
-    $firstDayOfMonth = date('Y-m-01');
-    $startOfWeek = date('Y-m-d', strtotime("+" . (($weekNum - 1) * 7) . " days", strtotime($firstDayOfMonth)));
-    $endOfWeek = date('Y-m-d', strtotime("+6 days", strtotime($startOfWeek)));
-
-    $dateCondition = "b.startDate BETWEEN '$startOfWeek' AND '$endOfWeek'";
-}
-
-// SQL query
-$salesQuery = $conn->prepare("
-    SELECT 
-        CONCAT(
-            'Week ', FLOOR((DAYOFMONTH(b.startDate) - 1 ) / 7 ) + 1,
-            ' (',
-            DATE_FORMAT(DATE_SUB(b.startDate, INTERVAL WEEKDAY(b.startDate) DAY), '%b %e'),
-            ' - ',
-            DATE_FORMAT(DATE_ADD(b.startDate, INTERVAL (6 - WEEKDAY(b.startDate)) DAY), '%b %e'),
-            ')'
-        ) AS weekName,
-        SUM(CASE WHEN WEEKDAY(b.startDate) = 0 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Mon,
-        SUM(CASE WHEN WEEKDAY(b.startDate) = 1 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Tue,
-        SUM(CASE WHEN WEEKDAY(b.startDate) = 2 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Wed,
-        SUM(CASE WHEN WEEKDAY(b.startDate) = 3 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Thu,
-        SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Fri,
-        SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Sat,
-        SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN IFNULL(cb.confirmedFinalBill - IFNULL(bpas.price, 0), 0) ELSE 0 END) AS Sun
-    FROM 
-        confirmedbooking cb
-    LEFT JOIN 
-        booking b ON cb.bookingID = b.bookingID
-    LEFT JOIN 
-        businesspartneravailedservice bpas ON b.bookingID = cb.bookingID
-    WHERE 
-        (
-            cb.paymentStatus IN (?, ?) OR 
-            cb.paymentApprovalStatus IN (?, ?)
-        ) AND $dateCondition
-    GROUP BY weekName
-    ORDER BY MIN(b.startDate)
-");
-
-$salesQuery->bind_param("iiii", $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus);
-$salesQuery->execute();
-$salesResult = $salesQuery->get_result();
-
-$days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-$sales = [];
-$weekName = "";
-
-if ($salesResult->num_rows > 0) {
-    $row = $salesResult->fetch_assoc();
-    $weekName = $row['weekName'];
-    $sales = [
-        (float) $row['Mon'],
-        (float) $row['Tue'],
-        (float) $row['Wed'],
-        (float) $row['Thu'],
-        (float) $row['Fri'],
-        (float) $row['Sat'],
-        (float) $row['Sun']
-    ];
-}
-$salesResult->free();
-$salesQuery->close();
-
 $hotel = 1;
 $availabilityCount = [];
 $availabilityName = ['Available', 'Maintenance', 'Occupied', 'Private'];
@@ -234,10 +163,10 @@ require '../../Function/notification.php';
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                        id="notifCounter">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notifCounter">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -327,9 +256,9 @@ require '../../Function/notification.php';
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="sales.php">
+                    <a class="nav-link" href="revenue.php">
                         <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
-                        <h5>sales</h5>
+                        <h5>Sales</h5>
                     </a>
                 </li>
 
@@ -423,7 +352,7 @@ require '../../Function/notification.php';
         $eventBooking = $data['eventBooking'];
     }
     ?>
-    <h1 class="dashboardTitle">Weekly Status</h1>
+    <!-- <h1 class="dashboardTitle">Weekly Status</h1> -->
     <div class="container-fluid" id="contentsCF">
 
         <div class="leftSection">
@@ -432,12 +361,9 @@ require '../../Function/notification.php';
                     <div class="card-header">
                         All Bookings
                     </div>
-
                     <div class="card-body">
                         <h2 class="newBookingTotal"><?= $bookingsThisWeek ?></h2>
                     </div>
-
-                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
                 <div class="card trendCardContent">
@@ -448,8 +374,6 @@ require '../../Function/notification.php';
                     <div class="card-body">
                         <h2 class="newBookingTotal"><?= $eventBooking ?></h2>
                     </div>
-
-                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
                 <div class="card trendCardContent">
@@ -460,8 +384,6 @@ require '../../Function/notification.php';
                     <div class="card-body">
                         <h2 class="totalGuest"><?= $totalGuests ?></h2>
                     </div>
-
-                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
                 <div class="card trendCardContent">
@@ -472,8 +394,6 @@ require '../../Function/notification.php';
                     <div class="card-body">
                         <h2 class="checkInTotal"><?= $checkInsThisWeek ?></h2>
                     </div>
-
-                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
                 <div class="card trendCardContent">
@@ -484,8 +404,6 @@ require '../../Function/notification.php';
                     <div class="card-body">
                         <h2 class="checkOutTotal"><?= $checkOutsThisWeek ?></h2>
                     </div>
-
-                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
                 <div class="card trendCardContent">
@@ -496,8 +414,6 @@ require '../../Function/notification.php';
                     <div class="card-body">
                         <h2 class="salesTotal">₱<?= number_format($totalsalesThisWeek ?? 0, 2) ?></h2>
                     </div>
-
-                    <!-- <h6 class="card-footer">This Week</h6> -->
                 </div>
 
             </div>
@@ -518,14 +434,15 @@ require '../../Function/notification.php';
 
 
         <div class="rightSection">
+
             <div class="filter-select" id="filter-select">
                 <select name="sales-filter-select" class="form-select" id="sales-filter-select">
-                    <option value="month" <?= $selectedWeek === 'month' ? 'selected' : '' ?>>This Month</option>
-                    <option value="w1" <?= $selectedWeek === 'w1' ? 'selected' : '' ?>>Week 1</option>
-                    <option value="w2" <?= $selectedWeek === 'w2' ? 'selected' : '' ?>>Week 2</option>
-                    <option value="w3" <?= $selectedWeek === 'w3' ? 'selected' : '' ?>>Week 3</option>
-                    <option value="w4" <?= $selectedWeek === 'w4' ? 'selected' : '' ?>>Week 4</option>
-                    <option value="w5" <?= $selectedWeek === 'w5' ? 'selected' : '' ?>>Week 5</option>
+                    <option value="month">This Month</option>
+                    <option value="w1">Week 1</option>
+                    <option value="w2">Week 2</option>
+                    <option value="w3">Week 3</option>
+                    <option value="w4">Week 4</option>
+                    <option value="w5">Week 5</option>
                 </select>
             </div>
 
@@ -539,6 +456,8 @@ require '../../Function/notification.php';
             </div>
 
 
+
+
             <div class="card graph" id="reservationTrends">
                 <div class="card-header ">
 
@@ -546,15 +465,15 @@ require '../../Function/notification.php';
                 </div>
                 <div class="card-body">
                     <?php if (!empty($bookingTypeCount)): ?>
-                    <div class="sales-chart">
-                        <canvas id="reservationTrendsBar"></canvas>
-                    </div>
+                        <div class="sales-chart">
+                            <canvas id="reservationTrendsBar"></canvas>
+                        </div>
                     <?php else: ?>
-                    <div class="sales-chart">
-                        <canvas id="reservationTrendsBar"></canvas>
-                    </div>
-                    <!-- Change this div -->
-                    <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
+                        <div class="sales-chart">
+                            <canvas id="reservationTrendsBar"></canvas>
+                        </div>
+                        <!-- Change this div -->
+                        <!-- <div class="ReservationTrendsGraph">No data available.</div> -->
                     <?php endif; ?>
                 </div>
             </div>
@@ -563,8 +482,7 @@ require '../../Function/notification.php';
     </div>
 
 
-    <!-- Notification Modal -->
-    <?php include '../notificationModal.php' ?>
+    <?php include '../notificationModal.php'; ?>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -580,175 +498,290 @@ require '../../Function/notification.php';
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
     <!-- Display if no available data -->
     <script src="../../Assets/JS/ChartNoData.js"> </script>
 
     <script>
-    //* Reservation Trends Bar
-    const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
+        //* Reservation Trends Bar
+        const reservationTrendsBar = document.getElementById("reservationTrendsBar").getContext('2d');
 
-    const reservationTrendsChart = new Chart(reservationTrendsBar, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($bookingTypeName) ?>,
-            datasets: [{
-                data: <?= json_encode($bookingTypeCount) ?>,
-                backgroundColor: [
-                    'rgba(0, 123, 255, 0.5)',
-                    'rgba(255, 193, 7, 0.5)',
-                    'rgba(40, 167, 69, 0.5)',
-                    'rgba(220, 53, 69, 0.5)'
-                ],
-                borderColor: [
-                    'rgba(0, 123, 255, 1)',
-                    'rgba(255, 193, 7, 1)',
-                    'rgba(40, 167, 69, 1)',
-                    'rgba(220, 53, 69, 1)'
-                ],
+        const reservationTrendsChart = new Chart(reservationTrendsBar, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode($bookingTypeName) ?>,
+                datasets: [{
+                    data: <?= json_encode($bookingTypeCount) ?>,
+                    backgroundColor: [
+                        'rgba(0, 123, 255, 0.5)',
+                        'rgba(255, 193, 7, 0.5)',
+                        'rgba(40, 167, 69, 0.5)',
+                        'rgba(220, 53, 69, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(0, 123, 255, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)'
+                    ],
 
-                borderWidth: 3
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
+                    borderWidth: 3
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-    </script>
-
-    <script>
-    //* availabilityGraph
-    const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
-
-    const availabilityChart = new Chart(availabilityGraph, {
-        type: 'doughnut',
-        data: {
-            labels: <?= json_encode($availabilityName) ?>,
-            datasets: [{
-                data: <?= json_encode($availabilityCount) ?>,
-                backgroundColor: [
-                    'rgba(40, 167, 69, 0.5)', // Available
-                    'rgba(255, 193, 7, 0.5)', // Maintenance
-                    'rgba(220, 53, 69, 0.5)', // Occupied
-                    'rgba(0, 123, 255, 0.5)' // Private
-                ],
-                borderColor: [
-                    'rgba(40, 167, 69, 1)',
-                    'rgba(255, 193, 7, 1)',
-                    'rgba(220, 53, 69, 1)',
-                    'rgba(0, 123, 255, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            cutout: '60%',
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                }
-            }
-        }
-    });
-    </script>
-
-    <script>
-    document.getElementById("sales-filter-select").addEventListener("change", function() {
-        const selectedValue = this.value;
-        window.location.href = `?week=${selectedValue}`;
-    });
-
-    const salesBar = document.getElementById("salesBar").getContext('2d');
-
-    const salesChart = new Chart(salesBar, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($days) ?>,
-            datasets: [{
-                label: <?= json_encode($weekName ?: 'No data') ?>,
-                data: <?= json_encode($sales) ?>,
-                backgroundColor: [
-                    'rgba(40, 167, 69, 0.5)', 'rgba(255, 193, 7, 0.5)', 'rgba(220, 53, 69, 0.5)',
-                    'rgba(0, 123, 255, 0.5)', 'rgba(23, 162, 184, 0.5)', 'rgba(108, 117, 125, 0.5)',
-                    'rgba(255, 99, 132, 0.5)'
-                ],
-                borderColor: [
-                    'rgba(40, 167, 69, 1)', 'rgba(255, 193, 7, 1)', 'rgba(220, 53, 69, 1)',
-                    'rgba(0, 123, 255, 1)', 'rgba(23, 162, 184, 1)', 'rgba(108, 117, 125, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 3
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        usePointStyle: true,
-                        pointStyle: 'line',
-                        boxWidth: 0,
-                        font: {
-                            size: 16
-                        }
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
+            }
+        });
+    </script>
+
+    <script>
+        //* availabilityGraph
+        const availabilityGraph = document.getElementById("availabilityGraph").getContext('2d');
+
+        const availabilityChart = new Chart(availabilityGraph, {
+            type: 'doughnut',
+            data: {
+                labels: <?= json_encode($availabilityName) ?>,
+                datasets: [{
+                    data: <?= json_encode($availabilityCount) ?>,
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.5)', // Available
+                        'rgba(255, 193, 7, 0.5)', // Maintenance
+                        'rgba(220, 53, 69, 0.5)', // Occupied
+                        'rgba(0, 123, 255, 0.5)' // Private
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(0, 123, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true
+            options: {
+                cutout: '60%',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
                 }
             }
-        }
-    });
+        });
     </script>
+
+    <script>
+        //* For Sales
+        let salesChart;
+        const noDataPlugin = {
+            id: 'noDataPlugin',
+            afterDraw(chart) {
+                const datasets = chart.data.datasets;
+                const hasData = datasets.some(ds => ds.data.length > 0);
+
+                if (!hasData) {
+                    const ctx = chart.ctx;
+                    const width = chart.width;
+                    const height = chart.height;
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = '16px Arial';
+                    ctx.fillStyle = 'gray';
+                    ctx.restore();
+                }
+            }
+        };
+
+        function filteredSales(selectedFilterValue) {
+            fetch(`../../Function/Admin/salesGraph.php?selectedFilter=${encodeURIComponent(selectedFilterValue)}`)
+                .then(response => {
+                    if (!response.ok) throw new Error("Network error");
+                    return response.json();
+                })
+                .then(data => {
+                    const ctx = document.getElementById("salesBar").getContext("2d");
+
+                    if (!data.success || !data.sales || data.sales.length === 0) {
+
+                        if (salesChart) {
+                            salesChart.destroy();
+                        }
+                        salesChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: [],
+                                datasets: []
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    },
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: selectedFilterValue === 'month' ? 'Weeks of the Month' : 'Days of the Week'
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    tooltip: {
+                                        enabled: false
+                                    }
+                                }
+                            },
+                            plugins: [noDataPlugin]
+                        });
+                        return;
+                    }
+
+                    const sales = data.sales;
+                    let labels = [];
+                    let dataset = [];
+                    let title = '';
+
+                    if (selectedFilterValue === 'month') {
+                        labels = sales.map(item => item.weekOfMonth);
+                        dataset = sales.map(item => parseFloat(item.totalSalesThisWeek));
+                        title = sales[0]?.month || '';
+                    } else {
+                        const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+                        labels = dayLabels;
+                        title = sales[0]?.weekLabel || '';
+
+                        const dayData = sales[0];
+                        dataset = dayLabels.map(day => parseFloat(dayData[day]));
+                    }
+
+                    if (salesChart) {
+                        salesChart.destroy();
+                    }
+
+                    salesChart = new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: title,
+                                data: dataset,
+                                backgroundColor: 'rgb(128, 189, 255)',
+                                borderColor: 'rgb(37, 144, 232)',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: selectedFilterValue === 'month' ? 'Weeks of the Month' : 'Days of the Week'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `₱${context.parsed.y.toLocaleString()}`;
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        plugins: [noDataPlugin]
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching sales data:", error);
+                    if (salesChart) {
+                        salesChart.destroy();
+                    }
+                    const ctx = document.getElementById("salesBar").getContext("2d");
+                    salesChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [],
+                            datasets: []
+                        },
+                        options: {
+                            responsive: true
+                        },
+                        plugins: [noDataPlugin]
+                    });
+                });
+        }
+
+        const selectedFilter = document.getElementById("sales-filter-select");
+        if (selectedFilter) {
+            selectedFilter.addEventListener("change", () => {
+                filteredSales(selectedFilter.value);
+            });
+            filteredSales(selectedFilter.value);
+        }
+    </script>
+
 </body>
 
 </html>
