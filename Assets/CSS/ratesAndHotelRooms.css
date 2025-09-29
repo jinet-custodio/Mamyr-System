@@ -602,7 +602,7 @@ main {
   }
 
   .entrance-card-title {
-    font-size: clamp(26px, calc(1.8vh + 2px), 23px);
+    font-size: clamp(24px, calc(2.8vh + 2px), 22px);
   }
 
   .cottages {
@@ -1018,8 +1018,16 @@ main {
     font-size: clamp(18px, calc(1.4vh + 2px), 16px);
   }
 
+  .entranceTitle {
+    font-size: clamp(20px, calc(2.5vh + 4px), 23px);
+  }
+
   .selection {
     margin-top: 15vw;
+  }
+
+  .massage {
+    margin-top: 3vw;
   }
 
   input {
@@ -1040,7 +1048,7 @@ main {
   }
 
   .backToSelection i {
-    font-size: 6vw;
+    font-size: 7.5vw;
   }
 
   .Description h2 {

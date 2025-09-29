@@ -62,120 +62,117 @@ require '../../Function/Partner/getBookings.php';
 </head>
 
 <body>
-    <div class="wrapper d-flex">
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
-            <input type="hidden" id="userRole" value="<?= $userRole ?>">
-            <!-- Account Icon on the Left -->
-            <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
-                <?php
-                $getProfile = $conn->prepare("SELECT firstName, userProfile FROM user WHERE userID = ? AND userRole = ?");
-                $getProfile->bind_param("ii", $userID, $userRole);
-                $getProfile->execute();
-                $getProfileResult = $getProfile->get_result();
-                if ($getProfileResult->num_rows > 0) {
-                    $data = $getProfileResult->fetch_assoc();
-                    $firstName = $data['firstName'];
-                    $imageData = $data['userProfile'];
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $imageData);
-                    finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                }
-                ?>
-                <li class="nav-item account-nav">
-                    <a href="../Account/account.php">
-                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+        <input type="hidden" id="userRole" value="<?= $userRole ?>">
+        <!-- Account Icon on the Left -->
+        <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
+            <?php
+            $getProfile = $conn->prepare("SELECT firstName, userProfile FROM user WHERE userID = ? AND userRole = ?");
+            $getProfile->bind_param("ii", $userID, $userRole);
+            $getProfile->execute();
+            $getProfileResult = $getProfile->get_result();
+            if ($getProfileResult->num_rows > 0) {
+                $data = $getProfileResult->fetch_assoc();
+                $firstName = $data['firstName'];
+                $imageData = $data['userProfile'];
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $imageData);
+                finfo_close($finfo);
+                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+            }
+            ?>
+            <li class="nav-item account-nav">
+                <a href="../Account/account.php">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
+                </a>
+            </li>
+
+            <!-- Get notification -->
+            <?php
+
+            if ($userRole === 1) {
+                $receiver = 'Customer';
+            } elseif ($userRole === 2) {
+                $receiver = 'Partner';
+            }
+
+            $notifications = getNotification($conn, $userID, $receiver);
+            $counter = $notifications['count'];
+            $notificationsArray = $notifications['messages'];
+            $color = $notifications['colors'];
+            $notificationIDs = $notifications['ids'];
+            ?>
+
+            <div class="notification-container position-relative">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                    <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
+                    <?php if (!empty($counter)): ?>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
+                    <?php endif; ?>
+                </button>
+            </div>
+        </ul>
+        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse " id="navbarNav">
+            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        AMENITIES
                     </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="../Customer/amenities.php">RESORT AMENITIES</a></li>
+                        <li><a class="dropdown-item" href="../Customer/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                        <li><a class="dropdown-item" href="../Customer/events.php">EVENTS</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../Customer/blog.php">BLOG</a>
                 </li>
 
-                <!-- Get notification -->
-                <?php
+                <li class="nav-item">
+                    <a class="nav-link" href="../Customer/about.php">ABOUT</a>
+                </li>
 
-                if ($userRole === 1) {
-                    $receiver = 'Customer';
-                } elseif ($userRole === 2) {
-                    $receiver = 'Partner';
-                }
+                <li class="nav-item">
+                    <a class="nav-link" href="../Customer/bookNow.php">BOOK NOW</a>
+                </li>
 
-                $notifications = getNotification($conn, $userID, $receiver);
-                $counter = $notifications['count'];
-                $notificationsArray = $notifications['messages'];
-                $color = $notifications['colors'];
-                $notificationIDs = $notifications['ids'];
-                ?>
-
-                <div class="notification-container position-relative">
-                    <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
-                        <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                        <?php if (!empty($counter)): ?>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?= htmlspecialchars($counter) ?>
-                            </span>
-                        <?php endif; ?>
-                    </button>
-                </div>
-
+                <li class="nav-item">
+                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
+                </li>
 
             </ul>
-            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse " id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            AMENITIES
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="../Customer/amenities.php">RESORT AMENITIES</a></li>
-                            <li><a class="dropdown-item" href="../Customer/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                            <li><a class="dropdown-item" href="../Customer/events.php">EVENTS</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../Customer/blog.php">BLOG</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="../Customer/about.php">ABOUT</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="../Customer/bookNow.php">BOOK NOW</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
-                    </li>
-
-                </ul>
-            </div>
-        </nav>
+        </div>
+    </nav>
 
 
-        <!-- Notification Modal -->
-        <?php
-        include '../notificationModal.php';
-        $getPartnershipID = $conn->prepare('SELECT partnershipID FROM `partnership` WHERE userID = ?');
-        $getPartnershipID->bind_param('i', $userID);
-        $getPartnershipID->execute();
-        $result = $getPartnershipID->get_result();
-        if ($result->num_rows > 0) {
-            $data = $result->fetch_assoc();
-            $partnershipID = $data['partnershipID'];
-        }
-        ?>
-        <!-- Get Sales -->
-        <?php $totalSales = getSales($conn, $userID); ?>
+    <!-- Notification Modal -->
+    <?php
+    include '../notificationModal.php';
+    $getPartnershipID = $conn->prepare('SELECT partnershipID FROM `partnership` WHERE userID = ?');
+    $getPartnershipID->bind_param('i', $userID);
+    $getPartnershipID->execute();
+    $result = $getPartnershipID->get_result();
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_assoc();
+        $partnershipID = $data['partnershipID'];
+    }
+    ?>
+    <!-- Get Sales -->
+    <?php $totalSales = getSales($conn, $userID); ?>
 
-        <!-- Get number of booking — approved, pending -->
-        <?php
-        $row = getBookingsCount($conn, $userID);
-        ?>
-
+    <!-- Get number of booking — approved, pending -->
+    <?php
+    $row = getBookingsCount($conn, $userID);
+    ?>
+    <div class="wrapper d-flex">
         <main class="main-content" id="main-content">
             <div class="container">
                 <h3 class="welcomeText">Hello there, <?= ucfirst($firstName) ?>!</h3>
