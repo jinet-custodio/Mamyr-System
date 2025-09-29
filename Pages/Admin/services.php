@@ -87,9 +87,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -300,23 +300,23 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 $serviceAvailability = $row['RSAvailabilityID'];
 
                     ?>
-                    <tr class="resortdata">
-                        <input type="hidden" class="form-control resortServiceID" name="resortServiceID"
-                            value="<?= htmlspecialchars($serviceID) ?>" readonly>
-                        <td><input type="text" class="form-control resortServiceName" name="resortServiceName"
-                                value="<?= htmlspecialchars($serviceName) ?>" readonly></td>
-                        <td><input type="text" class="form-control resortServicePrice" name="resortServicePrice"
-                                value="<?= htmlspecialchars($servicePrice) ?>" readonly></td>
-                        <td><input type="text" class="form-control resortServiceCapacity" name="resortServiceCapacity"
-                                value="<?= htmlspecialchars($serviceCapacity) ?>" readonly></td>
-                        <td><input type="text" class="form-control resortServiceMaxCapacity"
-                                name="resortServiceMaxCapacity" value="<?= htmlspecialchars($serviceMaxCapacity) ?>"
-                                readonly></td>
-                        <td><input type="text" class="form-control resortServiceDuration" name="resortServiceDuration"
-                                value="<?= htmlspecialchars($serviceDuration) ?>" readonly></td>
-                        <td><textarea name="serviceDesc" readonly
-                                class="form-control"><?= htmlspecialchars($serviceDesc) ?></textarea></td>
-                        <!-- <td>
+                                <tr class="resortdata">
+                                    <input type="hidden" class="form-control resortServiceID" name="resortServiceID"
+                                        value="<?= htmlspecialchars($serviceID) ?>" readonly>
+                                    <td><input type="text" class="form-control resortServiceName" name="resortServiceName"
+                                            value="<?= htmlspecialchars($serviceName) ?>" readonly></td>
+                                    <td><input type="text" class="form-control resortServicePrice" name="resortServicePrice"
+                                            value="<?= htmlspecialchars($servicePrice) ?>" readonly></td>
+                                    <td><input type="text" class="form-control resortServiceCapacity" name="resortServiceCapacity"
+                                            value="<?= htmlspecialchars($serviceCapacity) ?>" readonly></td>
+                                    <td><input type="text" class="form-control resortServiceMaxCapacity"
+                                            name="resortServiceMaxCapacity" value="<?= htmlspecialchars($serviceMaxCapacity) ?>"
+                                            readonly></td>
+                                    <td><input type="text" class="form-control resortServiceDuration" name="resortServiceDuration"
+                                            value="<?= htmlspecialchars($serviceDuration) ?>" readonly></td>
+                                    <td><textarea name="serviceDesc" readonly
+                                            class="form-control"><?= htmlspecialchars($serviceDesc) ?></textarea></td>
+                                    <!-- <td>
                                         <div class="input-group">
                                             <input type="text" class="form-control resortServiceImage"
                                                 value="<?= htmlspecialchars($serviceImageName) ?>" name="resortServiceImage"
@@ -327,31 +327,31 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         <input type="file" class="form-control resortServiceImagePicker"
                                             name="resortServiceImagePicker" hidden>
                                     </td> -->
-                        <td>
-                            <select name="resortAvailability" class="form-select resortAvailability" disabled>
-                                <option value="" disabled <?= $serviceAvailability == "" ? "selected" : "" ?>>Select
-                                    Availability</option>
-                                <option value="1" <?= $serviceAvailability == "1" ? "selected" : "" ?>>Available
-                                </option>
-                                <option value="2" <?= $serviceAvailability == "2" ? "selected" : "" ?>>Occupied</option>
-                                <option value="3" <?= $serviceAvailability == "3" ? "selected" : "" ?>>Maintenance
-                                </option>
-                                <option value="4" <?= $serviceAvailability == "4" ? "selected" : "" ?>>Private</option>
-                                <option value="5" <?= $serviceAvailability == "5" ? "selected" : "" ?>>Not Available
-                                </option>
-                            </select>
-                        </td>
-                        <td>
-                            <div class="buttonContainer">
-                                <button class="btn btn-primary editBtn editResortService"
-                                    onclick="editResortService(this)" id="editPrimary" data-label="Edit"><i
-                                        class="fa-solid fa-pen-to-square"></i>Edit</button>
-                                <button class="btn btn-danger cancelBtn cancelResortService" disabled id="cancelDanger"
-                                    onclick="cancelResortService(this)"><i
-                                        class="fa-solid fa-delete-left"></i>Cancel</button>
-                            </div>
-                        </td>
-                    </tr>
+                                    <td>
+                                        <select name="resortAvailability" class="form-select resortAvailability" disabled>
+                                            <option value="" disabled <?= $serviceAvailability == "" ? "selected" : "" ?>>Select
+                                                Availability</option>
+                                            <option value="1" <?= $serviceAvailability == "1" ? "selected" : "" ?>>Available
+                                            </option>
+                                            <option value="2" <?= $serviceAvailability == "2" ? "selected" : "" ?>>Occupied</option>
+                                            <option value="3" <?= $serviceAvailability == "3" ? "selected" : "" ?>>Maintenance
+                                            </option>
+                                            <option value="4" <?= $serviceAvailability == "4" ? "selected" : "" ?>>Private</option>
+                                            <option value="5" <?= $serviceAvailability == "5" ? "selected" : "" ?>>Not Available
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="buttonContainer">
+                                            <button class="btn btn-primary editBtn editResortService"
+                                                onclick="editResortService(this)" id="editPrimary" data-label="Edit"><i
+                                                    class="fa-solid fa-pen-to-square"></i>Edit</button>
+                                            <button class="btn btn-danger cancelBtn cancelResortService" disabled id="cancelDanger"
+                                                onclick="cancelResortService(this)"><i
+                                                    class="fa-solid fa-delete-left"></i>Cancel</button>
+                                        </div>
+                                    </td>
+                                </tr>
                     <?php
                             }
                             $getResult->free();
@@ -386,74 +386,74 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         $rateResult = $selectRates->get_result();
                         while ($row = $rateResult->fetch_assoc()) {
                     ?>
-                    <tr class="ratesdata">
-                        <input type="hidden" name="entranceRatesID" class="entranceRateID"
-                            value="<?= $row['entranceRateID'] ?>">
-                        <input type="hidden" name="timeRangeID" class="timeRangeID"
-                            value="<?= $row['entranceRateID'] ?>">
-                        <td>
-                            <select id="tourType" name="tourType" class="form-select tourType" disabled>
-                                <option value="" disabled
-                                    <?= htmlspecialchars($row['sessionType']) == "" ? "selected" : "" ?> selected>Tour
-                                    Type</option>
-                                <option value="<?= htmlspecialchars($row['sessionType']) == "Day" ? "Day" : "" ?>"
-                                    <?= htmlspecialchars($row['sessionType']) == "Day" ? "selected" : "" ?>>Day Swimming
-                                </option>
-                                <option value="<?= htmlspecialchars($row['sessionType']) == "Night" ? "Night" : "" ?>"
-                                    <?= htmlspecialchars($row['sessionType']) == "Night" ? "selected" : "" ?>>Night
-                                    Swimming</option>
-                                <option
-                                    value="<?= htmlspecialchars($row['sessionType']) == "Overnight" ? "Overnight" : "" ?>"
-                                    <?= htmlspecialchars($row['sessionType']) == "Overnight" ? "selected" : "" ?>>
-                                    Overnight Swimming</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control timeRange" name="timeRange"
-                                value="<?= htmlspecialchars($row['time_range']) ?>" readonly>
-                        </td>
-                        <td>
-                            <select name="visitorType" class="form-select visitorType" disabled>
-                                <option value="" disabled
-                                    <?= htmlspecialchars($row['ERcategory']) == "" ? "selected" : "" ?> selected>Visitor
-                                    Type</option>
-                                <option value="adult"
-                                    <?= htmlspecialchars($row['ERcategory']) == "Adult" ? "selected" : "" ?>>Adult
-                                </option>
-                                <option value="children"
-                                    <?= htmlspecialchars($row['ERcategory']) == "Kids" ? "selected" : "" ?>>Children
-                                </option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control entrancePrice" name="entrancePrice"
-                                value="<?= htmlspecialchars($row['ERprice']) ?>" readonly>
-                        </td>
-                        <td>
-                            <select name="availability" class="form-select availability" disabled>
-                                <option value="" disabled
-                                    <?= htmlspecialchars($row['availability']) == "" ? "selected" : "" ?> selected>
-                                    Select Availability</option>
-                                <option value="Enabled"
-                                    <?= htmlspecialchars($row['availability']) == "Enabled" ? "selected" : "" ?>>Enabled
-                                </option>
-                                <option value="Disabled"
-                                    <?= htmlspecialchars($row['availability']) == "Disabled" ? "selected" : "" ?>>
-                                    Disabled
-                                </option>
-                            </select>
-                        </td>
-                        <td>
-                            <div class="buttonContainer">
-                                <button class="btn btn-primary editRatesBtn" id="editPrimary"
-                                    onclick="editRates(this)"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
-                                <button class="btn btn-danger cancelRatesBtn" id="cancelDanger"
-                                    onclick="cancelEditRates(this)" disabled><i
-                                        class="fa-solid fa-delete-left"></i>Cancel</button>
-                            </div>
+                            <tr class="ratesdata">
+                                <input type="hidden" name="entranceRatesID" class="entranceRateID"
+                                    value="<?= $row['entranceRateID'] ?>">
+                                <input type="hidden" name="timeRangeID" class="timeRangeID"
+                                    value="<?= $row['entranceRateID'] ?>">
+                                <td>
+                                    <select id="tourType" name="tourType" class="form-select tourType" disabled>
+                                        <option value="" disabled
+                                            <?= htmlspecialchars($row['sessionType']) == "" ? "selected" : "" ?> selected>Tour
+                                            Type</option>
+                                        <option value="<?= htmlspecialchars($row['sessionType']) == "Day" ? "Day" : "" ?>"
+                                            <?= htmlspecialchars($row['sessionType']) == "Day" ? "selected" : "" ?>>Day Swimming
+                                        </option>
+                                        <option value="<?= htmlspecialchars($row['sessionType']) == "Night" ? "Night" : "" ?>"
+                                            <?= htmlspecialchars($row['sessionType']) == "Night" ? "selected" : "" ?>>Night
+                                            Swimming</option>
+                                        <option
+                                            value="<?= htmlspecialchars($row['sessionType']) == "Overnight" ? "Overnight" : "" ?>"
+                                            <?= htmlspecialchars($row['sessionType']) == "Overnight" ? "selected" : "" ?>>
+                                            Overnight Swimming</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control timeRange" name="timeRange"
+                                        value="<?= htmlspecialchars($row['time_range']) ?>" readonly>
+                                </td>
+                                <td>
+                                    <select name="visitorType" class="form-select visitorType" disabled>
+                                        <option value="" disabled
+                                            <?= htmlspecialchars($row['ERcategory']) == "" ? "selected" : "" ?> selected>Visitor
+                                            Type</option>
+                                        <option value="adult"
+                                            <?= htmlspecialchars($row['ERcategory']) == "Adult" ? "selected" : "" ?>>Adult
+                                        </option>
+                                        <option value="children"
+                                            <?= htmlspecialchars($row['ERcategory']) == "Kids" ? "selected" : "" ?>>Children
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control entrancePrice" name="entrancePrice"
+                                        value="<?= htmlspecialchars($row['ERprice']) ?>" readonly>
+                                </td>
+                                <td>
+                                    <select name="availability" class="form-select availability" disabled>
+                                        <option value="" disabled
+                                            <?= htmlspecialchars($row['availability']) == "" ? "selected" : "" ?> selected>
+                                            Select Availability</option>
+                                        <option value="Enabled"
+                                            <?= htmlspecialchars($row['availability']) == "Enabled" ? "selected" : "" ?>>Enabled
+                                        </option>
+                                        <option value="Disabled"
+                                            <?= htmlspecialchars($row['availability']) == "Disabled" ? "selected" : "" ?>>
+                                            Disabled
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="buttonContainer">
+                                        <button class="btn btn-primary editRatesBtn" id="editPrimary"
+                                            onclick="editRates(this)"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
+                                        <button class="btn btn-danger cancelRatesBtn" id="cancelDanger"
+                                            onclick="cancelEditRates(this)" disabled><i
+                                                class="fa-solid fa-delete-left"></i>Cancel</button>
+                                    </div>
 
-                        </td>
-                    </tr>
+                                </td>
+                            </tr>
                     <?php
                         }
                         $rateResult->free();
@@ -468,7 +468,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <div class="eventContainer" id="eventContainer" style="display: none;">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                 data-bs-target="#addServicePricingModal" id="eventAdd">Add Service Pricing</button>
-            <table class=" table table-striped" id="eventServices">
+            <table class=" table table-striped" id="servicePricing">
                 <thead>
                     <th scope="col">Pricing Type</th>
                     <th scope="col">Price</th>
@@ -479,38 +479,73 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td> <select id="pricingType" name="pricingType" class="form-select" required>
-                                <option value="" disabled selected>Pricing Type</option>
-                                <option value="perHead" id="perHead">Per Head</option>
-                            </select>
-                        </td>
+                    <?php
+                    $getServicePricingQuery = $conn->prepare("SELECT `pricingID`, `pricingType`, `price`, `chargeType`, `ageGroup`, `notes` FROM `servicepricing`");
+                    if (!$getServicePricingQuery->execute()) {
+                        error_log('Error: ' . $getServicePricingQuery->error);
+                    }
 
-                        <td><input type="text" class="form-control" id="servicePrice"></td>
+                    $servicePricingResult = $getServicePricingQuery->get_result();
+                    $data = [];
+                    if ($servicePricingResult->num_rows > 0) {
 
-                        <td> <select id="chargeType" name="chargeType" class="form-select" required>
-                                <option value="" disabled selected>Charge Type</option>
-                                <option value="ctFood" id="ctFood">Food</option>
-                            </select>
-                        </td>
+                        while ($row = $servicePricingResult->fetch_assoc()) {
+                            $data[] = [
+                                'pricingID' => (int) $row['pricingID'],
+                                'pricingType' => htmlspecialchars($row['pricingType'] ?? ''),
+                                'price' => $row['price'],
+                                'chargeType' => htmlspecialchars($row['chargeType'] ?? ''),
+                                'ageGroup' => !empty($row['ageGroup']) ? $row['ageGroup'] : 'Both',
+                                'notes' => htmlspecialchars($row['notes'] ?? 'N/A')
+                            ];
+                        }
+                    }
+                    ?>
+                    <?php foreach ($data as $item): ?>
+                        <tr id="service-pricing">
+                            <input type="hidden" name="pricingID" value="<?= $item['pricingID'] ?>" class="pricingID">
+                            <td>
+                                <select name="pricingType" class="form-select pricingType" disabled>
+                                    <option value="" disabled <?= $item['pricingType'] == "" ? "selected" : "" ?> selected>Pricing Type</option>
+                                    <option value="Per Head" <?= $item['pricingType'] == "Per Head" ? "selected" : "" ?>>Per Head</option>
+                                    <option value="Per Hour" <?= $item['pricingType'] == "Per Hour" ? "selected" : "" ?>>Per Hour</option>
+                                </select>
+                            </td>
 
-                        <td> <select id="ageGroup" name="ageGroup" class="form-select" required>
-                                <option value="" disabled selected>Age Group</option>
-                                <option value="adult" id="ctAgeAdult">Adult</option>
-                                <option value="children" id="ctAgeChildren">Children</option>
-                            </select>
-                        </td>
+                            <td>
+                                <input type="text" class="form-control servicePrice" name="servicePrice" value="<?= htmlspecialchars($item['price']) ?>" readonly>
+                            </td>
 
-                        <td><textarea name="SPNotes" class="form-control" id="SPNotes"></textarea></td>
+                            <td>
+                                <select name="chargeType" class="form-select chargeType" disabled>
+                                    <option value="" disabled <?= $item['chargeType'] == "" ? "selected" : "" ?> selected>Pricing Type</option>
+                                    <option value="room" <?= $item['chargeType'] == "Room" ? "selected" : "" ?>>Room</option>
+                                    <option value="food" <?= $item['chargeType'] == "Food" ? "selected" : "" ?>>Food</option>
+                                </select>
+                            </td>
 
-                        <td>
-                            <div class="buttonContainer">
-                                <button class="btn btn-primary" id="addServicePricing" onclick="add()">Add</button>
-                                <button class="btn btn-primary" id="editServicePricing" onclick="edit()">Edit</button>
-                                <button class="btn btn-danger cancelBtn" id="deleteServicePricing">Delete</button>
-                            </div>
-                        </td>
-                    </tr>
+                            <td> <select name="ageGroup" class="form-select ageGroup" disabled>
+                                    <option value="" disabled <?= $item['ageGroup'] == "" ? "selected" : "" ?> selected>Age Group</option>
+                                    <option value="adult" <?= $item['ageGroup'] == "Adult" ? "selected" : "" ?>>Adult</option>
+                                    <option value="child" <?= $item['ageGroup'] == "Child" ? "selected" : "" ?>>Children</option>
+                                    <option value="both" <?= $item['ageGroup'] == "Both" ? "selected" : "" ?>>Both</option>
+                                </select>
+                            </td>
+
+                            <td><textarea name="SPNotes" class="form-control SPNotes" readonly><?= $item['notes'] ?></textarea></td>
+
+                            <td>
+                                <div class="buttonContainer">
+                                    <button class="btn btn-primary editServicePricing" onclick="editServicePricing(this)">
+                                        <i class="fa-solid fa-pen-to-square"></i>Edit
+                                    </button>
+                                    <button class="btn btn-danger cancelEditPricingBtn" onclick="cancelEditServicePricing(this)" disabled>
+                                        <i class="fa-solid fa-delete-left"></i>Cancel
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
 
@@ -537,61 +572,61 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     if ($foodResult->num_rows > 0) {
                         while ($row = $foodResult->fetch_assoc()) {
                 ?>
-                <tbody>
-                    <tr id="menuData">
-                        <input type="hidden" name="foodID" id="foodID" class="form-control foodID"
-                            value="<?= htmlspecialchars($row['foodItemID']) ?>">
-                        <td><input type="text" class="form-control foodName" name="foodName" id="foodName"
-                                value="<?= htmlspecialchars($row['foodName']) ?>" readonly></td>
-                        <td>
-                            <select id="foodCategory" name="foodCategory" class="form-select foodCategory" disabled>
-                                <option value="" disabled <?= empty($row['foodCategory']) ? 'selected' : '' ?>>Category
-                                </option>
-                                <option value="chicken"
-                                    <?= strtolower($row['foodCategory']) === 'chicken' ? 'selected' : '' ?>>Chicken
-                                </option>
-                                <option value="pork"
-                                    <?= strtolower($row['foodCategory']) === 'pork' ? 'selected' : '' ?>>Pork</option>
-                                <option value="beef"
-                                    <?= strtolower($row['foodCategory']) === 'beef' ? 'selected' : '' ?>>Beef</option>
-                                <option value="pasta"
-                                    <?= strtolower($row['foodCategory']) === 'pasta' ? 'selected' : '' ?>>Pasta</option>
-                                <option value="vegetables"
-                                    <?= strtolower($row['foodCategory']) === 'vegetables' ? 'selected' : '' ?>>
-                                    Vegetables</option>
-                                <option value="seafood"
-                                    <?= strtolower($row['foodCategory']) === 'seafood' ? 'selected' : '' ?>>Seafood
-                                </option>
-                                <option value="drink"
-                                    <?= strtolower($row['foodCategory']) === 'drink' ? 'selected' : '' ?>>Drinks
-                                </option>
-                                <option value="dessert"
-                                    <?= strtolower($row['foodCategory']) === 'dessert' ? 'selected' : '' ?>>Desserts
-                                </option>
-                            </select>
-                        </td>
+                            <tbody>
+                                <tr id="menuData">
+                                    <input type="hidden" name="foodID" id="foodID" class="form-control foodID"
+                                        value="<?= htmlspecialchars($row['foodItemID']) ?>">
+                                    <td><input type="text" class="form-control foodName" name="foodName" id="foodName"
+                                            value="<?= htmlspecialchars($row['foodName']) ?>" readonly></td>
+                                    <td>
+                                        <select id="foodCategory" name="foodCategory" class="form-select foodCategory" disabled>
+                                            <option value="" disabled <?= empty($row['foodCategory']) ? 'selected' : '' ?>>Category
+                                            </option>
+                                            <option value="chicken"
+                                                <?= strtolower($row['foodCategory']) === 'chicken' ? 'selected' : '' ?>>Chicken
+                                            </option>
+                                            <option value="pork"
+                                                <?= strtolower($row['foodCategory']) === 'pork' ? 'selected' : '' ?>>Pork</option>
+                                            <option value="beef"
+                                                <?= strtolower($row['foodCategory']) === 'beef' ? 'selected' : '' ?>>Beef</option>
+                                            <option value="pasta"
+                                                <?= strtolower($row['foodCategory']) === 'pasta' ? 'selected' : '' ?>>Pasta</option>
+                                            <option value="vegetables"
+                                                <?= strtolower($row['foodCategory']) === 'vegetables' ? 'selected' : '' ?>>
+                                                Vegetables</option>
+                                            <option value="seafood"
+                                                <?= strtolower($row['foodCategory']) === 'seafood' ? 'selected' : '' ?>>Seafood
+                                            </option>
+                                            <option value="drink"
+                                                <?= strtolower($row['foodCategory']) === 'drink' ? 'selected' : '' ?>>Drinks
+                                            </option>
+                                            <option value="dessert"
+                                                <?= strtolower($row['foodCategory']) === 'dessert' ? 'selected' : '' ?>>Desserts
+                                            </option>
+                                        </select>
+                                    </td>
 
 
-                        <td>
-                            <select id="foodAvailability" name="foodAvailability" class="form-select foodAvailability"
-                                disabled>
-                                <option value="" disabled <?= empty($row['availabilityName']) ? 'selected' : '' ?>>
-                                    Select Availability</option>
-                                <option value="1" <?= $row['availabilityName'] === 'Available' ? 'selected' : '' ?>>
-                                    Available</option>
-                                <option value="5" <?= $row['availabilityName'] === 'Unavailable' ? 'selected' : '' ?>>
-                                    Unavailable</option>
-                            </select>
-                        </td>
-                        <td>
-                            <div class="buttonContainer">
-                                <button class="btn btn-primary editMenuItem" onclick="editMenuItem(this)"><i
-                                        class="fa-solid fa-pen-to-square"></i>Edit</button>
-                                <button class="btn btn-danger cancelBtn cancelEditItem" onclick="cancelEditItem(this)"
-                                    disabled><i class="fa-solid fa-delete-left"></i>Cancel</button>
-                            </div>
-                        </td>
-                    </tr>
+                                    <td>
+                                        <select id="foodAvailability" name="foodAvailability" class="form-select foodAvailability"
+                                            disabled>
+                                            <option value="" disabled <?= empty($row['availabilityName']) ? 'selected' : '' ?>>
+                                                Select Availability</option>
+                                            <option value="1" <?= $row['availabilityName'] === 'Available' ? 'selected' : '' ?>>
+                                                Available</option>
+                                            <option value="5" <?= $row['availabilityName'] === 'Unavailable' ? 'selected' : '' ?>>
+                                                Unavailable</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="buttonContainer">
+                                            <button class="btn btn-primary editMenuItem" onclick="editMenuItem(this)"><i
+                                                    class="fa-solid fa-pen-to-square"></i>Edit</button>
+                                            <button class="btn btn-danger cancelBtn cancelEditItem" onclick="cancelEditItem(this)"
+                                                disabled><i class="fa-solid fa-delete-left"></i>Cancel</button>
+                                        </div>
+                                    </td>
+                                </tr>
                     <?php
                         }
                     }
@@ -599,7 +634,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     error_log("Error executing " . $getFoodQuery->error);
                 }
                     ?>
-                </tbody>
+                            </tbody>
             </table>
         </div>
 
@@ -656,8 +691,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                    <option value="<?= htmlspecialchars($row['categoryID']) ?>" id="available">
-                                        <?= htmlspecialchars($row['categoryName']) ?></option>
+                                                <option value="<?= htmlspecialchars($row['categoryID']) ?>" id="available">
+                                                    <?= htmlspecialchars($row['categoryName']) ?></option>
                                     <?php
                                             }
                                         }
@@ -685,8 +720,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                    <option value="<?= htmlspecialchars($row['availabilityID']) ?>" id="available">
-                                        <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>" id="available">
+                                                    <?= htmlspecialchars($row['availabilityName']) ?></option>
                                     <?php
                                             }
                                         }
@@ -735,8 +770,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                             while ($row = $tourTypeResult->fetch_assoc()) {
                                     ?>
-                                    <option value="<?= htmlspecialchars($row['session_type']) ?>">
-                                        <?= htmlspecialchars($row['session_type']) ?></option>
+                                                <option value="<?= htmlspecialchars($row['session_type']) ?>">
+                                                    <?= htmlspecialchars($row['session_type']) ?></option>
 
                                     <?php
                                             }
@@ -760,8 +795,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                             while ($row = $timeRangeResult->fetch_assoc()) {
                                     ?>
-                                    <option value="<?= htmlspecialchars($row['timeRangeID']) ?>">
-                                        <?= htmlspecialchars($row['time_range']) ?></option>
+                                                <option value="<?= htmlspecialchars($row['timeRangeID']) ?>">
+                                                    <?= htmlspecialchars($row['time_range']) ?></option>
 
                                     <?php
                                             }
@@ -796,7 +831,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </form>
 
         <!-- modal for service pricing -->
-        <form action="#" method="POST">
+        <form action="../../Function/Admin/Services/addServices.php" method="POST">
             <div class="modal fade" id="addServicePricingModal" tabindex="-1"
                 aria-labelledby="addServicePricingModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -809,43 +844,46 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <div class="modal-body">
                             <div class="input-container">
                                 <label for="pricingType">Pricing Type </label>
-                                <select id="pricingType" name="pricingType" class="form-select" required>
+                                <select name="pricingType" class="form-select" required>
                                     <option value="" disabled selected>Pricing Type</option>
-                                    <option value="perHead" id="perHead">Per Head</option>
+                                    <option value="Per Head">Per Head</option>
+                                    <option value="Per Hour">Per Hour</option>
                                 </select>
                             </div>
 
                             <div class="input-container">
                                 <label for="servicePrice">Price</label>
-                                <input type="text" class="form-control" id="SPservicePrice" name="SPservicePrice">
+                                <input type="text" maxlength="50" class="form-control" name="SPservicePrice">
                             </div>
 
-                            <div class="input-container">
-                                <label for="eventCapacity">Charge Type </label>
-                                <select id="chargeType" name="chargeType" class="form-select" required>
-                                    <option value="" disabled selected>Charge Type</option>
-                                    <option value="ctFood" id="ctFood">Food</option>
+                            <td>
+                                <label for="chargeType">Charge Type </label>
+                                <select name="chargeType" class="form-select" id="chargeType">
+                                    <option value="" disabled selected>Pricing Type</option>
+                                    <option value="Room">Room</option>
+                                    <option value="Food">Food</option>
                                 </select>
-                            </div>
+                            </td>
 
                             <div class="input-container">
                                 <label for="ageGroup">Age Group</label>
-                                <select id="ageGroup" name="ageGroup" class="form-select" required>
+                                <select name="ageGroup" class="form-select" required>
                                     <option value="" disabled selected>Age Group</option>
-                                    <option value="adult" id="ctAgeAdult">Adult</option>
-                                    <option value="children" id="ctAgeChildren">Children</option>
+                                    <option value="adult">Adult</option>
+                                    <option value="children">Children</option>
+                                    <option value="both">Both</option>
                                 </select>
                             </div>
 
                             <div class="input-container">
-                                <label for="eventDesc">Event Description</label>
-                                <textarea name="SPNotes" class="form-control" id="SPNotes"></textarea>
+                                <label for="eventDesc">Notes</label>
+                                <textarea name="SPNotes" class="form-control" maxlength="100"></textarea>
                             </div>
 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="saveRate">Save</button>
+                            <button type="submit" class="btn btn-primary" name="addServicePrice">Add</button>
                         </div>
                     </div>
                 </div>
@@ -903,8 +941,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                    <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
-                                        <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
+                                                    <?= htmlspecialchars($row['availabilityName']) ?></option>
                                     <?php
                                             }
                                         }
@@ -948,198 +986,277 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Responsive Navbar -->
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const icons = document.querySelectorAll('.navbar-icon');
-        const navbarUL = document.getElementById('navUL');
-        const nav = document.getElementById('navbar')
+        document.addEventListener("DOMContentLoaded", function() {
+            const icons = document.querySelectorAll('.navbar-icon');
+            const navbarUL = document.getElementById('navUL');
+            const nav = document.getElementById('navbar')
 
-        function handleResponsiveNavbar() {
-            if (window.innerWidth <= 991.98) {
-                navbarUL.classList.remove('w-100');
-                navbarUL.style.position = "fixed";
-                nav.style.margin = "0";
-                nav.style.maxWidth = "100%";
-                icons.forEach(icon => {
-                    icon.style.display = "none";
-                })
-            } else {
-                navbarUL.classList.add('w-100');
-                navbarUL.style.position = "relative";
-                nav.style.margin = "20px auto";
-                nav.style.maxWidth = "80vw";
-                icons.forEach(icon => {
-                    icon.style.display = "block";
-                })
+            function handleResponsiveNavbar() {
+                if (window.innerWidth <= 991.98) {
+                    navbarUL.classList.remove('w-100');
+                    navbarUL.style.position = "fixed";
+                    nav.style.margin = "0";
+                    nav.style.maxWidth = "100%";
+                    icons.forEach(icon => {
+                        icon.style.display = "none";
+                    })
+                } else {
+                    navbarUL.classList.add('w-100');
+                    navbarUL.style.position = "relative";
+                    nav.style.margin = "20px auto";
+                    nav.style.maxWidth = "80vw";
+                    icons.forEach(icon => {
+                        icon.style.display = "block";
+                    })
+                }
             }
-        }
 
-        handleResponsiveNavbar();
-        window.addEventListener('resize', handleResponsiveNavbar);
-    });
+            handleResponsiveNavbar();
+            window.addEventListener('resize', handleResponsiveNavbar);
+        });
     </script>
-    <!-- Button Adding a service function -->
-    <!-- <script>
-        // console.log("Script loaded2");
-        const addResortServiceBtn = document.getElementById('addResortServiceBtn');
-        const addResortRatesBtn = document.getElementById('addResortRatesBtn');
-        const modalAddServiceBtn = document.getElementById('saveService');
-        const modalAddResortRatesBtn = document.getElementById('saveRate');
-        const form = document.getElementById('addingServiceForm');
-        let action = '';
-
-        addResortServiceBtn.addEventListener('click', function() {
-            action = 'addResortService';
-            modalAddServiceBtn.setAttribute('name', action);
-        });
-
-        addResortRatesBtn.addEventListener('click', function() {
-            action = 'addResortRates';
-            modalAddResortRatesBtn.setAttribute('name', action);
-        });
-    </script> -->
-
     <!-- Table JS -->
     <script>
-    // console.log("Script loaded1");
-    $(document).ready(function() {
-        $('#resortServices').DataTable({
-            language: {
-                emptyTable: "No Services"
-            },
-            columnDefs: [{
-                    width: '10%',
-                    targets: 0
-                }, {
-                    width: '10%',
-                    targets: 1
-                }, {
-                    width: '5%',
-                    targets: 2
+        // console.log("Script loaded1");
+        $(document).ready(function() {
+            $('#resortServices').DataTable({
+                language: {
+                    emptyTable: "No Services"
                 },
-                {
-                    width: '5%',
-                    targets: 3
-                }, {
-                    width: '5%',
-                    targets: 3
-                },
-                {
-                    width: '15%',
-                    targets: 5
-                },
-                {
-                    width: '15%',
-                    targets: 6
-                },
-                {
-                    width: '15%',
-                    targets: 7
-                }
+                columnDefs: [{
+                        targets: [0, 1, 2, 3, 4],
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+                            var cell = $('#resortServices tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var input = cell.find('input');
 
-            ]
+                            return input.length ? input.val() : data;
+                        }
+                    },
+                    {
+                        targets: 5,
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+
+                            var cell = $('#resortServices tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var textarea = cell.find('textarea');
+
+                            return textarea.length ? textarea.val() : data;
+                        }
+                    },
+                    {
+                        targets: 6,
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+
+                            var cell = $('#resortServices tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var select = cell.find('select');
+
+                            return select.length ? select.find('option:selected').text() : data;
+                        }
+                    }
+                ]
+            });
+
+            $('#resortRates').DataTable({
+                language: {
+                    emptyTable: "No Data"
+                },
+                columnDefs: [{
+                        targets: [1, 3],
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+                            var cell = $('#resortRates tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var input = cell.find('input');
+
+                            return input.length ? input.val() : data;
+                        }
+                    },
+                    {
+                        targets: [0, 2, 4],
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+
+                            var cell = $('#resortRates tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var select = cell.find('select');
+
+                            return select.length ? select.find('option:selected').text() : data;
+                        }
+                    }
+                ]
+            });
+            $('#servicePricing').DataTable({
+                language: {
+                    emptyTable: "No Data"
+                },
+                columnDefs: [{
+                        targets: 1,
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+                            var cell = $('#servicePricing tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var input = cell.find('input');
+
+                            return input.length ? input.val() : data;
+                        }
+                    },
+                    {
+                        targets: 4,
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+
+                            var cell = $('#servicePricing tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var textarea = cell.find('textarea');
+
+                            return textarea.length ? textarea.val() : data;
+                        }
+                    },
+                    {
+                        targets: [0, 2, 3],
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+
+                            var cell = $('#servicePricing tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var select = cell.find('select');
+
+                            return select.length ? select.find('option:selected').text() : data;
+                        }
+                    }
+                ]
+            });
+            $('#cateringServices').DataTable({
+                language: {
+                    emptyTable: "No Data"
+                },
+                columnDefs: [{
+                        targets: 0,
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+                            var cell = $('#cateringServices tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var input = cell.find('input');
+
+                            return input.length ? input.val() : data;
+                        }
+                    },
+                    {
+                        targets: [1, 2],
+                        render: function(data, type, row, meta) {
+                            if (type === 'display') {
+                                return data;
+                            }
+
+                            var cell = $('#cateringServices tbody tr').eq(meta.row).find('td').eq(meta.col);
+                            var select = cell.find('select');
+
+                            return select.length ? select.find('option:selected').text() : data;
+                        }
+                    }
+                ]
+            });
         });
-        $('#resortRates').DataTable({
-            language: {
-                emptyTable: "No Services"
-            }
-        });
-        $('#eventServices').DataTable({
-            language: {
-                emptyTable: "No Services"
-            }
-        });
-        $('#cateringServices').DataTable({
-            language: {
-                emptyTable: "No Services"
-            }
-        });
-    });
     </script>
 
     <!-- Changing pages by category -->
     <script>
-    // console.log("Script loaded");
-    document.addEventListener("DOMContentLoaded", function() {
+        // console.log("Script loaded");
+        document.addEventListener("DOMContentLoaded", function() {
 
-        const resortLink = document.getElementById("resort-link");
-        const resortRatesLink = document.getElementById("resortRates-link");
-        const eventLink = document.getElementById("event-link");
-        const cateringLink = document.getElementById("catering-link");
+            const resortLink = document.getElementById("resort-link");
+            const resortRatesLink = document.getElementById("resortRates-link");
+            const eventLink = document.getElementById("event-link");
+            const cateringLink = document.getElementById("catering-link");
 
-        const resortContainer = document.getElementById("resortContainer");
-        const resortRatesContainer = document.getElementById("resortRatesContainer");
-        const eventContainer = document.getElementById("eventContainer");
-        const cateringContainer = document.getElementById("cateringContainer");
+            const resortContainer = document.getElementById("resortContainer");
+            const resortRatesContainer = document.getElementById("resortRatesContainer");
+            const eventContainer = document.getElementById("eventContainer");
+            const cateringContainer = document.getElementById("cateringContainer");
 
-        const backButton = document.getElementById("backArrowContainer");
-        const serviceCategories = document.getElementById("serviceCategories");
-        const headerText = document.getElementById("headerText");
+            const backButton = document.getElementById("backArrowContainer");
+            const serviceCategories = document.getElementById("serviceCategories");
+            const headerText = document.getElementById("headerText");
 
-        // console.log(resortLink, resortRatesLink, eventLink, cateringLink, backButton);
+            // console.log(resortLink, resortRatesLink, eventLink, cateringLink, backButton);
 
-        function hideAllContainers() {
-            resortContainer.style.display = "none";
-            resortRatesContainer.style.display = "none";
-            eventContainer.style.display = "none";
-            cateringContainer.style.display = "none";
-        }
+            function hideAllContainers() {
+                resortContainer.style.display = "none";
+                resortRatesContainer.style.display = "none";
+                eventContainer.style.display = "none";
+                cateringContainer.style.display = "none";
+            }
 
-        resortLink.addEventListener("click", function(e) {
-            e.preventDefault();
-            hideAllContainers();
-            serviceCategories.style.display = "none";
-            backButton.style.display = "block";
-            resortContainer.style.display = "block";
-            headerText.innerHTML = "Resort";
-            document.body.style.backgroundColor = "whitesmoke";
+            resortLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                hideAllContainers();
+                serviceCategories.style.display = "none";
+                backButton.style.display = "block";
+                resortContainer.style.display = "block";
+                headerText.innerHTML = "Resort";
+                document.body.style.backgroundColor = "whitesmoke";
+            });
+
+            resortRatesLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                hideAllContainers();
+                serviceCategories.style.display = "none";
+                backButton.style.display = "block";
+                resortRatesContainer.style.display = "block";
+                headerText.innerHTML = "Resort Rates";
+                document.body.style.backgroundColor = "whitesmoke";
+            });
+
+            eventLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                hideAllContainers();
+                serviceCategories.style.display = "none";
+                backButton.style.display = "block";
+                eventContainer.style.display = "block";
+                headerText.innerHTML = "Service Pricing";
+                document.body.style.backgroundColor = "whitesmoke";
+            });
+
+            cateringLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                hideAllContainers();
+                serviceCategories.style.display = "none";
+                backButton.style.display = "block";
+                cateringContainer.style.display = "block";
+                headerText.innerHTML = "Catering";
+                document.body.style.backgroundColor = "whitesmoke";
+            });
+
+
+            backButton.addEventListener("click", function() {
+                hideAllContainers();
+                backButton.style.display = "none";
+                serviceCategories.style.display = "flex";
+                headerText.innerHTML = "Services";
+                document.body.style.backgroundColor = "#a1c8c7";
+            });
         });
-
-        resortRatesLink.addEventListener("click", function(e) {
-            e.preventDefault();
-            hideAllContainers();
-            serviceCategories.style.display = "none";
-            backButton.style.display = "block";
-            resortRatesContainer.style.display = "block";
-            headerText.innerHTML = "Resort Rates";
-            document.body.style.backgroundColor = "whitesmoke";
-        });
-
-        eventLink.addEventListener("click", function(e) {
-            e.preventDefault();
-            hideAllContainers();
-            serviceCategories.style.display = "none";
-            backButton.style.display = "block";
-            eventContainer.style.display = "block";
-            headerText.innerHTML = "Event";
-            document.body.style.backgroundColor = "whitesmoke";
-        });
-
-        cateringLink.addEventListener("click", function(e) {
-            e.preventDefault();
-            hideAllContainers();
-            serviceCategories.style.display = "none";
-            backButton.style.display = "block";
-            cateringContainer.style.display = "block";
-            headerText.innerHTML = "Catering";
-            document.body.style.backgroundColor = "whitesmoke";
-        });
-
-
-        backButton.addEventListener("click", function() {
-            hideAllContainers();
-            backButton.style.display = "none";
-            serviceCategories.style.display = "flex";
-            headerText.innerHTML = "Services";
-            document.body.style.backgroundColor = "#a1c8c7";
-        });
-    });
     </script>
 
     <!-- For editing, cancelling, saving a service -->
     <script src="../../Assets/JS/Services/resortFunc.js"></script>
     <script src="../../Assets/JS/Services/resortRateFunc.js"></script>
     <script src="../../Assets/JS/Services/cateringFunc.js"></script>
-
+    <script src="../../Assets/JS/Services/servicePricingFunc.js"> </script>
 
 </body>
 

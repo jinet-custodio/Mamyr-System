@@ -571,7 +571,7 @@ body {
   }
 
   .resortPic {
-    width: 85vw;
+    width: 100%;
     border-radius: 50px;
     margin: 2vw auto;
   }
@@ -620,6 +620,7 @@ body {
 
   .firstParagraphPhoto,
   .thirdParagraphPhoto {
+    width: 12rem;
     border-radius: 2vw;
   }
 
