@@ -28,231 +28,24 @@ body {
   background-position: center;
   background-repeat: no-repeat;
 }
-
-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  /* background-color: rgb(242, 242, 242); */
-}
-
-.navbar {
+.wrapper {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* height: 15vh; */
-  padding: 1rem;
-  /* background-color: rgba(255, 255, 255, 0.562); */
-  /* backdrop-filter: blur(8px); */
-  /* -webkit-backdrop-filter: blur(8px); */
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.navbar-nav {
-  display: flex !important;
-  list-style: none;
-  margin-top: 10px !important;
+main {
+  flex: 1;
 }
 
-.navbar-nav .dropdown-toggle {
-  display: inline-block;
-  padding: 10px 15px !important;
-  line-height: 1.5;
-  vertical-align: middle;
-  position: relative;
-  top: 0.12vw; /* para ma-align yung dropdown sa ibang nav-item */
+.defaultDiv {
+  width: 95%;
+  border: 1px solid black;
+  margin: 3vw auto;
+  text-align: center;
+  padding: 2vw;
+  background-color: rgba(245, 245, 245, 0.501);
 }
-
-.navbar.scrolled {
-  background-color: white;
-  .nav-link {
-    color: black !important;
-  }
-  .nav-link:not(.dropdown-toggle):after {
-    border-bottom: 4px solid rgb(126, 203, 242) !important;
-  }
-
-  #logOutBtn {
-    color: #000000 !important;
-  }
-}
-
-.nav-link,
-#logOutBtn {
-  text-decoration: none;
-  display: inline-block;
-  padding: 10px 15px !important;
-  position: relative;
-  color: rgb(255, 255, 255) !important;
-  letter-spacing: 0.1em;
-}
-
-#logOutBtn {
-  font-family: "Poppins";
-  font-size: 1.3vw;
-  margin-right: 2vw;
-  border: none;
-}
-
-.nav-link:not(.dropdown-toggle):after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 50%;
-  position: absolute;
-  border-bottom: 4px solid rgb(255, 255, 255) !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-
-.nav-link.active:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link:not(.dropdown-toggle):hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-item.dropdown:hover .dropdown-menu {
-  background-color: white !important;
-  display: block;
-}
-
-.dropdown-menu {
-  background-color: rgba(255, 255, 255, 0.5) !important;
-}
-
-.dropdown-item:hover {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
-.dropdown-item {
-  font-size: 1.3vw;
-  font-weight: bold;
-}
-
-.account-nav {
-  margin: 1px;
-  margin-left: 1rem;
-  /* border: 1px solid white; */
-  border-radius: 50%;
-}
-.account-nav img {
-    height: 5vw;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
-
-.notification-container {
-  margin: 1rem;  
-}
-.notification-container button {
-    background-color: transparent;
-    border: none;
-  }
-.logoNav {
-  /* border: 1px solid black; */
-  width: 15vw;
-  position: absolute;
-  margin: 2vw;
-}
-
-footer {
-  /* border: 1px solid black; */
-  margin-top: auto !important;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 10vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 1.5vw;
-  font-weight: bold;
-  color: #ffff;
-}
-
-.footerLine {
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  opacity: 1;
-}
-
-.info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5vw;
-}
-.locationFooter {
-  /* border: 1px solid black; */
-  width: 30%;
-}
-
-.reservationTitle,
-.locationTitle {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 1.5vw;
-  color: #fff;
-}
-
-.numberFooter,
-.emailAddressTextFooter,
-.addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: 1vw;
-}
-
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  margin: 0.3vw;
-}
-
-.socialIcons a {
-  text-decoration: none;
-  padding: 0.8vw;
-  background-color: rgb(255, 255, 255);
-  margin: 5px;
-  border-radius: 50%;
-}
-
-.socialIcons a i {
-  font-size: 2vw;
-  color: #3e849e;
-  opacity: 0.9;
-}
-
-.socialIcons a:hover {
-  background-color: white;
-  transition: 0.5s;
-}
-
-.socialIcons a:hover i {
-  color: #c1a534;
-  transition: 0.5s;
-}
-
 .titleContainer {
   /* border: 1px solid black; */
   width: 70%;
@@ -324,6 +117,15 @@ footer {
 
 .form-select {
   margin-top: 1vw;
+}
+
+button.close {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.close span {
+  font-size: 3.5vw;
 }
 
 .row1 {
@@ -413,7 +215,6 @@ footer {
 
 /* Laptop */
 @media screen and (min-width: 1025px) {
-
   .title {
     margin-top: 1vw !important;
     font-size: 2.4vw;
@@ -454,46 +255,13 @@ footer {
     margin-top: 1.5rem !important;
   }
 
-  .btn-primary {
+  #submit-request {
     margin-top: 2rem !important;
-  }
-
-    .account-nav,
-  .notification-container {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    /*margin-left: 1rem; */
-  }
-
-  .account-nav img {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  .notification-container img {
-    height: 45px;
-    width: 45px;
-    border-radius: 40%;
-    object-fit: cover;
-  }
-
-  .notification-container button {
-    background-color: transparent;
-    border: none;
-  }
-  .locationFooter {
-    margin-bottom: 1.5rem !important;
   }
 }
 
 /* Tablet Landscape */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  body {
-    outline: 5px solid blue !important; /* 🔵 Debug border */
-  }
-
   .title {
     margin-top: 7rem;
     font-size: clamp(18px, 3vw, 26px);
@@ -516,223 +284,36 @@ footer {
     gap: 2px;
     margin-top: 10px !important;
   }
-  .navbar {
-    display: flex;
-    flex-wrap: nowrap !important;
-  }
-
-  .navbar-toggler {
-    display: none !important;
-  }
-  .navbar-collapse {
-    display: flex !important;
-    align-items: center;
-  }
-
-  .navbar-nav {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: center;
-    list-style: none;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-  }
-  .dropdown-menu {
-    position: absolute !important;
-    z-index: 1050;
-  }
-
-  .navbar-nav .nav-link {
-    color: #000 !important;
-    white-space: nowrap;
-    font-size: clamp(12px, 1.5vw, 16px); /* kusang adjust text size */
-    padding: 0 clamp(4px, 0.8vw, 12px);   /* kusang adjust gap */
-    
-  }
-
-  #logOutBtn {
-    color: black !important;
-    font-size: 14px;
-  }
-
-  .nav-link.active:after {
-    border-bottom: 4px solid rgb(126, 203, 242) !important;
-  }
-  .navbar-nav .nav-link:hover {
-    border-bottom: 3px solid rgb(126, 203, 242);
-  }
-
-  .nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    top: 100%;
-    left: 0;
-    margin-top: 0.30rem;
-  }
-
-  .fixed-top {
-    background-color: #fff !important;
-    height: auto;
-    min-height: 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1rem;
-  }
-
-  .account-nav,
-  .notification-container {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    /*margin-left: 1rem; */
-  }
-
-  .account-nav img,
-  .notification-container img {
-    height: 32px;
-    width: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .notification-container button {
-    background-color: transparent;
-    border: none;
-  }
-  .label {
-    margin-top: 2rem !important;
-  }
-  .locationFooter {
-    margin-bottom: 1.3rem !important;
-  }
 }
-
 
 /* Tablet portrait only */
 @media only screen and (min-width: 600px) and (max-width: 768px) {
-      body {
-    outline: 5px solid orange !important; /* 🟠 Tablet Portrait */
+  .titleContainer {
+    width: 90%;
+  }
+
+  .defaultDiv h2 {
+    font-size: clamp(20px, 18px, 19px);
   }
   .title {
-    margin-top: 8rem !important;
+    margin-top: 5rem !important;
     font-size: 5vw;
   }
   .titleDescription {
     width: 100% !important;
     margin: 3vw auto 0 auto !important;
     margin-top: 3vw;
-    font-size: 1.5vw;
-  }
-  .ms-auto {
-    margin-left: auto !important;
-  }
-  .navbar-toggler {
-    padding: 1vw;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-right: 2vw;
+    font-size: clamp(16px, 18px, 14px);
   }
 
-  .navbar-nav {
-    display: flex !important;
-    flex-direction: row !important;
-    list-style: none;
-    background-color: white;
-    padding-right: 1vw;
-    margin-top: 2rem !important;
-    padding-bottom: 2rem;
-  }
-
-  .navbar.scrolled {
-    background-color: white !important;
-  }
-  .navbar-collapse .navbar-nav {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    list-style: none;
-    background-color: white;
-  }
-
-  .navbar-nav .nav-link {
-    color: #000000 !important;
-  }
-
-  .navbar .nav-link {
-    color: black !important;
-  }
-  .dropdown-item {
-    font-size: clamp(12px, 4vw, 20px);
-  }
-
-  #logOutBtn {
-    color: black !important;
-    font-size: 16px;
-  }
-
-  .nav-link.active:after {
-    border-bottom: 4px solid rgb(126, 203, 242) !important;
-  }
-
-  .fixed-top {
-    background-color: rgb(255, 255, 255) !important;
-    padding: 0.3rem 1rem !important;
-    height: auto !important;
-    display: flex;
-    align-items: center;
-  }
   .right-icons {
     display: flex;
     align-items: center;
     gap: 0.8rem;
   }
 
-  .account-nav {
-    display: inline-flex;
-    align-items: center;
-    margin: 0 0.5rem;
-    vertical-align: middle;
-    border-radius: 50%;
-  }
-
-  .notification-container img {
-    height: clamp(20px, 5vw, 32px);
-    width: clamp(20px, 5vw, 32px);
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 0;
-    padding: 0;
-  }
-  .account-nav, .notification-container {
-    display: flex;
-
-  }
-  .account-nav img {
-    height: 31px !important;
-    width: clamp(20px, 5vw, 32px);
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 0;
-    padding: 0;
-    margin-left: 1rem;
-  }
-
-  .notification-container {
-    display: inline-flex;
-    align-items: center;
-    margin: 0 0.5rem;
-    vertical-align: middle;
-    margin-left: 0;
-  }
-
-  .notification-container button {
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    margin-left: 1rem;
-
+  .close span {
+    font-size: 5vw;
   }
 
   #basicInfo {
@@ -766,8 +347,6 @@ footer {
   }
 
   .container {
-    transform: scale(0.9);
-    transform-origin: top center;
     width: 600px !important;
     max-width: 1200px !important;
     height: 125vh;
@@ -801,7 +380,7 @@ footer {
     flex-direction: column;
   }
   #repInfoContainer {
-    padding-bottom: 2vw;
+    padding-bottom: 5vw;
     top: -3vw;
   }
   #busInfoContainer {
@@ -813,149 +392,42 @@ footer {
   .label {
     margin-top: 3vw !important;
   }
-  .form-control {
-  margin-top: 10px !important;
-}
-  #submit-request{
+  .form-control,
+  button.btn-light {
+    margin-top: 15px !important;
+  }
+  #submit-request {
     display: block !important;
     margin: 0 auto !important;
     margin-top: 2rem !important;
     width: 100% !important;
-    
   }
-  .socialIcons a {
-    margin: 5px;
-    border-radius: 50%;
-    padding-left: 1.5vw;
-    padding-right: 1.5vw;
-  }
-  .socialIcons a i {
-    font-size: 3vw;
-  }
-  .moreDetails {
-    margin-top: 2vw;
-    text-decoration: none;
-    padding: 0px;    
-}
-.mb-0 {
-  margin-bottom: 2vw !important;
-}
-.locationFooter {
-  margin-bottom: 1rem !important;
-}
 }
 
 /* Phone size */
 @media screen and (max-width: 599px) {
-
+  .titleContainer {
+    width: 90%;
+  }
   .title {
     margin-top: clamp(2rem, 6vw, 4rem);
-    font-size: clamp(16px, 5vw, 28px);
+    font-size: clamp(25px, calc(3.3vh + 4px), 29px);
     padding-top: 3rem;
+  }
+
+  .form-control,
+  .btn-light {
+    margin-top: 20px;
+  }
+
+  .defaultDiv h2 {
+    font-size: clamp(14px, 15px, 16px);
   }
 
   .titleDescription {
     width: 100% !important;
     margin: 3vw auto 0 auto !important;
-    font-size: clamp(12px, calc(1.5vw + 4px), 25px)!important;
-  }
-
-  .ms-auto {
-    margin-left: auto !important;
-    margin-bottom: 0 !important;
-    background-color: white !important;
-  }
-
-  .navbar-toggler {
-    padding: 1vw;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-right: 2vw;
-  }
-
-  .navbar-nav {
-    display: flex !important;
-    list-style: none;
-    background-color: white;
-    padding-right: 1vw;
-    margin-top: 5vw !important;
-  }
-
-  .navbar.scrolled {
-    background-color: white !important;
-  }
-
-  .navbar-nav .nav-link {
-    color: #000000 !important;
-  }
-
-  .navbar .nav-link {
-    color: black !important;
-  }
-  .dropdown-item {
-    font-size: clamp(12px, 4vw, 20px);
-  }
-
-  #logOutBtn {
-    color: black !important;
-    font-size: 16px;
-  }
-
-  .nav-link.active:after {
-    border-bottom: 4px solid rgb(126, 203, 242) !important;
-  }
-
-  .fixed-top {
-    background-color: rgb(255, 255, 255) !important;
-    padding: 0.3rem 1rem !important;
-    height: auto !important;
-    display: flex;
-    align-items: center;
-  }
-  .right-icons {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-
-  .account-nav {
-    display: inline-flex;
-    align-items: center;
-    margin: 0 0.5rem;
-    vertical-align: middle;
-    border-radius: 50%;
-  }
-
-  .notification-container img {
-    height: clamp(20px, 5vw, 32px);
-    width: clamp(20px, 5vw, 32px);
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 0;
-    padding: 0;
-  }
-  .account-nav img {
-    height: clamp(20px, 5vw, 36px);
-    width: clamp(20px, 5vw, 32px);
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 0;
-    padding: 0;
-  }
-
-  .notification-container {
-    display: inline-flex;
-    align-items: center;
-    margin: 0 0.5rem;
-    vertical-align: middle;
-  }
-
-  .notification-container button {
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    margin-left: 8vw;
-    top: -5.4vw;
+    font-size: clamp(12px, calc(1.5vw + 4px), 25px) !important;
   }
 
   #basicInfo {
@@ -964,6 +436,15 @@ footer {
     align-items: flex-start;
     padding: 0;
     height: auto !important;
+    width: 90%;
+  }
+
+  .col {
+    margin: 2vw auto;
+  }
+
+  .col h4 {
+    margin-top: 3vw !important;
   }
 
   .row {
@@ -988,8 +469,6 @@ footer {
     width: 100%;
     height: auto;
     margin-top: clamp(8px, 4vw, 24px) !important;
-    transform: scale(0.95);
-    transform-origin: top center;
   }
 
   #busInfoContainer {
@@ -1000,8 +479,8 @@ footer {
 
   .busInfoLabel,
   .busProofLabel,
-  .repInfoLabel{
-    font-size: clamp(14px, 4vw, 20px);
+  .repInfoLabel {
+    font-size: clamp(18px, calc(2.4vh + 4px), 20px);
     margin-top: 1vw;
     font-weight: bold;
     text-align: center;
@@ -1027,19 +506,8 @@ footer {
     padding-bottom: 2vw;
   }
 
-  .btn-primary {
+  #submit-request {
     margin-top: 2vw !important;
-  }
-
-  .socialIcons a {
-    margin: 5px;
-    border-radius: 50%;
-    padding-left: 2vw;
-    padding-right: 2vw;
-  }
-
-  .socialIcons a i {
-    font-size: 3vw;
   }
 
   .moreDetails {
@@ -1048,59 +516,4 @@ footer {
     margin-left: 1vw;
     margin-right: 3vw;
   }
-  .logoNav {
-  /* border: 1px solid black; */
-  width: 15vw;
-  position: absolute;
-  margin: 2vw;
 }
-
-footer {
-  /* border: 1px solid black; */
-  margin-top: auto !important;
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
-}
-
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
-}
-
-.logo {
-  width: 20vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 12px;
-  font-weight: bold;
-  color: #ffff;
-}
-.reservationTitle {
-  font-size: 8px;
-}
-.locationTitle {
-  font-size: 8px;
-}
-.locationFooter {
-  margin-bottom: 1.2rem !important;
-}
-.numberFooter, .emailAddressTextFooter, .addressTextFooter {
-  font-size: 7px;
-}
-}
-
-
-
-
-
-
-
-
-
-
-
