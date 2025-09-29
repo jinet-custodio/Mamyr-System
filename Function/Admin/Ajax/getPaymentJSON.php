@@ -14,7 +14,7 @@ try {
                         FROM booking b
                         INNER JOIN user u ON b.userID = u.userID
                         LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
-                        WHERE b.bookingStatus not in (3, 4, 6)");
+                        WHERE b.bookingStatus not in (1, 3, 4, 6)");
     $getBookingInfo->execute();
     $result = $getBookingInfo->get_result();
 
