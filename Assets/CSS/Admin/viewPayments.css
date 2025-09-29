@@ -142,7 +142,7 @@ label {
 .form-control {
   height: 6vh;
   /* width: 25vw !important; */
-  width: 20% !important;
+  width: 100%;
   background-color: #f5f5f5;
   text-align: center;
 }
@@ -150,6 +150,9 @@ label {
   width: 25vw !important;
 }
 
+.w-50 {
+  width: 100% !important;
+}
 .card {
   background-color: #f5f5f5;
   margin-top: -4vw;
