@@ -51,7 +51,7 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
         mkdir($servicePath, 0755, true);
     }
 
-    $imageMaxSize = 64 * 1024 * 1024;
+    $imageMaxSize = 24 * 1024 * 1024;
     if (isset($_FILES['serviceImage']) && $_FILES['serviceImage']['error'] === UPLOAD_ERR_OK) {
         if ($_FILES['serviceImage']['size'] <= $imageMaxSize) {
             $filePath = $_FILES['serviceImage']['tmp_name'];

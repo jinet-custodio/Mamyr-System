@@ -294,7 +294,7 @@ require '../../Function/notification.php';
                         $result = $selectQuery->get_result();
                         if ($result->num_rows > 0) {
                             foreach ($result as $applicants) {
-                                $name = ucwords($applicants['firstName'] ?? "") . " Secret" . ucwords($applicants['lastName'] ?? "");
+                                $name = ucwords($applicants['firstName'] ?? "") . " " . ucwords($applicants['lastName'] ?? "");
                                 $partnerID = $applicants['partnershipID'];
                                 $status = $applicants['statusName'];
                                 $date = $applicants['startDate'];

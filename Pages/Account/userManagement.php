@@ -30,6 +30,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
+
+unset($_SESSION['account-form']);
 ?>
 <!DOCTYPE html>
 <html lang="en">

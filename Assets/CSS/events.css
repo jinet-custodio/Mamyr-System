@@ -360,7 +360,8 @@ body {
   }
 
   .cardFlex {
-    width: 90%;
+    width: 105%;
+    justify-content: space-around;
   }
 
   #eventsInner {
@@ -372,7 +373,7 @@ body {
   }
 
   .event-card {
-    width: 50%;
+    width: 48%;
   }
 
   img.card-img-top {
