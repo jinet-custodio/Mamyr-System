@@ -499,11 +499,33 @@ require '../../Function/functions.php';
                 language: {
                     emptyTable: <?= json_encode($message ?: "No data available") ?>
                 },
+                responsive: false,
+                scrollX: true,
                 columnDefs: [{
-                    width: '15%',
-                    target: 0
-
-                }]
+                        width: '10%',
+                        targets: 0
+                    },
+                    {
+                        width: '20%',
+                        targets: 1
+                    },
+                    {
+                        width: '15%',
+                        targets: 2
+                    },
+                    {
+                        width: '20%',
+                        targets: 3
+                    },
+                    {
+                        width: '15%',
+                        targets: 4
+                    },
+                    {
+                        width: '20%',
+                        targets: 5
+                    },
+                ],
             });
         });
     </script>
