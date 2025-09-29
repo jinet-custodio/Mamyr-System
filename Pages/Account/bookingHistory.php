@@ -278,7 +278,6 @@ switch ($userRole) {
                                     </div>
 
                                     <div class="modal-body">
-
                                         <input type="hidden" name="bookingID" id="bookingIDModal" value="">
                                         <input type="hidden" name="confirmedBookingID" id="confirmedBookingIDModal" value="">
                                         <input type="hidden" name="bookingStatus" id="bookingStatusModal" value="">
@@ -321,6 +320,201 @@ switch ($userRole) {
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const userID = document.getElementById('userID');
+            const userIDValue = userID.value;
+            // console.error(userIDValue);
+            fetch(`../../Function/Admin/Ajax/getBookingHistoryJSON.php?userID=${userIDValue}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        // console.error("Failed to load bookings.");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'An unknown error occurred.'
+                        });
+                        return;
+                    }
+                    const bookings = data.bookings;
+                    const tbody = document.querySelector('#p-b-history-body');
+                    tbody.innerHTML = "";
+
+
+                    const reviewedBookingIDs = <?= json_encode($reviewedBookingIDs) ?>;
+                    if (bookings && bookings.length > 0) {
+                        bookings.forEach(booking => {
+                            let isReviewed = reviewedBookingIDs.includes(booking.bookingID);
+                            let canReview = (
+                                booking.approvalStatus === 'Done' ||
+                                booking.status === 'Cancelled' ||
+                                booking.status === 'Expired' ||
+                                booking.approvalStatus === 'Approved' ||
+                                booking.status === 'Rejected' ||
+                                booking.approvalStatus === 'Rejected'
+                            );
+                            // console.log(booking.bookingStatus);
+                            // console.log(canReview);
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                                                <td>${booking.checkIn}</td>
+                                                <td>${booking.totalBill}</td>
+                                                <td>${booking.userBalance}</td>
+                                                <td>${booking.paymentMethod}</td>
+                                                <td>${booking.bookingType} Booking</td>
+                                                <td>
+                                                    <a class="btn btn-${booking.statusClass} w-100">
+                                                        ${booking.status}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                <div class="button-container gap-2 md-auto"
+                                                    style="display: flex;  width: 100%; justify-content: center;">
+                                                    <form action="reservationSummary.php" method="POST">
+                                                        <input type="hidden" name="bookingType" value="${booking.bookingType}">
+                                                        <input type="hidden" name="confirmedBookingID" value="${booking.confirmedBookingID}">
+                                                        <input type="hidden" name="bookingID" value="${booking.bookingID}">
+                                                        <input type="hidden" name="status" value="${booking.status}">
+                                                        <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
+                                                    </form>
+                                                    ${
+                                                        canReview
+                                                            ? (
+                                                                isReviewed
+                                                                    ? `<button class="btn btn-outline-secondary px-0 w-100 rateBtn" title="You have already reviewed this booking/reservation" disabled data-label="Reviewed">Reviewed</button>`
+                                                                    : `<button class="btn btn-outline-primary px-0 w-100 rateBtn"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#rateModal"
+                                                                        data-bookingid="${booking.bookingID}"
+                                                                        data-bookingtype="${booking.bookingType}"
+                                                                        data-label="Review">Review</button>`
+                                                            )
+                                                            : `<button type="button" class="btn btn-danger w-100 cancelBooking"
+                                                                data-bookingid="${booking.bookingID}"
+                                                                data-confirmedbookingid="${booking.confirmedBookingID}"
+                                                                data-status="${booking.status}"
+                                                                data-bookingstatus="${booking.bookingStatus}"
+                                                                data-confirmedstatus="${booking.approvalStatus}"
+                                                                data-bookingtype="${booking.bookingType}"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#confirmationModal" data-label="Cancel">Cancel</button>`
+                                                    }
+                                                </div> 
+                                                </td>
+                                                
+                                            `;
+                            tbody.appendChild(row);
+
+                            document.querySelectorAll(".cancelBooking").forEach(button => {
+                                button.addEventListener("click", function() {
+
+                                    const bookingID = this.getAttribute("data-bookingid");
+                                    const confirmedBookingID = this.getAttribute("data-confirmedbookingid");
+                                    const status = this.getAttribute("data-status");
+                                    const bookingStatus = this.getAttribute("data-bookingstatus");
+                                    const confirmedStatus = this.getAttribute("data-confirmedstatus");
+                                    const bookingType = this.getAttribute("data-bookingtype");
+
+                                    document.getElementById("bookingIDModal").value = bookingID;
+                                    document.getElementById("confirmedBookingIDModal").value = confirmedBookingID;
+                                    document.getElementById("statusModal").value = status;
+                                    document.querySelector('input[name="bookingStatus"]').value = bookingStatus;
+                                    document.querySelector('input[name="confirmedStatus"]').value = confirmedStatus;
+                                    document.querySelector('input[name="bookingType"]').value = bookingType;
+                                });
+                            });
+                        })
+                    } else {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `<td colspan="7" class="text-center">No bookings to display</td>`;
+                        tbody.appendChild(row);
+                    }
+
+                    $(document).ready(function() {
+                        const starContainer = $("#starContainer");
+                        const ratingInput = $("#reviewRating");
+                        let currentRating = 0;
+
+                        function renderStars(rating) {
+                            starContainer.empty();
+                            for (let i = 1; i <= 5; i++) {
+                                const star = $('<i class="fa fa-star star"></i>');
+                                star.attr("data-value", i);
+                                if (i <= rating) {
+                                    star.addClass("checked");
+                                }
+                                star.on("click", function() {
+                                    currentRating = i;
+                                    ratingInput.val(currentRating);
+                                    renderStars(currentRating);
+                                });
+                                star.on("dblclick", function() {
+                                    currentRating = i - 0.5;
+                                    ratingInput.val(currentRating);
+                                    renderStars(currentRating);
+                                });
+                                starContainer.append(star);
+                            }
+                        }
+
+                        renderStars(currentRating);
+
+
+                        $('.rateBtn').on('click', function() {
+                            const bookingID = $(this).data('bookingid');
+                            const bookingType = $(this).data('bookingtype');
+
+                            $('#modalBookingID').val(bookingID);
+                            $('#modalBookingType').val(bookingType);
+                        });
+
+                        // AJAX form submission
+                        $("#reviewForm").on("submit", function(e) {
+                            e.preventDefault();
+                            // console.log("Submitting review:", {
+                            //     bookingID: $('#modalBookingID').val(),
+                            //     bookingType: $('#modalBookingType').val(),
+                            //     rating: $('#reviewRating').val(),
+                            //     comment: $('#purpose-additionalNotes').val()
+                            // });
+
+                            $.ajax({
+                                url: "../../Function/Account/submitReview.php",
+                                method: "POST",
+                                data: $(this).serialize(),
+                                success: function(response) {
+                                    // alert("Review submitted successfully!");
+                                    Swal.fire({
+                                        position: "top-end",
+                                        icon: "success",
+                                        title: "Review submitted successfully!",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    $("#rateModal").modal("hide");
+                                    $("#reviewForm")[0].reset();
+                                    renderStars(0);
+                                },
+                                error: function(xhr, status, error) {
+                                    alert("Error submitting review: " + error);
+                                }
+                            });
+                        });
+
+
+                    });
+                }).catch(error => {
+                    console.error("Error loading bookings:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: error.message || 'Failed to load data from the server.'
+                    })
+                })
+        })
+    </script>
 
     <script>
         //Handle sidebar for responsiveness
@@ -466,25 +660,6 @@ switch ($userRole) {
             });
         });
 
-        document.querySelectorAll(".cancelBooking").forEach(button => {
-            button.addEventListener("click", function() {
-
-                const bookingID = this.getAttribute("data-bookingid");
-                const confirmedBookingID = this.getAttribute("data-confirmedbookingid");
-                const status = this.getAttribute("data-status");
-                const bookingStatus = this.getAttribute("data-bookingstatus");
-                const confirmedStatus = this.getAttribute("data-confirmedstatus");
-                const bookingType = this.getAttribute("data-bookingtype");
-
-                document.getElementById("bookingIDModal").value = bookingID;
-                document.getElementById("confirmedBookingIDModal").value = confirmedBookingID;
-                document.getElementById("statusModal").value = status;
-                document.querySelector('input[name="bookingStatus"]').value = bookingStatus;
-                document.querySelector('input[name="confirmedStatus"]').value = confirmedStatus;
-                document.querySelector('input[name="bookingType"]').value = bookingType;
-            });
-        });
-
         if (paramValue === "Cancelled") {
             Swal.fire({
                 title: "Successfully Cancelled!",
@@ -506,179 +681,12 @@ switch ($userRole) {
                 confirmButtonText: "OK"
             });
         };
-    </script>
 
-    <!-- rate JS -->
-    <script>
-        $(document).ready(function() {
-            const starContainer = $("#starContainer");
-            const ratingInput = $("#reviewRating");
-            let currentRating = 0;
-
-            function renderStars(rating) {
-                starContainer.empty();
-                for (let i = 1; i <= 5; i++) {
-                    const star = $('<i class="fa fa-star star"></i>');
-                    star.attr("data-value", i);
-                    if (i <= rating) {
-                        star.addClass("checked");
-                    }
-                    star.on("click", function() {
-                        currentRating = i;
-                        ratingInput.val(currentRating);
-                        renderStars(currentRating);
-                    });
-                    star.on("dblclick", function() {
-                        currentRating = i - 0.5;
-                        ratingInput.val(currentRating);
-                        renderStars(currentRating);
-                    });
-                    starContainer.append(star);
-                }
-            }
-
-            renderStars(currentRating);
-
-
-            $('.rateBtn').on('click', function() {
-                const bookingID = $(this).data('bookingid');
-                const bookingType = $(this).data('bookingtype');
-
-                $('#modalBookingID').val(bookingID);
-                $('#modalBookingType').val(bookingType);
-            });
-
-            // AJAX form submission
-            $("#reviewForm").on("submit", function(e) {
-                e.preventDefault();
-                // console.log("Submitting review:", {
-                //     bookingID: $('#modalBookingID').val(),
-                //     bookingType: $('#modalBookingType').val(),
-                //     rating: $('#reviewRating').val(),
-                //     comment: $('#purpose-additionalNotes').val()
-                // });
-
-                $.ajax({
-                    url: "../../Function/Account/submitReview.php",
-                    method: "POST",
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        alert("Review submitted successfully!");
-                        $("#rateModal").modal("hide");
-                        $("#reviewForm")[0].reset();
-                        renderStars(0);
-                    },
-                    error: function(xhr, status, error) {
-                        alert("Error submitting review: " + error);
-                    }
-                });
-            });
-
-
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const userID = document.getElementById('userID');
-            const userIDValue = userID.value;
-            // console.error(userIDValue);
-            fetch(`../../Function/Admin/Ajax/getBookingHistoryJSON.php?userID=${userIDValue}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        // console.error("Failed to load bookings.");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'An unknown error occurred.'
-                        });
-                        return;
-                    }
-                    const bookings = data.bookings;
-                    const tbody = document.querySelector('#p-b-history-body');
-                    tbody.innerHTML = "";
-
-
-                    const reviewedBookingIDs = <?= json_encode($reviewedBookingIDs) ?>;
-
-
-
-                    if (bookings && bookings.length > 0) {
-                        bookings.forEach(booking => {
-                            let isReviewed = reviewedBookingIDs.includes(booking.bookingID);
-                            let canReview = (
-                                booking.approvalStatus === 'Done' ||
-                                booking.bookingStatus === 'Cancelled' ||
-                                booking.bookingStatus === 'Expired' ||
-                                booking.approvalStatus === 'Approved' ||
-                                booking.bookingStatus === 'Rejected' ||
-                                booking.approvalStatus === 'Rejected'
-                            );
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
-                                                <td>${booking.checkIn}</td>
-                                                <td>${booking.totalBill}</td>
-                                                <td>${booking.userBalance}</td>
-                                                <td>${booking.paymentMethod}</td>
-                                                <td>${booking.bookingType} Booking</td>
-                                                <td>
-                                                    <a class="btn btn-${booking.statusClass} w-100">
-                                                        ${booking.status}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                <div class="button-container gap-2 md-auto"
-                                                    style="display: flex;  width: 100%; justify-content: center;">
-                                                    <form action="reservationSummary.php" method="POST">
-                                                        <input type="hidden" name="bookingType" value="${booking.bookingType}">
-                                                        <input type="hidden" name="confirmedBookingID" value="${booking.confirmedBookingID}">
-                                                        <input type="hidden" name="bookingID" value="${booking.bookingID}">
-                                                        <input type="hidden" name="status" value="${booking.status}">
-                                                        <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
-                                                    </form>
-                                                    ${
-                                                        canReview
-                                                            ? (
-                                                                isReviewed
-                                                                    ? `<button class="btn btn-outline-secondary px-0 w-100 rateBtn" title="You have already reviewed this booking/reservation" disabled data-label="Reviewed">Reviewed</button>`
-                                                                    : `<button class="btn btn-outline-primary px-0 w-100 rateBtn"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#rateModal"
-                                                                        data-bookingid="${booking.bookingID}"
-                                                                        data-bookingtype="${booking.bookingType}"
-                                                                        data-label="Review">Review</button>`
-                                                            )
-                                                            : `<button type="button" class="btn btn-danger w-100 cancelBooking"
-                                                                data-bookingid="${booking.bookingID}"
-                                                                data-confirmedbookingid="${booking.confirmedBookingID}"
-                                                                data-status="${booking.status}"
-                                                                data-bookingstatus="${booking.bookingStatus}"
-                                                                data-confirmedstatus="${booking.confirmedStatus}"
-                                                                data-bookingtype="${booking.bookingType}"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#confirmationModal" data-label="Cancel">Cancel</button>`
-                                                    }
-                                                </div> 
-                                                </td>
-                                                
-                                            `;
-                            tbody.appendChild(row);
-                        })
-                    } else {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `<td colspan="7" class="text-center">No bookings to display</td>`;
-                        tbody.appendChild(row);
-                    }
-                }).catch(error => {
-                    console.error("Error loading bookings:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: error.message || 'Failed to load data from the server.'
-                    })
-                })
-        })
+        if (paramValue) {
+            const url = new URLSearchParams(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
     <!-- Table JS -->

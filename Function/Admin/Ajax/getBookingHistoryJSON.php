@@ -6,7 +6,7 @@ require '../../functions.php';
 header('Content-Type: application/json');
 if (isset($_GET['userID'])) {
     $userID = (int) $_GET['userID'];
-    error_log($userID);
+    // error_log($userID);
     try {
         $getBookingInfo = $conn->prepare("SELECT 
                             b.bookingID, b.bookingType, b.userID, b.startDate, b.bookingStatus, b.paymentMethod, 
@@ -42,6 +42,16 @@ if (isset($_GET['userID'])) {
                             case 5:
                                 $class = 'sky-blue';
                                 $status =  $paymentStatus['paymentStatusName'];
+                                break;
+                        }
+                        switch ($bookingStatus['statusID']) {
+                            case 6:
+                                $class = 'secondary';
+                                $status = $bookingStatus['statusName'];
+                                break;
+                            case 4:
+                                $class = 'red';
+                                $status = $bookingStatus['statusName'];
                                 break;
                         }
                         break;
