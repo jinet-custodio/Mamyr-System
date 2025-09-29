@@ -333,7 +333,7 @@ require '../../Function/notification.php';
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
-                        console.error("Failed to load payments.");
+                        // console.error("Failed to load payments.");
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
@@ -344,7 +344,7 @@ require '../../Function/notification.php';
                     const payments = data.payments;
                     const tbody = document.querySelector('#payment-display-body');
                     tbody.innerHTML = "";
-                    console.log(payments);
+                    // console.log(payments);
                     if (payments && payments.length > 0) {
                         payments.forEach(payment => {
                             const row = document.createElement("tr");

@@ -209,7 +209,10 @@ switch ($userRole) {
                 <div class="titleContainer">
                     <h2 class="title">Booking History</h2>
                 </div>
-                <input type="hidden" name="userID" id="userID" value="<?= $userID ?>">
+
+                <script>
+                    // console.log(reviewedBookingIDs);
+                </script>
                 <div class="tableContainer">
                     <table class=" table table-striped" id="bookingHistory">
                         <thead>
@@ -219,10 +222,173 @@ switch ($userRole) {
                             <th scope="col">Payment Method</th>
                             <th scope="col">Booking Type</th>
                             <th scope="col">Status</th>
+                            <!-- <th scope="col">Review</th> -->
                             <th scope="col">Action</th>
                         </thead>
 
-                        <tbody id="p-b-history-body">
+                        <tbody>
+
+                            <?php
+
+                            $getBooking = $conn->prepare("SELECT cb.*, b.*, s.statusName AS confirmedStatus, stat.statusName as bookingStatus FROM booking b
+                                LEFT JOIN confirmedbooking cb ON cb.bookingID = b.bookingID
+                                LEFT JOIN status s ON cb.paymentApprovalStatus = s.statusID
+                                LEFT JOIN status stat ON b.bookingStatus = stat.statusID
+                                WHERE userID = ?
+                                ORDER BY b.createdAt");
+                            $getBooking->bind_param("i", $userID);
+                            $getBooking->execute();
+                            $resultGetBooking = $getBooking->get_result();
+                            if ($resultGetBooking->num_rows > 0) {
+                                $bookings = $resultGetBooking->fetch_all(MYSQLI_ASSOC);
+
+
+                                foreach ($bookings as $booking) {
+                                    $confirmedBookingID = $booking['confirmedBookingID'];
+                                    $bookingID = $booking['bookingID'];
+                                    $startDate = strtotime($booking['startDate']);
+                                    $checkIn = date("M j, Y", $startDate);  //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
+                                    $endDate = strtotime($booking['endDate']);
+                                    $checkOut = date("M j, Y", $endDate); //  Pag gusto n`yo is Month day, Year pakipalitan ng F j, Y 
+                                    $bookingType = $booking['bookingType'];
+                                    $totalAmount = $booking['totalCost'];
+                                    $balance = $booking['userBalance'] ?? $totalAmount;
+                                    $paymentMethod = $booking['paymentMethod'];
+
+                                    // echo '<pre>';
+                                    // print_r("Data " . $booking['confirmedStatus'] . $booking['bookingStatus']);
+                                    // echo '</pre>';
+                            ?>
+                                    <tr>
+                                        <td><?= $checkIn ?></td>
+                                        <!-- <td><?= $checkOut ?></td> -->
+                                        <td>₱<?= number_format($totalAmount, 2) ?></td>
+                                        <td>₱<?= number_format($balance, 2) ?></td>
+                                        <td><?= htmlspecialchars($paymentMethod) ?></a></td>
+
+                                        <td><?= htmlspecialchars($bookingType) ?></a></td>
+
+                                        <!-- Papalitan na lang ng mas magandang term -->
+                                        <?php if (!empty($booking['confirmedBookingID'])) {
+                                            if ($booking['confirmedStatus'] === "Pending" && $booking['paymentStatus'] === 1) {
+
+                                                if ($paymentMethod === 'Cash') {
+                                                    $status = "Onsite payment";
+                                                    $class = 'btn btn-primary w-100';
+                                                } else {
+                                                    $status = "Downpayment";
+                                                    $class = 'btn btn-primary w-100';
+                                                }
+                                            } elseif ($booking['confirmedStatus'] === "Approved") {
+                                                $status = "Success";
+                                                $class = 'btn btn-success w-100';
+                                            } elseif ($booking['confirmedStatus'] === "Rejected") {
+                                                $status = "Rejected";
+                                                $class = 'btn btn-red w-100';
+                                            } elseif ($booking['confirmedStatus'] === 'Done') {
+                                                $status = "Finished";
+                                                $class = 'btn btn-dark-green w-100';
+                                            } elseif ($booking['confirmedStatus'] === "Cancelled") {
+                                                $status = "Cancelled";
+                                                $class = 'btn btn-red w-100';
+                                            } elseif ($booking['paymentStatus'] === 5) {
+                                                $status = "Payment Sent";
+                                                $class = 'btn btn-red w-100';
+                                            }
+                                        } else {
+                                            $confirmedBookingID = NULL;
+                                            if ($booking['bookingStatus'] === "Pending") {
+                                                $status = "Pending";
+                                                $class = 'btn btn-warning w-100';
+                                                $bookingStatus = $booking['bookingStatus'];
+                                            } else if ($booking['bookingStatus'] === "Approved") {
+                                                $bookingStatus = $booking['bookingStatus'];
+                                                if ($paymentMethod === 'Cash') {
+                                                    $status = "Onsite payment";
+                                                    $class = 'btn btn-primary w-100';
+                                                } else {
+                                                    $status = "Downpayment";
+                                                    $class = 'btn btn-primary w-100';
+                                                }
+                                            } elseif ($booking['bookingStatus'] === "Rejected") {
+                                                $bookingStatus = $booking['bookingStatus'];
+                                                $status = "Rejected";
+                                                $class = 'btn btn-red w-100';
+                                            } elseif ($booking['bookingStatus'] === "Cancelled") {
+                                                $bookingStatus = $booking['bookingStatus'];
+                                                $status = "Cancelled";
+                                                $class = 'btn btn-red w-100';
+                                            } elseif ($booking['bookingStatus'] === "Expired") {
+                                                $bookingStatus = $booking['bookingStatus'];
+                                                $status = "Expired";
+                                                $class = 'btn btn-danger w-100';
+                                            }
+                                        }
+                                        ?>
+
+                                        <td> <span class="<?= $class ?> font-weight-bold bookingStatus" data-label="<?= $status ?>"><?= $status ?></span></td>
+                                        <td>
+                                            <div class="button-container gap-2 md-auto"
+                                                style="display: flex;  width: 100%; justify-content: center;">
+                                                <form action="reservationSummary.php" method="POST">
+                                                    <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
+                                                    <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
+                                                    <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
+                                                    <input type="hidden" name="status" value="<?= $status ?>">
+                                                    <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
+                                                </form>
+                                                <?php
+                                                $isReviewed = in_array($bookingID, $reviewedBookingIDs);
+                                                ?>
+                                                <?php
+                                                echo "<!-- DEBUG: bookingID={$bookingID}, bookingType={$bookingType}, isReviewed=" . ($isReviewed ? 'yes' : 'no') . " -->";
+                                                ?>
+                                                <?php if (
+                                                    $booking['confirmedStatus'] === 'Done'
+                                                    || $booking['bookingStatus'] === 'Cancelled'
+                                                    || $booking['bookingStatus'] === 'Expired'
+                                                    || $booking['confirmedStatus'] === 'Approved'
+                                                    || $booking['bookingStatus'] === 'Rejected'
+                                                    || $booking['confirmedStatus'] === 'Rejected'
+                                                ) { ?>
+                                                    <?php if ($isReviewed): ?>
+                                                        <button class="btn btn-outline-secondary px-0 w-100 rateBtn"
+                                                            title="You have already reviewed this booking/reservation"
+                                                            disabled
+                                                            data-label="Reviewed">
+                                                            Reviewed
+                                                        </button>
+
+                                                    <?php else: ?>
+                                                        <button class="btn btn-outline-primary px-0 w-100 rateBtn"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#rateModal"
+                                                            data-bookingid="<?= $bookingID ?>"
+                                                            data-bookingtype="<?= $bookingType ?>"
+                                                            data-label="Review">
+                                                            Review
+                                                        </button>
+                                                    <?php endif; ?>
+
+                                                <?php } else { ?>
+                                                    <button type="button" class="btn btn-danger w-100 cancelBooking"
+                                                        data-bookingid="<?= $bookingID ?>"
+                                                        data-confirmedbookingid="<?= $confirmedBookingID ?>"
+                                                        data-status="<?= $status ?>"
+                                                        data-bookingstatus="<?= $booking['bookingStatus'] ?>"
+                                                        data-confirmedstatus="<?= $booking['confirmedStatus'] ?>"
+                                                        data-bookingtype="<?= $bookingType ?>"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#confirmationModal" data-label="Cancel"></button>
+                                                <?php } ?>
+                                            </div>
+                                        </td>
+                                    <?php } ?>
+                                    </tr>
+                                <?php
+                            }
+                                ?>
+
                         </tbody>
                     </table>
 
@@ -312,6 +478,21 @@ switch ($userRole) {
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- DataTables Link -->
     <script src="../../Assets/JS/datatables.min.js"></script>
+    <!-- Table JS -->
+    <script>
+        $(document).ready(function() {
+            $('#bookingHistory').DataTable({
+                language: {
+                    emptyTable: "You have not made any bookings yet" //Pakipalitan na lang din ng magandang term
+                },
+                columnDefs: [{
+                    width: '15%',
+                    target: 0
+
+                }]
+            });
+        });
+    </script>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -577,131 +758,6 @@ switch ($userRole) {
 
         });
     </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const userID = document.getElementById('userID');
-            const userIDValue = userID.value;
-            // console.error(userIDValue);
-            fetch(`../../Function/Admin/Ajax/getBookingHistoryJSON.php?userID=${userIDValue}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        // console.error("Failed to load bookings.");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'An unknown error occurred.'
-                        });
-                        return;
-                    }
-                    const bookings = data.bookings;
-                    const tbody = document.querySelector('#p-b-history-body');
-                    tbody.innerHTML = "";
-
-
-                    const reviewedBookingIDs = <?= json_encode($reviewedBookingIDs) ?>;
-
-
-
-                    if (bookings && bookings.length > 0) {
-                        bookings.forEach(booking => {
-                            let isReviewed = reviewedBookingIDs.includes(booking.bookingID);
-                            let canReview = (
-                                booking.approvalStatus === 'Done' ||
-                                booking.bookingStatus === 'Cancelled' ||
-                                booking.bookingStatus === 'Expired' ||
-                                booking.approvalStatus === 'Approved' ||
-                                booking.bookingStatus === 'Rejected' ||
-                                booking.approvalStatus === 'Rejected'
-                            );
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
-                                                <td>${booking.checkIn}</td>
-                                                <td>${booking.totalBill}</td>
-                                                <td>${booking.userBalance}</td>
-                                                <td>${booking.paymentMethod}</td>
-                                                <td>${booking.bookingType} Booking</td>
-                                                <td>
-                                                    <a class="btn btn-${booking.statusClass} w-100">
-                                                        ${booking.status}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                <div class="button-container gap-2 md-auto"
-                                                    style="display: flex;  width: 100%; justify-content: center;">
-                                                    <form action="reservationSummary.php" method="POST">
-                                                        <input type="hidden" name="bookingType" value="${booking.bookingType}">
-                                                        <input type="hidden" name="confirmedBookingID" value="${booking.confirmedBookingID}">
-                                                        <input type="hidden" name="bookingID" value="${booking.bookingID}">
-                                                        <input type="hidden" name="status" value="${booking.status}">
-                                                        <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
-                                                    </form>
-                                                    ${
-                                                        canReview
-                                                            ? (
-                                                                isReviewed
-                                                                    ? `<button class="btn btn-outline-secondary px-0 w-100 rateBtn" title="You have already reviewed this booking/reservation" disabled data-label="Reviewed">Reviewed</button>`
-                                                                    : `<button class="btn btn-outline-primary px-0 w-100 rateBtn"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#rateModal"
-                                                                        data-bookingid="${booking.bookingID}"
-                                                                        data-bookingtype="${booking.bookingType}"
-                                                                        data-label="Review">Review</button>`
-                                                            )
-                                                            : `<button type="button" class="btn btn-danger w-100 cancelBooking"
-                                                                data-bookingid="${booking.bookingID}"
-                                                                data-confirmedbookingid="${booking.confirmedBookingID}"
-                                                                data-status="${booking.status}"
-                                                                data-bookingstatus="${booking.bookingStatus}"
-                                                                data-confirmedstatus="${booking.confirmedStatus}"
-                                                                data-bookingtype="${booking.bookingType}"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#confirmationModal" data-label="Cancel">Cancel</button>`
-                                                    }
-                                                </div> 
-                                                </td>
-                                                
-                                            `;
-                            tbody.appendChild(row);
-                        })
-                    } else {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `<td colspan="7" class="text-center">No bookings to display</td>`;
-                        tbody.appendChild(row);
-                    }
-                }).catch(error => {
-                    console.error("Error loading bookings:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: error.message || 'Failed to load data from the server.'
-                    })
-                })
-        })
-    </script>
-
-    <!-- Table JS -->
-    <script>
-        $(document).ready(function() {
-            $('#bookingHistory').DataTable({
-                language: {
-                    emptyTable: "You have not made any bookings yet"
-                },
-                columnDefs: [{
-                        width: '15%',
-                        target: 0
-                    },
-                    {
-                        width: '20%',
-                        target: 6
-                    },
-
-                ]
-            });
-        });
-    </script>
-
 
 </body>
 
