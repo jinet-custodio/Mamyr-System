@@ -204,12 +204,12 @@ if (isset($_POST['approveBtn'])) {
         $insertNotification->close();
 
         unset($_SESSION['bookingID']);
-        header('Location: ../../Pages/Admin/booking.php?action=success');
+        header('Location: ../../Pages/Admin/booking.php?action=approvedSuccess');
         exit();
     } catch (Exception $e) {
         $conn->rollback();
         error_log("Error " . $e->getMessage());
-        header("Location: ../../Pages/Admin/viewBooking.php?error=exception&message=" . urlencode($e->getMessage()));
+        header("Location: ../../Pages/Admin/viewBooking.php?error=exception&action=approvalFailed");
         exit();
     }
 }
@@ -219,10 +219,16 @@ if (isset($_POST['approveBtn'])) {
 //Reject Button is Click
 if (isset($_POST['rejectBtn'])) {
     $bookingID = (int) $_POST['bookingID'];
-    $bookingStatusID = (int) $_POST['bookingStatus'];
+    $bookingStatusID = (int) $_POST['bookingStatusID'];
     $customerID = (int) $_POST['customerID'];
-    $message = mysqli_real_escape_string($conn, $_POST['rejectionReason']);
+    $message = mysqli_real_escape_string($conn, $_POST['rejectionReason']) ?? null;
     $userRoleID = (int) $_POST['userRoleID'];
+
+
+    if (empty($message)) {
+        header('Location: ../../Pages/Admin/viewBooking.php?action=rejectionEmpty');
+        exit();
+    }
     $conn->begin_transaction();
     try {
         $bookingQuery = $conn->prepare("SELECT * FROM booking WHERE bookingID = ? AND bookingStatus = ?");
@@ -245,7 +251,7 @@ if (isset($_POST['rejectBtn'])) {
         $receiver = getMessageReceiver($userRoleID);
 
         $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, senderID, receiverID,  message, receiver) VALUES(?,?,?,?,?)");
-        $insertNotification->bind_param('iiss', $bookingID, $userID, $customerID, $message, $receiver);
+        $insertNotification->bind_param('iiiss', $bookingID, $userID, $customerID, $message, $receiver);
 
         if (!$insertNotification->execute()) {
             throw new Exception("Failed to insert notification.");
@@ -264,10 +270,4 @@ if (isset($_POST['rejectBtn'])) {
         header('Location: ../../Pages/Admin/viewBooking.php?action=rejectionFailed');
         exit();
     }
-} else {
-    echo "<script>
-            alert('Error');
-            window.location.href = '../../Pages/Admin/booking.php';
-        </script>";
-    exit();
 }
