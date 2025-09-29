@@ -34,6 +34,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 }
 require '../../Function/notification.php';
 
+// $customerPayment = $_SESSION['huh']
 ?>
 
 <!DOCTYPE html>
@@ -231,7 +232,78 @@ require '../../Function/notification.php';
                         <th scope="col">Action</th>
                     </thead>
                     <!-- Get data and isplay Transaction -->
-                    <tbody id="payment-display-body"></tbody>
+                    <tbody>
+                        <?php
+                        $payments = $conn->prepare("SELECT LPAD(cb.bookingID, 4, '0') AS formattedID, cb.*, b.userID, b.bookingID, u.firstName, u.lastName, b.paymentMethod, bps.statusName as PaymentStatus, stat.statusName AS paymentApprovalStatus
+                    FROM confirmedbooking cb
+                    LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                    LEFT JOIN user u ON b.userID = u.userID
+                    LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID
+                    LEFT JOIN status stat ON cb.paymentApprovalStatus = stat.statusID
+                    ");
+                        $payments->execute();
+                        $paymentsResult = $payments->get_result();
+                        if ($paymentsResult->num_rows > 0) {
+                            while ($data = $paymentsResult->fetch_assoc()) {
+                                $guestName = ucfirst($data['firstName']) . " " . ucfirst($data['lastName']);
+                                $bookingID = $data['bookingID'];
+                                $formattedID = $data['formattedID'];
+                                $totalAmount = $data['confirmedFinalBill'];
+                                // $downpayment = $data['CBdownpayment'];
+                                $amountPaid = $data['amountPaid'];
+                                $balance = $data['userBalance'];
+                                $paymentMethod = $data['paymentMethod'];
+                                $paymentStatus = $data['PaymentStatus'];
+                                $paymentApprovalStatus = $data['paymentApprovalStatus'];
+
+                                if ($paymentStatus === 'Fully Paid') {
+                                    $classColor = 'success';
+                                } elseif ($paymentStatus === 'No Payment') {
+                                    $classColor = 'danger';
+                                } elseif ($paymentStatus === 'Partially Paid') {
+                                    $classColor = 'primary';
+                                }
+
+
+
+                                if ($paymentApprovalStatus === "Pending") {
+                                    $addClass = "btn btn-warning w-100";
+                                } elseif ($paymentApprovalStatus === "Approved") {
+                                    $addClass = "btn btn-primary w-100";
+                                } elseif ($paymentApprovalStatus === "Rejected") {
+                                    $addClass = "btn btn-danger w-100";
+                                } elseif ($paymentApprovalStatus === "Done") {
+                                    $addClass = "btn btn-success w-100";
+                                }
+
+
+                        ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($formattedID) ?></td>
+                                    <td><?= htmlspecialchars($guestName) ?></td>
+                                    <td>₱ <?= number_format($totalAmount, 2) ?></td>
+                                    <td>₱ <?= number_format($balance, 2) ?></td>
+                                    <td><?= htmlspecialchars($paymentMethod) ?></td>
+                                    <td><span class="<?= $addClass ?>"><?= htmlspecialchars($paymentApprovalStatus) ?></span></td>
+                                    <td><span
+                                            class="btn btn-<?= $classColor ?> w-100"><?= htmlspecialchars($paymentStatus) ?></span>
+                                    </td>
+
+                                    <td>
+                                        <form action="viewPayments.php" method="POST">
+                                            <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
+                                            <button type="submit" name="viewIndividualPayment"
+                                                class="btn btn-info w-100">View</button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                        <?php
+                            }
+                        }
+
+                        ?>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -326,75 +398,8 @@ require '../../Function/notification.php';
         });
     </script>
     <script src="../../Assets/JS/adminNavbar.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("../../Function/Admin/Ajax/getPaymentJSON.php")
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        console.error("Failed to load payments.");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'An unknown error occurred.'
-                        });
-                        return;
-                    }
-                    const payments = data.payments;
-                    const tbody = document.querySelector('#payment-display-body');
-                    tbody.innerHTML = "";
-                    console.log(payments);
-                    if (payments && payments.length > 0) {
-                        payments.forEach(payment => {
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
-                                                <td>${payment.formattedBookingID}</td>
-                                                <td>${payment.name}</td>
-                                                <td>${payment.totalBill}</td>
-                                                <td>${payment.userBalance}</td>
-                                                <td>${payment.paymentMethod}</td>
-                                                <td>
-                                                    <a class="btn btn-${payment.statusClass} w-100">
-                                                        ${payment.status}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-${payment.paymentClass} w-100">
-                                                        ${payment.paymentStatusName}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <form action="viewPayments.php" method="POST">
-                                                        <input type="hidden" name="button" value="booking">
-                                                        <input type="hidden" name="bookingType" value="${payment.bookingType}">
-                                                        <input type="hidden" name="bookingStatus" value="${payment.bookingStatus}">
-                                                        <input type="hidden" name="bookingID" value="${payment.bookingID}">
-                                                        <button type="submit" class="btn btn-primary">View</button>
-                                                    </form>
-                                                </td>
-                                            `;
-                            tbody.appendChild(row);
-                        })
-                    } else {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `<td colspan="6" class="text-center">No bookings to display</td>`;
-                        tbody.appendChild(row);
-                    }
-                }).catch(error => {
-                    console.error("Error loading bookings:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: error.message || 'Failed to load data from the server.'
-                    })
-                })
-        })
-    </script>
-
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <!-- Sweetalert Popup -->
     <script>
         const param = new URLSearchParams(window.location.search);
