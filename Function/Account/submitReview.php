@@ -1,21 +1,31 @@
 <?php
 require '../../Config/dbcon.php';
-
 session_start();
 
+
 $bookingID = intval($_POST['bookingID']);
-$bookingType = $conn->real_escape_string($_POST['bookingType']);
+$bookingType = $_POST['bookingType'];
 $reviewRating = floatval($_POST['reviewRating']);
-$reviewComment = $conn->real_escape_string($_POST['reviewComment']);
+$reviewComment = $_POST['reviewComment'];
 
-$sql = "INSERT INTO userreview (bookingID, bookingType, reviewRating, reviewComment)
-        VALUES ('$bookingID', '$bookingType', '$reviewRating', '$reviewComment')";
+$stmt = $conn->prepare("INSERT INTO userreview (bookingID, bookingType, reviewRating, reviewComment) VALUES (?, ?, ?, ?) LIMIT 1");
 
-if ($conn->query($sql) === TRUE) {
-    echo "Success";
+if ($stmt) {
+    $stmt->bind_param("isds", $bookingID, $bookingType, $reviewRating, $reviewComment);
+
+    if ($stmt->execute()) {
+        echo "Success";
+    } else {
+        http_response_code(500);
+        echo "Error executing statement: " . $stmt->error;
+        error_log("Error executing statement: " . $stmt->error);
+    }
+
+
+    $stmt->close();
 } else {
     http_response_code(500);
-    echo "Error: " . $conn->error;
+    echo "Error preparing statement: " . $conn->error;
 }
 
 $conn->close();

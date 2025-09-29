@@ -161,11 +161,11 @@ if (isset($_POST['eventBook'])) {
         }
 
         $bookingID = $insertBooking->insert_id;
-
+        $approvedID = 2;
         //insert into bp availed service
-        $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`, `price`) VALUES (?,?,?)");
+        $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`, `approvalStatus`, `price`) VALUES (?,?,?,?)");
         foreach ($partnerIDs as $partershipServiceID => $price) {
-            $insertBPavailedService->bind_param('iid', $partershipServiceID, $bookingID, $price);
+            $insertBPavailedService->bind_param('iiid', $partershipServiceID, $bookingID, $approvedID, $price);
             if (!$insertBPavailedService->execute()) {
                 $conn->rollback();
                 error_log("Error: " . $insertBooking->error);
