@@ -23,7 +23,9 @@
 
 
     <div class="backArrowContainer" id="backArrowContainer">
-        <a href="register.php"><img src="../Assets/Images/Icon/arrowBtnBlue.png" alt="Back Button" class="backArrow"> </a>
+
+        <a href="register.php"><i class="fa-solid fa-arrow-left backArrow" style="color: #121212;"></i></a>
+
     </div>
 
     <div class="titleContainer">

@@ -4,6 +4,9 @@ ini_set('display_errors', 1);
 require_once '../Config/dbcon.php';
 
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
+if ($editMode) {
+    session_start();
+}
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
 $getContent = $conn->prepare("SELECT * FROM resortinfo WHERE resortInfoTitle = ?");
