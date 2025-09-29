@@ -9,6 +9,7 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
@@ -51,6 +52,8 @@ unset($_SESSION['formData']);
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
 
 
     <!-- Font Awesome Link -->
@@ -480,7 +483,7 @@ unset($_SESSION['formData']);
             <h2 class="page-header-title">Booking Summary</h2>
         </div>
 
-        <div class="container-fluid">
+        <div class="container">
             <div class="card booking-summary" style="width: 50%;">
                 <div class="card-info">
                     <h5 class="info-title">Booking Type:</h5>
@@ -511,11 +514,11 @@ unset($_SESSION['formData']);
                 </div>
 
                 <?php if ($bookingType === 'Hotel') { ?>
-                    <div class="card-info">
-                        <h5 class="info-title">Arrival Time:</h5>
-                        <p class="card-text"><?= $arrivalTimeText ?></p>
-                        <input type="hidden" name="arrivalTime" value="<?= $arrivalTime ?>">
-                    </div>
+                <div class="card-info">
+                    <h5 class="info-title">Arrival Time:</h5>
+                    <p class="card-text"><?= $arrivalTimeText ?></p>
+                    <input type="hidden" name="arrivalTime" value="<?= $arrivalTime ?>">
+                </div>
                 <?php } ?>
 
                 <div class="card-info">
@@ -529,35 +532,37 @@ unset($_SESSION['formData']);
                     <h5 class="info-title">Description:</h5>
                     <ul class="card-text">
                         <?php foreach ($items as $service): ?>
-                            <li>
-                                <strong><?= htmlspecialchars($service['serviceName']) ?></strong>
-                                <ul>
-                                    <?php foreach (explode(',', $service['description']) as $feature): ?>
-                                        <li class="features"><?= htmlspecialchars(trim($feature)) ?></li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </li>
+                        <li>
+                            <strong><?= htmlspecialchars($service['serviceName']) ?></strong>
+                            <ul>
+                                <?php foreach (explode(',', $service['description']) as $feature): ?>
+                                <li class="features"><?= htmlspecialchars(trim($feature)) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
                         <?php endforeach; ?>
                     </ul>
-                    <input type="hidden" name="capacity"
-                        value="<?= $totalCapacity ?>">
+                    <input type="hidden" name="capacity" value="<?= $totalCapacity ?>">
                 </div>
 
 
                 <?php if ($bookingType === 'Resort') { ?>
-                    <div class="card-info">
-                        <h5 class="info-title">Additional Services:</h5>
-                        <p class="card-text"><?= !empty($addOnsServices) ? htmlspecialchars(implode(', ', $addOnsServices)) : 'None' ?></p>
-                        <?php foreach ($addOnsServices as $addOns): ?>
-                            <input type="hidden" name="addOnsServices[]" value="<?= htmlspecialchars($addOns) ?>">
-                        <?php endforeach; ?>
-                    </div>
+                <div class="card-info">
+                    <h5 class="info-title">Additional Services:</h5>
+                    <p class="card-text">
+                        <?= !empty($addOnsServices) ? htmlspecialchars(implode(', ', $addOnsServices)) : 'None' ?></p>
+                    <?php foreach ($addOnsServices as $addOns): ?>
+                    <input type="hidden" name="addOnsServices[]" value="<?= htmlspecialchars($addOns) ?>">
+                    <?php endforeach; ?>
+                </div>
                 <?php } else if ($bookingType === 'Hotel') { ?>
-                    <div class="card-info">
-                        <h5 class="info-title">Additional Guest:</h5>
-                        <p class="card-text"><?= !empty($additionalGuest) ? htmlspecialchars($additionalGuest) : 'None' ?></p>
-                        <input type="hidden" name="additionalGuest" value="<?= !empty($additionalGuest) ? $additionalGuest : 0 ?>">
-                    </div>
+                <div class="card-info">
+                    <h5 class="info-title">Additional Guest:</h5>
+                    <p class="card-text"><?= !empty($additionalGuest) ? htmlspecialchars($additionalGuest) : 'None' ?>
+                    </p>
+                    <input type="hidden" name="additionalGuest"
+                        value="<?= !empty($additionalGuest) ? $additionalGuest : 0 ?>">
+                </div>
                 <?php } ?>
 
                 <div class="card-info" id="addRequest">
@@ -577,35 +582,40 @@ unset($_SESSION['formData']);
                     <li class="list-group-item payment-info">
                         <h5 class="card-title">Payment Method:</h5>
                         <p class="card-text"><?= htmlspecialchars($paymentMethod) ?></p>
-                        <input type="hidden" name="paymentMethod" value="<?= htmlspecialchars($paymentMethod) ?>" class="card-content">
+                        <input type="hidden" name="paymentMethod" value="<?= htmlspecialchars($paymentMethod) ?>"
+                            class="card-content">
                     </li>
 
                     <?php if ($bookingType === "Resort") { ?>
-                        <li class="list-group-item payment-info" id="entranceFeeDiv">
-                            <h5 class="card-title">Entrance Fee:</h5>
-                            <p class="card-text">₱ <?= htmlspecialchars(number_format($totalEntranceFee, 2)) ?></p>
-                            <input type="hidden" name="entranceFee" value="<?= htmlspecialchars($totalEntranceFee) ?>" class="card-content">
-                        </li>
+                    <li class="list-group-item payment-info" id="entranceFeeDiv">
+                        <h5 class="card-title">Entrance Fee:</h5>
+                        <p class="card-text">₱ <?= htmlspecialchars(number_format($totalEntranceFee, 2)) ?></p>
+                        <input type="hidden" name="entranceFee" value="<?= htmlspecialchars($totalEntranceFee) ?>"
+                            class="card-content">
+                    </li>
                     <?php } ?>
 
                     <li class="list-group-item payment-info">
                         <h5 class="card-title">Service Fee:</h5>
                         <p class="card-text">₱ <?= htmlspecialchars(number_format($totalServicePrice, 2)) ?></p>
-                        <input type="hidden" name="serviceFee" value="<?= htmlspecialchars($totalServicePrice) ?>" class="card-content">
+                        <input type="hidden" name="serviceFee" value="<?= htmlspecialchars($totalServicePrice) ?>"
+                            class="card-content">
                     </li>
 
                     <?php if ($bookingType === "Hotel" || $bookingType === "Event") { ?>
-                        <li class="list-group-item payment-info" id="entertainmentDiv">
-                            <h5 class="card-title">Additional Fee:</h5>
-                            <p class="card-text">₱ <?= htmlspecialchars(number_format($additionalCharge, 2)) ?></p>
-                            <input type="hidden" name="additionalFee" value="<?= htmlspecialchars($additionalCharge) ?>" class="card-content">
-                        </li>
+                    <li class="list-group-item payment-info" id="entertainmentDiv">
+                        <h5 class="card-title">Additional Fee:</h5>
+                        <p class="card-text">₱ <?= htmlspecialchars(number_format($additionalCharge, 2)) ?></p>
+                        <input type="hidden" name="additionalFee" value="<?= htmlspecialchars($additionalCharge) ?>"
+                            class="card-content">
+                    </li>
                     <?php } else { ?>
-                        <li class="list-group-item payment-info" id="entertainmentDiv">
-                            <h5 class="card-title">Additional Service Fee:</h5>
-                            <p class="card-text">₱ <?= htmlspecialchars(number_format($totalEntertainmentPrice, 2)) ?></p>
-                            <input type="hidden" name="additionalServiceFee" value="<?= htmlspecialchars($totalEntertainmentPrice) ?>" class="card-content">
-                        </li>
+                    <li class="list-group-item payment-info" id="entertainmentDiv">
+                        <h5 class="card-title">Additional Service Fee:</h5>
+                        <p class="card-text">₱ <?= htmlspecialchars(number_format($totalEntertainmentPrice, 2)) ?></p>
+                        <input type="hidden" name="additionalServiceFee"
+                            value="<?= htmlspecialchars($totalEntertainmentPrice) ?>" class="card-content">
+                    </li>
                     <?php } ?>
 
                     <li class="list-group-item payment-info">
@@ -651,40 +661,41 @@ unset($_SESSION['formData']);
 
         <div class="note">
             <?php if ($bookingType === "Resort") { ?>
-                <ul>
-                    <li>
-                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        Payment for the cottage reservation must be made through the resort's GCash account.
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        If you reserve more than one cottage, a down payment is required for only one cottage.
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        The remaining balance should be paid directly at the resort upon arrival.
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        Upon arrival, the staff will verify the number of guests.
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        For any questions, please contact <strong><?= $contactNumber ?></strong>.
-                    </li>
+            <ul>
+                <li>
+                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                    Payment for the cottage reservation must be made through the resort's GCash account.
+                </li>
+                <li>
+                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                    If you reserve more than one cottage, a down payment is required for only one cottage.
+                </li>
+                <li>
+                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                    The remaining balance should be paid directly at the resort upon arrival.
+                </li>
+                <li>
+                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                    Upon arrival, the staff will verify the number of guests.
+                </li>
+                <li>
+                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                    For any questions, please contact <strong><?= $contactNumber ?></strong>.
+                </li>
 
-                </ul>
+            </ul>
             <?php } else if ($bookingType === 'Hotel') { ?>
-                <ul>
-                    <li>
-                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        Downpayment(30%) is required. Once you pay the downpayment its not refundable but you can still cancel the booking after 5-7 days of approval.
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
-                        For any questions, contact <strong><?= $contactNumber ?></strong>.
-                    </li>
-                </ul>
+            <ul>
+                <li>
+                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                    Downpayment(30%) is required. Once you pay the downpayment its not refundable but you can still
+                    cancel the booking after 5-7 days of approval.
+                </li>
+                <li>
+                    <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                    For any questions, contact <strong><?= $contactNumber ?></strong>.
+                </li>
+            </ul>
             <?php } ?>
         </div>
 
@@ -693,13 +704,13 @@ unset($_SESSION['formData']);
             <input type="hidden" name="scheduledStartDate" value="<?= htmlspecialchars($scheduledStartDate ?? '') ?>">
             <input type="hidden" name="scheduledEndDate" value="<?= htmlspecialchars($scheduledEndDate ?? '') ?>">
             <?php foreach ($cottageChoices as $choice): ?>
-                <input type="hidden" name="cottageSelections[]" value="<?= htmlspecialchars($choice) ?>">
+            <input type="hidden" name="cottageSelections[]" value="<?= htmlspecialchars($choice) ?>">
             <?php endforeach; ?>
             <?php foreach ($roomChoices as $choice): ?>
-                <input type="hidden" name="roomSelections[]" value="<?= htmlspecialchars($choice) ?>">
+            <input type="hidden" name="roomSelections[]" value="<?= htmlspecialchars($choice) ?>">
             <?php endforeach; ?>
             <?php foreach ($selectedHotels as $choice): ?>
-                <input type="hidden" name="hotelSelections[]" value="<?= htmlspecialchars($choice) ?>">
+            <input type="hidden" name="hotelSelections[]" value="<?= htmlspecialchars($choice) ?>">
             <?php endforeach; ?>
             <input type="hidden" name="hoursSelected" value="<?= htmlspecialchars($hoursSelected ?? '') ?>">
             <input type="hidden" name="hoursNumber" value="<?= htmlspecialchars($numHours ?? '') ?>">

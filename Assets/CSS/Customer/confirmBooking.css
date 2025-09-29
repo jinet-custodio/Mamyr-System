@@ -59,7 +59,7 @@ body {
   color: rgb(23, 143, 235);
 }
 
-.container-fluid {
+.container {
   display: flex;
   gap: 2rem;
   margin: 1rem auto 0 auto;
@@ -177,96 +177,281 @@ li .features {
   text-align: justify;
 }
 
-/* Footer  */
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  .page-header {
+    width: 100%;
+    padding: 1rem;
+  }
 
-footer {
-  /* border: 1px solid black; */
+  .page-header .btn {
+    top: 30%;
+    left: 3%;
+  }
+  .page-header-title {
+    margin-top: 6rem;
+    text-align: center !important;
+  }
 
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
-  );
+  .container {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+    padding: 1rem !important;
+  }
+
+  .booking-summary,
+  .payment-summary {
+    width: 100% !important;
+    padding: 0.5rem;
+  }
+
+  .card-info {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .card-info ul {
+    width: unset !important;
+    margin-top: 1rem;
+  }
+
+  p,
+  .info-title {
+    text-align: center;
+  }
+
+  .cardHeader {
+    text-align: center;
+  }
+
+  .payment-info {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .list-group-item h5 {
+    text-align: center;
+  }
+
+  .note {
+    width: 70% !important;
+  }
+
+  .note ul {
+    padding: 0 !important;
+  }
+
+  .note li {
+    margin-top: 2rem;
+  }
 }
 
-.pb-1 {
-  gap: 2vw;
-  padding: 1vw 0 0 2vw;
+/* Tablet Landscape */
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  .page-header {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .page-header .btn {
+    top: 30%;
+    left: 3%;
+  }
+  .page-header-title {
+    margin-top: 6rem;
+    text-align: center !important;
+  }
+
+  .container {
+    margin-top: 3rem;
+    padding: 0.5rem !important;
+  }
+
+  .booking-summary,
+  .payment-summary {
+    width: 100% !important;
+    padding: 0.5rem;
+  }
+
+  .card-info {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .card-info ul {
+    width: unset !important;
+    margin-top: 1rem;
+  }
+
+  p,
+  .info-title {
+    text-align: center;
+  }
+
+  .cardHeader {
+    text-align: center;
+  }
+
+  .list-group-item h5 {
+    text-align: center;
+  }
+
+  .note {
+    width: 70% !important;
+  }
+
+  .note ul {
+    padding: 0 !important;
+  }
+
+  .note li {
+    margin-top: 2rem;
+  }
 }
 
-.logo {
-  width: 10vw;
-  height: auto;
-}
-.mb-0 {
-  font-family: "Lora";
-  font-size: 1.5vw;
-  font-weight: bold;
-  color: #ffff;
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .page-header {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .page-header .btn {
+    top: 30%;
+    left: 3%;
+  }
+  .page-header-title {
+    margin-top: 6rem;
+    text-align: center !important;
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+    padding: 1rem !important;
+  }
+
+  .booking-summary,
+  .payment-summary {
+    width: 100% !important;
+    padding: 0.5rem;
+  }
+
+  .card-info {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .card-info ul {
+    width: unset !important;
+    margin-top: 1rem;
+  }
+
+  p,
+  .info-title {
+    text-align: center;
+  }
+
+  .cardHeader {
+    text-align: center;
+  }
+
+  .payment-info {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .list-group-item h5 {
+    text-align: center;
+  }
+
+  .note {
+    width: 70% !important;
+  }
+
+  .note ul {
+    padding: 0 !important;
+  }
+
+  .note li {
+    margin-top: 2rem;
+  }
 }
 
-.footerLine {
-  width: 80%;
-  margin: 0 auto;
-  color: #fff;
-  opacity: 1;
-}
+/* Phone size */
+@media screen and (max-width: 599px) {
+  .page-header {
+    width: 100%;
+    padding: 1rem;
+  }
 
-.info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5vw;
-}
-.locationFooter {
-  /* border: 1px solid black; */
-  width: 30%;
-}
+  .page-header .btn {
+    top: 30%;
+    left: 3%;
+  }
+  .page-header-title {
+    margin-top: 6rem;
+    text-align: center !important;
+  }
 
-.reservationTitle,
-.locationTitle {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 1.5vw;
-  color: #fff;
-}
+  .container {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+    padding: 1rem !important;
+  }
 
-.numberFooter,
-.emailAddressTextFooter,
-.addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: 1vw;
-}
+  .booking-summary,
+  .payment-summary {
+    width: 100% !important;
+    padding: 0.5rem;
+  }
 
-.socialIcons {
-  display: flex;
-  justify-content: center;
-  margin: 0.3vw;
-}
+  .card-info {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  p,
+  .info-title {
+    text-align: center;
+  }
 
-.socialIcons a {
-  text-decoration: none;
-  padding: 0.8vw;
-  background-color: rgb(255, 255, 255);
-  margin: 5px;
-  border-radius: 50%;
-}
+  .cardHeader {
+    text-align: center;
+  }
 
-.socialIcons a i {
-  font-size: 2vw;
-  color: #3e849e;
-  opacity: 0.9;
-}
+  .card-info ul {
+    width: unset !important;
+    margin-top: 1rem;
+  }
 
-.socialIcons a:hover {
-  background-color: white;
-  transition: 0.5s;
-}
+  .payment-info {
+    flex-direction: column;
+    align-items: center;
+  }
 
-.socialIcons a:hover i {
-  color: #c1a534;
-  transition: 0.5s;
-}
+  .list-group-item h5 {
+    text-align: center;
+  }
 
-/* Footer */
+  .note {
+    width: 70% !important;
+  }
+
+  .note ul {
+    padding: 0 !important;
+  }
+
+  .note li {
+    margin-top: 2rem;
+  }
+}
