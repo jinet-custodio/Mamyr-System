@@ -146,9 +146,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <input type="text" class="form-control" name="checkInDate" id="checkInDate" required
                                     placeholder="Select Date and Time"
                                     value="<?php echo isset($_SESSION['hotelFormData']['checkInDate']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['checkInDate'])) : ''; ?>">
-                                <i class="fa-solid fa-calendar" id="hotelCheckinIcon"
+                                <!--<i class="fa-solid fa-calendar" id="hotelCheckinIcon"
                                     style="margin-left: -2vw;font-size:1.2vw;"> </i>
-                            </div>
+                           --> </div>
                         </div>
                         <div class="checkOut-container">
                             <h5 class="containerLabel">Check-Out Date</h5>
@@ -156,9 +156,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <input type="text" class="form-control" name="checkOutDate" id="checkOutDate" required
                                     placeholder="Select Date and Time"
                                     value="<?php echo isset($_SESSION['hotelFormData']['checkOutDate']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['checkOutDate'])) : ''; ?>">
-                                <i class="fa-solid fa-calendar" id="hotelCheckoutIcon"
+                                <!--<i class="fa-solid fa-calendar" id="hotelCheckoutIcon"
                                     style="margin-left: -2vw;font-size:1.2vw;"> </i>
-                            </div>
+                    --></div>
                         </div>
                     </div>
 
