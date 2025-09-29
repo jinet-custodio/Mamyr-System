@@ -270,8 +270,8 @@ body {
     gap: 1rem;
   }
   .card {
-    height: 10rem !important;
-    width: 10rem !important;
+    height: 15rem !important;
+    width: 15rem !important;
   }
 
   .category-card img {
