@@ -128,6 +128,10 @@ a.dropdown-item {
   left: 4%;
 }
 
+i.backButton {
+  font-size: 2.2vw;
+}
+
 .titleContainer {
   margin-top: 4vw;
   display: flex;

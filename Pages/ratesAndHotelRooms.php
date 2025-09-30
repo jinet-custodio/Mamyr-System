@@ -367,9 +367,10 @@ require '../Config/dbcon.php';
                         <input type="text" placeholder="Select your booking date" id="hotelDate">
                     </div>
                     <?php
-                    $availsql = "SELECT RSAvailabilityID, RServiceName, RSduration 
+                    $availsql = "SELECT RServiceName, MIN(RSAvailabilityID) AS RSAvailabilityID, MIN(RSduration) AS RSduration
                         FROM resortamenity
-                        WHERE RSCategoryID = 1";
+                        WHERE RSCategoryID = 1
+                        GROUP BY RServiceName;";
 
                     $result = mysqli_query($conn, $availsql);
                     ?>
@@ -432,7 +433,20 @@ require '../Config/dbcon.php';
 
                     <div class="hotelRoomList">
                         <?php
-                        $roomsql = "SELECT * FROM resortamenity WHERE RScategoryID = 1";
+                        $roomsql = "WITH Ranked AS (
+                            SELECT *,
+                                    ROW_NUMBER() OVER (
+                                    PARTITION BY RServiceName
+                                    ORDER BY RSAvailabilityID
+                                    ) AS rn
+                            FROM resortamenity
+                            WHERE RSCategoryID = 1
+                            )
+                            SELECT *
+                            FROM Ranked
+                            WHERE rn = 1
+                            ORDER BY CAST(SUBSTRING(RServiceName, 5) AS UNSIGNED);
+                             ";
                         $roomresult = mysqli_query($conn, $roomsql);
                         if (mysqli_num_rows($roomresult) > 0) {
                             foreach ($roomresult as $hotel) {
