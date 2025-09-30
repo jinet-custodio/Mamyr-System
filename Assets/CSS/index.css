@@ -385,7 +385,7 @@ input[type="password"]::-webkit-search-cancel-button {
 /* modal css */
 
 .modal-dialog {
-  max-width: 60% !important;
+  max-width: 60%;
 }
 .modal-body {
   max-height: 500px;
@@ -549,6 +549,14 @@ input[type="password"]::-webkit-search-cancel-button {
   #signUp {
     margin-top: 5vw;
     margin-bottom: 1rem;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  .modal-dialog {
+    width: 90% !important;
+    max-width: 90% !important;
+    margin: auto !important;
   }
 }
 

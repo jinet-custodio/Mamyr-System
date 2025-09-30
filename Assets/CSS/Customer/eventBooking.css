@@ -580,12 +580,13 @@ td {
     margin-top: -1rem !important;
   }
 
-  .card {
-    width: 100% !important;
-  }
-
   #eventBookingCard {
     display: flex !important;
+    height: 55rem !important;
+  }
+
+  .card {
+    width: 100% !important;
   }
 
   .eventBox {
