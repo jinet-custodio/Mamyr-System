@@ -707,6 +707,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             const slides = container.querySelectorAll('.slide');
             const prevBtn = container.querySelector('.prev-btn');
             const nextBtn = container.querySelector('.next-btn');
+            if (slides.length === 0) {
+                console.warn('No slides found in container:', container);
+                return;
+            }
             let index = 0;
 
             slides.forEach(slide => {

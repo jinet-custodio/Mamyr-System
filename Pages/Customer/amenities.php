@@ -248,19 +248,18 @@ require '../../Function/notification.php';
                         <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
                     </div>
                 </div>
-
                 <div class="cottage colored-bg" style="background-color:#f7d5b0;">
                     <div class=" amenityTitleContainer">
                         <hr class="amenityLine">
                         <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity2"
-                                value="<?= htmlspecialchars($contentMap['Amenity2'] ?? 'No Title found') ?>">
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity2" value="<?= htmlspecialchars($contentMap['Amenity2'] ?? 'No Title found') ?>">
                         <?php else: ?>
                             <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity2'] ?? 'No title found') ?></h4>
                         <?php endif; ?>
                         <?php if ($editMode): ?>
                             <textarea type="text" rows="5"
-                                class="amenityDescription Amenity2Desc indent editable-input form-control"
+                                class="amenityDescription Amenity2Desc indent editable-input form-control  text-center"
                                 data-title="Amenity2Desc"><?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></textarea>
                         <?php else: ?>
                             <p class="amenityDescription">
@@ -268,9 +267,9 @@ require '../../Function/notification.php';
                         <?php endif; ?>
                     </div>
                     <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity1'])): ?>
-                            <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        <?php if (isset($imageMap['Amenity2'])): ?>
+                            <?php foreach ($imageMap['Amenity2'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/cottagePics/" . $img['imageData'];
                                 $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                             ?>
                                 <div class="slide">
@@ -283,7 +282,7 @@ require '../../Function/notification.php';
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="slide">
-                                <img src="<?= $defaultImage ?>" alt="None Found">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
                         <?php endif; ?>
                         <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -295,14 +294,14 @@ require '../../Function/notification.php';
                     <div class=" amenityTitleContainer">
                         <hr class="amenityLine">
                         <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity3"
-                                value="<?= htmlspecialchars($contentMap['Amenity3'] ?? 'No Title found') ?>">
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity3" value="<?= htmlspecialchars($contentMap['Amenity3'] ?? 'No Title found') ?>">
                         <?php else: ?>
                             <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity3'] ?? 'No title found') ?></h4>
                         <?php endif; ?>
                         <?php if ($editMode): ?>
                             <textarea type="text" rows="5"
-                                class="amenityDescription Amenity3Desc indent editable-input form-control"
+                                class="amenityDescription Amenity3Desc indent editable-input form-control text-center"
                                 data-title="Amenity3Desc"><?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></textarea>
                         <?php else: ?>
                             <p class="amenityDescription">
@@ -311,9 +310,9 @@ require '../../Function/notification.php';
                     </div>
 
                     <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity1'])): ?>
-                            <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        <?php if (isset($imageMap['Amenity3'])): ?>
+                            <?php foreach ($imageMap['Amenity3'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/videokePics/" . $img['imageData'];
                                 $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                             ?>
                                 <div class="slide">
@@ -326,7 +325,7 @@ require '../../Function/notification.php';
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="slide">
-                                <img src="<?= $defaultImage ?>" alt="None Found">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
                         <?php endif; ?>
                         <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -338,14 +337,14 @@ require '../../Function/notification.php';
                     <div class="amenityTitleContainer">
                         <hr class="amenityLine">
                         <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity4"
-                                value="<?= htmlspecialchars($contentMap['Amenity4'] ?? 'No Title found') ?>">
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity4" value="<?= htmlspecialchars($contentMap['Amenity4'] ?? 'No Title found') ?>">
                         <?php else: ?>
                             <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity4'] ?? 'No title found') ?></h4>
                         <?php endif; ?>
                         <?php if ($editMode): ?>
                             <textarea type="text" rows="5"
-                                class="amenityDescription Amenity4Desc indent editable-input form-control"
+                                class="amenityDescription Amenity4Desc indent editable-input form-control text-center"
                                 data-title="Amenity4Desc"><?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></textarea>
                         <?php else: ?>
                             <p class="amenityDescription">
@@ -354,9 +353,9 @@ require '../../Function/notification.php';
                     </div>
 
                     <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity1'])): ?>
-                            <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        <?php if (isset($imageMap['Amenity4'])): ?>
+                            <?php foreach ($imageMap['Amenity4'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/pavilionPics/" . $img['imageData'];
                                 $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                             ?>
                                 <div class="slide">
@@ -369,7 +368,7 @@ require '../../Function/notification.php';
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="slide">
-                                <img src="<?= $defaultImage ?>" alt="None Found">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
                         <?php endif; ?>
                         <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -382,14 +381,14 @@ require '../../Function/notification.php';
                     <div class="amenityTitleContainer">
                         <hr class="amenityLine">
                         <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity5"
-                                value="<?= htmlspecialchars($contentMap['Amenity5'] ?? 'No Title found') ?>">
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity5" value="<?= htmlspecialchars($contentMap['Amenity5'] ?? 'No Title found') ?>">
                         <?php else: ?>
                             <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity5'] ?? 'No title found') ?></h4>
                         <?php endif; ?>
                         <?php if ($editMode): ?>
                             <textarea type="text" rows="5"
-                                class="amenityDescription Amenity5Desc indent editable-input form-control"
+                                class="amenityDescription Amenity5Desc indent editable-input form-control text-center"
                                 data-title="Amenity5Desc"><?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></textarea>
                         <?php else: ?>
                             <p class="amenityDescription">
@@ -398,9 +397,9 @@ require '../../Function/notification.php';
                     </div>
 
                     <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity1'])): ?>
-                            <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        <?php if (isset($imageMap['Amenity5'])): ?>
+                            <?php foreach ($imageMap['Amenity5'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/miniPavPics/" . $img['imageData'];
                                 $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                             ?>
                                 <div class="slide">
@@ -413,7 +412,7 @@ require '../../Function/notification.php';
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="slide">
-                                <img src="<?= $defaultImage ?>" alt="None Found">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
                         <?php endif; ?>
                         <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -426,14 +425,14 @@ require '../../Function/notification.php';
                     <div class="amenityTitleContainer">
                         <hr class="amenityLine">
                         <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity6"
-                                value="<?= htmlspecialchars($contentMap['Amenity6'] ?? 'No Title found') ?>">
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity6" value="<?= htmlspecialchars($contentMap['Amenity6'] ?? 'No Title found') ?>">
                         <?php else: ?>
                             <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity6'] ?? 'No title found') ?></h4>
                         <?php endif; ?>
                         <?php if ($editMode): ?>
                             <textarea type="text" rows="5"
-                                class="amenityDescription Amenity6Desc indent editable-input form-control"
+                                class="amenityDescription Amenity6Desc indent editable-input form-control text-center"
                                 data-title="Amenity6Desc"><?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></textarea>
                         <?php else: ?>
                             <p class="amenityDescription">
@@ -441,9 +440,9 @@ require '../../Function/notification.php';
                         <?php endif; ?>
                     </div>
                     <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity1'])): ?>
-                            <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                        <?php if (isset($imageMap['Amenity6'])): ?>
+                            <?php foreach ($imageMap['Amenity6'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/hotelPics/" . $img['imageData'];
                                 $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                             ?>
                                 <div class="slide">
@@ -456,7 +455,7 @@ require '../../Function/notification.php';
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="slide">
-                                <img src="<?= $defaultImage ?>" alt="None Found">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
                         <?php endif; ?>
                         <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -469,14 +468,14 @@ require '../../Function/notification.php';
                     <div class="amenityTitleContainer">
                         <hr class="amenityLine">
                         <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity7"
-                                value="<?= htmlspecialchars($contentMap['Amenity7'] ?? 'No Title found') ?>">
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity7" value="<?= htmlspecialchars($contentMap['Amenity7'] ?? 'No Title found') ?>">
                         <?php else: ?>
                             <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity7'] ?? 'No title found') ?></h4>
                         <?php endif; ?>
                         <?php if ($editMode): ?>
                             <textarea type="text" rows="5"
-                                class="amenityDescription Amenity7Desc indent editable-input form-control"
+                                class="amenityDescription Amenity7Desc indent editable-input form-control text-center"
                                 data-title="Amenity7Desc"><?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></textarea>
                         <?php else: ?>
                             <p class="amenityDescription">
@@ -500,7 +499,7 @@ require '../../Function/notification.php';
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="slide">
-                                <img src="<?= $defaultImage ?>" alt="None Found">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
                         <?php endif; ?>
                         <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
@@ -595,6 +594,10 @@ require '../../Function/notification.php';
             const slides = container.querySelectorAll('.slide');
             const prevBtn = container.querySelector('.prev-btn');
             const nextBtn = container.querySelector('.next-btn');
+            if (slides.length === 0) {
+                console.warn('No slides found in container:', container);
+                return;
+            }
             let index = 0;
 
             slides.forEach(slide => {
