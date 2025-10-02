@@ -157,6 +157,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="reviews.php">
+                        <i class="fa-solid fa-star navbar-icon"></i>
+                        <h5>Reviews</h5>
+                    </a>
+                </li>
+
                 <li class="nav-item ">
                     <a class="nav-link " href="roomList.php">
                         <i class="fa-solid fa-hotel navbar-icon"></i>
@@ -199,8 +206,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
-                        Log Out
+                    <a href="../../Function/Admin/logout.php" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
+                        <h5 style="color: red;">Log Out</h5>
                     </a>
                 </li>
             </ul>
@@ -702,10 +710,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     ?>
                                 </select>
                             </div>
-                            <!-- <div class="input-container">
+                            <div class="input-container">
                                 <label for="serviceImage">Service Image</label>
                                 <input type="file" class="form-control" name="serviceImage" id="serviceImage">
-                            </div> -->
+                            </div>
 
                             <div class="input-container">
                                 <label for="serviceAvailability">Availability</label>
@@ -906,11 +914,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <label for="foodName">Food Name</label>
                                 <input type="text" class="form-control" id="foodName" name="foodName" required>
                             </div>
-
-                            <!-- <div class="input-container">
-                                <label for="foodPrice">Price</label>
-                                <input type="text" class="form-control" id="foodPrice" name="foodPrice" required>
-                            </div> -->
 
                             <div class="input-container">
                                 <label for="foodCategory">Food Category</label>

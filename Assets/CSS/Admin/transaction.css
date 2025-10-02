@@ -111,6 +111,26 @@ th:nth-child(7) {
   text-transform: capitalize;
 }
 
+.btn-red {
+  background-color: rgb(204, 30, 20) !important;
+  color: white;
+}
+
+.btn-red:hover {
+  background-color: rgb(150, 10, 3) !important;
+  color: white;
+}
+
+.btn-light-green {
+  background-color: rgb(71, 139, 10) !important;
+  color: white;
+}
+
+.btn-light-green:hover {
+  background-color: rgb(58, 112, 10) !important;
+  color: white;
+}
+
 @media (max-width: 991.98px) {
   .transactionContainer {
     margin-top: 5vh;

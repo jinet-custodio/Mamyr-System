@@ -27,11 +27,15 @@
   font-family: "Poppins" !important;
   font-weight: lighter;
   margin-top: 15px;
+}
+
+.nav-item,
+#logOutBtn {
   font-size: 1.5vw;
 }
 
-#navbar-half .nav-link,
-#navbar-half {
+.white-text .nav-link,
+.white-text .nav-item #logOutBtn {
   color: white !important;
 }
 
@@ -40,18 +44,25 @@
 }
 
 #navbar-half.scrolled {
-  background-color: white !important;
+  background-color: white;
 }
 #navbar-half.scrolled a,
 #navbar-half.scrolled #logOutBtn {
   color: black !important;
 }
 
+/* #navbar .nav-link,
+#navbar #logOutBtn,
+#navbar-half2 .nav-link,
+#navbar-half2 #logOutBtn {
+  color: rgb(2, 2, 2) !important;
+} */
+
 .nav-link,
 #logOutBtn {
   text-decoration: none;
   display: inline-block;
-  padding: 10px 15px !important;
+  padding: 10px !important;
   position: relative;
   color: rgb(2, 2, 2) !important;
   letter-spacing: 0.1em;
@@ -59,7 +70,6 @@
 
 #logOutBtn {
   font-family: "Poppins";
-  font-size: 1.5vw;
   margin-right: 2vw;
   border: none;
 }
@@ -114,12 +124,13 @@
   color: black !important;
 }
 
-#navbar-half2.scrolled {
+.white-text.scrolled {
   background-color: white;
 }
 
-#navbar-half2.scrolled {
-  background-color: white;
+.white-text.scrolled .nav-link,
+.white-text.scrolled #logOutBtn {
+  color: black !important;
 }
 
 .dropdown-item {
@@ -129,6 +140,10 @@
 
 .navbar {
   transition: all 0.4s ease-in-out;
+}
+
+#navbar-half2.scrolled {
+  background-color: white;
 }
 
 .account-nav {
@@ -237,7 +252,7 @@
 
   .nav-item,
   #logOutBtn {
-    font-size: 2vw;
+    font-size: 1.7vw;
   }
 
   #logOutBtn {
@@ -266,7 +281,7 @@
     position: relative;
   }
 
-  #navbar-half.scrolled {
+  .navbar.scrolled {
     background-color: transparent !important;
   }
 
@@ -300,7 +315,7 @@
 
   #toggledNav,
   #navUL {
-    width: 25%;
+    width: 30%;
     margin-right: 2vw;
     background-color: whitesmoke;
   }

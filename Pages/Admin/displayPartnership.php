@@ -177,6 +177,13 @@ require '../../Function/notification.php';
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link" href="reviews.php">
+                        <i class="fa-solid fa-star navbar-icon"></i>
+                        <h5>Reviews</h5>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link " href="services.php">
                         <i class="fa-solid fa-bell-concierge navbar-icon"></i>
                         <h5>Services</h5>
@@ -294,7 +301,7 @@ require '../../Function/notification.php';
                         $result = $selectQuery->get_result();
                         if ($result->num_rows > 0) {
                             foreach ($result as $applicants) {
-                                $name = ucwords($applicants['firstName'] ?? "") . " Secret" . ucwords($applicants['lastName'] ?? "");
+                                $name = ucwords($applicants['firstName'] ?? "") . " " . ucwords($applicants['lastName'] ?? "");
                                 $partnerID = $applicants['partnershipID'];
                                 $status = $applicants['statusName'];
                                 $date = $applicants['startDate'];

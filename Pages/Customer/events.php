@@ -53,7 +53,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top " id="navbar-half">
+    <nav class="navbar navbar-expand-lg fixed-top white-text" id="navbar-half">
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
             <?php

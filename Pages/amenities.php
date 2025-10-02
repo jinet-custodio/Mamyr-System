@@ -111,7 +111,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="embed-responsive embed-responsive-16by9">
             <video id="mamyrVideo" autoplay muted loop controls class="embed-responsive-item">
-                <source src="../Assets/Videos/mamyrVideo1.mp4" type="video/mp4">
+                <source src="../Assets/videos/mamyrVideo1.mp4" type="video/mp4">
             </video>
 
         </div>
@@ -179,9 +179,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <?php endif; ?>
             </div>
             <div class="slideshow-container">
-                <?php if (isset($imageMap['Amenity1'])): ?>
-                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                        $imagePath = "../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                <?php if (isset($imageMap['Amenity2'])): ?>
+                    <?php foreach ($imageMap['Amenity2'] as $index => $img):
+                        $imagePath = "../Assets/Images/amenities/cottagePics/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                     ?>
                         <div class="slide">
@@ -222,9 +222,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
 
             <div class="slideshow-container">
-                <?php if (isset($imageMap['Amenity1'])): ?>
-                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                        $imagePath = "../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                <?php if (isset($imageMap['Amenity3'])): ?>
+                    <?php foreach ($imageMap['Amenity3'] as $index => $img):
+                        $imagePath = "../Assets/Images/amenities/videokePics/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                     ?>
                         <div class="slide">
@@ -265,9 +265,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
 
             <div class="slideshow-container">
-                <?php if (isset($imageMap['Amenity1'])): ?>
-                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                        $imagePath = "../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                <?php if (isset($imageMap['Amenity4'])): ?>
+                    <?php foreach ($imageMap['Amenity4'] as $index => $img):
+                        $imagePath = "../Assets/Images/amenities/pavilionPics/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                     ?>
                         <div class="slide">
@@ -309,9 +309,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
 
             <div class="slideshow-container">
-                <?php if (isset($imageMap['Amenity1'])): ?>
-                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                        $imagePath = "../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                <?php if (isset($imageMap['Amenity5'])): ?>
+                    <?php foreach ($imageMap['Amenity5'] as $index => $img):
+                        $imagePath = "../Assets/Images/amenities/miniPavPics/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                     ?>
                         <div class="slide">
@@ -352,9 +352,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <?php endif; ?>
             </div>
             <div class="slideshow-container">
-                <?php if (isset($imageMap['Amenity1'])): ?>
-                    <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                        $imagePath = "../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                <?php if (isset($imageMap['Amenity6'])): ?>
+                    <?php foreach ($imageMap['Amenity6'] as $index => $img):
+                        $imagePath = "../Assets/Images/amenities/hotelPics/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                     ?>
                         <div class="slide">
@@ -707,6 +707,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             const slides = container.querySelectorAll('.slide');
             const prevBtn = container.querySelector('.prev-btn');
             const nextBtn = container.querySelector('.next-btn');
+            if (slides.length === 0) {
+                console.warn('No slides found in container:', container);
+                return;
+            }
             let index = 0;
 
             slides.forEach(slide => {

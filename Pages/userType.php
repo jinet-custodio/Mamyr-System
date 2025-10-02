@@ -23,7 +23,9 @@
 
 
     <div class="backArrowContainer" id="backArrowContainer">
-        <a href="register.php"><img src="../Assets/Images/Icon/back-button.png" alt="Back Button" class="backArrow"> </a>
+
+        <a href="register.php"><i class="fa-solid fa-arrow-left backArrow" style="color: #121212;"></i></a>
+
     </div>
 
     <div class="titleContainer">
@@ -35,7 +37,7 @@
 
 
 
-        <a href="register.php?page=register" id="partner-link" class="categoryLink" >
+        <a href="register.php?page=register" id="partner-link" class="categoryLink">
             <div class="card category-card ">
                 <img class="card-img-top" src="../Assets/Images/UserTypePhotos/customer.png" alt="Partners">
 
@@ -47,8 +49,8 @@
             </div>
         </a>
 
-        <a href="busPartnerRegister.php" id="request-link" class="categoryLink" >
-            <div class="card category-card " >
+        <a href="busPartnerRegister.php" id="request-link" class="categoryLink">
+            <div class="card category-card ">
                 <img class="card-img-top" src="../Assets/Images/UserTypePhotos/businessPartner.png"
                     alt="Business Partner">
 

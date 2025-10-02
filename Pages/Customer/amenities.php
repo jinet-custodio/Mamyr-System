@@ -82,9 +82,10 @@ require '../../Function/notification.php';
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
 
     <!-- Bootstrap Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
@@ -147,6 +148,7 @@ require '../../Function/notification.php';
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
@@ -189,346 +191,344 @@ require '../../Function/notification.php';
                 </ul>
             </div>
         </nav>
+        <main>
+            <!-- Notification Modal -->
+            <?php include '../notificationModal.php' ?>
 
+            <div class="amenities">
 
-        <!-- Notification Modal -->
-        <?php include '../notificationModal.php' ?>
-        <div class="amenities">
+                <h1 class="title">OUR AMENITIES</h1>
 
-            <h1 class="title">OUR AMENITIES</h1>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video id="mamyrVideo" autoplay muted loop controls class="embed-responsive-item">
+                        <source src="../../Assets/Videos/mamyrVideo1.mp4" type="video/mp4">
+                    </video>
 
-            <div class="embed-responsive embed-responsive-16by9">
-                <video id="mamyrVideo" autoplay muted loop controls class="embed-responsive-item">
-                    <source src="../../Assets/Videos/mamyrVideo1.mp4" type="video/mp4">
-                </video>
-
-            </div>
-
-            <div class="pool">
-                <div class="amenityTitleContainer">
-                    <hr class="amenityLine">
-                    <!-- <h4 class="amenityTitle">Swimming Pools</h4> -->
-                    <?php if ($editMode): ?>
-                        <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity1"
-                            value="<?= htmlspecialchars($contentMap['Amenity1'] ?? 'No Title found') ?>">
-                    <?php else: ?>
-                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity1'] ?? 'No title found') ?></h4>
-                    <?php endif; ?>
-                    <?php if ($editMode): ?>
-                        <textarea type="text" rows="5"
-                            class="amenityDescription Amenity1Desc indent editable-input form-control"
-                            data-title="Amenity1Desc"><?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></textarea>
-                    <?php else: ?>
-                        <p class="amenityDescription">
-                            <?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></p>
-                    <?php endif; ?>
                 </div>
+                <div class="pool">
+                    <div class="amenityTitleContainer">
+                        <hr class="amenityLine">
+                        <!-- <h4 class="amenityTitle">Swimming Pools</h4> -->
+                        <?php if ($editMode): ?>
+                            <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity1"
+                                value="<?= htmlspecialchars($contentMap['Amenity1'] ?? 'No Title found') ?>">
+                        <?php else: ?>
+                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity1'] ?? 'No title found') ?></h4>
+                        <?php endif; ?>
+                        <?php if ($editMode): ?>
+                            <textarea type="text" rows="5"
+                                class="amenityDescription Amenity1Desc indent editable-input form-control"
+                                data-title="Amenity1Desc"><?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></textarea>
+                        <?php else: ?>
+                            <p class="amenityDescription">
+                                <?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></p>
+                        <?php endif; ?>
+                    </div>
 
-                <div class="slideshow-container">
-                    <?php if (isset($imageMap['Amenity1'])): ?>
-                        <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                            $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
-                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                        ?>
+                    <div class="slideshow-container">
+                        <?php if (isset($imageMap['Amenity1'])): ?>
+                            <?php foreach ($imageMap['Amenity1'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                            ?>
+                                <div class="slide">
+                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <div class="slide">
-                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                    data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                <img src="<?= $defaultImage ?>" alt="None Found">
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="slide">
-                            <img src="<? $defaultImage ?>" alt="None Found">
-                        </div>
-                    <?php endif; ?>
-                    <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                    <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                        <?php endif; ?>
+                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="cottage colored-bg" style="background-color:#f7d5b0;">
-                <div class=" amenityTitleContainer">
-                    <hr class="amenityLine">
-                    <?php if ($editMode): ?>
-                        <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity2"
-                            value="<?= htmlspecialchars($contentMap['Amenity2'] ?? 'No Title found') ?>">
-                    <?php else: ?>
-                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity2'] ?? 'No title found') ?></h4>
-                    <?php endif; ?>
-                    <?php if ($editMode): ?>
-                        <textarea type="text" rows="5"
-                            class="amenityDescription Amenity2Desc indent editable-input form-control"
-                            data-title="Amenity2Desc"><?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></textarea>
-                    <?php else: ?>
-                        <p class="amenityDescription">
-                            <?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></p>
-                    <?php endif; ?>
-                </div>
-                <div class="slideshow-container">
-                    <?php if (isset($imageMap['Amenity1'])): ?>
-                        <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                            $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
-                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                        ?>
+                <div class="cottage colored-bg" style="background-color:#f7d5b0;">
+                    <div class=" amenityTitleContainer">
+                        <hr class="amenityLine">
+                        <?php if ($editMode): ?>
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity2" value="<?= htmlspecialchars($contentMap['Amenity2'] ?? 'No Title found') ?>">
+                        <?php else: ?>
+                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity2'] ?? 'No title found') ?></h4>
+                        <?php endif; ?>
+                        <?php if ($editMode): ?>
+                            <textarea type="text" rows="5"
+                                class="amenityDescription Amenity2Desc indent editable-input form-control  text-center"
+                                data-title="Amenity2Desc"><?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></textarea>
+                        <?php else: ?>
+                            <p class="amenityDescription">
+                                <?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <div class="slideshow-container">
+                        <?php if (isset($imageMap['Amenity2'])): ?>
+                            <?php foreach ($imageMap['Amenity2'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/cottagePics/" . $img['imageData'];
+                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                            ?>
+                                <div class="slide">
+                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <div class="slide">
-                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                    data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="slide">
-                            <img src="<? $defaultImage ?>" alt="None Found">
-                        </div>
-                    <?php endif; ?>
-                    <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                    <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
-                </div>
-            </div>
-
-            <div class="videoke">
-                <div class=" amenityTitleContainer">
-                    <hr class="amenityLine">
-                    <?php if ($editMode): ?>
-                        <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity3"
-                            value="<?= htmlspecialchars($contentMap['Amenity3'] ?? 'No Title found') ?>">
-                    <?php else: ?>
-                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity3'] ?? 'No title found') ?></h4>
-                    <?php endif; ?>
-                    <?php if ($editMode): ?>
-                        <textarea type="text" rows="5"
-                            class="amenityDescription Amenity3Desc indent editable-input form-control"
-                            data-title="Amenity3Desc"><?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></textarea>
-                    <?php else: ?>
-                        <p class="amenityDescription">
-                            <?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></p>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                    </div>
                 </div>
 
-                <div class="slideshow-container">
-                    <?php if (isset($imageMap['Amenity1'])): ?>
-                        <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                            $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
-                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                        ?>
+                <div class="videoke">
+                    <div class=" amenityTitleContainer">
+                        <hr class="amenityLine">
+                        <?php if ($editMode): ?>
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity3" value="<?= htmlspecialchars($contentMap['Amenity3'] ?? 'No Title found') ?>">
+                        <?php else: ?>
+                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity3'] ?? 'No title found') ?></h4>
+                        <?php endif; ?>
+                        <?php if ($editMode): ?>
+                            <textarea type="text" rows="5"
+                                class="amenityDescription Amenity3Desc indent editable-input form-control text-center"
+                                data-title="Amenity3Desc"><?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></textarea>
+                        <?php else: ?>
+                            <p class="amenityDescription">
+                                <?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></p>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="slideshow-container">
+                        <?php if (isset($imageMap['Amenity3'])): ?>
+                            <?php foreach ($imageMap['Amenity3'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/videokePics/" . $img['imageData'];
+                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                            ?>
+                                <div class="slide">
+                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <div class="slide">
-                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                    data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="slide">
-                            <img src="<? $defaultImage ?>" alt="None Found">
-                        </div>
-                    <?php endif; ?>
-                    <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                    <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
-                </div>
-            </div>
-
-            <div class="pavilion colored-bg" style="background-color: #7dcbf2;">
-                <div class="amenityTitleContainer">
-                    <hr class="amenityLine">
-                    <?php if ($editMode): ?>
-                        <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity4"
-                            value="<?= htmlspecialchars($contentMap['Amenity4'] ?? 'No Title found') ?>">
-                    <?php else: ?>
-                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity4'] ?? 'No title found') ?></h4>
-                    <?php endif; ?>
-                    <?php if ($editMode): ?>
-                        <textarea type="text" rows="5"
-                            class="amenityDescription Amenity4Desc indent editable-input form-control"
-                            data-title="Amenity4Desc"><?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></textarea>
-                    <?php else: ?>
-                        <p class="amenityDescription">
-                            <?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></p>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                    </div>
                 </div>
 
-                <div class="slideshow-container">
-                    <?php if (isset($imageMap['Amenity1'])): ?>
-                        <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                            $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
-                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                        ?>
+                <div class="pavilion colored-bg" style="background-color: #7dcbf2;">
+                    <div class="amenityTitleContainer">
+                        <hr class="amenityLine">
+                        <?php if ($editMode): ?>
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity4" value="<?= htmlspecialchars($contentMap['Amenity4'] ?? 'No Title found') ?>">
+                        <?php else: ?>
+                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity4'] ?? 'No title found') ?></h4>
+                        <?php endif; ?>
+                        <?php if ($editMode): ?>
+                            <textarea type="text" rows="5"
+                                class="amenityDescription Amenity4Desc indent editable-input form-control text-center"
+                                data-title="Amenity4Desc"><?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></textarea>
+                        <?php else: ?>
+                            <p class="amenityDescription">
+                                <?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></p>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="slideshow-container">
+                        <?php if (isset($imageMap['Amenity4'])): ?>
+                            <?php foreach ($imageMap['Amenity4'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/pavilionPics/" . $img['imageData'];
+                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                            ?>
+                                <div class="slide">
+                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <div class="slide">
-                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                    data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="slide">
-                            <img src="<? $defaultImage ?>" alt="None Found">
-                        </div>
-                    <?php endif; ?>
-                    <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                    <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                        <?php endif; ?>
+                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                    </div>
+
                 </div>
 
-            </div>
+                <div class="minipavilion">
+                    <div class="amenityTitleContainer">
+                        <hr class="amenityLine">
+                        <?php if ($editMode): ?>
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity5" value="<?= htmlspecialchars($contentMap['Amenity5'] ?? 'No Title found') ?>">
+                        <?php else: ?>
+                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity5'] ?? 'No title found') ?></h4>
+                        <?php endif; ?>
+                        <?php if ($editMode): ?>
+                            <textarea type="text" rows="5"
+                                class="amenityDescription Amenity5Desc indent editable-input form-control text-center"
+                                data-title="Amenity5Desc"><?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></textarea>
+                        <?php else: ?>
+                            <p class="amenityDescription">
+                                <?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></p>
+                        <?php endif; ?>
+                    </div>
 
-            <div class="minipavilion">
-                <div class="amenityTitleContainer">
-                    <hr class="amenityLine">
-                    <?php if ($editMode): ?>
-                        <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity5"
-                            value="<?= htmlspecialchars($contentMap['Amenity5'] ?? 'No Title found') ?>">
-                    <?php else: ?>
-                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity5'] ?? 'No title found') ?></h4>
-                    <?php endif; ?>
-                    <?php if ($editMode): ?>
-                        <textarea type="text" rows="5"
-                            class="amenityDescription Amenity5Desc indent editable-input form-control"
-                            data-title="Amenity5Desc"><?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></textarea>
-                    <?php else: ?>
-                        <p class="amenityDescription">
-                            <?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></p>
-                    <?php endif; ?>
-                </div>
-
-                <div class="slideshow-container">
-                    <?php if (isset($imageMap['Amenity1'])): ?>
-                        <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                            $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
-                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                        ?>
+                    <div class="slideshow-container">
+                        <?php if (isset($imageMap['Amenity5'])): ?>
+                            <?php foreach ($imageMap['Amenity5'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/miniPavPics/" . $img['imageData'];
+                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                            ?>
+                                <div class="slide">
+                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <div class="slide">
-                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                    data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="slide">
-                            <img src="<? $defaultImage ?>" alt="None Found">
-                        </div>
-                    <?php endif; ?>
-                    <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                    <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                        <?php endif; ?>
+                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                    </div>
+
                 </div>
 
-            </div>
-
-            <div class="hotel colored-bg" style="background-color:#f7d5b0;">
-                <div class="amenityTitleContainer">
-                    <hr class="amenityLine">
-                    <?php if ($editMode): ?>
-                        <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity6"
-                            value="<?= htmlspecialchars($contentMap['Amenity6'] ?? 'No Title found') ?>">
-                    <?php else: ?>
-                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity6'] ?? 'No title found') ?></h4>
-                    <?php endif; ?>
-                    <?php if ($editMode): ?>
-                        <textarea type="text" rows="5"
-                            class="amenityDescription Amenity6Desc indent editable-input form-control"
-                            data-title="Amenity6Desc"><?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></textarea>
-                    <?php else: ?>
-                        <p class="amenityDescription">
-                            <?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></p>
-                    <?php endif; ?>
-                </div>
-                <div class="slideshow-container">
-                    <?php if (isset($imageMap['Amenity1'])): ?>
-                        <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                            $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
-                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                        ?>
+                <div class="hotel colored-bg" style="background-color:#f7d5b0;">
+                    <div class="amenityTitleContainer">
+                        <hr class="amenityLine">
+                        <?php if ($editMode): ?>
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity6" value="<?= htmlspecialchars($contentMap['Amenity6'] ?? 'No Title found') ?>">
+                        <?php else: ?>
+                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity6'] ?? 'No title found') ?></h4>
+                        <?php endif; ?>
+                        <?php if ($editMode): ?>
+                            <textarea type="text" rows="5"
+                                class="amenityDescription Amenity6Desc indent editable-input form-control text-center"
+                                data-title="Amenity6Desc"><?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></textarea>
+                        <?php else: ?>
+                            <p class="amenityDescription">
+                                <?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <div class="slideshow-container">
+                        <?php if (isset($imageMap['Amenity6'])): ?>
+                            <?php foreach ($imageMap['Amenity6'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/hotelPics/" . $img['imageData'];
+                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                            ?>
+                                <div class="slide">
+                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <div class="slide">
-                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                    data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="slide">
-                            <img src="<? $defaultImage ?>" alt="None Found">
-                        </div>
-                    <?php endif; ?>
-                    <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                    <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                        <?php endif; ?>
+                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                    </div>
+
                 </div>
 
-            </div>
+                <div class="parking">
+                    <div class="amenityTitleContainer">
+                        <hr class="amenityLine">
+                        <?php if ($editMode): ?>
+                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
+                                data-title="Amenity7" value="<?= htmlspecialchars($contentMap['Amenity7'] ?? 'No Title found') ?>">
+                        <?php else: ?>
+                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity7'] ?? 'No title found') ?></h4>
+                        <?php endif; ?>
+                        <?php if ($editMode): ?>
+                            <textarea type="text" rows="5"
+                                class="amenityDescription Amenity7Desc indent editable-input form-control text-center"
+                                data-title="Amenity7Desc"><?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></textarea>
+                        <?php else: ?>
+                            <p class="amenityDescription">
+                                <?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></p>
+                        <?php endif; ?>
+                    </div>
 
-            <div class="parking">
-                <div class="amenityTitleContainer">
-                    <hr class="amenityLine">
-                    <?php if ($editMode): ?>
-                        <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity7"
-                            value="<?= htmlspecialchars($contentMap['Amenity7'] ?? 'No Title found') ?>">
-                    <?php else: ?>
-                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity7'] ?? 'No title found') ?></h4>
-                    <?php endif; ?>
-                    <?php if ($editMode): ?>
-                        <textarea type="text" rows="5"
-                            class="amenityDescription Amenity7Desc indent editable-input form-control"
-                            data-title="Amenity7Desc"><?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></textarea>
-                    <?php else: ?>
-                        <p class="amenityDescription">
-                            <?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></p>
-                    <?php endif; ?>
-                </div>
-
-                <div class="slideshow-container">
-                    <?php if (isset($imageMap['Amenity7'])): ?>
-                        <?php foreach ($imageMap['Amenity7'] as $index => $img):
-                            $imagePath = "../../Assets/Images/amenities/parkingPics/" . $img['imageData'];
-                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                        ?>
+                    <div class="slideshow-container">
+                        <?php if (isset($imageMap['Amenity7'])): ?>
+                            <?php foreach ($imageMap['Amenity7'] as $index => $img):
+                                $imagePath = "../../Assets/Images/amenities/parkingPics/" . $img['imageData'];
+                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                            ?>
+                                <div class="slide">
+                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
+                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
+                                        data-folder="amenities/parkingPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
+                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <div class="slide">
-                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                    data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                    data-folder="amenities/parkingPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                    data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="slide">
-                            <img src="<? $defaultImage ?>" alt="None Found">
-                        </div>
-                    <?php endif; ?>
-                    <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                    <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                        <?php endif; ?>
+                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
+                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                    </div>
                 </div>
-            </div>
-        </div>
-
+        </main>
+        <?php include 'footer.php'; ?>
         <!-- Div for loader -->
         <div id="loaderOverlay" style="display: none;">
             <div class="loader"></div>
         </div>
-        <?php
-        $sectionName = 'BusinessInformation';
-        $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
-        $getWebContent->bind_param("s", $sectionName);
-        $getWebContent->execute();
-        $getWebContentResult = $getWebContent->get_result();
-        $businessInfo = [];
-        while ($row = $getWebContentResult->fetch_assoc()) {
-            $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
-            $contentID = $row['contentID'];
-
-            $businessInfo[$cleanTitle] = $row['content'];
-        }
-        ?>
-
-        <?php include 'footer.php'; ?>
     </div>
+    <?php
+    $sectionName = 'BusinessInformation';
+    $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+    $getWebContent->bind_param("s", $sectionName);
+    $getWebContent->execute();
+    $getWebContentResult = $getWebContent->get_result();
+    $businessInfo = [];
+    while ($row = $getWebContentResult->fetch_assoc()) {
+        $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+        $contentID = $row['contentID'];
+
+        $businessInfo[$cleanTitle] = $row['content'];
+    }
+    ?>
+
+
     <!-- Bootstrap Link -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
@@ -582,20 +582,11 @@ require '../../Function/notification.php';
             video.muted = false;
         };
     </script>
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
-
-    <script>
-        const navbar = document.getElementById("navbar");
-
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 10) {
-                navbar.classList.add("bg-white", "shadow");
-            } else {
-                navbar.classList.remove("bg-white", "shadow");
-            }
-        });
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
 
+    <script src="../../Assets/JS/scrollNavbg.js"></script>
 
     <script>
         // JS for slideshow
@@ -603,6 +594,10 @@ require '../../Function/notification.php';
             const slides = container.querySelectorAll('.slide');
             const prevBtn = container.querySelector('.prev-btn');
             const nextBtn = container.querySelector('.next-btn');
+            if (slides.length === 0) {
+                console.warn('No slides found in container:', container);
+                return;
+            }
             let index = 0;
 
             slides.forEach(slide => {

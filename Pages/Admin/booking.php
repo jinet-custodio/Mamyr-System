@@ -218,8 +218,9 @@ if (isset($_SESSION['error'])) {
                     </a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a href="../../Function/Admin/logout.php" class="btn btn-danger" id="logOutBtn">
-                        Log Out
+                    <a href="../../Function/Admin/logout.php" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
+                        <h5 style="color: red;">Log Out</h5>
                     </a>
                 </li>
             </ul>
@@ -412,30 +413,30 @@ if (isset($_SESSION['error'])) {
         const param = new URLSearchParams(window.location.search);
         const paramValue = param.get('action');
 
-        if (paramValue === "success") {
+        if (paramValue === "approvedSuccess") {
             Swal.fire({
+                position: "top-end",
                 title: "Booking Approved!",
                 text: "The booking has been successfully approved.",
                 icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
             });
-        } else if (paramValue === "error") {
+        } else if (paramValue === 'rejectedSuccess') {
             Swal.fire({
-                title: "Action Failed!",
-                text: "The booking could not be approved or rejected. Please try again later.",
-                icon: 'error',
-            });
-        } else if (paramValue === 'rejected') {
-            Swal.fire({
+                position: "top-end",
                 title: "Booking Rejected!",
                 text: "The booking has been successfully rejected.",
                 icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
             });
         }
 
         if (paramValue) {
             const url = new URL(window.location);
             url.search = '';
-            history.replaceState({}, document.title, url.toString)
+            history.replaceState({}, document.title, url.toString());
         }
     </script>
 </body>

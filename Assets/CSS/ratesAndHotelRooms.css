@@ -571,12 +571,12 @@ main {
   }
 
   #rates {
-    margin-top: 10vh;
+    margin-top: 10vw;
   }
 
   .backToSelection i {
     font-size: 4vw;
-    border-radius: 50%;
+    margin-top: 3vw;
   }
 
   .title {
@@ -602,7 +602,7 @@ main {
   }
 
   .entrance-card-title {
-    font-size: clamp(26px, calc(1.8vh + 2px), 23px);
+    font-size: clamp(24px, calc(2.8vh + 2px), 22px);
   }
 
   .cottages {
@@ -783,6 +783,7 @@ main {
 
   .backToSelection i {
     font-size: 5vw;
+    margin-top: 5vw;
   }
 
   .hotelIconWithCaption {
@@ -818,11 +819,11 @@ main {
 @media (max-width: 600px) {
   .rates,
   .hotelRooms {
-    margin-top: 8vh;
+    margin-top: 13vw;
   }
 
   .categories {
-    margin-top: 7vh;
+    margin-top: 10vw;
   }
 
   .categoryLink {
@@ -1005,8 +1006,9 @@ main {
 @media (max-width: 400px) {
   #rates,
   .hotelRooms {
-    margin-top: 10vh;
+    margin-top: 5vh;
   }
+
   #mainTitle {
     margin-top: 20vw;
   }
@@ -1018,8 +1020,16 @@ main {
     font-size: clamp(18px, calc(1.4vh + 2px), 16px);
   }
 
+  .entranceTitle {
+    font-size: clamp(20px, calc(2.5vh + 4px), 23px);
+  }
+
   .selection {
     margin-top: 15vw;
+  }
+
+  .massage {
+    margin-top: 3vw;
   }
 
   input {
@@ -1040,7 +1050,8 @@ main {
   }
 
   .backToSelection i {
-    font-size: 6vw;
+    font-size: 7.5vw;
+    margin-top: 8vw;
   }
 
   .Description h2 {
