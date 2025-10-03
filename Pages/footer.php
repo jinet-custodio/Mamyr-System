@@ -2,11 +2,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require_once '../Config/dbcon.php';
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
+if ($editMode) {
+    session_start();
+}
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
 $getContent = $conn->prepare("SELECT * FROM resortinfo WHERE resortInfoTitle = ?");

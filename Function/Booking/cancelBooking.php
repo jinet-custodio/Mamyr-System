@@ -45,7 +45,8 @@ if (isset($_POST['cancelBooking'])) {
             exit();
         }
 
-        $cancelledStatusID = getStatuses($conn, 4);
+        $cancelledStatus = getStatuses($conn, 4);
+        $cancelledStatusID = $cancelledStatus['statusID'];
 
         $cancelBooking = $conn->prepare("UPDATE booking SET bookingStatus = ? WHERE bookingID = ?  ");
         $cancelBooking->bind_param("ii", $cancelledStatusID, $bookingID);
@@ -65,7 +66,7 @@ if (isset($_POST['cancelBooking'])) {
 
         $receiver = 'Admin';
         $message = 'A customer has cancelled a' . strtolower($bookingType) . ' booking.';
-        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, userID, message, receiver)
+        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, senderID, message, receiver)
             VALUES(?,?,?,?)");
         $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
         $insertBookingNotificationRequest->execute();

@@ -212,3 +212,119 @@ h5 {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
 }
+
+/* Tablet Landscape only */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  body {
+    outline: 5px solid red !important;
+  }
+
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+    .hotelIconContainer {
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4rem;
+    row-gap: 0;
+    justify-items: center;
+  }
+    .hotel-card {
+    width: 35rem !important;
+  }
+  .form-control {
+    padding-right: .40rem !important;
+    font-size: 14px !important;
+  }
+  .hotelRooms-title {
+    margin-top: .4rem !important;
+  }
+  .hotel-card {
+    margin-top: 1rem !important;
+  }
+}
+
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+    body {
+    outline: 5px solid rgb(21, 255, 0) !important;
+  }
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .hotelIconContainer {
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4rem;
+    row-gap: 0;
+    justify-items: center;
+  }
+  .btn {
+    font-size: 15px !important;
+  }
+  .hotel-card {
+    width: 35rem !important;
+  }
+}
+
+/* Phone size */
+@media screen and (max-width: 599px) {
+    body {
+    outline: 5px solid rgb(0, 26, 255) !important;
+  }
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .hotelIconContainer {
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
+    row-gap: 0;
+    justify-items: center;
+  }
+  #amenitiesHR {
+    width: 100% !important;
+  }
+  .btn {
+    font-size: 12px !important;
+  }
+  .hotel-card {
+    width: 25rem !important;
+  }
+  .form-control {
+    font-size: 13px !important;
+  }
+  .availabilityIcons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: nowrap;
+  }
+  .hotelPeopleForm .info-container p {
+    font-size: 9px !important;
+  }
+  .hotelRooms-title{
+    font-size: 16px !important;
+  }
+  .payment-title {
+    font-size: 16px !important;
+  }
+  .arrivalTimeLabel {
+    font-size: 16px !important;
+  }
+}

@@ -8,7 +8,6 @@
   src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
-
 /* Div for loader */
 #loaderOverlay {
   position: fixed;
@@ -111,4 +110,22 @@
   text-align: center;
   color: red;
   margin-bottom: 1px !important;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1025px) {
+  .form-control {
+    font-size: 50px !important;
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .form-control {
+    font-size: 30px !important;
+  }
+}
+
+@media screen and (max-width: 399px) {
+  .form-control {
+    font-size: 20px !important;
+  }
 }

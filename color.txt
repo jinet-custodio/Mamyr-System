@@ -5,8 +5,9 @@ Expired -> secondary
 Pending -> warning
 Approved -> success
 Rejected -> danger
+Downpayment -> info
 Payment Status
 Fully Paid - success
 No Payment - danger
 Partially Paid - primary/info
-Payment Sent - light green
+Payment Sent - sky blue rgb(0, 182, 227)

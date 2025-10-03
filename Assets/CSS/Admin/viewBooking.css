@@ -219,6 +219,10 @@ label {
   margin-top: 1vw;
 }
 
+.input-container {
+  margin-top: 0.5rem;
+}
+
 /* Laptop */
 @media screen and (min-width: 1025px) {
   .page-container {
