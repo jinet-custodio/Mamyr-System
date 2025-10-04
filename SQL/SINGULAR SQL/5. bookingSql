@@ -19,7 +19,7 @@ CREATE TABLE booking (
     downpayment DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     bookingStatus INT DEFAULT 1,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    approvedBy VARCHAR(25) DEFAUL NULL ,
+    approvedBy VARCHAR(25) DEFAULT NULL ,
     approvedDate DATETIME NULL,
 
     FOREIGN KEY (userID) REFERENCES user(userID),
@@ -34,6 +34,8 @@ AFTER durationCount;
 ALTER TABLE booking
 ADD COLUMN bookingOrigin ENUM('Online', 'Walk-In') NOT NULL DEFAULT 'Online'
 AFTER paymentMethod;
+
+ALTER TABLE `booking` ADD `customerChoice` ENUM('Proceed', 'Cancel') DEFAULT NULL AFTER `bookingType`;
 
 
 CREATE TABLE bookingservice (
@@ -66,7 +68,7 @@ CREATE TABLE confirmedbooking (
     
     FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
     FOREIGN KEY (paymentApprovalStatus) REFERENCES status(statusID),
-    FOREIGN KEY (paymentStatus) REFERENCES bookingpaymentstatus(paymentStatusID),
+    FOREIGN KEY (paymentStatus) REFERENCES paymentstatus(paymentStatusID),
     FOREIGN KEY (approvedBy) REFERENCES admin(adminID)
 );            
 
@@ -85,5 +87,4 @@ CREATE TABLE businesspartneravailedservice(
 );
 
 ALTER TABLE businesspartneravailedservice
-ADD COLUMN price DECIMAL(10,2) DEFAULT 0.00
-BEFORE availedDate
+ADD COLUMN price DECIMAL(10,2) DEFAULT 0.00;

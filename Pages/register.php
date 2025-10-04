@@ -43,13 +43,13 @@ resetExpiredOTPs($conn);
                 </div>
                 <div class="input-box">
                     <input type="password" class="form-control" id="login_password" name="login_password"
-                        oninput="checkLoginPassword();" placeholder="Password" required>
+                        placeholder="Password" required>
                     <i id="togglePassword" class='bx bxs-hide'></i>
                 </div>
                 <div class="forgot-link">
                     <a href="enterEmail.php">Forgot Password?</a>
                 </div>
-                <button type="submit" class="btn btn-primary" id="login" name="login" disabled>Login</button>
+                <button type="submit" class="btn btn-primary" id="login" name="login">Login</button>
 
                 <div class="signUpSection">
                     <p>Don't have an account? <a href="userType.php" class="signUpLink">Sign Up
@@ -58,10 +58,10 @@ resetExpiredOTPs($conn);
 
                 </div>
                 <div class="loginMessageBox">
-                    <div class="errorMsg" style="display: none;">
-                        <!-- (Show under Login Button) -->
+                    <!-- (Show under Login Button) -->
+                    <!-- <div class="errorMsg" style="display: none;">
                         <div class="login-error" id="passwordLValidation"></div>
-                    </div>
+                    </div> -->
                     <p class="errorMsg">
                         <!-- (Show under Login Button) -->
                         <?php

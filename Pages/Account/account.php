@@ -86,55 +86,68 @@ $userRole = $_SESSION['userRole'];
     }
 
 
-    $getData = $conn->prepare("SELECT u.*, ut.typeName as roleName FROM user u
-            INNER JOIN usertype ut ON u.userRole = ut.userTypeID
+    $getData = $conn->prepare("SELECT u.firstName, u.middleInitial, u.lastName, u.userProfile, u.email, u.phoneNumber, u.birthDate, u.userAddress, pt.partnerTypeDescription
+            FROM user u
+            LEFT JOIN partnership p ON u.userID = p.userID
+            LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
+            LEFT JOIN partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID
             WHERE u.userID = ? AND userRole = ?");
     $getData->bind_param("ii", $userID, $userRole);
     $getData->execute();
     $getDataResult = $getData->get_result();
+
+    $partnerTypes = [];
     if ($getDataResult->num_rows > 0) {
-        $data =  $getDataResult->fetch_assoc();
-        $middleInitial = trim($data['middleInitial'] ?? '');
-        $name = ucfirst($data['firstName'] ?? '') . " " .
-            ucfirst($data['middleInitial'] ?? '') . " " .
-            ucfirst($data['lastName'] ?? '');
+        $partnerTypes = [];
+        $name = $email = $phoneNumber = $birthday = $address = $image = "";
+        $type = "text";
 
-        // var_dump($name);
-        $email = $data['email'];
-        $phoneNumber = $data['phoneNumber'];
-        if ($phoneNumber === NULL || $phoneNumber === "") {
-            $phoneNumber = "--";
-        } else {
-            $phoneNumber;
-        }
-        $birthday = $data['birthDate'];
-        if ($birthday === NULL || $birthday === "") {
-            $type = "text";
-            $birthday = "--";
-        } else {
-            $type = "date";
-            $birthday;
-        }
+        while ($data = $getDataResult->fetch_assoc()) {
+            if (empty($name)) {
+                $firstName = $data['firstName'] ?? '';
+                $middleInitial = trim($data['middleInitial'] ?? '');
+                $lastName = $data['lastName'] ?? '';
+                $name = ucfirst($firstName ?? '') . " " .
+                    ucfirst($middleInitial) . " " .
+                    ucfirst($lastName);
 
-        $address = $data['userAddress'];
-        $profile = $data['userProfile'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mimeType = finfo_buffer($finfo, $profile);
-        finfo_close($finfo);
-        $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+                $email = $data['email'];
+                $phoneNumber = $data['phoneNumber'] ?: "--";
+
+                $birthday = $data['birthDate'];
+                $type = ($birthday === NULL || $birthday === "") ? "text" : "date";
+                $birthday = $birthday ?: "--";
+
+                $address = $data['userAddress'];
+
+                // Handle image
+                $profile = $data['userProfile'];
+                if (!empty($profile)) {
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_buffer($finfo, $profile);
+                    finfo_close($finfo);
+                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+                }
+            }
+            $partnerTypes[] = $data['partnerTypeDescription'] ?? 'N/A';
+        }
     }
 
+    // foreach ($partnerTypes as $partnerType):
+    //     error_log($partnerType);
+    // endforeach;
     ?>
     <div class="wrapper d-flex">
+
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="d-flex" id="toggle-container">
+            <div class="d-flex justify-content-center" id="toggle-container">
                 <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </button>
             </div>
-            <div class="home text-center">
-                <?php if ($role === 'Customer' || $role === "Partnership Applicant") { ?>
+            <div class="home">
+                <?php if ($role === 'Customer') { ?>
                     <a href="../Customer/dashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
@@ -148,11 +161,12 @@ $userRole = $_SESSION['userRole'];
                     </a>
                 <?php } ?>
             </div>
+
             <div class="sidebar-header text-center">
                 <h5 class="sidebar-text">User Account</h5>
                 <div class="profileImage">
                     <img src="<?= htmlspecialchars($image) ?>"
-                        alt="<?= htmlspecialchars($data['firstName']) ?> Picture">
+                        alt="<?= htmlspecialchars($firstName) ?> Picture">
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
@@ -163,7 +177,7 @@ $userRole = $_SESSION['userRole'];
                     </a>
                 </li>
 
-                <?php if ($role !== 'Admin') { ?>
+                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
                     <li class="sidebar-item">
                         <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
@@ -211,16 +225,14 @@ $userRole = $_SESSION['userRole'];
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
-                        style="margin: 3vw auto;">
-                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
-                        <span class="sidebar-text ms-2">Logout</span>
-                    </button>
-                </li>
             </ul>
-        </aside> <!-- End Side Bar -->
-
+            <div class="logout">
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
+                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                    <span class="sidebar-text ms-2">Logout</span>
+            </div>
+        </aside>
+        <!-- End Side Bar -->
 
         <!-- Customer Information Container -->
         <main class="main-content" id="main-content">
@@ -230,9 +242,9 @@ $userRole = $_SESSION['userRole'];
                         <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
                         <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
                         <div class="profile-image">
-                            <img src="<?= $image ?>" alt="<?= htmlspecialchars($data['firstName']) ?> Picture"
+                            <img src="<?= $image ?>" alt="<?= htmlspecialchars($firstName) ?> Picture"
                                 class="profile-pic">
-                            <button type="button" class="changePfpBtn btn btn-primary" id="changePfp">
+                            <button type="button" class="changePfpBtn btn btn-primary" id="changePfp"><i class="fa-solid fa-camera-retro"></i>
                                 Change Profile
                             </button>
                             <!-- Profile Picture Modal -->
@@ -241,13 +253,13 @@ $userRole = $_SESSION['userRole'];
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="picModalLabel">Change Profile Picture</h5>
+                                            <h5 class="modal-title" id="picModalLabel"> Change Profile Picture</h5>
                                             <button type="button" class="btn-close btn btn-danger"
                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <img src="<?= $image ?>"
-                                                alt="<?= htmlspecialchars($data['firstName']) ?> Picture" id="preview"
+                                                alt="<?= htmlspecialchars($firstName) ?> Picture" id="preview"
                                                 class="profile-pic">
                                             <input type="file" name="profilePic" id="profilePic" hidden>
                                             <label for="profilePic"
@@ -255,8 +267,8 @@ $userRole = $_SESSION['userRole'];
                                         </div>
                                         <div class="modal-button">
                                             <button type="submit" class="btn btn-danger"
-                                                name="cancelPfp">Cancel</button>
-                                            <button type="submit" class="btn btn-success" name="changePfpBtn">Save
+                                                name="cancelPfp"><i class="fa-solid fa-ban"></i> Cancel</button>
+                                            <button type="submit" class="btn btn-success" name="changePfpBtn"><i class="fa-solid fa-floppy-disk"></i> Save
                                                 Changes</button>
                                         </div>
                                     </div>
@@ -265,7 +277,7 @@ $userRole = $_SESSION['userRole'];
                         </div>
 
                         <div class="profile-info">
-                            <h5 class="account-name"> <?= htmlspecialchars($data['firstName']) ?></h5>
+                            <h5 class="account-name"> <?= htmlspecialchars($firstName) ?></h5>
                             <h6 class="account-contact"> <?= htmlspecialchars($email) ?> |
                                 <?= htmlspecialchars($phoneNumber) ?></h6>
                             <h6 class="roleName"><?= htmlspecialchars($role) ?></h6>
@@ -282,7 +294,6 @@ $userRole = $_SESSION['userRole'];
                             required>
                         <label for="fullName">Full Name</label>
                     </div>
-
                     <div class="info">
                         <?php if (!empty($data['birthDate'])) : ?>
                             <input type="date" name="birthday" id="birthday"
@@ -292,7 +303,6 @@ $userRole = $_SESSION['userRole'];
                         <?php endif; ?>
                         <label for="birthday">Birthday</label>
                     </div>
-
                     <div class="info">
                         <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>"
                             disabled required>
@@ -305,20 +315,28 @@ $userRole = $_SESSION['userRole'];
                         <label for="phoneNumber">Phone Number
                             <?php if ($phoneNumber === '--' || $phoneNumber === Null) { ?>
                                 <sup>
-                                    <i class="fa-solid fa-asterisk m-2" style="color: #ff0000; "></i>
+                                    <i class="fa-solid fa-asterisk" style="color: #ff0000; "></i>
                                 </sup>
                             <?php } ?>
                         </label>
-
                     </div>
+                    <?php if ($role === 'Business Partner'): ?>
+                        <div class="partner-info">
+                            <label for="partnerType">Partner Type/s</label>
+                            <?php foreach ($partnerTypes as $partnerType): ?>
+                                <input type="text" name="partnerType" id="partnerType" value="<?= htmlspecialchars($partnerType) ?>"
+                                    disabled required>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="button-container">
                     <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
-                        onclick="enableEditing()">Edit</button>
+                        onclick="enableEditing()"><i class="fa-solid fa-pen-to-square ms-10"></i> Edit</button>
                     <button type="button" onclick="cancelEdit()" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
-                        style="display: none;">Cancel</button>
+                        style="display: none;"><i class="fa-solid fa-ban"></i> Cancel</button>
                     <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
-                        style="display: none;">Save</button>
+                        style="display: none;"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                 </div>
             </form>
         </main>

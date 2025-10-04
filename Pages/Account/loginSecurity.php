@@ -88,12 +88,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     $getUserInfoResult = $getUserInfo->get_result();
     if ($getUserInfoResult->num_rows > 0) {
         $data =  $getUserInfoResult->fetch_assoc();
+
+        $imageData = $data['userProfile'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_buffer($finfo, $imageData);
+        finfo_close($finfo);
+        $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
     }
     ?>
     <div class="wrapper d-flex">
-        <!-- Side Bar -->
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="d-flex" id="toggle-container">
+            <div class="d-flex justify-content-center" id="toggle-container">
                 <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </button>
@@ -116,44 +122,28 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <div class="sidebar-header text-center">
                 <h5 class="sidebar-text">User Account</h5>
-                <?php
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
-                $getProfile->bind_param("ii", $userID, $userRole);
-                $getProfile->execute();
-                $getProfileResult = $getProfile->get_result();
-                if ($getProfileResult->num_rows > 0) {
-                    $profile = $getProfileResult->fetch_assoc();
-                    $firstName = $profile['firstName'];
-                    $imageData = $profile['userProfile'];
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $imageData);
-                    finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                }
-                ?>
-
                 <div class="profileImage">
-                    <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+                    <img src="<?= htmlspecialchars($image) ?>"
+                        alt="<?= htmlspecialchars($data['firstName']) ?> Picture">
                 </div>
             </div>
-            <ul class="list-group">
-                <li>
+            <ul class="list-group sidebar-nav">
+                <li class="sidebar-item">
                     <a href="account.php" class="list-group-item ">
                         <i class="fa-solid fa-user sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
 
-
-                <?php if ($role !== 'Admin') { ?>
-                    <li>
+                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
                         <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
                             <span class="sidebar-text">Payment & Booking History</span>
                         </a>
                     </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li>
+                    <li class="sidebar-item">
                         <a href="userManagement.php" class="list-group-item">
                             <i class="fa-solid fa-people-roof sidebar-icon"></i>
                             <span class="sidebar-text">Manage Users</span>
@@ -180,24 +170,25 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </a>
                     </li>
                 <?php } ?>
-                <li>
+
+                <li class="sidebar-item">
                     <a href="loginSecurity.php" class="list-group-item active">
                         <i class="fa-solid fa-user-shield sidebar-icon"></i>
                         <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
-                <li>
+                <li class="sidebar-item">
                     <a href="deleteAccount.php" class="list-group-item">
                         <i class="fa-solid fa-user-slash sidebar-icon"></i>
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
-                <li>
-                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
-                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon" alt="Log Out"></i>
-                        <span class="sidebar-text ms-2">Logout</span></button>
-                </li>
             </ul>
+            <div class="logout">
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
+                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                    <span class="sidebar-text ms-2">Logout</span>
+            </div>
         </aside>
         <!-- End Side Bar -->
         <main class="main-content" id="main-content">

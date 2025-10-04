@@ -16,7 +16,7 @@ $userID = (int) $_SESSION['userID'];
 
 function getUserByEmail($conn, $userID, $userRole, $email)
 {
-    $getEmailQuery = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ? AND email = ?");
+    $getEmailQuery = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ? AND email = ? ");
     $getEmailQuery->bind_param('iis', $userID, $userRole, $email);
     if ($getEmailQuery->execute()) {
 
@@ -68,6 +68,17 @@ if (isset($_POST['validatePassword'])) {
             if ($data) {
                 $storedEmail = $data['email'];
                 $firstName = $data['firstName'];
+
+                $checkEmailExistQuery = $conn->prepare("SELECT email FROM user WHERE email = ?");
+                $checkEmailExistQuery->bind_param("s", $newEmail);
+                $checkEmailExistQuery->execute();
+                $result = $checkEmailExistQuery->get_result();
+                if ($result->num_rows > 0) {
+                    $_SESSION['modal-error'] = "Email already exist";
+                    header("Location: ../../Pages/Account/loginSecurity.php?step=2");
+                    exit;
+                }
+
                 if ($storedEmail === $email && $newEmail !== $storedEmail) {
                     $otp = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
                     $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes')); //Add a 5mins to the time of creation
@@ -97,7 +108,7 @@ if (isset($_POST['validatePassword'])) {
                                     <tr>
                                         <td style="padding: 30px; text-align: left; color: #333333">
                                             <h2 style="color: #333333; margin-top: 0">
-                                           ' . $subject . '
+                                        ' . $subject . '
                                             </h2>
                                             <p style="font-size: 16px; margin: 20px 0 10px">Hello,</p>
                                             <p style="font-size: 16px; margin: 10px 0; text-align: justify">
