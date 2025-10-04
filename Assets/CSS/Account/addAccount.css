@@ -104,7 +104,7 @@ body {
 
 .button-container {
   margin: auto;
-  margin-left: 53%;
+  /* margin-left: 53%; */
   margin-top: 1rem;
   font-family: "Lora" !important;
 }

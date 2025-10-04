@@ -197,12 +197,14 @@ switch ($userRole) {
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
-                <li>
-                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
-                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
-                        <span class="sidebar-text ms-2">Logout</span>
-                </li>
+
             </ul>
+
+            <div class="logout">
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
+                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                    <span class="sidebar-text ms-2">Logout</span>
+            </div>
 
         </aside>
         <!-- End Side Bar -->

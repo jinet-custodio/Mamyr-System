@@ -168,13 +168,7 @@ $data = $_SESSION['account-form'] ?? [];
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('action');
 
-        if (paramValue === "invalidRole") {
-            Swal.fire({
-                title: "Error",
-                text: "Please Select a Role.",
-                icon: "info"
-            });
-        } else if (paramValue === 'emailExist') {
+        if (paramValue === 'emailExist') {
             Swal.fire({
                 title: "Error",
                 text: "Please Select a Role.",

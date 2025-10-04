@@ -43,12 +43,12 @@ unset($_SESSION['account-form']);
     <link
         rel="icon"
         type="image/x-icon"
-        href="../../Assets/Images/Icon/favicon.png" />
+        href="../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/userManagement.css" />
 
@@ -60,7 +60,6 @@ unset($_SESSION['account-form']);
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
-
 </head>
 
 <body>
@@ -185,16 +184,16 @@ unset($_SESSION['account-form']);
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
+                <li class="sidebar-item">
+                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
+                        style="margin: 3vw auto;">
+                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                        <span class="sidebar-text ms-2">Logout</span>
+                    </button>
+                </li>
             </ul>
-            <div class="logout">
-                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
-                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
-                    <span class="sidebar-text ms-2">Logout</span>
-
-            </div>
-        </aside>
+        </aside> <!-- End Side Bar -->
         <!-- End Side Bar -->
-
         <!-- Customer Information Container -->
         <main class="main-content" id="main-content">
             <div class="card">
@@ -203,33 +202,81 @@ unset($_SESSION['account-form']);
                     <a href="addAccount.php" class="btn btn-light add-button"><img src="../../Assets/Images/Icon/addUser.png" alt=""> Add an Account</a>
                 </div>
                 <div class="card-body">
-                    <table class="table table-hover" id="usertable">
+                    <table class="table" id="usertable">
                         <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col" class="emailCol">Email</th>
-                                <th scope="col">Role</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Date Created</th>
-                                <th scope="col">Action</th>
-                            </tr>
-
+                            <th scope="col">Name</th>
+                            <th scope="col" class="emailCol">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date Created</th>
+                            <th scope="col">Action</th>
                         </thead>
-                        <tbody id="user-table-body"> </tbody>
+                        <tbody>
+                            <?php
+
+                            $selectUsers = $conn->prepare("SELECT u.*, ut.typeName as roleName, stat.statusName as status
+                            FROM user u
+                            INNER JOIN usertype ut ON u.userRole = ut.userTypeID
+                            INNER JOIN userstatus stat ON u.userStatusID = stat.userStatusID
+                            WHERE u.userID != ? AND  u.userStatusID != ?
+                            ORDER BY u.userRole DESC");
+                            $selectUsers->bind_param("ii", $userID, $userStatusID);
+                            $selectUsers->execute();
+                            $selectUsersResult = $selectUsers->get_result();
+                            if ($selectUsersResult->num_rows > 0) {
+                                $users = $selectUsersResult->fetch_all(MYSQLI_ASSOC);
+                                foreach ($users as $userData) {
+                                    $middleInitial = trim($userData['middleInitial']);
+                                    $name = ucfirst($userData['firstName']) . ($middleInitial ? " " . ucfirst($middleInitial) . "." : "") . " " . ucfirst($userData['lastName']);
+                                    $status =  $userData['status'];
+                                    $role = $userData['roleName'];
+                                    $dataCreated = date("F d, Y", strtotime($userData['createdAt']));
+                                    if ($status === 'Verified') {
+                                        $image = '../../Assets/Images/Icon/greencircle.png';
+                                    } elseif ($status === 'Pending') {
+                                        $image = '../../Assets/Images/Icon/yellowcircle.png';
+                                    }
+                            ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($name) ?></td>
+                                        <td class="emailCol"><?= htmlspecialchars($userData['email']) ?> </td>
+                                        <td class="user-role"><?= htmlspecialchars($role) ?></td>
+                                        <td class="statusText">
+                                            <span class="status-label"><?= htmlspecialchars(ucfirst($userData['status'])) ?></span>
+                                            <img src="<?= $image ?>" alt="" class="status-image">
+                                        </td>
+                                        <td><?= htmlspecialchars($dataCreated) ?> </td>
+                                        <td>
+                                            <div class="button-container">
+                                                <form action="viewUser.php" method="POST" id="viewForm">
+                                                    <input type="hidden" name="selectedUserID" value="<?= htmlspecialchars($userData['userID']) ?>">
+                                                    <button type="submit" class="btn btn-info viewBtn" name="viewUser">View</button>
+                                                </form>
+                                                <button type="button" class="btn btn-danger deleteUserAccount" data-userid="<?= $userData['userID'] ?>">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                            <?php
+                                }
+                            }
+                            ?>
+
+                        </tbody>
                     </table>
 
                     <!-- Confirmation Modal -->
                     <form action="../../Function/Account/deleteUserAccount.php" method="POST">
-                        <div class="modal fade " id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="image w-100 text-center">
-                                        <i class="fa-solid fa-circle-exclamation" style="color: #b61b1b;"></i>
+                                        <img src="../../Assets/Images/Icon/warningRed.png" alt="warning icon" class="warning-image">
                                     </div>
+                                    <input type="hidden" name="selectedUserID" value="<?= htmlspecialchars($userData['userID']) ?>">
                                     <div class="modal-body">
-                                        <input type="hidden" name="selectedUserID" value="">
+                                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
                                         <p class="modal-title text-center mb-2">Are you sure?</p>
-                                        <p class="modal-text text-center mb-2">Deleting this account will remove all user access from the system. Their booking records will be retained for historical or reporting purposes, but personal identifiers (such as their name) will be removed. This action is permanent and cannot be undone.</p>
+                                        <p class="modal-text text-center mb-2">Deleting this account will remove all of their data from the system. This action cannot be reverted.</p>
                                         <div class="button-container modal-buttons">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                                             <button type="submit" class="btn btn-primary" name="yesDelete" id="yesDelete">Yes</button>
@@ -253,7 +300,6 @@ unset($_SESSION['account-form']);
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- Data Table Link -->
     <script src="../../Assets/JS/datatables.min.js"></script>
-
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
@@ -263,23 +309,23 @@ unset($_SESSION['account-form']);
                 },
                 columnDefs: [{
                         targets: 0,
-                        width: "18%"
+                        width: "15%"
                     },
                     {
                         targets: 1,
-                        width: "25%"
+                        width: "23%"
                     },
                     {
                         targets: 2,
-                        width: "10%"
+                        width: "13%"
                     },
                     {
                         targets: 3,
-                        width: "10%"
+                        width: "15%"
                     },
                     {
                         targets: 4,
-                        width: "15%"
+                        width: "17%"
                     },
                     {
                         targets: 5,
@@ -289,109 +335,6 @@ unset($_SESSION['account-form']);
             });
         });
     </script>
-
-    <script>
-        function getRoleBadge(role) {
-            let colorClass = "";
-            switch (role.toLowerCase()) {
-                case "admin":
-                    colorClass = "badge bg-danger";
-                    break;
-                case "customer":
-                    colorClass = "badge bg-primary";
-                    break;
-                case "business partner":
-                case "partner":
-                    colorClass = "badge bg-success";
-                    break;
-                case "applicant":
-                    colorClass = "badge bg-warning ";
-                    break;
-                default:
-                    colorClass = "badge bg-secondary";
-            }
-            return `<span class="${colorClass} text-capitalize">${role}</span>`;
-        }
-
-        function getStatusBadge(status) {
-            let colorClass = "";
-            switch (status.toLowerCase()) {
-                case "verified":
-                case "active":
-                    colorClass = "badge bg-success";
-                    break;
-                case "pending":
-                    colorClass = "badge bg-warning ";
-                    break;
-                default:
-                    colorClass = "badge bg-light text-muted";
-            }
-            return `<span class="${colorClass} text-capitalize">${status}</span>`;
-        }
-
-        fetch("../../Function/Admin/Ajax/getUsers.php")
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    throw new Error(data.message || "Failed to load user data.");
-                    return;
-                }
-
-                const users = data.users;
-                const table = $('#usertable').DataTable();
-                table.clear();
-
-                users.forEach(user => {
-                    table.row.add([
-                        user.name,
-                        user.email,
-                        getRoleBadge(user.role),
-                        getStatusBadge(user.status),
-                        user.date,
-                        `<div class="button-container">
-                            <form action="viewUser.php" method="POST" id="viewForm">
-                                <input type="hidden" name="selectedUserID" value="${user.userID}">
-                                <button type="submit" class="btn btn-info viewBtn" name="viewUser">View</button>
-                            </form>
-                            <button 
-                                type="button" 
-                                class="btn btn-danger deleteUserAccount"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#confirmationModal"
-                                data-userid="${user.userID}" >
-                                Delete
-                            </button>
-                        </div>`
-                    ]);
-                });
-
-
-                table.draw();
-
-            }).catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: error.message || 'Failed to load data from the server.'
-                })
-            });
-
-
-        const deleteBtns = document.querySelectorAll('.deleteUserAccount');
-
-        document.addEventListener('click', function(e) {
-            const target = e.target;
-            if (target.classList.contains('deleteUserAccount')) {
-                const userId = target.getAttribute("data-userid");
-                const confirmationModal = document.getElementById("confirmationModal");
-                if (!confirmationModal) return;
-
-                const userIdInput = confirmationModal.querySelector('input[name="selectedUserID"]');
-                if (userIdInput) userIdInput.value = userId;
-            }
-        });
-    </script>
-
     <script>
         //Handle sidebar for responsiveness
         document.addEventListener("DOMContentLoaded", function() {
@@ -484,6 +427,7 @@ unset($_SESSION['account-form']);
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- For logout -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -511,18 +455,35 @@ unset($_SESSION['account-form']);
         });
     </script>
 
+
+    <!-- For deleting user -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const deleteButtons = document.querySelectorAll(".deleteUserAccount");
+            const confirmationModal = document.getElementById("confirmationModal");
+
+            if (confirmationModal) {
+                deleteButtons.forEach(button => {
+                    button.addEventListener("click", function() {
+                        const myconfirmationModal = new bootstrap.Modal(confirmationModal);
+                        myconfirmationModal.show();
+                    });
+                });
+            }
+        });
+    </script>
+
+
+
     <script>
         const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('action');
+        const paramValue = params.get('status');
 
-        if (paramValue === "accountDeleted") {
+        if (paramValue === "deleted") {
             Swal.fire({
-                position: 'top-right',
                 title: "Confirmed",
                 text: "The account has been deleted.",
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1500
+                icon: "success"
             });
         } else if (paramValue === "failed") {
             Swal.fire({
@@ -530,14 +491,11 @@ unset($_SESSION['account-form']);
                 text: "We were unable to delete the account. Please try again later.",
                 icon: "error"
             });
-        } else if (paramValue === "userCreated") {
+        } else if (paramValue === "added") {
             Swal.fire({
-                position: 'top-right',
                 title: "Confirmed",
                 text: "New Account Created Successfully.",
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1500
+                icon: "success"
             });
         }
 

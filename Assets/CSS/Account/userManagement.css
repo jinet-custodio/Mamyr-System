@@ -4,11 +4,6 @@
 }
 
 @font-face {
-  font-family: "Lora";
-  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
-}
-
-@font-face {
   font-family: "Poppins Black";
   src: url(../../Fonts/Poppins/Poppins-Black.ttf);
 }
@@ -16,16 +11,21 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: "Poppins";
   box-sizing: border-box;
 }
-
+/* body {
+  background-color: rgba(0, 0, 0, 0.863);
+} */
 .sidebar {
-  width: 25vw;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 20vw;
   background-color: #cee4f2;
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 2px solid #cee4f2;
@@ -91,11 +91,10 @@
 }
 
 .sidebar-header h5 {
-  font-family: "Lora" !important;
   margin: 0;
-  font-size: 30px;
+  font-size: 25px;
   text-align: center;
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 .profileImage {
@@ -104,18 +103,19 @@
 }
 
 .profileImage img {
-  height: clamp(8vw, 6.5vw, 4vw);
+  height: clamp(6vw, 4vw, 3vw);
   border-radius: 50%;
   aspect-ratio: 1;
   object-fit: cover;
 }
 
 .list-group {
-  font-family: "Poppins";
-  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+  font-size: 16px;
   border: none;
   list-style: none;
   margin-top: 0.5rem;
+  flex-grow: 1;
+  padding-left: 0;
 }
 
 .list-group a {
@@ -135,25 +135,28 @@
   background-color: rgb(255, 255, 255);
 }
 
-#logoutBtn {
+.logout {
+  margin-top: auto; /* Pushes to bottom of sidebar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  color: black;
-  padding: 10px;
-  font-size: clamp(1.6vw, 1.4vw, 1.3vw);
+  padding: 1rem;
+  font-size: 14px;
 }
 
-#logoutBtn:hover {
+.logoutBtn:hover {
   background-color: rgb(219, 53, 69);
   color: white;
 }
 
 .main-content {
   /* border: 1px solid red; */
-  margin-left: 25vw;
+  margin-left: 20vw;
   margin-top: 5rem;
   padding: 1rem;
   overflow-y: auto;
-  width: 75%;
+  width: 100%;
 }
 .card {
   border: none;
@@ -169,20 +172,23 @@
 }
 
 .card-header .add-button {
-  font-family: "Lora";
   box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.2);
   border-radius: 0.5rem !important;
 }
 
+.add-button {
+  font-size: 14px !important;
+}
+
 .add-button img {
-  height: 24px;
-  width: 24px;
+  height: 20px;
+  width: 20px;
 }
 
 .card-header .card-title {
   font-family: "Poppins Black";
   margin-top: 1rem;
-  font-size: clamp(2.6vw, 2.8vw, 3vw);
+  font-size: 25px;
 }
 
 .add-button:hover {
@@ -195,7 +201,6 @@
 table {
   text-align: center;
   border: 1px solid rgba(168, 168, 168, 0.5);
-  font-family: "Poppins";
   table-layout: fixed;
   width: 100%;
 }
@@ -206,7 +211,6 @@ table {
 
 table .btn {
   padding: 0.3rem;
-  font-family: "Lora";
   width: 100%;
 }
 
@@ -229,7 +233,6 @@ table .btn {
 .dt-info,
 .dt-search,
 .dt-layout-cell label {
-  font-family: "Lora";
   text-transform: capitalize;
 }
 
@@ -253,7 +256,6 @@ th {
 /* .badge {
   margin-top: 0.3rem;
   letter-spacing: 2px;
-  font-family: "Lora";
   font-size: 14px;
 } */
 
@@ -267,33 +269,77 @@ th {
 }
 
 .swal-custom-title {
-  font-family: "Poppins";
   font-size: 18px;
   font-weight: bold;
 }
 
 .swal-custom-text {
-  font-family: "Poppins";
   font-size: 16px;
 }
 
-.image {
+/* .image {
   padding: 1rem !important;
+} */
+
+.fa-circle-exclamation {
+  padding: 1rem;
+  font-size: 5rem;
 }
 
 .modal-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
 }
 
 .modal-text {
-  width: 80%;
+  width: 90%;
   margin: auto;
   line-height: 2;
-  font-size: 16px;
+  font-size: 14px;
 }
 
-/* Tablet portrait */
+.modal-buttons {
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.modal-buttons .btn {
+  width: 50% !important;
+}
+
+.badge {
+  font-weight: initial;
+  line-height: normal;
+  font-size: initial;
+  padding: 0.18rem !important;
+  width: 6.5rem;
+  border-radius: 3rem !important;
+}
+
+.badge.bg-success {
+  background-color: rgba(83, 243, 169, 0.5) !important;
+  color: rgb(0, 129, 69);
+}
+
+.bg-primary {
+  background-color: rgba(12, 100, 232, 0.3) !important;
+  color: rgb(12, 100, 232);
+}
+
+.bg-danger {
+  background-color: rgba(219, 53, 69, 0.3) !important;
+  color: rgb(219, 53, 69);
+}
+
+.badge.bg-warning {
+  background-color: rgba(255, 193, 8, 0.5) !important;
+  color: rgb(187, 140, 0) !important;
+}
+
+.bi-box-arrow-left {
+  font-size: 1rem;
+}
+
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
   .list-group {
     font-size: clamp(2.5vw, 2.2vw, 2vw);

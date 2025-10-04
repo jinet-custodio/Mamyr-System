@@ -10,7 +10,7 @@ CREATE TABLE partnershipservice (
     PBcapacity INT DEFAULT 1,
     PBduration varchar(255) NULL,
     PSAvailabilityID INT DEFAULT 1,
-    createdAT DATETIME DEFAULT CURRENT_TIMESTAMP,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID),
     FOREIGN KEY (PSAvailabilityID) REFERENCES serviceavailability(availabilityID),
@@ -45,7 +45,7 @@ CREATE TABLE entrancerate (
 );
 
 ALTER TABLE entrancerate
-ADD COLUMN availability ENUM ('Enabled', 'Disabled') DEFAULT 'Enabled'
+ADD COLUMN availability ENUM ('Enabled', 'Disabled') DEFAULT 'Enabled';
 
 
 CREATE TABLE service (

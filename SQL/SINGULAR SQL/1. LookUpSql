@@ -60,6 +60,7 @@ Create Table status (
 INSERT INTO status (statusName) VALUES 
 ('Pending'),
 ('Approved'),
+('Reserved'),
 ('Rejected'),
 ('Cancelled'),
 ('Done'),
@@ -82,12 +83,12 @@ INSERT INTO `eventcategory` (`categoryID`, `categoryName`) VALUES
 (NULL, 'Debut');
 
 
-Create Table bookingpaymentstatus (
+Create Table paymentstatus (
     paymentStatusID INT PRIMARY KEY AUTO_INCREMENT,
     statusName VARCHAR(50) UNIQUE 
 );
 
-INSERT INTO bookingpaymentstatus (statusName) Values 
+INSERT INTO paymentstatus (statusName) Values 
 ('No Payment'),
 ('Partially Paid'),
 ('Fully Paid'),
