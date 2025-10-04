@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 session_start();
 require 'Config/dbcon.php';
 
-
-require_once 'Function/functions.php';
+require_once 'Function/Helpers/userFunctions.php';
+resetExpiredOTPs($conn);
 addToAdminTable($conn);
 
 //for edit website, this will enable edit mode from the iframe

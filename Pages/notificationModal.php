@@ -15,7 +15,7 @@
                             $notificationID = $notificationIDs[$index];
                         ?>
                             <li class="list-group-item mb-2 notification-item" data-id="<?= htmlspecialchars($notificationID) ?>" style="background-color: <?= htmlspecialchars($bgColor) ?>; border: 1px solid rgba(84, 87, 92, 0.5)">
-                                <?= htmlspecialchars($message) ?>
+                                <?= $message ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>

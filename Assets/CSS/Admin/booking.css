@@ -96,6 +96,7 @@ th {
 
 th {
   background-color: #91d2f2 !important;
+  color: rgb(61, 46, 46);
 }
 
 .dt-column-title {
@@ -119,24 +120,48 @@ th {
   width: 16%;
 }
 
-.btn-red {
-  background-color: rgb(204, 30, 20) !important;
-  color: white;
+.badge {
+  font-weight: initial;
+  line-height: normal;
+  font-size: initial;
+  padding: 0.6rem !important;
+  width: 7rem;
+  border-radius: 3rem !important;
 }
 
-.btn-red:hover {
-  background-color: rgb(150, 10, 3) !important;
-  color: white;
+.badge.bg-red {
+  background-color: rgba(204, 30, 20, 0.3) !important;
+  color: rgb(204, 30, 20) !important;
 }
 
-.btn-light-green {
-  background-color: rgb(71, 139, 10) !important;
-  color: white;
+.badge.bg-light-green {
+  background-color: rgba(99, 201, 9, 0.3) !important;
+  color: rgb(71, 139, 10) !important;
 }
 
-.btn-light-green:hover {
-  background-color: rgb(58, 112, 10) !important;
-  color: white;
+.badge.badge.bg-success {
+  background-color: rgba(83, 243, 169, 0.5) !important;
+  color: rgb(0, 129, 69) !important;
+}
+
+.badge.bg-primary {
+  background-color: rgba(12, 100, 232, 0.3) !important;
+  color: rgb(11, 90, 209) !important;
+}
+
+.badge.bg-danger {
+  background-color: rgba(219, 53, 69, 0.3) !important;
+  color: rgb(219, 53, 69) !important;
+}
+
+.badge.bg-warning {
+  background-color: rgba(255, 193, 8, 0.5) !important;
+  color: rgb(187, 140, 0) !important;
+}
+
+.badge.bg-info {
+  background-color: rgba(12, 202, 240, 0.3) !important;
+  color: rgb(28, 155, 180);
 }
 
 @media only screen and (min-width: 600px) and (max-width: 1024px) {

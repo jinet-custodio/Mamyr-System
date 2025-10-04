@@ -59,6 +59,10 @@ $userRole = $_SESSION['userRole'];
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
+    <!-- Flatpickr calendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
+
 </head>
 
 <body>
@@ -86,7 +90,7 @@ $userRole = $_SESSION['userRole'];
     }
 
 
-    $getData = $conn->prepare("SELECT u.firstName, u.middleInitial, u.lastName, u.userProfile, u.email, u.phoneNumber, u.birthDate, u.userAddress, pt.partnerTypeDescription
+    $getData = $conn->prepare("SELECT u.firstName, u.middleInitial, u.lastName, u.userProfile, u.email, u.phoneNumber, u.birthDate, u.userAddress, pt.partnerTypeDescription, ppt.isApproved
             FROM user u
             LEFT JOIN partnership p ON u.userID = p.userID
             LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
@@ -97,6 +101,7 @@ $userRole = $_SESSION['userRole'];
     $getDataResult = $getData->get_result();
 
     $partnerTypes = [];
+    $isApproved;
     if ($getDataResult->num_rows > 0) {
         $partnerTypes = [];
         $name = $email = $phoneNumber = $birthday = $address = $image = "";
@@ -115,7 +120,7 @@ $userRole = $_SESSION['userRole'];
                 $phoneNumber = $data['phoneNumber'] ?: "--";
 
                 $birthday = $data['birthDate'];
-                $type = ($birthday === NULL || $birthday === "") ? "text" : "date";
+                // $type = ($birthday === NULL || $birthday === "") ? "text" : "date";
                 $birthday = $birthday ?: "--";
 
                 $address = $data['userAddress'];
@@ -129,9 +134,16 @@ $userRole = $_SESSION['userRole'];
                     $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
                 }
             }
-            $partnerTypes[] = $data['partnerTypeDescription'] ?? 'N/A';
+
+            $isApproved = $data['isApproved'] ?? false;
+
+            if ($isApproved) {
+                $partnerTypes[] = $data['partnerTypeDescription'] ?? 'N/A';
+            }
         }
     }
+
+    // error_log($birthday);
 
     // foreach ($partnerTypes as $partnerType):
     //     error_log($partnerType);
@@ -147,7 +159,7 @@ $userRole = $_SESSION['userRole'];
                 </button>
             </div>
             <div class="home">
-                <?php if ($role === 'Customer') { ?>
+                <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
                     <a href="../Customer/dashboard.php">
                         <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
                     </a>
@@ -177,7 +189,7 @@ $userRole = $_SESSION['userRole'];
                     </a>
                 </li>
 
-                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
                     <li class="sidebar-item">
                         <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
@@ -289,29 +301,29 @@ $userRole = $_SESSION['userRole'];
                 <div class="customer-details">
                     <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
                     <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
-                    <div class="info">
-                        <input type="text" name="fullName" id="fullName" value="<?= htmlspecialchars($name) ?>" disabled
+                    <div class="info form-floating">
+                        <input type="text" class="form-control editable" name="fullName" id="fullName" value="<?= htmlspecialchars($name) ?>" readonly
                             required>
                         <label for="fullName">Full Name</label>
                     </div>
-                    <div class="info">
-                        <?php if (!empty($data['birthDate'])) : ?>
-                            <input type="date" name="birthday" id="birthday"
-                                value="<?= htmlspecialchars($data['birthDate']) ?>" disabled>
+                    <div class="info form-floating">
+                        <?php if (!empty($birthday)) : ?>
+                            <input type="text" class="form-control editable" name="birthday" id="birthday"
+                                value="<?= htmlspecialchars($birthday) ?>">
                         <?php else : ?>
-                            <input type="text" name="birthday" id="birthday" value="--" disabled>
+                            <input type="text" class="form-control" name="birthday" id="birthday" value="--" readonly>
                         <?php endif; ?>
                         <label for="birthday">Birthday</label>
                     </div>
-                    <div class="info">
-                        <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>"
-                            disabled required>
+                    <div class="info form-floating">
+                        <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>" class="form-control editable"
+                            readonly required>
                         <label for="address">Address</label>
                     </div>
-                    <div class="info">
+                    <div class="info form-floating">
                         <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$"
-                            title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>"
-                            disabled required>
+                            title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>" class="form-control editable"
+                            readonly required>
                         <label for="phoneNumber">Phone Number
                             <?php if ($phoneNumber === '--' || $phoneNumber === Null) { ?>
                                 <sup>
@@ -319,17 +331,22 @@ $userRole = $_SESSION['userRole'];
                                 </sup>
                             <?php } ?>
                         </label>
+                        <div id="tooltip" class="custom-tooltip">Please input number</div>
                     </div>
-                    <?php if ($role === 'Business Partner'): ?>
-                        <div class="partner-info">
-                            <label for="partnerType">Partner Type/s</label>
-                            <?php foreach ($partnerTypes as $partnerType): ?>
-                                <input type="text" name="partnerType" id="partnerType" value="<?= htmlspecialchars($partnerType) ?>"
-                                    disabled required>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
                 </div>
+
+                <?php if ($role === 'Business Partner'): ?>
+                    <h5 class="partner-info-label">Partner Type/s</h5>
+                    <div class="partner-info">
+                        <?php foreach ($partnerTypes as $partnerType): ?>
+                            <div>
+                                <input type="text" name="partnerType" id="partnerType" value="<?= htmlspecialchars($partnerType) ?>"
+                                    readonly required class="form-control">
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
                 <div class="button-container">
                     <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
                         onclick="enableEditing()"><i class="fa-solid fa-pen-to-square ms-10"></i> Edit</button>
@@ -351,6 +368,9 @@ $userRole = $_SESSION['userRole'];
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- Flatpickr for date input -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
         //Show the image preview
@@ -385,6 +405,7 @@ $userRole = $_SESSION['userRole'];
             });
         });
     </script>
+
     <script>
         //Handle sidebar for responsiveness
         document.addEventListener("DOMContentLoaded", function() {
@@ -434,43 +455,72 @@ $userRole = $_SESSION['userRole'];
     </script>
 
     <script>
+        const input = document.getElementById('phoneNumber');
+        const tooltip = document.getElementById('tooltip');
+        input.addEventListener('keypress', function(e) {
+            if (!/[0-9]/.test(e.key)) {
+                e.preventDefault();
+            }
+            tooltip.classList.add('show');
+
+
+            clearTimeout(tooltip.hideTimeout);
+            tooltip.hideTimeout = setTimeout(() => {
+                tooltip.classList.remove('show');
+            }, 2000);
+        });
+    </script>
+
+    <script>
+        let birthdayPicker = null;
+
         function enableEditing() {
             const birthdayInput = document.getElementById("birthday");
-
-            if (birthdayInput.type === "text" && birthdayInput.value === "--") {
-                const newInput = document.createElement("input");
-                newInput.type = "date";
-                newInput.name = "birthday";
-                newInput.id = "birthday";
-                newInput.disabled = false;
-                newInput.className = birthdayInput.className;
-
-                birthdayInput.parentNode.replaceChild(newInput, birthdayInput);
-            } else {
-                birthdayInput.removeAttribute("disabled");
+            birthdayInput.removeAttribute("readonly");
+            const editable = document.querySelectorAll('.editable');
+            if (!birthdayPicker) {
+                birthdayPicker = flatpickr('#birthday', {
+                    dateFormat: "Y-m-d",
+                    maxDate: "today",
+                    allowInput: true
+                });
             }
 
-            document.getElementById("fullName").removeAttribute("disabled");
-            document.getElementById("address").removeAttribute("disabled");
-            document.getElementById("phoneNumber").removeAttribute("disabled");
+            editable.forEach((input) => {
+                input.style.border = ' 1px solid red';
+            })
+
+            document.getElementById("fullName").removeAttribute("readonly");
+            document.getElementById("address").removeAttribute("readonly");
+            document.getElementById("phoneNumber").removeAttribute("readonly");
 
             document.getElementById("saveBtn").style.display = "inline-block";
             document.getElementById("cancelBtn").style.display = "inline-block";
             document.getElementById("editBtn").style.display = "none";
-        };
+        }
 
         document.getElementById("cancelBtn").addEventListener("click", function() {
+            const editable = document.querySelectorAll('.editable');
+            document.getElementById("fullName").setAttribute('readonly', true);
+            document.getElementById("address").setAttribute('readonly', true);
+            document.getElementById("phoneNumber").setAttribute('readonly', true);
+            document.getElementById("birthday").setAttribute('readonly', true);
+
+            editable.forEach((input) => {
+                input.style.border = '1px solid rgb(223, 226, 230)';
+            })
+
+            if (birthdayPicker) {
+                birthdayPicker.destroy();
+                birthdayPicker = null;
+            }
+
             document.getElementById("saveBtn").style.display = "none";
             document.getElementById("cancelBtn").style.display = "none";
             document.getElementById("editBtn").style.display = "block";
-
-            document.getElementById("fullName").disabled = true;
-            document.getElementById("address").disabled = true;
-            document.getElementById("phoneNumber").disabled = true;
-            document.getElementById("birthday").disabled = true;
-
         });
     </script>
+
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

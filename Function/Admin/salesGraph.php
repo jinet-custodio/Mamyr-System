@@ -114,7 +114,7 @@ if (isset($_GET['selectedFilter'])) {
             'message' => 'No Data',
             'sales' => []
         ]);
-        error_log(print_r($sales, true));
+        // error_log(print_r($sales, true));
         exit;
     }
 
@@ -123,7 +123,7 @@ if (isset($_GET['selectedFilter'])) {
     while ($row = $salesResult->fetch_assoc()) {
         $sales[] = $row;
     }
-    error_log(print_r($sales, true));
+    // error_log(print_r($sales, true));
 
     echo json_encode([
         'success' => true,

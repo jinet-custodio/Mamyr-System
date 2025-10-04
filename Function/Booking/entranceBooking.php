@@ -264,6 +264,7 @@ if (isset($_POST['bookRates'])) {
                 throw new Exception('Error :' . $insertConfirmedBooking->error);
             }
             $updateApproval->close();
+
             $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedbooking(bookingID, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate )
                 VALUES(?,?,?,?,?)");
             $insertConfirmedBooking->bind_param("iddss", $bookingID,  $totalCost, $totalCost, $downpaymentDueDate, $paymentDueDate);
@@ -274,18 +275,28 @@ if (isset($_POST['bookRates'])) {
             $insertConfirmedBooking->close();
 
 
-            $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?,?,?)");
-            if (!empty($resortServiceIDs)) {
-                for ($i = 0; $i < count($resortServiceIDs); $i++) {
-                    $resortServiceID = $resortServiceIDs[$i];
-                    $insertUnavailableService->bind_param("iss", $resortServiceID, $scheduledStartDate, $scheduledEndDate);
-                    if (!$insertUnavailableService->execute()) {
-                        $conn->rollback();
-                        throw new Exception('Error :' . $insertUnavailableService->error);
-                    }
-                }
+            $receiver = 'Customer';
+            $message = 'Your booking has been approved. Please complete your payment within 24 hours to confirm your reservation.';
+            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, reciverID, message, receiver)
+            VALUES(?,?,?,?)");
+            $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
+
+            if (!$insertBookingNotificationRequest->execute()) {
+                $conn->rollback();
+                throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
             }
-            $insertUnavailableService->close();
+            // $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?,?,?)");
+            // if (!empty($resortServiceIDs)) {
+            //     for ($i = 0; $i < count($resortServiceIDs); $i++) {
+            //         $resortServiceID = $resortServiceIDs[$i];
+            //         $insertUnavailableService->bind_param("iss", $resortServiceID, $scheduledStartDate, $scheduledEndDate);
+            //         if (!$insertUnavailableService->execute()) {
+            //             $conn->rollback();
+            //             throw new Exception('Error :' . $insertUnavailableService->error);
+            //         }
+            //     }
+            // }
+            // $insertUnavailableService->close();
         }
 
         unset($_SESSION['resortFormData']);

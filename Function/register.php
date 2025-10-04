@@ -6,7 +6,7 @@ $env = parse_ini_file(__DIR__ . '/../.env');
 require '../vendor/autoload.php';
 
 require_once 'emailSenderFunction.php';
-require_once 'functions.php';
+require_once 'Helpers/userFunctions.php';
 
 date_default_timezone_set('Asia/Manila'); //Set default time zone 
 

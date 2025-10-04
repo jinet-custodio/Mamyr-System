@@ -2,21 +2,28 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
+
 @font-face {
-  font-family: "Alkatra";
-  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
 }
-@font-face {
-  font-family: "Lora";
-  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins";
 }
+
 .sidebar {
-  width: 25vw;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 20vw;
   background-color: #cee4f2;
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 2px solid #cee4f2;
@@ -82,11 +89,10 @@
 }
 
 .sidebar-header h5 {
-  font-family: "Lora" !important;
   margin: 0;
-  font-size: 30px;
+  font-size: 25px;
   text-align: center;
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 .profileImage {
@@ -95,18 +101,19 @@
 }
 
 .profileImage img {
-  height: clamp(8vw, 6.5vw, 4vw);
+  height: clamp(6vw, 4vw, 3vw);
   border-radius: 50%;
   aspect-ratio: 1;
   object-fit: cover;
 }
 
 .list-group {
-  font-family: "Poppins";
-  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+  font-size: 16px;
   border: none;
   list-style: none;
   margin-top: 0.5rem;
+  flex-grow: 1;
+  padding-left: 0;
 }
 
 .list-group a {
@@ -126,32 +133,35 @@
   background-color: rgb(255, 255, 255);
 }
 
-#logoutBtn {
+.logout {
+  margin-top: auto; /* Pushes to bottom of sidebar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  color: black;
-  padding: 10px;
-  font-size: clamp(1.6vw, 1.4vw, 1.3vw);
+  padding: 1rem;
+  font-size: 14px;
 }
 
-#logoutBtn:hover {
+.logoutBtn:hover {
   background-color: rgb(219, 53, 69);
   color: white;
 }
 
 .main-content {
-  margin-left: 27vw;
-  margin-top: 5rem;
+  margin-left: 21vw;
+  margin-top: 2rem;
   padding: 1rem;
   overflow-y: auto;
-  width: 75%;
+  width: 100%;
 }
 
 /* sidebar */
 
 .welcomeText {
-  font-size: 36px;
+  font-size: 35px;
   font-family: "Poppins Black";
-  font-style: italic;
+  /* font-style: italic; */
   margin-top: 1vw;
 }
 
@@ -196,24 +206,39 @@ td {
   text-align: center !important;
 }
 
-.btn-red {
-  background-color: rgb(204, 30, 20);
-  color: white;
+.badge.bg-red {
+  background-color: rgba(204, 30, 20, 0.3) !important;
+  color: rgb(204, 30, 20) !important;
 }
 
-.btn-red:hover {
-  background-color: rgb(150, 10, 3);
-  color: white;
+.badge.bg-light-green {
+  background-color: rgba(99, 201, 9, 0.3) !important;
+  color: rgb(71, 139, 10) !important;
 }
 
-.btn-light-green {
-  background-color: rgb(71, 139, 10);
-  color: white;
+.badge.badge.bg-success {
+  background-color: rgba(83, 243, 169, 0.5) !important;
+  color: rgb(0, 129, 69) !important;
 }
 
-.btn-light-green:hover {
-  background-color: rgb(58, 112, 10);
-  color: white;
+.badge.bg-primary {
+  background-color: rgba(12, 100, 232, 0.3) !important;
+  color: rgb(11, 90, 209) !important;
+}
+
+.badge.bg-danger {
+  background-color: rgba(219, 53, 69, 0.3) !important;
+  color: rgb(219, 53, 69) !important;
+}
+
+.badge.bg-warning {
+  background-color: rgba(255, 193, 8, 0.5) !important;
+  color: rgb(187, 140, 0) !important;
+}
+
+.badge.bg-info {
+  background-color: rgba(12, 202, 240, 0.3) !important;
+  color: rgb(28, 155, 180);
 }
 
 /* table css */

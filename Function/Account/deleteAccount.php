@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer\PHPmailer;
 use PHPMailer\PHPMailer\Exception;
 
 require '../emailSenderFunction.php';
-require '../functions.php';
+require '../Helpers/userFunctions.php';
 
 // require '../../../phpmailer/src/PHPMailer.php';
 // require '../../../phpmailer/src/Exception.php';

@@ -2,7 +2,7 @@
 
 
 require '../../../Config/dbcon.php';
-require '../../functions.php';
+require '../../Helpers/statusFunctions.php';
 header('Content-Type: application/json');
 if (isset($_GET['userID'])) {
     $userID = (int) $_GET['userID'];

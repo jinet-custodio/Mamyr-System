@@ -35,3 +35,4 @@ CREATE TABLE userreview (
 
 ALTER TABLE `userreview`
 ADD dateReviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+

@@ -47,7 +47,6 @@ if ($result->num_rows > 0) {
             </tr>";
     }
 } else {
-    echo '<tr><td colspan="5" class="text-center">No Record Found!</td></tr>';
+    echo "<tr><td colspan='5' class='text-center'>No requests found.</td></tr>";
 }
-
 echo ob_get_clean();

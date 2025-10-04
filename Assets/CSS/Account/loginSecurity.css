@@ -167,7 +167,7 @@
 
 .card-header {
   font-family: "Poppins Black";
-  font-size: 2vw;
+  font-size: 25px;
   background-color: transparent;
   border: none;
   text-transform: capitalize;
@@ -179,7 +179,7 @@
   text-indent: 3rem;
   text-align: justify;
   line-height: 2;
-  font-size: 1.4vw;
+  font-size: 16px;
 }
 
 .form-container {
@@ -206,12 +206,12 @@
 .input-box label {
   /* border: 1px solid rgb(207, 25, 198); */
   width: 20%;
-  font-size: 1.4vw;
+  font-size: 16px;
 }
 
 #changeEmailBtn,
 #changePasswordBtn {
-  font-size: clamp(1.3vw, 1.1vw, 0.9vw);
+  font-size: 14px;
 }
 
 .input-box input {
@@ -220,7 +220,7 @@
   width: 55%;
   color: black !important;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
-  font-size: 1.4vw;
+  font-size: 16px;
 }
 
 /* Modal CSS */
@@ -266,7 +266,7 @@
   right: 20%;
   top: 45%;
   transform: translateY(-40%);
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .modal-body .button-container {
@@ -305,12 +305,12 @@ input[type="password"]::-webkit-search-cancel-button {
     border: none;
     .modal-title {
       font-family: "Poppins Black";
-      font-size: 20px;
+      font-size: 18px;
       margin-left: 0;
       margin-bottom: 0.5rem;
     }
     .modal-text {
-      font-size: 15px;
+      font-size: 14px;
       line-height: 2;
       text-align: center;
     }

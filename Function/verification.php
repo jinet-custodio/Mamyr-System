@@ -6,7 +6,7 @@ session_start();
 $env = parse_ini_file(__DIR__ . '/../.env');
 require '../vendor/autoload.php';
 require_once 'emailSenderFunction.php';
-require_once 'functions.php';
+require_once 'Helpers/userFunctions.php';
 
 
 if (isset($_POST['verify-btn'])) {
@@ -118,8 +118,8 @@ if (isset($_POST['verify-btn'])) {
                                 $conn->commit();
 
                                 unset($_SESSION['partnerData']);
-                                $_SESSION['success'] = "Partner has been successfully registered and verified.";
-                                header("Location: ../Pages/register.php");
+                                // $_SESSION['success'] = "Partner has been successfully registered and verified.";
+                                header("Location: ../Pages/register.php?action=partner-registered");
 
                                 $updateUser->close();
                                 $insertPartner->close();
@@ -143,7 +143,6 @@ if (isset($_POST['verify-btn'])) {
 
                                 $_SESSION['registerError'] = "An error occurred during partner registration. Please try again.";
                                 header("Location: ../Pages/register.php");
-                                $deletePartnerQuery->close();
                                 exit;
                             }
                         } elseif ($action === 'forgot-password') {
