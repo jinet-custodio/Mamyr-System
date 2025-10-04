@@ -3,7 +3,6 @@
 require '../../Config/dbcon.php';
 
 session_start();
-require '../functions.php';
 require '../emailSenderFunction.php';
 $env = parse_ini_file(__DIR__ . '/../../.env');
 require '../../vendor/autoload.php';

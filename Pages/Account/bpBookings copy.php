@@ -8,6 +8,9 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -33,12 +36,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
-
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
-
-require_once '../../Function/Partner/getBookings.php';
+require '../../Function/Partner/getBookings.php';
+require '../../Function/Helpers/statusFunctions.php';
 
 ?>
 <!DOCTYPE html>
@@ -236,9 +235,6 @@ require_once '../../Function/Partner/getBookings.php';
                     </div>
                 </div>
 
-                <div class="hidden-input">
-                    <input type="hidden" name="userID" id="userID" value="<?= $userID ?>">
-                </div>
                 <div class="tableContainer" id="bookingTable">
                     <table class=" table table-striped" id="booking">
                         <thead>
@@ -251,106 +247,245 @@ require_once '../../Function/Partner/getBookings.php';
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
+
                         </thead>
                         <tbody>
+                            <!-- Get availed service -->
+                            <?php
+                            $message = '';
+                            try {
+                                $getAvailedService = $conn->prepare("SELECT b.bookingID, LPAD(b.bookingID , 4, '0') AS formattedBookingID,
+                                        u.firstName, u.lastName, b.bookingType, ps.PBName, b.startDate, b.endDate, bpas.approvalStatus
+                                        FROM businesspartneravailedservice bpas
+                                        LEFT JOIN booking b ON bpas.bookingID = b.bookingID
+                                        LEFT JOIN user u ON u.userID = b.userID
+                                        LEFT JOIN partnershipservice ps ON bpas.partnershipServiceID = ps.partnershipServiceID
+                                        LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
+                                        WHERE p.userID = ?");
+                                $getAvailedService->bind_param('i', $userID);
+                                if (!$getAvailedService->execute()) {
+                                    throw new Exception("Error executing availed service: User ID: $userID. Error=>" . $getAvailedService->error);
+                                }
+
+                                $result = $getAvailedService->get_result();
+
+                                if ($result->num_rows === 0) {
+                                    $message =  'No booking to display';
+                                }
+                                $bookings = [];
+                                while ($row = $result->fetch_assoc()) {
+                                    $rawStartDate = $row['startDate'] ?? null;
+                                    $startDate = DATE('m-d-y g:i A', strtotime($rawStartDate));
+                                    $bookings[] = [
+                                        'formattedBookingID' => $row['formattedBookingID'],
+                                        'guestName' => $row['firstName'] . ' ' . $row['lastName'],
+                                        'bookingType' => $row['bookingType'] . ' Booking',
+                                        'service' => $row['PBName'],
+                                        'bookingDate' => $startDate,
+                                        'approvalStatusID' => $row['approvalStatus']
+                                    ];
+                                }
+                            } catch (Exception $e) {
+                                error_log("An error occured. Error-> " . $e->getMessage());
+                            }
+
+
+                            foreach ($bookings as $booking) {
+                            ?>
+                                <tr>
+                                    <td><?= $booking['formattedBookingID'] ?></td>
+                                    <td><?= $booking['guestName'] ?></td>
+                                    <td><?= $booking['bookingType'] ?></td>
+                                    <td><?= $booking['service'] ?></td>
+                                    <td><?= $booking['bookingDate'] ?></td>
+                                    <?php
+                                    $status = getStatuses($conn, $booking['approvalStatusID']);
+                                    $statusName = ucwords($status['statusName']);
+                                    switch ($statusName) {
+                                        case 'Pending':
+                                            $className = 'warning';
+                                            break;
+                                        case 'Approved':
+                                            $className = 'success';
+                                            break;
+                                        case 'Cancelled':
+                                            $className = 'red';
+                                            break;
+                                        case 'Rejected':
+                                            $className = 'danger';
+                                            break;
+                                        case 'Done':
+                                            $className = 'light-green';
+                                            break;
+                                        case 'Expired':
+                                            $className = 'secondary';
+                                            break;
+                                        default:
+                                            $className = 'warning';
+                                            break;
+                                    }
+                                    ?>
+                                    <td>
+                                        <span class="btn btn-<?= $className ?> w-75"><?= $statusName ?></span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#bookingModal">View</button>
+                                    </td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <form action="../../Function/Partner/approvalBooking.php" method="POST">
-                <!-- bookingModal -->
-                <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="booking"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalLabel">Booking Info</h4>
-                            </div>
-                            <div class="modal-body">
-                                <section class="user-info-container">
-                                    <div class="booking-info-name-pic-btn">
-                                        <div class="user-info">
-                                            <img src="../../Assets/Images/defaultProfile.png"
-                                                class="img-fluid rounded-start" alt="Profile Image">
-                                            <div class="booking-info-contact">
-                                                <p class="card-text name">Mica Lee</p>
-                                                <p class="card-text sub-name contact">micalee.bini@gmail.com |
-                                                    09235467831 </p>
-                                                <p class="card-text sub-name address">243, E. Viudez St., Poblacion, San Ildefonso,
-                                                    Bulacan</p>
-                                            </div>
+            <!-- bookingModal -->
+            <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="booking"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Booking Info</h4>
+                        </div>
+                        <div class="modal-body">
+                            <section class="user-info-container">
+                                <div class="booking-info-name-pic-btn">
+                                    <div class="user-info">
+                                        <img src="../../Assets/Images/defaultProfile.png"
+                                            class="img-fluid rounded-start" alt="Profile Image">
+                                        <div class="booking-info-contact">
+                                            <p class="card-text name">Mica Lee</p>
+                                            <p class="card-text sub-name">micalee.bini@gmail.com |
+                                                09235467831 </p>
+                                            <p class="card-text sub-name">243, E. Viudez St., Poblacion, San Ildefonso,
+                                                Bulacan</p>
                                         </div>
-                                </section>
-
-                                <section class="booking-info-container">
-
-                                    <div class="hidden-inputs" style="display: none;">
-                                        <input type="hidden" name="bookingID" id="bookingID" value="">
-                                        <input type="hidden" name="guestID" id="guestID" value="">
-                                        <input type="hidden" name="guestRole" id="guestRole" value="">
                                     </div>
-                                    <div class="booking-info">
-                                        <label for="eventType">Event Type</label>
-                                        <input type="text" class="form-control" name="eventType" id="eventType"
-                                            value="" readonly>
-                                    </div>
+                            </section>
 
-                                    <div class="booking-info">
-                                        <label for="eventDate">Booking Date</label>
-                                        <input type="text" class="form-control" name="eventDate" id="eventDate"
-                                            value="" readonly>
-                                    </div>
-
-                                    <div class="booking-info">
-                                        <label for="eventDuration">Time Duration</label>
-                                        <input type="text" class="form-control" name="eventDuration" id="eventDuration"
-                                            value="" readonly>
-                                    </div>
-
-                                    <div class="booking-info">
-                                        <label for="eventVenue">Venue</label>
-                                        <input type="text" class="form-control" name="eventVenue" id="eventVenue"
-                                            value="" readonly>
-                                    </div>
-                                </section>
-
-                                <section class="serviceContainer">
-                                    <label for="service">Your Service</label>
-                                    <div class="service-info">
-                                        <p id="service"></p>
-                                    </div>
-                                </section>
-
-                                <section class="additionalNotesContainer">
-                                    <label for="eventVenue">Additional Notes</label>
-                                    <textarea name="additionalNotes" class="form-control" id="additionalNotes"></textarea>
-                                </section>
-
-
-                            </div>
-                            <div class="modal-footer">
-                                <div class="btnContainer">
-                                    <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
-                                    <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
+                            <section class="booking-info-container">
+                                <div class="booking-info">
+                                    <label for="eventType">Event Type</label>
+                                    <input type="text" class="form-control" name="eventType" id="eventType"
+                                        value="Birthday" readonly>
                                 </div>
+
+                                <div class="booking-info">
+                                    <label for="eventDate">Booking Date</label>
+                                    <input type="text" class="form-control" name="eventDate" id="eventDate"
+                                        value="October 08, 2025" readonly>
+                                </div>
+
+                                <div class="booking-info">
+                                    <label for="eventDuration">Time Duration</label>
+                                    <input type="text" class="form-control" name="eventDuration" id="eventDuration"
+                                        value="2:00 PM - 7:00 PM (5 hours)" readonly>
+                                </div>
+
+                                <div class="booking-info">
+                                    <label for="eventVenue">Venue</label>
+                                    <input type="text" class="form-control" name="eventVenue" id="eventVenue"
+                                        value="Mini Function Hall" readonly>
+                                </div>
+                            </section>
+
+                            <section class="additionalServiceContainer">
+                                <label for="additionalService">Addtional Service</label>
+                                <div class="additionalService-info">
+                                    <p class="additionalServiceName">Snapshot Photography - Photography</p>
+                                    <p class="additionalServiceprice">₱2000</p>
+                                </div>
+                            </section>
+
+                            <section class="additionalNotesContainer">
+                                <label for="eventVenue">Addtional Notes</label>
+                                <textarea name="additionalNotes" class="form-control" id="additionalNotes"></textarea>
+                            </section>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="btnContainer">
+                                <button type="submit" class="btn btn-primary">Approve</button>
+                                <button type="submit" class="btn btn-danger" data-bs-dismiss="modal"
+                                    aria-label="Close">Reject</button>
+
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
+
+            <!-- bookingModal -->
+            <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Service Info</h4>
+                        </div>
+                        <div class="modal-body">
+                            <section class="pic-info">
+                                <div class="picContainer">
+                                    <img src="../../Assets/Images/no-picture.jpg" alt="Service Picture"
+                                        class="servicePic">
+                                </div>
+
+                                <div class="infoContainer">
+                                    <div class="info-container">
+                                        <label for="serviceName">Service Name</label>
+                                        <input type="text" class="form-control" name="serviceName" id="serviceName"
+                                            value="Snapshot Photography" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="servicePrice">Price</label>
+                                        <input type="text" class="form-control" name="servicePrice" id="servicePrice"
+                                            value="₱2000" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceCapacity">Capacity</label>
+                                        <input type="text" class="form-control" name="serviceCapacity"
+                                            id="serviceCapacity" value="Unlimited Shots" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceDuration">Service Duration</label>
+                                        <input type="text" class="form-control" name="serviceDuration"
+                                            id="serviceDuration" value="5 hours" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceAvailable">Service Availability</label>
+                                        <input type="text" class="form-control" name="serviceAvailability"
+                                            id="serviceAvalability" value="Available" readonly>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="descContainer">
+                                <div class="form-group">
+                                    <label for="serviceDescription">Service Description</label>
+                                    <textarea class="form-control" name="serviceDescription" id="serviceDescription"
+                                        rows="60">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque expedita maxime quo obcaecati, corporis, sunt mollitia similique suscipit dolorem ipsam quia iure laborum, esse ducimus explicabo voluptatum autem temporibus quidem!</textarea>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="declineBtnContainer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- bookingModal -->
         </main>
     </div>
 
-    <!-- Bootstrap Link -->
-    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
 
-    <!-- Sweetalert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -362,7 +497,7 @@ require_once '../../Function/Partner/getBookings.php';
         $(document).ready(function() {
             $('#booking').DataTable({
                 language: {
-                    emptyTable: "No data available",
+                    emptyTable: <?= json_encode($message ?: "No data available") ?>
                 },
                 responsive: false,
                 scrollX: true,
@@ -395,86 +530,14 @@ require_once '../../Function/Partner/getBookings.php';
         });
     </script>
 
-    <script>
-        function getStatusBadge(colorClass, status) {
-            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const userID = document.getElementById('userID').value;
-            const bookingMap = {}; // Store bookings for later use
-
-            fetch(`../../Function/Partner/getPartnerBookings.php?userID=${encodeURIComponent(userID)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        throw new Error(data.message || "Failed to load user data.");
-                    }
-
-                    const bookings = data.bookings;
-                    const table = $('#booking').DataTable();
-                    table.clear();
-
-                    bookings.forEach(booking => {
-                        bookingMap[booking.bookingID] = booking;
-                        table.row.add([
-                            booking.formattedBookingID,
-                            booking.guestName,
-                            booking.bookingType,
-                            booking.service,
-                            booking.bookingDate,
-                            getStatusBadge(booking.color, booking.statusName),
-                            `
-                            <button type="button" class="btn btn-info viewInfo" data-bookingid="${booking.bookingID}"> View </button>
-                        `
-                        ]);
-                    });
-
-                    table.draw();
-                })
-                .catch(error =>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: error.message || 'An unknown error occurred.',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    })
-                );
-
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('viewInfo')) {
-                    const bookingID = e.target.getAttribute("data-bookingid");
-                    const booking = bookingMap[bookingID];
-                    if (!booking) return;
-
-                    const viewModal = document.getElementById('bookingModal');
-                    if (!viewModal) return;
-
-                    viewModal.querySelector('.user-info img').src = booking.profileImage || '../../Assets/Images/defaultProfile.png';
-                    viewModal.querySelector('.user-info .name').textContent = booking.guestName;
-                    viewModal.querySelector('.user-info .contact').textContent = booking.contact;
-                    viewModal.querySelector('.user-info .address').textContent = booking.address;
-
-                    viewModal.querySelector('#eventType').value = booking.eventType;
-                    viewModal.querySelector('#eventDate').value = booking.bookingDate;
-                    viewModal.querySelector('#eventDuration').value = booking.timeDuration;
-                    viewModal.querySelector('#eventVenue').value = booking.venue;
-                    viewModal.querySelector("#service").textContent = booking.serviceInfo;
-                    viewModal.querySelector('#bookingID').value = booking.bookingID;
-                    viewModal.querySelector('#guestID').value = booking.guestID;
-                    viewModal.querySelector('#guestRole').value = booking.guestRole;
-
-                    viewModal.querySelector('#additionalNotes').value = booking.notes || '';
-
-                    const modal = new bootstrap.Modal(viewModal);
-                    modal.show();
-                }
-            });
-        });
+    <!-- Bootstrap Link -->
+    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
     </script>
 
-
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         //Handle sidebar for responsiveness
         document.addEventListener("DOMContentLoaded", function() {

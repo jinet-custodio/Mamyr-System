@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 require '../Config/dbcon.php';
 session_start();
 
-require_once '../Function/functions.php';
+require_once '../Function/Helpers/userFunctions.php';
 resetExpiredOTPs($conn);
 ?>
 
@@ -419,7 +419,17 @@ resetExpiredOTPs($conn);
                 text: "Your account has been verified. You may now log in to your account.",
                 icon: "success"
             })
+        } else if (action === 'partner-registered') {
+            Swal.fire({
+                position: 'center',
+                title: 'Verified Successfully',
+                text: 'Partner has been successfully registered and verified.',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
+            })
         }
+
         if (page || action) {
             const url = new URL(window.location);
             url.search = '';

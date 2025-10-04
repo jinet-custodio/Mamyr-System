@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require '../../../Config/dbcon.php';
-require '../../functions.php';
+require '../../Helpers/userFunctions.php';
 header('Content-Type: application/json');
 session_start();
 $userID = $_SESSION['userID'];

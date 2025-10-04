@@ -12,23 +12,25 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
-    header("Location: ../register.php");
+    header("Location: ../../../register.php");
     exit();
 }
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
         $_SESSION['error'] = 'Account no longer exists';
         session_unset();
         session_destroy();
-        header("Location: ../register.php");
+        header("Location: ../../../register.php");
         exit();
     }
 }
@@ -78,7 +80,7 @@ require '../../Function/notification.php';
     <div class="topSection">
         <div class="dashTitleContainer">
             <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
-                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
+                    src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -169,6 +171,13 @@ require '../../Function/notification.php';
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="reviews.php">
+                        <i class="fa-solid fa-star navbar-icon"></i>
+                        <h5>Reviews</h5>
+                    </a>
+                </li>
+
                 <li class="nav-item ">
                     <a class="nav-link " href="roomList.php">
                         <i class="fa-solid fa-hotel navbar-icon"></i>
@@ -200,7 +209,7 @@ require '../../Function/notification.php';
                 <li class="nav-item">
                     <a class="nav-link" href="revenue.php">
                         <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
-                        <h5>Revenue</h5>
+                        <h5>Sales</h5>
                     </a>
                 </li>
 
@@ -281,66 +290,7 @@ require '../../Function/notification.php';
                             <th class="table-header" scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="table-body">
-                        <!-- Select to display all the applicants  -->
-                        <?php
-                        $partner = 2;
-                        // $rejectedStatus = 3;
-                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName,  GROUP_CONCAT(pt.partnerTypeDescription SEPARATOR ' & ') AS partnerTypeDescription
-                                FROM partnership p
-                                INNER JOIN user u ON p.userID = u.userID
-                                INNER JOIN status s ON s.statusID = p.partnerStatusID
-                                LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
-                                LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
-                                WHERE u.userRole = ?
-                                GROUP BY 
-                                p.partnershipID
-                                ");
-                        $selectQuery->bind_param("i", $partner);
-                        $selectQuery->execute();
-                        $result = $selectQuery->get_result();
-                        if ($result->num_rows > 0) {
-                            foreach ($result as $applicants) {
-                                $name = ucwords($applicants['firstName'] ?? "") . " " . ucwords($applicants['lastName'] ?? "");
-                                $partnerID = $applicants['partnershipID'];
-                                $status = $applicants['statusName'];
-                                $date = $applicants['startDate'];
-                                $startDate = !empty($date) ? date("F d, Y - g:i A", strtotime($date)) : "N/A";
-
-                        ?>
-                                <tr>
-                                    <td scope="row" class="wrap-date" id="nameTD"><?= $name ?></td>
-
-                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'] ?? "Photographer")  ?></td>
-
-                                    <td scope="row" class="wrap-date">
-                                        <?= $startDate ?>
-                                    </td>
-
-                                    <td scope="row">
-                                        <?php
-                                        $partner = 3;
-                                        // $partnerContainer = base64_encode($partner);
-                                        ?>
-                                        <form action="partnership.php?container=<?= $partner ?>" method="POST"
-                                            style="display:inline;">
-                                            <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                            <button type="submit" class="btn btn-info w-100" name="view-btn">View</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            <?php
-                            }
-                        } else {
-                            ?>
-                            <tr>
-                                <td colspan="4" class="text-center">
-                                    <h5>No Record Found!</h5>
-                                </td>
-                            </tr>
-
-                        <?php
-                        } ?>
+                    <tbody class="table-body" id="partners-table-body">
                     </tbody>
 
                 </table>
@@ -373,77 +323,7 @@ require '../../Function/notification.php';
                             <th class="table-header" scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="table-body">
-                        <!-- Select to display all the applicants  -->
-                        <?php
-                        $pendingStatus = 1;
-                        $rejectedStatus = 3;
-                        $applicant = 4;
-                        $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName,  GROUP_CONCAT(pt.partnerTypeDescription SEPARATOR ' & ') AS partnerTypeDescription
-                                FROM partnership p
-                                INNER JOIN user u ON p.userID = u.userID
-                                INNER JOIN status s ON s.statusID = p.partnerStatusID
-                                LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
-                                LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
-                                WHERE p.partnerStatusID = ? OR p.partnerStatusID = ? AND u.userRole = ?
-                                GROUP BY 
-                                p.partnershipID
-                                ");
-                        $selectQuery->bind_param("iii", $pendingStatus, $rejectedStatus, $applicant);
-                        $selectQuery->execute();
-                        $result = $selectQuery->get_result();
-                        if ($result->num_rows > 0) {
-                            foreach ($result as $applicants) {
-                                $name = ucwords($applicants['firstName'] ?? "") . " " . ucwords($applicants['lastName'] ?? "");
-                                $partnerID = $applicants['partnershipID'];
-                                $status = $applicants['statusName'];
-                                $date = $applicants['requestDate'];
-                                $requestDate = date("F d, Y - g:i A", strtotime($date));
-                        ?>
-                                <tr>
-                                    <td scope="row" class="wrap-date"><?= $name ?></td>
-
-                                    <td scope="row"><?= ucfirst($applicants['partnerTypeDescription'] ?? "Photographer & Videographer")  ?></td>
-                                    <td scope="row" class="wrap-date"><?= htmlspecialchars($requestDate) ?></td>
-                                    <?php
-                                    if ($status == "Pending") {
-                                    ?>
-                                        <td scope="row" class="btn btn-warning w-100 d-block m-auto mt-1"
-                                            style="background-color:#ffc108 ;">
-                                            <?= $status ?>
-                                        </td>
-                                    <?php
-                                    } else if ($status == "Rejected") {
-                                    ?>
-                                        <td scope="row" class="btn btn-danger w-100 d-block m-auto mt-1"
-                                            style="background-color:#FF0000; color:#ffff ;">
-                                            <?= $status ?>
-                                        </td>
-                                    <?php
-                                    }
-                                    ?>
-                                    <td scope="row">
-                                        <?php
-                                        $applicant = 4;
-                                        // $applicantContainer = base64_encode($applicant);
-                                        ?>
-                                        <form action="partnership.php?container=<?= $applicant ?>" method="POST"
-                                            style="display:inline;">
-                                            <input type="hidden" name="partnerID" value="<?= $partnerID ?>">
-                                            <button type="submit" class="btn btn-info w-100" name="view-partner">View</button>
-                                        </form>
-
-                                    </td>
-                                    </td>
-                                <?php
-                            }
-                        } else {
-                                ?>
-                                <td colspan="5">
-                                    <h5 scope="row" class="text-center">No Record Found!</h5>
-                                </td>
-                            <?php
-                        } ?>
+                    <tbody class="table-body" id="requests-table-body">
                     </tbody>
 
                 </table>
@@ -552,10 +432,64 @@ require '../../Function/notification.php';
             ],
         });
     </script>
+
+
+    <!-- Ajax fort request adn partner -->
+    <script>
+        function loadPartners() {
+            const table = $('#partnersTable');
+            const tableBody = document.getElementById("partners-table-body");
+            tableBody.innerHTML = "<tr><td colspan='4' class='text-center'>Loading...</td></tr>";
+
+            fetch('../../Function/Admin/Partnership/getPartner.php')
+                .then(res => res.text())
+                .then(html => {
+
+                    tableBody.innerHTML = html;
+
+                    table.DataTable();
+                }).catch(err => {
+                    console.log(err);
+                });
+        }
+
+
+        function loadRequests() {
+            const table = $('#requestTable');
+            const tableBody = document.getElementById("requests-table-body");
+            tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Loading...</td></tr>";
+
+            fetch('../../Function/Admin/Partnership/getApplicant.php')
+                .then(res => res.text())
+                .then(html => {
+                    tableBody.innerHTML = html;
+
+                    table.DataTable();
+                }).catch(err => {
+                    console.log(err);
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("partner-link").addEventListener("click", function() {
+                loadPartners();
+            });
+
+            document.getElementById("request-link").addEventListener("click", function() {
+                loadRequests();
+            });
+
+            const params = new URLSearchParams(window.location.search);
+            const paramValue = params.get('container');
+
+            if (paramValue == 1) loadPartners();
+            else if (paramValue == 2) loadRequests();
+        });
+    </script>
+
     <!-- Pages hide/show -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            console.log("Script loaded");
             const requestLink = document.getElementById("request-link");
             const partnerLink = document.getElementById("partner-link");
 
@@ -575,16 +509,20 @@ require '../../Function/notification.php';
                 request_Container.style.display = "block";
                 partner_Card.style.display = "none";
                 request_Card.style.display = "block";
+
+                loadRequests();
             });
 
             partnerLink.addEventListener('click', function(event) {
                 event.preventDefault();
-                console.log("Request link clicked");
+                console.log("Partner link clicked");
                 choices.style.display = "none";
                 partner_Container.style.display = "block";
                 request_Container.style.display = "none";
                 partner_Card.style.display = "block";
                 request_Card.style.display = "none";
+
+                loadPartners();
             });
 
             choice1Link.addEventListener('click', function(event) {
@@ -607,6 +545,7 @@ require '../../Function/notification.php';
         });
     </script>
     <script src="../../Assets/JS/adminNavbar.js"></script>
+
     <!-- Search URL -->
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -625,12 +564,16 @@ require '../../Function/notification.php';
             requestContainer.style.display = "none";
             partnerCard.style.display = "block";
             requestCard.style.display = "none";
+
+            loadPartners()
         } else if (paramValue == 2) {
             choices.style.display = "none";
             partnerContainer.style.display = "none";
             requestContainer.style.display = "block";
             partnerCard.style.display = "none";
             requestCard.style.display = "block";
+
+            loadRequests();
         }
 
         if (action === "approved") {
@@ -664,53 +607,6 @@ require '../../Function/notification.php';
             });
         <?php endif; ?>
     </script>
-
-    <!-- Ajax fort request adn partner -->
-    <script>
-        function loadPartners() {
-            const tableBody = document.getElementById("partners-table-body");
-            tableBody.innerHTML = "<tr><td colspan='4' class='text-center'>Loading...</td></tr>";
-
-            fetch('../../Function/Admin/Partnership/getPartner.php')
-                .then(res => res.text())
-                .then(html => {
-                    tableBody.innerHTML = html;
-                }).catch(err => {
-                    tableBody.innerHTML = "<tr><td colspan='4' class='text-danger text-center'>Error loading data.</td></tr>";
-                });
-        }
-
-        function loadRequests() {
-            const tableBody = document.getElementById("requests-table-body");
-            tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Loading...</td></tr>";
-
-            fetch('../../Function/Admin/Partnership/getApplicant.php')
-                .then(res => res.text())
-                .then(html => {
-                    tableBody.innerHTML = html;
-                }).catch(err => {
-                    tableBody.innerHTML = "<tr><td colspan='5' class='text-danger text-center'>Error loading data.</td></tr>";
-                });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("partner-link").addEventListener("click", function() {
-                loadPartners();
-            });
-
-            document.getElementById("request-link").addEventListener("click", function() {
-                loadRequests();
-            });
-
-            const params = new URLSearchParams(window.location.search);
-            const paramValue = params.get('container');
-
-            if (paramValue == 1) loadPartners();
-            else if (paramValue == 2) loadRequests();
-        });
-    </script>
-
-
 
 
 </body>

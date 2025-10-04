@@ -13,11 +13,13 @@ $userRole = $_SESSION['userRole'];
 
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -28,6 +30,7 @@ if (isset($_SESSION['userID'])) {
         exit();
     }
 }
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -78,7 +81,7 @@ if (isset($_SESSION['error'])) {
     <div class="topSection">
         <div class="dashTitleContainer">
             <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
-                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
+                    src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -200,7 +203,7 @@ if (isset($_SESSION['error'])) {
                 <li class="nav-item">
                     <a class="nav-link" href="revenue.php">
                         <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
-                        <h5>Revenue</h5>
+                        <h5>Sales</h5>
                     </a>
                 </li>
 

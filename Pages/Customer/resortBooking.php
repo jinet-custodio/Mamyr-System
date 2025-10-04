@@ -11,11 +11,13 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -481,6 +483,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         // console.log(roomSelectionSession);
         document.addEventListener("DOMContentLoaded", function() {
             const dateInput = document.getElementById('resortBookingDate');
+            const tourInput = document.getElementById('tourSelections');
             const form = document.querySelector('form');
             if (dateInput && !dateInput.value) {
                 Swal.fire({
@@ -489,9 +492,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     text: 'Please pick a booking date to continue',
                     confirmButtonText: 'OK'
                 }).then(() => {
+                    tourInput.style.border = '2px solid red'
                     dateInput.style.border = '2px solid red';
                     form.removeAttribute('aria-hidden');
                     dateInput.focus();
+                    document.getElementById("cottageBtn").disabled = true;
+                    document.getElementById("entertainmentBtn").disabled = true;
+                    document.getElementById("hotelBtn").disabled = true;
                 })
             };
         });
@@ -527,24 +534,15 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         alert("Error: " + data.error);
                         return;
                     }
-
-
-                    //  const cottageModalBody = document.getElementById('cottageModalBody');
                     const cottageContainer = document.getElementById('cottagesContainer');
                     const roomSection = document.getElementById('rooms');
                     const roomsContainer = document.getElementById('roomsContainer');
-                    //  const cottageLabel = document.getElementById('cottagesFormLabel');
-                    //  const roomLabel = document.getElementById('roomLabel');
                     const entertainmentContainer = document.getElementById('entertainmentContainer');
-                    //  const entertainmentLabel = document.getElementById('entertainmentFormLabel');
 
                     cottageContainer.innerHTML = '';
                     roomsContainer.innerHTML = '';
                     entertainmentContainer.innerHTML = '';
                     roomSection.style.display = 'none';
-                    //  cottageLabel.innerHTML = '';
-                    //  entertainmentLabel.innerHTML = '';
-
 
                     function getCottages() {
                         data.cottages.forEach(cottage => {
@@ -563,7 +561,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             label.textContent = `${cottage.RServiceName} - (${cottage.RScapacity} pax)`;
 
                             const cottageSelections = cottageSelectionsSession.map(String);
-                            // console.log(cottageSelections);
                             if (cottageSelections.includes(String(cottage.RServiceName))) {
                                 checkbox.checked = true;
                             }
@@ -609,7 +606,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     if (selectedTour === 'Day' || selectedTour === 'Night') {
                         getCottages();
                     }
-                    // console.log(selectedTour);
 
                     // Show rooms for Overnight
                     if (selectedTour === 'Overnight') {
@@ -658,9 +654,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
         document.addEventListener("DOMContentLoaded", () => {
-            if (startDate && startDate.value) {
+            if (startDate && startDate.value || tourSelect && tourSelect.value) {
                 fetchAmenities();
                 startDate.style.border = '1px solid rgb(223, 226, 230)';
+                tourSelect.style.border = '1px solid rgb(223, 226, 230)';
             }
 
             console.log("startDate.value at DOMContentLoaded:", startDate?.value);
@@ -685,7 +682,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 document.getElementById("cottageBtn").disabled = false;
                 document.getElementById("entertainmentBtn").disabled = false;
                 document.getElementById("hotelBtn").disabled = false;
+                tourSelect.style.border = '1px solid rgb(223, 226, 230)';
             });
+            tourSelect.style.border = '1px solid rgb(223, 226, 230)';
             fetchAmenities();
         }
         const bookRatesBTN = document.getElementById('bookRatesBTN')

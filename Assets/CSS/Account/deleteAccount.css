@@ -163,21 +163,14 @@
 }
 
 .card-title {
-  font-size: clamp(3vw, 2.8vw, 2.7vw);
+  font-size: 25px;
   font-family: "Poppins Black";
   font-weight: bold;
   margin-bottom: 2vw;
 }
 
-.card-body {
-  .button-container {
-    font-family: "Poppins";
-  }
-}
-
 .card-text {
-  font-family: "Poppins";
-  font-size: clamp(1.4vw, 1.2vw, 1.1vw);
+  font-size: 18px;
   text-indent: 2rem;
   line-height: 2;
   text-align: justify;
@@ -189,12 +182,11 @@
   }
   .modal-title {
     font-family: "Poppins Black";
-    font-size: clamp(2.3vw, 2.1vw, 2vw);
+    font-size: 16px;
   }
 
   .modal-text {
-    font-family: "Poppins";
-    font-size: clamp(1.7vw, 1.5vw, 1.4vw);
+    font-size: 14px;
   }
 
   .button-container {
@@ -203,15 +195,14 @@
     display: flex;
     justify-content: space-around;
     button {
-      width: 8vw;
-      font-size: clamp(1.5vw, 1.4vw, 1.3vw);
+      width: 10vw;
+      font-size: 14px;
     }
   }
 }
 
 #deleteModal {
   .modal {
-    font-family: "Poppins";
     .modal-title {
       margin-left: 2rem;
     }
@@ -246,13 +237,11 @@
   }
 }
 .swal-custom-title {
-  font-family: "Poppins";
   font-size: 18px;
   font-weight: bold;
 }
 
 .swal-custom-text {
-  font-family: "Poppins";
   font-size: 16px;
 }
 

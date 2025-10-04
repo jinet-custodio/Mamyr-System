@@ -103,7 +103,7 @@ require '../../Function/notification.php';
     <div class="topSection">
         <div class="dashTitleContainer">
             <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
-                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
+                    src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -223,9 +223,9 @@ require '../../Function/notification.php';
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="revenue.php">
+                    <a class="nav-link" href="revenue.php">
                         <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
-                        <h5>Revenue</h5>
+                        <h5>Sales</h5>
                     </a>
                 </li>
 
@@ -258,7 +258,7 @@ require '../../Function/notification.php';
 
     <div class="wrapper mb-5">
         <div class="card">
-            <h5 class="card-title">Revenue</h5>
+            <h5 class="card-title">Sales</h5>
             <div class="card-body">
                 <div class="charts">
                     <?php if (!empty($revenues)): ?>

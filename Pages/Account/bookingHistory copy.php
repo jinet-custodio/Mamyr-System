@@ -12,11 +12,13 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -44,8 +46,7 @@ while ($row = $reviewResult->fetch_assoc()) {
     $reviewedBookingIDs[] = $row['bookingID'];
 }
 
-require_once '../../Function/functions.php';
-//Changing Status function to ah galing sa file na functions.php
+require_once '../../Function/Helpers/statusFunctions.php';
 changeToExpiredStatus($conn);
 changeToDoneStatus($conn);
 

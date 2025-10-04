@@ -200,156 +200,89 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <h3 class="welcomeText" id="title">Services</h3>
 
                 <div class="btnContainer" id="addServiceButtonContainer">
-                    <button class="btn btn-primary  add-service-btn" id="addServiceButton" onclick="addService()"><i class="fas fa-plus-circle"></i> Add Service</button>
+                    <button class="btn btn-primary" id="addServiceButton" onclick="addService()"><i class="fas fa-plus-circle"></i> Add Service</button>
                 </div>
 
-                <div class="serviceContainer" id="servicesTable">
-                    <?php
-                    $getPartnerService = $conn->prepare("SELECT * FROM `partnershipservice` WHERE partnershipID = ?");
-                    $getPartnerService->bind_param('i', $partnershipID);
+                <div class="tableContainer" id="servicesTable">
+                    <table class=" table table-striped" id="services">
+                        <thead>
+                            <th scope="col">Service Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </thead>
 
-                    if (!$getPartnerService->execute()) {
-                        error_log("Error: " . $getPartnerService->error);
-                    }
+                        <tbody>
+                            <?php
+                            $getPartnerService = $conn->prepare("SELECT * FROM `partnershipservice` WHERE partnershipID = ?");
+                            $getPartnerService->bind_param('i', $partnershipID);
 
-                    $result = $getPartnerService->get_result();
+                            if (!$getPartnerService->execute()) {
+                                error_log("Error: " . $getPartnerService->error);
+                            }
 
-                    if (!$result->num_rows === 0) {
-                    ?>
-                        <div class="card service-card text-center">
-                            <div class="card-body">
-                                <p class="card-text">NO SERVICES, ADD A SERVICE</p>
-                                <button class="btn btn-primary" id="addServiceButton" onclick="addService()"><i class="fas fa-plus-circle"></i> Add Service</button>
-                            </div>
-                        </div>
+                            $result = $getPartnerService->get_result();
 
-                    <?php
-                    }
-                    $details = [];
-                    while ($row = $result->fetch_assoc()) {
-                        $details[] = $row;
-                    }
+                            if (!$result->num_rows === 0) {
+                            ?>
+                                <tr>
+                                    <td colspan="8" class="text-center no-data-text">No data available</td>
+                                </tr>
+                            <?php
+                            }
+                            $details = [];
+                            while ($row = $result->fetch_assoc()) {
+                                $details[] = $row;
+                            }
 
-                    foreach ($details as $service):
+                            foreach ($details as $service):
 
-                        $storedAvailabilityID = intval($service['PSAvailabilityID']);
+                                $storedAvailabilityID = intval($service['PSAvailabilityID']);
 
-                        $availabilityStatus = getAvailabilityStatus($conn, $storedAvailabilityID);
-                        $modalID = 'serviceModal' . $service['partnershipServiceID'];
-                        $availabilityID = $availabilityStatus['availabilityID'];
-                        $availabilityName = $availabilityStatus['availabilityName'];
-                        switch ($availabilityID) {
-                            case 1:
-                                $classcolor = 'success';
-                                $statusName =  $availabilityName;
-                                break;
-                            case 2:
-                                $classcolor = 'info';
-                                $statusName =  'Booked';
-                                break;
-                            case 3:
-                                $classcolor = 'warning';
-                                $statusName =  $availabilityName;
-                                break;
-                            case 4:
-                                $classcolor = 'light-green';
-                                $statusName =  $availabilityName;
-                                break;
-                            case 5:
-                                $classcolor = 'danger';
-                                $statusName =  $availabilityName;
-                                break;
-                            default:
-                                $classcolor = 'secondary';
-                                $availabilityID;
-                                $statusName =  $availabilityName;
-                        }
+                                $availabilityStatus = getAvailabilityStatus($conn, $storedAvailabilityID);
 
+                                $availabilityID = $availabilityStatus['availabilityID'];
+                                $availabilityName = $availabilityStatus['availabilityName'];
+                                switch ($availabilityID) {
+                                    case 1:
+                                        $classcolor = 'success';
+                                        $statusName =  $availabilityName;
+                                        break;
+                                    case 2:
+                                        $classcolor = 'info';
+                                        $statusName =  'Booked';
+                                        break;
+                                    case 3:
+                                        $classcolor = 'warning';
+                                        $statusName =  $availabilityName;
+                                        break;
+                                    case 4:
+                                        $classcolor = 'light-green';
+                                        $statusName =  $availabilityName;
+                                        break;
+                                    case 5:
+                                        $classcolor = 'danger';
+                                        $statusName =  $availabilityName;
+                                        break;
+                                    default:
+                                        $classcolor = 'secondary';
+                                        $availabilityID;
+                                        $statusName =  $availabilityName;
+                                }
 
-                    ?>
-
-                        <div class="card service-card">
-                            <div class="card-header">
-                                <p class="card-text">
-                                    <span class="badge bg-<?= $classcolor ?> w-75"
-                                        id="<?= $statusName ?>"><?= $statusName ?></span>
-                                </p>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title"><?= htmlspecialchars(ucfirst($service['PBName'])) ?></h5>
-                                <p class="card-text">Price: ₱<?= number_format($service['PBPrice'], 2) ?></p>
-
-                            </div>
-                            <div class="card-footer">
-                                <button type="button" class="btn btn-primary w-50" data-bs-toggle="modal"
-                                    data-bs-target="#<?= $modalID ?>">View</button></td>
-                            </div>
-                        </div>
-
-                        <!-- serviceModal -->
-                        <div class="modal fade" id="<?= $modalID ?>" tabindex="-1" role="dialog" aria-labelledby="serviceModal"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="exampleModalLabel">Service Info</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <section>
-                                            <div class="infoContainer">
-                                                <div class="info-container">
-                                                    <label for="serviceName">Service Name</label>
-                                                    <input type="text" class="form-control" name="serviceName" id="serviceName"
-                                                        value="<?= $service['PBName'] ?? 'N/A' ?>" readonly>
-                                                </div>
-                                                <div class="info-container">
-                                                    <label for="servicePrice">Price</label>
-                                                    <input type="text" class="form-control" name="servicePrice" id="servicePrice"
-                                                        value="₱<?= number_format($service['PBPrice'], 2) ?>" readonly>
-                                                </div>
-                                                <div class="info-container">
-                                                    <label for="serviceCapacity">Capacity</label>
-                                                    <input type="text" class="form-control" name="serviceCapacity"
-                                                        id="serviceCapacity" value="<?= $service['PBCapacity'] ?? 'N/A' ?>" readonly>
-                                                </div>
-                                                <div class="info-container">
-                                                    <label for="serviceDuration">Service Duration</label>
-                                                    <input type="text" class="form-control" name="serviceDuration"
-                                                        id="serviceDuration" value="<?= $service['PBduration'] ?? 'N/A' ?>" readonly>
-                                                </div>
-                                                <div class="info-container">
-                                                    <label for="serviceAvailable">Service Availability</label>
-                                                    <select class="form-select" name="serviceAvailability"
-                                                        id="serviceAvalability" disabled>
-                                                        <option value="" <?= ($statusName == '') ? "selected" : '' ?>>Select Availability</option>
-                                                        <option value="available" <?= (strtolower($statusName) == 'available') ? "selected" : '' ?>> Available</option>
-                                                        <option value="occupied" <?= (strtolower($statusName) == 'occupied') ? "selected" : '' ?>>Booked</option>
-                                                        <option value="notAvailable" <?= (strtolower($statusName) == 'not available') ? "selected" : '' ?>>Unavailable</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </section>
-
-                                        <section class="descContainer">
-                                            <div class="form-group">
-                                                <label for="serviceDescription">Service Description</label>
-                                                <textarea class="form-control" name="serviceDescription" id="serviceDescription"
-                                                    rows="5"><?= $service['PBDescription'] ?? 'N/A' ?></textarea>
-                                            </div>
-                                        </section>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div class="declineBtnContainer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                                aria-label="Close">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- serviceModal -->
-
-                    <?php endforeach; ?>
+                            ?>
+                                <tr>
+                                    <td><?= htmlspecialchars(ucfirst($service['PBName'])) ?></td>
+                                    <td>₱<?= number_format($service['PBPrice'], 2) ?></td>
+                                    <td><span class="badge bg-<?= $classcolor ?> w-75"
+                                            id="<?= $statusName ?>"><?= $statusName ?></span>
+                                    </td>
+                                    <td><button type="button" class="btn btn-primary w-75" data-bs-toggle="modal"
+                                            data-bs-target="#serviceModal">View</button></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
 
                 <!-- //* Form for adding a service  -->
@@ -444,7 +377,64 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
 
+            <!-- serviceModal -->
+            <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Service Info</h4>
+                        </div>
+                        <div class="modal-body">
+                            <section>
+                                <div class="infoContainer">
+                                    <div class="info-container">
+                                        <label for="serviceName">Service Name</label>
+                                        <input type="text" class="form-control" name="serviceName" id="serviceName"
+                                            value="Snapshot Photography" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="servicePrice">Price</label>
+                                        <input type="text" class="form-control" name="servicePrice" id="servicePrice"
+                                            value="₱2000" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceCapacity">Capacity</label>
+                                        <input type="text" class="form-control" name="serviceCapacity"
+                                            id="serviceCapacity" value="Unlimited Shots" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceDuration">Service Duration</label>
+                                        <input type="text" class="form-control" name="serviceDuration"
+                                            id="serviceDuration" value="5 hours" readonly>
+                                    </div>
+                                    <div class="info-container">
+                                        <label for="serviceAvailable">Service Availability</label>
+                                        <input type="text" class="form-control" name="serviceAvailability"
+                                            id="serviceAvalability" value="Available" readonly>
+                                    </div>
+                                </div>
+                            </section>
 
+                            <section class="descContainer">
+                                <div class="form-group">
+                                    <label for="serviceDescription">Service Description</label>
+                                    <textarea class="form-control" name="serviceDescription" id="serviceDescription"
+                                        rows="60">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque expedita maxime quo obcaecati, corporis, sunt mollitia similique suscipit dolorem ipsam quia iure laborum, esse ducimus explicabo voluptatum autem temporibus quidem!</textarea>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="declineBtnContainer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- serviceModal -->
         </main>
     </div>
 

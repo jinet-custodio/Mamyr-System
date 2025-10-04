@@ -8,15 +8,18 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
-require_once '../../Function/functions.php';
+require_once '../../Function/Helpers/statusFunctions.php';
 changeToDoneStatus($conn);
 changeToExpiredStatus($conn);
+
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -78,7 +81,7 @@ if (isset($_SESSION['error'])) {
     <div class="topSection">
         <div class="dashTitleContainer">
             <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
-                    src="../../Assets/images/MamyrLogo.png" alt="" class="logo"></a>
+                    src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
         </div>
 
         <div class="menus">
@@ -200,7 +203,7 @@ if (isset($_SESSION['error'])) {
                 <li class="nav-item">
                     <a class="nav-link" href="revenue.php">
                         <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
-                        <h5>Revenue</h5>
+                        <h5>Sales</h5>
                     </a>
                 </li>
 
@@ -246,6 +249,7 @@ if (isset($_SESSION['error'])) {
                     <th scope="col">Guest</th>
                     <th scope="col">Booking Type</th>
                     <th scope="col">Check-in</th>
+                    <th scope="col">Check-out</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
                 </thead>
@@ -265,8 +269,50 @@ if (isset($_SESSION['error'])) {
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
 
+    <!-- Table JS -->
+    <script>
+        $('#bookingTable').DataTable({
+            responsive: false,
+            scrollX: true,
+            columnDefs: [{
+                    width: '10%',
+                    targets: 0
+                },
+                {
+                    width: '15%',
+                    targets: 1
+                },
+                {
+                    width: '15%',
+                    targets: 2
+                },
+                {
+                    width: '15%',
+                    targets: 3
+                },
+                {
+                    width: '15%',
+                    targets: 4
+                },
+                {
+                    width: '10%',
+                    targets: 5
+                },
+                {
+                    width: '10%',
+                    targets: 6
+                },
+            ],
+        });
+    </script>
+
+
     <!-- Booking Ajax -->
     <script>
+        function getStatusBadge(colorClass, status) {
+            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             fetch("../../Function/Admin/Ajax/getBookingsJSON.php")
                 .then(response => response.json())
@@ -276,50 +322,44 @@ if (isset($_SESSION['error'])) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
-                            text: data.message || 'An unknown error occurred.'
+                            text: data.message || 'An unknown error occurred.',
+                            showConfirmButton: false,
+                            timer: 1500,
                         });
                         return;
                     }
                     const bookings = data.bookings;
-                    const tbody = document.querySelector('#booking-display-body');
-                    tbody.innerHTML = "";
+                    const table = $('#bookingTable').DataTable();
+                    table.clear();
 
-                    if (bookings && bookings.length > 0) {
-                        bookings.forEach(booking => {
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
-                                                <td>${booking.formattedBookingID}</td>
-                                                <td>${booking.name}</td>
-                                                <td>${booking.bookingType} Booking</td>
-                                                <td>${booking.checkIn}</td>
-                                                <td>
-                                                    <a class="btn btn-${booking.statusClass} w-100">
-                                                        ${booking.status}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <form action="viewBooking.php" method="POST">
-                                                        <input type="hidden" name="button" value="booking">
-                                                        <input type="hidden" name="bookingType" value="${booking.bookingType}">
-                                                        <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
-                                                        <input type="hidden" name="bookingID" value="${booking.bookingID}">
-                                                        <button type="submit" class="btn btn-primary">View</button>
-                                                    </form>
-                                                </td>
-                                            `;
-                            tbody.appendChild(row);
-                        })
-                    } else {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `<td colspan="6" class="text-center">No bookings to display</td>`;
-                        tbody.appendChild(row);
-                    }
+                    bookings.forEach(booking => {
+                        table.row.add([
+                            booking.formattedBookingID,
+                            booking.name,
+                            booking.bookingType + ` Booking`,
+                            booking.checkIn,
+                            booking.checkOut,
+                            getStatusBadge(booking.statusClass, booking.status),
+                            `<form action="viewBooking.php" method="POST">
+                                    <input type="hidden" name="button" value="booking">
+                                    <input type="hidden" name="bookingType" value="${booking.bookingType}">
+                                    <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
+                                    <input type="hidden" name="bookingID" value="${booking.bookingID}">
+                                    <button type="submit" class="btn btn-primary">View</button>
+                            </form>`
+                        ]);
+                    });
+
+                    table.draw();
+
                 }).catch(error => {
                     console.error("Error loading bookings:", error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: error.message || 'Failed to load data from the server.'
+                        text: data.message || 'An unknown error occurred.',
+                        showConfirmButton: false,
+                        timer: 1500,
                     })
                 })
         })
@@ -364,38 +404,6 @@ if (isset($_SESSION['error'])) {
         });
     </script>
 
-    <!-- Table JS -->
-    <script>
-        $('#bookingTable').DataTable({
-            responsive: false,
-            scrollX: true,
-            columnDefs: [{
-                    width: '10%',
-                    targets: 0
-                },
-                {
-                    width: '20%',
-                    targets: 1
-                },
-                {
-                    width: '15%',
-                    targets: 2
-                },
-                {
-                    width: '20%',
-                    targets: 3
-                },
-                {
-                    width: '15%',
-                    targets: 4
-                },
-                {
-                    width: '20%',
-                    targets: 5
-                },
-            ],
-        });
-    </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
