@@ -56,8 +56,8 @@ while ($row = $getLogoResult->fetch_assoc()) {
 </head>
 
 <body>
-    <footer class="py-1 ">
-        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
+    <footer class="py-1 " id="footer">
+        <div class=" py-1 d-flex justify-content-start">
             <?php
             foreach ($logoInfo as $id => $logo) {
                 foreach ($logo as $fileName => $altText) {
@@ -82,7 +82,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
 
         <div class="info">
             <div class="reservation">
-                <h4 class="reservationTitle">Reservation</h4>
+                <h4 class="reservationTitle mb-1">Reservation</h4>
                 <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>
                 </h4>
                 <h4 class="emailAddressTextFooter">
@@ -90,7 +90,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
                 </h4>
             </div>
             <div class="locationFooter">
-                <h4 class="locationTitle">Location</h4>
+                <h4 class="locationTitle mb-1">Location</h4>
                 <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>
                 </h4>
             </div>
@@ -104,7 +104,6 @@ while ($row = $getLogoResult->fetch_assoc()) {
             <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
                 <i class='bx bxs-phone'></i>
             </a>
-
         </div>
     </footer>
 
