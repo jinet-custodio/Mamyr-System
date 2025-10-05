@@ -4,7 +4,7 @@ session_start();
 date_default_timezone_set('Asia/Manila');
 $env = parse_ini_file(__DIR__ . '/../.env');
 require '../vendor/autoload.php';
-require_once 'functions.php';
+require_once 'Helpers/userFunctions.php';
 require_once 'emailSenderFunction.php';
 
 

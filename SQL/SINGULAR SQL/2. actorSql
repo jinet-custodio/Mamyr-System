@@ -34,15 +34,9 @@ ALTER TABLE user
 ADD COLUMN dateDeleted DATE NULL
 AFTER isDeleted;
 
-ALTER TABLE `user` 
-ADD `isTermAccepted` BOOLEAN NULL DEFAULT FALSE 
-AFTER `userRole`;
-
 ALTER TABLE user
 ADD COLUMN isTemporaryPassword BOOLEAN DEFAULT FALSE AFTER password;
 
-ALTER TABLE `user`
-  DROP `isTermAccepted`;
 
 CREATE TABLE admin (
     adminID INT PRIMARY KEY AUTO_INCREMENT,
@@ -53,7 +47,7 @@ CREATE TABLE admin (
 );
 
 ALTER TABLE admin
-ADD COLUMN fullName VArchar(50)
+ADD COLUMN fullName VARCHAR(50)
 AFTER userID 
 
 CREATE TABLE partnership (

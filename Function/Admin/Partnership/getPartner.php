@@ -27,7 +27,7 @@ if ($result->num_rows > 0) {
         echo "
             <tr>
                 <td>{$name}</td>
-                <td>{$applicant['partnerTypeDescription']}</td>
+                <td>" . ($applicant['partnerTypeDescription'] ?? 'N/A') . "</td>
                 <td>{$startDate}</td>
                 <td>
                     <form action='partnership.php?container=3' method='POST'>

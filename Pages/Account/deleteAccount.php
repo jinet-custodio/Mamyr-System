@@ -11,11 +11,13 @@ $userRole = $_SESSION['userRole'];
 
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -26,7 +28,6 @@ if (isset($_SESSION['userID'])) {
         exit();
     }
 }
-
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -197,12 +198,14 @@ switch ($userRole) {
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
-                <li>
-                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
-                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
-                        <span class="sidebar-text ms-2">Logout</span>
-                </li>
+
             </ul>
+
+            <div class="logout">
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
+                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                    <span class="sidebar-text ms-2">Logout</span>
+            </div>
 
         </aside>
         <!-- End Side Bar -->

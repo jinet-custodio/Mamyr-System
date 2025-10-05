@@ -12,11 +12,13 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -148,7 +150,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     value="<?php echo isset($_SESSION['hotelFormData']['checkInDate']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['checkInDate'])) : ''; ?>">
                                 <!--<i class="fa-solid fa-calendar" id="hotelCheckinIcon"
                                     style="margin-left: -2vw;font-size:1.2vw;"> </i>
-                           --> </div>
+                           -->
+                            </div>
                         </div>
                         <div class="checkOut-container">
                             <h5 class="containerLabel">Check-Out Date</h5>
@@ -158,7 +161,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     value="<?php echo isset($_SESSION['hotelFormData']['checkOutDate']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['checkOutDate'])) : ''; ?>">
                                 <!--<i class="fa-solid fa-calendar" id="hotelCheckoutIcon"
                                     style="margin-left: -2vw;font-size:1.2vw;"> </i>
-                    --></div>
+                    -->
+                            </div>
                         </div>
                     </div>
 

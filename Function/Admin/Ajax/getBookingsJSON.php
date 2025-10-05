@@ -2,12 +2,12 @@
 
 
 require '../../../Config/dbcon.php';
-require '../../functions.php';
+require '../../Helpers/statusFunctions.php';
 header('Content-Type: application/json');
 
 try {
     $getBookingInfo = $conn->prepare("SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID,  
-                            b.bookingID, b.bookingType, b.userID, b.startDate, b.bookingStatus,
+                            b.bookingID, b.bookingType, b.userID, b.startDate, b.endDate, b.bookingStatus,
                             u.firstName, u.middleInitial, u.lastName, 
                             b.customPackageID, 
                             cb.paymentApprovalStatus, cb.confirmedBookingID, cb.paymentStatus
@@ -23,7 +23,7 @@ try {
         $middleInitial = trim($bookings['middleInitial'] ?? '');
         $name = ucfirst($bookings['firstName']) . " " . ucfirst($middleInitial) . " " . ucfirst($bookings['lastName']);
         $checkIn = date("F d, Y", strtotime($bookings['startDate']));
-
+        $checkOut = date("F d, Y", strtotime($bookings['endDate']));
         $paymentApprovalStatus = getStatuses($conn, $bookings['paymentApprovalStatus'] ?? null);
         $bookingStatus = getStatuses($conn, $bookings['bookingStatus'] ?? null);
         // $paymentStatus = getPaymentStatus($conn, $bookings['paymentStatus']) ?? null;
@@ -90,6 +90,7 @@ try {
             'name' => $name,
             'bookingType' => $bookings['bookingType'],
             'checkIn' => $checkIn,
+            'checkOut' => $checkOut,
             'status' => $status,
             'statusClass' => $class,
             'bookingStatus' => $bookings['bookingStatus'],

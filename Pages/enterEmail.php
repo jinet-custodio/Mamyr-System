@@ -35,7 +35,7 @@ if (isset($_SESSION['action'])) {
     <div class="container">
         <div class="back-icon-container">
             <a href="../Pages/register.php">
-                <img src="../Assets/Images/Icon/arrow.png" alt="Go back" class="backArrow">
+                <img src="../Assets/Images/Icon/arrowBtnBlue.png" alt="Go back" class="backArrow">
             </a>
         </div>
         <div class="form-box forgotPassword">

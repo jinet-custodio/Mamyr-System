@@ -8,18 +8,20 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
-require_once '../../Function/functions.php';
+require_once '../../Function/Helpers/statusFunctions.php';
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -81,9 +83,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     $getDataResult = $getData->get_result();
     if ($getDataResult->num_rows > 0) {
         $data =  $getDataResult->fetch_assoc();
+        $firstName = $data['firstName'] ?? '';
         $middleInitial = trim($data['middleInitial'] ?? '');
-        $name = ucfirst($data['firstName'] ?? '') . " " .
-            ucfirst($data['middleInitial'] ?? '') . " " .
+        $name = ucfirst($firstName) . " " .
+            ucfirst($middleInitial) . " " .
             ucfirst($data['lastName'] ?? '');
         $profile = $data['userProfile'];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -96,33 +99,35 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     ?>
     <div class="wrapper d-flex">
+
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="d-flex" id="toggle-container">
+            <div class="d-flex justify-content-center" id="toggle-container">
                 <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </button>
             </div>
-            <div class="home text-center">
-                <?php if ($role === 'Customer') { ?>
-                <a href="../Customer/dashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
+            <div class="home">
+                <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
+                    <a href="../Customer/dashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
+                    <a href="../Admin/adminDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                <a href="../BusinessPartner/bpDashboard.php">
-                    <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                </a>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
+                    </a>
                 <?php } ?>
             </div>
+
             <div class="sidebar-header text-center">
                 <h5 class="sidebar-text">User Account</h5>
                 <div class="profileImage">
                     <img src="<?= htmlspecialchars($image) ?>"
-                        alt="<?= htmlspecialchars($data['firstName']) ?> Picture">
+                        alt="<?= htmlspecialchars($firstName) ?> Picture">
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
@@ -133,40 +138,40 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </a>
                 </li>
 
-                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                        <i class="fa-solid fa-table-list sidebar-icon"></i>
-                        <span class="sidebar-text">Payment & Booking History</span>
-                    </a>
-                </li>
+                <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                            <i class="fa-solid fa-table-list sidebar-icon"></i>
+                            <span class="sidebar-text">Payment & Booking History</span>
+                        </a>
+                    </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                <li class="sidebar-item">
-                    <a href="userManagement.php" class="list-group-item">
-                        <i class="fa-solid fa-people-roof sidebar-icon"></i>
-                        <span class="sidebar-text">Manage Users</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bpBookings.php" class="list-group-item">
-                        <i class="fa-regular fa-calendar-days sidebar-icon"></i>
-                        <span class="sidebar-text">Bookings</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpServices.php" class="list-group-item active">
-                        <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
-                        <span class="sidebar-text">Services</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpSales.php" class="list-group-item">
-                        <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                        <span class="sidebar-text">Sales</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bpBookings.php" class="list-group-item">
+                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpServices.php" class="list-group-item active">
+                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpSales.php" class="list-group-item">
+                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
+                            <span class="sidebar-text">Sales</span>
+                        </a>
+                    </li>
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -181,107 +186,173 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
-                        style="margin: 3vw auto;">
-                        <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
-                        <span class="sidebar-text ms-2">Logout</span>
-                    </button>
-                </li>
             </ul>
-        </aside> <!-- End Side Bar -->
+            <div class="logout">
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
+                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                    <span class="sidebar-text ms-2">Logout</span>
+            </div>
+        </aside>
+        <!-- End Side Bar -->
 
         <main class="main-content" id="main-content">
             <div class="container">
                 <h3 class="welcomeText" id="title">Services</h3>
 
                 <div class="btnContainer" id="addServiceButtonContainer">
-                    <button class="btn btn-primary" id="addServiceButton" onclick="addService()">Add
-                        Service</button>
+                    <button class="btn btn-primary  add-service-btn" id="addServiceButton" onclick="addService()"><i class="fas fa-plus-circle"></i> Add Service</button>
                 </div>
 
-                <div class="tableContainer" id="servicesTable">
-                    <table class=" table table-striped" id="services">
-                        <thead>
-                            <th scope="col">Service Name</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
-                        </thead>
+                <div class="serviceContainer" id="servicesTable">
+                    <?php
+                    $getPartnerService = $conn->prepare("SELECT * FROM `partnershipservice` WHERE partnershipID = ?");
+                    $getPartnerService->bind_param('i', $partnershipID);
 
-                        <tbody>
-                            <?php
-                            $getPartnerService = $conn->prepare("SELECT * FROM `partnershipservice` WHERE partnershipID = ?");
-                            $getPartnerService->bind_param('i', $partnershipID);
+                    if (!$getPartnerService->execute()) {
+                        error_log("Error: " . $getPartnerService->error);
+                    }
 
-                            if (!$getPartnerService->execute()) {
-                                error_log("Error: " . $getPartnerService->error);
-                            }
+                    $result = $getPartnerService->get_result();
 
-                            $result = $getPartnerService->get_result();
+                    if (!$result->num_rows === 0) {
+                    ?>
+                        <div class="card service-card text-center">
+                            <div class="card-body">
+                                <p class="card-text">NO SERVICES, ADD A SERVICE</p>
+                                <button class="btn btn-primary" id="addServiceButton" onclick="addService()"><i class="fas fa-plus-circle"></i> Add Service</button>
+                            </div>
+                        </div>
 
-                            if (!$result->num_rows === 0) {
-                            ?>
-                            <tr>
-                                <td colspan="8" class="text-center no-data-text">No data available</td>
-                            </tr>
-                            <?php
-                            }
-                            $details = [];
-                            while ($row = $result->fetch_assoc()) {
-                                $details[] = $row;
-                            }
+                    <?php
+                    }
+                    $details = [];
+                    while ($row = $result->fetch_assoc()) {
+                        $details[] = $row;
+                    }
 
-                            foreach ($details as $service):
+                    foreach ($details as $service):
 
-                                $storedAvailabilityID = intval($service['PSAvailabilityID']);
+                        $storedAvailabilityID = intval($service['PSAvailabilityID']);
 
-                                $availabilityStatus = getAvailabilityStatus($conn, $storedAvailabilityID);
+                        $availabilityStatus = getAvailabilityStatus($conn, $storedAvailabilityID);
+                        $modalID = 'serviceModal' . $service['partnershipServiceID'];
+                        $availabilityID = $availabilityStatus['availabilityID'];
+                        $availabilityName = $availabilityStatus['availabilityName'];
+                        switch ($availabilityID) {
+                            case 1:
+                                $classcolor = 'success';
+                                $statusName =  $availabilityName;
+                                break;
+                            case 2:
+                                $classcolor = 'info';
+                                $statusName =  'Booked';
+                                break;
+                            case 3:
+                                $classcolor = 'warning';
+                                $statusName =  $availabilityName;
+                                break;
+                            case 4:
+                                $classcolor = 'light-green';
+                                $statusName =  $availabilityName;
+                                break;
+                            case 5:
+                                $classcolor = 'danger';
+                                $statusName =  $availabilityName;
+                                break;
+                            default:
+                                $classcolor = 'secondary';
+                                $availabilityID;
+                                $statusName =  $availabilityName;
+                        }
 
-                                $availabilityID = $availabilityStatus['availabilityID'];
-                                $availabilityName = $availabilityStatus['availabilityName'];
-                                switch ($availabilityID) {
-                                    case 1:
-                                        $classcolor = 'success';
-                                        $statusName =  $availabilityName;
-                                        break;
-                                    case 2:
-                                        $classcolor = 'info';
-                                        $statusName =  'Booked';
-                                        break;
-                                    case 3:
-                                        $classcolor = 'warning';
-                                        $statusName =  $availabilityName;
-                                        break;
-                                    case 4:
-                                        $classcolor = 'success';
-                                        $statusName =  $availabilityName;
-                                        break;
-                                    case 5:
-                                        $classcolor = 'danger';
-                                        $statusName =  $availabilityName;
-                                        break;
-                                    default:
-                                        $classcolor = 'secondary';
-                                        $availabilityID;
-                                        $statusName =  $availabilityName;
-                                }
 
-                            ?>
-                            <tr>
-                                <td><?= htmlspecialchars(ucfirst($service['PBName'])) ?></td>
-                                <td>₱<?= number_format($service['PBPrice'], 2) ?></td>
-                                <td><span class="btn btn-<?= $classcolor ?> w-75"
+                    ?>
+
+                        <div class="card service-card">
+                            <div class="card-header">
+                                <p class="card-text">
+                                    <span class="badge bg-<?= $classcolor ?> w-75"
                                         id="<?= $statusName ?>"><?= $statusName ?></span>
-                                </td>
-                                <td><button type="button" class="btn btn-primary w-75" data-bs-toggle="modal"
-                                        data-bs-target="#serviceModal">View</button></td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                                </p>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars(ucfirst($service['PBName'])) ?></h5>
+                                <p class="card-text">Price: ₱<?= number_format($service['PBPrice'], 2) ?></p>
+
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary w-50" data-bs-toggle="modal"
+                                    data-bs-target="#<?= $modalID ?>">View</button></td>
+                            </div>
+                        </div>
+
+                        <!-- serviceModal -->
+                        <div class="modal fade" id="<?= $modalID ?>" tabindex="-1" role="dialog" aria-labelledby="serviceModal"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabel">Service Info</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <section>
+                                            <div class="infoContainer">
+                                                <div class="info-container">
+                                                    <label for="serviceName">Service Name</label>
+                                                    <input type="text" class="form-control" name="serviceName" id="serviceName"
+                                                        value="<?= $service['PBName'] ?? 'N/A' ?>" readonly>
+                                                </div>
+                                                <div class="info-container">
+                                                    <label for="servicePrice">Price</label>
+                                                    <input type="text" class="form-control" name="servicePrice" id="servicePrice"
+                                                        value="₱<?= number_format($service['PBPrice'], 2) ?>" readonly>
+                                                </div>
+                                                <div class="info-container">
+                                                    <label for="serviceCapacity">Capacity</label>
+                                                    <input type="text" class="form-control" name="serviceCapacity"
+                                                        id="serviceCapacity" value="<?= $service['PBCapacity'] ?? 'N/A' ?>" readonly>
+                                                </div>
+                                                <div class="info-container">
+                                                    <label for="serviceDuration">Service Duration</label>
+                                                    <input type="text" class="form-control" name="serviceDuration"
+                                                        id="serviceDuration" value="<?= $service['PBduration'] ?? 'N/A' ?>" readonly>
+                                                </div>
+                                                <div class="info-container">
+                                                    <label for="serviceAvailable">Service Availability</label>
+                                                    <select class="form-select" name="serviceAvailability"
+                                                        id="serviceAvalability" disabled>
+                                                        <option value="" <?= ($statusName == '') ? "selected" : '' ?>>Select Availability</option>
+                                                        <option value="available" <?= (strtolower($statusName) == 'available') ? "selected" : '' ?>> Available</option>
+                                                        <option value="occupied" <?= (strtolower($statusName) == 'occupied') ? "selected" : '' ?>>Booked</option>
+                                                        <option value="notAvailable" <?= (strtolower($statusName) == 'not available') ? "selected" : '' ?>>Unavailable</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section class="descContainer">
+                                            <div class="form-group">
+                                                <label for="serviceDescription">Service Description</label>
+                                                <textarea class="form-control" name="serviceDescription" id="serviceDescription"
+                                                    rows="5"><?= $service['PBDescription'] ?? 'N/A' ?></textarea>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="declineBtnContainer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                aria-label="Close">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- serviceModal -->
+
+                    <?php endforeach; ?>
                 </div>
 
+                <!-- //* Form for adding a service  -->
                 <div class="addServiceContainer" id="addServiceContainer">
                     <div class="backArrowContainer" id="backArrowContainer">
                         <a href="bpServices.php"><img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="Back Button"
@@ -310,8 +381,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                    <option value="<?= htmlspecialchars($row['partnerTypeID']) ?>">
-                                        <?= htmlspecialchars($row['description']) ?></option>
+                                                <option value="<?= htmlspecialchars($row['partnerTypeID']) ?>">
+                                                    <?= htmlspecialchars($row['description']) ?></option>
                                     <?php
                                             }
                                         }
@@ -332,8 +403,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                     ?>
-                                    <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
-                                        <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
+                                                    <?= htmlspecialchars($row['availabilityName']) ?></option>
                                     <?php
                                             }
                                         }
@@ -361,85 +432,19 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </div>
                             <div class="descContainer">
                                 <label for="description" class="description" class="addServiceLabel">Description</label>
-                                <textarea class="form-control" id="description" name="serviceDesc"
+                                <textarea id="description" name="serviceDesc" class="form-control"
                                     placeholder="Service information/description (Optional)"></textarea>
                             </div>
                         </div>
                         <div class="submitBtnContainer ">
                             <input type="hidden" name="partnershipID" value="<?= (int) $partnershipID ?>">
-                            <button type="submit" class="btn btn-success w-25" name="addService">Add Service</button>
+                            <button type="submit" class="btn btn-success w-25" name="addService"><i class="fas fa-plus-circle"></i> Add Service</button>
                         </div>
                     </form>
-
-
-
-                </div>
-
-            </div>
-
-            <!-- serviceModal -->
-            <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModal"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="exampleModalLabel">Service Info</h4>
-                        </div>
-                        <div class="modal-body">
-                            <section class="pic-info">
-                                <div class="picContainer">
-                                    <img src="../../Assets/Images/no-picture.jpg" alt="Service Picture"
-                                        class="servicePic">
-                                </div>
-
-                                <div class="infoContainer">
-                                    <div class="info-container">
-                                        <label for="serviceName">Service Name</label>
-                                        <input type="text" class="form-control" name="serviceName" id="serviceName"
-                                            value="Snapshot Photography" readonly>
-                                    </div>
-                                    <div class="info-container">
-                                        <label for="servicePrice">Price</label>
-                                        <input type="text" class="form-control" name="servicePrice" id="servicePrice"
-                                            value="₱2000" readonly>
-                                    </div>
-                                    <div class="info-container">
-                                        <label for="serviceCapacity">Capacity</label>
-                                        <input type="text" class="form-control" name="serviceCapacity"
-                                            id="serviceCapacity" value="Unlimited Shots" readonly>
-                                    </div>
-                                    <div class="info-container">
-                                        <label for="serviceDuration">Service Duration</label>
-                                        <input type="text" class="form-control" name="serviceDuration"
-                                            id="serviceDuration" value="5 hours" readonly>
-                                    </div>
-                                    <div class="info-container">
-                                        <label for="serviceAvailable">Service Availability</label>
-                                        <input type="text" class="form-control" name="serviceAvailability"
-                                            id="serviceAvalability" value="Available" readonly>
-                                    </div>
-                                </div>
-                            </section>
-
-                            <section class="descContainer">
-                                <div class="form-group">
-                                    <label for="serviceDescription">Service Description</label>
-                                    <textarea class="form-control" name="serviceDescription" id="serviceDescription"
-                                        rows="60">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque expedita maxime quo obcaecati, corporis, sunt mollitia similique suscipit dolorem ipsam quia iure laborum, esse ducimus explicabo voluptatum autem temporibus quidem!</textarea>
-                                </div>
-                            </section>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="declineBtnContainer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                    aria-label="Close">Close</button>
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <!-- serviceModal -->
+
+
         </main>
     </div>
 
@@ -458,117 +463,117 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../../Assets/JS/datatables.min.js"></script>
 
     <script>
-    const servicesTable = document.getElementById("servicesTable")
-    const addServiceContainer = document.getElementById("addServiceContainer")
-    const addServiceButtonContainer = document.getElementById("addServiceButtonContainer")
-    const homeBtnContainer = document.getElementById("homeBtnContainer")
+        const servicesTable = document.getElementById("servicesTable")
+        const addServiceContainer = document.getElementById("addServiceContainer")
+        const addServiceButtonContainer = document.getElementById("addServiceButtonContainer")
+        const homeBtnContainer = document.getElementById("homeBtnContainer")
 
-    addServiceContainer.style.display = "none"
+        addServiceContainer.style.display = "none"
 
-    function addService() {
-        if (addServiceContainer.style.display == "none") {
-            addServiceContainer.style.display = "block";
-            servicesTable.style.display = "none";
-            addServiceButtonContainer.style.display = "none";
-            homeBtnContainer.style.display = "none";
-            document.getElementById("title").innerHTML = "Add Service"
+        function addService() {
+            if (addServiceContainer.style.display == "none") {
+                addServiceContainer.style.display = "block";
+                servicesTable.style.display = "none";
+                addServiceButtonContainer.style.display = "none";
+                homeBtnContainer.style.display = "none";
+                document.getElementById("title").innerHTML = "Add Service"
 
-        } else {
-            addServiceContainer.style.display = "block";
+            } else {
+                addServiceContainer.style.display = "block";
+            }
         }
-    }
     </script>
 
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#services').DataTable({
-            language: {
-                emptyTable: "No Services"
-            },
-            columnDefs: [{
-                width: '25%',
-                target: 0
+        $(document).ready(function() {
+            $('#services').DataTable({
+                language: {
+                    emptyTable: "No Services"
+                },
+                columnDefs: [{
+                    width: '25%',
+                    target: 0
 
-            }]
+                }]
+            });
         });
-    });
     </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    //Handle sidebar for responsiveness
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('toggle-btn');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const items = document.querySelectorAll('.list-group-item');
-        const toggleCont = document.getElementById('toggle-container')
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container')
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
 
-            if (sidebar.classList.contains('collapsed')) {
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                });
-                toggleCont.style.justifyContent = "center"
-            } else {
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                toggleCont.style.justifyContent = "flex-end"
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 600) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    })
+                    sidebar.classList.remove('collapsed');
+                }
             }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
         });
-
-        function handleResponsiveSidebar() {
-            if (window.innerWidth <= 600) {
-                sidebar.classList.add('collapsed');
-                toggleBtn.style.display = "flex";
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                })
-
-            } else {
-                toggleBtn.style.display = "none";
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                })
-                sidebar.classList.remove('collapsed');
-            }
-        }
-
-        // Run on load and when window resizes
-        handleResponsiveSidebar();
-        window.addEventListener('resize', handleResponsiveSidebar);
-    });
     </script>
 
     <!-- Show when want to logout-->
     <script>
-    const logoutBtn = document.getElementById('logoutBtn');
-    const logoutModal = document.getElementById('logoutModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/logout.php";
-            }
-        });
-    })
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/logout.php";
+                }
+            });
+        })
     </script>
 
     <!-- <script>
@@ -584,27 +589,27 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     </script> -->
     <!-- Message pop up -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('action');
-    if (paramValue === 'success') {
-        Swal.fire({
-            icon: 'success',
-            title: 'Service Added Successfully',
-            text: ''
-        })
-    } else if (paramValue === 'error') {
-        Swal.fire({
-            icon: 'error',
-            title: 'Failed to Add Service',
-            text: 'Please try again later.'
-        })
-    }
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
+        if (paramValue === 'success') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Service Added Successfully',
+                text: ''
+            })
+        } else if (paramValue === 'error') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to Add Service',
+                text: 'Please try again later.'
+            })
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 

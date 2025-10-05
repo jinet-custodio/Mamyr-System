@@ -4,7 +4,7 @@ require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 session_start();
 
-require '../functions.php';
+require '../Helpers/userFunctions.php';
 
 $userID = (int)$_SESSION['userID'];
 $userRole = (int) $_SESSION['userRole'];

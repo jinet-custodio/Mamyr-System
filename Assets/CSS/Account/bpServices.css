@@ -2,23 +2,28 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
+
 @font-face {
-  font-family: "Alkatra";
-  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
-}
-@font-face {
-  font-family: "Lora";
-  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
 }
 
-/* sidebar */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins";
+}
+
 .sidebar {
-  width: 25vw;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 20vw;
   background-color: #cee4f2;
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 2px solid #cee4f2;
@@ -84,11 +89,10 @@
 }
 
 .sidebar-header h5 {
-  font-family: "Lora" !important;
   margin: 0;
-  font-size: 30px;
+  font-size: 25px;
   text-align: center;
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 .profileImage {
@@ -97,18 +101,19 @@
 }
 
 .profileImage img {
-  height: clamp(8vw, 6.5vw, 4vw);
+  height: clamp(6vw, 4vw, 3vw);
   border-radius: 50%;
   aspect-ratio: 1;
   object-fit: cover;
 }
 
 .list-group {
-  font-family: "Poppins";
-  font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+  font-size: 16px;
   border: none;
   list-style: none;
   margin-top: 0.5rem;
+  flex-grow: 1;
+  padding-left: 0;
 }
 
 .list-group a {
@@ -128,31 +133,33 @@
   background-color: rgb(255, 255, 255);
 }
 
-#logoutBtn {
+.logout {
+  margin-top: auto; /* Pushes to bottom of sidebar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  color: black;
-  padding: 10px;
-  font-size: clamp(1.6vw, 1.4vw, 1.3vw);
+  padding: 1rem;
+  font-size: 14px;
 }
 
-#logoutBtn:hover {
+.logoutBtn:hover {
   background-color: rgb(219, 53, 69);
   color: white;
 }
 
 .main-content {
-  margin-left: 27vw;
+  margin-left: 20vw;
   margin-top: 5rem;
   padding: 1rem;
   overflow-y: auto;
-  width: 75%;
+  width: 80%;
 }
 /* sidebar */
 
 .welcomeText {
   font-size: 36px;
   font-family: "Poppins Black";
-  font-style: italic;
   margin-top: 1vw;
 }
 
@@ -161,12 +168,12 @@
   margin-top: 2vw;
 }
 
-.btn-primary {
+.add-service-btn {
   float: right;
   width: 16%;
 }
 
-.tableContainer {
+/* .tableContainer {
   margin-top: 3vw;
   width: 100%;
 }
@@ -188,46 +195,39 @@ td {
 
 .dt-column-title {
   text-align: center;
-}
+} */
 
-label {
+/* label {
   margin-bottom: 1vw;
-}
+} */
 
 .serviceInputContainer {
   /* border: 1px solid red; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 5vw);
-  gap: 3rem;
-  margin-top: 3vw;
+  gap: 1rem;
+  margin-top: 1vw;
 }
+
+.serviceInputContainer > :last-child {
+  grid-column: span 2;
+}
+
+#description {
+  height: 5rem;
+}
+
 .addServiceLabel {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 1vw;
-  font-size: 20px;
+  /* display: block; */
+  font-weight: 500;
+  font-size: 18px;
   font-family: "Poppins";
-}
-
-.form-control,
-.form-select {
-  height: 3vw;
-}
-
-.imageContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.serviceImage {
-  width: 20vw;
 }
 
 .submitBtnContainer {
   /* border: 1px solid red; */
-  margin-top: 25vw;
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -240,51 +240,79 @@ label {
   align-items: center;
 }
 
-.description {
-  margin-top: 2vw;
-}
-
-#description {
-  height: 15vw;
-}
-
-.modal-dialog {
-  max-width: 50% !important;
-}
-
-.pic-info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4rem;
-}
-
-.servicePic {
-  width: 20vw;
-}
-
 .info-container {
   margin-top: 0.5rem;
 }
 
-label {
+/* label {
   font-size: 18px;
   font-family: "Poppins";
-  font-weight: bold;
   margin-bottom: -1rem !important;
-}
+} */
 
 .info-container .form-control {
-  border: none;
-  padding: 0;
+  border: 1px solid rgb(107, 117, 125, 0.5);
+  padding: 0.3rem;
   font-size: 18px;
 }
 
-textarea {
-  margin-top: 1rem;
-  height: 10rem !important;
-  width: 100% !important;
+.serviceContainer {
+  margin: 3rem auto;
+  border: 1px solid red;
+  width: 95%;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
 }
+
+.service-card {
+  /* border: 1px solid red; */
+  width: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.badge {
+  font-weight: initial;
+  line-height: normal;
+  font-size: initial;
+  padding: 0.6rem !important;
+  width: 7rem;
+  border-radius: 3rem !important;
+}
+
+.badge.bg-light-green {
+  background-color: rgba(99, 201, 9, 0.3) !important;
+  color: rgb(71, 139, 10) !important;
+}
+
+.badge.badge.bg-success {
+  background-color: rgba(83, 243, 169, 0.5) !important;
+  color: rgb(0, 129, 69) !important;
+}
+
+.badge.bg-danger {
+  background-color: rgba(219, 53, 69, 0.3) !important;
+  color: rgb(219, 53, 69) !important;
+}
+
+.badge.bg-warning {
+  background-color: rgba(255, 193, 8, 0.5) !important;
+  color: rgb(187, 140, 0) !important;
+}
+
+.badge.bg-info {
+  background-color: rgba(12, 202, 240, 0.3) !important;
+  color: rgb(28, 155, 180);
+}
+
+.badge.bg-secondary {
+  background-color: rgba(107, 117, 125, 0.3) !important;
+  color: rgb(107, 117, 125);
+}
+
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
   .sidebar {

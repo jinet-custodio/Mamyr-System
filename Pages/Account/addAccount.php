@@ -12,11 +12,13 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -168,13 +170,7 @@ $data = $_SESSION['account-form'] ?? [];
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('action');
 
-        if (paramValue === "invalidRole") {
-            Swal.fire({
-                title: "Error",
-                text: "Please Select a Role.",
-                icon: "info"
-            });
-        } else if (paramValue === 'emailExist') {
+        if (paramValue === 'emailExist') {
             Swal.fire({
                 title: "Error",
                 text: "Please Select a Role.",

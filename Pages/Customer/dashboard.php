@@ -6,8 +6,9 @@ session_start();
 require '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
-require '../../Function/functions.php';
-require '../../Function/notification.php';
+require_once '../../Function/Helpers/statusFunctions.php';
+require_once '../../Function/Helpers/userFunctions.php';
+require_once '../../Function/notification.php';
 resetExpiredOTPs($conn);
 addToAdminTable($conn);
 autoChangeStatus($conn);
@@ -15,11 +16,13 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -141,6 +144,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                <li class="nav-item">
+                    <?php if ($userRole !== 2): ?>
+                        <a class="nav-link active" href="dashboard.php"> Home</a>
+                    <?php else: ?>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                    <?php endif; ?>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">

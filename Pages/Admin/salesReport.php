@@ -8,31 +8,33 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
-require_once '../../Function/functions.php';
+require_once '../../Function/Helpers/statusFunctions.php';
 changeToDoneStatus($conn);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
         $_SESSION['error'] = 'Account no longer exists';
         session_unset();
         session_destroy();
-        header("Location: ../register.php");
+        header("Location: ../../../register.php");
         exit();
     }
 }
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
-    header("Location: ../register.php");
+    header("Location: ../../../register.php");
     exit();
 }
 

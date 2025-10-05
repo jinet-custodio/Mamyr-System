@@ -12,11 +12,13 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -277,10 +279,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </section>
 
             <?php if (!empty($allMenus)) { ?>
-            <section class="food-container">
-                <h4>Food, Drinks & Dessert</h4>
+                <section class="food-container">
+                    <h4>Food, Drinks & Dessert</h4>
 
-                <?php
+                    <?php
                     $selectedFoodCount = 0;
                     $hasMenuItems = false;
                     foreach ($allMenus as $items) {
@@ -291,28 +293,28 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     }
                     ?>
 
-                <?php if ($hasMenuItems) { ?>
-                <?php foreach ($allMenus as $category => $items) { ?>
-                <?php if (!empty($items)) {
+                    <?php if ($hasMenuItems) { ?>
+                        <?php foreach ($allMenus as $category => $items) { ?>
+                            <?php if (!empty($items)) {
                                 $selectedFoodCount++ ?>
 
-                <div class="food-info">
-                    <h5 class="foodCategory"><?= htmlspecialchars(ucfirst($category)) ?></h5>
-                    <div class="food-name">
-                        <?php foreach ($items as $item) {
-                                ?>
-                        <label class="foodName"><?= $item['foodName'] ?></label>
-                        <input type="hidden" name="foodIDs[]" value="<?= $item['foodItemID'] ?>">
+                                <div class="food-info">
+                                    <h5 class="foodCategory"><?= htmlspecialchars(ucfirst($category)) ?></h5>
+                                    <div class="food-name">
+                                        <?php foreach ($items as $item) {
+                                        ?>
+                                            <label class="foodName"><?= $item['foodName'] ?></label>
+                                            <input type="hidden" name="foodIDs[]" value="<?= $item['foodItemID'] ?>">
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            <?php } ?>
                         <?php } ?>
-                    </div>
-                </div>
-                <?php } ?>
-                <?php } ?>
 
-                <?php } else { ?>
-                <p class="text-center">No menu selected.</p>
-                <?php } ?>
-            </section>
+                    <?php } else { ?>
+                        <p class="text-center">No menu selected.</p>
+                    <?php } ?>
+                </section>
             <?php } ?>
 
             <section class="additional-container">
@@ -322,24 +324,25 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 if (!empty($additionalServiceSelected)) { ?>
 
 
-                <?php foreach ($additionalServiceSelected as $serviceID => $service) {
+                    <?php foreach ($additionalServiceSelected as $serviceID => $service) {
                         $additionalServicePrice += $service['PBPrice'] ?>
-                <div class="form-group">
-                    <label><?= htmlspecialchars($service['PBName']) ?> &mdash;
-                        ₱<?= number_format($service['PBPrice'], 2) ?></label>
-                    <input type="hidden" name="additionalServiceSelected[]" value="<?= htmlspecialchars($serviceID) ?>"
-                        class="form-control">
-                </div>
-                <?php } ?>
+                        <div class="form-group">
+                            <label><?= htmlspecialchars($service['PBName']) ?> &mdash;
+                                ₱<?= number_format($service['PBPrice'], 2) ?></label>
+                            <input type="hidden" name="additionalServiceSelected[]" value="<?= htmlspecialchars($serviceID) ?>"
+                                class="form-control">
+                        </div>
+                    <?php } ?>
             </section>
-            <?php } else { ?>
+        <?php } else { ?>
             <p class="text-center">No additional service selected.</p>
-            <?php } ?>
+        <?php } ?>
 
 
-            <?php
+        <?php
         $chargeType = 'Food';
         $pricingType = 'Per Head';
+        $pricePerHead = 0;
         $getPricingID = $conn->prepare("SELECT pricingID, price FROM `servicepricing` WHERE chargeType = ? AND pricingType = ?");
         $getPricingID->bind_param('ss',  $chargeType, $pricingType);
         if ($getPricingID->execute()) {
@@ -348,7 +351,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $row = $result->fetch_assoc();
 
                 $pricingID = intval($row['pricingID']);
-                $pricePerHead = (float) $row['price'];
+                $pricePerHead = (float) $row['price'] ?? 0;
             }
         }
 
@@ -361,76 +364,76 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         ?>
 
 
-            <section class="additionalServices">
+        <section class="additionalServices">
 
-            </section>
+        </section>
 
-            <section class="payment-container">
-                <h4>Payment Details</h4>
+        <section class="payment-container">
+            <h4>Payment Details</h4>
 
-                <div class="payment-details-container">
-                    <div class="input-container">
-                        <label for="paymentMethod"> Payment Method</label>
-                        <input type="text" class="form-control" name="paymentMethod"
-                            value="<?= htmlspecialchars($paymentMethod) ?>">
-                    </div>
-                    <div class="input-container">
-                        <label for="eventVenuePrice">Venue Price</label>
-                        <input type="text" class="form-control" name="eventVenuePrice"
-                            value="<?= !empty($venuePrice) ? '₱' . htmlspecialchars(number_format($venuePrice, 2)) : 'None' ?>">
-                    </div>
-                    <div class="input-container">
-                        <label for="totalFoodPrice">Menu Price</label>
-                        <input type="text" class="form-control" name="totalFoodPrice"
-                            value="<?= !empty($totalFoodPrice) ? '₱' . htmlspecialchars(number_format($totalFoodPrice, 2)) : 'None' ?>">
-                    </div>
-                    <div class="input-container">
-                        <label for="additionalServicePrice">Additional Service Price</label>
-                        <input type="text" class="form-control" name="additionalServicePrice"
-                            value="<?= !empty($additionalServicePrice) ? '₱' . htmlspecialchars(number_format($additionalServicePrice, 2)) : 'None' ?>">
-                    </div>
-                    <div class="input-container">
-                        <label for="downpayment">(Tentative) Downpayment (30%): </label>
-                        <input type="text" class="form-control" name="downpayment"
-                            value="₱<?= htmlspecialchars(number_format($downpaymentPrice, 2)) ?>">
-                    </div>
-                    <div class="input-container">
-                        <label for="totalCost">Total Cost (Tentative)</label>
-                        <input type="text" class="form-control" name="totalCost"
-                            value="₱<?= htmlspecialchars(number_format($totalCost, 2)) ?>">
-                    </div>
+            <div class="payment-details-container">
+                <div class="input-container">
+                    <label for="paymentMethod"> Payment Method</label>
+                    <input type="text" class="form-control" name="paymentMethod"
+                        value="<?= htmlspecialchars($paymentMethod) ?>">
                 </div>
-            </section>
-
-
-            <section class="notes-container">
-
-                <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>The price shown is for the
-                    event venue only.</p>
-                <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>The admin will verify the
-                    number of guests and the selected menu to calculate the total cost.</p>
-                <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>There will be a changes in
-                    downpayment amount once the total bill is computed</p>
-                <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>Full payment must be given to
-                    the admin before the start of the event.</p>
-                <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>Cooking and sticking
-                    decoration that will damage the venue are prohibited.</p>
-            </section>
-
-            <div class="hidden-inputs">
-
-                <input type="hidden" name="eventDate" value="<?= $eventDate ?>">
-                <input type="hidden" name="eventStartTime" value="<?= $eventStartTime ?>">
-                <input type="hidden" name="startDate" value="<?= $startDate ?>">
-                <input type="hidden" name="endDate" value="<?= $endDate ?>">
-                <input type="hidden" name="menuIDs" value="<? $menuIDs ?>">
-                <input type="hidden" name="venueID" value="<?= $venueID ?>">
-                <input type="hidden" name="pricingID" value="<?= $pricingID ?>">
+                <div class="input-container">
+                    <label for="eventVenuePrice">Venue Price</label>
+                    <input type="text" class="form-control" name="eventVenuePrice"
+                        value="<?= !empty($venuePrice) ? '₱' . htmlspecialchars(number_format($venuePrice, 2)) : 'None' ?>">
+                </div>
+                <div class="input-container">
+                    <label for="totalFoodPrice">Menu Price</label>
+                    <input type="text" class="form-control" name="totalFoodPrice"
+                        value="<?= !empty($totalFoodPrice) ? '₱' . htmlspecialchars(number_format($totalFoodPrice, 2)) : 'None' ?>">
+                </div>
+                <div class="input-container">
+                    <label for="additionalServicePrice">Additional Service Price</label>
+                    <input type="text" class="form-control" name="additionalServicePrice"
+                        value="<?= !empty($additionalServicePrice) ? '₱' . htmlspecialchars(number_format($additionalServicePrice, 2)) : 'None' ?>">
+                </div>
+                <div class="input-container">
+                    <label for="downpayment">(Tentative) Downpayment (30%): </label>
+                    <input type="text" class="form-control" name="downpayment"
+                        value="₱<?= htmlspecialchars(number_format($downpaymentPrice, 2)) ?>">
+                </div>
+                <div class="input-container">
+                    <label for="totalCost">Total Cost (Tentative)</label>
+                    <input type="text" class="form-control" name="totalCost"
+                        value="₱<?= htmlspecialchars(number_format($totalCost, 2)) ?>">
+                </div>
             </div>
+        </section>
 
-            <div class="button-container">
-                <button type="submit" class="btn btn-primary" name="eventBook">Book Now</button>
-            </div>
+
+        <section class="notes-container">
+
+            <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>The price shown is for the
+                event venue only.</p>
+            <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>The admin will verify the
+                number of guests and the selected menu to calculate the total cost.</p>
+            <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>There will be a changes in
+                downpayment amount once the total bill is computed</p>
+            <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>Full payment must be given to
+                the admin before the start of the event.</p>
+            <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>Cooking and sticking
+                decoration that will damage the venue are prohibited.</p>
+        </section>
+
+        <div class="hidden-inputs">
+
+            <input type="hidden" name="eventDate" value="<?= $eventDate ?>">
+            <input type="hidden" name="eventStartTime" value="<?= $eventStartTime ?>">
+            <input type="hidden" name="startDate" value="<?= $startDate ?>">
+            <input type="hidden" name="endDate" value="<?= $endDate ?>">
+            <input type="hidden" name="menuIDs" value="<? $menuIDs ?>">
+            <input type="hidden" name="venueID" value="<?= $venueID ?>">
+            <input type="hidden" name="pricingID" value="<?= $pricingID ?>">
+        </div>
+
+        <div class="button-container">
+            <button type="submit" class="btn btn-primary" name="eventBook">Book Now</button>
+        </div>
         </main>
     </form>
 

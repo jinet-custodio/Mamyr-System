@@ -40,12 +40,12 @@ main {
 
 .defaultDiv {
   width: 95%;
-  border: 1px solid black;
+  border: 1px solid rgb(182, 239, 250);
   margin: 3vw auto;
   text-align: center;
   padding: 2vw;
-  background-color: rgba(245, 245, 245, 0.501);
-
+  background-color: rgb(207, 244, 252, 0.5);
+  color: rgb(5, 107, 171);
 }
 .titleContainer {
   /* border: 1px solid black; */
@@ -315,7 +315,6 @@ button.close {
 
   .close span {
     font-size: 5vw;
-
   }
 
   #basicInfo {
@@ -398,7 +397,6 @@ button.close {
   .form-control,
   button.btn-light {
     margin-top: 15px !important;
-
   }
   #submit-request {
     display: block !important;
@@ -413,7 +411,7 @@ button.close {
   .titleContainer {
     width: 90%;
   }
-  
+
   .title {
     margin-top: clamp(2rem, 6vw, 4rem);
     font-size: clamp(25px, calc(3.3vh + 4px), 29px);
@@ -423,7 +421,6 @@ button.close {
   .form-control,
   .btn-light {
     margin-top: 20px;
-
   }
 
   .defaultDiv h2 {

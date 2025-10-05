@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 session_start();
 require 'Config/dbcon.php';
 
-
-require_once 'Function/functions.php';
+require_once 'Function/Helpers/userFunctions.php';
+resetExpiredOTPs($conn);
 addToAdminTable($conn);
 
 //for edit website, this will enable edit mode from the iframe
@@ -65,7 +65,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 <body>
     <?php if (!$editMode): ?>
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-            <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav" style="visibility: hidden;">
+            <img src="Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -73,8 +73,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             <div class="collapse navbar-collapse " id="navbarNav">
                 <ul class="navbar-nav ms-auto me-10" id="navUL">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="../index.php"> Home</a>
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             AMENITIES
                         </a>
@@ -85,19 +88,19 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="Pages/blog.php">Blog</a>
+                        <a class="nav-link" href="Pages/blog.php">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="Pages/beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
+                        <a class="nav-link" href="Pages/beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="Pages/about.php">About</a>
+                        <a class="nav-link" href="Pages/about.php">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="Pages/register.php">Book Now</a>
+                        <a class="nav-link" href="Pages/register.php">Book Now</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="Pages/register.php">Sign Up</a>
+                        <a class="nav-link" href="Pages/register.php">Sign Up</a>
                     </li>
                 </ul>
             </div>

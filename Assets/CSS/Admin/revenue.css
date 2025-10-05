@@ -69,7 +69,7 @@ body {
   border: none;
   width: 100%;
   height: 80vh;
-  margin-top: 5vw;
+  /* margin-top: 5vw; */
 }
 
 .card-body {
@@ -161,10 +161,24 @@ body {
     font-size: clamp(1.4vw, 1.5vw, 1.7vw);
     padding-bottom: 0 !important;
   }
+
+  .cards {
+    width: 50vw !important;
+  }
 }
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
-  .revenue-chart {
+  /* .revenue-chart {
     border: 1px solid black;
+  } */
+  .form-floating {
+    label {
+      font-size: 0.9rem;
+      padding-top: 0.6rem !important;
+    }
+    input {
+      font-size: 1rem;
+      padding-bottom: 0.4rem !important;
+    }
   }
 }
 
@@ -230,5 +244,16 @@ body {
 
   .cards {
     flex-wrap: wrap;
+  }
+
+  .form-floating {
+    label {
+      font-size: 0.9rem;
+      padding-top: 0.6rem !important;
+    }
+    input {
+      font-size: 1rem;
+      padding-bottom: 0.4rem !important;
+    }
   }
 }

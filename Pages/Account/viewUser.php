@@ -10,11 +10,13 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
     }
 
     if (!$user) {
@@ -67,14 +69,14 @@ $selectedUserID = $_SESSION['selectedUserID'];
                 us.statusName as userStatusName,
                 b.*, cb.*, p.*,
                 s.statusName, u.createdAt AS userCreatedAt
-              FROM user u
-              LEFT JOIN usertype ut ON u.userRole = ut.userTypeID
-              LEFT JOIN userstatus us ON u.userStatusID = us.userStatusID
-              LEFT JOIN partnership p ON  u.userID = p.userID
-              LEFT JOIN booking b ON u.userID = b.userID
-              LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
-              LEFT JOIN status s ON  cb.confirmedBookingStatus = s.statusID
-              WHERE u.userID = ?");
+                FROM user u
+                LEFT JOIN usertype ut ON u.userRole = ut.userTypeID
+                LEFT JOIN userstatus us ON u.userStatusID = us.userStatusID
+                LEFT JOIN partnership p ON  u.userID = p.userID
+                LEFT JOIN booking b ON u.userID = b.userID
+                LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
+                LEFT JOIN status s ON  cb.paymentApprovalStatus = s.statusID
+                WHERE u.userID = ?");
     $getUserData->bind_param("i", $selectedUserID);
     $getUserData->execute();
     $getUserDataResult =  $getUserData->get_result();
@@ -107,8 +109,8 @@ $selectedUserID = $_SESSION['selectedUserID'];
 
 
         //Count number of bookings (cancelled, booked, pending)
-        $confirmedBookingQuery = "SELECT  userBalance, COUNT(*) AS confirmedBookingCount FROM confirmedbookings cb
-        LEFT JOIN bookings b ON cb.bookingID = b.bookingID
+        $confirmedBookingQuery = "SELECT  userBalance, COUNT(*) AS confirmedBookingCount FROM confirmedbooking cb
+        LEFT JOIN booking b ON cb.bookingID = b.bookingID
         WHERE userID = '$selectedUserID'";
         $confirmbookingresult = $conn->query($confirmedBookingQuery);
 
@@ -127,7 +129,7 @@ $selectedUserID = $_SESSION['selectedUserID'];
     }
     ?>
 
-    <a href="userManagement.php" class="back-button btn"><img src="../../Assets/Images/Icon/arrow.png" alt=""></a>
+    <a href="userManagement.php" class="back-button btn"><img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt=""></a>
     <div class="wrapper">
         <div class="card">
             <div class="card-header">

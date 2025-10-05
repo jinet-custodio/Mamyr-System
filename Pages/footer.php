@@ -65,7 +65,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
         <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
     <footer class="py-1 " id="footer">
-        <div class=" pb-1 mb-1 d-flex align-items-center justify-content-start">
+        <div class=" py-1 d-flex justify-content-start">
             <?php
             foreach ($logoInfo as $id => $logo) {
                 foreach ($logo as $fileName => $altText) {
@@ -98,7 +98,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
 
         <div class="info">
             <div class="reservation">
-                <h4 class="reservationTitle">Reservation</h4>
+                <h4 class="reservationTitle mb-1">Reservation</h4>
                 <?php if ($editMode): ?>
                     <input type="text" class="numberFooter editable-input form-control"
                         data-title="ContactNum" value="<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
@@ -113,7 +113,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
 
             </div>
             <div class="locationFooter">
-                <h4 class="locationTitle">Location</h4>
+                <h4 class="locationTitle mb-1">Location</h4>
                 <?php if ($editMode): ?>
                     <input type="text" class="addressTextFooter editable-input form-control"
                         data-title="ContactNum" value="<?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>">
@@ -210,13 +210,11 @@ while ($row = $getLogoResult->fetch_assoc()) {
             });
         </script>
 
-    <?php endif; ?>
-    <!-- Sweetalert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- AJAX for editing website content -->
-    <?php if ($editMode): ?>
+        <!-- Sweetalert JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- AJAX for editing website content -->
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const saveBtn = document.getElementById('saveChangesBtn');
