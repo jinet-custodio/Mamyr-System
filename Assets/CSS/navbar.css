@@ -1,8 +1,124 @@
+:root {
+  --blue-50: oklch(0.9 0.15 210);
+  --blue-100: oklch(0.8 0.2 210);
+  --blue-200: oklch(0.7 0.25 210);
+  --blue-300: oklch(0.6 0.3 210);
+  --blue-350: oklch(0.5848 0.129 246.27); /* #3e849e */
+  --blue-400: oklch(0.5 0.35 210);
+  --blue-500: oklch(0.4 0.4 210);
+  --blue-600: oklch(0.3 0.4 210);
+  --blue-700: oklch(0.2 0.4 210);
+  --blue-800: oklch(0.15 0.35 210);
+  --blue-900: oklch(0.1 0.3 210);
+
+  --blue-accents: oklch(0.8 0.1 210);
+
+  --bg-light: oklch(96.715% 0.00011 0.2);
+  --bg-dark: oklch(0.05 0.05 50);
+
+  --text-light: oklch(0.2 0.02 50);
+  --text-dark: oklch(96.715% 0.00011 0.2);
+
+  --border-light: oklch(95% 0.01523 49);
+  --border-dark: oklch(0.1 0.05 50);
+
+  --link-light: oklch(0.4 0.3 210);
+  --link-dark: oklch(0.6 0.3 210);
+
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-md: 18px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 32px;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-full: 50%;
+
+  --shadow-light: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
+
+  --transition: all 0.3s ease;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* --- Margin Variables --- */
+  --margin-xs: 0.5rem;
+  --margin-sm: 1rem;
+  --margin-md: 1.5rem;
+  --margin-lg: 2rem;
+  --margin-xl: 3rem;
+
+  /* --- Padding Variables --- */
+  --padding-xs: 0.5rem;
+  --padding-sm: 1rem;
+  --padding-md: 1.5rem;
+  --padding-lg: 2rem;
+  --padding-xl: 3rem;
+}
+
+[data-theme="dark"] {
+  --blue-50: oklch(0.1 0.15 210);
+  --blue-100: oklch(0.2 0.2 210);
+  --blue-200: oklch(0.3 0.25 210);
+  --blue-300: oklch(0.4 0.3 210);
+  --blue-400: oklch(0.5 0.35 210);
+  --blue-500: oklch(0.6 0.4 210);
+  --blue-600: oklch(0.7 0.4 210);
+  --blue-700: oklch(0.8 0.35 210);
+  --blue-800: oklch(0.85 0.3 210);
+  --blue-900: oklch(0.9 0.25 210);
+
+  --blue-accents: oklch(0.3 0.1 210);
+
+  --bg-light: oklch(0.05 0.05 50);
+  --bg-dark: oklch(0.1 0.05 50);
+
+  --text-light: oklch(0.9 0.03 50);
+  --text-dark: oklch(0.2 0.02 50);
+
+  --border-light: oklch(0.2 0.05 50);
+  --border-dark: oklch(0.05 0.05 50);
+
+  --link-light: oklch(0.7 0.3 210);
+  --link-dark: oklch(0.8 0.3 210);
+
+  --shadow-light: 0 2px 5px 0 rgba(255, 255, 255, 0.1);
+  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.7);
+
+  --margin-xs: 0.5rem;
+  --margin-sm: 1rem;
+  --margin-md: 1.5rem;
+  --margin-lg: 2rem;
+  --margin-xl: 3rem;
+
+  --padding-xs: 0.5rem;
+  --padding-sm: 1rem;
+  --padding-md: 1.5rem;
+  --padding-lg: 2rem;
+  --padding-xl: 3rem;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: var(--padding-md);
+  background-color: rgba(244, 244, 244, 0.566);
+  -webkit-box-shadow: 1px 2px 10px -3px oklch(14.7% 0.004 49.25);
+  box-shadow: 1px 2px 10px -3px oklch(14.7% 0.004 49.25);
 }
 
 .navbar-nav {
@@ -14,29 +130,20 @@
 }
 
 .navbar-nav .dropdown-toggle {
-  display: inline-block;
   padding: 10px !important;
   line-height: 1.5;
   vertical-align: middle;
-  position: relative;
-  top: 0.1vw;
 }
 
 .nav-item {
   text-transform: uppercase;
   font-family: "Poppins" !important;
   font-weight: lighter;
-  margin-top: 15px;
 }
 
 .nav-item,
 #logOutBtn {
-  font-size: 1.5vw;
-}
-
-.white-text .nav-link,
-.white-text .nav-item #logOutBtn {
-  color: white !important;
+  font-size: var(--font-size-md);
 }
 
 #navbar-half.scrolled.dropdown-menu a {
@@ -44,7 +151,7 @@
 }
 
 #navbar-half.scrolled {
-  background-color: white;
+  background-color: var(--bg-light);
 }
 #navbar-half.scrolled a,
 #navbar-half.scrolled #logOutBtn {
@@ -97,14 +204,9 @@
   left: 0;
 }
 
-.dropdown-menu {
-  background-color: rgb(126, 203, 242, 0.5) !important;
-}
-
 .nav-item.dropdown:hover .dropdown-menu {
   background-color: white !important;
   color: black !important;
-  display: block;
 }
 
 .dropdown-item:hover {
@@ -134,7 +236,6 @@
 }
 
 .dropdown-item {
-  font-size: 1.3vw;
   font-weight: bold;
 }
 
@@ -190,9 +291,13 @@
   aspect-ratio: 1;
 }
 
+img {
+  display: block;
+}
+
 .logoNav {
-  width: 15vw;
-  margin: 1vw;
+  width: 10vw;
+  margin: var(--margin-xs);
 }
 
 /* Tablet size */
@@ -250,11 +355,6 @@
     width: 18vw;
   }
 
-  .nav-item,
-  #logOutBtn {
-    font-size: 1.7vw;
-  }
-
   #logOutBtn {
     display: flex;
     align-items: center;
@@ -271,42 +371,33 @@
 
 @media (max-width: 991.98px) {
   .navbar {
-    background-color: transparent !important;
+    background-color: oklch(98.5% 0 0) !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
   }
   #navbarNav .nav-link,
   #navbarNav .dropdown-item {
     color: black !important;
   }
-  .nav-item.dropdown {
-    position: relative;
-  }
 
-  .navbar.scrolled {
-    background-color: transparent !important;
+  .nav-item.dropdown {
+    text-align: center !important;
   }
 
   .nav-item {
     margin-top: 5px;
-    font-size: 2vw;
+    text-align: center !important;
   }
 
   a.dropdown-item {
-    font-size: 1.8vw !important;
-  }
-
-  #profileAndNotif {
-    background-color: transparent;
-  }
-
-  .navbar-collapse {
-    background-color: transparent;
+    text-align: center !important;
   }
 
   #navbar-half2 .btn-outline-danger {
     color: black !important;
     border-color: white !important;
     width: 100%;
-    text-align: left;
+    text-align: center !important;
   }
 
   .navbar-toggler {
@@ -315,9 +406,7 @@
 
   #toggledNav,
   #navUL {
-    width: 30%;
-    margin-right: 2vw;
-    background-color: whitesmoke;
+    background-color: oklch(98.5% 0 0);
   }
 }
 
@@ -330,13 +419,10 @@
 @media (max-width: 600px) {
   .nav-link,
   #logOutBtn {
-    font-size: 3vw !important;
+    font-size: clamp(15px, calc(2vh + 2px), 16px) !important;
   }
   .logoNav {
     width: 20vw !important;
-  }
-  a.dropdown-item {
-    font-size: 2.8vw !important;
   }
 
   .account-nav img {
@@ -367,8 +453,6 @@
 
   #toggledNav,
   #navUL {
-    width: 40%;
-    margin-right: 2vw;
     background-color: whitesmoke;
   }
 }

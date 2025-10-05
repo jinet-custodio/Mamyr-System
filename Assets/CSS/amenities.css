@@ -316,13 +316,6 @@ textarea.amenityDescription {
   background: rgba(0, 0, 0, 0.8);
 }
 
-.info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5vw;
-}
-
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   .title {

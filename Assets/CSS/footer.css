@@ -22,37 +22,35 @@ footer {
   width: 100%;
 }
 
-.pb-1 {
+.py-1 {
   gap: 2vw;
-  padding: 1vw 0 0 2vw;
+  padding: 0.1vw;
 }
 
 .logo {
-  width: 15vw;
+  width: 10vw;
   height: auto;
 }
 .mb-0 {
   font-family: "Lora";
-  font-size: 1.9vw;
+  font-size: var(--font-size-lg);
   font-weight: bold;
-  color: #ffff;
+  color: var(--text-dark);
 }
 
 .footerLine {
   width: 80%;
   margin: 0 auto;
-  color: #fff;
+  color: var(--text-dark);
   opacity: 1;
 }
 
 .info {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 5vw;
 }
 .locationFooter {
-  /* border: 1px solid black; */
   width: 30%;
 }
 
@@ -60,22 +58,22 @@ footer {
 .locationTitle {
   font-family: "Poppins";
   font-weight: bold;
-  font-size: 1.8vw;
-  color: #fff;
+  font-size: 19px;
+  color: var(--text-dark);
 }
 
 .numberFooter,
 .emailAddressTextFooter,
 .addressTextFooter {
   font-family: "Poppins ExtraLight";
-  color: #fff;
-  font-size: clamp(1.5vw, 1.4vw, 1.3vw);
+  color: var(--text-dark);
+  font-size: clamp(18px, calc(2.1vh + 2px), 16px);
+  margin-bottom: 0 !important;
 }
 
 .socialIcons {
   display: flex;
   justify-content: center;
-  margin: 0.5vw 0;
 }
 
 .socialIcons a {
@@ -86,10 +84,10 @@ footer {
 }
 
 .socialIcons a i {
-  font-size: clamp(2.2vw, 2.1vw, 2vw);
-  color: #3e849e;
+  font-size: clamp(22px, calc(2.5vh + 2px), 25px);
+  color: var(--blue-350);
   opacity: 0.9;
-  margin: 1vw;
+  margin: 0.7vw;
 }
 
 .socialIcons a:hover {
@@ -98,7 +96,7 @@ footer {
 }
 
 .socialIcons a:hover i {
-  color: #c1a534;
+  color: var(--blue-accents);
   transition: 0.5s;
 }
 
@@ -123,7 +121,7 @@ footer {
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   .mb-0 {
-    font-size: clamp(2.6vw, calc(2.1vh + 4px), 2.8vw) !important;
+    font-size: clamp(18px, calc(2.1vh + 2px), 16px) !important;
   }
 
   .info {
@@ -131,18 +129,18 @@ footer {
   }
 
   .logo {
-    width: 18vw;
+    width: 10vw;
   }
 
   .reservationTitle,
   .locationTitle {
-    font-size: clamp(2.6vw, calc(2vh + 2px), 2.4vw) !important;
+    font-size: clamp(18px, calc(2.1vh + 2px), 16px) !important;
   }
 
   .numberFooter,
   .emailAddressTextFooter,
   .addressTextFooter {
-    font-size: clamp(2.3vw, calc(1.8vh + 4px), 2.1vw) !important;
+    font-size: clamp(18px, calc(2.1vh + 2px), 16px) !important;
   }
 
   .socialIcons {
@@ -155,26 +153,37 @@ footer {
   }
 
   .socialIcons a i {
-    font-size: 3.5vw;
+    font-size: 23px;
     margin: clamp(0.7vw, 0.5vw, 0.8vw) !important;
   }
 }
 
 @media (max-width: 600px) {
   .info {
-    justify-content: space-around;
+    margin-bottom: 0.5vw;
+    justify-content: space-between;
+    padding-left: 1vw;
+    padding-right: 1vw;
   }
+
   .mb-0 {
-    font-size: clamp(3.1vw, calc(2.2vh + 4px), 3.5vw) !important;
+    font-size: clamp(15px, calc(2vh + 2px), 16px) !important;
+  }
+
+  .py-1 {
+    gap: 5vw;
+  }
+
+  .py-1 img {
+    margin-left: 2vw;
   }
 
   .justify-content-start {
     justify-content: center !important;
-    margin-top: 3vw !important;
   }
 
   .logo {
-    width: 20vw;
+    width: 15vw;
   }
 
   .reservation {
@@ -187,22 +196,17 @@ footer {
 
   .reservationTitle,
   .locationTitle {
-    font-size: clamp(2.8vw, calc(2vh + 2px), 3vw) !important;
+    font-size: clamp(15px, calc(2vh + 2px), 16px) !important;
   }
 
   .numberFooter,
   .emailAddressTextFooter,
   .addressTextFooter {
-    font-size: clamp(3.2vw, calc(2vh + 2px), 3vw) !important;
+    font-size: clamp(14px, calc(1.7vh + 2px), 13px) !important;
   }
 
   .numberFooter {
     margin-bottom: 0 !important;
-  }
-
-  .socialIcons {
-    margin-bottom: 3vw !important;
-    margin-top: 2vw;
   }
 
   .socialIcons a {
@@ -211,7 +215,20 @@ footer {
   }
 
   .socialIcons a i {
-    font-size: 3.8vw;
-    margin: 1vw !important;
+    font-size: 22px;
+    margin: 0.5vw !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .reservationTitle,
+  .locationTitle {
+    font-size: clamp(15px, calc(1.8vh + 2px), 14px) !important;
+  }
+
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
+    font-size: clamp(14px, calc(1.7vh + 2px), 13px) !important;
   }
 }

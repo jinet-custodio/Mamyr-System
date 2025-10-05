@@ -64,42 +64,42 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <?php endif; ?>
     <?php if (!$editMode): ?>
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-
             <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
-            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+
+            <div class="collapse navbar-collapse " id="navbarNav">
+                <ul class="navbar-nav ms-auto me-10" id="navUL">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false" onclick="event.preventDefault()">
+                        <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             AMENITIES
                         </a>
-
-                        <ul class="dropdown-menu  dropdown-menu-start" aria-labelledby="navbarDropdown">
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item active" href="amenities.php">RESORT AMENITIES</a></li>
                             <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
                             <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog.php">BLOG</a>
+                        <a class="nav-link" href="blog.php">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">BE OUR PARTNER</a>
+                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.php">ABOUT</a>
+                        <a class="nav-link" href="about.php">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="register.php">BOOK NOW</a>
+                        <a class="nav-link" href="register.php">Book Now</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="register.php" id="logOutBtn">Sign Up</a>
+                        <a class="nav-link" href="register.php">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -110,7 +110,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <h1 class="title">OUR AMENITIES</h1>
 
         <div class="embed-responsive embed-responsive-16by9">
-            <video id="mamyrVideo" autoplay muted loop controls class="embed-responsive-item">
+            <video id="mamyrVideo" muted loop controls class="embed-responsive-item">
                 <source src="../Assets/videos/mamyrVideo1.mp4" type="video/mp4">
             </video>
 
@@ -499,20 +499,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <div id="loaderOverlay" style="display: none;">
         <div class="loader"></div>
     </div>
-    <?php
-    $sectionName = 'BusinessInformation';
-    $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
-    $getWebContent->bind_param("s", $sectionName);
-    $getWebContent->execute();
-    $getWebContentResult = $getWebContent->get_result();
-    $businessInfo = [];
-    while ($row = $getWebContentResult->fetch_assoc()) {
-        $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
-        $contentID = $row['contentID'];
-
-        $businessInfo[$cleanTitle] = $row['content'];
-    }
-    ?>
 
     <?php if (!$editMode): ?>
         <?php include 'footer.php'; ?>
@@ -528,7 +514,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         };
     </script>
     <!-- Bootstrap JS -->
-    <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
