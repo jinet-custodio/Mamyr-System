@@ -731,8 +731,6 @@ unset($_SESSION['formData']);
 
     </form>
 
-    <?php include 'footer.php' ?>
-
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"

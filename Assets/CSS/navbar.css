@@ -125,10 +125,6 @@
   list-style: none;
 }
 
-#profileAndNotif {
-  padding: 0.6vw;
-}
-
 .navbar-nav .dropdown-toggle {
   padding: 10px !important;
   line-height: 1.5;
@@ -255,7 +251,7 @@
   margin-top: 0 !important;
 
   img {
-    height: 5vw;
+    height: 50px;
     border-radius: 50%;
     aspect-ratio: 1;
     object-fit: cover;
@@ -276,7 +272,6 @@
   height: 100%;
   display: flex;
   align-items: center;
-  margin-left: 1vw;
 
   button {
     background-color: transparent;
@@ -287,7 +282,7 @@
 .notificationIcon {
   display: flex;
   align-items: center;
-  height: clamp(2.9vw, 2.8vw, 2.7vw);
+  height: 30px;
   aspect-ratio: 1;
 }
 
@@ -303,7 +298,7 @@ img {
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   .notification-container {
-    margin-left: 2vw;
+    margin-left: var(--margin-sm);
   }
   .navbar {
     background-color: transparent;
@@ -322,7 +317,7 @@ img {
 
   .account-nav {
     .profile-pic {
-      height: clamp(6.5vw, 6.8vw, 7.4vw);
+      height: 44px;
     }
   }
   .navbar-toggler {
@@ -342,7 +337,7 @@ img {
   .notificationIcon {
     display: flex;
     align-items: center;
-    height: clamp(3.5vw, 3.8vw, 4vw);
+    height: 30px;
     aspect-ratio: 1;
   }
 
@@ -358,6 +353,7 @@ img {
   #logOutBtn {
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 
   a.nav-link {
@@ -426,14 +422,14 @@ img {
   }
 
   .account-nav img {
-    height: clamp(8.5vw, 9.5vw, 10vw);
+    height: 35px;
     aspect-ratio: 1;
   }
 
   .notificationIcon {
     display: flex;
     align-items: center;
-    height: clamp(4.5vw, 5.1vw, 6vw);
+    height: 25px;
     aspect-ratio: 1;
   }
 

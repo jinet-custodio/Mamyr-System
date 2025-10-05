@@ -144,6 +144,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                <li class="nav-item">
+                    <?php if ($userRole !== 2): ?>
+                        <a class="nav-link active" href="dashboard.php"> Home</a>
+                    <?php else: ?>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                    <?php endif; ?>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
