@@ -72,7 +72,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $data = $result->fetch_assoc();
         $firstName = trim(ucfirst($data['firstName']));
         $lastName = trim(ucfirst($data['lastName']));
-        $middleInitial = trim(ucfirst($data['middleInitial'])) ?? '';
+        $middleInitial = trim(ucfirst($data['middleInitial'] ?? ''));
 
         $name = ucfirst($firstName) . " " .
             ucfirst($middleInitial) . " " .
