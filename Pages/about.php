@@ -383,58 +383,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
     </div>
 
-    <!-- Div for loader -->
-    <div id="loaderOverlay" style="display: none;">
-        <div class="loader"></div>
-    </div>
-
-
     <?php if (!$editMode): ?>
-        <?php include 'footer.php'; ?>
+        <?php include 'footer.php';
+        include 'loader.php' ?>
     <?php endif; ?>
-
-    <!-- Script for loader -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loaderOverlay = document.getElementById('loaderOverlay');
-            const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
-
-            const navbarLinks = document.querySelectorAll('.navbar a');
-
-            navbarLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = link.getAttribute('href');
-
-                    if (href && !href.startsWith('#')) {
-                        // Create a temporary anchor to parse the href
-                        const tempAnchor = document.createElement('a');
-                        tempAnchor.href = href;
-                        const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
-
-                        // If the target is different from the current path, show loader
-                        if (targetPath !== currentPath) {
-                            loaderOverlay.style.display = 'flex';
-                        }
-                    }
-                });
-            });
-        });
-
-        function hideLoader() {
-            const overlay = document.getElementById('loaderOverlay');
-            if (overlay) overlay.style.display = 'none';
-        }
-
-        // Hide loader on normal load
-        window.addEventListener('load', hideLoader);
-
-        // Hide loader on back/forward navigation (from browser cache)
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                hideLoader();
-            }
-        });
-    </script>
 
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>

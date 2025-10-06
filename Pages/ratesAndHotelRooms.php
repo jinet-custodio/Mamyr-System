@@ -78,8 +78,8 @@ require '../Config/dbcon.php';
 
                 <div class="categories" id="categories">
 
-                    <a class="categoryLink" onclick="showRates(event)">
-                        <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
+                    <a class="categoryLink d-flex justify-content-center" onclick="showRates(event)">
+                        <div class="card " style="flex-direction: column;">
                             <img class="card-img-top category" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg"
                                 alt="Resort Rates">
 
@@ -89,8 +89,8 @@ require '../Config/dbcon.php';
                         </div>
                     </a>
 
-                    <a class="categoryLink" onclick="showHotels(event)">
-                        <div class="card" style="width: 25vw; display: flex; flex-direction: column;">
+                    <a class="categoryLink  d-flex justify-content-center" onclick="showHotels(event)">
+                        <div class="card" style="flex-direction: column;">
                             <img class="card-img-top category" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg"
                                 alt="Hotel Rooms">
                             <div class="card-body">
@@ -490,14 +490,11 @@ require '../Config/dbcon.php';
             <a href="#" id="backToTopBtn" title="Back to Top">
                 <i class="fas fa-chevron-up"></i>
             </a>
-
-            <!-- Div for loader -->
-            <div id="loaderOverlay" style="display: none;">
-                <div class="loader"></div>
-            </div>
         </main>
         <?php include 'footer.php'; ?>
     </div>
+    <?php include 'loader.php'; ?>
+
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
@@ -556,49 +553,6 @@ require '../Config/dbcon.php';
                 behavior: 'smooth'
             });
 
-        });
-    </script>
-
-    <!-- Script for loader -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loaderOverlay = document.getElementById('loaderOverlay');
-            const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
-
-            const navbarLinks = document.querySelectorAll('.navbar a');
-
-            navbarLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = link.getAttribute('href');
-
-                    if (href && !href.startsWith('#')) {
-                        // Create a temporary anchor to parse the href
-                        const tempAnchor = document.createElement('a');
-                        tempAnchor.href = href;
-                        const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
-
-                        // If the target is different from the current path, show loader
-                        if (targetPath !== currentPath) {
-                            loaderOverlay.style.display = 'flex';
-                        }
-                    }
-                });
-            });
-        });
-
-        function hideLoader() {
-            const overlay = document.getElementById('loaderOverlay');
-            if (overlay) overlay.style.display = 'none';
-        }
-
-        // Hide loader on normal load
-        window.addEventListener('load', hideLoader);
-
-        // Hide loader on back/forward navigation (from browser cache)
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                hideLoader();
-            }
         });
     </script>
 
