@@ -71,7 +71,6 @@
 }
 
 .home {
-  /* border: 1px solid red; */
   padding: 2vw;
 }
 
@@ -201,8 +200,82 @@ td {
   margin-bottom: 1vw;
 } */
 
+.infoContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 5vw);
+  gap: 0.3rem 1rem;
+}
+
+/* .info-container {
+  margin-top: 0.5rem;
+} */
+
+/* label {
+  font-size: 18px;
+  font-family: "Poppins";
+  margin-bottom: -1rem !important;
+} */
+
+.info-container .form-control,
+.info-container .form-select,
+.descContainer .form-control {
+  border: 1px solid rgb(107, 117, 125, 0.5);
+  padding: 0.3rem;
+  font-size: 14px !important;
+}
+
+.serviceContainer {
+  margin: 3rem auto;
+  width: 95%;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+}
+
+.service-card {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.modal-btn-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  border-top: none;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+}
+
+.info-container label,
+.descContainer label {
+  font-weight: bolder;
+}
+
+input:read-only,
+select:disabled {
+  background-color: rgb(233, 236, 240, 0.3) !important;
+  cursor: not-allowed;
+}
+
+input:read-only:hover,
+select:disabled:hover {
+  background-color: rgba(233, 236, 240, 0.3);
+}
+
+.descContainer {
+  margin-top: 1rem;
+}
+
+.form-group input {
+  margin: 0.5rem;
+}
+
 .serviceInputContainer {
-  /* border: 1px solid red; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 5vw);
@@ -214,10 +287,6 @@ td {
   grid-column: span 2;
 }
 
-#description {
-  height: 5rem;
-}
-
 .addServiceLabel {
   /* display: block; */
   font-weight: 500;
@@ -226,7 +295,6 @@ td {
 }
 
 .submitBtnContainer {
-  /* border: 1px solid red; */
   margin-top: 1rem;
   display: flex;
   justify-content: center;
@@ -234,44 +302,9 @@ td {
 }
 
 .addServiceContainer {
-  /* border: 1px solid red; */
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.info-container {
-  margin-top: 0.5rem;
-}
-
-/* label {
-  font-size: 18px;
-  font-family: "Poppins";
-  margin-bottom: -1rem !important;
-} */
-
-.info-container .form-control {
-  border: 1px solid rgb(107, 117, 125, 0.5);
-  padding: 0.3rem;
-  font-size: 18px;
-}
-
-.serviceContainer {
-  margin: 3rem auto;
-  border: 1px solid red;
-  width: 95%;
-  padding: 1rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 3rem;
-}
-
-.service-card {
-  /* border: 1px solid red; */
-  width: 100%;
-  display: flex;
-  text-align: center;
-  justify-content: center;
 }
 
 .badge {
