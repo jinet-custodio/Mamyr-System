@@ -526,10 +526,7 @@ session_start();
     </div>
     <!-- terms and conditions modal -->
 
-    <!-- Div for loader -->
-    <div id="loaderOverlay" style="display: none;">
-        <div class="loader"></div>
-    </div>
+    <?php include 'loader.php' ?>
 
     <!-- Bootstrap JS -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
@@ -537,44 +534,6 @@ session_start();
     <script src="../Assets/JS/passwordValidation.js"></script>
 
     <script src="../Assets/JS/terms-condition.js"></script>
-    <!-- <script>
-        function validateStepOne() {
-            const partnerType = document.getElementById('service').value;
-            if (!partnerType) {
-                alert("Please select a business type.");
-                return false;
-            }
-            return true;
-        }
-    </script> -->
-    <!-- Script for loader -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loaderOverlay = document.getElementById('loaderOverlay');
-            const form = document.querySelector('form');
-
-            if (form) {
-                form.addEventListener('submit', function() {
-                    loaderOverlay.style.display = 'flex';
-                });
-            }
-        });
-
-        function hideLoader() {
-            const overlay = document.getElementById('loaderOverlay');
-            if (overlay) overlay.style.display = 'none';
-        }
-
-        // Hide loader on normal load
-        window.addEventListener('load', hideLoader);
-
-        // Hide loader on back/forward navigation (from browser cache)
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                hideLoader();
-            }
-        });
-    </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

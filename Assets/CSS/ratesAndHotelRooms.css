@@ -40,46 +40,12 @@ main {
   flex: 1;
 }
 
-/* Div for loader */
-#loaderOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  /* Gray out effect */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.loader {
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #3498db;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  position: absolute;
-  z-index: 5;
-  left: 50%;
-  top: 50%;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+img {
+  display: block !important;
 }
 
 .selection {
-  margin-top: 20vh;
+  margin-top: 10vw;
 }
 
 /* body css */
@@ -89,17 +55,13 @@ main {
   text-align: center;
 }
 
-#mainTitle {
-  margin-top: 10vw;
-}
-
 .categories {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
-  margin-top: 2vw;
-  margin-bottom: 5vw;
+  margin-bottom: 1vw;
+  margin-top: var(--margin-lg);
 }
 
 .backToSelection {
@@ -116,12 +78,12 @@ main {
 .card,
 .card-body {
   text-align: center;
-  width: 85% !important;
+  width: 90%;
 }
 
 .card {
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
-  margin: 2vw;
+  margin: 0;
   background-color: whitesmoke !important;
 }
 
@@ -129,13 +91,13 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 3vw auto;
+  margin: var(--margin-m) auto;
 }
 
 .card-img-top.category {
-  border-radius: 2vw 2vw 2vw 2vw !important;
+  border-radius: 2vw !important;
   padding: 1vw;
-  height: 25vw;
+  height: 20vw;
   object-fit: cover;
   width: 100%;
   margin: 0 auto;
@@ -145,7 +107,11 @@ main {
   font-family: "Poppins Black";
   font-style: italic;
   font-weight: bold;
-  font-size: clamp(3vw, 2.8vw, 2.5vw);
+  font-size: clamp(
+    var(--font-size-xxl),
+    calc(var(--font-size-lg) + 1vh),
+    var(--font-size-xl)
+  );
   color: #00b3d1 !important;
   text-align: center;
 }
@@ -238,8 +204,13 @@ main {
   text-align: center;
   margin-top: -3vw;
   margin-bottom: 1vw;
-  font-size: clamp(3.7vw, 3.6vw, 3.5vw);
+  font-size: clamp(
+    var(--font-size-xxl),
+    calc(var(--font-size-lg) + 1vh),
+    var(--font-size-xl)
+  );
   font-family: "Lora";
+  font-weight: var(--font-weight-bold);
   color: #000000;
 }
 
