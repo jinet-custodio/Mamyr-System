@@ -318,7 +318,7 @@ if (isset($_SESSION['error'])) {
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
-                        console.error("Failed to load bookings.");
+                        // console.error("Failed to load bookings.");
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
