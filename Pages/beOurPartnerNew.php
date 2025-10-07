@@ -7,6 +7,7 @@
     <title>Mamyr Resort And Events Place - Be Our Partner</title>
     <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/beOurPartnerNew.css">
+    <link rel="stylesheet" href="../Assets/CSS/navbar.css">
     <!-- Link to Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -17,11 +18,8 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
+
 <body>
-    <!-- <?php if ($editMode): ?>
-    <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
-    <?php endif; ?>
-    <?php if (!$editMode): ?> -->
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -61,7 +59,6 @@
             </ul>
         </div>
     </nav>
-    <!-- <?php endif; ?> -->
 
     <section class="topSec">
         <div class="topLeft">
@@ -178,47 +175,8 @@
 
     </section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <?php include 'footer.php';
+    include 'loader.php'; ?>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"

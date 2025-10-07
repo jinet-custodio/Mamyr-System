@@ -22,9 +22,10 @@ footer {
   width: 100%;
 }
 
-.py-1 {
+#nameAndLogo {
   gap: 2vw;
   padding: 0.1vw;
+  margin: var(--margin-xs);
 }
 
 .logo {

@@ -60,7 +60,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 <body>
     <footer class="py-1 ">
-        <div class=" pb-1 d-flex align-items-center justify-content-start">
+        <div class=" pb-1 d-flex align-items-center justify-content-start" id="nameAndLogo">
 
             <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
 

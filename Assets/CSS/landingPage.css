@@ -1,928 +1,380 @@
+:root {
+  --blue-50: oklch(0.9 0.15 210);
+  --blue-100: oklch(0.8 0.2 210);
+  --blue-200: oklch(0.7 0.25 210);
+  --blue-300: oklch(0.6 0.3 210);
+  --blue-400: oklch(0.5 0.35 210);
+  --blue-500: oklch(0.4 0.4 210);
+  --blue-600: oklch(0.3 0.4 210);
+  --blue-700: oklch(0.2 0.4 210);
+  --blue-800: oklch(0.15 0.35 210);
+  --blue-900: oklch(0.1 0.3 210);
+
+  --blue-accents: oklch(0.8 0.1 210);
+
+  --bg-light: oklch(0.9 0.05 50);
+  --bg-dark: oklch(0.05 0.05 50);
+
+  --text-light: oklch(0.2 0.02 50);
+  --text-dark: oklch(0.9 0.03 50);
+
+  --border-light: oklch(0.9 0.05 50);
+  --border-dark: oklch(0.1 0.05 50);
+
+  --link-light: oklch(0.4 0.3 210);
+  --link-dark: oklch(0.6 0.3 210);
+
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-md: 18px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 32px;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-full: 50%;
+
+  --shadow-light: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
+
+  --transition: all 0.3s ease;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* --- Margin Variables --- */
+  --margin-xs: 0.5rem;
+  --margin-sm: 1rem;
+  --margin-md: 1.5rem;
+  --margin-lg: 2rem;
+  --margin-xl: 3rem;
+
+  /* --- Padding Variables --- */
+  --padding-xs: 0.5rem;
+  --padding-sm: 1rem;
+  --padding-md: 1.5rem;
+  --padding-lg: 2rem;
+  --padding-xl: 3rem;
+}
+
+[data-theme="dark"] {
+  --blue-50: oklch(0.1 0.15 210);
+  --blue-100: oklch(0.2 0.2 210);
+  --blue-200: oklch(0.3 0.25 210);
+  --blue-300: oklch(0.4 0.3 210);
+  --blue-400: oklch(0.5 0.35 210);
+  --blue-500: oklch(0.6 0.4 210);
+  --blue-600: oklch(0.7 0.4 210);
+  --blue-700: oklch(0.8 0.35 210);
+  --blue-800: oklch(0.85 0.3 210);
+  --blue-900: oklch(0.9 0.25 210);
+
+  --blue-accents: oklch(0.3 0.1 210);
+
+  --bg-light: oklch(0.05 0.05 50);
+  --bg-dark: oklch(0.1 0.05 50);
+
+  --text-light: oklch(0.9 0.03 50);
+  --text-dark: oklch(0.2 0.02 50);
+
+  --border-light: oklch(0.2 0.05 50);
+  --border-dark: oklch(0.05 0.05 50);
+
+  --link-light: oklch(0.7 0.3 210);
+  --link-dark: oklch(0.8 0.3 210);
+
+  --shadow-light: 0 2px 5px 0 rgba(255, 255, 255, 0.1);
+  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.7);
+
+  --margin-xs: 0.5rem;
+  --margin-sm: 1rem;
+  --margin-md: 1.5rem;
+  --margin-lg: 2rem;
+  --margin-xl: 3rem;
+
+  --padding-xs: 0.5rem;
+  --padding-sm: 1rem;
+  --padding-md: 1.5rem;
+  --padding-lg: 2rem;
+  --padding-xl: 3rem;
+}
+
 @font-face {
   font-family: "Poppins";
-  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
 @font-face {
   font-family: "Alkatra";
-  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
-}
-
-@font-face {
-  font-family: "Lora";
-  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins";
   text-decoration: none;
-  list-style: none;
 }
 
-body {
-  background-image: url(../Images/landingPage/landingPageBg.png);
-  background-repeat: no-repeat;
-  background-position: fixed;
-  background-size: cover;
+.topSec {
+  width: 98%;
+  height: 80vh;
+  margin-top: 5rem !important;
+  border-radius: 20px;
+  margin: 0 auto;
+  background-color: oklch(0.64 0.65 220 / 0.5);
   display: flex;
-  max-height: 100vh;
-  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 
-/* Edit mode CSS */
-#saveChangesBtn {
-  margin-top: 8vw !important;
-  margin-left: 80vw;
-  font-size: 1.8vw !important;
-  position: fixed;
+.topLeft {
+  width: 50%;
 }
 
-.editable-input {
-  background-color: rgba(255, 255, 255, 0) !important;
-  border: 1px solid rgb(255, 13, 13) !important;
-  padding: 2px;
+.topRight {
+  width: 50%;
 }
 
-/* .editable-img {
-  border: 2px solid rgb(255, 13, 13) !important;
-} */
-
-.white-text {
-  color: whitesmoke !important;
+.topText {
+  font-family: "Alkatra";
+  font-size: var(--font-size-base);
+  text-transform: uppercase;
+  margin-top: var(--margin-md);
 }
 
-/* Div for loader */
-#loaderOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.headerText {
+  font-family: "Poppins Light";
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
+  margin-top: 2vw;
+}
+.subtext {
+  font-family: "Poppins Light";
+  width: 75%;
+  font-size: var(--font-size-base);
+  margin-top: 1.3vw;
+}
+
+#topBookNow-btn {
+  margin-top: var(--margin-xl);
+  width: 25%;
+}
+
+.bpIcon {
+  height: 350px;
+  width: auto;
+  margin: auto !important;
+}
+.carousel-container {
+  position: relative;
+  width: 420px; /* smaller width */
+  height: 280px;
+  margin: 60px auto;
+  perspective: 1000px;
+}
+
+.card-stack {
+  position: relative;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  /* Gray out effect */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
 }
 
-.loader {
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #3498db;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
+.card-img {
   position: absolute;
-  z-index: 5;
+  top: 0;
   left: 50%;
-  top: 50%;
-  animation: spin 2s linear infinite;
+  width: 60%; /* smaller size */
+  transform: translateX(-50%) scale(0.8);
+  transition: all 0.7s ease;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  z-index: 0;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-.titleContainer {
-  /* margin-top: 20vh; */
-  /* border: 1px solid black; */
-  width: 100%;
-  height: 50vh;
-  padding: 12vw;
-  /* margin: auto; */
-}
-
-.mamyrTitle {
-  /* border: 1px solid black; */
-  width: 50%;
-}
-
-.name {
-  color: #fff;
-  text-align: left;
-  font-family: "Lora";
-  font-size: 7vw;
-  font-style: normal;
-  line-height: normal;
-}
-
-.description {
-  width: 90%;
-  margin: auto;
-}
-
-.descriptionText {
-  color: #fff;
-  font-family: "Poppins";
-  font-size: 2vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-indent: 20px;
-  letter-spacing: 1px;
-}
-
-.containerBook {
-  background-color: #ffffff;
-  border-radius: 1vw;
-  width: 85%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  padding: 2vw;
-  margin-top: 31vw;
-  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
-}
-
-.checkBoxContainer {
-  display: flex;
-  gap: 1vw;
-  border-radius: 5px;
-  width: 100%;
-  padding: 0.3rem;
-}
-
-.form-check-label {
-  font-size: 1.6vw;
-}
-
-.form-check-input {
-  border-color: black !important;
-}
-
-.label {
-  display: flex;
-  gap: 5vw;
-  margin-top: 3vw;
-  justify-content: center;
-}
-
-.formBoxes {
-  width: 100%;
-  gap: 4vw;
-  display: flex;
-}
-
-input[type="number"]::-webkit-inner-spin-button {
+/* Center (active) */
+.card-img.active {
   opacity: 1;
+  z-index: 3;
+  transform: translateX(-50%) scale(1);
 }
 
-.form-control {
-  font-size: 1.5vw !important;
+/* Peeking left */
+.card-img.behind-left {
+  opacity: 0.8;
+  z-index: 2;
+  transform: translateX(-80%) rotate(-6deg) scale(0.85);
 }
 
-.containerLabel {
-  width: 100%;
-  font-size: 20px;
-  font-family: "Poppins";
-  text-align: left !important;
+/* Peeking right */
+.card-img.behind-right {
+  opacity: 0.8;
+  z-index: 1;
+  transform: translateX(-20%) rotate(6deg) scale(0.85);
 }
 
-.availBtn {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 3vw;
+/* Buttons */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 8px 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 5;
 }
 
-.custom-btn {
-  background-color: #007bff !important;
-  color: #ffffff !important;
-  font-size: 1.5vw !important;
-  width: 100%;
-
-  &:hover {
-    background-color: #2186f3 !important;
-  }
+.carousel-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
-.welcomeSection {
-  display: flex;
+.carousel-btn.prev {
+  left: -40px; /* moves button outside image stack */
+}
+
+.carousel-btn.next {
+  right: -40px;
+}
+
+.middle-container {
+  margin-top: 2rem !important;
+  padding: var(--padding-xl);
+  border-radius: 20px;
+  width: 98%;
   margin: 0 auto;
-  /* border: 1px solid black; */
-  width: 100%;
-}
-
-.resortPic1 {
-  margin-top: 5vw !important;
-  margin: auto;
-}
-
-.pic1 {
-  width: 40vw;
-  height: auto;
-}
-
-.wsText {
+  display: flex;
   justify-content: center;
   align-items: center;
+  gap: 3rem;
+}
+
+.embed-responsive {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
   margin: auto;
-  margin-top: 5vw !important;
-  width: 50%;
 }
 
-.line {
-  border: none;
-  border-top: 5px solid #d48d31;
-  width: 40%;
-  height: 2vw;
-  opacity: 1;
-  /* margin: 20px auto; */
+.embed-responsive video {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
 }
 
-.wsTitle {
-  font-family: "Poppins";
-  font-size: 25px;
+.videoTitle,
+.bottom-header {
+  font-size: var(--font-size-xxl);
+  font-family: "Alkatra";
+}
+
+.bottom-header {
   text-align: center;
-  color: rgb(0, 0, 0);
 }
 
-.wsDescription {
+.videoDescription {
+  font-size: var(--font-size-md);
   font-family: "Poppins";
   text-align: justify;
-  margin-top: 30px;
-  font-size: 20px;
-  text-indent: 20px;
+  margin-top: var(--margin-lg);
+}
+.videoText-container {
+  width: 90%;
+  margin-top: 0;
 }
 
-.contact {
+.middle-btn-container a {
+  margin-top: var(--margin-md);
+}
+
+.bottom-section {
+  width: 98%;
+  background-color: #f5f5f5;
+  margin-top: 2rem !important;
+  border-radius: 20px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.bottom-text-container {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.bottom-subtext {
+  font-family: "Poppins";
+  font-size: var(--font-size-md);
+  text-align: center;
+  margin-top: var(--margin-sm);
+}
+
+.swiper {
+  width: 90%;
+  height: auto;
+  margin-top: var(--margin-sm);
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #444;
   display: flex;
-  justify-content: space-around;
-  margin-top: 7vh;
-  margin-bottom: 5vw;
-  background-color: #7dcbf2;
-  padding: 5vw;
-  height: 90vh;
-}
-
-.contactText {
-  /* border: 1px solid black; */
   justify-content: center;
   align-items: center;
-  width: 45%;
 }
 
-.location,
-.number,
-.email {
-  display: flex;
-  gap: 3vw;
-  margin-top: 1vw;
-}
-
-.locationIcon,
-.emailIcon,
-.phoneIcon {
-  height: 4vw;
-  width: auto;
-}
-
-.contactTitle {
-  margin-bottom: 2vw;
-  font-family: "Poppins";
-}
-
-.locationText {
-  margin-top: 0.1vw;
-}
-
-.emailAddressText {
-  margin-top: 1vw;
-}
-
-.googleMap {
-  /* border: 1px solid black; */
-  width: 45%;
-  height: 60vh;
-}
-
-.gallery {
-  background-color: #f7d5b0;
-  /* margin: 2vw; */
-  margin-bottom: 0;
-  padding: 2vw;
-  padding-bottom: 1vw;
-}
-
-.galleryTitle {
-  font-family: "Poppins";
-  font-size: 2vw;
-  margin-left: 2vw;
-}
-
-.carousel {
-  width: 65%;
-  margin: auto;
-}
-
-.carousel-inner {
-  width: 100% !important;
-}
-
-.carousel-item img {
+.swiper-slide img {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  background-color: #007bff !important;
+.location-container {
+  margin-top: 2rem !important;
+  padding: var(--padding-xl);
+  border-radius: 20px;
+  width: 98%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
 }
 
-.seeMore {
-  margin: 5vh auto 3vh auto;
-  width: 15vw;
+.locationText-container {
+  width: 50%;
+  margin-top: 0;
 }
 
-/* Tablet size */
-@media only screen and (min-width: 600px) and (max-width: 1025px) {
-  .titleContainer {
-    height: calc(100vh - 15vh);
-    padding: calc(12vh - 3vh);
-  }
-  .mamyrTitle {
-    width: 100%;
-    margin-top: clamp(15vh, 5vh, 2vh) !important;
-  }
-
-  .name {
-    font-size: clamp(60px, calc(3.5vw + 4px), 45px) !important;
-    text-align: left;
-  }
-
-  .description {
-    margin: auto;
-  }
-
-  .descriptionText {
-    text-align: justify;
-    font-size: clamp(23px, calc(2vw + 4px), 35px);
-  }
-
-  .white-bg {
-    background-color: white;
-  }
-
-  .containerBook {
-    width: 95%;
-    padding: 2vw;
-    margin-top: 7vw;
-    margin-top: 3vw;
-    box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
-  }
-
-  .label {
-    display: flex;
-    gap: clamp(5vw, 4vw, 3vw);
-    margin-top: 3vw;
-  }
-
-  .formBoxes {
-    gap: 4vw;
-    display: flex;
-    justify-content: center;
-  }
-
-  .containerLabel {
-    width: 100%;
-    font-size: clamp(12px, calc(1.5vw + 4px), 20px);
-  }
-
-  .welcomeSection {
-    display: flex;
-    flex-direction: column-reverse;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .resortPic1 {
-    margin-top: 5vw !important;
-  }
-
-  .pic1 {
-    width: 60vw;
-  }
-
-  .wsText {
-    margin-top: 8vw !important;
-    width: 80%;
-
-    .line {
-      width: 100%;
-    }
-  }
-
-  .form-check-label {
-    font-size: 2.1vw;
-  }
-
-  .contact {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-  }
-
-  .contactText {
-    justify-content: center;
-    align-items: center;
-    width: 80%;
-
-    .line {
-      width: 30%;
-    }
-
-    h4 {
-      font-size: clamp(18px, calc(2vw + 4px), 12px) !important;
-    }
-
-    h5 {
-      font-size: clamp(15px, calc(1.5vw + 4px), 12px) !important;
-    }
-  }
-
-  .locationIcon,
-  .emailIcon,
-  .phoneIcon {
-    height: clamp(4vh, calc(1.5vw + 4px), 2vh) !important;
-    width: auto;
-  }
-
-  .emailAddressText {
-    margin-top: 0.1vw;
-  }
-
-  .googleMap {
-    height: 80vh;
-    width: 70%;
-    margin-top: 5vh;
-  }
-
-  .gallery {
-    .line {
-      width: 30%;
-    }
-  }
-
-  .galleryTitle {
-    font-size: 4vw;
-  }
-
-  .galleryImg {
-    height: 40vh;
-    width: auto;
-  }
-
-  .img5,
-  .img6 {
-    display: none;
-  }
-
-  .seeMore {
-    margin: auto;
-    margin-top: 2vh;
-  }
-
-  .announcements {
-    height: clamp(300px, 90vh, 800px) !important;
-  }
-
-  .announcementTitleContainer {
-    width: 80%;
-  }
-
-  .announcementLine {
-    width: 50%;
-  }
-
-  .announcementTitle {
-    margin-top: 1vw;
-    font-size: 4vw;
-  }
-
-  .post {
-    width: 70%;
-    height: clamp(100px, 90vh, 450px) !important;
-    margin-bottom: 10vw !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .sorryText {
-    margin-top: 2vh;
-    font-size: clamp(25px, calc(1.25vw + 4px), 35px) !important;
-  }
-
-  .closedText {
-    font-size: clamp(35px, calc(2.5vw + 4px), 45px) !important;
-    font-weight: bold;
-  }
-
-  .tomorrowText {
-    font-size: clamp(25px, calc(1.25vw + 4px), 35px) !important;
-  }
-
-  .vr {
-    height: 3.2vw;
-    margin-top: 2.5vw;
-  }
-
-  .closedAdditionalText {
-    font-size: clamp(20px, calc(1.5vw + 4px), 30px) !important;
-  }
-
-  .pb-1 {
-    gap: 3vw;
-  }
-
-  .mb-0 {
-    font-size: clamp(2.2vw, calc(1.9vw + 2px), 1.5vw) !important;
-  }
-
-  .logo {
-    width: 15vw;
-  }
-
-  .reservationTitle,
-  .locationTitle {
-    font-size: clamp(2.1vw, calc(1.6vw + 2px), 1.3vw) !important;
-  }
-
-  .numberFooter,
-  .emailAddressTextFooter,
-  .addressTextFooter {
-    font-size: clamp(1.7vw, calc(1.5vw + 2px), 1.2vw) !important;
-  }
-
-  .socialIcons a {
-    justify-items: center;
-    align-items: center;
-  }
-
-  .socialIcons a i {
-    font-size: 3vw;
-  }
-}
-
-/* Tablet portrait */
-@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-  .titleContainer {
-    height: calc(100vh - 20vh);
-    padding: calc(12vh - 3vh);
-  }
-
-  .name {
-    font-size: clamp(40px, calc(4vw + 10px), 60px) !important;
-  }
-
-  .descriptionText {
-    font-size: clamp(20px, calc(2vw + 4px), 35px);
-  }
-
-  .btn-outline-light {
-    font-size: clamp(12px, calc(1.5vw + 4px), 20px) !important;
-  }
-
-  .availBtn {
-    .custom-btn {
-      font-size: medium !important;
-    }
-  }
-
-  .contact {
-    height: clamp(50%, 75%, 80%);
-  }
-
-  .contactText {
-    h4 {
-      font-size: clamp(30px, calc(2vw + 4px), 35px) !important;
-    }
-
-    h5 {
-      font-size: clamp(25px, calc(1.5vw + 4px), 20px) !important;
-    }
-  }
-
-  .locationIcon,
-  .emailIcon,
-  .phoneIcon {
-    height: clamp(3vh, calc(1.5vw + 4px), 2vh) !important;
-  }
-
-  .gallery {
-    .line {
-      width: 30%;
-    }
-  }
-
-  .galleryTitle {
-    font-size: 4vw;
-  }
-
-  .galleryImg {
-    height: 40vh;
-    width: auto;
-  }
-
-  .img5,
-  .img6 {
-    display: block;
-  }
-
-  .img1,
-  .img2,
-  .img3,
-  .img4 {
-    display: none;
-  }
-
-  .seeMore {
-    margin: auto;
-    margin-top: 2vh;
-    width: 30%;
-
-    .custom-btn {
-      font-size: large !important;
-    }
-  }
-
-  .announcements {
-    height: clamp(300px, 90vh, 700px) !important;
-  }
-
-  .post {
-    width: calc(100% - 30vw);
-    height: clamp(100px, 90vh, 450px) !important;
-    margin-bottom: 10vw !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-}
-
-/* Tablet landscape */
-@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
-  .img5,
-  .img6,
-  .img4 {
-    display: none;
-  }
-
-  .img1,
-  .img2,
-  .img3 {
-    display: block;
-  }
-
-  .post {
-    width: calc(100% - 30vw);
-    height: clamp(100px, 90vh, 400px) !important;
-    margin-bottom: 10vw !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 991.98px) {
-  .fc-daygrid-day-top a {
-    font-size: clamp(2vw, 1.8vw, 1.6vw);
-  }
-}
-
-/* Phone size */
-@media screen and (max-width: 599px) {
-  .titleContainer {
-    height: calc(100vh - 20vh);
-    padding: 12vw;
-  }
-
-  .mamyrTitle {
-    width: 100%;
-    margin-top: clamp(16vh, 6vh, 2vh) !important;
-  }
-
-  .name {
-    font-size: clamp(35px, calc(3.5vw + 4px), 45px) !important;
-    text-align: left;
-  }
-
-  .description {
-    margin: auto;
-  }
-
-  .descriptionText {
-    font-size: clamp(15px, calc(1.5vw + 4px), 35px) !important;
-    text-align: justify;
-    letter-spacing: 0;
-  }
-
-  .form-check-label {
-    font-size: 3.1vw;
-  }
-
-  .containerBook {
-    width: 80%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto auto;
-    justify-items: center;
-    align-items: center;
-    padding: 5vw;
-    margin-top: clamp(5vh, calc(2.5vh + 4px), 12vh);
-    box-shadow: 0 40px 60px rgba(0, 0, 0, 0.3);
-  }
-
-  .label {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 0;
-  }
-
-  .formBoxes {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .containerLabel {
-    text-align: left !important;
-    width: 100%;
-    font-size: clamp(14px, calc(1.5vw + 4px), 20px) !important;
-  }
-
-  .form-control {
-    font-size: clamp(8px, calc(1.5vw + 4px), 10px) !important;
-  }
-
-  .availBtn {
-    grid-column: span 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .welcomeSection {
-    display: flex;
-    flex-direction: column-reverse;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .resortPic1 {
-    margin-top: 5vw !important;
-  }
-
-  .pic1 {
-    width: 80vw;
-  }
-
-  .wsText {
-    margin-top: 8vw !important;
-    width: 80%;
-
-    .line {
-      width: 100%;
-    }
-  }
-
-  .img5,
-  .img6 {
-    display: none;
-  }
-
-  .wsDescription {
-    font-size: 15px;
-  }
-
-  .contact {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10vh;
-    height: 80vh;
-    padding-bottom: 8vh;
-
-    h5 {
-      font-size: 15px;
-    }
-
-    img {
-      height: 3vh;
-    }
-  }
-
-  .contactText {
-    justify-content: center;
-    align-items: center;
-    margin: 1vh 3vw 0 0;
-    width: 80%;
-
-    .line {
-      width: 40%;
-    }
-  }
-
-  .emailAddressText {
-    margin-top: 0.1vw;
-  }
-
-  .googleMap {
-    height: 40vh;
-    width: 80%;
-    margin-top: 5vh;
-  }
-
-  .gallery {
-    .line {
-      width: 30%;
-    }
-  }
-
-  .galleryTitle {
-    font-size: 6vw;
-  }
-
-  .galleryImg {
-    height: 30vh;
-    width: auto;
-  }
-
-  .seeMore {
-    margin: auto;
-    margin-top: 2vh;
-    width: 30%;
-  }
-
-  .custom-btn {
-    font-size: 10px !important;
-  }
-
-  .announcements {
-    height: calc(100vh - 40vh);
-  }
-
-  .announcementLine {
-    width: 60%;
-  }
-
-  .announcementTitle {
-    margin-top: 1.5vw;
-    font-size: clamp(20px, calc(1.5vh + 4px), 25px);
-  }
-
-  .post {
-    width: 70%;
-    height: calc(75vh - 30vh);
-    margin-bottom: 10vw !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .sorryText {
-    margin-top: 2vh;
-    font-size: clamp(12px, calc(1.5vh + 4px), 20px);
-  }
-
-  .closedText {
-    font-size: clamp(25px, calc(2.5vh + 4px), 30px);
-    font-weight: bold;
-  }
-
-  .tomorrowText {
-    font-size: clamp(12px, calc(1.5vh + 4px), 20px);
-  }
-
-  .date,
-  .time {
-    font-size: clamp(12px, calc(1.5vh + 4px), 20px);
-  }
-
-  .vr {
-    height: 3.5vw;
-    margin-top: 2.5vw;
-  }
-
-  .closedAdditionalText {
-    font-size: clamp(8px, calc(1.5vh + 4px), 12px);
-  }
-
-  .pb-1 {
-    gap: 3vw;
-  }
+#map {
+  height: 300px; /* Set the height to 300px */
+  width: 500px; /* Set the width to 500px (or any other desired value) */
+  margin: 0 auto; /* Center the map horizontally in its container */
 }

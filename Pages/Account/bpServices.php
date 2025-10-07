@@ -10,10 +10,6 @@ checkSessionTimeout($timeout = 3600);
 
 require_once '../../Function/Helpers/statusFunctions.php';
 
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
-
-
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
@@ -38,6 +34,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,12 +47,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <title>Business Partner Services - Mamyr Resort and Events Place</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- Bootstrap Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
+
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/Account/bpServices.css">
-    <!-- DataTables Link -->
+    <link rel=" stylesheet" href="../../Assets/CSS/Account/bpServices.css">
+    <!-- DataTables Link 
+        -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css" />
+
     <!-- icon libraries for font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -199,161 +200,16 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <div class="container">
                 <h3 class="welcomeText" id="title">Services</h3>
 
+                <input type="hidden" name="partnershipID" id="partnershipID" value="<?= $partnershipID ?>">
                 <div class="btnContainer" id="addServiceButtonContainer">
                     <button class="btn btn-primary  add-service-btn" id="addServiceButton" onclick="addService()"><i class="fas fa-plus-circle"></i> Add Service</button>
                 </div>
 
-                <div class="serviceContainer" id="servicesTable">
-                    <?php
-                    $getPartnerService = $conn->prepare("SELECT * FROM `partnershipservice` WHERE partnershipID = ?");
-                    $getPartnerService->bind_param('i', $partnershipID);
-
-                    if (!$getPartnerService->execute()) {
-                        error_log("Error: " . $getPartnerService->error);
-                    }
-
-                    $result = $getPartnerService->get_result();
-
-                    if (!$result->num_rows === 0) {
-                    ?>
-                        <div class="card service-card text-center">
-                            <div class="card-body">
-                                <p class="card-text">NO SERVICES, ADD A SERVICE</p>
-                                <button class="btn btn-primary" id="addServiceButton" onclick="addService()"><i class="fas fa-plus-circle"></i> Add Service</button>
-                            </div>
-                        </div>
-
-                    <?php
-                    }
-                    $details = [];
-                    while ($row = $result->fetch_assoc()) {
-                        $details[] = $row;
-                    }
-
-                    foreach ($details as $service):
-
-                        $storedAvailabilityID = intval($service['PSAvailabilityID']);
-
-                        $availabilityStatus = getAvailabilityStatus($conn, $storedAvailabilityID);
-                        $modalID = 'serviceModal' . $service['partnershipServiceID'];
-                        $availabilityID = $availabilityStatus['availabilityID'];
-                        $availabilityName = $availabilityStatus['availabilityName'];
-                        switch ($availabilityID) {
-                            case 1:
-                                $classcolor = 'success';
-                                $statusName =  $availabilityName;
-                                break;
-                            case 2:
-                                $classcolor = 'info';
-                                $statusName =  'Booked';
-                                break;
-                            case 3:
-                                $classcolor = 'warning';
-                                $statusName =  $availabilityName;
-                                break;
-                            case 4:
-                                $classcolor = 'light-green';
-                                $statusName =  $availabilityName;
-                                break;
-                            case 5:
-                                $classcolor = 'danger';
-                                $statusName =  $availabilityName;
-                                break;
-                            default:
-                                $classcolor = 'secondary';
-                                $availabilityID;
-                                $statusName =  $availabilityName;
-                        }
-
-
-                    ?>
-
-                        <div class="card service-card">
-                            <div class="card-header">
-                                <p class="card-text">
-                                    <span class="badge bg-<?= $classcolor ?> w-75"
-                                        id="<?= $statusName ?>"><?= $statusName ?></span>
-                                </p>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title"><?= htmlspecialchars(ucfirst($service['PBName'])) ?></h5>
-                                <p class="card-text">Price: ₱<?= number_format($service['PBPrice'], 2) ?></p>
-
-                            </div>
-                            <div class="card-footer">
-                                <button type="button" class="btn btn-primary w-50" data-bs-toggle="modal"
-                                    data-bs-target="#<?= $modalID ?>">View</button></td>
-                            </div>
-                        </div>
-
-                        <!-- serviceModal -->
-                        <div class="modal fade" id="<?= $modalID ?>" tabindex="-1" role="dialog" aria-labelledby="serviceModal"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="exampleModalLabel">Service Info</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <section>
-                                            <div class="infoContainer">
-                                                <div class="info-container">
-                                                    <label for="serviceName">Service Name</label>
-                                                    <input type="text" class="form-control" name="serviceName" id="serviceName"
-                                                        value="<?= $service['PBName'] ?? 'N/A' ?>" readonly>
-                                                </div>
-                                                <div class="info-container">
-                                                    <label for="servicePrice">Price</label>
-                                                    <input type="text" class="form-control" name="servicePrice" id="servicePrice"
-                                                        value="₱<?= number_format($service['PBPrice'], 2) ?>" readonly>
-                                                </div>
-                                                <div class="info-container">
-                                                    <label for="serviceCapacity">Capacity</label>
-                                                    <input type="text" class="form-control" name="serviceCapacity"
-                                                        id="serviceCapacity" value="<?= $service['PBCapacity'] ?? 'N/A' ?>" readonly>
-                                                </div>
-                                                <div class="info-container">
-                                                    <label for="serviceDuration">Service Duration</label>
-                                                    <input type="text" class="form-control" name="serviceDuration"
-                                                        id="serviceDuration" value="<?= $service['PBduration'] ?? 'N/A' ?>" readonly>
-                                                </div>
-                                                <div class="info-container">
-                                                    <label for="serviceAvailable">Service Availability</label>
-                                                    <select class="form-select" name="serviceAvailability"
-                                                        id="serviceAvalability" disabled>
-                                                        <option value="" <?= ($statusName == '') ? "selected" : '' ?>>Select Availability</option>
-                                                        <option value="available" <?= (strtolower($statusName) == 'available') ? "selected" : '' ?>> Available</option>
-                                                        <option value="occupied" <?= (strtolower($statusName) == 'occupied') ? "selected" : '' ?>>Booked</option>
-                                                        <option value="notAvailable" <?= (strtolower($statusName) == 'not available') ? "selected" : '' ?>>Unavailable</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </section>
-
-                                        <section class="descContainer">
-                                            <div class="form-group">
-                                                <label for="serviceDescription">Service Description</label>
-                                                <textarea class="form-control" name="serviceDescription" id="serviceDescription"
-                                                    rows="5"><?= $service['PBDescription'] ?? 'N/A' ?></textarea>
-                                            </div>
-                                        </section>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div class="declineBtnContainer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                                aria-label="Close">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- serviceModal -->
-
-                    <?php endforeach; ?>
+                <div class="serviceContainer" id="service-card-container">
                 </div>
 
-                <!-- //* Form for adding a service  -->
-                <div class="addServiceContainer" id="addServiceContainer">
+                <!--  Form for adding a service  -->
+                <div class=" addServiceContainer" id="addServiceContainer">
                     <div class="backArrowContainer" id="backArrowContainer">
                         <a href="bpServices.php"><img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="Back Button"
                                 class="backArrow">
@@ -393,8 +249,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 </select>
                             </div>
                             <div class="AvailabilityContainer">
-                                <label for="availability" class="addServiceLabel">Availability</label>
-                                <select class="form-select" name="availability" id="availability">
+                                <label for="serviceAvailability" class="addServiceLabel">Availability</label>
+                                <select class="form-select" name="serviceAvailability" id="serviceAvailability">
                                     <option value="" disabled selected>Select Availability</option>
                                     <?php
                                     $getAvailability = $conn->prepare("SELECT * FROM serviceavailability WHERE availabilityName  NOT IN ('Occupied', 'Private')");
@@ -436,25 +292,20 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     placeholder="Service information/description (Optional)"></textarea>
                             </div>
                         </div>
-                        <div class="submitBtnContainer ">
+                        <div class="submitBtnContainer">
                             <input type="hidden" name="partnershipID" value="<?= (int) $partnershipID ?>">
                             <button type="submit" class="btn btn-success w-25" name="addService"><i class="fas fa-plus-circle"></i> Add Service</button>
                         </div>
                     </form>
                 </div>
             </div>
-
-
         </main>
     </div>
 
 
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -463,41 +314,25 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../../Assets/JS/datatables.min.js"></script>
 
     <script>
-        const servicesTable = document.getElementById("servicesTable")
-        const addServiceContainer = document.getElementById("addServiceContainer")
-        const addServiceButtonContainer = document.getElementById("addServiceButtonContainer")
-        const homeBtnContainer = document.getElementById("homeBtnContainer")
+        const serviceCardContainer = document.getElementById("service-card-container");
+        const addServiceContainer = document.getElementById("addServiceContainer");
+        const addServiceButtonContainer = document.getElementById("addServiceButtonContainer");
+        // const homeBtnContainer = document.getElementById("homeBtnContainer")
 
         addServiceContainer.style.display = "none"
 
         function addService() {
             if (addServiceContainer.style.display == "none") {
                 addServiceContainer.style.display = "block";
-                servicesTable.style.display = "none";
+                serviceCardContainer.style.display = "none";
                 addServiceButtonContainer.style.display = "none";
-                homeBtnContainer.style.display = "none";
+                // homeBtnContainer.style.display = "none";
                 document.getElementById("title").innerHTML = "Add Service"
 
             } else {
                 addServiceContainer.style.display = "block";
             }
         }
-    </script>
-
-    <!-- Table JS -->
-    <script>
-        $(document).ready(function() {
-            $('#services').DataTable({
-                language: {
-                    emptyTable: "No Services"
-                },
-                columnDefs: [{
-                    width: '25%',
-                    target: 0
-
-                }]
-            });
-        });
     </script>
 
     <!-- Sweetalert JS -->
@@ -576,18 +411,272 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         })
     </script>
 
-    <!-- <script>
-        document.querySelector("input[type='file']").addEventListener("change", function(event) {
-            let reader = new FileReader();
-            reader.onload = function() {
-                let preview = document.getElementById("preview");
-                preview.src = reader.result;
-                preview.style.display = "block";
-            };
-            reader.readAsDataURL(event.target.files[0]);
+    <script>
+        function getStatusBadge(colorClass, status) {
+            return `<span class="badge bg-${colorClass} text-capitalize w-75">${status}</span>`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const partnershipID = document.getElementById('partnershipID').value;
+
+            fetch(`../../Function/Partner/getPartnerServices.php?id=${encodeURIComponent(partnershipID)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'An unknown error occurred.',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                        return;
+                    }
+
+                    const services = data.details;
+                    const serviceContainer = document.getElementById('service-card-container');
+                    serviceContainer.innerHTML = '';
+
+                    services.forEach((service, index) => {
+                        // Create card
+                        const card = document.createElement('div');
+                        card.classList.add('card', 'service-card');
+
+                        const cardHeader = document.createElement('div');
+                        cardHeader.classList.add('card-header');
+
+                        const pHeader = document.createElement('p');
+                        pHeader.classList.add('card-text');
+                        pHeader.innerHTML = getStatusBadge(service.classColor, service.statusName);
+
+                        const cardBody = document.createElement('div');
+                        cardBody.classList.add('card-body');
+
+                        const h5 = document.createElement('h5');
+                        h5.classList.add('card-title');
+                        h5.innerHTML = service.serviceName;
+
+                        const pBody = document.createElement('p');
+                        pBody.classList.add('card-text');
+                        pBody.innerHTML = `Price: ${service.servicePrice}`;
+
+                        const cardFooter = document.createElement('div');
+                        cardFooter.classList.add('card-footer');
+
+                        const viewModalBtn = document.createElement('button');
+                        viewModalBtn.classList.add('btn', 'btn-primary', 'w-50');
+                        viewModalBtn.setAttribute('data-bs-toggle', 'modal');
+                        viewModalBtn.setAttribute('data-bs-target', `#${service.modalID}`);
+                        viewModalBtn.innerHTML = 'View';
+
+                        // Assemble card
+                        cardHeader.appendChild(pHeader);
+                        cardBody.appendChild(h5);
+                        cardBody.appendChild(pBody);
+                        cardFooter.appendChild(viewModalBtn);
+
+                        card.appendChild(cardHeader);
+                        card.appendChild(cardBody);
+                        card.appendChild(cardFooter);
+
+                        // Create Modal
+                        const viewModal = document.createElement('div');
+                        viewModal.classList.add('modal', 'fade', 'serviceModal');
+                        viewModal.id = service.modalID;
+                        viewModal.tabIndex = -1;
+                        viewModal.setAttribute('role', 'dialog');
+                        viewModal.setAttribute('aria-labelledby', `modalLabel-${index}`);
+
+                        const modalDialog = document.createElement('div');
+                        modalDialog.className = 'modal-dialog modal-dialog-centered';
+                        modalDialog.setAttribute('role', 'document');
+
+                        const modalContent = document.createElement('div');
+                        modalContent.className = 'modal-content';
+
+                        const modalHeader = document.createElement('div');
+                        modalHeader.className = 'modal-header';
+
+                        const modalTitle = document.createElement('h4');
+                        modalTitle.className = 'modal-title';
+                        modalTitle.id = `modalLabel-${index}`;
+                        modalTitle.textContent = 'Service Info';
+
+                        const closeButton = document.createElement('button');
+                        closeButton.type = 'button';
+                        closeButton.className = 'btn-close';
+                        closeButton.setAttribute('data-bs-dismiss', 'modal');
+                        closeButton.setAttribute('aria-label', 'Close');
+
+                        modalHeader.appendChild(modalTitle);
+                        modalHeader.appendChild(closeButton);
+
+                        const modalBody = document.createElement('div');
+                        modalBody.className = 'modal-body';
+                        modalBody.id = 'view-modal-container';
+
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'partnershipServiceID';
+                        hiddenInput.id = 'partnershipServiceID';
+                        hiddenInput.value = service.partnershipServiceID || '';
+
+                        // Info section
+                        const sectionInfo = document.createElement('section');
+                        const infoContainer = document.createElement('div');
+                        infoContainer.className = 'infoContainer';
+
+                        function inputContainer(inputLabel, IDName, inputValue = '', isReadonly = true) {
+                            const container = document.createElement('div');
+                            container.className = 'info-container';
+
+                            const label = document.createElement('label');
+                            label.setAttribute('for', IDName);
+                            label.textContent = inputLabel;
+
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.className = 'form-control';
+                            input.name = IDName;
+                            input.id = IDName;
+                            input.value = inputValue;
+                            input.readOnly = isReadonly;
+
+                            container.appendChild(label);
+                            container.appendChild(input);
+
+                            return container;
+                        }
+
+                        infoContainer.appendChild(inputContainer('Service Name', 'serviceName', service.serviceName));
+                        infoContainer.appendChild(inputContainer('Service Price', 'servicePrice', service.servicePrice));
+                        infoContainer.appendChild(inputContainer('Service Capacity', 'serviceCapacity', service.serviceCapacity));
+                        infoContainer.appendChild(inputContainer('Service Duration', 'serviceDuration', service.serviceDuration));
+
+                        // Availability dropdown
+                        const availContainer = document.createElement('div');
+                        availContainer.className = 'info-container';
+
+                        const availLabel = document.createElement('label');
+                        availLabel.setAttribute('for', 'serviceAvailability');
+                        availLabel.textContent = 'Availability';
+
+                        const availSelect = document.createElement('select');
+                        availSelect.className = 'form-select';
+                        availSelect.name = 'serviceAvailability';
+                        availSelect.id = 'serviceAvailability';
+                        availSelect.disabled = true;
+
+                        const options = [{
+                                text: 'Select Availability',
+                                value: '',
+                                selected: service.statusName === ''
+                            },
+                            {
+                                text: 'Available',
+                                value: 'available',
+                                selected: service.statusName.toLowerCase() === 'available'
+                            },
+                            {
+                                text: 'Booked',
+                                value: 'occupied',
+                                selected: ['occupied', 'booked'].includes(service.statusName.toLowerCase())
+                            },
+                            {
+                                text: 'Unavailable',
+                                value: 'not available',
+                                selected: service.statusName.toLowerCase() === 'not available'
+                            }
+                        ];
+
+                        options.forEach(opt => {
+                            const option = document.createElement('option');
+                            option.value = opt.value;
+                            option.textContent = opt.text;
+                            if (opt.selected) option.selected = true;
+                            availSelect.appendChild(option);
+                        });
+
+                        availContainer.appendChild(availLabel);
+                        availContainer.appendChild(availSelect);
+                        infoContainer.appendChild(availContainer);
+
+
+                        sectionInfo.appendChild(hiddenInput);
+                        sectionInfo.appendChild(infoContainer);
+                        modalBody.appendChild(sectionInfo);
+
+                        const sectionDesc = document.createElement('section');
+                        sectionDesc.className = 'descContainer';
+
+                        const formGroup = document.createElement('div');
+                        formGroup.className = 'form-group';
+
+                        const descLabel = document.createElement('label');
+                        descLabel.setAttribute('for', 'serviceDescription');
+                        descLabel.textContent = 'Service Description';
+
+                        formGroup.appendChild(descLabel);
+
+                        const descriptions = service.description || [];
+
+                        if (descriptions.length > 0) {
+                            descriptions.forEach(desc => {
+                                const input = document.createElement('input');
+                                input.name = 'serviceDescription';
+                                input.className = 'form-control';
+                                input.value = desc;
+                                input.readOnly = true;
+                                formGroup.appendChild(input);
+                            });
+                        } else {
+                            const input = document.createElement('input');
+                            input.name = 'serviceDescription';
+                            input.className = 'form-control';
+                            input.value = 'N/A';
+                            input.readOnly = true;
+                            formGroup.appendChild(input);
+                        }
+
+                        sectionDesc.appendChild(formGroup);
+                        modalBody.appendChild(sectionDesc);
+
+                        // Modal Buttons
+                        const modalBtnContainer = document.createElement('div');
+                        modalBtnContainer.className = 'modal-btn-container';
+
+                        const cancelBtn = document.createElement('button');
+                        cancelBtn.type = 'button';
+                        cancelBtn.className = 'btn btn-danger w-75 cancel-info-button';
+                        cancelBtn.style.display = 'none';
+                        cancelBtn.setAttribute('onclick', 'canEditInfo(this)');
+                        cancelBtn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cancel';
+
+                        const editBtn = document.createElement('button');
+                        editBtn.type = 'button';
+                        editBtn.className = 'btn btn-primary w-75 edit-info-button';
+                        editBtn.setAttribute('onclick', 'editServiceInfo(this)');
+                        editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Edit';
+
+                        modalBtnContainer.appendChild(cancelBtn);
+                        modalBtnContainer.appendChild(editBtn);
+
+                        // Assemble Modal
+                        modalContent.appendChild(modalHeader);
+                        modalContent.appendChild(modalBody);
+                        modalContent.appendChild(modalBtnContainer);
+                        modalDialog.appendChild(modalContent);
+                        viewModal.appendChild(modalDialog);
+
+                        // Append card and modal to DOM
+                        serviceContainer.appendChild(card);
+                        serviceContainer.appendChild(viewModal);
+                    });
+                });
         });
-    </script> -->
-    <!-- Message pop up -->
+    </script>
+
+    <script src="../../Assets/JS/Services/editCancelPartnerService.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('action');

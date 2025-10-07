@@ -116,8 +116,8 @@ function cancelResortService(cancelBtn) {
   const thisRowForm = thisRow.querySelectorAll(".form-control");
   const editBtn = thisRow.querySelector(".editBtn");
   const availabilityForm = thisRow.querySelectorAll(".resortAvailability");
-  const resortServiceImage = thisRow.querySelectorAll(".resortServiceImage");
-  const editImageBtn = thisRow.querySelectorAll(".editImageBtn");
+  // const resortServiceImage = thisRow.querySelectorAll(".resortServiceImage");
+  // const editImageBtn = thisRow.querySelectorAll(".editImageBtn");
   // const cancelBtn = thisRow.querySelectorAll('.cancelResortService');
   // const originalResortValues = {};
   // cancelBtn.forEach(btn => btn.disabled = false);

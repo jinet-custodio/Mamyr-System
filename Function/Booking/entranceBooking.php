@@ -277,7 +277,7 @@ if (isset($_POST['bookRates'])) {
 
             $receiver = 'Customer';
             $message = 'Your booking has been approved. Please complete your payment within 24 hours to confirm your reservation.';
-            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, reciverID, message, receiver)
+            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, receiverID, message, receiver)
             VALUES(?,?,?,?)");
             $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
 
