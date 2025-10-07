@@ -287,7 +287,6 @@ td {
 }
 
 label {
-  font-weight: bold;
   display: block;
   text-align: center;
 }
@@ -321,7 +320,7 @@ textarea {
 .btnContainer button {
   width: 25%;
 }
-/* modal */
+
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
   .sidebar {
@@ -452,6 +451,23 @@ textarea {
   .tableContainer {
     overflow-x: auto;
   }
+  .dt-length {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: .5rem;
+  font-size: 14px;
+}
+.dt-search {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: .5rem;
+  justify-content: center;
+  font-size: 14px;
+}
 }
 
 /* Phones */
@@ -505,7 +521,10 @@ textarea {
 
   .cardContainer {
     grid-template-columns: 1fr;
-    justify-items: center;
+    justify-items: center !important;
+    margin-left: 2.1rem;
+    width: 40%;
+    height: 10%;
   }
 
   .tableContainer {
@@ -515,6 +534,27 @@ textarea {
   th, td {
     font-size: 16px;
   }
+  .dt-column-title {
+  text-align: center;
+  font-size: 1px !important;
+}
+.dt-type-numeric {
+  text-align: center !important;
+}
+.dt-length {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 1.5rem;
+}
+.dt-search {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 1.8rem;
+}
 }
 
 @media only screen and (max-width: 400px) {
