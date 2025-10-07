@@ -184,7 +184,8 @@ if (!empty($confirmedBookingID)) {
 $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? null;
 $paymentStatus = $row['paymentStatus'] ?? null;
 $finalBill = (float) $row['confirmedFinalBill'] ?? null;
-$paymentDueDate = !empty($row['paymentDueDate']) ? date('F d, Y h:i A', strtotime($row['paymentDueDate'])) : 'Not Stated';
+$paymentDueDate = !empty($row['paymentDueDate']) ? date('F d, Y h:i A', strtotime($row['paymentDueDate'])) : 'Not
+Stated';
 $amountPaid = (float) $row['amountPaid'];
 $userBalance = (float) $row['userBalance'];
 
@@ -267,7 +268,8 @@ $serviceType = $row['serviceType'];
 $pax = $row['guestCount'];
 
 $downpaymentNotes[] = 'Wait for the approval before paying the downpayment.';
-$downpaymentNotes[] = 'Your booking is considered confirmed only after the downpayment is received and proof of payment verified';
+$downpaymentNotes[] = 'Your booking is considered confirmed only after the downpayment is received and proof of payment
+verified';
 $downpaymentNotes[] = 'You can check the payment due date by clicking the "Make a Down Payment" button';
 
 if ($bookingType === 'Resort') {
@@ -310,11 +312,13 @@ your reservation.';
 } elseif ($bookingStatusName === 'Rejected') {
 $status = strtolower($bookingStatusName) ?? NUll;
 $statusTitle = "Booking Rejected!";
-$statusSubtitle = "We regret to inform you that your reservation has been rejected. Please contact us for more details.";
+$statusSubtitle = "We regret to inform you that your reservation has been rejected. Please contact us for more
+details.";
 } elseif ($bookingStatusName === 'Cancelled') {
 $status = strtolower($bookingStatusName) ?? null;
 $statusTitle = "Booking Cancelled";
-$statusSubtitle = "You have cancelled your reservation. If this was a mistake or you wish to rebook, please contact us.";
+$statusSubtitle = "You have cancelled your reservation. If this was a mistake or you wish to rebook, please contact
+us.";
 } elseif ($bookingStatusName === 'Expired') {
 $status = strtolower($bookingStatusName) ?? null;
 $statusTitle = "Expired Booking";
@@ -322,17 +326,21 @@ $statusSubtitle = "Sorry. The scheduled time for this booking has passed.";
 } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Rejected') {
 $status = strtolower($paymentApprovalStatusName) ?? null;
 $statusTitle = "Payment Rejected";
-$statusSubtitle = "Your reservation was approved, but the submitted payment was rejected. Please check the payment details and try again, or contact the admin for assistance.";
+$statusSubtitle = "Your reservation was approved, but the submitted payment was rejected. Please check the payment
+details and try again, or contact the admin for assistance.";
 } elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Pending') {
 $status = strtolower($bookingStatusName) ?? NUll;
 $statusTitle = "Your reservation has been approved.";
 if ($paymentMethod === 'GCash') {
-$statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed with the down payment via GCash.";
+$statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed with the down payment
+via GCash.";
 } elseif ($paymentMethod === 'Cash') {
 if ($bookingType === 'Resort') {
-$statusSubtitle = "Your reservation has been approved by the admin. Please proceed on your scheduled swimming date and complete the payment on that day.";
+$statusSubtitle = "Your reservation has been approved by the admin. Please proceed on your scheduled swimming date and
+complete the payment on that day.";
 } else {
-$statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed to the resort to make your downpayment.";
+$statusSubtitle = "Your reservation request has been approved by the admin. You may now proceed to the resort to make
+your downpayment.";
 }
 }
 } elseif ($paymentApprovalStatusName === 'Approved' && $paymentStatusName === 'Partially Paid') {
@@ -343,10 +351,12 @@ $statusSubtitle = "We have received and reviewed your payment. The service you b
 $status = strtolower($bookingStatusName) ?? NUll;
 $statusTitle = "Payment done successfully.";
 $statusSubtitle = "Thank you! We have received your full payment. You may now enjoy your stay at the resort.";
-} elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Done' && $paymentStatusName === 'Fully Paid') {
+} elseif ($bookingStatusName === 'Approved' && $paymentApprovalStatusName === 'Done' && $paymentStatusName === 'Fully
+Paid') {
 $statusTitle = "Booking Completed";
 $status = strtolower($bookingStatusName) ?? NUll;
-$statusSubtitle = "Thank you for staying with us! Your booking is fully paid and successfully completed. We hope you had a wonderful time.";
+$statusSubtitle = "Thank you for staying with us! Your booking is fully paid and successfully completed. We hope you had
+a wonderful time.";
 }
 
 
@@ -423,7 +433,8 @@ $storedQuantity = intval($data['quantity']);
 $newTotalFoodPrice += $foodPrice;
 
 if (abs($storedServicePrice - $foodPrice) > 0.01) {
-$updateServicePrice = $conn->prepare("UPDATE `custompackageitem` SET `servicePrice`= ? WHERE foodItemID = ? AND customPackageID = ?");
+$updateServicePrice = $conn->prepare("UPDATE `custompackageitem` SET `servicePrice`= ? WHERE foodItemID = ? AND
+customPackageID = ?");
 $updateServicePrice->bind_param("dii", $foodPrice, $foodItemID, $customPackageID);
 if (!$updateServicePrice->execute()) {
 throw new Exception("Error updating the service price for foodItemID " . $foodItemID);
@@ -434,7 +445,8 @@ throw new Exception("Error updating the service price for foodItemID " . $foodIt
 
 if (abs($newTotalFoodPrice - $foodPriceTotal) > 0.01) {
 $bill = $newCustomPackageTotalPrice = $newTotalFoodPrice + $venuePrice;
-$updateTotalPrice = $conn->prepare("UPDATE `custompackage` SET `customPackageTotalPrice`= ? WHERE `customPackageID`= ?");
+$updateTotalPrice = $conn->prepare("UPDATE `custompackage` SET `customPackageTotalPrice`= ? WHERE `customPackageID`=
+?");
 $updateTotalPrice->bind_param('di', $newCustomPackageTotalPrice, $customPackageID);
 if (!$updateTotalPrice->execute()) {
 throw new Exception("Error updating the totalPrice for custom package " . $customPackageID);
@@ -450,3 +462,69 @@ $_SESSION['bookingID'] = $bookingID;
 header("Location: ../../Pages/Admin/viewBooking.php");
 exit();
 }
+
+<!-- MODAL FROM viewBooking.php -->
+
+<div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectionModalLabel">Booking Approval</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- // TODO -> Pakipalitan yung notes na they can change the final bill or the discount amount (pacheck grammary na lang) try nyo dark red -->
+                <p>
+                    Note: You can either change the total amount or apply a discount, not both.
+                </p>
+                <div class="input-container">
+                    <label for="finalBill">Final Bill:</label>
+                    <input type="text" class="form-control" placeholder="e.g. 100" name="finalBill" min="0"
+                        value="₱<?= number_format($finalBill, 2) ?>" readonly>
+                </div>
+                <label>
+                    <input type="radio" name="adjustOption" value="editBill" id="change-final-bill">
+                    Edit Total Amount
+                </label>
+
+                <label>
+                    <input type="radio" name="adjustOption" value="discount" id="offer-discount">
+                    Enable discount
+                </label>
+                <!-- // TODO -> Palitan nyo label pag di madali intindihin -->
+                <div class="input-container">
+                    <label for="editedFinalBill">Enter Final Bill:</label>
+                    <input type="number" class="form-control" placeholder="e.g. 100" id="editedFinalBill"
+                        name="editedFinalBill" min="0" readonly>
+                </div>
+                <div class="input-container">
+                    <label for="discountAmount">Enter discount amount:</label>
+                    <input type="number" class="form-control" placeholder="e.g. 100" id="discountAmount"
+                        name="discountAmount" min="0" readonly>
+                </div>
+
+                <label>
+                    <input type="checkbox" name="applyAdditionalCharge" id="add-charge">
+                    Enable Additional Charge
+                </label>
+
+                <div class="input-container">
+                    <label for="additionalCharge">Additional Charge:</label>
+                    <input type="number" class="form-control" placeholder="e.g. 100" id="additionalCharge"
+                        name="additionalCharge" min="0" readonly>
+                </div>
+
+                <div class="input-container">
+                    <label for="approvalNotes">Approval Notes</label>
+                    <textarea rows="4" cols="50" class="form-control" name="approvalNotes" maxlength="50"
+                        id="approvalNotes" placeholder=" Optional"></textarea>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
