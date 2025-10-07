@@ -113,7 +113,7 @@ label {
   display: block;
   text-align: center;
   margin-bottom: 5px;
-  font-size: 18px;
+  font-size: 16px;
   font-family: "Poppins";
   font-weight: bold;
 }
@@ -218,7 +218,7 @@ label {
 #approveModalForm {
   width: 100% !important;
   margin: auto !important;
-  margin-top: 1vw !important;
+  /* margin-top: 1vw !important; */
 }
 
 .radio-container,
@@ -234,6 +234,49 @@ label {
   display: flex;
 }
 
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, auto);
+  gap: 8px;
+}
+
+#approveModal .modal-body {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-bottom: 70px;
+}
+
+.form-check label,
+.radio label {
+  font-weight: unset !important;
+  text-align: unset !important;
+}
+.cb-enabler {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.additionalCharge-container {
+  margin-top: 1rem;
+}
+
+.grand-total {
+  margin-top: 4rem;
+}
+
+.amount-balance {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+/* .checkbox-group .form-check {
+  border: 1px solid red;
+} */
 /* Tablet Portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
   .back-button {
