@@ -45,27 +45,27 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                             <a class="nav-link" href="../index.php"> Home</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                AMENITIES
+                                Amenities
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="amenities.php">RESORT AMENITIES</a></li>
-                                <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                                <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
+                                <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
+                                <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                                <li><a class="dropdown-item" href="events.php">Events</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">BLOG</a>
+                            <a class="nav-link active" href="#">Blog</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">BE OUR PARTNER</a>
+                            <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="about.php">ABOUT</a>
+                            <a class="nav-link " href="about.php">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="register.php">BOOK NOW</a>
+                            <a class="nav-link" href="register.php">Book Now</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="register.php">Sign Up</a>

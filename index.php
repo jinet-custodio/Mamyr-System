@@ -42,30 +42,30 @@ require 'Config/dbcon.php';
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
-                    <a class="nav-link" href="new_landingPage.php"> Home</a>
+                    <a class="nav-link active" href="index.php"> Home</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        AMENITIES
+                        Amenities
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="Pages/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="Pages/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="Pages/events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="Pages/amenities.php">Resort Amenities</a></li>
+                        <li><a class="dropdown-item" href="Pages/ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                        <li><a class="dropdown-item" href="Pages/events.php">Events</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/blog.php">BLOG</a>
+                    <a class="nav-link" href="Pages/blog.php">Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/beOurPartnerNew.php" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="Pages/beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/about.php">ABOUT</a>
+                    <a class="nav-link" href="Pages/about.php">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/register.php">BOOK NOW</a>
+                    <a class="nav-link" href="Pages/register.php">Book Now</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Pages/register.php">Sign Up</a>
@@ -177,18 +177,8 @@ require 'Config/dbcon.php';
 
         <div id="map"></div>
     </section>
-
-
-
-
-
-
-
-
-
-
-
-
+    <?php include 'Pages/Customer/footer.php';
+    include './Pages/loader.php'; ?>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
@@ -198,33 +188,33 @@ require 'Config/dbcon.php';
 
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const images = document.querySelectorAll(".card-img");
-        const total = images.length;
-        let current = 0;
+        document.addEventListener("DOMContentLoaded", function() {
+            const images = document.querySelectorAll(".card-img");
+            const total = images.length;
+            let current = 0;
 
-        function updateStack() {
-            images.forEach(img => img.className = "card-img"); // reset
-            const prev = (current - 1 + total) % total;
-            const next = (current + 1) % total;
+            function updateStack() {
+                images.forEach(img => img.className = "card-img"); // reset
+                const prev = (current - 1 + total) % total;
+                const next = (current + 1) % total;
 
-            images[current].classList.add("active");
-            images[prev].classList.add("behind-left");
-            images[next].classList.add("behind-right");
-        }
+                images[current].classList.add("active");
+                images[prev].classList.add("behind-left");
+                images[next].classList.add("behind-right");
+            }
 
-        document.getElementById("prevBtn").addEventListener("click", () => {
-            current = (current - 1 + total) % total;
-            updateStack();
+            document.getElementById("prevBtn").addEventListener("click", () => {
+                current = (current - 1 + total) % total;
+                updateStack();
+            });
+
+            document.getElementById("nextBtn").addEventListener("click", () => {
+                current = (current + 1) % total;
+                updateStack();
+            });
+
+            updateStack(); // initial
         });
-
-        document.getElementById("nextBtn").addEventListener("click", () => {
-            current = (current + 1) % total;
-            updateStack();
-        });
-
-        updateStack(); // initial
-    });
     </script>
 
     <!-- Swiper JS -->
@@ -232,44 +222,42 @@ require 'Config/dbcon.php';
 
     <!-- Initialize Swiper -->
     <script>
-    var swiper = new Swiper(".mySwiper", {
-        slidesPerView: 3,
-        spaceBetween: 30,
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-    });
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 3,
+            spaceBetween: 30,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
     </script>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-    const lat = 15.05073200154005;
-    const lon = 121.0218658098424;
+        const lat = 15.05073200154005;
+        const lon = 121.0218658098424;
 
-    const map = L.map('map').setView([lat, lon], 13);
+        const map = L.map('map').setView([lat, lon], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-
-    const customIcon = L.icon({
-        iconUrl: 'Assets/Images/MamyrLogo.png',
-        iconSize: [100, 25], // Size of the logo 
-        iconAnchor: [25, 50], // Anchor point of the icon 
-        popupAnchor: [0, -50] // Popup anchor point 
-    });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
 
-    L.marker([lat, lon], {
-            icon: customIcon
-        }).addTo(map)
-        .bindPopup('Mamyr Resort and Events Place is Located Here!')
-        .openPopup();
+        const customIcon = L.icon({
+            iconUrl: 'Assets/Images/MamyrLogo.png',
+            iconSize: [100, 25], // Size of the logo 
+            iconAnchor: [25, 50], // Anchor point of the icon 
+            popupAnchor: [0, -50] // Popup anchor point 
+        });
+
+
+        L.marker([lat, lon], {
+                icon: customIcon
+            }).addTo(map)
+            .bindPopup('Mamyr Resort and Events Place is Located Here!')
+            .openPopup();
     </script>
-
-    <?php include 'Pages/Customer/footer.php'; ?>
 
 </body>
 

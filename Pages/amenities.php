@@ -76,14 +76,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            AMENITIES
+                            Amenities
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item active" href="amenities.php">RESORT AMENITIES</a></li>
-                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                            <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
+                            <li><a class="dropdown-item active" href="amenities.php">Resort Amenities</a></li>
+                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                            <li><a class="dropdown-item" href="events.php">Events</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
