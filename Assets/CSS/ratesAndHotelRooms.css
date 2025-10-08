@@ -27,7 +27,7 @@
 }
 
 body {
-  background: #ffd787a0 !important;
+  background: #f5f5f5 !important;
 }
 
 .wrapper {
@@ -45,7 +45,7 @@ img {
 }
 
 .selection {
-  margin-top: 10vw;
+  margin-top: 6vw;
 }
 
 /* body css */
@@ -59,26 +59,13 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: center;
-  margin-bottom: 1vw;
-  margin-top: var(--margin-lg);
-}
-
-.backToSelection {
-  width: 90%;
-  display: flex;
-  justify-content: flex-start;
-  margin: 0 auto;
-}
-
-.backToSelection i {
-  font-size: 3.5vw;
+  width: 95%;
+  margin-top: var(--margin-m);
 }
 
 .card,
 .card-body {
   text-align: center;
-  width: 90%;
 }
 
 .card {
@@ -92,6 +79,7 @@ img {
   flex-direction: column;
   justify-content: center;
   margin: var(--margin-m) auto;
+  border-radius: var(--radius-lg);
 }
 
 .card-img-top.category {
@@ -104,21 +92,20 @@ img {
 }
 
 .card-title {
-  font-family: "Poppins Black";
+  font-family: "Poppins";
   font-style: italic;
   font-weight: bold;
   font-size: clamp(
-    var(--font-size-xxl),
-    calc(var(--font-size-lg) + 1vh),
-    var(--font-size-xl)
+    var(--font-size-lg),
+    calc(var(--font-size-md) + 1vh),
+    var(--font-size-md)
   );
-  color: #00b3d1 !important;
   text-align: center;
 }
 
 .categoryLink {
   text-decoration: none;
-
+  color: gray;
   &:hover {
     text-decoration: none !important;
   }
@@ -129,24 +116,27 @@ img {
 }
 
 .categoryLink:hover .card {
-  transform: translateY(-12px);
+  transform: translateY(-6px);
   box-shadow: 0 8px 6px rgba(39, 183, 255, 0.4);
 }
 
-/* rates code */
-
-.rates,
-.hotelRooms {
-  margin-top: 10vw;
+.categoryLink .selected {
+  color: var(--blue-350) !important;
+  text-decoration: underline;
 }
 
+/* rates code */
+#rates,
+#hotelRooms {
+  margin-top: var(--margin-md);
+}
 /* entrance */
 .entranceFee {
   display: flex;
   flex-wrap: wrap;
-  width: 90%;
+  width: 80%;
   justify-content: space-between;
-  margin: 0 auto;
+  margin: var(--margin-sm) auto;
 }
 
 .entranceTitleContainer {
@@ -160,28 +150,30 @@ img {
 .entranceLine {
   border: none;
   border-top: 5px solid #d48d31;
-  width: 30%;
+  width: 33%;
   margin: 0 auto;
   opacity: 1;
 }
 
 .entranceTitle {
-  margin-top: 2vw;
-  font-size: 2.8vw;
+  font-size: clamp(
+    var(--font-size-xxl),
+    calc(var(--font-size-lg) + 1vh),
+    var(--font-size-xl)
+  );
   font-family: "Lora";
 }
 
 .entranceCard {
-  padding: 3vw;
-  font-size: 1.5vw;
-  width: 22vw !important;
+  padding: 1vw;
+  font-size: var(--font-size-lg);
   display: grid;
   align-items: center;
 }
 
 .entrance-card-title {
   font-family: "Lora";
-  font-size: 1.7vw;
+  font-size: var(--font-size-xl);
   color: #212121 !important;
   text-align: center;
 }
@@ -200,9 +192,44 @@ img {
   margin: auto;
 }
 
+.swiper-container {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  overflow-y: hidden;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  width: 100% !important;
+}
+
+.swiper-pagination {
+  bottom: 10px !important;
+  text-align: center;
+}
+
+.card-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.card.cottage {
+  flex: 1;
+  min-width: 0;
+  max-width: 25%; /* 4 cards per slide */
+}
+
+.cottage img {
+  width: 100%;
+}
+
 .title {
   text-align: center;
-  margin-top: -3vw;
   margin-bottom: 1vw;
   font-size: clamp(
     var(--font-size-xxl),
@@ -222,6 +249,7 @@ img {
   display: flex;
   flex-wrap: wrap;
   width: 95%;
+  height: 100%;
   margin: 2vw auto;
   column-gap: 5px;
   row-gap: 2vw;
