@@ -1,0 +1,22 @@
+PAGES LINKED WITH THE LATEST BOOTSTRAP CSS AND JS
+
+
+
+
+ADMIN PAGE
+1. adminDashboard.php
+2. booking.php
+
+
+
+
+CUSTOMER PAGE
+
+
+
+BUSINESS PARTNER PAGE
+
+
+
+
+ACCOUNT PAGE
