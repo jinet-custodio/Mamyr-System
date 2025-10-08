@@ -24,6 +24,8 @@ require 'Config/dbcon.php';
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Swiper's CSS Link  -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -161,6 +163,82 @@ require 'Config/dbcon.php';
         </div>
     </section>
 
+    <section class="rating-container">
+        <div class="locationText-container">
+            <h3 class="videoTitle">Why Guests Keep Coming Back</h3>
+
+
+            <p class="videoDescription indent">
+                Guests often return to Mamyr Resort and Events Place for the exceptional experience we offer across
+                every aspect of the resort. From our beautiful grounds to our attentive service, we’re dedicated to
+                creating spaces where visitors feel at home. Consistent feedback reflects our commitment to quality,
+                making Mamyr a standout destination for relaxation and celebration alike.
+            </p>
+
+        </div>
+
+        <div class="card ratings-card">
+            <div class="card-body graph-card-body">
+                <!-- <div class="graph-header">
+                    <i class="bi bi-star"></i>
+                    <h6 class="graph-header-text">Ratings</h6>
+                </div> -->
+
+                <div class="rating-categories">
+                    <!-- Resort -->
+                    <div class="rating-row">
+                        <div class="rating-label">Resort</div>
+                        <div class="rating-bar">
+                            <div class="progress">
+                                <div class="progress-bar" id="resort-bar" role="progressbar" style="width: 88%;"
+                                    aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div class="rating-value" id="resort-rating-value">4.4</div>
+                    </div>
+
+                    <!-- Hotel -->
+                    <div class="rating-row">
+                        <div class="rating-label">Hotel</div>
+                        <div class="rating-bar">
+                            <div class="progress">
+                                <div class="progress-bar" id="hotel-bar" role="progressbar" style="width: 92%;"
+                                    aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div class="rating-value" id="hotel-rating-value">4.6</div>
+                    </div>
+
+                    <!-- Event -->
+                    <div class="rating-row">
+                        <div class="rating-label">Event</div>
+                        <div class="rating-bar">
+                            <div class="progress">
+                                <div class="progress-bar" id="event-bar" role="progressbar" style="width: 95%;"
+                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div class="rating-value" id="event">4.8</div>
+                    </div>
+
+                    <!-- Overall Rating (Optional) -->
+                    <div class="overall-rating">
+                        <div class="overall-rating-label">
+                            <h6 class="overall-rating-label">Overall Rating</h6>
+                            <h4 class="overall-rating-value">4.6</h4>
+                        </div>
+                        <div class="overall-rating-stars">
+                            <i class="bi bi-star-fill" id="overall-rating"></i>
+                            <i class="bi bi-star-fill" id="overall-rating"></i>
+                            <i class="bi bi-star-fill" id="overall-rating"></i>
+                            <i class="bi bi-star-fill" id="overall-rating"></i>
+                            <i class="bi bi-star-fill" id="overall-rating"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="location-container">
         <div class="locationText-container">
@@ -188,33 +266,33 @@ require 'Config/dbcon.php';
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const images = document.querySelectorAll(".card-img");
-            const total = images.length;
-            let current = 0;
+    document.addEventListener("DOMContentLoaded", function() {
+        const images = document.querySelectorAll(".card-img");
+        const total = images.length;
+        let current = 0;
 
-            function updateStack() {
-                images.forEach(img => img.className = "card-img"); // reset
-                const prev = (current - 1 + total) % total;
-                const next = (current + 1) % total;
+        function updateStack() {
+            images.forEach(img => img.className = "card-img"); // reset
+            const prev = (current - 1 + total) % total;
+            const next = (current + 1) % total;
 
-                images[current].classList.add("active");
-                images[prev].classList.add("behind-left");
-                images[next].classList.add("behind-right");
-            }
+            images[current].classList.add("active");
+            images[prev].classList.add("behind-left");
+            images[next].classList.add("behind-right");
+        }
 
-            document.getElementById("prevBtn").addEventListener("click", () => {
-                current = (current - 1 + total) % total;
-                updateStack();
-            });
-
-            document.getElementById("nextBtn").addEventListener("click", () => {
-                current = (current + 1) % total;
-                updateStack();
-            });
-
-            updateStack(); // initial
+        document.getElementById("prevBtn").addEventListener("click", () => {
+            current = (current - 1 + total) % total;
+            updateStack();
         });
+
+        document.getElementById("nextBtn").addEventListener("click", () => {
+            current = (current + 1) % total;
+            updateStack();
+        });
+
+        updateStack(); // initial
+    });
     </script>
 
     <!-- Swiper JS -->
@@ -222,41 +300,41 @@ require 'Config/dbcon.php';
 
     <!-- Initialize Swiper -->
     <script>
-        var swiper = new Swiper(".mySwiper", {
-            slidesPerView: 3,
-            spaceBetween: 30,
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-        });
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+    });
     </script>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        const lat = 15.05073200154005;
-        const lon = 121.0218658098424;
+    const lat = 15.05073200154005;
+    const lon = 121.0218658098424;
 
-        const map = L.map('map').setView([lat, lon], 13);
+    const map = L.map('map').setView([lat, lon], 13);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-
-        const customIcon = L.icon({
-            iconUrl: 'Assets/Images/MamyrLogo.png',
-            iconSize: [100, 25], // Size of the logo 
-            iconAnchor: [25, 50], // Anchor point of the icon 
-            popupAnchor: [0, -50] // Popup anchor point 
-        });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
 
-        L.marker([lat, lon], {
-                icon: customIcon
-            }).addTo(map)
-            .bindPopup('Mamyr Resort and Events Place is Located Here!')
-            .openPopup();
+    const customIcon = L.icon({
+        iconUrl: 'Assets/Images/MamyrLogo.png',
+        iconSize: [100, 25], // Size of the logo 
+        iconAnchor: [25, 50], // Anchor point of the icon 
+        popupAnchor: [0, -50] // Popup anchor point 
+    });
+
+
+    L.marker([lat, lon], {
+            icon: customIcon
+        }).addTo(map)
+        .bindPopup('Mamyr Resort and Events Place is Located Here!')
+        .openPopup();
     </script>
 
 </body>
