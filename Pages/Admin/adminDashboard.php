@@ -12,7 +12,6 @@
     <!-- CSS Links -->
     <!-- Bootstrap Links -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Links -->
     <!-- Icon Links -->
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke.css" />
@@ -59,6 +58,10 @@
             <li class="nav-item">
                 <i class="bi bi-pencil-square"></i>
                 <a class="nav-link" href="editWebsite/editWebsite.php">Edit Website</a>
+            </li>
+            <li class="nav-item">
+                <i class="bi bi-clock-history"></i>
+                <a class="nav-link" href="auditLogs.php">Audit Logs</a>
             </li>
         </ul>
 
@@ -323,9 +326,7 @@
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Chart JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
