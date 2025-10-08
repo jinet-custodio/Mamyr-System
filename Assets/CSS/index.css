@@ -315,6 +315,13 @@ input[type="password"]::-webkit-search-cancel-button {
 .signUpLink {
   text-decoration: none;
   font-size: 16px;
+  border: none;
+  background-color: transparent !important;
+  color: #0d6dfc;
+}
+
+.signUpLink:hover {
+  color: #0148b4;
 }
 
 .confirmErrorMsg {
@@ -374,6 +381,82 @@ input[type="password"]::-webkit-search-cancel-button {
 }
 
 /*end of modal css */
+
+/* user type modal */
+.btn-close {
+  margin: 0 !important;
+  position: absolute;
+  right: 1.5%;
+}
+
+.user-category {
+  display: flex;
+  justify-content: center;
+}
+
+#usertype-modal-content {
+  width: 90rem !important;
+}
+
+#userType-modal-label {
+  font-size: 22px;
+  display: block !important;
+  margin: auto !important;
+}
+.category-card {
+  width: 15rem;
+  height: 22rem !important;
+}
+.category-card,
+.category-body {
+  margin: 1vw;
+  border-radius: 2vw 2vw 2vw 2vw !important;
+  text-align: center;
+}
+
+.category-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1vw;
+}
+
+.category-card img {
+  object-fit: cover;
+  width: 12rem;
+  height: auto;
+  margin: auto;
+}
+
+.category-title {
+  font-family: "Poppins Black" !important;
+  font-style: italic;
+  font-weight: bolder;
+  font-size: 18px;
+  color: #0865b1 !important;
+}
+
+.card-text {
+  color: black;
+  font-size: 16px;
+}
+
+a.categoryLink {
+  text-decoration: none;
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+.categoryLink .category-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.categoryLink:hover .category-card {
+  transform: translateY(-12px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+}
+/* user type modal */
 
 @media screen and (max-width: 650px) {
   .container {

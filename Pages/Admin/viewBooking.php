@@ -76,15 +76,15 @@ if (isset($_POST['bookingID'])) {
             <?php
             $button = !empty($_POST['button']) ? mysqli_real_escape_string($conn, $_POST['button']) : 'payment';
             if ($button === 'booking') { ?>
-                <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/arrowBtnWhite.png"
-                        alt="Back Button"></a>
+            <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/arrowBtnWhite.png"
+                    alt="Back Button"></a>
             <?php   } elseif ($button === 'payment') {  ?>
-                <form action="viewPayments.php" method="POST" style="display:inline;">
-                    <input type="hidden" name="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
-                    <button type="submit" class="btn btn-primary back">
-                        <img src="../../Assets/Images/Icon/arrowBtnWhite.png" alt="Back Button">
-                    </button>
-                </form>
+            <form action="viewPayments.php" method="POST" style="display:inline;">
+                <input type="hidden" name="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
+                <button type="submit" class="btn btn-primary back">
+                    <img src="../../Assets/Images/Icon/arrowBtnWhite.png" alt="Back Button">
+                </button>
+            </form>
             <?php   } ?>
             <h5 class="page-title">Guest Booking Information</h5>
         </div>
@@ -422,11 +422,27 @@ if (isset($_POST['bookingID'])) {
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <p>State the reason for rejection</p>
-                                <textarea rows="4" cols="50" name="rejectionReason" id="rejectionReason"></textarea>
+
+                                <h6 class="reject-label fw-bold">Select a Reason for Rejection</h6>
+                                <div class="form-group mt-4">
+                                    <select class="form-select" id="select-reject" aria-label="rejection-reason"
+                                        onchange="otherReason()">
+                                        <option value="" disabled selected>Select a reason</option>
+                                        <option value="option1">Di ko bet customer</option>
+                                        <option value="option2">Dami request</option>
+                                        <option value="option3">Kuripot</option>
+                                        <option value="other">Other (Please specify)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-4" id="otherInputGroup" style="display: none;">
+                                    <h6 class="otherReason-label fw-bold">Please Specify</h6>
+                                    <input type="text" class="form-control" id="rejectReason-textBox"
+                                        placeholder="Enter your option">
+                                </div>
+
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
                             </div>
                         </div>
@@ -444,56 +460,13 @@ if (isset($_POST['bookingID'])) {
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <!-- // TODO -> Pakipalitan yung notes na they can change the final bill or the discount amount (pacheck grammary na lang) try nyo dark red -->
-                                <p>
-                                    Note: You can either change the total amount or apply a discount, not both.
+                                <p class="approvalModal-p">You are about to approve a booking. Please review the
+                                    details carefully. Once you
+                                    approve, the booking will be finalized and cannot be undone.</p>
+                                <p class="approvalModal-p"><strong>Do you want to approve this booking?</strong>
                                 </p>
-                                <div class="input-container">
-                                    <label for="finalBill">Final Bill:</label>
-                                    <input type="text" class="form-control" placeholder="e.g. 100" name="finalBill"
-                                        min="0" value="₱<?= number_format($finalBill, 2) ?>" readonly>
-                                </div>
-                                <label>
-                                    <input type="radio" name="adjustOption" value="editBill" id="change-final-bill">
-                                    Edit Total Amount
-                                </label>
-
-                                <label>
-                                    <input type="radio" name="adjustOption" value="discount" id="offer-discount">
-                                    Enable discount
-                                </label>
-                                <!-- // TODO -> Palitan nyo label pag di madali intindihin -->
-                                <div class="input-container">
-                                    <label for="editedFinalBill">Enter Final Bill:</label>
-                                    <input type="number" class="form-control" placeholder="e.g. 100"
-                                        id="editedFinalBill" name="editedFinalBill" min="0" readonly>
-                                </div>
-                                <div class="input-container">
-                                    <label for="discountAmount">Enter discount amount:</label>
-                                    <input type="number" class="form-control" placeholder="e.g. 100" id="discountAmount"
-                                        name="discountAmount" min="0" readonly>
-                                </div>
-
-                                <label>
-                                    <input type="checkbox" name="applyAdditionalCharge" id="add-charge">
-                                    Enable Additional Charge
-                                </label>
-
-                                <div class="input-container">
-                                    <label for="additionalCharge">Additional Charge:</label>
-                                    <input type="number" class="form-control" placeholder="e.g. 100"
-                                        id="additionalCharge" name="additionalCharge" min="0" readonly>
-                                </div>
-
-                                <div class="input-container">
-                                    <label for="approvalNotes">Approval Notes</label>
-                                    <textarea rows="4" cols="50" class="form-control" name="approvalNotes"
-                                        maxlength="50" id="approvalNotes" placeholder=" Optional"></textarea>
-                                </div>
-
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
                             </div>
                         </div>
@@ -512,18 +485,18 @@ if (isset($_POST['bookingID'])) {
                                     readonly>
                             </div>
                             <?php if ($bookingType === 'Resort') { ?>
-                                <div class="info-container" id="booking-info-container">
-                                    <label for="tourType" class="info-label">Tour Type</label>
-                                    <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
-                                    <input type="text" class="form-control inputDetail" name="tourType"
-                                        value="<?= $tourType ?> Swimming" readonly>
-                                </div>
+                            <div class="info-container" id="booking-info-container">
+                                <label for="tourType" class="info-label">Tour Type</label>
+                                <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
+                                <input type="text" class="form-control inputDetail" name="tourType"
+                                    value="<?= $tourType ?> Swimming" readonly>
+                            </div>
                             <?php } elseif ($bookingType === 'Event') { ?>
-                                <div class="info-container" id="booking-info-container">
-                                    <label for="eventType" class="info-label">Event Type</label>
-                                    <input type="text" name="eventType" id="eventType" class="form-control inputDetail"
-                                        readonly value="<?= $eventType ?>">
-                                </div>
+                            <div class="info-container" id="booking-info-container">
+                                <label for="eventType" class="info-label">Event Type</label>
+                                <input type="text" name="eventType" id="eventType" class="form-control inputDetail"
+                                    readonly value="<?= $eventType ?>">
+                            </div>
                             <?php } ?>
                         </div>
 
@@ -560,76 +533,76 @@ if (isset($_POST['bookingID'])) {
 
                         <div class="bookingDetails mt-3">
                             <?php if ($bookingType !== 'Event') { ?>
-                                <div class="servicesDetails">
-                                    <h1 class="card-title text-center">Services</h1>
-                                    <div class="servicesInfo">
-                                        <ul>
-                                            <?php
+                            <div class="servicesDetails">
+                                <h1 class="card-title text-center">Services</h1>
+                                <div class="servicesInfo">
+                                    <ul>
+                                        <?php
                                             foreach ($services as $service) {
                                             ?>
-                                                <li><?= $service ?></li>
-                                            <?php
+                                        <li><?= $service ?></li>
+                                        <?php
                                             }
                                             ?>
-                                        </ul>
-                                    </div>
+                                    </ul>
                                 </div>
+                            </div>
 
                             <?php } else { ?>
 
-                                <div class="venueDetails">
-                                    <h1 class="card-title text-center">Venue</h1>
-                                    <input type="text" readonly class="form-control inputDetail" name="venue" id="venue"
-                                        value="<?= $venue ?>">
+                            <div class="venueDetails">
+                                <h1 class="card-title text-center">Venue</h1>
+                                <input type="text" readonly class="form-control inputDetail" name="venue" id="venue"
+                                    value="<?= $venue ?>">
+                            </div>
+                            <h1 class="card-title text-center">Selected Menu</h1>
+                            <div class="foodDetails">
+                                <?php if (!empty($foodList)) { ?>
+                                <?php foreach ($foodList as $category => $name) { ?>
+                                <div class="foodList">
+                                    <p><?= htmlspecialchars($category) ?></p>
+                                    <ul>
+                                        <li>
+                                            <input type="text" name="foodIDs[<?= htmlspecialchars($foodID) ?>]"
+                                                class="form-control inputDetail" value="<?= htmlspecialchars($name) ?>">
+                                        </li>
+                                    </ul>
                                 </div>
-                                <h1 class="card-title text-center">Selected Menu</h1>
-                                <div class="foodDetails">
-                                    <?php if (!empty($foodList)) { ?>
-                                        <?php foreach ($foodList as $category => $name) { ?>
-                                            <div class="foodList">
-                                                <p><?= htmlspecialchars($category) ?></p>
-                                                <ul>
-                                                    <li>
-                                                        <input type="text" name="foodIDs[<?= htmlspecialchars($foodID) ?>]"
-                                                            class="form-control inputDetail" value="<?= htmlspecialchars($name) ?>">
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        <?php } ?>
-                                    <?php } else { ?>
-                                        <h1 class="text-center defaultMess">No Food Selected!</h1>
-                                    <?php } ?>
-                                </div>
+                                <?php } ?>
+                                <?php } else { ?>
+                                <h1 class="text-center defaultMess">No Food Selected!</h1>
+                                <?php } ?>
+                            </div>
 
-                                <div class="partnerService">
-                                    <h1 class="card-title text-center">Additional Services</h1>
-                                    <?php if (!empty($partnerServices)) { ?>
-                                        <?php foreach ($partnerServices as $partnershipServiceID => $services) {
+                            <div class="partnerService">
+                                <h1 class="card-title text-center">Additional Services</h1>
+                                <?php if (!empty($partnerServices)) { ?>
+                                <?php foreach ($partnerServices as $partnershipServiceID => $services) {
                                             foreach ($services as $name => $price) { ?>
-                                                <ul>
-                                                    <li class="servicesList">
-                                                        <input type="hidden" name="partnerServices[<?= $partnerServiceID ?>]"
-                                                            class="form-control inputDetail" value="<?= htmlspecialchars($name) ?>">
-                                                        <?= htmlspecialchars($name) ?> &mdash; ₱<?= number_format($price, 2) ?>
-                                                    </li>
-                                                </ul>
-                                            <?php } ?>
-                                        <?php } ?>
-                                    <?php } else { ?>
-                                        <h1 class="text-center defaultMess">No Additional Services Selected!</h1>
-                                    <?php } ?>
-                                </div>
+                                <ul>
+                                    <li class="servicesList">
+                                        <input type="hidden" name="partnerServices[<?= $partnerServiceID ?>]"
+                                            class="form-control inputDetail" value="<?= htmlspecialchars($name) ?>">
+                                        <?= htmlspecialchars($name) ?> &mdash; ₱<?= number_format($price, 2) ?>
+                                    </li>
+                                </ul>
+                                <?php } ?>
+                                <?php } ?>
+                                <?php } else { ?>
+                                <h1 class="text-center defaultMess">No Additional Services Selected!</h1>
+                                <?php } ?>
+                            </div>
                             <?php  } ?>
 
 
 
                             <div class="row3 mt-4">
                                 <?php if ($bookingType !== 'Event') { ?>
-                                    <div class="additionalServices" id="booking-info-container">
-                                        <label for="addOns" class="info-label mb-2">Additional Services</label>
-                                        <input type="text" class="form-control inputDetail" name="addOns" id="addOns"
-                                            value="<?= $additionalServices ?>" readonly>
-                                    </div>
+                                <div class="additionalServices" id="booking-info-container">
+                                    <label for="addOns" class="info-label mb-2">Additional Services</label>
+                                    <input type="text" class="form-control inputDetail" name="addOns" id="addOns"
+                                        value="<?= $additionalServices ?>" readonly>
+                                </div>
                                 <?php  } ?>
                                 <div class="peopleCountContainer" id="booking-info-container">
                                     <label for="paxNum" class="info-label mb-2">Number of People:</label>
@@ -652,35 +625,35 @@ if (isset($_POST['bookingID'])) {
                                     id="paymentMethod" value="<?= $paymentMethod ?>" readonly>
                             </div>
                             <?php if ($bookingStatusName === 'Approved') { ?>
-                                <div class="info-container paymentInfo">
-                                    <label for="paymentStatus" class="mt-2">Payment Status</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="paymentStatus"
-                                        id="paymentStatus" value="<?= $paymentStatusName ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo">
+                                <label for="paymentStatus" class="mt-2">Payment Status</label>
+                                <input type="text" class="form-control inputDetail w-50" name="paymentStatus"
+                                    id="paymentStatus" value="<?= $paymentStatusName ?>" readonly>
+                            </div>
                             <?php } ?>
 
                             <?php if ($bookingType === 'Event') { ?>
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="venuePrice" class="mt-2">Venue Price</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="venuePrice"
-                                        id="venuePrice" value="₱<?= number_format($venuePrice, 2) ?>" readonly>
-                                </div>
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="pricePerHead" class="mt-2">Price Per Head</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="pricePerHead"
-                                        id="pricePerHead" value="₱<?= number_format($pricePerHead, 2) ?>" readonly>
-                                </div>
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="foodPriceTotal" class="mt-2">Total Food Price</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="foodPriceTotal"
-                                        id="foodPriceTotal" value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
-                                </div>
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="additionalServicePrice" class="mt-2">Additional Services Price</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="additionalServicePrice"
-                                        id="additionalServicePrice"
-                                        value="₱<?= number_format($additionalServicePrice, 2) ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="venuePrice" class="mt-2">Venue Price</label>
+                                <input type="text" class="form-control inputDetail w-50" name="venuePrice"
+                                    id="venuePrice" value="₱<?= number_format($venuePrice, 2) ?>" readonly>
+                            </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="pricePerHead" class="mt-2">Price Per Head</label>
+                                <input type="text" class="form-control inputDetail w-50" name="pricePerHead"
+                                    id="pricePerHead" value="₱<?= number_format($pricePerHead, 2) ?>" readonly>
+                            </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="foodPriceTotal" class="mt-2">Total Food Price</label>
+                                <input type="text" class="form-control inputDetail w-50" name="foodPriceTotal"
+                                    id="foodPriceTotal" value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
+                            </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="additionalServicePrice" class="mt-2">Additional Services Price</label>
+                                <input type="text" class="form-control inputDetail w-50" name="additionalServicePrice"
+                                    id="additionalServicePrice"
+                                    value="₱<?= number_format($additionalServicePrice, 2) ?>" readonly>
+                            </div>
 
                             <?php } ?>
 
@@ -691,21 +664,21 @@ if (isset($_POST['bookingID'])) {
                             </div>
 
                             <?php if ($bookingStatusName === 'Approved') { ?>
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="paymentDue" class="mt-2">Payment Due Date</label>
-                                    <input type="text" class="form-control inputDetail w-50" value="<?= $paymentDueDate ?>"
-                                        readonly>
-                                </div>
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="userBalance" class="mt-2">User Balance</label>
-                                    <input type="text" class="form-control inputDetail w-50"
-                                        value="₱<?= number_format($userBalance, 2) ?>" readonly>
-                                </div>
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="amountPaid" class="mt-2">Amount Paid</label>
-                                    <input type="text" class="form-control inputDetail w-50"
-                                        value="₱<?= number_format($amountPaid, 2) ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="paymentDue" class="mt-2">Payment Due Date</label>
+                                <input type="text" class="form-control inputDetail w-50" value="<?= $paymentDueDate ?>"
+                                    readonly>
+                            </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="userBalance" class="mt-2">User Balance</label>
+                                <input type="text" class="form-control inputDetail w-50"
+                                    value="₱<?= number_format($userBalance, 2) ?>" readonly>
+                            </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="amountPaid" class="mt-2">Amount Paid</label>
+                                <input type="text" class="form-control inputDetail w-50"
+                                    value="₱<?= number_format($amountPaid, 2) ?>" readonly>
+                            </div>
                             <?php } ?>
 
                             <div class="info-container paymentInfo" id="payment-info">
@@ -760,7 +733,7 @@ if (isset($_POST['bookingID'])) {
                     <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus"
                         value="<?= $paymentApprovalStatusName ?? 'None' ?>">
                     <?php foreach ($serviceIDs as $serviceID): ?>
-                        <input type="hidden" name="serviceIDs[]" value="<?= $serviceID ?>">
+                    <input type="hidden" name="serviceIDs[]" value="<?= $serviceID ?>">
                     <?php endforeach; ?>
                     <input type="hidden" name="endDate" id="endDate" value="<?= $rawEndDate ?>">
                     <input type="hidden" name="startDate" id="startDate" value="<?= $rawStartDate ?>">
@@ -781,119 +754,131 @@ if (isset($_POST['bookingID'])) {
 
     <!-- Allow adding discount and changing final bill -->
     <script>
-        const changeFinalBillRadio = document.getElementById('change-final-bill');
-        const offerDiscountRadio = document.getElementById('offer-discount');
-        const finalBillInput = document.getElementById('editedFinalBill');
-        const discountInput = document.getElementById('discountAmount');
-        const addChargeCheckBox = document.getElementById('add-charge');
-        const additionalChargeInput = document.getElementById('additionalCharge');
+    const changeFinalBillRadio = document.getElementById('change-final-bill');
+    const offerDiscountRadio = document.getElementById('offer-discount');
+    const finalBillInput = document.getElementById('editedFinalBill');
+    const discountInput = document.getElementById('discountAmount');
+    const addChargeCheckBox = document.getElementById('add-charge');
+    const additionalChargeInput = document.getElementById('additionalCharge');
 
-        function resetInputs() {
-            finalBillInput.readOnly = true;
-            finalBillInput.style.border = '';
-            discountInput.readOnly = true;
-            discountInput.style.border = '';
+    function resetInputs() {
+        finalBillInput.readOnly = true;
+        finalBillInput.style.border = '';
+        discountInput.readOnly = true;
+        discountInput.style.border = '';
+    }
+
+    function updateInputs() {
+        resetInputs();
+
+        if (changeFinalBillRadio.checked) {
+            // Enable and highlight final bill input
+            finalBillInput.readOnly = false;
+            finalBillInput.style.border = '1px solid red';
+
+            // Clear discount input
+            discountInput.value = '';
+        } else if (offerDiscountRadio.checked) {
+            // Enable and highlight discount input
+            discountInput.readOnly = false;
+            discountInput.style.border = '1px solid red';
+
+            // Clear final bill input
+            finalBillInput.value = '';
         }
+    }
 
-        function updateInputs() {
-            resetInputs();
-
-            if (changeFinalBillRadio.checked) {
-                // Enable and highlight final bill input
-                finalBillInput.readOnly = false;
-                finalBillInput.style.border = '1px solid red';
-
-                // Clear discount input
-                discountInput.value = '';
-            } else if (offerDiscountRadio.checked) {
-                // Enable and highlight discount input
-                discountInput.readOnly = false;
-                discountInput.style.border = '1px solid red';
-
-                // Clear final bill input
-                finalBillInput.value = '';
-            }
+    addChargeCheckBox.addEventListener('change', function() {
+        if (addChargeCheckBox.checked) {
+            additionalChargeInput.readOnly = !this.checked;
+            additionalChargeInput.style.border = '1px solid red';
+        } else {
+            additionalChargeInput.value = '';
+            additionalChargeInput.style.border = '1px solid rgb(117, 117, 117)';
         }
-
-        addChargeCheckBox.addEventListener('change', function() {
-            if (addChargeCheckBox.checked) {
-                additionalChargeInput.readOnly = !this.checked;
-                additionalChargeInput.style.border = '1px solid red';
-            } else {
-                additionalChargeInput.value = '';
-                additionalChargeInput.style.border = '1px solid rgb(117, 117, 117)';
-            }
-        })
+    })
 
 
 
-        // Listen for changes on both radios
-        changeFinalBillRadio.addEventListener('change', updateInputs);
-        offerDiscountRadio.addEventListener('change', updateInputs);
+    // Listen for changes on both radios
+    changeFinalBillRadio.addEventListener('change', updateInputs);
+    offerDiscountRadio.addEventListener('change', updateInputs);
     </script>
 
 
 
     <!--//* Hiding buttons -->
     <script>
-        const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
-        const bookingStatus = document.getElementById('bookingStatusName').value;
+    const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
+    const bookingStatus = document.getElementById('bookingStatusName').value;
 
-        const buttonContainer = document.getElementById('button-container');
+    const buttonContainer = document.getElementById('button-container');
 
-        if (paymentApprovalStatus === 'Done' ||
-            bookingStatus === 'Expired' ||
-            bookingStatus === 'Rejected' ||
-            bookingStatus === 'Cancelled' ||
-            paymentApprovalStatus === 'Rejected' ||
-            paymentApprovalStatus === 'Cancelled' ||
-            bookingStatus === 'Approved') {
-            buttonContainer.style.display = "none";
-        }
+    if (paymentApprovalStatus === 'Done' ||
+        bookingStatus === 'Expired' ||
+        bookingStatus === 'Rejected' ||
+        bookingStatus === 'Cancelled' ||
+        paymentApprovalStatus === 'Rejected' ||
+        paymentApprovalStatus === 'Cancelled' ||
+        bookingStatus === 'Approved') {
+        buttonContainer.style.display = "none";
+    }
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
 
-        if (paramValue === "approvalFailed") {
-            Swal.fire({
-                title: "Failed!",
-                text: "The booking request could not be approved. Please try again later.",
-                icon: 'error',
-            });
-        } else if (paramValue === 'rejectionEmpty') {
-            Swal.fire({
-                title: "Oops!",
-                text: "Please provide the reason for your rejection",
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then((result) => {
-                const rejectionModal = document.getElementById('rejectionModal');
-                const modal = new bootstrap.modal(rejectionModal);
-                modal.show();
+    if (paramValue === "approvalFailed") {
+        Swal.fire({
+            title: "Failed!",
+            text: "The booking request could not be approved. Please try again later.",
+            icon: 'error',
+        });
+    } else if (paramValue === 'rejectionEmpty') {
+        Swal.fire({
+            title: "Oops!",
+            text: "Please provide the reason for your rejection",
+            icon: 'warning',
+            confirmButtonText: 'Okay',
+        }).then((result) => {
+            const rejectionModal = document.getElementById('rejectionModal');
+            const modal = new bootstrap.modal(rejectionModal);
+            modal.show();
 
-                document.getElementById('rejectionReason').style.border = '1px solid red';
-            });
-        } else if (paramValue === 'rejectionFailed') {
-            Swal.fire({
-                title: "Failed!",
-                text: "The booking request could not be rejected. Please try again later.",
-                icon: 'error',
-            });
-        }
+            document.getElementById('rejectionReason').style.border = '1px solid red';
+        });
+    } else if (paramValue === 'rejectionFailed') {
+        Swal.fire({
+            title: "Failed!",
+            text: "The booking request could not be rejected. Please try again later.",
+            icon: 'error',
+        });
+    }
 
-        if (paramValue) {
-            const url = new URLSearchParams(window.location);
-            url.search = '';
-            history.replaceState({}, document.title.url.toString());
-        }
+    if (paramValue) {
+        const url = new URLSearchParams(window.location);
+        url.search = '';
+        history.replaceState({}, document.title.url.toString());
+    }
     </script>
 
+    <script>
+    function otherReason() {
+        var selectBox = document.getElementById("select-reject");
+        var otherInputGroup = document.getElementById("otherInputGroup");
 
+        // Show or hide the text box when "Other (Please specify)" is selected
+        if (selectBox.value === "other") {
+            otherInputGroup.style.display = "block"; // Show the text box
+        } else {
+            otherInputGroup.style.display = "none"; // Hide the text box
+        }
+    }
+    </script>
 </body>
 
 </html>

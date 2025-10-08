@@ -52,8 +52,12 @@ resetExpiredOTPs($conn);
                 <button type="submit" class="btn btn-primary" id="login" name="login">Login</button>
 
                 <div class="signUpSection">
-                    <p>Don't have an account? <a href="userType.php" class="signUpLink">Sign Up
-                        </a></p>
+                    <p>Don't have an account? <button type="button" class="signUpLink" data-bs-toggle="modal"
+                            data-bs-target="#userType-modal">
+                            Sign Up
+                        </button></p>
+                    <!-- <p>Don't have an account? <a href="userType.php" class="signUpLink">Sign Up
+                        </a></p> -->
 
 
                 </div>
@@ -94,7 +98,8 @@ resetExpiredOTPs($conn);
                 <h1 id="signUpTitle">Sign Up</h1>
                 <div class="fullName">
                     <div class="input-box">
-                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" maxlength="30"
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
+                            maxlength="30"
                             value="<?php echo isset($_SESSION['registerFormData']['firstName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['firstName'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user-circle'></i>
@@ -109,7 +114,8 @@ resetExpiredOTPs($conn);
                 </div>
                 <div class="userInfo">
                     <div class="input-box">
-                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" maxlength="30"
+                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
+                            maxlength="30"
                             value="<?php echo isset($_SESSION['registerFormData']['lastName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['lastName'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user-circle'></i>
@@ -209,6 +215,51 @@ resetExpiredOTPs($conn);
     </div>
 
 
+    <!-- User Type Modal -->
+    <div class="modal fade" id="userType-modal" role=" dialog" aria-labelledby="userType-modal-label">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" id="usertype-modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="userType-modal-label">I am signing up as:</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body user-category">
+
+                    <a href="register.php?page=register" id="partner-link" class="categoryLink">
+                        <div class="card category-card ">
+                            <img class="card-img-top" src="../Assets/Images/UserTypePhotos/customer.png" alt="Partners">
+
+                            <div class="category-body m-auto">
+                                <h5 class="category-title m-auto">Customer</h5>
+                                <p class="card-text">I am interested in making bookings and viewing the amenities of
+                                    the resort.
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="busPartnerRegister.php" id="request-link" class="categoryLink">
+                        <div class="card category-card ">
+                            <img class="card-img-top" src="../Assets/Images/UserTypePhotos/businessPartner.png"
+                                alt="Business Partner">
+
+                            <div class="category-body m-auto">
+                                <h5 class="category-title m-auto">Business Partner</h5>
+                                <p class="card-text"> I want to request for a partnership to offer my services to
+                                    customers of
+                                    the resort.</p>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- User Type Modal -->
+
+
     <!-- terms and conditions modal -->
     <div class="modal fade" id="termsModal" role=" dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -303,7 +354,8 @@ resetExpiredOTPs($conn);
                             aria-label="Close">Decline</button>
                     </div>
                     <div class="acceptBtnContainer">
-                        <button type="button" class="btn btn-primary" id="acceptTermsBtn" onclick="AcceptTerms()">Accept</button>
+                        <button type="button" class="btn btn-primary" id="acceptTermsBtn"
+                            onclick="AcceptTerms()">Accept</button>
                     </div>
                 </div>
             </div>
@@ -337,138 +389,138 @@ resetExpiredOTPs($conn);
 
     <!-- Loader function -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const signUpBtn = document.getElementById('signUp');
-            const loginBtn = document.getElementById('login');
-            const loginEmail = document.getElementById('login_email');
-            const loginPassword = document.getElementById('login_password');
-            const loader = document.getElementById('loader');
+    document.addEventListener('DOMContentLoaded', function() {
+        const signUpBtn = document.getElementById('signUp');
+        const loginBtn = document.getElementById('login');
+        const loginEmail = document.getElementById('login_email');
+        const loginPassword = document.getElementById('login_password');
+        const loader = document.getElementById('loader');
 
 
-            // Click event on the button
-            signUpBtn.addEventListener('click', function(e) {
-                document.getElementById('loaderOverlay').style.display = 'flex';
-            });
-            loginBtn.addEventListener('click', function(e) {
-                document.getElementById('loaderOverlay').style.display = 'flex';
-            });
+        // Click event on the button
+        signUpBtn.addEventListener('click', function(e) {
+            document.getElementById('loaderOverlay').style.display = 'flex';
         });
+        loginBtn.addEventListener('click', function(e) {
+            document.getElementById('loaderOverlay').style.display = 'flex';
+        });
+    });
     </script>
 
 
     <script>
-        const container = document.querySelector('.container');
-        const registerBtn = document.querySelector('.register-btn');
-        const loginBtn = document.querySelector('.login-btn');
+    const container = document.querySelector('.container');
+    const registerBtn = document.querySelector('.register-btn');
+    const loginBtn = document.querySelector('.login-btn');
 
-        // registerBtn.addEventListener('click', () => {
-        //     container.classList.add('active');
-        // });
+    // registerBtn.addEventListener('click', () => {
+    //     container.classList.add('active');
+    // });
 
-        loginBtn.addEventListener('click', () => {
-            container.classList.remove('active');
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove('active');
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
+    const action = urlParams.get('action');
+
+    if (page === 'register') {
+        container.classList.add('active');
+
+        // 🔽 Remove `?page=register` from URL after activating the form
+        const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({}, document.title, urlWithoutParam);
+    } else {
+        container.classList.remove('active');
+    }
+
+    if (action === "deleted") {
+        Swal.fire({
+            title: "Success",
+            text: "Your account has been deleted successfully.",
+            icon: "success"
         });
+    } else if (action === "unauthorized") {
+        Swal.fire({
+            title: "Oops",
+            text: "You are not authorized to access this page.",
+            icon: "warning"
+        })
+    } else if (action === "notVerified") {
+        Swal.fire({
+            title: "Oops",
+            text: "User not verified. Please verify your account.",
+            icon: "warning"
+        })
+    } else if (action === "emailExist") {
+        Swal.fire({
+            title: "Oops",
+            text: "An account with this email already exists.",
+            icon: "warning"
+        })
+    } else if (action === "OTPFailed") {
+        Swal.fire({
+            title: "Oops",
+            text: "We couldn’t send the OTP. Please try again.",
+            icon: "warning"
+        })
+    } else if (action === "successVerification") {
+        Swal.fire({
+            title: "Verified Successfully",
+            text: "Your account has been verified. You may now log in to your account.",
+            icon: "success"
+        })
+    } else if (action === 'partner-registered') {
+        Swal.fire({
+            position: 'center',
+            title: 'Verified Successfully',
+            text: 'Partner has been successfully registered and verified.',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
-        const action = urlParams.get('action');
-
-        if (page === 'register') {
-            container.classList.add('active');
-
-            // 🔽 Remove `?page=register` from URL after activating the form
-            const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({}, document.title, urlWithoutParam);
-        } else {
-            container.classList.remove('active');
-        }
-
-        if (action === "deleted") {
-            Swal.fire({
-                title: "Success",
-                text: "Your account has been deleted successfully.",
-                icon: "success"
-            });
-        } else if (action === "unauthorized") {
-            Swal.fire({
-                title: "Oops",
-                text: "You are not authorized to access this page.",
-                icon: "warning"
-            })
-        } else if (action === "notVerified") {
-            Swal.fire({
-                title: "Oops",
-                text: "User not verified. Please verify your account.",
-                icon: "warning"
-            })
-        } else if (action === "emailExist") {
-            Swal.fire({
-                title: "Oops",
-                text: "An account with this email already exists.",
-                icon: "warning"
-            })
-        } else if (action === "OTPFailed") {
-            Swal.fire({
-                title: "Oops",
-                text: "We couldn’t send the OTP. Please try again.",
-                icon: "warning"
-            })
-        } else if (action === "successVerification") {
-            Swal.fire({
-                title: "Verified Successfully",
-                text: "Your account has been verified. You may now log in to your account.",
-                icon: "success"
-            })
-        } else if (action === 'partner-registered') {
-            Swal.fire({
-                position: 'center',
-                title: 'Verified Successfully',
-                text: 'Partner has been successfully registered and verified.',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1500
-            })
-        }
-
-        if (page || action) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (page || action) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
     <!-- Eye icon of password show and hide -->
     <script>
-        const passwordField = document.getElementById('login_password');
-        const passwordField1 = document.getElementById('password');
-        const passwordField2 = document.getElementById('confirm_password');
-        const togglePassword = document.getElementById('togglePassword');
-        const togglePassword1 = document.getElementById('togglePassword1');
-        const togglePassword2 = document.getElementById('togglePassword2');
+    const passwordField = document.getElementById('login_password');
+    const passwordField1 = document.getElementById('password');
+    const passwordField2 = document.getElementById('confirm_password');
+    const togglePassword = document.getElementById('togglePassword');
+    const togglePassword1 = document.getElementById('togglePassword1');
+    const togglePassword2 = document.getElementById('togglePassword2');
 
-        function togglePasswordVisibility(passwordField, toggleIcon) {
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('bxs-hide');
-                toggleIcon.classList.add('bx-show-alt');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('bx-show-alt');
-                toggleIcon.classList.add('bxs-hide');
-            }
+    function togglePasswordVisibility(passwordField, toggleIcon) {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('bxs-hide');
+            toggleIcon.classList.add('bx-show-alt');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('bx-show-alt');
+            toggleIcon.classList.add('bxs-hide');
         }
+    }
 
-        togglePassword.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField, togglePassword);
-        });
+    togglePassword.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField, togglePassword);
+    });
 
-        togglePassword1.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField1, togglePassword1);
-        });
+    togglePassword1.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField1, togglePassword1);
+    });
 
-        togglePassword2.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField2, togglePassword2);
-        });
+    togglePassword2.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField2, togglePassword2);
+    });
     </script>
 </body>
 

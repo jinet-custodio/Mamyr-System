@@ -414,7 +414,7 @@ input[type="password"]::-webkit-search-cancel-button {
 
   .profileImage {
     img {
-      height: clamp(13vw, 11vw, 10vw);
+      height: clamp(10vw, 11vw, 10vw);
     }
     margin: 1vw auto;
   }
@@ -454,9 +454,12 @@ input[type="password"]::-webkit-search-cancel-button {
   }
 
   .input-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     width: 90%;
-    flex-wrap: wrap;
     height: auto;
+    gap: 10px;
   }
 
   .info input:focus + label,
@@ -541,7 +544,7 @@ input[type="password"]::-webkit-search-cancel-button {
   #changeEmailBtn,
   #changePasswordBtn {
     font-size: clamp(1.8vw, 1.6vw, 1.4vw);
-    margin: 1.5vw auto 1vw auto;
+    margin: 2px auto 1vw 1vw;
   }
 
   .profile-info {
@@ -558,8 +561,13 @@ input[type="password"]::-webkit-search-cancel-button {
 
   .input-box {
     width: 90%;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    
   }
 
   .info input:focus + label,
@@ -569,7 +577,7 @@ input[type="password"]::-webkit-search-cancel-button {
 
   .input-box label {
     width: 25%;
-    font-size: clamp(2.2vw, 2vw, 1.9vw);
+    font-size: clamp(20px, 2vw, 1.9vw);
     text-align: center;
   }
 
@@ -636,6 +644,9 @@ input[type="password"]::-webkit-search-cancel-button {
   .profile-image {
     width: 35%;
   }
+  .profileImage img {
+    height: 9vw;
+  }
 
   .profile-pic {
     height: 18vw;
@@ -662,9 +673,12 @@ input[type="password"]::-webkit-search-cancel-button {
   }
 
   .input-box {
+    display: flex;
+    flex-direction: row;
     width: 100%;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     height: auto;
+    gap: 10px;
   }
 
   .input-box label {
