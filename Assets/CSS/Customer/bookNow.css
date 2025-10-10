@@ -38,11 +38,11 @@ body {
   width: 70%;
   margin: auto;
   text-align: center;
-  margin-top: 2vw !important;
+  margin-top: 1rem !important;
 }
 
 .title {
-  margin-top: 5vw;
+  margin-top: 2rem;
   font-size: 3vw;
   font-family: "Poppins Black";
   color: #e47807;

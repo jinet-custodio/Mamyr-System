@@ -1,8 +1,8 @@
- TABLE notification (
+ CREATE TABLE notification (
     notificationID INT AUTO_INCREMENT PRIMARY KEY,
     bookingID INT NULL,
     partnershipID INT NULL,
-    senderID INT NOT NULL,
+    senderID INT DEFAULT NULL,
     message TEXT NOT NULL,
     receiver ENUM ('Admin', 'Partner', 'Customer') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -15,7 +15,7 @@
 
 
 ALTER TABLE notification
-ADD receiverID INT NOT NULL AFTER senderID;
+ADD receiverID INT DEFAULT NULL AFTER senderID;
 
 ALTER TABLE notification
 ADD CONSTRAINT notification_ibfk_receiver

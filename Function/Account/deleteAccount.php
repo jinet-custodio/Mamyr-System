@@ -39,7 +39,7 @@ if (isset($_POST['yesDelete'])) {
         }
 
         $storedData = $result->fetch_assoc();
-        $OTP = generateOTP(6);
+        $OTP = generateCode(6);
         $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes'));
 
         $insertOTP = $conn->prepare("UPDATE user SET userOTP = ?, 
