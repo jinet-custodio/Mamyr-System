@@ -14,7 +14,7 @@ require '../Config/dbcon.php';
     <link rel="icon" type="image/x-icon" href="/Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/ratesAndHotelRooms.css">
     <link rel="stylesheet" href="../Assets/CSS/navbar.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -91,9 +91,9 @@ require '../Config/dbcon.php';
                 </div>
 
 
-                <div class="entrance" style="background-color:rgba(16, 128, 125, 1); padding: 0vw 0 1vw 0; ">
+                <div class="entrance mx-auto" style="padding: 0vw 0 1vw 0; ">
                     <div class=" entranceTitleContainer" style="padding-top: 2vw;">
-                        <hr class="entranceLine">
+
                         <h4 class="entranceTitle" style="color: whitesmoke;">Resort Entrance Fee</h4>
                     </div>
                     <div class="entranceFee">
@@ -123,7 +123,7 @@ require '../Config/dbcon.php';
                             // Display cards
                             foreach ($sessions as $session => $data) {
                         ?>
-                                <div class="entranceCard card">
+                                <div class="entranceCard card mx-auto">
                                     <div class="entrace-card-body">
                                         <h5 class="entrance-card-title">
                                             <span class="dayNight"><?= strtoupper($session) ?> TOUR</span><br>
@@ -146,191 +146,171 @@ require '../Config/dbcon.php';
                 </div>
 
                 <div class="titleContainer" style="margin-top: 2vw;">
-                    <hr class="entranceLine">
+
                     <h4 class="entranceTitle">Cottages</h4>
                 </div>
 
 
-                <div class="cottages">
-                    <div class="swiper-container">
+                <div class="cottages mx-auto">
+                    <div class="swiper-container cottage-swiper-container">
                         <div class="swiper-wrapper">
                             <?php
                             $cottagesql = "SELECT * FROM resortamenity WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
                             $cottresult = mysqli_query($conn, $cottagesql);
 
                             if (mysqli_num_rows($cottresult) > 0) {
-                                $count = 0;
                                 foreach ($cottresult as $cottage) {
-                                    // Start a new slide every 4 cottages
-                                    if ($count % 4 == 0) {
-                                        if ($count > 0) {
-                                            echo '</div></div>'; // Close .card-wrapper and .swiper-slide
-                                        }
-                                        echo '<div class="swiper-slide"><div class="card-wrapper">';
-                                    }
-
                                     $imgSrc = '../../Assets/Images/Services/Cottage/';
                                     $img = !empty($cottage['RSimageData']) ? $imgSrc . $cottage['RSimageData'] : '';
                             ?>
-                                    <div class="card cottage">
-                                        <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top">
-                                        <div class="card-body description">
-                                            <h2><?= $cottage['RServiceName'] ?></h2>
-                                            <p><?= $cottage['RSdescription'] ?></p>
-                                            <p class="font-weight-bold">Price: PHP <?= $cottage['RSprice'] ?></p>
-                                            <a href="register.php" class="btn btn-primary">Book Now</a>
+                                    <div class="swiper-slide">
+                                        <div class="card cottage">
+                                            <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top">
+                                            <div class="card-body description">
+                                                <h2 class="fw-bold"><?= $cottage['RServiceName'] ?></h2>
+                                                <p><?= $cottage['RSdescription'] ?></p>
+                                                <p class="font-weight-bold">Price: PHP <?= $cottage['RSprice'] ?></p>
+                                                <a href="register.php" class="btn btn-primary mt-auto">Book Now</a>
+                                            </div>
                                         </div>
                                     </div>
                             <?php
-                                    $count++;
-                                }
-
-                                // Close the last slide
-                                if ($count > 0) {
-                                    echo '</div></div>'; // Close .card-wrapper and .swiper-slide
                                 }
                             } else {
                                 echo "<h5>No Record Found</h5>";
                             }
                             ?>
                         </div>
+                    </div>
+                    <div class="swiper-pagination cottage-pagination"></div>
+                </div>
 
-                        <!-- Navigation & Pagination -->
-                        <div class="swiper-button-next my-auto"></div>
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-pagination"></div>
+
+                <div class="videoke mx-auto" style="background-color: oklch(0.64 0.65 220 / 0.1); padding: 0vw 0 3vw 0 ">
+                    <div class=" videokeTitleContainer">
+                        <h4 class="entranceTitle pt-3">Videoke for Rent</h4>
+                    </div>
+                    <div class="videokes d-flex">
+                        <?php
+                        $videoke = 'Videoke%';
+                        $vidsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName LIKE ?");
+                        $vidsql->bind_param('s', $videoke);
+                        $vidsql->execute();
+                        $vidresult = $vidsql->get_result();
+                        if ($vidresult->num_rows > 0) {
+                            while ($data = $vidresult->fetch_assoc()) {
+                        ?>
+                                <div class="section d-flex flex-column">
+                                    <div class="singleImg">
+                                        <?php
+                                        $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                                        if (!empty($data['RSimageData'])) {
+                                            $img = $imgSrc . $data['RSimageData'];
+                                        }
+                                        ?>
+                                        <img src="<?= $img ?>" alt="Videoke Image" class="rounded mx-auto" id="videokeDisplayPhoto">
+
+                                    </div>
+                                    <div class="Description" id="videokeDescContainer">
+                                        <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent </h2>
+                                        <p class="videokeDesc">
+                                            <?= $data['RSdescription'] ?>
+                                        </p>
+                                    </div>
+
+
+                                </div>
+                        <?php
+                            }
+                        } else {
+                            echo "<h5> No Record Found </h5>";
+                        }
+                        ?>
                     </div>
                 </div>
+                <div class="d-flex mt-3 billiardMassage">
+                    <div class="cottage section mx-auto d-flex align-items-center" id="billiards">
+                        <div class=" videokeTitleContainer mb-2" id="billiardCont">
+                            <h4 class="entranceTitle">Blliards Table for Rent</h4>
+                        </div>
+                        <?php
+                        $billiard = 'Billiard';
+                        $bilsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
+                        $bilsql->bind_param("s", $billiard);
+                        $bilsql->execute();
+                        $bilresult = $bilsql->get_result();
+                        if ($bilresult->num_rows > 0) {
+                            while ($data = $bilresult->fetch_assoc()) {
+                        ?>
+                                <div class="d-flex justify-content-center align-items-center" id="billiard-flex">
+                                    <div class="Description" id="videokeDescContainer">
+                                        <h2 class="text-center" id="videokePriceDesc">
+                                            Price: PHP<?= $data['RSprice'] ?> per Hour
+                                        </h2>
+                                        <p class="videokeDesc">
+                                            <?= $data['RSdescription'] ?>
+                                        </p>
+                                    </div>
+                                    <div class="singleImg">
+                                        <?php
+                                        $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                                        if (isset($data['RSimageData'])) {
+                                            $img = $imgSrc . $data['RSimageData'];
+                                        }
+                                        ?>
+                                        <img src=" <?= $img ?>" alt="Videoke Image" class="rounded mx-auto" id="billardsDisplayPhoto">
 
-
-
-
-
-                <div class="videoke" style="background-color:whitesmoke; padding: 0vw 0 3vw 0 ">
-                    <div class=" videokeTitleContainer" style="padding-top: 2vw;">
-                        <hr class="entranceLine">
-                        <h4 class="entranceTitle">Videoke for Rent</h4>
+                                    </div>
+                                </div>
+                        <?php
+                            }
+                        } else {
+                            echo "<h5> No Record Found </h5>";
+                        }
+                        ?>
                     </div>
-                    <?php
-                    $videoke = 'Videoke%';
-                    $vidsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName LIKE ?");
-                    $vidsql->bind_param('s', $videoke);
-                    $vidsql->execute();
-                    $vidresult = $vidsql->get_result();
-                    if ($vidresult->num_rows > 0) {
-                        while ($data = $vidresult->fetch_assoc()) {
-                    ?>
 
-                            <div class="section">
-                                <div class="singleImg">
-                                    <?php
-                                    $imgSrc = '../../Assets/Images/Services/Entertainment/';
-                                    if (!empty($data['RSimageData'])) {
-                                        $img = $imgSrc . $data['RSimageData'];
-                                    }
-                                    ?>
-                                    <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="videokeDisplayPhoto">
+                    <div class="massage section mx-auto d-flex flex-column flex-grow-1 flex-shrink-1">
+                        <div class=" videokeTitleContainer mb-2">
+                            <h4 class="entranceTitle">Massage Chair</h4>
+                        </div>
+                        <?php
+                        $Massage = 'Massage Chair';
+                        $massagesql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
+                        $massagesql->bind_param('s', $Massage);
+                        $massagesql->execute();
+                        $massageresult = $massagesql->get_result();
+                        if ($massageresult->num_rows > 0) {
+                            while ($data = $massageresult->fetch_assoc()) {
+                        ?>
+                                <div class="d-flex flex-column align-items-center justify-content-center" id="massage">
+                                    <div class="singleImg">
+                                        <?php
+                                        $imgSrc = '../../Assets/Images/Services/Entertainment/';
+                                        if (!empty($data['RSimageData'])) {
+                                            $img = $imgSrc . $data['RSimageData'];
+                                        }
+                                        ?>
+                                        <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded"
+                                            id="massageChairDisplayPhoto">
 
+                                    </div>
+                                    <div class="Description" id="massageDesc">
+                                        <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
+                                            <?= $data['RSduration'] ?>
+                                        </h2>
+                                        <p class="text-center">
+                                            <?= $data['RSdescription'] ?>
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="Description" id="videokeDescContainer">
-                                    <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent </h2>
-                                    <p class="videokeDesc">
-                                        <?= $data['RSdescription'] ?>
-                                    </p>
-                                </div>
-
-
-                            </div>
-                    <?php
+                        <?php
+                            }
+                        } else {
+                            echo "<h5> No Record Found </h5>";
                         }
-                    } else {
-                        echo "<h5> No Record Found </h5>";
-                    }
-                    ?>
-                </div>
-
-                <div class=" videokeTitleContainer" id="billiardCont" style="padding-top: 2vw;">
-                    <hr class="entranceLine">
-                    <h4 class="entranceTitle">Blliards Table for Rent</h4>
-                </div>
-                <div class="cottage " id="billiards">
-                    <?php
-                    $billiard = 'Billiard';
-                    $bilsql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
-                    $bilsql->bind_param("s", $billiard);
-                    $bilsql->execute();
-                    $bilresult = $bilsql->get_result();
-                    if ($bilresult->num_rows > 0) {
-                        while ($data = $bilresult->fetch_assoc()) {
-                    ?>
-                            <div class="Description" id="videokeDescContainer">
-                                <p class="videokeDesc">
-                                    <?= $data['RSdescription'] ?>
-                                </p>
-                                <p class="text-center" id="videokePriceDesc">
-                                    Price: PHP<?= $data['RSprice'] ?> per Hour
-                                </p>
-                            </div>
-                            <div class="singleImg" style="width:50%;">
-                                <?php
-                                $imgSrc = '../../Assets/Images/Services/Entertainment/';
-                                if (isset($data['RSimageData'])) {
-                                    $img = $imgSrc . $data['RSimageData'];
-                                }
-                                ?>
-                                <img src="<?= $img ?>" alt="Videoke Image" class="rounded" id="billardsDisplayPhoto">
-
-                            </div>
-                    <?php
-                        }
-                    } else {
-                        echo "<h5> No Record Found </h5>";
-                    }
-                    ?>
-
-                </div>
-                <div class="massage"
-                    style="background-color:rgba(125, 203, 242, 1); padding: 0vw 0 3vw 0; margin-bottom:3vw; ">
-                    <div class=" videokeTitleContainer" style="padding-top: 2vw;">
-                        <hr class="entranceLine">
-                        <h4 class="entranceTitle">Massage Chair</h4>
+                        ?>
                     </div>
-                    <?php
-                    $Massage = 'Massage Chair';
-                    $massagesql = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ?");
-                    $massagesql->bind_param('s', $Massage);
-                    $massagesql->execute();
-                    $massageresult = $massagesql->get_result();
-                    if ($massageresult->num_rows > 0) {
-                        while ($data = $massageresult->fetch_assoc()) {
-                    ?>
-                            <div class="section" id="massage">
-                                <div class="singleImg">
-                                    <?php
-                                    $imgSrc = '../../Assets/Images/Services/Entertainment/';
-                                    if (!empty($data['RSimageData'])) {
-                                        $img = $imgSrc . $data['RSimageData'];
-                                    }
-                                    ?>
-                                    <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded"
-                                        id="massageChairDisplayPhoto">
-
-                                </div>
-                                <div class="Description" id="massageDesc">
-                                    <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
-                                        <?= $data['RSduration'] ?>
-                                    </h2>
-                                    <p class="text-center">
-                                        <?= $data['RSdescription'] ?>
-                                    </p>
-                                </div>
-                            </div>
-                    <?php
-                        }
-                    } else {
-                        echo "<h5> No Record Found </h5>";
-                    }
-                    ?>
                 </div>
             </div>
 
@@ -354,17 +334,19 @@ require '../Config/dbcon.php';
                 </div>
                 <div class="container-fluid">
                     <div class=" entranceTitleContainer">
-                        <hr class="entranceLine">
                         <h4 class="entranceTitle" style="color: black;">Room Availability </h4>
                     </div>
                     <div class="filterBtns">
                         <input type="text" placeholder="Select your booking date" id="hotelDate">
                     </div>
                     <?php
-                    $availsql = "SELECT RServiceName, MIN(RSAvailabilityID) AS RSAvailabilityID, MIN(RSduration) AS RSduration
-                        FROM resortamenity
-                        WHERE RSCategoryID = 1
-                        GROUP BY RServiceName;";
+                    $availsql = "SELECT RServiceName, 
+                        MIN(RSAvailabilityID) AS RSAvailabilityID, 
+                        MIN(RSduration) AS RSduration
+                    FROM resortamenity
+                    WHERE RSCategoryID = 1
+                    GROUP BY RServiceName
+                    ORDER BY CAST(REGEXP_SUBSTR(RServiceName, '\\d+') AS UNSIGNED);";
 
                     $result = mysqli_query($conn, $availsql);
                     ?>
@@ -400,12 +382,11 @@ require '../Config/dbcon.php';
                                     $duration = htmlspecialchars($row['RSduration']);
                                     $availabilityStatus = $isAvailable ? 'available' : 'unavailable';
 
-                                    echo '<div class="hotelIconWithCaption" style="text-align: center;" 
-                                data-availability="' . $availabilityStatus . '">';
+                                    echo '<div class="hotelIconWithCaption d-flex flex-column align-items-center" data-availability="' . $availabilityStatus . '">';
 
 
-                                    echo '<a href="#' . trim($row['RServiceName']) . '">  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '"> </a>';
-                                    echo '  <p class="roomCaption">' . $roomName . '</p>';
+                                    echo '<a href="#' . trim($row['RServiceName']) . '" class="d-flex justify-content-center">  <img src="' . $iconPath . '" alt="' . $roomName . '" class="hotelIcon" id="hotelIcon' . $i . '"> </a>';
+                                    echo '<p class="roomCaption">' . $roomName . '</p>';
                                     echo '</div>';
 
                                     $i++;
@@ -420,63 +401,66 @@ require '../Config/dbcon.php';
                 </div>
                 <div class="ourRooms">
                     <div class="titleContainer">
-                        <hr class="entranceLine">
                         <h4 class="entranceTitle">Our Rooms</h4>
                     </div>
 
+                    <div class="hotelRoomList mx-auto">
+                        <div class="swiper-container hotel-swiper-container">
+                            <div class="swiper-wrapper">
+                                <?php
+                                $roomsql = "WITH Ranked AS (
+                                        SELECT *,
+                                            ROW_NUMBER() OVER (
+                                            PARTITION BY RServiceName
+                                            ORDER BY RSAvailabilityID
+                                            ) AS rn
+                                        FROM resortamenity
+                                        WHERE RSCategoryID = 1
+                                    )
+                                    SELECT *
+                                    FROM Ranked
+                                    WHERE rn = 1
+                                    ORDER BY CAST(SUBSTRING(RServiceName, 5) AS UNSIGNED);";
 
-                    <div class="hotelRoomList">
-                        <?php
-                        $roomsql = "WITH Ranked AS (
-                            SELECT *,
-                                    ROW_NUMBER() OVER (
-                                    PARTITION BY RServiceName
-                                    ORDER BY RSAvailabilityID
-                                    ) AS rn
-                            FROM resortamenity
-                            WHERE RSCategoryID = 1
-                            )
-                            SELECT *
-                            FROM Ranked
-                            WHERE rn = 1
-                            ORDER BY CAST(SUBSTRING(RServiceName, 5) AS UNSIGNED);";
-                        $roomresult = mysqli_query($conn, $roomsql);
-                        if (mysqli_num_rows($roomresult) > 0) {
-                            foreach ($roomresult as $hotel) {
-                        ?>
-                                <div class="hotel" id="<?= trim($hotel['RServiceName']) ?>">
-                                    <div class="halfImg">
-                                        <?php
+                                $roomresult = mysqli_query($conn, $roomsql);
+
+                                if (mysqli_num_rows($roomresult) > 0) {
+                                    foreach ($roomresult as $hotel) {
                                         $imgSrc = '../Assets/Images/amenities/hotelPics/hotel1.jpg';
                                         if (!empty($hotel['imageData'])) {
-                                            // $imgData = base64_encode($hotel['RSimageData']);
+                                            // You can use this if imageData is raw binary
+                                            // $imgData = base64_encode($hotel['imageData']);
                                             // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                         }
-                                        ?>
-                                        <img src="<?= $imgSrc ?>" alt="User Image" class="rounded" id="displayPhoto">
-                                    </div>
-
-                                    <div class="Description">
-                                        <h2 class="text bold font-weight-bold"> <?= $hotel['RServiceName']  ?> </h2>
-                                        <?php
-                                        $descriptions = explode(',', $hotel['RSdescription']);
-                                        foreach ($descriptions as $description) {
-                                        ?>
-                                            <p><?= "- " . trim($description) ?><br></p>
-                                        <?php } ?>
-                                        <p class="font-weight-bold">
-                                            Price: PHP <?= $hotel['RSprice'] ?>
-                                        </p>
-                                    </div>
-                                </div>
-                        <?php
-                            }
-                        } else {
-                            echo "<h5> No Record Found </h5>";
-                        }
-                        ?>
+                                ?>
+                                        <div class="swiper-slide">
+                                            <div class="card hotel" id="<?= trim($hotel['RServiceName']) ?>">
+                                                <img src="<?= $imgSrc ?>" alt="Hotel Image" class="card-img-top rounded">
+                                                <div class="card-body description">
+                                                    <h2 class="text fw-bold bold roomNum"><?= $hotel['RServiceName'] ?></h2>
+                                                    <?php
+                                                    $descriptions = explode(',', $hotel['RSdescription']);
+                                                    foreach ($descriptions as $description) {
+                                                    ?>
+                                                        <p><?= "- " . trim($description) ?><br></p>
+                                                    <?php } ?>
+                                                    <p class="font-weight-bold">
+                                                        Price: PHP <?= $hotel['RSprice'] ?>
+                                                    </p>
+                                                    <a href="register.php" class="btn btn-primary">Book Now</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                <?php
+                                    }
+                                } else {
+                                    echo "<h5>No Record Found</h5>";
+                                }
+                                ?>
+                            </div>
+                        </div>
+                        <div class="swiper-pagination hotel-pagination"></div>
                     </div>
-
                 </div>
             </div>
             <!-- Back to Top Button -->
@@ -547,7 +531,16 @@ require '../Config/dbcon.php';
                 top: 0,
                 behavior: 'smooth'
             });
+        });
 
+        document.addEventListener('DOMContentLoaded', () => {
+            if (ratesTitle.classList.contains('selected')) {
+                document.getElementById('hotelRooms').style.display = 'none';
+                document.getElementById('rates').style.display = 'block';
+            } else if (hotelTitle.classList.contains('selected')) {
+                document.getElementById('rates').style.display = 'none';
+                document.getElementById('hotelRooms').style.display = 'block';
+            }
         });
     </script>
 
@@ -637,28 +630,65 @@ require '../Config/dbcon.php';
                 .catch(console.error);
         }
 
-        // Re-fetch availability whenever the date changes
         document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
         document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
     </script>
     <!-- SwiperJS JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
-
     <script>
-        const swiper = new Swiper('.swiper-container', {
-            slidesPerView: 1,
+        const cottageSwiper = new Swiper('.cottage-swiper-container', {
+            slidesPerView: 4,
             spaceBetween: 30,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
             pagination: {
-                el: '.swiper-pagination',
+                el: '.cottage-pagination',
                 clickable: true,
             },
+            breakpoints: {
+                0: {
+                    slidesPerView: 1,
+                    spaceBetween: 15,
+                },
+                600: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                992: {
+                    slidesPerView: 3,
+                    spaceBetween: 25,
+                },
+                1200: {
+                    slidesPerView: 4,
+                    spaceBetween: 30,
+                }
+            }
+        });
+
+
+        const hotelSwiper = new Swiper('.hotel-swiper-container', {
+            slidesPerView: 3, // show 3 cards per view
+            spaceBetween: 30,
+            pagination: {
+                el: '.hotel-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                0: {
+                    slidesPerView: 1, // Mobile
+                    spaceBetween: 20,
+                },
+                600: {
+                    slidesPerView: 2, // Tablet
+                    spaceBetween: 25,
+                },
+                992: {
+                    slidesPerView: 3, // Desktop
+                    spaceBetween: 30,
+                }
+            }
         });
     </script>
+
 </body>
 
 </html>

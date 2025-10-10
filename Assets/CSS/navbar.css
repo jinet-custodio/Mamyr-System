@@ -250,7 +250,7 @@
   margin-top: 0 !important;
 
   img {
-    height: 50px;
+    height: 40px;
     border-radius: 50%;
     aspect-ratio: 1;
     object-fit: cover;
@@ -261,6 +261,10 @@
     display: flex;
     align-items: center;
   }
+}
+
+.btn .badge {
+  top: 10px !important;
 }
 
 #notifs {
@@ -298,10 +302,12 @@ img {
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   .notification-container {
     margin-left: var(--margin-sm);
+    width: 50px;
+    overflow-x: visible;
   }
   .navbar {
     background-color: transparent;
-    --bs-navbar-padding-y: 0 !important;
+    padding-top: 1vw;
   }
 
   button.position-relative {
@@ -322,7 +328,7 @@ img {
   .navbar-toggler {
     float: right;
     background-color: #ffffff !important;
-    margin: 3vw;
+    margin: 1vw;
     border: none;
 
     &:focus,
@@ -338,6 +344,11 @@ img {
     align-items: center;
     height: 30px;
     aspect-ratio: 1;
+    margin-right: var(--margin-xs);
+  }
+
+  .btn .badge {
+    top: -2px !important;
   }
 
   .notifBtn {
@@ -425,6 +436,10 @@ img {
     aspect-ratio: 1;
   }
 
+  .btn .badge {
+    top: 4px !important;
+  }
+
   .notificationIcon {
     display: flex;
     align-items: center;
@@ -437,7 +452,6 @@ img {
   }
 
   .navbar-toggler {
-    margin-top: 2vw;
     margin-right: 3vw;
   }
 
@@ -460,5 +474,13 @@ img {
   }
   .notificationIcon {
     height: clamp(7vw, 6vw, 5vw);
+  }
+
+  .navbar-toggler-icon {
+    width: 19px !important;
+  }
+
+  .btn .badge {
+    font-size: var(--font-size-xs) !important;
   }
 }
