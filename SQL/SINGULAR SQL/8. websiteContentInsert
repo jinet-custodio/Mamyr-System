@@ -76,3 +76,4 @@ INSERT INTO `resortinfo`(`resortInfoTitle`, `resortInfoName`, `resortInfoDetail`
 ('Logo', 'MamyrLogo.png', 'Mamyr Logo');
 
 INSERT INTO `resortinfo` (`resortInfoID`, `resortInfoTitle`, `resortInfoName`, `resortInfoDetail`) VALUES (NULL, 'Resort Owner', 'Owner Full Name', 'Myrna C. Dela Cruz - Prop.');
+INSERT INTO `resortinfo` (`resortInfoID`, `resortInfoTitle`, `resortInfoName`, `resortInfoDetail`) VALUES (NULL, 'paymentInformation ', 'gcashNumber', '(0998) 962 4697 - Mamerto Dela Cruz');

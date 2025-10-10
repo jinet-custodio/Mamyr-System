@@ -208,6 +208,30 @@ button.close {
 }
 /* modal css */
 
+#phoneNumber {
+  position: relative;
+}
+
+.custom-tooltip {
+  position: absolute;
+  color: #ff0000;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  top: -30px;
+  left: 0;
+  z-index: 10;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.custom-tooltip.show {
+  display: block;
+  opacity: 1;
+}
+
 @media screen and (max-width: 600px) {
   .column {
     width: 100%;

@@ -102,8 +102,8 @@ if (isset($_POST['bookingID'])) {
         if ($resultUserInfo->num_rows > 0) {
             $data = $resultUserInfo->fetch_assoc();
             $customerID = (int) $data['userID'];
-            $middleInitial = trim($data['middleInitial']);
-            $name = ucfirst($data['firstName']) . " " . ucfirst($data['middleInitial']) . " "  . ucfirst($data['lastName']);
+            $middleInitial = trim($data['middleInitial'] ?? '');
+            $name = ucfirst($data['firstName'] ?? '') . " " . $middleInitial . " "  . ucfirst($data['lastName'] ?? '');
             $email = $data['email'];
             $phoneNumber = $data['phoneNumber'];
             $address = $data['userAddress'];
@@ -422,11 +422,27 @@ if (isset($_POST['bookingID'])) {
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <p>State the reason for rejection</p>
-                                <textarea rows="4" cols="50" name="rejectionReason" id="rejectionReason"></textarea>
+
+                                <h6 class="reject-label fw-bold">Select a Reason for Rejection</h6>
+                                <div class="form-group mt-4">
+                                    <select class="form-select" id="select-reject" aria-label="rejection-reason"
+                                        onchange="otherReason()">
+                                        <option value="" disabled selected>Select a reason</option>
+                                        <option value="option1">Di ko bet customer</option>
+                                        <option value="option2">Dami request</option>
+                                        <option value="option3">Kuripot</option>
+                                        <option value="other">Other (Please specify)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-4" id="otherInputGroup" style="display: none;">
+                                    <h6 class="otherReason-label fw-bold">Please Specify</h6>
+                                    <input type="text" class="form-control" id="rejectReason-textBox"
+                                        placeholder="Enter your option">
+                                </div>
+
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
                             </div>
                         </div>
@@ -444,56 +460,13 @@ if (isset($_POST['bookingID'])) {
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <!-- // TODO -> Pakipalitan yung notes na they can change the final bill or the discount amount (pacheck grammary na lang) try nyo dark red -->
-                                <p>
-                                    Note: You can either change the total amount or apply a discount, not both.
+                                <p class="approvalModal-p">You are about to approve a booking. Please review the
+                                    details carefully. Once you
+                                    approve, the booking will be finalized and cannot be undone.</p>
+                                <p class="approvalModal-p"><strong>Do you want to approve this booking?</strong>
                                 </p>
-                                <div class="input-container">
-                                    <label for="finalBill">Final Bill:</label>
-                                    <input type="text" class="form-control" placeholder="e.g. 100" name="finalBill"
-                                        min="0" value="₱<?= number_format($finalBill, 2) ?>" readonly>
-                                </div>
-                                <label>
-                                    <input type="radio" name="adjustOption" value="editBill" id="change-final-bill">
-                                    Edit Total Amount
-                                </label>
-
-                                <label>
-                                    <input type="radio" name="adjustOption" value="discount" id="offer-discount">
-                                    Enable discount
-                                </label>
-                                <!-- // TODO -> Palitan nyo label pag di madali intindihin -->
-                                <div class="input-container">
-                                    <label for="editedFinalBill">Enter Final Bill:</label>
-                                    <input type="number" class="form-control" placeholder="e.g. 100"
-                                        id="editedFinalBill" name="editedFinalBill" min="0" readonly>
-                                </div>
-                                <div class="input-container">
-                                    <label for="discountAmount">Enter discount amount:</label>
-                                    <input type="number" class="form-control" placeholder="e.g. 100" id="discountAmount"
-                                        name="discountAmount" min="0" readonly>
-                                </div>
-
-                                <label>
-                                    <input type="checkbox" name="applyAdditionalCharge" id="add-charge">
-                                    Enable Additional Charge
-                                </label>
-
-                                <div class="input-container">
-                                    <label for="additionalCharge">Additional Charge:</label>
-                                    <input type="number" class="form-control" placeholder="e.g. 100"
-                                        id="additionalCharge" name="additionalCharge" min="0" readonly>
-                                </div>
-
-                                <div class="input-container">
-                                    <label for="approvalNotes">Approval Notes</label>
-                                    <textarea rows="4" cols="50" class="form-control" name="approvalNotes"
-                                        maxlength="50" id="approvalNotes" placeholder=" Optional"></textarea>
-                                </div>
-
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
                             </div>
                         </div>
@@ -893,7 +866,19 @@ if (isset($_POST['bookingID'])) {
         }
     </script>
 
+    <script>
+        function otherReason() {
+            var selectBox = document.getElementById("select-reject");
+            var otherInputGroup = document.getElementById("otherInputGroup");
 
+            // Show or hide the text box when "Other (Please specify)" is selected
+            if (selectBox.value === "other") {
+                otherInputGroup.style.display = "block"; // Show the text box
+            } else {
+                otherInputGroup.style.display = "none"; // Hide the text box
+            }
+        }
+    </script>
 </body>
 
 </html>

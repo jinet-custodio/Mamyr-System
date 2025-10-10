@@ -23,6 +23,7 @@ require '../Config/dbcon.php';
     <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 
 <body>
@@ -40,28 +41,27 @@ require '../Config/dbcon.php';
                         <a class="nav-link" href="../index.php"> Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            AMENITIES
+                            Amenities
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item " href="amenities.php">RESORT AMENITIES</a></li>
-                            <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a>
-                            </li>
-                            <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
+                            <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
+                            <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                            <li><a class="dropdown-item" href="events.php">Events</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog.php">BLOG</a>
+                        <a class="nav-link" href="blog.php">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">BE OUR PARTNER</a>
+                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="about.php">ABOUT</a>
+                        <a class="nav-link " href="about.php">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="register.php">BOOK NOW</a>
+                        <a class="nav-link" href="register.php">Book Now</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="register.php">Sign Up</a>
@@ -72,47 +72,26 @@ require '../Config/dbcon.php';
 
         <main>
             <div class="selection" id="selection" style="display: block;">
-                <div class="titleContainer">
-                    <h4 class="title" id="mainTitle">RATES AND HOTEL ROOMS</h4>
-                </div>
-
-                <div class="categories" id="categories">
-
+                <div class="categories mx-auto" id="categories">
                     <a class="categoryLink d-flex justify-content-center" onclick="showRates(event)">
-                        <div class="card " style="flex-direction: column;">
-                            <img class="card-img-top category" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg"
-                                alt="Resort Rates">
-
-                            <div class="card-body">
-                                <h5 class="card-title">Resort Rates</h5>
-                            </div>
-                        </div>
+                        <h5 class="card-title m-auto selected" id="ratesTitle">Resort Rates</h5>
                     </a>
 
                     <a class="categoryLink  d-flex justify-content-center" onclick="showHotels(event)">
-                        <div class="card" style="flex-direction: column;">
-                            <img class="card-img-top category" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg"
-                                alt="Hotel Rooms">
-                            <div class="card-body">
-                                <h5 class="card-title">Hotel Rooms</h5>
-                            </div>
-                        </div>
+                        <h5 class="card-title m-auto" id="hotelTitle">Hotel Rooms</h5>
                     </a>
 
                 </div>
             </div>
 
 
-            <div class="rates" id="rates" style="display: none;">
-                <div class="backToSelection" id="backToSelection">
-                    <i class="fa-solid fa-arrow-left" style="color: #121212;" onclick="backToSelection()"></i>
-                </div>
+            <div class="rates" id="rates">
                 <div class="titleContainer">
                     <h4 class="title">Our Rates</h4>
                 </div>
 
 
-                <div class="entrance" style="background-color:rgba(16, 128, 125, 1); padding: 0vw 0 3vw 0; ">
+                <div class="entrance" style="background-color:rgba(16, 128, 125, 1); padding: 0vw 0 1vw 0; ">
                     <div class=" entranceTitleContainer" style="padding-top: 2vw;">
                         <hr class="entranceLine">
                         <h4 class="entranceTitle" style="color: whitesmoke;">Resort Entrance Fee</h4>
@@ -147,7 +126,7 @@ require '../Config/dbcon.php';
                                 <div class="entranceCard card">
                                     <div class="entrace-card-body">
                                         <h5 class="entrance-card-title">
-                                            <span class="dayNight"><?= strtoupper($session) ?></span><br>
+                                            <span class="dayNight"><?= strtoupper($session) ?> TOUR</span><br>
                                             <?= $data['time_range'] ?>
                                         </h5>
                                         <div class="entrance-card-content">
@@ -173,39 +152,57 @@ require '../Config/dbcon.php';
 
 
                 <div class="cottages">
-                    <?php
-                    $cottagesql = "SELECT * FROM resortamenity WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
-                    $cottresult = mysqli_query($conn, $cottagesql);
-                    if (mysqli_num_rows($cottresult) > 0) {
-                        foreach ($cottresult as $cottage) {
-                    ?>
-                            <div class="card cottage" id="cottageCard">
-                                <?php
-                                $imgSrc = '../../Assets/Images/Services/Cottage/';
-                                if (!empty($cottage['RSimageData'])) {
-                                    $img = $imgSrc . $cottage['RSimageData'];
-                                }
-                                ?>
-                                <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top" id="cottageDisplayPhoto">
-                                <div class="card-body description">
-                                    <h2> <?= $cottage['RServiceName'] ?> </h2>
-                                    <p>
-                                        <?= $cottage['RSdescription'] ?>
-                                    </p>
-                                    <p class="font-weight-bold">
-                                        Price: PHP <?= $cottage['RSprice'] ?>
-                                    </p>
-                                    <a href="resortBooking.php" class="btn btn-primary">Book Now</a>
-                                </div>
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <?php
+                            $cottagesql = "SELECT * FROM resortamenity WHERE RSCategoryID = 2 AND RSAvailabilityID = 1";
+                            $cottresult = mysqli_query($conn, $cottagesql);
 
-                            </div>
-                    <?php
-                        }
-                    } else {
-                        echo "<h5> No Record Found </h5>";
-                    }
-                    ?>
+                            if (mysqli_num_rows($cottresult) > 0) {
+                                $count = 0;
+                                foreach ($cottresult as $cottage) {
+                                    // Start a new slide every 4 cottages
+                                    if ($count % 4 == 0) {
+                                        if ($count > 0) {
+                                            echo '</div></div>'; // Close .card-wrapper and .swiper-slide
+                                        }
+                                        echo '<div class="swiper-slide"><div class="card-wrapper">';
+                                    }
+
+                                    $imgSrc = '../../Assets/Images/Services/Cottage/';
+                                    $img = !empty($cottage['RSimageData']) ? $imgSrc . $cottage['RSimageData'] : '';
+                            ?>
+                                    <div class="card cottage">
+                                        <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top">
+                                        <div class="card-body description">
+                                            <h2><?= $cottage['RServiceName'] ?></h2>
+                                            <p><?= $cottage['RSdescription'] ?></p>
+                                            <p class="font-weight-bold">Price: PHP <?= $cottage['RSprice'] ?></p>
+                                            <a href="register.php" class="btn btn-primary">Book Now</a>
+                                        </div>
+                                    </div>
+                            <?php
+                                    $count++;
+                                }
+
+                                // Close the last slide
+                                if ($count > 0) {
+                                    echo '</div></div>'; // Close .card-wrapper and .swiper-slide
+                                }
+                            } else {
+                                echo "<h5>No Record Found</h5>";
+                            }
+                            ?>
+                        </div>
+
+                        <!-- Navigation & Pagination -->
+                        <div class="swiper-button-next my-auto"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
                 </div>
+
+
 
 
 
@@ -338,9 +335,6 @@ require '../Config/dbcon.php';
             </div>
 
             <div class="hotelRooms" id="hotelRooms" style="display: none;">
-                <div class="backToSelection" id="backToSelection">
-                    <i class="fa-solid fa-arrow-left" style="color: #121212;" onclick="backToSelection()"></i>
-                </div>
                 <div class="titleContainer" id="hotelTitle">
                     <h4 class="title">Hotel Rooms</h4>
                     <p class="hotelDescription">Mamyr Resort and Events Place is not only a venue for unforgettable
@@ -445,8 +439,7 @@ require '../Config/dbcon.php';
                             SELECT *
                             FROM Ranked
                             WHERE rn = 1
-                            ORDER BY CAST(SUBSTRING(RServiceName, 5) AS UNSIGNED);
-                             ";
+                            ORDER BY CAST(SUBSTRING(RServiceName, 5) AS UNSIGNED);";
                         $roomresult = mysqli_query($conn, $roomsql);
                         if (mysqli_num_rows($roomresult) > 0) {
                             foreach ($roomresult as $hotel) {
@@ -506,29 +499,31 @@ require '../Config/dbcon.php';
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script>
-        const backbtn = document.getElementById("backToSelection");
-
-        function backToSelection() {
-            document.getElementById('selection').style.display = 'block';
-            document.getElementById('hotelRooms').style.display = 'none';
-            document.getElementById('rates').style.display = 'none';
-            document.getElementById("footer").style.marginTop = "5vw";
-        };
+        const ratesTitle = document.getElementById("ratesTitle");
+        const hotelTitle = document.getElementById("hotelTitle");
 
         function showRates(event) {
             event.preventDefault();
-            document.getElementById('selection').style.display = 'none';
             document.getElementById('hotelRooms').style.display = 'none';
             document.getElementById('rates').style.display = 'block';
-            document.getElementById("footer").style.marginTop = "3vw";
+            if (!ratesTitle.classList.contains('selected')) {
+                ratesTitle.classList.add('selected');
+            };
+            if (hotelTitle.classList.contains('selected')) {
+                hotelTitle.classList.remove('selected')
+            }
         }
 
         function showHotels(event) {
             event.preventDefault();
-            document.getElementById('selection').style.display = 'none';
             document.getElementById('hotelRooms').style.display = 'block';
             document.getElementById('rates').style.display = 'none';
-            document.getElementById("footer").style.marginTop = "3vw";
+            if (!hotelTitle.classList.contains('selected')) {
+                hotelTitle.classList.add('selected');
+            };
+            if (ratesTitle.classList.contains('selected')) {
+                ratesTitle.classList.remove('selected')
+            }
         }
 
         flatpickr('#hotelDate', {
@@ -558,15 +553,10 @@ require '../Config/dbcon.php';
 
     <!-- filters hotel rooms by the hour -->
     <script>
-        // State variables
         let currentAvailabilityFilter = 'all';
-
-        // Initialize filters when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            // Default 
             document.getElementById('allRooms').classList.add('selectedIcon');
 
-            // Apply filters 
             applyFilters();
 
             // Click events
@@ -619,9 +609,6 @@ require '../Config/dbcon.php';
             });
         }
     </script>
-
-    <!-- AJAX for fetching real time availability -->
-    <!-- to be further tested after availability is resolved -->
     <script>
         function fetchAvailability() {
             fetch('/Function/Customer/getAvailability.php', {
@@ -654,7 +641,24 @@ require '../Config/dbcon.php';
         document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
         document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
     </script>
+    <!-- SwiperJS JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
+
+    <script>
+        const swiper = new Swiper('.swiper-container', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    </script>
 </body>
 
 </html>

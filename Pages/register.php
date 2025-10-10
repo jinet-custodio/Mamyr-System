@@ -36,14 +36,21 @@ resetExpiredOTPs($conn);
             <form action="../Function/register.php" id="login-form" method="POST">
                 <h1>Login</h1>
                 <div class="input-box">
-                    <input type="text" class="form-control" id="login_email" name="login_email"
+                    <input type="text" class="form-control" id="login_email" name="login_email" autocomplete="username"
                         value="<?php echo isset($_SESSION['loginFormData']['email']) ? htmlspecialchars(trim($_SESSION['loginFormData']['email'])) : ''; ?>"
                         placeholder="Email" required>
                     <i class='bx bxs-envelope'></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" class="form-control" id="login_password" name="login_password"
-                        placeholder="Password" required>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="login_password"
+                        name="login_password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required>
+
                     <i id="togglePassword" class='bx bxs-hide'></i>
                 </div>
                 <div class="forgot-link">
@@ -52,8 +59,12 @@ resetExpiredOTPs($conn);
                 <button type="submit" class="btn btn-primary" id="login" name="login">Login</button>
 
                 <div class="signUpSection">
-                    <p>Don't have an account? <a href="userType.php" class="signUpLink">Sign Up
-                        </a></p>
+                    <p>Don't have an account? <button type="button" class="signUpLink" data-bs-toggle="modal"
+                            data-bs-target="#userType-modal">
+                            Sign Up
+                        </button></p>
+                    <!-- <p>Don't have an account? <a href="userType.php" class="signUpLink">Sign Up
+                        </a></p> -->
 
 
                 </div>
@@ -94,7 +105,8 @@ resetExpiredOTPs($conn);
                 <h1 id="signUpTitle">Sign Up</h1>
                 <div class="fullName">
                     <div class="input-box">
-                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" maxlength="30"
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
+                            maxlength="30"
                             value="<?php echo isset($_SESSION['registerFormData']['firstName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['firstName'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user-circle'></i>
@@ -109,7 +121,8 @@ resetExpiredOTPs($conn);
                 </div>
                 <div class="userInfo">
                     <div class="input-box">
-                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" maxlength="30"
+                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
+                            maxlength="30"
                             value="<?php echo isset($_SESSION['registerFormData']['lastName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['lastName'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user-circle'></i>
@@ -122,7 +135,7 @@ resetExpiredOTPs($conn);
                         <i class='bx bxs-user'></i>
                     </div>
                     <div class="input-box">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                        <input type="email" class="form-control" id="email" autocomplete="username" name="email" placeholder="Email"
                             value="<?php echo isset($_SESSION['registerFormData']['email']) ? htmlspecialchars(trim($_SESSION['registerFormData']['email'])) : ''; ?>"
                             required>
                         <input type="hidden" name="userRole" value="1"> <!-- 1 = customer -->
@@ -132,13 +145,20 @@ resetExpiredOTPs($conn);
 
                     <div class="passwordContainer">
                         <div class="input-box">
-                            <input type="password" class="form-control" id="password" name="password"
-                                placeholder="Password" oninput="validateSignUpForm();" required>
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                placeholder="Password"
+                                autocomplete="new-password"
+                                oninput="validateSignUpForm();"
+                                required>
                             <i id="togglePassword1" class='bx bxs-hide'></i>
                         </div>
                         <div class="confirmErrorMsg" id="passwordValidation"></div>
                         <div class=" input-box">
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" autocomplete="new-password"
                                 placeholder="Confirm Password" oninput="validateSignUpForm();" required>
                             <i id="togglePassword2" class='bx bxs-hide'></i>
                         </div>
@@ -209,8 +229,57 @@ resetExpiredOTPs($conn);
     </div>
 
 
+    <!-- User Type Modal -->
+    <div class="modal fade" id="userType-modal" role="dialog" aria-labelledby="userType-modal-label">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" id="usertype-modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="userType-modal-label">I am signing up as:</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body user-category">
+
+                    <a href="register.php?page=register" id="partner-link" class="categoryLink">
+                        <div class="card category-card ">
+                            <img class="card-img-top" src="../Assets/Images/UserTypePhotos/customer.png" alt="Partners">
+
+                            <div class="category-body m-auto">
+                                <h5 class="category-title m-auto">Customer</h5>
+                                <p class="card-text">I am interested in making bookings and viewing the amenities of
+                                    the resort.
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="busPartnerRegister.php" id="request-link" class="categoryLink">
+                        <div class="card category-card ">
+                            <img class="card-img-top" src="../Assets/Images/UserTypePhotos/businessPartner.png"
+                                alt="Business Partner">
+
+                            <div class="category-body m-auto">
+                                <h5 class="category-title m-auto">Business Partner</h5>
+                                <p class="card-text"> I want to request for a partnership to offer my services to
+                                    customers of
+                                    the resort.</p>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- User Type Modal -->
     <!-- terms and conditions modal -->
-    <div class="modal fade" id="termsModal" role=" dialog" aria-labelledby="exampleModalLabel">
+
+    <div class="modal fade"
+        id="termsModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -299,40 +368,26 @@ resetExpiredOTPs($conn);
                 </div>
                 <div class="modal-footer">
                     <div class="declineBtnContainer">
-                        <button type="button" class="btn btn-secondary" id="declineTermsBtn" data-bs-dismiss="modal"
-                            aria-label="Close">Decline</button>
+                        <button type="button" class="btn btn-secondary" id="declineTermsBtn" onclick="declineTerms()">Decline</button>
                     </div>
                     <div class="acceptBtnContainer">
-                        <button type="button" class="btn btn-primary" id="acceptTermsBtn" onclick="AcceptTerms()">Accept</button>
+                        <button type="button" class="btn btn-primary" id="acceptTermsBtn"
+                            onclick="AcceptTerms()">Accept</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- terms and conditions modal -->
 
     <!-- Bootstrap Link -->
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
-
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
     <!--Password Validation JS & terms and condition-->
     <script src="../Assets/JS/passwordValidation.js"></script>
-    <!-- <script src="../Assets/JS/terms-condition.js"></script> -->
 
-    <!-- Check if user agree to the terms and condition -->
-    <!-- <script src="../Assets/JS/checkbox.js"></script> -->
-
-
-    <!-- Password Match JS-->
-    <!-- <script src="../Assets/JS/checkPasswordMatch.js"></script> -->
-    <!-- Register Password Validation JS -->
-    <!-- <script src="../Assets/JS/checkPassword.js"></script> -->
-
-    <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Loader function -->
@@ -357,6 +412,8 @@ resetExpiredOTPs($conn);
 
 
     <script>
+        const emailInputField = document.getElementById('email');
+
         const container = document.querySelector('.container');
         const registerBtn = document.querySelector('.register-btn');
         const loginBtn = document.querySelector('.login-btn');
@@ -364,6 +421,10 @@ resetExpiredOTPs($conn);
         // registerBtn.addEventListener('click', () => {
         //     container.classList.add('active');
         // });
+
+        emailInputField.addEventListener('change', () => {
+            emailInputField.style.border = '1px solid rgb(237, 237, 237)';
+        })
 
         loginBtn.addEventListener('click', () => {
             container.classList.remove('active');
@@ -405,7 +466,10 @@ resetExpiredOTPs($conn);
             Swal.fire({
                 title: "Oops",
                 text: "An account with this email already exists.",
-                icon: "warning"
+                icon: "warning",
+                confirmButtonText: 'okay'
+            }).then((result) => {
+                emailInputField.style.border = '1px solid red';
             })
         } else if (action === "OTPFailed") {
             Swal.fire({

@@ -147,30 +147,30 @@ require '../../Function/notification.php';
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        AMENITIES
+                        Amenities
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item active" href="amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item" href="events.php">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
+                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                        <li><a class="dropdown-item" href="events.php">Events</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Pages/Customer/blog.php">BLOG</a>
+                    <a class="nav-link" href="blog.php">Blog</a>
                 </li>
                 <?php if ($userRole !== 2): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="partnerApplication.php">BE OUR PARTNER</a>
+                        <a class="nav-link" href="partnerApplication.php">Be Our Partner</a>
                     </li>
                 <?php endif; ?>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/Pages/Customer/about.php">ABOUT</a>
+                    <a class="nav-link active" href="about.php">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="bookNow.php">BOOK NOW</a>
+                    <a class="nav-link" href="bookNow.php">Book Now</a>
                 </li>
                 <li class="nav-item">
-                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
+                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">Log Out</a>
                 </li>
             </ul>
         </div>
@@ -298,7 +298,8 @@ require '../../Function/notification.php';
         </div>
     </div>
 
-    <?php include 'footer.php'; ?>
+    <?php include 'footer.php';
+    include 'loader.php'; ?>
 
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"

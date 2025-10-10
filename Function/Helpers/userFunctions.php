@@ -31,8 +31,8 @@ function resetExpiredOTPs($conn)
 }
 
 
-//? Function for generating otps
-function generateOTP($length)
+//? Function for generating code
+function generateCode($length)
 {
     $otp = '';
     for ($i = 0; $i < $length; $i++) {
@@ -40,6 +40,7 @@ function generateOTP($length)
     }
     return $otp;
 }
+
 //? Function for getting user role name
 function getUserStatus($conn, $userStatusID)
 {

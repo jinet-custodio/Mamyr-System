@@ -38,30 +38,30 @@ require '../Config/dbcon.php';
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
-                    <a class="nav-link" href="../index.php"> HOME</a>
+                    <a class="nav-link" href="../index.php">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        AMENITIES
+                        Amenities
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="amenities.php" style="color: black;">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
-                        <li><a class="dropdown-item active" href="#">EVENTS</a></li>
+                        <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
+                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                        <li><a class="dropdown-item active" href="events.php">Events</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="blog.php">BLOG</a>
+                    <a class="nav-link" href="blog.php">Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">BE OUR PARTNER</a>
+                    <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="register.php">BOOK NOW</a>
+                    <a class="nav-link" href="register.php">Book Now</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">Sign Up</a>

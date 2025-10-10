@@ -7,6 +7,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Poppins";
 }
 .sidebar {
   display: flex;
@@ -141,7 +142,7 @@
   color: white;
 }
 .main-content {
-  margin: 5rem 0 0 20rem;
+  margin: 3vw 0 0 20vw;
   padding: 1rem;
   overflow-y: auto;
   width: 75%;
@@ -149,7 +150,7 @@
 
 .title {
   text-align: center;
-  font-size: clamp(3.5vw, 3.2vw, 3vw);
+  font-size: 30px;
   font-family: "Poppins";
   font-weight: bold;
   margin-bottom: 2vw;
@@ -163,28 +164,28 @@ a {
   text-align: center;
   width: 100%;
   margin: auto;
-  margin-top: 3vw !important;
+  /* margin-top: 3vw !important; */
 }
 
 th {
   background-color: #cee4f2 !important;
-  font-size: clamp(1.3vw, 1.2vw, 1vw);
+  font-size: 14px;
 }
 
 td,
 #bookingHistory_info,
 .btn {
-  font-size: clamp(1.2vw, 1vw, 0.9vw);
+  font-size: 15px;
 }
 
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-  padding: 0.9vw 0.6vw !important;
+  padding: 0.5vw 0.6vw !important;
 }
 
-.btn {
+/* .btn {
   padding: 0.5vw 0.8vw;
-}
+} */
 
 .dt-column-title {
   text-align: center;
@@ -193,7 +194,7 @@ table.dataTable > tbody > tr > td {
 label {
   margin-left: 1vw;
   margin-right: 1vw;
-  font-size: clamp(1.3vw, 1.1vw, 1vw);
+  font-size: 14px;
 }
 
 #cancel-content {
@@ -205,7 +206,7 @@ label {
 }
 
 #cancelModalDesc {
-  font-size: 18px;
+  font-size: 16px;
 }
 #cancelButtonModal {
   display: flex;
@@ -216,7 +217,7 @@ label {
 }
 
 .dt-input {
-  font-size: clamp(1.3vw, 1.1vw, 1vw);
+  font-size: 14px;
 }
 
 /* rate modal */
@@ -246,52 +247,86 @@ label {
 
 /* Colors */
 
-.btn-orange {
-  background-color: orange;
-  border: 1px solid orange;
-  color: black;
+.badge {
+  font-weight: initial;
+  line-height: normal;
+  font-size: initial;
+  padding: 0.2rem !important;
+  width: 10rem;
+  border-radius: 3rem !important;
 }
 
-.btn-orange:hover {
-  background-color: rgb(231, 151, 1);
-  border: 1px solid rgb(231, 151, 1);
-  color: black;
+/* Fully Paid */
+.badge.bg-bright-green {
+  background-color: rgba(75, 192, 75, 0.4) !important;
+  color: rgb(75, 192, 75) !important;
 }
 
-.btn-red {
-  background-color: red !important;
-  border: 1px solid red !important;
-  color: rgb(255, 255, 255);
+/* Partially Paid */
+.badge.bg-light-blue {
+  background-color: rgba(54, 162, 235, 0.4) !important;
+  color: rgb(54, 162, 235) !important;
 }
 
-.btn-red:hover {
-  background-color: rgb(221, 4, 4);
-  border: 1px solid rgb(221, 4, 4);
-  color: rgb(255, 255, 255);
+/* Awaiting Payment */
+.badge.bg-orange {
+  background-color: rgba(255, 159, 64, 0.4) !important;
+  color: rgb(247, 127, 8) !important;
 }
 
-.btn-light-green {
-  background-color: green;
-  border: 1px solid green;
-  color: white;
+/* Pending */
+.badge.bg-warning {
+  background-color: rgba(255, 193, 7, 0.4) !important;
+  color: rgb(190, 114, 0) !important;
 }
 
-.btn-light-green:hover {
-  background-color: rgb(4, 112, 4);
-  border: 1px solid rgb(4, 112, 4);
-  color: white;
+/* Approved */
+.badge.bg-green {
+  background-color: rgba(40, 167, 69, 0.4) !important;
+  color: rgb(40, 167, 69) !important;
 }
 
-.btn-sky-blue {
-  background-color: rgb(128, 216, 255);
-  border: 1px solid rgb(128, 216, 255);
-  color: rgb(0, 0, 0);
+/* Reserved */
+.badge.bg-success {
+  background-color: rgba(83, 243, 169, 0.4) !important;
+  color: rgb(0, 129, 69) !important;
 }
 
-.btn-sky-blue:hover {
-  background-color: rgb(128, 216, 255);
-  border: 1px solid rgb(128, 216, 255);
-  color: rgb(0, 0, 0);
+/* Cancelled */
+.badge.bg-danger {
+  background-color: rgba(219, 53, 69, 0.4) !important;
+  color: rgb(219, 53, 69) !important;
+}
+
+/* Rejected */
+.badge.bg-red {
+  background-color: rgba(204, 30, 20, 0.4) !important;
+  color: rgb(204, 30, 20) !important;
+}
+
+/* Expired */
+.badge.bg-muted {
+  background-color: rgba(73, 80, 87, 0.4) !important;
+  color: rgb(73, 80, 87) !important;
+}
+
+/* Finished */
+.badge.bg-light-green {
+  background-color: rgba(99, 201, 9, 0.4) !important;
+  color: rgb(71, 139, 10) !important;
+}
+
+div.action-button-container {
+  display: flex !important;
+  flex-direction: row;
+  gap: 1rem;
+  margin: auto;
+}
+
+.viewBooking,
+.cancelBooking,
+.rateBtn {
+  width: 100px;
 }
 
 .custom-tooltip {
