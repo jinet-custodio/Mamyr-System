@@ -33,11 +33,11 @@ body {
 }
 
 #resortBookingForm {
-  margin-top: 6vw;
+  margin-top: 2rem;
 }
 
 .resortTitle {
-  font-size: clamp(3.5vw, 3.2vw, 3vw);
+  font-size: 35px;
   font-family: "Lora";
   color: #000000;
   font-weight: bold;
@@ -54,9 +54,9 @@ body {
 
 .backToSelection {
   position: absolute;
-  margin: 0 0 0 5rem;
-  /* background-color: transparent;
-    border: none; */
+  margin: -1rem 0 0 5rem;
+  border: none !important;
+  background-color: transparent !important;
 }
 
 .backToSelection img {
@@ -162,24 +162,25 @@ body {
 }
 
 .rates {
+  top: -5rem;
+  height: 250px !important;
   width: auto;
-  height: 280px;
   padding: 0.5rem;
 }
 
 .rates h1 {
-  font-size: 30px;
+  font-size: 25px;
   font-family: "Alkatra";
   color: blue;
 }
 
 .rates h5 {
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
 .rates p {
-  font-size: 16px;
+  font-size: 14px;
   margin: 0;
   text-align: center;
 }
@@ -194,6 +195,7 @@ body {
 }
 
 .cottagesEntertainment {
+  top: -5rem;
   width: auto;
   height: 320px;
   display: flex;

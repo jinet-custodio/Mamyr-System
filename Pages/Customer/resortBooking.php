@@ -47,8 +47,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="stylesheet" href="../../Assets/CSS/Customer/resortBooking.css">
 
     <!-- Bootstrap Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
 
     <!-- Flatpickr calendar -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -69,7 +68,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <form action="confirmBooking.php" method="POST" id="resortBookingForm">
         <div class="resort" id="resort">
             <button type="button" class="backToSelection btn btn-light" id="backToSelection">
-                <img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="back button" />
+                <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="back button" />
             </button>
             <div class="titleContainer">
                 <h4 class="resortTitle text-center" id="resortTitle">RESORT BOOKING</h4>
@@ -283,7 +282,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     list($sessionType, $timeRange) = explode('|', $key);
                             ?>
                                     <div class="data-container">
-                                        <h5><strong><?= htmlspecialchars($sessionType) ?></strong>|
+                                        <h5><strong><?= htmlspecialchars($sessionType) ?> Tour</strong>|
                                             <?= htmlspecialchars($timeRange) ?> </h5>
                                         <?php
                                         foreach ($entries as $entry) {

@@ -83,8 +83,7 @@ switch ($userRole) {
 
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/bookingHistory.css" />
@@ -94,6 +93,8 @@ switch ($userRole) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Bootstrap Icon Link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
 <body>
@@ -151,10 +152,16 @@ switch ($userRole) {
                     </a>
                 </li>
                 <?php if ($role !== 'Admin') { ?>
-                    <li>
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item active" id="BookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
+                            <span class="sidebar-text">Booking History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentHist">
+                            <i class="fa-solid fa-table-list sidebar-icon"></i>
+                            <span class="sidebar-text">Payment</span>
                         </a>
                     </li>
                 <?php } elseif ($role === 'Admin') { ?>
@@ -215,10 +222,11 @@ switch ($userRole) {
                 <div class="tableContainer">
                     <table class=" table table-striped" id="bookingHistory">
                         <thead>
+                            <th scope="col">Booking Code</th>
                             <th scope="col">Check In</th>
-                            <th scope="col">Total Cost</th>
+                            <!-- <th scope="col">Total Cost</th>
                             <th scope="col">Balance</th>
-                            <th scope="col">Payment Method</th>
+                            <th scope="col">Payment Method</th> -->
                             <th scope="col">Booking Type</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
@@ -280,6 +288,29 @@ switch ($userRole) {
                                     </div>
 
                                     <div class="modal-body">
+                                        <p class="modal-title text-center mb-2 fw-bold fs-5">Are you sure?</p>
+                                        <p class="modal-text text-center mb-2" id="cancelModalDesc">You are about to cancel this booking. This action cannot be undone.</p>
+
+                                        <div class="button-container" id="cancelButtonModal">
+                                            <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">No</button>
+                                            <button type="button" class="btn btn-primary w-25" data-bs-target="#reasonModal" data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content" id="cancel-content">
+
+                                    <!-- <div class="image w-100 text-center">
+                                        <img src="../../Assets/Images/Icon/warning.png" alt="warning icon"
+                                            class="warning-image">
+                                    </div> -->
+
+                                    <div class="modal-body">
                                         <input type="hidden" name="bookingID" id="bookingIDModal" value="">
                                         <input type="hidden" name="confirmedBookingID" id="confirmedBookingIDModal" value="">
                                         <input type="hidden" name="bookingStatus" id="bookingStatusModal" value="">
@@ -287,12 +318,46 @@ switch ($userRole) {
                                         <input type="hidden" name="bookingType" id="bookingTypeModal" value="">
                                         <input type="hidden" name="status" id="statusModal" value="">
 
-                                        <p class="modal-title text-center mb-2 fw-bold fs-3">Are you sure?</p>
-                                        <p class="modal-text text-center mb-2" id="cancelModalDesc">You are about to cancel this booking. This action cannot be undone.</p>
+                                        <!-- <p class="modal-title text-center mb-2 fw-bold fs-5">Reason of Cancellation</p> -->
+                                        <h6 class="cancellation-label fw-bold fs-5">Select a Reason for Cancellation</h6>
+                                        <div class="form-group mt-4">
+                                            <select class="form-select" id="select-reason" name="cancellation-reason" aria-label="cancellation-reason"
+                                                onchange="otherReason()" required>
+                                                <option value="" disabled selected>Select a reason</option>
+                                                <?php
+                                                $category = 'Cancellation';
+                                                $getCancellationReason = $conn->prepare("SELECT `reasonID`, `reasonDescription` FROM `reasons` WHERE `category` = ?");
+                                                $getCancellationReason->bind_param('s', $category);
+                                                if (!$getCancellationReason->execute()) {
+                                                    error_log('Failed getting cancellation reason');
+                                                ?>
+                                                    <option value="other">Other (Please specify)</option>
+                                                <?php
+                                                }
+
+                                                $result = $getCancellationReason->get_result();
+
+                                                while ($row = $result->fetch_assoc()):
+                                                ?>
+                                                    <option value="<?= $row['reasonID'] ?>"><?= htmlspecialchars($row['reasonDescription']) ?></option>
+                                                <?php
+                                                endwhile;
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mt-4" id="otherInputGroup" style="display: none;">
+                                            <h6 class="otherReason-label fw-bold">Please Specify</h6>
+                                            <input type="text" class="form-control" id="cancellationReason-textBox" name="other-cancellation-reason"
+                                                placeholder="Enter your option">
+                                        </div>
+                                        <div class="notes mt-2">
+                                            <p style="color:rgb(12, 202, 240);"><i class="bi bi-info-circle-fill"></i> Remember: No Refund Policy</p>
+                                        </div>
 
                                         <div class="button-container" id="cancelButtonModal">
-                                            <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">No</button>
-                                            <button type="submit" class="btn btn-primary w-25" name="cancelBooking" id="yesDelete">Yes</button>
+                                            <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary w-25" name="cancelBooking" id="yesDelete">Submit</button>
                                         </div>
                                     </div>
 
@@ -316,14 +381,16 @@ switch ($userRole) {
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        function getStatusBadge(colorClass, status) {
+            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             const userID = document.getElementById('userID');
             const userIDValue = userID.value;
@@ -341,8 +408,8 @@ switch ($userRole) {
                         return;
                     }
                     const bookings = data.bookings;
-                    const tbody = document.querySelector('#p-b-history-body');
-                    tbody.innerHTML = "";
+                    const table = $('#bookingHistory').DataTable();
+                    table.clear();
 
 
                     const reviewedBookingIDs = <?= json_encode($reviewedBookingIDs) ?>;
@@ -357,67 +424,64 @@ switch ($userRole) {
                                 booking.status === 'Rejected' ||
                                 booking.approvalStatus === 'Rejected'
                             );
-                            // console.log(booking.bookingStatus);
-                            // console.log(canReview);
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
-                                                <td>${booking.checkIn}</td>
-                                                <td>${booking.totalBill}</td>
-                                                <td>${booking.userBalance}</td>
-                                                <td>${booking.paymentMethod}</td>
-                                                <td>${booking.bookingType} Booking</td>
-                                                <td>
-                                                    <a class="btn btn-${booking.statusClass} w-100">
-                                                        ${booking.status}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                <div class="button-container gap-2 md-auto"
-                                                    style="display: flex;  width: 100%; justify-content: center;">
-                                                    <form action="reservationSummary.php" method="POST">
-                                                        <input type="hidden" name="bookingType" value="${booking.bookingType}">
-                                                        <input type="hidden" name="confirmedBookingID" value="${booking.confirmedBookingID}">
-                                                        <input type="hidden" name="bookingID" value="${booking.bookingID}">
-                                                        <input type="hidden" name="status" value="${booking.status}">
-                                                        <button type="submit" name="viewBooking" class="btn btn-info w-100 viewBooking" data-label="View">View</button>
-                                                    </form>
-                                                    ${
-                                                        canReview
-                                                            ? (
-                                                                isReviewed
-                                                                    ? `<button class="btn btn-outline-secondary px-0 w-100 rateBtn" title="You have already reviewed this booking/reservation" disabled data-label="Reviewed">Reviewed</button>`
-                                                                    : `<button class="btn btn-outline-primary px-0 w-100 rateBtn"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#rateModal"
-                                                                        data-bookingid="${booking.bookingID}"
-                                                                        data-bookingtype="${booking.bookingType}"
-                                                                        data-label="Review">Review</button>`
-                                                            )
-                                                            : `<button type="button" class="btn btn-danger w-100 cancelBooking"
-                                                                data-bookingid="${booking.bookingID}"
-                                                                data-confirmedbookingid="${booking.confirmedBookingID}"
-                                                                data-status="${booking.status}"
-                                                                data-bookingstatus="${booking.bookingStatus}"
-                                                                data-confirmedstatus="${booking.approvalStatus}"
-                                                                data-bookingtype="${booking.bookingType}"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#confirmationModal" data-label="Cancel">Cancel</button>`
-                                                    }
-                                                </div> 
-                                                </td>
-                                                
-                                            `;
-                            tbody.appendChild(row);
 
-                            document.querySelectorAll(".cancelBooking").forEach(button => {
-                                button.addEventListener("click", function() {
+                            table.row.add([
+                                booking.bookingCode,
+                                booking.checkIn,
+                                // booking.totalBill,
+                                // booking.userBalance,
+                                // booking.paymentMethod,
+                                booking.bookingType + ' Booking',
+                                getStatusBadge(booking.statusClass, booking.status),
+                                `<div class="action-button-container">
+                                            <form action="reservationSummary.php" method="POST">
+                                                <input type="hidden" name="bookingType" value="${booking.bookingType}">
+                                                <input type="hidden" name="confirmedBookingID" value="${booking.confirmedBookingID}">
+                                                <input type="hidden" name="bookingID" value="${booking.bookingID}">
+                                                <input type="hidden" name="status" value="${booking.status}">
+                                                <button type="submit" name="viewBooking" class="btn btn-info  viewBooking" data-label="View">View</button>
+                                            </form>
+                                            ${
+                                            canReview
+                                            ? (
+                                            isReviewed
+                                            ? `<button class="btn btn-outline-secondary rateBtn" title="You have already reviewed this booking/reservation" disabled data-label="Reviewed">Reviewed</button>`
+                                            : `<button class="btn btn-outline-primary rateBtn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#rateModal"
+                                            data-bookingid="${booking.bookingID}"
+                                            data-bookingtype="${booking.bookingType}"
+                                            data-label="Review">Review</button>`
+                                            )
+                                            : `<button type="button" class="btn btn-danger cancelBooking"
+                                                    data-bookingid="${booking.bookingID}"
+                                                    data-confirmedbookingid="${booking.confirmedBookingID}"
+                                                    data-status="${booking.status}"
+                                                    data-bookingstatus="${booking.bookingStatus}"
+                                                    data-confirmedstatus="${booking.approvalStatus}"
+                                                    data-bookingtype="${booking.bookingType}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#confirmationModal" data-label="Cancel">Cancel
+                                            </button>`
+                                    }
+                                </div> `
+                            ]);
 
-                                    const bookingID = this.getAttribute("data-bookingid");
-                                    const confirmedBookingID = this.getAttribute("data-confirmedbookingid");
-                                    const status = this.getAttribute("data-status");
-                                    const bookingStatus = this.getAttribute("data-bookingstatus");
-                                    const confirmedStatus = this.getAttribute("data-confirmedstatus");
-                                    const bookingType = this.getAttribute("data-bookingtype");
+                            document.addEventListener("click", function(e) {
+                                if (e.target && e.target.classList.contains("cancelBooking")) {
+                                    const button = e.target;
+
+                                    const bookingID = button.getAttribute("data-bookingid");
+                                    const confirmedBookingID = button.getAttribute("data-confirmedbookingid");
+                                    const status = button.getAttribute("data-status");
+                                    const bookingStatus = button.getAttribute("data-bookingstatus");
+                                    const confirmedStatus = button.getAttribute("data-confirmedstatus");
+                                    const bookingType = button.getAttribute("data-bookingtype");
+
+                                    // console.log({
+                                    //     bookingID,
+                                    //     confirmedBookingID
+                                    // });
 
                                     document.getElementById("bookingIDModal").value = bookingID;
                                     document.getElementById("confirmedBookingIDModal").value = confirmedBookingID;
@@ -425,14 +489,18 @@ switch ($userRole) {
                                     document.querySelector('input[name="bookingStatus"]').value = bookingStatus;
                                     document.querySelector('input[name="confirmedStatus"]').value = confirmedStatus;
                                     document.querySelector('input[name="bookingType"]').value = bookingType;
-                                });
+                                }
                             });
-                        })
-                    } else {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `<td colspan="7" class="text-center">No bookings to display</td>`;
-                        tbody.appendChild(row);
+
+                        });
+
+                        table.draw();
                     }
+                    //  else {
+                    //     const row = document.createElement("tr");
+                    //     row.innerHTML = `<td colspan="7" class="text-center">No bookings to display</td>`;
+                    //     tbody.appendChild(row);
+                    // }
 
                     $(document).ready(function() {
                         const starContainer = $("#starContainer");
@@ -516,6 +584,20 @@ switch ($userRole) {
                     })
                 })
         })
+    </script>
+
+    <script>
+        function otherReason() {
+            var selectBox = document.getElementById("select-reason");
+            var otherInputGroup = document.getElementById("otherInputGroup");
+
+            // Show or hide the text box when "Other (Please specify)" is selected
+            if (selectBox.value === "other" || selectBox.value === '9') {
+                otherInputGroup.style.display = "block"; // Show the text box
+            } else {
+                otherInputGroup.style.display = "none"; // Hide the text box
+            }
+        }
     </script>
 
     <script>
@@ -685,7 +767,7 @@ switch ($userRole) {
         };
 
         if (paramValue) {
-            const url = new URLSearchParams(window.location);
+            const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url.toString());
         }
@@ -697,17 +779,7 @@ switch ($userRole) {
             $('#bookingHistory').DataTable({
                 language: {
                     emptyTable: "You have not made any bookings yet"
-                },
-                columnDefs: [{
-                        width: '15%',
-                        target: 0
-                    },
-                    {
-                        width: '20%',
-                        target: 6
-                    },
-
-                ]
+                }
             });
         });
     </script>

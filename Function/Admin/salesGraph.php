@@ -22,8 +22,8 @@ if (isset($_GET['selectedFilter'])) {
                         CONCAT('Week ', CEIL(DAY(b.startDate) / 7)) AS weekOfMonth,
                         SUM(
                             CASE 
-                                WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill
-                                ELSE cb.confirmedFinalBill - bpas.price
+                                WHEN bpas.bookingID IS NULL THEN cb.finalBill
+                                ELSE cb.finalBill - bpas.price
                             END
                         ) AS totalSalesThisWeek
                     FROM 
@@ -56,13 +56,13 @@ if (isset($_GET['selectedFilter'])) {
                             DATE_FORMAT(DATE(b.startDate - INTERVAL (DAY(b.startDate) - 1) % 7 DAY + INTERVAL 6 DAY), '%b %e'),
                             ' (Mon - Sun)'
                         ) AS weekLabel,
-                        SUM(CASE WHEN WEEKDAY(b.startDate) = 0 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill ELSE cb.confirmedFinalBill - bpas.price END  ELSE 0 END) AS Mon,
-                        SUM(CASE WHEN WEEKDAY(b.startDate) = 1 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill ELSE cb.confirmedFinalBill - bpas.price END  ELSE 0 END) AS Tue,
-                        SUM(CASE WHEN WEEKDAY(b.startDate) = 2 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill ELSE cb.confirmedFinalBill - bpas.price END  ELSE 0 END) AS Wed,
-                        SUM(CASE WHEN WEEKDAY(b.startDate) = 3 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill ELSE cb.confirmedFinalBill - bpas.price END  ELSE 0 END) AS Thu,
-                        SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill ELSE cb.confirmedFinalBill - bpas.price END  ELSE 0 END) AS Fri,
-                        SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill ELSE cb.confirmedFinalBill - bpas.price END  ELSE 0 END) AS Sat,
-                        SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.confirmedFinalBill ELSE cb.confirmedFinalBill - bpas.price END  ELSE 0 END) AS Sun
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 0 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Mon,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 1 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Tue,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 2 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Wed,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 3 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Thu,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Fri,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Sat,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Sun
                     FROM 
                         confirmedbooking cb
                     LEFT JOIN 

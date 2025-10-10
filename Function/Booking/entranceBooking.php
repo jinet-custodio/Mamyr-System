@@ -2,7 +2,11 @@
 
 
 require '../../Config/dbcon.php';
+require '../Helpers/userFunctions.php';
+$env = parse_ini_file(__DIR__ . '/../../.env');
+require '../../vendor/autoload.php';
 
+require_once '../emailSenderFunction.php';
 
 session_start();
 $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
@@ -19,6 +23,18 @@ function multiplication($a, $b)
     return $a * $b;
 }
 
+$gcashDetails = '';
+$resortInfoName = 'gcashNumber';
+$getPaymentDetails = $conn->prepare("SELECT resortInfoDetail FROM resortinfo WHERE resortInfoName = ?");
+$getPaymentDetails->bind_param('s', $resortInfoName);
+$getPaymentDetails->execute();
+$result = $getPaymentDetails->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $gcashDetails = 'Here is our gcash details where you can send the downpayment. <br> <strong>' . $row['resortInfoDetail'] . '</strong>';
+}
+
 if (isset($_POST['bookRates'])) {
     $serviceIDs = [];
     $servicePrices = [];
@@ -26,6 +42,9 @@ if (isset($_POST['bookRates'])) {
     $services = [];
     $resortServiceIDs = [];
 
+    $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
+    $tourType = mysqli_real_escape_string($conn, $_POST['tourType']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
     $resortBookingDate = mysqli_real_escape_string($conn, $_POST['resortBookingDate']);
     $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['scheduledStartDate']);
     $scheduledEndDate = mysqli_real_escape_string($conn, $_POST['scheduledEndDate']);
@@ -143,7 +162,7 @@ if (isset($_POST['bookRates'])) {
         }
     }
 
-
+    $bookingCode = 'TOUR' . date('ymd') . generateCode(5);
 
     $totalAdultFee = multiplication($adultCount, $adultRate);
     $totalChildFee =  multiplication($childrenCount, $childRate);
@@ -161,17 +180,18 @@ if (isset($_POST['bookRates'])) {
 
     try {
 
+
         $bookingStatus = ($dateScheduled === 'March' || $dateScheduled === 'April' || $dateScheduled === 'May') ? 1 : 2;
 
         $insertBooking = $conn->prepare("INSERT INTO 
         booking(userID, additionalRequest, toddlerCount, kidCount, adultCount, guestCount, durationCount, 
         startDate, endDate,
         totalCost, downpayment, 
-        addOns, paymentMethod, bookingStatus, bookingType, arrivalTime) 
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        addOns, paymentMethod, bookingStatus, bookingType, arrivalTime, bookingCode) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
         $insertBooking->bind_param(
-            "isiiiiissddssiss",
+            "isiiiiissddssisss",
             $userID,
             $additionalRequest,
             $toddlerCount,
@@ -188,7 +208,8 @@ if (isset($_POST['bookRates'])) {
             $paymentMethod,
             $bookingStatus,
             $bookingType,
-            $arrivalTime
+            $arrivalTime,
+            $bookingCode
         );
 
         if (!$insertBooking->execute()) {
@@ -246,6 +267,7 @@ if (isset($_POST['bookRates'])) {
         }
 
         if ($bookingStatus === 2) {
+            $isSend = false;
             $today = date('Y m d');
             if ($today === $scheduledStartDate) {
                 $paymentDueDate = $downpaymentDueDate = $today;
@@ -265,7 +287,7 @@ if (isset($_POST['bookRates'])) {
             }
             $updateApproval->close();
 
-            $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedbooking(bookingID, confirmedFinalBill, userBalance, downpaymentDueDate, paymentDueDate )
+            $insertConfirmedBooking = $conn->prepare("INSERT INTO confirmedbooking(bookingID, finalBill, userBalance, downpaymentDueDate, paymentDueDate )
                 VALUES(?,?,?,?,?)");
             $insertConfirmedBooking->bind_param("iddss", $bookingID,  $totalCost, $totalCost, $downpaymentDueDate, $paymentDueDate);
             if (!$insertConfirmedBooking->execute()) {
@@ -274,6 +296,7 @@ if (isset($_POST['bookRates'])) {
             }
             $insertConfirmedBooking->close();
 
+            $confirmedBookingID = $conn->insert_id;
 
             $receiver = 'Customer';
             $message = 'Your booking has been approved. Please complete your payment within 24 hours to confirm your reservation.';
@@ -285,6 +308,68 @@ if (isset($_POST['bookRates'])) {
                 $conn->rollback();
                 throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
             }
+
+            $dateCreated = date('d F Y');
+            $email_message = '
+                <body style="font-family: Poppins, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
+                    <table align="center" width="100%" cellpadding="0" cellspacing="0"
+                    style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+
+                    <!-- Header -->
+                    <tr style="background-color: #365CCE;">
+                        <td style="text-align:center; padding: 30px;">
+                        <h4 style="font-family: Poppins, sans-serif;  font-weight: 300; font-size: 18px; color: #ffffff; font-size: 18px; margin: 0;">
+                            THANKS FOR BOOKING!
+                        </h4>
+                        <h2 style="font-family: Poppins, sans-serif; font-weight: 200; font-size: 16px; font-size:  color: #ffffff; margin: 10px 0 0;">
+                            Confirm Your Reservation with Payment
+                        </h2>
+                        </td>
+                    </tr>
+
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding: 30px; text-align: left; color: #333333;">
+                        <p style="font-size: 12px; margin: 0 0 10px; font-style: italic;">
+                            Booking Reference: <strong>' . $bookingCode . '</strong> &nbsp;|&nbsp; Created on ' . $dateCreated . '
+                        </p>
+
+                        <p style="font-size: 14px; margin: 20px 0 10px;">Hello <strong> ' . $firstName . '</strong>,</p>
+
+                        <p style="font-size: 14px; margin: 20px 0 10px;">Here are your booking details:</p>
+
+                        <p style="font-size: 14px; margin: 8px 0;">Booking Reference: <strong>' . $bookingCode . '</strong></p>
+                        <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' . $scheduledStartDate . '</strong></p>
+                        <p style="font-size: 14px; margin: 8px 0;">Booking Type: <strong>' . $bookingType . ' Booking $mdash; ' . $tourType . '</strong></p>
+                        <p style="font-size: 14px; margin: 8px 0;">Grand Total: <strong>₱' . number_format($totalCost, 2) . '</strong></p>
+
+                        <p style="font-size: 14px;">
+                            <strong>To confirm your reservation, a downpayment of ₱' . number_format($downpayment, 2) . ' must be paid within 24 hours.</strong>
+                        </p>
+
+                        <p style="font-size: 14px;">If we do not receive the payment within this timeframe, your booking may be given to other customers. Make sure to upload the receipt in the website.</p>
+
+                        <p> ' . $gcashDetails . '. </p>
+                        <p> You can contact us directly here: <a href="https://www.facebook.com/messages/t/100888189251567" style="color: #007bff; text-decoration: none;> Message us on Facebook</a> </p> <br>
+
+                        <p style="font-size: 14px;">We look forward to welcoming you soon!</p>
+
+                        <br>
+
+                        <p style="font-size: 16px;">Thank you,</p>
+                        <p style="font-size: 16px; font-weight: bold;">Mamyr Resort and Events Place</p>
+                        </td>
+                    </tr>
+                    </table>
+                </body>
+            ';
+
+            $subject = 'Booking Confirmation';
+
+            if (sendEmail($email, $firstName, $subject, $email_message, $env)) {
+                $isSend = true;
+            }
+
             // $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?,?,?)");
             // if (!empty($resortServiceIDs)) {
             //     for ($i = 0; $i < count($resortServiceIDs); $i++) {
@@ -297,18 +382,23 @@ if (isset($_POST['bookRates'])) {
             //     }
             // }
             // $insertUnavailableService->close();
+            if (!$isSend) {
+                $conn->rollback();
+                throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
+            }
         }
+
+
 
         unset($_SESSION['resortFormData']);
         $conn->commit();
         header('Location: ../../Pages/Customer/bookNow.php?action=success');
+        $insertBookingServices->close();
         exit();
     } catch (Exception $e) {
         $conn->rollback();
         error_log('Error: ' . $e->getMessage());
         $_SESSION['resortFormData'] = $_POST;
         header('Location: ../../../../Pages/Customer/resortBooking.php?action=errorBooking');
-    } finally {
-        $insertBookingServices->close();
     }
 }

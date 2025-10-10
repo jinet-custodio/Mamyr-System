@@ -112,20 +112,21 @@
 
 @font-face {
   font-family: "Poppins";
-  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+  src: url(../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
   font-family: "Poppins Black";
-  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+  src: url(../Fonts/Poppins/Poppins-Black.ttf);
 }
+
 @font-face {
   font-family: "Lora";
-  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
 @font-face {
   font-family: "Alkatra";
-  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+  src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
 * {

@@ -186,7 +186,7 @@ if (isset($_POST['verify-btn'])) {
 
 if (isset($_POST['resend_code'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
-    $newOtp = generateOTP(6);
+    $newOtp = generateCode(6);
     date_default_timezone_set('Asia/Manila');
     $new_time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
 

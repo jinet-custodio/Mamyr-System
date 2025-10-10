@@ -3,6 +3,42 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 require 'Config/dbcon.php';
+
+require_once 'Function/Helpers/userFunctions.php';
+resetExpiredOTPs($conn);
+addToAdminTable($conn);
+
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'BusinessInformation';
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+
+$imageMap = [];
+
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
+
+    // Fetch images with this contentID
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages->bind_param("i", $contentID);
+    $getImages->execute();
+    $imageResult = $getImages->get_result();
+
+    $images = [];
+    while ($imageRow = $imageResult->fetch_assoc()) {
+        $images[] = $imageRow;
+    }
+
+    $imageMap[$cleanTitle] = $images;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -266,33 +302,33 @@ require 'Config/dbcon.php';
 
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const images = document.querySelectorAll(".card-img");
-        const total = images.length;
-        let current = 0;
+        document.addEventListener("DOMContentLoaded", function() {
+            const images = document.querySelectorAll(".card-img");
+            const total = images.length;
+            let current = 0;
 
-        function updateStack() {
-            images.forEach(img => img.className = "card-img"); // reset
-            const prev = (current - 1 + total) % total;
-            const next = (current + 1) % total;
+            function updateStack() {
+                images.forEach(img => img.className = "card-img"); // reset
+                const prev = (current - 1 + total) % total;
+                const next = (current + 1) % total;
 
-            images[current].classList.add("active");
-            images[prev].classList.add("behind-left");
-            images[next].classList.add("behind-right");
-        }
+                images[current].classList.add("active");
+                images[prev].classList.add("behind-left");
+                images[next].classList.add("behind-right");
+            }
 
-        document.getElementById("prevBtn").addEventListener("click", () => {
-            current = (current - 1 + total) % total;
-            updateStack();
+            document.getElementById("prevBtn").addEventListener("click", () => {
+                current = (current - 1 + total) % total;
+                updateStack();
+            });
+
+            document.getElementById("nextBtn").addEventListener("click", () => {
+                current = (current + 1) % total;
+                updateStack();
+            });
+
+            updateStack(); // initial
         });
-
-        document.getElementById("nextBtn").addEventListener("click", () => {
-            current = (current + 1) % total;
-            updateStack();
-        });
-
-        updateStack(); // initial
-    });
     </script>
 
     <!-- Swiper JS -->
@@ -300,41 +336,41 @@ require 'Config/dbcon.php';
 
     <!-- Initialize Swiper -->
     <script>
-    var swiper = new Swiper(".mySwiper", {
-        slidesPerView: 3,
-        spaceBetween: 30,
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-    });
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 3,
+            spaceBetween: 30,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
     </script>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-    const lat = 15.05073200154005;
-    const lon = 121.0218658098424;
+        const lat = 15.05073200154005;
+        const lon = 121.0218658098424;
 
-    const map = L.map('map').setView([lat, lon], 13);
+        const map = L.map('map').setView([lat, lon], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-
-    const customIcon = L.icon({
-        iconUrl: 'Assets/Images/MamyrLogo.png',
-        iconSize: [100, 25], // Size of the logo 
-        iconAnchor: [25, 50], // Anchor point of the icon 
-        popupAnchor: [0, -50] // Popup anchor point 
-    });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
 
-    L.marker([lat, lon], {
-            icon: customIcon
-        }).addTo(map)
-        .bindPopup('Mamyr Resort and Events Place is Located Here!')
-        .openPopup();
+        const customIcon = L.icon({
+            iconUrl: 'Assets/Images/MamyrLogo.png',
+            iconSize: [100, 25], // Size of the logo 
+            iconAnchor: [25, 50], // Anchor point of the icon 
+            popupAnchor: [0, -50] // Popup anchor point 
+        });
+
+
+        L.marker([lat, lon], {
+                icon: customIcon
+            }).addTo(map)
+            .bindPopup('Mamyr Resort and Events Place is Located Here!')
+            .openPopup();
     </script>
 
 </body>

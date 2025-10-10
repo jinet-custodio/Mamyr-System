@@ -1,90 +1,169 @@
-Use mamyr;
+USE mamyr;
 
+-- Booking Table
 CREATE TABLE booking (
     bookingID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT NOT NULL,
-    bookingType ENUM('Resort', 'Hotel', 'Event') NOT NULL, 
+    bookingType ENUM('Resort', 'Hotel', 'Event') NOT NULL,
     customPackageID INT NULL,
-    addOns VARCHAR(50), 
     additionalRequest TEXT,
     toddlerCount INT DEFAULT 0,
     kidCount INT DEFAULT 0,
     adultCount INT DEFAULT 0,
-    guestCount INT NOT NULL, 
+    guestCount INT NOT NULL,
     durationCount INT NOT NULL,
+    arrivalTime TIME NULL,
     startDate DATETIME NOT NULL,
     endDate DATETIME NOT NULL,
     paymentMethod VARCHAR(50) NOT NULL,
+    bookingOrigin ENUM('Online', 'Walk-In') NOT NULL DEFAULT 'Online',
+    customerChoice ENUM('Proceed', 'Cancel') DEFAULT NULL,
     totalCost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     downpayment DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     bookingStatus INT DEFAULT 1,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    approvedBy VARCHAR(25) DEFAULT NULL ,
+    approvedBy VARCHAR(25) DEFAULT NULL,
     approvedDate DATETIME NULL,
-
     FOREIGN KEY (userID) REFERENCES user(userID),
     FOREIGN KEY (bookingStatus) REFERENCES status(statusID),
     FOREIGN KEY (customPackageID) REFERENCES custompackage(customPackageID)
 );
 
-ALTER TABLE booking
-ADD COLUMN arrivalTime TIME NULL
-AFTER durationCount;
+ALTER TABLE `booking` ADD `addOns` VARCHAR(255) NOT NULL DEFAULT 'N/A' AFTER `bookingOrigin`;
+ALTER TABLE `booking` ADD `bookingCode` VARCHAR(20) NOT NULL AFTER `bookingID`;
 
-ALTER TABLE booking
-ADD COLUMN bookingOrigin ENUM('Online', 'Walk-In') NOT NULL DEFAULT 'Online'
-AFTER paymentMethod;
-
-ALTER TABLE `booking` ADD `customerChoice` ENUM('Proceed', 'Cancel') DEFAULT NULL AFTER `bookingType`;
-
-
+-- Booking Service Table
 CREATE TABLE bookingservice (
     bookingServiceID INT PRIMARY KEY AUTO_INCREMENT,
     bookingID INT NOT NULL,
     serviceID INT NOT NULL,
-    guests INT NOT NULL, 
+    guests INT NOT NULL,
     bookingServicePrice DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
     FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
     FOREIGN KEY (serviceID) REFERENCES service(serviceID)
 );
 
+-- Confirmed Booking Table
 CREATE TABLE confirmedbooking (
     confirmedBookingID INT PRIMARY KEY AUTO_INCREMENT,
     bookingID INT NOT NULL,
-    downpaymentImage varchar(255) DEFAULT 'defaultDownpayment.png', 
-    discountAmount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    additionalCharge DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    confirmedFinalBill DECIMAL(10,2) NOT NULL DEFAULT 0.00, 
-    amountPaid DECIMAL(10,2) NOT NULL DEFAULT 0.00,  
-    userBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00, 
+    downpaymentImage VARCHAR(255) DEFAULT 'defaultDownpayment.png',
+    discountAmount DECIMAL(10,2) DEFAULT 0.00,
+    additionalCharge DECIMAL(10,2) DEFAULT 0.00,
+    finalBill DECIMAL(10,2) DEFAULT 0.00,
+    amountPaid DECIMAL(10,2) DEFAULT 0.00,
+    userBalance DECIMAL(10,2) DEFAULT 0.00,
     paymentApprovalStatus INT DEFAULT 1,
-    paymentStatus INT DEFAULT 1,
-    paymentDueDate DATETIME,
-    downpaymentDueDate	DATETIME,
+    paymentDueDate DATETIME NULL,
+    downpaymentDueDate DATETIME NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    approvedBy INT,
-    approvedDate DATETIME NULL,
-    
-    FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
-    FOREIGN KEY (paymentApprovalStatus) REFERENCES status(statusID),
-    FOREIGN KEY (paymentStatus) REFERENCES paymentstatus(paymentStatusID),
-    FOREIGN KEY (approvedBy) REFERENCES admin(adminID)
-);            
 
-CREATE TABLE businesspartneravailedservice(
+    FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
+    FOREIGN KEY (paymentApprovalStatus) REFERENCES status(statusID)
+);
+
+-- Business Partner Availed Service Table
+CREATE TABLE businesspartneravailedservice (
     BPavailedService INT PRIMARY KEY AUTO_INCREMENT,
     partnershipServiceID INT NOT NULL,
     bookingID INT NOT NULL,
     approvalStatus INT,
+    price DECIMAL(10,2) DEFAULT 0.00,
     availedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-    
-
-   FOREIGN KEY(partnershipServiceID) REFERENCES partnershipservice(partnershipServiceID),
-    FOREIGN KEY(bookingID) REFERENCES booking(bookingID),
-    FOREIGN KEY(approvalStatus) REFERENCES status(statusID)
+    FOREIGN KEY (partnershipServiceID) REFERENCES partnershipservice(partnershipServiceID),
+    FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
+    FOREIGN KEY (approvalStatus) REFERENCES status(statusID)
 );
 
-ALTER TABLE businesspartneravailedservice
-ADD COLUMN price DECIMAL(10,2) DEFAULT 0.00;
+CREATE TABLE payment (
+    paymentID INT PRIMARY KEY AUTO_INCREMENT,
+    confirmedBookingID INT NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    paymentStatus INT NOT NULL, -- only here
+    paymentDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    notes TEXT DEFAULT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (confirmedBookingID) REFERENCES confirmedbooking(confirmedBookingID),
+    FOREIGN KEY (paymentStatus) REFERENCES paymentstatus(paymentStatusID)
+);
+
+ALTER TABLE `payment` CHANGE `paymentStatus` `paymentStatus` INT(11) NOT NULL DEFAULT '1';
+
+CREATE TABLE walkin_sales_summary (
+    salesID INT PRIMARY KEY AUTO_INCREMENT,
+    salesDate DATE NOT NULL,
+    bookingType ENUM('Resort', 'Hotel', 'Event') NOT NULL,
+    salesAmount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE additionalcharges (
+    additionalChargeID INT PRIMARY KEY AUTO_INCREMENT,
+    bookingID INT NOT NULL,
+    chargeDescription VARCHAR(255) NOT NULL,  -- What the charge is for
+    amount DECIMAL(10,2) NOT NULL,             -- Charge amount
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (bookingID) REFERENCES booking(bookingID)
+);
+
+
+CREATE TABLE reasons (
+    reasonID INT PRIMARY KEY AUTO_INCREMENT,
+    category ENUM('Cancellation', 'Rejection') NOT NULL,
+    reasonDescription VARCHAR(255) NOT NULL
+);
+
+INSERT INTO reasons (category, reasonDescription) VALUES
+('Cancellation', 'Change of plans'),
+('Cancellation', 'Found better option'),
+('Cancellation', 'Too expensive'),
+('Cancellation', 'Scheduling conflict'),
+('Cancellation', 'Booking error'),
+('Cancellation', 'Health reasons'),
+('Cancellation', 'Travel restrictions'),
+('Cancellation', 'Personal reasons'),
+('Cancellation', 'Other'),
+('Rejection', 'Full rooms'),
+('Rejection', 'Invalid documents'),
+('Rejection', 'Suspicious activity'),
+('Rejection', 'Non-compliance'),
+('Rejection', 'Payment issues'),
+('Rejection', 'Double booking'),
+('Rejection', 'Policy violation'),
+('Rejection', 'Other');
+
+
+CREATE TABLE booking_cancellations (
+    cancellationID INT PRIMARY KEY AUTO_INCREMENT,
+    bookingID INT NOT NULL,
+    userID INT NOT NULL,
+    reasonID INT NOT NULL,
+    otherReason TEXT NULL,
+    cancelledAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
+    FOREIGN KEY (userID) REFERENCES user(userID),
+    FOREIGN KEY (reasonID) REFERENCES reasons(reasonID)
+);
+
+-- ======================
+-- BOOKING REJECTIONS
+-- ======================
+CREATE TABLE booking_rejections (
+    rejectionID INT PRIMARY KEY AUTO_INCREMENT,
+    bookingID INT NOT NULL,
+    adminID INT NOT NULL,
+    reasonID INT NOT NULL,
+    otherReason TEXT NULL,
+    rejectedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
+    FOREIGN KEY (adminID) REFERENCES admin(adminID),
+    FOREIGN KEY (reasonID) REFERENCES reasons(reasonID)
+);

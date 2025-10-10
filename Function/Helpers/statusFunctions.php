@@ -193,8 +193,8 @@ function changeToDoneStatus($conn)
 
     //Select all confirmed bookings that have ended and is fully paid
     $selectConfirmedBookings = $conn->prepare("SELECT cb.*, b.endDate, b.bookingID FROM confirmedbooking cb 
-                            JOIN booking b ON cb.bookingID = b.bookingID WHERE b.endDate < ? AND paymentStatus = ? AND paymentApprovalStatus = ?");
-    $selectConfirmedBookings->bind_param("sii", $dateNow, $fullyPaidID, $approvedStatusID);
+                            JOIN booking b ON cb.bookingID = b.bookingID WHERE b.endDate < ?  AND paymentApprovalStatus = ?");
+    $selectConfirmedBookings->bind_param("si", $dateNow, $$approvedStatusID);
     $selectConfirmedBookings->execute();
     $result = $selectConfirmedBookings->get_result();
     if ($result->num_rows > 0) {
