@@ -26,7 +26,7 @@ if (isset($_POST['verify_email'])) {
         $statusID = intval($storedData['userStatusID']);
         if ($statusID === $isVerified) //Verified User
         {
-            $resetPasswordOTP = generateOTP(6);
+            $resetPasswordOTP = generateCode(6);
             $time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
             $updateOTP = $conn->prepare("UPDATE user SET userOTP = ?, OTP_expiration_at = ? WHERE email = ?");
             $updateOTP->bind_param("sss", $resetPasswordOTP, $time, $email);

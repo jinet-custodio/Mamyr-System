@@ -57,10 +57,22 @@ session_start();
                         <!-- <i class='bx bxs-user-circle'></i> -->
                         <!-- <input type="text" class="form-control" id="email" name="email" placeholder="Email Address"
                             required> -->
-                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                            placeholder="Phone Number"
-                            value="<?php echo isset($_SESSION['partnerData']['phoneNumber']) ? htmlspecialchars(trim($_SESSION['partnerData']['phoneNumber'])) : ''; ?>"
-                            required>
+
+
+                        <div class="phone-container">
+                            <input
+                                type="text"
+                                name="phoneNumber"
+                                id="phoneNumber"
+                                pattern="^(?:\+63|0)9\d{9}$"
+                                title="e.g., +639123456789 or 09123456789"
+                                value="<?php echo isset($_SESSION['partnerData']['phoneNumber']) ? htmlspecialchars(trim($_SESSION['partnerData']['phoneNumber']) ?? '') : ''; ?>"
+                                class="form-control"
+                                placeholder="Phone Number"
+                                required>
+                            <div id="tooltip-phone" class="custom-tooltip">Please input numbers only</div>
+                        </div>
+
                         <!-- <i class='bx bxs-phone'></i> -->
 
                     </div>
@@ -136,9 +148,12 @@ session_start();
                         <div class="row1">
                             <input type="text" class="form-control" id="province" name="province" placeholder="Province"
                                 value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>">
+                            <div class="zip-code">
+                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code"
+                                    value="<?php echo isset($_SESSION['partnerData']['zip']) ? htmlspecialchars(trim($_SESSION['partnerData']['zip'])) : ''; ?>">
+                                <div id="tooltip-zip" class="custom-tooltip-zip">Please input numbers only</div>
+                            </div>
 
-                            <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code"
-                                value="<?php echo isset($_SESSION['partnerData']['zip']) ? htmlspecialchars(trim($_SESSION['partnerData']['zip'])) : ''; ?>">
                         </div>
                     </div>
                 </div>
@@ -514,11 +529,11 @@ session_start();
                 </div>
                 <div class="modal-footer">
                     <div class="declineBtnContainer">
-                        <button type="button" class="btn btn-secondary" id="declineBtn" data-bs-dismiss="modal"
-                            aria-label="Close">Decline</button>
+                        <button type="button" class="btn btn-secondary" id="declineTermsBtn" onclick="declineTerms()">Decline</button>
                     </div>
                     <div class="acceptBtnContainer">
-                        <button type="button" class="btn btn-primary" id="acceptBtn">Accept</button>
+                        <button type="button" class="btn btn-primary" id="acceptTermsBtn"
+                            onclick="AcceptTerms()">Accept</button>
                     </div>
                 </div>
             </div>
@@ -530,10 +545,9 @@ session_start();
 
     <!-- Bootstrap JS -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+
     <!-- Password and terms Validation -->
     <script src="../Assets/JS/passwordValidation.js"></script>
-
-    <script src="../Assets/JS/terms-condition.js"></script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -619,6 +633,42 @@ session_start();
             url.search = '';
             history.replaceState({}, document.title, url.toString());
         }
+    </script>
+
+
+    <script>
+        const input = document.getElementById('phoneNumber');
+        const tooltipPhone = document.getElementById('tooltip-phone');
+        const zip = document.getElementById('zip');
+        const tooltipZip = document.getElementById('tooltip-zip');
+
+        input.addEventListener('keydown', function(e) {
+            const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Delete'];
+
+            if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                e.preventDefault();
+
+                tooltipPhone.classList.add('show');
+                clearTimeout(tooltipPhone.hideTimeout);
+                tooltipPhone.hideTimeout = setTimeout(() => {
+                    tooltipPhone.classList.remove('show');
+                }, 2000);
+            }
+        });
+
+        zip.addEventListener('keydown', function(e) {
+            const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Delete'];
+
+            if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                e.preventDefault();
+
+                tooltipZip.classList.add('show');
+                clearTimeout(tooltipZip.hideTimeout);
+                tooltipZip.hideTimeout = setTimeout(() => {
+                    tooltipZip.classList.remove('show');
+                }, 2000);
+            }
+        });
     </script>
 
 

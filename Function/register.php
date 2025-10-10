@@ -108,7 +108,7 @@ if (isset($_POST['signUp'])) {
                 }
             } elseif ($password == $confirm_password) {
                 $hashpassword = password_hash($password, PASSWORD_DEFAULT);
-                $otp = generateOTP(6);
+                $otp = generateCode(6);
                 $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes')); //Add a 5mins to the time of creation
 
                 $conn->begin_transaction();

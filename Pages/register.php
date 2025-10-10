@@ -36,14 +36,21 @@ resetExpiredOTPs($conn);
             <form action="../Function/register.php" id="login-form" method="POST">
                 <h1>Login</h1>
                 <div class="input-box">
-                    <input type="text" class="form-control" id="login_email" name="login_email"
+                    <input type="text" class="form-control" id="login_email" name="login_email" autocomplete="username"
                         value="<?php echo isset($_SESSION['loginFormData']['email']) ? htmlspecialchars(trim($_SESSION['loginFormData']['email'])) : ''; ?>"
                         placeholder="Email" required>
                     <i class='bx bxs-envelope'></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" class="form-control" id="login_password" name="login_password"
-                        placeholder="Password" required>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="login_password"
+                        name="login_password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required>
+
                     <i id="togglePassword" class='bx bxs-hide'></i>
                 </div>
                 <div class="forgot-link">
@@ -128,7 +135,7 @@ resetExpiredOTPs($conn);
                         <i class='bx bxs-user'></i>
                     </div>
                     <div class="input-box">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                        <input type="email" class="form-control" id="email" autocomplete="username" name="email" placeholder="Email"
                             value="<?php echo isset($_SESSION['registerFormData']['email']) ? htmlspecialchars(trim($_SESSION['registerFormData']['email'])) : ''; ?>"
                             required>
                         <input type="hidden" name="userRole" value="1"> <!-- 1 = customer -->
@@ -138,13 +145,20 @@ resetExpiredOTPs($conn);
 
                     <div class="passwordContainer">
                         <div class="input-box">
-                            <input type="password" class="form-control" id="password" name="password"
-                                placeholder="Password" oninput="validateSignUpForm();" required>
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                placeholder="Password"
+                                autocomplete="new-password"
+                                oninput="validateSignUpForm();"
+                                required>
                             <i id="togglePassword1" class='bx bxs-hide'></i>
                         </div>
                         <div class="confirmErrorMsg" id="passwordValidation"></div>
                         <div class=" input-box">
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" autocomplete="new-password"
                                 placeholder="Confirm Password" oninput="validateSignUpForm();" required>
                             <i id="togglePassword2" class='bx bxs-hide'></i>
                         </div>
@@ -216,7 +230,7 @@ resetExpiredOTPs($conn);
 
 
     <!-- User Type Modal -->
-    <div class="modal fade" id="userType-modal" role=" dialog" aria-labelledby="userType-modal-label">
+    <div class="modal fade" id="userType-modal" role="dialog" aria-labelledby="userType-modal-label">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content" id="usertype-modal-content">
                 <div class="modal-header">
@@ -258,10 +272,14 @@ resetExpiredOTPs($conn);
         </div>
     </div>
     <!-- User Type Modal -->
-
-
     <!-- terms and conditions modal -->
-    <div class="modal fade" id="termsModal" role=" dialog" aria-labelledby="exampleModalLabel">
+
+    <div class="modal fade"
+        id="termsModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -350,8 +368,7 @@ resetExpiredOTPs($conn);
                 </div>
                 <div class="modal-footer">
                     <div class="declineBtnContainer">
-                        <button type="button" class="btn btn-secondary" id="declineTermsBtn" data-bs-dismiss="modal"
-                            aria-label="Close">Decline</button>
+                        <button type="button" class="btn btn-secondary" id="declineTermsBtn" onclick="declineTerms()">Decline</button>
                     </div>
                     <div class="acceptBtnContainer">
                         <button type="button" class="btn btn-primary" id="acceptTermsBtn"
@@ -361,166 +378,161 @@ resetExpiredOTPs($conn);
             </div>
         </div>
     </div>
+
     <!-- terms and conditions modal -->
 
     <!-- Bootstrap Link -->
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
-
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
     <!--Password Validation JS & terms and condition-->
     <script src="../Assets/JS/passwordValidation.js"></script>
-    <!-- <script src="../Assets/JS/terms-condition.js"></script> -->
 
-    <!-- Check if user agree to the terms and condition -->
-    <!-- <script src="../Assets/JS/checkbox.js"></script> -->
-
-
-    <!-- Password Match JS-->
-    <!-- <script src="../Assets/JS/checkPasswordMatch.js"></script> -->
-    <!-- Register Password Validation JS -->
-    <!-- <script src="../Assets/JS/checkPassword.js"></script> -->
-
-    <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Loader function -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const signUpBtn = document.getElementById('signUp');
-        const loginBtn = document.getElementById('login');
-        const loginEmail = document.getElementById('login_email');
-        const loginPassword = document.getElementById('login_password');
-        const loader = document.getElementById('loader');
+        document.addEventListener('DOMContentLoaded', function() {
+            const signUpBtn = document.getElementById('signUp');
+            const loginBtn = document.getElementById('login');
+            const loginEmail = document.getElementById('login_email');
+            const loginPassword = document.getElementById('login_password');
+            const loader = document.getElementById('loader');
 
 
-        // Click event on the button
-        signUpBtn.addEventListener('click', function(e) {
-            document.getElementById('loaderOverlay').style.display = 'flex';
+            // Click event on the button
+            signUpBtn.addEventListener('click', function(e) {
+                document.getElementById('loaderOverlay').style.display = 'flex';
+            });
+            loginBtn.addEventListener('click', function(e) {
+                document.getElementById('loaderOverlay').style.display = 'flex';
+            });
         });
-        loginBtn.addEventListener('click', function(e) {
-            document.getElementById('loaderOverlay').style.display = 'flex';
-        });
-    });
     </script>
 
 
     <script>
-    const container = document.querySelector('.container');
-    const registerBtn = document.querySelector('.register-btn');
-    const loginBtn = document.querySelector('.login-btn');
+        const emailInputField = document.getElementById('email');
 
-    // registerBtn.addEventListener('click', () => {
-    //     container.classList.add('active');
-    // });
+        const container = document.querySelector('.container');
+        const registerBtn = document.querySelector('.register-btn');
+        const loginBtn = document.querySelector('.login-btn');
 
-    loginBtn.addEventListener('click', () => {
-        container.classList.remove('active');
-    });
+        // registerBtn.addEventListener('click', () => {
+        //     container.classList.add('active');
+        // });
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = urlParams.get('page');
-    const action = urlParams.get('action');
+        emailInputField.addEventListener('change', () => {
+            emailInputField.style.border = '1px solid rgb(237, 237, 237)';
+        })
 
-    if (page === 'register') {
-        container.classList.add('active');
-
-        // 🔽 Remove `?page=register` from URL after activating the form
-        const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
-        window.history.replaceState({}, document.title, urlWithoutParam);
-    } else {
-        container.classList.remove('active');
-    }
-
-    if (action === "deleted") {
-        Swal.fire({
-            title: "Success",
-            text: "Your account has been deleted successfully.",
-            icon: "success"
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove('active');
         });
-    } else if (action === "unauthorized") {
-        Swal.fire({
-            title: "Oops",
-            text: "You are not authorized to access this page.",
-            icon: "warning"
-        })
-    } else if (action === "notVerified") {
-        Swal.fire({
-            title: "Oops",
-            text: "User not verified. Please verify your account.",
-            icon: "warning"
-        })
-    } else if (action === "emailExist") {
-        Swal.fire({
-            title: "Oops",
-            text: "An account with this email already exists.",
-            icon: "warning"
-        })
-    } else if (action === "OTPFailed") {
-        Swal.fire({
-            title: "Oops",
-            text: "We couldn’t send the OTP. Please try again.",
-            icon: "warning"
-        })
-    } else if (action === "successVerification") {
-        Swal.fire({
-            title: "Verified Successfully",
-            text: "Your account has been verified. You may now log in to your account.",
-            icon: "success"
-        })
-    } else if (action === 'partner-registered') {
-        Swal.fire({
-            position: 'center',
-            title: 'Verified Successfully',
-            text: 'Partner has been successfully registered and verified.',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500
-        })
-    }
 
-    if (page || action) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get('page');
+        const action = urlParams.get('action');
+
+        if (page === 'register') {
+            container.classList.add('active');
+
+            // 🔽 Remove `?page=register` from URL after activating the form
+            const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({}, document.title, urlWithoutParam);
+        } else {
+            container.classList.remove('active');
+        }
+
+        if (action === "deleted") {
+            Swal.fire({
+                title: "Success",
+                text: "Your account has been deleted successfully.",
+                icon: "success"
+            });
+        } else if (action === "unauthorized") {
+            Swal.fire({
+                title: "Oops",
+                text: "You are not authorized to access this page.",
+                icon: "warning"
+            })
+        } else if (action === "notVerified") {
+            Swal.fire({
+                title: "Oops",
+                text: "User not verified. Please verify your account.",
+                icon: "warning"
+            })
+        } else if (action === "emailExist") {
+            Swal.fire({
+                title: "Oops",
+                text: "An account with this email already exists.",
+                icon: "warning",
+                confirmButtonText: 'okay'
+            }).then((result) => {
+                emailInputField.style.border = '1px solid red';
+            })
+        } else if (action === "OTPFailed") {
+            Swal.fire({
+                title: "Oops",
+                text: "We couldn’t send the OTP. Please try again.",
+                icon: "warning"
+            })
+        } else if (action === "successVerification") {
+            Swal.fire({
+                title: "Verified Successfully",
+                text: "Your account has been verified. You may now log in to your account.",
+                icon: "success"
+            })
+        } else if (action === 'partner-registered') {
+            Swal.fire({
+                position: 'center',
+                title: 'Verified Successfully',
+                text: 'Partner has been successfully registered and verified.',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+
+        if (page || action) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
     <!-- Eye icon of password show and hide -->
     <script>
-    const passwordField = document.getElementById('login_password');
-    const passwordField1 = document.getElementById('password');
-    const passwordField2 = document.getElementById('confirm_password');
-    const togglePassword = document.getElementById('togglePassword');
-    const togglePassword1 = document.getElementById('togglePassword1');
-    const togglePassword2 = document.getElementById('togglePassword2');
+        const passwordField = document.getElementById('login_password');
+        const passwordField1 = document.getElementById('password');
+        const passwordField2 = document.getElementById('confirm_password');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const togglePassword2 = document.getElementById('togglePassword2');
 
-    function togglePasswordVisibility(passwordField, toggleIcon) {
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleIcon.classList.remove('bxs-hide');
-            toggleIcon.classList.add('bx-show-alt');
-        } else {
-            passwordField.type = 'password';
-            toggleIcon.classList.remove('bx-show-alt');
-            toggleIcon.classList.add('bxs-hide');
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide');
+            }
         }
-    }
 
-    togglePassword.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField, togglePassword);
-    });
+        togglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField, togglePassword);
+        });
 
-    togglePassword1.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField1, togglePassword1);
-    });
+        togglePassword1.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField1, togglePassword1);
+        });
 
-    togglePassword2.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField2, togglePassword2);
-    });
+        togglePassword2.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField2, togglePassword2);
+        });
     </script>
 </body>
 
