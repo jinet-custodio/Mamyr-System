@@ -64,10 +64,10 @@ if (isset($_SESSION['error'])) {
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/roomList.css">
-    <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/sidebar.css">
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
     <!-- Link to Box Icons and Fontawesome -->
@@ -75,184 +75,96 @@ if (isset($_SESSION['error'])) {
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="topSection">
-        <div class="dashTitleContainer">
-            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
-                    src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
-        </div>
-
-        <div class="menus">
-            <!-- Get notification -->
-            <?php
-
-            $receiver = 'Admin';
-            $notifications = getNotification($conn, $userID, $receiver);
-            $counter = $notifications['count'];
-            $notificationsArray = $notifications['messages'];
-            $color = $notifications['colors'];
-            $notificationIDs = $notifications['ids'];
-            ?>
-
-            <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
-                    <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                    <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
-                    <?php endif; ?>
-                </button>
-            </div>
-
-            <a href="#" class="chat">
-                <img src="../../Assets/Images/Icon/chat.png" alt="home icon">
-            </a>
-
-            <?php
-            if ($userRole == 3) {
-                $admin = "Admin";
-            } else {
-                $_SESSION['error'] = "Unauthorized Access!";
-                session_destroy();
-                header("Location: ../register.php");
-                exit();
-            }
-
-            if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
-                $getProfile->bind_param("ii", $userID, $userRole);
-                $getProfile->execute();
-                $getProfileResult = $getProfile->get_result();
-                if ($getProfileResult->num_rows > 0) {
-                    $data = $getProfileResult->fetch_assoc();
-                    $firstName = $data['firstName'];
-                    $imageData = $data['userProfile'];
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $imageData);
-                    finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                }
-            } else {
-                $_SESSION['error'] = "Unauthorized Access!";
-                session_destroy();
-                header("Location: ../register.php");
-                exit();
-            }
-            ?>
-            <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="../Account/account.php" class="admin">
-                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
-            </a>
-        </div>
-    </div>
-
-    <nav class="navbar navbar-expand-lg" id="navbar">
-        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav w-100 me-10 d-flex justify-content-around px-2" id="navUL">
-
+    <main>
+        <div id="sidebar">
+            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo">
+            <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link " href="adminDashboard.php">
-                        <i class="fa-solid fa-grip navbar-icon"></i>
-                        <h5>Dashboard</h5>
-                    </a>
+                    <i class="bi bi-speedometer2"></i>
+                    <a class="nav-link" href="adminDashboard.php">Dashboard</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="booking.php">
-                        <i class="fa-solid fa-calendar-days navbar-icon"></i>
-                        <h5>Bookings</h5>
-                    </a>
+                    <i class="bi bi-calendar-week"></i>
+                    <a class="nav-link" href="booking.php">Bookings</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="reviews.php">
-                        <i class="fa-solid fa-star navbar-icon"></i>
-                        <h5>Reviews</h5>
-                    </a>
+                    <i class="bi bi-list-stars"></i>
+                    <a class="nav-link" href="reviews.php">Reviews</a>
                 </li>
-
-                <li class="nav-item ">
-                    <a class="nav-link active" href="roomList.php">
-                        <i class="fa-solid fa-hotel navbar-icon"></i>
-                        <h5>Rooms</h5>
-                    </a>
+                <li class="nav-item active">
+                    <i class="bi bi-door-open"></i>
+                    <a class="nav-link" href="roomList.php">Rooms</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="services.php">
-                        <i class="fa-solid fa-bell-concierge navbar-icon"></i>
-                        <h5>Services</h5>
-                    </a>
+                    <i class="bi bi-bell"></i>
+                    <a class="nav-link" href="services.php">Services</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="transaction.php">
-                        <i class="fa-solid fa-credit-card navbar-icon"></i>
-                        <h5>Payments</h5>
-                    </a>
+                    <i class="bi bi-credit-card-2-front"></i>
+                    <a class="nav-link" href="transaction.php">Payments</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="revenue.php">
-                        <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
-                        <h5>Sales</h5>
-                    </a>
+                    <i class="bi bi-people"></i>
+                    <a class="nav-link" href="displayPartnership.php">Partnerships</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="displayPartnership.php">
-                        <i class="fa-solid fa-handshake navbar-icon"></i>
-                        <h5>Partnerships</h5>
-                    </a>
+                    <i class="bi bi-pencil-square"></i>
+                    <a class="nav-link" href="editWebsite/editWebsite.php">Edit Website</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="editWebsite/editWebsite.php">
-                        <i class="fa-solid fa-pen-to-square navbar-icon"></i>
-                        <h5>Edit Website</h5>
-                    </a>
-                </li>
-                <li class="nav-item d-flex align-items-center">
-                    <a href="../../Function/Admin/logout.php" class="nav-link">
-                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
-                        <h5 style="color: red;">Log Out</h5>
-                    </a>
+                    <i class="bi bi-clock-history"></i>
+                    <a class="nav-link" href="auditLogs.php">Audit Logs</a>
                 </li>
             </ul>
+
+            <section class="profileContainer">
+                <img src="../../Assets/Images/defaultProfile.png" alt="Admin Profile" class="rounded-circle profilePic">
+                <h5 class="admin-name">Diane Dela Cruz</h5>
+
+            </section>
+
+            <section class="btn btn-outline-danger logOutContainer">
+                <a href="../../Function/Admin/logout.php" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <h5>Log Out</h5>
+                </a>
+            </section>
         </div>
-    </nav>
 
-    <!-- Notification Modal -->
-    <?php include '../notificationModal.php' ?>
-    <!-- Room container -->
+        <section class="booking-container">
 
-    <div class="room-container">
+            <section class="notification-container">
+                <i class="bi bi-bell" id="notification-icon"></i>
+            </section>
 
-        <div class="card " style="width: 80%;">
-            <div class="addHotelContainer">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHotelModal"
-                    id="addHotelBtn">Add Hotel Room</button>
-            </div>
-            <table class="table table-striped" id="roomsTable">
+            <section class="page-title-container">
+                <h5 class="page-title">Rooms</h5>
+            </section>
 
-                <thead>
-                    <th scope="col">Room No.</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Rates</th>
-                    <th scope="col">Duration</th>
-                    <th scope="col">Action</th>
-                </thead>
-                <tbody>
-                    <!-- Select booking info -->
-                    <?php
+
+            <div class="room-container">
+
+                <div class="card " style="width: 80%;">
+                    <div class="addHotelContainer">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addHotelModal" id="addHotelBtn">Add Hotel Room</button>
+                    </div>
+                    <table class="table table-striped" id="roomsTable">
+
+                        <thead>
+                            <th scope="col">Room No.</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Rates</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Action</th>
+                        </thead>
+                        <tbody>
+                            <!-- Select booking info -->
+                            <?php
                     $hotelCategoryID = 1;
                     $getRoomInfo = $conn->prepare("SELECT rs.*, sa.availabilityName AS roomStatus
                     FROM resortamenity rs 
@@ -321,20 +233,22 @@ if (isset($_SESSION['error'])) {
                                 </td>
 
                             </tr>
-                    <?php
+                            <?php
                         }
                     }
                     ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- FORM MODAL ADDING Hotel-->
     <!-- Modal -->
     <form action="../../Function/Admin/Services/addServices.php" method="POST" enctype="multipart/form-data">
-        <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addHotelModal" tabindex="-1" aria-labelledby="addHotelModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -344,12 +258,12 @@ if (isset($_SESSION['error'])) {
                     <div class="modal-body">
                         <div class="input-container">
                             <label for="roomName">Room No.</label>
-                            <input type="text" class="form-control" id="roomName" name="roomName" placeholder="e.g. Room 1" required>
+                            <input type="text" class="form-control" id="roomName" name="roomName"
+                                placeholder="e.g. Room 1" required>
                         </div>
                         <div class="input-container">
                             <label for="roomStat">Room Status</label>
-                            <select id="roomStat" name="roomStat" class="form-select"
-                                required>
+                            <select id="roomStat" name="roomStat" class="form-select" required>
                                 <option value="" disabled selected>Select Availability</option>
                                 <?php
 
@@ -359,8 +273,8 @@ if (isset($_SESSION['error'])) {
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                 ?>
-                                            <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
-                                                <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
+                                    <?= htmlspecialchars($row['availabilityName']) ?></option>
                                 <?php
                                         }
                                     }
@@ -401,7 +315,8 @@ if (isset($_SESSION['error'])) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="saveHotelRoom" name="saveHotelRoom">Save</button>
+                        <button type="submit" class="btn btn-primary" id="saveHotelRoom"
+                            name="saveHotelRoom">Save</button>
                     </div>
                 </div>
             </div>
@@ -411,79 +326,77 @@ if (isset($_SESSION['error'])) {
 
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+
     <!-- Responsive Navbar -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const icons = document.querySelectorAll('.navbar-icon');
-            const navbarUL = document.getElementById('navUL');
-            const nav = document.getElementById('navbar')
+    document.addEventListener("DOMContentLoaded", function() {
+        const icons = document.querySelectorAll('.navbar-icon');
+        const navbarUL = document.getElementById('navUL');
+        const nav = document.getElementById('navbar')
 
-            function handleResponsiveNavbar() {
-                if (window.innerWidth <= 991.98) {
-                    navbarUL.classList.remove('w-100');
-                    navbarUL.style.position = "fixed";
-                    nav.style.margin = "0";
-                    nav.style.maxWidth = "100%";
-                    icons.forEach(icon => {
-                        icon.style.display = "none";
-                    })
-                } else {
-                    navbarUL.classList.add('w-100');
-                    navbarUL.style.position = "relative";
-                    nav.style.margin = "20px auto";
-                    nav.style.maxWidth = "80vw";
-                    icons.forEach(icon => {
-                        icon.style.display = "block";
-                    })
-                }
+        function handleResponsiveNavbar() {
+            if (window.innerWidth <= 991.98) {
+                navbarUL.classList.remove('w-100');
+                navbarUL.style.position = "fixed";
+                nav.style.margin = "0";
+                nav.style.maxWidth = "100%";
+                icons.forEach(icon => {
+                    icon.style.display = "none";
+                })
+            } else {
+                navbarUL.classList.add('w-100');
+                navbarUL.style.position = "relative";
+                nav.style.margin = "20px auto";
+                nav.style.maxWidth = "80vw";
+                icons.forEach(icon => {
+                    icon.style.display = "block";
+                })
             }
+        }
 
-            handleResponsiveNavbar();
-            window.addEventListener('resize', handleResponsiveNavbar);
-        });
+        handleResponsiveNavbar();
+        window.addEventListener('resize', handleResponsiveNavbar);
+    });
     </script>
 
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
     <!-- Jquery Link -->
@@ -493,19 +406,25 @@ if (isset($_SESSION['error'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#roomsTable').DataTable({
-                language: {
-                    emptyTable: "No Hotel Rooms"
-                },
-                columnDefs: [{
-                    width: "30%",
-                    target: 4
-                }]
+    $(document).ready(function() {
+        $('#roomsTable').DataTable({
+            language: {
+                emptyTable: "No Hotel Rooms"
+            },
+            columnDefs: [{
+                width: "30%",
+                target: 4
+            }]
 
-            })
-        });
+        })
+    });
     </script>
+
+
+
+
+
+
 </body>
 
 </html>

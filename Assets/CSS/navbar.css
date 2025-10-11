@@ -131,8 +131,9 @@
   vertical-align: middle;
 }
 
-.nav-item {
-  font-family: "Poppins" !important;
+.nav-item,
+.nav-link {
+  font-family: "Poppins Light";
   font-weight: lighter;
 }
 
@@ -171,7 +172,7 @@
 }
 
 #logOutBtn {
-  font-family: "Poppins";
+  font-family: "Poppins Light";
   margin-right: 2vw;
   border: none;
 }
@@ -232,6 +233,7 @@
 
 .dropdown-item {
   font-weight: bold;
+  font-family: "Poppins Light";
 }
 
 .navbar {

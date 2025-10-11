@@ -205,7 +205,7 @@ tbody {
 td,
 th {
   text-align: center !important;
-  font-size: var;
+  font-size: var(--font-size-base);
 }
 
 th {
@@ -234,6 +234,7 @@ th {
   width: 16%;
 }
 
+/* Status */
 .badge {
   font-weight: initial;
   line-height: normal;
@@ -277,6 +278,7 @@ th {
   background-color: rgba(12, 202, 240, 0.3) !important;
   color: rgb(28, 155, 180);
 }
+/* Status */
 
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   #addBookings {

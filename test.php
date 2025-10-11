@@ -528,3 +528,22 @@ exit();
         </div>
     </div>
 </div>
+
+<!-- NOTIFICATION CODE FROM ROOMLIST.PHP -->
+<div class="notification-container position-relative">
+    <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+        <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
+        <?php if (!empty($counter)): ?>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            <?= htmlspecialchars($counter) ?>
+        </span>
+        <?php endif; ?>
+    </button>
+</div>
+
+<!-- Notification Modal -->
+<?php include '../notificationModal.php' ?>
+<!-- Room container -->
+
+
+<!-- NOTIFICATION CODE FROM ROOMLIST.PHP -->
