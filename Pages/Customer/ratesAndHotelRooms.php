@@ -172,7 +172,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </a>
 
                     <a class="categoryLink  d-flex justify-content-center" onclick="showHotels(event)">
-                        <h5 class="card-title m-auto selected" id="hotelTitle">Hotel Rooms</h5>
+                        <h5 class="card-title m-auto" id="hotelTitle">Hotel Rooms</h5>
                     </a>
 
                 </div>
