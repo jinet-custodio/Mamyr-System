@@ -180,7 +180,8 @@
   letter-spacing: 0.1em;
 }
 
-#logOutBtn {
+#logOutBtn,
+#signUpBtn {
   font-family: "Poppins Light";
   margin-right: 2vw;
   border: none;
