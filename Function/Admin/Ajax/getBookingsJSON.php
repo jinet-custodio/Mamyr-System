@@ -10,10 +10,11 @@ try {
                             b.bookingID, b.bookingType, b.userID, b.startDate, b.endDate, b.bookingStatus,
                             u.firstName, u.middleInitial, u.lastName, 
                             b.customPackageID, 
-                            cb.paymentApprovalStatus, cb.confirmedBookingID, cb.paymentStatus
+                            cb.paymentApprovalStatus, cb.confirmedBookingID, p.paymentStatus
                         FROM booking b
                         INNER JOIN user u ON b.userID = u.userID
-                        LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID");
+                        LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
+                        LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID");
     $getBookingInfo->execute();
     $result = $getBookingInfo->get_result();
 
@@ -33,56 +34,70 @@ try {
         if (!empty($bookings['confirmedBookingID'])) {
             $status = $paymentApprovalStatus['statusName'];
             switch ($paymentApprovalStatus['statusID']) {
-                case 1:
-                    $status = 'Downpayment';
-                    $class = 'info';
+                case 1: //Pending
+                    $status = 'Awaiting Payment';
+                    $class = 'orange';
+                    switch ($bookingStatus['statusID']) {
+                        case 4: //Cancelled
+                            $status = $bookingStatus['statusName'];
+                            $class = 'danger';
+                            break;
+                        case 7: //Expired
+                            $status = $bookingStatus['statusName'];
+                            $class = 'muted';
+                            break;
+                    }
                     break;
-                case 2:
+                case 2: //Approved
+                    $status = 'Reserved';
                     $class = 'success';
+                    switch ($bookingStatus['statusID']) {
+                        case 4: //Cancelled
+                            $status = $bookingStatus['statusName'];
+                            $class = 'danger';
+                            break;
+                    }
                     break;
-                case 3:
-                    $class = 'danger';
-                    break;
-                case 4:
+                case 5: // Rejected
                     $class = 'red';
                     break;
-                case 5:
-                    $class = 'light-green';
-                    break;
-                case 6:
-                    $class = 'secondary';
-                    break;
                 default:
-                    $class = 'warning';
+                    $class = 'orange';
                     break;
             }
         } else {
-            $status = $bookingStatus['statusName'];
+            $status   = $bookingStatus['statusName'];
             switch ($bookingStatus['statusID']) {
-                case 1:
+                case 1: //Pending
+                    $status = 'Awaiting Review';
                     $class = 'warning';
                     break;
-                case 2:
-                    $status = 'Downpayment';
-                    $class = 'info';
+                case 2: //Approved
+                    $status = 'Awaiting Payment';
+                    $class = 'orange';
                     break;
-                case 3:
-                    $class = 'danger';
+                case 3: //Reserved
+                    $status = 'Reserved';
+                    $class = 'success';
                     break;
-                case 4:
+                case 5: //Rejected
                     $class = 'red';
                     break;
-                case 5:
+                case 4: //Cancelled
+                    $class = 'danger';
+                    break;
+                case 6: // Done
                     $class = 'light-green';
                     break;
-                case 6:
-                    $class = 'secondary';
+                case 7: //Expired
+                    $class = 'muted';
                     break;
                 default:
                     $class = 'warning';
                     break;
             }
         }
+
 
         $rows[] = [
             'bookingID' => $bookings['bookingID'],

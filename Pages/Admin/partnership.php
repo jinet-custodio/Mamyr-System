@@ -64,8 +64,6 @@ $partnerID = $_SESSION['partnerID']  ?? null;
 
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/partnership.css">
 </head>
@@ -153,7 +151,8 @@ $partnerID = $_SESSION['partnerID']  ?? null;
                 </div>
                 <div class="partner-info">
                     <h4 class="card-title">Document Link</h4>
-                    <a href="<?= $link ?>" target="_blank"><?= $link ?></a>
+                    <a href="<?= $link ?>" target="_blank" onclick="return warnExternalLink('<?= htmlspecialchars($link) ?>', event)"><?= $link ?></a>
+
                 </div>
                 <div class="applicant-info">
                     <h4 class="card-title">Partner Type</h4>
@@ -163,7 +162,7 @@ $partnerID = $_SESSION['partnerID']  ?? null;
                 </div>
                 <div class="applicant-info validID">
                     <h4 class="card-title">Valid ID</h4>
-                    <input type="text" class="form-control validID" value="<?= $imageName ?>" name="validID" readonly>
+                    <input type="text" class="form-control validID" value="<?= $imageName ?? '' ?>" name="validID" readonly>
                     <button type="button" class="btn btn-primary viewID" data-bs-toggle="modal"
                         data-bs-target="#partnerModal">View ID</button>
                 </div>
@@ -180,7 +179,7 @@ $partnerID = $_SESSION['partnerID']  ?? null;
                         </button>
                     </div>
                     <div class="modal-body">
-                        <img src="../../Assets/Images/BusinessPartnerIDs/<?= $imageName ?>" alt="Valid ID"
+                        <img src="../../Assets/Images/BusinessPartnerIDs/<?= $imageName ?? '' ?>" alt="Valid ID"
                             class="validIDImg">
                     </div>
                     <div class="modal-footer">
@@ -303,7 +302,7 @@ $partnerID = $_SESSION['partnerID']  ?? null;
                         </div>
                         <div class="applicant-info documentLink">
                             <h4 class="card-title">Document Link</h4>
-                            <a href="<?= $link ?>" target="_blank"><?= $link ?></a>
+                            <a href="<?= $link ?>" target="_blank" onclick="return warnExternalLink('<?= htmlspecialchars($link) ?>', event)"><?= $link ?></a>
                         </div>
                         <div class="applicant-info validID">
                             <h4 class="card-title">Valid ID</h4>
@@ -371,9 +370,7 @@ $partnerID = $_SESSION['partnerID']  ?? null;
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -435,6 +432,33 @@ $partnerID = $_SESSION['partnerID']  ?? null;
         }
     </script>
 
+
+    <script>
+        function warnExternalLink(url, e) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'External Link Warning',
+                html: `
+                <p>This link leads to an external site.</p>
+                <p><b>It may be unsafe, unverified, or contain spam.</b></p>
+                <p>Do you still want to continue to:</p>
+                <code>${url}</code>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Yes, open link',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.open(url, '_blank');
+                }
+            });
+
+            return false;
+        }
+    </script>
 </body>
 
 </html>

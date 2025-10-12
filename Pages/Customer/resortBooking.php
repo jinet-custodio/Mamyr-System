@@ -470,8 +470,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <!-- Fetch Info -->
     <script>
-        const cottageSelectionsSession = <?= isset($_SESSION['resortFormData']['cottageSelections'])
-                                                ? json_encode($_SESSION['resortFormData']['cottageSelections'])
+        const cottageSelectionsSession = <?= isset($_SESSION['resortFormData']['cottageOptions'])
+                                                ? json_encode($_SESSION['resortFormData']['cottageOptions'])
                                                 : '[]'
                                             ?>;
         const addOnsServicesSession =

@@ -1,12 +1,11 @@
 <?php
 
-ini_set('display_errors', 0); // Don't display errors to browser
+ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
 
-require '../../Config/dbcon.php';
+require '../../../Config/dbcon.php';
 
-// Optional: Set the correct content type
 header('Content-Type: application/json');
 
 
@@ -18,28 +17,33 @@ if (isset($_GET['selectedFilter'])) {
         case 'month':
             $filter = 'month';
             $sql = "SELECT 
+                        b.bookingType,
                         MONTHNAME(b.startDate) AS month,
-                        CONCAT('Week ', CEIL(DAY(b.startDate) / 7)) AS weekOfMonth,
+                        CONCAT('Week ', 
+                            WEEK(b.startDate, 3) - WEEK(DATE_SUB(b.startDate, INTERVAL DAY(b.startDate)-1 DAY), 3) + 1
+                        ) AS weekOfMonth,
                         SUM(
                             CASE 
                                 WHEN bpas.bookingID IS NULL THEN cb.finalBill
                                 ELSE cb.finalBill - bpas.price
                             END
-                        ) AS totalSalesThisWeek
+                        ) AS totalSalesThisMonth
                     FROM 
                         confirmedbooking cb
                     LEFT JOIN 
                         booking b ON cb.bookingID = b.bookingID
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
+                    LEFT JOIN 
+                        payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
-                        cb.paymentStatus IN (?, ?) AND cb.paymentApprovalStatus IN (?, ?) AND
+                        -- p.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                     GROUP BY 
-                        CEIL(DAY(b.startDate) / 7)
+                        b.bookingType, weekOfMonth
                     ORDER BY 
-                        CEIL(DAY(b.startDate) / 7)
+                        b.bookingType, weekOfMonth
             ";
             break;
         case 'w1':
@@ -50,6 +54,7 @@ if (isset($_GET['selectedFilter'])) {
             $filter = 'week';
             $weekNumber = intval(substr($selectedFilterValue, 1)) - 1;
             $sql = "SELECT 
+                        b.bookingType,
                         CONCAT(
                             DATE_FORMAT(DATE(b.startDate - INTERVAL (DAY(b.startDate) - 1) % 7 DAY), '%b %e'), 
                             ' - ',
@@ -69,15 +74,17 @@ if (isset($_GET['selectedFilter'])) {
                         booking b ON cb.bookingID = b.bookingID
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
+                    LEFT JOIN 
+                        payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
-                        cb.paymentStatus IN (?, ?) AND cb.paymentApprovalStatus IN (?, ?) AND
+                        -- p.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                         AND FLOOR((DAY(b.startDate) - 1) / 7) = ?
                     GROUP BY 
-                        YEAR(b.startDate), MONTH(b.startDate), FLOOR((DAY(b.startDate) - 1) / 7)
+                        b.bookingType, YEAR(b.startDate), MONTH(b.startDate), FLOOR((DAY(b.startDate) - 1) / 7)
                     ORDER BY 
-                        MIN(b.startDate)
+                        b.bookingType, MIN(b.startDate)
                     ";
             break;
     }
@@ -86,18 +93,24 @@ if (isset($_GET['selectedFilter'])) {
     $partiallyPaid = 2;
     $fullyPaid = 3;
     $approvedStatus = 2;
-    $doneStatus = 5;
+    $doneStatus = 6;
     $getSalesFiltered = $conn->prepare($sql);
     if (!$getSalesFiltered) {
         error_log("Prepare failed: " . $conn->error);
     }
+    // if ($filter === 'week') {
+    //     $getSalesFiltered->bind_param('iiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $weekNumber);
+    // } elseif ($filter === 'month') {
+    //     $getSalesFiltered->bind_param('iiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus);
+    // }
+
     if ($filter === 'week') {
-        $getSalesFiltered->bind_param('iiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $weekNumber);
-    } elseif ($filter === 'month') {
-        $getSalesFiltered->bind_param('iiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus);
+        $getSalesFiltered->bind_param('i', $weekNumber);
     }
+    // error_log("Executing query with weekNumber = $weekNumber * selectedValue = $selectedFilterValue");
 
     if (!$getSalesFiltered->execute()) {
+        error_log("Error: " . $getSalesFiltered->error);
         echo json_encode([
             'success' => false,
             'message' => 'An error occured',

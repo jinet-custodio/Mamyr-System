@@ -1,7 +1,7 @@
 <?php
 function getNotification($conn, $userID, $receiver)
 {
-    $getNotifications = $conn->prepare("SELECT * FROM notification WHERE receiverID = ? AND receiver = ?");
+    $getNotifications = $conn->prepare("SELECT * FROM notification WHERE (receiverID = ? OR receiver = ?) AND is_read = 0");
     $getNotifications->bind_param("is", $userID, $receiver);
     $getNotifications->execute();
     $result = $getNotifications->get_result();

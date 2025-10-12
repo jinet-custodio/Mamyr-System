@@ -15,13 +15,17 @@ $userRole = $_SESSION['userRole'] ?? '';
 
 
 if (isset($_SESSION['userID'])) {
-    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
+    $stmt = $conn->prepare("SELECT u.userID, u.userRole, a.adminID
+                            FROM user u
+                            LEFT JOIN admin a ON u.userID = a.userID
+                            WHERE u.userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
 
         $_SESSION['userRole'] = $user['userRole'];
+        $_SESSION['adminID'] = (int) $user['adminID'];
     }
 
     if (!$user) {
@@ -93,7 +97,7 @@ if (isset($_POST['bookingID'])) {
 
 
         <?php
-        $getUserInfo = $conn->prepare("SELECT u.*, b.*  FROM booking b
+        $getUserInfo = $conn->prepare("SELECT u.*, b.* FROM booking b
         INNER JOIN user u ON b.userID = u.userID
         WHERE b.bookingID = ?");
         $getUserInfo->bind_param("i", $bookingID);
@@ -132,6 +136,8 @@ if (isset($_POST['bookingID'])) {
                         <img src="<?= htmlspecialchars($userProfile) ?>" class="img-fluid rounded-start">
                         <div class="booking-info-contact">
                             <p class="card-text name"><?= htmlspecialchars($name) ?></p>
+                            <input type="hidden" name="firstName" value="<?= $data['firstName'] ?>">
+                            <input type="hidden" name="email" value="<?= $email ?>">
                             <p class="card-text sub-name"><?= htmlspecialchars($email) ?> |
                                 <?= htmlspecialchars($phoneNumber) ?> </p>
                             <p class="card-text sub-name"><?= htmlspecialchars($address) ?></p>
@@ -204,12 +210,12 @@ if (isset($_POST['bookingID'])) {
 
                                                     cb.confirmedBookingID,
                                                     cb.amountPaid, 
-                                                    cb.confirmedFinalBill, 
+                                                    cb.finalBill, 
                                                     cb.userBalance, 
                                                     cb.confirmedBookingID, 
                                                     cb.discountAmount, 
                                                     cb.paymentApprovalStatus, 
-                                                    cb.paymentStatus,  
+                                                    p.paymentStatus,  
                                                     cb.paymentDueDate, 
                                                     cb.downpaymentDueDate,
                                                     cb.additionalCharge
@@ -227,6 +233,7 @@ if (isset($_POST['bookingID'])) {
                                                 LEFT JOIN eventcategory ec 
                                                     ON cp.eventTypeID = ec.categoryID
 
+                                                LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                                                 LEFT JOIN bookingservice bs 
                                                     ON b.bookingID = bs.bookingID
                                                 LEFT JOIN service s 
@@ -314,8 +321,8 @@ if (isset($_POST['bookingID'])) {
 
                         if (!empty($confirmedBookingID)) {
                             $paymentApprovalStatus = $row['paymentApprovalStatus'] ?? null;
-                            $paymentStatus = $row['paymentStatus'] ?? null;
-                            $finalBill = (float) $row['confirmedFinalBill'] ?? null;
+                            $paymentStatus = $row['paymentStatus'] ?? 1;
+                            $finalBill = (float) $row['finalBill'] ?? null;
                             $paymentDueDate = !empty($row['paymentDueDate']) ? date('F d, Y h:i A', strtotime($row['paymentDueDate'])) : 'Not Stated';
                             $amountPaid = (float) $row['amountPaid'];
                             $userBalance =  (float) $row['userBalance'];
@@ -416,22 +423,32 @@ if (isset($_POST['bookingID'])) {
                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="rejectionModalLabel">Rejection</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
                             <div class="modal-body">
 
                                 <h6 class="reject-label fw-bold">Select a Reason for Rejection</h6>
                                 <div class="form-group mt-4">
-                                    <select class="form-select" id="select-reject" aria-label="rejection-reason"
+                                    <select class="form-select" id="select-reason" name="rejection-reason" aria-label="rejection-reason"
                                         onchange="otherReason()">
                                         <option value="" disabled selected>Select a reason</option>
-                                        <option value="option1">Di ko bet customer</option>
-                                        <option value="option2">Dami request</option>
-                                        <option value="option3">Kuripot</option>
-                                        <option value="other">Other (Please specify)</option>
+                                        <?php
+                                        $category = 'Rejection';
+                                        $getRejectionReason = $conn->prepare("SELECT `reasonID`, `reasonDescription` FROM `reason` WHERE `category` = ?");
+                                        $getRejectionReason->bind_param('s', $category);
+                                        if (!$getRejectionReason->execute()) {
+                                            error_log('Failed getting rejection reason');
+                                        ?>
+                                            <option value="other">Other (Please specify)</option>
+                                        <?php
+                                        }
+
+                                        $result = $getRejectionReason->get_result();
+
+                                        while ($row = $result->fetch_assoc()):
+                                        ?>
+                                            <option value="<?= $row['reasonID'] ?>"><?= htmlspecialchars($row['reasonDescription']) ?></option>
+                                        <?php
+                                        endwhile;
+                                        ?>
                                     </select>
                                 </div>
 
@@ -443,6 +460,8 @@ if (isset($_POST['bookingID'])) {
 
                             </div>
                             <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Close</button>
                                 <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
                             </div>
                         </div>
@@ -450,23 +469,29 @@ if (isset($_POST['bookingID'])) {
                 </div>
 
                 <!-- Approval Modal -->
-                <div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="rejectionModalLabel"
+                <div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="approvalModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="rejectionModalLabel">Booking Approval</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
                             <div class="modal-body">
                                 <p class="approvalModal-p">You are about to approve a booking. Please review the
                                     details carefully. Once you
                                     approve, the booking will be finalized and cannot be undone.</p>
                                 <p class="approvalModal-p"><strong>Do you want to approve this booking?</strong>
                                 </p>
+
+                                <div class="discount-container mt-2">
+                                    <p>Would you like to give a discount?</p>
+                                    <button type="button" class="btn btn-primary" id="addDiscount">Yes</button>
+                                    <div class="add-discount-container mb-3" id="add-discount-container" style="display: none;">
+                                        <label for="discountAmount">Discount Amount</label>
+                                        <input type="text" class="form-control" id="discountAmount" name="discountAmount" placeholder="100">
+                                    </div>
+                                </div>
                             </div>
                             <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Close</button>
                                 <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
                             </div>
                         </div>
@@ -478,6 +503,7 @@ if (isset($_POST['bookingID'])) {
                 <div class="card" id="info-card">
                     <div class="bookingInfoLeft" id="bookingInformation">
                         <div class="row1">
+                            <input type="hidden" name="startDate" value="<?= $startDate ?>">
                             <div class="info-container" id="booking-info-container">
                                 <label for="bookingType" class="info-label">Booking Type</label>
                                 <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
@@ -589,7 +615,7 @@ if (isset($_POST['bookingID'])) {
                                             <?php } ?>
                                         <?php } ?>
                                     <?php } else { ?>
-                                        <h1 class="text-center defaultMess">No Additional Services Selected!</h1>
+                                        <h1 class="text-center defaultMess">None</h1>
                                     <?php } ?>
                                 </div>
                             <?php  } ?>
@@ -754,55 +780,71 @@ if (isset($_POST['bookingID'])) {
 
     <!-- Allow adding discount and changing final bill -->
     <script>
-        const changeFinalBillRadio = document.getElementById('change-final-bill');
-        const offerDiscountRadio = document.getElementById('offer-discount');
-        const finalBillInput = document.getElementById('editedFinalBill');
+        const discountContainer = document.getElementById('add-discount-container');
         const discountInput = document.getElementById('discountAmount');
-        const addChargeCheckBox = document.getElementById('add-charge');
-        const additionalChargeInput = document.getElementById('additionalCharge');
 
-        function resetInputs() {
-            finalBillInput.readOnly = true;
-            finalBillInput.style.border = '';
-            discountInput.readOnly = true;
-            discountInput.style.border = '';
-        }
+        document.getElementById('addDiscount').addEventListener('click', () => {
+            discountContainer.style.display = 'block';
+            discountInput.style.border = '1px solid red';
+        });
 
-        function updateInputs() {
-            resetInputs();
+        discountInput.addEventListener('keypress', function(e) {
+            if (/[0-9]/.test(e.key)) return;
 
-            if (changeFinalBillRadio.checked) {
-                // Enable and highlight final bill input
-                finalBillInput.readOnly = false;
-                finalBillInput.style.border = '1px solid red';
+            if (e.key === '.' && !discountInput.value.includes('.')) return;
 
-                // Clear discount input
-                discountInput.value = '';
-            } else if (offerDiscountRadio.checked) {
-                // Enable and highlight discount input
-                discountInput.readOnly = false;
-                discountInput.style.border = '1px solid red';
+            e.preventDefault();
+        });
 
-                // Clear final bill input
-                finalBillInput.value = '';
-            }
-        }
+        // const changeFinalBillRadio = document.getElementById('change-final-bill');
+        // const offerDiscountRadio = document.getElementById('offer-discount');
+        // const finalBillInput = document.getElementById('editedFinalBill');
 
-        addChargeCheckBox.addEventListener('change', function() {
-            if (addChargeCheckBox.checked) {
-                additionalChargeInput.readOnly = !this.checked;
-                additionalChargeInput.style.border = '1px solid red';
-            } else {
-                additionalChargeInput.value = '';
-                additionalChargeInput.style.border = '1px solid rgb(117, 117, 117)';
-            }
-        })
+        // const addChargeCheckBox = document.getElementById('add-charge');
+        // const additionalChargeInput = document.getElementById('additionalCharge');
+
+        // function resetInputs() {
+        //     finalBillInput.readOnly = true;
+        //     finalBillInput.style.border = '';
+        //     discountInput.readOnly = true;
+        //     discountInput.style.border = '';
+        // }
+
+        // function updateInputs() {
+        //     resetInputs();
+
+        //     if (changeFinalBillRadio.checked) {
+        //         // Enable and highlight final bill input
+        //         finalBillInput.readOnly = false;
+        //         finalBillInput.style.border = '1px solid red';
+
+        //         // Clear discount input
+        //         discountInput.value = '';
+        //     } else if (offerDiscountRadio.checked) {
+        //         // Enable and highlight discount input
+        //         discountInput.readOnly = false;
+        //         discountInput.style.border = '1px solid red';
+
+        //         // Clear final bill input
+        //         finalBillInput.value = '';
+        //     }
+        // }
+
+        // addChargeCheckBox.addEventListener('change', function() {
+        //     if (addChargeCheckBox.checked) {
+        //         additionalChargeInput.readOnly = !this.checked;
+        //         additionalChargeInput.style.border = '1px solid red';
+        //     } else {
+        //         additionalChargeInput.value = '';
+        //         additionalChargeInput.style.border = '1px solid rgb(117, 117, 117)';
+        //     }
+        // })
 
 
 
-        // Listen for changes on both radios
-        changeFinalBillRadio.addEventListener('change', updateInputs);
-        offerDiscountRadio.addEventListener('change', updateInputs);
+        // // Listen for changes on both radios
+        // changeFinalBillRadio.addEventListener('change', updateInputs);
+        // offerDiscountRadio.addEventListener('change', updateInputs);
     </script>
 
 
@@ -849,7 +891,7 @@ if (isset($_POST['bookingID'])) {
                 const modal = new bootstrap.modal(rejectionModal);
                 modal.show();
 
-                document.getElementById('rejectionReason').style.border = '1px solid red';
+                // document.getElementById('rejectionReason').style.border = '1px solid red';
             });
         } else if (paramValue === 'rejectionFailed') {
             Swal.fire({
@@ -868,11 +910,11 @@ if (isset($_POST['bookingID'])) {
 
     <script>
         function otherReason() {
-            var selectBox = document.getElementById("select-reject");
+            var selectBox = document.getElementById("select-reason");
             var otherInputGroup = document.getElementById("otherInputGroup");
 
             // Show or hide the text box when "Other (Please specify)" is selected
-            if (selectBox.value === "other") {
+            if (selectBox.value === "other" || selectBox.value === '17') {
                 otherInputGroup.style.display = "block"; // Show the text box
             } else {
                 otherInputGroup.style.display = "none"; // Hide the text box
