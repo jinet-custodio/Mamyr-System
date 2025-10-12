@@ -32,6 +32,16 @@ body {
   transition: background-color 0.5s ease;
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
 /* category section */
 
 .titleContainer {
@@ -58,7 +68,6 @@ body {
 }
 
 .category-card {
-  height: 60vh !important;
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 

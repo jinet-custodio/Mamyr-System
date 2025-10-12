@@ -16,8 +16,8 @@ footer {
   margin-top: 3vw;
   background: linear-gradient(
     to top,
-    rgba(255, 255, 255, 0.445) -50%,
-    rgb(62, 132, 158) 95%
+    rgba(241, 241, 241, 0.445) -50%,
+    var(--blue-450)
   );
   width: 100%;
 }
@@ -25,11 +25,11 @@ footer {
 #nameAndLogo {
   gap: 2vw;
   padding: 0.1vw;
-  margin: var(--margin-xs);
+  margin-top: var(--margin-xs);
 }
 
 .logo {
-  width: 10vw;
+  width: 9vw;
   height: auto;
 }
 .mb-0 {
@@ -41,7 +41,7 @@ footer {
 
 .footerLine {
   width: 80%;
-  margin: 0 auto;
+  margin: var(--margin-xs) auto;
   color: var(--text-dark);
   opacity: 1;
 }
@@ -60,7 +60,7 @@ footer {
   font-family: "Poppins";
   font-weight: bold;
   font-size: 19px;
-  color: var(--text-dark);
+  color: var(--bg-light);
 }
 
 .numberFooter,
