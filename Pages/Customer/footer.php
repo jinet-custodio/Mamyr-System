@@ -57,7 +57,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
 
 <body>
     <footer class="py-1 " id="footer">
-        <div class=" py-1 d-flex justify-content-start">
+        <div class=" py-1 d-flex justify-content-start" id="nameAndLogo">
             <?php
             foreach ($logoInfo as $id => $logo) {
                 foreach ($logo as $fileName => $altText) {
