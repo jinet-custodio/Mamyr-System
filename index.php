@@ -106,7 +106,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <a class="nav-link" href="Pages/register.php">Book Now</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Pages/register.php">Sign Up</a>
+                    <a class="nav-link" id="signUpBtn" href="Pages/register.php">Sign Up</a>
                 </li>
             </ul>
         </div>

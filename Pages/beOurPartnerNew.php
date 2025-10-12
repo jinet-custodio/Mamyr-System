@@ -54,7 +54,7 @@
                     <a class="nav-link" href="register.php">Book Now</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="register.php">Sign Up</a>
+                    <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
                 </li>
             </ul>
         </div>
