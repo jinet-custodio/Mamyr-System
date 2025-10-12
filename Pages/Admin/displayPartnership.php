@@ -62,9 +62,10 @@ require '../../Function/notification.php';
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/displayPartnership.css">
-    <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css">
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/sidebar.css">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -76,303 +77,169 @@ require '../../Function/notification.php';
 </head>
 
 <body>
-
-    <div class="topSection">
-        <div class="dashTitleContainer">
-            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard"><img
-                    src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
-        </div>
-
-        <div class="menus">
-            <!-- Get notification -->
-            <?php
-
-            $receiver = 'Admin';
-            $notifications = getNotification($conn, $userID, $receiver);
-            $counter = $notifications['count'];
-            $notificationsArray = $notifications['messages'];
-            $color = $notifications['colors'];
-            $notificationIDs = $notifications['ids'];
-            ?>
-
-            <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
-                    <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                    <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
-                    <?php endif; ?>
-                </button>
-            </div>
-
-            <a href="#" class="chat">
-                <img src="../../Assets/Images/Icon/chat.png" alt="home icon">
-            </a>
-
-            <?php
-            if ($userRole == 3) {
-                $admin = "Admin";
-            } else {
-                $_SESSION['error'] = "Unauthorized Access eh!";
-                session_destroy();
-                header("Location: ../register.php");
-                exit();
-            }
-
-            if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
-                $getProfile->bind_param("ii", $userID, $userRole);
-                $getProfile->execute();
-                $getProfileResult = $getProfile->get_result();
-                if ($getProfileResult->num_rows > 0) {
-                    $data = $getProfileResult->fetch_assoc();
-                    $firstName = $data['firstName'];
-                    $imageData = $data['userProfile'];
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $imageData);
-                    finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                }
-            } else {
-                $_SESSION['error'] = "Unauthorized Access!";
-                session_destroy();
-                header("Location: ../register.php");
-                exit();
-            }
-            ?>
-            <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="../Account/account.php" class="admin">
-                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
-            </a>
-        </div>
-    </div>
-
-    <nav class="navbar navbar-expand-lg" id="navbar">
-        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav w-100 me-10 d-flex justify-content-around px-2" id="navUL">
-
+    <main>
+        <div id="sidebar">
+            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo">
+            <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link " href="adminDashboard.php">
-                        <i class="fa-solid fa-grip navbar-icon"></i>
-                        <h5>Dashboard</h5>
-                    </a>
+                    <i class="bi bi-speedometer2"></i>
+                    <a class="nav-link" href="adminDashboard.php">Dashboard</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="booking.php">
-                        <i class="fa-solid fa-calendar-days navbar-icon"></i>
-                        <h5>Bookings</h5>
-                    </a>
+                    <i class="bi bi-calendar-week"></i>
+                    <a class="nav-link" href="booking.php">Bookings</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="reviews.php">
-                        <i class="fa-solid fa-star navbar-icon"></i>
-                        <h5>Reviews</h5>
-                    </a>
+                    <i class="bi bi-list-stars"></i>
+                    <a class="nav-link" href="reviews.php">Reviews</a>
                 </li>
-
-                <li class="nav-item ">
-                    <a class="nav-link " href="roomList.php">
-                        <i class="fa-solid fa-hotel navbar-icon"></i>
-                        <h5>Rooms</h5>
-                    </a>
-                </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="reviews.php">
-                        <i class="fa-solid fa-star navbar-icon"></i>
-                        <h5>Reviews</h5>
-                    </a>
+                    <i class="bi bi-door-open"></i>
+                    <a class="nav-link" href="roomList.php">Rooms</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link " href="services.php">
-                        <i class="fa-solid fa-bell-concierge navbar-icon"></i>
-                        <h5>Services</h5>
-                    </a>
+                    <i class="bi bi-bell"></i>
+                    <a class="nav-link" href="services.php">Services</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="transaction.php">
-                        <i class="fa-solid fa-credit-card navbar-icon"></i>
-                        <h5>Payments</h5>
-                    </a>
+                    <i class="bi bi-credit-card-2-front"></i>
+                    <a class="nav-link" href="transaction.php">Payments</a>
                 </li>
-
+                <li class="nav-item active">
+                    <i class="bi bi-people"></i>
+                    <a class="nav-link" href="displayPartnership.php">Partnerships</a>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="revenue.php">
-                        <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
-                        <h5>Sales</h5>
-                    </a>
+                    <i class="bi bi-pencil-square"></i>
+                    <a class="nav-link" href="editWebsite/editWebsite.php">Edit Website</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link active" href="displayPartnership.php">
-                        <i class="fa-solid fa-handshake navbar-icon"></i>
-                        <h5>Partnerships</h5>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="editWebsite/editWebsite.php">
-                        <i class="fa-solid fa-pen-to-square navbar-icon"></i>
-                        <h5>Edit Website</h5>
-                    </a>
-                </li>
-                <li class="nav-item d-flex align-items-center">
-                    <a href="../../Function/Admin/logout.php" class="nav-link">
-                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
-                        <h5 style="color: red;">Log Out</h5>
-                    </a>
+                    <i class="bi bi-clock-history"></i>
+                    <a class="nav-link" href="auditLogs.php">Audit Logs</a>
                 </li>
             </ul>
+
+            <section class="profileContainer">
+                <img src="../../Assets/Images/defaultProfile.png" alt="Admin Profile" class="rounded-circle profilePic">
+                <h5 class="admin-name">Diane Dela Cruz</h5>
+
+            </section>
+
+            <section class="btn btn-outline-danger logOutContainer">
+                <a href="../../Function/Admin/logout.php" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <h5>Log Out</h5>
+                </a>
+            </section>
         </div>
-    </nav>
 
-    <!-- Notification Modal -->
-    <?php include '../notificationModal.php' ?>
+        <!-- Booking-container -->
+        <section class="booking-container">
+            <section class="notification-container">
+                <i class="bi bi-bell" id="notification-icon"></i>
+            </section>
 
-    <div class="categories" id="choice-container">
+            <section class="page-title-container">
+                <nav aria-label="breadcrumb" id="choice-container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active page-title"><a href="#" id="partner-link">Partnerships</a>
+                        </li>
+                        <li class="breadcrumb-item page-title" aria-current="page"><a href="#" id="request-link">
+                                Partnership Requests</li></a>
+                    </ol>
+                </nav>
+            </section>
 
-        <a href="#" id="partner-link" class="categoryLink">
-            <div class="card category-card d-flex" style="flex-direction: column;">
-                <img class="card-img-top" src="../../Assets/Images/AdminImages/DisplayPartnershipImages/partners.jpg"
-                    alt="Partners">
 
-                <div class="category-body">
-                    <h5 class="category-title m-auto">PARTNERS</h5>
+            <!-- Display when Partner is Click -->
+            <div class="partner-container" id="partner-container">
+                <!-- Partners Table  -->
+                <div class=" partnership-table">
+
+                    <div class="card" id="partner-card">
+                        <table class="table table-striped display nowrap" id="partnersTable">
+                            <thead>
+                                <tr>
+                                    <th class="table-header wrap-date" scope="col">Name</th>
+                                    <th class="table-header" scope="col">Partner Type</th>
+                                    <th class="table-header wrap-date" scope="col">Date Applied</th>
+                                    <th class="table-header" scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-body" id="partners-table-body">
+                            </tbody>
+
+                        </table>
+                    </div>
                 </div>
             </div>
-        </a>
 
-        <a href="#" id="request-link" class="categoryLink">
-            <div class="card category-card d-flex" style="flex-direction: column;">
-                <img class="card-img-top" src="../../Assets/Images/AdminImages/DisplayPartnershipImages/request.jpg"
-                    alt="Requests">
+            <!-- Display when Request is Click -->
+            <div class="request-container" id="request-container" style="display: none;">
 
-                <div class="category-body">
-                    <h5 class="category-title m-auto">REQUESTS</h5>
+                <!-- Partnership Request Table  -->
+                <div class="partnership-request-table">
+
+                    <div class="card" id="request-card">
+                        <table class="table table-striped display nowrap" id="requestTable">
+                            <thead>
+                                <tr>
+                                    <th class="table-header" scope="col">Name</th>
+                                    <th class="table-header" scope="col">Partner Type</th>
+                                    <th class="table-header wrap-date" scope="col">Request Date</th>
+                                    <th class="table-header" scope="col">Status</th>
+                                    <th class="table-header" scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-body" id="requests-table-body">
+                            </tbody>
+
+                        </table>
+                    </div>
                 </div>
             </div>
-        </a>
-
-    </div>
-
-
-    <!-- Display when Partner is Click -->
-    <div class="partner-container" id="partner-container" style="display: none;">
-        <!-- Partners Table  -->
-        <div class="partnership-table">
-
-            <div class="card" id="partner-card" style="width: 80rem;">
-
-                <!-- Back Button -->
-                <div class="back-btn-container">
-                    <a href="#" id="choice1-link" class="btn btn-primary">
-                        <i class="fa-solid fa-arrow-left backArrow" style="color: #f6f6f6ff;"></i>
-                    </a>
-
-                </div>
-                <h4 class="fw-bold page-title">Partners</h4>
-                <table class="table table-striped display nowrap" id="partnersTable">
-                    <thead>
-                        <tr>
-                            <th class="table-header wrap-date" scope="col">Name</th>
-                            <th class="table-header" scope="col">Partner Type</th>
-                            <th class="table-header wrap-date" scope="col">Date Applied</th>
-                            <th class="table-header" scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-body" id="partners-table-body">
-                    </tbody>
-
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Display when Request is Click -->
-    <div class="request-container" id="request-container" style="display: none;">
-
-        <!-- Partnership Request Table  -->
-        <div class="partnership-request-table">
-
-            <div class="card" id="request-card" style="width: 80rem;">
-                <!-- Back Button -->
-                <div class="back-btn-container">
-                    <a href="#" id="choice2-link" class="btn btn-primary ">
-                        <i class="fa-solid fa-arrow-left backArrow" style="color: #f7f7f7ff;" id="emailBackArrow"></i>
-                    </a>
-
-                </div>
-                <h4 class="fw-bold page-title">Applicant Requests</h4>
-                <table class="table table-striped display nowrap" id="requestTable">
-                    <thead>
-                        <tr>
-                            <th class="table-header" scope="col">Name</th>
-                            <th class="table-header" scope="col">Partner Type</th>
-                            <th class="table-header wrap-date" scope="col">Request Date</th>
-                            <th class="table-header" scope="col">Status</th>
-                            <th class="table-header" scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-body" id="requests-table-body">
-                    </tbody>
-
-                </table>
-            </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -383,229 +250,230 @@ require '../../Function/notification.php';
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $('#requestTable').DataTable({
-            responsive: false,
-            scrollX: true,
-            columnDefs: [{
-                    width: '20%',
-                    targets: 0
-                },
-                {
-                    width: '20%',
-                    targets: 1
-                },
-                {
-                    width: '25%',
-                    targets: 2
-                },
-                {
-                    width: '20%',
-                    targets: 3
-                },
-                {
-                    width: '15%',
-                    targets: 4
-                },
+    $('#requestTable').DataTable({
+        responsive: false,
+        scrollX: true,
+        columnDefs: [{
+                width: '20%',
+                targets: 0
+            },
+            {
+                width: '20%',
+                targets: 1
+            },
+            {
+                width: '25%',
+                targets: 2
+            },
+            {
+                width: '20%',
+                targets: 3
+            },
+            {
+                width: '15%',
+                targets: 4
+            },
 
-            ],
-        });
+        ],
+    });
 
-        $('#partnersTable').DataTable({
-            responsive: false,
-            scrollX: true,
-            columnDefs: [{
-                    width: '25%',
-                    targets: 0
-                },
-                {
-                    width: '25%',
-                    targets: 1
-                },
-                {
-                    width: '25%',
-                    targets: 2
-                },
-                {
-                    width: '25%',
-                    targets: 3
-                }
-            ],
-        });
+    $('#partnersTable').DataTable({
+        responsive: false,
+        scrollX: true,
+        columnDefs: [{
+                width: '25%',
+                targets: 0
+            },
+            {
+                width: '25%',
+                targets: 1
+            },
+            {
+                width: '25%',
+                targets: 2
+            },
+            {
+                width: '25%',
+                targets: 3
+            }
+        ],
+    });
     </script>
 
 
     <!-- Ajax fort request adn partner -->
     <script>
-        function loadPartners() {
-            const table = $('#partnersTable');
-            const tableBody = document.getElementById("partners-table-body");
-            tableBody.innerHTML = "<tr><td colspan='4' class='text-center'>Loading...</td></tr>";
+    function loadPartners() {
+        const table = $('#partnersTable');
+        const tableBody = document.getElementById("partners-table-body");
+        tableBody.innerHTML = "<tr><td colspan='4' class='text-center'>Loading...</td></tr>";
 
-            fetch('../../Function/Admin/Partnership/getPartner.php')
-                .then(res => res.text())
-                .then(html => {
+        fetch('../../Function/Admin/Partnership/getPartner.php')
+            .then(res => res.text())
+            .then(html => {
 
-                    tableBody.innerHTML = html;
+                tableBody.innerHTML = html;
 
-                    table.DataTable();
-                }).catch(err => {
-                    console.log(err);
-                });
-        }
-
-
-        function loadRequests() {
-            const table = $('#requestTable');
-            const tableBody = document.getElementById("requests-table-body");
-            tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Loading...</td></tr>";
-
-            fetch('../../Function/Admin/Partnership/getApplicant.php')
-                .then(res => res.text())
-                .then(html => {
-                    tableBody.innerHTML = html;
-
-                    table.DataTable();
-                }).catch(err => {
-                    console.log(err);
-                });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("partner-link").addEventListener("click", function() {
-                loadPartners();
+                table.DataTable();
+            }).catch(err => {
+                console.log(err);
             });
+    }
 
-            document.getElementById("request-link").addEventListener("click", function() {
-                loadRequests();
+
+    function loadRequests() {
+        const table = $('#requestTable');
+        const tableBody = document.getElementById("requests-table-body");
+        tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Loading...</td></tr>";
+
+        fetch('../../Function/Admin/Partnership/getApplicant.php')
+            .then(res => res.text())
+            .then(html => {
+                tableBody.innerHTML = html;
+
+                table.DataTable();
+            }).catch(err => {
+                console.log(err);
             });
+    }
 
-            const params = new URLSearchParams(window.location.search);
-            const paramValue = params.get('container');
-
-            if (paramValue == 1) loadPartners();
-            else if (paramValue == 2) loadRequests();
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("partner-link").addEventListener("click", function() {
+            loadPartners();
         });
+
+        document.getElementById("request-link").addEventListener("click", function() {
+            loadRequests();
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('container');
+
+        if (paramValue == 1) loadPartners();
+        else if (paramValue == 2) loadRequests();
+    });
     </script>
 
     <!-- Pages hide/show -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const requestLink = document.getElementById("request-link");
-            const partnerLink = document.getElementById("partner-link");
+    document.addEventListener("DOMContentLoaded", function() {
+        const requestLink = document.getElementById("request-link");
+        const partnerLink = document.getElementById("partner-link");
+        const choices = document.getElementById("choice-container");
+        const choice1Link = document.getElementById("choice1-link");
+        const choice2Link = document.getElementById("choice2-link");
+        const partner_Container = document.getElementById("partner-container");
+        const request_Container = document.getElementById("request-container");
+        const partner_Card = document.getElementById("partner-card");
+        const request_Card = document.getElementById("request-card");
 
-            const choices = document.getElementById("choice-container");
-            const choice1Link = document.getElementById("choice1-link");
-            const choice2Link = document.getElementById("choice2-link");
-            const partner_Container = document.getElementById("partner-container");
-            const request_Container = document.getElementById("request-container");
-            const partner_Card = document.getElementById("partner-card");
-            const request_Card = document.getElementById("request-card");
+        requestLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            console.log("Request link clicked");
+            partnerLink.style.color = "#6d6e72ff";
+            requestLink.style.color = "#0d6dfc";
+            partner_Container.style.display = "none";
+            request_Container.style.display = "block";
+            partner_Card.style.display = "none";
+            request_Card.style.display = "block";
 
-            requestLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                console.log("Request link clicked");
-                choices.style.display = "none";
-                partner_Container.style.display = "none";
-                request_Container.style.display = "block";
-                partner_Card.style.display = "none";
-                request_Card.style.display = "block";
-
-                loadRequests();
-            });
-
-            partnerLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                console.log("Partner link clicked");
-                choices.style.display = "none";
-                partner_Container.style.display = "block";
-                request_Container.style.display = "none";
-                partner_Card.style.display = "block";
-                request_Card.style.display = "none";
-
-                loadPartners();
-            });
-
-            choice1Link.addEventListener('click', function(event) {
-                event.preventDefault();
-                choices.style.display = "flex";
-                partner_Container.style.display = "none";
-                request_Container.style.display = "none";
-                partner_Card.style.display = "none";
-                request_Card.style.display = "none";
-            });
-
-            choice2Link.addEventListener('click', function(event) {
-                event.preventDefault();
-                choices.style.display = "flex";
-                partner_Container.style.display = "none";
-                request_Container.style.display = "none";
-                partner_Card.style.display = "none";
-                request_Card.style.display = "none";
-            });
+            loadRequests();
         });
+
+        partnerLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            console.log("Partner link clicked");
+            requestLink.style.color = "#6d6e72ff";
+            partnerLink.style.color = "#0d6dfc";
+            partner_Container.style.display = "block";
+            request_Container.style.display = "none";
+            partner_Card.style.display = "block";
+            request_Card.style.display = "none";
+
+            loadPartners();
+        });
+
+        choice1Link.addEventListener('click', function(event) {
+            event.preventDefault();
+            choices.style.display = "flex";
+            partner_Container.style.display = "none";
+            request_Container.style.display = "none";
+            partner_Card.style.display = "none";
+            request_Card.style.display = "none";
+        });
+
+        choice2Link.addEventListener('click', function(event) {
+            event.preventDefault();
+            choices.style.display = "flex";
+            partner_Container.style.display = "none";
+            request_Container.style.display = "none";
+            partner_Card.style.display = "none";
+            request_Card.style.display = "none";
+        });
+    });
     </script>
     <script src="../../Assets/JS/adminNavbar.js"></script>
 
     <!-- Search URL -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('container');
-        const action = params.get("action");
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('container');
+    const action = params.get("action");
 
-        const choices = document.getElementById("choice-container");
-        const partnerContainer = document.getElementById("partner-container");
-        const requestContainer = document.getElementById("request-container");
-        const partnerCard = document.getElementById("partner-card");
-        const requestCard = document.getElementById("request-card");
+    const choices = document.getElementById("choice-container");
+    const partnerContainer = document.getElementById("partner-container");
+    const requestContainer = document.getElementById("request-container");
+    const partnerCard = document.getElementById("partner-card");
+    const requestCard = document.getElementById("request-card");
 
-        if (paramValue == 1) {
-            choices.style.display = "none";
-            partnerContainer.style.display = "block";
-            requestContainer.style.display = "none";
-            partnerCard.style.display = "block";
-            requestCard.style.display = "none";
+    if (paramValue == 1) {
+        choices.style.display = "none";
+        partnerContainer.style.display = "block";
+        requestContainer.style.display = "none";
+        partnerCard.style.display = "block";
+        requestCard.style.display = "none";
 
-            loadPartners()
-        } else if (paramValue == 2) {
-            choices.style.display = "none";
-            partnerContainer.style.display = "none";
-            requestContainer.style.display = "block";
-            partnerCard.style.display = "none";
-            requestCard.style.display = "block";
+        loadPartners()
+    } else if (paramValue == 2) {
+        choices.style.display = "none";
+        partnerContainer.style.display = "none";
+        requestContainer.style.display = "block";
+        partnerCard.style.display = "none";
+        requestCard.style.display = "block";
 
-            loadRequests();
-        }
+        loadRequests();
+    }
 
-        if (action === "approved") {
-            Swal.fire({
-                icon: 'success',
-                title: 'Partnership Approved',
-                text: 'The partnership request has been approved successfully.'
-            });
-        } else if (action === 'rejected') {
-            Swal.fire({
-                icon: 'success',
-                title: 'Partnership Rejected',
-                text: 'The partnership request has been rejected successfully.'
-            });
-        }
+    if (action === "approved") {
+        Swal.fire({
+            icon: 'success',
+            title: 'Partnership Approved',
+            text: 'The partnership request has been approved successfully.'
+        });
+    } else if (action === 'rejected') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Partnership Rejected',
+            text: 'The partnership request has been rejected successfully.'
+        });
+    }
 
-        if (action) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (action) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-        <?php if (!empty($message)): ?>
-            Swal.fire({
-                icon: '<?= $status ?>',
-                title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
-                text: '<?= $message ?>'
-            });
-        <?php endif; ?>
+    <?php if (!empty($message)): ?>
+    Swal.fire({
+        icon: '<?= $status ?>',
+        title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
+        text: '<?= $message ?>'
+    });
+    <?php endif; ?>
     </script>
 
 

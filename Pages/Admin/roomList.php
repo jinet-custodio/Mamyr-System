@@ -144,8 +144,8 @@ if (isset($_SESSION['error'])) {
                         data-bs-target="#notificationModal">
                         <i class="bi bi-bell" id="notification-icon"></i>
                         <?php if (!empty($counter)): ?>
-                            <?= htmlspecialchars($counter) ?>
-                            </span>
+                        <?= htmlspecialchars($counter) ?>
+                        </span>
                         <?php endif; ?>
                     </button>
                 </div>
@@ -216,36 +216,36 @@ if (isset($_SESSION['error'])) {
                                         // print_r($statColor);
                                         // echo '<pre>';
                                 ?>
-                                        <tr>
-                                            <td>
-                                                <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
-                                                <?= $roomInfo['RServiceName'] ?>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn statusBtn btn-<?= $statColor ?>">
-                                                    <?= $roomInfo['roomStatus'] ?>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <?= "₱ " . $roomInfo['RSprice'] ?>
-                                            </td>
-                                            <td>
-                                                <?= $roomInfo['RSduration'] ?>
-                                            </td>
-                                            <td class="action-column">
-                                                <form action="roomInfo.php" method="POST" class="w-50">
-                                                    <input type="hidden" name="roomID" value="<?= htmlspecialchars($roomID) ?>">
-                                                    <input type="hidden" name="actionType" value="edit">
-                                                    <button type="submit" class="btn btn-primary actionBtn w-100">Edit</button>
-                                                </form>
-                                                <form action="roomInfo.php" method="POST" class="w-50">
-                                                    <input type="hidden" name="roomID" value="<?= htmlspecialchars($roomID) ?>">
-                                                    <input type="hidden" name="actionType" value="view">
-                                                    <button type="submit" class="btn btn-info actionBtn w-100">View</button>
-                                                </form>
-                                            </td>
+                                <tr>
+                                    <td>
+                                        <p style="display: none;"><?= $roomInfo['resortServiceID'] ?> </p>
+                                        <?= $roomInfo['RServiceName'] ?>
+                                    </td>
+                                    <td>
+                                        <span class="badge statusBtn bg-<?= $statColor ?>">
+                                            <?= $roomInfo['roomStatus'] ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <?= "₱ " . $roomInfo['RSprice'] ?>
+                                    </td>
+                                    <td>
+                                        <?= $roomInfo['RSduration'] ?>
+                                    </td>
+                                    <td class="action-column">
+                                        <form action="roomInfo.php" method="POST" class="w-50">
+                                            <input type="hidden" name="roomID" value="<?= htmlspecialchars($roomID) ?>">
+                                            <input type="hidden" name="actionType" value="edit">
+                                            <button type="submit" class="btn btn-primary actionBtn w-100">Edit</button>
+                                        </form>
+                                        <form action="roomInfo.php" method="POST" class="w-50">
+                                            <input type="hidden" name="roomID" value="<?= htmlspecialchars($roomID) ?>">
+                                            <input type="hidden" name="actionType" value="view">
+                                            <button type="submit" class="btn btn-info actionBtn w-100">View</button>
+                                        </form>
+                                    </td>
 
-                                        </tr>
+                                </tr>
                                 <?php
                                     }
                                 }
@@ -286,8 +286,8 @@ if (isset($_SESSION['error'])) {
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                 ?>
-                                            <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
-                                                <?= htmlspecialchars($row['availabilityName']) ?></option>
+                                <option value="<?= htmlspecialchars($row['availabilityID']) ?>">
+                                    <?= htmlspecialchars($row['availabilityName']) ?></option>
                                 <?php
                                         }
                                     }
@@ -343,73 +343,73 @@ if (isset($_SESSION['error'])) {
 
     <!-- Responsive Navbar -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const icons = document.querySelectorAll('.navbar-icon');
-            const navbarUL = document.getElementById('navUL');
-            const nav = document.getElementById('navbar')
+    document.addEventListener("DOMContentLoaded", function() {
+        const icons = document.querySelectorAll('.navbar-icon');
+        const navbarUL = document.getElementById('navUL');
+        const nav = document.getElementById('navbar')
 
-            function handleResponsiveNavbar() {
-                if (window.innerWidth <= 991.98) {
-                    navbarUL.classList.remove('w-100');
-                    navbarUL.style.position = "fixed";
-                    nav.style.margin = "0";
-                    nav.style.maxWidth = "100%";
-                    icons.forEach(icon => {
-                        icon.style.display = "none";
-                    })
-                } else {
-                    navbarUL.classList.add('w-100');
-                    navbarUL.style.position = "relative";
-                    nav.style.margin = "20px auto";
-                    nav.style.maxWidth = "80vw";
-                    icons.forEach(icon => {
-                        icon.style.display = "block";
-                    })
-                }
+        function handleResponsiveNavbar() {
+            if (window.innerWidth <= 991.98) {
+                navbarUL.classList.remove('w-100');
+                navbarUL.style.position = "fixed";
+                nav.style.margin = "0";
+                nav.style.maxWidth = "100%";
+                icons.forEach(icon => {
+                    icon.style.display = "none";
+                })
+            } else {
+                navbarUL.classList.add('w-100');
+                navbarUL.style.position = "relative";
+                nav.style.margin = "20px auto";
+                nav.style.maxWidth = "80vw";
+                icons.forEach(icon => {
+                    icon.style.display = "block";
+                })
             }
+        }
 
-            handleResponsiveNavbar();
-            window.addEventListener('resize', handleResponsiveNavbar);
-        });
+        handleResponsiveNavbar();
+        window.addEventListener('resize', handleResponsiveNavbar);
+    });
     </script>
 
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
     <!-- Jquery Link -->
@@ -419,18 +419,18 @@ if (isset($_SESSION['error'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#roomsTable').DataTable({
-                language: {
-                    emptyTable: "No Hotel Rooms"
-                },
-                columnDefs: [{
-                    width: "30%",
-                    target: 4
-                }]
+    $(document).ready(function() {
+        $('#roomsTable').DataTable({
+            language: {
+                emptyTable: "No Hotel Rooms"
+            },
+            columnDefs: [{
+                width: "30%",
+                target: 4
+            }]
 
-            })
-        });
+        })
+    });
     </script>
 
 
