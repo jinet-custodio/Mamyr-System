@@ -185,7 +185,7 @@ main {
 #serviceCategories {
   /* border: none !important; */
   padding: var(--padding-lg);
-  margin-top: var(--margin-mdl);
+  margin-top: var(--margin-md);
   margin-bottom: 2rem;
   width: 100% !important;
   max-width: 100%;
