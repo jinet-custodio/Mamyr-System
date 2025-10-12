@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 10, 2025 at 12:26 PM
+-- Generation Time: Oct 12, 2025 at 06:01 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `additionalcharges`
+-- Table structure for table `additionalcharge`
 --
 
-CREATE TABLE `additionalcharges` (
+CREATE TABLE `additionalcharge` (
   `additionalChargeID` int(11) NOT NULL,
   `bookingID` int(11) NOT NULL,
   `chargeDescription` varchar(255) NOT NULL,
@@ -104,6 +104,15 @@ CREATE TABLE `booking` (
   `approvedDate` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`bookingID`, `bookingCode`, `userID`, `bookingType`, `customPackageID`, `additionalRequest`, `toddlerCount`, `kidCount`, `adultCount`, `guestCount`, `durationCount`, `arrivalTime`, `startDate`, `endDate`, `paymentMethod`, `bookingOrigin`, `addOns`, `customerChoice`, `totalCost`, `downpayment`, `bookingStatus`, `createdAt`, `approvedBy`, `approvedDate`) VALUES
+(1, 'TOUR25101258786', 2, 'Resort', NULL, 'None', 0, 2, 4, 6, 7, '09:00:00', '2025-10-31 09:00:00', '2025-10-31 16:00:00', 'GCash', 'Online', '', NULL, 1800.00, 500.00, 2, '2025-10-12 11:38:39', 'System', '2025-10-12 07:38:39'),
+(2, 'HTL25101254544', 2, 'Hotel', NULL, NULL, 0, 0, 2, 2, 22, '00:00:00', '2025-10-31 08:00:00', '2025-11-01 06:00:00', 'GCash', 'Online', 'N/A', NULL, 2500.00, 750.00, 5, '2025-10-12 12:19:02', NULL, NULL),
+(3, 'TOUR25101258786 ', 2, 'Event', 1, 'N/A', 0, 0, 0, 50, 5, NULL, '2025-10-31 08:20:00', '2025-10-31 13:20:00', 'GCash', 'Online', 'N/A', NULL, 22000.00, 6300.00, 2, '2025-10-12 12:21:09', 'Shantal I. Gregorio', '2025-10-12 11:57:15');
+
 -- --------------------------------------------------------
 
 --
@@ -119,13 +128,24 @@ CREATE TABLE `bookingservice` (
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `bookingservice`
+--
+
+INSERT INTO `bookingservice` (`bookingServiceID`, `bookingID`, `serviceID`, `guests`, `bookingServicePrice`, `createdAt`) VALUES
+(1, 1, 49, 4, 600.00, '2025-10-12 11:38:39'),
+(2, 1, 50, 2, 200.00, '2025-10-12 11:38:39'),
+(3, 1, 1, 5, 500.00, '2025-10-12 11:38:39'),
+(4, 1, 3, 5, 500.00, '2025-10-12 11:38:39'),
+(5, 2, 30, 2, 2500.00, '2025-10-12 12:19:02');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `booking_cancellations`
+-- Table structure for table `booking_cancellation`
 --
 
-CREATE TABLE `booking_cancellations` (
+CREATE TABLE `booking_cancellation` (
   `cancellationID` int(11) NOT NULL,
   `bookingID` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
@@ -137,10 +157,10 @@ CREATE TABLE `booking_cancellations` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `booking_rejections`
+-- Table structure for table `booking_rejection`
 --
 
-CREATE TABLE `booking_rejections` (
+CREATE TABLE `booking_rejection` (
   `rejectionID` int(11) NOT NULL,
   `bookingID` int(11) NOT NULL,
   `adminID` int(11) NOT NULL,
@@ -148,6 +168,14 @@ CREATE TABLE `booking_rejections` (
   `otherReason` text DEFAULT NULL,
   `rejectedAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `booking_rejection`
+--
+
+INSERT INTO `booking_rejection` (`rejectionID`, `bookingID`, `adminID`, `reasonID`, `otherReason`, `rejectedAt`) VALUES
+(10, 2, 1, 10, '', '2025-10-12 14:37:07'),
+(11, 2, 1, 10, '', '2025-10-12 14:55:45');
 
 -- --------------------------------------------------------
 
@@ -185,6 +213,15 @@ CREATE TABLE `confirmedbooking` (
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `confirmedbooking`
+--
+
+INSERT INTO `confirmedbooking` (`confirmedBookingID`, `bookingID`, `downpaymentImage`, `discountAmount`, `additionalCharge`, `finalBill`, `amountPaid`, `userBalance`, `paymentApprovalStatus`, `paymentDueDate`, `downpaymentDueDate`, `createdAt`) VALUES
+(1, 1, 'defaultDownpayment.png', 0.00, 0.00, 1800.00, 0.00, 1800.00, 1, '2025-10-31 09:00:00', '2025-10-30 00:00:00', '2025-10-12 11:38:39'),
+(6, 3, 'defaultDownpayment.png', 1000.00, 0.00, 21000.00, 0.00, 21000.00, 1, '2025-10-31 08:20:00', '2025-10-30 08:20:00', '2025-10-12 15:57:11'),
+(7, 3, 'defaultDownpayment.png', 1000.00, 0.00, 21000.00, 0.00, 21000.00, 1, '2025-10-31 08:20:00', '2025-10-30 08:20:00', '2025-10-12 15:57:15');
+
 -- --------------------------------------------------------
 
 --
@@ -204,6 +241,13 @@ CREATE TABLE `custompackage` (
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `custompackage`
+--
+
+INSERT INTO `custompackage` (`customPackageID`, `eventTypeID`, `userID`, `foodPricingPerHeadID`, `totalFoodPrice`, `venuePricing`, `additionalServicePrice`, `customPackageTotalPrice`, `customPackageNotes`, `createdAt`) VALUES
+(1, 8, 2, 1, 15000.00, 7000.00, 0.00, 22000.00, 'N/A', '2025-10-12 12:21:09');
+
 -- --------------------------------------------------------
 
 --
@@ -217,6 +261,19 @@ CREATE TABLE `custompackageitem` (
   `foodItemID` int(11) DEFAULT NULL,
   `servicePrice` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `custompackageitem`
+--
+
+INSERT INTO `custompackageitem` (`customPackageItemID`, `customPackageID`, `serviceID`, `foodItemID`, `servicePrice`) VALUES
+(1, 1, NULL, 16, 0.00),
+(2, 1, NULL, 13, 0.00),
+(3, 1, NULL, 23, 0.00),
+(4, 1, NULL, 28, 0.00),
+(5, 1, NULL, 31, 0.00),
+(6, 1, NULL, 37, 0.00),
+(7, 1, 22, NULL, 7000.00);
 
 -- --------------------------------------------------------
 
@@ -369,6 +426,19 @@ CREATE TABLE `notification` (
   `is_read` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`notificationID`, `bookingID`, `partnershipID`, `senderID`, `receiverID`, `message`, `receiver`, `created_at`, `is_read`) VALUES
+(1, 1, NULL, 2, NULL, 'A customer has submitted a new resort booking request.', 'Admin', '2025-10-12 11:38:39', 1),
+(2, 1, NULL, NULL, 2, 'Your booking has been approved. Please complete your payment within 24 hours to confirm your reservation.', 'Customer', '2025-10-12 11:38:39', 1),
+(4, 2, NULL, 2, NULL, 'A customer has submitted a new hotel booking request', 'Admin', '2025-10-12 12:19:02', 1),
+(5, 2, NULL, 1, 2, 'Booking Rejected: Full rooms', 'Customer', '2025-10-12 14:37:07', 0),
+(6, 2, NULL, 1, 2, 'Booking Rejected: Full rooms', 'Customer', '2025-10-12 14:55:45', 0),
+(11, 3, NULL, 1, 2, 'Your Event booking has been approved successfully. Please complete your payment within 24 hours to confirm your reservation. Kindly check your email for more details.', 'Customer', '2025-10-12 15:57:11', 0),
+(12, 3, NULL, 1, 2, 'Your Event booking has been approved successfully. Please complete your payment within 24 hours to confirm your reservation. Kindly check your email for more details.', 'Customer', '2025-10-12 15:57:15', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -503,26 +573,26 @@ INSERT INTO `paymentstatus` (`paymentStatusID`, `statusName`) VALUES
 (3, 'Fully Paid'),
 (2, 'Partially Paid'),
 (4, 'Payment Issue'),
-(5, 'Sent'),
+(5, 'Payment Sent'),
 (1, 'Unpaid');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reasons`
+-- Table structure for table `reason`
 --
 
-CREATE TABLE `reasons` (
+CREATE TABLE `reason` (
   `reasonID` int(11) NOT NULL,
   `category` enum('Cancellation','Rejection') NOT NULL,
   `reasonDescription` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `reasons`
+-- Dumping data for table `reason`
 --
 
-INSERT INTO `reasons` (`reasonID`, `category`, `reasonDescription`) VALUES
+INSERT INTO `reason` (`reasonID`, `category`, `reasonDescription`) VALUES
 (1, 'Cancellation', 'Change of plans'),
 (2, 'Cancellation', 'Found better option'),
 (3, 'Cancellation', 'Too expensive'),
@@ -591,7 +661,7 @@ INSERT INTO `resortamenity` (`resortServiceID`, `RServiceName`, `RSprice`, `RSca
 (24, 'Billiard', 200.00, 0, 0, '1 hour', 3, ' None', 'Entertainment_billiardPic3.png', 1),
 (25, 'Massage Chair', 100.00, 0, 0, '40 minutes', 3, ' None', 'Entertainment_massageChair.png', 1),
 (26, 'Videoke B', 800.00, 0, 0, 'None', 3, ' None', 'Entertainment_videoke2.jpg', 1),
-(27, 'Room 1', 2500.00, 2, 2, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ', 'Hotel_41_hotel1.jpg', 1),
+(27, 'Room 1', 2500.00, 2, 2, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ', 'Hotel_41_hotel1.jpg', 3),
 (28, 'Room 2', 2500.00, 2, 2, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons                                            ', 'Hotel_hotel2.jpg', 1),
 (29, 'Room 3', 2500.00, 2, 2, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons                                            ', 'Hotel_hotel3.jpg', 1),
 (30, 'Room 4', 2500.00, 2, 2, '22 hours', 1, 'Good for 2, Free access to swimming pool, Double Size Bed, Maximum of 4 persons                      ', 'Hotel_80_hotel4.jpg', 1),
@@ -799,6 +869,14 @@ CREATE TABLE `serviceunavailabledate` (
   `unavailableStartDate` datetime NOT NULL,
   `unavailableEndDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `serviceunavailabledate`
+--
+
+INSERT INTO `serviceunavailabledate` (`serviceUnavailableID`, `resortServiceID`, `partnershipServiceID`, `unavailableStartDate`, `unavailableEndDate`) VALUES
+(10, 22, NULL, '2025-10-31 08:20:00', '2025-10-31 13:20:00'),
+(11, 22, NULL, '2025-10-31 08:20:00', '2025-10-31 13:20:00');
 
 -- --------------------------------------------------------
 
@@ -1033,9 +1111,9 @@ INSERT INTO `websitecontentimage` (`WCImageID`, `contentID`, `imageData`, `altTe
 --
 
 --
--- Indexes for table `additionalcharges`
+-- Indexes for table `additionalcharge`
 --
-ALTER TABLE `additionalcharges`
+ALTER TABLE `additionalcharge`
   ADD PRIMARY KEY (`additionalChargeID`),
   ADD KEY `bookingID` (`bookingID`);
 
@@ -1071,18 +1149,18 @@ ALTER TABLE `bookingservice`
   ADD KEY `serviceID` (`serviceID`);
 
 --
--- Indexes for table `booking_cancellations`
+-- Indexes for table `booking_cancellation`
 --
-ALTER TABLE `booking_cancellations`
+ALTER TABLE `booking_cancellation`
   ADD PRIMARY KEY (`cancellationID`),
   ADD KEY `bookingID` (`bookingID`),
   ADD KEY `userID` (`userID`),
   ADD KEY `reasonID` (`reasonID`);
 
 --
--- Indexes for table `booking_rejections`
+-- Indexes for table `booking_rejection`
 --
-ALTER TABLE `booking_rejections`
+ALTER TABLE `booking_rejection`
   ADD PRIMARY KEY (`rejectionID`),
   ADD KEY `bookingID` (`bookingID`),
   ADD KEY `adminID` (`adminID`),
@@ -1214,9 +1292,9 @@ ALTER TABLE `paymentstatus`
   ADD UNIQUE KEY `statusName` (`statusName`);
 
 --
--- Indexes for table `reasons`
+-- Indexes for table `reason`
 --
-ALTER TABLE `reasons`
+ALTER TABLE `reason`
   ADD PRIMARY KEY (`reasonID`);
 
 --
@@ -1331,9 +1409,9 @@ ALTER TABLE `websitecontentimage`
 --
 
 --
--- AUTO_INCREMENT for table `additionalcharges`
+-- AUTO_INCREMENT for table `additionalcharge`
 --
-ALTER TABLE `additionalcharges`
+ALTER TABLE `additionalcharge`
   MODIFY `additionalChargeID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -1352,25 +1430,25 @@ ALTER TABLE `auditlog`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `bookingID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bookingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `bookingservice`
 --
 ALTER TABLE `bookingservice`
-  MODIFY `bookingServiceID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bookingServiceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `booking_cancellations`
+-- AUTO_INCREMENT for table `booking_cancellation`
 --
-ALTER TABLE `booking_cancellations`
+ALTER TABLE `booking_cancellation`
   MODIFY `cancellationID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `booking_rejections`
+-- AUTO_INCREMENT for table `booking_rejection`
 --
-ALTER TABLE `booking_rejections`
-  MODIFY `rejectionID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `booking_rejection`
+  MODIFY `rejectionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `businesspartneravailedservice`
@@ -1382,19 +1460,19 @@ ALTER TABLE `businesspartneravailedservice`
 -- AUTO_INCREMENT for table `confirmedbooking`
 --
 ALTER TABLE `confirmedbooking`
-  MODIFY `confirmedBookingID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `confirmedBookingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `custompackage`
 --
 ALTER TABLE `custompackage`
-  MODIFY `customPackageID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `customPackageID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `custompackageitem`
 --
 ALTER TABLE `custompackageitem`
-  MODIFY `customPackageItemID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `customPackageItemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `entrancerate`
@@ -1424,7 +1502,7 @@ ALTER TABLE `menuitem`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notificationID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `notificationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `partnership`
@@ -1463,9 +1541,9 @@ ALTER TABLE `paymentstatus`
   MODIFY `paymentStatusID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `reasons`
+-- AUTO_INCREMENT for table `reason`
 --
-ALTER TABLE `reasons`
+ALTER TABLE `reason`
   MODIFY `reasonID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
@@ -1508,7 +1586,7 @@ ALTER TABLE `servicepricing`
 -- AUTO_INCREMENT for table `serviceunavailabledate`
 --
 ALTER TABLE `serviceunavailabledate`
-  MODIFY `serviceUnavailableID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `serviceUnavailableID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `status`
@@ -1520,7 +1598,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `userreview`
@@ -1563,10 +1641,10 @@ ALTER TABLE `websitecontentimage`
 --
 
 --
--- Constraints for table `additionalcharges`
+-- Constraints for table `additionalcharge`
 --
-ALTER TABLE `additionalcharges`
-  ADD CONSTRAINT `additionalcharges_ibfk_1` FOREIGN KEY (`bookingID`) REFERENCES `booking` (`bookingID`);
+ALTER TABLE `additionalcharge`
+  ADD CONSTRAINT `additionalcharge_ibfk_1` FOREIGN KEY (`bookingID`) REFERENCES `booking` (`bookingID`);
 
 --
 -- Constraints for table `admin`
@@ -1596,20 +1674,20 @@ ALTER TABLE `bookingservice`
   ADD CONSTRAINT `bookingservice_ibfk_2` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
 
 --
--- Constraints for table `booking_cancellations`
+-- Constraints for table `booking_cancellation`
 --
-ALTER TABLE `booking_cancellations`
-  ADD CONSTRAINT `booking_cancellations_ibfk_1` FOREIGN KEY (`bookingID`) REFERENCES `booking` (`bookingID`),
-  ADD CONSTRAINT `booking_cancellations_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`),
-  ADD CONSTRAINT `booking_cancellations_ibfk_3` FOREIGN KEY (`reasonID`) REFERENCES `reasons` (`reasonID`);
+ALTER TABLE `booking_cancellation`
+  ADD CONSTRAINT `booking_cancellation_ibfk_1` FOREIGN KEY (`bookingID`) REFERENCES `booking` (`bookingID`),
+  ADD CONSTRAINT `booking_cancellation_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`),
+  ADD CONSTRAINT `booking_cancellation_ibfk_3` FOREIGN KEY (`reasonID`) REFERENCES `reason` (`reasonID`);
 
 --
--- Constraints for table `booking_rejections`
+-- Constraints for table `booking_rejection`
 --
-ALTER TABLE `booking_rejections`
-  ADD CONSTRAINT `booking_rejections_ibfk_1` FOREIGN KEY (`bookingID`) REFERENCES `booking` (`bookingID`),
-  ADD CONSTRAINT `booking_rejections_ibfk_2` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`),
-  ADD CONSTRAINT `booking_rejections_ibfk_3` FOREIGN KEY (`reasonID`) REFERENCES `reasons` (`reasonID`);
+ALTER TABLE `booking_rejection`
+  ADD CONSTRAINT `booking_rejection_ibfk_1` FOREIGN KEY (`bookingID`) REFERENCES `booking` (`bookingID`),
+  ADD CONSTRAINT `booking_rejection_ibfk_2` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`),
+  ADD CONSTRAINT `booking_rejection_ibfk_3` FOREIGN KEY (`reasonID`) REFERENCES `reason` (`reasonID`);
 
 --
 -- Constraints for table `businesspartneravailedservice`

@@ -196,7 +196,7 @@ $userRole = $_SESSION['userRole'];
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentHist">
+                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
                             <span class="sidebar-text">Payment</span>
                         </a>

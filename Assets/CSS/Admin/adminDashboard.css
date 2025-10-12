@@ -1,11 +1,126 @@
+:root {
+  --blue-50: oklch(0.9 0.15 210);
+  --blue-100: oklch(0.8 0.2 210);
+  --blue-200: oklch(0.7 0.25 210);
+  --blue-300: oklch(0.6 0.3 210);
+  --blue-400: oklch(0.5 0.35 210);
+  --blue-500: oklch(0.4 0.4 210);
+  --blue-600: oklch(0.3 0.4 210);
+  --blue-700: oklch(0.2 0.4 210);
+  --blue-800: oklch(0.15 0.35 210);
+  --blue-900: oklch(0.1 0.3 210);
+
+  --blue-accents: oklch(0.8 0.1 210);
+
+  --bg-light: oklch(0.9 0.05 50);
+  --bg-dark: oklch(0.05 0.05 50);
+
+  --text-light: oklch(0.2 0.02 50);
+  --text-dark: oklch(0.9 0.03 50);
+
+  --border-light: oklch(0.9 0.05 50);
+  --border-dark: oklch(0.1 0.05 50);
+
+  --link-light: oklch(0.4 0.3 210);
+  --link-dark: oklch(0.6 0.3 210);
+
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-md: 18px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 32px;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-full: 50%;
+
+  --shadow-light: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
+
+  --transition: all 0.3s ease;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* --- Margin Variables --- */
+  --margin-xs: 0.5rem;
+  --margin-sm: 1rem;
+  --margin-md: 1.5rem;
+  --margin-lg: 2rem;
+  --margin-xl: 3rem;
+
+  /* --- Padding Variables --- */
+  --padding-xs: 0.5rem;
+  --padding-sm: 1rem;
+  --padding-md: 1.5rem;
+  --padding-lg: 2rem;
+  --padding-xl: 3rem;
+}
+
+[data-theme="dark"] {
+  --blue-50: oklch(0.1 0.15 210);
+  --blue-100: oklch(0.2 0.2 210);
+  --blue-200: oklch(0.3 0.25 210);
+  --blue-300: oklch(0.4 0.3 210);
+  --blue-400: oklch(0.5 0.35 210);
+  --blue-500: oklch(0.6 0.4 210);
+  --blue-600: oklch(0.7 0.4 210);
+  --blue-700: oklch(0.8 0.35 210);
+  --blue-800: oklch(0.85 0.3 210);
+  --blue-900: oklch(0.9 0.25 210);
+
+  --blue-accents: oklch(0.3 0.1 210);
+
+  --bg-light: oklch(0.05 0.05 50);
+  --bg-dark: oklch(0.1 0.05 50);
+
+  --text-light: oklch(0.9 0.03 50);
+  --text-dark: oklch(0.2 0.02 50);
+
+  --border-light: oklch(0.2 0.05 50);
+  --border-dark: oklch(0.05 0.05 50);
+
+  --link-light: oklch(0.7 0.3 210);
+  --link-dark: oklch(0.8 0.3 210);
+
+  --shadow-light: 0 2px 5px 0 rgba(255, 255, 255, 0.1);
+  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.7);
+
+  --margin-xs: 0.5rem;
+  --margin-sm: 1rem;
+  --margin-md: 1.5rem;
+  --margin-lg: 2rem;
+  --margin-xl: 3rem;
+
+  --padding-xs: 0.5rem;
+  --padding-sm: 1rem;
+  --padding-md: 1.5rem;
+  --padding-lg: 2rem;
+  --padding-xl: 3rem;
+}
+
 @font-face {
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
-
 @font-face {
   font-family: "Poppins Black";
   src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
 @font-face {
@@ -13,359 +128,358 @@
   src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
-@font-face {
-  font-family: "Lora";
-  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
-}
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Poppins";
   text-decoration: none;
-  list-style: none;
 }
 
 body {
-  background: #a1c8c7 !important;
+  display: flex;
+  gap: 1rem;
+}
+
+.notification-container {
+  text-align: right !important;
+  padding: var(--padding-sm);
+  margin-right: var(--margin-xs);
+}
+
+#notification-icon {
+  font-size: 2rem;
+  color: #0d6dfc;
 }
 
 .topSection {
-  /* border: 1px solid black; */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5vw;
-}
-
-.menus {
-  /* border: 1px solid black; */
-  padding: 0.5vw;
-  margin-right: 2vw;
-  display: flex;
-  align-items: center;
-  gap: 2vw;
-}
-
-.dashTitleContainer {
-  margin-left: 1vw;
-}
-
-.logo {
-  width: 15vw;
-}
-
-#dashboard {
-  text-decoration: none;
-  margin-left: 1vw;
-}
-
-.graph,
-.trend-cards {
-  width: 90%;
-}
-
-#roomAvailabilityCard {
-  width: 84%;
-  display: flex;
-  justify-content: center;
-}
-
-.dashboardTitle {
-  font-family: "Lora";
-  text-align: center;
-}
-
-#contentsCF {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  padding: 1rem;
-  padding-top: 0;
-}
-
-.leftSection {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.card {
-  font-family: "Poppins";
-}
-
-.card-header {
-  font-family: "Poppins";
-  font-size: 1.3vw;
-}
-
-.card-body {
-  text-align: end;
-}
-
-.trend-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem;
-}
-
-.trendCardContent {
-  width: 45%;
-  margin: 0.5rem;
-}
-
-.roomAvailabilityGraph {
-  width: 40vw;
-  height: 15vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-}
-
-#availabilityGraph {
-  width: 100%;
-  height: 100%;
-}
-
-.rightSection {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.salesReportBtn {
-  width: 100%;
-  display: flex;
-  margin: auto;
-  justify-content: center;
-  margin: 0.5rem;
-}
-
-.salesReportBtn a {
-  font-size: 18px !important;
-  font-weight: 500;
-  font-family: "Lora" !important;
-}
-
-.salesGraphContainer {
-  /* border: 1px solid black; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(1, 1fr);
   gap: 1rem;
-  padding: 1rem;
 }
 
-.revTitle {
-  font-family: "Poppins Black";
-  display: inline-block;
-  border: 1px;
-  word-wrap: break-word;
-  width: 5px;
-  text-transform: uppercase;
+/* top cards css */
+.card {
+  width: 200px;
+  height: 94px !important;
 }
 
-.sales-chart {
-  width: 500px !important;
-  height: 250px !important;
+.header {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.header i,
+.header h6 {
+  font-size: var(--font-size-sm);
+  color: #a5a5a5;
+}
+
+.header h6 {
+  margin-top: 0.1rem;
+}
+
+.data-container {
+  margin-top: var(--margin-xs);
+}
+
+.customer {
+  display: flex;
+  gap: 1rem;
+}
+
+.card-data {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  width: 55px;
+  height: 18px;
+  /* background-color: rgba(135, 255, 124, 0.5); */
+  border-radius: 0.3rem;
+}
+
+.status i {
+  font-size: var(--font-size-md);
+  /* color: #0c9700; */
+}
+
+#customer-status-percentage {
+  font-size: 10px;
+  /* color: #0c9700; */
+  margin-top: 0.5rem;
+}
+
+.span-caption {
+  font-size: 10px;
+  color: #a5a5a5;
+  margin-top: 0.2rem;
+}
+/* top cards css */
+
+/* graph section css */
+.filter-btn-container {
+  display: flex;
+  width: 100%;
+  justify-content: end !important;
+}
+
+.filter-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #fff;
+  width: 100px; /* adjust as needed */
+  height: 36px; /* adjust as needed */
+  padding: 0 10px;
 }
 
 .filter-select {
-  width: 25%;
+  appearance: none; /* remove default select arrow */
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+  cursor: pointer;
+  padding-right: 20px;
 }
 
-/* Tablet Portrait */
-@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
-  .dashboardTitle {
-    font-size: clamp(4vw, 3.8vw, 3.5vw);
-  }
-
-  .trendCardContent {
-    width: 30%;
-  }
-
-  #contentsCF {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
-  }
-
-  .trend-cards {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 1rem;
-    width: 90vw;
-  }
-
-  .card-header {
-    font-size: 16px !important;
-  }
-
-  h2 {
-    font-size: 14px !important;
-  }
-
-  .roomAvailabilityGraph {
-    width: 100% !important;
-  }
-
-  .rightSection {
-    width: 80%;
-    align-items: center;
-  }
-
-  #salesGraphCard {
-    margin-bottom: 2vw;
-  }
-
-  .topSection {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem !important;
-  }
-
-  #salesBar,
-  #reservationTrendsBar {
-    width: 100% !important;
-  }
-
-  .sales-chart,
-  #reservationTrendsBar {
-    width: 100% !important;
-    height: 100% !important;
-  }
+.filter-select:focus {
+  outline: none;
+  box-shadow: none;
 }
 
-/* Tablet Landscape */
-@media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
-  .menus {
-    margin-right: 10vw;
-  }
-
-  .dashboardTitle {
-    font-size: 30px !important;
-  }
-
-  #contentsCF {
-    gap: 1.5vw !important;
-  }
-
-  .leftSection {
-    gap: 2vw !important;
-  }
-
-  .trend-cards {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 1rem;
-    width: 99.5vw;
-    margin: auto;
-  }
-
-  .trendCardContent {
-    width: 42% !important;
-  }
-
-  .card-header {
-    font-size: 16px !important;
-  }
-
-  h2 {
-    font-size: 14px !important;
-  }
-
-  .rightSection {
-    width: 43vw;
-  }
-
-  #roomAvailabilityCard {
-    width: 42vw !important;
-    margin-left: 6.5vw;
-  }
-
-  .roomAvailabilityGraph {
-    width: 100% !important;
-  }
-
-  #salesBar,
-  #reservationTrendsBar {
-    width: 100% !important;
-  }
-
-  .sales-chart,
-  #reservationTrendsBar {
-    width: 100% !important;
-    height: 100% !important;
-  }
+.filter-select-wrapper i {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  font-size: 16px;
+  color: #666;
 }
 
-@media only screen and (max-width: 599px) {
-  .menus {
-    margin-right: 20vw;
-  }
-
-  .dashboardTitle {
-    margin-top: -12vw;
-    font-size: 20px;
-  }
-
-  #contentsCF {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
-  }
-
-  .trend-cards {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 1rem;
-    width: 90vw;
-  }
-
-  .trendCardContent {
-    width: 42% !important;
-  }
-
-  .card-header {
-    text-align: center;
-    font-size: 16px !important;
-  }
-
-  h2 {
-    font-size: 14px !important;
-  }
-
-  #roomAvailabilityCard {
-    width: 84vw !important;
-  }
-
-  .roomAvailabilityGraph {
-    width: 100% !important;
-  }
-
-  #reservationTrends {
-    margin-top: 2vw;
-  }
-
-  .rightSection {
-    width: 90vw;
-    align-items: center;
-  }
-
-  #salesBar,
-  #reservationTrendsBar {
-    width: 100% !important;
-  }
-
-  .sales-chart,
-  #reservationTrendsBar {
-    width: 100% !important;
-    height: 100% !important;
-  }
+.bottomSection {
+  margin-top: var(--margin-sm);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
 }
+
+.graph-card {
+  width: 524px;
+  height: 370px !important;
+  background-color: #f5f5f5 !important;
+}
+
+.graph-header {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.graph-header i,
+.graph-header h6 {
+  font-size: var(--font-size-lg);
+  color: #0d6dfc;
+}
+
+.graph-header h6 {
+  margin-top: 0.2rem;
+  font-weight: var(--font-weight-bold);
+}
+
+/* .graph {
+  width: 403.86px;
+  height: 244.21px;
+  display: block;
+  margin: auto;
+  margin-top: var(--margin-xs) !important;
+} */
+
+.calendar-rating-container {
+  display: flex;
+  gap: 1rem;
+}
+.calendar-card {
+  width: 304px;
+  height: 370px !important;
+  padding: var(--padding-sm);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#calendar {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Adjusting the Toolbar (Month/Year) title */
+.fc .fc-toolbar-title {
+  font-size: var(--font-size-md);
+}
+
+.fc-toolbar .fc-button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.fc-toolbar-chunk {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fc-today-button.fc-button.fc-button-primary {
+  background-color: #0d6dfc;
+  width: 100%;
+}
+
+.fc-toolbar .fc-button {
+  font-size: var(--font-size-xs);
+  padding: 2px 5px;
+  background-color: #0d6dfc;
+  color: white;
+  border-radius: 4px;
+}
+
+.fc-toolbar .fc-button:hover {
+  background-color: rgb(3, 87, 177);
+}
+
+.fc-day-grid-event {
+  border-radius: 4px;
+}
+
+.fc .fc-view-harness {
+  height: auto !important;
+}
+
+/*font size of day numbers */
+.fc-daygrid-day-number,
+.fc-col-header-cell-cushion,
+.fc-daygrid-day-events {
+  font-size: var(--font-size-xs);
+}
+
+/*month and year view labels */
+.fc-toolbar .fc-left,
+.fc-toolbar .fc-right {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Make day cells (td) fit in the container */
+.fc-daygrid-day {
+  width: calc(100% / 7) !important;
+  box-sizing: border-box;
+}
+
+.fc-daygrid-day .fc-daygrid-day-number {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.fc-daygrid-week-number {
+  width: 30px;
+}
+
+.fc-day-today {
+  background-color: oklch(0.64 0.65 220 / 0.2) !important;
+  color: #333 !important;
+  font-weight: bold;
+}
+
+.ratings-card {
+  width: 203.57px !important;
+  height: 370px !important;
+  background-color: #f5f5f5 !important;
+}
+
+.rating-categories {
+  margin-top: var(--margin-md);
+}
+.progress {
+  height: 12px;
+  border-radius: 8px;
+}
+
+.progress-bar {
+  background-color: #14d2e5;
+  border-radius: 8px;
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.rating-label {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.rating-bar {
+  flex: 2;
+  margin: 0 8px;
+}
+
+.progress {
+  height: 12px;
+  border-radius: 8px;
+  background: #d9d9d9;
+}
+
+.progress-bar {
+  background-color: #14d2e5;
+  border-radius: 8px;
+}
+
+.rating-value {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.overall-rating {
+  margin-top: var(--margin-lg);
+}
+
+.overall-rating-label,
+.overall-rating-stars {
+  text-align: center;
+}
+
+.overall-rating-value {
+  font-weight: var(--font-weight-bold);
+}
+
+.overall-rating-stars i {
+  color: #fdcc0d;
+}
+.sales-chart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.gen-rep-btn {
+  margin-top: var(--margin-xs);
+  width: 50%;
+}
+/* graph section css */

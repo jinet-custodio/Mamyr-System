@@ -191,9 +191,10 @@ require '../../Function/notification.php';
                 </ul>
             </div>
         </nav>
+        <!-- Notification Modal -->
+        <?php include '../notificationModal.php' ?>
+
         <main>
-            <!-- Notification Modal -->
-            <?php include '../notificationModal.php' ?>
 
             <div class="amenities">
 

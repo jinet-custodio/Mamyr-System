@@ -136,7 +136,30 @@ INSERT INTO reasons (category, reasonDescription) VALUES
 ('Rejection', 'Payment issues'),
 ('Rejection', 'Double booking'),
 ('Rejection', 'Policy violation'),
-('Rejection', 'Other');
+('Rejection', 'Other'),
+('PartnerRejection', 'Incomplete or missing documents'),
+('PartnerRejection', 'Invalid or unverifiable business information'),
+('PartnerRejection', 'Duplicate partnership request'),
+('PartnerRejection', 'Existing active partnership for same partner type and service'),
+('PartnerRejection', 'Partner type not eligible for requested service'),
+('PartnerRejection', 'Service not aligned with partnership criteria'),
+('PartnerRejection', 'Failed validation or background check'),
+('PartnerRejection', 'Non-compliance with policy requirements'),
+('PartnerRejection', 'Other');
+
+-- INSERT INTO reasons (category, reasonDescription) VALUES
+-- ('PartnerRejection', 'Incomplete or missing documents'),
+-- ('PartnerRejection', 'Invalid or unverifiable business information'),
+-- ('PartnerRejection', 'Duplicate partnership request'),
+-- ('PartnerRejection', 'Existing active partnership for same partner type and service'),
+-- ('PartnerRejection', 'Partner type already linked to a similar service'),
+-- ('PartnerRejection', 'Partner type not eligible for requested service'),
+-- ('PartnerRejection', 'Service not aligned with partnership criteria'),
+-- ('PartnerRejection', 'Failed validation or background check'),
+-- ('PartnerRejection', 'Non-compliance with policy requirements'),
+-- ('PartnerRejection', 'Other');
+
+
 
 
 CREATE TABLE booking_cancellations (
@@ -167,3 +190,9 @@ CREATE TABLE booking_rejections (
     FOREIGN KEY (adminID) REFERENCES admin(adminID),
     FOREIGN KEY (reasonID) REFERENCES reasons(reasonID)
 );
+
+
+RENAME TABLE booking_rejections TO booking_rejection
+RENAME TABLE booking_cancellations TO booking_cancellation
+RENAME TABLE additionalcharges TO additionalcharge
+RENAME TABLE reasons TO reason

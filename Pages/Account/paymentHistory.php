@@ -153,13 +153,13 @@ switch ($userRole) {
                 </li>
                 <?php if ($role !== 'Admin') { ?>
                     <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item active" id="BookingHist">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
                             <span class="sidebar-text">Booking History</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                        <a href="paymentHistory.php" class="list-group-item active" id="paymentHist">
                             <i class="fa-solid fa-table-list sidebar-icon"></i>
                             <span class="sidebar-text">Payment</span>
                         </a>
@@ -216,23 +216,22 @@ switch ($userRole) {
             <div class="bookingHistContainer">
 
                 <div class="titleContainer">
-                    <h2 class="title">Booking History</h2>
+                    <h2 class="title">Payments</h2>
                 </div>
                 <input type="hidden" name="userID" id="userID" value="<?= $userID ?>">
                 <div class="tableContainer">
-                    <table class=" table table-striped" id="bookingHistory">
+                    <table class=" table table-striped" id="paymentHistory">
                         <thead>
                             <th scope="col">Booking Code</th>
-                            <th scope="col">Check In</th>
-                            <!-- <th scope="col">Total Cost</th>
+                            <th scope="col">Amount</th>
                             <th scope="col">Balance</th>
-                            <th scope="col">Payment Method</th> -->
-                            <th scope="col">Booking Type</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Payment Method</th>
+                            <th scope="col">Approval Status</th>
+                            <th scope="col">Payment Status</th>
                             <th scope="col">Action</th>
                         </thead>
 
-                        <tbody id="p-b-history-body">
+                        <tbody>
                         </tbody>
                     </table>
 
@@ -259,7 +258,6 @@ switch ($userRole) {
                                         <textarea class="form-control w-100 mt-3" id="purpose-additionalNotes"
                                             name="reviewComment" rows="5" placeholder="Additional Feedback"></textarea>
 
-                                        <!-- Booking Info -->
                                         <!-- Booking Info -->
                                         <input type="hidden" id="modalBookingID" name="bookingID" value="">
                                         <input type="hidden" id="modalBookingType" name="bookingType" value="">
@@ -395,7 +393,7 @@ switch ($userRole) {
             const userID = document.getElementById('userID');
             const userIDValue = userID.value;
             // console.error(userIDValue);
-            fetch(`../../Function/Admin/Ajax/getBookingHistoryJSON.php?userID=${userIDValue}`)
+            fetch(`../../Function/Admin/Ajax/getPaymentHistory.php?userID=${userIDValue}`)
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
@@ -408,7 +406,7 @@ switch ($userRole) {
                         return;
                     }
                     const bookings = data.bookings;
-                    const table = $('#bookingHistory').DataTable();
+                    const table = $('#paymentHistory').DataTable();
                     table.clear();
 
 
@@ -427,12 +425,11 @@ switch ($userRole) {
 
                             table.row.add([
                                 booking.bookingCode,
-                                booking.checkIn,
-                                // booking.totalBill,
-                                // booking.userBalance,
-                                // booking.paymentMethod,
-                                booking.bookingType + ' Booking',
-                                getStatusBadge(booking.statusClass, booking.status),
+                                booking.totalBill,
+                                booking.userBalance,
+                                booking.paymentMethod,
+                                getStatusBadge(booking.approvalClass, booking.approvalStatus),
+                                getStatusBadge(booking.paymentClass, booking.paymentStatus),
                                 `<div class="action-button-container">
                                             <form action="reservationSummary.php" method="POST">
                                                 <input type="hidden" name="bookingType" value="${booking.bookingType}">
@@ -776,9 +773,9 @@ switch ($userRole) {
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
-            $('#bookingHistory').DataTable({
+            $('#paymentHistory').DataTable({
                 language: {
-                    emptyTable: "You have not made any bookings yet"
+                    emptyTable: "You have no approved bookings and no payment has been made yet."
                 }
             });
         });

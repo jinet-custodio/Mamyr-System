@@ -71,8 +71,8 @@ if (isset($_POST['bookRates'])) {
     $childrenServiceID = (int) $_POST['childrenServiceID'];
     $adultServiceID = (int) $_POST['adultServiceID'];
 
-    $cottageChoices = !empty($_POST['cottageSelections']) ? $_POST['cottageSelections'] : [];
-    $roomChoices = !empty($_POST['roomSelections']) ?  $_POST['roomSelections'] : [];
+    $cottageChoices = !empty($_POST['cottageOptions']) ? $_POST['cottageOptions'] : [];
+    $roomChoices = !empty($_POST['roomOptions']) ?  $_POST['roomOptions'] : [];
     $addOnsServices = !empty($_POST['addOnsServices']) ?  $_POST['addOnsServices'] : [];
 
 
@@ -279,8 +279,9 @@ if (isset($_POST['bookRates'])) {
 
             $approvedBy = 'System';
             $today = date('Y-m-d h:i:s');
-            $updateApproval = $conn->prepare("UPDATE `booking` SET `approvedBy`= ?,`approvedDate`= ? WHERE bookingID = ?");
-            $updateApproval->bind_param('ssi', $approvedBy, $today, $bookingID);
+            $approvedStatusID = 2;
+            $updateApproval = $conn->prepare("UPDATE `booking` SET bookingStatus = ?, `approvedBy`= ?,`approvedDate`= ? WHERE bookingID = ?");
+            $updateApproval->bind_param('issi', $approvedStatusID, $approvedBy, $today, $bookingID);
             if (!$updateApproval->execute()) {
                 $conn->rollback();
                 throw new Exception('Error :' . $insertConfirmedBooking->error);
@@ -299,7 +300,7 @@ if (isset($_POST['bookRates'])) {
             $confirmedBookingID = $conn->insert_id;
 
             $receiver = 'Customer';
-            $message = 'Your booking has been approved. Please complete your payment within 24 hours to confirm your reservation.';
+            $message = 'Your booking has been approved. Please complete your payment within 24 hours to confirm your reservation. Kindly check your email for more details.';
             $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, receiverID, message, receiver)
             VALUES(?,?,?,?)");
             $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
@@ -311,72 +312,70 @@ if (isset($_POST['bookRates'])) {
 
             $dateCreated = date('d F Y');
             $email_message = '
-               <body style="font-family: Poppins, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
-    <table align="center" width="100%" cellpadding="0" cellspacing="0"
-        style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                        <body style="font-family: Poppins, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
+                            <table align="center" width="100%" cellpadding="0" cellspacing="0"
+                                style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
 
-        <!-- Header -->
-        <tr style="background-color: #365CCE;">
-            <td style="text-align:center; padding: 30px;">
-                <h4
-                    style="font-family: Poppins, sans-serif;  font-weight: 700; font-size: 18px; color: #ffffff; font-size: 18px; margin: 0;">
-                    THANKS FOR BOOKING WITH MAMYR!
-                </h4>
-                <h2
-                    style="font-family: Poppins, sans-serif; font-weight: 200; font-size: 16px;  color: #ffffff; margin: 10px 0 0;">
-                    Confirm Your Reservation with Payment
-                </h2>
-            </td>
-        </tr>
+                                <!-- Header -->
+                                <tr style="background-color: #365CCE;">
+                                    <td style="text-align:center; padding: 30px;">
+                                        <h4
+                                            style="font-family: Poppins, sans-serif;  font-weight: 700; font-size: 18px; color: #ffffff; font-size: 18px; margin: 0;">
+                                            THANKS FOR BOOKING WITH MAMYR!
+                                        </h4>
+                                        <h2
+                                            style="font-family: Poppins, sans-serif; font-weight: 200; font-size: 16px;  color: #ffffff; margin: 10px 0 0;">
+                                            Confirm Your Reservation with Payment
+                                        </h2>
+                                    </td>
+                                </tr>
 
-        <!-- Body -->
-        <tr>
-            <td style="padding: 30px; text-align: left; color: #333333;">
-                <p style="font-size: 12px; margin: -20PX 0 20px; font-style: italic;">
-                    Booking Reference: <strong>' . $bookingCode . '</strong> &nbsp;|&nbsp; Created on ' . $dateCreated .
-                    '
-                </p>
+                                <!-- Body -->
+                                <tr>
+                                    <td style="padding: 30px; text-align: left; color: #333333;">
+                                        <p style="font-size: 12px; margin: -20PX 0 20px; font-style: italic;">
+                                            Booking Reference: <strong>' . $bookingCode . '</strong> &nbsp;|&nbsp; Created on ' . $dateCreated . '
+                                        </p>
 
-                <p style="font-size: 14px; margin: 20px 0 10px;">Hello <strong> ' . $firstName . '</strong>,</p>
+                                        <p style="font-size: 14px; margin: 20px 0 10px;">Hello <strong> ' . $firstName . '</strong>,</p>
 
-                <p style="font-size: 14px; margin: 20px 0 10px;">Here are your booking details:</p>
+                                        <p style="font-size: 14px; margin: 20px 0 10px;">Here are your booking details:</p>
 
-                <p style="font-size: 14px; margin: 8px 0;">Booking Reference: <strong>' . $bookingCode . '</strong></p>
-                <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' . $scheduledStartDate . '</strong>
-                </p>
-                <p style="font-size: 14px; margin: 8px 0;">Booking Type: <strong>' . $bookingType . ' Booking $mdash; '
-                        . $tourType . '</strong></p>
-                <p style="font-size: 14px; margin: 8px 0;">Grand Total: <strong>₱' . number_format($totalCost, 2) .
-                        '</strong></p>
+                                        <p style="font-size: 14px; margin: 8px 0;">Booking Reference: <strong>' . $bookingCode . '</strong></p>
+                                        <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' . $scheduledStartDate . '</strong>
+                                        </p>
+                                        <p style="font-size: 14px; margin: 8px 0;">Booking Type: <strong>' . $bookingType . ' Booking $mdash; '
+                . $tourType . '</strong></p>
+                                                                                        <p style="font-size: 14px; margin: 8px 0;">Grand Total: <strong>₱' . number_format($totalCost, 2) .
+                '</strong></p>
 
-                <p style="font-size: 14px;">
-                    <strong>To confirm your reservation</strong>, a <strong>downpayment</strong> of
-                    ₱' .
-                    number_format($downpayment, 2) .
-                    ' must
-                    be paid within <strong>24 hours</strong>.
-                </p>
+                                                                                        <p style="font-size: 14px;">
+                                                                                            <strong>To confirm your reservation</strong>, a <strong>downpayment</strong> of
+                                                                                            ₱' .
+                number_format($downpayment, 2) .
+                ' must
+                                            be paid within <strong>24 hours</strong>.
+                                        </p>
 
-                <p style="font-size: 14px;">If we do not receive the payment within this timeframe, your booking may be
-                    given to other customers. Make sure to upload the receipt in the website.</p>
+                                        <p style="font-size: 14px;">If we do not receive the payment within this timeframe, your booking may be
+                                            given to other customers. Make sure to upload the receipt in the website.</p>
 
-                <p><strong> ' . $gcashDetails . '. </strong></p>
-                <p style="margin: 10px 0 0;"> You can contact us directly here: <a
-                        href="https://www.facebook.com/messages/t/100888189251567"
-                        style="color: #007bff; text-decoration: none;"> Message us on Facebook</a> </p>
+                                        <p><strong> ' . $gcashDetails . '. </strong></p>
+                                        <p style="margin: 10px 0 0;"> You can contact us directly here: <a
+                                                href="https://www.facebook.com/messages/t/100888189251567"
+                                                style="color: #007bff; text-decoration: none;"> Message us on Facebook</a> </p>
 
-                <p style=" font-size: 14px; margin: 20px 0 0;">We look forward to welcoming you soon!</p>
-
+                                        <p style=" font-size: 14px; margin: 20px 0 0;">We look forward to welcoming you soon!</p>
 
 
-                <p style="font-size: 16px; margin: 30px 0 0;">Thank you,</p>
-                <p style="font-size: 16px; font-weight: bold; margin: 8px 0 0;">Mamyr Resort and Events Place</p>
-            </td>
-        </tr>
-    </table>
-</body>
 
-            ';
+                                        <p style="font-size: 16px; margin: 30px 0 0;">Thank you,</p>
+                                        <p style="font-size: 16px; font-weight: bold; margin: 8px 0 0;">Mamyr Resort and Events Place</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </body>
+                    ';
 
             $subject = 'Booking Confirmation';
 
@@ -398,7 +397,7 @@ if (isset($_POST['bookRates'])) {
             // $insertUnavailableService->close();
             if (!$isSend) {
                 $conn->rollback();
-                throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
+                throw new Exception('Failed Sending Email');
             }
         }
 

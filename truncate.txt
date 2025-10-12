@@ -12,3 +12,5 @@ TRUNCATE TABLE partnership_partnertype;
 TRUNCATE TABLE serviceunavailabledate;
 TRUNCATE TABLE userreview;
 TRUNCATE TABLE user;
+TRUNCATE TABLE booking_rejection;
+TRUNCATE TABLE booking_cancellation;

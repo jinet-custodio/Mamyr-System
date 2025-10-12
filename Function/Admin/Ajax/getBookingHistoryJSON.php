@@ -34,7 +34,6 @@ if (isset($_GET['userID'])) {
             $status = '';
             $class = '';
 
-
             if (!empty($bookings['confirmedBookingID'])) {
                 $status = $paymentApprovalStatus['statusName'];
                 switch ($paymentApprovalStatus['statusID']) {
@@ -125,10 +124,7 @@ if (isset($_GET['userID'])) {
                 'status' => $status,
                 'statusClass' => $class,
                 'bookingStatus' => $bookings['bookingStatus'],
-                'paymentMethod' => $bookings['paymentMethod'],
-                'approvalStatus' => $paymentApprovalStatus['statusName'] ?? '',
-                'userBalance' => '₱ ' . number_format($bookings['userBalance'], 2),
-                'totalBill' => '₱ ' . number_format($bookings['finalBill'], 2) ?? '₱ ' . number_format($bookings['totalCost'], 2)
+                'approvalStatus' => $paymentApprovalStatus['statusName'] ?? ''
             ];
         }
         echo json_encode(
