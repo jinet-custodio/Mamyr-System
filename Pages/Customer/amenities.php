@@ -84,7 +84,7 @@ require '../../Function/notification.php';
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
 
     <!-- Bootstrap Link -->
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
@@ -477,7 +477,7 @@ require '../../Function/notification.php';
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <script src="../Assets/JS/scrollNavbg.js"></script>
+    <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script>
         const swiperConfigs = [{
                 selector: '.swiper-amenity1',
@@ -527,10 +527,10 @@ require '../../Function/notification.php';
             const enableLoop = slideCount >= 3;
 
             new Swiper(config.selector, {
-                slidesPerView: 3,
-                spaceBetween: 20,
-                loop: enableLoop,
-                loopedSlides: enableLoop ? slideCount : 0,
+                slidesPerView: 1,
+                spaceBetween: 10,
+                loop: true,
+                loopedSlides: 3,
                 navigation: {
                     nextEl: config.next,
                     prevEl: config.prev,
