@@ -94,9 +94,8 @@ body {
 }
 
 .titleContainer {
-  /* border: 1px solid red; */
   width: 100%;
-  margin-top: 15vw;
+  margin-top: 19vw;
 }
 
 .white-text {
@@ -107,35 +106,37 @@ body {
   color: #fff;
   text-align: center;
   font-family: "Lora";
-  font-size: clamp(3vw, 4vw, 5vw);
+  font-size: clamp(
+    var(--font-size-xxl),
+    calc(var(--font-size-lg) + 1vh),
+    var(--font-size-xl)
+  );
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
 
 .aboutTopContainer {
-  /* border: 1px solid red; */
-  padding: 5vw;
+  padding: 5vw 5vw 1vw 5vw;
   display: flex;
   justify-content: center;
   gap: 3vw;
-  margin-top: 30vh;
+  margin-top: 15vw;
 }
 
 .fa-arrow-left {
-  font-size: 3vw;
-}
-
-.resortPic {
-  width: 40vw;
-  border-radius: 64px;
+  font-size: 2.5vw;
 }
 
 .hook,
 .servicesTitle,
 .videoTitle {
   font-family: "Poppins";
-  font-size: clamp(2vw, 2.2vw, 2.4vw);
+  font-size: clamp(
+    var(--font-size-xl),
+    calc(var(--font-size-md) + 1vh),
+    var(--font-size-lg)
+  );
   text-align: center;
   font-weight: bold;
 }
@@ -147,14 +148,22 @@ body {
 }
 
 .aboutDescription,
-.servicesDescription {
-  font-size: clamp(1.6vw, 1.4vw, 1.8vw);
+.servicesDescription,
+.firstParagraph,
+.secondParagraph,
+.thirdParagraph,
+.fourthParagraph {
+  font-size: clamp(
+    var(--font-size-md),
+    calc(var(--font-size-sm) + 1vh),
+    var(--font-size-base)
+  );
   font-family: "Poppins";
 }
 
 .btn-primary {
   margin-top: 1vw;
-  font-size: 1.5vw !important;
+  font-size: var(--font-size-lg) !important;
 }
 
 .indent {
@@ -162,13 +171,12 @@ body {
 }
 
 .ourServicesContainer {
-  /* border: 1px solid red; */
   border-radius: 20px;
   width: 98%;
   margin: 0 auto;
   background: #f5f5f5;
   margin-top: 2vw;
-  padding-top: 5vw;
+  padding-top: 1vw;
 }
 
 .servicesTitleContainer {
@@ -185,8 +193,6 @@ body {
 }
 
 .servicesIconContainer {
-  /* border: 1px solid red; */
-  margin-top: 3vw;
   display: flex;
   justify-content: center;
   gap: 5vw;
@@ -195,7 +201,6 @@ body {
 .resortContainer,
 .eventContainer,
 .hotelContainer {
-  /* border: 1px solid red; */
   width: 27%;
   text-align: center;
   /* display: flex;
@@ -213,22 +218,33 @@ body {
 .hotelIconTitle {
   font-weight: bold;
   text-align: center;
-  font-size: 32px;
-  margin-top: 2.5vw;
+  font-size: var(--font-size-lg);
+  margin-top: 0.5vw;
 }
 
 .resortIconDescription,
 .eventIconDescription,
-.hotelIconDescription {
+.hotelIconDescription,
+.videoDescription {
   text-align: center;
-  font-size: clamp(1.6vw, 1.4vw, 1.2vw);
-  margin-top: 2vw;
+  font-size: var(--font-size-md);
+  margin-top: 1vw;
+}
+
+.firstParagraphtextContainer,
+.topTextContainer,
+.videoTextContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
 }
 
 .videoContainer {
-  margin-top: 7vw !important;
+  margin-top: 3vw !important;
   background-color: #4a93d4;
-  padding: 4vw;
+  padding: 2vw;
   border-radius: 20px;
   width: 98%;
   margin: 0 auto;
@@ -253,7 +269,6 @@ body {
   margin-top: 2vw;
   text-align: justify;
   font-family: "Poppins";
-  font-size: clamp(1.6vw, 1.4vw, 1.2vw);
   font-style: normal;
   color: #fff;
 }
@@ -277,11 +292,10 @@ body {
   left: 3%;
 }
 .mamyrHistoryContainer {
-  margin-top: 35vh;
+  margin-top: 18vw;
 }
 
 .firstParagraphContainer {
-  padding: 3vw;
   width: 90%;
   margin: auto;
   display: flex;
@@ -289,7 +303,6 @@ body {
 }
 
 .thirdParagraphContainer {
-  /* border: 1px solid red; */
   padding: 3vw;
   width: 90%;
   margin: auto;
@@ -300,13 +313,14 @@ body {
 }
 
 .firstParagraphPhoto {
-  width: 30vw;
-  border-radius: 64px;
+  width: 25vw;
+  border-radius: 50px;
 }
 
-.thirdParagraphPhoto {
-  width: 40vw;
-  border-radius: 64px;
+.thirdParagraphPhoto,
+.resortPic {
+  width: 30vw;
+  border-radius: 50px;
 }
 
 .firstParagraph,
@@ -314,7 +328,6 @@ body {
 .thirdParagraph,
 .fourthParagraph {
   text-align: justify;
-  font-size: clamp(1.6vw, 1.4vw, 1.2vw);
 }
 
 .firstParagraph,
@@ -328,8 +341,6 @@ body {
 }
 
 .fourthParagraphContainer {
-  /* border: 1px solid red; */
-  padding: 0 3vw 0 3vw;
   width: 90%;
   margin: auto;
   margin-top: -3vw !important;
@@ -358,11 +369,15 @@ body {
 
 /* Tablet Portrait */
 @media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+  .topPicContainer {
+    display: flex;
+    align-items: center;
+  }
   .backArrowContainer {
-    top: 8vh;
+    top: 12vw;
   }
   .mamyrHistoryContainer {
-    margin-top: 10vh;
+    margin-top: 13vw;
   }
 
   .fa-arrow-left {
@@ -373,54 +388,60 @@ body {
     margin-top: 0.5vw;
   }
   .title {
-    font-size: clamp(5vw, 4vw, 3.5vw);
+    font-size: var(--font-size-xxl);
   }
   .aboutTopContainer {
-    margin-top: 10vh;
+    margin-top: 10vw;
     gap: 4vw;
     flex-wrap: wrap;
   }
   .resortPic {
-    width: 60vw;
-    border-radius: 60px;
+    width: 50vw;
+    border-radius: 50px;
   }
 
   .thirdParagraphPhoto,
   .firstParagraphPhoto {
     border-radius: 1vw;
   }
+
+  .firstParagraphtextContainer,
+  .topTextContainer,
+  .videoTextContainer {
+    align-items: unset;
+  }
+
   .hook {
-    font-size: 30px;
-    text-align: center;
+    font-size: var(--font-size-xl);
+    text-align: center !important;
   }
   .aboutDescription,
-  .servicesDescription {
-    font-size: 2.5vw;
-  }
+  .servicesDescription,
   .resortIconDescription,
   .hotelIconDescription,
-  .eventIconDescription {
-    font-size: 2vw;
+  .eventIconDescription,
+  .videoDescription {
+    font-size: var(--font-size-md);
   }
   .videoContainer {
     flex-direction: column-reverse;
     margin-top: 5vw !important;
   }
+  #readMoreBtn {
+    font-size: var(--font-size-md) !important;
+  }
   .videoTitle {
     font-size: 4vw;
     margin-bottom: 2vw;
-  }
-  .videoDescription {
-    font-size: 2.3vw;
-  }
-
-  .btn-primary {
-    font-size: 3vw !important;
   }
 
   .firstParagraphContainer {
     display: flex;
     flex-direction: column-reverse;
+  }
+
+  .embed-responsive {
+    width: 80% !important;
   }
 
   .firstImageContainer {
@@ -429,21 +450,30 @@ body {
   }
 
   .firstParagraphPhoto {
-    width: 50vw;
+    width: 35vw;
   }
 
-  .firstParagraph,
-  .secondParagraph,
-  .thirdParagraph,
-  .fourthParagraph {
-    font-size: 2.4vw;
+  .thirdParagraphContainer {
+    flex-direction: column;
+    padding: 4vw 0;
+  }
+  .thirdImageContainer {
+    width: 58%;
+  }
+
+  .thirdParagraphPhoto {
+    width: 100%;
   }
 }
 
 /* Tablet Landscape */
 @media only screen and (min-width: 559px) and (max-width: 1024px) and (orientation: landscape) {
+  .topPicContainer {
+    display: flex;
+    align-items: center;
+  }
   .aboutTopContainer {
-    margin-top: 20vh;
+    margin-top: 12vw;
     gap: 4vw;
   }
   .fa-arrow-left {
@@ -454,35 +484,25 @@ body {
     width: 50vw;
     border-radius: 60px;
   }
-  .hook {
-    font-size: 25px;
-  }
-  .aboutDescription,
-  .servicesDescription {
-    font-size: 2.5vw;
-  }
-  .resortIconDescription,
-  .hotelIconDescription,
-  .eventIconDescription {
-    font-size: 2vw;
-  }
   .videoTitle {
-    font-size: 4vw;
     margin-bottom: 2vw;
   }
   .videoDescription {
-    font-size: 2.3vw;
     width: 110%;
   }
   .videoContainer {
     margin-top: 7vw !important;
   }
+
+  #readMoreBtn {
+    font-size: var(--font-size-md) !important;
+  }
   .embed-responsive {
     margin-left: 3vw;
   }
 
-  .btn-primary {
-    font-size: 3vw !important;
+  #readMoreBtn {
+    font-size: var(--font-size-md);
   }
 
   .firstParagraphContainer {
@@ -495,57 +515,72 @@ body {
     justify-content: center;
   }
 
-  .firstParagraphPhoto {
-    width: 50vw;
+  .thirdParagraphtextContainer {
+    width: 40% !important;
+  }
+  .thirdParagraphContainer {
+    justify-content: space-between;
+  }
+  .thirdImageContainer {
+    width: 58%;
   }
 
-  .firstParagraph,
-  .secondParagraph,
-  .thirdParagraph,
-  .fourthParagraph {
-    font-size: 2.4vw;
+  .thirdParagraphPhoto {
+    width: 100%;
+  }
+
+  .firstParagraphPhoto {
+    width: 40vw;
+  }
+
+  .thirdParagraphPhoto,
+  .firstParagraphPhoto {
+    border-radius: 1vw;
   }
 }
 
 /* Phones */
 @media only screen and (max-width: 599px) {
   .titleContainer {
-    margin-top: 7vh;
     width: 80%;
     margin-left: auto;
     margin-right: auto;
   }
   .title {
-    font-size: clamp(30px, calc(2.9vh + 4px), 27px);
+    font-size: clamp(24px, calc(2.4vh + 4px), 27px);
   }
   .aboutTopContainer {
     flex-direction: column;
-    margin-top: 7vh;
+    margin-top: 6vw;
     gap: 4vw;
   }
   .fa-arrow-left {
-    font-size: clamp(24px, calc(2.2vh + 4px), 22px);
+    font-size: clamp(28px, calc(2.7vh + 4px), 25px);
+  }
+
+  .embed-responsive {
+    width: 90% !important;
   }
 
   .backArrowContainer {
-    top: 10vh;
+    top: 18vw;
   }
   .mamyrHistoryContainer {
-    margin-top: 10vh;
+    margin-top: 9vw;
   }
 
   .resortPic {
-    width: 100%;
+    width: 70%;
     border-radius: 50px;
     margin: 2vw auto;
   }
   .hook {
-    font-size: 25px;
+    font-size: 21px;
     text-align: center;
     margin-bottom: 2vw;
   }
   .servicesTitle {
-    font-size: 25px;
+    font-size: 22px;
   }
 
   .servicesIconContainer {
@@ -556,12 +591,12 @@ body {
   .resortIcon,
   .eventIcon,
   .hotelIcon {
-    width: 25vw;
+    width: 20vw;
   }
   .resortIconTitle,
   .eventIconTitle,
   .hotelIconTitle {
-    font-size: 25px;
+    font-size: 21px;
   }
   .resortContainer,
   .eventContainer,
@@ -572,7 +607,7 @@ body {
     flex-direction: column-reverse;
   }
   .videoTitle {
-    font-size: 25px;
+    font-size: var(--font-size-md);
   }
   .videoDescription {
     font-size: 16px;
@@ -592,7 +627,7 @@ body {
   .eventIconDescription,
   .hotelIconDescription,
   #readMoreBtn {
-    font-size: clamp(17px, calc(1.7vh + 4px), 15px) !important;
+    font-size: clamp(16px, calc(1.5vh + 4px), 15px) !important;
   }
 
   .firstParagraph,
@@ -601,8 +636,13 @@ body {
   .fourthParagraph,
   .aboutDescription,
   .servicesDescription {
-    font-size: clamp(17px, calc(1.8vh + 4px), 19px);
+    font-size: clamp(15px, calc(1.6vh + 4px), 14px);
   }
+
+  .servicesTitleContainer {
+    width: 100%;
+  }
+
   .firstParagraphContainer,
   .thirdParagraphContainer {
     display: flex;
@@ -610,15 +650,68 @@ body {
     align-items: center;
   }
 
-  .firstParagraphPhoto,
-  .thirdParagraphPhoto {
-    width: 70%;
+  .firstParagraphPhoto {
+    width: 50%;
     margin: 2vw auto;
+  }
+
+  .thirdParagraphPhoto {
+    width: 80%;
   }
 
   .firstImageContainer,
   .thirdImageContainer {
     display: flex;
     justify-content: center;
+  }
+
+  .thirdParagraphContainer {
+    padding: 3vw 0;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .backArrowContainer {
+    top: 20vw;
+  }
+
+  .fa-arrow-left {
+    font-size: clamp(20px, calc(2.2vh + 4px), 25px);
+  }
+
+  .resortIconDescription,
+  .eventIconDescription,
+  .hotelIconDescription,
+  #readMoreBtn {
+    font-size: clamp(14px, calc(1.4vh + 4px), 15px) !important;
+  }
+
+  .firstParagraph,
+  .secondParagraph,
+  .thirdParagraph,
+  .fourthParagraph,
+  .aboutDescription,
+  .servicesDescription,
+  .videoDescription {
+    font-size: clamp(14px, calc(1.4vh + 4px), 15px) !important;
+  }
+
+  .resortIconTitle,
+  .eventIconTitle,
+  .hotelIconTitle {
+    font-size: var(--font-size-md);
+  }
+
+  .hook {
+    font-size: var(--font-size-lg);
+    text-align: center;
+    margin-bottom: 2vw;
+  }
+  .servicesTitle {
+    font-size: var(--font-size-lg);
   }
 }
