@@ -69,9 +69,11 @@ switch ($userRole) {
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/deleteAccount.css" />
+    <link rel="stylesheet" href="../../Assets/CSS/Account/account-sidebar.css" />
 
     <!-- Font Awesome Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -103,17 +105,17 @@ switch ($userRole) {
             </div>
             <div class="home">
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Customer/dashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Admin/adminDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../BusinessPartner/bpDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../BusinessPartner/bpDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } ?>
 
             </div>
@@ -137,64 +139,66 @@ switch ($userRole) {
                 ?>
 
                 <div class="profileImage">
-                    <img src="<?= htmlspecialchars($image) ?>" alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
+                    <img src="<?= htmlspecialchars($image) ?>"
+                        alt=" <?= htmlspecialchars($data['firstName']) ?> Picture">
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
                 <li>
                     <a href="account.php" class="list-group-item ">
-                        <i class="fa-solid fa-user sidebar-icon"></i>
+                        <i class="bi bi-person sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
 
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner' || $role === 'Partnership Applicant') { ?>
-                    <li>
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                            <i class="fa-solid fa-table-list sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
-                        </a>
-                    </li>
+                <li>
+                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <i class="bi bi-calendar2-check sidebar-icon"></i>
+                        <span class="sidebar-text">Payment & Booking History</span>
+                    </a>
+                </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li>
-                        <a href="userManagement.php" class="list-group-item">
-                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
-                            <span class="sidebar-text">Manage Users</span>
-                        </a>
-                    </li>
+                <li>
+                    <a href="userManagement.php" class="list-group-item">
+                        <i class="bi bi-person-gear sidebar-icon"></i>
+                        <span class="sidebar-text">Manage Users</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <?php
                 //* For business partner nav
                 if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpBookings.php" class="list-group-item">
-                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
-                            <span class="sidebar-text">Bookings</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpServices.php" class="list-group-item">
-                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
-                            <span class="sidebar-text">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bpBookings.php" class="list-group-item">
+                        <i class="bi bi-calendar2-check sidebar-icon"></i>
+                        <span class="sidebar-text">Bookings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpServices.php" class="list-group-item">
+                        <i class="bi bi-bell sidebar-icon"></i>
+                        <span class="sidebar-text">Services</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpSales.php" class="list-group-item">
+                        <i class="bi bi-bell sidebar-icon"></i>
+                        <i class="bi bi-tags sidebar-icon"></i>
+                        <span class="sidebar-text">Sales</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <li>
                     <a href="loginSecurity.php" class="list-group-item">
-                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <i class="bi bi-shield-check sidebar-icon"></i>
                         <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
                 <li>
                     <a href="deleteAccount.php" class="list-group-item active">
-                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
+                        <i class="bi bi-person-dash sidebar-icon"></i>
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
@@ -202,8 +206,9 @@ switch ($userRole) {
             </ul>
 
             <div class="logout">
-                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
-                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
+                    style="margin: 3vw auto;">
+                    <i class="bi bi-box-arrow-right logout-icon"></i>
                     <span class="sidebar-text ms-2">Logout</span>
             </div>
 
@@ -218,14 +223,17 @@ switch ($userRole) {
                     <div class="card-body">
                         <p class="card-text">
                             Deleting your account is permanent.
-                            When you delete your account, your main profile and everything else that you've added will be
+                            When you delete your account, your main profile and everything else that you've added will
+                            be
                             permanently deleted.
-                            You won't be able to retrieve anything that you've added. All additional information, and all of
+                            You won't be able to retrieve anything that you've added. All additional information, and
+                            all of
                             your
                             messages will also be deleted.
                         </p>
                         <div class="delete-button">
-                            <button type="button" class="btn btn-danger" name="confirmationBtn" id="confirmationBtn">Delete
+                            <button type="button" class="btn btn-danger" name="confirmationBtn"
+                                id="confirmationBtn">Delete
                                 Account</button>
                         </div>
                         <?php
@@ -247,7 +255,8 @@ switch ($userRole) {
 
                                         </div>
                                         <div class="modal-body">
-                                            <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                            <input type="hidden" name="email"
+                                                value="<?= htmlspecialchars($data['email']) ?>">
                                             <p class="modal-title text-center mb-2">Are you sure?</p>
                                             <p class="modal-text text-center mb-2">You won't be able to revert this!</p>
                                             <div class="button-container">
@@ -278,8 +287,8 @@ switch ($userRole) {
                                                 <input type="hidden" name="email"
                                                     value="<?= htmlspecialchars($data['email']) ?>">
                                             </div>
-                                            <button type="button" class="btn-close btn btn-danger ms-2" data-bs-dismiss="modal"
-                                                aria-label="Close">
+                                            <button type="button" class="btn-close btn btn-danger ms-2"
+                                                data-bs-dismiss="modal" aria-label="Close">
                                             </button>
                                         </div>
                                         <div class="modal-body">
@@ -292,7 +301,8 @@ switch ($userRole) {
 
 
 
-                                            <p class="modal-text text-center mb-2">Please enter the verification code</p>
+                                            <p class="modal-text text-center mb-2">Please enter the verification code
+                                            </p>
 
                                             <div class="text-center">
                                                 <input type="text" name="enteredOTP" id="enteredOTP"
@@ -303,7 +313,8 @@ switch ($userRole) {
                                             <div class="button-container">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary" name="verifyCode">Submit</button>
+                                                <button type="submit" class="btn btn-primary"
+                                                    name="verifyCode">Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -323,99 +334,99 @@ switch ($userRole) {
     </script>
 
     <script>
-        //Handle sidebar for responsiveness
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.getElementById('toggle-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container')
+    //Handle sidebar for responsiveness
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const items = document.querySelectorAll('.list-group-item');
+        const toggleCont = document.getElementById('toggle-container')
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    });
-                    toggleCont.style.justifyContent = "center"
-                } else {
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    toggleCont.style.justifyContent = "flex-end"
-                }
-            });
-
-            function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
-                    sidebar.classList.add('collapsed');
-                    toggleBtn.style.display = "flex";
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    })
-
-                } else {
-                    toggleBtn.style.display = "none";
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    })
-                    sidebar.classList.remove('collapsed');
-                }
+            if (sidebar.classList.contains('collapsed')) {
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                });
+                toggleCont.style.justifyContent = "center"
+            } else {
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                toggleCont.style.justifyContent = "flex-end"
             }
-
-            // Run on load and when window resizes
-            handleResponsiveSidebar();
-            window.addEventListener('resize', handleResponsiveSidebar);
         });
+
+        function handleResponsiveSidebar() {
+            if (window.innerWidth <= 600) {
+                sidebar.classList.add('collapsed');
+                toggleBtn.style.display = "flex";
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                })
+
+            } else {
+                toggleBtn.style.display = "none";
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                })
+                sidebar.classList.remove('collapsed');
+            }
+        }
+
+        // Run on load and when window resizes
+        handleResponsiveSidebar();
+        window.addEventListener('resize', handleResponsiveSidebar);
+    });
     </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Show -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramsValue = params.get('action')
-        const confirmationBtn = document.getElementById("confirmationBtn");
-        const confirmationModal = document.getElementById("confirmationModal");
-        const deleteModal = document.getElementById('deleteModal');
-        const logoutBtn = document.getElementById('logoutBtn');
+    const params = new URLSearchParams(window.location.search);
+    const paramsValue = params.get('action')
+    const confirmationBtn = document.getElementById("confirmationBtn");
+    const confirmationModal = document.getElementById("confirmationModal");
+    const deleteModal = document.getElementById('deleteModal');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../Function/logout.php";
-                }
-            });
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../Function/logout.php";
+            }
         });
+    });
 
-        confirmationBtn.addEventListener("click", function() {
-            const myconfirmationModal = new bootstrap.Modal(confirmationModal);
-            myconfirmationModal.show();
-        });
+    confirmationBtn.addEventListener("click", function() {
+        const myconfirmationModal = new bootstrap.Modal(confirmationModal);
+        myconfirmationModal.show();
+    });
 
-        if (paramsValue === 'success') {
-            const myModal = new bootstrap.Modal(deleteModal);
-            myModal.show();
-        };
+    if (paramsValue === 'success') {
+        const myModal = new bootstrap.Modal(deleteModal);
+        myModal.show();
+    };
 
-        if (paramsValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramsValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 </body>
 

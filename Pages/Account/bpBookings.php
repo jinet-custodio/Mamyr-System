@@ -50,8 +50,8 @@ require_once '../../Function/Partner/getBookings.php';
     <title>Business Partner Services - Mamyr Resort and Events Place</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- Bootstrap Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/Account/account-sidebar.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/bpBooking.css">
     <!-- DataTables Link -->
@@ -110,17 +110,17 @@ require_once '../../Function/Partner/getBookings.php';
             </div>
             <div class="home">
                 <?php if ($role === 'Customer') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Customer/dashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Admin/adminDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../BusinessPartner/bpDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../BusinessPartner/bpDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } ?>
             </div>
 
@@ -134,45 +134,45 @@ require_once '../../Function/Partner/getBookings.php';
             <ul class="list-group sidebar-nav">
                 <li class="sidebar-item">
                     <a href="account.php" class="list-group-item ">
-                        <i class="fa-solid fa-user sidebar-icon"></i>
+                        <i class="bi bi-person sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                            <i class="fa-solid fa-table-list sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <i class="bi bi-calendar2-check sidebar-icon"></i>
+                        <span class="sidebar-text">Payment & Booking History</span>
+                    </a>
+                </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li class="sidebar-item">
-                        <a href="userManagement.php" class="list-group-item">
-                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
-                            <span class="sidebar-text">Manage Users</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="userManagement.php" class="list-group-item">
+                        <i class="bi bi-person-gear sidebar-icon"></i>
+                        <span class="sidebar-text">Manage Users</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpBookings.php" class="list-group-item active">
-                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
-                            <span class="sidebar-text">Bookings</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpServices.php" class="list-group-item">
-                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
-                            <span class="sidebar-text">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bpBookings.php" class="list-group-item active">
+                        <i class="bi bi-calendar-week sidebar-icon"></i>
+                        <span class="sidebar-text">Bookings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpServices.php" class="list-group-item">
+                        <i class="bi bi-bell sidebar-icon"></i>
+                        <span class="sidebar-text">Services</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpSales.php" class="list-group-item">
+                        <i class="bi bi-tags sidebar-icon"></i>
+                        <span class="sidebar-text">Sales</span>
+                    </a>
+                </li>
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -183,14 +183,15 @@ require_once '../../Function/Partner/getBookings.php';
                 </li>
                 <li class="sidebar-item">
                     <a href="deleteAccount.php" class="list-group-item">
-                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
+                        <i class="bi bi-person-dash sidebar-icon"></i>
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
             </ul>
             <div class="logout">
-                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
-                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
+                    style="margin: 3vw auto;">
+                    <i class="bi bi-box-arrow-right logout-icon"></i>
                     <span class="sidebar-text ms-2">Logout</span>
             </div>
         </aside>
@@ -277,7 +278,8 @@ require_once '../../Function/Partner/getBookings.php';
                                                 <p class="card-text name">Mica Lee</p>
                                                 <p class="card-text sub-name contact">micalee.bini@gmail.com |
                                                     09235467831 </p>
-                                                <p class="card-text sub-name address">243, E. Viudez St., Poblacion, San Ildefonso,
+                                                <p class="card-text sub-name address">243, E. Viudez St., Poblacion, San
+                                                    Ildefonso,
                                                     Bulacan</p>
                                             </div>
                                         </div>
@@ -292,14 +294,14 @@ require_once '../../Function/Partner/getBookings.php';
                                     </div>
                                     <div class="booking-info">
                                         <label for="eventType">Event Type</label>
-                                        <input type="text" class="form-control" name="eventType" id="eventType"
-                                            value="" readonly>
+                                        <input type="text" class="form-control" name="eventType" id="eventType" value=""
+                                            readonly>
                                     </div>
 
                                     <div class="booking-info">
                                         <label for="eventDate">Booking Date</label>
-                                        <input type="text" class="form-control" name="eventDate" id="eventDate"
-                                            value="" readonly>
+                                        <input type="text" class="form-control" name="eventDate" id="eventDate" value=""
+                                            readonly>
                                     </div>
 
                                     <div class="booking-info">
@@ -324,7 +326,8 @@ require_once '../../Function/Partner/getBookings.php';
 
                                 <section class="additionalNotesContainer">
                                     <label for="eventVenue">Additional Notes</label>
-                                    <textarea name="additionalNotes" class="form-control" id="additionalNotes"></textarea>
+                                    <textarea name="additionalNotes" class="form-control"
+                                        id="additionalNotes"></textarea>
                                 </section>
 
 
@@ -359,194 +362,195 @@ require_once '../../Function/Partner/getBookings.php';
     <script src="../../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#booking').DataTable({
-                language: {
-                    emptyTable: "No data available",
+    $(document).ready(function() {
+        $('#booking').DataTable({
+            language: {
+                emptyTable: "No data available",
+            },
+            responsive: false,
+            scrollX: true,
+            columnDefs: [{
+                    width: '10%',
+                    targets: 0
                 },
-                responsive: false,
-                scrollX: true,
-                columnDefs: [{
-                        width: '10%',
-                        targets: 0
-                    },
-                    {
-                        width: '20%',
-                        targets: 1
-                    },
-                    {
-                        width: '15%',
-                        targets: 2
-                    },
-                    {
-                        width: '20%',
-                        targets: 3
-                    },
-                    {
-                        width: '15%',
-                        targets: 4
-                    },
-                    {
-                        width: '20%',
-                        targets: 5
-                    },
-                ],
-            });
+                {
+                    width: '20%',
+                    targets: 1
+                },
+                {
+                    width: '15%',
+                    targets: 2
+                },
+                {
+                    width: '20%',
+                    targets: 3
+                },
+                {
+                    width: '15%',
+                    targets: 4
+                },
+                {
+                    width: '20%',
+                    targets: 5
+                },
+            ],
         });
+    });
     </script>
 
     <script>
-        function getStatusBadge(colorClass, status) {
-            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
-        }
+    function getStatusBadge(colorClass, status) {
+        return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+    }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const userID = document.getElementById('userID').value;
-            const bookingMap = {}; // Store bookings for later use
+    document.addEventListener("DOMContentLoaded", function() {
+        const userID = document.getElementById('userID').value;
+        const bookingMap = {}; // Store bookings for later use
 
-            fetch(`../../Function/Partner/getPartnerBookings.php?userID=${encodeURIComponent(userID)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        throw new Error(data.message || "Failed to load user data.");
-                    }
+        fetch(`../../Function/Partner/getPartnerBookings.php?userID=${encodeURIComponent(userID)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    throw new Error(data.message || "Failed to load user data.");
+                }
 
-                    const bookings = data.bookings;
-                    const table = $('#booking').DataTable();
-                    table.clear();
+                const bookings = data.bookings;
+                const table = $('#booking').DataTable();
+                table.clear();
 
-                    bookings.forEach(booking => {
-                        bookingMap[booking.bookingID] = booking;
-                        table.row.add([
-                            booking.formattedBookingID,
-                            booking.guestName,
-                            booking.bookingType,
-                            booking.service,
-                            booking.bookingDate,
-                            getStatusBadge(booking.color, booking.statusName),
-                            `
+                bookings.forEach(booking => {
+                    bookingMap[booking.bookingID] = booking;
+                    table.row.add([
+                        booking.formattedBookingID,
+                        booking.guestName,
+                        booking.bookingType,
+                        booking.service,
+                        booking.bookingDate,
+                        getStatusBadge(booking.color, booking.statusName),
+                        `
                             <button type="button" class="btn btn-info viewInfo" data-bookingid="${booking.bookingID}"> View </button>
                         `
-                        ]);
-                    });
+                    ]);
+                });
 
-                    table.draw();
+                table.draw();
+            })
+            .catch(error =>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: error.message || 'An unknown error occurred.',
+                    showConfirmButton: false,
+                    timer: 1500,
                 })
-                .catch(error =>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: error.message || 'An unknown error occurred.',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    })
-                );
+            );
 
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('viewInfo')) {
-                    const bookingID = e.target.getAttribute("data-bookingid");
-                    const booking = bookingMap[bookingID];
-                    if (!booking) return;
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('viewInfo')) {
+                const bookingID = e.target.getAttribute("data-bookingid");
+                const booking = bookingMap[bookingID];
+                if (!booking) return;
 
-                    const viewModal = document.getElementById('bookingModal');
-                    if (!viewModal) return;
+                const viewModal = document.getElementById('bookingModal');
+                if (!viewModal) return;
 
-                    viewModal.querySelector('.user-info img').src = booking.profileImage || '../../Assets/Images/defaultProfile.png';
-                    viewModal.querySelector('.user-info .name').textContent = booking.guestName;
-                    viewModal.querySelector('.user-info .contact').textContent = booking.contact;
-                    viewModal.querySelector('.user-info .address').textContent = booking.address;
+                viewModal.querySelector('.user-info img').src = booking.profileImage ||
+                    '../../Assets/Images/defaultProfile.png';
+                viewModal.querySelector('.user-info .name').textContent = booking.guestName;
+                viewModal.querySelector('.user-info .contact').textContent = booking.contact;
+                viewModal.querySelector('.user-info .address').textContent = booking.address;
 
-                    viewModal.querySelector('#eventType').value = booking.eventType;
-                    viewModal.querySelector('#eventDate').value = booking.bookingDate;
-                    viewModal.querySelector('#eventDuration').value = booking.timeDuration;
-                    viewModal.querySelector('#eventVenue').value = booking.venue;
-                    viewModal.querySelector("#service").textContent = booking.serviceInfo;
-                    viewModal.querySelector('#bookingID').value = booking.bookingID;
-                    viewModal.querySelector('#guestID').value = booking.guestID;
-                    viewModal.querySelector('#guestRole').value = booking.guestRole;
+                viewModal.querySelector('#eventType').value = booking.eventType;
+                viewModal.querySelector('#eventDate').value = booking.bookingDate;
+                viewModal.querySelector('#eventDuration').value = booking.timeDuration;
+                viewModal.querySelector('#eventVenue').value = booking.venue;
+                viewModal.querySelector("#service").textContent = booking.serviceInfo;
+                viewModal.querySelector('#bookingID').value = booking.bookingID;
+                viewModal.querySelector('#guestID').value = booking.guestID;
+                viewModal.querySelector('#guestRole').value = booking.guestRole;
 
-                    viewModal.querySelector('#additionalNotes').value = booking.notes || '';
+                viewModal.querySelector('#additionalNotes').value = booking.notes || '';
 
-                    const modal = new bootstrap.Modal(viewModal);
-                    modal.show();
-                }
-            });
+                const modal = new bootstrap.Modal(viewModal);
+                modal.show();
+            }
         });
+    });
     </script>
 
 
     <script>
-        //Handle sidebar for responsiveness
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.getElementById('toggle-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container')
+    //Handle sidebar for responsiveness
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const items = document.querySelectorAll('.list-group-item');
+        const toggleCont = document.getElementById('toggle-container')
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    });
-                    toggleCont.style.justifyContent = "center"
-                } else {
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    toggleCont.style.justifyContent = "flex-end"
-                }
-            });
-
-            function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
-                    sidebar.classList.add('collapsed');
-                    toggleBtn.style.display = "flex";
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    })
-
-                } else {
-                    toggleBtn.style.display = "none";
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    })
-                    sidebar.classList.remove('collapsed');
-                }
+            if (sidebar.classList.contains('collapsed')) {
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                });
+                toggleCont.style.justifyContent = "center"
+            } else {
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                toggleCont.style.justifyContent = "flex-end"
             }
-
-            // Run on load and when window resizes
-            handleResponsiveSidebar();
-            window.addEventListener('resize', handleResponsiveSidebar);
         });
+
+        function handleResponsiveSidebar() {
+            if (window.innerWidth <= 600) {
+                sidebar.classList.add('collapsed');
+                toggleBtn.style.display = "flex";
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                })
+
+            } else {
+                toggleBtn.style.display = "none";
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                })
+                sidebar.classList.remove('collapsed');
+            }
+        }
+
+        // Run on load and when window resizes
+        handleResponsiveSidebar();
+        window.addEventListener('resize', handleResponsiveSidebar);
+    });
     </script>
 
     <!-- Show -->
     <script>
-        const logoutBtn = document.getElementById('logoutBtn');
-        const logoutModal = document.getElementById('logoutModal');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../../Function/logout.php";
-                }
-            });
-        })
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../../Function/logout.php";
+            }
+        });
+    })
     </script>
 </body>
 
