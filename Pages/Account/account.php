@@ -52,12 +52,13 @@ $userRole = $_SESSION['userRole'];
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/account.css" />
+    <link rel="stylesheet" href="../../Assets/CSS/Account/account-sidebar.css" />
     <!-- icon libraries for font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Flatpickr calendar -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
@@ -159,93 +160,93 @@ $userRole = $_SESSION['userRole'];
             </div>
             <div class="home">
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Customer/dashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Admin/adminDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../BusinessPartner/bpDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../BusinessPartner/bpDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } ?>
             </div>
 
             <div class="sidebar-header text-center">
                 <h5 class="sidebar-text">User Account</h5>
                 <div class="profileImage">
-                    <img src="<?= htmlspecialchars($image) ?>"
-                        alt="<?= htmlspecialchars($firstName) ?> Picture">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($firstName) ?> Picture">
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
                 <li class="sidebar-item">
                     <a href="account.php" class="list-group-item active">
-                        <i class="fa-solid fa-user sidebar-icon"></i>
+                        <i class="bi bi-person sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
-                            <i class="fa-solid fa-table-list sidebar-icon"></i>
-                            <span class="sidebar-text">Booking History</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
-                            <i class="fa-solid fa-table-list sidebar-icon"></i>
-                            <span class="sidebar-text">Payment</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
+                        <i class="bi bi-calendar2-check sidebar-icon"></i>
+                        <span class="sidebar-text">Booking History</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                        <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                        <span class="sidebar-text">Payment</span>
+                    </a>
+                </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li class="sidebar-item">
-                        <a href="userManagement.php" class="list-group-item">
-                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
-                            <span class="sidebar-text">Manage Users</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="userManagement.php" class="list-group-item">
+                        <i class="bi bi-person-gear sidebar-icon"></i>
+                        <span class="sidebar-text">Manage Users</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpBookings.php" class="list-group-item">
-                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
-                            <span class="sidebar-text">Bookings</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpServices.php" class="list-group-item">
-                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
-                            <span class="sidebar-text">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bpBookings.php" class="list-group-item">
+                        <i class="bi bi-calendar-week sidebar-icon"></i>
+                        <span class="sidebar-text">Bookings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpServices.php" class="list-group-item">
+                        <i class="bi bi-bell sidebar-icon"></i>
+                        <span class="sidebar-text">Services</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpSales.php" class="list-group-item">
+                        <i class="bi bi-tags sidebar-icon"></i>
+                        <span class="sidebar-text">Sales</span>
+                    </a>
+                </li>
                 <?php } ?>
 
                 <li class="sidebar-item">
                     <a href="loginSecurity.php" class="list-group-item">
-                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <i class="bi bi-shield-check sidebar-icon"></i>
                         <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="deleteAccount.php" class="list-group-item">
-                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
+                        <i class="bi bi-person-dash sidebar-icon"></i>
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
             </ul>
             <div class="logout">
-                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
-                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
+                    style="margin: 3vw auto;">
+                    <i class="bi bi-box-arrow-right logout-icon"></i>
                     <span class="sidebar-text ms-2">Logout</span>
             </div>
         </aside>
@@ -261,7 +262,8 @@ $userRole = $_SESSION['userRole'];
                         <div class="profile-image">
                             <img src="<?= $image ?>" alt="<?= htmlspecialchars($firstName) ?> Picture"
                                 class="profile-pic">
-                            <button type="button" class="changePfpBtn btn btn-primary" id="changePfp"><i class="fa-solid fa-camera-retro"></i>
+                            <button type="button" class="changePfpBtn btn btn-primary" id="changePfp"><i
+                                    class="fa-solid fa-camera-retro"></i>
                                 Change Profile
                             </button>
                             <!-- Profile Picture Modal -->
@@ -275,17 +277,17 @@ $userRole = $_SESSION['userRole'];
                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <img src="<?= $image ?>"
-                                                alt="<?= htmlspecialchars($firstName) ?> Picture" id="preview"
-                                                class="profile-pic">
+                                            <img src="<?= $image ?>" alt="<?= htmlspecialchars($firstName) ?> Picture"
+                                                id="preview" class="profile-pic">
                                             <input type="file" name="profilePic" id="profilePic" hidden>
                                             <label for="profilePic"
                                                 class="custom-file-button btn btn-outline-primary">Choose Image</label>
                                         </div>
                                         <div class="modal-button">
-                                            <button type="submit" class="btn btn-danger"
-                                                name="cancelPfp"><i class="fa-solid fa-ban"></i> Cancel</button>
-                                            <button type="submit" class="btn btn-success" name="changePfpBtn"><i class="fa-solid fa-floppy-disk"></i> Save
+                                            <button type="submit" class="btn btn-danger" name="cancelPfp"><i
+                                                    class="fa-solid fa-ban"></i> Cancel</button>
+                                            <button type="submit" class="btn btn-success" name="changePfpBtn"><i
+                                                    class="fa-solid fa-floppy-disk"></i> Save
                                                 Changes</button>
                                         </div>
                                     </div>
@@ -307,33 +309,33 @@ $userRole = $_SESSION['userRole'];
                     <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
                     <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
                     <div class="info form-floating">
-                        <input type="text" class="form-control editable" name="fullName" id="fullName" value="<?= htmlspecialchars($name) ?>" readonly
-                            required>
+                        <input type="text" class="form-control editable" name="fullName" id="fullName"
+                            value="<?= htmlspecialchars($name) ?>" readonly required>
                         <label for="fullName">Full Name</label>
                     </div>
                     <div class="info form-floating">
                         <?php if (!empty($birthday)) : ?>
-                            <input type="text" class="form-control editable" name="birthday" id="birthday"
-                                value="<?= htmlspecialchars($birthday) ?>">
+                        <input type="text" class="form-control editable" name="birthday" id="birthday"
+                            value="<?= htmlspecialchars($birthday) ?>">
                         <?php else : ?>
-                            <input type="text" class="form-control" name="birthday" id="birthday" value="--" readonly>
+                        <input type="text" class="form-control" name="birthday" id="birthday" value="--" readonly>
                         <?php endif; ?>
                         <label for="birthday">Birthday</label>
                     </div>
                     <div class="info form-floating">
-                        <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>" class="form-control editable"
-                            readonly required>
+                        <input type="text" name="address" id="address" value="<?= htmlspecialchars($address) ?>"
+                            class="form-control editable" readonly required>
                         <label for="address">Address</label>
                     </div>
                     <div class="info form-floating">
                         <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$"
-                            title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>" class="form-control editable"
-                            readonly required>
+                            title="e.g., +639123456789 or 09123456789" value="<?= htmlspecialchars($phoneNumber) ?>"
+                            class="form-control editable" readonly required>
                         <label for="phoneNumber">Phone Number
                             <?php if ($phoneNumber === '--' || $phoneNumber === Null) { ?>
-                                <sup>
-                                    <i class="fa-solid fa-asterisk" style="color: #ff0000; "></i>
-                                </sup>
+                            <sup>
+                                <i class="fa-solid fa-asterisk" style="color: #ff0000; "></i>
+                            </sup>
                             <?php } ?>
                         </label>
                         <div id="tooltip" class="custom-tooltip">Please input number</div>
@@ -341,22 +343,23 @@ $userRole = $_SESSION['userRole'];
                 </div>
 
                 <?php if ($role === 'Business Partner'): ?>
-                    <h5 class="partner-info-label">Partner Type/s</h5>
-                    <div class="partner-info">
-                        <?php foreach ($partnerTypes as $partnerType): ?>
-                            <div>
-                                <input type="text" name="partnerType" id="partnerType" value="<?= htmlspecialchars($partnerType) ?>"
-                                    readonly required class="form-control">
-                            </div>
-                        <?php endforeach; ?>
+                <h5 class="partner-info-label">Partner Type/s</h5>
+                <div class="partner-info">
+                    <?php foreach ($partnerTypes as $partnerType): ?>
+                    <div>
+                        <input type="text" name="partnerType" id="partnerType"
+                            value="<?= htmlspecialchars($partnerType) ?>" readonly required class="form-control">
                     </div>
+                    <?php endforeach; ?>
+                </div>
                 <?php endif; ?>
 
                 <div class="button-container">
                     <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
                         onclick="enableEditing()"><i class="fa-solid fa-pen-to-square ms-10"></i> Edit</button>
-                    <button type="button" onclick="cancelEdit()" name="cancelChanges" id="cancelBtn" class="change-info btn btn-danger"
-                        style="display: none;"><i class="fa-solid fa-ban"></i> Cancel</button>
+                    <button type="button" onclick="cancelEdit()" name="cancelChanges" id="cancelBtn"
+                        class="change-info btn btn-danger" style="display: none;"><i class="fa-solid fa-ban"></i>
+                        Cancel</button>
                     <button type="submit" name="saveChanges" id="saveBtn" class="change-info btn btn-primary"
                         style="display: none;"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                 </div>
@@ -376,152 +379,152 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
-        //Show the image preview
-        document.querySelector("input[type='file']").addEventListener("change", function(event) {
-            let reader = new FileReader();
-            reader.onload = function() {
-                let preview = document.getElementById("preview");
-                preview.src = reader.result;
-                preview.style.display = "block";
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        });
+    //Show the image preview
+    document.querySelector("input[type='file']").addEventListener("change", function(event) {
+        let reader = new FileReader();
+        reader.onload = function() {
+            let preview = document.getElementById("preview");
+            preview.src = reader.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
     </script>
 
     <!-- Cancel the edit and bring it back to its orginal data -->
     <script>
-        function cancelEdit() {
-            document.getElementById('accountForm').reset();
-        }
+    function cancelEdit() {
+        document.getElementById('accountForm').reset();
+    }
     </script>
 
 
     <script>
-        //Show Modal 
-        document.addEventListener("DOMContentLoaded", function() {
-            const changeBtn = document.getElementById("changePfp");
-            const modalElement = document.getElementById("picModal");
+    //Show Modal 
+    document.addEventListener("DOMContentLoaded", function() {
+        const changeBtn = document.getElementById("changePfp");
+        const modalElement = document.getElementById("picModal");
 
-            changeBtn.addEventListener("click", function() {
-                const myModal = new bootstrap.Modal(modalElement);
-                myModal.show();
-            });
+        changeBtn.addEventListener("click", function() {
+            const myModal = new bootstrap.Modal(modalElement);
+            myModal.show();
         });
+    });
     </script>
 
     <script>
-        //Handle sidebar for responsiveness
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.getElementById('toggle-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container')
+    //Handle sidebar for responsiveness
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const items = document.querySelectorAll('.list-group-item');
+        const toggleCont = document.getElementById('toggle-container')
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    });
-                    toggleCont.style.justifyContent = "center"
-                } else {
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    toggleCont.style.justifyContent = "flex-end"
-                }
-            });
-
-            function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
-                    sidebar.classList.add('collapsed');
-                    toggleBtn.style.display = "flex";
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    })
-
-                } else {
-                    toggleBtn.style.display = "none";
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    })
-                    sidebar.classList.remove('collapsed');
-                }
-            }
-
-            // Run on load and when window resizes
-            handleResponsiveSidebar();
-            window.addEventListener('resize', handleResponsiveSidebar);
-        });
-    </script>
-
-    <script>
-        const input = document.getElementById('phoneNumber');
-        const tooltip = document.getElementById('tooltip');
-        input.addEventListener('keypress', function(e) {
-            if (!/[0-9]/.test(e.key)) {
-                e.preventDefault();
-            }
-            tooltip.classList.add('show');
-
-
-            clearTimeout(tooltip.hideTimeout);
-            tooltip.hideTimeout = setTimeout(() => {
-                tooltip.classList.remove('show');
-            }, 2000);
-        });
-    </script>
-
-    <script>
-        let birthdayPicker = null;
-
-        function enableEditing() {
-            const birthdayInput = document.getElementById("birthday");
-            birthdayInput.removeAttribute("readonly");
-            const editable = document.querySelectorAll('.editable');
-            if (!birthdayPicker) {
-                birthdayPicker = flatpickr('#birthday', {
-                    dateFormat: "Y-m-d",
-                    maxDate: "today",
-                    allowInput: true
+            if (sidebar.classList.contains('collapsed')) {
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
                 });
+                toggleCont.style.justifyContent = "center"
+            } else {
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                toggleCont.style.justifyContent = "flex-end"
             }
+        });
 
-            editable.forEach((input) => {
-                input.style.border = ' 1px solid red';
-            })
+        function handleResponsiveSidebar() {
+            if (window.innerWidth <= 600) {
+                sidebar.classList.add('collapsed');
+                toggleBtn.style.display = "flex";
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                })
 
-            document.getElementById("fullName").removeAttribute("readonly");
-            document.getElementById("address").removeAttribute("readonly");
-            document.getElementById("phoneNumber").removeAttribute("readonly");
-
-            document.getElementById("saveBtn").style.display = "inline-block";
-            document.getElementById("cancelBtn").style.display = "inline-block";
-            document.getElementById("editBtn").style.display = "none";
+            } else {
+                toggleBtn.style.display = "none";
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                })
+                sidebar.classList.remove('collapsed');
+            }
         }
 
-        document.getElementById("cancelBtn").addEventListener("click", function() {
-            const editable = document.querySelectorAll('.editable');
-            document.getElementById("fullName").setAttribute('readonly', true);
-            document.getElementById("address").setAttribute('readonly', true);
-            document.getElementById("phoneNumber").setAttribute('readonly', true);
-            document.getElementById("birthday").setAttribute('readonly', true);
+        // Run on load and when window resizes
+        handleResponsiveSidebar();
+        window.addEventListener('resize', handleResponsiveSidebar);
+    });
+    </script>
 
-            editable.forEach((input) => {
-                input.style.border = '1px solid rgb(223, 226, 230)';
-            })
+    <script>
+    const input = document.getElementById('phoneNumber');
+    const tooltip = document.getElementById('tooltip');
+    input.addEventListener('keypress', function(e) {
+        if (!/[0-9]/.test(e.key)) {
+            e.preventDefault();
+        }
+        tooltip.classList.add('show');
 
-            if (birthdayPicker) {
-                birthdayPicker.destroy();
-                birthdayPicker = null;
-            }
 
-            document.getElementById("saveBtn").style.display = "none";
-            document.getElementById("cancelBtn").style.display = "none";
-            document.getElementById("editBtn").style.display = "block";
-        });
+        clearTimeout(tooltip.hideTimeout);
+        tooltip.hideTimeout = setTimeout(() => {
+            tooltip.classList.remove('show');
+        }, 2000);
+    });
+    </script>
+
+    <script>
+    let birthdayPicker = null;
+
+    function enableEditing() {
+        const birthdayInput = document.getElementById("birthday");
+        birthdayInput.removeAttribute("readonly");
+        const editable = document.querySelectorAll('.editable');
+        if (!birthdayPicker) {
+            birthdayPicker = flatpickr('#birthday', {
+                dateFormat: "Y-m-d",
+                maxDate: "today",
+                allowInput: true
+            });
+        }
+
+        editable.forEach((input) => {
+            input.style.border = ' 1px solid red';
+        })
+
+        document.getElementById("fullName").removeAttribute("readonly");
+        document.getElementById("address").removeAttribute("readonly");
+        document.getElementById("phoneNumber").removeAttribute("readonly");
+
+        document.getElementById("saveBtn").style.display = "inline-block";
+        document.getElementById("cancelBtn").style.display = "inline-block";
+        document.getElementById("editBtn").style.display = "none";
+    }
+
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+        const editable = document.querySelectorAll('.editable');
+        document.getElementById("fullName").setAttribute('readonly', true);
+        document.getElementById("address").setAttribute('readonly', true);
+        document.getElementById("phoneNumber").setAttribute('readonly', true);
+        document.getElementById("birthday").setAttribute('readonly', true);
+
+        editable.forEach((input) => {
+            input.style.border = '1px solid rgb(223, 226, 230)';
+        })
+
+        if (birthdayPicker) {
+            birthdayPicker.destroy();
+            birthdayPicker = null;
+        }
+
+        document.getElementById("saveBtn").style.display = "none";
+        document.getElementById("cancelBtn").style.display = "none";
+        document.getElementById("editBtn").style.display = "block";
+    });
     </script>
 
 
@@ -529,72 +532,72 @@ $userRole = $_SESSION['userRole'];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('message');
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('message');
 
-        if (paramValue === 'success-image') {
-            Swal.fire({
-                title: "Success!",
-                text: "Profile Change Successfully!",
-                icon: "success"
-            });
-        } else if (paramValue === 'error-image') {
-            Swal.fire({
-                title: "Info!",
-                text: "No Image Selected",
-                icon: "info"
-            });
-        } else if (paramValue === 'success-change') {
-            Swal.fire({
-                title: "Success!",
-                text: "Updated Successfully!",
-                icon: "success"
-            });
-        } else if (paramValue === 'error-change') {
-            Swal.fire({
-                title: "Error!",
-                text: "Updating Information Failed!",
-                icon: "error"
-            });
-        } else if (paramValue === 'emptyPhoneNumber') {
-            Swal.fire({
-                title: "Oops!",
-                text: "Empty Phone Number!",
-                icon: "warning",
-                confirmButtonText: 'Okay',
-            });
-        }
+    if (paramValue === 'success-image') {
+        Swal.fire({
+            title: "Success!",
+            text: "Profile Change Successfully!",
+            icon: "success"
+        });
+    } else if (paramValue === 'error-image') {
+        Swal.fire({
+            title: "Info!",
+            text: "No Image Selected",
+            icon: "info"
+        });
+    } else if (paramValue === 'success-change') {
+        Swal.fire({
+            title: "Success!",
+            text: "Updated Successfully!",
+            icon: "success"
+        });
+    } else if (paramValue === 'error-change') {
+        Swal.fire({
+            title: "Error!",
+            text: "Updating Information Failed!",
+            icon: "error"
+        });
+    } else if (paramValue === 'emptyPhoneNumber') {
+        Swal.fire({
+            title: "Oops!",
+            text: "Empty Phone Number!",
+            icon: "warning",
+            confirmButtonText: 'Okay',
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 
     <script>
-        const logoutBtn = document.getElementById('logoutBtn');
-        const logoutModal = document.getElementById('logoutModal');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../Function/logout.php";
-                }
-            });
-        })
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../Function/logout.php";
+            }
+        });
+    })
     </script>
 
 </body>
