@@ -10,15 +10,16 @@ addToAdminTable($conn);
 
 //for edit website, this will enable edit mode from the iframe
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
-//SQL statement for retrieving data for website content from DB
-$sectionName = 'BusinessInformation';
+//SQL statement for retrieving data for website content from DB\
+$folder = 'landingPage';
+$sectionName = 'Landing';
 $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
 $contentMap = [];
-
 $imageMap = [];
+$defaultImage = "/Assets/Images/no-picture.jpg";
 
 while ($row = $getWebContentResult->fetch_assoc()) {
     $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
@@ -72,68 +73,93 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
-                <li class="nav-item">
-                    <a class="nav-link active" href="index.php"> Home</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Amenities
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="Pages/amenities.php">Resort Amenities</a></li>
-                        <li><a class="dropdown-item" href="Pages/ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
-                        <li><a class="dropdown-item" href="Pages/events.php">Events</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages/blog.php">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages/beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages/about.php">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages/register.php">Book Now</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="signUpBtn" href="Pages/register.php">Sign Up</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-
+    <?php if (!$editMode): ?>
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.php"> Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Amenities
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="Pages/amenities.php">Resort Amenities</a></li>
+                            <li><a class="dropdown-item" href="Pages/ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                            <li><a class="dropdown-item" href="Pages/events.php">Events</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/blog.php">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/about.php">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Pages/register.php">Book Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signUpBtn" href="Pages/register.php">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    <?php endif; ?>
+    <?php if ($editMode): ?>
+        <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
+    <?php endif; ?>
     <section class="topSec">
         <div class="topLeft">
-            <h6 class="topText">Welcome to Mamyr Resort & Events Place</h6>
+            <?php if ($editMode): ?>
+                <input type="text" class="editable-input topText form-control" data-title="Welcome"
+                    value="<?= htmlspecialchars($contentMap['Welcome'] ?? 'Title Not Found') ?>">
+                <textarea cols="20" rows="2" type="text" class="editable-input form-control headerText"
+                    data-title="Heading"><?= htmlspecialchars($contentMap['Heading'] ?? 'Heading Not Found') ?></textarea>
+                <textarea cols="20" rows="3" type="text" class="editable-input form-control subtext"
+                    data-title="Subheading"><?= htmlspecialchars($contentMap['Subheading'] ?? 'Description Not Found') ?></textarea>
+            <?php else: ?>
+                <h6 class="topText"><?= htmlspecialchars($contentMap['Welcome'] ?? 'Name Not Found') ?> </h6>
+                <h2 class="headerText"> <?= htmlspecialchars($contentMap['Heading'] ?? 'Heading Not Found') ?> </h2>
+                <h5 class="subtext"><?= htmlspecialchars($contentMap['Subheading'] ?? 'Description Not Found') ?> </h5>
+                <a href="pages/register.php" class="btn btn-primary" id="topBookNow-btn">Book Now</a>
+            <?php endif; ?>
 
-            <h2 class="headerText">Discover the Perfect Destination for Relaxation and Celebration at Mamyr Resort &
-                Events Place.</h2>
-
-            <h5 class="subtext">Whether you’re here for a peaceful getaway or planning your next event, we’re here to
-                make your time memorable and enjoyable.</h5>
-
-
-            <a href="pages/register.php" class="btn btn-primary" id="topBookNow-btn">Book Now</a>
         </div>
 
         <div class="topRight">
             <div class="carousel-container">
                 <div class="card-stack">
-                    <img src="Assets/Images/amenities/poolPics/poolPic2.jpg" class="card-img active" alt="Pool">
-                    <img src="Assets/Images/amenities/hotelPics/hotel1.jpg" class="card-img behind-left" alt="Hotel">
-                    <img src="Assets/Images/amenities/pavilionPics/pav1.jpg" class="card-img behind-right"
-                        alt="Pavilion">
+                    <?php if (isset($imageMap['Heading'])): ?>
+                        <?php foreach ($imageMap['Heading'] as $index => $img):
+                            $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
+                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                        ?>
+                            <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class="editable-img card-img" style="cursor: pointer;"
+                                <?php if ($editMode): ?>
+                                data-bs-toggle="modal"
+                                data-bs-target="#editImageModal"
+                                data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
+                                data-folder="<?= $folder ?? '' ?>"
+                                data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText'] ?? '') ?>"
+                                <?php endif; ?>>
+
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="card-img">
+                            <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <button id="prevBtn" class="carousel-btn prev">‹</button>
@@ -152,36 +178,61 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </video>
         </div>
         <div class="videoText-container">
-            <h3 class="videoTitle">Escape to Paradise</h3>
-
-
-            <p class="videoDescription indent">
-                At Mamyr Resort & Events Place, we offer more than just a getaway—we provide an unforgettable
-                experience. Whether you're seeking a peaceful retreat, fun outdoor activities, or a beautiful venue for
-                your special events, we’ve got you covered. Nestled in nature’s embrace, our resort is the perfect
-                escape for families, couples, and groups alike.</p>
-
-            <div class="middle-btn-container">
-                <a href="Pages/amenities.php" class="btn btn-primary">View our Amenities</a>
-            </div>
+            <?php if ($editMode): ?>
+                <input type="text" class="editable-input videoTitle form-control" data-title="Heading2"
+                    value="<?= htmlspecialchars($contentMap['Heading2'] ?? 'Title Not Found') ?>">
+                <textarea cols="20" rows="5" type="text" class="editable-input form-control subtext"
+                    data-title="Subheading2"><?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?></textarea>
+            <?php else: ?>
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Heading2'] ?? 'Name Not Found') ?> </h3>
+                <p class="videoDescription indent"> <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
+                <div class="middle-btn-container">
+                    <a href="Pages/amenities.php" class="btn btn-primary">View our Amenities</a>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
 
     <section class="bottom-section">
 
         <div class="bottom-text-container">
-            <h3 class="bottom-header"> Book Your Stay or Event Today!</h3>
-
-            <p class="bottom-subtext"> Whether you’re looking to escape for a weekend of relaxation or host an
-                unforgettable event, Mamyr Resort &
-                Events Place is ready to welcome you. Our dedicated team is here to ensure your stay or event exceeds
-                expectations, offering personalized service and attention to every detail.
-            </p>
+            <?php if ($editMode): ?>
+                <input type="text" class="editable-input bottom-header form-control" data-title="BookNow"
+                    value="<?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?>">
+                <textarea cols="20" rows="5" type="text" class="editable-input form-control bottom-subtext"
+                    data-title="BookNowDesc"><?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?></textarea>
+            <?php else: ?>
+                <h3 class="bottom-header"><?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?> </h3>
+                <p class="bottom-subtext indent"> <?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?> </p>
+            <?php endif; ?>
         </div>
 
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="Assets/Images/amenities/poolPics/poolPic2.jpg" class="d-block w-100"
+                <?php if (isset($imageMap['BookNow'])): ?>
+                    <?php foreach ($imageMap['BookNow'] as $index => $img):
+                        $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                    ?>
+                        <div class="swiper-slide">
+                            <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                class="editable-img d-block w-100" style="cursor: pointer;"
+                                <?php if ($editMode): ?>
+                                data-bs-toggle="modal"
+                                data-bs-target="#editImageModal"
+                                data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
+                                data-folder="<?= $folder ?? '' ?>"
+                                data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
+                                data-alttext="<?= htmlspecialchars($img['altText'] ?? '') ?>"
+                                <?php endif; ?>>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="card-img">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
+                    </div>
+                <?php endif; ?>
+                <!-- <div class="swiper-slide"><img src="Assets/Images/amenities/poolPics/poolPic2.jpg" class="d-block w-100"
                         alt="Image 1"></div>
                 <div class="swiper-slide"> <img src="Assets/Images/amenities/cottagePics/cottage4.jpg"
                         class="d-block w-100" alt="Image 2"></div>
@@ -192,7 +243,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <div class="swiper-slide"> <img src="Assets/Images/amenities/pavilionPics/pav3.jpg"
                         class="d-block w-100" alt="Image 2"></div>
                 <div class="swiper-slide"> <img src="Assets/Images/amenities/parkingPics/parking4.jpg"
-                        class="d-block w-100" alt="Image 3"></div>
+                        class="d-block w-100" alt="Image 3"></div> -->
 
             </div>
             <div class="swiper-pagination"></div>
@@ -201,16 +252,15 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <section class="rating-container">
         <div class="locationText-container">
-            <h3 class="videoTitle">Why Guests Keep Coming Back</h3>
-
-
-            <p class="videoDescription indent">
-                Guests often return to Mamyr Resort and Events Place for the exceptional experience we offer across
-                every aspect of the resort. From our beautiful grounds to our attentive service, we’re dedicated to
-                creating spaces where visitors feel at home. Consistent feedback reflects our commitment to quality,
-                making Mamyr a standout destination for relaxation and celebration alike.
-            </p>
-
+            <?php if ($editMode): ?>
+                <input type="text" class="editable-input videoTitle form-control" data-title="Reviews"
+                    value="<?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?>">
+                <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
+                    data-title="ReviewsDesc"><?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?></textarea>
+            <?php else: ?>
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                <p class="videoDescription indent"> <?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?> </p>
+            <?php endif; ?>
         </div>
 
         <div class="card ratings-card">
@@ -278,28 +328,153 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <section class="location-container">
         <div class="locationText-container">
-            <h3 class="videoTitle">Discover Mamyr Resort & Events Place</h3>
-
-
-            <p class="videoDescription indent">
-                Experience paradise just a drive away at Mamyr Resort & Events Place, where every moment becomes a
-                memory — whether you're unwinding by the pool, celebrating life’s milestones, or escaping for a weekend
-                retreat. Visit us and experience where nature and comfort meet.
-            </p>
-
+            <?php if ($editMode): ?>
+                <input type="text" class="editable-input videoTitle form-control" data-title="Map"
+                    value="<?= htmlspecialchars($contentMap['Map'] ?? 'Title Not Found') ?>">
+                <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
+                    data-title="MapDesc"><?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?></textarea>
+            <?php else: ?>
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                <p class="videoDescription indent"> <?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?> </p>
+            <?php endif; ?>
         </div>
 
         <div id="map"></div>
     </section>
     <?php include 'Pages/Customer/footer.php';
     include './Pages/loader.php'; ?>
+    <?php if ($editMode):
+        include 'Pages/editImageModal.php';
+    endif; ?>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
     <script src="../Assets/JS/scrollNavbg.js"></script>
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- AJAX for editing website content -->
+    <?php if ($editMode): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const saveBtn = document.getElementById('saveChangesBtn');
+                saveBtn?.addEventListener('click', () => {
+                    saveTextContent();
+                    saveEditableImages();
+                });
 
+                function saveTextContent() {
+                    const inputs = document.querySelectorAll('.editable-input');
+                    const data = {
+                        sectionName: 'Landing'
+                    };
+
+                    inputs.forEach(input => {
+                        const title = input.getAttribute('data-title');
+                        const value = input.value;
+                        data[title] = value;
+                    });
+
+                    fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(res => res.text())
+                        .then(text => {
+                            if (!text) throw new Error('Empty response');
+                            return JSON.parse(text);
+                        })
+                        .then(response => {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Content Updated!',
+                                    text: 'Text content has been successfully updated.',
+                                    timer: 2000, // Optional: auto-close after 2 seconds
+                                    showConfirmButton: false
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Update Failed',
+                                    text: 'Failed to update text content: ' + response.message,
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error saving content:', err);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'An error occurred!',
+                                text: 'Something went wrong while saving the content.',
+                            });
+                        });
+                }
+
+                function saveEditableImages() {
+                    const editableImages = document.querySelectorAll('.editable-img');
+
+                    editableImages.forEach(img => {
+                        const wcImageID = img.dataset.wcimageid;
+                        const altText = img.dataset.alttext;
+                        const folder = img.dataset.folder || '';
+                        const file = img.fileObject || null;
+
+                        if (!wcImageID || (!file && !altText)) {
+                            console.log("No data");
+                            return
+                        };
+
+                        const formData = new FormData();
+                        formData.append('wcImageID', wcImageID);
+                        formData.append('altText', altText);
+                        formData.append('folder', folder);
+
+                        if (file) {
+                            formData.append('image', file);
+                        }
+                        console.log(formData);
+                        fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(res => res.json())
+                            .then(response => {
+                                console.log("Full Response:", response);
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Image Updated!',
+                                        text: `Image ${altText} has been updated`,
+                                        timer: 2000, // Optional: auto-close after 2 seconds
+                                        showConfirmButton: false
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: `Update Failed for Image ${wcImageID}`,
+                                        text: `Failed to update image ${wcImageID}: ` + response
+                                            .message,
+                                    });
+                                }
+                            })
+                            .catch(err => {
+                                console.error(`Image update failed for ${wcImageID}:`, err);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'An error occurred!',
+                                    text: `Something went wrong while updating the image ${wcImageID}.`,
+                                });
+                            });
+                    });
+                }
+            });
+        </script>
+    <?php endif; ?>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -327,7 +502,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 updateStack();
             });
 
-            updateStack(); // initial
+            updateStack();
         });
     </script>
 
@@ -339,12 +514,16 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         var swiper = new Swiper(".mySwiper", {
             slidesPerView: 3,
             spaceBetween: 30,
+            loop: true,
+            loopedSlides: 3,
             pagination: {
                 el: ".swiper-pagination",
                 clickable: true,
             },
         });
     </script>
+
+
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
