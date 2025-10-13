@@ -520,10 +520,12 @@ unset($_SESSION['formData']);
                     <p class="card-text"><?= $name ?></p>
                     <input type="hidden" name="customerName" value="<?= $name ?>">
                 </div>
-                <div class="card-info">
-                    <h5 class="info-title">Services:</h5>
-                    <p class="card-text"><?= htmlspecialchars(implode(', ', $services)) ?></p>
-                </div>
+                <?php if ($bookingType === 'Resort'): ?>
+                    <div class="card-info">
+                        <h5 class="info-title">Tour Type:</h5>
+                        <p class="card-text"><?= htmlspecialchars($tourSelections) ?> Swimming</p>
+                    </div>
+                <?php endif; ?>
 
                 <div class="card-info">
                     <h5 class="info-title" id='date'>Date:</h5>
@@ -553,7 +555,7 @@ unset($_SESSION['formData']);
 
 
                 <div class="card-info" id="descriptionContainer">
-                    <h5 class="info-title">Description:</h5>
+                    <h5 class="info-title">Services & Description: </h5>
                     <ul class="card-text">
                         <?php foreach ($items as $service): ?>
                             <li>
@@ -725,10 +727,10 @@ unset($_SESSION['formData']);
             <input type="hidden" name="scheduledStartDate" value="<?= htmlspecialchars($scheduledStartDate ?? '') ?>">
             <input type="hidden" name="scheduledEndDate" value="<?= htmlspecialchars($scheduledEndDate ?? '') ?>">
             <?php foreach ($cottageChoices as $choice): ?>
-                <input type="hidden" name="cottageSelections[]" value="<?= htmlspecialchars($choice) ?>">
+                <input type="hidden" name="cottageOptions[]" value="<?= htmlspecialchars($choice) ?>">
             <?php endforeach; ?>
             <?php foreach ($roomChoices as $choice): ?>
-                <input type="hidden" name="roomSelections[]" value="<?= htmlspecialchars($choice) ?>">
+                <input type="hidden" name="roomOptions[]" value="<?= htmlspecialchars($choice) ?>">
             <?php endforeach; ?>
             <?php foreach ($selectedHotels as $choice): ?>
                 <input type="hidden" name="hotelSelections[]" value="<?= htmlspecialchars($choice) ?>">

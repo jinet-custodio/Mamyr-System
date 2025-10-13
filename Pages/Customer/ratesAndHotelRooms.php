@@ -139,7 +139,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog.php">BLOG</a>
+                        <a class="nav-link" href="blog.php">Blog</a>
                     </li>
                     <?php if ($userRole !== 2): ?>
                         <li class="nav-item">
@@ -172,7 +172,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </a>
 
                     <a class="categoryLink  d-flex justify-content-center" onclick="showHotels(event)">
-                        <h5 class="card-title m-auto selected" id="hotelTitle">Hotel Rooms</h5>
+                        <h5 class="card-title m-auto" id="hotelTitle">Hotel Rooms</h5>
                     </a>
 
                 </div>
@@ -262,7 +262,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                                 <h2 class="fw-bold"><?= $cottage['RServiceName'] ?></h2>
                                                 <p><?= $cottage['RSdescription'] ?></p>
                                                 <p class="font-weight-bold">Price: PHP <?= $cottage['RSprice'] ?></p>
-                                                <a href="register.php" class="btn btn-primary mt-auto">Book Now</a>
+                                                <a href="resortBooking.php" class="btn btn-primary mt-auto">Book Now</a>
                                             </div>
                                         </div>
                                     </div>
@@ -541,7 +541,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                                     <p class="font-weight-bold">
                                                         Price: PHP <?= $hotel['RSprice'] ?>
                                                     </p>
-                                                    <a href="register.php" class="btn btn-primary">Book Now</a>
+                                                    <a href="hotelBooking.php" class="btn btn-primary">Book Now</a>
                                                 </div>
                                             </div>
                                         </div>

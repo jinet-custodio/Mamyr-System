@@ -94,7 +94,7 @@ INSERT INTO paymentstatus (statusName) Values
 ('Fully Paid'),
 ('Payment Issue');
 
-INSERT INTO `paymentstatus` (`paymentStatusID`, `statusName`) VALUES (NULL, 'Sent');
+INSERT INTO `paymentstatus` (`paymentStatusID`, `statusName`) VALUES (NULL, 'Payment Sent');
 UPDATE `paymentstatus` SET `statusName` = 'Unpaid' WHERE `paymentstatus`.`paymentStatusID` = 1;
 CREATE TABLE resortservicescategory (
     categoryID INT PRIMARY KEY AUTO_INCREMENT,

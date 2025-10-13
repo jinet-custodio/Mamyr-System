@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Poppins Light";
+  src: url(../Fonts/Poppins/Poppins-Light.ttf);
+}
+
 :root {
   --blue-50: oklch(0.9 0.15 210);
   --blue-100: oklch(0.8 0.2 210);
@@ -5,15 +10,18 @@
   --blue-300: oklch(0.6 0.3 210);
   --blue-350: oklch(0.5848 0.129 246.27); /* #3e849e */
   --blue-400: oklch(0.5 0.35 210);
+  --blue-450: oklch(0.579 0.0805 225.17);
   --blue-500: oklch(0.4 0.4 210);
   --blue-600: oklch(0.3 0.4 210);
   --blue-700: oklch(0.2 0.4 210);
   --blue-800: oklch(0.15 0.35 210);
   --blue-900: oklch(0.1 0.3 210);
+  --light-blue: oklch(0.64 0.65 220 / 0.1);
+  --blue: oklch(0.64 0.65 220 / 0.5);
 
   --blue-accents: oklch(0.8 0.1 210);
 
-  --bg-light: oklch(96.715% 0.00011 0.2);
+  --bg-light: oklch(0.9702 0 0);
   --bg-dark: oklch(0.05 0.05 50);
 
   --text-light: oklch(0.2 0.02 50);
@@ -131,9 +139,11 @@
   vertical-align: middle;
 }
 
-.nav-item {
-  font-family: "Poppins" !important;
+.nav-item,
+.nav-link {
+  font-family: "Poppins Light";
   font-weight: lighter;
+  text-transform: capitalize;
 }
 
 .nav-item,
@@ -170,8 +180,9 @@
   letter-spacing: 0.1em;
 }
 
-#logOutBtn {
-  font-family: "Poppins";
+#logOutBtn,
+#signUpBtn {
+  font-family: "Poppins Light";
   margin-right: 2vw;
   border: none;
 }
@@ -232,6 +243,7 @@
 
 .dropdown-item {
   font-weight: bold;
+  font-family: "Poppins Light";
 }
 
 .navbar {
@@ -357,7 +369,7 @@ img {
   }
 
   .logoNav {
-    width: 18vw;
+    width: 15vw;
   }
 
   #logOutBtn {

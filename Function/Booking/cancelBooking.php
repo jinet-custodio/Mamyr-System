@@ -54,7 +54,7 @@ if (isset($_POST['cancelBooking'])) {
         $cancelBooking->bind_param("ii", $cancelledStatusID, $bookingID);
 
 
-        $insertCancellationReason = $conn->prepare("INSERT INTO `booking_cancellations`(`bookingID`, `userID`, `reasonID`, `otherReason`) VALUES (?,?,?,?)");
+        $insertCancellationReason = $conn->prepare("INSERT INTO `booking_cancellation`(`bookingID`, `userID`, `reasonID`, `otherReason`) VALUES (?,?,?,?)");
         $insertCancellationReason->bind_param('iiis', $bookingID, $userID, $cancellationReason, $otherReason);
         if (!$insertCancellationReason->execute()) {
             error_log("Failed Adding Cancellation Reason" . $bookingID . "userID:" . $userID);

@@ -58,9 +58,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/reservationSummary.css" />
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
 
 
 </head>
@@ -149,16 +147,17 @@ require_once '../../Function/Helpers/statusFunctions.php';
 
                                                     cb.confirmedBookingID,
                                                     cb.amountPaid, 
-                                                    cb.confirmedFinalBill, 
+                                                    cb.finalBill, 
                                                     cb.userBalance, 
                                                     cb.confirmedBookingID, 
                                                     cb.discountAmount, 
-                                                    cb.paymentApprovalStatus, 
-                                                    cb.paymentStatus,  
+                                                    cb.paymentApprovalStatus,  
                                                     cb.paymentDueDate, 
                                                     cb.downpaymentDueDate,
                                                     cb.downpaymentImage,
-                                                    cb.additionalCharge
+                                                    cb.additionalCharge,
+
+                                                    p.paymentStatus 
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb 
                                                     ON b.bookingID = cb.bookingID
@@ -172,6 +171,8 @@ require_once '../../Function/Helpers/statusFunctions.php';
                                                     ON cp.customPackageID = cpi.customPackageID
                                                 LEFT JOIN eventcategory ec 
                                                     ON cp.eventTypeID = ec.categoryID
+
+                                                LEFT JOIN payment p ON p.confirmedBookingID = cb.confirmedBookingID
 
                                                 LEFT JOIN bookingservice bs 
                                                     ON b.bookingID = bs.bookingID
@@ -280,8 +281,8 @@ require_once '../../Function/Helpers/statusFunctions.php';
 
                     if (!empty($confirmedBookingID)) {
                         $paymentApprovalStatusID = $row['paymentApprovalStatus'] ?? null;
-                        $paymentStatusID = $row['paymentStatus'] ?? null;
-                        $finalBill = (float) $row['confirmedFinalBill'] ?? null;
+                        $paymentStatusID = $row['paymentStatus'] ?? 1;
+                        $finalBill = (float) $row['finalBill'] ?? null;
                         $downpaymentDueDate = !empty($row['downpaymentDueDate']) ? date('F d, Y h:i A', strtotime($row['downpaymentDueDate'])) : 'Not Stated';
                         $paymentDueDate = !empty($row['paymentDueDate']) ? date('F d, Y h:i A', strtotime($row['paymentDueDate'])) : 'Not Stated';
                         $dueDate = ($amountPaid === $downpayment || $amountPaid > $downpayment) ? $paymentDueDate : $downpaymentDueDate;
@@ -547,11 +548,11 @@ require_once '../../Function/Helpers/statusFunctions.php';
                             <h6 class="cardHeader"> Venue </h6>
                             <div class="venues">
                                 <?php if ($bookingType === 'Resort' || $bookingType === 'Hotel') {
-                                    foreach ($serviceVenue as $venue): ?>
-                                        <p class="cardContent" id="venue"><?= $venue ?></p>
-                                    <?php endforeach;
+                                ?>
+                                    <p class="cardContent"><?= implode(', ', $serviceVenue) ?></p>
+                                <?php
                                 } else { ?>
-                                    <p class="cardContent" id="venue"><?= htmlspecialchars($venue) ?></p>
+                                    <p class="cardContent"><?= htmlspecialchars($venue) ?></p>
                                 <?php } ?>
                             </div>
                         </li>
@@ -725,10 +726,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
-
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script>
         //Hide the make a downpayment button
@@ -755,7 +753,6 @@ require_once '../../Function/Helpers/statusFunctions.php';
             document.getElementById("makeDownpaymentBtn").style.display = "none";
         }
     </script>
-
 
     <script>
         //Show the preview of image
@@ -790,9 +787,9 @@ require_once '../../Function/Helpers/statusFunctions.php';
         });
     </script>
 
-
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Sweetalert Popup -->
     <script>
         const param = new URLSearchParams(window.location.search);

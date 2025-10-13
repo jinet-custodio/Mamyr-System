@@ -84,10 +84,8 @@ require '../../Function/notification.php';
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
 
     <!-- Bootstrap Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
@@ -193,9 +191,10 @@ require '../../Function/notification.php';
                 </ul>
             </div>
         </nav>
+        <!-- Notification Modal -->
+        <?php include '../notificationModal.php' ?>
+
         <main>
-            <!-- Notification Modal -->
-            <?php include '../notificationModal.php' ?>
 
             <div class="amenities">
 
@@ -209,324 +208,217 @@ require '../../Function/notification.php';
                 </div>
                 <div class="pool">
                     <div class="amenityTitleContainer">
-                        <hr class="amenityLine">
-                        <!-- <h4 class="amenityTitle">Swimming Pools</h4> -->
-                        <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control" data-title="Amenity1"
-                                value="<?= htmlspecialchars($contentMap['Amenity1'] ?? 'No Title found') ?>">
-                        <?php else: ?>
-                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity1'] ?? 'No title found') ?></h4>
-                        <?php endif; ?>
-                        <?php if ($editMode): ?>
-                            <textarea type="text" rows="5"
-                                class="amenityDescription Amenity1Desc indent editable-input form-control"
-                                data-title="Amenity1Desc"><?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></textarea>
-                        <?php else: ?>
-                            <p class="amenityDescription">
-                                <?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></p>
-                        <?php endif; ?>
+                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity1'] ?? 'No title found') ?></h4>
+                        <p class="amenityDescription">
+                            <?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></p>
                     </div>
 
-                    <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity1'])): ?>
-                            <?php foreach ($imageMap['Amenity1'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
-                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                            ?>
-                                <div class="slide">
-                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <div class="swiper mySwiper swiper-amenity1">
+                        <div class="swiper-wrapper">
+                            <?php if (isset($imageMap['Amenity1'])): ?>
+                                <?php foreach ($imageMap['Amenity1'] as $index => $img):
+                                    $imagePath = "../../Assets/Images/amenities/poolPics/" . $img['imageData'];
+                                    $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                                ?>
+                                    <div class="swiper-slide">
+                                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                            class="editable-img" style="cursor: pointer;">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="swiper-slide">
+                                    <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="slide">
-                                <img src="<?= $defaultImage ?>" alt="None Found">
-                            </div>
-                        <?php endif; ?>
-                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="swiper-button-next swiper-button-next-1"></div>
+                        <div class="swiper-button-prev swiper-button-prev-1"></div>
                     </div>
                 </div>
-                <div class="cottage colored-bg" style="background-color:#f7d5b0;">
+                <div class="cottage colored-bg">
                     <div class=" amenityTitleContainer">
-                        <hr class="amenityLine">
-                        <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
-                                data-title="Amenity2" value="<?= htmlspecialchars($contentMap['Amenity2'] ?? 'No Title found') ?>">
-                        <?php else: ?>
-                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity2'] ?? 'No title found') ?></h4>
-                        <?php endif; ?>
-                        <?php if ($editMode): ?>
-                            <textarea type="text" rows="5"
-                                class="amenityDescription Amenity2Desc indent editable-input form-control  text-center"
-                                data-title="Amenity2Desc"><?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></textarea>
-                        <?php else: ?>
-                            <p class="amenityDescription">
-                                <?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></p>
-                        <?php endif; ?>
+                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity2'] ?? 'No title found') ?></h4>
+                        <p class="amenityDescription">
+                            <?= htmlspecialchars($contentMap['Amenity2Desc'] ?? 'No description found') ?></p>
                     </div>
-                    <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity2'])): ?>
-                            <?php foreach ($imageMap['Amenity2'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/cottagePics/" . $img['imageData'];
-                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                            ?>
-                                <div class="slide">
-                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <div class="swiper mySwiper swiper-amenity2">
+                        <div class="swiper-wrapper">
+                            <?php if (isset($imageMap['Amenity2'])): ?>
+                                <?php foreach ($imageMap['Amenity2'] as $index => $img):
+                                    $imagePath = "../../Assets/Images/amenities/cottagePics/" . $img['imageData'];
+                                    $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                                ?>
+                                    <div class="swiper-slide">
+                                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                            class="editable-img" style="cursor: pointer;">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="swiper-slide">
+                                    <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="slide">
-                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                            </div>
-                        <?php endif; ?>
-                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="swiper-button-next swiper-button-next-2"></div>
+                        <div class="swiper-button-prev swiper-button-prev-2"></div>
                     </div>
                 </div>
 
                 <div class="videoke">
                     <div class=" amenityTitleContainer">
-                        <hr class="amenityLine">
-                        <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
-                                data-title="Amenity3" value="<?= htmlspecialchars($contentMap['Amenity3'] ?? 'No Title found') ?>">
-                        <?php else: ?>
-                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity3'] ?? 'No title found') ?></h4>
-                        <?php endif; ?>
-                        <?php if ($editMode): ?>
-                            <textarea type="text" rows="5"
-                                class="amenityDescription Amenity3Desc indent editable-input form-control text-center"
-                                data-title="Amenity3Desc"><?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></textarea>
-                        <?php else: ?>
-                            <p class="amenityDescription">
-                                <?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></p>
-                        <?php endif; ?>
+                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity3'] ?? 'No title found') ?></h4>
+                        <p class="amenityDescription">
+                            <?= htmlspecialchars($contentMap['Amenity3Desc'] ?? 'No description found') ?></p>
                     </div>
 
-                    <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity3'])): ?>
-                            <?php foreach ($imageMap['Amenity3'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/videokePics/" . $img['imageData'];
-                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                            ?>
-                                <div class="slide">
-                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <div class="swiper mySwiper swiper-amenity3">
+                        <div class="swiper-wrapper" id="videokeSwiper">
+                            <?php if (isset($imageMap['Amenity3'])): ?>
+                                <?php foreach ($imageMap['Amenity3'] as $index => $img):
+                                    $imagePath = "../../Assets/Images/amenities/videokePics/" . $img['imageData'];
+                                    $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                                ?>
+                                    <div class="swiper-slide">
+                                        <img
+                                            src="<?= htmlspecialchars($finalImage) ?>"
+                                            alt="<?= htmlspecialchars($img['altText']) ?>"
+                                            class="editable-img"
+                                            style="cursor: pointer;">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="swiper-slide">
+                                    <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="slide">
-                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                            </div>
-                        <?php endif; ?>
-                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="swiper-button-next swiper-button-next-3"></div>
+                        <div class="swiper-button-prev swiper-button-prev-3"></div>
                     </div>
                 </div>
 
                 <div class="pavilion colored-bg" style="background-color: #7dcbf2;">
                     <div class="amenityTitleContainer">
-                        <hr class="amenityLine">
-                        <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
-                                data-title="Amenity4" value="<?= htmlspecialchars($contentMap['Amenity4'] ?? 'No Title found') ?>">
-                        <?php else: ?>
-                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity4'] ?? 'No title found') ?></h4>
-                        <?php endif; ?>
-                        <?php if ($editMode): ?>
-                            <textarea type="text" rows="5"
-                                class="amenityDescription Amenity4Desc indent editable-input form-control text-center"
-                                data-title="Amenity4Desc"><?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></textarea>
-                        <?php else: ?>
-                            <p class="amenityDescription">
-                                <?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></p>
-                        <?php endif; ?>
+                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity4'] ?? 'No title found') ?></h4>
+                        <p class="amenityDescription"><?= htmlspecialchars($contentMap['Amenity4Desc'] ?? 'No description found') ?></p>
                     </div>
 
-                    <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity4'])): ?>
-                            <?php foreach ($imageMap['Amenity4'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/pavilionPics/" . $img['imageData'];
-                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                            ?>
-                                <div class="slide">
-                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <div class="swiper mySwiper swiper-amenity4">
+                        <div class="swiper-wrapper">
+                            <?php if (isset($imageMap['Amenity4'])): ?>
+                                <?php foreach ($imageMap['Amenity4'] as $index => $img):
+                                    $imagePath = "../../Assets/Images/amenities/pavilionPics/" . $img['imageData'];
+                                    $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                                ?>
+                                    <div class="swiper-slide">
+                                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                            class="editable-img" style="cursor: pointer;">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="swiper-slide">
+                                    <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="slide">
-                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                            </div>
-                        <?php endif; ?>
-                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="swiper-button-next swiper-button-next-4"></div>
+                        <div class="swiper-button-prev swiper-button-prev-4"></div>
                     </div>
 
                 </div>
 
                 <div class="minipavilion">
                     <div class="amenityTitleContainer">
-                        <hr class="amenityLine">
-                        <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
-                                data-title="Amenity5" value="<?= htmlspecialchars($contentMap['Amenity5'] ?? 'No Title found') ?>">
-                        <?php else: ?>
-                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity5'] ?? 'No title found') ?></h4>
-                        <?php endif; ?>
-                        <?php if ($editMode): ?>
-                            <textarea type="text" rows="5"
-                                class="amenityDescription Amenity5Desc indent editable-input form-control text-center"
-                                data-title="Amenity5Desc"><?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></textarea>
-                        <?php else: ?>
-                            <p class="amenityDescription">
-                                <?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></p>
-                        <?php endif; ?>
+                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity5'] ?? 'No title found') ?></h4>
+                        <p class="amenityDescription">
+                            <?= htmlspecialchars($contentMap['Amenity5Desc'] ?? 'No description found') ?></p>
                     </div>
-
-                    <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity5'])): ?>
-                            <?php foreach ($imageMap['Amenity5'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/miniPavPics/" . $img['imageData'];
-                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                            ?>
-                                <div class="slide">
-                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <div class="swiper mySwiper swiper-amenity5">
+                        <div class="swiper-wrapper">
+                            <?php if (isset($imageMap['Amenity5'])): ?>
+                                <?php foreach ($imageMap['Amenity5'] as $index => $img):
+                                    $imagePath = "../../Assets/Images/amenities/miniPavPics/" . $img['imageData'];
+                                    $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                                ?>
+                                    <div class="swiper-slide">
+                                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                            class="editable-img" style="cursor: pointer;">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="swiper-slide">
+                                    <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="slide">
-                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                            </div>
-                        <?php endif; ?>
-                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="swiper-button-next swiper-button-next-5"></div>
+                        <div class="swiper-button-prev swiper-button-prev-5"></div>
                     </div>
-
                 </div>
 
-                <div class="hotel colored-bg" style="background-color:#f7d5b0;">
+                <div class="hotel colored-bg">
                     <div class="amenityTitleContainer">
-                        <hr class="amenityLine">
-                        <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
-                                data-title="Amenity6" value="<?= htmlspecialchars($contentMap['Amenity6'] ?? 'No Title found') ?>">
-                        <?php else: ?>
-                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity6'] ?? 'No title found') ?></h4>
-                        <?php endif; ?>
-                        <?php if ($editMode): ?>
-                            <textarea type="text" rows="5"
-                                class="amenityDescription Amenity6Desc indent editable-input form-control text-center"
-                                data-title="Amenity6Desc"><?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></textarea>
-                        <?php else: ?>
-                            <p class="amenityDescription">
-                                <?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></p>
-                        <?php endif; ?>
+                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity6'] ?? 'No title found') ?></h4>
+                        <p class="amenityDescription">
+                            <?= htmlspecialchars($contentMap['Amenity6Desc'] ?? 'No description found') ?></p>
                     </div>
-                    <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity6'])): ?>
-                            <?php foreach ($imageMap['Amenity6'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/hotelPics/" . $img['imageData'];
-                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                            ?>
-                                <div class="slide">
-                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                        data-folder="amenities/poolPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <div class="swiper mySwiper swiper-amenity6">
+                        <div class="swiper-wrapper">
+                            <?php if (isset($imageMap['Amenity6'])): ?>
+                                <?php foreach ($imageMap['Amenity6'] as $index => $img):
+                                    $imagePath = "../../Assets/Images/amenities/hotelPics/" . $img['imageData'];
+                                    $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                                ?>
+                                    <div class="swiper-slide">
+                                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                            class="editable-img" style="cursor: pointer;">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="swiper-slide">
+                                    <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="slide">
-                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                            </div>
-                        <?php endif; ?>
-                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="swiper-button-next swiper-button-next-6"></div>
+                        <div class="swiper-button-prev swiper-button-prev-6"></div>
                     </div>
 
                 </div>
 
                 <div class="parking">
                     <div class="amenityTitleContainer">
-                        <hr class="amenityLine">
-                        <?php if ($editMode): ?>
-                            <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
-                                data-title="Amenity7" value="<?= htmlspecialchars($contentMap['Amenity7'] ?? 'No Title found') ?>">
-                        <?php else: ?>
-                            <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity7'] ?? 'No title found') ?></h4>
-                        <?php endif; ?>
-                        <?php if ($editMode): ?>
-                            <textarea type="text" rows="5"
-                                class="amenityDescription Amenity7Desc indent editable-input form-control text-center"
-                                data-title="Amenity7Desc"><?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></textarea>
-                        <?php else: ?>
-                            <p class="amenityDescription">
-                                <?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></p>
-                        <?php endif; ?>
+                        <h4 class="amenityTitle"><?= htmlspecialchars($contentMap['Amenity7'] ?? 'No title found') ?></h4>
+                        <p class="amenityDescription">
+                            <?= htmlspecialchars($contentMap['Amenity7Desc'] ?? 'No description found') ?></p>
                     </div>
 
-                    <div class="slideshow-container">
-                        <?php if (isset($imageMap['Amenity7'])): ?>
-                            <?php foreach ($imageMap['Amenity7'] as $index => $img):
-                                $imagePath = "../../Assets/Images/amenities/parkingPics/" . $img['imageData'];
-                                $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                            ?>
-                                <div class="slide">
-                                    <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                        class=" editable-img" style="cursor: pointer;" data-bs-toggle="modal"
-                                        data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>"
-                                        data-folder="amenities/parkingPics" data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
-                                        data-alttext="<?= htmlspecialchars($img['altText']) ?>">
+                    <div class="swiper mySwiper swiper-amenity7">
+                        <div class="swiper-wrapper">
+                            <?php if (isset($imageMap['Amenity7'])): ?>
+                                <?php foreach ($imageMap['Amenity7'] as $index => $img):
+                                    $imagePath = "../../Assets/Images/amenities/parkingPics/" . $img['imageData'];
+                                    $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                                ?>
+                                    <div class="swiper-slide">
+                                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                            class="editable-img" style="cursor: pointer;">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="swiper-slide">
+                                    <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="slide">
-                                <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                            </div>
-                        <?php endif; ?>
-                        <button class="btn slide-btn btn-primary prev-btn">&#10094;</button>
-                        <button class="btn slide-btn btn-primary next-btn">&#10095;</button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="swiper-button-next swiper-button-next-7"></div>
+                        <div class="swiper-button-prev swiper-button-prev-7"></div>
                     </div>
                 </div>
         </main>
         <?php include 'footer.php';
         include 'loader.php'; ?>
     </div>
-    <?php
-    $sectionName = 'BusinessInformation';
-    $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
-    $getWebContent->bind_param("s", $sectionName);
-    $getWebContent->execute();
-    $getWebContentResult = $getWebContent->get_result();
-    $businessInfo = [];
-    while ($row = $getWebContentResult->fetch_assoc()) {
-        $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
-        $contentID = $row['contentID'];
-
-        $businessInfo[$cleanTitle] = $row['content'];
-    }
-    ?>
-
 
     <!-- Bootstrap Link -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
@@ -581,89 +473,88 @@ require '../../Function/notification.php';
             video.muted = false;
         };
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
-    <script src="../../Assets/JS/scrollNavbg.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+    <script src="../Assets/JS/scrollNavbg.js"></script>
     <script>
-        // JS for slideshow
-        function createSlideshow(container) {
-            const slides = container.querySelectorAll('.slide');
-            const prevBtn = container.querySelector('.prev-btn');
-            const nextBtn = container.querySelector('.next-btn');
-            if (slides.length === 0) {
-                console.warn('No slides found in container:', container);
+        const swiperConfigs = [{
+                selector: '.swiper-amenity1',
+                next: '.swiper-button-next-1',
+                prev: '.swiper-button-prev-1'
+            },
+            {
+                selector: '.swiper-amenity2',
+                next: '.swiper-button-next-2',
+                prev: '.swiper-button-prev-2'
+            },
+            {
+                selector: '.swiper-amenity3',
+                next: '.swiper-button-next-3',
+                prev: '.swiper-button-prev-3'
+            }, {
+                selector: '.swiper-amenity4',
+                next: '.swiper-button-next-4',
+                prev: '.swiper-button-prev-4'
+            },
+            {
+                selector: '.swiper-amenity5',
+                next: '.swiper-button-next-5',
+                prev: '.swiper-button-prev-5'
+            },
+            {
+                selector: '.swiper-amenity6',
+                next: '.swiper-button-next-6',
+                prev: '.swiper-button-prev-6'
+            },
+            {
+                selector: '.swiper-amenity7',
+                next: '.swiper-button-next-7',
+                prev: '.swiper-button-prev-7'
+            }
+
+        ];
+
+        swiperConfigs.forEach(config => {
+            const swiperElement = document.querySelector(config.selector);
+            if (!swiperElement) {
+                console.warn(`Swiper element not found: ${config.selector}`);
                 return;
             }
-            let index = 0;
 
-            slides.forEach(slide => {
-                slide.style.transform = 'translateX(100%)'; // Start off-screen right
-                slide.style.position = 'absolute';
-                slide.style.top = '0';
-                slide.style.left = '0';
-                slide.style.width = '100%';
-                slide.style.height = '100%';
+            const slideCount = parseInt(swiperElement.dataset.slidesCount || "0", 10);
+            const enableLoop = slideCount >= 3;
+
+            new Swiper(config.selector, {
+                slidesPerView: 3,
+                spaceBetween: 20,
+                loop: enableLoop,
+                loopedSlides: enableLoop ? slideCount : 0,
+                navigation: {
+                    nextEl: config.next,
+                    prevEl: config.prev,
+                },
+                grabCursor: true,
+                keyboard: {
+                    enabled: true
+                },
+                breakpoints: {
+                    0: {
+                        slidesPerView: 1,
+                        slidesPerGroup: 1
+                    },
+                    768: {
+                        slidesPerView: 2,
+                        slidesPerGroup: 2
+                    },
+                    992: {
+                        slidesPerView: 3,
+                        slidesPerGroup: 3
+                    }
+                }
             });
-
-
-            slides[index].classList.add('active');
-            slides[index].style.transform = 'translateX(0)';
-            slides[index].style.zIndex = '1';
-
-            function showSlide(newIndex, direction) {
-                if (newIndex === index) return;
-
-                const currentSlide = slides[index];
-                const nextSlide = slides[newIndex];
-
-                nextSlide.classList.add('active');
-                nextSlide.style.transition = 'none';
-                nextSlide.style.transform = direction === 'next' ? 'translateX(100%)' : 'translateX(-100%)';
-                nextSlide.style.zIndex = '2';
-                nextSlide.style.opacity = '1';
-
-                void nextSlide.offsetWidth;
-
-                nextSlide.style.transition = 'transform 0.6s ease';
-                nextSlide.style.transform = 'translateX(0)';
-
-                currentSlide.style.transition = 'transform 0.6s ease, opacity 0.6s ease';
-                currentSlide.style.transform = direction === 'next' ? 'translateX(-100%)' : 'translateX(100%)';
-                currentSlide.style.opacity = '0';
-                currentSlide.style.zIndex = '1';
-
-                setTimeout(() => {
-                    currentSlide.classList.remove('active');
-                    currentSlide.style.transition = '';
-                    currentSlide.style.transform = 'translateX(100%)';
-                    currentSlide.style.opacity = '1';
-                    currentSlide.style.zIndex = '0';
-
-                    nextSlide.style.transition = '';
-                    nextSlide.style.zIndex = '1';
-
-                    index = newIndex;
-                }, 600);
-            }
-
-            nextBtn.addEventListener('click', () => {
-                const newIndex = (index + 1) % slides.length;
-                showSlide(newIndex, 'next');
-            });
-
-            prevBtn.addEventListener('click', () => {
-                const newIndex = (index - 1 + slides.length) % slides.length;
-                showSlide(newIndex, 'prev');
-            });
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            const allSlideshows = document.querySelectorAll('.slideshow-container');
-            allSlideshows.forEach(container => {
-                createSlideshow(container);
-            });
+            console.log(`Initializing ${config.selector} with ${slideCount} slides. Loop: ${enableLoop}`);
         });
     </script>
 </body>

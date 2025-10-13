@@ -249,13 +249,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <div class="input-container">
                         <p>Venue Description</p>
                         <textarea rows="5" class="form-control" name="venueDescription" id="venueDescription"
-                            readonly><?= !empty($venueDescription) ? htmlspecialchars(ucfirst(strtolower($venueDescription))) : 'N/A' ?></textarea>
+                            readonly><?= !empty($venueDescription) ? htmlspecialchars(ucfirst($venueDescription)) : 'N/A' ?></textarea>
                     </div>
 
                     <div class="input-container additionalRequestPart">
                         <p>Additional Request</p>
                         <textarea rows="5" class="form-control" name="additionalRequest"
-                            id="additionalRequest"><?= !empty($additionalRequest) ? htmlspecialchars($additionalRequest) : '' ?></textarea>
+                            id="additionalRequest"><?= !empty($additionalRequest) ?  htmlspecialchars(ucfirst($additionalRequest)) : '' ?></textarea>
                     </div>
                 </div>
             </section>

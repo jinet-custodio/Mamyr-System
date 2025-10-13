@@ -6,6 +6,9 @@ PAGES LINKED WITH THE LATEST BOOTSTRAP CSS AND JS
 ADMIN PAGE
 1. adminDashboard.php
 2. booking.php
+3. rooms.php
+4. auditLogs.php
+5. rooms.php 
 
 
 

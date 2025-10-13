@@ -103,7 +103,7 @@ if (isset($_POST['eventBook'])) {
             $row = $result->fetch_assoc();
             $eventCategoryID = intval($row['categoryID']);
         } {
-            error_log("No matching service found for $eventType");
+            error_log("No matching event found for $eventType");
         }
     } else {
         error_log("Query failed: " . $conn->error);
@@ -127,7 +127,7 @@ if (isset($_POST['eventBook'])) {
         $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `foodItemID`, `servicePrice`) VALUES (?,?,?)");
 
         foreach ($foodList as $foodItemID) {
-            error_log('Food ID: ' . $foodItemID);
+            // error_log('Food ID: ' . $foodItemID);
             $foodItemID = (int) $foodItemID;
             $foodItemPrice = 0.0;
 

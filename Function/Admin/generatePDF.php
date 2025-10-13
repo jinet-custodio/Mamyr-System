@@ -176,18 +176,18 @@ if (isset($_POST['generatePDF'])) {
                                 foreach ($reportData as $row):
                                     $totalBookings++;
 
-                                    $totalCost += $row['confirmedFinalBill'];
+                                    $totalCost += $row['finalBill'];
                                     $bookingType = $row['bookingType'];
 
                                     switch ($bookingType) {
                                         case 'Resort':
-                                            $resortTotalSales += $row['confirmedFinalBill'];
+                                            $resortTotalSales += $row['finalBill'];
                                             break;
                                         case 'Event':
-                                            $eventTotalSales += $row['confirmedFinalBill'];
+                                            $eventTotalSales += $row['finalBill'];
                                             break;
                                         case 'Hotel':
-                                            $hotelTotalSales += $row['confirmedFinalBill'];
+                                            $hotelTotalSales += $row['finalBill'];
                                             break;
                                         default:
                                             break;
@@ -205,7 +205,7 @@ if (isset($_POST['generatePDF'])) {
                                         <td><?= date('F d, Y', strtotime($row['startDate'])) ?></td>
                                         <td><?= date('F d, Y', strtotime($row['endDate'])) ?></td>
                                         <td><?= htmlspecialchars($row['paymentMethod']) ?></td>
-                                        <td>₱<?= number_format($row['confirmedFinalBill'], 2) ?></td>
+                                        <td>₱<?= number_format($row['finalBill'], 2) ?></td>
                                     </tr>
                                 <?php
                                 endforeach;
