@@ -136,7 +136,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></p>
                 <?php endif; ?>
             </div>
-
+            <!-- //! check $wcImageID and other variables if they work -->
             <div class="swiper mySwiper swiper-amenity1">
                 <div class="swiper-wrapper">
                     <?php if (isset($imageMap['Amenity1'])): ?>
