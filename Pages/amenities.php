@@ -734,10 +734,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             const enableLoop = slideCount >= 3;
 
             new Swiper(config.selector, {
-                slidesPerView: 3,
+                slidesPerView: 1,
                 spaceBetween: 20,
-                loop: enableLoop,
-                loopedSlides: enableLoop ? slideCount : 0,
+                loop: true,
+                loopedSlides: 3,
                 navigation: {
                     nextEl: config.next,
                     prevEl: config.prev,
