@@ -121,7 +121,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
         <div class="socialIcons">
             <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
                     class='bx bxl-facebook-circle'></i></a>
-            <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>"><i
+            <a href="mailto: <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>"><i
                     class='bx bxl-gmail'></i></a>
             <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
                 <i class='bx bxs-phone'></i>

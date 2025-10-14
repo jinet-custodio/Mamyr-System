@@ -232,18 +232,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
                     </div>
                 <?php endif; ?>
-                <!-- <div class="swiper-slide"><img src="Assets/Images/amenities/poolPics/poolPic2.jpg" class="d-block w-100"
-                        alt="Image 1"></div>
-                <div class="swiper-slide"> <img src="Assets/Images/amenities/cottagePics/cottage4.jpg"
-                        class="d-block w-100" alt="Image 2"></div>
-                <div class="swiper-slide"> <img src="Assets/Images/amenities/hotelPics/hotel2.jpg" class="d-block w-100"
-                        alt="Image 2"></div>
-                <div class="swiper-slide"> <img src="Assets/Images/amenities/miniPavPics/miniPav1.jpg"
-                        class="d-block w-100" alt="Image 2"></div>
-                <div class="swiper-slide"> <img src="Assets/Images/amenities/pavilionPics/pav3.jpg"
-                        class="d-block w-100" alt="Image 2"></div>
-                <div class="swiper-slide"> <img src="Assets/Images/amenities/parkingPics/parking4.jpg"
-                        class="d-block w-100" alt="Image 3"></div> -->
 
             </div>
             <div class="swiper-pagination"></div>
@@ -346,133 +334,20 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <?php if ($editMode):
         include 'Pages/editImageModal.php';
     endif; ?>
-    <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
+
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
     <script src="../Assets/JS/scrollNavbg.js"></script>
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const saveBtn = document.getElementById('saveChangesBtn');
-                saveBtn?.addEventListener('click', () => {
-                    saveTextContent();
-                    saveEditableImages();
-                });
+        <script type="module">
+            import {
+                initWebsiteEditor
+            } from '/Assets/JS/EditWebsite/editWebsiteContent.js';
 
-                function saveTextContent() {
-                    const inputs = document.querySelectorAll('.editable-input');
-                    const data = {
-                        sectionName: 'Landing'
-                    };
-
-                    inputs.forEach(input => {
-                        const title = input.getAttribute('data-title');
-                        const value = input.value;
-                        data[title] = value;
-                    });
-
-                    fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        })
-                        .then(res => res.text())
-                        .then(text => {
-                            if (!text) throw new Error('Empty response');
-                            return JSON.parse(text);
-                        })
-                        .then(response => {
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Content Updated!',
-                                    text: 'Text content has been successfully updated.',
-                                    timer: 2000, // Optional: auto-close after 2 seconds
-                                    showConfirmButton: false
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Update Failed',
-                                    text: 'Failed to update text content: ' + response.message,
-                                });
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Error saving content:', err);
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'An error occurred!',
-                                text: 'Something went wrong while saving the content.',
-                            });
-                        });
-                }
-
-                function saveEditableImages() {
-                    const editableImages = document.querySelectorAll('.editable-img');
-
-                    editableImages.forEach(img => {
-                        const wcImageID = img.dataset.wcimageid;
-                        const altText = img.dataset.alttext;
-                        const folder = img.dataset.folder || '';
-                        const file = img.fileObject || null;
-
-                        if (!wcImageID || (!file && !altText)) {
-                            console.log("No data");
-                            return
-                        };
-
-                        const formData = new FormData();
-                        formData.append('wcImageID', wcImageID);
-                        formData.append('altText', altText);
-                        formData.append('folder', folder);
-
-                        if (file) {
-                            formData.append('image', file);
-                        }
-                        console.log(formData);
-                        fetch('Function/Admin/editWebsite/editWebsiteContent.php', {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(res => res.json())
-                            .then(response => {
-                                console.log("Full Response:", response);
-                                if (response.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Image Updated!',
-                                        text: `Image ${altText} has been updated`,
-                                        timer: 2000, // Optional: auto-close after 2 seconds
-                                        showConfirmButton: false
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: `Update Failed for Image ${wcImageID}`,
-                                        text: `Failed to update image ${wcImageID}: ` + response
-                                            .message,
-                                    });
-                                }
-                            })
-                            .catch(err => {
-                                console.error(`Image update failed for ${wcImageID}:`, err);
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'An error occurred!',
-                                    text: `Something went wrong while updating the image ${wcImageID}.`,
-                                });
-                            });
-                    });
-                }
-            });
+            initWebsiteEditor('Landing', 'Function/Admin/editWebsite/editWebsiteContent.php');
         </script>
     <?php endif; ?>
 
