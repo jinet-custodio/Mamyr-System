@@ -31,7 +31,7 @@
 /* Edit mode CSS */
 #saveChangesBtn {
   margin-top: 8vw !important;
-  margin-left: 80vw;
+  float: right;
   font-size: 1.8vw !important;
   position: fixed;
 }

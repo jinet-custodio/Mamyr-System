@@ -159,12 +159,12 @@ require '../../Function/notification.php';
                         <?php endif; ?>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Amenities
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item active" href="amenities.php">Resort Amenities</a></li>
+                            <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
                             <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
                             <li><a class="dropdown-item" href="events.php">Events</a></li>
                         </ul>
@@ -421,8 +421,7 @@ require '../../Function/notification.php';
     </div>
 
     <!-- Bootstrap Link -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    <script src="../../Assets/JS/bootstrap.bundle.min.js">
     </script>
 
 

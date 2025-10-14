@@ -150,9 +150,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <?php if ($editMode): ?>
                                     data-bs-toggle="modal"
                                     data-bs-target="#editImageModal"
-                                    data-wcimageid="<?= $wcImageID ?>"
+                                    data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
                                     data-folder="<?= $folder ?>"
-                                    data-imagepath="<?= $imgData ?>"
+                                    data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>"
                                     <?php endif; ?>>
                             </div>
@@ -197,9 +197,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <?php if ($editMode): ?>
                                     data-bs-toggle="modal"
                                     data-bs-target="#editImageModal"
-                                    data-wcimageid="<?= $wcImageID ?>"
+                                    data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
                                     data-folder="<?= $folder ?>"
-                                    data-imagepath="<?= $imgData ?>"
+                                    data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>"
                                     <?php endif; ?>>
                             </div>
@@ -249,9 +249,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <?php if ($editMode): ?>
                                     data-bs-toggle="modal"
                                     data-bs-target="#editImageModal"
-                                    data-wcimageid="<?= $wcImageID ?>"
+                                    data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
                                     data-folder="<?= $folder ?>"
-                                    data-imagepath="<?= $imgData ?>"
+                                    data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>"
                                     <?php endif; ?>>
                             </div>
@@ -298,9 +298,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <?php if ($editMode): ?>
                                     data-bs-toggle="modal"
                                     data-bs-target="#editImageModal"
-                                    data-wcimageid="<?= $wcImageID ?>"
+                                    data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
                                     data-folder="<?= $folder ?>"
-                                    data-imagepath="<?= $imgData ?>"
+                                    data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>"
                                     <?php endif; ?>>
                             </div>
@@ -347,9 +347,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <?php if ($editMode): ?>
                                     data-bs-toggle="modal"
                                     data-bs-target="#editImageModal"
-                                    data-wcimageid="<?= $wcImageID ?>"
+                                    data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
                                     data-folder="<?= $folder ?>"
-                                    data-imagepath="<?= $imgData ?>"
+                                    data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>"
                                     <?php endif; ?>>
                             </div>
@@ -395,9 +395,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <?php if ($editMode): ?>
                                     data-bs-toggle="modal"
                                     data-bs-target="#editImageModal"
-                                    data-wcimageid="<?= $wcImageID ?>"
+                                    data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
                                     data-folder="<?= $folder ?>"
-                                    data-imagepath="<?= $imgData ?>"
+                                    data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>"
                                     <?php endif; ?>>
                             </div>
@@ -445,9 +445,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <?php if ($editMode): ?>
                                     data-bs-toggle="modal"
                                     data-bs-target="#editImageModal"
-                                    data-wcimageid="<?= $wcImageID ?>"
+                                    data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
                                     data-folder="<?= $folder ?>"
-                                    data-imagepath="<?= $imgData ?>"
+                                    data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>"
                                     <?php endif; ?>>
                             </div>
@@ -463,87 +463,16 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
         </div>
     </div>
-    <!-- Modal for editing images and alt texts in edit mode -->
-    <?php if ($editMode): ?>
-        <!-- Edit Image Modal -->
-        <div class="modal fade" id="editImageModal" tabindex="-1" aria-labelledby="editImageModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content p-3">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editImageModalLabel">Edit Image</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <img id="modalImagePreview" src="" alt="" class="img-thumbnail mb-3">
-
-                        <input type="file" id="modalImageUpload" class="form-control mb-2">
-
-                        <input type="text" id="modalAltText" class="form-control mb-3" placeholder="Alt text">
-
-                        <!-- Changed label to "Choose" -->
-                        <button id="chooseImageBtn" class="btn btn-success me-2" data-bs-dismiss="modal">Choose This
-                            Image</button>
-                        <button id="deleteImageBtn" class="btn btn-danger">Delete Image</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                let activeImageElement = null;
-                let activeWCImageID = null;
-
-                // On image click - open modal and load current image/alt
-                document.querySelectorAll('.editable-img').forEach(img => {
-                    img.addEventListener('click', function() {
-                        activeImageElement = this;
-                        activeWCImageID = this.dataset.wcimageid;
-
-                        const currentSrc = this.src;
-                        const currentAlt = this.alt;
-
-                        document.getElementById('modalImagePreview').src = currentSrc;
-                        document.getElementById('modalAltText').value = currentAlt;
-                        activeImageElement.setAttribute('data-folder', this.dataset.folder || '');
-                        document.getElementById('modalImageUpload').value = '';
-                    });
-                });
-
-                // When user clicks "Choose"
-                document.getElementById('chooseImageBtn').addEventListener('click', () => {
-                    if (!activeImageElement) return;
-
-                    const newAlt = document.getElementById('modalAltText').value;
-                    const newFile = document.getElementById('modalImageUpload').files[0];
-
-                    // Save alt text immediately to the image's alt and data attribute
-                    activeImageElement.alt = newAlt;
-                    activeImageElement.setAttribute('data-alttext', newAlt);
-
-                    // Handle local image preview before uploading
-                    if (newFile) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            activeImageElement.src = e.target.result;
-
-                            activeImageElement.setAttribute('data-tempfile', newFile.name);
-                            activeImageElement.fileObject =
-                                newFile;
-                        };
-                        reader.readAsDataURL(newFile);
-                    }
-                });
-            });
-        </script>
-
-    <?php endif; ?>
 
 
-    <?php if (!$editMode): ?>
-        <?php include 'footer.php';
-        include 'loader.php'; ?>
-    <?php endif; ?>
+
+    <?php if (!$editMode) {
+        include 'footer.php';
+        include 'loader.php';
+    } else {
+        include 'editImageModal.php';
+    }
+    ?>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -560,126 +489,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const saveBtn = document.getElementById('saveChangesBtn');
-                const amenities = document.getElementById('amenities');
-                document.getElementById('mamyrVideo').style.height = 'auto';
-                document.body.style.display = 'block';
-                amenities.style.marginTop = '0';
+        <script type="module">
+            import {
+                initWebsiteEditor
+            } from '../Assets/JS/EditWebsite/editWebsiteContent.js';
 
-                saveBtn?.addEventListener('click', () => {
-                    saveTextContent();
-                    saveEditableImages();
-                });
-
-                function saveTextContent() {
-                    const inputs = document.querySelectorAll('.editable-input');
-                    const data = {
-                        sectionName: 'Amenities'
-                    };
-
-                    inputs.forEach(input => {
-                        const title = input.getAttribute('data-title');
-                        const value = input.value;
-                        data[title] = value;
-                    });
-
-                    fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        })
-                        .then(res => res.text())
-                        .then(text => {
-                            if (!text) throw new Error('Empty response');
-                            return JSON.parse(text);
-                        })
-                        .then(response => {
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Content Updated!',
-                                    text: 'Text content has been successfully updated.',
-                                    timer: 2000, // Optional: auto-close after 2 seconds
-                                    showConfirmButton: false
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Update Failed',
-                                    text: 'Failed to update text content: ' + response.message,
-                                });
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Error saving content:', err);
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'An error occurred!',
-                                text: 'Something went wrong while saving the content.',
-                            });
-                        });
-                }
-
-                function saveEditableImages() {
-                    const editableImages = document.querySelectorAll('.editable-img');
-
-                    editableImages.forEach(img => {
-                        const wcImageID = img.dataset.wcimageid;
-                        const altText = img.dataset.alttext;
-                        const folder = img.dataset.folder || '';
-                        const file = img.fileObject || null;
-
-                        if (!wcImageID || (!file && !altText)) return;
-
-                        const formData = new FormData();
-                        formData.append('wcImageID', wcImageID);
-                        formData.append('altText', altText);
-                        formData.append('folder', folder);
-
-                        if (file) {
-                            formData.append('image', file);
-                        }
-
-                        fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(res => res.json())
-                            .then(response => {
-                                console.log("Full Response:", response);
-                                if (response.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Image Updated!',
-                                        text: `Image ${altText} has been updated`,
-                                        timer: 2000, // Optional: auto-close after 2 seconds
-                                        showConfirmButton: false
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: `Update Failed for Image ${wcImageID}`,
-                                        text: `Failed to update image ${wcImageID}: ` + response
-                                            .message,
-                                    });
-                                }
-                            })
-                            .catch(err => {
-                                console.error(`Image update failed for ${wcImageID}:`, err);
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'An error occurred!',
-                                    text: `Something went wrong while updating the image ${wcImageID}.`,
-                                });
-                            });
-                    });
-                }
-            });
+            initWebsiteEditor('Amenities', '../Function/Admin/editWebsite/editWebsiteContent.php');
         </script>
+
     <?php endif; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -736,8 +553,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             new Swiper(config.selector, {
                 slidesPerView: 1,
                 spaceBetween: 20,
-                loop: true,
-                loopedSlides: 3,
+                loop: false,
                 navigation: {
                     nextEl: config.next,
                     prevEl: config.prev,
