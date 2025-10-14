@@ -137,7 +137,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="topRight">
             <div class="carousel-container">
-                <div class="card-stack">
+                <div class="card-stack <?php if ($editMode): ?>editable-imgs<?php endif; ?>">
                     <?php if (isset($imageMap['Heading'])): ?>
                         <?php foreach ($imageMap['Heading'] as $index => $img):
                             $imagePath = "Assets/Images/landingPage/" . $img['imageData'];
@@ -329,11 +329,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div id="map"></div>
     </section>
-    <?php include 'Pages/Customer/footer.php';
-    include './Pages/loader.php'; ?>
-    <?php if ($editMode):
+    <?php if ($editMode) {
         include 'Pages/editImageModal.php';
-    endif; ?>
+    } else {
+        include 'Pages/Customer/footer.php';
+        include './Pages/loader.php';
+    }
+    ?>
 
     <!-- Bootstrap JS -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>

@@ -382,93 +382,26 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         </div>
     </div>
-
-    <?php if (!$editMode): ?>
-        <?php include 'footer.php';
-        include 'loader.php' ?>
-    <?php endif; ?>
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="../Assets/JS/scrollNavbg.js"></script>
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php if (!$editMode) {
+        include 'footer.php';
+        include 'loader.php';
+    } else {
+        include 'editImageModal.php';
+    }
+    ?>
 
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const saveBtn = document.getElementById('saveChangesBtn');
+        <script type="module">
+            import {
+                initWebsiteEditor
+            } from '../Assets/JS/EditWebsite/editWebsiteContent.js';
 
-
-                const editables = document.querySelectorAll(".editable-img");
-
-                editables.forEach(el => {
-                    el.style.border = "2px solid red";
-                });
-
-                saveBtn?.addEventListener('click', () => {
-
-                    const inputs = document.querySelectorAll('.editable-input');
-                    const data = {
-                        sectionName: 'About'
-                    };
-
-                    inputs.forEach(input => {
-                        const title = input.getAttribute('data-title');
-                        const value = input.value;
-                        data[title] = value;
-                    });
-
-                    fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        })
-                        .then(res => res.text())
-                        .then(response => {
-                            console.log('Content saved:', response);
-                            alert('Website content saved!');
-                        })
-                        .catch(err => {
-                            console.error('Error saving content:', err);
-                            alert('An error occurred while saving content.');
-                        });
-
-                    const editableImages = document.querySelectorAll('.editable-img');
-                    editableImages.forEach(img => {
-                        const wcImageID = img.dataset.wcimageid;
-                        const altText = img.dataset.alttext;
-                        const folder = img.dataset.folder || '';
-                        const file = img.fileObject || null;
-
-                        if (!wcImageID || (!file && !altText)) return;
-
-                        const formData = new FormData();
-                        formData.append('wcImageID', wcImageID);
-                        formData.append('altText', altText);
-                        formData.append('folder', folder);
-
-                        if (file) {
-                            formData.append('image', file);
-                        }
-
-                        fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (data.success) {
-                                    console.log(`Image ${wcImageID} updated successfully.`);
-                                } else {
-                                    alert(`Failed to update image ${wcImageID}: ` + data.message);
-                                }
-                            })
-                            .catch(err => {
-                                console.error('Image update failed:', err);
-                                alert('An error occurred while updating an image.');
-                            });
-                    });
-
-                });
-            });
+            initWebsiteEditor('About', '../Function/Admin/editWebsite/editWebsiteContent.php');
         </script>
     <?php endif; ?>
 
@@ -500,9 +433,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             })
         })
     </script>
-
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
-    <script src="../Assets/JS/scrollNavbg.js"></script>
 
     <!-- Sweetalert JS -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
