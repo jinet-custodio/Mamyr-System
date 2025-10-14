@@ -8,12 +8,13 @@ if (isset($_GET['userID'])) {
     $userID = (int) $_GET['userID'];
     // error_log($userID);
     try {
-        $getBookingInfo = $conn->prepare("SELECT 
+        $getBookingInfo = $conn->prepare("SELECT b.bookingCode,
                             b.bookingID, b.bookingType, b.userID, b.startDate, b.bookingStatus, b.paymentMethod, 
                             b.customPackageID, b.totalCost,
-                            cb.paymentApprovalStatus, cb.confirmedBookingID, cb.paymentStatus, cb.confirmedFinalBill, cb.userBalance
+                            cb.paymentApprovalStatus, cb.confirmedBookingID, p.paymentID, p.paymentStatus, cb.finalBill, cb.userBalance
                         FROM booking b
                         LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
+                        LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         WHERE b.userID = ?
                         ORDER BY
                         b.createdAt");
@@ -28,73 +29,84 @@ if (isset($_GET['userID'])) {
 
             $paymentApprovalStatus = getStatuses($conn, $bookings['paymentApprovalStatus'] ?? null);
             $bookingStatus = getStatuses($conn, $bookings['bookingStatus'] ?? null);
-            $paymentStatus = getPaymentStatus($conn, $bookings['paymentStatus']) ?? null;
+            $paymentStatus = !empty($paymentID) ? getPaymentStatus($conn, $bookings['paymentStatus']) : getPaymentStatus($conn, 1);
 
             $status = '';
             $class = '';
+
             if (!empty($bookings['confirmedBookingID'])) {
                 $status = $paymentApprovalStatus['statusName'];
                 switch ($paymentApprovalStatus['statusID']) {
                     case 1:
-                        $status = 'Downpayment';
-                        $class = 'info';
+                        $status = 'Awaiting Payment';
+                        $class = 'orange';
                         switch ($paymentStatus['paymentStatusID']) {
-                            case 5:
-                                $class = 'sky-blue';
-                                $status =  $paymentStatus['paymentStatusName'];
+                            case 1:
+                                $class = 'orange';
                                 break;
+                            case 5:
+                                $class = 'green';
+                                $status =  'Payment Sent';
                         }
                         switch ($bookingStatus['statusID']) {
-                            case 6:
-                                $class = 'secondary';
+                            case 7:
+                                $class = 'muted';
                                 $status = $bookingStatus['statusName'];
                                 break;
                             case 4:
-                                $class = 'red';
+                                $class = 'danger';
                                 $status = $bookingStatus['statusName'];
                                 break;
                         }
                         break;
                     case 2:
+                        $status = 'Reserved';
                         $class = 'success';
-                        break;
-                    case 3:
-                        $class = 'danger';
+                        switch ($paymentStatus['paymentStatusID']) {
+                            case 2:
+                                $class = 'light-blue';
+                                break;
+                            case 3:
+                                $class = 'bright-green';
+                                $status =  $paymentStatus['paymentStatusName'];
+                        }
                         break;
                     case 4:
-                        $class = 'red';
+                        $class = 'danger';
                         break;
                     case 5:
-                        $class = 'light-green';
-                        break;
-                    case 6:
-                        $class = 'secondary';
+                        $class = 'red';
                         break;
                     default:
-                        $class = 'warning';
+                        $class = 'orange';
                         break;
                 }
             } else {
-                $status = $bookingStatus['statusName'];
+                $status   = $bookingStatus['statusName'];
                 switch ($bookingStatus['statusID']) {
                     case 1:
+                        $status = 'Awaiting Review';
                         $class = 'warning';
                         break;
                     case 2:
-                        $status = 'Downpayment';
-                        $class = 'info';
+                        $status = 'Awaiting Payment';
+                        $class = 'orange';
                         break;
                     case 3:
-                        $class = 'danger';
-                        break;
-                    case 4:
-                        $class = 'red';
+                        $status = 'Reserved';
+                        $class = 'success';
                         break;
                     case 5:
-                        $class = 'light-green';
+                        $class = 'red';
+                        break;
+                    case 4:
+                        $class = 'danger';
                         break;
                     case 6:
-                        $class = 'secondary';
+                        $class = 'light-green';
+                        break;
+                    case 7:
+                        $class = 'muted';
                         break;
                     default:
                         $class = 'warning';
@@ -104,6 +116,7 @@ if (isset($_GET['userID'])) {
 
 
             $rows[] = [
+                'bookingCode' => $bookings['bookingCode'],
                 'confirmedBookingID' => $bookings['confirmedBookingID'],
                 'bookingID' => $bookings['bookingID'],
                 'bookingType' => $bookings['bookingType'],
@@ -111,10 +124,7 @@ if (isset($_GET['userID'])) {
                 'status' => $status,
                 'statusClass' => $class,
                 'bookingStatus' => $bookings['bookingStatus'],
-                'paymentMethod' => $bookings['paymentMethod'],
-                'approvalStatus' => $paymentApprovalStatus['statusName'] ?? '',
-                'userBalance' => '₱ ' . number_format($bookings['userBalance'], 2),
-                'totalBill' => '₱ ' . number_format($bookings['confirmedFinalBill'], 2) ?? '₱ ' . number_format($bookings['totalCost'], 2)
+                'approvalStatus' => $paymentApprovalStatus['statusName'] ?? ''
             ];
         }
         echo json_encode(

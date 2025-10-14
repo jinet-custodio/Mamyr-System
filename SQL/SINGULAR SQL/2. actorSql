@@ -48,7 +48,7 @@ CREATE TABLE admin (
 
 ALTER TABLE admin
 ADD COLUMN fullName VARCHAR(50)
-AFTER userID 
+AFTER userID; 
 
 CREATE TABLE partnership (
     partnershipID INT PRIMARY KEY AUTO_INCREMENT,

@@ -27,7 +27,7 @@
 }
 
 body {
-  background: #ffd787a0 !important;
+  background: #f5f5f5 !important;
 }
 
 .wrapper {
@@ -45,7 +45,7 @@ img {
 }
 
 .selection {
-  margin-top: 10vw;
+  margin-top: 6vw;
 }
 
 /* body css */
@@ -59,26 +59,13 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: center;
-  margin-bottom: 1vw;
-  margin-top: var(--margin-lg);
-}
-
-.backToSelection {
-  width: 90%;
-  display: flex;
-  justify-content: flex-start;
-  margin: 0 auto;
-}
-
-.backToSelection i {
-  font-size: 3.5vw;
+  width: 95%;
+  margin-top: var(--margin-m);
 }
 
 .card,
 .card-body {
   text-align: center;
-  width: 90%;
 }
 
 .card {
@@ -90,8 +77,10 @@ img {
 .card-body {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   margin: var(--margin-m) auto;
+  flex: 1;
+  border-radius: var(--radius-lg);
 }
 
 .card-img-top.category {
@@ -104,21 +93,20 @@ img {
 }
 
 .card-title {
-  font-family: "Poppins Black";
+  font-family: "Poppins";
   font-style: italic;
   font-weight: bold;
   font-size: clamp(
-    var(--font-size-xxl),
-    calc(var(--font-size-lg) + 1vh),
-    var(--font-size-xl)
+    var(--font-size-lg),
+    calc(var(--font-size-md) + 1vh),
+    var(--font-size-md)
   );
-  color: #00b3d1 !important;
   text-align: center;
 }
 
 .categoryLink {
   text-decoration: none;
-
+  color: gray;
   &:hover {
     text-decoration: none !important;
   }
@@ -129,24 +117,29 @@ img {
 }
 
 .categoryLink:hover .card {
-  transform: translateY(-12px);
+  transform: translateY(-6px);
   box-shadow: 0 8px 6px rgba(39, 183, 255, 0.4);
 }
 
-/* rates code */
-
-.rates,
-.hotelRooms {
-  margin-top: 10vw;
+.categoryLink .selected {
+  color: var(--blue-350) !important;
+  text-decoration: underline;
 }
 
+/* rates code */
+#rates,
+#hotelRooms {
+  margin-top: var(--margin-md);
+}
 /* entrance */
+.entrance {
+  background-color: rgba(16, 128, 125, 1);
+}
 .entranceFee {
   display: flex;
   flex-wrap: wrap;
-  width: 90%;
   justify-content: space-between;
-  margin: 0 auto;
+  margin: var(--margin-sm) auto;
 }
 
 .entranceTitleContainer {
@@ -157,31 +150,21 @@ img {
   color: whitesmoke;
 }
 
-.entranceLine {
-  border: none;
-  border-top: 5px solid #d48d31;
-  width: 30%;
-  margin: 0 auto;
-  opacity: 1;
-}
-
 .entranceTitle {
-  margin-top: 2vw;
-  font-size: 2.8vw;
+  font-size: calc(var(--font-size-lg) + 1vh);
   font-family: "Lora";
 }
 
 .entranceCard {
-  padding: 3vw;
-  font-size: 1.5vw;
-  width: 22vw !important;
+  padding: 1vw;
+  font-size: var(--font-size-md);
   display: grid;
   align-items: center;
 }
 
 .entrance-card-title {
   font-family: "Lora";
-  font-size: 1.7vw;
+  font-size: var(--font-size-lg);
   color: #212121 !important;
   text-align: center;
 }
@@ -200,9 +183,55 @@ img {
   margin: auto;
 }
 
+.swiper-container {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  overflow-y: hidden;
+}
+
+.swiper-wrapper {
+  display: flex;
+  align-items: stretch;
+}
+
+.swiper-slide {
+  display: flex !important;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.swiper-slide .card {
+  flex: 1;
+  flex-direction: column;
+}
+
+.swiper-pagination {
+  bottom: 10px !important;
+  text-align: center;
+  position: static !important;
+}
+
+.card-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  width: 100%;
+  justify-content: space-between;
+  height: 100% !important;
+}
+
+.card.cottage {
+  flex: 1;
+}
+
+.cottage img {
+  width: 100%;
+}
+
 .title {
   text-align: center;
-  margin-top: -3vw;
   margin-bottom: 1vw;
   font-size: clamp(
     var(--font-size-xxl),
@@ -216,13 +245,19 @@ img {
 
 /* end of entrance code */
 
+.cottages,
+.entrance,
+.videoke {
+  width: 98%;
+  border-radius: var(--radius-lg);
+}
+
 /* cottages code */
 
 .cottages {
   display: flex;
   flex-wrap: wrap;
-  width: 95%;
-  margin: 2vw auto;
+  height: 100%;
   column-gap: 5px;
   row-gap: 2vw;
   padding: 2vw;
@@ -244,6 +279,7 @@ img {
 
 .card-body.description {
   display: flex;
+  flex: 1;
   width: 100%;
   flex-direction: column;
   justify-content: center;
@@ -252,13 +288,17 @@ img {
 
 .card-body.description h2,
 .card-body.description a {
-  font-size: clamp(2vw, 1.8vw, 1.9vw);
+  font-size: var(--font-size-md);
   font-family: "Poppins";
 }
 
 .card-body.description p {
-  font-size: clamp(1.4vw, 1.5vw, 1.6vw);
+  font-size: var(--font-size-base);
   font-family: "Poppins";
+}
+
+.section {
+  width: 50%;
 }
 
 /* end of cottages code */
@@ -266,49 +306,31 @@ img {
 /* videoke code  */
 
 .videoke {
-  width: 98%;
-  border-radius: 20px;
   background-color: #f5f5f5;
-  margin: auto;
-}
-
-.section {
-  display: flex;
-  width: 90%;
-  padding: 1vw;
-  margin: 2vw auto 1vw auto;
-  justify-content: center;
-  gap: 5vw;
-}
-
-#videokeDescContainer {
-  width: 75%;
 }
 
 #videokePriceDesc {
   font-family: "Poppins";
-  font-size: 2vw;
+  font-size: var(--font-size-md);
   font-weight: bold;
 }
 
 .videokeDesc {
   text-align: center;
   font-family: "Poppins";
-  font-size: clamp(1.7vw, 1.8vw, 1.9vw);
-  margin-top: 2vw;
+  font-size: var(--font-size-base);
 }
 
 #videokeDisplayPhoto,
 #billardsDisplayPhoto,
 #massageChairDisplayPhoto {
-  width: 25vw;
+  width: 30vw;
+  aspect-ratio: 16/9;
+  object-fit: fill;
 }
 
 .videokeTitleContainer {
-  width: 50%;
-  margin: auto;
   text-align: center;
-  margin-top: 5vw !important;
 }
 
 .videokeTitle {
@@ -317,49 +339,44 @@ img {
   font-family: "Lora";
 }
 
-#videokeDesc {
-  font-size: 1.5vw;
+.videokeDesc {
   padding: 0.8vw;
   width: 75%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #videokeDesc p {
   font-size: 1.5vw;
 }
 
+.billiardMassage {
+  flex-direction: row !important;
+}
+
 /*end of videoke code */
 
 /* billiards code */
 #billiards {
-  width: 90%;
-  padding: 1vw;
-  margin: 2vw auto 1vw auto;
-  justify-content: center;
-  gap: 5vw;
-  display: flex;
+  flex-direction: column;
+}
+
+#billiard-flex {
+  flex-direction: column-reverse;
 }
 
 /* end of billiards code */
 
 /* massage chair code */
 
+#billiards,
 .massage {
-  width: 98%;
-  border-radius: 20px;
-  margin: auto;
-}
-
-#massage {
-  display: flex;
-  width: 90%;
   padding: 1vw;
-  margin: 2vw auto 1vw auto;
-  justify-content: center;
-  gap: 5vw;
+  border-radius: 20px;
 }
 
 #massageDesc {
-  font-size: 1.5vw;
+  font-size: var(--font-size-sm);
   padding: 0.8vw;
   width: 75%;
 }
@@ -370,7 +387,11 @@ img {
 /* start of hotel code */
 .hotelDescription {
   margin-top: 1vw;
-  font-size: clamp(1.5vw, 1.7vw, 1.9vw);
+  font-size: var(--font-size-md);
+}
+
+.roomNum {
+  font-size: var(--font-size-lg);
 }
 
 #allrooms {
@@ -413,7 +434,7 @@ img {
 }
 
 .hotelIcon {
-  width: clamp(8vw, 9vw, 10vw);
+  width: 4vw;
 }
 
 .filterBtns button.selected {
@@ -435,7 +456,7 @@ img {
 }
 
 .roomCaption {
-  font-size: clamp(1.8vw, 1.5vw, 1.6vw);
+  font-size: var(--font-size-md);
   font-family: "Lora";
 }
 
@@ -444,7 +465,7 @@ img {
 }
 
 .availabilityIcons p {
-  font-size: clamp(1.3vw, 1.5vw, 1.6vw);
+  font-size: var(--font-size-lg);
   font-weight: 700;
   font-family: "Lora";
   margin: 0 2vw 0 1vw;
@@ -462,29 +483,21 @@ img {
 }
 
 .hotelRoomList {
-  width: 90%;
+  width: 80%;
   display: flex;
   flex-wrap: wrap;
   margin: 2vw auto;
 }
 
 .hotel {
-  width: 30%;
-  flex-wrap: wrap;
-  background-color: whitesmoke;
   padding: 0.5vw;
   margin: 1vw auto 1vw auto;
   justify-content: space-around;
-  border-radius: 1vw;
-  border: 1px solid black;
-}
-
-#hotelTitle {
-  margin-bottom: 4vw;
 }
 
 .Description {
   text-align: center;
+  margin-top: 1rem;
 }
 
 .Description h2 {
@@ -492,7 +505,7 @@ img {
 }
 
 .Description p {
-  font-size: clamp(1.6vw, 1.4vw, 1.3vw);
+  font-size: var(--font-size-md);
   margin-bottom: 0.5vw !important;
 }
 
@@ -534,7 +547,7 @@ img {
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
   .selection {
-    margin-top: 15vw;
+    margin-top: 7vw;
   }
 
   .card-title {
@@ -542,16 +555,15 @@ img {
   }
 
   #rates {
-    margin-top: 10vw;
-  }
-
-  .backToSelection i {
-    font-size: 4vw;
     margin-top: 3vw;
   }
 
+  .categoryLink h5 {
+    font-size: var(--font-size-lg);
+  }
+
   .title {
-    font-size: clamp(4.5vw, 4.3vw, 4.1vw);
+    font-size: var(--font-size-xxl);
     margin-bottom: 2vw !important;
   }
 
@@ -572,12 +584,8 @@ img {
     width: 95%;
   }
 
-  .entrance-card-title {
-    font-size: clamp(24px, calc(2.8vh + 2px), 22px);
-  }
-
   .cottages {
-    width: 100%;
+    width: 70%;
   }
 
   #cottageCard {
@@ -589,16 +597,16 @@ img {
   }
 
   .card-body.description h2 {
-    font-size: clamp(24px, calc(1.8vh + 2px), 26px);
+    font-size: clamp(18px, calc(1.5vh + 2px), 16px);
   }
 
   #videokePriceDesc {
-    font-size: clamp(24px, calc(1.6vh + 2px), 20px);
+    font-size: clamp(20px, calc(1.4vh + 2px), 17px);
   }
 
   .card-body.description p,
   .card-body.description a {
-    font-size: clamp(20px, calc(1.8vh + 2px), 18px);
+    font-size: clamp(16px, calc(1.5vh + 2px), 14px);
   }
 
   .videokeDesc {
@@ -616,10 +624,6 @@ img {
     margin: 0 !important;
   }
 
-  .entranceCard span.age {
-    font-size: clamp(20px, calc(1.8vh + 2px), 23px);
-  }
-
   .cottageDisplayPhoto {
     width: 80% !important;
   }
@@ -632,18 +636,14 @@ img {
     font-size: clamp(12px, calc(1.5vh + 4px), 20px);
   }
 
-  #videokeDescContainer {
-    width: 35%;
-  }
-
   .singleImg {
-    width: 65%;
+    width: 90%;
   }
 
   #videokeDisplayPhoto,
   #billardsDisplayPhoto,
   #massageChairDisplayPhoto {
-    width: 90%;
+    width: 100%;
     aspect-ratio: 16/9;
     object-fit: cover;
   }
@@ -657,7 +657,7 @@ img {
   }
 
   .Description p {
-    font-size: clamp(23px, calc(1.9vh + 4px), 21px);
+    font-size: clamp(18px, calc(1.4vh + 4px), 16px);
     margin-bottom: 0.5vw !important;
   }
 
@@ -667,7 +667,11 @@ img {
 
   #videokeDesc p,
   #massageDesc {
-    font-size: 1.8vw;
+    font-size: var(--font-size-md);
+  }
+
+  .section {
+    align-items: center !important;
   }
 
   .availabilityIcons {
@@ -679,7 +683,7 @@ img {
     width: 100%;
   }
   .hotelIconsContainer {
-    width: 100%;
+    width: 90%;
   }
 
   .hotelIconContainer {
@@ -691,24 +695,23 @@ img {
   }
 
   .hotelIcon {
-    width: clamp(10vw, 11vw, 9vw);
+    width: 8vw;
   }
 
   .hotel {
-    width: 43%;
     align-items: baseline;
   }
 
   .roomCaption {
-    font-size: clamp(2.3vw, calc(2.4vh + 2px), 2.5vw);
+    font-size: var(--font-size-md);
   }
 
   .availabilityIcons p {
-    font-size: clamp(2.3vw, calc(2.1vh + 2px), 2.1vw);
+    font-size: var(--font-size-lg);
   }
 
   .hotelDescription {
-    font-size: clamp(2.3vw, 2.4vw, 2.5vw);
+    font-size: var(--font-size-md);
   }
 
   /* Back to top button */
@@ -725,14 +728,13 @@ img {
 }
 
 @media (max-width: 800px) {
-  .title {
-    font-size: clamp(6.5vw, 6.8vw, 7.2vw);
+  #rates,
+  #hotelRooms {
+    margin-top: var(--margin-sm);
   }
-
-  .categoryLink {
-    width: 60%;
+  .categories {
+    margin-top: 12vw;
   }
-
   .card-body h5 {
     font-size: clamp(24px, calc(2vh + 2px), 27px);
   }
@@ -741,9 +743,14 @@ img {
     width: 80%;
   }
 
-  #mainTitle {
-    font-size: clamp(5.5vw, 5.6vw, 5.8vw);
+  .categoryLink h5 {
+    font-size: var(--font-size-md);
   }
+
+  .cottages {
+    width: 80%;
+  }
+
   #cottageCard {
     width: 45% !important;
     margin: auto;
@@ -752,17 +759,12 @@ img {
     padding: 2.2vw;
   }
 
-  .backToSelection i {
-    font-size: 5vw;
-    margin-top: 5vw;
-  }
-
   .hotelIconWithCaption {
     width: 30%;
   }
 
   .hotelIcon {
-    width: 70%;
+    width: 9vw;
   }
 
   .availabilityIcon img {
@@ -770,7 +772,7 @@ img {
   }
   .availabilityIcons p,
   .hotelDescription {
-    font-size: clamp(3.5vw, 3.8vw, 3.2vw);
+    font-size: var(--font-size-md);
   }
 
   input {
@@ -779,11 +781,7 @@ img {
 
   .roomCaption,
   .Description h2 {
-    font-size: clamp(23px, calc(2vh + 4px), 25px);
-  }
-
-  .Description p {
-    font-size: clamp(3.1vw, 3vw, 3.2vw);
+    font-size: clamp(16px, calc(1.3vh + 4px), 18px);
   }
 }
 
@@ -793,12 +791,12 @@ img {
     margin-top: 13vw;
   }
 
-  .categories {
-    margin-top: 10vw;
+  .categoryLink h5 {
+    font-size: var(--font-size-base);
   }
 
-  .categoryLink {
-    width: 80%;
+  .categories {
+    margin-top: 15vw;
   }
 
   .entranceCard {
@@ -807,6 +805,10 @@ img {
 
   .selection {
     margin-top: 15vw;
+  }
+
+  .cottages {
+    width: 70%;
   }
 
   .entranceLine {
@@ -818,8 +820,8 @@ img {
   }
 
   .title {
-    font-size: clamp(7.5vw, 6.8vw, 7.2vw);
-    margin-bottom: 3vw !important;
+    margin-bottom: 1vw !important;
+    font-size: calc(var(--font-size-xl) + 1vh);
   }
 
   .backToSelection i {
@@ -831,23 +833,15 @@ img {
   }
 
   .entranceTitle {
-    font-size: clamp(26px, calc(3.5vh + 4px), 30px);
-    margin: 3vw auto 5vw auto !important;
+    font-size: clamp(22px, calc(2.2vh + 4px), 20px);
   }
 
   span.age {
-    font-size: clamp(3.2vw, 2.7vw, 3vw);
-  }
-  .Description h2 {
-    font-size: clamp(28px, calc(2.5vh + 4px), 34px) !important;
-  }
-
-  .entrance-card-title {
-    font-size: clamp(3.7vw, 3.9vw, 3.5vw);
-  }
-
-  .videokeTitleContainer {
-    width: 90%;
+    font-size: clamp(
+      var(--font-size-sm),
+      calc(var(--font-size-base) + 2px),
+      var(--font-size-md)
+    );
   }
 
   .entranceFee {
@@ -856,20 +850,17 @@ img {
     grid-template-rows: repeat(1, 1fr);
     gap: 8px;
     width: 98%;
-    margin: 5vw auto;
   }
 
   .entranceCard {
-    padding: 2vw;
-    font-size: 1.5vw;
-    width: 90% !important;
+    padding: 1vw;
     display: grid !important;
     align-items: center;
   }
 
   .card-body.description h2,
   #videokePriceDesc {
-    font-size: clamp(5vw, 4.8vw, 4.5vw) !important;
+    font-size: var(--font-size-lg);
   }
 
   .card-body.description {
@@ -884,8 +875,8 @@ img {
   .card-body.description p,
   .Description p,
   #videokeDesc p {
-    font-size: clamp(5vw, calc(3vh + 2px), 4.7vw) !important;
     margin-bottom: 0 !important;
+    font-size: var(--font-size-base);
   }
 
   #cottageCard {
@@ -931,10 +922,6 @@ img {
     width: 95%;
   }
 
-  .hotelDescription {
-    font-size: clamp(18px, calc(1.7vh + 2px), 24px);
-  }
-
   .availabilityIcons {
     width: 90%;
   }
@@ -968,23 +955,49 @@ img {
   }
 
   .hotel {
-    width: 80%;
     align-items: baseline !important;
     padding: 2vw;
   }
+  .swiper-wrapper {
+    justify-content: space-evenly;
+  }
+
+  .entrance-card-title {
+    font-size: var(--font-size-md);
+  }
 }
 
-@media (max-width: 400px) {
-  #rates,
-  .hotelRooms {
-    margin-top: 5vh;
+@media (max-width: 500px) {
+  .videokes {
+    flex-direction: column;
+    gap: 10px;
   }
 
-  #mainTitle {
-    margin-top: 20vw;
+  .section {
+    width: 100% !important;
   }
-  .title {
-    font-size: clamp(35px, calc(5vh + 4px), 30px);
+
+  .billiardMassage {
+    flex-direction: column;
+  }
+
+  .billiardMassage .massage,
+  .billiardMassage #billiards {
+    width: 100%;
+  }
+
+  .card-body.description h2,
+  #videokePriceDesc {
+    font-size: var(--font-size-md);
+  }
+}
+@media (max-width: 400px) {
+  .selection {
+    margin-top: 15vw;
+  }
+
+  .categories {
+    margin-top: 20vw;
   }
 
   .hotelDescription {
@@ -992,7 +1005,15 @@ img {
   }
 
   .entranceTitle {
-    font-size: clamp(20px, calc(2.5vh + 4px), 23px);
+    font-size: var(--font-size-md);
+  }
+
+  .entrance-card-title {
+    font-size: var(--font-size-sm);
+  }
+
+  span.age {
+    font-size: var(--font-size-sm);
   }
 
   .selection {
@@ -1025,10 +1046,6 @@ img {
     margin-top: 8vw;
   }
 
-  .Description h2 {
-    font-size: clamp(25px, calc(2.5vh + 4px), 28px) !important;
-  }
-
   .roomCaption {
     font-size: clamp(17px, calc(2.9vh + 4px), 16px);
   }
@@ -1043,15 +1060,6 @@ img {
   .Description p,
   #videokeDesc p {
     font-size: clamp(15px, calc(1.8vh + 2px), 14px) !important;
-  }
-
-  .entranceFee {
-    width: 100%;
-  }
-
-  .categoryLink {
-    width: 70%;
-    height: auto;
   }
 
   .card-body {

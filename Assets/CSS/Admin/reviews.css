@@ -21,38 +21,40 @@
   text-decoration: none;
   list-style: none;
 }
-
 body {
-  background: #a1c8c7 !important;
-}
-
-.topSection {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5vw;
+  gap: 1rem;
 }
-
-.menus {
-  /* border: 1px solid black; */
-  padding: 0.5vw;
-  margin-right: 2vw;
+main {
   display: flex;
-  align-items: center;
-  gap: 2vw;
+  justify-content: center;
+  width: 82%;
 }
 
-.dashTitleContainer {
-  margin-left: 1vw;
+.booking-container {
+  width: 100% !important;
+  max-width: 100%;
 }
 
-.logo {
-  width: 15vw;
+.notification-container {
+  text-align: right !important;
+  padding: var(--padding-sm);
+  margin-right: var(--margin-md);
 }
 
-#dashboard {
-  text-decoration: none;
-  margin-left: 1vw;
+#notification-icon {
+  font-size: 2rem;
+  color: #0d6dfc;
+}
+
+.page-title-container {
+  padding-left: var(--padding-md);
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-family: "Poppins";
+  font-weight: var(--font-weight-bold);
 }
 
 .filter-section {
@@ -65,17 +67,18 @@ body {
 }
 
 .cardContainer {
+  padding: var(--padding-lg);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  row-gap: 3rem;
+  row-gap: 4rem;
   margin-top: 4vw;
 }
 
 .reviewCard {
-  width: 25vw;
+  width: 20rem;
   height: 43vh !important;
   border-top-right-radius: 4vw !important;
   border-bottom-left-radius: 4vw !important;

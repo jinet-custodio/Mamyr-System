@@ -454,7 +454,7 @@ require '../../Function/notification.php';
                 </select>
             </div>
 
-            <div class="card graph" id="salesGraphCard">
+            <div class="card graph sales-chart" id="salesGraphCard">
                 <div class="salesGraphContainer mb-3">
                     <h5 class="revTitle">Sales</h5>
                     <div class="sales-chart">
@@ -490,7 +490,8 @@ require '../../Function/notification.php';
     </div>
 
 
-    <?php include '../notificationModal.php'; ?>
+    <!-- Notification Modal -->
+    <?php include '../notificationModal.php' ?>
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->

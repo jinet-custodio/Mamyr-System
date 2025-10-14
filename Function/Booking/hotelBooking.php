@@ -1,7 +1,7 @@
 <?php
 
 require '../../Config/dbcon.php';
-
+require '../Helpers/userFunctions.php';
 
 session_start();
 $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
@@ -83,18 +83,19 @@ if (isset($_POST['hotelBooking'])) {
             $hotelCapacity[] = $data['RScapacity'];
         }
     }
-
     $hoursNum = str_replace(" hours", "", $hoursSelected);
+
+    $bookingCode = 'HTL' . date('ymd') . generateCode(5);
 
     $conn->begin_transaction();
     try {
 
         //Insert Booking
         $insertBooking = $conn->prepare("INSERT INTO booking(userID, toddlerCount, adultCount, kidCount, guestCount, durationCount, startDate, endDate, 
-                    paymentMethod,  totalCost, downpayment, bookingStatus, bookingType, arrivalTime) 
-                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?, ?)");
+                    paymentMethod,  totalCost, downpayment, bookingStatus, bookingType, arrivalTime, bookingCode) 
+                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $insertBooking->bind_param(
-            "iiiiiisssddiss",
+            "iiiiiisssddisss",
             $userID,
             $toddlerCount,
             $adultCount,
@@ -109,7 +110,8 @@ if (isset($_POST['hotelBooking'])) {
             $downpayment,
             $bookingStatus,
             $bookingType,
-            $arrivalTime
+            $arrivalTime,
+            $bookingCode
         );
         if (!$insertBooking->execute()) {
             $conn->rollback();

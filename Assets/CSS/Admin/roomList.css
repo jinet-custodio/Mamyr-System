@@ -21,129 +21,47 @@
   list-style: none;
 }
 
-body {
-  background: #a1c8c7 !important;
-}
-
-.topSection {
-  /* border: 1px solid black; */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5vw;
-}
-
-.menus {
-  /* border: 1px solid black; */
-  padding: 0.5vw;
-  margin-right: 2vw;
-  display: flex;
-  align-items: center;
-  gap: 2vw;
-}
-
-.dashTitleContainer {
-  margin-left: 1vw;
-}
-
-.logo {
-  width: 15vw;
-}
-/* #dashboard {
-  font-family: "Plus Jakarta Sans";
-  text-decoration: none;
-  color: black;
-  font-weight: 800;
-  font-size: 2.3vw;
-  margin-left: 1vw;
-} */
-
-#dashboard {
-  text-decoration: none;
-  margin-left: 1vw;
-}
-
-.adminTitle {
-  font-family: "Lora" !important;
-  /* font-weight: bold; */
-  font-size: 24px;
-}
-
-.admin img {
-  height: 70px;
-  width: 70px;
-  border-radius: 3rem;
-}
-
-.navbar {
-  font-family: "Lora";
-  border-radius: 15px;
-  max-width: 80vw;
-  margin: 20px auto;
-  padding: 1rem !important;
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  h5 {
-    font-size: 20px !important;
-  }
-}
-
-.nav-link {
-  display: flex !important;
-  margin: auto;
-  flex-direction: column;
-  align-items: center;
-  color: black;
-  text-decoration: none;
-}
-
-.me-2 {
-  margin-left: 2vw;
-}
-
-.nav-link.active:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link:after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 100%;
-  /* position: absolute; */
-  border-bottom: 4px solid rgb(126, 203, 242) !important;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
-  width: 0;
-}
-
-.nav-link:hover:after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-link img {
-  height: 2vw;
-  width: auto;
-  object-fit: contain;
-}
-
-.room-container {
+main {
   display: flex;
   justify-content: center;
 }
 
+.notification-container {
+  text-align: right !important;
+  margin-top: 0.59rem;
+  margin-right: 0.85rem;
+}
+
+#notification-icon {
+  font-size: 2rem;
+  color: #0d6dfc;
+}
+
+.page-title-container {
+  padding-left: var(--padding-md);
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-family: "Poppins";
+  font-weight: var(--font-weight-bold);
+}
+
+section.booking-container {
+  width: 90%;
+}
+
 .card {
-  width: 90% !important;
-  padding: 1vw;
-  padding-bottom: 0;
-  margin-bottom: 2vw;
+  border: none !important;
+  padding: var(--padding-lg);
+  margin-top: var(--margin-mdl);
+  margin-bottom: 2rem;
+  width: 100% !important;
+  max-width: 100%;
 }
 
 #addHotelBtn {
-  width: 12vw;
+  width: 10rem;
   float: right;
   margin: 0 0 1vw 0;
 }
@@ -153,27 +71,26 @@ label {
 }
 
 #roomsTable {
-  width: 100%;
+  width: 100% !important;
+  max-width: 100%;
+  display: block;
+  margin: auto;
 }
 
-thead {
-  font-family: "Lora";
-  font-size: 18px !important;
-}
-
+thead,
 tbody {
   font-family: "Poppins";
-  font-size: 16px;
 }
 
 td,
 th {
   text-align: center !important;
-  vertical-align: middle;
+  font-size: var(--font-size-base);
 }
 
 th {
-  background-color: #91d2f2 !important;
+  background-color: oklch(0.64 0.65 220 / 0.5) !important;
+  color: rgb(61, 46, 46);
 }
 
 .text-center {
@@ -213,3 +130,49 @@ th {
 td .sorting_1 {
   padding-right: 2vw !important;
 }
+
+/* Status */
+.badge {
+  font-weight: initial;
+  line-height: normal;
+  font-size: initial;
+  padding: 0.6rem !important;
+  width: 7rem;
+  border-radius: 3rem !important;
+}
+
+.badge.bg-red {
+  background-color: rgba(204, 30, 20, 0.3) !important;
+  color: rgb(204, 30, 20) !important;
+}
+
+.badge.bg-light-green {
+  background-color: rgba(99, 201, 9, 0.3) !important;
+  color: rgb(71, 139, 10) !important;
+}
+
+.badge.badge.bg-success {
+  background-color: rgba(83, 243, 169, 0.5) !important;
+  color: rgb(0, 129, 69) !important;
+}
+
+.badge.bg-primary {
+  background-color: rgba(12, 100, 232, 0.3) !important;
+  color: rgb(11, 90, 209) !important;
+}
+
+.badge.bg-danger {
+  background-color: rgba(219, 53, 69, 0.3) !important;
+  color: rgb(219, 53, 69) !important;
+}
+
+.badge.bg-warning {
+  background-color: rgba(255, 193, 8, 0.5) !important;
+  color: rgb(187, 140, 0) !important;
+}
+
+.badge.bg-info {
+  background-color: rgba(12, 202, 240, 0.3) !important;
+  color: rgb(28, 155, 180);
+}
+/* Status */

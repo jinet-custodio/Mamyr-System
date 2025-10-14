@@ -1,9 +1,29 @@
 <?php
 require '../../../Config/dbcon.php';
+session_start();
 
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+$userID = isset($_SESSION['userID']) ? intval($_SESSION['userID']) : null;
+$adminID = null;
+
+if ($userID !== null) {
+    $stmt = $conn->prepare("SELECT adminID FROM admin WHERE userID = ?");
+    if ($stmt) {
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $stmt->bind_result($adminID);
+        $stmt->fetch();
+        $stmt->close();
+    } else {
+        error_log("Failed to prepare adminID query: " . $conn->error);
+    }
+}
+
+$action = "Update";
+$logDetails = "Edited website contents";
 
 // TEXT UPDATES - via JSON
 if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
@@ -14,20 +34,41 @@ if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
         header('Content-Type: application/json');
         echo json_encode([
             'success' => false,
-            'message' => 'Invalid input'
+            'message' => 'Invalid input (missing sectionName)'
         ]);
         exit;
     }
 
     $sectionName = $data['sectionName'];
     unset($data['sectionName']);
+    $target = $sectionName . " Page";
 
     foreach ($data as $title => $content) {
         $stmt = $conn->prepare("UPDATE websitecontent SET content = ?, lastUpdated = NOW() WHERE sectionName = ? AND title = ?");
+        if (!$stmt) {
+            error_log("Prepare failed: " . $conn->error);
+            continue;
+        }
         $stmt->bind_param("sss", $content, $sectionName, $title);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            error_log("Execute failed for title [$title]: " . $stmt->error);
+        }
     }
 
+    // Audit logging
+    if ($adminID !== null) {
+        $logStmt = $conn->prepare("INSERT INTO auditlog (adminID, action, target, logDetails) VALUES (?, ?, ?, ?)");
+        if ($logStmt) {
+            $logStmt->bind_param("isss", $adminID, $action, $target, $logDetails);
+            if (!$logStmt->execute()) {
+                error_log("Audit log execute failed: " . $logStmt->error);
+            }
+        } else {
+            error_log("Audit log prepare failed: " . $conn->error);
+        }
+    }
+
+    ob_clean();
     header('Content-Type: application/json');
     echo json_encode([
         'success' => true,

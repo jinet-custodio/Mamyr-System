@@ -69,189 +69,189 @@ unset($_SESSION['eventFormData']);
 </head>
 
 <body id="body">
+    <div class="wrapper">
+        <?php
+        $emailQuery = $conn->prepare("SELECT email, phoneNumber,userProfile FROM user WHERE userID = ? and userRole = ?");
+        $emailQuery->bind_param("ii", $userID, $userRole);
+        $emailQuery->execute();
+        $emailResult = $emailQuery->get_result();
+        if ($emailResult->num_rows > 0) {
+            $data =  $emailResult->fetch_assoc();
+            $email = $data['email'];
+            $phoneNumber = $data['phoneNumber'];
 
-    <?php
-    $emailQuery = $conn->prepare("SELECT email, phoneNumber,userProfile FROM user WHERE userID = ? and userRole = ?");
-    $emailQuery->bind_param("ii", $userID, $userRole);
-    $emailQuery->execute();
-    $emailResult = $emailQuery->get_result();
-    if ($emailResult->num_rows > 0) {
-        $data =  $emailResult->fetch_assoc();
-        $email = $data['email'];
-        $phoneNumber = $data['phoneNumber'];
+            $imageData = $data['userProfile'];
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_buffer($finfo, $imageData);
+            finfo_close($finfo);
+            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
 
-        $imageData = $data['userProfile'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mimeType = finfo_buffer($finfo, $imageData);
-        finfo_close($finfo);
-        $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-
-        if ($phoneNumber === NUll || $phoneNumber === "--") {
-            $phoneNumber = NULL;
-        } else {
-            $phoneNumber;
-        }
-    } else {
-        echo 'No Email Found';
-    }
-    ?>
-
-    <input type="hidden" name="phoneNumber" id="phoneNumber" value="<?= $phoneNumber ?>">
-
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: rgba(255, 255, 255, 0.562);">
-        <!-- Account Icon on the Left -->
-        <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
-            <li class="nav-item account-nav">
-                <a href="../Account/account.php">
-                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
-                </a>
-            </li>
-
-            <!-- Get notification -->
-            <?php
-
-            if ($userRole === 1 || $userRole === 4) {
-                $receiver = 'Customer';
-            } elseif ($userRole === 2) {
-                $receiver = 'Partner';
+            if ($phoneNumber === NUll || $phoneNumber === "--") {
+                $phoneNumber = NULL;
+            } else {
+                $phoneNumber;
             }
+        } else {
+            echo 'No Email Found';
+        }
+        ?>
 
-            $notifications = getNotification($conn, $userID, $receiver);
-            $counter = $notifications['count'];
-            $notificationsArray = $notifications['messages'];
-            $color = $notifications['colors'];
-            $notificationIDs = $notifications['ids'];
-            ?>
+        <input type="hidden" name="phoneNumber" id="phoneNumber" value="<?= $phoneNumber ?>">
 
-            <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
-                    <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                    <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
-                    <?php endif; ?>
-                </button>
-            </div>
-        </ul>
-
-        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
-                <li class="nav-item">
-                    <?php if ($userRole !== 2): ?>
-                        <a class="nav-link" href="dashboard.php"> Home</a>
-                    <?php else: ?>
-                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
-                    <?php endif; ?>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Amenities
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: rgba(255, 255, 255, 0.562);">
+            <!-- Account Icon on the Left -->
+            <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
+                <li class="nav-item account-nav">
+                    <a href="../Account/account.php">
+                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
-                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
-                        <li><a class="dropdown-item" href="events.php">Events</a></li>
-                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog.php">BLOG</a>
-                </li>
-                <?php if ($userRole !== 2): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="partnerApplication.php">Be Our Partner</a>
-                    </li>
-                <?php endif; ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="about.php">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="bookNow.php">Book Now</a>
-                </li>
-                <li class="nav-item">
-                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">Log Out</a>
-                </li>
+
+                <!-- Get notification -->
+                <?php
+
+                if ($userRole === 1 || $userRole === 4) {
+                    $receiver = 'Customer';
+                } elseif ($userRole === 2) {
+                    $receiver = 'Partner';
+                }
+
+                $notifications = getNotification($conn, $userID, $receiver);
+                $counter = $notifications['count'];
+                $notificationsArray = $notifications['messages'];
+                $color = $notifications['colors'];
+                $notificationIDs = $notifications['ids'];
+                ?>
+
+                <div class="notification-container position-relative">
+                    <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                        data-bs-target="#notificationModal">
+                        <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
+                        <?php if (!empty($counter)): ?>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= htmlspecialchars($counter) ?>
+                            </span>
+                        <?php endif; ?>
+                    </button>
+                </div>
             </ul>
-        </div>
-    </nav>
+
+            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                    <li class="nav-item">
+                        <?php if ($userRole !== 2): ?>
+                            <a class="nav-link" href="dashboard.php"> Home</a>
+                        <?php else: ?>
+                            <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                        <?php endif; ?>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Amenities
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
+                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                            <li><a class="dropdown-item" href="events.php">Events</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.php">Blog</a>
+                    </li>
+                    <?php if ($userRole !== 2): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="partnerApplication.php">Be Our Partner</a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.php">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="bookNow.php">Book Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
 
 
-    <!-- Notification Modal -->
-    <?php include '../notificationModal.php' ?>
-
-    <!-- Made every section visible except for the selection section to see the errors -->
-    <div class="categories-page" id="category-page">
-        <div class="titleContainer" style="margin-top: 10vw !important;">
-            <h4 class="title">What are you booking for?</h4>
-        </div>
-        <div class="categories">
-            <a href="resortBooking.php" id="resort-link" class="categoryLink">
-                <div class="card category-card resort-category"
-                    style="width: 20rem; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Resort">
-
-                    <div class="category-body">
-                        <h5 class="category-title">RESORT</h5>
-                    </div>
+        <!-- Notification Modal -->
+        <?php include '../notificationModal.php' ?>
+        <main>
+            <!-- Made every section visible except for the selection section to see the errors -->
+            <div class="categories-page" id="category-page">
+                <div class="titleContainer" style="margin-top: 10vw !important;">
+                    <h4 class="title">What are you booking for?</h4>
                 </div>
-            </a>
-            <a href="hotelBooking.php" id="hotel-link" class="categoryLink">
-                <div class="card category-card hotel-category"
-                    style="width: 20rem; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel">
-                    <div class="category-body">
-                        <h5 class="category-title">HOTEL</h5>
-                    </div>
-                </div>
-            </a>
-            <a href="eventBooking.php" id="event-link" class="categoryLink">
-                <div class="card category-card event-category"
-                    style="width: 20rem; display: flex; flex-direction: column;">
-                    <img class="card-img-top" src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Event">
-                    <div class="category-body">
-                        <h5 class="category-title">EVENT</h5>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
+                <div class="categories">
+                    <a href="resortBooking.php" id="resort-link" class="categoryLink">
+                        <div class="card category-card resort-category"
+                            style="display: flex; flex-direction: column;">
+                            <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Resort">
 
-
-    <!-- Phone Number Modal -->
-    <form action="../../Function/getPhoneNumber.php" method="POST">
-        <div class="modal fade" id="phoneNumberModal" data-bs-backdrop="static" tabindex=" -1"
-            aria-labelledby="phoneNumberModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="phoneNumberModalLabel">Required Phone Number</h5>
-                    </div>
-                    <div class="modal-body">
-                        <p class="text-center">Phone number is required before booking please enter your phone number
-                        </p>
-                        <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control w-100 mt-2"
-                            placeholder="+63 9XX XXX XXXX" pattern="^(?:\+63|0)9\d{9}$"
-                            title="e.g., +639123456789 or 09123456789" required>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" name="submitPhoneNumber">Submit</button>
-                    </div>
+                            <div class="category-body">
+                                <h5 class="category-title">RESORT</h5>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="hotelBooking.php" id="hotel-link" class="categoryLink">
+                        <div class="card category-card hotel-category"
+                            style="display: flex; flex-direction: column;">
+                            <img class="card-img-top" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel">
+                            <div class="category-body">
+                                <h5 class="category-title">HOTEL</h5>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="eventBooking.php" id="event-link" class="categoryLink">
+                        <div class="card category-card event-category"
+                            style="display: flex; flex-direction: column;">
+                            <img class="card-img-top" src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Event">
+                            <div class="category-body">
+                                <h5 class="category-title">EVENT</h5>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
-        </div>
-    </form>
 
-    <?php include 'footer.php';
-    include 'loader.php'; ?>
 
+            <!-- Phone Number Modal -->
+            <form action="../../Function/getPhoneNumber.php" method="POST">
+                <div class="modal fade" id="phoneNumberModal" data-bs-backdrop="static" tabindex=" -1"
+                    aria-labelledby="phoneNumberModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="phoneNumberModalLabel">Required Phone Number</h5>
+                            </div>
+                            <div class="modal-body">
+                                <p class="text-center">Phone number is required before booking please enter your phone number
+                                </p>
+                                <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control w-100 mt-2"
+                                    placeholder="+63 9XX XXX XXXX" pattern="^(?:\+63|0)9\d{9}$"
+                                    title="e.g., +639123456789 or 09123456789" required>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" name="submitPhoneNumber">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <?php include 'footer.php';
+        include 'loader.php'; ?>
+    </div>
     <!-- Full Calendar for Date display -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script src="../../Assets/JS/fullCalendar.js"></script>

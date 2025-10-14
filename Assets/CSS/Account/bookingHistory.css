@@ -7,141 +7,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 20vw;
-  background-color: #cee4f2;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  border-right: 2px solid #cee4f2;
-  border-top-right-radius: 30px;
-  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+  font-family: "Poppins";
 }
 
-.sidebar.collapsed {
-  width: 15vw;
-  justify-content: flex-start !important;
-}
-
-.sidebar .sidebar-text {
-  display: inline-block;
-  transition: opacity 0.2s ease;
-}
-
-.sidebar.collapsed .sidebar-text {
-  display: none;
-  width: 0;
-  overflow: hidden;
-}
-
-.sidebar-icon {
-  font-size: 2vw;
-  min-width: 3vw;
-  text-align: center;
-  margin-right: 10px;
-}
-
-/* Sidebar toggle button */
-.toggle-button {
-  background: none;
-  border: none;
-  margin: 10px;
-}
-
-.sidebar-item,
-.list-group-item {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  width: 100%;
-}
-
-.home {
-  /* border: 1px solid red; */
-  padding: 2vw;
-}
-
-.homeIcon {
-  float: right;
-}
-
-.sidebar-header {
-  color: black !important;
-  display: flex;
-  flex-direction: column;
-  margin: 1vw auto;
-  width: 100%;
-  padding-top: 0.5rem;
-}
-
-.sidebar-header h5 {
-  margin: 0;
-  font-size: 25px;
-  text-align: center;
-  font-weight: bolder;
-}
-
-.profileImage {
-  margin: auto;
-  padding: 1rem;
-}
-
-.profileImage img {
-  height: clamp(6vw, 4vw, 3vw);
-  border-radius: 50%;
-  aspect-ratio: 1;
-  object-fit: cover;
-}
-
-.list-group {
-  font-size: 16px;
-  border: none;
-  list-style: none;
-  margin-top: 0.5rem;
-  flex-grow: 1;
-  padding-left: 0;
-}
-
-.list-group a {
-  text-decoration: none;
-  color: rgb(0, 0, 0) !important;
-  background-color: #cee4f2;
-}
-
-.list-group-item {
-  border: none;
-  margin-top: 1vw;
-}
-
-.sidebar li:hover a,
-.list-group-item.active {
-  color: #0000;
-  background-color: rgb(255, 255, 255);
-}
-
-.logout {
-  margin-top: auto; /* Pushes to bottom of sidebar */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 1rem;
-  font-size: 14px;
-}
-
-.logoutBtn:hover {
-  background-color: rgb(219, 53, 69);
-  color: white;
-}
 .main-content {
-  margin: 5rem 0 0 20rem;
+  margin: 3vw 0 0 20vw;
   padding: 1rem;
   overflow-y: auto;
   width: 75%;
@@ -149,7 +19,7 @@
 
 .title {
   text-align: center;
-  font-size: clamp(3.5vw, 3.2vw, 3vw);
+  font-size: 30px;
   font-family: "Poppins";
   font-weight: bold;
   margin-bottom: 2vw;
@@ -163,28 +33,28 @@ a {
   text-align: center;
   width: 100%;
   margin: auto;
-  margin-top: 3vw !important;
+  /* margin-top: 3vw !important; */
 }
 
 th {
   background-color: #cee4f2 !important;
-  font-size: clamp(1.3vw, 1.2vw, 1vw);
+  font-size: 14px;
 }
 
 td,
 #bookingHistory_info,
 .btn {
-  font-size: clamp(1.2vw, 1vw, 0.9vw);
+  font-size: 15px;
 }
 
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-  padding: 0.9vw 0.6vw !important;
+  padding: 0.5vw 0.6vw !important;
 }
 
-.btn {
+/* .btn {
   padding: 0.5vw 0.8vw;
-}
+} */
 
 .dt-column-title {
   text-align: center;
@@ -193,7 +63,7 @@ table.dataTable > tbody > tr > td {
 label {
   margin-left: 1vw;
   margin-right: 1vw;
-  font-size: clamp(1.3vw, 1.1vw, 1vw);
+  font-size: 14px;
 }
 
 #cancel-content {
@@ -205,7 +75,7 @@ label {
 }
 
 #cancelModalDesc {
-  font-size: 18px;
+  font-size: 16px;
 }
 #cancelButtonModal {
   display: flex;
@@ -216,7 +86,7 @@ label {
 }
 
 .dt-input {
-  font-size: clamp(1.3vw, 1.1vw, 1vw);
+  font-size: 14px;
 }
 
 /* rate modal */
@@ -246,52 +116,86 @@ label {
 
 /* Colors */
 
-.btn-orange {
-  background-color: orange;
-  border: 1px solid orange;
-  color: black;
+.badge {
+  font-weight: initial;
+  line-height: normal;
+  font-size: initial;
+  padding: 0.2rem !important;
+  width: 10rem;
+  border-radius: 3rem !important;
 }
 
-.btn-orange:hover {
-  background-color: rgb(231, 151, 1);
-  border: 1px solid rgb(231, 151, 1);
-  color: black;
+/* Fully Paid */
+.badge.bg-bright-green {
+  background-color: rgba(75, 192, 75, 0.4) !important;
+  color: rgb(75, 192, 75) !important;
 }
 
-.btn-red {
-  background-color: red !important;
-  border: 1px solid red !important;
-  color: rgb(255, 255, 255);
+/* Partially Paid */
+.badge.bg-light-blue {
+  background-color: rgba(54, 162, 235, 0.4) !important;
+  color: rgb(54, 162, 235) !important;
 }
 
-.btn-red:hover {
-  background-color: rgb(221, 4, 4);
-  border: 1px solid rgb(221, 4, 4);
-  color: rgb(255, 255, 255);
+/* Awaiting Payment */
+.badge.bg-orange {
+  background-color: rgba(255, 159, 64, 0.4) !important;
+  color: rgb(247, 127, 8) !important;
 }
 
-.btn-light-green {
-  background-color: green;
-  border: 1px solid green;
-  color: white;
+/* Pending */
+.badge.bg-warning {
+  background-color: rgba(255, 193, 7, 0.4) !important;
+  color: rgb(190, 114, 0) !important;
 }
 
-.btn-light-green:hover {
-  background-color: rgb(4, 112, 4);
-  border: 1px solid rgb(4, 112, 4);
-  color: white;
+/* Approved */
+.badge.bg-green {
+  background-color: rgba(40, 167, 69, 0.4) !important;
+  color: rgb(40, 167, 69) !important;
 }
 
-.btn-sky-blue {
-  background-color: rgb(128, 216, 255);
-  border: 1px solid rgb(128, 216, 255);
-  color: rgb(0, 0, 0);
+/* Reserved */
+.badge.bg-success {
+  background-color: rgba(83, 243, 169, 0.4) !important;
+  color: rgb(0, 129, 69) !important;
 }
 
-.btn-sky-blue:hover {
-  background-color: rgb(128, 216, 255);
-  border: 1px solid rgb(128, 216, 255);
-  color: rgb(0, 0, 0);
+/* Cancelled */
+.badge.bg-danger {
+  background-color: rgba(219, 53, 69, 0.4) !important;
+  color: rgb(219, 53, 69) !important;
+}
+
+/* Rejected */
+.badge.bg-red {
+  background-color: rgba(204, 30, 20, 0.4) !important;
+  color: rgb(204, 30, 20) !important;
+}
+
+/* Expired */
+.badge.bg-muted {
+  background-color: rgba(73, 80, 87, 0.4) !important;
+  color: rgb(73, 80, 87) !important;
+}
+
+/* Finished */
+.badge.bg-light-green {
+  background-color: rgba(99, 201, 9, 0.4) !important;
+  color: rgb(71, 139, 10) !important;
+}
+
+div.action-button-container {
+  display: flex !important;
+  flex-direction: row;
+  gap: 1rem;
+  margin: auto;
+}
+
+.viewBooking,
+.cancelBooking,
+.rateBtn {
+  width: 100px;
 }
 
 .custom-tooltip {
@@ -315,32 +219,12 @@ label {
 }
 
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-  .list-group {
-    font-size: clamp(2.5vw, 2.2vw, 2vw);
-  }
-
   .title {
     font-size: clamp(5.5vw, 5vw, 4.5vw);
   }
 
   div.dt-container div.dt-layout-row:not(.dt-layout-table) {
     display: flex !important;
-  }
-
-  .sidebar-icon {
-    font-size: clamp(2.6vw, 2.3vw, 2vw);
-  }
-
-  .sidebar-header h5 {
-    margin-top: 2vw !important;
-    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-  }
-
-  .profileImage {
-    img {
-      height: clamp(9vw, 8vw, 7vw);
-    }
-    margin: 1vw auto;
   }
 
   .main-content {
@@ -422,14 +306,6 @@ label {
     width: 50%;
   }
 
-  .sidebar {
-    width: 35vw;
-  }
-
-  .list-group {
-    font-size: clamp(2.5vw, 2.2vw, 2vw);
-  }
-
   label {
     margin-left: 1vw;
     margin-right: 1vw;
@@ -451,21 +327,9 @@ label {
     font-size: clamp(1.8vw, 1.6vw, 1.4vw);
   }
 
-  .sidebar-icon {
-    font-size: clamp(2.6vw, 2.3vw, 2vw);
-  }
-
-  .sidebar-header h5,
   .card-header {
     margin-top: 2vw;
     font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-  }
-
-  .profileImage {
-    img {
-      height: clamp(8vw, 7vw, 6vw);
-    }
-    margin: 1vw auto;
   }
 
   .main-content {
@@ -527,9 +391,6 @@ label {
 
 /* Phone size */
 @media screen and (max-width: 600px) {
-  .sidebar {
-    width: 45vw;
-  }
   .main-content {
     margin-left: 16vw;
     width: 85%;
@@ -559,17 +420,8 @@ label {
     justify-content: start;
   }
 
-  .list-group-item {
-    justify-content: flex-start;
-  }
-
   .card-text {
     font-size: clamp(2vw, 1.8vw, 1.6vw);
-  }
-
-  .sidebar-icon {
-    font-size: clamp(4.5vw, 4.2vw, 4vw);
-    margin-right: 0 !important;
   }
 
   label {
@@ -578,11 +430,6 @@ label {
 
   .current {
     font-size: 2.5vw;
-  }
-
-  .sidebar-text {
-    font-size: clamp(2.9vw, 2.7vw, 2.5vw);
-    margin-left: 2vw;
   }
 
   .home {
@@ -613,7 +460,6 @@ label {
     font-size: clamp(3.7vw, 3.5vw, 3.3vw);
   }
 
-  .sidebar-header h5,
   .card-header {
     margin-top: 2vw;
     font-size: clamp(3.7vw, 3.5vw, 3.2vw);

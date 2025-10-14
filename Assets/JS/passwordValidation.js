@@ -114,11 +114,11 @@ function validateSignUpForm() {
       isCheckboxChecked
     );
 
-    console.log(
-      "checkBox " + isCheckboxChecked,
-      "match " + isPasswordMatch,
-      "pass " + isPasswordValid
-    );
+    // console.log(
+    //   "checkBox " + isCheckboxChecked,
+    //   "match " + isPasswordMatch,
+    //   "pass " + isPasswordValid
+    // );
   }
 }
 
@@ -153,25 +153,42 @@ function checkCreateAccountPassword() {
   }
 }
 
-function AcceptTerms() {
+function handleTerms(accepted) {
   const termsCheckbox = document.getElementById("terms-condition");
   const termsModal = document.getElementById("termsModal");
 
   if (termsCheckbox) {
-    termsCheckbox.checked = true;
+    termsCheckbox.checked = accepted;
   }
 
-  let modalInstance = bootstrap.Modal.getInstance(termsModal);
-  if (!modalInstance) {
-    modalInstance = new bootstrap.Modal(termsModal);
-  }
+  // Get or create a Bootstrap modal instance
+  const modalInstance =
+    bootstrap.Modal.getInstance(termsModal) || new bootstrap.Modal(termsModal);
+
+  // 🔹 Move focus out of modal before hiding to avoid aria-hidden warnings
+  document.activeElement?.blur();
+
+  // 🔹 Hide modal normally — don't dispose yet
   modalInstance.hide();
 
-  const backdrop = document.querySelector(".modal-backdrop");
-  if (backdrop) {
-    backdrop.parentNode.removeChild(backdrop);
-    document.body.classList.remove("modal-open");
-  }
+  // 🔹 Wait until Bootstrap fully hides the modal
+  termsModal.addEventListener(
+    "hidden.bs.modal",
+    () => {
+      // Revalidate form after modal is truly hidden
+      validateSignUpForm?.();
 
-  validateSignUpForm();
+      // Return focus somewhere meaningful
+      document.querySelector("#terms-condition")?.focus();
+    },
+    { once: true }
+  );
+}
+
+function AcceptTerms() {
+  handleTerms(true);
+}
+
+function declineTerms() {
+  handleTerms(false);
 }

@@ -39,7 +39,6 @@ if (isset($_POST['createAccount'])) {
         $date = new DateTime();
         $date->modify('+1 day');
         $expirationDate =  $date->format('Y-m-d H:i:s');
-        // $OTP = generateOTP(6);
         $isTemporaryPassword = true;
         $termAccepted = true;
 

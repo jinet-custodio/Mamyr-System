@@ -61,9 +61,9 @@ INSERT INTO status (statusName) VALUES
 ('Pending'),
 ('Approved'),
 ('Reserved'),
-('Rejected'),
 ('Cancelled'),
-('Done'),
+('Rejected'),
+('Completed'),
 ('Expired');
 
 
@@ -94,6 +94,8 @@ INSERT INTO paymentstatus (statusName) Values
 ('Fully Paid'),
 ('Payment Issue');
 
+INSERT INTO `paymentstatus` (`paymentStatusID`, `statusName`) VALUES (NULL, 'Payment Sent');
+UPDATE `paymentstatus` SET `statusName` = 'Unpaid' WHERE `paymentstatus`.`paymentStatusID` = 1;
 CREATE TABLE resortservicescategory (
     categoryID INT PRIMARY KEY AUTO_INCREMENT,
     categoryName VARCHAR(200) NOT NULL

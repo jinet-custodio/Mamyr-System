@@ -48,7 +48,7 @@ if (isset($_POST['downloadReceiptBtn'])) {
     $amountPaid = 0;
     $isFullPayment = false;
 
-    $selectBookingQuery = $conn->prepare("SELECT bookingID,confirmedFinalBill, amountPaid, userBalance FROM confirmedbooking
+    $selectBookingQuery = $conn->prepare("SELECT bookingID,finalBill, amountPaid, userBalance FROM confirmedbooking
     WHERE bookingID = ? ");
     $selectBookingQuery->bind_param('s', $bookingID);
     if (!$selectBookingQuery->execute()) {

@@ -53,10 +53,7 @@ unset($_SESSION['formData']);
     <link rel="stylesheet" href="../../Assets/CSS/Customer/confirmBooking.css">
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
-
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
 
     <!-- Font Awesome Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -73,14 +70,17 @@ unset($_SESSION['formData']);
     <!-- Get name of customer -->
 
     <?php
-    $getUserInfo = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ?");
+    $name = '';
+    $getUserInfo = $conn->prepare("SELECT firstName, lastName, middleInitial, email FROM user WHERE userID = ? AND userRole = ?");
     $getUserInfo->bind_param("ii", $userID, $userRole);
     $getUserInfo->execute();
     $getUserInfoResult = $getUserInfo->get_result();
     if ($getUserInfoResult->num_rows > 0) {
         $data =  $getUserInfoResult->fetch_assoc();
+        $firstName = $data['firstName'] ?? "";
         $middleInitial = trim($data['middleInitial']  ?? "");
-        $name = ucfirst($data['firstName']) ?? "" . " " . ucfirst($data['middleInitial']) ?? "" . " "  . ucfirst($data['lastName']) ?? "";
+        $name = ucfirst($firstName)  . " " . ucfirst($middleInitial) . ". "  . ucfirst($data['lastName'] ?? "");
+        $email = $data['email'] ?? '';
     }
     ?>
 
@@ -149,9 +149,10 @@ unset($_SESSION['formData']);
         $serviceCapacity = [];
         $services = [];
         $items = [];
+        $tourType = '';
 
         //Get the rates
-        $query = $conn->prepare("SELECT er.*, s.serviceID 
+        $query = $conn->prepare("SELECT er.ERprice, er.ERcategory, s.serviceID 
             FROM entrancerate er
             JOIN service s ON s.entranceRateID = er.entranceRateID
             WHERE er.sessionType = ?");
@@ -204,7 +205,7 @@ unset($_SESSION['formData']);
             }
 
             //Get number of hours
-            $services[] =  "Overnight Tour";
+            $tourType =  $services[] =  "Overnight Tour";
             $interval = $startDateObj->diff($endDateObj);
             $numHours = $interval->h + ($interval->days * 24);
         } elseif ($tourSelections === 'Day') {
@@ -213,14 +214,14 @@ unset($_SESSION['formData']);
 
             $interval = $startDateObj->diff($endDateObj);
             $numHours = $interval->h + ($interval->days * 24);
-            $services[] =  "Day Tour";
+            $tourType = $services[] =  "Day Tour";
         } elseif ($tourSelections === 'Night') {
             $startDateObj = new DateTime($scheduledDate . ' ' . $nightStartTime);
             $endDateObj = new DateTime($scheduledDate . ' ' . $nightEndTime);
 
             $interval = $startDateObj->diff($endDateObj);
             $numHours = $interval->h + ($interval->days * 24);
-            $services[] = "Night Tour";
+            $tourType = $services[] = "Night Tour";
         } else {
             $startDateObj = new DateTime($scheduledDate);
             $endDateObj = clone $startDateObj;
@@ -265,8 +266,9 @@ unset($_SESSION['formData']);
 
 
                         $items[] = [
-                            'serviceName' =>  $data['RServiceName'],
-                            'description' => $data['RSdescription']
+                            'serviceName' =>  ucfirst($data['RServiceName'] ?? 'N/A'),
+                            'description' => ucfirst($data['RSdescription'] ?? 'N/A'),
+                            'price' => (float) $data['RSprice']
                         ];
                     }
                 } else {
@@ -301,7 +303,8 @@ unset($_SESSION['formData']);
 
                         $items[] = [
                             'serviceName' =>  $data['RServiceName'],
-                            'description' =>  "Good for " . $data['RScapacity'] . " pax"
+                            'description' =>  "Good for " . $data['RScapacity'] . " pax",
+                            'price' => $data['RSprice'],
                         ];
                     }
                 } else {
@@ -364,6 +367,9 @@ unset($_SESSION['formData']);
 
         $_SESSION['resortFormData'] = $_POST;
     }
+
+    // error_log("Services " . print_r($services, true));
+    // error_log("Add Ons " . print_r($addOnsServices, true));
     ?>
 
     <!-- For Hotel Booking -->
@@ -388,7 +394,19 @@ unset($_SESSION['formData']);
         $page = 'hotelBooking.php';
         $bookingFunctionPage = 'hotelBooking.php';
         $additionalRequest = "None";
-        $excessChargePerPerson = 250;
+        $chargeType = 'Room';
+        $pricingType = 'Per Head';
+        $excessChargePerPerson = 0;
+        $getServicePricing = $conn->prepare("SELECT `price` FROM `servicepricing` WHERE pricingType = ? AND `chargeType` = ?");
+        $getServicePricing->bind_param('ss', $pricingType, $chargeType);
+        $getServicePricing->execute();
+        $result = $getServicePricing->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $excessChargePerPerson = $row['price'];
+        } else {
+            $excessChargePerPerson = 250;
+        }
 
         $additionalCharge = 0;
         $additionalGuest = 0;
@@ -430,7 +448,8 @@ unset($_SESSION['formData']);
 
                     $items[] = [
                         'serviceName' =>  $data['RServiceName'],
-                        'description' => $data['RSdescription']
+                        'description' => $data['RSdescription'],
+                        'price' => $data['RSprice']
                     ];
                 }
             }
@@ -486,6 +505,9 @@ unset($_SESSION['formData']);
         </div>
 
         <div class="container">
+            <input type="hidden" name="firstName" value="<?= ucfirst($firstName ?? '') ?>">
+            <input type="hidden" name="email" value="<?= $email ?? '' ?>">
+
             <div class="card booking-summary" style="width: 50%;">
                 <div class="card-info">
                     <h5 class="info-title">Booking Type:</h5>
@@ -498,10 +520,12 @@ unset($_SESSION['formData']);
                     <p class="card-text"><?= $name ?></p>
                     <input type="hidden" name="customerName" value="<?= $name ?>">
                 </div>
-                <div class="card-info">
-                    <h5 class="info-title">Services:</h5>
-                    <p class="card-text"><?= htmlspecialchars(implode(', ', $services)) ?></p>
-                </div>
+                <?php if ($bookingType === 'Resort'): ?>
+                    <div class="card-info">
+                        <h5 class="info-title">Tour Type:</h5>
+                        <p class="card-text"><?= htmlspecialchars($tourSelections) ?> Swimming</p>
+                    </div>
+                <?php endif; ?>
 
                 <div class="card-info">
                     <h5 class="info-title" id='date'>Date:</h5>
@@ -531,15 +555,13 @@ unset($_SESSION['formData']);
 
 
                 <div class="card-info" id="descriptionContainer">
-                    <h5 class="info-title">Description:</h5>
+                    <h5 class="info-title">Services & Description: </h5>
                     <ul class="card-text">
                         <?php foreach ($items as $service): ?>
                             <li>
-                                <strong><?= htmlspecialchars($service['serviceName']) ?></strong>
+                                <strong><?= htmlspecialchars($service['serviceName']) ?> &mdash; ₱<?= number_format($service['price'], 2) ?></strong>
                                 <ul>
-                                    <?php foreach (explode(',', $service['description']) as $feature): ?>
-                                        <li class="features"><?= htmlspecialchars(trim($feature)) ?></li>
-                                    <?php endforeach; ?>
+                                    <li class="features"><?= htmlspecialchars($service['description']) ?></li>
                                 </ul>
                             </li>
                         <?php endforeach; ?>
@@ -613,24 +635,23 @@ unset($_SESSION['formData']);
                         </li>
                     <?php } else { ?>
                         <li class="list-group-item payment-info" id="entertainmentDiv">
-                            <h5 class="card-title">Additional Service Fee:</h5>
+                            <h5 class="card-title">Additional Service(s) Fee:</h5>
                             <p class="card-text">₱ <?= htmlspecialchars(number_format($totalEntertainmentPrice, 2)) ?></p>
                             <input type="hidden" name="additionalServiceFee"
                                 value="<?= htmlspecialchars($totalEntertainmentPrice) ?>" class="card-content">
                         </li>
                     <?php } ?>
 
-                    <li class="list-group-item payment-info">
-                        <h5 class=" card-title">Downpayment:</h5>
+                    <li class="list-group-item payment-info downpayment-container">
+                        <h5 class=" card-title">Downpayment: <br> <small class="text-muted">This amount secures your booking.</small></h5>
                         <p class="card-text">₱ <?= number_format($downPayment, 2) ?> </p>
                         <input type="hidden" name="downPayment" value="<?= $downPayment ?>" class="card-content">
                     </li>
 
                     <li class="list-group-item payment-info">
-                        <h5 class="card-title">Total Cost:</h5>
+                        <h5 class="card-title">Grand Total:</h5>
                         <p class="card-text">₱ <?= number_format($totalCost, 2) ?> </p>
                         <input type="hidden" name="totalCost" value="<?= $totalCost ?>" class="card-content">
-
                     </li>
                 </ul>
 
@@ -706,10 +727,10 @@ unset($_SESSION['formData']);
             <input type="hidden" name="scheduledStartDate" value="<?= htmlspecialchars($scheduledStartDate ?? '') ?>">
             <input type="hidden" name="scheduledEndDate" value="<?= htmlspecialchars($scheduledEndDate ?? '') ?>">
             <?php foreach ($cottageChoices as $choice): ?>
-                <input type="hidden" name="cottageSelections[]" value="<?= htmlspecialchars($choice) ?>">
+                <input type="hidden" name="cottageOptions[]" value="<?= htmlspecialchars($choice) ?>">
             <?php endforeach; ?>
             <?php foreach ($roomChoices as $choice): ?>
-                <input type="hidden" name="roomSelections[]" value="<?= htmlspecialchars($choice) ?>">
+                <input type="hidden" name="roomOptions[]" value="<?= htmlspecialchars($choice) ?>">
             <?php endforeach; ?>
             <?php foreach ($selectedHotels as $choice): ?>
                 <input type="hidden" name="hotelSelections[]" value="<?= htmlspecialchars($choice) ?>">
@@ -726,7 +747,7 @@ unset($_SESSION['formData']);
             <input type="hidden" name="toddlerCount" value="<?= htmlspecialchars($toddlerCount ?? 0) ?>">
             <input type="hidden" name="adultRate" value="<?= htmlspecialchars($adultRate ?? 0) ?>">
             <input type="hidden" name="childrenRate" value="<?= htmlspecialchars($childRate ?? 0) ?>">
-
+            <input type="hidden" name="tourType" value="<?= htmlentities($tourType) ?? 'N/A' ?>">
         </div>
 
     </form>

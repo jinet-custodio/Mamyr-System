@@ -48,9 +48,8 @@ require '../../Function/notification.php';
     <link rel="icon" type="image/x-icon" href="../../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../Assets/CSS/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Icons Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -63,187 +62,95 @@ require '../../Function/notification.php';
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/transaction.css" />
-    <link rel="stylesheet" href="../../Assets/CSS/Admin/navbar.css" />
+    <link rel="stylesheet" href="../../Assets/CSS/Admin/sidebar.css" />
 </head>
 
 <body>
-    <div class="topSection">
-        <div class="dashTitleContainer">
-            <a href="adminDashboard.php" class="dashboardTitle" id="dashboard">
-                <img src="../../Assets/Images/MamyrLogo.png" alt="" class="logo"></a>
-        </div>
-
-        <div class="menus">
-            <!-- Get notification -->
-            <?php
-
-            $receiver = 'Admin';
-            $notifications = getNotification($conn, $userID, $receiver);
-            $counter = $notifications['count'];
-            $notificationsArray = $notifications['messages'];
-            $color = $notifications['colors'];
-            $notificationIDs = $notifications['ids'];
-            ?>
-
-            <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
-                    <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                    <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
-                    <?php endif; ?>
-                </button>
-            </div>
-
-            <a href="#" class="chat">
-                <img src="../../Assets/Images/Icon/chat.png" alt="home icon">
-            </a>
-            <?php
-            if ($userRole == 3) {
-                $admin = "Admin";
-            } else {
-                $_SESSION['error'] = "Unauthorized Access!";
-                session_destroy();
-                header("Location: ../register.php");
-                exit();
-            }
-
-            if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
-                $getProfile->bind_param("ii", $userID, $userRole);
-                $getProfile->execute();
-                $getProfileResult = $getProfile->get_result();
-                if ($getProfileResult->num_rows > 0) {
-                    $data = $getProfileResult->fetch_assoc();
-                    $firstName = $data['firstName'];
-                    $imageData = $data['userProfile'];
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $imageData);
-                    finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                }
-            } else {
-                $_SESSION['error'] = "Unauthorized Access!";
-                session_destroy();
-                header("Location: ../register.php");
-                exit();
-            }
-            ?>
-            <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="../Account/account.php" class="admin">
-                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
-            </a>
-        </div>
-    </div>
-
-    <nav class="navbar navbar-expand-lg" id="navbar">
-        <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav w-100 me-10 d-flex justify-content-around px-2" id="navUL">
-
+    <main>
+        <div id="sidebar">
+            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo">
+            <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="adminDashboard.php">
-                        <i class="fa-solid fa-grip navbar-icon"></i>
-                        <h5>Dashboard</h5>
-                    </a>
+                    <i class="bi bi-speedometer2"></i>
+                    <a class="nav-link" href="adminDashboard.php">Dashboard</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="booking.php">
-                        <i class="fa-solid fa-calendar-days navbar-icon"></i>
-                        <h5>Bookings</h5>
-                    </a>
+                    <i class="bi bi-calendar-week"></i>
+                    <a class="nav-link" href="booking.php">Bookings</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="reviews.php">
-                        <i class="fa-solid fa-star navbar-icon"></i>
-                        <h5>Reviews</h5>
-                    </a>
+                    <i class="bi bi-list-stars"></i>
+                    <a class="nav-link" href="reviews.php">Reviews</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="roomList.php">
-                        <i class="fa-solid fa-hotel navbar-icon"></i>
-                        <h5>Rooms</h5>
-                    </a>
+                    <i class="bi bi-door-open"></i>
+                    <a class="nav-link" href="roomList.php">Rooms</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="services.php">
-                        <i class="fa-solid fa-bell-concierge navbar-icon"></i>
-                        <h5>Services</h5>
-                    </a>
+                    <i class="bi bi-bell"></i>
+                    <a class="nav-link" href="services.php">Services</a>
                 </li>
-
+                <li class="nav-item active">
+                    <i class="bi bi-credit-card-2-front"></i>
+                    <a class="nav-link" href="transaction.php">Payments</a>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="transaction.php">
-                        <i class="fa-solid fa-credit-card navbar-icon"></i>
-                        <h5>Payments</h5>
-                    </a>
+                    <i class="bi bi-people"></i>
+                    <a class="nav-link" href="displayPartnership.php">Partnerships</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="revenue.php">
-                        <i class="fa-solid fa-money-bill-trend-up navbar-icon"></i>
-                        <h5>Sales</h5>
-                    </a>
+                    <i class="bi bi-pencil-square"></i>
+                    <a class="nav-link" href="editWebsite/editWebsite.php">Edit Website</a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="displayPartnership.php">
-                        <i class="fa-solid fa-handshake navbar-icon"></i>
-                        <h5>Partnerships</h5>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="editWebsite/editWebsite.php">
-                        <i class="fa-solid fa-pen-to-square navbar-icon"></i>
-                        <h5>Edit Website</h5>
-                    </a>
-                </li>
-                <li class="nav-item d-flex align-items-center">
-                    <a href="../../Function/Admin/logout.php" class="nav-link">
-                        <i class="fa-solid fa-right-from-bracket navbar-icon" style="color: #db3545;"></i>
-                        <h5 style="color: red;">Log Out</h5>
-                    </a>
+                    <i class="bi bi-clock-history"></i>
+                    <a class="nav-link" href="auditLogs.php">Audit Logs</a>
                 </li>
             </ul>
+
+            <section class="profileContainer">
+                <img src="../../Assets/Images/defaultProfile.png" alt="Admin Profile" class="rounded-circle profilePic">
+                <h5 class="admin-name">Diane Dela Cruz</h5>
+
+            </section>
+
+            <section class="btn btn-outline-danger logOutContainer">
+                <a href="../../Function/Admin/logout.php" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <h5>Log Out</h5>
+                </a>
+            </section>
         </div>
-    </nav>
+        <section class="booking-container">
+            <section class="notification-container">
+                <i class="bi bi-bell" id="notification-icon"></i>
+            </section>
+
+            <section class="page-title-container">
+                <h5 class="page-title">Payments</h5>
+            </section>
 
 
-    <!-- Notification Modal -->
-    <?php include '../notificationModal.php' ?>
+            <div class="transactionContainer">
+                <div class="card" id="tableContainer">
 
-    <main>
-        <div class="transactionContainer">
-            <div class="card" id="tableContainer">
-                <div class="titleContainer">
-                    <h3 class="title fw-bold">Transactions</h3>
+                    <table class="table table-striped display nowrap" id="transactionTable">
+                        <thead>
+                            <th scope="col">Booking ID</th>
+                            <th scope="col">Guest</th>
+                            <th scope="col">Total Payment</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Payment Method</th>
+                            <th scope="col">Payment Approval</th>
+                            <th scope="col">Payment Status</th>
+                            <th scope="col">Action</th>
+                        </thead>
+                        <!-- Get data and isplay Transaction -->
+                        <tbody id="payment-display-body"></tbody>
+                    </table>
                 </div>
-                <table class="table table-striped display nowrap" id="transactionTable">
-                    <thead>
-                        <th scope="col">Booking ID</th>
-                        <th scope="col">Guest</th>
-                        <th scope="col">Total Payment</th>
-                        <th scope="col">Balance</th>
-                        <th scope="col">Payment Method</th>
-                        <th scope="col">Payment Approval</th>
-                        <th scope="col">Payment Status</th>
-                        <th scope="col">Action</th>
-                    </thead>
-                    <!-- Get data and isplay Transaction -->
-                    <tbody id="payment-display-body"></tbody>
-                </table>
             </div>
-        </div>
+        </section>
     </main>
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -253,111 +160,108 @@ require '../../Function/notification.php';
     <script src="../../Assets/JS/datatables.min.js"></script>
 
     <!-- Bootstrap Link -->
-    <!-- <script src=" ../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
-    </script>
+    <script src=" ../../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#transactionTable').DataTable({
-                columnDefs: [{
-                        width: '9%',
-                        target: 0,
-                    },
-                    {
-                        width: '15%',
-                        target: 1,
-                    },
-                    {
-                        width: '15%',
-                        target: 2,
-                    },
-                    {
-                        width: '10%',
-                        target: 4,
-                    },
-                    {
-                        width: '15%',
-                        target: 5,
-                    },
-                    {
-                        width: '15%',
-                        target: 6,
-                    },
-                    {
-                        width: '10%',
-                        target: 7,
-                    }
-                ]
-            });
+    $(document).ready(function() {
+        $('#transactionTable').DataTable({
+            columnDefs: [{
+                    width: '9%',
+                    target: 0,
+                },
+                {
+                    width: '15%',
+                    target: 1,
+                },
+                {
+                    width: '15%',
+                    target: 2,
+                },
+                {
+                    width: '10%',
+                    target: 4,
+                },
+                {
+                    width: '15%',
+                    target: 5,
+                },
+                {
+                    width: '15%',
+                    target: 6,
+                },
+                {
+                    width: '10%',
+                    target: 7,
+                }
+            ]
         });
+    });
     </script>
     <script src="../../Assets/JS/adminNavbar.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("../../Function/Admin/Ajax/getPaymentJSON.php")
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        // console.error("Failed to load payments.");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'An unknown error occurred.'
-                        });
-                        return;
-                    }
-                    const payments = data.payments;
-                    const tbody = document.querySelector('#payment-display-body');
-                    tbody.innerHTML = "";
-                    // console.log(payments);
-                    if (payments && payments.length > 0) {
-                        payments.forEach(payment => {
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch("../../Function/Admin/Ajax/getPaymentJSON.php")
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    // console.error("Failed to load payments.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.message || 'An unknown error occurred.'
+                    });
+                    return;
+                }
+                const payments = data.payments;
+                const tbody = document.querySelector('#payment-display-body');
+                tbody.innerHTML = "";
+                // console.log(payments);
+                if (payments && payments.length > 0) {
+                    payments.forEach(payment => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
                                                 <td>${payment.formattedBookingID}</td>
                                                 <td>${payment.name}</td>
                                                 <td>${payment.totalBill}</td>
@@ -383,22 +287,22 @@ require '../../Function/notification.php';
                                                     </form>
                                                 </td>
                                             `;
-                            tbody.appendChild(row);
-                        })
-                    } else {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `<td colspan="6" class="text-center">No bookings to display</td>`;
                         tbody.appendChild(row);
-                    }
-                }).catch(error => {
-                    console.error("Error loading bookings:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: error.message || 'Failed to load data from the server.'
                     })
+                } else {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `<td colspan="6" class="text-center">No bookings to display</td>`;
+                    tbody.appendChild(row);
+                }
+            }).catch(error => {
+                console.error("Error loading bookings:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: error.message || 'Failed to load data from the server.'
                 })
-        })
+            })
+    })
     </script>
 
     <!-- Sweetalert Link -->
@@ -406,45 +310,45 @@ require '../../Function/notification.php';
 
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
-        if (paramValue === "approved") {
-            Swal.fire({
-                title: "Payment Approved",
-                text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
-                icon: 'success',
-            });
-        } else if (paramValue === "rejected") {
-            Swal.fire({
-                title: "Payment Rejected",
-                text: "You have reviewed and rejected the payment.",
-                icon: 'success',
-            });
-        } else if (paramValue === "failed") {
-            Swal.fire({
-                title: "Payment Approval Failed",
-                text: "Unable to approve or reject the payment. Please try again later.",
-                icon: 'error',
-            });
-        } else if (paramValue === "paymentSuccess") {
-            Swal.fire({
-                title: "Payment Added",
-                text: "Payment was successfully added and processed.",
-                icon: 'success',
-            });
-        } else if (paramValue === "paymentFailed") {
-            Swal.fire({
-                title: "Payment Failed",
-                text: "Failed to deduct the payment. Please try again later.",
-                icon: 'error',
-            });
-        }
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
+    if (paramValue === "approved") {
+        Swal.fire({
+            title: "Payment Approved",
+            text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
+            icon: 'success',
+        });
+    } else if (paramValue === "rejected") {
+        Swal.fire({
+            title: "Payment Rejected",
+            text: "You have reviewed and rejected the payment.",
+            icon: 'success',
+        });
+    } else if (paramValue === "failed") {
+        Swal.fire({
+            title: "Payment Approval Failed",
+            text: "Unable to approve or reject the payment. Please try again later.",
+            icon: 'error',
+        });
+    } else if (paramValue === "paymentSuccess") {
+        Swal.fire({
+            title: "Payment Added",
+            text: "Payment was successfully added and processed.",
+            icon: 'success',
+        });
+    } else if (paramValue === "paymentFailed") {
+        Swal.fire({
+            title: "Payment Failed",
+            text: "Failed to deduct the payment. Please try again later.",
+            icon: 'error',
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location.href);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location.href);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 

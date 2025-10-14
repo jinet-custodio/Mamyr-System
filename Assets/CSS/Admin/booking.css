@@ -1,115 +1,3 @@
-:root {
-  --blue-50: oklch(0.9 0.15 210);
-  --blue-100: oklch(0.8 0.2 210);
-  --blue-200: oklch(0.7 0.25 210);
-  --blue-300: oklch(0.6 0.3 210);
-  --blue-400: oklch(0.5 0.35 210);
-  --blue-500: oklch(0.4 0.4 210);
-  --blue-600: oklch(0.3 0.4 210);
-  --blue-700: oklch(0.2 0.4 210);
-  --blue-800: oklch(0.15 0.35 210);
-  --blue-900: oklch(0.1 0.3 210);
-
-  --blue-accents: oklch(0.8 0.1 210);
-
-  --bg-light: oklch(0.9 0.05 50);
-  --bg-dark: oklch(0.05 0.05 50);
-
-  --text-light: oklch(0.2 0.02 50);
-  --text-dark: oklch(0.9 0.03 50);
-
-  --border-light: oklch(0.9 0.05 50);
-  --border-dark: oklch(0.1 0.05 50);
-
-  --link-light: oklch(0.4 0.3 210);
-  --link-dark: oklch(0.6 0.3 210);
-
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
-  --font-size-base: 16px;
-  --font-size-md: 18px;
-  --font-size-lg: 20px;
-  --font-size-xl: 24px;
-  --font-size-xxl: 32px;
-
-  --font-weight-light: 300;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-bold: 700;
-
-  --radius-sm: 0.125rem;
-  --radius-md: 0.25rem;
-  --radius-lg: 0.5rem;
-  --radius-full: 50%;
-
-  --shadow-light: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
-  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
-
-  --transition: all 0.3s ease;
-
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-
-  /* --- Margin Variables --- */
-  --margin-xs: 0.5rem;
-  --margin-sm: 1rem;
-  --margin-md: 1.5rem;
-  --margin-lg: 2rem;
-  --margin-xl: 3rem;
-
-  /* --- Padding Variables --- */
-  --padding-xs: 0.5rem;
-  --padding-sm: 1rem;
-  --padding-md: 1.5rem;
-  --padding-lg: 2rem;
-  --padding-xl: 3rem;
-}
-
-[data-theme="dark"] {
-  --blue-50: oklch(0.1 0.15 210);
-  --blue-100: oklch(0.2 0.2 210);
-  --blue-200: oklch(0.3 0.25 210);
-  --blue-300: oklch(0.4 0.3 210);
-  --blue-400: oklch(0.5 0.35 210);
-  --blue-500: oklch(0.6 0.4 210);
-  --blue-600: oklch(0.7 0.4 210);
-  --blue-700: oklch(0.8 0.35 210);
-  --blue-800: oklch(0.85 0.3 210);
-  --blue-900: oklch(0.9 0.25 210);
-
-  --blue-accents: oklch(0.3 0.1 210);
-
-  --bg-light: oklch(0.05 0.05 50);
-  --bg-dark: oklch(0.1 0.05 50);
-
-  --text-light: oklch(0.9 0.03 50);
-  --text-dark: oklch(0.2 0.02 50);
-
-  --border-light: oklch(0.2 0.05 50);
-  --border-dark: oklch(0.05 0.05 50);
-
-  --link-light: oklch(0.7 0.3 210);
-  --link-dark: oklch(0.8 0.3 210);
-
-  --shadow-light: 0 2px 5px 0 rgba(255, 255, 255, 0.1);
-  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.7);
-
-  --margin-xs: 0.5rem;
-  --margin-sm: 1rem;
-  --margin-md: 1.5rem;
-  --margin-lg: 2rem;
-  --margin-xl: 3rem;
-
-  --padding-xs: 0.5rem;
-  --padding-sm: 1rem;
-  --padding-md: 1.5rem;
-  --padding-lg: 2rem;
-  --padding-xl: 3rem;
-}
-
 @font-face {
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
@@ -134,18 +22,18 @@
 }
 main {
   display: flex;
-  justify-content: center;
+  width: 100%;
 }
 
 .booking-container {
-  width: 100% !important;
-  max-width: 100%;
+  flex: 1; /* Take up all available space */
+  max-width: calc(100% - 190px);
 }
 
 .notification-container {
   text-align: right !important;
-  padding: var(--padding-sm);
-  margin-right: var(--margin-md);
+  margin-top: 0.59rem;
+  margin-right: 0.85rem;
 }
 
 #notification-icon {
@@ -153,6 +41,15 @@ main {
   color: #0d6dfc;
 }
 
+.page-title-container {
+  padding-left: var(--padding-md);
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-family: "Poppins";
+  font-weight: var(--font-weight-bold);
+}
 .card {
   border: none !important;
   padding: var(--padding-lg);
@@ -167,7 +64,7 @@ main {
   margin: auto;
 }
 table {
-  width: 100% !important;
+  width: 90% !important;
   max-width: 100%;
 }
 
@@ -196,7 +93,7 @@ tbody {
 td,
 th {
   text-align: center !important;
-  font-size: var;
+  font-size: var(--font-size-base);
 }
 
 th {
@@ -225,49 +122,77 @@ th {
   width: 16%;
 }
 
+/* Colors */
+
 .badge {
   font-weight: initial;
   line-height: normal;
-  font-size: initial;
+  font-size: 14px !important;
   padding: 0.6rem !important;
-  width: 7rem;
+  width: 10rem;
   border-radius: 3rem !important;
 }
 
-.badge.bg-red {
-  background-color: rgba(204, 30, 20, 0.3) !important;
-  color: rgb(204, 30, 20) !important;
+/* Fully Paid */
+.badge.bg-bright-green {
+  background-color: rgba(75, 192, 75, 0.4) !important;
+  color: rgb(75, 192, 75) !important;
 }
 
-.badge.bg-light-green {
-  background-color: rgba(99, 201, 9, 0.3) !important;
-  color: rgb(71, 139, 10) !important;
+/* Partially Paid */
+.badge.bg-light-blue {
+  background-color: rgba(54, 162, 235, 0.4) !important;
+  color: rgb(54, 162, 235) !important;
 }
 
-.badge.badge.bg-success {
-  background-color: rgba(83, 243, 169, 0.5) !important;
+/* Awaiting Payment */
+.badge.bg-orange {
+  background-color: rgba(255, 159, 64, 0.4) !important;
+  color: rgb(247, 127, 8) !important;
+}
+
+/* Pending */
+.badge.bg-warning {
+  background-color: rgba(255, 193, 7, 0.4) !important;
+  color: rgb(190, 114, 0) !important;
+}
+
+/* Approved */
+.badge.bg-green {
+  background-color: rgba(40, 167, 69, 0.4) !important;
+  color: rgb(40, 167, 69) !important;
+}
+
+/* Reserved */
+.badge.bg-success {
+  background-color: rgba(83, 243, 169, 0.4) !important;
   color: rgb(0, 129, 69) !important;
 }
 
-.badge.bg-primary {
-  background-color: rgba(12, 100, 232, 0.3) !important;
-  color: rgb(11, 90, 209) !important;
-}
-
+/* Cancelled */
 .badge.bg-danger {
-  background-color: rgba(219, 53, 69, 0.3) !important;
+  background-color: rgba(219, 53, 69, 0.4) !important;
   color: rgb(219, 53, 69) !important;
 }
 
-.badge.bg-warning {
-  background-color: rgba(255, 193, 8, 0.5) !important;
-  color: rgb(187, 140, 0) !important;
+/* Rejected */
+.badge.bg-red {
+  background-color: rgba(204, 30, 20, 0.4) !important;
+  color: rgb(204, 30, 20) !important;
 }
 
-.badge.bg-info {
-  background-color: rgba(12, 202, 240, 0.3) !important;
-  color: rgb(28, 155, 180);
+/* Expired */
+.badge.bg-muted {
+  background-color: rgba(73, 80, 87, 0.4) !important;
+  color: rgb(73, 80, 87) !important;
 }
+
+/* Finished */
+.badge.bg-light-green {
+  background-color: rgba(99, 201, 9, 0.4) !important;
+  color: rgb(71, 139, 10) !important;
+}
+/* Status */
 
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   #addBookings {

@@ -62,7 +62,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
     <?php if (!$editMode): ?>
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: white;">
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
             <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -98,7 +98,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <a class="nav-link" href="register.php">Book Now</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="register.php">Sign Up</a>
+                        <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -169,7 +169,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                            class="editable-img resortIcon" style="cursor: pointer;" data-bs-toggle="modal"
+                            class="editable-img resortIcon mx-auto" style="cursor: pointer;" data-bs-toggle="modal"
                             data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
                             data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
@@ -202,7 +202,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                            class="editable-img eventIcon" style="cursor: pointer;" data-bs-toggle="modal"
+                            class="editable-img eventIcon mx-auto" style="cursor: pointer;" data-bs-toggle="modal"
                             data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                     <?php endforeach; ?>
@@ -232,7 +232,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                            class="editable-img hotelIcon" style="cursor: pointer;" data-bs-toggle="modal"
+                            class="editable-img hotelIcon mx-auto" style="cursor: pointer;" data-bs-toggle="modal"
                             data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
                             data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
@@ -382,93 +382,26 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         </div>
     </div>
-
-    <?php if (!$editMode): ?>
-        <?php include 'footer.php';
-        include 'loader.php' ?>
-    <?php endif; ?>
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="../Assets/JS/scrollNavbg.js"></script>
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php if (!$editMode) {
+        include 'footer.php';
+        include 'loader.php';
+    } else {
+        include 'editImageModal.php';
+    }
+    ?>
 
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const saveBtn = document.getElementById('saveChangesBtn');
+        <script type="module">
+            import {
+                initWebsiteEditor
+            } from '../Assets/JS/EditWebsite/editWebsiteContent.js';
 
-
-                const editables = document.querySelectorAll(".editable-img");
-
-                editables.forEach(el => {
-                    el.style.border = "2px solid red";
-                });
-
-                saveBtn?.addEventListener('click', () => {
-
-                    const inputs = document.querySelectorAll('.editable-input');
-                    const data = {
-                        sectionName: 'About'
-                    };
-
-                    inputs.forEach(input => {
-                        const title = input.getAttribute('data-title');
-                        const value = input.value;
-                        data[title] = value;
-                    });
-
-                    fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        })
-                        .then(res => res.text())
-                        .then(response => {
-                            console.log('Content saved:', response);
-                            alert('Website content saved!');
-                        })
-                        .catch(err => {
-                            console.error('Error saving content:', err);
-                            alert('An error occurred while saving content.');
-                        });
-
-                    const editableImages = document.querySelectorAll('.editable-img');
-                    editableImages.forEach(img => {
-                        const wcImageID = img.dataset.wcimageid;
-                        const altText = img.dataset.alttext;
-                        const folder = img.dataset.folder || '';
-                        const file = img.fileObject || null;
-
-                        if (!wcImageID || (!file && !altText)) return;
-
-                        const formData = new FormData();
-                        formData.append('wcImageID', wcImageID);
-                        formData.append('altText', altText);
-                        formData.append('folder', folder);
-
-                        if (file) {
-                            formData.append('image', file);
-                        }
-
-                        fetch('../Function/Admin/editWebsite/editWebsiteContent.php', {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (data.success) {
-                                    console.log(`Image ${wcImageID} updated successfully.`);
-                                } else {
-                                    alert(`Failed to update image ${wcImageID}: ` + data.message);
-                                }
-                            })
-                            .catch(err => {
-                                console.error('Image update failed:', err);
-                                alert('An error occurred while updating an image.');
-                            });
-                    });
-
-                });
-            });
+            initWebsiteEditor('About', '../Function/Admin/editWebsite/editWebsiteContent.php');
         </script>
     <?php endif; ?>
 
@@ -500,9 +433,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             })
         })
     </script>
-
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
-    <script src="../Assets/JS/scrollNavbg.js"></script>
 
     <!-- Sweetalert JS -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->

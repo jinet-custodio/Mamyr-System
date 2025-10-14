@@ -3,10 +3,13 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require_once '../Config/dbcon.php';
 
-$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
-if ($editMode) {
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
+
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
 $getContent = $conn->prepare("SELECT * FROM resortinfo WHERE resortInfoTitle = ?");
@@ -121,7 +124,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
         <div class="socialIcons">
             <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
                     class='bx bxl-facebook-circle'></i></a>
-            <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>"><i
+            <a href="mailto: <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>"><i
                     class='bx bxl-gmail'></i></a>
             <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
                 <i class='bx bxs-phone'></i>
@@ -207,7 +210,16 @@ while ($row = $getLogoResult->fetch_assoc()) {
         <!-- Sweetalert JS -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+        <script>
+            const link = document.createElement('link');
+
+            // Set its attributes
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../Assets/CSS/bootstrap.min.css';
+            document.head.appendChild(link);
+        </script>
         <!-- AJAX for editing website content -->
         <script>
             document.addEventListener('DOMContentLoaded', () => {

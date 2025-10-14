@@ -398,6 +398,51 @@ input[type="password"]::-webkit-search-cancel-button {
   margin-left: -1.8rem;
 }
 
+.phone-container,
+.zip-code {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.custom-tooltip {
+  position: absolute;
+  color: #ff0000;
+  background: #fff0f0;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  top: 60px;
+  left: 0;
+  z-index: 10;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.custom-tooltip-zip {
+  position: absolute;
+  color: #ff0000;
+  background: #fff0f0;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  top: 60px;
+  left: 0;
+  z-index: 10;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.custom-tooltip.show,
+.custom-tooltip-zip.show {
+  display: block;
+  opacity: 1;
+}
+
 @media screen and (max-width: 600px) {
   .column {
     width: 100%;

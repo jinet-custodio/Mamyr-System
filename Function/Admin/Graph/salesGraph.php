@@ -1,0 +1,145 @@
+<?php
+
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(0);
+
+require '../../../Config/dbcon.php';
+
+header('Content-Type: application/json');
+
+
+if (isset($_GET['selectedFilter'])) {
+
+    $selectedFilterValue = $_GET['selectedFilter'];
+
+    switch ($selectedFilterValue) {
+        case 'month':
+            $filter = 'month';
+            $sql = "SELECT 
+                        b.bookingType,
+                        MONTHNAME(b.startDate) AS month,
+                        CONCAT('Week ', 
+                            WEEK(b.startDate, 3) - WEEK(DATE_SUB(b.startDate, INTERVAL DAY(b.startDate)-1 DAY), 3) + 1
+                        ) AS weekOfMonth,
+                        SUM(
+                            CASE 
+                                WHEN bpas.bookingID IS NULL THEN cb.finalBill
+                                ELSE cb.finalBill - bpas.price
+                            END
+                        ) AS totalSalesThisMonth
+                    FROM 
+                        confirmedbooking cb
+                    LEFT JOIN 
+                        booking b ON cb.bookingID = b.bookingID
+                    LEFT JOIN 
+                        businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
+                    LEFT JOIN 
+                        payment p ON cb.confirmedBookingID = p.confirmedBookingID
+                    WHERE 
+                        -- p.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
+                        MONTH(b.startDate) = MONTH(CURDATE()) 
+                        AND YEAR(b.startDate) = YEAR(CURDATE())
+                    GROUP BY 
+                        b.bookingType, weekOfMonth
+                    ORDER BY 
+                        b.bookingType, weekOfMonth
+            ";
+            break;
+        case 'w1':
+        case 'w2':
+        case 'w3':
+        case 'w4':
+        case 'w5':
+            $filter = 'week';
+            $weekNumber = intval(substr($selectedFilterValue, 1)) - 1;
+            $sql = "SELECT 
+                        b.bookingType,
+                        CONCAT(
+                            DATE_FORMAT(DATE(b.startDate - INTERVAL (DAY(b.startDate) - 1) % 7 DAY), '%b %e'), 
+                            ' - ',
+                            DATE_FORMAT(DATE(b.startDate - INTERVAL (DAY(b.startDate) - 1) % 7 DAY + INTERVAL 6 DAY), '%b %e'),
+                            ' (Mon - Sun)'
+                        ) AS weekLabel,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 0 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Mon,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 1 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Tue,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 2 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Wed,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 3 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Thu,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 4 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Fri,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 5 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Sat,
+                        SUM(CASE WHEN WEEKDAY(b.startDate) = 6 THEN CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill ELSE cb.finalBill - bpas.price END  ELSE 0 END) AS Sun
+                    FROM 
+                        confirmedbooking cb
+                    LEFT JOIN 
+                        booking b ON cb.bookingID = b.bookingID
+                    LEFT JOIN 
+                        businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
+                    LEFT JOIN 
+                        payment p ON cb.confirmedBookingID = p.confirmedBookingID
+                    WHERE 
+                        -- p.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
+                        MONTH(b.startDate) = MONTH(CURDATE()) 
+                        AND YEAR(b.startDate) = YEAR(CURDATE())
+                        AND FLOOR((DAY(b.startDate) - 1) / 7) = ?
+                    GROUP BY 
+                        b.bookingType, YEAR(b.startDate), MONTH(b.startDate), FLOOR((DAY(b.startDate) - 1) / 7)
+                    ORDER BY 
+                        b.bookingType, MIN(b.startDate)
+                    ";
+            break;
+    }
+
+
+    $partiallyPaid = 2;
+    $fullyPaid = 3;
+    $approvedStatus = 2;
+    $doneStatus = 6;
+    $getSalesFiltered = $conn->prepare($sql);
+    if (!$getSalesFiltered) {
+        error_log("Prepare failed: " . $conn->error);
+    }
+    // if ($filter === 'week') {
+    //     $getSalesFiltered->bind_param('iiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $weekNumber);
+    // } elseif ($filter === 'month') {
+    //     $getSalesFiltered->bind_param('iiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus);
+    // }
+
+    if ($filter === 'week') {
+        $getSalesFiltered->bind_param('i', $weekNumber);
+    }
+    // error_log("Executing query with weekNumber = $weekNumber * selectedValue = $selectedFilterValue");
+
+    if (!$getSalesFiltered->execute()) {
+        error_log("Error: " . $getSalesFiltered->error);
+        echo json_encode([
+            'success' => false,
+            'message' => 'An error occured',
+            'sales' => []
+        ]);
+        exit;
+    }
+
+    $salesResult = $getSalesFiltered->get_result();
+
+    if ($salesResult->num_rows === 0) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'No Data',
+            'sales' => []
+        ]);
+        // error_log(print_r($sales, true));
+        exit;
+    }
+
+    $sales = [];
+
+    while ($row = $salesResult->fetch_assoc()) {
+        $sales[] = $row;
+    }
+    // error_log(print_r($sales, true));
+
+    echo json_encode([
+        'success' => true,
+        'sales' => $sales
+    ]);
+}

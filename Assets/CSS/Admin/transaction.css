@@ -1,3 +1,114 @@
+:root {
+  --blue-50: oklch(0.9 0.15 210);
+  --blue-100: oklch(0.8 0.2 210);
+  --blue-200: oklch(0.7 0.25 210);
+  --blue-300: oklch(0.6 0.3 210);
+  --blue-400: oklch(0.5 0.35 210);
+  --blue-500: oklch(0.4 0.4 210);
+  --blue-600: oklch(0.3 0.4 210);
+  --blue-700: oklch(0.2 0.4 210);
+  --blue-800: oklch(0.15 0.35 210);
+  --blue-900: oklch(0.1 0.3 210);
+
+  --blue-accents: oklch(0.8 0.1 210);
+
+  --bg-light: oklch(0.9 0.05 50);
+  --bg-dark: oklch(0.05 0.05 50);
+
+  --text-light: oklch(0.2 0.02 50);
+  --text-dark: oklch(0.9 0.03 50);
+
+  --border-light: oklch(0.9 0.05 50);
+  --border-dark: oklch(0.1 0.05 50);
+
+  --link-light: oklch(0.4 0.3 210);
+  --link-dark: oklch(0.6 0.3 210);
+
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-md: 18px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 32px;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-full: 50%;
+
+  --shadow-light: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
+
+  --transition: all 0.3s ease;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* --- Margin Variables --- */
+  --margin-xs: 0.5rem;
+  --margin-sm: 1rem;
+  --margin-md: 1.5rem;
+  --margin-lg: 2rem;
+  --margin-xl: 3rem;
+
+  /* --- Padding Variables --- */
+  --padding-xs: 0.5rem;
+  --padding-sm: 1rem;
+  --padding-md: 1.5rem;
+  --padding-lg: 2rem;
+  --padding-xl: 3rem;
+}
+
+[data-theme="dark"] {
+  --blue-50: oklch(0.1 0.15 210);
+  --blue-100: oklch(0.2 0.2 210);
+  --blue-200: oklch(0.3 0.25 210);
+  --blue-300: oklch(0.4 0.3 210);
+  --blue-400: oklch(0.5 0.35 210);
+  --blue-500: oklch(0.6 0.4 210);
+  --blue-600: oklch(0.7 0.4 210);
+  --blue-700: oklch(0.8 0.35 210);
+  --blue-800: oklch(0.85 0.3 210);
+  --blue-900: oklch(0.9 0.25 210);
+
+  --blue-accents: oklch(0.3 0.1 210);
+
+  --bg-light: oklch(0.05 0.05 50);
+  --bg-dark: oklch(0.1 0.05 50);
+
+  --text-light: oklch(0.9 0.03 50);
+  --text-dark: oklch(0.2 0.02 50);
+
+  --border-light: oklch(0.2 0.05 50);
+  --border-dark: oklch(0.05 0.05 50);
+
+  --link-light: oklch(0.7 0.3 210);
+  --link-dark: oklch(0.8 0.3 210);
+
+  --shadow-light: 0 2px 5px 0 rgba(255, 255, 255, 0.1);
+  --shadow-dark: 0 2px 5px 0 rgba(0, 0, 0, 0.7);
+
+  --margin-xs: 0.5rem;
+  --margin-sm: 1rem;
+  --margin-md: 1.5rem;
+  --margin-lg: 2rem;
+  --margin-xl: 3rem;
+
+  --padding-xs: 0.5rem;
+  --padding-sm: 1rem;
+  --padding-md: 1.5rem;
+  --padding-lg: 2rem;
+  --padding-xl: 3rem;
+}
 @font-face {
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
@@ -26,21 +137,35 @@
   list-style: none;
 }
 
-body {
-  background: #a1c8c7 !important;
+main {
+  display: flex;
+  justify-content: center;
 }
 
-.dashTitleContainer {
-  margin-left: 1vw;
+.booking-container {
+  width: 90% !important;
+  max-width: 100%;
 }
 
-.logo {
-  width: 15vw;
+.notification-container {
+  text-align: right !important;
+  padding: var(--padding-sm);
+  margin-right: var(--margin-md);
 }
 
-#dashboard {
-  text-decoration: none;
-  margin-left: 1vw;
+#notification-icon {
+  font-size: 2rem;
+  color: #0d6dfc;
+}
+
+.page-title-container {
+  padding-left: var(--padding-md);
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-family: "Poppins";
+  font-weight: var(--font-weight-bold);
 }
 
 .transactionContainer {
@@ -50,24 +175,12 @@ body {
 }
 
 .card {
-  padding: 1rem 2rem 0.5rem 2rem;
+  border: none !important;
+  padding: var(--padding-lg);
+  margin-top: var(--margin-mdl);
   margin-bottom: 2rem;
-  max-width: 90% !important;
-  width: 90% !important;
-}
-
-.transactionContainer,
-main {
-  position: relative;
-  z-index: 1; /* Lower than navbar */
-}
-
-.titleContainer {
-  font-family: "Poppins Black";
-}
-
-.title {
-  font-size: 30px;
+  width: 100% !important;
+  max-width: 100%;
 }
 
 label {
@@ -91,10 +204,12 @@ tbody {
 td,
 th {
   text-align: center !important;
+  font-size: var(--font-size-base);
 }
 
 th {
-  background-color: #91d2f2 !important;
+  background-color: oklch(0.64 0.65 220 / 0.5) !important;
+  color: rgb(61, 46, 46);
 }
 
 th:nth-child(5),

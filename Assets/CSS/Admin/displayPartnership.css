@@ -20,87 +20,69 @@
   list-style: none;
 }
 
-body {
-  background: #a1c8c7 !important;
-}
-
-.dashTitleContainer {
-  margin-left: 1vw;
-}
-
-.logo {
-  width: 15vw;
-}
-
-#dashboard {
-  text-decoration: none;
-  margin-left: 1vw;
-}
-
-.categories {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  width: 80%;
-  margin: 0 auto;
-}
-
-.category-card {
-  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
-}
-
-.category-card,
-.category-body {
-  margin: 2vw;
-  border-radius: 2vw 2vw 2vw 2vw !important;
-  text-align: center;
-}
-
-.category-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: auto;
-}
-
-.category-card img {
-  border-radius: 2vw 2vw 2vw 2vw !important;
-  padding: 1vw;
-  width: 100%;
-  object-fit: cover;
-}
-
-.category-title {
-  font-family: "Poppins Black" !important;
-  font-style: italic;
-  font-weight: bolder;
-  font-size: 2.5vw;
-  color: #00b3d1 !important;
-}
-
-.categoryLink {
-  text-decoration: none;
-  width: 40%;
-  &:hover {
-    text-decoration: none !important;
-  }
-}
-
-a.choice2-link,
-a.choice1-link {
+main {
   display: flex;
   justify-content: center;
-  align-items: center;
+}
+
+.booking-container {
+  width: 90% !important;
+  max-width: 100%;
+}
+
+.notification-container {
+  text-align: right !important;
+  padding: var(--padding-sm);
+  margin-right: var(--margin-md);
+}
+
+#notification-icon {
+  font-size: 2rem;
+  color: #0d6dfc;
+}
+
+.page-title-container {
+  padding-left: var(--padding-md);
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-family: "Poppins";
+  font-weight: var(--font-weight-bold);
+}
+
+.breadcrumb-item.active {
+  color: #0d6dfc !important;
+}
+.breadcrumb-item:not(.active) {
+  color: #6d6e72ff !important;
+}
+
+#choice-container .breadcrumb li + li:before {
+  content: " > ";
+  color: #6c757d;
+}
+
+#partner-link,
+#request-link {
+  text-decoration: none;
+  color: unset;
 }
 
 .request-container,
 .partner-container {
-  width: 95%;
-  margin: 4vw auto;
+  width: 100%;
+  margin-top: var(--margin-md);
 }
 
-.categoryLink .category-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+#partner-card,
+#request-card {
+  border: none !important;
+  padding: var(--padding-lg);
+  margin-top: var(--margin-mdl);
+  margin-bottom: 2rem;
+  width: 100% !important;
+  max-width: 100%;
 }
 
 .categoryLink:hover .category-card {
@@ -117,16 +99,13 @@ a.choice1-link {
 
 #partnersTable,
 #requestTable {
-  table-layout: fixed;
-  width: 98% !important;
+  width: 100% !important;
+  max-width: 100%;
+  font-family: "Poppins";
 }
 
 .card {
   padding: 0.5vw;
-}
-
-.category-body {
-  margin: 3vw auto;
 }
 
 .card-header {
@@ -134,16 +113,15 @@ a.choice1-link {
   border: 1px solid black;
 }
 
-.table-striped {
-  margin-top: 2vw;
-}
 td,
 th {
   text-align: center !important;
+  font-size: var(--font-size-base);
 }
 
 th {
-  background-color: #91d2f2 !important;
+  background-color: oklch(0.64 0.65 220 / 0.5) !important;
+  color: rgb(61, 46, 46);
 }
 
 .dt-length select,
@@ -166,11 +144,6 @@ h4 {
   font-size: clamp(2vw, 2.1vw, 2.2vw);
 }
 
-.page-title {
-  font-family: "Poppins";
-  font-size: clamp(3vw, 2.5vw, 2.3vw);
-}
-
 .table-body {
   font-family: "Poppins";
   color: black;
@@ -182,25 +155,6 @@ h4 {
 
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
-  .categories {
-    margin-top: 5vw;
-    width: 100%;
-  }
-  .category-card img {
-    border-radius: 2vw !important;
-    padding: 1vw;
-    height: 70% !important;
-    object-fit: cover;
-  }
-
-  .categoryLink {
-    width: 48%;
-  }
-
-  .card {
-    padding: 2vw;
-  }
-
   .back-btn-container i {
     font-size: clamp(3vw, 3.5vw, 3.8vw);
   }
@@ -264,39 +218,6 @@ h4 {
 
 /* Phones */
 @media only screen and (max-width: 599px) {
-  .categoryLink {
-    width: 90% !important;
-    margin-bottom: 4vw !important;
-  }
-
-  .category-body {
-    margin: 4vw auto !important;
-  }
-  .page-title {
-    margin-top: -25px !important;
-    font-size: clamp(45px, calc(5.7vh + 2px), 40px);
-  }
-
-  .card {
-    padding: 3vw;
-  }
-
-  .categories {
-    margin-top: 5vh;
-  }
-
-  .category-card {
-    padding: 1vw !important;
-    max-width: 100% !important;
-  }
-  .category-card img {
-    height: 70% !important;
-    object-fit: cover;
-  }
-  .category-title {
-    font-size: clamp(4.6vw, 4.8vw, 5vw) !important;
-  }
-
   .back-btn-container i {
     font-size: clamp(5vw, 4.5vw, 4.2vw);
   }
@@ -337,33 +258,7 @@ h4 {
 }
 
 @media only screen and (max-width: 400px) {
-  .card {
-    padding: 3.5vw;
-  }
-  .categoryLink {
-    width: 70%;
-    height: 44vh;
-    margin-bottom: 1vw !important;
-  }
-
-  .page-title {
-    margin-top: -35px !important;
-    font-size: clamp(35px, calc(5.1vh + 2px), 40px);
-  }
-
   .back-btn-container i {
     font-size: clamp(5.5vw, 5vw, 5.2vw);
-  }
-
-  .category-card {
-    height: 80% !important;
-  }
-
-  .category-body {
-    margin: auto !important;
-  }
-
-  .category-title {
-    font-size: clamp(23px, calc(3.7vh + 2px), 26px) !important;
   }
 }
