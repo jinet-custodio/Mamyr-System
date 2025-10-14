@@ -62,7 +62,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
     <?php if (!$editMode): ?>
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: white;">
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
             <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -169,7 +169,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                            class="editable-img resortIcon" style="cursor: pointer;" data-bs-toggle="modal"
+                            class="editable-img resortIcon mx-auto" style="cursor: pointer;" data-bs-toggle="modal"
                             data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
                             data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
@@ -202,7 +202,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                            class="editable-img eventIcon" style="cursor: pointer;" data-bs-toggle="modal"
+                            class="editable-img eventIcon mx-auto" style="cursor: pointer;" data-bs-toggle="modal"
                             data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                     <?php endforeach; ?>
@@ -232,7 +232,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                            class="editable-img hotelIcon" style="cursor: pointer;" data-bs-toggle="modal"
+                            class="editable-img hotelIcon mx-auto" style="cursor: pointer;" data-bs-toggle="modal"
                             data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
                             data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">

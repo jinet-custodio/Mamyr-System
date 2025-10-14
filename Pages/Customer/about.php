@@ -207,19 +207,19 @@ require '../../Function/notification.php';
         <div class="servicesIconContainer">
 
             <div class="resortContainer">
-                <img src="../../Assets/Images/AboutImages/resort.png" alt="Resort Icon" class="resortIcon">
+                <img src="../../Assets/Images/AboutImages/resort.png" alt="Resort Icon" class="resortIcon mx-auto">
                 <h4 class="resortIconTitle"><?= htmlspecialchars($contentMap['Service1'] ?? 'No description Not Found') ?></h4>
                 <p class="resortIconDescription"><?= htmlspecialchars($contentMap['Service1Desc'] ?? 'No description Not Found') ?></p>
             </div>
 
             <div class="eventContainer">
-                <img src="../../Assets/Images/AboutImages/events.png" alt="Event Icon" class="eventIcon">
+                <img src="../../Assets/Images/AboutImages/events.png" alt="Event Icon" class="eventIcon mx-auto">
                 <h4 class="eventIconTitle"><?= htmlspecialchars($contentMap['Service2'] ?? 'No description Not Found') ?></h4>
                 <p class="eventIconDescription"><?= htmlspecialchars($contentMap['Service2Desc'] ?? 'No description Not Found') ?></p>
             </div>
 
             <div class="hotelContainer">
-                <img src="../../Assets/Images/AboutImages/hotel.png" alt="Hotel Icon" class="hotelIcon">
+                <img src="../../Assets/Images/AboutImages/hotel.png" alt="Hotel Icon" class="hotelIcon mx-auto">
                 <h4 class="hotelIconTitle"><?= htmlspecialchars($contentMap['Service3'] ?? 'No description Not Found') ?></h4>
                 <p class="hotelIconDescription"><?= htmlspecialchars($contentMap['Service3Desc'] ?? 'No description Not Found') ?></p>
             </div>

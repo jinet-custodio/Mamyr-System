@@ -282,7 +282,7 @@ $userRole = $_SESSION['userRole'];
         icon.addEventListener("click", function() {
             Swal.fire({
                 title: "How it works",
-                text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
+                text: "Texts and images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
                 icon: "info",
                 confirmButtonText: "Got it!"
             });

@@ -48,8 +48,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/loginSecurity.css" />
+    <link rel="stylesheet" href="../../Assets/CSS/Account/account-sidebar.css" />
     <!-- icon libraries for font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -107,17 +110,19 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
             <div class="home">
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Customer/dashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+
+                </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../Admin/adminDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+
+                </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../BusinessPartner/bpDashboard.php">
-                        <img src="../../Assets/Images/Icon/home2.png" alt="Go Back" class="homeIcon">
-                    </a>
+                <a href="../BusinessPartner/bpDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } ?>
             </div>
 
@@ -131,63 +136,64 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <ul class="list-group sidebar-nav">
                 <li class="sidebar-item">
                     <a href="account.php" class="list-group-item ">
-                        <i class="fa-solid fa-user sidebar-icon"></i>
+                        <i class="bi bi-person sidebar-icon"></i>
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                            <i class="fa-solid fa-table-list sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <i class="bi bi-calendar2-check sidebar-icon"></i>
+                        <span class="sidebar-text">Payment & Booking History</span>
+                    </a>
+                </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li class="sidebar-item">
-                        <a href="userManagement.php" class="list-group-item">
-                            <i class="fa-solid fa-people-roof sidebar-icon"></i>
-                            <span class="sidebar-text">Manage Users</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="userManagement.php" class="list-group-item">
+                        <i class="bi bi-person-gear sidebar-icon"></i>
+                        <span class="sidebar-text">Manage Users</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpBookings.php" class="list-group-item">
-                            <i class="fa-regular fa-calendar-days sidebar-icon"></i>
-                            <span class="sidebar-text">Bookings</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpServices.php" class="list-group-item">
-                            <i class="fa-solid fa-bell-concierge sidebar-icon"></i>
-                            <span class="sidebar-text">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="fa-solid fa-money-bill-trend-up sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bpBookings.php" class="list-group-item">
+                        <i class="bi bi-calendar-week sidebar-icon"></i>
+                        <span class="sidebar-text">Bookings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpServices.php" class="list-group-item">
+                        <i class="bi bi-bell sidebar-icon"></i>
+                        <span class="sidebar-text">Services</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpSales.php" class="list-group-item">
+                        <i class="bi bi-tags sidebar-icon"></i>
+                        <span class="sidebar-text">Sales</span>
+                    </a>
+                </li>
                 <?php } ?>
 
                 <li class="sidebar-item">
                     <a href="loginSecurity.php" class="list-group-item active">
-                        <i class="fa-solid fa-user-shield sidebar-icon"></i>
+                        <i class="bi bi-shield-check sidebar-icon"></i>
                         <span class="sidebar-text">Login & Security</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="deleteAccount.php" class="list-group-item">
-                        <i class="fa-solid fa-user-slash sidebar-icon"></i>
+                        <i class="bi bi-person-dash sidebar-icon"></i>
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
             </ul>
             <div class="logout">
-                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn" style="margin: 3vw auto;">
-                    <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon"></i>
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
+                    style="margin: 3vw auto;">
+                    <i class="bi bi-box-arrow-right logout-icon"></i>
                     <span class="sidebar-text ms-2">Logout</span>
             </div>
         </aside>
@@ -199,7 +205,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 </h5>
                 <div class="card-body">
-                    <p class="card-text">Your account credentials are used to securely access your resort account, manage
+                    <p class="card-text">Your account credentials are used to securely access your resort account,
+                        manage
                         reservations, view transaction history,
                         and receive important notifications regarding services, promotions, and exclusive offers.</p>
                     <div class="form-container">
@@ -230,13 +237,15 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title text-center" id="emailModalLabel">Your current email is <br>
+                                        <h5 class="modal-title text-center" id="emailModalLabel">Your current email is
+                                            <br>
                                             <strong><strong><?= htmlspecialchars($data['email']) ?></strong>
                                         </h5>
-                                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                        <input type="hidden" name="email"
+                                            value="<?= htmlspecialchars($data['email']) ?>">
                                         <div class="closeButtonContainer">
-                                            <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
-                                                aria-label="Close"> </button>
+                                            <button type="button" class="btn-close btn btn-danger"
+                                                data-bs-dismiss="modal" aria-label="Close"> </button>
                                         </div>
 
                                     </div>
@@ -263,10 +272,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title text-center" id="email2ModalLabel">Your current email is <br>
+                                        <h5 class="modal-title text-center" id="email2ModalLabel">Your current email is
+                                            <br>
                                             <strong><strong><?= htmlspecialchars($data['email']) ?></strong>
                                         </h5>
-                                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                        <input type="hidden" name="email"
+                                            value="<?= htmlspecialchars($data['email']) ?>">
                                         <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
                                             aria-label="Close">
                                         </button>
@@ -283,7 +294,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         <div class="button-container">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary" name="verifyEmail">Verify</button>
+                                            <button type="submit" class="btn btn-primary"
+                                                name="verifyEmail">Verify</button>
                                         </div>
                                     </div>
                                 </div>
@@ -298,10 +310,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title text-center" id="email3ModalLabel">Your current email is <br>
+                                        <h5 class="modal-title text-center" id="email3ModalLabel">Your current email is
+                                            <br>
                                             <strong><?= htmlspecialchars($data['email']) ?></strong>
                                         </h5>
-                                        <input type="hidden" name="email" value="<?= htmlspecialchars($data['email']) ?>">
+                                        <input type="hidden" name="email"
+                                            value="<?= htmlspecialchars($data['email']) ?>">
                                         <button type="button" class="btn-close btn btn-danger" data-bs-dismiss="modal"
                                             aria-label="Close">
                                         </button>
@@ -316,12 +330,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         ?>
                                         <input type="hidden" name="newEmail" value="<?= htmlspecialchars($newEmail) ?>">
                                         <p class="modal-text">Please enter the verification code</p>
-                                        <input type="text" name="enteredOTP" id="enteredOTP" placeholder="6 digit security code"
-                                            required>
+                                        <input type="text" name="enteredOTP" id="enteredOTP"
+                                            placeholder="6 digit security code" required>
                                         <div class="button-container">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary" name="verifyCode">Submit</button>
+                                            <button type="submit" class="btn btn-primary"
+                                                name="verifyCode">Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -337,7 +352,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="passwordLabel">Change Password</h5>
-                                        <p class="modal-text">Password must contain at least 1 letter, 1 number, and 1 symbol.
+                                        <p class="modal-text">Password must contain at least 1 letter, 1 number, and 1
+                                            symbol.
                                             Minimun length is 8 characters.</p>
                                     </div>
 
@@ -352,7 +368,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         <div class="input-container">
                                             <label for="currentPassword">Current Password</label>
                                             <div class="password">
-                                                <input type="password" name="currentPassword" id="currentPassword" required>
+                                                <input type="password" name="currentPassword" id="currentPassword"
+                                                    required>
                                                 <i id="togglePassword2" class='bx bxs-hide'></i>
                                             </div>
                                         </div>
@@ -381,7 +398,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         <div class="button-container">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-primary" id="changePassword" name="changePassword" disabled>Submit</button>
+                                            <button type="submit" class="btn btn-primary" id="changePassword"
+                                                name="changePassword" disabled>Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -404,188 +422,188 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
     <script>
-        //Show Modal
-        document.addEventListener("DOMContentLoaded", function() {
-            const changeEmailBtn = document.getElementById("changeEmailBtn");
-            const changePasswordBtn = document.getElementById("changePasswordBtn");
-            const emailModal = document.getElementById("emailModal");
-            const passwordModal = document.getElementById("passwordModal");
+    //Show Modal
+    document.addEventListener("DOMContentLoaded", function() {
+        const changeEmailBtn = document.getElementById("changeEmailBtn");
+        const changePasswordBtn = document.getElementById("changePasswordBtn");
+        const emailModal = document.getElementById("emailModal");
+        const passwordModal = document.getElementById("passwordModal");
 
-            changeEmailBtn.addEventListener("click", function() {
-                const myEmailModal = new bootstrap.Modal(emailModal);
-                myEmailModal.show();
-            });
-            changePasswordBtn.addEventListener("click", function() {
-                const myPasswordModal = new bootstrap.Modal(passwordModal);
-                myPasswordModal.show();
-            });
+        changeEmailBtn.addEventListener("click", function() {
+            const myEmailModal = new bootstrap.Modal(emailModal);
+            myEmailModal.show();
         });
+        changePasswordBtn.addEventListener("click", function() {
+            const myPasswordModal = new bootstrap.Modal(passwordModal);
+            myPasswordModal.show();
+        });
+    });
     </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        //Handle sidebar for responsiveness
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.getElementById('toggle-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container')
+    //Handle sidebar for responsiveness
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const items = document.querySelectorAll('.list-group-item');
+        const toggleCont = document.getElementById('toggle-container')
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    });
-                    toggleCont.style.justifyContent = "center"
-                } else {
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    toggleCont.style.justifyContent = "flex-end"
-                }
-            });
-
-            function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
-                    sidebar.classList.add('collapsed');
-                    toggleBtn.style.display = "flex";
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    })
-
-                } else {
-                    toggleBtn.style.display = "none";
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    })
-                    sidebar.classList.remove('collapsed');
-                }
+            if (sidebar.classList.contains('collapsed')) {
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                });
+                toggleCont.style.justifyContent = "center"
+            } else {
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                toggleCont.style.justifyContent = "flex-end"
             }
-
-            // Run on load and when window resizes
-            handleResponsiveSidebar();
-            window.addEventListener('resize', handleResponsiveSidebar);
         });
+
+        function handleResponsiveSidebar() {
+            if (window.innerWidth <= 600) {
+                sidebar.classList.add('collapsed');
+                toggleBtn.style.display = "flex";
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                })
+
+            } else {
+                toggleBtn.style.display = "none";
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                })
+                sidebar.classList.remove('collapsed');
+            }
+        }
+
+        // Run on load and when window resizes
+        handleResponsiveSidebar();
+        window.addEventListener('resize', handleResponsiveSidebar);
+    });
     </script>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('step');
-        const email2Modal = document.getElementById("email2Modal");
-        const email3Modal = document.getElementById("email3Modal");
-        const passwordModal = document.getElementById("passwordModal");
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('step');
+    const email2Modal = document.getElementById("email2Modal");
+    const email3Modal = document.getElementById("email3Modal");
+    const passwordModal = document.getElementById("passwordModal");
 
-        if (paramValue === '2') {
-            const myEmail2Modal = new bootstrap.Modal(email2Modal);
-            myEmail2Modal.show();
-            if (paramValue) {
-                const url = new URL(window.location);
-                url.search = '';
-                history.replaceState({}, document.title, url.toString());
-            };
-        } else if (paramValue === '3') {
-            const myEmail3Modal = new bootstrap.Modal(email3Modal);
-            myEmail3Modal.show();
-            if (paramValue) {
-                const url = new URL(window.location);
-                url.search = '';
-                history.replaceState({}, document.title, url.toString());
-            };
-        } else if (paramValue === 'success') {
-            Swal.fire({
-                title: "Success",
-                text: "Your email has been updated successfully.",
-                icon: "success"
-            });
-        } else if (paramValue === 'success-password') {
-            Swal.fire({
-                title: "Success",
-                text: "Your password has been updated successfully.",
-                icon: "success"
-            });
-        } else if (paramValue === '4') {
-            const myPasswordModal = new bootstrap.Modal(passwordModal);
-            myPasswordModal.show();
-            if (paramValue) {
-                const url = new URL(window.location);
-                url.search = '';
-                history.replaceState({}, document.title, url.toString());
-            };
-        }
+    if (paramValue === '2') {
+        const myEmail2Modal = new bootstrap.Modal(email2Modal);
+        myEmail2Modal.show();
         if (paramValue) {
             const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url.toString());
         };
+    } else if (paramValue === '3') {
+        const myEmail3Modal = new bootstrap.Modal(email3Modal);
+        myEmail3Modal.show();
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
+    } else if (paramValue === 'success') {
+        Swal.fire({
+            title: "Success",
+            text: "Your email has been updated successfully.",
+            icon: "success"
+        });
+    } else if (paramValue === 'success-password') {
+        Swal.fire({
+            title: "Success",
+            text: "Your password has been updated successfully.",
+            icon: "success"
+        });
+    } else if (paramValue === '4') {
+        const myPasswordModal = new bootstrap.Modal(passwordModal);
+        myPasswordModal.show();
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
+    }
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 
     <!-- Eye icon of password show and hide -->
     <script>
-        const passwordField = document.getElementById('passwordEntered');
-        const passwordField1 = document.getElementById('currentPassword');
-        const passwordField2 = document.getElementById('newPassword');
-        const passwordField3 = document.getElementById('confirmPassword');
-        const togglePassword = document.getElementById('togglePassword');
-        const togglePassword1 = document.getElementById('togglePassword2');
-        const togglePassword2 = document.getElementById('togglePassword3');
-        const togglePassword3 = document.getElementById('togglePassword4');
+    const passwordField = document.getElementById('passwordEntered');
+    const passwordField1 = document.getElementById('currentPassword');
+    const passwordField2 = document.getElementById('newPassword');
+    const passwordField3 = document.getElementById('confirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const togglePassword1 = document.getElementById('togglePassword2');
+    const togglePassword2 = document.getElementById('togglePassword3');
+    const togglePassword3 = document.getElementById('togglePassword4');
 
-        function togglePasswordVisibility(passwordField, toggleIcon) {
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('bxs-hide');
-                toggleIcon.classList.add('bx-show-alt');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('bx-show-alt');
-                toggleIcon.classList.add('bxs-hide');
-            }
+    function togglePasswordVisibility(passwordField, toggleIcon) {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('bxs-hide');
+            toggleIcon.classList.add('bx-show-alt');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('bx-show-alt');
+            toggleIcon.classList.add('bxs-hide');
         }
+    }
 
-        togglePassword.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField, togglePassword);
-        });
+    togglePassword.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField, togglePassword);
+    });
 
-        togglePassword1.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField1, togglePassword1);
-        });
+    togglePassword1.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField1, togglePassword1);
+    });
 
-        togglePassword2.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField2, togglePassword2);
-        });
+    togglePassword2.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField2, togglePassword2);
+    });
 
-        togglePassword3.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField3, togglePassword3);
-        });
+    togglePassword3.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField3, togglePassword3);
+    });
     </script>
 
     <script>
-        const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../Function/logout.php";
-                }
-            });
-        })
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../Function/logout.php";
+            }
+        });
+    })
     </script>
 
 

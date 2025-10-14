@@ -118,6 +118,19 @@ footer {
   border: 1px solid rgb(255, 13, 13) !important;
   padding: 2px;
 }
+@media (min-width: 1440px) {
+  .numberFooter,
+  .emailAddressTextFooter,
+  .addressTextFooter {
+    font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+  }
+
+  .reservationTitle,
+  .locationTitle,
+  .mb-0 {
+    font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+  }
+}
 
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
@@ -163,12 +176,12 @@ footer {
   .info {
     margin-bottom: 0.5vw;
     justify-content: space-between;
-    padding-left: 1vw;
+    padding-left: 2vw;
     padding-right: 1vw;
   }
 
   .mb-0 {
-    font-size: clamp(15px, calc(2vh + 2px), 16px) !important;
+    font-size: clamp(15px, calc(2vh + 2px), 14px) !important;
   }
 
   .py-1 {
@@ -224,12 +237,16 @@ footer {
 @media (max-width: 400px) {
   .reservationTitle,
   .locationTitle {
-    font-size: clamp(15px, calc(1.8vh + 2px), 14px) !important;
+    font-size: clamp(13px, calc(1.8vh + 2px), 14px) !important;
+  }
+
+  .logo {
+    width: 18vw;
   }
 
   .numberFooter,
   .emailAddressTextFooter,
   .addressTextFooter {
-    font-size: clamp(14px, calc(1.7vh + 2px), 13px) !important;
+    font-size: clamp(12px, calc(1.7vh + 2px), 13px) !important;
   }
 }
