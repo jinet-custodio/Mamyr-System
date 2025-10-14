@@ -22,18 +22,18 @@
 }
 main {
   display: flex;
-  justify-content: center;
+  width: 100%;
 }
 
 .booking-container {
-  width: 100% !important;
-  max-width: 100%;
+  flex: 1; /* Take up all available space */
+  max-width: calc(100% - 190px);
 }
 
 .notification-container {
   text-align: right !important;
-  padding: var(--padding-sm);
-  margin-right: var(--margin-md);
+  margin-top: 0.59rem;
+  margin-right: 0.85rem;
 }
 
 #notification-icon {
@@ -64,7 +64,7 @@ main {
   margin: auto;
 }
 table {
-  width: 100% !important;
+  width: 90% !important;
   max-width: 100%;
 }
 
