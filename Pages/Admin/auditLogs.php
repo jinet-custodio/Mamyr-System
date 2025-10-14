@@ -1,3 +1,58 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require '../../Config/dbcon.php';
+date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+require_once '../../Function/Helpers/statusFunctions.php';
+changeToDoneStatus($conn);
+changeToExpiredStatus($conn);
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
+    header("Location: ../register.php");
+    exit();
+}
+require '../../Function/notification.php';
+
+$message = '';
+$status = '';
+
+if (isset($_SESSION['error'])) {
+    $message = htmlspecialchars(strip_tags($_SESSION['error']));
+    $status = 'error';
+    unset($_SESSION['error']);
+} elseif (isset($_SESSION['success'])) {
+    $message = htmlspecialchars(strip_tags($_SESSION['success']));
+    $status = 'success';
+    unset($_SESSION['success']);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -170,80 +225,96 @@
 
     <!-- Table JS -->
     <script>
-    $('#auditLogTable').DataTable({
-        // responsive: false,
-        // scrollX: true,
-        // columnDefs: [{
-        //         width: '10%',
-        //         targets: 0
-        //     },
-        //     {
-        //         width: '15%',
-        //         targets: 1
-        //     },
-        //     {
-        //         width: '15%',
-        //         targets: 2
-        //     },
-        //     {
-        //         width: '15%',
-        //         targets: 3
-        //     },
-        //     {
-        //         width: '15%',
-        //         targets: 4
-        //     },
-        //     {
-        //         width: '10%',
-        //         targets: 5
-        //     },
-        //     {
-        //         width: '10%',
-        //         targets: 6
-        //     },
-        // ],
-    });
+        $(document).ready(function() {
+            $('#auditLogTable').DataTable({
+                "ajax": "../../Function/Admin/Ajax/getAuditLogs.php",
+                "columns": [{
+                        "data": "logID",
+                        "render": function(data, type, row) {
+                            return data.toString().padStart(4, '0');
+                        }
+                    },
+                    {
+                        "data": "adminID"
+                    },
+                    {
+                        "data": "action",
+                        "render": function(data, type, row) {
+                            let badgeClass = '';
+                            switch (data.toLowerCase()) {
+                                case 'create':
+                                    badgeClass = 'bg-success';
+                                    break;
+                                case 'update':
+                                    badgeClass = 'bg-warning';
+                                    break;
+                                case 'delete':
+                                    badgeClass = 'bg-danger';
+                                    break;
+                                case 'approved':
+                                    badgeClass = 'bg-info';
+                                    break;
+                                case 'rejected':
+                                    badgeClass = 'bg-danger'; // or bg-red if custom class exists
+                                    break;
+                                default:
+                                    badgeClass = 'bg-secondary';
+                            }
+                            return `<span class="badge ${badgeClass} text-capitalize">${data}</span>`;
+                        }
+                    },
+                    {
+                        "data": "target"
+                    },
+                    {
+                        "data": "logDetails"
+                    },
+                    {
+                        "data": "timestamp"
+                    }
+                ],
+                responsive: true
+            });
+        });
     </script>
 
 
-
-    <script src="../../Assets/JS/adminNavbar.js"></script>
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
 
