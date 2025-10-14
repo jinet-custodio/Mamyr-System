@@ -169,7 +169,7 @@
 
 .add-service-btn {
   float: right;
-  width: 16%;
+  width: 20%;
 }
 
 /* .tableContainer {
@@ -346,57 +346,9 @@ select:disabled:hover {
   color: rgb(107, 117, 125);
 }
 
-/* Tablet portrait */
-@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
-  .sidebar {
-    width: 35vw;
-  }
-
-  .list-group {
-    font-size: clamp(2.5vw, 2.2vw, 2vw);
-  }
-
-  .sidebar-icon {
-    font-size: clamp(2.6vw, 2.3vw, 2vw);
-  }
-
-  .sidebar-header h5 {
-    margin-top: 2vw !important;
-    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-  }
-
-  .profileImage {
-    margin: 1vw auto;
-  }
-
-  .profileImage img {
-    height: clamp(13vw, 11vw, 10vw);
-  }
-
-  .main-content {
-    margin-left: 34vw;
-  }
-}
-
-/* Tablet landscape */
-@media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
-  .homeIcon {
-    width: 4vw;
-  }
-
-  .sidebar-header h5,
-  .card-header {
-    margin-top: 2vw;
-    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
-  }
-
-  .profile-image {
-    width: 30%;
-  }
-}
-
 /* Phone size */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 767px) {
+
   .sidebar {
     width: 45vw;
   }
@@ -437,4 +389,75 @@ select:disabled:hover {
   .profile-image {
     width: 35%;
   }
+
+  .add-service-btn {
+    width: 50% !important;
+  }
+  .serviceInputContainer {
+    display: flex;
+    flex-direction: column !important;
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+  .w-25 {
+    width: 50% !important;
+    margin-right: 2rem;
+  }
+
 }
+
+
+/* Tablet portrait */
+@media only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .sidebar {
+    width: 30vw;
+  }
+  .sidebar-header h5{
+    font-size: 25px;
+  }
+  .add-service-btn {
+    width: 50% !important;
+  }
+  .profileImage img {
+    height: 12vw;
+  }
+  .w-25 {
+    width: 50% !important;
+  }
+  .main-content {
+    margin-left: 30vw;
+  }
+  .list-group-item {
+    font-size: 16px !important;
+  }
+  .serviceInputContainer {
+    display: flex;
+    flex-direction: column !important;
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+}
+
+
+/* Tablet landscape */
+@media only screen and (min-width: 1024px) and (max-width: 1279px) and (orientation: landscape) {
+  .homeIcon {
+    width: 4vw;
+  }
+
+  .sidebar-header h5,
+  .card-header {
+    margin-top: 2vw;
+    font-size: 25px;
+  }
+  .profile-image {
+    width: 30%;
+  }
+  .list-group {
+    font-size: 14px;
+  }
+}
+
+
+
+
