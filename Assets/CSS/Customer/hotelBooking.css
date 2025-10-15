@@ -35,7 +35,7 @@
   font-family: "Lora";
   color: #000000;
   font-weight: bold;
-  margin-top: 6vw;
+  margin-top: 2rem;
 }
 
 .backToSelection {
@@ -113,7 +113,8 @@
 
 .checkInOut,
 .hotelPeopleForm,
-.paymentTimeDiv {
+.paymentTimeDiv,
+.days-time-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -139,7 +140,8 @@
 
 .checkIn-container,
 .checkOut-container,
-.arrivalTime {
+.arrivalTime,
+.days-count {
   width: 50% !important  ;
 }
 
@@ -215,9 +217,9 @@ h5 {
 
 /* Tablet Landscape only */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  body {
+  /* body {
     outline: 5px solid red !important;
-  }
+  } */
 
   .container-fluid {
     display: flex;
@@ -226,7 +228,7 @@ h5 {
     justify-content: center;
     align-items: center;
   }
-    .hotelIconContainer {
+  .hotelIconContainer {
     justify-content: center;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -234,15 +236,15 @@ h5 {
     row-gap: 0;
     justify-items: center;
   }
-    .hotel-card {
+  .hotel-card {
     width: 35rem !important;
   }
   .form-control {
-    padding-right: .40rem !important;
+    padding-right: 0.4rem !important;
     font-size: 14px !important;
   }
   .hotelRooms-title {
-    margin-top: .4rem !important;
+    margin-top: 0.4rem !important;
   }
   .hotel-card {
     margin-top: 1rem !important;
@@ -251,9 +253,9 @@ h5 {
 
 /* Tablet portrait only */
 @media only screen and (min-width: 600px) and (max-width: 768px) {
-    body {
+  /* body {
     outline: 5px solid rgb(21, 255, 0) !important;
-  }
+  } */
   .container-fluid {
     display: flex;
     flex-direction: column;
@@ -279,9 +281,9 @@ h5 {
 
 /* Phone size */
 @media screen and (max-width: 599px) {
-    body {
+  /* body {
     outline: 5px solid rgb(0, 26, 255) !important;
-  }
+  } */
   .container-fluid {
     display: flex;
     flex-direction: column;
@@ -318,7 +320,7 @@ h5 {
   .hotelPeopleForm .info-container p {
     font-size: 9px !important;
   }
-  .hotelRooms-title{
+  .hotelRooms-title {
     font-size: 16px !important;
   }
   .payment-title {

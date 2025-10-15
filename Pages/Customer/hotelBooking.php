@@ -50,8 +50,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="stylesheet" href="../../Assets/CSS/Customer/hotelBooking.css">
 
     <!-- Bootstrap Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
 
     <!-- Flatpickr calendar -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -141,6 +140,22 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
 
                 <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
+                    <div class="days-time-container">
+                        <div class="arrivalTime">
+                            <h5 class="arrivalTimeLabel">Time arrival</h5>
+                            <div class="input-group">
+                                <input type="time" name="arrivalTime" id="arrivalTime" class="form-control"
+                                    placeholder="Select Arrival Time"
+                                    value="<?php echo isset($_SESSION['hotelFormData']['arrivalTime']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['arrivalTime'])) : ''; ?>">
+                            </div>
+                        </div>
+                        <!-- <div class="days-count">
+                            <h5 class="containerLabel">Number of days</h5>
+                            <input type="number" class="form-control" name="daysCount" id="daysCount" required
+                                placeholder="Days Count"
+                                value="<?php echo isset($_SESSION['hotelFormData']['daysCount']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['daysCount'])) : ''; ?>" min="1">
+                        </div> -->
+                    </div>
                     <div class="checkInOut">
                         <div class="checkIn-container">
                             <h5 class="containerLabel">Check-In Date</h5>
@@ -148,22 +163,20 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <input type="text" class="form-control" name="checkInDate" id="checkInDate" required
                                     placeholder="Select Date and Time"
                                     value="<?php echo isset($_SESSION['hotelFormData']['checkInDate']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['checkInDate'])) : ''; ?>">
-                                <!--<i class="fa-solid fa-calendar" id="hotelCheckinIcon"
-                                    style="margin-left: -2vw;font-size:1.2vw;"> </i>
-                           -->
+                                <!--<i class="fa-solid fa-calendar" id="hotelCheckinIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i>-->
                             </div>
                         </div>
                         <div class="checkOut-container">
                             <h5 class="containerLabel">Check-Out Date</h5>
                             <div style="display: flex;align-items:center;">
                                 <input type="text" class="form-control" name="checkOutDate" id="checkOutDate" required
-                                    placeholder="Select Date and Time"
+                                    placeholder="Date and Time"
                                     value="<?php echo isset($_SESSION['hotelFormData']['checkOutDate']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['checkOutDate'])) : ''; ?>">
-                                <!--<i class="fa-solid fa-calendar" id="hotelCheckoutIcon"
-                                    style="margin-left: -2vw;font-size:1.2vw;"> </i>
-                    -->
+                                <!-- <input type="hidden" name="checkOutDate" id="checkOutDateHidden"> -->
+                                <!-- <i class="fa-solid fa-calendar" id="hotelCheckoutIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i> -->
                             </div>
                         </div>
+
                     </div>
 
                     <div class="hotelPax">
@@ -243,19 +256,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                             </div>
                         </div>
-
-                        <div class="arrivalTime">
-                            <h5 class="arrivalTimeLabel">Time arrival</h5>
-                            <div class="input-group">
-                                <input type="time" name="arrivalTime" id="arrivalTime" class="form-control"
-                                    placeholder="Select Arrival Time"
-                                    value="<?php echo isset($_SESSION['hotelFormData']['arrivalTime']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['arrivalTime'])) : ''; ?>">
-                            </div>
-                        </div>
                     </div>
 
                     <div class="additional-info-container">
-                        <ul>
+                        <ul style="list-style: none;">
                             <li style="color: #0076d1ff;">
                                 <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
                                 &nbsp;If the maximum pax exceeded, extra guest is charged
@@ -264,6 +268,26 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <li style="color: #0076d1ff;">
                                 <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
                                 &nbsp;Children 3 years old and below are free
+                            </li>
+                            <li style="color: #0076d1ff;">
+                                <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
+                                &nbsp;Any request for an additional hour of stay must be arranged directly with the resort.
+                            </li>
+                            <li style="color: #0076d1ff;">
+                                <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
+                                <?php
+                                $chargeType = 'Room';
+                                $pricingType = 'Per Hour';
+                                $getPerHourRate = $conn->prepare("SELECT `pricingID` , `price`, `notes` FROM `servicepricing` WHERE `chargeType` = ? AND `pricingType` = ?");
+                                $getPerHourRate->bind_param('ss', $chargeType, $pricingType);
+                                if ($getPerHourRate->execute()) {
+                                    $result = $getPerHourRate->get_result();
+                                    if ($result->num_rows > 0) {
+                                        $row = $result->fetch_assoc();
+                                    }
+                                }
+                                ?>
+                                &nbsp; The rate for each additional hour will be <?= $row['notes'] ?? ($price . ' ' . $pricingType) ?>
                             </li>
                         </ul>
                     </div>
@@ -277,10 +301,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
     <!-- Full Calendar for Date display -->
@@ -311,22 +332,29 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         flatpickr('#checkInDate', {
             enableTime: true,
             minDate: minDate,
-            dateFormat: "Y-m-d H:i ",
-            minTime: '00:00'
+            dateFormat: "Y-m-d h:i K",
+            // minTime: "06:00",
+            // maxTime: "22:00",
+            disableMobile: true,
         });
 
 
         flatpickr('#checkOutDate', {
             enableTime: true,
             minDate: minDate,
-            dateFormat: "Y-m-d H:i ",
-            minTime: '00:00'
+            dateFormat: "Y-m-d h:i K",
+            // minTime: "06:00",
+            // maxTime: "22:00",
+            disableMobile: true,
         });
 
         flatpickr('#arrivalTime', {
             enableTime: true,
             noCalendar: true,
-            dateFormat: "H:i"
+            minTime: "06:00",
+            maxTime: "22:00",
+            dateFormat: "H:i",
+            disableMobile: true,
         });
     </script>
 
@@ -336,6 +364,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         //  const hoursSelected = document.getElementById('hoursSelected');
         const checkInInput = document.getElementById('checkInDate');
         const checkOutInput = document.getElementById('checkOutDate');
+        // const daysCountInput = document.getElementById('daysCount');
 
         checkInInput.addEventListener('change', () => {
             const selectedValue = '22 hours';
@@ -352,7 +381,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
                 checkOutInput.value = formattedDate;
+                // document.getElementById('checkOutDateHidden').value = formattedDate;
+                // diffTime = Math.abs(checkOutDate - checkInDate);
+                // daysCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
+                // daysCountInput.value = daysCount;
+                // console.log(daysCount);
             }
         });
     </script>
@@ -360,6 +394,15 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <!-- Get the available hotel/room depends on the customer selected date -->
     <script>
+        function formatDate(date) {
+            const y = date.getFullYear().toString();
+            const m = (date.getMonth() + 1).toString().padStart(2, '0');
+            const d = date.getDate().toString().padStart(2, '0');
+            const h = date.getHours().toString().padStart(2, '0');
+            const i = date.getMinutes().toString().padStart(2, '0');
+            return `${y}${m}${d} ${h}${i}`;
+        }
+
         hotelSelectionSession = <?= isset($_SESSION['hotelFormData']) ? json_encode($_SESSION['hotelFormData']['hotelSelections']) : '[]' ?>;
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -385,10 +428,15 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             const checkOutDateValue = checkOutDate.value;
             const hoursSelectedValue = "22 hours";
 
-            if (!checkInDateValue || !hoursSelectedValue) return;
+            const checkInDateObj = new Date(checkInDateValue);
+            const checkOutDateObj = new Date(checkOutDateValue);
 
+            const formattedCheckIn = formatDate(checkInDateObj);
+            const formattedCheckOut = formatDate(checkOutDateObj);
+
+            if (!formattedCheckIn || !hoursSelectedValue) return;
             fetch(
-                    `../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(checkInDateValue)}&hotelCheckOutDate=${encodeURIComponent(checkOutDateValue)}&duration=${encodeURIComponent(hoursSelectedValue)}`
+                    `../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(formattedCheckIn)}&hotelCheckOutDate=${encodeURIComponent(formattedCheckOut)}&duration=${encodeURIComponent(hoursSelectedValue)}`
                 )
                 .then(response => {
                     if (!response.ok) throw new Error('Network Problem');

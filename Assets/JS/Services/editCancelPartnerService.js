@@ -30,6 +30,7 @@ function editServiceInfo(edit) {
     select.addEventListener("change", () => {
       select.style.border = "1px solid rgb(247, 247, 247)";
     });
+    console.log(originalValues);
   } else {
     const serviceData = {
       id: modal.querySelector("#partnershipServiceID").value,
@@ -38,11 +39,9 @@ function editServiceInfo(edit) {
       capacity: modal.querySelector("#serviceCapacity").value,
       duration: modal.querySelector("#serviceDuration").value,
       availability: modal.querySelector("#serviceAvailability").value,
-      descriptions: Array.from(
-        modal.querySelectorAll('input[name="serviceDescription"]')
-      ).map((input) => input.value.trim()),
+      descriptions: modal.querySelector('[name="serviceDescription"]').value,
     };
-
+    console.log(serviceData.descriptions);
     fetch(`../../../Function/Partner/updatePartnerService.php`, {
       method: "POST",
       headers: {

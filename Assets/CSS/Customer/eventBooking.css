@@ -32,11 +32,11 @@
 }
 
 .eventTitle {
-  font-size: clamp(3.5vw, 3.2vw, 3vw);
+  font-size: 35px;
   font-family: "Lora";
   color: #000000;
   font-weight: bold;
-  margin-top: 6vw;
+  margin-top: 2rem;
 }
 
 .backToSelection {
@@ -45,18 +45,26 @@
 }
 
 .container-fluid {
-  display: flex;
-  justify-content: space-around;
+  display: flex !important;
+  justify-content: space-evenly !important;
   align-items: center;
   gap: 1.5rem;
-  width: 100%;
   padding: 2vw;
+  width: 90% !important;
+  /* border: 1px solid red; */
 }
 
 .card {
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   height: 90vh !important;
   padding: 2rem;
+}
+
+#eventContainer {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-rows: repeat(2, 1fr) !important;
+  gap: 8px !important;
 }
 
 #eventBookingCard {
@@ -66,28 +74,44 @@
   gap: 8px;
 }
 
+#eventBookingCard .eventInfo,
+#eventBookingCard .noteContainer {
+  grid-column: span 2;
+}
+
 .eventInfoLabel {
   font-family: "Poppins";
   font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 0.7vw;
+  font-size: 18px;
+  margin-bottom: 0.5vw;
   display: block;
   text-align: center;
+}
+
+.noteContainer {
+  /* border: 1px solid red; */
+  margin: 0.5rem 0 0 0 !important;
+  padding: 0;
+  font-size: 14px;
+}
+
+.noteContainer ul {
+  margin: 0;
+  padding-left: 0.5rem;
+  list-style: none;
+}
+
+.noteContainer li {
+  color: rgb(13, 109, 252, 0.8);
+}
+
+.eventInfo textarea {
+  width: 100%;
 }
 
 .secondColumn {
   display: grid;
   width: 100%;
-}
-
-.noteContainer {
-  margin-top: 4rem !important;
-  width: 98%;
-}
-
-.note {
-  color: #ff0000;
-  text-align: justify;
 }
 
 #foodSelectionCard,
@@ -125,16 +149,16 @@
 }
 
 #calendar {
-  width: 85%;
-  height: 80vh;
+  width: 80%;
+  height: 70vh;
   margin: auto;
-  margin-top: 1vw !important;
+  margin-top: 0.5rem !important;
   background-color: #fffefe;
   border-radius: 2.5rem;
 }
 
 .fc table {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .fc-scrollgrid,
@@ -226,19 +250,40 @@ td {
   background-color: #218838;
 }
 
-#eventContainer {
-  display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  grid-template-rows: repeat(2, 1fr) !important;
-  gap: 8px !important;
-  margin-top: 2vw !important;
+#dishMenuContainer {
+  margin-top: -2rem !important;
 }
 
-.modal-body {
+.kid-category,
+.adult-category,
+.drink-dessert-category {
+  margin: 1rem auto;
+}
+
+.mealLabel {
+  background-color: rgb(190, 184, 184, 0.5);
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 20px;
+}
+
+.foodContainer {
+  /* width: 80%;
+  margin: auto; */
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
-  grid-template-rows: repeat(3, 1fr) !important;
-  gap: 10px;
+  gap: 1rem;
+  justify-content: center !important;
+}
+
+.foodContainer h4 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+input[type="checkbox"],
+.adult-chickenCategory {
+  font-size: 16px;
 }
 
 .eventButton-container {
@@ -263,11 +308,15 @@ td {
 }
 
 .note-container {
-  padding: 0.7rem;
+  padding: 1rem;
+}
+
+.note-container ul {
+  list-style: none;
 }
 
 .note-container li {
-  color: #0d6dfc;
+  color: #3888ff;
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
@@ -282,7 +331,7 @@ td {
   }
 
   .eventTitle {
-    font-size: 36px;
+    font-size: 30px;
     margin-top: 6rem !important;
   }
   #eventContainer {

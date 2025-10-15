@@ -66,11 +66,7 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
             exit();
         }
     } else {
-        echo 'IMAGE ERROR';
-        // $imageError = "An error occured. Please try again.";
-        // $_SESSION['serviceFormData'] = $_POST;
-        header("Location: ../../../Pages/Admin/services.php?action=imageError&step=1");
-        exit();
+        $imageName = 'defaultImage.png';
     }
 
 
@@ -234,8 +230,8 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
         header('Location: ../../../Pages/Admin/services.php?page=catering&result=emptyCateringField');
     }
 
-    $insertFoodItem = $conn->prepare("INSERT INTO `menuitem`(`foodName`, `foodCategory`, `availabilityID`) VALUES (?,?,?,?)");
-    $insertFoodItem->bind_param("sdsi", $foodName, $foodCategory, $foodAvailability);
+    $insertFoodItem = $conn->prepare("INSERT INTO `menuitem`(`foodName`, `foodCategory`, `availabilityID`) VALUES (?,?,?)");
+    $insertFoodItem->bind_param("ssi", $foodName, $foodCategory, $foodAvailability);
     if ($insertFoodItem->execute()) {
         header('Location: ../../../Pages/Admin/services.php?page=catering&result=menuAdded');
     } else {

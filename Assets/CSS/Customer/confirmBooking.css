@@ -125,21 +125,30 @@ li .features {
   border: none !important;
 }
 
-.list-group-item {
+.list-group-item,
+.fee-item {
   display: flex !important;
+  justify-content: space-between;
+}
+
+#additionalFeesDiv {
+  display: flex;
+  flex-direction: column;
 }
 
 .list-group-item h5 {
+  /* border: 1px solid red; */
   font-size: 16px;
   margin: 0 1rem;
-  width: 70%;
+  /* width: 70%; */
   font-weight: bold;
 }
 
-.list-group-item p {
-  width: 30%;
+.list-group-item p,
+.list-group-item span {
+  /* width: 30%; */
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .list-group .list-group-item:last-child,

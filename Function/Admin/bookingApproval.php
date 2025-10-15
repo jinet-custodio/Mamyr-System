@@ -111,23 +111,23 @@ if (isset($_POST['approveBtn'])) {
     // $applyAdditionalCharge = mysqli_real_escape_string($conn, $_POST['applyAdditionalCharge']) ?? '';
     // $additionalCharge = !empty($applyAdditionalCharge) ? floatval($_POST['additionalCharge']) : 0.00;
 
-    switch (strtolower($bookingType)) {
-        case 'resort':
-            $type = 'TOUR';
-            break;
-        case 'hotel':
-            $type = 'HTL';
-            break;
-        case 'event':
-            $type = 'EVT';
-            break;
-        default:
-            $type = 'MAMYR';
-            break;
-    }
+    // switch (strtolower($bookingType)) {
+    //     case 'resort':
+    //         $type = 'TOUR';
+    //         break;
+    //     case 'hotel':
+    //         $type = 'HTL';
+    //         break;
+    //     case 'event':
+    //         $type = 'EVT';
+    //         break;
+    //     default:
+    //         $type = 'MAMYR';
+    //         break;
+    // }
 
-    $bookingCode = strtoupper($type) . date('ymd') . generateCode(5);
-
+    $bookingCode = mysqli_real_escape_string($conn, $_POST['bookingCode']);
+    // strtoupper($type) . date('ymd') . generateCode(5)
     if ($bookingType === 'Event') {
         $rawVenuePrice = mysqli_real_escape_string($conn, $_POST['venuePrice']);
         $rawTotalFoodPrice = mysqli_real_escape_string($conn, $_POST['foodPriceTotal']);
@@ -158,54 +158,54 @@ if (isset($_POST['approveBtn'])) {
     $availabilityID = 2;
     $conn->begin_transaction();
     try {
-        $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
+        // $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
 
 
         //* Insert this to unavailable dates
-        foreach ($serviceIDs as $serviceID) {
-            $getServicesQuery->bind_param("i", $serviceID);
-            if (!$getServicesQuery->execute()) {
-                $conn->rollback();
-                throw new Exception("Failed to fetch service for ID: $serviceID");
-            }
+        // foreach ($serviceIDs as $serviceID) {
+        //     $getServicesQuery->bind_param("i", $serviceID);
+        //     if (!$getServicesQuery->execute()) {
+        //         $conn->rollback();
+        //         throw new Exception("Failed to fetch service for ID: $serviceID");
+        //     }
 
-            $getServicesQueryResult = $getServicesQuery->get_result();
-            if ($getServicesQueryResult->num_rows === 0) {
-                $conn->rollback();
-                throw new Exception("No service found for ID: $serviceID");
-            }
+        //     $getServicesQueryResult = $getServicesQuery->get_result();
+        //     if ($getServicesQueryResult->num_rows === 0) {
+        //         $conn->rollback();
+        //         throw new Exception("No service found for ID: $serviceID");
+        //     }
 
-            $row = $getServicesQueryResult->fetch_assoc();
-            $serviceType = $row['serviceType'];
+        //     $row = $getServicesQueryResult->fetch_assoc();
+        //     $serviceType = $row['serviceType'];
 
-            switch ($serviceType) {
-                case 'Resort':
-                    $resortServiceID = $row['resortServiceID'];
-                    $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?, ?, ?)");
-                    $insertToUnavailableDates->bind_param('iss', $resortServiceID, $startDate, $endDate);
-                    if (!$insertToUnavailableDates->execute()) {
-                        $conn->rollback();
-                        throw new Exception("Failed to insert unavailable date for resort service ID: $resortServiceID");
-                    }
-                    $insertToUnavailableDates->close();
-                    break;
+        //     switch ($serviceType) {
+        //         case 'Resort':
+        //             $resortServiceID = $row['resortServiceID'];
+        //             $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?, ?, ?)");
+        //             $insertToUnavailableDates->bind_param('iss', $resortServiceID, $startDate, $endDate);
+        //             if (!$insertToUnavailableDates->execute()) {
+        //                 $conn->rollback();
+        //                 throw new Exception("Failed to insert unavailable date for resort service ID: $resortServiceID");
+        //             }
+        //             $insertToUnavailableDates->close();
+        //             break;
 
-                case 'Partner':
-                    $partnershipServiceID = $row['partnershipServiceID'];
-                    $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(partnershipServiceID, unavailableStartDate, unavailableEndDate) VALUES (?, ?, ?)");
-                    $insertToUnavailableDates->bind_param('iss', $partnershipServiceID, $startDate, $endDate);
-                    if (!$insertToUnavailableDates->execute()) {
-                        $conn->rollback();
-                        throw new Exception("Failed to insert unavailable date for partner service ID: $partnershipServiceID");
-                    }
-                    $insertToUnavailableDates->close();
-                    break;
+        //         case 'Partner':
+        //             $partnershipServiceID = $row['partnershipServiceID'];
+        //             $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(partnershipServiceID, unavailableStartDate, unavailableEndDate) VALUES (?, ?, ?)");
+        //             $insertToUnavailableDates->bind_param('iss', $partnershipServiceID, $startDate, $endDate);
+        //             if (!$insertToUnavailableDates->execute()) {
+        //                 $conn->rollback();
+        //                 throw new Exception("Failed to insert unavailable date for partner service ID: $partnershipServiceID");
+        //             }
+        //             $insertToUnavailableDates->close();
+        //             break;
 
-                default:
-                    $conn->rollback();
-                    throw new Exception("Unknown service type: $serviceType for service ID: $serviceID");
-            }
-        }
+        //         default:
+        //             $conn->rollback();
+        //             throw new Exception("Unknown service type: $serviceType for service ID: $serviceID");
+        //     }
+        // }
 
         //Update Booking Table Status
         $approvedStatus = 2;

@@ -10,7 +10,7 @@ if (isset($_POST['addService'])) {
     $partnershipID = intval($_POST['partnershipID']);
 
     $serviceName = mysqli_real_escape_string($conn, $_POST['serviceName']);
-    $availabilityID = intval($_POST['availability']) ?? 1;
+    $availabilityID = intval($_POST['serviceAvailabilityName']) ?? 1;
     $servicePrice = floatval($_POST['price']);
     $serviceCapacity = intval($_POST['capacity']);
     $serviceDuration = mysqli_real_escape_string($conn, $_POST['duration']);
@@ -38,10 +38,11 @@ if (isset($_POST['addService'])) {
             $conn->rollback();
             throw new Exception("Failed excuting the insertion of service: " . $partnershipServiceID);
         }
-
+        unset($_SESSION['addServiceForm']);
         $conn->commit();
         header("Location: ../../Pages/Account/bpServices.php?action=success");
     } catch (Exception $e) {
+        $_SESSION['addServiceForm'] = $_POST;
         $conn->rollback();
         error_log("Error: " . $e->getMessage());
         header("Location: ../../Pages/Account/bpServices.php?action=error");

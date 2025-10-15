@@ -106,6 +106,7 @@ INSERT INTO resortservicescategory (categoryName) VALUES
 ('Cottage'), 
 ('Entertainment'),
 ('Event Hall');
+INSERT INTO `resortservicescategory` (`categoryID`, `categoryName`) VALUES (NULL, 'Catering');
 
 CREATE TABLE entrancetimerange(
     timeRangeID INT PRIMARY KEY AUTO_INCREMENT,

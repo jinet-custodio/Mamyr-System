@@ -59,57 +59,59 @@ window.addEventListener("DOMContentLoaded", () => {
     updateBookNowButton();
   }
 
-  function countSelected(categoryName) {
-    const selected = document.querySelectorAll(
-      `input[name="${categoryName}Selections[]"]:checked`
-    );
-    return selected.length;
-  }
-
-  foodButton.addEventListener("click", function () {
-    const mainDish = ["chicken", "pork", "pasta", "beef", "vegie", "seafood"];
-    const drinkCount = countSelected("drink");
-    const dessertCount = countSelected("dessert");
-    let mainDishCount = 1;
-
-    mainDish.forEach((category) => {
-      mainDishCount += countSelected(category);
-    });
-
-    let isValid = true;
-
-    if (mainDishCount > 5) {
-      Swal.fire({
-        title: "Sorry",
-        text: `You can select a maximum of 4 dishes.`,
-        icon: "info",
-      });
-      isValid = false;
-    }
-
-    if (drinkCount > 2) {
-      Swal.fire({
-        title: "Sorry",
-        text: `You may only select 1 drink.`,
-        icon: "info",
-      });
-      isValid = false;
-    }
-
-    if (dessertCount > 3) {
-      Swal.fire({
-        title: "Sorry",
-        text: `You can select up to 2 kinds of dessert.`,
-        icon: "info",
-      });
-      isValid = false;
-    }
-
-    isFoodSelectionValid = isValid;
-    updateBookNowButton();
-  });
-
   function updateBookNowButton() {
-    bookNowBtn.disabled = !(isGuestCountValid && isFoodSelectionValid);
+    bookNowBtn.disabled = !isGuestCountValid;
   }
 });
+
+//   function countSelected(categoryName) {
+//     const selected = document.querySelectorAll(
+//       `input[name="${categoryName}Selections[]"]:checked`
+//     );
+//     return selected.length;
+//   }
+
+//   foodButton.addEventListener("click", function () {
+//     const mainDish = ["chicken", "pork", "pasta", "beef", "vegie", "seafood"];
+//     const drinkCount = countSelected("drink");
+//     const dessertCount = countSelected("dessert");
+//     let mainDishCount = 1;
+
+//     mainDish.forEach((category) => {
+//       mainDishCount += countSelected(category);
+//     });
+
+//     let isValid = true;
+
+//     if (mainDishCount > 5) {
+//       Swal.fire({
+//         title: "Sorry",
+//         text: `You can select a maximum of 4 dishes.`,
+//         icon: "info",
+//       });
+//       isValid = false;
+//     }
+
+//     if (drinkCount > 2) {
+//       Swal.fire({
+//         title: "Sorry",
+//         text: `You may only select 1 drink.`,
+//         icon: "info",
+//       });
+//       isValid = false;
+//     }
+
+//     if (dessertCount > 3) {
+//       Swal.fire({
+//         title: "Sorry",
+//         text: `You can select up to 2 kinds of dessert.`,
+//         icon: "info",
+//       });
+//       isValid = false;
+//     }
+
+//     isFoodSelectionValid = isValid;
+//     updateBookNowButton();
+//   });
+
+//

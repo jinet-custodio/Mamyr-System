@@ -11,7 +11,7 @@
 }
 
 .main-content {
-  margin: 5rem 0 0 22vw;
+  margin: 2.5rem 0 0 19vw;
   padding: 1rem;
   overflow-y: auto;
   width: 75%;
@@ -99,7 +99,8 @@
 }
 
 .customer-details,
-.partner-info {
+.partner-details-container,
+.partner-type {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
@@ -118,12 +119,55 @@
   font-weight: bold;
 }
 
+.partner-details-label {
+  font-weight: bold;
+}
+
 .info label,
 .partner-info-label {
   font-size: 16px;
 }
 
-.info input {
+.partner-type-container {
+  padding-top: 1rem;
+}
+
+/* #validIDInfo {
+  position: relative;
+  max-width: 350px;
+} */
+
+#validIDInfo .form-floating {
+  position: relative;
+}
+
+#validIDInfo button {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: #007eec;
+  cursor: pointer;
+  padding: 4px;
+}
+
+#validIDInfo i {
+  font-size: 1.5rem;
+}
+
+#validIDInfo button:hover {
+  color: #000;
+}
+
+#validIDImage {
+  width: 300px;
+  height: 300px;
+}
+
+.info input,
+.partner-details-label {
   font-size: 18px;
 }
 

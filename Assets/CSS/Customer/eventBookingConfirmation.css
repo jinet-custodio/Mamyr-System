@@ -59,11 +59,13 @@ body {
 }
 
 /* Event Details */
-h4 {
+section h4 {
   text-align: center;
   font-family: "Poppins";
   font-weight: bold !important;
-  font-size: 26px;
+  font-size: 20px;
+  background-color: oklch(0.64 0.65 220 / 0.2);
+  padding: 0.5rem;
 }
 
 .event-details {
@@ -129,7 +131,7 @@ h4 {
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 
 textarea {
@@ -138,18 +140,23 @@ textarea {
 /* Date details */
 
 /* Food details */
-.food-container {
+
+.food-main-container {
   margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+}
+.food-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  /* border: 1px solid red; */
+  padding: 1rem;
 }
 
 .food-info {
+  /* border: 1px solid red; */
   display: flex;
-  justify-content: space-between;
-  width: 45%;
+  flex-direction: column;
+  align-items: center;
   margin-top: 0.5rem;
 }
 
@@ -157,16 +164,19 @@ textarea {
   font-size: 18px;
   font-weight: bold;
   font-family: "Poppins";
+  text-align: center;
 }
 
-.foodName {
+/* .foodName {
   display: block;
   text-align: right;
-}
+} */
 
 .text-center {
   color: red;
   margin-top: 1rem;
+  text-align: center;
+  grid-column: span 4;
 }
 /* Food details */
 

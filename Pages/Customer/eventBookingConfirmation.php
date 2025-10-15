@@ -48,12 +48,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Customer/eventBookingConfirmation.css">
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-
-    <!-- Bootstrap CSS Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
@@ -74,8 +69,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $lastName = trim(ucfirst($data['lastName']));
         $middleInitial = trim(ucfirst($data['middleInitial'] ?? ''));
 
-        $name = ucfirst($firstName) . " " .
-            ucfirst($middleInitial) . " " .
+        $customerName = ucfirst($firstName) . " " .
+            ucfirst($middleInitial) . ". " .
             ucfirst($lastName);
     }
     ?>
@@ -141,29 +136,27 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $formattedEventTime = $startDateObj->format('g:i A') . " to " . $endDateObj->format('g:i A');
 
         //Food 
-        $chickenSelected = !empty($_POST['chickenSelections']) ? array_map('trim',  $_POST['chickenSelections']) : [];
-        $porkSelected = !empty($_POST['porkSelections']) ? array_map('trim',  $_POST['porkSelections']) : [];
-        $pastaSelected = !empty($_POST['pastaSelections']) ? array_map('trim',  $_POST['pastaSelections']) : [];
-        $beefSelected = !empty($_POST['beefSelections']) ? array_map('trim',  $_POST['beefSelections']) : [];
-        $vegieSelected = !empty($_POST['vegieSelections']) ? array_map('trim',  $_POST['vegieSelections']) : [];
-        $seafoodSelected = !empty($_POST['seafoodSelections']) ? array_map('trim',  $_POST['seafoodSelections']) : [];
-        $drinkSelected = !empty($_POST['drinkSelections']) ? array_map('trim',  $_POST['drinkSelections']) : [];
-        $dessertSelected = !empty($_POST['dessertSelections']) ? array_map('trim',  $_POST['dessertSelections']) : [];
+        $foodSelections = !empty($_POST['foodSelections']) ? ($_POST['foodSelections']) : [];
 
-        $getMenuItemQuery = $conn->prepare("SELECT * FROM `menuitem` WHERE foodName = ?");
-        $allMenus = [];
-        $allMenus['chicken'] = $chickenItems = getMenuItem($chickenSelected, $getMenuItemQuery);
-        $allMenus['pork'] =  $porkItems = getMenuItem($porkSelected, $getMenuItemQuery);
-        $allMenus['pasta'] =  $pastaItems = getMenuItem($pastaSelected, $getMenuItemQuery);
-        $allMenus['beef'] =  $beefItems = getMenuItem($beefSelected, $getMenuItemQuery);
-        $allMenus['vegie'] =  $vegieItems = getMenuItem($vegieSelected, $getMenuItemQuery);
-        $allMenus['seafood'] =  $seafoodItems = getMenuItem($seafoodSelected, $getMenuItemQuery);
-        $allMenus['drink'] =  $drinkItems = getMenuItem($drinkSelected, $getMenuItemQuery);
-        $allMenus['dessert'] =  $dessertItems = getMenuItem($dessertSelected, $getMenuItemQuery);
+
+        if (count($foodSelections) <= 2) {
+            foreach ($foodSelections as $foodID => $items) {
+                foreach ($items as $category => $name) {
+                    $name = strtolower(trim($name));
+
+                    if (strpos($name, 'lemonade') !== false || strpos($name, 'buko salad') !== false) {
+                        $foodSelections = [];
+                    }
+                }
+            }
+        }
+
+        // echo '<pre>';
+        // print_r($foodSelections);
+        // echo '</pre>';
 
         //Venue
         $eventVenue = mysqli_real_escape_string($conn, $_POST['eventVenue']);
-
         $getVenuePrice = $conn->prepare('SELECT * FROM `resortamenity` WHERE RServiceName = ?');
         $getVenuePrice->bind_param('s', $eventVenue);
         if ($getVenuePrice->execute()) {
@@ -173,7 +166,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $venueID = $data['resortServiceID'];
                 $venuePrice = $data['RSprice'];
                 $venueCapacity = $data['RScapacity'];
-                $venueDescription = $data['RSdescription'];
+                $venueDescription = !empty($data['RSdescription']) ? explode('. ', $data['RSdescription']) : [];
             }
         }
 
@@ -193,13 +186,35 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 }
             }
         }
+
+        if (!empty($additionalServiceSelected)) {
+            $customerChoice = mysqli_real_escape_string($conn, $_POST['customer-choice']);
+
+            if (empty($customerChoice)) {
+                header('Location: ../../../Pages/Customer/eventBooking.php?action=NoSelectedChoice');
+            }
+
+            if ($customerChoice === 'proceed') {
+                $customerChoiceMessage = 'You decided to proceed with the event booking regardless of the chosen service provider\'s decision.';
+            } elseif ($customerChoice === 'cancel') {
+                $customerChoiceMessage = 'You decided to cancel the event booking if the partner service you availed declines.';
+            }
+        }
+
         $_SESSION['eventFormData'] = $_POST;
+
+        // $getFreeServiceQuery = $conn->prepare("SELECT RServiceName, resortServiceID FROM resortamenity WHERE RSavailabilityID = 4");
+        // $getFreeServiceQuery->execute();
+        // $result = $getFreeServiceQuery->get_result();
+        // $row = $result->fetch_assoc();
+
+        // $freeRoom = $row['RServiceName'];
 
         // var_dump($additionalServiceSelected);
     }
 
     // echo '<pre>';
-    // print_r($allMenus);
+    // print_r($_posiadditionalServiceSelected);
     // echo '</pre>';
     ?>
 
@@ -220,7 +235,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <div class="input-container">
                         <label for="customerName">Customer Name: </label>
                         <input type="text" class="form-control" name="customerName"
-                            value="<?= htmlspecialchars($name) ?>" readonly>
+                            value="<?= htmlspecialchars($customerName) ?>" readonly>
                     </div>
                     <div class="input-container">
                         <label for="eventType">Type of Event</label>
@@ -245,11 +260,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         value="<?= htmlspecialchars($eventVenue) ?>">
                 </div>
 
+
                 <div class="textareaContainer">
                     <div class="input-container">
                         <p>Venue Description</p>
                         <textarea rows="5" class="form-control" name="venueDescription" id="venueDescription"
-                            readonly><?= !empty($venueDescription) ? htmlspecialchars(ucfirst($venueDescription)) : 'N/A' ?></textarea>
+                            readonly><?= !empty($venueDescription) ? htmlspecialchars(ucwords(implode("\n", $venueDescription))) : 'N/A' ?></textarea>
                     </div>
 
                     <div class="input-container additionalRequestPart">
@@ -260,62 +276,60 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </section>
 
-
-
             <section class="date-container">
                 <h4> Date & Time</h4>
                 <div class="date-details">
                     <div class="input-container">
-                        <label for="formattedEventDate">Event Date: </label>
+                        <label for="formattedEventDate">Event Date </label>
                         <input type="text" class="form-control" name="formattedEventDate"
                             value="<?= htmlspecialchars($formattedEventDate) ?>">
                     </div>
                     <div class="input-container">
-                        <label for="eventTime">Event Time: </label>
+                        <label for="eventTime">Event Time </label>
                         <input type="text" class="form-control" name="eventTime"
                             value="<?= htmlspecialchars($formattedEventTime) ?>">
                     </div>
                 </div>
             </section>
 
-            <?php if (!empty($allMenus)) { ?>
-                <section class="food-container">
-                    <h4>Food, Drinks & Dessert</h4>
 
+            <section class="food-main-container">
+                <h4>Food, Drinks & Dessert</h4>
+                <div class="food-container">
                     <?php
                     $selectedFoodCount = 0;
-                    $hasMenuItems = false;
-                    foreach ($allMenus as $items) {
-                        if (!empty($items)) {
-                            $hasMenuItems = true;
-                            break;
+
+                    if (!empty($foodSelections)) {
+                        $groupedFoods = [];
+
+                        foreach ($foodSelections as $id => $items) {
+                            foreach ($items as $category => $name) {
+                                $groupedFoods[$category][] = [
+                                    'id' => $id,
+                                    'name' => $name
+                                ];
+                            }
                         }
-                    }
-                    ?>
 
-                    <?php if ($hasMenuItems) { ?>
-                        <?php foreach ($allMenus as $category => $items) { ?>
-                            <?php if (!empty($items)) {
-                                $selectedFoodCount++ ?>
-
-                                <div class="food-info">
-                                    <h5 class="foodCategory"><?= htmlspecialchars(ucfirst($category)) ?></h5>
+                        foreach ($groupedFoods as $category => $foods) { ?>
+                            <div class="food-info">
+                                <h5 class="foodCategory"><?= htmlspecialchars(ucfirst($category)) ?></h5>
+                                <?php foreach ($foods as $food) {
+                                    $selectedFoodCount++; ?>
                                     <div class="food-name">
-                                        <?php foreach ($items as $item) {
-                                        ?>
-                                            <label class="foodName"><?= $item['foodName'] ?></label>
-                                            <input type="hidden" name="foodIDs[]" value="<?= $item['foodItemID'] ?>">
-                                        <?php } ?>
+                                        <label class="foodName"><?= htmlspecialchars($food['name']) ?></label>
+                                        <input type="hidden" name="foodSelections[]" value="<?= htmlspecialchars($food['id']) ?>">
                                     </div>
-                                </div>
-                            <?php } ?>
+                                <?php } ?>
+                            </div>
                         <?php } ?>
 
                     <?php } else { ?>
                         <p class="text-center">No menu selected.</p>
                     <?php } ?>
-                </section>
-            <?php } ?>
+                </div>
+            </section>
+
 
             <section class="additional-container">
                 <h4>Additional Services</h4>
@@ -331,6 +345,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 ₱<?= number_format($service['PBPrice'], 2) ?></label>
                             <input type="hidden" name="additionalServiceSelected[]" value="<?= htmlspecialchars($serviceID) ?>"
                                 class="form-control">
+                        </div>
+                        <div class="customer-chocie-container">
+                            <p style="color: rgba(2, 10, 20, 0.6);"><?= $customerChoiceMessage ?> </p>
+                            <input type="hidden" name="customer-choice" value="<?= $customerChoice ?>">
                         </div>
                     <?php } ?>
             </section>
@@ -364,9 +382,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         ?>
 
 
-        <section class="additionalServices">
+        <!-- <section class="additionalServices">
 
-        </section>
+        </section> -->
 
         <section class="payment-container">
             <h4>Payment Details</h4>
@@ -408,8 +426,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         <section class="notes-container">
 
-            <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>The price shown is for the
-                event venue only.</p>
+
             <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>The admin will verify the
                 number of guests and the selected menu to calculate the total cost.</p>
             <p><i class="fa-solid fa-circle-info fa-flip" style="color: #74C0FC;"></i>There will be a changes in
@@ -439,22 +456,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-
-
-
-
-
-
-
 
 </body>
 
