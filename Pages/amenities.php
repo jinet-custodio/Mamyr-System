@@ -136,7 +136,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <?= htmlspecialchars($contentMap['Amenity1Desc'] ?? 'No description found') ?></p>
                 <?php endif; ?>
             </div>
-            <!-- //! check $wcImageID and other variables if they work -->
+
             <div class="swiper mySwiper swiper-amenity1">
                 <div class="swiper-wrapper">
                     <?php if (isset($imageMap['Amenity1'])): ?>
@@ -471,6 +471,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         include 'loader.php';
     } else {
         include 'editImageModal.php';
+        include 'loader.php';
     }
     ?>
 
@@ -489,6 +490,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
+        <script>
+            const editableImgs = document.querySelectorAll('.editable-img')
+            document.addEventListener("DOMContentLoaded", function() {
+                editableImgs.forEach(editable => {
+                    editable.style.border = '2px solid red';
+                })
+            });
+        </script>
         <script type="module">
             import {
                 initWebsiteEditor
