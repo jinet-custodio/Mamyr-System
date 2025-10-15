@@ -48,7 +48,7 @@ body {
 
 .title {
   margin-top: 1vw;
-  font-size: 2.8vw;
+  font-size: 2.5vw;
   font-family: "Lora";
   color: #ffffff;
 }
@@ -84,7 +84,7 @@ body {
 .eventsTitle,
 .venueTitle {
   font-family: "Poppins";
-  font-size: 2.4vw;
+  font-size: 2vw;
   text-align: center;
   font-weight: bold;
 }
@@ -93,7 +93,7 @@ body {
 .venueDescription {
   font-family: "Poppins";
   text-align: center;
-  font-size: 1.4vw;
+  font-size: 1.3vw;
 }
 
 .carousel {
@@ -109,7 +109,8 @@ body {
 .cardFlex {
   /* border: 1px solid red; */
   display: flex;
-  width: 70%;
+  width: 75%;
+  gap: 3rem;
   margin: auto;
 }
 .card {
@@ -141,7 +142,7 @@ body {
 
 .card-title {
   font-family: "Alkatra";
-  font-size: 1.67vw;
+  font-size: 1.5vw;
 }
 
 .eventDesc {
@@ -161,7 +162,7 @@ body {
 }
 
 .miniHall {
-  margin-top: 1vw;
+  margin-top: 1.3rem !important;
   width: 98%;
   border-radius: 20px;
   background-color: #f7d5b0;
@@ -189,7 +190,7 @@ body {
 .mainHallDescTitle {
   color: #fff;
   font-family: "Poppins";
-  font-size: 2.4vw;
+  font-size: 2vw;
   font-style: normal;
   text-align: center;
   margin-top: 2vw;
@@ -198,24 +199,24 @@ body {
 .miniHallDescTitle {
   color: #000000;
   font-family: "Poppins";
-  font-size: 2.4vw;
+  font-size: 2.2vw;
   font-style: normal;
   text-align: center;
   margin-top: 4vw;
 }
 
 .mainHallDescription {
-  margin-top: 2.5vw;
+  margin-top: 2vw;
   font-family: "Poppins";
-  font-size: 18px;
+  font-size: 1.3vw;
   font-style: normal;
   color: #fff;
 }
 
 .miniHallDescription {
-  margin-top: 2.5vw;
+  margin-top: 2vw;
   font-family: "Poppins";
-  font-size: 18px;
+  font-size: 1.3vw;
   font-style: normal;
   color: #000000;
 }
@@ -324,8 +325,9 @@ body {
   }
 
   .cardFlex {
-    width: 105%;
+    width: 100%;
     justify-content: space-around;
+    gap: unset;
   }
 
   #eventsInner {
