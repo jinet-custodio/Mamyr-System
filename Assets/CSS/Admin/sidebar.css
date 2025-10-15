@@ -145,7 +145,16 @@
   width: 250px;
   background-color: #f5f5f5;
   padding-top: 20px;
-  max-height: auto;
+}
+
+.sidebar-custom {
+  transition: all 0.5s ease !important;
+  width: 0 !important;
+  overflow: hidden !important;
+}
+
+.sidebar-custom.show {
+  width: 250px !important;
 }
 
 #sidebar::-webkit-scrollbar {
@@ -180,13 +189,26 @@
   display: flex;
   align-items: center;
   padding: var(--padding-xs);
-  padding-left: var(--padding-md);
 }
 
-.nav-item i,
-.bi-list {
+.nav-item i {
   font-size: 25px;
   color: #0d6dfc;
+}
+
+.bi-layout-sidebar {
+  font-size: 2vw;
+  color: #0d6dfc;
+}
+
+.sbToggle-container {
+  margin-top: 1rem;
+  margin-right: 0.85rem;
+}
+
+.toggler {
+  margin-top: -1rem;
+  padding-left: var(--padding-sm);
 }
 
 .toggle-button {
@@ -194,11 +216,16 @@
   margin-left: auto !important;
   margin-right: 0.5rem !important;
   padding: 0.5rem !important;
+  border: none !important;
+  background-color: unset;
 }
 
 #sidebar .nav-link {
   color: black;
   font-size: var(--font-size-base);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 #sidebar .nav-item:hover,
@@ -208,14 +235,14 @@
   background-color: oklch(0.64 0.65 220 / 0.2);
 }
 
+.nav-item.active {
+  padding: var(--padding-xs) !important;
+}
+
 .content {
   margin-left: 250px;
   padding: 20px;
   flex-grow: 1;
-}
-
-.toggler {
-  margin-top: -1rem;
 }
 
 .logo {
@@ -267,4 +294,19 @@
 
 .btn-outline-danger i {
   font-size: 25px;
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+}
+
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+}
+
+/* Phone size */
+@media screen and (max-width: 599px) {
 }

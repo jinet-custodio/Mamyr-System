@@ -80,51 +80,64 @@ if (isset($_SESSION['error'])) {
 
 <body>
     <main>
-        <div id="sidebar">
-            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo">
+        <div id="sidebar" class="collapse show sidebar-custom">
+            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo"
+                id="sbLogo">
             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <i class="bi bi-speedometer2"></i>
-                    <a class="nav-link" href="adminDashboard.php">Dashboard</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="adminDashboard.php">
+                        <i class="bi bi-speedometer2"></i> <span id="linkText">Dashboard</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-calendar-week"></i>
-                    <a class="nav-link" href="booking.php">Bookings</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="booking.php">
+                        <i class="bi bi-calendar-week"></i><span id="linkText"> Bookings</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-list-stars"></i>
-                    <a class="nav-link" href="reviews.php">Reviews</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="reviews.php">
+                        <i class="bi bi-list-stars"></i> <span id="linkText">Reviews</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-door-open"></i>
-                    <a class="nav-link" href="roomList.php">Rooms</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="roomList.php">
+                        <i class="bi bi-door-open"></i> <span id="linkText">Rooms</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-bell"></i>
-                    <a class="nav-link" href="services.php">Services</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="services.php">
+                        <i class="bi bi-bell"></i> <span id="linkText">Services</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-credit-card-2-front"></i>
-                    <a class="nav-link" href="transaction.php">Payments</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="transaction.php">
+                        <i class="bi bi-credit-card-2-front"></i> <span id="linkText">Payments</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-people"></i>
-                    <a class="nav-link" href="displayPartnership.php">Partnerships</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="displayPartnership.php">
+                        <i class="bi bi-people"></i> <span id="linkText">Partnerships</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-pencil-square"></i>
-                    <a class="nav-link" href="editWebsite/editWebsite.php">Edit Website</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="editWebsite/editWebsite.php">
+                        <i class="bi bi-pencil-square"></i> <span id="linkText">Edit Website</span>
+                    </a>
                 </li>
-                <li class="nav-item active">
-                    <i class="bi bi-clock-history"></i>
-                    <a class="nav-link" href="auditLogs.php">Audit Logs</a>
+                <li class="nav-item active" id="navLI">
+                    <a class="nav-link" href="auditLogs.php">
+                        <i class="bi bi-clock-history"></i> <span id="linkText">Audit Logs</span>
+                    </a>
                 </li>
             </ul>
 
-            <section class="profileContainer">
-                <img src="../../Assets/Images/defaultProfile.png" alt="Admin Profile" class="rounded-circle profilePic">
-                <h5 class="admin-name">Diane Dela Cruz</h5>
 
+            <section>
+                <a href="../Account/account.php" class="profileContainer" id="pfpContainer">
+                    <img src=" ../../Assets/Images/defaultProfile.png" alt="Admin Profile"
+                        class="rounded-circle profilePic">
+                    <h5 class="admin-name" id="adminName">Diane Dela Cruz</h5>
+                </a>
             </section>
 
             <section class="btn btn-outline-danger logOutContainer">
@@ -135,10 +148,24 @@ if (isset($_SESSION['error'])) {
             </section>
         </div>
 
-
         <section class="auditLog-container">
-            <section class="notification-container">
-                <i class="bi bi-bell" id="notification-icon"></i>
+            <section class="notification-toggler-container">
+                <div class="sbToggle-container">
+                    <button class="toggle-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar"
+                        aria-controls="sidebar">
+                        <i class="bi bi-layout-sidebar"></i>
+                    </button>
+                </div>
+                <div class="notification-container position-relative">
+                    <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                        data-bs-target="#notificationModal">
+                        <i class="bi bi-bell" id="notification-icon"></i>
+                        <?php if (!empty($counter)): ?>
+                        <?= htmlspecialchars($counter) ?>
+                        </span>
+                        <?php endif; ?>
+                    </button>
+                </div>
             </section>
 
             <section class="page-title-container">

@@ -153,51 +153,64 @@ if (isset($_SESSION['error'])) {
     <?php include '../notificationModal.php' ?>
 
     <main>
-        <div id="sidebar">
-            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo">
+        <div id="sidebar" class="collapse show sidebar-custom">
+            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo"
+                id="sbLogo">
             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <i class="bi bi-speedometer2"></i>
-                    <a class="nav-link" href="adminDashboard.php">Dashboard</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="adminDashboard.php">
+                        <i class="bi bi-speedometer2"></i> <span id="linkText">Dashboard</span>
+                    </a>
                 </li>
-                <li class="nav-item active">
-                    <i class="bi bi-calendar-week"></i>
-                    <a class="nav-link" href="booking.php">Bookings</a>
+                <li class="nav-item active" id="navLI">
+                    <a class="nav-link" href="booking.php">
+                        <i class="bi bi-calendar-week"></i><span id="linkText"> Bookings</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-list-stars"></i>
-                    <a class="nav-link" href="reviews.php">Reviews</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="reviews.php">
+                        <i class="bi bi-list-stars"></i> <span id="linkText">Reviews</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-door-open"></i>
-                    <a class="nav-link" href="roomList.php">Rooms</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="roomList.php">
+                        <i class="bi bi-door-open"></i> <span id="linkText">Rooms</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-bell"></i>
-                    <a class="nav-link" href="services.php">Services</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="services.php">
+                        <i class="bi bi-bell"></i> <span id="linkText">Services</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-credit-card-2-front"></i>
-                    <a class="nav-link" href="transaction.php">Payments</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="transaction.php">
+                        <i class="bi bi-credit-card-2-front"></i> <span id="linkText">Payments</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-people"></i>
-                    <a class="nav-link" href="displayPartnership.php">Partnerships</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="displayPartnership.php">
+                        <i class="bi bi-people"></i> <span id="linkText">Partnerships</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-pencil-square"></i>
-                    <a class="nav-link" href="editWebsite/editWebsite.php">Edit Website</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="editWebsite/editWebsite.php">
+                        <i class="bi bi-pencil-square"></i> <span id="linkText">Edit Website</span>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <i class="bi bi-clock-history"></i>
-                    <a class="nav-link" href="auditLogs.php">Audit Logs</a>
+                <li class="nav-item" id="navLI">
+                    <a class="nav-link" href="auditLogs.php">
+                        <i class="bi bi-clock-history"></i> <span id="linkText">Audit Logs</span>
+                    </a>
                 </li>
             </ul>
 
-            <section class="profileContainer">
-                <img src="../../Assets/Images/defaultProfile.png" alt="Admin Profile" class="rounded-circle profilePic">
-                <h5 class="admin-name">Diane Dela Cruz</h5>
 
+            <section>
+                <a href="../Account/account.php" class="profileContainer" id="pfpContainer">
+                    <img src=" ../../Assets/Images/defaultProfile.png" alt="Admin Profile"
+                        class="rounded-circle profilePic">
+                    <h5 class="admin-name" id="adminName">Diane Dela Cruz</h5>
+                </a>
             </section>
 
             <section class="btn btn-outline-danger logOutContainer">
@@ -210,19 +223,23 @@ if (isset($_SESSION['error'])) {
 
         <!-- Booking-container -->
         <section class="booking-container">
-            <section class="notification-container">
-                <section class="notification-container">
-                    <div class="notification-container position-relative">
-                        <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                            data-bs-target="#notificationModal">
-                            <i class="bi bi-bell" id="notification-icon"></i>
-                            <?php if (!empty($counter)): ?>
-                                <?= htmlspecialchars($counter) ?>
-                                </span>
-                            <?php endif; ?>
-                        </button>
-                    </div>
-                </section>
+            <section class="notification-toggler-container">
+                <div class="sbToggle-container">
+                    <button class="toggle-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar"
+                        aria-controls="sidebar">
+                        <i class="bi bi-layout-sidebar"></i>
+                    </button>
+                </div>
+                <div class="notification-container position-relative">
+                    <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                        data-bs-target="#notificationModal">
+                        <i class="bi bi-bell" id="notification-icon"></i>
+                        <?php if (!empty($counter)): ?>
+                        <?= htmlspecialchars($counter) ?>
+                        </span>
+                        <?php endif; ?>
+                    </button>
+                </div>
             </section>
 
             <section class="page-title-container">
@@ -266,137 +283,137 @@ if (isset($_SESSION['error'])) {
 
     <!-- Table JS -->
     <script>
-        $('#bookingTable').DataTable({
-            responsive: false,
-            scrollX: true,
-            columnDefs: [{
-                    width: '10%',
-                    targets: 0
-                },
-                {
-                    width: '15%',
-                    targets: 1
-                },
-                {
-                    width: '15%',
-                    targets: 2
-                },
-                {
-                    width: '15%',
-                    targets: 3
-                },
-                {
-                    width: '15%',
-                    targets: 4
-                },
-                {
-                    width: '10%',
-                    targets: 5
-                },
-                {
-                    width: '10%',
-                    targets: 6
-                },
-            ],
-        });
+    $('#bookingTable').DataTable({
+        responsive: false,
+        scrollX: true,
+        columnDefs: [{
+                width: '10%',
+                targets: 0
+            },
+            {
+                width: '15%',
+                targets: 1
+            },
+            {
+                width: '15%',
+                targets: 2
+            },
+            {
+                width: '15%',
+                targets: 3
+            },
+            {
+                width: '15%',
+                targets: 4
+            },
+            {
+                width: '10%',
+                targets: 5
+            },
+            {
+                width: '10%',
+                targets: 6
+            },
+        ],
+    });
     </script>
 
 
     <!-- Booking Ajax -->
     <script>
-        function getStatusBadge(colorClass, status) {
-            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
-        }
+    function getStatusBadge(colorClass, status) {
+        return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+    }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("../../Function/Admin/Ajax/getBookingsJSON.php")
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        // console.error("Failed to load bookings.");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'An unknown error occurred.',
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
-                        return;
-                    }
-                    const bookings = data.bookings;
-                    const table = $('#bookingTable').DataTable();
-                    table.clear();
-
-                    bookings.forEach(booking => {
-                        table.row.add([
-                            booking.formattedBookingID,
-                            booking.name,
-                            booking.bookingType + ` Booking`,
-                            booking.checkIn,
-                            booking.checkOut,
-                            getStatusBadge(booking.statusClass, booking.status),
-                            `<form action="viewBooking.php" method="POST">
-                                    <input type="hidden" name="button" value="booking">
-                                    <input type="hidden" name="bookingType" value="${booking.bookingType}">
-                                    <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
-                                    <input type="hidden" name="bookingID" value="${booking.bookingID}">
-                                    <button type="submit" class="btn btn-primary">View</button>
-                            </form>`
-                        ]);
-                    });
-
-                    table.draw();
-
-                }).catch(error => {
-                    console.error("Error loading bookings:", error);
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch("../../Function/Admin/Ajax/getBookingsJSON.php")
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    // console.error("Failed to load bookings.");
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: data.message || 'An unknown error occurred.',
                         showConfirmButton: false,
                         timer: 1500,
-                    })
+                    });
+                    return;
+                }
+                const bookings = data.bookings;
+                const table = $('#bookingTable').DataTable();
+                table.clear();
+
+                bookings.forEach(booking => {
+                    table.row.add([
+                        booking.formattedBookingID,
+                        booking.name,
+                        booking.bookingType + ` Booking`,
+                        booking.checkIn,
+                        booking.checkOut,
+                        getStatusBadge(booking.statusClass, booking.status),
+                        `<form action="viewBooking.php" method="POST">
+                                    <input type="hidden" name="button" value="booking">
+                                    <input type="hidden" name="bookingType" value="${booking.bookingType}">
+                                    <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
+                                    <input type="hidden" name="bookingID" value="${booking.bookingID}">
+                                    <button type="submit" class="btn btn-primary">View</button>
+                            </form>`
+                    ]);
+                });
+
+                table.draw();
+
+            }).catch(error => {
+                console.error("Error loading bookings:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: data.message || 'An unknown error occurred.',
+                    showConfirmButton: false,
+                    timer: 1500,
                 })
-        })
+            })
+    })
     </script>
 
     <script src="../../Assets/JS/adminNavbar.js"></script>
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
 
@@ -404,34 +421,34 @@ if (isset($_SESSION['error'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
 
-        if (paramValue === "approvedSuccess") {
-            Swal.fire({
-                position: "top-end",
-                title: "Booking Approved!",
-                text: "The booking has been successfully approved.",
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1500
-            });
-        } else if (paramValue === 'rejectedSuccess') {
-            Swal.fire({
-                position: "top-end",
-                title: "Booking Rejected!",
-                text: "The booking has been successfully rejected.",
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1500
-            });
-        }
+    if (paramValue === "approvedSuccess") {
+        Swal.fire({
+            position: "top-end",
+            title: "Booking Approved!",
+            text: "The booking has been successfully approved.",
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    } else if (paramValue === 'rejectedSuccess') {
+        Swal.fire({
+            position: "top-end",
+            title: "Booking Rejected!",
+            text: "The booking has been successfully rejected.",
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 </body>
 

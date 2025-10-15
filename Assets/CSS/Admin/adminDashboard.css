@@ -25,12 +25,19 @@
 }
 
 main {
-  width: 82%;
+  width: 90%;
+  margin: auto;
 }
 
 body {
   display: flex;
   gap: 1rem;
+}
+
+.notification-toggler-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .notification-container {
@@ -220,7 +227,7 @@ body {
 }
 
 .graph-card {
-  width: 524px;
+  width: 534px;
   height: 370px !important;
   background-color: #f5f5f5 !important;
 }

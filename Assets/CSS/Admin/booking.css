@@ -26,8 +26,14 @@ main {
 }
 
 .booking-container {
-  flex: 1; /* Take up all available space */
-  max-width: calc(100% - 190px);
+  width: 80%;
+  margin: 0 auto;
+}
+
+.notification-toggler-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .notification-container {
@@ -64,8 +70,7 @@ main {
   margin: auto;
 }
 table {
-  width: 90% !important;
-  max-width: 100%;
+  width: 100% !important;
 }
 
 #bookingTable_filter,
