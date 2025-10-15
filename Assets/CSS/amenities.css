@@ -41,10 +41,6 @@
   padding: 2px;
 }
 
-img.editable-img {
-  border: 2px solid rgb(255, 13, 13) !important;
-}
-
 /* modal css */
 
 .modal-dialog {

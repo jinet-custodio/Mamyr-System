@@ -60,11 +60,6 @@
   padding: 2px;
 }
 
-img.editable-img,
-.editable-imgs img {
-  border: 2px solid rgb(255, 13, 13) !important;
-}
-
 .topText {
   font-family: "Alkatra";
   font-size: var(--font-size-base);

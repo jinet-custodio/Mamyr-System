@@ -396,6 +396,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
+        <script>
+            const editableImgs = document.querySelectorAll('.editable-img')
+            document.addEventListener("DOMContentLoaded", function() {
+                editableImgs.forEach(editable => {
+                    editable.style.border = '2px solid red';
+                })
+            });
+        </script>
         <script type="module">
             import {
                 initWebsiteEditor

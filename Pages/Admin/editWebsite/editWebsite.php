@@ -75,8 +75,7 @@ $userRole = $_SESSION['userRole'];
 <body>
     <div class="container-fluid">
         <div class="backButtonContainer">
-            <a href="../adminDashboard.php" id="backBtn"><i class="fa-solid fa-arrow-left backButton" style="color: #121212;" id="emailBackArrow" alt="Back Button"></i></a>
-
+            <a href="../../../Function/Admin/editWebsite/unsetEditMode.php" id="backBtn"><i class="fa-solid fa-arrow-left backButton" style="color: #121212;" id="emailBackArrow" alt="Back Button"></i></a>
         </div>
 
         <div class="titleContainer">
@@ -116,27 +115,39 @@ $userRole = $_SESSION['userRole'];
                     src="../../../Assets/Images/Icon/footer.png" alt="Footer" class="buttonIcon">Footer</button>
         </div>
     </div>
-
+    <!-- //* Landing Page iFrame -->
     <div class="container-fluid landingPage" id="landingPageContainer">
         <iframe src="../../../index.php?" class="editFrame" style="width: 100%; height: 100vh; display:none"></iframe>
     </div>
+    <!-- //* About Page iFrame -->
     <div class="container-fluid aboutPage" id="aboutContainer">
         <iframe src="../../about.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
     </div>
+    <!-- //* Amenities Page iFrame -->
     <div class="container-fluid amenitiesPage" id="amenitiesContainer">
         <iframe src="../../amenities.php?" class="editFrame" style="width: 100%; height: 100vh; display:none"></iframe>
     </div>
+    <!-- //* Rates and Hotel Rooms Page iFrame -->
+    <div class="container-fluid ratesAndHotelsPage" id="ratesAndHotelContainer">
+        <iframe src="../../ratesAndHotelRooms.php" class="editFrame" style="width: 100%; height: 100vh; display:none"></iframe>
+    </div>
+    <!-- //* Events Page iFrame -->
+    <div class="container-fluid eventsPage" id="eventsContainer">
+        <iframe src="../../events.php" class="editFrame" style="width: 100%; height: 100vh; display:none"></iframe>
+    </div>
+    <!-- //* Blog Page iFrame -->
     <div class="container-fluid blogPage" id="blogContainer">
         <button type="button" class="btn btn-primary" id="newBlogBtn" data-bs-toggle="modal" style="display:none"
             data-bs-target="#NewBlogPost">Add a New Blog Post</button>
         <iframe src="../../blog.php" class="editFrame" style="width: 100%; height: 100vh;  display:none"></iframe>
     </div>
+    <!-- //* Footer Page iFrame -->
     <div class="container-fluid footerPage" id="footerContainer">
         <iframe src="../../footer.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
     </div>
 
 
-    <!-- MODAL FOR ADDING A NEW BLOG POST -->
+    <!-- //! MODAL FOR ADDING A NEW BLOG POST -->
     <!-- <form action="../../Function/Admin/Services/addServices.php" id="addingServiceForm" method="POST"
             enctype="multipart/form-data"> -->
     <!-- Modal -->
@@ -195,7 +206,6 @@ $userRole = $_SESSION['userRole'];
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const pagesContainer = document.getElementById("pagesContainer");
@@ -203,6 +213,8 @@ $userRole = $_SESSION['userRole'];
             const icon = document.getElementById("help-circle");
             const aboutContainer = document.getElementById("aboutContainer");
             const amenitiesContainer = document.getElementById("amenitiesContainer");
+            const ratesAndHotelContainer = document.getElementById("ratesAndHotelContainer");
+            const eventsContainer = document.getElementById("eventsContainer");
             const newBlogBtn = document.getElementById("newBlogBtn");
             const footerContainer = document.getElementById("footerContainer");
             const landingPageBtn = document.getElementById("landingPage");
@@ -211,6 +223,8 @@ $userRole = $_SESSION['userRole'];
             const bookNowPageBtn = document.getElementById("bookNow");
             const footerPageBtn = document.getElementById("footer");
             const amenitiesPageBtn = document.getElementById("amenities");
+            const ratesPageBtn = document.getElementById("rates");
+            const eventsPageBtn = document.getElementById("events");
 
 
             landingPageBtn.addEventListener('click', function() {
@@ -241,6 +255,26 @@ $userRole = $_SESSION['userRole'];
                 pagesContainer.style.display = "none";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Amenities Page";
+            });
+
+            ratesPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                ratesAndHotelContainer.style.display = "block";
+                ratesAndHotelContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                pagesContainer.style.display = "none";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Rates and Hotel Rooms Page";
+            });
+
+            eventsPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                eventsContainer.style.display = "block";
+                eventsContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                pagesContainer.style.display = "none";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Events Page";
             });
 
             blogPageBtn.addEventListener('click', function() {

@@ -26,6 +26,21 @@ if (isset($_SESSION['userID'])) {
         exit();
     }
 }
+
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'Rates and Hotel Rooms';
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+$defaultImage = "../Assets/Images/no-picture.jpg";
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
+}
+
 require '../../Function/notification.php';
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -410,19 +425,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <div class="hotelRooms" id="hotelRooms" style="display: block;">
                 <div class="titleContainer" id="hotelTitle">
                     <h4 class="title">Hotel Rooms</h4>
-                    <p class="hotelDescription">Mamyr Resort and Events Place is not only a venue for unforgettable
-                        celebrations
-                        but also a relaxing retreat, offering 11 air-conditioned hotel rooms for guests seeking comfort
-                        and
-                        convenience.
-                        Every booking at the hotel includes complimentary access to the resort's pool, allowing guests
-                        to unwind
-                        and
-                        enjoy their stay to the fullest. Whether you're here for a grand occasion or a quiet getaway,
-                        Mamyr
-                        Resort
-                        offers a beautiful and welcoming environment for all.
-                    </p>
+                    <p class="hotelDescription"><?= htmlspecialchars($contentMap['HotelDesc'] ?? 'No description found') ?></p>
                 </div>
 
                 <div class="container-fluid">

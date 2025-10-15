@@ -1,7 +1,26 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require '../Config/dbcon.php';
+
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
+
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'Rates and Hotel Rooms';
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+$defaultImage = "../Assets/Images/no-picture.jpg";
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -28,49 +47,57 @@ require '../Config/dbcon.php';
 
 <body>
     <div class="wrapper">
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
-            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <?php if (!$editMode): ?>
+            <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+                <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
 
-            <div class="navbar-collapse collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.php"> Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Amenities
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
-                            <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
-                            <li><a class="dropdown-item" href="events.php">Events</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="blog.php">Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="about.php">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php">Book Now</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
+                <div class="navbar-collapse collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.php"> Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Amenities
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
+                                <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                                <li><a class="dropdown-item" href="events.php">Events</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="blog.php">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="about.php">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="register.php">Book Now</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        <?php endif; ?>
         <main>
+            <?php if ($editMode): ?>
+                <div class="question m-2" id="help" style="cursor: pointer">
+                    <h3><i class="fa-sharp fa-regular fa-circle-question mx-2" style="color: #ff4c67ff;cursor: pointer;font-size:2vw;"
+                            id="help-circle"></i>Why can't I edit?</h3>
+                    <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
+                </div>
+            <?php endif; ?>
             <div class="selection" id="selection" style="display: block;">
                 <div class="categories mx-auto" id="categories">
                     <a class="categoryLink d-flex justify-content-center" onclick="showRates(event)">
@@ -317,20 +344,13 @@ require '../Config/dbcon.php';
             <div class="hotelRooms" id="hotelRooms" style="display: none;">
                 <div class="titleContainer" id="hotelTitle">
                     <h4 class="title">Hotel Rooms</h4>
-                    <p class="hotelDescription">Mamyr Resort and Events Place is not only a venue for unforgettable
-                        celebrations
-                        but also a relaxing retreat, offering 11 air-conditioned hotel rooms for guests seeking comfort
-                        and
-                        convenience.
-                        Every booking at the hotel includes complimentary access to the resort's pool, allowing guests
-                        to unwind
-                        and
-                        enjoy their stay to the fullest. Whether you're here for a grand occasion or a quiet getaway,
-                        Mamyr
-                        Resort
-                        offers a beautiful and welcoming environment for all.
-
-                    </p>
+                    <?php if ($editMode): ?>
+                        <textarea rows="4"
+                            class="hotelDescription HotelDesc editable-input form-control text-center"
+                            data-title="HotelDesc"><?= htmlspecialchars($contentMap['HotelDesc'] ?? 'No description found') ?></textarea>
+                    <?php else: ?>
+                        <p class="hotelDescription"><?= htmlspecialchars($contentMap['HotelDesc'] ?? 'No description found') ?></p>
+                    <?php endif; ?>
                 </div>
                 <div class="container-fluid">
                     <div class=" entranceTitleContainer">
@@ -468,10 +488,18 @@ require '../Config/dbcon.php';
                 <i class="fas fa-chevron-up"></i>
             </a>
         </main>
-        <?php include 'footer.php'; ?>
+        <?php if (!$editMode) {
+            include 'footer.php';
+            include 'loader.php';
+        } else {
+            include 'editImageModal.php';
+            include 'loader.php';
+        }
+        ?>
     </div>
-    <?php include 'loader.php'; ?>
 
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
@@ -543,7 +571,15 @@ require '../Config/dbcon.php';
             }
         });
     </script>
+    <?php if ($editMode): ?>
+        <script type="module">
+            import {
+                initWebsiteEditor
+            } from '../Assets/JS/EditWebsite/editWebsiteContent.js';
 
+            initWebsiteEditor('Rates  and Hotel Rooms', '../Function/Admin/editWebsite/editWebsiteContent.php');
+        </script>
+    <?php endif; ?>
     <!-- filters hotel rooms by the hour -->
     <script>
         let currentAvailabilityFilter = 'all';
@@ -632,6 +668,18 @@ require '../Config/dbcon.php';
 
         document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
         document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
+    </script>
+
+    <script>
+        const icon = document.getElementById("help");
+        icon.addEventListener("click", function() {
+            Swal.fire({
+                title: "Why can't I edit the majority of this?",
+                text: "Most of the contents of this page are already found at the services section. To edit, please head to the Services page to ensure consistency.",
+                icon: "info",
+                confirmButtonText: "Got it!"
+            });
+        });
     </script>
     <!-- SwiperJS JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

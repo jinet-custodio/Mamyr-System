@@ -44,6 +44,19 @@ img {
   display: block !important;
 }
 
+/* Edit mode CSS */
+#saveChangesBtn {
+  margin-left: 80vw;
+  font-size: 1.8vw !important;
+  position: fixed;
+}
+
+.editable-input {
+  background-color: rgba(255, 255, 255, 0) !important;
+  border: 1px solid rgb(255, 13, 13) !important;
+  padding: 2px;
+}
+
 .selection {
   margin-top: 6vw;
 }

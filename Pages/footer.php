@@ -1,11 +1,10 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-require_once '../Config/dbcon.php';
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+require_once '../Config/dbcon.php';
 
 
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
@@ -207,6 +206,14 @@ while ($row = $getLogoResult->fetch_assoc()) {
             });
         </script>
 
+        <script>
+            const editableImgs = document.querySelectorAll('.editable-img')
+            document.addEventListener("DOMContentLoaded", function() {
+                editableImgs.forEach(editable => {
+                    editable.style.border = '2px solid red';
+                })
+            });
+        </script>
         <!-- Sweetalert JS -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Bootstrap JS -->
