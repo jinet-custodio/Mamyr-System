@@ -36,10 +36,16 @@ main {
   max-width: 100%;
 }
 
+.notification-toggler-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .notification-container {
   text-align: right !important;
-  padding: var(--padding-sm);
-  margin-right: var(--margin-md);
+  margin-top: 0.59rem;
+  margin-right: 0.85rem;
 }
 
 #notification-icon {
@@ -49,7 +55,7 @@ main {
 
 .page-title-container {
   padding-left: var(--padding-md);
-  margin-top: var(--margin-md);
+  margin-top: 2rem;
 }
 
 .page-title {
@@ -61,7 +67,7 @@ main {
 .backArrowContainer {
   position: absolute;
   width: 2%;
-  margin: -3rem 2rem;
+  margin: 0.01rem 2rem;
 }
 
 .backArrowContainer img {

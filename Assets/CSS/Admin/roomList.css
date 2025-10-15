@@ -26,6 +26,12 @@ main {
   justify-content: center;
 }
 
+.notification-toggler-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .notification-container {
   text-align: right !important;
   margin-top: 0.59rem;

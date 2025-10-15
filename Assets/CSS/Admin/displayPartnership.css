@@ -30,10 +30,16 @@ main {
   max-width: 100%;
 }
 
+.notification-toggler-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .notification-container {
   text-align: right !important;
-  padding: var(--padding-sm);
-  margin-right: var(--margin-md);
+  margin-top: 0.59rem;
+  margin-right: 0.85rem;
 }
 
 #notification-icon {
@@ -81,7 +87,7 @@ main {
   padding: var(--padding-lg);
   margin-top: var(--margin-mdl);
   margin-bottom: 2rem;
-  width: 100% !important;
+  width: 90% !important;
   max-width: 100%;
 }
 
