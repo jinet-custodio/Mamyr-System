@@ -440,9 +440,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
     <!-- Bootstrap Link -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Flatpickr for date input -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -463,8 +461,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         const calIcon = document.getElementById("calendarIcon");
         //resort calendar
         flatpickr('#resortBookingDate', {
-            minDate: new Date().fp_incr(1),
-            dateFormat: "Y-m-d"
+            // enableTime: true,
+            minDate: new Date().setDate(new Date().getDate() + 1),
+            dateFormat: "Y-m-d",
         });
     </script>
 

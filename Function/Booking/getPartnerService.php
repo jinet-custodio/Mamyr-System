@@ -37,7 +37,7 @@
                     AND (? < sud.unavailableEndDate 
                     AND ? > sud.unavailableStartDate)
                 )
-                GROUP BY partnerTypeID"
+                GROUP BY partnerTypeID "
             );
             if (!$getPartnerService) {
                 throw new Exception("Error at query Partner Service: " . $getPartnerService->error);

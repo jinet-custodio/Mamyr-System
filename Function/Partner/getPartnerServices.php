@@ -14,9 +14,9 @@ if (isset($_GET['id'])) {
     $partnershipID = (int) $_GET['id'];
     $getPartnerService = $conn->prepare("SELECT * FROM `partnershipservice` WHERE partnershipID = ?");
     $getPartnerService->bind_param('i', $partnershipID);
-
+    error_log("PID: $partnershipID");
     if (!$getPartnerService->execute()) {
-        error_log("Error: " . $getPartnerService->error);
+        error_log("Error: $partnershipID" . $getPartnerService->error);
         echo json_encode(['error' => 'Database execution failed']);
         exit;
     }
@@ -24,7 +24,10 @@ if (isset($_GET['id'])) {
     $result = $getPartnerService->get_result();
 
     if ($result->num_rows === 0) {
-        echo json_encode([]);
+        echo json_encode([
+            'success' => true,
+            'details' => []
+        ]);
         exit;
     }
 
@@ -61,7 +64,7 @@ if (isset($_GET['id'])) {
                 $statusName =  $availabilityName;
         }
 
-        $descriptions = !empty($row['PBDescription']) ? explode(",", $row['PBDescription']) : [];
+        $descriptions = !empty($row['PBDescription']) ? ($row['PBDescription']) : '';
 
         $details[] = [
             'statusName' => strtolower($statusName),

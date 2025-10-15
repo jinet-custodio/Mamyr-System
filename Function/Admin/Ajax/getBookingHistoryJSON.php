@@ -16,8 +16,10 @@ if (isset($_GET['userID'])) {
                         LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
                         LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         WHERE b.userID = ?
-                        ORDER BY
-                        b.createdAt");
+                        GROUP BY
+                            b.bookingID
+                        ORDER BY 
+                            b.createdAt");
         $getBookingInfo->bind_param("i", $userID);
         $getBookingInfo->execute();
         $result = $getBookingInfo->get_result();

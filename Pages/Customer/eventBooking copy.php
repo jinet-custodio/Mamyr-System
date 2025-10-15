@@ -203,7 +203,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                     <div class="eventInfo">
                         <label for="additionalRequest" class="eventInfoLabel">Additional Request</label>
                         <textarea class="form-control w-100" id="purpose-additionalNotes" name="additionalRequest"
-                            rows="2" placeholder="Optional"></textarea>
+                            rows="3" placeholder="Optional"></textarea>
                     </div>
 
                     <div class="noteContainer">
@@ -274,7 +274,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
         <!--end ng event div-->
 
         <!-- Dish Modal -->
-        <div class="modal  modal-lg" id="dishModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+        <div class="modal fade modal-lg" id="dishModal" tabindex="-1" aria-labelledby="exampleModalLabel">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -282,220 +282,61 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="note-container">
-                        <h6 class="noteLabel">Catering Services Inclusions:</h6>
                         <ul>
-                            <li>Basic design for tables, chair & stage</li>
-                            <li>4 Dishes (vegetables is included)</li>
-                            <li>w/ Rice & Drink/Juice</li>
-                            <li>Dessert</li>
+                            <li>You can select a maximum of 4 dishes.</li>
+                            <li>You may only select 1 drink.</li>
+                            <li>You can select up to 2 kinds of dessert.</li>
                         </ul>
                     </div>
-                    <div class="modal-body dishMenu" id="dishMenuContainer">
-                        <?php
-                        $availableID = 1;
-                        $getFoodItemQuery = $conn->prepare("SELECT `foodItemID`, `foodName`, `foodCategory`, `ageGroup` FROM `menuitem`WHERE availabilityID = ? ORDER BY ageGroup");
-                        $getFoodItemQuery->bind_param("i", $availableID);
-                        $getFoodItemQuery->execute();
-                        $getFoodItemResult = $getFoodItemQuery->get_result();
-
-
-                        $chickenCategory = [];
-                        $porkCategory = [];
-                        $beefCategory = [];
-                        $pastaCategory = [];
-                        $vegetablesCategory = [];
-                        $seafoodCategory = [];
-                        $dessertCategory = [];
-                        $drinkCategory = [];
-                        $fingerFoods = [];
-                        if ($getFoodItemResult->num_rows > 0) {
-                            while ($row = $getFoodItemResult->fetch_assoc()) {
-                                $categoryName = $row['foodCategory'];
-                                if ($categoryName === 'Chicken') {
-                                    $chickenCategory[] = $row;
-                                } elseif ($categoryName === 'Pork') {
-                                    $porkCategory[] = $row;
-                                } elseif ($categoryName === 'Beef') {
-                                    $beefCategory[] = $row;
-                                } elseif ($categoryName === 'Pasta') {
-                                    $pastaCategory[] = $row;
-                                } elseif ($categoryName === 'Vegetables') {
-                                    $vegetablesCategory[] = $row;
-                                } elseif ($categoryName === 'Seafood') {
-                                    $seafoodCategory[] = $row;
-                                } elseif ($categoryName === 'Drink') {
-                                    $drinkCategory[] = $row;
-                                } elseif ($categoryName === 'Dessert') {
-                                    $dessertCategory[] = $row;
-                                } elseif ($categoryName === 'Finger Foods Cocktail') {
-                                    $fingerFoods[] = $row;
-                                }
-                            }
-                        }
-
-                        // error_log(print_r($dessertCategory, true));
-                        ?>
-
-                        <div class="adult-category container" id="adultMeal">
-                            <h3 class="mealLabel">Adult Meal</h3>
-                            <div class="foodContainer">
-                                <div id="adultChickenContainer">
-                                    <h4>Chicken</h4>
-
-                                    <?php foreach ($chickenCategory as $item):
-                                        if ($item['ageGroup'] === 'Adult'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="adultPorkContainer">
-                                    <h4>Pork</h4>
-                                    <?php foreach ($porkCategory as $item):
-                                        if ($item['ageGroup'] === 'Adult'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="adultBeefContainer">
-                                    <h4>Beef</h4>
-                                    <?php foreach ($beefCategory as $item):
-                                        if ($item['ageGroup'] === 'Adult'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="adultPastaContainer">
-                                    <h4>Pasta</h4>
-                                    <?php foreach ($pastaCategory as $item):
-                                        if ($item['ageGroup'] === 'Adult'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="adultVeggieContainer">
-                                    <h4>Vegetables</h4>
-                                    <?php foreach ($vegetablesCategory as $item):
-                                        if ($item['ageGroup'] === 'Adult'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="adultSeafoodContainer">
-                                    <h4>Seafood</h4>
-                                    <?php foreach ($seafoodCategory as $item):
-                                        if ($item['ageGroup'] === 'Adult'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
+                    <div class="modal-body dishMenu" id="dishMenu">
+                        <!-- <div class="chicken">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Chicken</h6>
                             </div>
+                            <div class="dishListContainer" id="chickenContainerA"></div>
                         </div>
-                        <div class="kid-category container" id="kidMeal" style="display: none;">
-                            <h3 class="mealLabel">Kiddie Meal</h3>
-                            <div class="foodContainer">
-                                <div id="kidChickenContainer">
-                                    <h4>Chicken</h4>
-                                    <?php foreach ($chickenCategory as $item):
-                                        if ($item['ageGroup'] === 'Child'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="kidPorkContainer">
-                                    <h4>Pork</h4>
-                                    <?php foreach ($porkCategory as $item):
-                                        if ($item['ageGroup'] === 'Child'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="kidPastaContainer">
-                                    <h4>Pasta</h4>
-                                    <?php foreach ($pastaCategory as $item):
-                                        if ($item['ageGroup'] === 'Child'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="kidSeafoodContainer">
-                                    <h4>Seafood</h4>
-                                    <?php foreach ($seafoodCategory as $item):
-                                        if ($item['ageGroup'] === 'Child'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="kidFingerContainer">
-                                    <h4>Finger Foods</h4>
-                                    <?php foreach ($fingerFoods as $item):
-                                        if ($item['ageGroup'] === 'Child'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-
-                                <div id="dessertContainer">
-                                    <h4>Desserts</h4>
-                                    <?php foreach ($dessertCategory as $item):
-                                        if ($item['ageGroup'] === 'Child'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
+                        <div class="pasta">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Pasta</h6>
                             </div>
+                            <div class="dishListContainer" id="pastaContainerA"></div>
                         </div>
-
-
-                        <div class="drink-dessert-category container" id="drinkDessert">
-                            <h3 class="mealLabel">Drinks & Dessert</h3>
-                            <div class="foodContainer">
-                                <div id="drinkContainer">
-                                    <h4>Drinks</h4>
-                                    <?php foreach ($drinkCategory as $item):
-                                        if ($item['ageGroup'] === 'Adult'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>" <?= ($item['foodName'] === 'Lemonade') ? 'checked' : '' ?>>&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
-                                <div id="dessertContainer">
-                                    <h4>Desserts</h4>
-                                    <?php foreach ($dessertCategory as $item):
-                                        if ($item['ageGroup'] === 'Adult'): ?>
-                                            <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>" <?= ($item['foodName'] === 'Buko Salad') ? 'checked' : '' ?>>&nbsp;<?= $item['foodName'] ?>
-                                            </div>
-                                    <?php endif;
-                                    endforeach; ?>
-                                </div>
+                        <div class="pork">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Pork</h6>
                             </div>
+                            <div class="dishListContainer" id="porkContainerA"></div>
                         </div>
-
+                        <div class="veg">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Vegetables</h6>
+                            </div>
+                            <div class="dishListContainer" id="vegieContainerA"></div>
+                        </div>
+                        <div class="beef">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Beef</h6>
+                            </div>
+                            <div class="dishListContainer" id="beefContainerA"></div>
+                        </div>
+                        <div class="seafood">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Seafood</h6>
+                            </div>
+                            <div class="dishListContainer" id="seafoodContainerA"> </div>
+                        </div>
+                        <div class="drinks">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Drinks</h6>
+                            </div>
+                            <div class="dishListContainer" id="drinkContainer"></div>
+                        </div>
+                        <div class="dessert">
+                            <div class="dishTypeContainer">
+                                <h6 class="dishType fw-bold">Desserts</h6>
+                            </div>
+                            <div class="dishListContainer" id="dessertContainer"></div>
+                        </div> -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -520,21 +361,6 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         <strong> please
                             make sure to contact them</strong> and discuss the details of the event.
                     </p>
-                    <div class="customer-choice-container p-3" style="color:rgba(43, 155, 240, 1);">
-                        <p class="warning-text">This option applies only when you’ve chosen to avail a partner service. Please select one if that’s the case.</p>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="customer-choice" value="proceed" <?= $formData['customer-choice'] === 'proceed' ? 'checked' : '' ?>>
-                            <label class="form-check-label" for="radioButton">
-                                Still <strong>proceed </strong> with the event regardless of the partner’s decision.
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="customer-choice" value="cancel">
-                            <label class="form-check-label" for="radioButton">
-                                <strong>Cancel</strong> the event if the availed (chosen) service is declined.
-                            </label>
-                        </div>
-                    </div>
                     <div class="modal-body additionalService" id="additionalService">
                     </div>
                     <div class="modal-footer">
@@ -563,7 +389,8 @@ $formData = $_SESSION['eventFormData'] ?? [];
     <!-- Format the date to Y-M-D h:i:s -->
     <script src="../../Assets/JS/formatDateTime.js" type="text/javascript"> </script>
 
-    <!-- <script src="../../Assets/JS/EventJS/getFoodByCategory.js"></script> -->
+    <script src="../../Assets/JS/EventJS/getFoodByCategory.js"></script>
+
     <!-- Guest Count & Food Count to enable the button for booknow-->
     <script src="../../Assets/JS/EventJS/countingGuestFood.js"> </script>
 
@@ -590,7 +417,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
             enableTime: true,
             noCalendar: true,
             minTime: "06:00",
-            maxTime: "17:00",
+            maxTime: "22:00",
             dateFormat: "H:i",
             disableMobile: true,
         })
@@ -684,25 +511,62 @@ $formData = $_SESSION['eventFormData'] ?? [];
         });
     </script>
 
-    <!-- Session Selected Food -->
+    <!-- For event food -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sessionFoodSelections =
-                <?= isset($formData['foodSelections']) ? json_encode($formData['foodSelections']) : '[]' ?>;
+        document.addEventListener('DOMContentLoaded', function() {
+            const sessionSelectedChicken =
+                <?= isset($formData['chickenSelections']) ? json_encode($formData['chickenSelections']) : '[]' ?>;
+            const sessionSelectedPork =
+                <?= isset($formData['porkSelections']) ? json_encode($formData['porkSelections']) : '[]' ?>;
+            const sessionSelectedPasta =
+                <?= isset($formData['pastaSelections']) ? json_encode($formData['pastaSelections']) : '[]' ?>;
+            const sessionSelectedBeef =
+                <?= isset($formData['beefSelections']) ? json_encode($formData['beefSelections']) : '[]' ?>;
+            const sessionSelectedVegie =
+                <?= isset($formData['vegieSelections']) ? json_encode($formData['vegieSelections']) : '[]' ?>;
+            const sessionSelectedSeafood =
+                <?= isset($formData['seafoodSelections']) ? json_encode($formData['seafoodSelections']) : '[]' ?>;
+            const sessionSelectedDrink =
+                <?= isset($formData['drinkSelections']) ? json_encode($formData['drinkSelections']) : '[]' ?>;
+            const sessionSelectedDessert =
+                <?= isset($formData['dessertSelections']) ? json_encode($formData['dessertSelections']) : '[]' ?>;
 
-            console.log(sessionFoodSelections);
-            // const selectedFood = Object.keys(sessionfoodSelections.value);
-            // console.log(selectedFood)
-            const checkboxes = document.querySelectorAll('.food-item');
+            const sessionFoodIDs = <?= isset($formData['foodIDs']) ? json_encode($formData['foodIDs']) : '[]' ?>;
 
-            Object.values(sessionFoodSelections).forEach(name => {
-                checkboxes.forEach(checkbox => {
-                    if (checkbox.value === name) {
-                        checkbox.checked = true;
+
+            fetch('../../Function/Booking/getAvailableFood.php')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network Error');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        alert("Error: " + data.error);
+                        return;
                     }
-                });
-            });
-        })
+
+                    getMenuByCategory('chickenContainerA', data.chickenCategory, 'chicken',
+                        'No Available Chicken Menu', sessionSelectedChicken, sessionFoodIDs);
+                    getMenuByCategory('porkContainerA', data.porkCategory, 'pork', 'No Available Pork Menu',
+                        sessionSelectedPork, sessionFoodIDs);
+                    getMenuByCategory('pastaContainerA', data.pastaCategory, 'pasta',
+                        'No Available Pasta Menu', sessionSelectedPasta, sessionFoodIDs);
+                    getMenuByCategory('beefContainerA', data.beefCategory, 'beef', 'No Available Beef Menu',
+                        sessionSelectedBeef, sessionFoodIDs);
+                    getMenuByCategory('vegieContainerA', data.vegieCategory, 'vegie',
+                        'No Available Vegetables Menu', sessionSelectedVegie, sessionFoodIDs);
+                    getMenuByCategory('seafoodContainerA', data.seafoodCategory, 'seafood',
+                        'No Available Seafood Menu', sessionSelectedSeafood, sessionFoodIDs);
+                    getMenuByCategory('drinkContainer', data.drinkCategory, 'drink', 'No Available Drink Menu',
+                        sessionSelectedDrink, sessionFoodIDs);
+                    getMenuByCategory('dessertContainer', data.dessertCategory, 'dessert',
+                        'No Available Dessert Menu', sessionSelectedDessert, sessionFoodIDs);
+
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation', error);
+                })
+        });
     </script>
 
     <!-- Fetch Partner service -->
@@ -736,101 +600,104 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 getAvailablePartnerService();
             }
 
+            // console.log('Date value:', date.value);
+            // console.log('StartTime value:', startTime.value);
+
+
             function getAvailablePartnerService() {
+
                 const selectedDate = date.value;
                 const selectedStartTime = startTime.value;
 
                 if (!selectedDate || !selectedStartTime) return;
 
                 const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
-                const endDateTimeObj = new Date(
-                    startDateTimeObj.getTime() + 5 * 60 * 60 * 1000
-                ); // +5 hours
+                const endDateTimeObj = new Date(startDateTimeObj.getTime() + 5 * 60 * 60 * 1000); // +5 hours
 
                 const formattedStartDateTime = formatDateTime(startDateTimeObj);
                 const formattedEndDateTime = formatDateTime(endDateTimeObj);
 
                 fetch(
-                        `../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(
-                    formattedStartDateTime
-                    )}&endDate=${encodeURIComponent(formattedEndDateTime)}`
+                        `../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`
                     )
-                    .then((response) => {
+                    .then(response => {
                         if (!response.ok) {
-                            throw new Error("Network Error");
+                            throw new Error('Network Error');
                         }
                         return response.json();
                     })
-                    .then((data) => {
+                    .then(data => {
                         if (data.error) {
                             Swal.fire({
-                                title: "Error",
-                                text: "Error: " + data.error,
-                                icon: "error",
+                                title: 'Error',
+                                text: 'Error: ' + data.error,
+                                icon: 'error'
                             });
                             return;
                         }
-                        mainContainer.innerHTML = "";
+                        mainContainer.innerHTML = '';
                         if (data.Categories && data.Categories.length > 0) {
-                            data.Categories.forEach((category) => {
-                                const wrapper = document.createElement("div");
-                                wrapper.classList.add("photography");
+                            data.Categories.forEach(category => {
 
+                                const wrapper = document.createElement('div');
+                                wrapper.classList.add('photography');
 
-                                const bpTypeContainer = document.createElement("div");
-                                bpTypeContainer.classList.add("bpTypeContainer");
+                                // Create and append category label
+                                const bpTypeContainer = document.createElement('div');
+                                bpTypeContainer.classList.add('bpTypeContainer');
 
-                                const categoryHeading = document.createElement("h6");
-                                categoryHeading.classList.add("bpCategory", "fw-bold");
-                                categoryHeading.innerText = category.eventCategory || "Category Name";
+                                const categoryHeading = document.createElement('h6');
+                                categoryHeading.classList.add('bpCategory', 'fw-bold');
+                                categoryHeading.innerText = category.eventCategory ||
+                                    'Category Name'; // fallback if undefined
 
                                 bpTypeContainer.appendChild(categoryHeading);
                                 wrapper.appendChild(bpTypeContainer);
 
-                                const partnerListContainer = document.createElement("div");
-                                partnerListContainer.classList.add("partnerListContainer");
 
-                                const checkbox = document.createElement("input");
-                                checkbox.type = "checkbox";
-                                checkbox.classList.add("form-check-input");
-                                checkbox.name = `additionalServiceSelected[${category.partnershipServiceID}][selected]`;
+                                const partnerListContainer = document.createElement('div');
+                                partnerListContainer.classList.add('partnerListContainer');
+
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.classList.add('form-check-input');
+                                checkbox.name =
+                                    `additionalServiceSelected[${category.partnershipServiceID}][selected]`;
                                 checkbox.value = category.partnershipServiceID;
 
-                                const inputPBName = document.createElement("input");
-                                inputPBName.type = "hidden";
-                                inputPBName.name = `additionalServiceSelected[${category.partnershipServiceID}][PBName]`;
+
+                                const inputPBName = document.createElement('input');
+                                inputPBName.type = 'hidden';
+                                inputPBName.name =
+                                    `additionalServiceSelected[${category.partnershipServiceID}][PBName]`;
                                 inputPBName.value = category.PBName;
 
-                                const inputPBPrice = document.createElement("input");
-                                inputPBPrice.type = "hidden";
-                                inputPBPrice.name = `additionalServiceSelected[${category.partnershipServiceID}][PBPrice]`;
+                                const inputPBPrice = document.createElement('input');
+                                inputPBPrice.type = 'hidden';
+                                inputPBPrice.name =
+                                    `additionalServiceSelected[${category.partnershipServiceID}][PBPrice]`;
                                 inputPBPrice.value = category.PBPrice;
 
-                                const inputServiceID = document.createElement("input");
-                                inputServiceID.type = "hidden";
-                                inputServiceID.name = `additionalServiceSelected[${category.partnershipServiceID}][partnershipServiceID]`;
+                                const inputServiceID = document.createElement('input');
+                                inputServiceID.type = 'hidden';
+                                inputServiceID.name =
+                                    `additionalServiceSelected[${category.partnershipServiceID}][partnershipServiceID]`;
                                 inputServiceID.value = category.partnershipServiceID;
 
-                                const label = document.createElement("label");
-                                label.classList.add("form-check-label");
-                                label.innerHTML = `${category.companyName} - ${
-                                    category.PBName
-                                } &mdash; ₱ ${Number(category.PBPrice).toLocaleString(undefined, {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                })} &mdash; ${category.phoneNumber}`;
 
-                                let selectedServiceIDs = [];
+                                const label = document.createElement('label');
+                                label.classList.add('form-check-label');
+                                label.innerHTML =
+                                    `${category.companyName} - ${category.PBName} &mdash; ₱ ${Number(category.PBPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} &mdash; ${category.phoneNumber}`;
 
-                                if (Array.isArray(sessionSelectedServices)) {
-                                    selectedServiceIDs = sessionSelectedServices.map(String);
-                                } else if (typeof sessionSelectedServices === "object" && sessionSelectedServices !== null) {
-                                    selectedServiceIDs = Object.keys(sessionSelectedServices).map(String);
-                                }
+                                const selectedServiceIDs = Object.keys(sessionSelectedServices).map(
+                                    String);
 
-                                if (selectedServiceIDs.includes(String(category.partnershipServiceID))) {
+                                if (selectedServiceIDs.includes(String(category
+                                        .partnershipServiceID))) {
                                     checkbox.checked = true;
                                 }
+
 
                                 partnerListContainer.appendChild(checkbox);
                                 partnerListContainer.appendChild(inputPBName);
@@ -842,29 +709,27 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                 mainContainer.appendChild(wrapper);
                             });
                         } else {
-                            const div = document.createElement("div");
-                            div.classList.add("no-data-container");
+                            const div = document.createElement('div');
+                            div.classList.add('no-data-container');
 
-                            const cardText = document.createElement("h3");
-                            cardText.classList.add("card-text");
-                            cardText.innerHTML = "No Additional Services Available";
+                            const cardText = document.createElement('h3');
+                            cardText.classList.add('card-text');
+                            cardText.innerHTML = 'No Additional Services Available';
 
                             div.appendChild(cardText);
                             mainContainer.appendChild(div);
                         }
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: "Error",
-                            text: error.Message,
-                            icon: "error",
-                        });
-                        console.error("There was a problem with the fetch operation", error);
-                    });
-            }
 
-            // console.log('Date value:', date.value);
-            // console.log('StartTime value:', startTime.value);
+
+                    }).catch(error => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: error.Message,
+                            icon: 'error'
+                        })
+                        console.error('There was a problem with the fetch operation', error);
+                    })
+            };
         });
     </script>
 
@@ -873,88 +738,34 @@ $formData = $_SESSION['eventFormData'] ?? [];
         window.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const selectedEvent = params.get('event');
-            const select = document.getElementById('eventType');
+
             if (selectedEvent) {
+                const select = document.getElementById('eventType');
                 if (select) {
                     select.value = selectedEvent;
                 }
             };
             // console.log(selectedEvent);
 
-            if (selectedEvent) {
+            if (params) {
                 const url = new URL(window.location);
                 url.search = '';
                 history.replaceState({}, document.title, url.toString());
             }
-            const kidsMeal = document.getElementById('kidMeal');
-            const foodItem = document.querySelectorAll('.food-item');
-            if (select.value) {
-                if (select.value === 'Kids Party') {
-                    kidsMeal.style.display = 'block';
-
-                    foodItem.forEach((food) => {
-                        if (foodItem.value === 'Chocolate fountain machine') {
-                            foodItem.checked = true;
-                        }
-                    })
-                }
-                select.addEventListener('change', () => {
-                    if (select.value === 'Kids Party') {
-                        kidsMeal.style.display = 'block';
-                    } else {
-                        kidsMeal.style.display = 'none';
-                    }
-                    console.log(select.value);
-                })
-            }
-
         });
     </script>
 
     <!-- Sweetalert Message  -->
     <script>
         const params = new URLSearchParams(window.location.search);
-        const action = params.get('action');
+        const paramValue = params.get('action');
 
-        if (action === 'errorBooking') {
+        if (paramValue === 'errorBooking') {
             Swal.fire({
                 title: 'Error Booking',
                 text: 'An error occured while booking. Try again later',
                 icon: 'error',
             })
-        } else if (action === 'NoSelectedChoice') {
-            Swal.fire({
-                title: 'Oops',
-                text: 'Selection required! Choose whether to proceed or cancel the event before moving forward.',
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then((result) => {
-                const additionalServicesModal = document.getElementById('additionalServicesModal');
-                const modal = new bootstrap.Modal(additionalServicesModal);
-                modal.show();
-
-                // const container = document.querySelector('.customer-choice-container');
-                // container.style.setProperty("border", "1px solid red", "important");
-
-            })
-        }
-        // else if (action === 'exceedFoodCount') {
-        //     Swal.fire({
-        //         title: 'Oops',
-        //         text: 'You can select a maximum of 4 dishes.',
-        //         icon: 'warning',
-        //         confirmButtonText: 'Okay',
-        //     }).then((result) => {
-        //         const dishModal = document.getElementById('dishModal');
-        //         const modal = new bootstrap.Modal(dishModal);
-        //         modal.show();
-        //     })
-        // }
-
-        if (action) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
         }
     </script>
 

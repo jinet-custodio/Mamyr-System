@@ -1,8 +1,26 @@
 <?php
 function getNotification($conn, $userID, $receiver)
 {
-    $getNotifications = $conn->prepare("SELECT * FROM notification WHERE (receiverID = ? OR receiver = ?) AND is_read = 0");
-    $getNotifications->bind_param("is", $userID, $receiver);
+    // $getNotifications = $conn->prepare("SELECT * FROM notification WHERE (receiverID = ? OR receiver = ?) AND is_read = 0");
+    if (strtolower($receiver) === 'admin') {
+        $getNotifications = $conn->prepare("
+            SELECT * FROM notification 
+            WHERE receiverID IS NULL 
+            AND receiver = ? 
+            AND is_read = 0
+        ");
+        $getNotifications->bind_param("s", $receiver);
+    } else {
+        // For customers or partners → match receiverID normally
+        $getNotifications = $conn->prepare("
+            SELECT * FROM notification 
+            WHERE receiverID = ? 
+            AND receiver = ? 
+            AND is_read = 0
+        ");
+        $getNotifications->bind_param("is", $userID, $receiver);
+    }
+    // $getNotifications->bind_param("is", $userID, $receiver);
     $getNotifications->execute();
     $result = $getNotifications->get_result();
 
