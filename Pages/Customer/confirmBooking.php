@@ -52,7 +52,6 @@ unset($_SESSION['formData']);
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Customer/confirmBooking.css">
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
 
     <!-- Font Awesome Link -->
@@ -378,7 +377,7 @@ unset($_SESSION['formData']);
     $selectedHotels = [];
     if (isset($_POST['hotelBooking'])) {
         $hoursSelected = "22 hours";
-        $arrivalTime = mysqli_real_escape_string($conn, $_POST['arrivalTime']) ?? '';
+        $arrivalTime = isset($_POST['arrivalTime']) ? mysqli_real_escape_string($conn, $_POST['arrivalTime']) : '';
         $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['checkInDate']);
         $scheduledEndDate = mysqli_real_escape_string($conn, $_POST['checkOutDate']);
 
@@ -395,17 +394,30 @@ unset($_SESSION['formData']);
         $bookingFunctionPage = 'hotelBooking.php';
         $additionalRequest = "None";
         $chargeType = 'Room';
-        $pricingType = 'Per Head';
+        $perHead = 'Per Head';
+        $perHour = 'Per Hour';
         $excessChargePerPerson = 0;
-        $getServicePricing = $conn->prepare("SELECT `price` FROM `servicepricing` WHERE pricingType = ? AND `chargeType` = ?");
-        $getServicePricing->bind_param('ss', $pricingType, $chargeType);
-        $getServicePricing->execute();
-        $result = $getServicePricing->get_result();
+        $hourlyFee = 0;
+        $getServicePricingHead = $conn->prepare("SELECT `price` FROM `servicepricing` WHERE pricingType = ? AND `chargeType` = ?");
+        $getServicePricingHead->bind_param('ss',  $perHead, $chargeType);
+        $getServicePricingHead->execute();
+        $result = $getServicePricingHead->get_result();
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $excessChargePerPerson = $row['price'];
         } else {
             $excessChargePerPerson = 250;
+        }
+
+        $getServicePricingHour = $conn->prepare("SELECT `price` FROM `servicepricing` WHERE pricingType = ? AND `chargeType` = ?");
+        $getServicePricingHour->bind_param('ss', $perHour, $chargeType);
+        $getServicePricingHour->execute();
+        $result = $getServicePricingHour->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $hourlyFee = $row['price'];
+        } else {
+            $hourlyFee = 500;
         }
 
         $additionalCharge = 0;
@@ -455,28 +467,13 @@ unset($_SESSION['formData']);
             }
         }
 
-        $totalCapacity = arrayAddition($capacity);
-        $totalPax = addition($childrenCount, $adultCount, $toddlerCount);
-        $adultChildrenCount = addition($childrenCount, $adultCount, 0);
-        $totalHotelPrice = arrayAddition($hotelPrices);
 
-
-        if ($totalCapacity < $adultChildrenCount) {
-            $additionalGuest = subtraction($adultChildrenCount, $totalCapacity,  0);
-            $additionalCharge = multiplication($additionalGuest, $excessChargePerPerson);
-            $totalCost = addition($totalHotelPrice, $additionalCharge, 0);
-        } else {
-            $totalCost =  $totalHotelPrice;
-        }
-
-        $totalServicePrice = $totalHotelPrice;
 
         $numberOfPeople =
             ($adultCount > 0 ? "{$adultCount} Adults" : '') .
             ($childrenCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$childrenCount} Kids" : '') .
             ($toddlerCount > 0 ? (($adultCount > 0 || $childrenCount > 0) ? ' & ' : ' ') . "{$toddlerCount} toddler" : '');
 
-        $downPayment = multiplication($totalCost, .3);
 
         $startDateObj = new DateTime($scheduledStartDate);
         $endDateObj = new DateTime($scheduledEndDate);
@@ -489,7 +486,63 @@ unset($_SESSION['formData']);
             $date = $startDate . " - " . $endDate;
         }
 
-        $timeRange = $startDateObj->format("g:i A") . " - " . $endDateObj->format("g:i A");
+        $interval = $startDateObj->diff($endDateObj);
+
+        $durationParts = [];
+        if ($interval->d > 0) $durationParts[] = $interval->d . " day" . ($interval->d > 1 ? "s" : "");
+        if ($interval->h > 0) $durationParts[] = $interval->h . " hour" . ($interval->h > 1 ? "s" : "");
+        if ($interval->i > 0) $durationParts[] = $interval->i . " minute" . ($interval->i > 1 ? "s" : "");
+
+        $duration = implode(" & ", $durationParts);
+
+        $timeRange = $startDateObj->format("g:i A") . " - " . $endDateObj->format("g:i A") . ' ( ' . $duration . ')';
+
+        $numHours = ($interval->d * 24) + $interval->h + ($interval->i / 60);
+        $computedHotelPrice = [];
+        $additionalFeePerHour = 0;
+        $remainingHours = 0;
+        $fullBlocks = 0;
+        // print_r($numHours);
+        if ($numHours <= 24 && $numHours <= 22) {
+            $fullBlocks = floor($numHours / 22);
+        } else {
+            $remainingHours = $numHours % 24;
+            $fullBlocks = floor(($numHours - ($numHours % 24)) / 24);
+            if ($remainingHours == 22) {
+                $remainingHours = 0;
+                $fullBlocks += 1;
+            } else {
+                $remainingHours;
+            }
+        }
+
+        foreach ($hotelPrices as $hotelPrice) {
+            if ($remainingHours != 0) {
+                $additionalFeePerHour = $remainingHours * $hourlyFee;
+            }
+            $computedHotelPrice[] = ($fullBlocks * $hotelPrice) + $additionalFeePerHour;
+        }
+
+        // print_r('remaininghours ' . $remainingHours);
+        // print_r($computedHotelPrice);
+        $totalCapacity = arrayAddition($capacity);
+        $totalPax = addition($childrenCount, $adultCount, $toddlerCount);
+        $adultChildrenCount = addition($childrenCount, $adultCount, 0);
+        $totalHotelPrice = arrayAddition($computedHotelPrice);
+
+
+        if ($totalCapacity < $adultChildrenCount) {
+            $additionalGuest = subtraction($adultChildrenCount, $totalCapacity,  0);
+            $additionalCharge = multiplication($additionalGuest, $excessChargePerPerson);
+            $totalCost = addition($totalHotelPrice, $additionalCharge, 0);
+        } else {
+            $totalCost =  $totalHotelPrice;
+        }
+
+        $totalServicePrice = $totalHotelPrice;
+
+        $downPayment = multiplication($totalCost, .3);
+
         $_SESSION['hotelFormData'] = $_POST;
     }
     ?>
@@ -617,7 +670,7 @@ unset($_SESSION['formData']);
                             <input type="hidden" name="entranceFee" value="<?= htmlspecialchars($totalEntranceFee) ?>"
                                 class="card-content">
                         </li>
-                    <?php } ?>
+                    <?php }  ?>
 
                     <li class="list-group-item payment-info">
                         <h5 class="card-title">Service Fee:</h5>
@@ -626,13 +679,24 @@ unset($_SESSION['formData']);
                             class="card-content">
                     </li>
 
-                    <?php if ($bookingType === "Hotel" || $bookingType === "Event") { ?>
-                        <li class="list-group-item payment-info" id="entertainmentDiv">
-                            <h5 class="card-title">Additional Fee:</h5>
-                            <p class="card-text">₱ <?= htmlspecialchars(number_format($additionalCharge, 2)) ?></p>
-                            <input type="hidden" name="additionalFee" value="<?= htmlspecialchars($additionalCharge) ?>"
-                                class="card-content">
+                    <?php if ($bookingType === "Hotel") { ?>
+                        <li class="list-group-item payment-info" id="additionalFeesDiv">
+                            <h5 class="card-title mb-2">Additional Fee:</h5>
+
+                            <div class="fee-item">
+                                <span>Per Head: (₱<?= htmlspecialchars(number_format($excessChargePerPerson, 2)) ?>)</span>
+                                <span>₱<?= htmlspecialchars(number_format($additionalCharge, 2)) ?></span>
+                            </div>
+
+                            <div class="fee-item">
+                                <span>Per Hour: (₱<?= htmlspecialchars(number_format($hourlyFee, 2)) ?>)</span>
+                                <span>₱<?= htmlspecialchars(number_format($additionalFeePerHour, 2)) ?></span>
+                            </div>
+
+                            <input type="hidden" name="additionalFeePerHead" value="<?= htmlspecialchars($additionalCharge) ?>" class="card-content">
+                            <input type="hidden" name="additionalFeePerHour" value="<?= htmlspecialchars($additionalFeePerHour) ?>" class="card-content">
                         </li>
+
                     <?php } else { ?>
                         <li class="list-group-item payment-info" id="entertainmentDiv">
                             <h5 class="card-title">Additional Service(s) Fee:</h5>
@@ -753,9 +817,7 @@ unset($_SESSION['formData']);
     </form>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    <script src="../../Assets/JS/bootstrap.bundle.min.js">
     </script>
 
     <!-- Sweetalert Link -->

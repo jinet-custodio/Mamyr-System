@@ -17,7 +17,6 @@ $vegetablesCategory = [];
 $seafoodCategory = [];
 $dessertCategory = [];
 $drinkCategory = [];
-$fingerFoods = [];
 if ($getFoodItemResult->num_rows > 0) {
     while ($row = $getFoodItemResult->fetch_assoc()) {
         $categoryName = $row['foodCategory'];
@@ -37,8 +36,6 @@ if ($getFoodItemResult->num_rows > 0) {
             $drinkCategory[] = $row;
         } elseif ($categoryName === 'Dessert') {
             $dessertCategory[] = $row;
-        } elseif ($categoryName === 'Finger Foods Cocktail') {
-            $fingerFoods[] = $row;
         }
     }
 }
@@ -51,8 +48,7 @@ echo json_encode([
     'vegieCategory'  => $vegetablesCategory,
     'seafoodCategory'  => $seafoodCategory,
     'drinkCategory' => $drinkCategory,
-    'dessertCategory' => $dessertCategory,
-    'fingerFoods' => $fingerFoods
+    'dessertCategory' => $dessertCategory
 
 ]);
 $getFoodItemResult->close();

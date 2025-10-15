@@ -157,6 +157,7 @@ if (isset($_POST['bookingID'])) {
                 <?php
 
                 $getBookingInfo = $conn->prepare("SELECT 
+                                                    b.bookingCode,
                                                     b.bookingID, 
                                                     b.bookingType, 
                                                     b.customPackageID, 
@@ -503,6 +504,7 @@ if (isset($_POST['bookingID'])) {
                 <div class="card" id="info-card">
                     <div class="bookingInfoLeft" id="bookingInformation">
                         <div class="row1">
+                            <input type="hidden" name="bookingCode" id="bookingCode" value="<?= $bookingCode ?>">
                             <input type="hidden" name="startDate" value="<?= $startDate ?>">
                             <div class="info-container" id="booking-info-container">
                                 <label for="bookingType" class="info-label">Booking Type</label>

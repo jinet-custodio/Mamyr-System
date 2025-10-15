@@ -118,3 +118,7 @@ INSERT INTO `service` (`serviceID`, `resortServiceID`, `partnershipServiceID`, `
 INSERT INTO `servicepricing` (`pricingID`, `pricingType`, `price`, `chargeType`, `ageGroup`, `notes`) VALUES
 (1, 'Per Head', 300.00, 'Food', 'Both', 'Meal charges calculated at ₱300.00 per person'),
 (2, 'Per Head', 250.00, 'Room', 'Both', 'Extra charge per person if the room occupancy limit is exceeded.');
+(3, 'Per Hour', '500.00', 'Room', 'Both', '500 per hour\r\n');
+(4, 'Per Hour', '2000.00', 'Event', 'Both', NULL);
+
+

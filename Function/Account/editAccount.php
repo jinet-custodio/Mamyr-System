@@ -9,13 +9,24 @@ session_start();
 if (isset($_POST['saveChanges'])) {
     $userRole = (int) $_SESSION['userRole'];
     $userID = (int) $_SESSION['userID'];
-
+    $partnershipID = (int) $_POST['partnershipID'] ?? 0;
     $fullName = mysqli_real_escape_string($conn, $_POST['fullName']);
     $birthday = mysqli_real_escape_string($conn, $_POST['birthday']);
     // $birthDate = date('Y-m-d', strtotime($birthday));
     // var_dump($birthday);
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $companyName = !empty($_POST['companyName'])
+        ? mysqli_real_escape_string($conn, $_POST['companyName'])
+        : '';
+
+    $businessEmail = !empty($_POST['businessEmail'])
+        ? mysqli_real_escape_string($conn, $_POST['businessEmail'])
+        : '';
+
+    $partnerAddress = !empty($_POST['partnerAddress'])
+        ? mysqli_real_escape_string($conn, $_POST['partnerAddress'])
+        : '';
 
     $nameParts = explode(" ", trim($fullName));
     $numParts = count($nameParts);
@@ -76,6 +87,18 @@ if (isset($_POST['saveChanges'])) {
         $userRole
     );
     if ($updateUser->execute()) {
+
+
+        if (!empty($partnershipID)) {
+            $updatePartner = $conn->prepare("UPDATE `partnership` SET `companyName`=?,`businessEmail`=?,`partnerAddress`=? WHERE `partnershipID`= ? AND `userID`= ?");
+            $updatePartner->bind_param("sssii", $companyName, $businessEmail, $partnerAddress, $partnershipID, $userID);
+
+            if (!$updatePartner->execute()) {
+                header("Location: ../../Pages/Account/account.php?message=partner-failed");
+                exit;
+            }
+        }
+
         header("Location: ../../Pages/Account/account.php?message=success-change");
         exit;
     } else {

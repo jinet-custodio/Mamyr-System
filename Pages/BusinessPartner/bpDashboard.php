@@ -50,8 +50,7 @@ require '../../Function/Partner/getBookings.php';
     <title>Business Partner - Mamyr Resort and Events Place</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- Bootstrap Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/BusinessPartner/bpDashboard.css">
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
@@ -287,8 +286,9 @@ require '../../Function/Partner/getBookings.php';
                     LEFT JOIN service s ON (cpi.serviceID = s.serviceID  OR bs.serviceID = s.serviceID)
                     LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                     LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
+                    LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE cb.paymentApprovalStatus = ?
-                    AND cb.paymentStatus = ?
+                    AND p.paymentStatus = ?
                     AND YEAR(b.startDate) = YEAR(CURDATE()) 
                     AND DATE(b.endDate) < CURDATE()
                     AND ps.partnershipID = ?

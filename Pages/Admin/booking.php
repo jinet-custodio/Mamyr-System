@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+error_reporting(0);
+ini_set('display_errors', 0);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -93,22 +93,6 @@ if (isset($_SESSION['error'])) {
             $color = $notifications['colors'];
             $notificationIDs = $notifications['ids'];
             ?>
-
-            <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
-                    <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                    <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
-                    <?php endif; ?>
-                </button>
-            </div>
-
-            <a href="#" class="chat">
-                <img src="../../Assets/Images/Icon/chat.png" alt="home icon">
-            </a>
 
             <?php
             if ($userRole == 3) {

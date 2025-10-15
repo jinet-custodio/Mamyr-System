@@ -8,8 +8,6 @@ date_default_timezone_set('Asia/Manila');
 $userID = intval($_SESSION['userID']);
 $userRole = intval($_SESSION['userRole']);
 
-require '../Helpers/userFunctions.php';
-
 if (isset($_POST['eventBook'])) {
     $bookingType = 'Event';
     $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
@@ -30,8 +28,6 @@ if (isset($_POST['eventBook'])) {
     $foodList =  $_POST['foodIDs'] ?? [];
     $venueID = intval($_POST['venueID']);
     $partnerIDs = $_POST['additionalServiceSelected'] ?? [];
-
-
     $serviceQuantity = 1;
 
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']); //Cash or Gcash
@@ -52,8 +48,6 @@ if (isset($_POST['eventBook'])) {
 
     $services = [];
 
-    $customerChoice = mysqli_real_escape_string($conn, $_POST['customer-choice']);
-    $bookingCode = 'EVT' . date('ymd') . generateCode(5);
 
     if (!empty($venueID)) {
         $getServiceID = $conn->prepare("SELECT * FROM `service` WHERE resortServiceID = ?");
@@ -72,14 +66,9 @@ if (isset($_POST['eventBook'])) {
         }
         $getServiceID->close();
     }
-
-
-
     $partnerService = [];
     if (!empty($partnerIDs)) {
-        $getServiceID = $conn->prepare("SELECT s.* FROM `service` s 
-        LEFT JOIN partnerservice ps ON p.partnershipServiceID = ps.partnershipServiceID
-        WHERE partnershipServiceID = ?");
+        $getServiceID = $conn->prepare("SELECT * FROM `service` WHERE partnershipServiceID = ?");
         foreach ($partnerIDs as $partershipServiceID) {
             $partershipServiceID = intval($partershipServiceID);
             $getServiceID->bind_param('i', $partershipServiceID);
@@ -102,7 +91,6 @@ if (isset($_POST['eventBook'])) {
         $getServiceID->close();
     }
 
-    error_log(print_r($partnerService, true));
 
 
 
@@ -158,15 +146,15 @@ if (isset($_POST['eventBook'])) {
             $price = floatval($price);
             $insertServicePrices->bind_param('iid', $customPackageID, $serviceID, $price);
 
-            if (!$insertServicePrices->execute()) {
+            if (! $insertServicePrices->execute()) {
                 $conn->rollback();
                 error_log("Error: " .  $insertServicePrices->error);
             }
         }
 
         //insert into booking
-        $insertBooking = $conn->prepare("INSERT INTO `booking`(`userID`, `bookingCode`, `customerChoice`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-        $insertBooking->bind_param("isssisissssdds", $userID, $bookingCode, $customerChoice, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDate, $endDate, $paymentMethod, $totalCost, $downpayment, $arrivalTime);
+        $insertBooking = $conn->prepare("INSERT INTO `booking`(`userID`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+        $insertBooking->bind_param("isisissssdds", $userID, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDate, $endDate, $paymentMethod, $totalCost, $downpayment, $arrivalTime);
         if (!$insertBooking->execute()) {
             $conn->rollback();
             error_log("Error: " . $insertBooking->error);
@@ -176,7 +164,7 @@ if (isset($_POST['eventBook'])) {
         $approvedID = 2;
         //insert into bp availed service
         $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`, `approvalStatus`, `price`) VALUES (?,?,?,?)");
-        foreach ($partnerService as $partershipServiceID => $price) {
+        foreach ($partnerIDs as $partershipServiceID => $price) {
             $insertBPavailedService->bind_param('iiid', $partershipServiceID, $bookingID, $approvedID, $price);
             if (!$insertBPavailedService->execute()) {
                 $conn->rollback();

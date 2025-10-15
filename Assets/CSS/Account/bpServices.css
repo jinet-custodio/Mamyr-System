@@ -143,6 +143,18 @@ select:disabled:hover {
   margin: 0.5rem;
 }
 
+.serviceDesc {
+  height: 10rem;
+  line-height: 1.5;
+  text-align: justify;
+  resize: none;
+  padding: 0.5rem;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  overflow-y: auto;
+}
+
 .serviceInputContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -173,6 +185,21 @@ select:disabled:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.no-data-container {
+  width: 100%;
+  height: 40vh;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.empty-card .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .badge {

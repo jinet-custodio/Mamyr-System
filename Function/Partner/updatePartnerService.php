@@ -13,11 +13,9 @@ $rawPrice = $data['price'];
 $servicePrice = str_replace(['₱', ','], '', $rawPrice);
 $serviceCapacity = intval($data['capacity']);
 $serviceDuration = $data['duration'];
-$serviceDesc = $data['descriptions'] ?? [];
+$serviceDesc = $data['descriptions'] ?? 'N/A';
 // $serviceImage = $data['image'];
 $serviceAvailabilityName = ucwords($data['availability']);
-$description = $serviceDesc ? implode(', ', $serviceDesc) : 'N/A';
-error_log($serviceAvailabilityName);
 try {
     $getAvailabilityIDQuery = $conn->prepare('SELECT `availabilityID` FROM `serviceavailability` WHERE `availabilityName` = ?');
     $getAvailabilityIDQuery->bind_param('s', $serviceAvailabilityName);
@@ -30,7 +28,7 @@ try {
     }
 
     $updatePartnerServiceQuery = $conn->prepare("UPDATE `partnershipservice` SET `PBName`= ?,`PBPrice`=?,`PBDescription`= ? ,`PBcapacity`= ?,`PBduration`= ? ,`PSAvailabilityID`= ? WHERE `partnershipServiceID`= ?");
-    $updatePartnerServiceQuery->bind_param('sdsssii', $serviceName, $servicePrice, $description, $serviceCapacity, $serviceDuration, $availabilityID, $serviceID);
+    $updatePartnerServiceQuery->bind_param('sdsssii', $serviceName, $servicePrice, $serviceDesc, $serviceCapacity, $serviceDuration, $availabilityID, $serviceID);
     if (!$updatePartnerServiceQuery->execute()) {
         echo json_encode([
             'success' => false,
