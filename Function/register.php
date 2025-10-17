@@ -42,7 +42,7 @@ if (isset($_POST['signUp'])) {
             } else {
                 $_SESSION['registerFormData'] = $_POST;
                 $_SESSION['partnerData'] = $_POST;
-                error_log(print_r($_POST, true));
+                // error_log(print_r($_POST, true));
                 header('Location: ../../../Pages/busPartnerRegister.php?action=exceedImageSize');
             }
         }

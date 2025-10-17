@@ -147,7 +147,7 @@ INSERT INTO reasons (category, reasonDescription) VALUES
 ('PartnerRejection', 'Non-compliance with policy requirements'),
 ('PartnerRejection', 'Other');
 
--- INSERT INTO reasons (category, reasonDescription) VALUES
+-- INSERT INTO reason (category, reasonDescription) VALUES
 -- ('PartnerRejection', 'Incomplete or missing documents'),
 -- ('PartnerRejection', 'Invalid or unverifiable business information'),
 -- ('PartnerRejection', 'Duplicate partnership request'),
@@ -196,3 +196,6 @@ RENAME TABLE booking_rejections TO booking_rejection
 RENAME TABLE booking_cancellations TO booking_cancellation
 RENAME TABLE additionalcharges TO additionalcharge
 RENAME TABLE reasons TO reason
+
+
+ALTER TABLE `payment` ADD `downpaymentImage` VARCHAR(255) NOT NULL DEFAULT 'defaultDownpayment.png' AFTER `amount`;

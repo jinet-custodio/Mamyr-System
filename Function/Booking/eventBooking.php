@@ -27,7 +27,7 @@ if (isset($_POST['eventBook'])) {
     $durationCount = '5 hours';
 
     //Service & Food & Venue
-    $foodList =  $_POST['foodIDs'] ?? [];
+    $foodList =  $_POST['selectedFoods'] ?? [];
     $venueID = intval($_POST['venueID']);
     $partnerIDs = $_POST['additionalServiceSelected'] ?? [];
 
@@ -78,8 +78,8 @@ if (isset($_POST['eventBook'])) {
     $partnerService = [];
     if (!empty($partnerIDs)) {
         $getServiceID = $conn->prepare("SELECT s.* FROM `service` s 
-        LEFT JOIN partnerservice ps ON p.partnershipServiceID = ps.partnershipServiceID
-        WHERE partnershipServiceID = ?");
+        LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
+        WHERE ps.partnershipServiceID = ?");
         foreach ($partnerIDs as $partershipServiceID) {
             $partershipServiceID = intval($partershipServiceID);
             $getServiceID->bind_param('i', $partershipServiceID);
@@ -133,13 +133,13 @@ if (isset($_POST['eventBook'])) {
             $conn->rollback();
             error_log("Error: " . $insertCustomPackage->error);
         }
-        $customPackageID =   $conn->insert_id;
+        $customPackageID =  $conn->insert_id;
 
         //insert each item
         $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `foodItemID`, `servicePrice`) VALUES (?,?,?)");
 
-        foreach ($foodList as $foodItemID) {
-            // error_log('Food ID: ' . $foodItemID);
+        foreach ($foodList as $foodItemID => $name) {
+            error_log('Food ID: ' . $foodItemID . 'CustomID: ' .  $customPackageID);
             $foodItemID = (int) $foodItemID;
             $foodItemPrice = 0.0;
 
@@ -148,7 +148,7 @@ if (isset($_POST['eventBook'])) {
 
             if (!$insertCustomPackageItem->execute()) {
                 $conn->rollback();
-                error_log("Error inserting item $foodItemID: " . $insertCustomPackageItem->error);
+                error_log("Error inserting itemID => $foodItemID: " . $insertCustomPackageItem->error);
             }
         }
 
@@ -165,7 +165,7 @@ if (isset($_POST['eventBook'])) {
         }
 
         //insert into booking
-        $insertBooking = $conn->prepare("INSERT INTO `booking`(`userID`, `bookingCode`, `customerChoice`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+        $insertBooking = $conn->prepare("INSERT INTO `booking`(`userID`, `bookingCode`, `customerChoice`, `bookingType`, `customPackageID`, `additionalRequest`, `guestCount`, `durationCount`,  `startDate`, `endDate`, `paymentMethod`, `totalCost`, `downpayment`, `arrivalTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $insertBooking->bind_param("isssisissssdds", $userID, $bookingCode, $customerChoice, $bookingType, $customPackageID, $additionalRequest, $guestNo, $durationCount, $startDate, $endDate, $paymentMethod, $totalCost, $downpayment, $arrivalTime);
         if (!$insertBooking->execute()) {
             $conn->rollback();
@@ -173,11 +173,11 @@ if (isset($_POST['eventBook'])) {
         }
 
         $bookingID = $insertBooking->insert_id;
-        $approvedID = 2;
+        $pendingID = 1;
         //insert into bp availed service
         $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`, `approvalStatus`, `price`) VALUES (?,?,?,?)");
         foreach ($partnerService as $partershipServiceID => $price) {
-            $insertBPavailedService->bind_param('iiid', $partershipServiceID, $bookingID, $approvedID, $price);
+            $insertBPavailedService->bind_param('iiid', $partershipServiceID, $bookingID, $pendingID, $price);
             if (!$insertBPavailedService->execute()) {
                 $conn->rollback();
                 error_log("Error: " . $insertBooking->error);

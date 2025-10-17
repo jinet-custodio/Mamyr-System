@@ -28,7 +28,7 @@ if (isset($_GET['userID'])) {
 
         while ($bookings = $result->fetch_assoc()) {
             $checkIn = date("M. d, Y", strtotime($bookings['startDate']));
-
+            $paymentID = $bookings['paymentID'];
             $paymentApprovalStatus = getStatuses($conn, $bookings['paymentApprovalStatus'] ?? null);
             $bookingStatus = getStatuses($conn, $bookings['bookingStatus'] ?? null);
             $paymentStatus = !empty($paymentID) ? getPaymentStatus($conn, $bookings['paymentStatus']) : getPaymentStatus($conn, 1);
@@ -49,6 +49,7 @@ if (isset($_GET['userID'])) {
                             case 5:
                                 $class = 'green';
                                 $status =  'Payment Sent';
+                                break;
                         }
                         switch ($bookingStatus['statusID']) {
                             case 7:

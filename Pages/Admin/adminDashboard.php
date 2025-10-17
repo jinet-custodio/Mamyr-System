@@ -598,6 +598,7 @@ require '../../Function/notification.php';
 
     <!-- //* For Payments -->
     <script src="../../Assets/JS/Dashboard/adminPayments.js"></script>
+
     <script>
         const colors = {
             unpaid: {

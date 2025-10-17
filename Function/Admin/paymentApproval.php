@@ -36,7 +36,7 @@ if (!$getAdminName->execute()) {
 $result = $getAdminName->get_result();
 
 if ($result->num_rows === 0) {
-    error_log('NO DATA  ' . $userID);
+    // error_log('NO DATA  ' . $userID);
     $approvedBy = 'Unknown';
 }
 

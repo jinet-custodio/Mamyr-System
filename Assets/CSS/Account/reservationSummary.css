@@ -189,7 +189,7 @@ body {
 
 #gcashPaymentModal .modal-title {
   font-family: "Poppins Black";
-  font-size: 18px;
+  font-size: 16px;
 }
 
 #gcashModalBody {
@@ -203,6 +203,12 @@ body {
   width: 20vw;
   height: auto;
   margin-top: 1vw;
+}
+
+.time-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 5rem;
 }
 
 .foodModalBtn {
@@ -225,12 +231,58 @@ body {
   width: 300px;
 }
 
-.modal-body {
+/* .modal-body {
   padding: 15px;
   overflow-y: auto;
   flex-grow: 1;
   max-height: 60vh;
+} */
+
+#service-info-button {
+  background-color: transparent !important;
+  border: none !important;
 }
+
+.cardContent i {
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+#payment-amount {
+  position: relative;
+}
+
+.custom-tooltip {
+  position: absolute;
+  color: #ff0000;
+  background-color: rgb(222, 222, 227);
+  padding: 3px 2px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  bottom: -1rem;
+  left: 16rem;
+  z-index: 10;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 1000;
+}
+
+input:read-only {
+  background-color: rgb(204, 204, 204);
+  cursor: default;
+}
+
+input:read-only:hover {
+  background-color: rgb(204, 204, 204);
+}
+
+.custom-tooltip.show {
+  display: block;
+  opacity: 1;
+}
+
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
   .container {
     width: 100% !important;

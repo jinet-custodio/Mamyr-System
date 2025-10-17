@@ -232,26 +232,76 @@ th:nth-child(7) {
   text-transform: capitalize;
 }
 
-.btn-red {
-  background-color: rgb(204, 30, 20) !important;
-  color: white;
+/* Colors */
+
+.badge {
+  font-weight: initial;
+  line-height: normal;
+  font-size: 14px;
+  padding: 0.1rem !important;
+  width: 10rem;
+  border-radius: 5rem !important;
 }
 
-.btn-red:hover {
-  background-color: rgb(150, 10, 3) !important;
-  color: white;
+/* Fully Paid */
+.badge.bg-bright-green {
+  background-color: rgba(75, 192, 75, 0.4) !important;
+  color: rgb(75, 192, 75) !important;
 }
 
-.btn-light-green {
-  background-color: rgb(71, 139, 10) !important;
-  color: white;
+/* Partially Paid */
+.badge.bg-light-blue {
+  background-color: rgba(54, 162, 235, 0.4) !important;
+  color: rgb(54, 162, 235) !important;
 }
 
-.btn-light-green:hover {
-  background-color: rgb(58, 112, 10) !important;
-  color: white;
+/* Awaiting Payment */
+.badge.bg-orange {
+  background-color: rgba(255, 159, 64, 0.4) !important;
+  color: rgb(247, 127, 8) !important;
 }
 
+/* Pending */
+.badge.bg-warning {
+  background-color: rgba(255, 193, 7, 0.4) !important;
+  color: rgb(190, 114, 0) !important;
+}
+
+/* Approved */
+.badge.bg-green {
+  background-color: rgba(40, 167, 69, 0.4) !important;
+  color: rgb(40, 167, 69) !important;
+}
+
+/* Reserved */
+.badge.bg-success {
+  background-color: rgba(83, 243, 169, 0.4) !important;
+  color: rgb(0, 129, 69) !important;
+}
+
+/* Cancelled */
+.badge.bg-danger {
+  background-color: rgba(219, 53, 69, 0.4) !important;
+  color: rgb(219, 53, 69) !important;
+}
+
+/* Rejected */
+.badge.bg-red {
+  background-color: rgba(204, 30, 20, 0.4) !important;
+  color: rgb(204, 30, 20) !important;
+}
+
+/* Expired */
+.badge.bg-muted {
+  background-color: rgba(73, 80, 87, 0.4) !important;
+  color: rgb(73, 80, 87) !important;
+}
+
+/* Finished */
+.badge.bg-light-green {
+  background-color: rgba(99, 201, 9, 0.4) !important;
+  color: rgb(71, 139, 10) !important;
+}
 @media (max-width: 991.98px) {
   .transactionContainer {
     margin-top: 5vh;

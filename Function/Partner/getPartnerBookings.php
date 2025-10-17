@@ -30,7 +30,9 @@ if (isset($_GET['userID'])) {
                                                 MAX(b.additionalRequest) AS additionalRequest,
                                                 GROUP_CONCAT(DISTINCT ps.PBName) AS PBName,
                                                 MAX(bpas.approvalStatus) AS approvalStatus,
-                                                MAX(ec.categoryName) AS categoryName
+                                                MAX(ec.categoryName) AS categoryName,
+                                                bpas.availedDate,
+                                                b.createdAt
                                             FROM businesspartneravailedservice bpas
                                             LEFT JOIN booking b ON bpas.bookingID = b.bookingID
                                             LEFT JOIN user u ON u.userID = b.userID
@@ -57,7 +59,7 @@ if (isset($_GET['userID'])) {
             // Date and Time
             $rawStartDate = $row['startDate'] ?? null;
             $rawEndDate = $row['endDate'] ?? null;
-
+            $availedDate = new DateTime($row['availedDate'] ?? $row['createdAt']);
             $arrivalTime = !empty($row['arrivalTime'])
                 ? date('H:i A', strtotime($row['arrivalTime']))
                 : 'Not Stated';
@@ -73,7 +75,7 @@ if (isset($_GET['userID'])) {
             $createdAt = $row['createdAt'] ?? null;
 
             if (!empty($rawStartDate) || $rawStartDate ===  $rawEndDate) {
-                $bookingDate = date('F d, Y', strtotime($rawStartDate));
+                $bookingDate = date('M. d, Y', strtotime($rawStartDate));
             } elseif (!empty($rawStartDate) && !empty($rawEndDate)) {
                 $bookingDate = $startDate . " to " . $endDate;
             } else {
@@ -82,6 +84,10 @@ if (isset($_GET['userID'])) {
 
             $time = date("g:i A", strtotime($rawStartDate)) . " - " . date("g:i A", strtotime($rawEndDate));
             $duration = $row['durationCount'] . " hours";
+
+            $approvalTimeRange = (clone $availedDate)->modify('+24 hours');
+            $approvalTimeUntil = $approvalTimeRange->format('M. d,Y g:i A');
+
 
             $venue = $row['RServiceName'] ?? null;
 
@@ -132,7 +138,8 @@ if (isset($_GET['userID'])) {
                 'timeDuration' => $time . "(" . $duration . ")",
                 'venue' => $venue,
                 'notes' => $row['additionalRequest'],
-                'serviceInfo' =>  $serviceInfo
+                'serviceInfo' =>  $serviceInfo,
+                'approvalTimeUntil' =>  $approvalTimeUntil
             ];
         }
 

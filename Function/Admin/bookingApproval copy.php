@@ -75,11 +75,42 @@ if (isset($_POST['approveBtn'])) {
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
-
+    // $serviceIDs = [];
+    // $serviceIDs = !empty($_POST['serviceIDs']) ? array_map('trim',   $_POST['serviceIDs']) : [];
+    // $notes = isset($_POST['approvalNotes']) ? mysqli_real_escape_string($conn, $_POST['approvalNotes']) : 'N/A';
     //*Date and Time
     $startDate = mysqli_real_escape_string($conn, $_POST['startDate']);
     $endDate = mysqli_real_escape_string($conn, $_POST['endDate']);
 
+    // Options in approval
+    // $selectedOption = mysqli_real_escape_string($conn, $_POST['adjustOption']) ?? '';
+
+    // $discountAmount = 0.00;
+    // if ($selectedOption === 'editBill') {
+    //     $editedFinalBill = floatval($_POST['editedFinalBill']);
+    //     $finalBill =  ($editedFinalBill !== $finalBill && $editedFinalBill !== 0) ? $editedFinalBill : $finalBill;
+    // } elseif ($selectedOption === 'discount') {
+    //     $discountAmount = floatval($_POST['discountAmount']);
+    //     $finalBill = $finalBill - $discountAmount;
+    // }
+
+    // $applyAdditionalCharge = mysqli_real_escape_string($conn, $_POST['applyAdditionalCharge']) ?? '';
+    // $additionalCharge = !empty($applyAdditionalCharge) ? floatval($_POST['additionalCharge']) : 0.00;
+
+    // switch (strtolower($bookingType)) {
+    //     case 'resort':
+    //         $type = 'TOUR';
+    //         break;
+    //     case 'hotel':
+    //         $type = 'HTL';
+    //         break;
+    //     case 'event':
+    //         $type = 'EVT';
+    //         break;
+    //     default:
+    //         $type = 'MAMYR';
+    //         break;
+    // }
 
     $bookingCode = mysqli_real_escape_string($conn, $_POST['bookingCode']);
     // strtoupper($type) . date('ymd') . generateCode(5)
@@ -88,30 +119,27 @@ if (isset($_POST['approveBtn'])) {
         $totalFoodPrice = mysqli_real_escape_string($conn, $_POST['foodPrice']) ?? 0;
         $newFoodPrice = !empty($_POST['newFoodPrice']) ? (float) $_POST['newFoodPrice'] : $totalFoodPrice;
         $venuePrice = (float) str_replace(['₱', ','], '', $rawVenuePrice) ?? 0;
+        // $foodPriceTotal = (float) str_replace(['₱', ','], '', $rawTotalFoodPrice) ?? 0;
+        // $foodIDs = !empty($_POST['foodIDs']) ? array_map('trim',  $_POST['foodIDs']) : [];
 
+        // $venueName = mysqli_real_escape_string($conn, $_POST['venue']);
 
-        $customerChoice = mysqli_real_escape_string($conn, $_POST['customerChoice']);
+        // if (stripos($venueName, 'Main') !== false) {
+        //     $miniVenue = 'Mini Function Hall';
+        //     $getMiniIDQuery = $conn->prepare("SELECT ra.resortServiceID, s.serviceID FROM resortamenity ra 
+        //     LEFT JOIN service s ON ra.resortServiceID = s.resortServiceID
+        //     WHERE ra.RServiceName = ?");
+        //     $getMiniIDQuery->bind_param('s', $miniVenue);
+        //     if (!$getMiniIDQuery->execute()) {
+        //         error_log('Error getting mini function hall ID' . $getMiniIDQuery->error);
+        //     }
 
-        if (!empty($_POST['partnerServices'])) {
-            $businessApprovalStatus = mysqli_real_escape_string($conn, $_POST['businessApprovalStatus']) ?? '';
-
-            foreach ($_POST['partnerServices'] as $partnerID => $services) {
-                foreach ($services as $service) {
-                    $serviceID = intval($service['id']);
-                    $status = strtolower(trim($service['status']));
-                    $price = floatval($service['price']);
-
-                    if ($customerChoice === 'cancel' && $status === 'rejected') {
-                        header('Location: ../../../../Pages/Admin/viewBooking.php?action=addOnsService-rejected');
-                        exit();
-                    }
-
-                    if ($status === 'rejected') {
-                        $finalBill -= $price;
-                    }
-                }
-            }
-        }
+        //     $result = $getMiniIDQuery->get_result();
+        //     if ($result->num_rows > 0) {
+        //         $data = $result->fetch_assoc();
+        //         $serviceIDs[] = $data['serviceID'];
+        //     }
+        // }
     }
 
     $discountAmount = (float) $_POST['discountAmount'];
@@ -119,11 +147,82 @@ if (isset($_POST['approveBtn'])) {
     $finalBill = mysqli_real_escape_string($conn, $_POST['finalBill']);
     $downpayment = $finalBill * .3;
 
+    $customerChoice = mysqli_real_escape_string($conn, $_POST['customerChoice']);
 
+    if (!empty($_POST['partnerServices'])) {
+        $businessApprovalStatus = mysqli_real_escape_string($conn, $_POST['businessApprovalStatus']) ?? '';
 
+        foreach ($_POST['partnerServices'] as $partnerID => $services) {
+            foreach ($services as $service) {
+                $serviceID = intval($service['id']);
+                $status = strtolower(trim($service['status']));
+                $price = floatval($service['price']);
 
+                if ($customerChoice === 'cancel' && $status === 'rejected') {
+                    header('Location: ../../../../Pages/Admin/viewBooking.php?action=addOnsService-rejected');
+                    exit();
+                }
+
+                if ($status === 'rejected') {
+                    $finalBill -= $price;
+                }
+            }
+        }
+    }
+
+    // $availabilityID = 2;
     $conn->begin_transaction();
     try {
+        // $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
+
+
+        //* Insert this to unavailable dates
+        // foreach ($serviceIDs as $serviceID) {
+        //     $getServicesQuery->bind_param("i", $serviceID);
+        //     if (!$getServicesQuery->execute()) {
+        //         $conn->rollback();
+        //         throw new Exception("Failed to fetch service for ID: $serviceID");
+        //     }
+
+        //     $getServicesQueryResult = $getServicesQuery->get_result();
+        //     if ($getServicesQueryResult->num_rows === 0) {
+        //         $conn->rollback();
+        //         throw new Exception("No service found for ID: $serviceID");
+        //     }
+
+        //     $row = $getServicesQueryResult->fetch_assoc();
+        //     $serviceType = $row['serviceType'];
+
+        //     switch ($serviceType) {
+        //         case 'Resort':
+        //             $resortServiceID = $row['resortServiceID'];
+        //             $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?, ?, ?)");
+        //             $insertToUnavailableDates->bind_param('iss', $resortServiceID, $startDate, $endDate);
+        //             if (!$insertToUnavailableDates->execute()) {
+        //                 $conn->rollback();
+        //                 throw new Exception("Failed to insert unavailable date for resort service ID: $resortServiceID");
+        //             }
+        //             $insertToUnavailableDates->close();
+        //             break;
+
+        //         case 'Partner':
+        //             $partnershipServiceID = $row['partnershipServiceID'];
+        //             $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(partnershipServiceID, unavailableStartDate, unavailableEndDate) VALUES (?, ?, ?)");
+        //             $insertToUnavailableDates->bind_param('iss', $partnershipServiceID, $startDate, $endDate);
+        //             if (!$insertToUnavailableDates->execute()) {
+        //                 $conn->rollback();
+        //                 throw new Exception("Failed to insert unavailable date for partner service ID: $partnershipServiceID");
+        //             }
+        //             $insertToUnavailableDates->close();
+        //             break;
+
+        //         default:
+        //             $conn->rollback();
+        //             throw new Exception("Unknown service type: $serviceType for service ID: $serviceID");
+        //     }
+        // }
+
+
         //Update customer package
 
         if (!empty($customPackageID)) {
@@ -148,8 +247,6 @@ if (isset($_POST['approveBtn'])) {
         $startDateObj = new DateTime($startDate);
         $startDateObj->modify('-1 day');
         $downpaymentDueDate = $startDateObj->format('Y-m-d H:i:s');
-
-        $bookingDate = $startDateObj->format('F d, Y g:i A');
 
         //Insert into Confirmed Booking
         $insertConfirmed = $conn->prepare("INSERT INTO confirmedbooking(bookingID, discountAmount, finalBill, userBalance, downpaymentDueDate, paymentDueDate)
@@ -212,17 +309,17 @@ if (isset($_POST['approveBtn'])) {
                                     <p style="font-size: 14px; margin: 20px 0 10px;">Here are your booking details:</p>
 
                                     <p style="font-size: 14px; margin: 8px 0;">Booking Reference: <strong>' . $bookingCode . '</strong></p>
-                                    <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' .  $bookingDate . '</strong>
+                                    <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' .  $startDate . '</strong>
                                     </p>
                                     <p style="font-size: 14px; margin: 8px 0;">Booking Type: <strong>' . htmlspecialchars($tourType) . ' Booking ' . htmlspecialchars($tourType) . '</strong></p>
                                     <p style="font-size: 14px; margin: 8px 0;">Grand Total: <strong>₱' . number_format($finalBill, 2) .
             '</strong></p>
 
                                     <p style="font-size: 14px;">
-                                        <strong>To confirm your reservation</strong>, a downpayment of <strong>
+                                        <strong>To confirm your reservation</strong>, a <strong>downpayment</strong> of
                                         ₱' .
             number_format($downpayment, 2) .
-            '</strong> must
+            ' must
                                         be paid within <strong>24 hours</strong>.
                                     </p>
 
@@ -341,7 +438,7 @@ if (isset($_POST['rejectBtn'])) {
         $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, senderID, receiverID,  message, receiver) VALUES(?,?,?,?,?)");
         $insertNotification->bind_param('iiiss', $bookingID, $userID, $customerID, $message, $receiver);
 
-        if (!$insertNotification->execute()) {
+        if ($insertNotification->execute()) {
             $conn->rollback();
             throw new Exception("Failed to insert notification.");
         }

@@ -318,7 +318,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     $selectedFoodCount++; ?>
                                     <div class="food-name">
                                         <label class="foodName"><?= htmlspecialchars($food['name']) ?></label>
-                                        <input type="hidden" name="foodSelections[]" value="<?= htmlspecialchars($food['id']) ?>">
+                                        <input type="hidden" name="selectedFoods[<?= $food['id'] ?>]" value="<?= htmlspecialchars($food['name']) ?>">
                                     </div>
                                 <?php } ?>
                             </div>
@@ -437,13 +437,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 decoration that will damage the venue are prohibited.</p>
         </section>
 
-        <div class="hidden-inputs">
+        <div class="hidden-inputs" style="display: none;">
 
             <input type="hidden" name="eventDate" value="<?= $eventDate ?>">
             <input type="hidden" name="eventStartTime" value="<?= $eventStartTime ?>">
             <input type="hidden" name="startDate" value="<?= $startDate ?>">
             <input type="hidden" name="endDate" value="<?= $endDate ?>">
-            <input type="hidden" name="menuIDs" value="<? $menuIDs ?>">
             <input type="hidden" name="venueID" value="<?= $venueID ?>">
             <input type="hidden" name="pricingID" value="<?= $pricingID ?>">
         </div>

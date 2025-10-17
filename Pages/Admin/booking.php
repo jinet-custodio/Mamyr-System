@@ -219,8 +219,8 @@ if (isset($_SESSION['error'])) {
                         data-bs-target="#notificationModal">
                         <i class="bi bi-bell" id="notification-icon"></i>
                         <?php if (!empty($counter)): ?>
-                        <?= htmlspecialchars($counter) ?>
-                        </span>
+                            <?= htmlspecialchars($counter) ?>
+                            </span>
                         <?php endif; ?>
                     </button>
                 </div>
@@ -267,137 +267,137 @@ if (isset($_SESSION['error'])) {
 
     <!-- Table JS -->
     <script>
-    $('#bookingTable').DataTable({
-        responsive: false,
-        scrollX: true,
-        columnDefs: [{
-                width: '10%',
-                targets: 0
-            },
-            {
-                width: '15%',
-                targets: 1
-            },
-            {
-                width: '15%',
-                targets: 2
-            },
-            {
-                width: '15%',
-                targets: 3
-            },
-            {
-                width: '15%',
-                targets: 4
-            },
-            {
-                width: '10%',
-                targets: 5
-            },
-            {
-                width: '10%',
-                targets: 6
-            },
-        ],
-    });
+        $('#bookingTable').DataTable({
+            responsive: false,
+            scrollX: true,
+            columnDefs: [{
+                    width: '10%',
+                    targets: 0
+                },
+                {
+                    width: '15%',
+                    targets: 1
+                },
+                {
+                    width: '15%',
+                    targets: 2
+                },
+                {
+                    width: '15%',
+                    targets: 3
+                },
+                {
+                    width: '15%',
+                    targets: 4
+                },
+                {
+                    width: '10%',
+                    targets: 5
+                },
+                {
+                    width: '10%',
+                    targets: 6
+                },
+            ],
+        });
     </script>
 
 
     <!-- Booking Ajax -->
     <script>
-    function getStatusBadge(colorClass, status) {
-        return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
-    }
+        function getStatusBadge(colorClass, status) {
+            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+        }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch("../../Function/Admin/Ajax/getBookingsJSON.php")
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    // console.error("Failed to load bookings.");
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: data.message || 'An unknown error occurred.',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-                    return;
-                }
-                const bookings = data.bookings;
-                const table = $('#bookingTable').DataTable();
-                table.clear();
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("../../Function/Admin/Ajax/getBookingsJSON.php")
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        // console.error("Failed to load bookings.");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'An unknown error occurred.',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                        return;
+                    }
+                    const bookings = data.bookings;
+                    const table = $('#bookingTable').DataTable();
+                    table.clear();
 
-                bookings.forEach(booking => {
-                    table.row.add([
-                        booking.formattedBookingID,
-                        booking.name,
-                        booking.bookingType + ` Booking`,
-                        booking.checkIn,
-                        booking.checkOut,
-                        getStatusBadge(booking.statusClass, booking.status),
-                        `<form action="viewBooking.php" method="POST">
+                    bookings.forEach(booking => {
+                        table.row.add([
+                            booking.formattedBookingID,
+                            booking.name,
+                            booking.bookingType + ` Booking`,
+                            booking.checkIn,
+                            booking.checkOut,
+                            getStatusBadge(booking.statusClass, booking.status),
+                            `<form action="viewBooking.php" method="POST">
                                     <input type="hidden" name="button" value="booking">
                                     <input type="hidden" name="bookingType" value="${booking.bookingType}">
                                     <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
                                     <input type="hidden" name="bookingID" value="${booking.bookingID}">
                                     <button type="submit" class="btn btn-primary">View</button>
                             </form>`
-                    ]);
-                });
+                        ]);
+                    });
 
-                table.draw();
+                    table.draw();
 
-            }).catch(error => {
-                console.error("Error loading bookings:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: data.message || 'An unknown error occurred.',
-                    showConfirmButton: false,
-                    timer: 1500,
+                }).catch(error => {
+                    console.error("Error loading bookings:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.message || 'An unknown error occurred.',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
                 })
-            })
-    })
+        })
     </script>
 
     <script src="../../Assets/JS/adminNavbar.js"></script>
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
 
@@ -405,34 +405,34 @@ if (isset($_SESSION['error'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
 
-    if (paramValue === "approvedSuccess") {
-        Swal.fire({
-            position: "top-end",
-            title: "Booking Approved!",
-            text: "The booking has been successfully approved.",
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500
-        });
-    } else if (paramValue === 'rejectedSuccess') {
-        Swal.fire({
-            position: "top-end",
-            title: "Booking Rejected!",
-            text: "The booking has been successfully rejected.",
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500
-        });
-    }
+        if (paramValue === "approvedSuccess") {
+            Swal.fire({
+                position: "top-end",
+                title: "Booking Approved!",
+                text: "The booking has been successfully approved.",
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } else if (paramValue === 'rejectedSuccess') {
+            Swal.fire({
+                position: "top-end",
+                title: "Booking Rejected!",
+                text: "The booking has been successfully rejected.",
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 </body>
 
