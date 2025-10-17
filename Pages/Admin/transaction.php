@@ -147,8 +147,8 @@ require '../../Function/notification.php';
                         data-bs-target="#notificationModal">
                         <i class="bi bi-bell" id="notification-icon"></i>
                         <?php if (!empty($counter)): ?>
-                        <?= htmlspecialchars($counter) ?>
-                        </span>
+                            <?= htmlspecialchars($counter) ?>
+                            </span>
                         <?php endif; ?>
                     </button>
                 </div>
@@ -194,143 +194,140 @@ require '../../Function/notification.php';
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#transactionTable').DataTable({
-            columnDefs: [{
-                    width: '9%',
-                    target: 0,
-                },
-                {
-                    width: '15%',
-                    target: 1,
-                },
-                {
-                    width: '15%',
-                    target: 2,
-                },
-                {
-                    width: '10%',
-                    target: 4,
-                },
-                {
-                    width: '15%',
-                    target: 5,
-                },
-                {
-                    width: '15%',
-                    target: 6,
-                },
-                {
-                    width: '10%',
-                    target: 7,
-                }
-            ]
+        $(document).ready(function() {
+            $('#transactionTable').DataTable({
+                columnDefs: [{
+                        width: '9%',
+                        target: 0,
+                    },
+                    {
+                        width: '15%',
+                        target: 1,
+                    },
+                    {
+                        width: '15%',
+                        target: 2,
+                    },
+                    {
+                        width: '10%',
+                        target: 4,
+                    },
+                    {
+                        width: '15%',
+                        target: 5,
+                    },
+                    {
+                        width: '15%',
+                        target: 6,
+                    },
+                    {
+                        width: '10%',
+                        target: 7,
+                    }
+                ]
+            });
         });
-    });
     </script>
     <script src="../../Assets/JS/adminNavbar.js"></script>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch("../../Function/Admin/Ajax/getPaymentJSON.php")
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    // console.error("Failed to load payments.");
+        function getStatusBadge(colorClass, status) {
+            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("../../Function/Admin/Ajax/getPaymentJSON.php")
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        // console.error("Failed to load payments.");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'An unknown error occurred.'
+                        });
+                        return;
+                    }
+                    const payments = data.payments;
+                    const table = $('#transactionTable').DataTable();
+                    table.clear();
+                    // console.log(payments);
+
+                    payments.forEach(payment => {
+                        // const row = document.createElement("tr");
+                        table.row.add([
+                            payment.formattedBookingID,
+                            payment.name,
+                            payment.totalBill,
+                            payment.userBalance,
+                            payment.paymentMethod,
+                            getStatusBadge(payment.statusClass, payment.status),
+                            getStatusBadge(payment.paymentClass, payment.paymentStatusName),
+                            ` <form action = "viewPayments.php"
+                                        method = "POST" >
+                                            <input type = "hidden"
+                                        name = "button"
+                                        value = "booking" >
+                                            <input type = "hidden"
+                                        name = "bookingType"
+                                        value = "${payment.bookingType}" >
+                                            <input type = "hidden"
+                                        name="bookingStatus"
+                                        value="${payment.bookingStatus}">
+                                            <input type ="hidden"
+                                        name="bookingID"
+                                        value="${payment.bookingID}">
+                                            <button type="submit" class="btn btn-primary"> View </button> </form>`
+                        ]);
+                    });
+                    table.draw();
+                }).catch(error => {
+                    console.error("Error loading bookings:", error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: data.message || 'An unknown error occurred.'
-                    });
-                    return;
-                }
-                const payments = data.payments;
-                const tbody = document.querySelector('#payment-display-body');
-                tbody.innerHTML = "";
-                // console.log(payments);
-                if (payments && payments.length > 0) {
-                    payments.forEach(payment => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                                                <td>${payment.formattedBookingID}</td>
-                                                <td>${payment.name}</td>
-                                                <td>${payment.totalBill}</td>
-                                                <td>${payment.userBalance}</td>
-                                                <td>${payment.paymentMethod}</td>
-                                                <td>
-                                                    <a class="btn btn-${payment.statusClass} w-100">
-                                                        ${payment.status}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-${payment.paymentClass} w-100">
-                                                        ${payment.paymentStatusName}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <form action="viewPayments.php" method="POST">
-                                                        <input type="hidden" name="button" value="booking">
-                                                        <input type="hidden" name="bookingType" value="${payment.bookingType}">
-                                                        <input type="hidden" name="bookingStatus" value="${payment.bookingStatus}">
-                                                        <input type="hidden" name="bookingID" value="${payment.bookingID}">
-                                                        <button type="submit" class="btn btn-primary">View</button>
-                                                    </form>
-                                                </td>
-                                            `;
-                        tbody.appendChild(row);
+                        text: error.message || 'Failed to load data from the server.'
                     })
-                } else {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `<td colspan="6" class="text-center">No bookings to display</td>`;
-                    tbody.appendChild(row);
-                }
-            }).catch(error => {
-                console.error("Error loading bookings:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: error.message || 'Failed to load data from the server.'
                 })
-            })
-    })
+        })
     </script>
 
     <!-- Sweetalert Link -->
@@ -338,45 +335,45 @@ require '../../Function/notification.php';
 
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
-    if (paramValue === "approved") {
-        Swal.fire({
-            title: "Payment Approved",
-            text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
-            icon: 'success',
-        });
-    } else if (paramValue === "rejected") {
-        Swal.fire({
-            title: "Payment Rejected",
-            text: "You have reviewed and rejected the payment.",
-            icon: 'success',
-        });
-    } else if (paramValue === "failed") {
-        Swal.fire({
-            title: "Payment Approval Failed",
-            text: "Unable to approve or reject the payment. Please try again later.",
-            icon: 'error',
-        });
-    } else if (paramValue === "paymentSuccess") {
-        Swal.fire({
-            title: "Payment Added",
-            text: "Payment was successfully added and processed.",
-            icon: 'success',
-        });
-    } else if (paramValue === "paymentFailed") {
-        Swal.fire({
-            title: "Payment Failed",
-            text: "Failed to deduct the payment. Please try again later.",
-            icon: 'error',
-        });
-    }
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        if (paramValue === "approved") {
+            Swal.fire({
+                title: "Payment Approved",
+                text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
+                icon: 'success',
+            });
+        } else if (paramValue === "rejected") {
+            Swal.fire({
+                title: "Payment Rejected",
+                text: "You have reviewed and rejected the payment.",
+                icon: 'success',
+            });
+        } else if (paramValue === "failed") {
+            Swal.fire({
+                title: "Payment Approval Failed",
+                text: "Unable to approve or reject the payment. Please try again later.",
+                icon: 'error',
+            });
+        } else if (paramValue === "paymentSuccess") {
+            Swal.fire({
+                title: "Payment Added",
+                text: "Payment was successfully added and processed.",
+                icon: 'success',
+            });
+        } else if (paramValue === "paymentFailed") {
+            Swal.fire({
+                title: "Payment Failed",
+                text: "Failed to deduct the payment. Please try again later.",
+                icon: 'error',
+            });
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location.href);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location.href);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 

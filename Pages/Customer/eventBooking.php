@@ -279,7 +279,6 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-4 fw-bold" id="dishModalLabel">Select Dishes</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="note-container">
                         <h6 class="noteLabel">Catering Services Inclusions:</h6>
@@ -478,7 +477,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <?php foreach ($drinkCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
                                             <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>" <?= ($item['foodName'] === 'Lemonade') ? 'checked' : '' ?>>&nbsp;<?= $item['foodName'] ?>
+                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
                                             </div>
                                     <?php endif;
                                     endforeach; ?>
@@ -488,7 +487,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <?php foreach ($dessertCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
                                             <div class="food-item-container">
-                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>" <?= ($item['foodName'] === 'Buko Salad') ? 'checked' : '' ?>>&nbsp;<?= $item['foodName'] ?>
+                                                <input type="checkbox" class="food-item" name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]" value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
                                             </div>
                                     <?php endif;
                                     endforeach; ?>
@@ -513,7 +512,6 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-4 fw-bold" id="additionalServicesModalLabel">Business Partners</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <p class="note" id="additionalServiceNote" style="color: #0d6dfc">Before including additional
                         services from our partners,
@@ -523,7 +521,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                     <div class="customer-choice-container p-3" style="color:rgba(43, 155, 240, 1);">
                         <p class="warning-text">This option applies only when you’ve chosen to avail a partner service. Please select one if that’s the case.</p>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="customer-choice" value="proceed" <?= $formData['customer-choice'] === 'proceed' ? 'checked' : '' ?>>
+                            <input class="form-check-input" type="radio" name="customer-choice" value="proceed" <?= (!empty($formData['customer-choice']) ?? $formData['customer-choice'] === 'proceed') ? 'checked' : '' ?>>
                             <label class="form-check-label" for="radioButton">
                                 Still <strong>proceed </strong> with the event regardless of the partner’s decision.
                             </label>
@@ -687,22 +685,37 @@ $formData = $_SESSION['eventFormData'] ?? [];
     <!-- Session Selected Food -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const sessionFoodSelections =
-                <?= isset($formData['foodSelections']) ? json_encode($formData['foodSelections']) : '[]' ?>;
+            const sessionFoodSelections = <?= isset($formData['foodSelections']) ? json_encode($formData['foodSelections']) : '[]' ?>;
+            const sessionSelectedFoods = <?= isset($formData['selectedFoods']) ? json_encode($formData['selectedFoods']) : '[]' ?>;
 
-            console.log(sessionFoodSelections);
-            // const selectedFood = Object.keys(sessionfoodSelections.value);
-            // console.log(selectedFood)
+            let selectedFoods = [];
+
             const checkboxes = document.querySelectorAll('.food-item');
 
-            Object.values(sessionFoodSelections).forEach(name => {
-                checkboxes.forEach(checkbox => {
-                    if (checkbox.value === name) {
-                        checkbox.checked = true;
+
+            if (typeof sessionFoodSelections === "object" && sessionFoodSelections !== null) {
+                Object.values(sessionFoodSelections).forEach(categoryObj => {
+                    if (typeof categoryObj === "object" && categoryObj !== null) {
+                        Object.values(categoryObj).forEach(foodName => {
+                            selectedFoods.push(String(foodName));
+                        });
                     }
                 });
+            }
+
+
+            if (typeof sessionSelectedFoods === 'object' && sessionSelectedFoods !== null && Object.keys(sessionSelectedFoods).length > 0) {
+                selectedFoods = Object.values(sessionSelectedFoods).map(String);
+            }
+
+            console.log(selectedFoods);
+
+            checkboxes.forEach((checkbox) => {
+                if (selectedFoods.includes(String(checkbox.value))) {
+                    checkbox.checked = true;
+                }
             });
-        })
+        });
     </script>
 
     <!-- Fetch Partner service -->

@@ -395,6 +395,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         if (paramValue === 'successLogin') {
             Swal.fire({
+                timer: 1000,
+                showConfirmButton: false,
                 title: "Login Successful!",
                 text: "Welcome back! You have successfully logged in.",
                 icon: "success",

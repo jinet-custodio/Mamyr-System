@@ -59,8 +59,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
     <link rel="stylesheet" href="../../Assets/CSS/Account/reservationSummary.css" />
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
-
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
 <body>
@@ -149,7 +148,6 @@ require_once '../../Function/Helpers/statusFunctions.php';
                                                     cb.amountPaid, 
                                                     cb.finalBill, 
                                                     cb.userBalance, 
-                                                    cb.confirmedBookingID, 
                                                     cb.discountAmount, 
                                                     cb.paymentApprovalStatus,  
                                                     cb.paymentDueDate, 
@@ -241,6 +239,10 @@ require_once '../../Function/Helpers/statusFunctions.php';
 
                     $createdAt = $row['createdAt'] ?? null;
 
+                    $newCreatedAt = new DateTime($createdAt);
+                    $until24hrs = $newCreatedAt->modify('+1');
+                    $within24hrs = $until24hrs->format('M. d, Y g:i A');
+
                     if (!empty($rawStartDate) || $rawStartDate ===  $rawEndDate) {
                         $bookingDate = date('F d, Y', strtotime($rawStartDate));
                     } elseif (!empty($rawStartDate) && !empty($rawEndDate)) {
@@ -271,11 +273,6 @@ require_once '../../Function/Helpers/statusFunctions.php';
                     $downpayment =  (float) $row['downpayment'];
                     $additionalCharge =  (float) $row['additionalCharge'];
                     $downpaymentImageData = $row['downpaymentImage'];
-                    if (!empty($downpaymentImageData)) {
-                        $downpaymentImage = "../../Assets/Images/PaymentProof/" . $downpaymentImageData;
-                    } else {
-                        $downpaymentImage = "../../Assets/Images/PaymentProof/defaultDownpayment.png";
-                    }
                     $bookingStatusID = $row['bookingStatus'] ?? null;
                     $bookingStatus = getStatuses($conn, $bookingStatusID);
 
@@ -283,9 +280,8 @@ require_once '../../Function/Helpers/statusFunctions.php';
                         $paymentApprovalStatusID = $row['paymentApprovalStatus'] ?? null;
                         $paymentStatusID = $row['paymentStatus'] ?? 1;
                         $finalBill = (float) $row['finalBill'] ?? null;
-                        $downpaymentDueDate = !empty($row['downpaymentDueDate']) ? date('F d, Y h:i A', strtotime($row['downpaymentDueDate'])) : 'Not Stated';
-                        $paymentDueDate = !empty($row['paymentDueDate']) ? date('F d, Y h:i A', strtotime($row['paymentDueDate'])) : 'Not Stated';
-                        $dueDate = ($amountPaid === $downpayment || $amountPaid > $downpayment) ? $paymentDueDate : $downpaymentDueDate;
+                        $downpaymentDueDate = !empty($row['downpaymentDueDate']) ? date('M. d, Y h:i A', strtotime($row['downpaymentDueDate'])) : 'Not Stated';
+                        $paymentDueDate = !empty($row['paymentDueDate']) ? date('M. d, Y h:i A', strtotime($row['paymentDueDate'])) : 'Not Stated';
                         $amountPaid = (float) $row['amountPaid'];
                         $userBalance =  (float) $row['userBalance'];
 
@@ -297,9 +293,6 @@ require_once '../../Function/Helpers/statusFunctions.php';
                         $finalBill = $originalBill;
                         $dueDate = 'Wait for approval before paying';
                     }
-
-                    $buttonName = ($amountPaid === $downpayment || $amountPaid > $downpayment) ? 'Check Payment' : 'Make a downpayment';
-
 
                     //Pax Details
                     $toddlerCount = (int) $row['toddlerCount'];
@@ -429,7 +422,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
                 }
 
                 // echo '<pre>';
-                // print_r($services);
+                // print_r($paymentStatus);
                 // echo '</pre>';
 
                 $serviceVenue = [];
@@ -462,7 +455,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
                 <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus"
                     value="<?= !empty($paymentApprovalStatus['statusName']) ? htmlspecialchars($paymentApprovalStatus['statusName']) : '' ?>">
                 <input type="hidden" name="paymentStatus" id="paymentStatus"
-                    value="<?= !empty($paymentStatus['statusName']) ?  htmlspecialchars($paymentStatus['statusName']) : '' ?>">
+                    value="<?= !empty($paymentStatus['paymentStatusName']) ?  htmlspecialchars($paymentStatus['paymentStatusName']) : '' ?>">
                 <input type="hidden" name="paymentMethod" id="paymentMethod"
                     value="<?= htmlspecialchars($paymentMethod) ?>">
 
@@ -475,9 +468,10 @@ require_once '../../Function/Helpers/statusFunctions.php';
                 <div class="button-container">
                     <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn"
                         style="display: none;" data-bs-toggle="modal"
-                        data-bs-target="#gcashPaymentModal"><?= $buttonName ?></button>
-                    <!-- <a href="../bookNow.php" class="btn btn-primary w-100 mt-3" id="newReservationBtn">Make Another
-                        Reservation</a> -->
+                        data-bs-target="#gcashPayment1stModal">Make a downpayment</button>
+
+                    <a href="paymentHistory.php" class="btn btn-info w-100 mt-3" id="viewTransaction">View Your Transaction</a>
+
                     <form action="../../Function/receiptPDF.php" method="POST" target="_blank">
                         <input type="hidden" name="totalCost" value="<?= $finalBill ?>">
                         <input type="hidden" name="name" value="<?= $clientName ?>">
@@ -572,9 +566,8 @@ require_once '../../Function/Helpers/statusFunctions.php';
                                 <h6 class="cardHeader">Menu</h6>
                                 <?php if ($foodList) { ?>
                                     <p class="cardContent">Food List
-                                        <button data-bs-target="#foodListModal" class="foodModalBtn" data-bs-toggle="modal">
-                                            <img src="../../Assets/Images/Icon/information.png" alt="More Details"
-                                                class="infoIcon"></button>
+                                        <button id="food-info-button" data-bs-target="#foodListModal" class="foodModalBtn" data-bs-toggle="modal">
+                                            <i class="bi bi-info-circle  text-primary"></i></button>
                                     </p>
                                 <?php } else {  ?>
                                     <p class="cardContent">None</p>
@@ -587,12 +580,11 @@ require_once '../../Function/Helpers/statusFunctions.php';
                                 <h6 class="cardHeader">Additional Service</h6>
                                 <?php if ($partnerServiceList) { ?>
                                     <p class="cardContent">Service List
-                                        <button data-bs-target="#partnerServiceModal" data-bs-toggle="modal"> <img
-                                                src="../../Assets/Images/Icon/information.png" alt="More Details"
-                                                class="infoIcon"></button>
+                                        <button id="service-info-button" data-bs-target="#partnerServiceModal" data-bs-toggle="modal"> <i class="bi bi-info-circle  text-primary"></i></button>
                                     </p>
                                 <?php } else {  ?>
-                                    <p class="cardContent">None</p>
+                                    <p class=" cardContent">None
+                                    </p>
                                 <?php
                                 }
                                 ?>
@@ -636,96 +628,159 @@ require_once '../../Function/Helpers/statusFunctions.php';
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Modal for menu list -->
-        <div class="modal" tabindex="-1" id="foodListModal">
-            <div class="modal-dialog">
+    <!-- Modal for menu list -->
+    <div class="modal" tabindex="-1" id="foodListModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Event Menu</h5>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <?php foreach ($foodList as $category => $items) { ?>
+                        <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
+                        <?php foreach ($items as $name) { ?>
+                            <ul>
+                                <li> <?= htmlspecialchars($name) ?></li>
+                            </ul>
+                        <?php } ?>
+                    <?php } ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for partner service list -->
+    <div class="modal" tabindex="-1" id="partnerServiceModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Additional Service</h5>
+                </div>
+                <div class="modal-body">
+
+                    <?php foreach ($partnerServiceList as $category => $items) { ?>
+                        <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
+                        <?php foreach ($items as $name => $price) { ?>
+                            <ul>
+                                <li> <?= htmlspecialchars($name) ?> — ₱<?= number_format($price, 2) ?> </li>
+                            </ul>
+                        <?php } ?>
+                    <?php } ?>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form for payment -->
+    <form action="../../Function/Customer/Account/uploadPayment.php" method="POST" enctype="multipart/form-data">
+
+        <div class="modal fade" id="gcashPayment1stModal" aria-hidden="true" aria-labelledby="gcashPayment1stModalLabel" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+
                     <div class="modal-header">
-                        <h5 class="modal-title">Event Menu</h5>
+                        <h1 class="modal-title">Upload Your Screenshot</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <?php foreach ($foodList as $category => $items) { ?>
-                            <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
-                            <?php foreach ($items as $name) { ?>
-                                <ul>
-                                    <li> <?= htmlspecialchars($name) ?></li>
-                                </ul>
-                            <?php } ?>
-                        <?php } ?>
+
+                    <div class="modal-body" id="gcashModalBody">
+                        <p>
+                            Please upload a screenshot of your <strong>GCash downpayment</strong> below.
+                        </p>
+
+                        <div class="alert alert-info mt-3">
+                            <ul class="mb-0">
+                                <li>Downpayment must be made within <strong>24 hours</strong> after booking creation for <strong>events and hotels</strong>.</li>
+                                <li>Downpayment for <strong>resort cottages</strong> is <strong>not required</strong>, but failure to pay may make your reserved cottage available to others.</li>
+                                <li>Make sure the receipt is <strong>readable</strong>.</li>
+                            </ul>
+                        </div>
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success w-100 mt-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#gcashPaymentModal">Next</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal for partner service list -->
-        <div class="modal" tabindex="-1" id="partnerServiceModal">
-            <div class="modal-dialog">
+        <div class="modal fade" id="gcashPaymentModal" aria-hidden="true" aria-labelledby="gcashPaymentModalLabel" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+
                     <div class="modal-header">
-                        <h5 class="modal-title">Additional Service</h5>
+                        <h1 class="modal-title">Upload Your Screenshot</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
 
-                        <?php foreach ($partnerServiceList as $category => $items) { ?>
-                            <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
-                            <?php foreach ($items as $name => $price) { ?>
-                                <ul>
-                                    <li> <?= htmlspecialchars($name) ?> — ₱<?= number_format($price, 2) ?> </li>
-                                </ul>
-                            <?php } ?>
-                        <?php } ?>
+                    <div class="modal-body" id="gcashModalBody">
+                        <p>
+                            Please upload a screenshot of your <strong>GCash downpayment</strong> below.
+                        </p>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <div class="mt-3 time-container">
+                            <div class="due-date-container">
+                                <label class="form-label fw-bold">Downpayment Due Date:</label>
+                                <p><?= htmlspecialchars($within24hrs) ?> <br> <?= htmlspecialchars($downpaymentDueDate) ?> </p>
+                            </div>
 
-        <!-- Form for payment -->
-        <form action="../../Function/Customer/Account/uploadPayment.php" method="POST" enctype="multipart/form-data">
-            <div class="modal fade" id="gcashPaymentModal" aria-hidden="true" aria-labelledby="gcashPaymentModal"
-                tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-
-                        <div class="modal-header">
-                            <h1 class="modal-title">Upload Your Screenshot</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="due-date-container">
+                                <label class="form-label fw-bold">Full Payment Due Date:</label>
+                                <p><?= htmlspecialchars($paymentDueDate) ?></p>
+                            </div>
                         </div>
 
-                        <div class="modal-body" id="gcashModalBody">
-                            Please upload a screenshot of your GCash down payment below.
-                            <img src="<?= $downpaymentImage ?>" alt="Downpayment Image" id="preview"
-                                class="downpaymentPic">
+                        <div class="mt-2 text-center">
+                            <img src="../../Assets/Images/PaymentProof/<?= isset($_SESSION['tempImage']) ? $_SESSION['tempImage'] : 'defaultDownpayment.png'; ?>" alt="Downpayment Image" id="preview" class="downpaymentPic mb-3">
                             <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
                             <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
-                            <input type="text" name="paymentDueDate" value="<?= $dueDate ?>">
+                            <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
+                            <input type="hidden" name="imageFileName" value="<?= $_SESSION['tempImage'] ?? '' ?>">
                             <input type="file" name="downpaymentPic" id="downpaymentPic" hidden>
-                            <label for="downpaymentPic" class="custom-file-button btn btn-outline-primary mt-2">
+                            <label for="downpaymentPic" class="custom-file-button btn btn-primary mt-2">
                                 Upload Payment Receipt
                             </label>
                         </div>
 
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" name="submitDownpaymentImage">Submit</button>
+                        <div class="payment-details-container d-flex gap-3">
+                            <div class="input-container mt-3">
+                                <label for="downpayment" class="fw-bold">Downpayment Amount:</label>
+                                <input type="text" id="downpayment" name="downpayment" value="<?= $downpayment ?>" class="form-control mt-1" readonly>
+                            </div>
+                            <div class="input-container mt-3">
+                                <label for="payment" class="fw-bold">Enter payment amount:</label>
+                                <input type="text" id="payment-amount" name="payment-amount" placeholder="1000" class="form-control mt-1" value="<?= !empty($_SESSION['payment-amount']) ? $_SESSION['payment-amount'] : '' ?>" required>
+                                <div id="tooltip" class="custom-tooltip">Please input number</div>
+                            </div>
                         </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-bs-toggle="modal" data-bs-target="#gcashPaymentModal">Back</button>
+                        <button type="submit" class="btn btn-success" name="submitDownpaymentImage">Submit</button>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
+
 
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -734,15 +789,17 @@ require_once '../../Function/Helpers/statusFunctions.php';
         const bookingStatus = document.getElementById("bookingStatus").value;
         const paymentApprovalStatus = document.getElementById("paymentApprovalStatus").value;
         const paymentMethod = document.getElementById("paymentMethod").value;
-
+        const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
         // console.log("Booking Stat: " + bookingStatus);
         // console.log("payment App Stat" + paymentApprovalStatus);
-        if (bookingStatus === "Pending" && paymentApprovalStatus === '') {
+        if ((bookingStatus === "Pending" && paymentApprovalStatus === '') || (bookingStatus === 'Cancelled') || (bookingStatus === 'Rejected')) {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
+            downloadReceiptBtn.style.display = 'none';
         } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && paymentStatus === "Unpaid") {
-            document.getElementById("makeDownpaymentBtn").style.display = "show";
+            document.getElementById("makeDownpaymentBtn").style.display = "block";
+            downloadReceiptBtn.style.display = 'none';
         } else if (paymentApprovalStatus === "Approved" && paymentStatus === "Partially Paid") {
-            document.getElementById("makeDownpaymentBtn").style.display = "show";
+            document.getElementById("makeDownpaymentBtn").style.display = "block";
         } else if (paymentApprovalStatus === "Done" && paymentStatus === "Fully Paid") {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
         } else if (paymentMethod === 'Cash') {
@@ -751,7 +808,23 @@ require_once '../../Function/Helpers/statusFunctions.php';
             document.getElementById("makeDownpaymentBtn").style.display = "block";
         } else {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
-        }
+        };
+
+
+        const input = document.getElementById('payment-amount');
+        const tooltip = document.getElementById('tooltip');
+        input.addEventListener('keypress', function(e) {
+            if (!/[0-9]/.test(e.key)) {
+                e.preventDefault();
+            }
+            tooltip.classList.add('show');
+
+
+            clearTimeout(tooltip.hideTimeout);
+            tooltip.hideTimeout = setTimeout(() => {
+                tooltip.classList.remove('show');
+            }, 2000);
+        });
     </script>
 
     <script>
@@ -767,7 +840,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
         });
     </script>
 
-    <script>
+    <!-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             const bookingType = document.getElementById("bookingType").value;
 
@@ -785,7 +858,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
                 addOnsContainer.style.display = "none";
             }
         });
-    </script>
+    </script> -->
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -794,28 +867,59 @@ require_once '../../Function/Helpers/statusFunctions.php';
     <script>
         const param = new URLSearchParams(window.location.search);
         const paramValue = param.get('action');
+
+        const downpaymentValue = parseFloat(document.getElementById('downpayment').value);
+        const paymentAmount = parseFloat(document.getElementById('payment-amount').value);
+
         if (paramValue === "imageSize") {
             Swal.fire({
                 title: "Oops!",
-                text: "File is too large. Maximum allowed size is 64MB.",
+                text: "File is too large. Maximum allowed size is 5MB.",
                 icon: "warning",
                 confirmButtonText: "Okay",
             });
         } else if (paramValue === 'error') {
             Swal.fire({
-                title: 'Oops',
+                title: 'Oops! Database problem!',
                 text: 'There was an error while processing your request. Please try again later.',
                 icon: 'warning',
                 confirmButtonText: 'Okay'
             })
+        } else if (paramValue === 'lessAmount') {
+            Swal.fire({
+                title: 'Oops',
+                text: `Your payment is only ₱${paymentAmount.toFixed(2)}. Please complete the required downpayment of ₱${downpaymentValue.toFixed(2)}.`,
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            }).then((result) => {
+                const paymentModal = document.getElementById('gcashPaymentModal');
+                const modal = new bootstrap.Modal(paymentModal);
+                modal.show();
+
+                document.getElementById('payment-amount').style.border = '1px solid red';
+            })
+        } else if (paramValue === 'imageFailed') {
+            Swal.fire({
+                title: 'Oops',
+                text: `Make sure you uploaded an image`,
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            }).then((result) => {
+                const paymentModal = document.getElementById('gcashPaymentModal');
+                const modal = new bootstrap.Modal(paymentModal);
+                modal.show();
+
+                document.querySelector('.custom-file-button').style.border = '2px solid red';
+            })
         }
 
+        document.getElementById('payment-amount').addEventListener('input', () => {
+            document.getElementById('payment-amount').style.border = '1px solid rgb(222, 222, 227)';
+        });
 
-        if (paramValue) {
-            const url = new URL(window.location.href);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+        document.querySelector('.custom-file-button').addEventListener('click', () => {
+            document.querySelector('.custom-file-button').style.border = '1px solid rgb(64, 136, 245)';
+        })
     </script>
 
 

@@ -253,10 +253,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="card ratings-card">
             <div class="card-body graph-card-body">
-                <!-- <div class="graph-header">
+                <div class="graph-header">
                     <i class="bi bi-star"></i>
                     <h6 class="graph-header-text">Ratings</h6>
-                </div> -->
+                </div>
 
                 <div class="rating-categories">
                     <!-- Resort -->
@@ -264,11 +264,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <div class="rating-label">Resort</div>
                         <div class="rating-bar">
                             <div class="progress">
-                                <div class="progress-bar" id="resort-bar" role="progressbar" style="width: 88%;"
-                                    aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar" id="resort-bar" role="progressbar" aria-valuenow=""
+                                    aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
-                        <div class="rating-value" id="resort-rating-value">4.4</div>
+                        <div class="rating-value" id="resort-rating-value"></div>
                     </div>
 
                     <!-- Hotel -->
@@ -276,11 +276,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <div class="rating-label">Hotel</div>
                         <div class="rating-bar">
                             <div class="progress">
-                                <div class="progress-bar" id="hotel-bar" role="progressbar" style="width: 92%;"
-                                    aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar" id="hotel-bar" role="progressbar" aria-valuenow=""
+                                    aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
-                        <div class="rating-value" id="hotel-rating-value">4.6</div>
+                        <div class="rating-value" id="hotel-rating-value"></div>
                     </div>
 
                     <!-- Event -->
@@ -288,25 +288,25 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <div class="rating-label">Event</div>
                         <div class="rating-bar">
                             <div class="progress">
-                                <div class="progress-bar" id="event-bar" role="progressbar" style="width: 95%;"
-                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar" id="event-bar" role="progressbar" aria-valuenow=""
+                                    aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
-                        <div class="rating-value" id="event">4.8</div>
+                        <div class="rating-value" id="event-rating-value"></div>
                     </div>
 
                     <!-- Overall Rating (Optional) -->
                     <div class="overall-rating">
                         <div class="overall-rating-label">
                             <h6 class="overall-rating-label">Overall Rating</h6>
-                            <h4 class="overall-rating-value">4.6</h4>
+                            <h4 class="overall-rating-value" id="overall-rating-value"></h4>
                         </div>
-                        <div class="overall-rating-stars">
-                            <i class="bi bi-star-fill" id="overall-rating"></i>
-                            <i class="bi bi-star-fill" id="overall-rating"></i>
-                            <i class="bi bi-star-fill" id="overall-rating"></i>
-                            <i class="bi bi-star-fill" id="overall-rating"></i>
-                            <i class="bi bi-star-fill" id="overall-rating"></i>
+                        <div class="overall-rating-stars" id="star-container">
+                            <!-- <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i> -->
                         </div>
                     </div>
                 </div>
@@ -435,6 +435,45 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             }).addTo(map)
             .bindPopup('Mamyr Resort and Events Place is Located Here!')
             .openPopup();
+    </script>
+
+    <script>
+        async function getRatings() {
+            const response = await fetch('Function/Admin/Ajax/getRatings.php');
+            const data = await response.json();
+
+            const resortBar = document.getElementById('resort-bar');
+            resortBar.style.width = data.resortPercent + '%';
+            resortBar.setAttribute('ari-valuenow', data.resortPercent)
+            document.getElementById('resort-rating-value').textContent = data.resortRating;
+
+            const hotelBar = document.getElementById('hotel-bar');
+            hotelBar.style.width = data.hotelPercent + '%';
+            hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
+            document.getElementById('hotel-rating-value').textContent = data.hotelRating;
+
+            const eventBar = document.getElementById('event-bar');
+            eventBar.style.width = data.eventPercent + '%';
+            eventBar.setAttribute('ari-valuenow', data.eventPercent)
+            document.getElementById('event-rating-value').textContent = data.eventRating;
+
+            document.getElementById('overall-rating-value').textContent = data.overAllRating;
+            const starContainer = document.getElementById('star-container');
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(data.overAllRating)) {
+                    starContainer.innerHTML += '<i class="bi bi-star-fill text-warning"></i>';
+                } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
+                    starContainer.innerHTML += '<i class="bi bi-star-half text-warning"></i>';
+                } else {
+                    starContainer.innerHTML += '<i class="bi bi-star text-warning"></i>';
+                }
+            }
+        }
+
+
+
+        getRatings();
+        setInterval(getRatings, 300000);
     </script>
 
 </body>

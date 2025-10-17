@@ -26,7 +26,7 @@ if (isset($_GET['userID'])) {
 
         while ($bookings = $result->fetch_assoc()) {
             // $checkIn = date("M. d, Y", strtotime($bookings['startDate']));
-
+            $paymentID = $bookings['paymentID'];
             $paymentApprovalStatus = getStatuses($conn, $bookings['paymentApprovalStatus'] ?? null);
             $bookingStatus = getStatuses($conn, $bookings['bookingStatus'] ?? null);
             $paymentStatus = !empty($paymentID) ? getPaymentStatus($conn, $bookings['paymentStatus']) : getPaymentStatus($conn, 1);
@@ -39,6 +39,12 @@ if (isset($_GET['userID'])) {
             switch ($paymentApprovalStatus['statusID']) {
                 case 1: //Pending
                     $approvalClass = 'warning';
+                    switch ($paymentStatus['paymentStatusID']) {
+                        case 5:
+                            $approvalStatusName = 'Awaiting Review';
+                            $approvalClass = 'green';
+                            break;
+                    }
                     break;
                 case 2:
                     $status = 'Reserved';

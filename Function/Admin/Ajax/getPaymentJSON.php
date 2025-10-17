@@ -10,10 +10,11 @@ try {
                             b.bookingID, b.bookingType, b.userID, b.startDate, b.bookingStatus, b.paymentMethod,
                             u.firstName, u.middleInitial, u.lastName, 
                             b.customPackageID, b.totalCost,
-                            cb.paymentApprovalStatus, cb.confirmedBookingID, cb.paymentStatus, cb.confirmedFinalBill, cb.userBalance
-                        FROM booking b
+                            cb.paymentApprovalStatus, cb.confirmedBookingID, p.paymentStatus, cb.finalBill, cb.userBalance
+                        FROM confirmedbooking cb
+                        LEFT JOIN  booking b ON  cb.bookingID = b.bookingID 
                         INNER JOIN user u ON b.userID = u.userID
-                        LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
+                        LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         WHERE b.bookingStatus not in (1, 3, 4, 6)");
     $getBookingInfo->execute();
     $result = $getBookingInfo->get_result();
@@ -27,7 +28,7 @@ try {
 
         $paymentApprovalStatus = getStatuses($conn, $payments['paymentApprovalStatus'] ?? null);
         $bookingStatus = getStatuses($conn, $payments['bookingStatus'] ?? null);
-        $paymentStatus = getPaymentStatus($conn, $payments['paymentStatus']) ?? null;
+        $paymentStatus = getPaymentStatus($conn, $payments['paymentStatus'] ?? 1);
 
         $status = '';
         $class = '';
@@ -35,23 +36,26 @@ try {
             $status = $paymentApprovalStatus['statusName'];
             switch ($paymentApprovalStatus['statusID']) {
                 case 1:
-                    $status = 'Downpayment';
-                    $class = 'info';
+                    $status = 'Awaiting Payment';
+                    $class = 'warning';
+                    switch ($paymentStatus['paymentStatusID']) {
+                        case 5:
+                            $status = 'Awaiting review';
+                            $paymentClass = 'warning';
+                            break;
+                    }
                     break;
                 case 2:
-                    $class = 'success';
-                    break;
-                case 3:
-                    $class = 'danger';
+                    $class = 'green';
                     break;
                 case 4:
-                    $class = 'red';
+                    $class = 'danger';
                     break;
                 case 5:
-                    $class = 'light-green';
+                    $class = 'red';
                     break;
-                case 6:
-                    $class = 'secondary';
+                case 7:
+                    $class = 'muted';
                     break;
                 default:
                     $class = 'warning';
@@ -61,45 +65,20 @@ try {
             $paymentStatusName =  $paymentStatus['paymentStatusName'];
             switch ($paymentStatus['paymentStatusID']) {
                 case  1:
-                    $paymentClass = 'warning';
+                    $paymentClass = 'orange';
                     break;
                 case 2:
-                    $paymentClass = 'info';
+                    $paymentClass = 'light-blue';
                     break;
                 case 3:
-                    $paymentClass = 'success';
+                    $paymentClass = 'bright-green';
                     break;
                 case 4:
                     $paymentClass = 'danger';
                     break;
                 case 5:
+                    $paymentStatusName = 'Awaiting review';
                     $paymentClass = 'primary';
-                    break;
-            }
-        } else {
-            $status = $bookingStatus['statusName'];
-            switch ($bookingStatus['statusID']) {
-                case 1:
-                    $class = 'warning';
-                    break;
-                case 2:
-                    $status = 'Downpayment';
-                    $class = 'info';
-                    break;
-                case 3:
-                    $class = 'danger';
-                    break;
-                case 4:
-                    $class = 'red';
-                    break;
-                case 5:
-                    $class = 'light-green';
-                    break;
-                case 6:
-                    $class = 'secondary';
-                    break;
-                default:
-                    $class = 'warning';
                     break;
             }
         }
@@ -118,7 +97,7 @@ try {
             'paymentStatusName' =>  $paymentStatusName,
             'paymentClass' => $paymentClass,
             'userBalance' => '₱ ' . number_format($payments['userBalance'], 2),
-            'totalBill' => '₱ ' . number_format($payments['confirmedFinalBill'], 2) ?? '₱ ' . number_format($payments['totalCost'], 2)
+            'totalBill' => '₱ ' . number_format($payments['finalBill'], 2) ?? '₱ ' . number_format($payments['totalCost'], 2)
         ];
     }
     echo json_encode(
