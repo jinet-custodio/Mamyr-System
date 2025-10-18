@@ -79,8 +79,8 @@ require '../../Function/notification.php';
                 </a>
             </li>
             <li class="nav-item" id="navLI">
-                <a class="nav-link" href="reviews.php">
-                    <i class="bi bi-list-stars"></i> <span id="linkText">Reviews</span>
+                <a class="nav-link" href="schedule.php">
+                    <i class="bi bi-calendar-date"></i><span id="linkText">Schedule</span>
                 </a>
             </li>
             <li class="nav-item" id="navLI">
@@ -101,6 +101,11 @@ require '../../Function/notification.php';
             <li class="nav-item" id="navLI">
                 <a class="nav-link" href="displayPartnership.php">
                     <i class="bi bi-people"></i> <span id="linkText">Partnerships</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI">
+                <a class="nav-link" href="reviews.php">
+                    <i class="bi bi-list-stars"></i> <span id="linkText">Reviews</span>
                 </a>
             </li>
             <li class="nav-item" id="navLI">
@@ -239,7 +244,7 @@ require '../../Function/notification.php';
         </section>
         <?php $monthToday = date('F') ?>
         <section class="container bottomSection">
-            <div class="card graph-card">
+            <div class="card graph-card" id="bookingSummary">
                 <div class="card-body graph-card-body">
                     <div class="graph-header">
                         <i class="bi bi-calendar-check"></i>
@@ -298,7 +303,7 @@ require '../../Function/notification.php';
                 </div>
             </div>
 
-            <div class="card graph-card">
+            <div class="card graph-card" id="bookingsGraph">
                 <div class="card-body graph-card-body">
                     <div class="graph-header">
                         <i class="bi bi-calendar-week"></i>
@@ -328,7 +333,7 @@ require '../../Function/notification.php';
             </div>
 
 
-            <div class="card graph-card">
+            <div class="card graph-card" id="salesCard">
                 <div class="card-body graph-card-body">
                     <div class="graph-header">
                         <i class="bi bi-tags"></i>
@@ -363,7 +368,7 @@ require '../../Function/notification.php';
             </div>
 
 
-            <div class="card graph-card">
+            <div class="card graph-card" id="paymentsGraph">
                 <div class="card-body graph-card-body">
                     <div class="graph-header">
                         <i class="bi bi-receipt-cutoff"></i>
@@ -397,10 +402,22 @@ require '../../Function/notification.php';
 
 
             <div class="card calendar-card">
+                <div class="filter-btn-container mb-2">
+                    <div class="filter-select-wrapper">
+                        <select class="filter-select" name="calendar-filter-select" id="calendar-filter-select">
+                            <option selected value="events">Events</option>
+                            <option value="services">Available Services</option>
+                        </select>
+                        <i class="bi bi-funnel"></i>
+                    </div>
+                </div>
                 <div id="calendar"></div>
+                <div class="moreBtn">
+                    <a href="schedule.php" class="btn btn-primary">View More</a>
+                </div>
             </div>
 
-            <div class="card graph-card">
+            <div class="card graph-card" id="ratingsCard">
                 <div class="card-body graph-card-body">
                     <div class="graph-header">
                         <i class="bi bi-star"></i>
@@ -483,11 +500,33 @@ require '../../Function/notification.php';
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
+            const filterSelect = document.getElementById('calendar-filter-select');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth'
-
+                initialView: 'dayGridMonth',
+                events: '../../Function/Admin/fetchBookings.php',
+                eventsSet: function(events) {
+                    console.log('Fetched events:', events);
+                    events.forEach(event => {
+                        console.log(`Title: ${event.title}, Start: ${event.startStr}`);
+                    });
+                },
             });
             calendar.render();
+
+            function changeEventSource(newSourceUrl) {
+                calendar.removeAllEventSources();
+                calendar.addEventSource(newSourceUrl);
+            }
+
+            filterSelect.addEventListener('change', function() {
+                const selectedValue = this.value;
+
+                if (selectedValue === 'events') {
+                    changeEventSource('../../Function/Admin/fetchBookings.php');
+                } else if (selectedValue === 'services') {
+                    changeEventSource('../../Function/Admin/fetchUnavailableServices.php');
+                }
+            });
         });
     </script>
 
