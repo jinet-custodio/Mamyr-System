@@ -29,8 +29,8 @@ $fetchUserBookingQuery = $conn->prepare("SELECT
                                 LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
                                 LEFT JOIN bookingservice bs ON bs.bookingID = b.bookingID
                                 LEFT JOIN service s ON bs.serviceID = s.serviceID
-                                LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                                WHERE p.paymentStatus IN (?,?) AND u.userID = ?
+                                -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
+                                WHERE cp.paymentStatus IN (?,?) AND u.userID = ?
                             ");
 $fetchUserBookingQuery->bind_param("iii", $fullyPaid, $partiallyPaid, $userID);
 $fetchUserBookingQuery->execute();
