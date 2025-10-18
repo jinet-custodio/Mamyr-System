@@ -150,13 +150,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
                                             b.bookingType, u.firstName, u.lastName, b.guestCount AS guest, 
                                             b.startDate, b.endDate, b.paymentMethod, b.totalCost, 
-                                            cb.paymentApprovalStatus, p.paymentStatus, 
+                                            cb.paymentApprovalStatus, cb.paymentStatus, 
                                             CASE WHEN bpas.bookingID IS NULL THEN cb.finalBill 
                                             ELSE cb.finalBill - bpas.price
                                             END AS confirmedFinalBill
                                             FROM confirmedbooking cb
                                             LEFT JOIN booking b ON cb.bookingID = b.bookingID
-                                            LEFT JOIN payment p ON cb.confirmedBookingID = cb.confirmedBookingID
+                                            -- LEFT JOIN payment p ON cb.confirmedBookingID = cb.confirmedBookingID
                                             LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                                             LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
                                             LEFT JOIN user u ON b.userID = u.userID
@@ -168,12 +168,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             GROUP BY 
                                             b.bookingID, b.bookingType, u.firstName, u.lastName, b.guestCount, 
                                             b.startDate, b.endDate, b.paymentMethod, b.totalCost, 
-                                            cb.paymentApprovalStatus, p.paymentStatus, cb.finalBill
+                                            cb.paymentApprovalStatus, cb.paymentStatus, cb.finalBill
                                             ");
                                     $getReportData->bind_param("iss", $approvedStatusID, $selectedStartDate, $selectedEndDate);
                                 } elseif ($userRole === 2) { //Partner
                                     $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
-                                            cb.paymentApprovalStatus, p.paymentStatus,
+                                            cb.paymentApprovalStatus, cb.paymentStatus,
                                             b.bookingType, b.startDate, b.endDate, b.paymentMethod, cb.finalBill,
                                             bs.serviceID, bs.bookingServicePrice,
                                             cp.customPackageID, cpi.customPackageID , cpi.serviceID,  
@@ -183,7 +183,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                             FROM confirmedbooking cb
                                             LEFT JOIN booking b ON cb.bookingID = b.bookingID 
-                                            LEFT JOIN payment p ON cb.confirmedBookingID = b.confirmedBookingID  
+                                            -- LEFT JOIN payment p ON cb.confirmedBookingID = b.confirmedBookingID  
                                             LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                                             LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
                                             LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID 

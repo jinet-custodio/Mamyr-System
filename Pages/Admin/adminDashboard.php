@@ -251,7 +251,7 @@ require '../../Function/notification.php';
 
                         <div class="filter-btn-container">
                             <div class="filter-select-wrapper">
-                                <select class="filter-select" name="bookings-filter-select" id="bookings-filter-select">
+                                <select class="filter-select" name="booking-summary-filter-select" id="booking-summary-filter-select">
                                     <option value="month"><?= $monthToday ?></option>
                                     <option value="w1">Week 1</option>
                                     <option value="w2">Week 2</option>

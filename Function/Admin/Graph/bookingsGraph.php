@@ -27,10 +27,10 @@ if (isset($_GET['selectedFilter'])) {
                         booking b ON cb.bookingID = b.bookingID
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                    LEFT JOIN 
-                        payment p ON cb.confirmedBookingID = p.confirmedBookingID
+                    -- LEFT JOIN 
+                    --     payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
-                        -- p.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND cb.paymentApprovalStatus = ? AND
+                        cb.paymentStatus NOT IN (?) AND b.bookingStatus IN (?, ?)  AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                     GROUP BY 
@@ -67,10 +67,8 @@ if (isset($_GET['selectedFilter'])) {
                         booking b ON cb.bookingID = b.bookingID
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                    LEFT JOIN 
-                        payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
-                        -- p.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND cb.paymentApprovalStatus = ? AND
+                        cb.paymentStatus NOT IN (?) AND b.bookingStatus IN (?, ?)  AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                         AND FLOOR((DAY(b.startDate) - 1) / 7) = ?
@@ -83,8 +81,7 @@ if (isset($_GET['selectedFilter'])) {
     }
 
 
-    $partiallyPaid = 2;
-    $fullyPaid = 3;
+    $paymentIssue = 4;
     $approvedStatus = 2;
     $doneStatus = 6;
     $getBookingsFiltered = $conn->prepare($sql);
@@ -92,15 +89,15 @@ if (isset($_GET['selectedFilter'])) {
         error_log("Prepare failed: " . $conn->error);
     }
     // error_log("Executing query with weekNumber = $weekNumber * selectedValue = $selectedFilterValue");
-    // if ($filter === 'week') {
-    //     $getBookingsFiltered->bind_param('iiiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $approvedStatus, $weekNumber);
-    // } elseif ($filter === 'month') {
-    //     $getBookingsFiltered->bind_param('iiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $approvedStatus);
-    // }
-
     if ($filter === 'week') {
-        $getBookingsFiltered->bind_param('i', $weekNumber);
+        $getBookingsFiltered->bind_param('iiii', $paymentIssue, $approvedStatus, $doneStatus,  $weekNumber);
+    } elseif ($filter === 'month') {
+        $getBookingsFiltered->bind_param('iii', $paymentIssue, $approvedStatus, $doneStatus);
     }
+
+    // if ($filter === 'week') {
+    //     $getBookingsFiltered->bind_param('i', $weekNumber);
+    // }
 
     if (!$getBookingsFiltered->execute()) {
         error_log("Error: " . $getBookingsFiltered->error);

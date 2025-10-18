@@ -11,10 +11,10 @@ if (isset($_GET['userID'])) {
         $getBookingInfo = $conn->prepare("SELECT b.bookingCode,
                                             b.bookingID, b.bookingType, b.userID, b.startDate, b.bookingStatus, b.paymentMethod, 
                                             b.customPackageID, b.totalCost,
-                                            cb.paymentApprovalStatus, cb.confirmedBookingID, p.paymentID, p.paymentStatus, cb.finalBill, cb.userBalance
+                                            cb.paymentApprovalStatus, cb.confirmedBookingID, cb.paymentStatus, cb.finalBill, cb.userBalance
                                         FROM confirmedbooking cb
                                         LEFT JOIN booking b ON cb.bookingID = b.bookingID
-                                        LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
+                                        -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                                         WHERE b.userID = ?
                                         ORDER BY
                                         b.createdAt");
@@ -26,10 +26,10 @@ if (isset($_GET['userID'])) {
 
         while ($bookings = $result->fetch_assoc()) {
             // $checkIn = date("M. d, Y", strtotime($bookings['startDate']));
-            $paymentID = $bookings['paymentID'];
+            // $paymentID = $bookings['paymentID'];
             $paymentApprovalStatus = getStatuses($conn, $bookings['paymentApprovalStatus'] ?? null);
             $bookingStatus = getStatuses($conn, $bookings['bookingStatus'] ?? null);
-            $paymentStatus = !empty($paymentID) ? getPaymentStatus($conn, $bookings['paymentStatus']) : getPaymentStatus($conn, 1);
+            $paymentStatus =  getPaymentStatus($conn, ($bookings['paymentStatus'] ?? 1));
 
             $status = '';
             $approvalClass = '';

@@ -77,8 +77,8 @@
 
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
-                                                LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                                                -- WHERE b.bookingStatus IN (?, ?) AND cb.paymentApprovalStatus = ? AND p.paymentStatus IN (?, ?) 
+                                                -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
+                                                -- WHERE b.bookingStatus IN (?, ?) AND cb.paymentApprovalStatus = ? AND cb.paymentStatus IN (?, ?) 
                                                 ");
             // $getCardData->bind_param('iiiii',  $approvedStatusID, $doneStatusID, $approvedStatusID, $paymentStatusID, $fullyPaidID);
 

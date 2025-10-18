@@ -155,7 +155,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
                                                     cb.downpaymentImage,
                                                     cb.additionalCharge,
 
-                                                    p.paymentStatus 
+                                                    cb.paymentStatus 
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb 
                                                     ON b.bookingID = cb.bookingID
@@ -814,16 +814,15 @@ require_once '../../Function/Helpers/statusFunctions.php';
         const input = document.getElementById('payment-amount');
         const tooltip = document.getElementById('tooltip');
         input.addEventListener('keypress', function(e) {
-            if (!/[0-9]/.test(e.key)) {
+            if (!/[0-9.]/.test(e.key) || (e.key === '.' && input.value.includes('.'))) {
+                tooltip.classList.add('show');
                 e.preventDefault();
             }
-            tooltip.classList.add('show');
-
 
             clearTimeout(tooltip.hideTimeout);
             tooltip.hideTimeout = setTimeout(() => {
                 tooltip.classList.remove('show');
-            }, 2000);
+            }, 1000);
         });
     </script>
 

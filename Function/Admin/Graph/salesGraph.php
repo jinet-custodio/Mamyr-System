@@ -34,10 +34,8 @@ if (isset($_GET['selectedFilter'])) {
                         booking b ON cb.bookingID = b.bookingID
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                    LEFT JOIN 
-                        payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
-                        -- p.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
+                        cb.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                     GROUP BY 
@@ -74,10 +72,10 @@ if (isset($_GET['selectedFilter'])) {
                         booking b ON cb.bookingID = b.bookingID
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                    LEFT JOIN 
-                        payment p ON cb.confirmedBookingID = p.confirmedBookingID
+                    -- LEFT JOIN 
+                    --     payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
-                        -- p.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
+                        cb.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                         AND FLOOR((DAY(b.startDate) - 1) / 7) = ?
@@ -98,15 +96,15 @@ if (isset($_GET['selectedFilter'])) {
     if (!$getSalesFiltered) {
         error_log("Prepare failed: " . $conn->error);
     }
-    // if ($filter === 'week') {
-    //     $getSalesFiltered->bind_param('iiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $weekNumber);
-    // } elseif ($filter === 'month') {
-    //     $getSalesFiltered->bind_param('iiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus);
-    // }
-
     if ($filter === 'week') {
-        $getSalesFiltered->bind_param('i', $weekNumber);
+        $getSalesFiltered->bind_param('iiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $weekNumber);
+    } elseif ($filter === 'month') {
+        $getSalesFiltered->bind_param('iiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus);
     }
+
+    // if ($filter === 'week') {
+    //     $getSalesFiltered->bind_param('i', $weekNumber);
+    // }
     // error_log("Executing query with weekNumber = $weekNumber * selectedValue = $selectedFilterValue");
 
     if (!$getSalesFiltered->execute()) {

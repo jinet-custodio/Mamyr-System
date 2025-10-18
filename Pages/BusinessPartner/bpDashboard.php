@@ -286,9 +286,9 @@ require '../../Function/Partner/getBookings.php';
                     LEFT JOIN service s ON (cpi.serviceID = s.serviceID  OR bs.serviceID = s.serviceID)
                     LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                     LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                    LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
+                    -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE cb.paymentApprovalStatus = ?
-                    AND p.paymentStatus = ?
+                    AND cb.paymentStatus = ?
                     AND YEAR(b.startDate) = YEAR(CURDATE()) 
                     AND DATE(b.endDate) < CURDATE()
                     AND ps.partnershipID = ?
