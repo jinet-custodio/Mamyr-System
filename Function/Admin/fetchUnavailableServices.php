@@ -30,7 +30,7 @@ while ($row = $result->fetch_assoc()) {
         'start' => $start,
         'end'   => $end,
         'allDay' => false,
-        'backgroundColor' => '#6c757d',  // Grey
+        'backgroundColor' => '#9ab6ceff',  // Grey
         'borderColor' => '#6c757d',
         'opacity' => '0.7'
     ];

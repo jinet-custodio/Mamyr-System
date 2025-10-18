@@ -25,7 +25,6 @@
 }
 
 main {
-  width: 90%;
   margin: auto;
 }
 
@@ -36,8 +35,9 @@ body {
 
 .notification-toggler-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
+  width: 100%;
 }
 
 .notification-container {
@@ -58,10 +58,8 @@ body {
   gap: 1rem;
 }
 
-/* top cards css */
-.card {
-  width: 200px;
-  height: 94px !important;
+.statCard {
+  width: 98%;
 }
 
 .header {
@@ -236,6 +234,20 @@ option {
   background-color: #f5f5f5 !important;
 }
 
+.bookings-chart,
+.sales-chart,
+.payments-chart {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#bookingsBar,
+#salesBar,
+#paymentsBar {
+  height: 80% !important;
+}
+
 #bookingSummary {
   grid-column: span 2 / span 2;
 }
@@ -297,7 +309,7 @@ option {
   width: 95%;
   grid-column: span 3 / span 3;
   grid-row-start: 3;
-  height: 450px !important;
+  height: 420px !important;
   padding: var(--padding-sm);
   display: flex;
   justify-content: center;
