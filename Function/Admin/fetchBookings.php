@@ -16,6 +16,7 @@ $fullyPaid = 3;
 $fetchUserBookingQuery = $conn->prepare("SELECT 
                                     cb.bookingID,
                                     b.startDate,
+                                    b.endDate,
                                     b.bookingType,
                                     s.resortServiceID,
                                     s.entranceRateID,
@@ -34,10 +35,11 @@ $result = $fetchUserBookingQuery->get_result();
 $eventsByDate = [];
 
 while ($row = $result->fetch_assoc()) {
-    $date = $row['startDate'];
+    $startdate = $row['startDate'];
+    $enddate = $row['endDate'];
     $type = $row['bookingType'];
 
-    if (isset($eventsByDate[$date])) {
+    if (isset($eventsByDate[$startdate])) {
         continue;
     }
 
@@ -49,9 +51,15 @@ while ($row = $result->fetch_assoc()) {
         $color = '#5dccf5'; // Blue
     }
 
-    $eventsByDate[$date] = [
+    $formattedEndDate = null;
+    if (!empty($endDate)) {
+        $formattedEndDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+    }
+
+    $eventsByDate[$startdate] = [
         'title' => $type,
-        'start' => $date,
+        'start' => $startdate,
+        'end' => $enddate,
         'allDay' => true,
         'backgroundColor' => $color,
         'opacity' => '1'

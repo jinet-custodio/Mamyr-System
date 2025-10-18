@@ -21,19 +21,23 @@
 }
 
 main {
-  display: flex;
-  justify-content: center;
+  margin: auto;
 }
 
-.booking-container {
-  width: 90% !important;
-  max-width: 100%;
+body {
+  display: flex;
+  gap: 1rem;
 }
 
 .notification-toggler-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
+  width: 100%;
+}
+
+.booking-container {
+  max-width: 100%;
 }
 
 .notification-container {
