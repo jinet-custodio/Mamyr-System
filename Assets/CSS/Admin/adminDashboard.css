@@ -79,6 +79,10 @@ body {
   margin-top: 0.1rem;
 }
 
+option {
+  padding-left: 1vw !important;
+}
+
 .data-container {
   margin-top: var(--margin-xs);
 }
@@ -134,7 +138,6 @@ body {
   border: 1px solid #ccc;
   border-radius: 20px;
   background-color: #fff;
-  width: 100px; /* adjust as needed */
   height: 36px; /* adjust as needed */
   padding: 0 10px;
 }
@@ -166,9 +169,10 @@ body {
 .bottomSection {
   margin-top: var(--margin-sm);
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap: 1rem;
+  width: 95% !important;
 }
 
 .booking-illustration {
@@ -227,9 +231,36 @@ body {
 }
 
 .graph-card {
-  width: 534px;
-  height: 370px !important;
+  width: 95%;
+  height: 100% !important;
   background-color: #f5f5f5 !important;
+}
+
+#bookingSummary {
+  grid-column: span 2 / span 2;
+}
+
+#bookingsGraph {
+  grid-column: span 2 / span 2;
+  grid-column-start: 3;
+}
+
+#salesCard {
+  grid-column: span 2 / span 2;
+  grid-row-start: 2;
+}
+
+#paymentsGraph {
+  grid-column: span 2 / span 2;
+  grid-column-start: 3;
+  grid-row-start: 2;
+}
+
+#ratingsCard {
+  grid-column-start: 4;
+  grid-row-start: 3;
+  width: 95% !important;
+  margin-left: -5%;
 }
 
 .graph-header {
@@ -263,8 +294,10 @@ body {
 }
 
 .calendar-card {
-  width: 524px;
-  height: 370px !important;
+  width: 95%;
+  grid-column: span 3 / span 3;
+  grid-row-start: 3;
+  height: 450px !important;
   padding: var(--padding-sm);
   display: flex;
   justify-content: center;
@@ -429,7 +462,7 @@ body {
 .overall-rating-stars i {
   color: #fdcc0d;
   font-size: var(--font-size-xl);
-  margin: var(--margin-sm);
+  margin: var(--margin-xs);
 }
 .sales-chart {
   display: flex;
