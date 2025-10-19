@@ -586,7 +586,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     }
                 }
             });
-            console.log(`Initializing ${config.selector} with ${slideCount} slides. Loop: ${enableLoop}`);
         });
     </script>
 

@@ -66,11 +66,10 @@ CREATE TABLE `auditlog` (
   `logID` int(11) NOT NULL,
   `adminID` int(11) NOT NULL,
   `action` varchar(255) NOT NULL,
-  `targetTable` varchar(100) DEFAULT NULL,
-  `targetID` int(11) DEFAULT NULL,
+  `target` varchar(100) DEFAULT NULL,
+  `logDetails` varchar(255) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 -- --------------------------------------------------------
 
 --
