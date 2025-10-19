@@ -469,7 +469,11 @@ require_once '../../Function/Helpers/statusFunctions.php';
                     <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn"
                         style="display: none;" data-bs-toggle="modal" data-bs-target="#gcashPayment1stModal">Make a
                         downpayment</button>
+                        style="display: none;" data-bs-toggle="modal" data-bs-target="#gcashPayment1stModal">Make a
+                        downpayment</button>
 
+                    <a href="paymentHistory.php" class="btn btn-info w-100 mt-3" id="viewTransaction">View Your
+                        Transaction</a>
                     <a href="paymentHistory.php" class="btn btn-info w-100 mt-3" id="viewTransaction">View Your
                         Transaction</a>
 
