@@ -1,9 +1,27 @@
 export function initWebsiteEditor(sectionName, endpointUrl) {
     document.addEventListener('DOMContentLoaded', () => {
         const saveBtn = document.getElementById('saveChangesBtn');
+
         saveBtn?.addEventListener('click', () => {
             saveTextContent();
-            saveEditableImages();
+
+            const editableImages = document.querySelectorAll('.editable-img');
+
+            if (editableImages.length === 0) {
+                console.log("No editable images found — skipping image save.");
+                return;
+            }
+
+            // Check if any image has a file selected or changed alt text
+            const hasModifiedImages = Array.from(editableImages).some(img =>
+                img.fileObject || img.dataset.alttextChanged === "true"
+            );
+
+            if (hasModifiedImages) {
+                saveEditableImages();
+            } else {
+                console.log("No image changes detected — skipping image save.");
+            }
         });
 
         function saveTextContent() {
@@ -17,10 +35,10 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
             });
 
             fetch(endpointUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                })
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
                 .then(res => res.text())
                 .then(text => {
                     try {
@@ -66,10 +84,10 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
                 const altText = img.dataset.alttext;
                 const folder = img.dataset.folder || '';
                 const file = img.fileObject || null;
+                const altTextChanged = img.dataset.alttextChanged === "true";
 
-                if (!wcImageID || (!file && !altText)) {
-                    console.log("No data");
-                    return;
+                if (!wcImageID || (!file && !altTextChanged)) {
+                    return; // skip if no actual change
                 }
 
                 const formData = new FormData();
@@ -82,13 +100,17 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
                 }
 
                 fetch(endpointUrl, {
-                        method: 'POST',
-                        body: formData
-                    })
+                    method: 'POST',
+                    body: formData
+                })
                     .then(res => res.json())
                     .then(response => {
                         console.log("Full Response:", response);
                         if (response.success) {
+                            // Reset change tracking
+                            img.dataset.alttextChanged = "false";
+                            delete img.fileObject;
+
                             setTimeout(() => {
                                 Swal.fire({
                                     icon: 'success',
@@ -116,5 +138,19 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
                     });
             });
         }
+
+        // Optional: Track alt text changes automatically
+        const altTextInputs = document.querySelectorAll('.altTextInput');
+        altTextInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                const imgID = input.dataset.imgId;
+                const newAlt = input.value;
+                const img = document.querySelector(`.editable-img[data-wcimageid="${imgID}"]`);
+                if (img) {
+                    img.dataset.alttext = newAlt;
+                    img.dataset.alttextChanged = "true";
+                }
+            });
+        });
     });
 }

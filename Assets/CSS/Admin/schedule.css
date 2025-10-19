@@ -1,0 +1,114 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+@font-face {
+  font-family: "Lora";
+  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: "Alkatra";
+  src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins";
+  text-decoration: none;
+}
+
+main {
+  width: 90%;
+  margin: auto;
+  flex: 1;
+}
+
+body {
+  display: flex;
+  gap: 1rem;
+}
+
+.notification-toggler-container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 100%;
+}
+
+.notification-container {
+  text-align: right !important;
+  margin-top: 0.59rem;
+  margin-right: 0.85rem;
+}
+
+#notification-icon {
+  font-size: 2rem;
+  color: #0d6dfc;
+}
+
+.page-title-container {
+  padding-left: var(--padding-md);
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-family: "Poppins";
+  font-weight: var(--font-weight-bold);
+}
+
+.calendar-card {
+  width: 80%;
+  margin: 0 auto;
+}
+
+#calendar {
+  width: 90%;
+  margin: 1vw auto;
+}
+
+.filter-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #fff;
+  padding: 0 10px;
+}
+
+.filter-select {
+  appearance: none; /* remove default select arrow */
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  flex: 1;
+  cursor: pointer;
+  padding-right: 20px;
+}
+
+.fc-daygrid-block-event .fc-event-time,
+.fc-daygrid-block-event .fc-event-title,
+.fc .fc-daygrid-event-harness {
+  font-size: var(--font-size-lg);
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+}
+
+@media only screen and (max-width: 768px) {
+  .fc .fc-button {
+    font-size: 0.8em;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 1.4em;
+  }
+}

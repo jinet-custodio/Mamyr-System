@@ -20,20 +20,27 @@
   text-decoration: none;
   list-style: none;
 }
+
+body {
+  display: flex;
+  gap: 1rem;
+}
+
 main {
   display: flex;
-  width: 100%;
+  margin: auto;
 }
 
 .booking-container {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
 }
 
 .notification-toggler-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
+  width: 100%;
 }
 
 .notification-container {

@@ -51,13 +51,13 @@ body {
 }
 
 .btn {
-  font-family: "Lora" !important;
+  /* font-family: "Lora" !important; */
   font-size: 16px !important;
 }
 
 .statusTitle,
 .rightContainerTitle {
-  font-family: "Lora" !important;
+  font-family: "Poppins" !important;
   font-weight: bolder;
 }
 
@@ -187,9 +187,9 @@ body {
   font-size: 14px;
 }
 
-#gcashPaymentModal .modal-title {
-  font-family: "Poppins Black";
-  font-size: 16px;
+#gcashPaymentModal .modal-title,
+.modal-title {
+  font-size: 18px;
 }
 
 #gcashModalBody {
@@ -208,7 +208,8 @@ body {
 .time-container {
   display: flex;
   justify-content: space-between;
-  gap: 5rem;
+  text-align: center;
+  gap: 4rem;
 }
 
 .foodModalBtn {
@@ -281,6 +282,17 @@ input:read-only:hover {
 .custom-tooltip.show {
   display: block;
   opacity: 1;
+}
+
+.upload-photo-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.downpaymentPic {
+  width: 50vw;
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
@@ -402,7 +414,12 @@ input:read-only:hover {
     padding: 15px;
     overflow-y: auto;
     flex-grow: 1;
-    max-height: 60vh;
+    max-height: 90vh;
+  }
+
+  .downpaymentPic {
+    width: 200px !important;
+    height: auto !important;
   }
 }
 
@@ -483,6 +500,19 @@ input:read-only:hover {
     overflow-y: auto;
     flex-grow: 1;
     max-height: 60vh;
+  }
+
+  .time-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .downpaymentPic {
+    width: 200px !important;
+    height: auto !important;
   }
 }
 
@@ -568,6 +598,31 @@ input:read-only:hover {
     padding: 15px;
     overflow-y: auto;
     flex-grow: 1;
-    max-height: 60vh;
+    max-height: 100vh;
+  }
+
+  .time-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .upload-photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .downpaymentPic {
+    width: 200px !important;
+    height: auto !important;
+  }
+
+  .fw-bold {
+    display: block !important;
+    margin: auto !important;
+    text-align: center;
   }
 }

@@ -10,11 +10,12 @@ try {
                             b.bookingID, b.bookingType, b.userID, b.startDate, b.endDate, b.bookingStatus,
                             u.firstName, u.middleInitial, u.lastName, 
                             b.customPackageID, 
-                            cb.paymentApprovalStatus, cb.confirmedBookingID, p.paymentStatus
+                            cb.paymentApprovalStatus, cb.confirmedBookingID, cb.paymentStatus
                         FROM booking b
                         INNER JOIN user u ON b.userID = u.userID
                         LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
-                        LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID");
+                        -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
+                        ");
     $getBookingInfo->execute();
     $result = $getBookingInfo->get_result();
 

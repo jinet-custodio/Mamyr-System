@@ -56,12 +56,14 @@ CREATE TABLE confirmedbooking (
     amountPaid DECIMAL(10,2) DEFAULT 0.00,
     userBalance DECIMAL(10,2) DEFAULT 0.00,
     paymentApprovalStatus INT DEFAULT 1,
+    paymentStatus INT NOT NULL DEFAULT 1, -- only here
     paymentDueDate DATETIME NULL,
     downpaymentDueDate DATETIME NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
-    FOREIGN KEY (paymentApprovalStatus) REFERENCES status(statusID)
+    FOREIGN KEY (paymentApprovalStatus) REFERENCES status(statusID),
+    FOREIGN KEY (paymentStatus) REFERENCES paymentstatus(paymentStatusID)
 );
 
 -- Business Partner Availed Service Table
@@ -81,14 +83,12 @@ CREATE TABLE payment (
     paymentID INT PRIMARY KEY AUTO_INCREMENT,
     confirmedBookingID INT NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
-    paymentStatus INT NOT NULL, -- only here
     paymentDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     notes TEXT DEFAULT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (confirmedBookingID) REFERENCES confirmedbooking(confirmedBookingID),
-    FOREIGN KEY (paymentStatus) REFERENCES paymentstatus(paymentStatusID)
+    FOREIGN KEY (confirmedBookingID) REFERENCES confirmedbooking(confirmedBookingID)
 );
 
 ALTER TABLE `payment` CHANGE `paymentStatus` `paymentStatus` INT(11) NOT NULL DEFAULT '1';

@@ -547,3 +547,14 @@ exit();
 
 
 <!-- NOTIFICATION CODE FROM ROOMLIST.PHP -->
+
+<!-- FROM VIEW PAYMENTS -->
+<form action="reservationSummary.php" method="POST">
+    <input type="hidden" name="bookingType" value="${booking.bookingType}">
+    <input type="hidden" name="confirmedBookingID" value="${booking.confirmedBookingID}">
+    <input type="hidden" name="bookingID" value="${booking.bookingID}">
+    <input type="hidden" name="status" value="${booking.status}">
+    <button type="submit" name="viewBooking" class="btn btn-info  viewBooking" data-label="View">View</button>
+</form>
+
+<!-- FROM VIEW PAYMENTS -->

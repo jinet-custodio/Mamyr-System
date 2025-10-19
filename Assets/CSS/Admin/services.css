@@ -27,19 +27,25 @@
 }
 
 main {
+  margin: auto;
+  flex: 1;
+}
+
+body {
   display: flex;
-  justify-content: center;
+  gap: 1rem;
 }
 
 .booking-container {
-  width: 90% !important;
+  width: 95% !important;
   max-width: 100%;
 }
 
 .notification-toggler-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
+  width: 100%;
 }
 
 .notification-container {
@@ -84,6 +90,7 @@ main {
   width: 100% !important;
   max-width: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
 }

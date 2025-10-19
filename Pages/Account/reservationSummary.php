@@ -155,7 +155,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
                                                     cb.downpaymentImage,
                                                     cb.additionalCharge,
 
-                                                    p.paymentStatus 
+                                                    cb.paymentStatus 
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb 
                                                     ON b.bookingID = cb.bookingID
@@ -467,10 +467,15 @@ require_once '../../Function/Helpers/statusFunctions.php';
 
                 <div class="button-container">
                     <button type="button" class="btn btn-success w-100 mt-3" id="makeDownpaymentBtn"
-                        style="display: none;" data-bs-toggle="modal"
-                        data-bs-target="#gcashPayment1stModal">Make a downpayment</button>
+                        style="display: none;" data-bs-toggle="modal" data-bs-target="#gcashPayment1stModal">Make a
+                        downpayment</button>
+                        style="display: none;" data-bs-toggle="modal" data-bs-target="#gcashPayment1stModal">Make a
+                        downpayment</button>
 
-                    <a href="paymentHistory.php" class="btn btn-info w-100 mt-3" id="viewTransaction">View Your Transaction</a>
+                    <a href="paymentHistory.php" class="btn btn-info w-100 mt-3" id="viewTransaction">View Your
+                        Transaction</a>
+                    <a href="paymentHistory.php" class="btn btn-info w-100 mt-3" id="viewTransaction">View Your
+                        Transaction</a>
 
                     <form action="../../Function/receiptPDF.php" method="POST" target="_blank">
                         <input type="hidden" name="totalCost" value="<?= $finalBill ?>">
@@ -478,7 +483,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
                         <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
                         <input type="hidden" name="bookingType" value="<?= $bookingType ?>">
                         <?php foreach ($services as $service): ?>
-                            <input type="hidden" name="services[]" value="<?= $service ?>">
+                        <input type="hidden" name="services[]" value="<?= $service ?>">
                         <?php endforeach; ?>
                         <button type="submit" class="btn btn-primary w-100 mt-3" name="downloadReceiptBtn"
                             id="downloadReceiptBtn">Download Receipt </button>
@@ -517,15 +522,15 @@ require_once '../../Function/Helpers/statusFunctions.php';
                 <div class="card" id="summaryDetails">
                     <ul class="list-group list-group-flush">
                         <?php if ($bookingType === 'Resort') { ?>
-                            <li class="list-group-item" id="tourType">
-                                <h6 class="cardHeader"><?= $cardHeader ?></h6>
-                                <p class="cardContent" id="eventDate"><?= $tourType ?></p>
-                            </li>
+                        <li class="list-group-item" id="tourType">
+                            <h6 class="cardHeader"><?= $cardHeader ?></h6>
+                            <p class="cardContent" id="eventDate"><?= $tourType ?></p>
+                        </li>
                         <?php } elseif ($bookingType === 'Event') { ?>
-                            <li class="list-group-item" id="tourType">
-                                <h6 class="cardHeader"><?= $cardHeader ?></h6>
-                                <p class="cardContent" id="eventDate"><?= $eventType ?></p>
-                            </li>
+                        <li class="list-group-item" id="tourType">
+                            <h6 class="cardHeader"><?= $cardHeader ?></h6>
+                            <p class="cardContent" id="eventDate"><?= $eventType ?></p>
+                        </li>
                         <?php } ?>
 
                         <li class="list-group-item">
@@ -543,10 +548,10 @@ require_once '../../Function/Helpers/statusFunctions.php';
                             <div class="venues">
                                 <?php if ($bookingType === 'Resort' || $bookingType === 'Hotel') {
                                 ?>
-                                    <p class="cardContent"><?= implode(', ', $serviceVenue) ?></p>
+                                <p class="cardContent"><?= implode(', ', $serviceVenue) ?></p>
                                 <?php
                                 } else { ?>
-                                    <p class="cardContent"><?= htmlspecialchars($venue) ?></p>
+                                <p class="cardContent"><?= htmlspecialchars($venue) ?></p>
                                 <?php } ?>
                             </div>
                         </li>
@@ -562,38 +567,40 @@ require_once '../../Function/Helpers/statusFunctions.php';
                         </li>
 
                         <?php if ($bookingType === 'Event') {  ?>
-                            <li class="list-group-item">
-                                <h6 class="cardHeader">Menu</h6>
-                                <?php if ($foodList) { ?>
-                                    <p class="cardContent">Food List
-                                        <button id="food-info-button" data-bs-target="#foodListModal" class="foodModalBtn" data-bs-toggle="modal">
-                                            <i class="bi bi-info-circle  text-primary"></i></button>
-                                    </p>
-                                <?php } else {  ?>
-                                    <p class="cardContent">None</p>
-                                <?php
+                        <li class="list-group-item">
+                            <h6 class="cardHeader">Menu</h6>
+                            <?php if ($foodList) { ?>
+                            <p class="cardContent">Food List
+                                <button id="food-info-button" data-bs-target="#foodListModal" class="foodModalBtn"
+                                    data-bs-toggle="modal">
+                                    <i class="bi bi-info-circle  text-primary"></i></button>
+                            </p>
+                            <?php } else {  ?>
+                            <p class="cardContent">None</p>
+                            <?php
                                 }
                                 ?>
-                            </li>
+                        </li>
 
-                            <li class="list-group-item">
-                                <h6 class="cardHeader">Additional Service</h6>
-                                <?php if ($partnerServiceList) { ?>
-                                    <p class="cardContent">Service List
-                                        <button id="service-info-button" data-bs-target="#partnerServiceModal" data-bs-toggle="modal"> <i class="bi bi-info-circle  text-primary"></i></button>
-                                    </p>
-                                <?php } else {  ?>
-                                    <p class=" cardContent">None
-                                    </p>
-                                <?php
+                        <li class="list-group-item">
+                            <h6 class="cardHeader">Additional Service</h6>
+                            <?php if ($partnerServiceList) { ?>
+                            <p class="cardContent">Service List
+                                <button id="service-info-button" data-bs-target="#partnerServiceModal"
+                                    data-bs-toggle="modal"> <i class="bi bi-info-circle  text-primary"></i></button>
+                            </p>
+                            <?php } else {  ?>
+                            <p class=" cardContent">None
+                            </p>
+                            <?php
                                 }
                                 ?>
-                            </li>
+                        </li>
                         <?php } else { ?>
-                            <li class="list-group-item" id="addOns">
-                                <h6 class="cardHeader">Add Ons</h6>
-                                <p class="cardContent"><?= $additionalServices ?></p>
-                            </li>
+                        <li class="list-group-item" id="addOns">
+                            <h6 class="cardHeader">Add Ons</h6>
+                            <p class="cardContent"><?= $additionalServices ?></p>
+                        </li>
                         <?php } ?>
 
                         <li class="list-group-item" id="totalAmountSection">
@@ -621,7 +628,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
                     <div class="note">
                         <ul>
                             <?php foreach (array_unique($downpaymentNotes) as $notes) {  ?>
-                                <li><?= $notes ?></li>
+                            <li><?= $notes ?></li>
                             <?php  }  ?>
                         </ul>
                     </div>
@@ -640,12 +647,12 @@ require_once '../../Function/Helpers/statusFunctions.php';
                 </div>
                 <div class="modal-body">
                     <?php foreach ($foodList as $category => $items) { ?>
-                        <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
-                        <?php foreach ($items as $name) { ?>
-                            <ul>
-                                <li> <?= htmlspecialchars($name) ?></li>
-                            </ul>
-                        <?php } ?>
+                    <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
+                    <?php foreach ($items as $name) { ?>
+                    <ul>
+                        <li> <?= htmlspecialchars($name) ?></li>
+                    </ul>
+                    <?php } ?>
                     <?php } ?>
                 </div>
                 <div class="modal-footer">
@@ -665,12 +672,12 @@ require_once '../../Function/Helpers/statusFunctions.php';
                 <div class="modal-body">
 
                     <?php foreach ($partnerServiceList as $category => $items) { ?>
-                        <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
-                        <?php foreach ($items as $name => $price) { ?>
-                            <ul>
-                                <li> <?= htmlspecialchars($name) ?> — ₱<?= number_format($price, 2) ?> </li>
-                            </ul>
-                        <?php } ?>
+                    <p class="foodNameLabel"><?= htmlspecialchars(strtoupper($category)) ?></p>
+                    <?php foreach ($items as $name => $price) { ?>
+                    <ul>
+                        <li> <?= htmlspecialchars($name) ?> — ₱<?= number_format($price, 2) ?> </li>
+                    </ul>
+                    <?php } ?>
                     <?php } ?>
 
                 </div>
@@ -684,12 +691,13 @@ require_once '../../Function/Helpers/statusFunctions.php';
     <!-- Form for payment -->
     <form action="../../Function/Customer/Account/uploadPayment.php" method="POST" enctype="multipart/form-data">
 
-        <div class="modal fade" id="gcashPayment1stModal" aria-hidden="true" aria-labelledby="gcashPayment1stModalLabel" tabindex="-1">
+        <div class="modal fade" id="gcashPayment1stModal" aria-hidden="true" aria-labelledby="gcashPayment1stModalLabel"
+            tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
 
                     <div class="modal-header">
-                        <h1 class="modal-title">Upload Your Screenshot</h1>
+                        <h5 class="modal-title">Upload Your Screenshot</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -700,28 +708,31 @@ require_once '../../Function/Helpers/statusFunctions.php';
 
                         <div class="alert alert-info mt-3">
                             <ul class="mb-0">
-                                <li>Downpayment must be made within <strong>24 hours</strong> after booking creation for <strong>events and hotels</strong>.</li>
-                                <li>Downpayment for <strong>resort cottages</strong> is <strong>not required</strong>, but failure to pay may make your reserved cottage available to others.</li>
+                                <li>Downpayment must be made within <strong>24 hours</strong> after booking creation for
+                                    <strong>events and hotels</strong>.
+                                </li>
+                                <li>Downpayment for <strong>resort cottages</strong> is <strong>not required</strong>,
+                                    but failure to pay may make your reserved cottage available to others.</li>
                                 <li>Make sure the receipt is <strong>readable</strong>.</li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success w-100 mt-3"
-                            data-bs-toggle="modal"
+                        <button type="button" class="btn btn-success w-100 mt-3" data-bs-toggle="modal"
                             data-bs-target="#gcashPaymentModal">Next</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="gcashPaymentModal" aria-hidden="true" aria-labelledby="gcashPaymentModalLabel" tabindex="-1">
+        <div class="modal fade" id="gcashPaymentModal" aria-hidden="true" aria-labelledby="gcashPaymentModalLabel"
+            tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
 
                     <div class="modal-header">
-                        <h1 class="modal-title">Upload Your Screenshot</h1>
+                        <h5 class="modal-title">Upload Your Screenshot</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -733,7 +744,8 @@ require_once '../../Function/Helpers/statusFunctions.php';
                         <div class="mt-3 time-container">
                             <div class="due-date-container">
                                 <label class="form-label fw-bold">Downpayment Due Date:</label>
-                                <p><?= htmlspecialchars($within24hrs) ?> <br> <?= htmlspecialchars($downpaymentDueDate) ?> </p>
+                                <p><?= htmlspecialchars($within24hrs) ?> <br>
+                                    <?= htmlspecialchars($downpaymentDueDate) ?> </p>
                             </div>
 
                             <div class="due-date-container">
@@ -742,8 +754,9 @@ require_once '../../Function/Helpers/statusFunctions.php';
                             </div>
                         </div>
 
-                        <div class="mt-2 text-center">
-                            <img src="../../Assets/Images/PaymentProof/<?= isset($_SESSION['tempImage']) ? $_SESSION['tempImage'] : 'defaultDownpayment.png'; ?>" alt="Downpayment Image" id="preview" class="downpaymentPic mb-3">
+                        <div class="mt-2 text-center upload-photo-container">
+                            <img src="../../Assets/Images/PaymentProof/<?= isset($_SESSION['tempImage']) ? $_SESSION['tempImage'] : 'defaultDownpayment.png'; ?>"
+                                alt="Downpayment Image" id="preview" class="downpaymentPic mb-3">
                             <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
                             <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
                             <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
@@ -757,11 +770,15 @@ require_once '../../Function/Helpers/statusFunctions.php';
                         <div class="payment-details-container d-flex gap-3">
                             <div class="input-container mt-3">
                                 <label for="downpayment" class="fw-bold">Downpayment Amount:</label>
-                                <input type="text" id="downpayment" name="downpayment" value="<?= $downpayment ?>" class="form-control mt-1" readonly>
+                                <input type="text" id="downpayment" name="downpayment" value="<?= $downpayment ?>"
+                                    class="form-control mt-1" readonly>
                             </div>
                             <div class="input-container mt-3">
                                 <label for="payment" class="fw-bold">Enter payment amount:</label>
-                                <input type="text" id="payment-amount" name="payment-amount" placeholder="1000" class="form-control mt-1" value="<?= !empty($_SESSION['payment-amount']) ? $_SESSION['payment-amount'] : '' ?>" required>
+                                <input type="text" id="payment-amount" name="payment-amount" placeholder="1000"
+                                    class="form-control mt-1"
+                                    value="<?= !empty($_SESSION['payment-amount']) ? $_SESSION['payment-amount'] : '' ?>"
+                                    required>
                                 <div id="tooltip" class="custom-tooltip">Please input number</div>
                             </div>
                         </div>
@@ -769,8 +786,8 @@ require_once '../../Function/Helpers/statusFunctions.php';
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"
-                            data-bs-toggle="modal" data-bs-target="#gcashPaymentModal">Back</button>
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                            data-bs-target="#gcashPaymentModal">Back</button>
                         <button type="submit" class="btn btn-success" name="submitDownpaymentImage">Submit</button>
                     </div>
                 </div>
@@ -784,60 +801,60 @@ require_once '../../Function/Helpers/statusFunctions.php';
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script>
-        //Hide the make a downpayment button
-        const paymentStatus = document.getElementById("paymentStatus").value;
-        const bookingStatus = document.getElementById("bookingStatus").value;
-        const paymentApprovalStatus = document.getElementById("paymentApprovalStatus").value;
-        const paymentMethod = document.getElementById("paymentMethod").value;
-        const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
-        // console.log("Booking Stat: " + bookingStatus);
-        // console.log("payment App Stat" + paymentApprovalStatus);
-        if ((bookingStatus === "Pending" && paymentApprovalStatus === '') || (bookingStatus === 'Cancelled') || (bookingStatus === 'Rejected')) {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-            downloadReceiptBtn.style.display = 'none';
-        } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && paymentStatus === "Unpaid") {
-            document.getElementById("makeDownpaymentBtn").style.display = "block";
-            downloadReceiptBtn.style.display = 'none';
-        } else if (paymentApprovalStatus === "Approved" && paymentStatus === "Partially Paid") {
-            document.getElementById("makeDownpaymentBtn").style.display = "block";
-        } else if (paymentApprovalStatus === "Done" && paymentStatus === "Fully Paid") {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-        } else if (paymentMethod === 'Cash') {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-        } else if (paymentMethod === 'GCash') {
-            document.getElementById("makeDownpaymentBtn").style.display = "block";
-        } else {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-        };
+    //Hide the make a downpayment button
+    const paymentStatus = document.getElementById("paymentStatus").value;
+    const bookingStatus = document.getElementById("bookingStatus").value;
+    const paymentApprovalStatus = document.getElementById("paymentApprovalStatus").value;
+    const paymentMethod = document.getElementById("paymentMethod").value;
+    const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
+    // console.log("Booking Stat: " + bookingStatus);
+    // console.log("payment App Stat" + paymentApprovalStatus);
+    if ((bookingStatus === "Pending" && paymentApprovalStatus === '') || (bookingStatus === 'Cancelled') || (
+            bookingStatus === 'Rejected')) {
+        document.getElementById("makeDownpaymentBtn").style.display = "none";
+        downloadReceiptBtn.style.display = 'none';
+    } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && paymentStatus === "Unpaid") {
+        document.getElementById("makeDownpaymentBtn").style.display = "block";
+        downloadReceiptBtn.style.display = 'none';
+    } else if (paymentApprovalStatus === "Approved" && paymentStatus === "Partially Paid") {
+        document.getElementById("makeDownpaymentBtn").style.display = "block";
+    } else if (paymentApprovalStatus === "Done" && paymentStatus === "Fully Paid") {
+        document.getElementById("makeDownpaymentBtn").style.display = "none";
+    } else if (paymentMethod === 'Cash') {
+        document.getElementById("makeDownpaymentBtn").style.display = "none";
+    } else if (paymentMethod === 'GCash') {
+        document.getElementById("makeDownpaymentBtn").style.display = "block";
+    } else {
+        document.getElementById("makeDownpaymentBtn").style.display = "none";
+    };
 
 
-        const input = document.getElementById('payment-amount');
-        const tooltip = document.getElementById('tooltip');
-        input.addEventListener('keypress', function(e) {
-            if (!/[0-9]/.test(e.key)) {
-                e.preventDefault();
-            }
+    const input = document.getElementById('payment-amount');
+    const tooltip = document.getElementById('tooltip');
+    input.addEventListener('keypress', function(e) {
+        if (!/[0-9.]/.test(e.key) || (e.key === '.' && input.value.includes('.'))) {
             tooltip.classList.add('show');
+            e.preventDefault();
+        }
 
-
-            clearTimeout(tooltip.hideTimeout);
-            tooltip.hideTimeout = setTimeout(() => {
-                tooltip.classList.remove('show');
-            }, 2000);
-        });
+        clearTimeout(tooltip.hideTimeout);
+        tooltip.hideTimeout = setTimeout(() => {
+            tooltip.classList.remove('show');
+        }, 1000);
+    });
     </script>
 
     <script>
-        //Show the preview of image
-        document.querySelector("input[type='file']").addEventListener("change", function(event) {
-            let reader = new FileReader();
-            reader.onload = function() {
-                let preview = document.getElementById("preview");
-                preview.src = reader.result;
-                preview.style.display = "block";
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        });
+    //Show the preview of image
+    document.querySelector("input[type='file']").addEventListener("change", function(event) {
+        let reader = new FileReader();
+        reader.onload = function() {
+            let preview = document.getElementById("preview");
+            preview.src = reader.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
     </script>
 
     <!-- <script>
@@ -865,61 +882,61 @@ require_once '../../Function/Helpers/statusFunctions.php';
 
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
 
-        const downpaymentValue = parseFloat(document.getElementById('downpayment').value);
-        const paymentAmount = parseFloat(document.getElementById('payment-amount').value);
+    const downpaymentValue = parseFloat(document.getElementById('downpayment').value);
+    const paymentAmount = parseFloat(document.getElementById('payment-amount').value);
 
-        if (paramValue === "imageSize") {
-            Swal.fire({
-                title: "Oops!",
-                text: "File is too large. Maximum allowed size is 5MB.",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        } else if (paramValue === 'error') {
-            Swal.fire({
-                title: 'Oops! Database problem!',
-                text: 'There was an error while processing your request. Please try again later.',
-                icon: 'warning',
-                confirmButtonText: 'Okay'
-            })
-        } else if (paramValue === 'lessAmount') {
-            Swal.fire({
-                title: 'Oops',
-                text: `Your payment is only ₱${paymentAmount.toFixed(2)}. Please complete the required downpayment of ₱${downpaymentValue.toFixed(2)}.`,
-                icon: 'warning',
-                confirmButtonText: 'Okay'
-            }).then((result) => {
-                const paymentModal = document.getElementById('gcashPaymentModal');
-                const modal = new bootstrap.Modal(paymentModal);
-                modal.show();
-
-                document.getElementById('payment-amount').style.border = '1px solid red';
-            })
-        } else if (paramValue === 'imageFailed') {
-            Swal.fire({
-                title: 'Oops',
-                text: `Make sure you uploaded an image`,
-                icon: 'warning',
-                confirmButtonText: 'Okay'
-            }).then((result) => {
-                const paymentModal = document.getElementById('gcashPaymentModal');
-                const modal = new bootstrap.Modal(paymentModal);
-                modal.show();
-
-                document.querySelector('.custom-file-button').style.border = '2px solid red';
-            })
-        }
-
-        document.getElementById('payment-amount').addEventListener('input', () => {
-            document.getElementById('payment-amount').style.border = '1px solid rgb(222, 222, 227)';
+    if (paramValue === "imageSize") {
+        Swal.fire({
+            title: "Oops!",
+            text: "File is too large. Maximum allowed size is 5MB.",
+            icon: "warning",
+            confirmButtonText: "Okay",
         });
-
-        document.querySelector('.custom-file-button').addEventListener('click', () => {
-            document.querySelector('.custom-file-button').style.border = '1px solid rgb(64, 136, 245)';
+    } else if (paramValue === 'error') {
+        Swal.fire({
+            title: 'Oops! Database problem!',
+            text: 'There was an error while processing your request. Please try again later.',
+            icon: 'warning',
+            confirmButtonText: 'Okay'
         })
+    } else if (paramValue === 'lessAmount') {
+        Swal.fire({
+            title: 'Oops',
+            text: `Your payment is only ₱${paymentAmount.toFixed(2)}. Please complete the required downpayment of ₱${downpaymentValue.toFixed(2)}.`,
+            icon: 'warning',
+            confirmButtonText: 'Okay'
+        }).then((result) => {
+            const paymentModal = document.getElementById('gcashPaymentModal');
+            const modal = new bootstrap.Modal(paymentModal);
+            modal.show();
+
+            document.getElementById('payment-amount').style.border = '1px solid red';
+        })
+    } else if (paramValue === 'imageFailed') {
+        Swal.fire({
+            title: 'Oops',
+            text: `Make sure you uploaded an image`,
+            icon: 'warning',
+            confirmButtonText: 'Okay'
+        }).then((result) => {
+            const paymentModal = document.getElementById('gcashPaymentModal');
+            const modal = new bootstrap.Modal(paymentModal);
+            modal.show();
+
+            document.querySelector('.custom-file-button').style.border = '2px solid red';
+        })
+    }
+
+    document.getElementById('payment-amount').addEventListener('input', () => {
+        document.getElementById('payment-amount').style.border = '1px solid rgb(222, 222, 227)';
+    });
+
+    document.querySelector('.custom-file-button').addEventListener('click', () => {
+        document.querySelector('.custom-file-button').style.border = '1px solid rgb(64, 136, 245)';
+    })
     </script>
 
 

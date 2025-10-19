@@ -66,82 +66,86 @@ require '../../Function/notification.php';
 </head>
 
 <body>
-    <main>
-        <div id="sidebar" class="collapse show sidebar-custom">
-            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo"
-                id="sbLogo">
-            <ul class="nav flex-column">
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="adminDashboard.php">
-                        <i class="bi bi-speedometer2"></i> <span id="linkText">Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="booking.php">
-                        <i class="bi bi-calendar-week"></i><span id="linkText"> Bookings</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="reviews.php">
-                        <i class="bi bi-list-stars"></i> <span id="linkText">Reviews</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="roomList.php">
-                        <i class="bi bi-door-open"></i> <span id="linkText">Rooms</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="services.php">
-                        <i class="bi bi-bell"></i> <span id="linkText">Services</span>
-                    </a>
-                </li>
-                <li class="nav-item active" id="navLI">
-                    <a class="nav-link" href="transaction.php">
-                        <i class="bi bi-credit-card-2-front"></i> <span id="linkText">Payments</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="displayPartnership.php">
-                        <i class="bi bi-people"></i> <span id="linkText">Partnerships</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="editWebsite/editWebsite.php">
-                        <i class="bi bi-pencil-square"></i> <span id="linkText">Edit Website</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="auditLogs.php">
-                        <i class="bi bi-clock-history"></i> <span id="linkText">Audit Logs</span>
-                    </a>
-                </li>
-            </ul>
-
-
-            <section>
-                <a href="../Account/account.php" class="profileContainer" id="pfpContainer">
-                    <img src=" ../../Assets/Images/defaultProfile.png" alt="Admin Profile"
-                        class="rounded-circle profilePic">
-                    <h5 class="admin-name" id="adminName">Diane Dela Cruz</h5>
-                </a>
-            </section>
-
-            <section class="btn btn-outline-danger logOutContainer">
-                <a href="../../Function/Admin/logout.php" class="btn btn-outline-danger">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <h5>Log Out</h5>
-                </a>
-            </section>
+    <div id="sidebar" class=" sidebar show sidebar-custom">
+        <div class="sbToggle-container d-flex justify-content-center" id="sidebar-toggle">
+            <button class="toggle-button" type="button" id="toggle-btn">
+                <i class="bi bi-layout-sidebar"></i>
+            </button>
         </div>
+        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo"
+            id="sbLogo">
+        <ul class="nav flex-column">
+            <li class="nav-item" id="navLI" title="Dashboard">
+                <a class="nav-link" href="adminDashboard.php">
+                    <i class="bi bi-speedometer2"></i> <span class="linkText">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title=" Bookings">
+                <a class="nav-link" href="booking.php">
+                    <i class="bi bi-calendar-week"></i><span class="linkText"> Bookings</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Schedule">
+                <a class="nav-link" href="schedule.php">
+                    <i class="bi bi-calendar-date"></i><span class="linkText">Schedule</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Rooms">
+                <a class="nav-link" href="roomList.php">
+                    <i class="bi bi-door-open"></i> <span class="linkText">Rooms</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Services">
+                <a class="nav-link" href="services.php">
+                    <i class="bi bi-bell"></i> <span class="linkText">Services</span>
+                </a>
+            </li>
+            <li class="nav-item active" id="navLI" title="Payments">
+                <a class="nav-link" href="transaction.php">
+                    <i class="bi bi-credit-card-2-front"></i> <span class="linkText">Payments</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Partnerships">
+                <a class="nav-link" href="displayPartnership.php">
+                    <i class="bi bi-people"></i> <span class="linkText">Partnerships</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Reviews">
+                <a class="nav-link" href="reviews.php">
+                    <i class="bi bi-list-stars"></i> <span class="linkText">Reviews</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Edit Website">
+                <a class="nav-link" href="editWebsite/editWebsite.php">
+                    <i class="bi bi-pencil-square"></i> <span class="linkText">Edit Website</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Audit Logs">
+                <a class="nav-link" href="auditLogs.php">
+                    <i class="bi bi-clock-history"></i> <span class="linkText">Audit Logs</span>
+                </a>
+            </li>
+        </ul>
+
+
+        <section>
+            <a href="../Account/account.php" class="profileContainer" id="pfpContainer">
+                <img src=" ../../Assets/Images/defaultProfile.png" alt="Admin Profile"
+                    class="rounded-circle profilePic">
+                <h5 class="admin-name" id="adminName">Diane Dela Cruz</h5>
+            </a>
+        </section>
+
+        <section class="btn btn-outline-danger logOutContainer">
+            <a href="../../Function/Admin/logout.php" class="btn btn-outline-danger">
+                <i class="bi bi-box-arrow-right"></i>
+                <h5>Log Out</h5>
+            </a>
+        </section>
+    </div>
+    <main>
         <section class="booking-container">
             <section class="notification-toggler-container">
-                <div class="sbToggle-container">
-                    <button class="toggle-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar"
-                        aria-controls="sidebar">
-                        <i class="bi bi-layout-sidebar"></i>
-                    </button>
-                </div>
                 <div class="notification-container position-relative">
                     <button type="button" class="btn position-relative" data-bs-toggle="modal"
                         data-bs-target="#notificationModal">
@@ -180,6 +184,8 @@ require '../../Function/notification.php';
             </div>
         </section>
     </main>
+    <!-- Notification Modal -->
+    <?php include '../notificationModal.php' ?>
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -234,6 +240,7 @@ require '../../Function/notification.php';
     <script>
         $(document).ready(function() {
             $('#transactionTable').DataTable({
+                scrollX: true,
                 columnDefs: [{
                         width: '9%',
                         target: 0,
@@ -266,7 +273,8 @@ require '../../Function/notification.php';
             });
         });
     </script>
-    <script src="../../Assets/JS/adminNavbar.js"></script>
+    <!-- Responsive sidebar -->
+    <script src="../../Assets/JS/adminSidebar.js"> </script>
 
     <script>
         function getStatusBadge(colorClass, status) {

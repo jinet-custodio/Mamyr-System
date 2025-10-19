@@ -59,6 +59,19 @@ body {
   color: #ffffff;
 }
 
+/* Edit mode CSS */
+#saveChangesBtn {
+  margin-left: 80vw;
+  font-size: 1.8vw !important;
+  position: fixed;
+}
+
+.editable-input {
+  background-color: rgba(255, 255, 255, 0) !important;
+  border: 1px solid rgb(255, 13, 13) !important;
+  padding: 2px;
+}
+
 .categories {
   margin-top: 12vw !important;
   width: 98%;
@@ -96,34 +109,26 @@ body {
   font-size: 1.3vw;
 }
 
-.carousel {
+.swiper {
   width: 70%;
-  margin: auto;
+  padding: 20px 0;
+  margin: 3vw auto;
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  width: 3.5vw !important;
-  height: 2.5vw !important;
-}
-.cardFlex {
-  /* border: 1px solid red; */
+.swiper-slide {
+  text-align: center;
   display: flex;
-  width: 75%;
-  gap: 3rem;
-  margin: auto;
+  justify-content: center;
 }
+
 .card {
   border-radius: 10vw 10vw 0 0 !important;
   text-align: center;
 }
 
-.carousel-inner {
-  padding-top: 2vw;
-}
-
 .event-card {
-  width: 50%;
+  width: 70%;
+  margin: 1vw auto;
 }
 
 .card-body {
@@ -135,7 +140,7 @@ body {
 .card img {
   border-radius: 10vw 10vw 0 0 !important;
   padding: 1vw;
-  height: 15vw;
+  height: 50% !important;
   aspect-ratio: 1;
   object-fit: cover;
 }

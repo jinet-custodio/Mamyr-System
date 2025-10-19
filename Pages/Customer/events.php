@@ -35,6 +35,53 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
+
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'Events';
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+$imageMap = [];
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
+
+    // Fetch images with this contentID
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages->bind_param("i", $contentID);
+    $getImages->execute();
+    $imageResult = $getImages->get_result();
+
+    $images = [];
+    while ($imageRow = $imageResult->fetch_assoc()) {
+        $images[] = $imageRow;
+    }
+
+    $imageMap[$cleanTitle] = $images;
+}
+
+$getEvents = $conn->prepare("SELECT * FROM eventcategory");
+$getEvents->execute();
+
+$getEventsResult = $getEvents->get_result();
+
+$defaultImage = "../../Assets/Images/no-picture.jpg";
+$eventMap = [];
+
+while ($row = $getEventsResult->fetch_assoc()) {
+    $cleanTitle = strtolower(trim($row['categoryName']));
+    $imagePath = !empty($row['imagePath']) ? $row['imagePath'] : $defaultImage;
+
+    $eventMap[$cleanTitle] = [
+        'categoryID' => $row['categoryID'],
+        'categoryName' => $row['categoryName'],
+        'eventDescription' => $row['eventDescription'],
+        'imagePath' => $imagePath
+    ];
+}
 ?>
 
 
@@ -49,8 +96,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="stylesheet" href="../../Assets/CSS/events.css">
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
     <!-- Bootstrap Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="../../Assets/CSS/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
@@ -157,209 +204,59 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <?php include '../notificationModal.php' ?>
 
     <div class="titleContainer">
-        <h4 class="title">EVENTS</h4>
-        <p class="description">At Mamyr Resort and Events Place, we celebrate life’s most meaningful moments—weddings,
-            birthdays, reunions, corporate events, and more—that can be celebrated in our Pavilion, which can occupy
-            up to 350 guests, and our Mini Pavilion, perfect for more intimate gatherings of up to 50
-            guests. Whether grand or small, each event is made memorable in a beautiful and comfortable setting
-            designed to suit your occasion.
-        </p>
+        <h4 class="title"><?= htmlspecialchars($contentMap['EventTitle'] ?? 'No Title found') ?></h4>
+        <p class="description"><?= htmlspecialchars($contentMap['EventDesc'] ?? 'No description found') ?></p>
     </div>
 
     <div class="categories">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <?php
+                $defaultImage = "../../Assets/Images/no-picture.jpg";
 
-        <!-- <div class="eventsTitleContainer">
-            <h3 class="eventsTitle">Mamyr Events</h3>
-            <p class="eventsDescription indent">
-                Mamyr Resort and Events Place offers the perfect setting for unforgettable moments, blending elegance,
-                comfort, and natural beauty—ideal for life’s most cherished celebrations and meaningful gatherings of
-                all kinds.
-        </div> -->
+                foreach ($eventMap as $key => $event):
+                    $eventName = $event['categoryName'] ?? 'Untitled Event';
+                    $eventDesc = $event['eventDescription'] ?? 'No description available.';
+                    $folderPath = '../../Assets/Images/EventsPhotos/' .  $event['imagePath'];
+                    $imagePath = !empty($event['imagePath']) ? $folderPath : $defaultImage;
 
-        <div id="eventCarousel" class="carousel slide" data-bs-ride="false">
-            <div class="carousel-inner" id="eventsInner">
-
-                <div class="carousel-item active">
-                    <div class="cardFlex">
+                    // Sanitize alt text
+                    $altText = htmlspecialchars($eventName);
+                ?>
+                    <div class="swiper-slide">
                         <div class="card event-card">
-                            <img class="card-img-top" src="../../Assets/Images/amenities/pavilionPics/pav4.jpg"
-                                alt="Wedding Event">
-                            <div class="card-body">
-                                <h5 class="card-title">Wedding</h5>
+                            <img class="card-img-top" src="<?= htmlspecialchars($imagePath) ?>" alt="<?= $altText ?>">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><?= htmlspecialchars($eventName) ?></h5>
                                 <div class="eventDescription">
-                                    <p class="eventDesc">Celebrating love and lifelong memories at Mamyr Resort—where
-                                        every
-                                        wedding
-                                        is a
-                                        dream come true!</p>
+                                    <p class="eventDesc"><?= htmlspecialchars($eventDesc) ?></p>
                                 </div>
-
-                                <button type="button" class="btn btn-primary" id="weddingBtn"
-                                    style="margin-top: auto;" onclick="window.location.href='eventbooking.php?event=Wedding'">BOOK
-                                    NOW</button>
-                            </div>
-                        </div>
-
-                        <div class="card event-card">
-                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/debut.jpg"
-                                alt="Debut Event">
-                            <div class="card-body">
-                                <h5 class="card-title">Debut</h5>
-                                <div class="eventDescription">
-                                    <p class="eventDesc">Celebrating a milestone at Mamyr Resort and Events
-                                        Place—where
-                                        every
-                                        debut
-                                        marks a new chapter of unforgettable memories!</p>
-                                </div>
-                                <button type="button" class="btn btn-primary" id="debutBtn" onclick="window.location.href='eventbooking.php?event=Debut'" style="margin-top: auto;">BOOK
-                                    NOW</button>
+                                <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    style="margin-top: auto;"
+                                    onclick="window.location.href='eventbooking.php?event=<?= $eventName ?>'">
+                                    BOOK NOW
+                                </button>
                             </div>
                         </div>
                     </div>
-
-                </div>
-
-                <div class="carousel-item">
-                    <div class="cardFlex">
-                        <div class="card event-card">
-                            <img class="card-img-top" src="../../Assets/Images//EventsPhotos/kidsParty.jpg"
-                                alt="Kids Party">
-                            <div class="card-body">
-                                <h5 class="card-title">Kids Party</h5>
-                                <div class="eventDescription">
-                                    <p class="eventDesc">Creating magical moments at Mamyr Resort and Events Place—where
-                                        every
-                                        kids'
-                                        party is filled with joy, laughter, and unforgettable memories!</p>
-                                </div>
-                                <button type="button" class="btn btn-primary" id="kidPartyBtn" onclick="window.location.href='eventbooking.php?event=' + encodeURIComponent('Kids Party')" style="margin-top: auto;">BOOK
-                                    NOW</button>
-                            </div>
-                        </div>
-
-                        <div class="card event-card">
-                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/birthday.jpg"
-                                alt="Birthday Event">
-                            <div class="card-body">
-                                <h5 class="card-title">Birthday</h5>
-                                <div class="eventDescription">
-                                    <p class="eventDesc">Celebrating the joy of life at Mamyr Resort and Events
-                                        Place—where
-                                        every
-                                        year
-                                        brings new moments to cherish!</p>
-                                </div>
-                                <button type="button" class="btn btn-primary" id="birthdayBtn"
-                                    style="margin-top: auto;" onclick="window.location.href='eventbooking.php?event=Birthday'">BOOK
-                                    NOW</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="carousel-item">
-                    <div class="cardFlex">
-                        <div class="card event-card">
-                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/christening.jpg"
-                                alt="Christening Event">
-                            <div class="card-body">
-                                <h5 class="card-title">Christening/Dedication</h5>
-                                <div class="eventDescription">
-                                    <p class="eventDesc">Make lasting memories at Mamyr Resort where every celebration,
-                                        from
-                                        christenings to dedications, is a moment to treasure.</p>
-                                </div>
-
-                                <button type="button" class="btn btn-primary" id="christeningBtn" onclick="window.location.href='eventbooking.php?event=Christening/Dedication'"
-                                    style="margin-top: auto;">BOOK
-                                    NOW</button>
-                            </div>
-                        </div>
-
-                        <div class="card event-card">
-                            <img class="card-img-top event-card" src="../../Assets/Images/EventsPhotos/teamBuilding.jpg"
-                                alt="Team Building Event">
-                            <div class="card-body">
-                                <h5 class="card-title">Team Building</h5>
-                                <div class="eventDescription">
-                                    <p class="eventDesc">Creating great ideas and strong bonds at Mamyr Resort—where
-                                        teamwork
-                                        and
-                                        leadership thrive in inspiring surroundings!
-                                    </p>
-                                </div>
-                                <button type="button" class="btn btn-primary" id="teamBuildingBtn" onclick="window.location.href='eventbooking.php?event='+ encodeURIComponent('Team Building')"
-                                    style="margin-top: auto;">BOOK
-                                    NOW</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="carousel-item">
-                    <div class="cardFlex">
-                        <div class="card event-card">
-                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/thanksgiving.jpg"
-                                alt="Thanksgiving Event">
-                            <div class="card-body">
-                                <h5 class="card-title">Thanksgiving Party</h5>
-                                <div class="eventDescription">
-                                    <p class="eventDesc">Celebrating gratitude and togetherness at Mamyr Resort—where
-                                        good
-                                        food
-                                        and
-                                        great company make every moment unforgettable!</p>
-                                </div>
-                                <button type="button" class="btn btn-primary" id="thanksgivingBtn" onclick="window.location.href='eventbooking.php?event='+ encodeURIComponent('Thanksgiving Party')"
-                                    style="margin-top: auto;">BOOK
-                                    NOW</button>
-                            </div>
-                        </div>
-
-                        <div class="card event-card">
-                            <img class="card-img-top" src="../../Assets/Images/EventsPhotos/xmas.jpg"
-                                alt="Birthday Event">
-                            <div class="card-body">
-                                <h5 class="card-title">Christmas Party</h5>
-                                <div class="eventDescription">
-                                    <p class="eventDesc">Embracing the magic of the holidays at Mamyr Resort—where grand
-                                        feasts
-                                        and
-                                        unforgettable moments bring joy to all!</p>
-                                </div>
-                                <button type="button" class="btn btn-primary" id="christmasBtn" onclick="window.location.href='eventbooking.php?event=' + encodeURIComponent('Christmas Party')"
-                                    style="margin-top: auto;">BOOK
-                                    NOW</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <button class="carousel-control-prev " type="button" data-bs-target="#eventCarousel"
-                    data-bs-slide="prev">
-                    <span class="btn btn-primary carousel-control-prev-icon "></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel"
-                    data-bs-slide="next">
-                    <span class=" btn btn-primary carousel-control-next-icon"></span>
-                </button>
-
+                <?php endforeach; ?>
             </div>
+
+            <!-- Optional navigation -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+
+            <!-- Optional pagination -->
+            <div class="swiper-pagination"></div>
         </div>
+
     </div>
 
     <div class="venueTitleContainer">
-        <h3 class="venueTitle">Our Venues</h3>
-        <p class="venueDescription indent">
-            Mamyr Resort and Events Place offers two exceptional venues: the spacious Main Function Hall for grand
-            celebrations and the Mini Function Hall for intimate gatherings—both crafted to make every event
-            truly memorable.
+        <h3 class="venueTitle"><?= htmlspecialchars($contentMap['OurEventsTitle'] ?? 'No Title found') ?></h3>
+        <p class="venueDescription indent"><?= htmlspecialchars($contentMap['OurEventsDesc'] ?? 'No description found') ?></p>
     </div>
 
     <div class="mainHall">
@@ -407,12 +304,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $getEventHallQuery->execute();
         $result = $getEventHallQuery->get_result();
         if ($result->num_rows > 0) {
-
             while ($row = $result->fetch_assoc()) {
                 $serviceName = $row['RServiceName'];
-                if (stripos($serviceName, 'Main') !== false) {
+                if (stripos($serviceName, 'Main Function Hall') !== false) {
                     $mainHall = $row;
-                } elseif (stripos($serviceName, 'Mini') !== false) {
+                } elseif (stripos($serviceName, 'Mini Function Hall') !== false) {
                     $miniHall = $row;
                 }
             }
@@ -486,20 +382,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next href=" #carouselMiniHall" role="button" data-bs-slide="next">
+            <a class="carousel-control-next" href="#carouselMiniHall" role="button" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
         </div>
-
     </div>
 
     <?php include 'footer.php';
     include 'loader.php'; ?>
 
     <!-- Bootstrap Link -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    <script src="../../Assets/JS/bootstrap.bundle.min.js">
     </script>
 
     <!-- Jquery Link -->
@@ -543,7 +437,28 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             });
         });
     </script>
-
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2
+                }
+            }
+        });
+    </script>
     <!-- Scroll Nav BG -->
     <script src="../../Assets/JS/scrollNavbg.js"></script>
 </body>

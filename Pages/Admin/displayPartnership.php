@@ -77,90 +77,93 @@ require '../../Function/notification.php';
 </head>
 
 <body>
-    <main>
-        <div id="sidebar" class="collapse show sidebar-custom">
-            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo"
-                id="sbLogo">
-            <ul class="nav flex-column">
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="adminDashboard.php">
-                        <i class="bi bi-speedometer2"></i> <span id="linkText">Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="booking.php">
-                        <i class="bi bi-calendar-week"></i><span id="linkText"> Bookings</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="reviews.php">
-                        <i class="bi bi-list-stars"></i> <span id="linkText">Reviews</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="roomList.php">
-                        <i class="bi bi-door-open"></i> <span id="linkText">Rooms</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="services.php">
-                        <i class="bi bi-bell"></i> <span id="linkText">Services</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="transaction.php">
-                        <i class="bi bi-credit-card-2-front"></i> <span id="linkText">Payments</span>
-                    </a>
-                </li>
-                <li class="nav-item active" id="navLI">
-                    <a class="nav-link" href="displayPartnership.php">
-                        <i class="bi bi-people"></i> <span id="linkText">Partnerships</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="editWebsite/editWebsite.php">
-                        <i class="bi bi-pencil-square"></i> <span id="linkText">Edit Website</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="navLI">
-                    <a class="nav-link" href="auditLogs.php">
-                        <i class="bi bi-clock-history"></i> <span id="linkText">Audit Logs</span>
-                    </a>
-                </li>
-            </ul>
-
-
-            <section>
-                <a href="../Account/account.php" class="profileContainer" id="pfpContainer">
-                    <img src=" ../../Assets/Images/defaultProfile.png" alt="Admin Profile"
-                        class="rounded-circle profilePic">
-                    <h5 class="admin-name" id="adminName">Diane Dela Cruz</h5>
-                </a>
-            </section>
-
-            <section class="btn btn-outline-danger logOutContainer">
-                <a href="../../Function/Admin/logout.php" class="btn btn-outline-danger">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <h5>Log Out</h5>
-                </a>
-            </section>
+    <div id="sidebar" class=" sidebar show sidebar-custom">
+        <div class="sbToggle-container d-flex justify-content-center" id="sidebar-toggle">
+            <button class="toggle-button" type="button" id="toggle-btn">
+                <i class="bi bi-layout-sidebar"></i>
+            </button>
         </div>
+        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place Logo" class="logo"
+            id="sbLogo">
+        <ul class="nav flex-column">
+            <li class="nav-item" id="navLI" title="Dashboard">
+                <a class="nav-link" href="adminDashboard.php">
+                    <i class="bi bi-speedometer2"></i> <span class="linkText">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title=" Bookings">
+                <a class="nav-link" href="booking.php">
+                    <i class="bi bi-calendar-week"></i><span class="linkText"> Bookings</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Schedule">
+                <a class="nav-link" href="schedule.php">
+                    <i class="bi bi-calendar-date"></i><span class="linkText">Schedule</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Rooms">
+                <a class="nav-link" href="roomList.php">
+                    <i class="bi bi-door-open"></i> <span class="linkText">Rooms</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Services">
+                <a class="nav-link" href="services.php">
+                    <i class="bi bi-bell"></i> <span class="linkText">Services</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Payments">
+                <a class="nav-link" href="transaction.php">
+                    <i class="bi bi-credit-card-2-front"></i> <span class="linkText">Payments</span>
+                </a>
+            </li>
+            <li class="nav-item active" id="navLI" title="Partnerships">
+                <a class="nav-link" href="displayPartnership.php">
+                    <i class="bi bi-people"></i> <span class="linkText">Partnerships</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Reviews">
+                <a class="nav-link" href="reviews.php">
+                    <i class="bi bi-list-stars"></i> <span class="linkText">Reviews</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Edit Website">
+                <a class="nav-link" href="editWebsite/editWebsite.php">
+                    <i class="bi bi-pencil-square"></i> <span class="linkText">Edit Website</span>
+                </a>
+            </li>
+            <li class="nav-item" id="navLI" title="Audit Logs">
+                <a class="nav-link" href="auditLogs.php">
+                    <i class="bi bi-clock-history"></i> <span class="linkText">Audit Logs</span>
+                </a>
+            </li>
+        </ul>
+
+        <section>
+            <a href="../Account/account.php" class="profileContainer" id="pfpContainer">
+                <img src=" ../../Assets/Images/defaultProfile.png" alt="Admin Profile"
+                    class="rounded-circle profilePic">
+                <h5 class="admin-name" id="adminName">Diane Dela Cruz</h5>
+            </a>
+        </section>
+
+        <section class="btn btn-outline-danger logOutContainer">
+            <a href="../../Function/Admin/logout.php" class="btn btn-outline-danger">
+                <i class="bi bi-box-arrow-right"></i>
+                <h5 class="logoutText">Log Out</h5>
+            </a>
+        </section>
+    </div>
+    <main>
         <!-- Booking-container -->
         <section class="booking-container">
             <section class="notification-toggler-container">
-                <div class="sbToggle-container">
-                    <button class="toggle-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar"
-                        aria-controls="sidebar">
-                        <i class="bi bi-layout-sidebar"></i>
-                    </button>
-                </div>
                 <div class="notification-container position-relative">
                     <button type="button" class="btn position-relative" data-bs-toggle="modal"
                         data-bs-target="#notificationModal">
                         <i class="bi bi-bell" id="notification-icon"></i>
                         <?php if (!empty($counter)): ?>
-                        <?= htmlspecialchars($counter) ?>
-                        </span>
+                            <?= htmlspecialchars($counter) ?>
+                            </span>
                         <?php endif; ?>
                     </button>
                 </div>
@@ -229,43 +232,44 @@ require '../../Function/notification.php';
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
-
+    <!-- Responsive sidebar -->
+    <script src="../../Assets/JS/adminSidebar.js"> </script>
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -276,230 +280,230 @@ require '../../Function/notification.php';
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    $('#requestTable').DataTable({
-        responsive: false,
-        scrollX: true,
-        columnDefs: [{
-                width: '20%',
-                targets: 0
-            },
-            {
-                width: '20%',
-                targets: 1
-            },
-            {
-                width: '25%',
-                targets: 2
-            },
-            {
-                width: '20%',
-                targets: 3
-            },
-            {
-                width: '15%',
-                targets: 4
-            },
+        $('#requestTable').DataTable({
+            responsive: false,
+            scrollX: true,
+            columnDefs: [{
+                    width: '20%',
+                    targets: 0
+                },
+                {
+                    width: '20%',
+                    targets: 1
+                },
+                {
+                    width: '25%',
+                    targets: 2
+                },
+                {
+                    width: '20%',
+                    targets: 3
+                },
+                {
+                    width: '15%',
+                    targets: 4
+                },
 
-        ],
-    });
+            ],
+        });
 
-    $('#partnersTable').DataTable({
-        responsive: false,
-        scrollX: true,
-        columnDefs: [{
-                width: '25%',
-                targets: 0
-            },
-            {
-                width: '25%',
-                targets: 1
-            },
-            {
-                width: '25%',
-                targets: 2
-            },
-            {
-                width: '25%',
-                targets: 3
-            }
-        ],
-    });
+        $('#partnersTable').DataTable({
+            responsive: false,
+            scrollX: true,
+            columnDefs: [{
+                    width: '25%',
+                    targets: 0
+                },
+                {
+                    width: '25%',
+                    targets: 1
+                },
+                {
+                    width: '25%',
+                    targets: 2
+                },
+                {
+                    width: '25%',
+                    targets: 3
+                }
+            ],
+        });
     </script>
 
 
     <!-- Ajax fort request adn partner -->
     <script>
-    function loadPartners() {
-        const table = $('#partnersTable');
-        const tableBody = document.getElementById("partners-table-body");
-        tableBody.innerHTML = "<tr><td colspan='4' class='text-center'>Loading...</td></tr>";
+        function loadPartners() {
+            const table = $('#partnersTable');
+            const tableBody = document.getElementById("partners-table-body");
+            tableBody.innerHTML = "<tr><td colspan='4' class='text-center'>Loading...</td></tr>";
 
-        fetch('../../Function/Admin/Partnership/getPartner.php')
-            .then(res => res.text())
-            .then(html => {
+            fetch('../../Function/Admin/Partnership/getPartner.php')
+                .then(res => res.text())
+                .then(html => {
 
-                tableBody.innerHTML = html;
+                    tableBody.innerHTML = html;
 
-                table.DataTable();
-            }).catch(err => {
-                console.log(err);
+                    table.DataTable();
+                }).catch(err => {
+                    console.log(err);
+                });
+        }
+
+
+        function loadRequests() {
+            const table = $('#requestTable');
+            const tableBody = document.getElementById("requests-table-body");
+            tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Loading...</td></tr>";
+
+            fetch('../../Function/Admin/Partnership/getApplicant.php')
+                .then(res => res.text())
+                .then(html => {
+                    tableBody.innerHTML = html;
+
+                    table.DataTable();
+                }).catch(err => {
+                    console.log(err);
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("partner-link").addEventListener("click", function() {
+                loadPartners();
             });
-    }
 
-
-    function loadRequests() {
-        const table = $('#requestTable');
-        const tableBody = document.getElementById("requests-table-body");
-        tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Loading...</td></tr>";
-
-        fetch('../../Function/Admin/Partnership/getApplicant.php')
-            .then(res => res.text())
-            .then(html => {
-                tableBody.innerHTML = html;
-
-                table.DataTable();
-            }).catch(err => {
-                console.log(err);
+            document.getElementById("request-link").addEventListener("click", function() {
+                loadRequests();
             });
-    }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("partner-link").addEventListener("click", function() {
-            loadPartners();
+            const params = new URLSearchParams(window.location.search);
+            const paramValue = params.get('container');
+
+            if (paramValue == 1) loadPartners();
+            else if (paramValue == 2) loadRequests();
         });
-
-        document.getElementById("request-link").addEventListener("click", function() {
-            loadRequests();
-        });
-
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('container');
-
-        if (paramValue == 1) loadPartners();
-        else if (paramValue == 2) loadRequests();
-    });
     </script>
 
     <!-- Pages hide/show -->
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const requestLink = document.getElementById("request-link");
-        const partnerLink = document.getElementById("partner-link");
-        const choices = document.getElementById("choice-container");
-        const choice1Link = document.getElementById("choice1-link");
-        const choice2Link = document.getElementById("choice2-link");
-        const partner_Container = document.getElementById("partner-container");
-        const request_Container = document.getElementById("request-container");
-        const partner_Card = document.getElementById("partner-card");
-        const request_Card = document.getElementById("request-card");
+        document.addEventListener("DOMContentLoaded", function() {
+            const requestLink = document.getElementById("request-link");
+            const partnerLink = document.getElementById("partner-link");
+            const choices = document.getElementById("choice-container");
+            const choice1Link = document.getElementById("choice1-link");
+            const choice2Link = document.getElementById("choice2-link");
+            const partner_Container = document.getElementById("partner-container");
+            const request_Container = document.getElementById("request-container");
+            const partner_Card = document.getElementById("partner-card");
+            const request_Card = document.getElementById("request-card");
 
-        requestLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            console.log("Request link clicked");
-            partnerLink.style.color = "#6d6e72ff";
-            requestLink.style.color = "#0d6dfc";
-            partner_Container.style.display = "none";
-            request_Container.style.display = "block";
-            partner_Card.style.display = "none";
-            request_Card.style.display = "block";
+            requestLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log("Request link clicked");
+                partnerLink.style.color = "#6d6e72ff";
+                requestLink.style.color = "#0d6dfc";
+                partner_Container.style.display = "none";
+                request_Container.style.display = "block";
+                partner_Card.style.display = "none";
+                request_Card.style.display = "block";
 
-            loadRequests();
+                loadRequests();
+            });
+
+            partnerLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log("Partner link clicked");
+                requestLink.style.color = "#6d6e72ff";
+                partnerLink.style.color = "#0d6dfc";
+                partner_Container.style.display = "block";
+                request_Container.style.display = "none";
+                partner_Card.style.display = "block";
+                request_Card.style.display = "none";
+
+                loadPartners();
+            });
+
+            choice1Link.addEventListener('click', function(event) {
+                event.preventDefault();
+                choices.style.display = "flex";
+                partner_Container.style.display = "none";
+                request_Container.style.display = "none";
+                partner_Card.style.display = "none";
+                request_Card.style.display = "none";
+            });
+
+            choice2Link.addEventListener('click', function(event) {
+                event.preventDefault();
+                choices.style.display = "flex";
+                partner_Container.style.display = "none";
+                request_Container.style.display = "none";
+                partner_Card.style.display = "none";
+                request_Card.style.display = "none";
+            });
         });
-
-        partnerLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            console.log("Partner link clicked");
-            requestLink.style.color = "#6d6e72ff";
-            partnerLink.style.color = "#0d6dfc";
-            partner_Container.style.display = "block";
-            request_Container.style.display = "none";
-            partner_Card.style.display = "block";
-            request_Card.style.display = "none";
-
-            loadPartners();
-        });
-
-        choice1Link.addEventListener('click', function(event) {
-            event.preventDefault();
-            choices.style.display = "flex";
-            partner_Container.style.display = "none";
-            request_Container.style.display = "none";
-            partner_Card.style.display = "none";
-            request_Card.style.display = "none";
-        });
-
-        choice2Link.addEventListener('click', function(event) {
-            event.preventDefault();
-            choices.style.display = "flex";
-            partner_Container.style.display = "none";
-            request_Container.style.display = "none";
-            partner_Card.style.display = "none";
-            request_Card.style.display = "none";
-        });
-    });
     </script>
     <script src="../../Assets/JS/adminNavbar.js"></script>
 
     <!-- Search URL -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('container');
-    const action = params.get("action");
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('container');
+        const action = params.get("action");
 
-    const choices = document.getElementById("choice-container");
-    const partnerContainer = document.getElementById("partner-container");
-    const requestContainer = document.getElementById("request-container");
-    const partnerCard = document.getElementById("partner-card");
-    const requestCard = document.getElementById("request-card");
+        const choices = document.getElementById("choice-container");
+        const partnerContainer = document.getElementById("partner-container");
+        const requestContainer = document.getElementById("request-container");
+        const partnerCard = document.getElementById("partner-card");
+        const requestCard = document.getElementById("request-card");
 
-    if (paramValue == 1) {
-        choices.style.display = "none";
-        partnerContainer.style.display = "block";
-        requestContainer.style.display = "none";
-        partnerCard.style.display = "block";
-        requestCard.style.display = "none";
+        if (paramValue == 1) {
+            choices.style.display = "none";
+            partnerContainer.style.display = "block";
+            requestContainer.style.display = "none";
+            partnerCard.style.display = "block";
+            requestCard.style.display = "none";
 
-        loadPartners()
-    } else if (paramValue == 2) {
-        choices.style.display = "none";
-        partnerContainer.style.display = "none";
-        requestContainer.style.display = "block";
-        partnerCard.style.display = "none";
-        requestCard.style.display = "block";
+            loadPartners()
+        } else if (paramValue == 2) {
+            choices.style.display = "none";
+            partnerContainer.style.display = "none";
+            requestContainer.style.display = "block";
+            partnerCard.style.display = "none";
+            requestCard.style.display = "block";
 
-        loadRequests();
-    }
+            loadRequests();
+        }
 
-    if (action === "approved") {
-        Swal.fire({
-            icon: 'success',
-            title: 'Partnership Approved',
-            text: 'The partnership request has been approved successfully.'
-        });
-    } else if (action === 'rejected') {
-        Swal.fire({
-            icon: 'success',
-            title: 'Partnership Rejected',
-            text: 'The partnership request has been rejected successfully.'
-        });
-    }
+        if (action === "approved") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Partnership Approved',
+                text: 'The partnership request has been approved successfully.'
+            });
+        } else if (action === 'rejected') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Partnership Rejected',
+                text: 'The partnership request has been rejected successfully.'
+            });
+        }
 
-    if (action) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    };
+        if (action) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-    <?php if (!empty($message)): ?>
-    Swal.fire({
-        icon: '<?= $status ?>',
-        title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
-        text: '<?= $message ?>'
-    });
-    <?php endif; ?>
+        <?php if (!empty($message)): ?>
+            Swal.fire({
+                icon: '<?= $status ?>',
+                title: '<?= ($status == 'error') ? 'Rejected' : 'Success' ?>',
+                text: '<?= $message ?>'
+            });
+        <?php endif; ?>
     </script>
 
 
