@@ -148,8 +148,6 @@ $userRole = $_SESSION['userRole'];
 
 
     <!-- //! MODAL FOR ADDING A NEW BLOG POST -->
-    <!-- <form action="../../Function/Admin/Services/addServices.php" id="addingServiceForm" method="POST"
-            enctype="multipart/form-data"> -->
     <!-- Modal -->
     <div class="modal fade" id="NewBlogPost" tabindex="-1" aria-labelledby="newBlogPost" aria-hidden="true">
         <div class="modal-dialog">
@@ -285,6 +283,7 @@ $userRole = $_SESSION['userRole'];
                 pagesContainer.style.display = "none";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Blog Page";
+                newBlogBtn.style.display = "block";
                 newBlogBtn.style.position = "absolute";
             });
 

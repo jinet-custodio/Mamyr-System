@@ -25,7 +25,7 @@ if ($userID !== null) {
 $action = "Update";
 $logDetails = "Edited website contents";
 
-// TEXT UPDATES - via JSON
+// TEXT UPDATES (JSON)
 if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
     $data = json_decode(file_get_contents("php://input"), true);
 
@@ -53,6 +53,7 @@ if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
         if (!$stmt->execute()) {
             error_log("Execute failed for title [$title]: " . $stmt->error);
         }
+        $stmt->close();
     }
 
     // Audit logging
@@ -63,6 +64,7 @@ if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
             if (!$logStmt->execute()) {
                 error_log("Audit log execute failed: " . $logStmt->error);
             }
+            $logStmt->close();
         } else {
             error_log("Audit log prepare failed: " . $conn->error);
         }
@@ -77,48 +79,80 @@ if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
     exit;
 }
 
-// IMAGE UPDATES - via multipart/form-data
+// IMAGE UPDATES (Multipart)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wcImageID'], $_POST['altText'])) {
+    header('Content-Type: application/json');
+
     $wcImageID = intval($_POST['wcImageID']);
     $altText = trim($_POST['altText']);
-    $folder = $_POST['folder'];
+    $folder = isset($_POST['folder']) ? trim($_POST['folder']) : '';
 
-    // Update alt text first
+    $altTextUpdated = false;
+    $imageUpdated = false;
+    $errors = [];
+
+    // Update alt text
     $stmt = $conn->prepare("UPDATE websitecontentimage SET altText = ?, uploadedAt = NOW() WHERE WCImageID = ?");
-    $stmt->bind_param("si", $altText, $wcImageID);
-    $stmt->execute();
+    if ($stmt) {
+        $stmt->bind_param("si", $altText, $wcImageID);
+        if ($stmt->execute()) {
+            $altTextUpdated = true;
+        } else {
+            $errors[] = "Failed to update alt text: " . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        $errors[] = "Failed to prepare alt text update: " . $conn->error;
+    }
 
-    // Handle image upload
+    // Update image file (if uploaded)
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $filename = basename($_FILES['image']['name']);
         $targetDir = "../../../Assets/Images/" . $folder;
         $targetPath = $targetDir . "/" . $filename;
 
         if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0755, true);
+            if (!mkdir($targetDir, 0755, true)) {
+                $errors[] = "Failed to create image folder: $targetDir";
+            }
         }
 
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
+        if (empty($errors) && move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
+            // Save image filename to DB
             $stmt = $conn->prepare("UPDATE websitecontentimage SET imageData = ?, uploadedAt = NOW() WHERE WCImageID = ?");
-            $stmt->bind_param("si", $filename, $wcImageID);
-            $stmt->execute();
-
-            echo json_encode([
-                'success' => true,
-                'message' => 'Image and alt text updated successfully.',
-                'path_returned' => $targetPath
-            ]);
-            exit;
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to move uploaded file']);
-            exit;
+            if ($stmt) {
+                $stmt->bind_param("si", $filename, $wcImageID);
+                if ($stmt->execute()) {
+                    $imageUpdated = true;
+                } else {
+                    $errors[] = "Failed to update image filename: " . $stmt->error;
+                }
+                $stmt->close();
+            } else {
+                $errors[] = "Failed to prepare image update: " . $conn->error;
+            }
+        } else if (empty($errors)) {
+            $errors[] = "Failed to move uploaded file to: $targetPath";
         }
     }
 
-    // Only alt text was updated
-    echo json_encode([
-        'success' => true,
-        'message' => 'Alt text updated (no image uploaded).'
-    ]);
+    // Response
+    if (!empty($errors)) {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'message' => implode("; ", $errors)
+        ]);
+    } else {
+        echo json_encode([
+            'success' => true,
+            'message' => ($imageUpdated ? "Image" : "") .
+                ($imageUpdated && $altTextUpdated ? " and " : "") .
+                ($altTextUpdated ? "alt text" : "") .
+                " updated successfully.",
+            'imageUpdated' => $imageUpdated,
+            'altTextUpdated' => $altTextUpdated
+        ]);
+    }
     exit;
 }
