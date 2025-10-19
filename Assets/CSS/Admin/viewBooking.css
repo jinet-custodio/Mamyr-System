@@ -185,7 +185,8 @@ label {
   font-size: 1vw;
 }
 
-#payment-info {
+#payment-info,
+.info-container.paymentInfo {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -227,6 +228,10 @@ label {
   font-family: "Poppins";
   text-align: center;
   font-size: 16px;
+}
+
+.discount-choice {
+  justify-content: center;
 }
 
 /* Colors */
@@ -356,6 +361,9 @@ label {
     white-space: nowrap;
     font-size: 11px;
   }
+  .form-label {
+    font-size: clamp(16px, 18px, 20px);
+  }
 }
 
 /* Tablet portrait only */
@@ -447,6 +455,10 @@ label {
   label {
     font-size: 10px;
   }
+
+  .form-label {
+    font-size: clamp(16px, 18px, 20px);
+  }
 }
 /* Phone size */
 @media screen and (max-width: 599px) {
@@ -526,6 +538,10 @@ label {
   }
   label {
     font-size: 10px;
+  }
+
+  .form-label {
+    font-size: clamp(14px, 16px, 18px);
   }
 }
 
