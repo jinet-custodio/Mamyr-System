@@ -142,10 +142,8 @@ while ($row = $getEventsResult->fetch_assoc()) {
         <div class="swiper">
             <div class="swiper-wrapper">
                 <?php
-                // Default fallback image
                 $defaultImage = "../Assets/Images/no-picture.jpg";
 
-                // Loop through content from the eventcategory table
                 foreach ($eventMap as $key => $event):
                     $eventName = $event['categoryName'] ?? 'Untitled Event';
                     $eventDesc = $event['eventDescription'] ?? 'No description available.';
