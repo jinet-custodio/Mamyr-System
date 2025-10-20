@@ -10,7 +10,7 @@ if (isset($_POST['addService'])) {
     $partnershipID = intval($_POST['partnershipID']);
 
     $serviceName = mysqli_real_escape_string($conn, $_POST['serviceName']);
-    $availabilityID = intval($_POST['serviceAvailabilityName']) ?? 1;
+    $availabilityID = intval($_POST['serviceAvailability']) ?? 1;
     $servicePrice = floatval($_POST['price']);
     $serviceCapacity = intval($_POST['capacity']);
     $serviceDuration = mysqli_real_escape_string($conn, $_POST['duration']);

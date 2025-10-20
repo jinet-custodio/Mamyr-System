@@ -405,7 +405,7 @@ require_once '../../Function/Partner/getBookings.php';
 
         document.addEventListener("DOMContentLoaded", function() {
             const userID = document.getElementById('userID').value;
-            const bookingMap = {}; // Store bookings for later use
+            const bookingMap = {};
 
             fetch(`../../Function/Partner/getPartnerBookings.php?userID=${encodeURIComponent(userID)}`)
                 .then(response => response.json())
@@ -528,7 +528,7 @@ require_once '../../Function/Partner/getBookings.php';
         });
     </script>
 
-    <!-- Show -->
+    <!-- Show Logout -->
     <script>
         const logoutBtn = document.getElementById('logoutBtn');
         const logoutModal = document.getElementById('logoutModal');

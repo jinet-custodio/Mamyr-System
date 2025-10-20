@@ -119,24 +119,30 @@ CREATE TABLE reasons (
     reasonDescription VARCHAR(255) NOT NULL
 );
 
-INSERT INTO reasons (category, reasonDescription) VALUES
+INSERT INTO reason (category, reasonDescription) VALUES
 ('Cancellation', 'Change of plans'),
-('Cancellation', 'Found better option'),
-('Cancellation', 'Too expensive'),
-('Cancellation', 'Scheduling conflict'),
-('Cancellation', 'Booking error'),
-('Cancellation', 'Health reasons'),
-('Cancellation', 'Travel restrictions'),
-('Cancellation', 'Personal reasons'),
+('Cancellation', 'Found a better place or event'),
+('Cancellation', 'Price is too expensive'),
+('Cancellation', 'Family or personal emergency'),
+('Cancellation', 'Health or medical issue'),
+('Cancellation', 'Unable to travel'),
+('Cancellation', 'Incorrect booking details'),
+('Cancellation', 'Trip or event was cancelled'),
 ('Cancellation', 'Other'),
-('Rejection', 'Full rooms'),
-('Rejection', 'Invalid documents'),
-('Rejection', 'Suspicious activity'),
-('Rejection', 'Non-compliance'),
-('Rejection', 'Payment issues'),
-('Rejection', 'Double booking'),
-('Rejection', 'Policy violation'),
+('BookingRejection', 'No rooms, seats, or spaces available'),
+('BookingRejection', 'Missing or incorrect information'),
+('BookingRejection', 'Booking appears unsafe or suspicious'),
+('BookingRejection', 'Does not meet booking rules or requirements'),
+('BookingRejection', 'Duplicate booking detected'),
+('BookingRejection', 'Breaks property or event policy'),
+('BookingRejection', 'Invalid booking date selected'),
 ('Rejection', 'Other'),
+('PaymentRejection', 'Payment was not completed or declined'),
+('PaymentRejection', 'Payment method is invalid or expired'),
+('PaymentRejection', 'Insufficient payment'),
+('PaymentRejection', 'Payment could not be verified'),
+('PaymentRejection', 'Duplicate payment detected'),
+('PaymentRejection', 'Other'),
 ('PartnerRejection', 'Incomplete or missing documents'),
 ('PartnerRejection', 'Invalid or unverifiable business information'),
 ('PartnerRejection', 'Duplicate partnership request'),
@@ -197,5 +203,9 @@ RENAME TABLE booking_cancellations TO booking_cancellation
 RENAME TABLE additionalcharges TO additionalcharge
 RENAME TABLE reasons TO reason
 
-
+ALTER TABLE `reason` CHANGE `category` `category` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE confirmedbooking ADD approvedBy INT(11) NULL AFTER paymentApprovalStatus, ADD approvedDate DATETIME NULL AFTER approvedBy;
+ALTER TABLE confirmedbooking ADD CONSTRAINT confirmedbooking_ibfk_4 FOREIGN KEY (approvedBy) REFERENCES admin`(adminID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `payment` ADD `downpaymentImage` VARCHAR(255) NOT NULL DEFAULT 'defaultDownpayment.png' AFTER `amount`;
+ALTER TABLE `serviceunavailabledate` ADD `expiresAt` DATETIME NULL AFTER `unavailableEndDate`;
+ALTER TABLE `serviceunavailabledate` ADD `status` ENUM('hold', 'confirmed', 'cancelled') NOT NULL DEFAULT 'hold' AFTER `unavailableEndDate`;

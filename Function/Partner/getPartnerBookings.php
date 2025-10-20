@@ -15,6 +15,7 @@ if (isset($_GET['userID'])) {
                                                 LPAD(b.bookingID, 4, '0') AS formattedBookingID,
                                                 b.userID AS guestID,
                                                 u.userRole,
+                                                u.userProfile,
                                                 MAX(u.firstName) AS firstName,
                                                 MAX(u.lastName) AS lastName,
                                                 MAX(u.email) AS email,
@@ -88,6 +89,13 @@ if (isset($_GET['userID'])) {
             $approvalTimeRange = (clone $availedDate)->modify('+24 hours');
             $approvalTimeUntil = $approvalTimeRange->format('M. d,Y g:i A');
 
+            $profile = $data['userProfile'];
+            if (!empty($profile)) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $profile);
+                finfo_close($finfo);
+                $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+            }
 
             $venue = $row['RServiceName'] ?? null;
 
@@ -139,7 +147,8 @@ if (isset($_GET['userID'])) {
                 'venue' => $venue,
                 'notes' => $row['additionalRequest'],
                 'serviceInfo' =>  $serviceInfo,
-                'approvalTimeUntil' =>  $approvalTimeUntil
+                'approvalTimeUntil' =>  $approvalTimeUntil,
+                'profileImage' => $image
             ];
         }
 

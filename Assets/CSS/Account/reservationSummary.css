@@ -212,7 +212,7 @@ body {
   gap: 4rem;
 }
 
-.foodModalBtn {
+.iModalBtn {
   border: none;
   margin-left: 0.2rem;
   background-color: transparent;
@@ -223,14 +223,14 @@ body {
   aspect-ratio: 1;
 }
 
-#foodListModal {
+/* #foodListModal {
   display: none;
   position: absolute;
   top: 13.5%;
   left: 75%;
   margin-left: 10px;
   width: 300px;
-}
+} */
 
 /* .modal-body {
   padding: 15px;
@@ -239,10 +239,10 @@ body {
   max-height: 60vh;
 } */
 
-#service-info-button {
+/* #service-info-button {
   background-color: transparent !important;
   border: none !important;
-}
+} */
 
 .cardContent i {
   font-size: 1rem;

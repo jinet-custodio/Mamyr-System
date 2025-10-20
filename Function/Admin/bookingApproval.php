@@ -69,6 +69,7 @@ if (isset($_POST['approveBtn'])) {
     $userRoleID = (int) $_POST['userRoleID'];
     $customerID = (int) $_POST['customerID'];
     $customPackageID = (int) $_POST['customPackageID'];
+    $serviceIDs = $_POST['serviceIDs'];
     $tourType = isset($_POST['tourType'])
         ? '&mdash; ' . mysqli_real_escape_string($conn, $_POST['tourType'])
         : '';
@@ -119,13 +120,59 @@ if (isset($_POST['approveBtn'])) {
     $finalBill = mysqli_real_escape_string($conn, $_POST['finalBill']);
     $downpayment = $finalBill * .3;
 
-
-
-
     $conn->begin_transaction();
     try {
-        //Update customer package
+        $today = new DateTime();
+        $expiresAt = $today->modify('+24 hours')->format('Y-m-d H:i:s');
 
+        $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
+        //* Insert this to unavailable dates
+        foreach ($serviceIDs as $serviceID) {
+            $getServicesQuery->bind_param("i", $serviceID);
+            if (!$getServicesQuery->execute()) {
+                $conn->rollback();
+                throw new Exception("Failed to fetch service for ID: $serviceID");
+            }
+
+            $getServicesQueryResult = $getServicesQuery->get_result();
+            if ($getServicesQueryResult->num_rows === 0) {
+                $conn->rollback();
+                throw new Exception("No service found for ID: $serviceID");
+            }
+
+            $row = $getServicesQueryResult->fetch_assoc();
+            $serviceType = $row['serviceType'];
+
+            switch ($serviceType) {
+                case 'Resort':
+                    $resortServiceID = $row['resortServiceID'];
+                    $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?, ?, ?, ?)");
+                    $insertToUnavailableDates->bind_param('isss', $resortServiceID, $startDate, $endDate, $expiresAt);
+                    if (!$insertToUnavailableDates->execute()) {
+                        $conn->rollback();
+                        throw new Exception("Failed to insert unavailable date for resort service ID: $resortServiceID");
+                    }
+                    $insertToUnavailableDates->close();
+                    break;
+
+                case 'Partner':
+                    $partnershipServiceID = $row['partnershipServiceID'];
+                    $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(partnershipServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?, ?, ?,?)");
+                    $insertToUnavailableDates->bind_param('isss', $partnershipServiceID, $startDate, $endDate, $expiresAt);
+                    if (!$insertToUnavailableDates->execute()) {
+                        $conn->rollback();
+                        throw new Exception("Failed to insert unavailable date for partner service ID: $partnershipServiceID");
+                    }
+                    $insertToUnavailableDates->close();
+                    break;
+
+                default:
+                    $conn->rollback();
+                    throw new Exception("Unknown service type: $serviceType for service ID: $serviceID");
+            }
+        }
+
+        //Update customer package
         if (!empty($customPackageID)) {
             $updateFoodPrice = $conn->prepare("UPDATE `custompackage` SET `totalFoodPrice`= ? WHERE customPackageID = ?");
             $updateFoodPrice->bind_param('di', $newFoodPrice, $customPackageID);
@@ -282,9 +329,10 @@ if (isset($_POST['rejectBtn'])) {
     $bookingStatusID = (int) $_POST['bookingStatusID'];
     $customerID = (int) $_POST['customerID'];
     $reason = (int) $_POST['rejection-reason'];
+    $serviceIDs = $_POST['serviceIDs'];
     $otherReason = mysqli_real_escape_string($conn, $_POST['reasonDescription']) ?? NULL;
     $userRoleID = (int) $_POST['userRoleID'];
-
+    // $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     // error_log('reasonID: ' . $reason);
     // error_log("AdminID: " . $adminID);
 
@@ -294,6 +342,45 @@ if (isset($_POST['rejectBtn'])) {
     }
     $conn->begin_transaction();
     try {
+        if (strtolower($bookingType) === 'resort') {
+            $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
+            //* Insert this to unavailable dates
+            foreach ($serviceIDs as $serviceID) {
+                $getServicesQuery->bind_param("i", $serviceID);
+                if (!$getServicesQuery->execute()) {
+                    $conn->rollback();
+                    throw new Exception("Failed to fetch service for ID: $serviceID");
+                }
+
+                $getServicesQueryResult = $getServicesQuery->get_result();
+                if ($getServicesQueryResult->num_rows === 0) {
+                    $conn->rollback();
+                    throw new Exception("No service found for ID: $serviceID");
+                }
+
+                $row = $getServicesQueryResult->fetch_assoc();
+                $serviceType = $row['serviceType'];
+                switch ($serviceType) {
+                    case 'Resort':
+                        $resortServiceID = $row['resortServiceID'];
+                        $removeFromUnavailableDates = $conn->prepare("DELETE FROM `serviceunavailabledate` WHERE `resortServiceID`= ?");
+                        $removeFromUnavailableDates->bind_param('i', $resortServiceID);
+                        if (!$removeFromUnavailableDates->execute()) {
+                            $conn->rollback();
+                            throw new Exception("Failed to delete unavailable date for resort service ID: $resortServiceID");
+                        }
+                        $removeFromUnavailableDates->close();
+                        break;
+
+                    default:
+                        $conn->rollback();
+                        throw new Exception("Unknown service type: $serviceType for service ID: $serviceID");
+                }
+            }
+        }
+
+
+
         $bookingQuery = $conn->prepare("SELECT * FROM booking WHERE bookingID = ? AND bookingStatus = ?");
         $bookingQuery->bind_param("is", $bookingID, $bookingStatusID);
         $bookingQuery->execute();

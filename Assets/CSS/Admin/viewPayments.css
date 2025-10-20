@@ -139,7 +139,7 @@ label {
   width: 100% !important;
 }
 
-.form-control {
+.form-control:read-only {
   height: 6vh;
   /* width: 25vw !important; */
   width: 100%;
@@ -272,6 +272,15 @@ label {
   align-items: center;
   margin-bottom: 1rem;
   gap: 1rem;
+}
+
+.form-floating .form-control {
+  height: 3rem !important;
+  min-height: 3rem !important;
+}
+
+.form-floating label {
+  font-size: 14px !important;
 }
 
 /* .checkbox-group .form-check {

@@ -35,7 +35,7 @@
                     FROM `serviceunavailabledate` sud 
                     WHERE sud.partnershipServiceID = ps.partnershipServiceID
                     AND (? < sud.unavailableEndDate 
-                    AND ? > sud.unavailableStartDate)
+                    AND ? > sud.unavailableStartDate) AND sud.status IN ('confirmed', 'hold')
                 )
                 GROUP BY partnerTypeID "
             );

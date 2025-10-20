@@ -33,7 +33,7 @@ if (isset($_GET['startDate']) && isset($_GET['endDate'])) {
             AND NOT EXISTS (
                     SELECT 1 FROM serviceunavailabledate sud
                     WHERE sud.resortServiceID = ra.resortServiceID
-                    AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate)
+                    AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate) AND sud.status IN ('confirmed', 'hold')
                 )
             ");
     if (!$getEventHallQuery) {

@@ -9,8 +9,8 @@ function autoChangeStatus($conn)
     $availableStatusID = 1;
 
     // Set status to OCCUPIED
-    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledate
-    WHERE unavailableStartDate <= NOW() AND unavailableEndDate>= NOW()
+    $fetchUnavailableServiceDatesQuery  = $conn->prepare("SELECT * FROM serviceunavailabledate
+    WHERE unavailableStartDate <= NOW() AND unavailableEndDate>= NOW() AND status = 'confirmed'
         ");
     $fetchUnavailableServiceDatesQuery->execute();
     $result = $fetchUnavailableServiceDatesQuery->get_result();
@@ -58,10 +58,10 @@ function autoChangeStatus($conn)
     }
 
     //Set status to AVAILABLE
-    $fetchUnavailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledate
-        WHERE unavailableStartDate > NOW() OR unavailableEndDate < NOW() ");
-    $fetchUnavailableServiceDatesQuery->execute();
-    $result = $fetchUnavailableServiceDatesQuery->get_result();
+    $fetchAvailableServiceDatesQuery = $conn->prepare("SELECT * FROM serviceunavailabledate
+        WHERE unavailableStartDate > NOW() OR unavailableEndDate < NOW() OR status = 'cancelled' ");
+    $fetchAvailableServiceDatesQuery->execute();
+    $result = $fetchAvailableServiceDatesQuery->get_result();
 
     while ($row = $result->fetch_assoc()) {
         $resortServiceID = intval($row['resortServiceID']);

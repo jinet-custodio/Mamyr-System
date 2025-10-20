@@ -811,7 +811,7 @@ unset($_SESSION['formData']);
             <input type="hidden" name="toddlerCount" value="<?= htmlspecialchars($toddlerCount ?? 0) ?>">
             <input type="hidden" name="adultRate" value="<?= htmlspecialchars($adultRate ?? 0) ?>">
             <input type="hidden" name="childrenRate" value="<?= htmlspecialchars($childRate ?? 0) ?>">
-            <input type="hidden" name="tourType" value="<?= htmlentities($tourType) ?? 'N/A' ?>">
+            <input type="hidden" name="tourType" value="<?= htmlspecialchars($tourType ?? 'N/A') ?>">
         </div>
 
     </form>

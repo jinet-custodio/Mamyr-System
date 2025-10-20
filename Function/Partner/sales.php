@@ -12,8 +12,8 @@ function getSales($conn, $userID)
                     LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
                     LEFT JOIN partnershipservice ps ON bpas.partnershipServiceID = ps.partnershipServiceID 
                     LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
-                    LEFT JOIN payment pay ON cb.confirmedBookingID = pay.confirmedBookingID
-                    WHERE p.userID = ? AND cb.paymentApprovalStatus = ? AND pay.paymentStatus = ? AND bpas.approvalStatus = ?
+                    -- LEFT JOIN payment pay ON cb.confirmedBookingID = pay.confirmedBookingID
+                    WHERE p.userID = ? AND cb.paymentApprovalStatus = ? AND cb.paymentStatus = ? AND bpas.approvalStatus = ?
         ");
     $getPartnerSalesQuery->bind_param("iiii", $userID, $approveStatusID, $paymentStatusID, $approvalStatus);
     if (!$getPartnerSalesQuery->execute()) {

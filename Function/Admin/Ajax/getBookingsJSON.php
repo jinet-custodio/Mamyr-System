@@ -14,6 +14,8 @@ try {
                         FROM booking b
                         INNER JOIN user u ON b.userID = u.userID
                         LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
+                        ORDER BY
+                            cb.paymentStatus
                         -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         ");
     $getBookingInfo->execute();

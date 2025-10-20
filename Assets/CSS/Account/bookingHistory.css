@@ -98,12 +98,16 @@ label {
 }
 
 /* View Payment Modal */
+.paymentListContainer {
+  margin-top: 1rem;
+}
+
 .downpayment-container,
 .payment-container {
   display: flex;
   justify-content: space-around;
   font-family: "Poppins";
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .payment-container {
@@ -111,7 +115,7 @@ label {
   justify-content: space-between;
   padding: 0 1.3rem 0 1.3rem;
   font-family: "Poppins";
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .payment-container-title {
@@ -121,13 +125,13 @@ label {
 
 .dp-title,
 .dp-amount {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .date,
 .mode {
   color: #575656;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .view-dp-btn {
