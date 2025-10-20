@@ -45,18 +45,33 @@ if ($userRole === 2) {
 }
 
 
-//SQL statement for retrieving data for website content from DB
-$sectionName = 'BusinessInformation';
+$folder = 'landingPage';
+$sectionName = 'Landing';
 $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
 $contentMap = [];
+$imageMap = [];
+$defaultImage = "../../Assets/Images/no-picture.jpg";
+
 while ($row = $getWebContentResult->fetch_assoc()) {
     $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
     $contentID = $row['contentID'];
-
     $contentMap[$cleanTitle] = $row['content'];
+
+    // Fetch images with this contentID
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages->bind_param("i", $contentID);
+    $getImages->execute();
+    $imageResult = $getImages->get_result();
+
+    $images = [];
+    while ($imageRow = $imageResult->fetch_assoc()) {
+        $images[] = $imageRow;
+    }
+
+    $imageMap[$cleanTitle] = $images;
 }
 ?>
 
@@ -73,12 +88,16 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <!-- online stylesheet link for bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
+    <!-- Swiper's CSS Link  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- icon libraries for font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
 </head>
 
@@ -190,7 +209,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     ?>
 
     <div class="custom-container">
-        <div class="topContainer">
+        <div class="topSec">
             <div class="titleContainer">
                 <div class="mamyrTitle">
                     <h1 class="welcome">Welcome to Mamyr,</h1>
@@ -216,61 +235,134 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
 
 
-        <div class="welcomeSection">
-            <div class="resortPic1">
-                <img src="../../../Assets/Images/landingPage/resortPic1.png" alt="Mamyr Resort" class="pic1">
+        <section class="middle-container">
+            <div class="embed-responsive embed-responsive-16by9">
+                <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
+                    poster="../../Assets/Videos/thumbnail2.jpg">
+                    <source src="../../Assets/Videos/mamyrVideo3.mp4" type="video/mp4">
+
+                </video>
             </div>
-            <div class="wsText">
-                <hr class="line">
-                <h4 class="wsTitle">Welcome to <?= htmlspecialchars($contentMap['FullName'] ?? 'Name Not Found') ?></h4>
-                <p class="wsDescription">Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable
-                    moments await you. Whether you're here for a peaceful retreat or a special celebration, we're
-                    dedicated to making your experience truly exceptional.</p>
-            </div>
-
-        </div>
-
-        <div class="contact">
-            <div class="contactText">
-                <hr class="line">
-                <h4 class="contactTitle">Contact Us </h4>
-
-                <div class="location contacts">
-                    <img src="../../Assets/Images/landingPage/icons/location.png" alt="locationPin" class="locationIcon">
-                    <h5 class="locationText"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?></h5>
+            <div class="videoText-container">
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Heading2'] ?? 'Name Not Found') ?> </h3>
+                <p class="videoDescription indent">
+                    <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
+                <div class="middle-btn-container">
+                    <a href="Pages/amenities.php" class="btn btn-primary">View our Amenities</a>
                 </div>
+            </div>
+        </section>
 
-                <div class="number contacts">
-                    <img src="../../Assets/Images/landingPage/icons/phone.png" alt="phone" class="phoneIcon">
-                    <h5 class="number"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h5>
+
+        <section class="bottom-section">
+
+            <div class="bottom-text-container">
+                <h3 class="bottom-header"><?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?> </h3>
+                <p class="bottom-subtext indent">
+                    <?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?> </p>
+            </div>
+
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <?php if (isset($imageMap['BookNow'])): ?>
+                        <?php foreach ($imageMap['BookNow'] as $index => $img):
+                            $imagePath = "../../Assets/Images/landingPage/" . $img['imageData'];
+                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                        ?>
+                            <div class="swiper-slide">
+                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                    class="editable-img d-block" style="cursor: pointer;">
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="card-img">
+                            <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
+                        </div>
+                    <?php endif; ?>
+
                 </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
 
-                <div class="email contacts">
-                    <img src="../../Assets/Images/landingPage/icons/email.png" alt="email" class="emailIcon">
-                    <h5 class="emailAddressText"><?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h5>
+        <section class="rating-container">
+            <div class="locationText-container">
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                <p class="videoDescription indent">
+                    <?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?> </p>
+            </div>
+
+            <div class="card ratings-card">
+                <div class="card-body graph-card-body">
+                    <div class="graph-header">
+                        <i class="bi bi-star"></i>
+                        <h6 class="graph-header-text">Ratings</h6>
+                    </div>
+
+                    <div class="rating-categories">
+                        <!-- Resort -->
+                        <div class="rating-row">
+                            <div class="rating-label">Resort</div>
+                            <div class="rating-bar">
+                                <div class="progress">
+                                    <div class="progress-bar" id="resort-bar" role="progressbar" aria-valuenow=""
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="rating-value" id="resort-rating-value"></div>
+                        </div>
+
+                        <!-- Hotel -->
+                        <div class="rating-row">
+                            <div class="rating-label">Hotel</div>
+                            <div class="rating-bar">
+                                <div class="progress">
+                                    <div class="progress-bar" id="hotel-bar" role="progressbar" aria-valuenow=""
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="rating-value" id="hotel-rating-value"></div>
+                        </div>
+
+                        <!-- Event -->
+                        <div class="rating-row">
+                            <div class="rating-label">Event</div>
+                            <div class="rating-bar">
+                                <div class="progress">
+                                    <div class="progress-bar" id="event-bar" role="progressbar" aria-valuenow=""
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="rating-value" id="event-rating-value"></div>
+                        </div>
+
+                        <!-- Overall Rating (Optional) -->
+                        <div class="overall-rating">
+                            <div class="overall-rating-label">
+                                <h6 class="overall-rating-label">Overall Rating</h6>
+                                <h4 class="overall-rating-value" id="overall-rating-value"></h4>
+                            </div>
+                            <div class="overall-rating-stars" id="star-container">
+                                <!-- <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i> -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-            <div class="googleMap" id="googleMap"></div>
-        </div>
-
-        <div class="gallery">
-            <hr class="line">
-            <h4 class="galleryTitle">Gallery </h4>
-            <div class="galleryPictures">
-                <img src="../../Assets/Images/landingPage/img1.png" alt="resort View 1" class="img1 galleryImg">
-                <img src="../../Assets/Images/landingPage/img2.png" alt="resort View 2" class="img2 galleryImg">
-                <img src="../../Assets/Images/landingPage/img3.png" alt="resort View 3" class="img3 galleryImg">
-                <img src="../../Assets/Images/landingPage/img4.png" alt="resort View 4" class="img4 galleryImg">
-                <img src="../../Assets/Images/landingPage/img5.png" alt="resort View 5" class="img5 galleryImg">
-                <img src="../../Assets/Images/landingPage/img6.png" alt="resort View 6" class="img6 galleryImg">
+        </section>
+        <section class="location-container">
+            <div class="locationText-container">
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                <p class="videoDescription indent">
+                    <?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?> </p>
             </div>
 
-            <div class="seeMore">
-                <a href="../amenities.php" class="btn btn-primary w-100">See More</a>
-            </div>
-        </div>
-
+            <div id="map"></div>
+        </section>
         <?php include 'footer.php';
         include 'loader.php'; ?>
     </div>
@@ -284,52 +376,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </script>
 
 
-    <script>
-        function myMap() {
-            var mapProp = {
-                center: new google.maps.LatLng(15.050861525959231, 121.02183364955998),
-                zoom: 5,
-            };
-            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: '../../Function/fetchUserBookings.php',
-                eventsSet: function(events) {
-                    console.log('Fetched events:', events);
-                    events.forEach(event => {
-                        console.log(`Title: ${event.title}, Start: ${event.startStr}`);
-                    });
-                },
-                eventClick: function(info) {
-                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
-                },
-                eventDidMount: function(info) {
-                    if (info.event.allDay) {
-                        const dateStr = info.event.startStr;
-                        const dayCell = document.querySelector(`.fc-daygrid-day[data-date="${dateStr}"]`);
-                        if (dayCell) {
-                            let baseColor = info.event.backgroundColor || info.event.extendedProps.color || '#dc3545';
-                            dayCell.style.backgroundColor = baseColor;
-                            dayCell.style.color = '#000';
-                        }
-                        if (info.el) {
-                            info.el.style.display = 'none';
-                        }
-                    }
-                }
-            });
-
-            calendar.render();
-        });
-    </script>
     <script src="../../Assets/JS/scrollNavbg.js">
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCalqMvV8mz7fIlyY51rxe8IerVxzUTQ2Q&callback=myMap">
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
@@ -409,8 +457,139 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             history.replaceState({}, document.title, url.toString());
         };
     </script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        window.addEventListener("load", function() {
+            new Swiper(".mySwiper", {
+                loop: true,
+                spaceBetween: 30,
+                slidesPerView: 3,
+                breakpoints: {
+                    0: {
+                        slidesPerView: 1,
+                        spaceBetween: 10
+                    },
+                    600: {
+                        slidesPerView: 2,
+                        spaceBetween: 20
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30
+                    },
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true
+                },
+            });
+        });
+    </script>
 
 
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const lat = 15.05073200154005;
+        const lon = 121.0218658098424;
+
+        const map = L.map('map').setView([lat, lon], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+
+        const customIcon = L.icon({
+            iconUrl: '../../Assets/Images/MamyrLogo.png',
+            iconSize: [100, 25], // Size of the logo 
+            iconAnchor: [25, 50], // Anchor point of the icon 
+            popupAnchor: [0, -50] // Popup anchor point 
+        });
+
+
+        L.marker([lat, lon], {
+                icon: customIcon
+            }).addTo(map)
+            .bindPopup('Mamyr Resort and Events Place is Located Here!')
+            .openPopup();
+    </script>
+
+    <script>
+        async function getRatings() {
+            const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
+            const data = await response.json();
+
+            const resortBar = document.getElementById('resort-bar');
+            resortBar.style.width = data.resortPercent + '%';
+            resortBar.setAttribute('ari-valuenow', data.resortPercent)
+            document.getElementById('resort-rating-value').textContent = data.resortRating;
+
+            const hotelBar = document.getElementById('hotel-bar');
+            hotelBar.style.width = data.hotelPercent + '%';
+            hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
+            document.getElementById('hotel-rating-value').textContent = data.hotelRating;
+
+            const eventBar = document.getElementById('event-bar');
+            eventBar.style.width = data.eventPercent + '%';
+            eventBar.setAttribute('ari-valuenow', data.eventPercent)
+            document.getElementById('event-rating-value').textContent = data.eventRating;
+
+            document.getElementById('overall-rating-value').textContent = data.overAllRating;
+            const starContainer = document.getElementById('star-container');
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(data.overAllRating)) {
+                    starContainer.innerHTML += '<i class="bi bi-star-fill text-warning"></i>';
+                } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
+                    starContainer.innerHTML += '<i class="bi bi-star-half text-warning"></i>';
+                } else {
+                    starContainer.innerHTML += '<i class="bi bi-star text-warning"></i>';
+                }
+            }
+        }
+
+        getRatings();
+        setInterval(getRatings, 300000);
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '../../Function/fetchUserBookings.php',
+                eventsSet: function(events) {
+                    console.log('Fetched events:', events);
+                    events.forEach(event => {
+                        console.log(`Title: ${event.title}, Start: ${event.startStr}`);
+                    });
+                },
+                eventClick: function(info) {
+                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+                },
+                eventDidMount: function(info) {
+                    if (info.event.allDay) {
+                        const dateStr = info.event.startStr;
+                        const dayCell = document.querySelector(`.fc-daygrid-day[data-date="${dateStr}"]`);
+                        if (dayCell) {
+                            let baseColor = info.event.backgroundColor || info.event.extendedProps.color || '#dc3545';
+                            dayCell.style.backgroundColor = baseColor;
+                            dayCell.style.color = '#000';
+                        }
+                        if (info.el) {
+                            info.el.style.display = 'none';
+                        }
+                    }
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
 </body>
 
 </html>
