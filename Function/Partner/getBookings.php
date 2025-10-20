@@ -18,8 +18,8 @@ function getBookingsCount($conn, $userID)
                 LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                 LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
                 LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                LEFT JOIN payment pay ON cb.confirmedBookingID = pay.confirmedBookingID
-                WHERE p.userID = ? AND pay.paymentStatus = ?
+                -- LEFT JOIN payment pay ON cb.confirmedBookingID = pay.confirmedBookingID
+                WHERE p.userID = ? AND cb.paymentStatus = ?
                 ");
         $getPartnerBooking->bind_param('ii', $userID, $paymentStatus);
         if (!$getPartnerBooking->execute()) {

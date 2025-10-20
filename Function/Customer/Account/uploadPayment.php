@@ -62,12 +62,13 @@ if (isset($_POST['submitDownpaymentImage'])) {
     $conn->begin_transaction();
     try {
         $downpaymentImageQuery = $conn->prepare("UPDATE confirmedbooking
-            SET downpaymentImage = ?
+            SET downpaymentImage = ?, paymentStatus = ?
             WHERE bookingID = ? ");
-        $downpaymentImageQuery->bind_param("si", $imageFileName, $bookingID);
+        $downpaymentImageQuery->bind_param("sii", $imageFileName, $paymentSentID,  $bookingID);
 
         if (!$downpaymentImageQuery->execute()) {
             $conn->rollback();
+            $_SESSION['bookingID'] = $bookingID;
             throw new Exception('Error executing the downpayment query');
             error_log('Error: ' . $downpaymentImageQuery->error);
             header('Location: ../../../../../Pages/Account/reservationSummary.php?action=error');
@@ -76,8 +77,8 @@ if (isset($_POST['submitDownpaymentImage'])) {
 
         $today = Date('Y-m-d h:i:s');
 
-        $insertPaymentQuery = $conn->prepare("INSERT INTO `payment`(`amount`, `downpaymentImage`, `paymentStatus`, `paymentDate`,  confirmedBookingID) VALUES (?,?,?,?,?)");
-        $insertPaymentQuery->bind_param('dsisi', $paymentAmount, $imageFileName, $paymentSentID, $today, $confirmedBookingID);
+        $insertPaymentQuery = $conn->prepare("INSERT INTO `payment`(`amount`, `downpaymentImage`, `paymentDate`,  confirmedBookingID) VALUES (?,?,?,?)");
+        $insertPaymentQuery->bind_param('dssi', $paymentAmount, $imageFileName, $today, $confirmedBookingID);
         if (!$insertPaymentQuery->execute()) {
             $conn->rollback();
             throw new Exception('Failed Inserting payment');

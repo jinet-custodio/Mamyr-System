@@ -7,9 +7,9 @@
 
             header('Content-Type: application/json');
 
-            $approvedStatusID = $paymentStatusID  = 2;
+            $paymentStatusID  = 4;
+            $approvedStatusID = 2;
             $doneStatusID = 6;
-            $fullyPaidID = 3;
             $getCardData = $conn->prepare("SELECT
                                                     -- Guests this month
                                                     SUM(CASE 
@@ -78,9 +78,9 @@
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
                                                 -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                                                -- WHERE b.bookingStatus IN (?, ?) AND cb.paymentApprovalStatus = ? AND cb.paymentStatus IN (?, ?) 
+                                                WHERE b.bookingStatus IN (?, ?)  AND cb.paymentStatus != ? 
                                                 ");
-            // $getCardData->bind_param('iiiii',  $approvedStatusID, $doneStatusID, $approvedStatusID, $paymentStatusID, $fullyPaidID);
+            $getCardData->bind_param('iii',  $approvedStatusID, $doneStatusID,  $paymentStatusID);
 
             if (!$getCardData->execute()) {
                 error_log("Error executing the card data query.");

@@ -361,7 +361,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <!-- Hotel check-in check-out  -->
     <script>
-        //  const hoursSelected = document.getElementById('hoursSelected');
         const checkInInput = document.getElementById('checkInDate');
         const checkOutInput = document.getElementById('checkOutDate');
         // const daysCountInput = document.getElementById('daysCount');

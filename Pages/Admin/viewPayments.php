@@ -101,13 +101,15 @@ if ($admin === "Admin") {
     <?php
     $bookingID = $bookingID;
     $bookingStatus = 2;
+    $doneStatus = 6;
 
     $payments = $conn->prepare("SELECT 
-                    LPAD(cb.bookingID, 4, '0') AS formattedID,
+                    LPAD(cb.bookingID, 4, '0') AS formattedID, b.bookingCode,
                     cb.confirmedBookingID, cb.downpaymentImage, cb.discountAmount, cb.additionalCharge, cb.finalBill,
-                    cb.amountPaid, cb.userBalance, cb.paymentApprovalStatus as paymentApprovalStatusID, p.paymentStatus as paymentStatusID, cb.paymentDueDate, cb.downpaymentDueDate,
+                    cb.amountPaid, cb.userBalance, cb.paymentApprovalStatus as paymentApprovalStatusID, 
+                    cb.paymentStatus as paymentStatusID, p.amount, p.paymentID,  cb.paymentDueDate, cb.downpaymentDueDate,
                     b.bookingID, b.bookingType, b.customPackageID, b.addOns, b.paymentMethod, b.totalCost as originalBill, b.downpayment, b.bookingStatus as bookingStatusID, mi.foodName,
-                    u.firstName, u.lastName, u.phoneNumber, u.userID AS customerID, u.userRole,
+                    u.firstName, u.lastName, u.phoneNumber, u.userID AS customerID, u.userRole, u.email,
                     cp.totalFoodPrice, cp.venuePricing, cp.additionalServicePrice, cpi.foodItemID, 
                     s.serviceID, s.resortServiceID, s.partnershipServiceID, s.entranceRateID, s.serviceType,
                     ra.RServiceName,sp.price,
@@ -126,9 +128,9 @@ if ($admin === "Admin") {
                 LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
                 LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                 LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                WHERE cb.bookingID = ? AND b.bookingStatus = ?
+                WHERE cb.bookingID = ? AND b.bookingStatus IN (?, ?)
         ");
-    $payments->bind_param("ii", $bookingID, $bookingStatus);
+    $payments->bind_param("iii", $bookingID, $bookingStatus, $doneStatus);
     $payments->execute();
     $resultPayments = $payments->get_result();
     if ($resultPayments->num_rows > 0) {
@@ -138,12 +140,16 @@ if ($admin === "Admin") {
         $foodPriceTotal = 0;
         $venuePrice = 0;
         $partnerServices = [];
+        $serviceIDs = [];
         while ($row = $resultPayments->fetch_assoc()) {
             //user info
+            $userEmail = $row['email'];
             $customerID = (int) $row['customerID'];
-            $guestName = ucfirst($row['firstName']) . " " . ucfirst($row['lastName']);
+            $firstName = ucfirst($row['firstName']);
+            $guestName = $firstName . " " . ucfirst($row['lastName']);
             $phoneNumber = $row['phoneNumber'] ?? '--';
             $userRoleID = $row['userRole'];
+
 
             //Payment Details
             $originalBill = floatval($row['originalBill']);
@@ -187,6 +193,7 @@ if ($admin === "Admin") {
                 $additionalServicePrice = floatval($row['additionalServicePrice']);
 
                 if (!empty($serviceID)) {
+                    $serviceIDs[] = $row['serviceID'];
                     if ($serviceType === 'Resort') {
                         $services[] = $row['RServiceName'];
                         $venuePrice = $row['venuePricing'] ?? 0;
@@ -214,6 +221,12 @@ if ($admin === "Admin") {
                 }
             }
 
+            $paymentID = $row['paymentID'];
+            $customerAmountPaid = 0;
+            if (!empty($paymentID)) {
+                $customerAmountPaid = $row['amount'];
+            }
+
             $paymentStatus = getPaymentStatus($conn, $paymentStatusID);
             $paymentStatusName = $paymentStatus['paymentStatusName'];
         }
@@ -233,8 +246,10 @@ if ($admin === "Admin") {
                     <input type="hidden" name="customerID" value="<?= $customerID ?>">
                     <input type="hidden" name="userRoleID" value="<?= $userRoleID ?>">
                     <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
-                    <?php foreach ($services as $service): ?>
-                        <input type="hidden" name="services[]" value="<?= $service ?>">
+                    <input type="hidden" name="firstName" value="<?= $firstName ?>">
+                    <input type="hidden" name="email" value="<?= $userEmail ?>">
+                    <?php foreach ($serviceIDs as $id): ?>
+                        <input type="hidden" name="services[]" value="<?= $id ?>">
                     <?php endforeach; ?>
                     <div class="firstRow">
                         <div class="input-container">
@@ -328,12 +343,12 @@ if ($admin === "Admin") {
                         </div>
                         <div class="payment-input-container">
                             <label for="discountAmount" id="paymentLabel">Discount</label>
-                            <input type="text" class="form-control" name="discountAmount" id="payment-form"
+                            <input type="text" class="form-control" id="payment-form"
                                 value="₱<?= number_format($discount, 2) ?>" readonly>
                         </div>
                         <div class="payment-input-container">
                             <label id="paymentLabel">Final Bill</label>
-                            <input type="text" class="form-control" id="payment-form"
+                            <input type="text" class="form-control" id="payment-form" name="finalBill"
                                 value="₱<?= number_format($finalBill, 2) ?>" readonly>
                         </div>
                     </div>
@@ -348,12 +363,12 @@ if ($admin === "Admin") {
 
                     <div class="form-button" id="form-button">
                         <button type="button" name="approveBtn" class="btn btn-primary w-100" data-bs-toggle="modal"
-                            data-bs-target="#approveModal">Approve</button>
+                            data-bs-target="#finalizedModal">Approve</button>
 
                         <button type="button" name="rejectBtn" class="btn btn-danger w-100" data-bs-toggle="modal"
                             data-bs-target="#rejectModal">Reject</button>
                     </div>
-
+                    <input type="hidden" name="button" value="payment">
                     <input type="hidden" name="totalCost" value="<?= $finalBill ?>"> <!-- info for receipt -->
                     <input type="hidden" name="bookingType" value="<?= $bookingType ?>"> <!-- info for receipt -->
                     <input type="hidden" name="adminName" value="<?= $adminName ?>"> <!-- info for receipt -->
@@ -382,261 +397,339 @@ if ($admin === "Admin") {
 
         <div class="modals-container">
             <!-- //* Approve Modal -->
-            <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel"
+            <div class="modal fade" id="finalizedModal" tabindex="-1" aria-labelledby="finalizedModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="approveModalLabel">Payment Approval</h5>
+                            <h5 class="modal-title" id="finalizedModalLabel">Payment Approval</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" id="approveModalBody">
                             <div class="amount-balance">
                                 <div class="input-container">
                                     <label for="finalBill">Total Amount</label>
-                                    <input type="text" class="form-control" id="approveModalForm" name="finalBill"
-                                        value="₱<?= number_format($finalBill, 2) ?>" readonly>
+                                    <input type="text" class="form-control" id="approved-finalBill"
+                                        value="<?= $finalBill ?>" readonly>
                                 </div>
                                 <div class="input-container">
                                     <label for="balance">Customer Balance</label>
                                     <input type="text" class="form-control approveModalForm"
-                                        value="₱<?= number_format($userBalance, 2) ?>" readonly>
-                                </div>
-                            </div>
-                            <div class="input-container">
-                                <label for="paymentAmount">Payment Amount</label>
-                                <input type="text" class="form-control" id="paymentAmount" name="paymentAmount"
-                                    style="background-color: #ffff;">
-                            </div>
-
-
-                            <!-- // TODO -> Pakipalitan yung notes na they can change the final bill or the discount amount (pacheck grammary na lang) try nyo dark red -->
-                            <p class="alert text-center" style="color: #C73D3D;">
-                                <strong> Note:</strong> You can either adjust the total amount or apply a discount, but
-                                not both at the same time.
-                            </p>
-
-                            <div class="radio-container">
-                                <div class="radio">
-                                    <input type="radio" class="me-2" id="applyDiscount" value="discount"
-                                        name="radioOptions">
-                                    <label for="applyDiscount" class="mt-1">Apply Discount</label>
-                                </div>
-                                <div class="radio">
-                                    <input type="radio" class="me-2" id="changeTotalAmount" value="editedBill"
-                                        name="radioOptions">
-                                    <label for="changeTotalAmount" class="mt-1">Change Total Amount</label>
+                                        value="<?= $userBalance  ?>" readonly>
                                 </div>
                             </div>
 
-                            <div class="changes-container" id="changes-container"></div>
+                            <input type="hidden" name="paymentID" value="<?= $paymentID ?? '' ?>">
 
-                            <div class="form-check cb-enabler">
-                                <input class="form-check-input" type="checkbox" value="" id="en-additional">
-                                <label class="form-check-label" for="en-additional">
-                                    Enable Additional Charge
-                                </label>
-                            </div>
-
-                            <div class="additionalCharge-container">
-                                <label for=" additional-charge">Additionals</label>
-                                <form id="additional-form">
-                                    <div class="form-group mt-3">
-                                        <div class="checkbox-group">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="additional-bed"
-                                                    data-input="additional-bed-input"
-                                                    onchange="toggleAdditionalInput()">
-                                                <label for="additional-bed">Additional Bed</label>
-                                                <div class="additional-input" id="additional-bed-input"
-                                                    style="display: none;">
-                                                    <input type="number" class="form-control" id="bed-charge"
-                                                        placeholder="Amount">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="additional-kitchenware"
-                                                    data-input="additional-kitchenware-input"
-                                                    onchange="toggleAdditionalInput()">
-                                                <label for="additional-kitchenware">Kitchenware</label>
-                                                <!-- Additional Input for Charge -->
-                                                <div class="additional-input" id="additional-kitchenware-input"
-                                                    style="display: none;">
-                                                    <input type="number" class="form-control" id="kitchenware-charge"
-                                                        placeholder="Amount">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="electric-fan"
-                                                    data-input="electric-fan-input" onchange="toggleAdditionalInput()">
-                                                <label for="electric-fan">Electric Fan</label>
-                                                <!-- Additional Input for Quantity and Charge -->
-
-                                                <div class="additional-input efan" id="electric-fan-input"
-                                                    style="display: none;">
-                                                    <input type="number" class="form-control" id="electric-fan-quantity"
-                                                        placeholder="Enter quantity">
-                                                    <input type="number" class="form-control mt-2"
-                                                        id="electric-fan-charge" placeholder="Amount">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="table"
-                                                    data-input="table-input" onchange="toggleAdditionalInput()">
-                                                <label for="table">Table</label>
-                                                <!-- Additional Input for Charge -->
-                                                <div class="additional-input" id="table-input" style="display: none;">
-                                                    <input type="number" class="form-control" id="table-charge"
-                                                        placeholder="Amount">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="additional-person"
-                                                    data-input="additional-person-input"
-                                                    onchange="toggleAdditionalInput()">
-                                                <label for="additional-person">Additional Person</label>
-                                                <!-- Additional Input for Quantity and Charge -->
-                                                <div class="additional-input" id="additional-person-input"
-                                                    style="display: none;">
-                                                    <input type="number" class="form-control" id="person-quantity"
-                                                        placeholder="Enter quantity">
-                                                    <input type="number" class="form-control mt-2" id="person-charge"
-                                                        placeholder="Amount">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="others"
-                                                    data-input="others-input" onchange="toggleAdditionalInput()">
-                                                <label for="others">Others</label>
-                                                <!-- Additional Input for Description and Charge -->
-                                                <div class="additional-input" id="others-input" style="display: none;">
-                                                    <input type="text" class="form-control" id="other-description"
-                                                        placeholder="Please Specify">
-                                                    <input type="number" class="form-control mt-2" id="other-charge"
-                                                        placeholder="Amount">
-                                                </div>
-                                            </div>
-                                        </div>
+                            <?php if (strtolower($paymentMethod) === 'gcash') { ?>
+                                <div class="input-container">
+                                    <label for="customerPaymentMade">Customer Entered Payment:</label>
+                                    <input type="text" class="form-control" id="customerPaymentMade" name="customerPaymentMade" value="<?= $customerAmountPaid ?>" readonly>
+                                </div>
+                                <div class="note">
+                                    <p class="note text-center">Is the entered amount the same as the amount on the receipt? </p>
+                                    <div class="d-flex mb-2" style="width: 50%; height:10%;">
+                                        <button type="button" class="btn btn-primary w-50 me-2" id="sameAmount">Yes</button>
+                                        <button type="button" class="btn btn-secondary w-50" id="notSame">No</button>
                                     </div>
-                                </form>
+                                    <div class="input-container mt-2" style="display: none;" id="paymentAmountContainer">
+                                        <label for="paymentAmount">Payment Amount</label>
+                                        <input type="text" class="form-control" id="paymentAmount" name="paymentAmount" placeholder="5000"
+                                            style="background-color: #ffff;">
+                                    </div>
+                                </div>
+                            <?php } else { ?>
+                                <div class="input-container mt-2" id="paymentAmountContainer">
+                                    <label for="paymentAmount">Payment Amount</label>
+                                    <input type="text" class="form-control" id="cash-paymentAmount" name="paymentAmount" placeholder="5000"
+                                        style="background-color: #ffff;">
+                                </div>
+                            <?php } ?>
+
+
+                            <div class="discount-container mt-3">
+                                <div class="d-flex mb-2 ">
+                                    <p class="fw-bold">Would you like to give a discount?</p>
+                                    <div class="discount-button-container d-inline-flex">
+                                        <button type="button" class="btn btn-primary w-50 me-2 fs-6" id="addDiscount">Yes</button>
+                                        <button type="button" class="btn btn-secondary w-50 fs-6" id="noDiscount" style="display:none;">No</button>
+                                    </div>
+                                </div>
+
+                                <div id="add-discount-container" style="display:none;">
+                                    <label for="discountAmount" class="form-label">Discount Amount (₱)</label>
+                                    <input type="text" class="form-control" id="discountAmount" name="discountAmount" placeholder="Enter discount amount">
+                                </div>
                             </div>
 
-                            <div class="input-container grand-total">
-                                <label for="grandTotal">Grand Total</label>
-                                <input type="text" class="form-control" id="grandTotal" name="grandTotal" value="₱2000"
-                                    disabled>
+                            <!-- Summary Section -->
+                            <div id="summaryContainer">
+                                <h6 class="fw-bold">Summary</h6>
+                                <p>Customer Payment: ₱<span id="summaryCustomerPayment">0.00</span></p>
+                                <p>Discount: ₱<span id="summaryDiscount">0.00</span></p>
+                                <hr>
+                                <p><strong>Total Balance: ₱<span id="summaryBalance">0.00</span></strong></p>
+                                <input type="hidden" id="balance" name="balance" value="">
                             </div>
 
                         </div>
 
                         <!-- Footer Section -->
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" name="approvePaymentBtn"
-                                id="approvePaymentBtn">Approve Booking</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approvalModal">Next</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-
-        <!-- //* Reject Modal -->
-        <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="rejectModalLabel">Reject Payment</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h6 class="reject-label fw-bold">Select a Reason for Rejection</h6>
-                        <div class="form-group mt-4">
-                            <select class="form-select" id="select-reject" aria-label="rejection-reason"
-                                onchange="otherReason()">
-                                <option value="" disabled selected>Select a reason</option>
-                                <option value="option1">Di ko bet customer</option>
-                                <option value="option2">Dami request</option>
-                                <option value="option3">Kuripot</option>
-                                <option value="other">Other (Please specify)</option>
-                            </select>
+            <!--//* Approval Modal -->
+            <div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="approvalModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="approvalModal-p">You are about to approve a payment. Please review the details carefully. Once you approve, the payment will be finalized and cannot be undone. After approval, the reservation will be secured.</p>
+                            <p class="approvalModal-p text-center"><strong>Do you want to approve this payment?</strong></p>
                         </div>
-
-                        <div class="form-group mt-4" id="otherInputGroup" style="display: none;">
-                            <h6 class="otherReason-label fw-bold">Please Specify</h6>
-                            <input type="text" class="form-control" id="rejectReason-textBox"
-                                placeholder="Enter your option">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                aria-label="Close">Close</button>
+                            <button type="submit" class="btn btn-primary" name="approvePaymentBtn" id="approvePaymentBtn">Approve</button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="submit" class="btn btn-danger" name="rejectPaymentBtn"
-                            id="rejectPaymentBtn">Reject Booking</button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- //* Add Payment Modal -->
-        <div class="modal fade" id="addPaymentModal" tabindex="-1" aria-labelledby="addPaymentModal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addPaymentModalLabel">Customer Payment</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
 
-                    <div class="modal-body" id="addPaymentModalBody">
-                        <div class="input-container">
-                            <label for="finalBill">Total Amount</label>
-                            <input type="text" class="form-control" id="paymentModalForm" name="finalBill"
-                                value="₱<?= number_format($finalBill, 2) ?>" readonly>
+            <!-- //* Reject Modal -->
+            <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="rejectModalLabel">Reject Payment</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="input-container">
-                            <label for="balance">Customer Balance</label>
-                            <input type="text" class="form-control" id="paymentModalForm"
-                                value="₱<?= number_format($userBalance, 2) ?>" readonly>
-                        </div>
-                        <div class="input-container">
-                            <label for="customerPayment">Payment Amount</label>
-                            <input type="text" class="form-control" name="customerPayment" id="customerPayment"
-                                style="background-color: #ffff;">
-                        </div>
+                        <div class="modal-body">
+                            <h6 class="reject-label fw-bold">Select a Reason for Rejection</h6>
+                            <div class="form-group mt-4">
+                                <select class="form-select" id="select-reject" aria-label="rejection-reason" name="rejection-reason"
+                                    onchange="otherReason()">
+                                    <option value="" disabled selected>Select a reason</option>
+                                    <?php
+                                    $reason = 'PaymentRejection';
+                                    $getPaymentReason = $conn->prepare("SELECT `reasonID`, `reasonDescription` FROM `reason` WHERE `category` = ?");
+                                    $getPaymentReason->bind_param('s', $reason);
+                                    $getPaymentReason->execute();
+                                    $result = $getPaymentReason->get_result();
+                                    if ($result->num_rows === 0) {
+                                    ?>
+                                        <option value="other">Other (Please specify)</option>
+                                    <?php
+                                    }
 
-                        <div class="radio-container">
-                            <div class="radio">
-                                <input type="radio" id="offered-discount" value="discount" name="radioOptions">
-                                <label for="offered-discount">Apply Discount</label>
+                                    while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                        <option value="<?= $row['reasonID'] ?>"><?= htmlspecialchars($row['reasonDescription']) ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
-                            <div class="radio">
-                                <input type="radio" id="edit-amount" value="editedBill" name="radioOptions">
-                                <label for="edit-amount">Change Total Amount</label>
+
+                            <div class="form-group mt-4" id="otherInputGroup" style="display: none;">
+                                <h6 class="otherReason-label fw-bold">Please Specify</h6>
+                                <input type="text" class="form-control" id="rejectReason-textBox" name="rejection-entered-reason"
+                                    placeholder="Enter your reason here....">
                             </div>
                         </div>
+                        <div class="modal-footer">
 
-                        <div id="addPaymentModal-changes"></div>
-
-                        <div class="checkbox-container">
-                            <input type="checkbox" id="add-charge" name="addCharge">
-                            <label for="add-charge">Additional Charge</label>
+                            <button type="submit" class="btn btn-danger" name="rejectPaymentBtn"
+                                id="rejectPaymentBtn">Reject Booking</button>
                         </div>
-                        <div class="input-container" id="charge-container"></div>
-
-
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="submit" class="btn btn-primary" name="submitPaymentBtn"
-                            id="submitPaymentBtn">Submit</button>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- //* Add Payment Modal -->
+            <div class="modal fade" id="addPaymentModal" tabindex="-1" aria-labelledby="addPaymentModal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addPaymentModalLabel">Customer Payment</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body" id="addPaymentModalBody">
+                            <div class="display-container d-flex gap-3 justify-content-center">
+                                <div class="input-container">
+                                    <label for="finalBill">Total Amount</label>
+                                    <input type="text" class="form-control" id="add-payment-finalBill"
+                                        value="<?= $finalBill ?>" readonly>
+                                </div>
+                                <div class="input-container">
+                                    <label for="balance">Customer Balance</label>
+                                    <input type="text" class="form-control" id="addModal-customer-balance"
+                                        value="<?= $userBalance ?>" readonly>
+                                </div>
+                            </div>
+
+                            <div class="input-container">
+                                <label for="customerPayment">Payment Amount</label>
+                                <input type="text" class="form-control" name="customerPayment" id="customerPayment"
+                                    style="background-color: #ffff;">
+                            </div>
+
+                            <div class="additionalCharge-container">
+                                <label for="additional-charge">Additionals</label>
+                                <div class="form-group mt-3">
+                                    <div class="checkbox-group">
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="additional-bed"
+                                                data-input="additional-bed-input"
+                                                onchange="toggleAdditionalInput()">
+                                            <label for="additional-bed">Additional Bed</label>
+                                            <!-- Additional Input for Quality and Charge -->
+                                            <div class="additional-input gap-1" id="additional-bed-input"
+                                                style="display: none;">
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="bed-quantity" name="additionalCharges[bed][quantity]" value="" data-role="quantity">
+                                                    <label for="bed-quantity">Quantity</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="bed-amount" data-role="amount" name="additionalCharges[bed][amount]">
+                                                    <label for="bed-amount">Amount</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"
+                                                id="additional-kitchenware"
+                                                data-input="additional-kitchenware-input"
+                                                onchange="toggleAdditionalInput()">
+                                            <label for="additional-kitchenware">Kitchenware</label>
+                                            <!-- Additional Input for Quality and Charge -->
+                                            <div class="additional-input  gap-1" id="additional-kitchenware-input"
+                                                style="display: none;">
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="kitchenware-quantity" name="additionalCharges[kitchenware][quantity]" data-role="quantity">
+                                                    <label for="kitchenware-quantity">Quantity</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="kitchenware-amount" name="additionalCharges[kitchenware][amount]" data-role="amount">
+                                                    <label for="kitchenware-amount">Amount</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="electric-fan"
+                                                data-input="electric-fan-input" onchange="toggleAdditionalInput()">
+                                            <label for="electric-fan">Electric Fan</label>
+                                            <!-- Additional Input for Quantity and Charge -->
+
+                                            <div class="additional-input efan  gap-1" id="electric-fan-input"
+                                                style="display: none;">
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="electricFan-quantity" name="additionalCharges[fan][quantity]" data-role="quantity">
+                                                    <label for="electric-fan-quantity">Quantity</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="electricFan-amount" name="additionalCharges[fan][amount]" data-role="amount">
+                                                    <label for="electric-fan-amount">Amount</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="table"
+                                                data-input="table-input" onchange="toggleAdditionalInput()">
+                                            <label for="table">Table</label>
+                                            <!-- Additional Input for Quality and Charge -->
+                                            <div class="additional-input  gap-1" id="table-input" style="display: none;">
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="table-quantity" name="additionalCharges[table][quantity]" data-role="quantity">
+                                                    <label for="table-quantity">Quantity</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="table-amount" name="additionalCharges[table][amount]" data-role="amount">
+                                                    <label for="table-amount">Amount</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="additional-person"
+                                                data-input="additional-person-input"
+                                                onchange="toggleAdditionalInput()">
+                                            <label for="additional-person">Additional Person</label>
+                                            <!-- Additional Input for Quantity and Charge -->
+                                            <div class="additional-input  gap-1" id="additional-person-input"
+                                                style="display: none;">
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="person-quantity" name="additionalCharges[person][quantity]" data-role="quantity">
+                                                    <label for="kitchenware-quantity">Quantity</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number"" class=" form-control" id="person-amount" name="additionalCharges[person][amount]" data-role="amount">
+                                                    <label for="kitchenware-amount">Amount</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="others"
+                                                data-input="others-input" onchange="toggleAdditionalInput()">
+                                            <label for="others">Others</label>
+                                            <!-- Additional Input for Description and Charge -->
+                                            <div class="additional-input" id="others-input" style="display: none;">
+                                                <div class="form-floating mb-1">
+                                                    <input type="text" class="form-control" id="other-desc" name="additionalCharges[others][name]" data-role="name">
+                                                    <label for="other-name">Description</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="other-quantity" name="additionalCharges[others][quantity]" data-role="quantity">
+                                                    <label for="other-quantity">Quantity</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="other-amount" name="additionalCharges[others][amount]" data-role="amount">
+                                                    <label for="other-amount">Amount</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Summary Section -->
+                            <div id="summaryContainer" class="border-top pt-3">
+                                <h6 class="fw-bold mb-1">Summary</h6>
+
+                                <p>Customer Payment: ₱<span id="summary-add-payment">0.00</span></p>
+                                <div id="additionalSummary" class="mt-2">
+                                    <h6 class="fw-semibold">Additional Charges</h6>
+                                    <ul class="list-group mb-1" id="additional-charges-list">
+                                    </ul>
+                                    <p>Total Additional Charges: ₱<span id="total-additional-charges">0.00</span></p>
+                                </div>
+
+                                <hr>
+                                <p><strong>Total Balance: ₱<span id="summary-balance">0.00</span></strong></p>
+                                <p><strong>Final Bill: ₱<span id="summary-total-amount">0.00</span></strong></p>
+                                <input type="hidden" id="new-balance" name="new-balance" value="">
+                                <input type="hidden" id="new-bill" name="new-bill" value="">
+                                <input type="hidden" id="additional-charge" name="additional-charge" value="">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="submit" class="btn btn-primary" name="submitPaymentBtn"
+                                id="submitPaymentBtn">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -652,10 +745,10 @@ if ($admin === "Admin") {
         const paymentMethod = document.getElementById("paymentMethod").value;
         const paymentStatus = document.getElementById("paymentStatus").value;
         const ImageContainer = document.getElementById("downpayment-image-container");
-        const downpaymentContainer = document.getElementById('downpaymentContainer');
+        // const downpaymentContainer = document.getElementById('downpaymentContainer');
         if (paymentMethod === 'Cash - Onsite Payment') {
             ImageContainer.style.display = "none";
-            downpaymentContainer.style.display = "none";
+            // downpaymentContainer.style.display = "none";
         }
         if (paymentStatus === 'Fully Paid') {
             document.querySelector("#form-button").style.display = "none";
@@ -694,106 +787,233 @@ if ($admin === "Admin") {
             form.action = '../../Function/receiptPDF.php';
         })
     </script>
-
-    <!-- Applying discount or changing total amount and adding payment -->
+    <!-- For Finalized Modal then approve -->
     <script>
-        const changeFinalBillRadio = document.getElementById('changeTotalAmount');
-        const applyDiscountRadio = document.getElementById('applyDiscount');
-        const editAmountRadio = document.getElementById('edit-amount');
-        const offeredDiscountRadio = document.getElementById('offered-discount');
-        const container = document.getElementById('changes-container');
-        const div = document.getElementById('addPaymentModal-changes');
-        const addCharge = document.getElementById('add-charge');
-        const paymentModalBody = document.getElementById('addPaymentModalBody');
+        document.addEventListener("DOMContentLoaded", function() {
+            const approveModalForm = document.querySelectorAll('#finalizedModal .form-control');
+            const discountContainer = document.getElementById('add-discount-container');
+            const discountInput = document.getElementById('discountAmount');
+            const noDiscountBtn = document.getElementById('noDiscount');
+            const paymentAmount = document.getElementById('paymentAmount');
+            const cashPaymentAmount = document.getElementById('cash-paymentAmount');
+            const enteredPayment = document.getElementById('customerPaymentMade');
+            const finalBill = document.getElementById('approved-finalBill');
 
-        function updateInputContainer(container, radio, labelText, inputName) {
-            if (radio.checked) {
-                container.innerHTML = '';
+            const balanceInput = document.getElementById('balance');
 
-                const div = document.createElement('div');
-                div.classList.add('input-container');
-
-                const label = document.createElement('label');
-                label.textContent = labelText;
-
-                const input = document.createElement('input');
-                input.name = inputName;
-                input.placeholder = 'e.g. 1500';
-                input.className = 'form-control';
-
-                div.appendChild(label);
-                div.appendChild(input);
-                container.appendChild(div);
-            }
-        }
-
-        changeFinalBillRadio.addEventListener('change', function() {
-            updateInputContainer(container, changeFinalBillRadio, 'Enter new total bill', 'newTotalAmount');
-        });
-
-        applyDiscountRadio.addEventListener('change', function() {
-            updateInputContainer(container, applyDiscountRadio, 'Enter discount amount', 'discountAmount');
-        });
-
-        editAmountRadio.addEventListener('change', function() {
-            console.log(1);
-            updateInputContainer(div, editAmountRadio, 'Enter new total amount', 'newTotalAmount');
-        });
-
-        offeredDiscountRadio.addEventListener('change', function() {
-            console.log(2);
-            updateInputContainer(div, offeredDiscountRadio, 'Enter discount amount', 'discountAmount');
-        });
+            const paymentMethod = document.getElementById("paymentMethod");
 
 
-        addCharge.addEventListener('change', function() {
-            const existingChargeContainer = document.getElementById('chargeContainer');
+            document.getElementById('addDiscount').addEventListener('click', () => {
+                discountContainer.style.display = 'block';
+                discountInput.style.border = '1px solid red';
+                discountInput.style.backgroundColor = 'rgba(255, 255, 255, 1)'
+                noDiscountBtn.style.display = 'block';
 
-            if (addCharge.checked) {
-                console.log(addCharge.value);
-                if (!existingChargeContainer) {
-                    const chargeContainer = document.createElement('div');
-                    chargeContainer.classList.add('input-container');
-                    chargeContainer.id = 'chargeContainer';
+                discountInput.addEventListener('input', () => {
+                    discountInput.style.border = '1px solid rgb(223, 226, 230)';
+                    updateSummary();
+                });
+                updateSummary();
+            });
 
-                    const label = document.createElement('label');
-                    label.textContent = 'Enter Additional Charge:';
+            noDiscountBtn.addEventListener('click', () => {
+                discountContainer.style.display = 'none';
+                noDiscountBtn.style.display = 'none';
+                discountInput.value = '';
+                updateSummary();
+            });
 
-                    const input = document.createElement('input');
-                    input.name = 'additionalCharge';
-                    input.placeholder = 'e.g. 1500';
-                    input.className = 'form-control';
+            function updateSummary() {
+                const paymentAmountValue = parseFloat(paymentAmount?.value || 0);
+                const enteredPaymentValue = parseFloat(enteredPayment?.value || 0);
+                const discountValue = parseFloat(discountInput?.value || 0);
+                const approvalTotalAmountValue = parseFloat(finalBill?.value || 0);
+                const cashPaymentAmountValue = parseFloat(cashPaymentAmount?.value || 0);
 
-                    chargeContainer.appendChild(label);
-                    chargeContainer.appendChild(input);
-                    paymentModalBody.appendChild(chargeContainer);
+                let totalBalance = 0;
+                let customerPayment = 0;
+                if (paymentMethod.value === 'GCash') {
+                    if (paymentAmountValue === 0) {
+                        totalBalance = approvalTotalAmountValue - enteredPaymentValue - discountValue;
+                        customerPayment = enteredPaymentValue;
+                    } else {
+                        totalBalance = approvalTotalAmountValue - paymentAmountValue - discountValue;
+                        customerPayment = paymentAmountValue;
+                    }
+                } else {
+                    totalBalance = approvalTotalAmountValue - cashPaymentAmountValue - discountValue;
+                    customerPayment = cashPaymentAmountValue;
                 }
-            } else {
-                if (existingChargeContainer) {
-                    existingChargeContainer.remove();
-                }
+
+                balanceInput.value = totalBalance;
+                document.getElementById('summaryBalance').textContent = totalBalance.toFixed(2);
+                document.getElementById('summaryCustomerPayment').textContent = customerPayment.toFixed(2);
+                document.getElementById('summaryDiscount').textContent = discountValue.toFixed(2);
             }
-        })
+
+
+            const inputs = [
+                paymentAmount,
+                discountInput,
+                cashPaymentAmount
+            ].filter(Boolean);
+
+
+            inputs.forEach(input => {
+                input.addEventListener('input', updateSummary);
+            });
+
+            updateSummary();
+
+            approveModalForm.forEach(formControl => {
+                formControl.addEventListener('keypress', function(e) {
+                    if (/[0-9]/.test(e.key)) return;
+
+                    if (e.key === '.' && !formControl.value.includes('.')) return;
+
+                    e.preventDefault();
+                });
+            });
+
+            if (paymentMethod.value === 'GCash') {
+                document.getElementById('notSame').addEventListener('click', () => {
+                    document.getElementById('paymentAmountContainer').style.display = 'block';
+                });
+
+                document.getElementById('sameAmount').addEventListener('click', () => {
+                    document.getElementById('paymentAmountContainer').style.display = 'none';
+                    paymentAmount.value = '';
+                    updateSummary();
+                });
+            }
+        });
     </script>
-
+    <!-- For Add Payment Modal -->
     <script>
         function toggleAdditionalInput() {
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
             var additionalInputs = document.querySelectorAll('.additional-input');
 
-            // Hide all inputs initially
             additionalInputs.forEach(function(input) {
                 input.style.display = 'none';
+                input.querySelectorAll('input').forEach(i => i.disabled = true);
             });
 
-            // Loop through each checkbox to see if it is checked and show the appropriate input
             checkboxes.forEach(function(checkbox) {
-                var inputId = checkbox.getAttribute('data-input');
+                const inputId = checkbox.getAttribute('data-input');
+                const container = document.getElementById(inputId);
+                const inputs = container.querySelectorAll('input');
+
                 if (checkbox.checked) {
-                    document.getElementById(inputId).style.display = 'block';
+                    if (inputId === 'others-input') {
+                        document.getElementById(inputId).style.display = 'block';
+                    } else {
+                        document.getElementById(inputId).style.display = 'flex';
+                    }
+                    inputs.forEach(input => input.disabled = false);
+                } else {
+                    container.style.display = 'none';
+                    inputs.forEach(input => {
+                        input.value = '';
+                        input.disabled = true;
+                    });
+
+                    const name = inputId.split('-')[1] || inputId.replace('-input', '');
+
+                    const index = data.findIndex(item => Object.keys(item)[0] === name);
+                    if (index !== -1) {
+                        data.splice(index, 1);
+                    }
                 }
             });
+
+            updateAddPaymentSummary(); // Make sure to update the summary here
         }
+
+
+        const finalBill = document.getElementById('add-payment-finalBill');
+        const customerBalance = document.getElementById('addModal-customer-balance');
+        const customerPayment = document.getElementById('customerPayment');
+        const finalBillInput = document.getElementById('new-bill');
+        const balanceInput = document.getElementById('new-balance');
+        const additionalChargeInput = document.getElementById('additional-charge');
+        const chargesList = document.getElementById("additional-charges-list");
+        const additionalChargeContainer = document.querySelectorAll('.additionalCharge-container .form-control');
+        const data = [];
+
+        additionalChargeContainer.forEach(form => {
+            form.addEventListener('change', () => {
+                const parts = form.id.split('-');
+                const name = parts[0];
+                const property = parts[1];
+
+                let entry = data.find(item => item[name]);
+                if (!entry) {
+                    entry = {
+                        [name]: {}
+                    };
+                    data.push(entry);
+                }
+                entry[name][property] = isNaN(form.value) ? form.value : Number(form.value);
+                updateAddPaymentSummary();
+                // console.log(data);
+            });
+        });
+
+
+        function updateAddPaymentSummary() {
+            const finalBillValue = parseFloat(finalBill.value) || 0;
+            const customerBalanceValue = parseFloat(customerBalance.value) || 0;
+            const customerPaymentValue = parseFloat(customerPayment.value) || 0;
+            let additionalChargesTotal = 0;
+            chargesList.innerHTML = '';
+
+            data.forEach(item => {
+                const name = Object.keys(item)[0];
+                const properties = item[name];
+
+                if (name === 'other') {
+                    displayName = properties.desc;
+                } else if (name === 'electricFan') {
+                    displayName = 'Electric Fan';
+                } else {
+                    displayName = name;
+                }
+
+                const li = document.createElement('li');
+
+                li.textContent = `${displayName.charAt(0).toUpperCase() + displayName.slice(1)} — Quantity: ${parseInt(properties.quantity) || 0}, Amount: ${parseFloat(properties.amount) || 0}`;
+                additionalChargesTotal += parseFloat(properties.amount) || 0;
+
+                chargesList.appendChild(li);
+            });
+
+
+            const totalBill = finalBillValue + additionalChargesTotal;
+            const totalBalance = (customerBalanceValue + additionalChargesTotal) - customerPaymentValue;
+            //Summary display
+            document.getElementById('summary-add-payment').textContent = customerPaymentValue.toFixed(2);
+            document.getElementById('total-additional-charges').textContent = additionalChargesTotal.toFixed(2);
+            document.getElementById('summary-balance').textContent = totalBalance.toFixed(2);
+            document.getElementById('summary-total-amount').textContent = totalBill.toFixed(2);
+
+            finalBillInput.value = totalBill;
+            balanceInput.value = totalBalance;
+            additionalChargeInput.value = additionalChargesTotal;
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            customerPayment.addEventListener('input', updateAddPaymentSummary);
+
+            const checkboxGroups = document.querySelectorAll('.checkbox-group .form-control');
+            checkboxGroups.forEach((input) => {
+                input.disabled = true;
+            })
+
+
+            updateAddPaymentSummary();
+        });
     </script>
 
 
@@ -810,8 +1030,8 @@ if ($admin === "Admin") {
                 icon: "warning",
                 confirmButtonText: "Okay",
             }).then(() => {
-                const paymentAmount = document.getElementById('paymentAmount');
-                const approveModal = document.getElementById('approveModal');
+                const paymentAmount = document.getElementById('cash-paymentAmount');
+                const approveModal = document.getElementById('approvalModal');
                 const modal = new bootstrap.Modal(approveModal);
 
                 paymentAmount.style.border = '1px solid red';
@@ -858,9 +1078,9 @@ if ($admin === "Admin") {
         function otherReason() {
             var selectBox = document.getElementById("select-reject");
             var otherInputGroup = document.getElementById("otherInputGroup");
-
+            // console.log(selectBox.textContent);
             // Show or hide the text box when "Other (Please specify)" is selected
-            if (selectBox.value === "other") {
+            if (selectBox.value === "other" || selectBox.value == 23) {
                 otherInputGroup.style.display = "block"; // Show the text box
             } else {
                 otherInputGroup.style.display = "none"; // Hide the text box

@@ -265,7 +265,7 @@ $userRole = $_SESSION['userRole'];
                                         $result = $getAvailability->get_result();
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
-                                                $selected = ($_SESSION['addServiceForm']['serviceAvailability'] ?? '') == $row['serviceAvailability'] ? 'selected' : '';
+                                                $selected = ($_SESSION['addServiceForm']['serviceAvailability'] ?? '') == $row['availabilityName'] ? 'selected' : '';
                                     ?>
                                                 <option value="<?= htmlspecialchars($row['availabilityID']) ?>" <?= $selected ?>>
                                                     <?= htmlspecialchars($row['availabilityName']) ?></option>
@@ -495,7 +495,6 @@ $userRole = $_SESSION['userRole'];
                             card.appendChild(cardBody);
                             card.appendChild(cardFooter);
 
-                            // Create Modal
                             const viewModal = document.createElement('div');
                             viewModal.classList.add('modal', 'fade', 'serviceModal');
                             viewModal.id = service.modalID;

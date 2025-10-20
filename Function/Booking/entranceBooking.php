@@ -136,6 +136,25 @@ if (isset($_POST['bookRates'])) {
                 exit();
             }
         }
+
+        $getSameServiceName = $conn->prepare("SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription, rs.resortServiceID FROM service s
+            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
+            WHERE rs.RServiceName = ? AND rs.RSduration = '22 hours'");
+        foreach ($roomChoices as $selectedRoom) {
+            $selectedRoom = trim($selectedRoom);
+            $getSameServiceName->bind_param('s', $selectedRoom);
+            $getSameServiceName->execute();
+            $getSameServiceResult = $getSameServiceName->get_result();
+
+            if ($getSameServiceResult->num_rows > 0) {
+                while ($data = $getSameServiceResult->fetch_assoc()) {
+                    $resortServiceIDs[] = $data['resortServiceID'];
+                }
+            } else {
+                echo "Service not found for: " . htmlspecialchars($selectedRoom);
+                exit();
+            }
+        }
     }
 
 
@@ -265,6 +284,7 @@ if (isset($_POST['bookRates'])) {
             $conn->rollback();
             throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
         }
+        $expiresAt = NULL;
 
         if ($bookingStatus === 2) {
             $isSend = false;
@@ -309,7 +329,8 @@ if (isset($_POST['bookRates'])) {
                 $conn->rollback();
                 throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
             }
-
+            $startDate = new Datetime($scheduledStartDate);
+            $bookingDate = $startDate->format('M. d, Y g:i A');
             $dateCreated = date('d F Y');
             $email_message = '
                         <body style="font-family: Poppins, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
@@ -342,7 +363,7 @@ if (isset($_POST['bookRates'])) {
                                         <p style="font-size: 14px; margin: 20px 0 10px;">Here are your booking details:</p>
 
                                         <p style="font-size: 14px; margin: 8px 0;">Booking Reference: <strong>' . $bookingCode . '</strong></p>
-                                        <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' . $scheduledStartDate . '</strong>
+                                        <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' . $bookingDate . '</strong>
                                         </p>
                                         <p style="font-size: 14px; margin: 8px 0;">Booking Type: <strong>' . $bookingType . ' Booking $mdash; '
                 . $tourType . '</strong></p>
@@ -381,25 +402,28 @@ if (isset($_POST['bookRates'])) {
 
             if (sendEmail($email, $firstName, $subject, $email_message, $env)) {
                 $isSend = true;
-            }
+            };
 
-            // $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate) VALUES (?,?,?)");
-            // if (!empty($resortServiceIDs)) {
-            //     for ($i = 0; $i < count($resortServiceIDs); $i++) {
-            //         $resortServiceID = $resortServiceIDs[$i];
-            //         $insertUnavailableService->bind_param("iss", $resortServiceID, $scheduledStartDate, $scheduledEndDate);
-            //         if (!$insertUnavailableService->execute()) {
-            //             $conn->rollback();
-            //             throw new Exception('Error :' . $insertUnavailableService->error);
-            //         }
-            //     }
-            // }
-            // $insertUnavailableService->close();
+            $today = new DateTime();
+            $expiresAt = $today->modify('+24 hours')->format('Y-m-d H:i:s');
             if (!$isSend) {
                 $conn->rollback();
                 throw new Exception('Failed Sending Email');
             }
         }
+
+        $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?,?,?,?)");
+        if (!empty($resortServiceIDs)) {
+            for ($i = 0; $i < count($resortServiceIDs); $i++) {
+                $resortServiceID = $resortServiceIDs[$i];
+                $insertUnavailableService->bind_param("isss", $resortServiceID, $scheduledStartDate, $scheduledEndDate, $expiresAt);
+                if (!$insertUnavailableService->execute()) {
+                    $conn->rollback();
+                    throw new Exception('Error :' . $insertUnavailableService->error);
+                }
+            }
+        }
+        $insertUnavailableService->close();
 
 
 

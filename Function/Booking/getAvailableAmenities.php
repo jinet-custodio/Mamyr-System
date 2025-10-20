@@ -43,7 +43,7 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
         AND NOT EXISTS (
             SELECT 1 FROM serviceunavailabledate sud
             WHERE sud.resortServiceID = ra.resortServiceID
-            AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate)
+            AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate) AND sud.status IN ('confirmed', 'hold')
         )
     ");
 
@@ -94,7 +94,7 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
                             AND NOT EXISTS (
                             SELECT 1 FROM serviceunavailabledate sud
                             WHERE sud.resortServiceID = ra.resortServiceID
-                            AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate)
+                            AND (? < sud.unavailableEndDate AND ? > sud.unavailableStartDate) AND sud.status IN ('confirmed', 'hold')
                         )");
 
     $getAvailableHotel->bind_param("iisss", $availableID, $hotelCategoryID, $duration, $startDate, $endDate);
