@@ -33,17 +33,19 @@ body {
 .back-button:hover {
   border: 1px solid rgb(23, 143, 235);
   box-shadow: 0 0 5px 5px rgb(23, 143, 235, 0.5);
+  height: 60px;
+  width: 64px;
 }
 
 .wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 4rem auto auto auto;
-  width: 80vw;
+  margin: 6rem auto auto auto;
 }
 
 .card {
+  margin-top: 2rem;
   padding: 1.5rem;
   width: 90%;
   margin-bottom: 1rem;
@@ -95,3 +97,88 @@ body {
 .form-control {
   height: 60px !important;
 }
+/*PHONE SIZE*/
+@media screen and (max-width: 599px) {
+  .back-button {
+    margin-top: -2rem !important;
+  }
+  .wrapper {
+    margin-top: 3rem;
+    width: 80vw;
+  }
+  .card {
+    margin-top: 3rem;
+    align-items: center;
+    width: 100%;
+  }
+  .profile-pic {
+    margin-left: 5px;
+    height: 80px;
+    width: 80px;
+  }
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 2px;
+  }
+  .card-body  {
+    margin-right: 5rem;
+    width: 80%;
+    padding-top: 0 !important;
+  }
+  .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+  #floatingInputValue {
+    width: 125% !important;
+  }
+ }
+
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait){
+  .wrapper {
+    margin-top: 3rem;
+    width: 80vw;
+  }
+  .card {
+    margin-top: 3rem;
+    width: 100%;
+  }
+  .profile-pic {
+    height: 100px;
+    width: 100px;
+    margin-left: -1rem;
+  }
+  .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: landscape){
+  .wrapper {
+    margin-top: 3.5rem;
+  }
+  .back-button {
+    margin-bottom: 1rem;
+  }
+  .card {
+    margin-top: 2.5rem;
+  }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1440px) {
+  .wrapper {
+    margin-top: 3rem;
+  }
+  .back-button {
+    margin-top: -1rem !important;
+  }
+  .card {
+    margin-top: 4rem;
+  }
+
+}
+
+
+
