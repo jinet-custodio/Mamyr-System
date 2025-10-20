@@ -193,7 +193,7 @@
 
 .videoTitle,
 .bottom-header {
-  font-size: var(--font-size-xxl);
+  font-size: var(--font-size-xl);
   font-family: "Alkatra";
 }
 
@@ -301,10 +301,6 @@
 .rating-categories {
   margin-top: var(--margin-xl);
 }
-.progress {
-  height: 12px;
-  border-radius: 8px;
-}
 
 .progress-bar {
   background-color: #14d2e5;
@@ -332,11 +328,6 @@
   height: 12px;
   border-radius: 8px;
   background: #d9d9d9;
-}
-
-.progress-bar {
-  background-color: #14d2e5;
-  border-radius: 8px;
 }
 
 .rating-value {
@@ -390,4 +381,1156 @@
   height: 300px; /* Set the height to 300px */
   width: 500px; /* Set the width to 500px (or any other desired value) */
   margin: 0 auto; /* Center the map horizontally in its container */
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  .topSec {
+    flex-direction: column;
+    /* height: 90vh; */
+  }
+
+  .topLeft {
+    width: 100%;
+    text-align: center;
+    margin-top: var(--margin-md);
+  }
+
+  .topText {
+    font-family: "Alkatra";
+    font-size: var(--font-size-md);
+    text-transform: uppercase;
+    margin-top: 8rem;
+  }
+
+  .headerText {
+    font-family: "Poppins Light";
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+    margin-top: 1rem;
+  }
+
+  .subtext {
+    font-family: "Poppins Light";
+    width: 100%;
+    font-size: var(--font-size-lg);
+    margin-top: 1rem;
+  }
+
+  #topBookNow-btn {
+    margin-top: var(--margin-xl);
+    font-size: var(--font-size-md);
+    width: 40%;
+  }
+
+  .topRight {
+    width: 100%;
+    margin-top: var(--margin-md);
+  }
+
+  .carousel-container {
+    position: relative;
+    width: 50vw;
+    height: 48vw;
+    margin: 60px auto;
+    perspective: 1000px;
+  }
+
+  .card-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 30%; /* smaller size */
+    transform: translateX(-50%) scale(0.8);
+    transition: all 0.7s ease;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    z-index: 0;
+  }
+
+  /* Center (active) */
+  .card-img.active {
+    opacity: 1;
+    z-index: 3;
+    transform: translateX(-50%) scale(1);
+  }
+
+  /* Peeking left */
+  .card-img.behind-left {
+    opacity: 0.8;
+    z-index: 2;
+    transform: translateX(-80%) rotate(-6deg) scale(0.85);
+  }
+
+  /* Peeking right */
+  .card-img.behind-right {
+    opacity: 0.8;
+    z-index: 1;
+    transform: translateX(-20%) rotate(6deg) scale(0.85);
+  }
+
+  /* Buttons */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 3rem;
+    padding: 1px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 5;
+  }
+
+  .carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .carousel-btn.prev {
+    left: -40px; /* moves button outside image stack */
+    height: 5rem;
+  }
+
+  .carousel-btn.next {
+    right: -40px;
+    height: 5rem;
+  }
+
+  .middle-container {
+    flex-direction: column;
+    padding: var(--padding-md);
+    gap: 2rem;
+  }
+
+  .videoText-container,
+  .bottom-text-container {
+    width: 100%;
+    text-align: center;
+  }
+
+  .videoTitle,
+  .bottom-header {
+    font-size: var(--font-size-xl);
+    text-align: center !important;
+  }
+
+  .videoDescription {
+    font-size: var(--font-size-lg);
+    margin-top: var(--margin-md);
+  }
+
+  .middle-btn-container a {
+    margin-top: var(--margin-xl);
+    font-size: var(--font-size-md);
+    width: 40%;
+  }
+
+  .bottom-section {
+    padding: var(--padding-md);
+    height: 50vh;
+  }
+
+  .bottom-text-container {
+    margin-top: var(--margin-sm);
+  }
+  .bottom-subtext {
+    font-size: var(--font-size-lg);
+    margin-top: var(--margin-md);
+    text-align: justify;
+  }
+
+  .swiper {
+    margin-top: var(--margin-xl);
+  }
+  .rating-container {
+    flex-direction: column-reverse;
+    margin-top: 5rem !important;
+    gap: 2rem;
+  }
+
+  .graph-header {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .graph-header i,
+  .graph-header h6 {
+    font-size: var(--font-size-lg);
+    color: #0d6dfc;
+  }
+
+  .graph-header h6 {
+    margin-top: 0.3rem;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .ratings-card {
+    width: 22rem !important;
+    height: 26rem !important;
+    border: none !important;
+    background-color: oklch(1 0 0 / 0.4) !important;
+  }
+
+  .rating-categories {
+    margin-top: var(--margin-xl);
+  }
+
+  .progress-bar {
+    background-color: #14d2e5;
+    border-radius: 8px;
+  }
+
+  .rating-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .rating-label {
+    flex: 1;
+    font-size: 20px;
+    color: #333;
+  }
+
+  .rating-bar {
+    flex: 2;
+    margin: 0 8px;
+  }
+
+  .progress {
+    height: 12px;
+    border-radius: 8px;
+    background: #d9d9d9;
+  }
+
+  .rating-value {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .overall-rating {
+    margin-top: var(--margin-md);
+  }
+
+  .overall-rating-label,
+  .overall-rating-stars {
+    text-align: center;
+  }
+
+  .overall-rating-label {
+    font-size: var(--font-size-lg);
+  }
+
+  .overall-rating-value {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .overall-rating-stars i {
+    color: #fdcc0d;
+    font-size: var(--font-size-xl);
+  }
+
+  .locationText-container {
+    width: 100%;
+    text-align: center;
+  }
+
+  .location-container {
+    flex-direction: column;
+    height: 80vh !important;
+    padding-top: var(--padding-md) !important;
+    gap: 2rem;
+  }
+
+  #map {
+    height: 400px;
+    width: 100%;
+    margin: 0 auto !important;
+  }
+
+  .leaflet-popup-content-wrapper {
+    padding: 6px;
+  }
+
+  .leaflet-marker-pane img {
+    width: 150px !important;
+    height: auto !important;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  .topSec {
+    gap: 3rem;
+  }
+  .topLeft {
+    width: 80%;
+    text-align: center;
+    /* margin-top: var(--margin-md); */
+  }
+
+  .topText {
+    font-family: "Alkatra";
+    font-size: 1.5vw;
+    text-transform: uppercase;
+  }
+
+  .headerText {
+    font-family: "Poppins Light";
+    font-weight: var(--font-weight-bold);
+    font-size: 2.5vw;
+    margin-top: 1rem;
+  }
+
+  .subtext {
+    font-family: "Poppins Light";
+    width: 100%;
+    font-size: 2vw;
+    margin-top: 1rem;
+  }
+
+  #topBookNow-btn {
+    /* margin-top: var(--margin-xl); */
+    font-size: var(--font-size-md);
+    width: 40%;
+  }
+
+  .topRight {
+    width: 100%;
+    margin-top: var(--margin-md);
+  }
+
+  .carousel-container {
+    position: relative;
+    width: 30vw;
+    height: 28vw;
+    margin: 60px auto;
+    perspective: 1000px;
+  }
+
+  .card-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 30%; /* smaller size */
+    transform: translateX(-50%) scale(0.8);
+    transition: all 0.7s ease;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    z-index: 0;
+  }
+
+  /* Center (active) */
+  .card-img.active {
+    opacity: 1;
+    z-index: 3;
+    transform: translateX(-50%) scale(1);
+  }
+
+  /* Peeking left */
+  .card-img.behind-left {
+    opacity: 0.8;
+    z-index: 2;
+    transform: translateX(-80%) rotate(-6deg) scale(0.85);
+  }
+
+  /* Peeking right */
+  .card-img.behind-right {
+    opacity: 0.8;
+    z-index: 1;
+    transform: translateX(-20%) rotate(6deg) scale(0.85);
+  }
+
+  /* Buttons */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 3rem;
+    padding: 1px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 5;
+  }
+
+  .carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .carousel-btn.prev {
+    left: -40px; /* moves button outside image stack */
+    height: 5rem;
+  }
+
+  .carousel-btn.next {
+    right: -40px;
+    height: 5rem;
+  }
+
+  .middle-container {
+    flex-direction: column;
+    padding: var(--padding-md);
+    gap: 2rem;
+  }
+
+  .videoText-container,
+  .bottom-text-container {
+    width: 100%;
+    text-align: center;
+  }
+
+  .videoTitle,
+  .bottom-header {
+    font-size: var(--font-size-xl);
+    text-align: center !important;
+  }
+
+  .videoDescription {
+    font-size: var(--font-size-lg);
+    margin-top: var(--margin-md);
+  }
+
+  .middle-btn-container a {
+    margin-top: var(--margin-xl);
+    font-size: var(--font-size-md);
+    width: 40%;
+  }
+
+  .bottom-section {
+    padding: var(--padding-md);
+    height: 50vh;
+  }
+
+  .bottom-text-container {
+    margin-top: var(--margin-sm);
+  }
+  .bottom-subtext {
+    font-size: var(--font-size-lg);
+    margin-top: var(--margin-md);
+    text-align: justify;
+  }
+
+  .swiper {
+    margin-top: var(--margin-xl);
+  }
+  .rating-container {
+    /* flex-direction: column-reverse; */
+    margin-top: 20rem !important;
+    gap: 2rem;
+  }
+
+  .graph-header {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .graph-header i,
+  .graph-header h6 {
+    font-size: var(--font-size-lg);
+    color: #0d6dfc;
+  }
+
+  .graph-header h6 {
+    margin-top: 0.3rem;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .ratings-card {
+    width: 22rem !important;
+    height: 26rem !important;
+    border: none !important;
+    background-color: oklch(1 0 0 / 0.4) !important;
+  }
+
+  .rating-categories {
+    margin-top: var(--margin-xl);
+  }
+
+  .progress-bar {
+    background-color: #14d2e5;
+    border-radius: 8px;
+  }
+
+  .rating-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .rating-label {
+    flex: 1;
+    font-size: 20px;
+    color: #333;
+  }
+
+  .rating-bar {
+    flex: 2;
+    margin: 0 8px;
+  }
+
+  .progress {
+    height: 12px;
+    border-radius: 8px;
+    background: #d9d9d9;
+  }
+
+  .rating-value {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .overall-rating {
+    margin-top: var(--margin-md);
+  }
+
+  .overall-rating-label,
+  .overall-rating-stars {
+    text-align: center;
+  }
+
+  .overall-rating-label {
+    font-size: var(--font-size-lg);
+  }
+
+  .overall-rating-value {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .overall-rating-stars i {
+    color: #fdcc0d;
+    font-size: var(--font-size-xl);
+  }
+
+  .locationText-container {
+    width: 100%;
+    text-align: center;
+  }
+
+  .location-container {
+    flex-direction: column;
+    height: 90vh !important;
+    padding-top: var(--padding-md) !important;
+    gap: 2rem;
+  }
+
+  #map {
+    height: 400px;
+    width: 100%;
+    margin: 0 auto !important;
+  }
+
+  .leaflet-popup-content-wrapper {
+    padding: 6px;
+  }
+
+  .leaflet-marker-pane img {
+    width: 150px !important;
+    height: auto !important;
+  }
+}
+
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .topSec {
+    flex-direction: column;
+    /* height: 90vh; */
+  }
+
+  .topLeft {
+    width: 100%;
+    text-align: center;
+    margin-top: var(--margin-md);
+  }
+
+  .topText {
+    font-family: "Alkatra";
+    font-size: var(--font-size-md);
+    text-transform: uppercase;
+    margin-top: 8rem;
+  }
+
+  .headerText {
+    font-family: "Poppins Light";
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+    margin-top: 1rem;
+  }
+
+  .subtext {
+    font-family: "Poppins Light";
+    width: 100%;
+    font-size: var(--font-size-lg);
+    margin-top: 1rem;
+  }
+
+  #topBookNow-btn {
+    margin-top: var(--margin-xl);
+    font-size: var(--font-size-md);
+    width: 40%;
+  }
+
+  .topRight {
+    width: 100%;
+    margin-top: var(--margin-md);
+  }
+
+  .carousel-container {
+    position: relative;
+    width: 50vw;
+    height: 48vw;
+    margin: 60px auto;
+    perspective: 1000px;
+  }
+
+  .card-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 30%; /* smaller size */
+    transform: translateX(-50%) scale(0.8);
+    transition: all 0.7s ease;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    z-index: 0;
+  }
+
+  /* Center (active) */
+  .card-img.active {
+    opacity: 1;
+    z-index: 3;
+    transform: translateX(-50%) scale(1);
+  }
+
+  /* Peeking left */
+  .card-img.behind-left {
+    opacity: 0.8;
+    z-index: 2;
+    transform: translateX(-80%) rotate(-6deg) scale(0.85);
+  }
+
+  /* Peeking right */
+  .card-img.behind-right {
+    opacity: 0.8;
+    z-index: 1;
+    transform: translateX(-20%) rotate(6deg) scale(0.85);
+  }
+
+  /* Buttons */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 3rem;
+    padding: 1px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 5;
+  }
+
+  .carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .carousel-btn.prev {
+    left: -40px; /* moves button outside image stack */
+    height: 5rem;
+  }
+
+  .carousel-btn.next {
+    right: -40px;
+    height: 5rem;
+  }
+
+  .middle-container {
+    flex-direction: column;
+    padding: var(--padding-md);
+    gap: 2rem;
+  }
+
+  .videoText-container,
+  .bottom-text-container {
+    width: 100%;
+    text-align: center;
+  }
+
+  .videoTitle,
+  .bottom-header {
+    font-size: var(--font-size-xl);
+    text-align: center !important;
+  }
+
+  .videoDescription {
+    font-size: var(--font-size-lg);
+    margin-top: var(--margin-md);
+  }
+
+  .middle-btn-container a {
+    margin-top: var(--margin-xl);
+    font-size: var(--font-size-md);
+    width: 40%;
+  }
+
+  .bottom-section {
+    padding: var(--padding-md);
+    height: 50vh;
+  }
+
+  .bottom-text-container {
+    margin-top: var(--margin-sm);
+  }
+  .bottom-subtext {
+    font-size: var(--font-size-lg);
+    margin-top: var(--margin-md);
+    text-align: justify;
+  }
+
+  .swiper {
+    margin-top: var(--margin-xl);
+  }
+  .rating-container {
+    flex-direction: column-reverse;
+    margin-top: 5rem !important;
+    gap: 2rem;
+  }
+
+  .graph-header {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .graph-header i,
+  .graph-header h6 {
+    font-size: var(--font-size-lg);
+    color: #0d6dfc;
+  }
+
+  .graph-header h6 {
+    margin-top: 0.3rem;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .ratings-card {
+    width: 22rem !important;
+    height: 26rem !important;
+    border: none !important;
+    background-color: oklch(1 0 0 / 0.4) !important;
+  }
+
+  .rating-categories {
+    margin-top: var(--margin-xl);
+  }
+
+  .progress-bar {
+    background-color: #14d2e5;
+    border-radius: 8px;
+  }
+
+  .rating-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .rating-label {
+    flex: 1;
+    font-size: 20px;
+    color: #333;
+  }
+
+  .rating-bar {
+    flex: 2;
+    margin: 0 8px;
+  }
+
+  .progress {
+    height: 12px;
+    border-radius: 8px;
+    background: #d9d9d9;
+  }
+
+  .rating-value {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .overall-rating {
+    margin-top: var(--margin-md);
+  }
+
+  .overall-rating-label,
+  .overall-rating-stars {
+    text-align: center;
+  }
+
+  .overall-rating-label {
+    font-size: var(--font-size-lg);
+  }
+
+  .overall-rating-value {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .overall-rating-stars i {
+    color: #fdcc0d;
+    font-size: var(--font-size-xl);
+  }
+
+  .locationText-container {
+    width: 100%;
+    text-align: center;
+  }
+
+  .location-container {
+    flex-direction: column;
+    height: 80vh !important;
+    padding-top: var(--padding-md) !important;
+    gap: 2rem;
+  }
+
+  #map {
+    height: 400px;
+    width: 100%;
+    margin: 0 auto !important;
+  }
+
+  .leaflet-popup-content-wrapper {
+    padding: 6px;
+  }
+
+  .leaflet-marker-pane img {
+    width: 150px !important;
+    height: auto !important;
+  }
+}
+
+/* Phone size */
+@media screen and (max-width: 599px) {
+  .topSec {
+    flex-direction: column;
+    height: 90vh;
+  }
+
+  .topLeft {
+    width: 100%;
+    text-align: center;
+    margin-top: var(--margin-md);
+  }
+
+  .topText {
+    font-family: "Alkatra";
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    margin-top: var(--margin-md);
+  }
+
+  .headerText {
+    font-family: "Poppins Light";
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    margin-top: 1rem;
+  }
+
+  .subtext {
+    font-family: "Poppins Light";
+    width: 100%;
+    font-size: var(--font-size-base);
+    margin-top: 1rem;
+  }
+
+  #topBookNow-btn {
+    margin-top: var(--margin-sm);
+    font-size: var(--font-size-sm);
+    width: 40%;
+  }
+
+  .topRight {
+    width: 100%;
+  }
+
+  .carousel-container {
+    position: relative;
+    width: 220px; /* smaller width */
+    height: 180px;
+    margin: 60px auto;
+    perspective: 1000px;
+  }
+
+  .card-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 30%; /* smaller size */
+    transform: translateX(-50%) scale(0.8);
+    transition: all 0.7s ease;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    z-index: 0;
+  }
+
+  /* Center (active) */
+  .card-img.active {
+    opacity: 1;
+    z-index: 3;
+    transform: translateX(-50%) scale(1);
+  }
+
+  /* Peeking left */
+  .card-img.behind-left {
+    opacity: 0.8;
+    z-index: 2;
+    transform: translateX(-80%) rotate(-6deg) scale(0.85);
+  }
+
+  /* Peeking right */
+  .card-img.behind-right {
+    opacity: 0.8;
+    z-index: 1;
+    transform: translateX(-20%) rotate(6deg) scale(0.85);
+  }
+
+  /* Buttons */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    padding: 1px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 5;
+  }
+
+  .carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .carousel-btn.prev {
+    left: -40px; /* moves button outside image stack */
+    height: 3rem;
+  }
+
+  .carousel-btn.next {
+    right: -40px;
+    height: 3rem;
+  }
+
+  .middle-container {
+    flex-direction: column;
+    padding: var(--padding-md);
+    gap: 2rem;
+  }
+
+  .videoText-container,
+  .bottom-text-container {
+    width: 100%;
+    text-align: center;
+  }
+
+  .videoTitle,
+  .bottom-header {
+    font-size: var(--font-size-lg);
+  }
+
+  .videoDescription {
+    font-size: var(--font-size-sm);
+    margin-top: var(--margin-md);
+  }
+
+  .middle-btn-container a {
+    margin-top: var(--margin-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  .bottom-section {
+    padding: var(--padding-md);
+    height: 70vh;
+  }
+
+  .bottom-text-container {
+    margin-top: var(--margin-sm);
+  }
+  .bottom-subtext {
+    font-size: var(--font-size-sm);
+    margin-top: var(--margin-md);
+    text-align: justify;
+  }
+
+  .rating-container {
+    flex-direction: column-reverse;
+    margin-top: 2rem !important;
+    gap: 2rem;
+  }
+
+  .graph-header {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .graph-header i,
+  .graph-header h6 {
+    font-size: var(--font-size-md);
+    color: #0d6dfc;
+  }
+
+  .graph-header h6 {
+    margin-top: 0.2rem;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .ratings-card {
+    width: 18rem !important;
+    height: 22rem !important;
+    border: none !important;
+    background-color: oklch(1 0 0 / 0.4) !important;
+  }
+
+  .rating-categories {
+    margin-top: var(--margin-xl);
+  }
+
+  .progress-bar {
+    background-color: #14d2e5;
+    border-radius: 8px;
+  }
+
+  .rating-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .rating-label {
+    flex: 1;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .rating-bar {
+    flex: 2;
+    margin: 0 8px;
+  }
+
+  .progress {
+    height: 12px;
+    border-radius: 8px;
+    background: #d9d9d9;
+  }
+
+  .rating-value {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .overall-rating {
+    margin-top: var(--margin-md);
+  }
+
+  .overall-rating-label,
+  .overall-rating-stars {
+    text-align: center;
+  }
+
+  .overall-rating-label {
+    font-size: var(--font-size-md);
+  }
+
+  .overall-rating-value {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .overall-rating-stars i {
+    color: #fdcc0d;
+    font-size: var(--font-size-lg);
+  }
+
+  .locationText-container {
+    width: 100%;
+    text-align: center;
+  }
+
+  .location-container {
+    flex-direction: column;
+    height: auto;
+    padding-top: var(--padding-md) !important;
+    gap: 2rem;
+  }
+
+  #map {
+    height: 200px;
+    width: 100%;
+    margin: 0 auto !important;
+  }
+
+  .leaflet-touch .leaflet-bar a {
+    width: 1.2rem !important;
+    height: 2rem !important;
+    font-size: 16px !important;
+    line-height: 30px !important;
+  }
+
+  .leaflet-popup-content {
+    font-size: 12px;
+    max-width: 150px;
+  }
+
+  .leaflet-popup-content-wrapper {
+    padding: 6px;
+  }
+
+  .leaflet-marker-pane img {
+    width: 80px !important;
+    height: 20px !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .rating-container {
+    margin-top: 8rem !important;
+  }
 }
