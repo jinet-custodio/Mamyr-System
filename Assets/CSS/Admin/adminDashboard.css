@@ -125,8 +125,9 @@ option {
 /* graph section css */
 .filter-btn-container {
   display: flex;
-  width: 100%;
+  width: 80%;
   justify-content: end !important;
+  gap: 1rem;
 }
 
 .filter-select-wrapper {
@@ -136,8 +137,9 @@ option {
   border: 1px solid #ccc;
   border-radius: 20px;
   background-color: #fff;
-  height: 36px; /* adjust as needed */
+  height: 36px;
   padding: 0 10px;
+  width: 80%;
 }
 
 .filter-select {
@@ -154,6 +156,7 @@ option {
 .filter-select:focus {
   outline: none;
   box-shadow: none;
+  padding-left: 0.5rem;
 }
 
 .filter-select-wrapper i {
@@ -161,16 +164,25 @@ option {
   right: 10px;
   pointer-events: none;
   font-size: 16px;
-  color: #666;
+  color: #0d6dfc;
 }
+
+/* .filter-select option:hover {
+  background-color: rgb(196, 225, 255) !important;
+} */
 
 .bottomSection {
   margin-top: var(--margin-sm);
+  margin-bottom: var(--margin-sm);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap: 1rem;
-  width: 95% !important;
+  width: 100% !important;
+}
+
+.bottomSection .card {
+  height: 95% !important;
 }
 
 .booking-illustration {
@@ -182,7 +194,8 @@ option {
   margin: auto;
   gap: 1rem;
   padding: var(--padding-sm);
-  margin-top: var(--margin-md);
+  margin-top: var(--margin-sm);
+  margin-bottom: var(--margin-sm);
 }
 
 .booking-category {
@@ -227,11 +240,14 @@ option {
 .booking-category.event {
   background-color: rgb(178, 177, 252);
 }
+.booking-category.total {
+  background-color: rgb(148, 241, 196);
+}
 
 .graph-card {
-  width: 95%;
-  height: 100% !important;
-  background-color: #f5f5f5 !important;
+  /* border: 1px solid red !important; */
+  width: 100%;
+  background-color: rgba(245, 245, 245, 0.5) !important;
 }
 
 .bookings-chart,
@@ -239,13 +255,26 @@ option {
 .payments-chart {
   height: 100%;
   display: flex;
-  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* .sales-chart {
+  flex-direction: column;
+} */
+
+.gen-rep-btn {
+  font-size: var(--font-size-sm) !important;
+  width: 50%;
+  margin: 0 auto;
 }
 
 #bookingsBar,
 #salesBar,
 #paymentsBar {
-  height: 80% !important;
+  width: auto;
+  height: auto !important;
+  min-height: 70%;
 }
 
 #bookingSummary {
@@ -271,22 +300,24 @@ option {
 #ratingsCard {
   grid-column-start: 4;
   grid-row-start: 3;
-  width: 95% !important;
-  margin-left: -5%;
+  width: 100% !important;
+  /* height: 420px !important; */
 }
 
-.graph-header {
+.graph-header,
+.calendar-header {
   display: flex;
   gap: 0.3rem;
 }
 
 .graph-header i,
-.graph-header h6 {
+.calendar-header i {
   font-size: var(--font-size-lg);
-  color: #0d6dfc;
 }
 
-.graph-header h6 {
+.graph-header h6,
+.calendar-header h6 {
+  font-size: var(--font-size-md);
   margin-top: 0.2rem;
   width: 100%;
   font-weight: var(--font-weight-bold);
@@ -309,12 +340,28 @@ option {
   width: 95%;
   grid-column: span 3 / span 3;
   grid-row-start: 3;
-  height: 420px !important;
-  padding: var(--padding-sm);
+  /* height: 550px !important; */
+  padding: 0 var(--padding-sm);
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+}
+
+.calendar-card-body {
+  /* border: 1px solid red; */
+  width: 100%;
+  /* height: auto !important; */
+}
+
+.moreBtn {
+  /* border: 1px solid red; */
+  margin-top: 1.8rem;
+  padding: var(--padding-sm);
+}
+
+.moreBtn a {
+  font-size: var(--font-size-sm);
 }
 
 #calendar {
@@ -407,7 +454,7 @@ option {
 
 .ratings-card {
   width: 203.57px !important;
-  height: 370px !important;
+  height: 250px !important;
   background-color: #f5f5f5 !important;
 }
 
@@ -454,7 +501,7 @@ option {
 
 .rating-value {
   font-weight: bold;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   color: #333;
 }
 
@@ -462,8 +509,22 @@ option {
   margin-top: var(--margin-lg);
 }
 
-.overall-rating-label,
+.overall-rating-label {
+  text-align: center;
+}
+
 .overall-rating-stars {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 220px;
+  margin: 5px auto;
+}
+
+.star {
+  /* border: 1px solid red; */
+  font-size: 30px !important;
+  width: 25%;
   text-align: center;
 }
 
@@ -472,18 +533,8 @@ option {
 }
 
 .overall-rating-stars i {
-  color: #fdcc0d;
-  font-size: var(--font-size-xl);
-  margin: var(--margin-xs);
+  font-size: var(--font-size-sm);
+  margin: auto var(--margin-xs);
 }
-.sales-chart {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.gen-rep-btn {
-  margin-top: var(--margin-xs);
-  width: 50%;
-}
+
 /* graph section css */

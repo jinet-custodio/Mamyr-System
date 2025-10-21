@@ -102,7 +102,7 @@ if (isset($_POST['eventBook'])) {
         $getServiceID->close();
     }
 
-    error_log(print_r($partnerService, true));
+    // error_log(print_r($partnerService, true));
 
 
 

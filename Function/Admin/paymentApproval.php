@@ -62,6 +62,7 @@ if (isset($_POST['approvePaymentBtn'])) {
     $customerID = (int) $_POST['customerID'];
     $paymentID = (int) $_POST['paymentID'];
     $paymentApprovalStatusID = 2; //Approved
+    $bookingStatus = 3; //Reserved
 
     $serviceIDs = $_POST['services'];
 
@@ -186,6 +187,13 @@ if (isset($_POST['approvePaymentBtn'])) {
             $paymentStatusID = 1;
         }
 
+        $updateBookingStatus = $conn->prepare(" UPDATE booking SET bookingStatus =? WHERE bookingID = ?");
+        $updateBookingStatus->bind_param('ii', $bookingStatus, $bookingID);
+
+        if (! $updateBookingStatus->execute()) {
+            $conn->rollback();
+            throw new Exception('Error executing update booking status query!' . $updateBookingStatus->error);
+        }
         $updateBookingPaymentStatus = $conn->prepare("UPDATE confirmedbooking SET 
                     finalBill = ?,
                     discountAmount = ?,
@@ -389,7 +397,7 @@ if (isset($_POST['approvePaymentBtn'])) {
         }
     }
 } elseif (isset($_POST['submitPaymentBtn'])) {
-    error_log(print_r($_POST, true));
+    // error_log(print_r($_POST, true));
 
     //IDs
     $bookingID  = (int) $_POST['bookingID'];

@@ -127,6 +127,27 @@ function getStatuses($conn, $statusID)
     }
 }
 
+function getAllStatuses($conn)
+{
+    $status = [];
+    $getStatus = $conn->prepare("SELECT * FROM status ORDER BY statusID ASC");
+    $getStatus->execute();
+    $getStatusResult = $getStatus->get_result();
+    if ($getStatusResult->num_rows > 0) {
+        while ($row = $getStatusResult->fetch_assoc()) {
+
+            $status[] = $row;
+        }
+    } else {
+        return NULL;
+    }
+
+    return [
+        'status' => $status
+    ];
+}
+
+
 //? Function for getting availability status
 function getAvailabilityStatus($conn, $availabilityID)
 {
