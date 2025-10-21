@@ -10,6 +10,7 @@
             $paymentStatusID  = 4;
             $approvedStatusID = 2;
             $doneStatusID = 6;
+            $reservedStatusID = 3;
             $getCardData = $conn->prepare("SELECT
                                                     -- Guests this month
                                                     SUM(CASE 
@@ -78,9 +79,9 @@
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
                                                 -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                                                WHERE b.bookingStatus IN (?, ?)  AND cb.paymentStatus != ? 
+                                                WHERE b.bookingStatus IN (?, ?, ?)  AND cb.paymentStatus != ? 
                                                 ");
-            $getCardData->bind_param('iii',  $approvedStatusID, $doneStatusID,  $paymentStatusID);
+            $getCardData->bind_param('iiii',  $approvedStatusID, $doneStatusID, $reservedStatusID,  $paymentStatusID);
 
             if (!$getCardData->execute()) {
                 error_log("Error executing the card data query.");

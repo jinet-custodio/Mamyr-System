@@ -50,10 +50,8 @@ require '../../Function/notification.php';
     <!-- CSS Links -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/adminDashboard.css">
     <link rel="stylesheet" href="../../Assets/CSS/Admin/sidebar.css">
-    <!-- CSS Links -->
     <!-- Bootstrap Links -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
-    <!-- Bootstrap Links -->
     <!-- Icon Links -->
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -243,8 +241,9 @@ require '../../Function/notification.php';
         </section>
         <?php $monthToday = date('F') ?>
         <section class="container bottomSection">
+
             <div class="card graph-card" id="bookingSummary">
-                <div class="card-body graph-card-body">
+                <div class="card-body graph-card-body" id="bookingSummary-body">
                     <div class="graph-header">
                         <i class="bi bi-calendar-check"></i>
                         <h6 class="graph-header-text">Booking Summary</h6>
@@ -259,7 +258,19 @@ require '../../Function/notification.php';
                                     <option value="w4">Week 4</option>
                                     <option value="w5">Week 5</option>
                                 </select>
-                                <i class="bi bi-funnel"></i>
+                                <i class="bi bi-filter"></i>
+                            </div>
+
+                            <div class="filter-select-wrapper">
+                                <select class="filter-select" id="booking-status-filter">
+                                    <option value="all">All</option>
+                                    <?php $statuses = getAllStatuses($conn);
+                                    foreach ($statuses['status'] as $status):
+                                    ?>
+                                        <option value="<?= $status['statusID'] ?>"><?= $status['statusName'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <i class="bi bi-filter"></i>
                             </div>
                         </div>
                     </div>
@@ -271,7 +282,7 @@ require '../../Function/notification.php';
                             </div>
                             <div class="categorySpan-container">
                                 <span id="resort-span" class="category-span">
-                                    <h6 id="resort-number" class="category-number">1552</h6>
+                                    <h6 id="resort-number" class="category-number">0</h6>
                                 </span>
                             </div>
                         </div>
@@ -282,7 +293,7 @@ require '../../Function/notification.php';
                             </div>
                             <div class="categorySpan-container">
                                 <span id="hotel-span" class="category-span">
-                                    <h6 id="hotel-number" class=" category-number">1552</h6>
+                                    <h6 id="hotel-number" class=" category-number">0</h6>
                                 </span>
                             </div>
                         </div>
@@ -293,7 +304,18 @@ require '../../Function/notification.php';
                             </div>
                             <div class="categorySpan-container">
                                 <span id="event-span" class="category-span">
-                                    <h6 id="event-number" class="category-number">1552</h6>
+                                    <h6 id="event-number" class="category-number">0</h6>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="booking-category total" id="total-category-div">
+                            <div class="category-header">
+                                <h6 class="category-type">Total</h6>
+                            </div>
+                            <div class="categorySpan-container">
+                                <span id="resort-span" class="category-span">
+                                    <h6 id="total-bookings" class="category-number">0</h6>
                                 </span>
                             </div>
                         </div>
@@ -318,7 +340,7 @@ require '../../Function/notification.php';
                                     <option value="w4">Week 4</option>
                                     <option value="w5">Week 5</option>
                                 </select>
-                                <i class="bi bi-funnel"></i>
+                                <i class="bi bi-filter"></i>
                             </div>
                         </div>
                     </div>
@@ -330,7 +352,6 @@ require '../../Function/notification.php';
                     </div>
                 </div>
             </div>
-
 
             <div class="card graph-card" id="salesCard">
                 <div class="card-body graph-card-body">
@@ -349,7 +370,7 @@ require '../../Function/notification.php';
                                     <option value="w4">Week 4</option>
                                     <option value="w5">Week 5</option>
                                 </select>
-                                <i class="bi bi-funnel"></i>
+                                <i class="bi bi-filter"></i>
                             </div>
                         </div>
                     </div>
@@ -365,7 +386,6 @@ require '../../Function/notification.php';
 
                 </div>
             </div>
-
 
             <div class="card graph-card" id="paymentsGraph">
                 <div class="card-body graph-card-body">
@@ -383,7 +403,7 @@ require '../../Function/notification.php';
                                     <option value="w4">Week 4</option>
                                     <option value="w5">Week 5</option>
                                 </select>
-                                <i class="bi bi-funnel"></i>
+                                <i class="bi bi-filter"></i>
                             </div>
                         </div>
                     </div>
@@ -398,19 +418,25 @@ require '../../Function/notification.php';
                 </div>
             </div>
 
-
-
             <div class="card calendar-card">
-                <div class="filter-btn-container mb-2">
-                    <div class="filter-select-wrapper">
-                        <select class="filter-select" name="calendar-filter-select" id="calendar-filter-select">
-                            <option selected value="events">Events</option>
-                            <option value="services">Available Services</option>
-                        </select>
-                        <i class="bi bi-funnel"></i>
+                <div class="card-body calendar-card-body">
+                    <div class="calendar-header">
+                        <i class="bi bi-calendar-check"></i>
+                        <h6 class="calendar-header-text">Calendar</h6>
+                        <div class="filter-btn-container mb-2">
+                            <div class="filter-select-wrapper">
+                                <select class="filter-select" name="calendar-filter-select" id="calendar-filter-select">
+                                    <option selected value="events">Events</option>
+                                    <option value="services">Available Services</option>
+                                </select>
+                                <i class="bi bi-filter"></i>
+                            </div>
+                        </div>
                     </div>
+
+                    <div id="calendar"></div>
                 </div>
-                <div id="calendar"></div>
+
                 <div class="moreBtn">
                     <a href="schedule.php" class="btn btn-primary">View More</a>
                 </div>
@@ -468,16 +494,15 @@ require '../../Function/notification.php';
                             </div>
                             <div class="overall-rating-stars" id="star-container">
                                 <!-- <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i> -->
+                                <i class="bi bi-star-fill" id="overall-rating"></i>
+                                <i class="bi bi-star-fill" id="overall-rating"></i>
+                                <i class="bi bi-star-fill" id="overall-rating"></i>
+                                <i class="bi bi-star-fill" id="overall-rating"></i> -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </section>
     </main>
 
@@ -504,7 +529,7 @@ require '../../Function/notification.php';
                 initialView: 'dayGridMonth',
                 events: '../../Function/Admin/fetchBookings.php',
                 eventsSet: function(events) {
-                    console.log('Fetched events:', events);
+                    // console.log('Fetched events:', events);
                     events.forEach(event => {
                         console.log(`Title: ${event.title}, Start: ${event.startStr}`);
                     });
@@ -614,11 +639,11 @@ require '../../Function/notification.php';
             const starContainer = document.getElementById('star-container');
             for (let i = 1; i <= 5; i++) {
                 if (i <= Math.floor(data.overAllRating)) {
-                    starContainer.innerHTML += '<i class="bi bi-star-fill text-warning"></i>';
+                    starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
                 } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
-                    starContainer.innerHTML += '<i class="bi bi-star-half text-warning"></i>';
+                    starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
                 } else {
-                    starContainer.innerHTML += '<i class="bi bi-star text-warning"></i>';
+                    starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
                 }
             }
         }
@@ -639,34 +664,37 @@ require '../../Function/notification.php';
     <!-- //* For Payments -->
     <script src="../../Assets/JS/Dashboard/adminPayments.js"></script>
 
+    <!-- //* For Booking Summary -->
+    <script src="../../Assets/JS/Dashboard/adminBookingSummary.js"></script>
+
     <script>
         const colors = {
             unpaid: {
-                bg: "rgba(219, 53, 69, .7)",
+                bg: "rgba(219, 53, 69, .6)",
                 border: "rgb(219, 53, 69)"
             },
             event: {
-                bg: "rgb(79, 76, 207, .7)",
+                bg: "rgb(79, 76, 207, .6)",
                 border: "rgb(79, 76, 207)"
             },
             "partially paid": {
-                bg: "rgba(255, 193, 8, .7)",
+                bg: "rgba(255, 193, 8, .6)",
                 border: "rgb(255, 193, 8)"
             },
             hotel: {
-                bg: "rgb(211, 120, 250, .7)",
+                bg: "rgb(211, 120, 250, .6)",
                 border: "rgb(211, 120, 250)"
             },
             "fully paid": {
-                bg: "rgba(26, 135, 84,.7)",
+                bg: "rgba(26, 135, 84,.6)",
                 border: "rgb(26, 135, 84)"
             },
             resort: {
-                bg: "rgb(65, 138, 240, .7)",
+                bg: "rgb(65, 138, 240, .6)",
                 border: "rgb(65, 138, 240)"
             },
             "payment sent": {
-                bg: "rgba(13, 109, 252, .7)",
+                bg: "rgba(13, 109, 252, .6)",
                 border: "rgb(13, 109, 252)"
             },
             default: {
@@ -723,6 +751,25 @@ require '../../Function/notification.php';
                 filteredPayments(paymentsSelectedFilter.value);
             });
             filteredPayments(paymentsSelectedFilter.value);
+        }
+
+        //For Booking Summary
+        const bookingSummaryFilter = document.getElementById('booking-summary-filter-select');
+        const bookingStatusFilter = document.getElementById('booking-status-filter');
+        if (bookingSummaryFilter || bookingStatusFilter) {
+            bookingSummaryFilter.addEventListener('change', () => {
+                const summaryFilterValue = bookingSummaryFilter.value;
+                const statusFilterValue = bookingStatusFilter.value;
+                filteredBookingSummary(summaryFilterValue, statusFilterValue);
+            });
+            bookingStatusFilter.addEventListener('change', () => {
+                const summaryFilterValue = bookingSummaryFilter.value;
+                const statusFilterValue = bookingStatusFilter.value;
+                filteredBookingSummary(summaryFilterValue, statusFilterValue);
+            });
+            const summaryFilterValue = bookingSummaryFilter.value;
+            const statusFilterValue = bookingStatusFilter.value;
+            filteredBookingSummary(summaryFilterValue, statusFilterValue);
         }
     </script>
 
