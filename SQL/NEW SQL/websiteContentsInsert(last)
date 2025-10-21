@@ -67,10 +67,10 @@ INSERT INTO `websitecontent` (`contentID`, `adminID`, `sectionName`, `title`, `c
 (118, 1, 'BusinessInformation', 'Address', 'Sitio Colonia Gabihan, San Ildefonso, Bulacan', current_timestamp()),
 (119, 1, 'BusinessInformation', 'ShortDesc2', ' Welcome to Mamyr Resort and Events Place, where relaxation and unforgettable moments await you. Whether you\'re here for a peaceful retreat or a special celebration, we\'re dedicated to making your experience truly exceptional.', current_timestamp()),
 (120, 1,'Rates and Hotel Rooms','HotelDesc','Mamyr Resort and Events Place is not only a venue for unforgettable celebrations but also a relaxing retreat, offering 11 air-conditioned hotel rooms for guests seeking comfort and convenience. Every booking at the hotel includes complimentary access to the resort\'s pool, allowing guests to unwind and enjoy their stay to the fullest. Whether you\'re here for a grand occasion or a quiet getaway, Mamyr Resort offers a beautiful and welcoming environment for all.', current_timestamp()),
-(1, 'Events', 'EventTitle', 'EVENTS', current_timestamp()),
-(1, 'Events', 'EventDesc', 'At Mamyr Resort and Events Place, we celebrate life’s most meaningful moments—weddings, birthdays, reunions, corporate events, and more—that can be celebrated in our Pavilion, which can occupy up to 350 guests, and our Mini Pavilion, perfect for more intimate gatherings of up to 50 guests. Whether grand or small, each event is made memorable in a beautiful and comfortable setting designed to suit your occasion.', current_timestamp()),
-(1, 'Events', 'OurEventsTitle', 'Our Venues', current_timestamp()),
-(1, 'Events', 'OurEventsDesc', 'Mamyr Resort and Events Place offers two exceptional venues: the spacious Main Function Hall for grand celebrations and the Mini Function Hall for intimate gatherings—both crafted to make every event truly memorable.', current_timestamp()),
+(121, 1, 'Events', 'EventTitle', 'EVENTS', current_timestamp()),
+(122, 1, 'Events', 'EventDesc', 'At Mamyr Resort and Events Place, we celebrate life’s most meaningful moments—weddings, birthdays, reunions, corporate events, and more—that can be celebrated in our Pavilion, which can occupy up to 350 guests, and our Mini Pavilion, perfect for more intimate gatherings of up to 50 guests. Whether grand or small, each event is made memorable in a beautiful and comfortable setting designed to suit your occasion.', current_timestamp()),
+(123, 1, 'Events', 'OurEventsTitle', 'Our Venues', current_timestamp()),
+(124, 1, 'Events', 'OurEventsDesc', 'Mamyr Resort and Events Place offers two exceptional venues: the spacious Main Function Hall for grand celebrations and the Mini Function Hall for intimate gatherings—both crafted to make every event truly memorable.', current_timestamp());
 
 
 INSERT INTO `websitecontentimage` (`WCImageID`, `contentID`, `imageData`, `altText`, `imageOrder`, `uploadedAt`) VALUES
@@ -123,7 +123,7 @@ INSERT INTO `websitecontentimage` (`WCImageID`, `contentID`, `imageData`, `altTe
 (47, 54, 'hotel2.jpg', 'Hotel Pic 2', 2, current_timestamp()),
 (48, 54, 'hotel3.jpg', 'Hotel Pic 3', 3, current_timestamp()),
 (49, 54, 'hotel4.jpg', 'Hotel Pic 4', 4, current_timestamp()),
-(50, 54, 'hotel5.jpeg', 'Hotel Pic 5', 5, current_timestamp()),
+(50, 54, 'hotel5.jpeg', 'Hotel Pic 5', 5, current_timestamp());
 
 
 -- Assets/Images/landingPage/ name
