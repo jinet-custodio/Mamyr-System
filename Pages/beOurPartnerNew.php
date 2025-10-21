@@ -1,3 +1,11 @@
+<?php
+
+error_reporting(E_ALL);
+session_start();
+ini_set('display_errors', 1);
+require '../Config/dbcon.php';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 

@@ -472,7 +472,6 @@ require '../../Function/notification.php';
             video.muted = false;
         };
     </script>
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -528,7 +527,7 @@ require '../../Function/notification.php';
             new Swiper(config.selector, {
                 slidesPerView: 1,
                 spaceBetween: 10,
-                loop: true,
+                loop: false,
                 loopedSlides: 3,
                 navigation: {
                     nextEl: config.next,
@@ -553,7 +552,6 @@ require '../../Function/notification.php';
                     }
                 }
             });
-            console.log(`Initializing ${config.selector} with ${slideCount} slides. Loop: ${enableLoop}`);
         });
     </script>
 </body>

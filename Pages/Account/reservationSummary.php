@@ -84,9 +84,9 @@ require_once '../../Function/Helpers/statusFunctions.php';
             $resultData = $getData->get_result();
             if ($resultData->num_rows > 0) {
                 $clientInfo = $resultData->fetch_assoc();
-                $middleInitial = trim($clientInfo['middleInitial']);
-                $firstName = $clientInfo['firstName'];
-                $clientName = ucfirst($firstName) . " " . ucfirst($clientInfo['middleInitial']) . " "  . ucfirst($clientInfo['lastName']);
+                $middleInitial = trim($clientInfo['middleInitial'] ?? '');
+                $firstName = $clientInfo['firstName'] ?? '';
+                $clientName = ucfirst($firstName) ?? '' . " " . ucfirst($clientInfo['middleInitial'] ?? '') . " "  . ucfirst($clientInfo['lastName'] ?? '');
             }
             ?>
 
