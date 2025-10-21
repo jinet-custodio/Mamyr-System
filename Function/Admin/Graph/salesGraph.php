@@ -35,7 +35,7 @@ if (isset($_GET['selectedFilter'])) {
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
                     WHERE 
-                        cb.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
+                        cb.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?, ?) AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                     GROUP BY 
@@ -75,7 +75,7 @@ if (isset($_GET['selectedFilter'])) {
                     -- LEFT JOIN 
                     --     payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
-                        cb.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?) AND
+                        cb.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?,?) AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                         AND FLOOR((DAY(b.startDate) - 1) / 7) = ?
@@ -89,17 +89,18 @@ if (isset($_GET['selectedFilter'])) {
 
 
     $partiallyPaid = 2;
-    $fullyPaid = 3;
+    $reservedID =  $fullyPaid = 3;
     $approvedStatus = 2;
     $doneStatus = 6;
+
     $getSalesFiltered = $conn->prepare($sql);
     if (!$getSalesFiltered) {
         error_log("Prepare failed: " . $conn->error);
     }
     if ($filter === 'week') {
-        $getSalesFiltered->bind_param('iiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $weekNumber);
+        $getSalesFiltered->bind_param('iiiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $reservedID, $weekNumber);
     } elseif ($filter === 'month') {
-        $getSalesFiltered->bind_param('iiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus);
+        $getSalesFiltered->bind_param('iiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $reservedID);
     }
 
     // if ($filter === 'week') {

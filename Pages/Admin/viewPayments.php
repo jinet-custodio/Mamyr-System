@@ -85,13 +85,10 @@ if ($admin === "Admin") {
     <link rel="icon" type="image/x-icon" href="../../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
 
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/viewPayments.css" />
-
 
 </head>
 
@@ -100,8 +97,9 @@ if ($admin === "Admin") {
 
     <?php
     $bookingID = $bookingID;
-    $bookingStatus = 2;
-    $doneStatus = 6;
+    // $bookingStatus = 2;
+    // $reservedStatus = 3;
+    // $doneStatus = 6;
 
     $payments = $conn->prepare("SELECT 
                     LPAD(cb.bookingID, 4, '0') AS formattedID, b.bookingCode,
@@ -128,9 +126,9 @@ if ($admin === "Admin") {
                 LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
                 LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                 LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                WHERE cb.bookingID = ? AND b.bookingStatus IN (?, ?)
+                WHERE cb.bookingID = ? 
         ");
-    $payments->bind_param("iii", $bookingID, $bookingStatus, $doneStatus);
+    $payments->bind_param("i", $bookingID);
     $payments->execute();
     $resultPayments = $payments->get_result();
     if ($resultPayments->num_rows > 0) {
@@ -213,6 +211,7 @@ if ($admin === "Admin") {
                     $foodPriceTotal = floatval($row['totalFoodPrice']);
                 }
             } else {
+                $serviceIDs[] = $row['serviceID'];
                 if ($serviceType === 'Resort') {
                     $services[] = $row['RServiceName'];
                 }

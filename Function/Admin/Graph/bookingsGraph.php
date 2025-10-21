@@ -30,7 +30,7 @@ if (isset($_GET['selectedFilter'])) {
                     -- LEFT JOIN 
                     --     payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
-                        cb.paymentStatus NOT IN (?) AND b.bookingStatus IN (?, ?)  AND
+                        cb.paymentStatus NOT IN (?) AND b.bookingStatus IN (?, ?, ?)  AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                     GROUP BY 
@@ -68,7 +68,7 @@ if (isset($_GET['selectedFilter'])) {
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
                     WHERE 
-                        cb.paymentStatus NOT IN (?) AND b.bookingStatus IN (?, ?)  AND
+                        cb.paymentStatus NOT IN (?) AND b.bookingStatus IN (?, ?, ?)  AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
                         AND YEAR(b.startDate) = YEAR(CURDATE())
                         AND FLOOR((DAY(b.startDate) - 1) / 7) = ?
@@ -84,15 +84,16 @@ if (isset($_GET['selectedFilter'])) {
     $paymentIssue = 4;
     $approvedStatus = 2;
     $doneStatus = 6;
+    $reservedID = 3;
     $getBookingsFiltered = $conn->prepare($sql);
     if (!$getBookingsFiltered) {
         error_log("Prepare failed: " . $conn->error);
     }
     // error_log("Executing query with weekNumber = $weekNumber * selectedValue = $selectedFilterValue");
     if ($filter === 'week') {
-        $getBookingsFiltered->bind_param('iiii', $paymentIssue, $approvedStatus, $doneStatus,  $weekNumber);
+        $getBookingsFiltered->bind_param('iiiii', $paymentIssue, $approvedStatus, $doneStatus, $reservedID,  $weekNumber);
     } elseif ($filter === 'month') {
-        $getBookingsFiltered->bind_param('iii', $paymentIssue, $approvedStatus, $doneStatus);
+        $getBookingsFiltered->bind_param('iiii', $paymentIssue, $approvedStatus, $doneStatus, $reservedID);
     }
 
     // if ($filter === 'week') {

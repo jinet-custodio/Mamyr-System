@@ -139,9 +139,9 @@ th {
 .badge {
   font-weight: initial;
   line-height: normal;
-  font-size: 14px !important;
-  padding: 0.6rem !important;
-  width: 10rem;
+  font-size: var(--font-size-base);
+  padding: var(--padding-md);
+  width: 8rem;
   border-radius: 3rem !important;
 }
 
@@ -205,6 +205,10 @@ th {
   color: rgb(71, 139, 10) !important;
 }
 /* Status */
+
+.viewBooking {
+  font-size: 12px;
+}
 
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   #addBookings {

@@ -368,6 +368,7 @@ require '../../Function/notification.php';
         }
 
         document.addEventListener("DOMContentLoaded", () => {
+            loadPartners();
             document.getElementById("partner-link").addEventListener("click", function() {
                 loadPartners();
             });

@@ -54,7 +54,7 @@ $approvedDate = date('Y-m-d h:i:s');
 
 if (isset($_POST['approvePaymentBtn'])) {
 
-    // error_log(print_r($_POST, true));
+    // error_log(print_r($_POST['services'], true));
 
     //ID`s
     $bookingID  = (int) $_POST['bookingID'];
@@ -64,7 +64,7 @@ if (isset($_POST['approvePaymentBtn'])) {
     $paymentApprovalStatusID = 2; //Approved
     $bookingStatus = 3; //Reserved
 
-    $serviceIDs = $_POST['services'];
+    // $serviceIDs = $_POST['services'];
 
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -96,54 +96,16 @@ if (isset($_POST['approvePaymentBtn'])) {
 
     $conn->begin_transaction();
     try {
+        $serviceStatus = 'confirmed';
 
-
-        $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
-
-        foreach ($serviceIDs as $serviceID) {
-            $getServicesQuery->bind_param("i", $serviceID);
-            if (!$getServicesQuery->execute()) {
-                $conn->rollback();
-                throw new Exception("Failed to fetch service for ID: $serviceID");
-            }
-
-            $getServicesQueryResult = $getServicesQuery->get_result();
-            if ($getServicesQueryResult->num_rows === 0) {
-                $conn->rollback();
-                throw new Exception("No service found for ID: $serviceID");
-            }
-
-            $row = $getServicesQueryResult->fetch_assoc();
-            $serviceType = $row['serviceType'];
-            $serviceStatus = 'confirmed';
-            switch ($serviceType) {
-                case 'Resort':
-                    $resortServiceID = $row['resortServiceID'];
-                    $updateUnavailableDates = $conn->prepare("UPDATE `serviceunavailabledate` SET `status`= ? ,`expiresAt`= NULL WHERE `resortServiceID`= ?");
-                    $updateUnavailableDates->bind_param('si', $serviceStatus,  $resortServiceID);
-                    if (!$updateUnavailableDates->execute()) {
-                        $conn->rollback();
-                        throw new Exception("Failed to insert unavailable date for resort service ID: $resortServiceID");
-                    }
-                    $updateUnavailableDates->close();
-                    break;
-
-                case 'Partner':
-                    $partnershipServiceID = $row['partnershipServiceID'];
-                    $updateUnavailableDates = $conn->prepare("UPDATE `serviceunavailabledate` SET `status`= ? ,`expiresAt`= NULL WHERE `partnershipServiceID`= ?");
-                    $updateUnavailableDates->bind_param('si', $serviceStatus, $partnershipServiceID);
-                    if (!$updateUnavailableDates->execute()) {
-                        $conn->rollback();
-                        throw new Exception("Failed to insert unavailable date for partner service ID: $partnershipServiceID");
-                    }
-                    $updateUnavailableDates->close();
-                    break;
-
-                default:
-                    $conn->rollback();
-                    throw new Exception("Unknown service type: $serviceType for service ID: $serviceID");
-            }
+        $updateUnavailableDates = $conn->prepare("UPDATE `serviceunavailabledate` SET `status`= ? ,`expiresAt`= NULL WHERE `bookingID`= ?");
+        $updateUnavailableDates->bind_param('si', $serviceStatus,  $bookingID);
+        if (!$updateUnavailableDates->execute()) {
+            $conn->rollback();
+            throw new Exception("Failed to update unavailable date for booking ID: $bookingID");
         }
+        $updateUnavailableDates->close();
+
 
         $bookingCheck = $conn->prepare("SELECT cb.userBalance, cb.amountPaid, cb.finalBill, cb.discountAmount, b.bookingCode, b.bookingType, b.startDate, b.endDate, b.arrivalTime,  p.paymentDate FROM confirmedbooking cb
                                         LEFT JOIN booking b ON cb.bookingID = b.bookingID

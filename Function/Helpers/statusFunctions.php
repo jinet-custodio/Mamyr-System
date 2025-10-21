@@ -253,3 +253,17 @@ function getPaymentStatus($conn, $paymentStatusID)
         return NULL;
     }
 }
+
+//? Function for deleting the services included in booking without payment within 24hrs of approval
+function noPayment24hrs($conn)
+{
+    $status = 'hold';
+    $removeToUnavailableService = $conn->prepare('DELETE FROM `serviceunavailabledate` WHERE expiresAt <= NOW() AND status = ?');
+    $removeToUnavailableService->bind_param('s', $status);
+
+    if (!$removeToUnavailableService->execute()) {
+        error_log('Error removing query: ' . $removeToUnavailableService->error);
+    }
+    $deleted = $removeToUnavailableService->affected_rows;
+    error_log('Deleted rows: ' . $deleted);
+}

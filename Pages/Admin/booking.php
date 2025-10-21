@@ -347,7 +347,7 @@ if (isset($_SESSION['error'])) {
                                     <input type="hidden" name="bookingType" value="${booking.bookingType}">
                                     <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
                                     <input type="hidden" name="bookingID" value="${booking.bookingID}">
-                                    <button type="submit" class="btn btn-primary">View</button>
+                                    <button type="submit" class="btn btn-primary viewBooking">View</button>
                             </form>`
                         ]);
                     });

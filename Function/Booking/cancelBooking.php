@@ -9,30 +9,11 @@ $userID = (int) $_SESSION['userID'];
 
 if (isset($_POST['cancelBooking'])) {
     $bookingID = (int) $_POST['bookingID'];
-    // $confirmedBookingID = mysqli_real_escape_string($conn, $_POST['confirmedBookingID']);
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     $cancellationReason = intval($_POST['cancellation-reason']);
     $otherReason = !empty($_POST['other-cancellation-reason']) ? mysqli_real_escape_string($conn, $_POST['other-cancellation-reason']) : 'N/A';
-    // $bookingStatus = mysqli_real_escape_string($conn, $_POST['bookingStatus']);
-    // $confirmedStatus = mysqli_real_escape_string($conn, $_POST['confirmedStatus']);
-
-
     try {
-        //GET STATUS ID 
-        // $IDtoUse = !empty($confirmedStatus) ? $confirmedStatus : $bookingStatus;
-        // if ($IDtoUse) {
-        //     $getStatusID = $conn->prepare("SELECT * FROM status WHERE statusName = ?");
-        //     $getStatusID->bind_param('s', $IDtoUse);
-        //     if (!$getStatusID->execute()) {
-        //         throw new Exception('Error ' . $getStatusID->error);
-        //     }
-        //     $getStatusIDResult = $getStatusID->get_result();
-        //     if ($getStatusIDResult->num_rows > 0) {
-        //         $row = $getStatusIDResult->fetch_assoc();
 
-        //         $statusID = $row['statusID'];
-        //     }
-        // }
         //Check if booking exist
         $checkBooking = $conn->prepare("SELECT *  FROM booking  WHERE bookingID = ? AND userID = ?");
         $checkBooking->bind_param("ii", $bookingID,  $userID);
@@ -70,9 +51,6 @@ if (isset($_POST['cancelBooking'])) {
     }
 
 
-
-
-
     if ($cancelBooking->execute()) {
 
         $receiver = 'Admin';
@@ -81,7 +59,6 @@ if (isset($_POST['cancelBooking'])) {
             VALUES(?,?,?,?)");
         $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
         $insertBookingNotificationRequest->execute();
-        // header("Location: ../../Pages/Customer/Account/bookingHistory.php?action=Cancelled&bookingID=$bookingID");
         header("Location: ../../Pages/Account/bookingHistory.php?action=Cancelled");
         $cancelBooking->close();
         exit();

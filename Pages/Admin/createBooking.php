@@ -1,14 +1,38 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
-date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+require_once '../../Function/Helpers/statusFunctions.php';
+require_once '../../Function/Helpers/userFunctions.php';
+addToAdminTable($conn);
+changeToDoneStatus($conn);
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -28,10 +52,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/createBooking.css">
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
 
@@ -51,7 +73,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
         <div class="backBtnContainer">
-            <a href="booking.php"><img src="../../Assets/Images/Icon/arrow.png" alt="Back Button" class="backButton">
+            <a href="booking.php"><img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="Back Button" class="backButton">
             </a>
         </div>
 
@@ -61,15 +83,15 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <h1 class="title" id="title">Add Booking</h1>
     </div>
 
-    <form action="#" method="POST">
+    <form action="../../Function/Admin/addBulkBooking.php" method="POST">
 
         <main class="container-fluid">
+            <!-- <h5 class="bsTitle">Booking Summary</h5> -->
             <section class="topSection">
-
                 <section class="leftSide">
                     <div class="infoLabelContainer">
-                        <label for="repPeriod">Report Period: </label>
-                        <label for="bookingCount">Number of Bookings: </label>
+                        <label for="repPeriod">Date Period: </label>
+                        <!-- <label for="bookingCount">Number of Bookings: </label> -->
                         <label for="bookingType">Type of Booking:</label>
                     </div>
 
@@ -77,14 +99,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <section class="date-picker">
                             <div class="input-wrapper w-100">
                                 <input type="text" name="repPeriod" class="form-control" id="repPeriod"
-                                    placeholder="Click to enter date">
+                                    placeholder="Click to enter date" required>
                                 <i class="fa-solid fa-calendar" id="calendarIcon"></i>
                             </div>
                         </section>
 
-                        <input type="number" class="form-control" id="bookingCount" name="bookingCount">
+                        <!-- <input type="number" class="form-control" id="bookingCount" name="bookingCount" min='1' required> -->
 
-                        <select class="form-select" aria-label="typeOfBooking" id="bookingType" name="bookingType">
+                        <select class="form-select" aria-label="typeOfBooking" id="bookingType" name="bookingType" required>
                             <option selected disabled>Booking Type</option>
                             <option value="resort">Resort</option>
                             <option value="hotel">Hotel</option>
@@ -96,7 +118,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </section>
 
                 <section class="rightSide">
-                    <h5 class="bsTitle">Booking Summary</h5>
+
 
                     <div class="bsContainer">
                         <div class="bsLabelContainer">
@@ -105,23 +127,22 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </div>
 
                         <div class="bsInput">
-                            <input type="text" class="form-control" id="totalBooking" name="totalBooking" value="0"
-                                readonly>
-                            <input type="text" class="form-control" id="totalSales" name="totalSales" value="₱ 0.00"
-                                readonly>
+                            <input type="text" class="form-control" id="totalBooking" name="totalBooking" placeholder="5">
+                            <input type="text" class="form-control" id="totalSales" name="totalSales" placeholder="23000.00">
                         </div>
                     </div>
 
-                    <div class="bsButtons">
-                        <button class="btn btn-primary">Edit</button>
-                        <button type="submit" class="btn btn-success">Save</button>
-                    </div>
+                    <!-- <div class="bsButtons">
+                        <button class="btn btn-primary"><i class="bi bi-pencil-square"></i> Edit</button>
+                        <button type="submit" class="btn btn-success"><i class="bi bi-floppy"></i> Save</button>
+                    </div> -->
 
                 </section>
             </section>
 
-            <section class="addButton">
-                <button type="submit" class="btn btn-primary" id="addBooking">Add Booking</button>
+            <section class="button-container">
+                <!-- <button class="btn btn-primary"><i class="bi bi-pencil-square"></i> Edit</button> -->
+                <button type="submit" class="btn btn-success" id="addBooking" name="addBulkBooking"><i class="bi bi-plus-lg"></i> Add Booking</button>
             </section>
         </main>
 
@@ -132,11 +153,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <th scope="col">Start Date</th>
                     <th scope="col">End Date</th>
                     <th scope="col">Type of Booking</th>
-                    <th scope="col">Final Price</th>
+                    <th scope="col">Number of Bookings</th>
+                    <th scope="col">Total Sales</th>
 
                 </thead>
                 <tbody>
-                    <tr>
+                    <!-- <tr>
                         <td>September 14, 2025</td>
                         <td>September 30, 2025</td>
                         <td>Resort Booking</td>
@@ -155,9 +177,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <td>September 30, 2025</td>
                         <td>Event Booking</td>
                         <td>₱100,000</td>
-                    </tr>
-
-
+                    </tr> -->
                 </tbody>
             </table>
 
@@ -175,6 +195,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
 
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -183,35 +205,76 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#addedBookings').DataTable({
-            // columnDefs: [{
-            //         width: '10%',
-            //         targets: 0
-            //     },
-            //     {
-            //         width: '15%',
-            //         targets: 2
-            //     },
-            //     {
-            //         width: '15%',
-            //         targets: 4
-            //     },
-            // ],
+        $(document).ready(function() {
+            $('#addedBookings').DataTable({
+                // columnDefs: [{
+                //         width: '10%',
+                //         targets: 0
+                //     },
+                //     {
+                //         width: '15%',
+                //         targets: 2
+                //     },
+                //     {
+                //         width: '15%',
+                //         targets: 4
+                //     },
+                // ],
+            });
         });
-    });
+    </script>
+
+    <!-- Fetch Added Bookings -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch(`../../Function/Admin/Ajax/getBulkBooking.php`)
+                .then(result => {
+                    if (!result.ok) throw new Error("Network Error");
+                    return result.json();
+                }).then((data) => {
+                    if (!data.success) {
+                        Swal.fire({
+                            text: data.message ||
+                                "Server error (500): Something went wrong on our end. Please try again later.",
+                            title: "Error",
+                            icon: "error",
+                        });
+                    };
+
+                    const bookings = data.bulkBookings;
+                    const table = $('#addedBookings').DataTable();
+                    table.clear();
+
+                    bookings.forEach(info => {
+                        table.row.add([
+                            info.startDate,
+                            info.endDate,
+                            info.bookingType,
+                            info.bookingCount,
+                            info.salesAmount
+                        ]);
+                    });
+                    table.draw();
+                }).catch((error) => {
+                    Swal.fire({
+                        text: error.message || 'An error occured',
+                        title: 'Error',
+                        icon: 'error'
+                    });
+                })
+        });
     </script>
 
 
     <!-- Flatpickr Link -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-    flatpickr('#repPeriod', {
-        mode: "range",
-        minDate: null,
-        maxDate: "today",
-        dateFormat: "F d, Y"
-    });
+        flatpickr('#repPeriod', {
+            mode: "range",
+            minDate: null,
+            maxDate: "today",
+            dateFormat: "M. d, Y"
+        });
     </script>
 </body>
 
