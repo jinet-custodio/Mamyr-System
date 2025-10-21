@@ -75,46 +75,40 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
             </nav>
         <?php endif; ?>
         <main>
-            <!-- Save button, only visible if page is on edit mode -->
             <?php if ($editMode): ?>
                 <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
             <?php endif; ?>
+
             <?php
             $getWebContent = "SELECT * FROM websitecontent WHERE sectionName = 'Blog'";
             $result = mysqli_query($conn, $getWebContent);
 
             $contentMap = [];
             $blogPosts = [];
-            $imagesByContentID = [];
+            $imageMap = [];
 
             $getImagesQuery = "SELECT contentID, imageData, altText FROM websitecontentimage ORDER BY imageOrder ASC";
             $imageResult = mysqli_query($conn, $getImagesQuery);
 
             if ($imageResult && mysqli_num_rows($imageResult) > 0) {
                 while ($imgRow = mysqli_fetch_assoc($imageResult)) {
-                    $cid = $imgRow['contentID'];
-                    $imagesByContentID[$cid][] = $imgRow;
+                    $imageMap[$imgRow['contentID']] = $imgRow;
                 }
             }
 
             while ($row = mysqli_fetch_assoc($result)) {
                 $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
-                $contentID = $row['contentID'];
-
                 $contentMap[$cleanTitle] = $row['content'];
 
                 if (preg_match('/^BlogPost(\d+)-(.*)$/', $cleanTitle, $matches)) {
                     $postNumber = 'BlogPost' . $matches[1];
                     $field = $matches[2];
-
                     $blogPosts[$postNumber][$field] = $row['content'];
-
-                    if (!isset($blogPosts[$postNumber]['contentID'])) {
-                        $blogPosts[$postNumber]['contentID'] = $contentID;
-                    }
+                    $blogPosts[$postNumber]['contentID'] = $row['contentID'];
                 }
             }
 
+            // Sort posts by date (newest first)
             uasort($blogPosts, function ($a, $b) {
                 $dateA = isset($a['EventDate']) ? $a['EventDate'] : '0000-00-00';
                 $dateB = isset($b['EventDate']) ? $b['EventDate'] : '0000-00-00';
@@ -122,193 +116,126 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
             });
 
 
-            $firstPost = reset($blogPosts);
+            $defaultImage = "../Assets/Images/no-picture.jpg";
             ?>
 
-
             <div class="titleContainer">
-                <h4 class="title" id="maintext">
-                    <?= htmlspecialchars($contentMap['MainTitle'] ?? 'Main Title Not Found') ?></h4>
+                <h4 class="titlemain" id="maintext">
+                    <?= htmlspecialchars($contentMap['MainTitle'] ?? 'Main Title Not Found') ?>
+                </h4>
                 <h4><?= htmlspecialchars($contentMap['Sub-title'] ?? '') ?></h4>
             </div>
 
             <div class="blogmain">
                 <div class="title">
-                    <h5>Recent blog posts</h5>
+                    <h5>Recent Blog Posts</h5>
                 </div>
+
                 <div class="posts">
-                    <!-- Featured Post -->
-                    <?php if (!empty($firstPost)): ?>
-                        <div class="featured">
-                            <div class="featuredpost">
-                                <?php
-                                $featuredContentID = $firstPost['contentID'] ?? null;
+                    <?php
+                    $defaultImage = "../../Assets/Images/no-picture.jpg";
+                    $index = 0;
+                    ?>
 
-                                if ($featuredContentID && isset($imagesByContentID[$featuredContentID])) {
-                                    $imgData = $imagesByContentID[$featuredContentID][0]['imageData'];
-                                    $featuredAlt = $imagesByContentID[$featuredContentID][0]['altText'] ?? 'Blog image';
-                                    $finfo = finfo_open();
-                                    $mimeType = finfo_buffer($finfo, $imgData, FILEINFO_MIME_TYPE);
-                                    finfo_close($finfo);
-
-                                    $featuredImage = base64_encode($imgData);
-                                    echo "<img src='data:$mimeType;base64,$featuredImage' alt='" . htmlspecialchars($featuredAlt) . "' />";
-                                } else {
-                                    echo "<img src='../Assets/Images/no-picture.jpg' alt='Default blog image'>";
-                                }
-                                ?>
-
-
-                                <div class="desc">
-                                    <div class="eventType">
-                                        <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
-                                            <p style="color: rgb(43, 43, 43);">
-                                                <?= htmlspecialchars($firstPost['EventType']) ?> •
-                                                <?= htmlspecialchars(date("j F Y", strtotime($firstPost['EventDate']))) ?>
-                                            </p>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="blogHeading">
-                                        <?php if (isset($firstPost['EventHeader'])): ?>
-                                            <h4><?= htmlspecialchars($firstPost['EventHeader']) ?></h4>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="blogDescription">
-                                        <p> <?= htmlspecialchars($firstPost['Content'] ?? '') ?> </p>
-                                    </div>
-                                    <button id="featuredReadmore" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalFeatured">
-                                        Read More
-                                    </button>
-
-                                </div>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Other Posts -->
-                    <div class="others container">
+                    <?php foreach ($blogPosts as $postID => $post): ?>
                         <?php
-                        $isFirst = true;
-                        foreach ($blogPosts as $postID => $post) {
-                            if ($isFirst) {
-                                $isFirst = false;
-                                continue;
-                            }
+                        $contentID = $post['contentID'] ?? null;
+                        $imagePath = $defaultImage;
+                        $altText = 'Blog image';
 
-                            $contentID = $post['contentID'] ?? null;
+                        $lookupKey = null;
+                        if (!empty($post['contentID']) && isset($imageMap[$post['contentID']])) {
+                            $lookupKey = $post['contentID'];
+                        } elseif (isset($imageMap[$postID])) {
+                            $lookupKey = $postID;
+                        }
+
+                        if ($lookupKey !== null) {
+                            $imageFile = $imageMap[$lookupKey]['imageData'];
+                            $tempPath = "../Assets/Images/blogposts/" . $imageFile;
+                            echo "<!-- Debug: imagePath = $tempPath -->";
+                            if (file_exists($tempPath)) {
+                                $imagePath = $tempPath;
+                            }
+                            $altText = $imageMap[$lookupKey]['altText'] ?? 'Blog image';
+                        }
                         ?>
-                            <div class="post row">
-                                <div class="othersImg col-md-5">
-                                    <?php
-                                    if ($contentID && isset($imagesByContentID[$contentID])) {
-                                        $imgData = $imagesByContentID[$contentID][0]['imageData'];
-                                        $finfo = finfo_open();
-                                        $mimeType = finfo_buffer($finfo, $imgData, FILEINFO_MIME_TYPE);
-                                        $base64Image = base64_encode($imgData);
-                                        echo "<img src='data:$mimeType;base64,$base64Image' alt='" . htmlspecialchars($altText) . "' />";
-                                    } else {
-                                        echo "<img src='../Assets/Images/no-picture.jpg' alt='Default blog image'>";
-                                    }
-                                    ?>
-                                </div>
-                                <div class="othersDesc col-md-7">
-                                    <div class="othersEventType">
-                                        <?php if (isset($post['EventType'], $post['EventDate'])): ?>
-                                            <p style="color: rgb(43, 43, 43);">
+
+                        <?php if ($index === 0): ?>
+                            <!-- ✅ FEATURED POST (LEFT SIDE) -->
+                            <div class="featured">
+                                <div class="featuredpost">
+                                    <img src="<?= htmlspecialchars($imagePath) ?>"
+                                        alt="<?= htmlspecialchars($altText) ?>"
+                                        class="img-fluid" />
+
+                                    <div class="desc">
+                                        <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
+                                            <p class="eventType text-muted">
                                                 <?= htmlspecialchars($post['EventType']) ?> •
                                                 <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
                                             </p>
                                         <?php endif; ?>
+
+                                        <div class="blogHeading">
+                                            <h4><?= htmlspecialchars($post['EventHeader'] ?? '') ?></h4>
+                                        </div>
+                                        <div class="blogDescription">
+                                            <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
+                                        </div>
+
+                                        <button class="btn btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
+                                            Read More
+                                        </button>
                                     </div>
-                                    <div class="othersHeading">
-                                        <?php if (isset($post['EventHeader'])): ?>
-                                            <h4><?= htmlspecialchars($post['EventHeader']) ?></h4>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <?php if ($index === 1): ?>
+                                <div class="others">
+                                <?php endif; ?>
+
+                                <div class="post row align-items-start mb-3">
+                                    <div class="col-md-5 othersImg">
+                                        <img src="<?= htmlspecialchars($imagePath) ?>"
+                                            alt="<?= htmlspecialchars($altText) ?>"
+                                            class="img-fluid" />
+                                    </div>
+                                    <div class="col-md-7 othersDesc">
+                                        <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
+                                            <p class="othersEventType text-muted">
+                                                <?= htmlspecialchars($post['EventType']) ?> •
+                                                <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                            </p>
                                         <?php endif; ?>
-                                    </div>
-                                    <div class="othersDescription">
-                                        <?= htmlspecialchars($post['Content'] ?? '') ?>
-                                    </div>
-                                    <button class="btn btn-primary mt-3 othersReadmore" style="display:flex;align-self:flex-end;text-align:center" data-bs-toggle="modal" data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
-                                        Read More
-                                    </button>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
 
-                    <!-- Modal for featured post -->
-                    <div class="modal fade" id="modalFeatured" tabindex="-1" aria-labelledby="modalFeaturedLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                            <div class="modal-content">
+                                        <div class="othersHeading">
+                                            <h4><?= htmlspecialchars($post['EventHeader'] ?? '') ?></h4>
+                                        </div>
+                                        <div class="othersDescription">
+                                            <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
+                                        </div>
 
-                                <div class="modal-header py-4">
-                                    <h5 class="modal-title" id="modalFeaturedLabel">
-                                        <?= htmlspecialchars($firstPost['EventHeader'] ?? 'Blog Post') ?>
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-
-                                <div class="modal-body">
-
-                                    <?php
-
-                                    $featuredContentID = $firstPost['contentID'] ?? null;
-                                    $featuredImage = '../../Assets/Images/no-picture.jpg'; // default fallback
-                                    $featuredAlt = 'Blog image';
-
-                                    if ($featuredContentID && isset($imagesByContentID[$featuredContentID][0])) {
-                                        $imgData = $imagesByContentID[$featuredContentID][0]['imageData'];
-                                        $featuredAlt = $imagesByContentID[$featuredContentID][0]['altText'] ?? 'Blog image';
-                                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                                        $mimeType = finfo_buffer($finfo, $imgData);
-                                        finfo_close($finfo);
-                                        $featuredImage = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
-                                    }
-                                    ?>
-
-                                    <img src="<?= htmlspecialchars($featuredImage) ?>" alt="<?= htmlspecialchars($featuredAlt) ?>" class="img-fluid mb-3" />
-                                    <?php if (isset($firstPost['EventType'], $firstPost['EventDate'])): ?>
-                                        <p class="text-muted">
-                                            <?= htmlspecialchars($firstPost['EventType']) ?> • <?= htmlspecialchars(date("j F Y", strtotime($firstPost['EventDate']))) ?>
-                                        </p>
-
-                                    <?php endif; ?>
-                                    <div class="blog-full-content">
-                                        <?= nl2br(htmlspecialchars($firstPost['Content'] ?? '')) ?>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button class="btn btn-primary mb-3 othersReadmore"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
+                                            Read More
+                                        </button>
                                     </div>
                                 </div>
 
-                            </div>
-                        </div>
-                    </div>
+                                <?php if ($index === count($blogPosts) - 1): ?>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
 
-                    <!-- Modal for other posts -->
-                    <?php foreach ($blogPosts as $postID => $post): ?>
-                        <?php
-                        $contentID = $post['contentID'] ?? null;
-                        $image = null;
-                        $alt = 'Blog image';
-
-                        if ($contentID && isset($imagesByContentID[$contentID][0])) {
-                            $imgData = $imagesByContentID[$contentID][0]['imageData'];
-                            $alt = $imagesByContentID[$contentID][0]['altText'] ?? 'Blog image';
-                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                            $mimeType = finfo_buffer($finfo, $imgData);
-                            finfo_close($finfo);
-                            $base64Image = 'data:' . $mimeType . ';base64,' . base64_encode($imgData);
-                        } else {
-                            $base64Image = '../../Assets/Images/no-picture.jpg'; // fallback
-                        }
-                        ?>
-
-                        <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1" aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
+                        <!-- MODAL for each post -->
+                        <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1"
+                            aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                 <div class="modal-content">
-
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="modalLabel<?= htmlspecialchars($postID) ?>">
                                             <?= htmlspecialchars($post['EventHeader'] ?? 'Blog Post') ?>
@@ -317,40 +244,45 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                                     </div>
 
                                     <div class="modal-body">
-                                        <!-- Blog Image -->
-                                        <img src="<?= htmlspecialchars($base64Image) ?>" alt="<?= htmlspecialchars($alt) ?>" class="img-fluid mb-3" />
-                                        <!-- Event Info -->
-                                        <?php if (isset($post['EventType'], $post['EventDate'])): ?>
+                                        <img src="<?= htmlspecialchars($imagePath) ?>"
+                                            alt="<?= htmlspecialchars($altText) ?>"
+                                            class="img-fluid mb-3" />
+
+                                        <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
                                             <p class="text-muted">
-                                                <?= htmlspecialchars($post['EventType']) ?> • <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                                <?= htmlspecialchars($post['EventType']) ?> •
+                                                <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
                                             </p>
                                         <?php endif; ?>
-                                        <!-- Full Content -->
+
                                         <div class="blog-full-content">
                                             <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
+
+                        <?php $index++; ?>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-
             </div>
-    </div>
-    </main>
 
-    <?php if (!$editMode) {
-        include 'footer.php';
-        include 'loader.php';
-    } else {
-        include 'loader.php';
-    } ?>
+        </main>
+
+
+
+        <?php if (!$editMode) {
+            include 'footer.php';
+            include 'loader.php';
+        } else {
+            include 'loader.php';
+        } ?>
     </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"

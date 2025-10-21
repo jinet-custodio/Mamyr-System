@@ -123,7 +123,11 @@ INSERT INTO `websitecontentimage` (`WCImageID`, `contentID`, `imageData`, `altTe
 (47, 54, 'hotel2.jpg', 'Hotel Pic 2', 2, current_timestamp()),
 (48, 54, 'hotel3.jpg', 'Hotel Pic 3', 3, current_timestamp()),
 (49, 54, 'hotel4.jpg', 'Hotel Pic 4', 4, current_timestamp()),
-(50, 54, 'hotel5.jpeg', 'Hotel Pic 5', 5, current_timestamp());
+(50, 54, 'hotel5.jpeg', 'Hotel Pic 5', 5, current_timestamp()),
+(17,'image.png','Blog Image 1',1, current_timestamp()), 
+(21,'img2.png','Blog Image 2',1, current_timestamp()), 
+(25,'img3.png','Blog Image 3',1, current_timestamp()), 
+(29,'img4.png','Blog Image 2',1, current_timestamp());
 
 
 -- Assets/Images/landingPage/ name
