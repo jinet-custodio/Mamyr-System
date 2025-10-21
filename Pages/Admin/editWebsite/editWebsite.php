@@ -153,44 +153,39 @@ $userRole = $_SESSION['userRole'];
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addNewBlogPost">Add a New Blog Post</h5>
+                    <h5 class="modal-title">Add a New Blog Post</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
-                    <div class="input-container">
-                        <label for="eventName">Type of Event</label>
-                        <input type="text" class="form-control" id="eventName" name="eventName" required>
-                    </div>
-                    <div class="input-container">
-                        <label for="eventDate">Date</label>
-                        <input type="date" class="form-control" id="eventDate" name="eventDate" required>
-                    </div>
-                    <div class="input-container">
-                        <label for="eventTitle">Title/Header</label>
-                        <input type="text" class="form-control" id="eventTitle" name="eventTitle">
-                    </div>
-                    <div class="input-container">
-                        <label for="eventDesc">Event Description</label>
-                        <textarea class="form-control" name="eventDesc" id="eventDesc"> </textarea>
-                    </div>
-                    <div class="input-container">
-                        <label for="eventImage">Event Image</label>
-                        <input type="file" class="form-control" name="eventImage" id="eventImage">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="uploadPost" name="addResortService">Save</button>
+                    <form id="blogPostForm" enctype="multipart/form-data">
+                        <div class="input-container mb-2">
+                            <label for="eventName">Type of Event</label>
+                            <input type="text" class="form-control" id="eventName" name="eventName" required>
+                        </div>
+                        <div class="input-container mb-2">
+                            <label for="eventDate">Date</label>
+                            <input type="date" class="form-control" id="eventDate" name="eventDate" required>
+                        </div>
+                        <div class="input-container mb-2">
+                            <label for="eventTitle">Title/Header</label>
+                            <input type="text" class="form-control" id="eventTitle" name="eventTitle" required>
+                        </div>
+                        <div class="input-container mb-2">
+                            <label for="eventDesc">Event Description</label>
+                            <textarea class="form-control" name="eventDesc" id="eventDesc" required></textarea>
+                        </div>
+                        <div class="input-container mb-2">
+                            <label for="eventImage">Event Image</label>
+                            <input type="file" class="form-control" name="eventImage" id="eventImage" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Save</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
     <!-- </form> -->
-
-
-
-
-
 
     <!-- Bootstrap Link -->
     <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -320,18 +315,68 @@ $userRole = $_SESSION['userRole'];
                 confirmButtonText: "Got it!"
             });
         });
+    </script>
 
-        // const defaults = document.querySelectorAll(".default");
-        // defaults.forEach(defaultPic => {
-        //     defaultPic.addEventListener("click", function() {
-        //         Swal.fire({
-        //             title: "No images ",
-        //             text: "Texts iand images with red borders can be edited. Please click 'Save Changes' once you're satisfied with your edits.",
-        //             icon: "info",
-        //             confirmButtonText: "Got it!"
-        //         });
-        //     });
-        // });
+
+    <script>
+        document.getElementById("blogPostForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            let form = e.target;
+            let formData = new FormData(form);
+
+            fetch("../../../Function/Admin/editWebsite/addBlogPost.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(text => {
+                    console.log("Raw response from PHP:", text);
+
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                        console.log("Parsed JSON:", data);
+                    } catch (e) {
+                        console.error("JSON parse error:", e);
+                        alert("⚠️ PHP returned invalid JSON. Check console for full output.");
+                        return; // Stop execution if JSON parsing fails
+                    }
+
+                    if (data.success) {
+                        const modalEl = document.getElementById("NewBlogPost");
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        modal.hide();
+
+                        // Clear form
+                        form.reset();
+
+                        // SweetAlert confirmation
+                        Swal.fire({
+                            title: "Post Successful",
+                            text: "You have successfully added a new blog post!",
+                            icon: "success",
+                            confirmButtonText: "Okay"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // 🔁 Refresh the page after clicking "Okay"
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: data.message || "An unknown error occurred.",
+                            icon: "error",
+                            confirmButtonText: "Close"
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error("Fetch error:", err);
+                    alert("An unexpected error occurred while uploading the post.");
+                });
+        });
     </script>
 
 </body>

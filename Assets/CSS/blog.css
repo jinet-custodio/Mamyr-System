@@ -74,57 +74,63 @@ main {
 
 .titleContainer {
   width: 70%;
-  margin: 9vw auto 2vw auto;
+  margin: 5vw auto 2vw auto;
   text-align: center;
 }
 
 .titleContainer h4,
 .descriptionText {
-  font-size: 2vw !important;
+  font-size: var(--font-size-xl) !important;
 }
 
 #maintext {
-  font-size: 3vw !important;
+  text-align: center;
+  font-size: var(--font-size-xxl) !important;
+}
+
+.title {
+  margin: 0 auto;
+  width: 90%;
 }
 
 .title h5 {
   font-size: 1.7vw !important;
 }
 
-.posts,
-.title {
-  width: 95%;
+.posts {
+  width: 90%;
   margin: 0 auto;
   display: flex;
 }
 
 .blogHeading h4 {
   font-weight: 800 !important;
-  font-size: 2.4vw;
+  font-size: 2vw;
 }
 
 .featured {
-  width: 50%;
+  width: 45%;
 }
 
 .featuredpost {
   display: grid;
   width: 100%;
-  padding: 1vw;
+  padding: 0 1vw;
 }
 
 .blogDescription,
 .eventType p {
-  font-size: 1.5vw;
+  font-size: 1.3vw;
 }
 
 .featuredpost img {
-  width: 45vw;
+  width: 30vw;
+  margin: 0 auto !important;
 }
 
 .others {
-  display: grid;
-  width: 50%;
+  display: grid !important;
+  width: 54%;
 }
 .othersImg {
   object-fit: contain;
@@ -148,12 +154,12 @@ main {
 }
 
 .othersHeading h4 {
-  font-size: 1.6vw !important;
+  font-size: 1.2vw !important;
   font-weight: 800;
 }
 
 .othersDescription {
-  font-size: 1.2vw;
+  font-size: 1.1vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -229,7 +235,6 @@ input.headerEdit {
 }
 
 .text-muted {
-  text-align: center;
   margin-bottom: 0;
 }
 
