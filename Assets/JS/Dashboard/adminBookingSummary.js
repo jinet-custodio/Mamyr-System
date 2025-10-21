@@ -23,6 +23,10 @@ function filteredBookingSummary(dateFilterValue, statusFilterValue) {
 
       let total = 0;
 
+      document.getElementById("resort-number").textContent = 0;
+      document.getElementById("hotel-number").textContent = 0;
+      document.getElementById("event-number").textContent = 0;
+
       if (bookings.length > 0) {
         bookings.forEach((item) => {
           let type = item.bookingType.toLowerCase();

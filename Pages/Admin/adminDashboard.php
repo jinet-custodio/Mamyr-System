@@ -11,7 +11,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
 require_once '../../Function/Helpers/userFunctions.php';
 addToAdminTable($conn);
 changeToDoneStatus($conn);
-
+noPayment24hrs($conn);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 

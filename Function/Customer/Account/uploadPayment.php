@@ -22,6 +22,12 @@ if (isset($_POST['submitDownpaymentImage'])) {
 
     $imageFileName = mysqli_real_escape_string($conn, $_POST['imageFileName']) ?? '';
 
+    $ext = ['jpg', 'jpeg', 'png'];
+
+    $_SESSION['bookingID'] = $bookingID;
+    $_SESSION['payment-amount'] = $paymentAmount;
+    $_SESSION['bookingType'] = $bookingType;
+
     if (empty($imageFileName)) {
         if (isset($_FILES['downpaymentPic']) && is_uploaded_file($_FILES['downpaymentPic']['tmp_name'])) {
             if ($_FILES['downpaymentPic']['size'] <= $imageMaxSize) {
@@ -30,6 +36,13 @@ if (isset($_POST['submitDownpaymentImage'])) {
                 $imageFileName = $randomNum . $_FILES['downpaymentPic']['name'];
                 $storeImage = $storeProofPath . $imageFileName;
                 move_uploaded_file($imagePath,  $storeImage);
+                $imageExt = pathinfo($imagePath, PATHINFO_EXTENSION);
+
+                if (!in_array($imageExt, $ext)) {
+                    $_SESSION['tempImage'] = $imageFileName;
+                    header("Location: ../../../Pages/Account/reservationSummary.php?action=extError");
+                    exit();
+                }
             } else {
                 $_SESSION['tempImage'] = $imageFileName;
                 header("Location: ../../../Pages/Account/reservationSummary.php?action=imageSize");
@@ -41,9 +54,6 @@ if (isset($_POST['submitDownpaymentImage'])) {
             exit();
         }
     }
-    $_SESSION['bookingID'] = $bookingID;
-    $_SESSION['payment-amount'] = $paymentAmount;
-    $_SESSION['bookingType'] = $bookingType;
 
 
     if ($paymentAmount < $downpayment) {
@@ -99,6 +109,18 @@ if (isset($_POST['submitDownpaymentImage'])) {
             header('Location: ../../../../../Pages/Account/reservationSummary.php?action=error');
             exit();
         }
+
+        $updateUnavailableService = $conn->prepare("UPDATE `serviceunavailabledate` SET `expiresAt`= NULL WHERE `bookingID`= ?");
+        $updateUnavailableService->bind_param('i', $bookingID);
+
+        if (!$updateUnavailableService->execute()) {
+            $conn->rollback();
+            throw new Exception('Error updating service expiration');
+            error_log('Error: ' . $updateUnavailableService->error);
+            header('Location: ../../../../../Pages/Account/reservationSummary.php?action=error');
+            exit();
+        }
+
         $conn->commit();
         unset($_SESSION['payment-amount']);
         unset($_SESSION['bookingType']);

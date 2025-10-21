@@ -412,11 +412,11 @@ if (isset($_POST['bookRates'])) {
             }
         }
 
-        $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?,?,?,?)");
+        $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(bookingID, resortServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?,?,?,?,?)");
         if (!empty($resortServiceIDs)) {
             for ($i = 0; $i < count($resortServiceIDs); $i++) {
                 $resortServiceID = $resortServiceIDs[$i];
-                $insertUnavailableService->bind_param("isss", $resortServiceID, $scheduledStartDate, $scheduledEndDate, $expiresAt);
+                $insertUnavailableService->bind_param("iisss", $bookingID, $resortServiceID, $scheduledStartDate, $scheduledEndDate, $expiresAt);
                 if (!$insertUnavailableService->execute()) {
                     $conn->rollback();
                     throw new Exception('Error :' . $insertUnavailableService->error);

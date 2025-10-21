@@ -1023,6 +1023,17 @@ require_once '../../Function/Helpers/statusFunctions.php';
 
                 document.querySelector('.custom-file-button').style.border = '2px solid red';
             })
+        } else if (paramValue === 'extError') {
+            Swal.fire({
+                title: 'Oops',
+                text: `Invalid file type. Please upload an image (JPG, JPEG, PNG, GIF)`,
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            }).then((result) => {
+                const paymentModal = document.getElementById('gcashPaymentModal');
+                const modal = new bootstrap.Modal(paymentModal);
+                modal.show();
+            })
         }
 
         document.getElementById('payment-amount').addEventListener('input', () => {

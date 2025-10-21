@@ -16,6 +16,13 @@
   src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins";
+}
+
 .backBtnContainer {
   margin: 1vw;
 }
@@ -43,7 +50,7 @@
   display: flex;
   gap: 5rem;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
 }
 
 .leftSide,
@@ -112,25 +119,27 @@ label {
   margin-bottom: 2rem;
 }
 
-.bsButtons {
+.button-container {
   display: flex;
   justify-content: center;
   gap: 2rem;
-  margin-top: 2rem;
+  margin: auto;
+  margin-top: 1.5rem;
+  width: 50%;
 }
 
 button {
   width: 30%;
 }
 
-.addButton {
+/* .addButton {
   margin-top: 0.5rem;
 }
 
 #addBooking {
   display: block;
   margin: auto;
-}
+}  */
 
 thead {
   font-family: "Lora";
@@ -161,7 +170,7 @@ th {
 }
 
 .tableContainer {
-  margin-top: 3rem;
+  margin: 3rem 0 1.5rem 0;
 }
 
 .dt-paging-button {

@@ -173,11 +173,11 @@ if (isset($_POST['hotelBooking'])) {
         $insertBookingNotificationRequest->close();
 
         $expiresAt = 'NULL';
-        $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?,?,?,?)");
+        $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(bookingID,resortServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?,?,?,?,?)");
         if (!empty($resortServiceIDs)) {
             for ($i = 0; $i < count($resortServiceIDs); $i++) {
                 $resortServiceID = $resortServiceIDs[$i];
-                $insertUnavailableService->bind_param("isss", $resortServiceID, $checkInDate, $checkOutDate, $expiresAt);
+                $insertUnavailableService->bind_param("iisss", $bookingID, $resortServiceID, $checkInDate, $checkOutDate, $expiresAt);
                 if (!$insertUnavailableService->execute()) {
                     $conn->rollback();
                     throw new Exception('Error :' . $insertUnavailableService->error);
