@@ -98,6 +98,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 </head>
 
@@ -145,12 +147,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -165,9 +168,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <?php if ($userRole !== 2): ?>
-                        <a class="nav-link active" href="dashboard.php"> Home</a>
+                    <a class="nav-link active" href="dashboard.php"> Home</a>
                     <?php else: ?>
-                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                    <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                     <?php endif; ?>
                 </li>
                 <li class="nav-item dropdown">
@@ -185,9 +188,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <a class="nav-link" href="blog.php">Blog</a>
                 </li>
                 <?php if ($userRole !== 2): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="partnerApplication.php">Be Our Partner</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="partnerApplication.php">Be Our Partner</a>
+                </li>
                 <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">About</a>
@@ -197,7 +200,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 </li>
 
                 <li class="nav-item">
-                    <a href="../../Function/logout.php" class="btn btn-outline-danger nav-link" id="logOutBtn">Log Out</a>
+                    <a href="../../Function/logout.php" class="btn btn-outline-danger nav-link" id="logOutBtn">Log
+                        Out</a>
                 </li>
 
             </ul>
@@ -209,30 +213,38 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     ?>
 
     <div class="custom-container">
-        <div class="topSec">
-            <div class="titleContainer">
-                <div class="mamyrTitle">
-                    <h1 class="welcome">Welcome to Mamyr,</h1>
-                </div>
-                <div class="nameOfUserContainer">
-                    <h1 class="nameOfUser"><?= ucfirst($firstName) ?></h1>
+        <section class="topSec">
+            <div class="topLeft">
+                <h1 class="welcome">Welcome to Mamyr Resort and Events Place, <?= ucfirst($firstName) ?>!</h1>
+                <h5 class="subtext">We’re excited to welcome you to Mamyr Resort! Whether you're here to unwind,
+                    explore, or enjoy some quality time, we’re ready to make your stay memorable. Book now and start
+                    your relaxation journey with us today!</h5>
+
+                <div class="topBtn-container">
+                    <a href="bookNow.php" class="btn btn-light">Book Now</a>
+                    <a href="amenities.php" class="btn btn-light">Browse Amenities</a>
                 </div>
             </div>
-            <div class="calendar-container">
-                <div class="legends">
-                    <div class="legend btn btn-outline-dark">
-                        <i class="fa-solid fa-circle" style="color: #dc3545;"></i> Event
+
+            <div class="topRight">
+
+
+                <div class="card calendar-card">
+                    <div class="legends">
+                        <div class="legend ">
+                            <i class="fa-solid fa-circle" style="color: #FF9999"></i> Event
+                        </div>
+                        <div class="legend ">
+                            <i class="fa-solid fa-circle" style="color: #ffdb6d;"></i> Resort/Hotel
+                        </div>
+                        <div class="legend ">
+                            <i class="fa-solid fa-circle" style="color: #b3e0f2 ;"></i> Resort Entrance
+                        </div>
                     </div>
-                    <div class="legend btn btn-outline-dark">
-                        <i class="fa-solid fa-circle" style="color: #ffc107;"></i> Resort/Hotel
-                    </div>
-                    <div class="legend btn btn-outline-dark">
-                        <i class="fa-solid fa-circle" style="color: #007bff;"></i> Resort Entrance
-                    </div>
+                    <div id="calendar"></div>
                 </div>
-                <div id="calendar"></div>
             </div>
-        </div>
+        </section>
 
 
         <section class="middle-container">
@@ -265,19 +277,19 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
                     <?php if (isset($imageMap['BookNow'])): ?>
-                        <?php foreach ($imageMap['BookNow'] as $index => $img):
+                    <?php foreach ($imageMap['BookNow'] as $index => $img):
                             $imagePath = "../../Assets/Images/landingPage/" . $img['imageData'];
                             $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                         ?>
-                            <div class="swiper-slide">
-                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class="editable-img d-block" style="cursor: pointer;">
-                            </div>
-                        <?php endforeach; ?>
+                    <div class="swiper-slide">
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="editable-img d-block" style="cursor: pointer;">
+                    </div>
+                    <?php endforeach; ?>
                     <?php else: ?>
-                        <div class="card-img">
-                            <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                        </div>
+                    <div class="card-img">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
+                    </div>
                     <?php endif; ?>
 
                 </div>
@@ -385,52 +397,52 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const businessPartnerNavLink = document.getElementById("businessPartnerNav");
-            const userRoleValue = document.getElementById("userRole").value;
+    document.addEventListener("DOMContentLoaded", function() {
+        const businessPartnerNavLink = document.getElementById("businessPartnerNav");
+        const userRoleValue = document.getElementById("userRole").value;
 
-            if (userRoleValue === "2") {
-                businessPartnerNavLink.style.display = "none";
-            }
-        });
+        if (userRoleValue === "2") {
+            businessPartnerNavLink.style.display = "none";
+        }
+    });
     </script>
 
 
@@ -438,55 +450,55 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('action');
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('action');
 
-        if (paramValue === 'successLogin') {
-            Swal.fire({
-                timer: 1000,
-                showConfirmButton: false,
-                title: "Login Successful!",
-                text: "Welcome back! You have successfully logged in.",
-                icon: "success",
-            })
-        };
+    if (paramValue === 'successLogin') {
+        Swal.fire({
+            timer: 1000,
+            showConfirmButton: false,
+            title: "Login Successful!",
+            text: "Welcome back! You have successfully logged in.",
+            icon: "success",
+        })
+    };
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <!-- Initialize Swiper -->
     <script>
-        window.addEventListener("load", function() {
-            new Swiper(".mySwiper", {
-                loop: true,
-                spaceBetween: 30,
-                slidesPerView: 3,
-                breakpoints: {
-                    0: {
-                        slidesPerView: 1,
-                        spaceBetween: 10
-                    },
-                    600: {
-                        slidesPerView: 2,
-                        spaceBetween: 20
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 30
-                    },
+    window.addEventListener("load", function() {
+        new Swiper(".mySwiper", {
+            loop: true,
+            spaceBetween: 30,
+            slidesPerView: 3,
+            breakpoints: {
+                0: {
+                    slidesPerView: 1,
+                    spaceBetween: 10
                 },
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true
+                600: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
                 },
-            });
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 30
+                },
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true
+            },
         });
+    });
     </script>
 
 
@@ -494,102 +506,105 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        const lat = 15.05073200154005;
-        const lon = 121.0218658098424;
+    const lat = 15.05073200154005;
+    const lon = 121.0218658098424;
 
-        const map = L.map('map').setView([lat, lon], 13);
+    const map = L.map('map').setView([lat, lon], 13);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-
-        const customIcon = L.icon({
-            iconUrl: '../../Assets/Images/MamyrLogo.png',
-            iconSize: [100, 25], // Size of the logo 
-            iconAnchor: [25, 50], // Anchor point of the icon 
-            popupAnchor: [0, -50] // Popup anchor point 
-        });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
 
-        L.marker([lat, lon], {
-                icon: customIcon
-            }).addTo(map)
-            .bindPopup('Mamyr Resort and Events Place is Located Here!')
-            .openPopup();
+    const customIcon = L.icon({
+        iconUrl: '../../Assets/Images/MamyrLogo.png',
+        iconSize: [100, 25], // Size of the logo 
+        iconAnchor: [25, 50], // Anchor point of the icon 
+        popupAnchor: [0, -50] // Popup anchor point 
+    });
+
+
+    L.marker([lat, lon], {
+            icon: customIcon
+        }).addTo(map)
+        .bindPopup('Mamyr Resort and Events Place is Located Here!')
+        .openPopup();
     </script>
 
     <script>
-        async function getRatings() {
-            const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
-            const data = await response.json();
+    async function getRatings() {
+        const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
+        const data = await response.json();
 
-            const resortBar = document.getElementById('resort-bar');
-            resortBar.style.width = data.resortPercent + '%';
-            resortBar.setAttribute('ari-valuenow', data.resortPercent)
-            document.getElementById('resort-rating-value').textContent = data.resortRating;
+        const resortBar = document.getElementById('resort-bar');
+        resortBar.style.width = data.resortPercent + '%';
+        resortBar.setAttribute('ari-valuenow', data.resortPercent)
+        document.getElementById('resort-rating-value').textContent = data.resortRating;
 
-            const hotelBar = document.getElementById('hotel-bar');
-            hotelBar.style.width = data.hotelPercent + '%';
-            hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
-            document.getElementById('hotel-rating-value').textContent = data.hotelRating;
+        const hotelBar = document.getElementById('hotel-bar');
+        hotelBar.style.width = data.hotelPercent + '%';
+        hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
+        document.getElementById('hotel-rating-value').textContent = data.hotelRating;
 
-            const eventBar = document.getElementById('event-bar');
-            eventBar.style.width = data.eventPercent + '%';
-            eventBar.setAttribute('ari-valuenow', data.eventPercent)
-            document.getElementById('event-rating-value').textContent = data.eventRating;
+        const eventBar = document.getElementById('event-bar');
+        eventBar.style.width = data.eventPercent + '%';
+        eventBar.setAttribute('ari-valuenow', data.eventPercent)
+        document.getElementById('event-rating-value').textContent = data.eventRating;
 
-            document.getElementById('overall-rating-value').textContent = data.overAllRating;
-            const starContainer = document.getElementById('star-container');
-            for (let i = 1; i <= 5; i++) {
-                if (i <= Math.floor(data.overAllRating)) {
-                    starContainer.innerHTML += '<i class="bi bi-star-fill text-warning"></i>';
-                } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
-                    starContainer.innerHTML += '<i class="bi bi-star-half text-warning"></i>';
-                } else {
-                    starContainer.innerHTML += '<i class="bi bi-star text-warning"></i>';
-                }
+        document.getElementById('overall-rating-value').textContent = data.overAllRating;
+        const starContainer = document.getElementById('star-container');
+        for (let i = 1; i <= 5; i++) {
+            if (i <= Math.floor(data.overAllRating)) {
+                starContainer.innerHTML += '<i class="bi bi-star-fill text-warning"></i>';
+            } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
+                starContainer.innerHTML += '<i class="bi bi-star-half text-warning"></i>';
+            } else {
+                starContainer.innerHTML += '<i class="bi bi-star text-warning"></i>';
             }
         }
+    }
 
-        getRatings();
-        setInterval(getRatings, 300000);
+    getRatings();
+    setInterval(getRatings, 300000);
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: '../../Function/fetchUserBookings.php',
-                eventsSet: function(events) {
-                    console.log('Fetched events:', events);
-                    events.forEach(event => {
-                        console.log(`Title: ${event.title}, Start: ${event.startStr}`);
-                    });
-                },
-                eventClick: function(info) {
-                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
-                },
-                eventDidMount: function(info) {
-                    if (info.event.allDay) {
-                        const dateStr = info.event.startStr;
-                        const dayCell = document.querySelector(`.fc-daygrid-day[data-date="${dateStr}"]`);
-                        if (dayCell) {
-                            let baseColor = info.event.backgroundColor || info.event.extendedProps.color || '#dc3545';
-                            dayCell.style.backgroundColor = baseColor;
-                            dayCell.style.color = '#000';
-                        }
-                        if (info.el) {
-                            info.el.style.display = 'none';
-                        }
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '../../Function/fetchUserBookings.php',
+            eventsSet: function(events) {
+                console.log('Fetched events:', events);
+                events.forEach(event => {
+                    console.log(`Title: ${event.title}, Start: ${event.startStr}`);
+                });
+            },
+            eventClick: function(info) {
+                window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+            },
+            eventDidMount: function(info) {
+                if (info.event.allDay) {
+                    const dateStr = info.event.startStr;
+                    const dayCell = document.querySelector(
+                        `.fc-daygrid-day[data-date="${dateStr}"]`);
+                    if (dayCell) {
+                        let baseColor = info.event.backgroundColor || info.event.extendedProps
+                            .color || '#dc3545';
+                        dayCell.style.backgroundColor = baseColor;
+                        dayCell.style.color = '#000';
+                    }
+                    if (info.el) {
+                        info.el.style.display = 'none';
                     }
                 }
-            });
-
-            calendar.render();
+            }
         });
+
+        calendar.render();
+    });
     </script>
+
+
 </body>
 
 </html>

@@ -111,6 +111,7 @@ input.amenityTitle {
     var(--font-size-lg)
   );
   font-weight: var(--font-weight-bold);
+  font-family: "Alkatra";
 }
 
 input.amenityTitle {
