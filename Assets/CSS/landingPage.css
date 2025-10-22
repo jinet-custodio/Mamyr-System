@@ -27,7 +27,6 @@
 
 .topSec {
   width: 98%;
-  height: 80vh;
   margin-top: 5rem !important;
   border-radius: 20px;
   margin: 0 auto;
@@ -35,7 +34,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 5rem 2rem;
 }
 
 .topLeft {

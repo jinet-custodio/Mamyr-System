@@ -842,7 +842,7 @@ require '../../Function/notification.php';
         linkText.style.display = "none";
     }
     </script> -->
-
+    <?php include '../Customer/loader.php'; ?>
 </body>
 
 </html>

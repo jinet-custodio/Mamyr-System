@@ -641,7 +641,7 @@ if (isset($_POST['bookingID'])) {
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                     aria-label="Close">Close</button>
-                                <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+                                <button type="submit" class="btn btn-primary loaderTrigger" name="approveBtn">Approve</button>
                             </div>
                         </div>
                     </div>
@@ -1135,6 +1135,8 @@ if (isset($_POST['bookingID'])) {
             }
         }
     </script>
+
+    <?php include '../Customer/loader.php'; ?>
 </body>
 
 </html>

@@ -426,10 +426,7 @@ if (isset($_SESSION['error'])) {
         });
     </script>
 
-
-
-
-
+    <?php include '../Customer/loader.php'; ?>
 
 </body>
 
