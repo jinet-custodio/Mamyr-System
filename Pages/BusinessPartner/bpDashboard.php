@@ -40,7 +40,41 @@ require '../../Function/notification.php';
 require '../../Function/Partner/sales.php';
 require '../../Function/Partner/getBookings.php';
 
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
+//SQL statement for retrieving data for website content from DB\
+$folder = 'landingPage';
+$sectionName = 'Landing';
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+$imageMap = [];
+$defaultImage = "/Assets/Images/no-picture.jpg";
+
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
+
+    // Fetch images with this contentID
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages->bind_param("i", $contentID);
+    $getImages->execute();
+    $imageResult = $getImages->get_result();
+
+    $images = [];
+    while ($imageRow = $imageResult->fetch_assoc()) {
+        $images[] = $imageRow;
+    }
+
+    $imageMap[$cleanTitle] = $images;
+}
+
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,6 +85,7 @@ require '../../Function/Partner/getBookings.php';
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/BusinessPartner/bpDashboard.css">
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
@@ -60,6 +95,11 @@ require '../../Function/Partner/getBookings.php';
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
+    <!-- Swiper's CSS Link  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 
 <body>
@@ -105,12 +145,13 @@ require '../../Function/Partner/getBookings.php';
             ?>
 
             <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -128,7 +169,8 @@ require '../../Function/Partner/getBookings.php';
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="../Customer/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="../Customer/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a></li>
+                        <li><a class="dropdown-item" href="../Customer/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a>
+                        </li>
                         <li><a class="dropdown-item" href="../Customer/events.php">EVENTS</a>
                         </li>
                     </ul>
@@ -173,62 +215,127 @@ require '../../Function/Partner/getBookings.php';
     <?php
     $row = getBookingsCount($conn, $userID);
     ?>
-    <div class="wrapper d-flex">
-        <main class="main-content" id="main-content">
+
+    <main class="main-content" id="main-content">
+        <section class="topSec">
             <div class="container">
-                <h3 class="welcomeText">Hello there, <?= ucfirst($firstName) ?>!</h3>
-                <section>
-                    <div class="column1">
-                        <div class="card">
-                            <div class="card-header fw-bold fs-5">All Bookings</div>
-                            <div class="card-body">
-                                <h2 class="bookingNumber"><?= $row['allBookingStatus'] ?></h2>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header fw-bold fs-5">Approved</div>
-                            <div class="card-body">
-                                <h2 class="approvedNumber"><?= $row['approvedBookings']  ?></h2>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header fw-bold fs-5">Pending</div>
-                            <div class="card-body">
-                                <h2 class="pendingNumber"><?= $row['totalPendingBooking']  ?></h2>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header fw-bold fs-5">Total Monthly Sales</div>
-                            <div class="card-body">
-                                <h2 class="revenueNumber"><?= ($totalSales !== 0) ? number_format($totalSales, 2) : '₱0.00' ?></h2>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="card" id="salesPerformance">
-                        <div class="card-header fw-bold fs-5">Monthly Sales</div>
-                        <div class="card-body" id="pieGraph">
-                            <canvas id="salesGraph"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- <div class="card" id="revenue">
-                        <div class="card-header fw-bold fs-5">Revenue Overview</div>
-                        <div class="card-body" id="revenueGraphContainer">
-                            <img src="../../Assets/Images/revenueGraph.png" alt="Pie" class="revenueGraph">
-                        </div>
-                    </div> -->
-
-                    <div class="card">
-                        <div class="card-header fw-bold fs-5">Services</div>
+                <h3 class="welcomeText">Hello there, <?= ucfirst($firstName) ?>! Welcome to Mamyr Resort and Events
+                    Place</h3>
+                <section class="container topSection">
+                    <div class="card statCard customer-card">
                         <div class="card-body">
+                            <div class="header">
+                                <i class="bi bi-calendar-week"></i>
+                                <h6 class="header-text">All Bookings</h6>
+                            </div>
 
-                            <ul>
-                                <?php
+                            <div class="data-container customer">
+                                <h5 class="card-data bookingNumber"><?= $row['allBookingStatus'] ?></h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card statCard total-bookings">
+                        <div class="card-body">
+                            <div class="header">
+                                <i class="bi bi-calendar-check"></i>
+                                <h6 class="header-text">Approved</h6>
+                            </div>
+
+                            <div class="data-container ">
+                                <h5 class="card-data approvedNumber"><?= $row['approvedBookings']  ?></h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card statCard total-sales">
+                        <div class="card-body">
+                            <div class="header">
+                                <i class="bi bi-hourglass-top"></i>
+                                <h6 class="header-text">Pending</h6>
+                            </div>
+
+                            <div class="data-container">
+                                <h5 class="card-data pendingNumber"><?= $row['totalPendingBooking']  ?></h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card statCard mostUsedSrvice-card">
+                        <div class="card-body">
+                            <div class="header">
+                                <i class="bi bi-tags"></i>
+                                <h6 class="header-text">Total Monthly Sales</h6>
+                            </div>
+
+                            <div class="data-container">
+                                <h5 class="card-data revenueNumber">
+                                    <?= ($totalSales !== 0) ? number_format($totalSales, 2) : '₱0.00' ?></h5>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <section class="container secondRow-graph">
+
+                    <div class="card graph-card" id="salesPerformance">
+                        <div class="card-body graph-card-body">
+                            <div class="graph-header">
+                                <i class="bi bi-tags"></i>
+                                <h6 class="graph-header-text">Monthly Sales</h6>
+
+                                <div class="filter-btn-container">
+                                    <div class="filter-select-wrapper">
+                                        <select class="filter-select" name="sales-filter-select"
+                                            id="sales-filter-select">
+                                            <option selected disabled>Filters</option>
+                                            <!-- <option value="month"><?= $monthToday ?></option> -->
+                                            <option value="w1">Week 1</option>
+                                            <option value="w2">Week 2</option>
+                                            <option value="w3">Week 3</option>
+                                            <option value="w4">Week 4</option>
+                                            <option value="w5">Week 5</option>
+                                        </select>
+                                        <i class="bi bi-filter"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sales-chart" id="pieGraph">
+                                <!-- <img src="../../Assets/Images/adminTemporary/bookingsGraph.jpg" alt="Bookings Graph"
+                            class="graph" id="salesBar"> -->
+                                <canvas id="salesGraph" class="graph"></canvas>
+                                <!-- <canvas class="graph" id="salesBar"></canvas> -->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card graph-card">
+                        <div class="card-body graph-card-body services-card">
+                            <div class="graph-header">
+                                <i class="bi bi-bell"></i>
+                                <h6 class="graph-header-text">Services</h6>
+
+                                <!-- <div class="filter-btn-container">
+                                <div class="filter-select-wrapper">
+                                    <select class="filter-select" name="sales-filter-select" id="sales-filter-select">
+                                        <option value="month"><?= $monthToday ?></option>
+                                        <option value="w1">Week 1</option>
+                                        <option value="w2">Week 2</option>
+                                        <option value="w3">Week 3</option>
+                                        <option value="w4">Week 4</option>
+                                        <option value="w5">Week 5</option>
+                                    </select>
+                                    <i class="bi bi-filter"></i>
+                                </div>
+                            </div> -->
+                            </div>
+
+                            <div class="services-container">
+                                <ul>
+                                    <?php
                                 // Get Services
                                 $getServicesQuery = $conn->prepare('SELECT ps.`PBName`, ps.`PBPrice` FROM `partnershipservice` ps 
                                 WHERE  partnershipID = ?');
@@ -243,7 +350,7 @@ require '../../Function/Partner/getBookings.php';
                                 if (!$result->num_rows === 0) {
                                 ?>
                                     <li>No Services</li>
-                                <?php
+                                    <?php
                                 }
 
                                 while ($service = $result->fetch_assoc()) {
@@ -251,24 +358,198 @@ require '../../Function/Partner/getBookings.php';
                                     // print_r("ID: " . $partnershipID);
                                     // echo '</pre>';
                                 ?>
-                                    <li class="serviceNamePrice"><?= htmlspecialchars(ucfirst($service['PBName'])) ?> &mdash; ₱<?= number_format($service['PBPrice']) ?></li>
-                                <?php
+                                    <li class="serviceNamePrice"><?= htmlspecialchars(ucfirst($service['PBName'])) ?>
+                                        &mdash; ₱<?= number_format($service['PBPrice']) ?></li>
+                                    <?php
                                 }
 
                                 ?>
-                            </ul>
-                        </div>
-                        <div class="card-footer">
-                            <a href="../Account/bpServices.php" class="btn btn-primary w-100">View All Services</a>
+                                </ul>
+
+                            </div>
+                            <div class="service-btn-container">
+                                <a href="../Account/bpServices.php" class="btn btn-primary service-btn">View All
+                                    Services</a>
+                            </div>
                         </div>
                     </div>
                 </section>
             </div>
-        </main>
-    </div>
+        </section>
 
-    <!-- Footer -->
-    <?php include 'footer.php'; ?>
+        <section class="middle-container">
+            <div class="embed-responsive embed-responsive-16by9">
+                <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
+                    poster="Assets/Videos/thumbnail2.jpg">
+                    <source src="../../Assets/Videos/mamyrVideo3.mp4" type="video/mp4">
+
+                </video>
+            </div>
+            <div class="videoText-container">
+                <?php if ($editMode): ?>
+                <input type="text" class="editable-input videoTitle form-control" data-title="Heading2"
+                    value="<?= htmlspecialchars($contentMap['Heading2'] ?? 'Title Not Found') ?>">
+                <textarea cols="20" rows="5" type="text" class="editable-input form-control subtext"
+                    data-title="Subheading2"><?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?></textarea>
+                <?php else: ?>
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Heading2'] ?? 'Name Not Found') ?> </h3>
+                <p class="videoDescription indent">
+                    <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
+                <div class="middle-btn-container">
+                    <a href="../Customer/bookNow.php" class="btn btn-primary">Book Now</a>
+                    <a href="../amenities.php" class="btn btn-primary">View our Amenities</a>
+                </div>
+                <?php endif; ?>
+            </div>
+        </section>
+
+        <section class="bottom-section">
+
+            <div class="bottom-text-container">
+                <?php if ($editMode): ?>
+                <input type="text" class="editable-input bottom-header form-control" data-title="BookNow"
+                    value="<?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?>">
+                <textarea cols="20" rows="5" type="text" class="editable-input form-control bottom-subtext"
+                    data-title="BookNowDesc"><?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?></textarea>
+                <?php else: ?>
+                <h3 class="bottom-header"><?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?> </h3>
+                <p class="bottom-subtext indent">
+                    <?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?> </p>
+                <?php endif; ?>
+            </div>
+
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <?php if (isset($imageMap['BookNow'])): ?>
+                    <?php foreach ($imageMap['BookNow'] as $index => $img):
+                        $imagePath = "../../Assets/Images/landingPage/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                    ?>
+                    <div class="swiper-slide">
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="editable-img d-block w-100" style="cursor: pointer;" <?php if ($editMode): ?>
+                            data-bs-toggle="modal" data-bs-target="#editImageModal"
+                            data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
+                            data-folder="<?= $folder ?? '' ?>"
+                            data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
+                            data-alttext="<?= htmlspecialchars($img['altText'] ?? '') ?>" <?php endif; ?>>
+                    </div>
+                    <?php endforeach; ?>
+                    <?php else: ?>
+                    <div class="card-img">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
+                    </div>
+                    <?php endif; ?>
+
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <section class="rating-container">
+            <div class="locationText-container">
+                <?php if ($editMode): ?>
+                <input type="text" class="editable-input videoTitle form-control" data-title="Reviews"
+                    value="<?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?>">
+                <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
+                    data-title="ReviewsDesc"><?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?></textarea>
+                <?php else: ?>
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                <p class="videoDescription indent">
+                    <?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?> </p>
+                <?php endif; ?>
+            </div>
+
+            <div class="card ratings-card">
+                <div class="card-body graph-card-body">
+                    <div class="graph-header">
+                        <i class="bi bi-star"></i>
+                        <h6 class="graph-header-text">Ratings</h6>
+                    </div>
+
+                    <div class="rating-categories">
+                        <!-- Resort -->
+                        <div class="rating-row">
+                            <div class="rating-label">Resort</div>
+                            <div class="rating-bar">
+                                <div class="progress">
+                                    <div class="progress-bar" id="resort-bar" role="progressbar" aria-valuenow=""
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="rating-value" id="resort-rating-value"></div>
+                        </div>
+
+                        <!-- Hotel -->
+                        <div class="rating-row">
+                            <div class="rating-label">Hotel</div>
+                            <div class="rating-bar">
+                                <div class="progress">
+                                    <div class="progress-bar" id="hotel-bar" role="progressbar" aria-valuenow=""
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="rating-value" id="hotel-rating-value"></div>
+                        </div>
+
+                        <!-- Event -->
+                        <div class="rating-row">
+                            <div class="rating-label">Event</div>
+                            <div class="rating-bar">
+                                <div class="progress">
+                                    <div class="progress-bar" id="event-bar" role="progressbar" aria-valuenow=""
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="rating-value" id="event-rating-value"></div>
+                        </div>
+
+                        <!-- Overall Rating (Optional) -->
+                        <div class="overall-rating">
+                            <div class="overall-rating-label">
+                                <h6 class="overall-rating-label">Overall Rating</h6>
+                                <h4 class="overall-rating-value" id="overall-rating-value"></h4>
+                            </div>
+                            <div class="overall-rating-stars" id="star-container">
+                                <!-- <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i>
+                                    <i class="bi bi-star-fill" id="overall-rating"></i> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="location-container">
+            <div class="locationText-container">
+                <?php if ($editMode): ?>
+                <input type="text" class="editable-input videoTitle form-control" data-title="Map"
+                    value="<?= htmlspecialchars($contentMap['Map'] ?? 'Title Not Found') ?>">
+                <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
+                    data-title="MapDesc"><?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?></textarea>
+                <?php else: ?>
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                <p class="videoDescription indent">
+                    <?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?> </p>
+                <?php endif; ?>
+            </div>
+
+            <div id="map"></div>
+        </section>
+        <?php if ($editMode) {
+        include 'Pages/editImageModal.php';
+    } else {
+        include '../../Pages/Customer/footer.php';
+        include '../../Pages/loader.php';
+    }
+    ?>
+    </main>
+
+
+
 
     <!-- Monthly Sales Graph -->
     <?php
@@ -330,77 +611,185 @@ require '../../Function/Partner/getBookings.php';
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
     <script>
-        //Handle sidebar for responsiveness
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.getElementById('toggle-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container')
+    var swiper = new Swiper(".mySwiper", {
+        loop: true,
+        loopedSlides: 3,
+        spaceBetween: 30,
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
+        slidesPerView: 3,
 
-                if (sidebar.classList.contains('collapsed')) {
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    });
-                    toggleCont.style.justifyContent = "center"
-                } else {
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    toggleCont.style.justifyContent = "flex-end"
-                }
-            });
-
-            function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
-                    sidebar.classList.add('collapsed');
-                    toggleBtn.style.display = "flex";
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    })
-
-                } else {
-                    toggleBtn.style.display = "none";
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    })
-                    sidebar.classList.remove('collapsed');
-                }
+        breakpoints: {
+            0: {
+                slidesPerView: 1,
+                spaceBetween: 10,
+            },
+            600: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
             }
+        },
 
-            // Run on load and when window resizes
-            handleResponsiveSidebar();
-            window.addEventListener('resize', handleResponsiveSidebar);
-        });
+
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        }
+    });
+    </script>
+
+
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+    const lat = 15.05073200154005;
+    const lon = 121.0218658098424;
+
+    const map = L.map('map').setView([lat, lon], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+
+    const customIcon = L.icon({
+        iconUrl: '../../Assets/Images/MamyrLogo.png',
+        iconSize: [100, 25], // Size of the logo 
+        iconAnchor: [25, 50], // Anchor point of the icon 
+        popupAnchor: [0, -50] // Popup anchor point 
+    });
+
+
+    L.marker([lat, lon], {
+            icon: customIcon
+        }).addTo(map)
+        .bindPopup('Mamyr Resort and Events Place is Located Here!')
+        .openPopup();
     </script>
 
     <script>
-        const logoutBtn = document.getElementById('logoutBtn');
-        const logoutModal = document.getElementById('logoutModal');
+    async function getRatings() {
+        const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
+        const data = await response.json();
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../../Function/logout.php";
-                }
-            });
-        })
+        const resortBar = document.getElementById('resort-bar');
+        resortBar.style.width = data.resortPercent + '%';
+        resortBar.setAttribute('ari-valuenow', data.resortPercent)
+        document.getElementById('resort-rating-value').textContent = data.resortRating;
+
+        const hotelBar = document.getElementById('hotel-bar');
+        hotelBar.style.width = data.hotelPercent + '%';
+        hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
+        document.getElementById('hotel-rating-value').textContent = data.hotelRating;
+
+        const eventBar = document.getElementById('event-bar');
+        eventBar.style.width = data.eventPercent + '%';
+        eventBar.setAttribute('ari-valuenow', data.eventPercent)
+        document.getElementById('event-rating-value').textContent = data.eventRating;
+
+        document.getElementById('overall-rating-value').textContent = data.overAllRating;
+        const starContainer = document.getElementById('star-container');
+        starContainer.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= Math.floor(data.overAllRating)) {
+                starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
+            } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
+                starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
+            } else {
+                starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
+            }
+        }
+    }
+    getRatings();
+    setInterval(getRatings, 300000);
+    </script>
+
+    <script>
+    //Handle sidebar for responsiveness
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const items = document.querySelectorAll('.list-group-item');
+        const toggleCont = document.getElementById('toggle-container')
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+
+            if (sidebar.classList.contains('collapsed')) {
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                });
+                toggleCont.style.justifyContent = "center"
+            } else {
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                toggleCont.style.justifyContent = "flex-end"
+            }
+        });
+
+        function handleResponsiveSidebar() {
+            if (window.innerWidth <= 600) {
+                sidebar.classList.add('collapsed');
+                toggleBtn.style.display = "flex";
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                })
+
+            } else {
+                toggleBtn.style.display = "none";
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                })
+                sidebar.classList.remove('collapsed');
+            }
+        }
+
+        // Run on load and when window resizes
+        handleResponsiveSidebar();
+        window.addEventListener('resize', handleResponsiveSidebar);
+    });
+    </script>
+
+    <script>
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
+
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../../Function/logout.php";
+            }
+        });
+    })
     </script>
 
     <!-- This is shown if no data to display -->
@@ -408,33 +797,33 @@ require '../../Function/Partner/getBookings.php';
 
     <!-- Line Chart for sales  -->
     <script>
-        const salesGraph = document.getElementById('salesGraph').getContext('2d');
-        const labels = <?= json_encode($months) ?>;
-        const data = {
-            labels: labels,
-            datasets: [{
-                label: "Monthly Sales Report — <?= !empty($year) ? json_encode($year) : DATE('Y') ?>",
-                data: <?= json_encode($sales) ?>,
-                fill: false,
-                backgroundColor: 'rgb(33, 148, 209, .5)',
-                borderColor: 'rgb(33, 148, 209, 1)',
-                tension: 0.1
-            }]
-        };
+    const salesGraph = document.getElementById('salesGraph').getContext('2d');
+    const labels = <?= json_encode($months) ?>;
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: "Monthly Sales Report — <?= !empty($year) ? json_encode($year) : DATE('Y') ?>",
+            data: <?= json_encode($sales) ?>,
+            fill: false,
+            backgroundColor: 'rgb(33, 148, 209, .5)',
+            borderColor: 'rgb(33, 148, 209, 1)',
+            tension: 0.1
+        }]
+    };
 
-        const lineSalesChart = new Chart(salesGraph, {
-            type: 'bar',
-            data: data,
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+    const lineSalesChart = new Chart(salesGraph, {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
-            },
-            plugins: ['noDataPlugin']
-        })
+            }
+        },
+        plugins: ['noDataPlugin']
+    })
     </script>
 </body>
 
