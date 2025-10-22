@@ -91,7 +91,7 @@ body {
   padding: var(--padding-lg);
   margin-top: var(--margin-mdl);
   margin-bottom: 2rem;
-  width: 90% !important;
+  width: 100% !important;
   max-width: 100%;
 }
 
@@ -161,6 +161,29 @@ h4 {
 
 .table-header {
   font-family: "Lora";
+}
+
+.viewApplicantBtn {
+  font-size: 14px !important;
+}
+
+.badge {
+  font-weight: initial;
+  line-height: normal;
+  font-size: var(--font-size-base);
+  padding: var(--padding-md);
+  width: 6rem;
+  border-radius: 3rem !important;
+}
+
+.badge.bg-danger {
+  background-color: rgba(219, 53, 69, 0.4) !important;
+  color: rgb(219, 53, 69) !important;
+}
+
+.badge.bg-warning {
+  background-color: rgba(255, 193, 7, 0.4) !important;
+  color: rgb(190, 114, 0) !important;
 }
 
 /* Tablet portrait */

@@ -390,9 +390,8 @@ require '../../Function/notification.php';
         document.addEventListener("DOMContentLoaded", function() {
             const requestLink = document.getElementById("request-link");
             const partnerLink = document.getElementById("partner-link");
-            const choices = document.getElementById("choice-container");
-            const choice1Link = document.getElementById("choice1-link");
-            const choice2Link = document.getElementById("choice2-link");
+            // const choices = document.getElementById("choice-container");
+            // const choice1Link = document.getElementById("choice1-link");
             const partner_Container = document.getElementById("partner-container");
             const request_Container = document.getElementById("request-container");
             const partner_Card = document.getElementById("partner-card");
@@ -407,7 +406,6 @@ require '../../Function/notification.php';
                 request_Container.style.display = "block";
                 partner_Card.style.display = "none";
                 request_Card.style.display = "block";
-
                 loadRequests();
             });
 
@@ -424,26 +422,25 @@ require '../../Function/notification.php';
                 loadPartners();
             });
 
-            choice1Link.addEventListener('click', function(event) {
-                event.preventDefault();
-                choices.style.display = "flex";
-                partner_Container.style.display = "none";
-                request_Container.style.display = "none";
-                partner_Card.style.display = "none";
-                request_Card.style.display = "none";
-            });
+            // choice1Link.addEventListener('click', function(event) {
+            //     event.preventDefault();
+            //     choices.style.display = "flex";
+            //     partner_Container.style.display = "none";
+            //     request_Container.style.display = "none";
+            //     partner_Card.style.display = "none";
+            //     request_Card.style.display = "none";
+            // });
 
-            choice2Link.addEventListener('click', function(event) {
-                event.preventDefault();
-                choices.style.display = "flex";
-                partner_Container.style.display = "none";
-                request_Container.style.display = "none";
-                partner_Card.style.display = "none";
-                request_Card.style.display = "none";
-            });
+            // choice2Link.addEventListener('click', function(event) {
+            //     event.preventDefault();
+            //     choices.style.display = "flex";
+            //     partner_Container.style.display = "none";
+            //     request_Container.style.display = "none";
+            //     partner_Card.style.display = "none";
+            //     request_Card.style.display = "none";
+            // });
         });
     </script>
-    <script src="../../Assets/JS/adminNavbar.js"></script>
 
     <!-- Search URL -->
     <script>
@@ -451,14 +448,14 @@ require '../../Function/notification.php';
         const paramValue = params.get('container');
         const action = params.get("action");
 
-        const choices = document.getElementById("choice-container");
+        // const choices = document.getElementById("choice-container");
         const partnerContainer = document.getElementById("partner-container");
         const requestContainer = document.getElementById("request-container");
         const partnerCard = document.getElementById("partner-card");
         const requestCard = document.getElementById("request-card");
 
         if (paramValue == 1) {
-            choices.style.display = "none";
+            // choices.style.display = "none";
             partnerContainer.style.display = "block";
             requestContainer.style.display = "none";
             partnerCard.style.display = "block";
@@ -466,7 +463,7 @@ require '../../Function/notification.php';
 
             loadPartners()
         } else if (paramValue == 2) {
-            choices.style.display = "none";
+            // choices.style.display = "none";
             partnerContainer.style.display = "none";
             requestContainer.style.display = "block";
             partnerCard.style.display = "none";
@@ -475,18 +472,38 @@ require '../../Function/notification.php';
             loadRequests();
         }
 
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
         if (action === "approved") {
-            Swal.fire({
-                icon: 'success',
-                title: 'Partnership Approved',
-                text: 'The partnership request has been approved successfully.'
+            Toast.fire({
+                icon: "success",
+                title: "Partnership Approved Successfully"
             });
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Partnership Approved',
+            //     text: 'The partnership request has been approved successfully.'
+            // });
         } else if (action === 'rejected') {
-            Swal.fire({
-                icon: 'success',
-                title: 'Partnership Rejected',
-                text: 'The partnership request has been rejected successfully.'
+            Toast.fire({
+                icon: "success",
+                title: "Partnership Rejected Successfully"
             });
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Partnership Rejected',
+            //     text: 'The partnership request has been rejected successfully.'
+            // });
         }
 
         if (action) {

@@ -9,7 +9,7 @@ $applicant = 4;
 $selectQuery = $conn->prepare("SELECT u.firstName, u.lastName, p.*, s.statusName,  GROUP_CONCAT(pt.partnerTypeDescription SEPARATOR ' & ') AS partnerTypeDescription
     FROM partnership p
     INNER JOIN user u ON p.userID = u.userID
-    INNER JOIN status s ON s.statusID = p.partnerStatusID
+    INNER JOIN partnerstatus s ON s.partnerStatusID = p.partnerStatusID
     LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
     LEFT JOIN partnershiptype pt ON pt.partnerTypeID = ppt.partnerTypeID
     WHERE (p.partnerStatusID = ? OR p.partnerStatusID = ?) AND u.userRole = ?
@@ -28,8 +28,8 @@ if ($result->num_rows > 0) {
         $date = $applicant['requestDate'];
         $requestDate = date("F d, Y — g:i A", strtotime($date));
 
-        $statusClass = ($status == 'Pending') ? 'btn-warning' : 'btn-danger';
-        $statusColor = ($status == 'Pending') ? '#ffc108' : 'rgb(219, 53, 69)';
+        $statusClass = ($status == 'Pending') ? 'bg-warning' : 'bg-danger';
+        // $statusColor = ($status == 'Pending') ? '#ffc108' : 'rgb(219, 53, 69)';
         $statusTextColor = ($status == 'Pending') ? 'black' : '#fff';
 
         echo "
@@ -37,11 +37,11 @@ if ($result->num_rows > 0) {
                 <td>{$name}</td>
                 <td>{$applicant['partnerTypeDescription']}</td>
                 <td>{$requestDate}</td>
-                <td class='btn {$statusClass} w-75 d-block m-auto mt-1' style='background-color:{$statusColor}; color:{$statusTextColor};'>{$status}</td>
+                <td> <span class='badge {$statusClass}'> {$status} </span></td>
                 <td>
                     <form action='partnership.php?container=4' method='POST'>
                         <input type='hidden' name='partnerID' value='{$partnerID}'>
-                        <button type='submit' class='btn btn-info w-75' name='view-partner'>View</button>
+                        <button type='submit' class='btn btn-info w-50 viewApplicantBtn' name='view-partner'>View</button>
                     </form>
                 </td>
             </tr>";

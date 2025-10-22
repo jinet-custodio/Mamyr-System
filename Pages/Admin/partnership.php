@@ -440,10 +440,10 @@ $partnerID = $_SESSION['partnerID']  ?? null;
                 icon: 'warning',
                 title: 'External Link Warning',
                 html: `
-                <p>This link leads to an external site.</p>
+                <p class="fs-6">This link leads to an external site.</p>
                 <p><b>It may be unsafe, unverified, or contain spam.</b></p>
                 <p>Do you still want to continue to:</p>
-                <code>${url}</code>
+                <code style="color: blue;">${url}</code>
                 `,
                 showCancelButton: true,
                 confirmButtonText: 'Yes, open link',

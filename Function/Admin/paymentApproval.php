@@ -61,6 +61,7 @@ if (isset($_POST['approvePaymentBtn'])) {
     $userRoleID = (int) $_POST['userRoleID'];
     $customerID = (int) $_POST['customerID'];
     $paymentID = (int) $_POST['paymentID'];
+    $paymentID = (int) $_POST['paymentID'];
     $paymentApprovalStatusID = 2; //Approved
     $bookingStatus = 3; //Reserved
 
@@ -148,6 +149,15 @@ if (isset($_POST['approvePaymentBtn'])) {
         } else {
             $paymentStatusID = 1;
         }
+        //AssigningStatus
+        if ($totalBalance <= 0) {
+            $totalBalance = 0;
+            $paymentStatusID = 3; //Fully Paid
+        } elseif ($amount > 0 && $totalBalance > 0 && $totalBalance < $storedFinalBill) {
+            $paymentStatusID = 2; //
+        } else {
+            $paymentStatusID = 1;
+        }
 
         $updateBookingStatus = $conn->prepare(" UPDATE booking SET bookingStatus =? WHERE bookingID = ?");
         $updateBookingStatus->bind_param('ii', $bookingStatus, $bookingID);
@@ -163,6 +173,7 @@ if (isset($_POST['approvePaymentBtn'])) {
                     userBalance = ?,
                     paymentApprovalStatus = ?,
                     paymentStatus = ?, approvedBy = ?, approvedDate = ? WHERE bookingID = ?");
+        $updateBookingPaymentStatus->bind_param("ddddiiisi", $finalBill, $totalDiscount, $totalAmountPaid, $totalBalance, $paymentApprovalStatusID, $paymentStatusID, $approvedBy, $approvedDate, $bookingID);
         $updateBookingPaymentStatus->bind_param("ddddiiisi", $finalBill, $totalDiscount, $totalAmountPaid, $totalBalance, $paymentApprovalStatusID, $paymentStatusID, $approvedBy, $approvedDate, $bookingID);
 
         if (!$updateBookingPaymentStatus->execute()) {
@@ -262,7 +273,26 @@ if (isset($_POST['approvePaymentBtn'])) {
             $conn->rollback();
             throw new Exception('Error executing notification query!' . $insertNotification->error);
         }
+        $receiver = getMessageReceiver($userRoleID);
+        $message = 'Payment approved successfully. We have received ₱' . $amount . ' and reviewed your payment. The service you booked is now reserved. Thank you';
+        $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, receiverID, senderID, message, receiver) VALUES(?,?,?,?,?)");
+        $insertNotification->bind_param("iiiss", $bookingID, $customerID, $userID, $message, $receiver);
+        if (! $insertNotification->execute()) {
+            $conn->rollback();
+            throw new Exception('Error executing notification query!' . $insertNotification->error);
+        }
 
+        $conn->commit();
+        header('Location: ../../Pages/Admin/transaction.php?action=approved');
+        $bookingResult->free();
+        $bookingCheck->close();
+        $updateBookingPaymentStatus->close();
+        $insertNotification->close();
+        exit();
+    } catch (Exception $e) {
+        $conn->rollback();
+        error_log("Error Message: " . $e->getMessage());
+        header("Location: ../../../../Pages/Admin/viewPayments.php");
         $conn->commit();
         header('Location: ../../Pages/Admin/transaction.php?action=approved');
         $bookingResult->free();
