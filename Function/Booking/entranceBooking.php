@@ -155,6 +155,25 @@ if (isset($_POST['bookRates'])) {
                 exit();
             }
         }
+
+        $getSameServiceName = $conn->prepare("SELECT s.serviceID, rs.RSprice, rs.RScapacity, rs.RServiceName, rs.RSdescription, rs.resortServiceID FROM service s
+            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
+            WHERE rs.RServiceName = ? AND rs.RSduration = '22 hours'");
+        foreach ($roomChoices as $selectedRoom) {
+            $selectedRoom = trim($selectedRoom);
+            $getSameServiceName->bind_param('s', $selectedRoom);
+            $getSameServiceName->execute();
+            $getSameServiceResult = $getSameServiceName->get_result();
+
+            if ($getSameServiceResult->num_rows > 0) {
+                while ($data = $getSameServiceResult->fetch_assoc()) {
+                    $resortServiceIDs[] = $data['resortServiceID'];
+                }
+            } else {
+                echo "Service not found for: " . htmlspecialchars($selectedRoom);
+                exit();
+            }
+        }
     }
 
 

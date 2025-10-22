@@ -927,7 +927,7 @@ if ($admin === "Admin") {
                 }
             });
 
-            updateAddPaymentSummary(); // Make sure to update the summary here
+            updateAddPaymentSummary();
         }
 
 
