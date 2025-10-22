@@ -553,17 +553,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         document.getElementById('overall-rating-value').textContent = data.overAllRating;
         const starContainer = document.getElementById('star-container');
+        starContainer.innerHTML = '';
         for (let i = 1; i <= 5; i++) {
             if (i <= Math.floor(data.overAllRating)) {
-                starContainer.innerHTML += '<i class="bi bi-star-fill text-warning"></i>';
+                starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
             } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
-                starContainer.innerHTML += '<i class="bi bi-star-half text-warning"></i>';
+                starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
             } else {
-                starContainer.innerHTML += '<i class="bi bi-star text-warning"></i>';
+                starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
             }
         }
     }
-
     getRatings();
     setInterval(getRatings, 300000);
     </script>
