@@ -381,7 +381,7 @@ require '../../Function/notification.php';
             });
         });
     </script>
-
+    <?php include '../Customer/loader.php'; ?>
 </body>
 
 </html>

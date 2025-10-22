@@ -163,9 +163,8 @@ body {
 
 .rates {
   top: -5rem;
-  height: 250px !important;
   width: auto;
-  padding: 0.5rem;
+  padding: 1rem 0.5rem;
 }
 
 .rates h1 {
@@ -315,6 +314,11 @@ body {
     flex-direction: column;
     gap: 2rem;
   }
+
+  .cottagesEntertainment,
+  .rates {
+    top: 0;
+  }
 }
 
 /* Tablet Landscape */
@@ -412,6 +416,11 @@ body {
   .backToSelection {
     top: 3%;
     left: -15%;
+  }
+
+  .cottagesEntertainment,
+  .rates {
+    top: 0;
   }
 
   .titleContainer {

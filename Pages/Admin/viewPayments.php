@@ -492,7 +492,7 @@ if ($admin === "Admin") {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                 aria-label="Close">Close</button>
-                            <button type="submit" class="btn btn-primary" name="approvePaymentBtn" id="approvePaymentBtn">Approve</button>
+                            <button type="submit" class="btn btn-primary loaderTrigger" name="approvePaymentBtn" id="approvePaymentBtn">Approve</button>
                         </div>
                     </div>
                 </div>
@@ -1086,7 +1086,7 @@ if ($admin === "Admin") {
             }
         }
     </script>
-
+    <?php include '../Customer/loader.php'; ?>
 </body>
 
 </html>

@@ -7,8 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .loader {
+            display: grid;
             position: absolute;
-            z-index: 5;
+            z-index: 15;
         }
 
         #loaderOverlay {
@@ -28,6 +29,8 @@
         .dots-container {
             display: flex;
             align-items: center;
+            flex-direction: row !important;
+            margin-top: 0 !important;
             justify-content: center;
             height: 100%;
             width: 100%;
@@ -100,25 +103,57 @@
             const loaderOverlay = document.getElementById('loaderOverlay');
             const currentPath = window.location.pathname.replace(/\/+$/, '').toLowerCase(); // Normalize
 
-            const navbarLinks = document.querySelectorAll('.navbar a');
+            if (document.querySelectorAll('.navbar a')) {
+                const navbarLinks = document.querySelectorAll('.navbar a');
+                navbarLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        const href = link.getAttribute('href');
 
-            navbarLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = link.getAttribute('href');
+                        if (href && !href.startsWith('#')) {
+                            // Create a temporary anchor to parse the href
+                            const tempAnchor = document.createElement('a');
+                            tempAnchor.href = href;
+                            const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
 
-                    if (href && !href.startsWith('#')) {
-                        // Create a temporary anchor to parse the href
-                        const tempAnchor = document.createElement('a');
-                        tempAnchor.href = href;
-                        const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
-
-                        // If the target is different from the current path, show loader
-                        if (targetPath !== currentPath) {
-                            loaderOverlay.style.display = 'flex';
+                            // If the target is different from the current path, show loader
+                            if (targetPath !== currentPath) {
+                                loaderOverlay.style.display = 'flex';
+                            }
                         }
-                    }
+                    });
                 });
-            });
+            }
+
+
+            if (document.querySelectorAll('.sidebar a')) {
+                const sidebarLinks = document.querySelectorAll('.sidebar a');
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        const href = link.getAttribute('href');
+
+                        if (href && !href.startsWith('#')) {
+                            // Create a temporary anchor to parse the href
+                            const tempAnchor = document.createElement('a');
+                            tempAnchor.href = href;
+                            const targetPath = tempAnchor.pathname.replace(/\/+$/, '').toLowerCase();
+
+                            // If the target is different from the current path, show loader
+                            if (targetPath !== currentPath) {
+                                loaderOverlay.style.display = 'flex';
+                            }
+                        }
+                    });
+                });
+            }
+
+            if (document.querySelectorAll('.loaderTrigger')) {
+                const triggers = document.querySelectorAll('.loaderTrigger');
+                triggers.forEach(trigger => {
+                    trigger.addEventListener('click', function(e) {
+                        loaderOverlay.style.display = 'flex';
+                    })
+                })
+            }
         });
 
         function hideLoader() {

@@ -720,7 +720,7 @@ unset($_SESSION['formData']);
                 </ul>
 
                 <div class="button-container w-100">
-                    <button type="submit" class="btn btn-primary w-75" name="<?= $buttonName ?>">Book Now</button>
+                    <button type="submit" class="btn btn-primary w-75 loaderTrigger" name="<?= $buttonName ?>">Book Now</button>
                 </div>
 
             </div>
@@ -815,7 +815,8 @@ unset($_SESSION['formData']);
         </div>
 
     </form>
-
+    <?php include 'loader.php'; ?>
+    </div>
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js">
     </script>

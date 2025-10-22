@@ -448,12 +448,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
 
         <div class="button-container">
-            <button type="submit" class="btn btn-primary" name="eventBook">Book Now</button>
+            <button type="submit" class="btn btn-primary loaderTrigger" name="eventBook">Book Now</button>
         </div>
         </main>
     </form>
 
-
+    <?php include 'loader.php'; ?>
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 

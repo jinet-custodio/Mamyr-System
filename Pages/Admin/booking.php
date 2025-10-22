@@ -439,6 +439,7 @@ if (isset($_SESSION['error'])) {
             history.replaceState({}, document.title, url.toString());
         }
     </script>
+    <?php include '../Customer/loader.php'; ?>
 </body>
 
 </html>

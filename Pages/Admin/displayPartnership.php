@@ -523,8 +523,7 @@ require '../../Function/notification.php';
             });
         <?php endif; ?>
     </script>
-
-
+    <?php include '../Customer/loader.php'; ?>
 </body>
 
 </html>

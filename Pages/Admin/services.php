@@ -1235,6 +1235,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../Assets/JS/Services/cateringFunc.js"></script>
     <script src="../../Assets/JS/Services/servicePricingFunc.js"> </script>
 
+    <?php include '../Customer/loader.php'; ?>
 </body>
 
 </html>
