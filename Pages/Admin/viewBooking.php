@@ -1009,7 +1009,6 @@ if (isset($_POST['bookingID'])) {
                 if (updatedFoodPrice) updatedFoodPrice.textContent = newFoodPriceValue.toFixed(2);
                 if (updatedTotalAmount) updatedTotalAmount.textContent = baseAmountValue.toFixed(2);
                 if (discountSummary) discountSummary.textContent = discountValue.toFixed(2);
-
             };
 
             const inputs = [

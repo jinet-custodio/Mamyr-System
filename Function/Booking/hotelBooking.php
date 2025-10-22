@@ -83,8 +83,31 @@ if (isset($_POST['hotelBooking'])) {
             $hotelPrices[] = $data['RSprice'];
             $hotelCapacity[] = $data['RScapacity'];
             $resortServiceIDs[] = $data['resortServiceID'];
+            $resortServiceIDs[] = $data['resortServiceID'];
         }
     }
+
+    $getSameServiceName = $conn->prepare("SELECT s.serviceID, rs.resortServiceID FROM service s
+            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
+            WHERE rs.RServiceName = ? AND rs.RSduration = '11 hours'");
+    foreach ($selectedHotels as $selectedRoom) {
+        $selectedRoom = trim($selectedRoom);
+        $getSameServiceName->bind_param('s', $selectedRoom);
+        $getSameServiceName->execute();
+        $getSameServiceResult = $getSameServiceName->get_result();
+
+        if ($getSameServiceResult->num_rows > 0) {
+            while ($data = $getSameServiceResult->fetch_assoc()) {
+                $resortServiceIDs[] = $data['resortServiceID'];
+            }
+        } else {
+            echo "Service not found for: " . htmlspecialchars($selectedRoom);
+            exit();
+        }
+    }
+
+
+
 
     $getSameServiceName = $conn->prepare("SELECT s.serviceID, rs.resortServiceID FROM service s
             INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 

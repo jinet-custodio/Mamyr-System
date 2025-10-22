@@ -778,14 +778,23 @@ require '../../Function/notification.php';
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('action');
 
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
         if (paramValue === 'successLogin') {
-            Swal.fire({
-                timer: 1000,
-                showConfirmButton: false,
-                title: "Login Successful!",
-                text: "Welcome back! You have successfully logged in.",
+            Toast.fire({
                 icon: "success",
-            })
+                title: "Signed in successfully"
+            });
         };
 
         if (paramValue) {
