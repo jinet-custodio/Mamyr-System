@@ -187,51 +187,6 @@ if (isset($_SESSION['error'])) {
                             <th scope="col">Time Stamp</th>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>002</td>
-                                <td><span class="badge bg-warning text-capitalize">Update</span></td>
-                                <td>Resort</td>
-                                <td>Resort Services</td>
-                                <td>2025-10-09 14:30:00</td>
-                            </tr>
-
-                            <tr>
-                                <td>001</td>
-                                <td>002</td>
-                                <td><span class="badge bg-success text-capitalize">Create</span></td>
-                                <td>Resort</td>
-                                <td>Resort Services</td>
-                                <td>2025-10-09 14:30:00</td>
-                            </tr>
-
-                            <tr>
-                                <td>001</td>
-                                <td>002</td>
-                                <td><span class="badge bg-danger text-capitalize">Delete</span></td>
-                                <td>Resort</td>
-                                <td>Resort Services</td>
-                                <td>2025-10-09 14:30:00</td>
-                            </tr>
-
-                            <tr>
-                                <td>001</td>
-                                <td>002</td>
-                                <td><span class="badge bg-info text-capitalize">Approved</span></td>
-                                <td>Resort</td>
-                                <td>Resort Services</td>
-                                <td>2025-10-09 14:30:00</td>
-                            </tr>
-
-                            <tr>
-                                <td>001</td>
-                                <td>002</td>
-                                <td><span class="badge bg-red text-capitalize">Rejected</span></td>
-                                <td>Resort</td>
-                                <td>Resort Services</td>
-                                <td>2025-10-09 14:30:00</td>
-                            </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -304,7 +259,6 @@ if (isset($_SESSION['error'])) {
                         "data": "timestamp"
                     }
                 ],
-                responsive: true
             });
         });
     </script>

@@ -37,10 +37,12 @@
                         item.style.justifyContent = "flex-start";
                     })
                     sidebar.classList.remove('collapsed');
+                    console.log(sidebar.classList);
                 }
             }
             console.log("Current size: " + window.innerWidth); 
             // Run on load and when window resizes
             handleResponsiveSidebar();
+            window.addEventListener("load", handleResponsiveSidebar);
             window.addEventListener('resize', handleResponsiveSidebar);
         });

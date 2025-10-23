@@ -425,9 +425,9 @@ if ($admin === "Admin") {
                                     <label for="customerPaymentMade">Customer Entered Payment:</label>
                                     <input type="text" class="form-control" id="customerPaymentMade" name="customerPaymentMade" value="<?= $customerAmountPaid ?>" readonly>
                                 </div>
-                                <div class="note">
-                                    <p class="note text-center">Is the entered amount the same as the amount on the receipt? </p>
-                                    <div class="d-flex mb-2" style="width: 50%; height:10%;">
+                                <div class="note mt-3">
+                                    <p class="note text-center mb-0">Is the entered amount the same as the amount on the receipt? </p>
+                                    <div class="d-flex mb-2 mx-auto" style="width: 50%; height:10%;">
                                         <button type="button" class="btn btn-primary w-50 me-2" id="sameAmount">Yes</button>
                                         <button type="button" class="btn btn-secondary w-50" id="notSame">No</button>
                                     </div>
@@ -447,10 +447,10 @@ if ($admin === "Admin") {
 
 
                             <div class="discount-container mt-3">
-                                <div class="d-flex mb-2 ">
-                                    <p class="fw-bold">Would you like to give a discount?</p>
-                                    <div class="discount-button-container d-inline-flex">
-                                        <button type="button" class="btn btn-primary w-50 me-2 fs-6" id="addDiscount">Yes</button>
+                                <div class="d-flex mb-2 align-items-center">
+                                    <p class="fw-bold mb-0">Would you like to give a discount?</p>
+                                    <div class="discount-button-container d-inline-flex mx-3">
+                                        <button type="button" class="btn btn-primary me-2 fs-6" id="addDiscount">Yes</button>
                                         <button type="button" class="btn btn-secondary w-50 fs-6" id="noDiscount" style="display:none;">No</button>
                                     </div>
                                 </div>
