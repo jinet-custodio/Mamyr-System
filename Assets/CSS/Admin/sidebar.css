@@ -321,8 +321,8 @@ main {
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .sidebar.collapsed {
-    width: 10% !important;
+  #sidebar {
+    width: 25% !important;
   }
 
   .collapsed .nav-item i,
@@ -333,13 +333,13 @@ main {
 
 /* Tablet portrait only */
 @media only screen and (min-width: 600px) and (max-width: 768px) {
-  .sidebar.collapsed {
-    width: 12% !important;
-  }
-
   .collapsed .nav-item i,
   .bi-layout-sidebar {
     font-size: var(--font-size-lg);
+  }
+
+  #sidebar {
+    width: 35% !important;
   }
 }
 
@@ -351,7 +351,8 @@ main {
     z-index: 1000;
   }
 
-  #main {
+  #main,
+  main {
     margin-left: 15%;
   }
   .sidebar.collapsed {

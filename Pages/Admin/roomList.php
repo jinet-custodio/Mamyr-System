@@ -79,7 +79,7 @@ if (isset($_SESSION['error'])) {
 </head>
 
 <body>
-    <div id="sidebar" class=" sidebar show sidebar-custom">
+    <div id="sidebar" class=" sidebar sidebar-custom">
         <div class="sbToggle-container d-flex justify-content-center" id="sidebar-toggle">
             <button class="toggle-button" type="button" id="toggle-btn">
                 <i class="bi bi-layout-sidebar"></i>
@@ -414,6 +414,8 @@ if (isset($_SESSION['error'])) {
     <script>
         $(document).ready(function() {
             $('#roomsTable').DataTable({
+                responsive: false,
+                scrollX: true,
                 language: {
                     emptyTable: "No Hotel Rooms"
                 },
