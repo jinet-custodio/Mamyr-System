@@ -169,8 +169,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <section class="middle-container">
         <div class="embed-responsive embed-responsive-16by9">
             <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
-                poster="Assets/Videos/thumbnail2.jpg">
-                <source src="Assets/Videos/mamyrVideo3.mp4" type="video/mp4">
+                poster="Assets/videos/thumbnail2.jpg">
+                <source src="Assets/videos/Mamyrvideo3.mp4" type="video/mp4">
 
             </video>
         </div>

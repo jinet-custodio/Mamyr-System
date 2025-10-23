@@ -51,8 +51,8 @@ if (isset($_POST['eventBook'])) {
     $totalCost = floatval(str_replace(['₱', ','], '',  $rawTotalCost));
 
     $services = [];
-
-    $customerChoice = mysqli_real_escape_string($conn, $_POST['customer-choice']);
+    $serviceIDs = [];
+    $customerChoice = isset($_POST['customer-choice']) ?  mysqli_real_escape_string($conn, $_POST['customer-choice']) : '';
     $bookingCode = 'EVT' . date('ymd') . generateCode(5);
 
     if (!empty($venueID)) {
@@ -62,6 +62,8 @@ if (isset($_POST['eventBook'])) {
             $result = $getServiceID->get_result();
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
+                $serviceType = strtolower($row['serviceType']);
+                $serviceIDs[$serviceType] = $row['resortServiceID'];
                 $serviceID = $row['serviceID'];
                 $services[$serviceID] = $venuePrice;
             } else {
@@ -88,12 +90,14 @@ if (isset($_POST['eventBook'])) {
                 $result = $getServiceID->get_result();
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
+                    $serviceType = strtolower($row['serviceType']);
+                    $serviceIDs[$serviceType] = $row['partnerServiceID'];
                     $serviceID = $row['serviceID'];
                     $price =  $row['PBPrice'];
                     $services[$serviceID] = $price;
                     $partnerService[$partershipServiceID] = $price;
                 } else {
-                    error_log("No matching service found for resortServiceID: $partershipServiceID");
+                    error_log("No matching service found for partnershipServiceID: $partershipServiceID");
                 }
             } else {
                 error_log("Query failed: " . $conn->error);
@@ -125,6 +129,7 @@ if (isset($_POST['eventBook'])) {
 
     $conn->begin_transaction();
     try {
+
         //insert the total of all
         $insertCustomPackage = $conn->prepare("INSERT INTO `custompackage`(`userID`, `eventTypeID`, `customPackageTotalPrice`, `customPackageNotes`, `foodPricingPerHeadID`, `totalFoodPrice`, `venuePricing`, `additionalServicePrice`) VALUES (?,?,?,?,?,?,?,?)");
         $insertCustomPackage->bind_param('iidsiddd', $userID, $eventCategoryID,  $totalCost, $additionalRequest, $pricingID, $totalFoodPrice, $venuePrice, $additionalServicePrice);
@@ -174,6 +179,7 @@ if (isset($_POST['eventBook'])) {
 
         $bookingID = $insertBooking->insert_id;
         $pendingID = 1;
+
         //insert into bp availed service
         $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`, `approvalStatus`, `price`) VALUES (?,?,?,?)");
         foreach ($partnerService as $partershipServiceID => $price) {
@@ -181,6 +187,32 @@ if (isset($_POST['eventBook'])) {
             if (!$insertBPavailedService->execute()) {
                 $conn->rollback();
                 error_log("Error: " . $insertBooking->error);
+            }
+        }
+        $startDateTime = new DateTime($startDate);
+        $unavailableStartDate = clone $startDateTime;
+        $unavailableStartDateStr = $unavailableStartDate->setTime(0, 0)->format('Y-m-d H:i:s');
+
+        $endDateTime = new DateTime($endDate);
+        $unavailableEndDate = clone $endDateTime;
+        $unavailableEndDateStr = $unavailableEndDate->setTime(23, 59)->format('Y-m-d H:i:s');
+
+
+        //insert into unavailable table
+        $insertIntoUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(bookingID, resortServiceID, partnershipServiceID, unavailableStartDate, unavailableEndDate, expiresAt) values (?,?,?,?,?,?)");
+        foreach ($serviceIDs as $type => $id) {
+            $type = trim($type);
+            $id = (int) $id;
+            $null = NULL;
+            if ($type === 'resort') {
+                $insertIntoUnavailableService->bind_param('iiisss', $bookingID, $id, $null, $unavailableStartDateStr, $unavailableEndDateStr, $null);
+            } elseif ($type === 'partnership') {
+                $insertIntoUnavailableService->bind_param('iiisss', $bookingID, $null, $id, $unavailableStartDateStr, $unavailableEndDateStr, $null);
+            }
+
+            if (!$insertIntoUnavailableService->execute()) {
+                $conn->rollback();
+                error_log("Error: " . $insertIntoUnavailableService->error);
             }
         }
 
