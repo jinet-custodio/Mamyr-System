@@ -149,7 +149,7 @@ session_start();
                             <input type="text" class="form-control" id="province" name="province" placeholder="Province"
                                 value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>">
                             <div class="zip-code">
-                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code"
+                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code" pattern="^\d{4}$"
                                     value="<?php echo isset($_SESSION['partnerData']['zip']) ? htmlspecialchars(trim($_SESSION['partnerData']['zip'])) : ''; ?>">
                                 <div id="tooltip-zip" class="custom-tooltip-zip">Please input numbers only</div>
                             </div>

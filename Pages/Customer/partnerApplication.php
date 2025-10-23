@@ -48,7 +48,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/beOurPartner.css">
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Link -->
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -197,25 +199,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     a variety of events, from weddings to corporate gatherings, all while showcasing your expertise in a
                     stunning resort setting. Reach out today to explore how we can work together to elevate every event we host!
                 </p>
-                <?php
-                if (isset($_SESSION['message'])): ?>
-                    <p class="alert alert-danger">
-                        <?php
-                        echo htmlspecialchars(strip_tags($_SESSION['message']));
-                        unset($_SESSION['message']);
-                        ?>
-                    </p>
-                <?php endif; ?>
-
-                <?php
-                if (isset($_SESSION['success'])): ?>
-                    <p class="alert alert-success">
-                        <?php
-                        echo htmlspecialchars(strip_tags($_SESSION['success']));
-                        unset($_SESSION['success']);
-                        ?>
-                    </p>
-                <?php endif; ?>
             </div>
 
             <?php if ($userRole === 1) { ?>
@@ -243,7 +226,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         placeholder="Middle Initial (Optional)">
                                     <input type="text" class="form-control" id="lastName" name="lastName"
                                         value="<?= htmlspecialchars($lastName) ?>" placeholder="Last Name" required>
-                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" pattern="^(?:\+63|0)9\d{9}$"
+                                        title="e.g., +639123456789 or 09123456789"
                                         placeholder="Phone Number" value="<?= htmlspecialchars($phoneNumber) ?>" required>
                                 </div>
                             </div>
@@ -462,17 +446,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="defaultDiv">
                     <h2>Your request has been submitted! Please wait for admin's evaluation of your application.</h2>
                 </div>
-            <?php } ?>
+            <?php } else {
+                header("Location: ../register.php");
+                exit();
+            } ?>
         </main>
 
         <?php include 'footer.php';
         include 'loader.php'; ?>
     </div>
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
     <!-- Notification Ajax -->
@@ -579,7 +563,67 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 title: 'Email Already Exist!',
                 text: 'The email address you entered is already registered.'
             })
-        }
+        };
+    </script>
+
+    <?php if (isset($_SESSION['message']) || isset($_SESSION['success'])): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+
+                <?php if (isset($_SESSION['message'])): ?>
+                    Toast.fire({
+                        icon: 'error',
+                        title: <?= json_encode(strip_tags($_SESSION['message'])) ?>
+                    });
+                    <?php unset($_SESSION['message']); ?>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['success'])): ?>
+                    Toast.fire({
+                        icon: 'success',
+                        title: <?= json_encode(strip_tags($_SESSION['success'])) ?>
+                    });
+                    <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
+            });
+        </script>
+    <?php endif; ?>
+
+
+    <script>
+        const phoneNumber = document.getElementById('phoneNumber');
+        const zipCode = document.getElementById('zip');
+        // const tooltip = document.getElementById('tooltip');
+
+        const inputs = [
+            phoneNumber,
+            zip
+        ].filter(Boolean);
+        inputs.forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (!/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                }
+                // tooltip.classList.add('show');
+
+
+                // clearTimeout(tooltip.hideTimeout);
+                // tooltip.hideTimeout = setTimeout(() => {
+                //     tooltip.classList.remove('show');
+                // }, 2000);
+            });
+        });
     </script>
 
 

@@ -144,8 +144,51 @@ require '../Config/dbcon.php';
                 provide a range of services that contribute to making every celebration special.</p>
         </div>
 
+        <?php
+        $approvedPartnerID = 2;
+        $getPartnersQuery = $conn->prepare("SELECT p.companyName, pt.partnerTypeDescription, ppt.isApproved
+                                            FROM partnership p 
+                                            LEFT JOIN 
+                                                partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID 
+                                            LEFT JOIN
+                                                partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID
+                                            WHERE 
+                                                p.partnerStatusID = ?
+                                                ");
+        $getPartnersQuery->bind_param('i', $approvedPartnerID);
+        if (!$getPartnersQuery->execute()) {
+            error_log('Failed fetching the partners of mamyr. ' . $getPartnersQuery->error);
+        }
+
+        $result = $getPartnersQuery->get_result();
+
+        $partners = [];
+
+        if ($result->num_rows === 0) {
+            $partners = [];
+        }
+
+        while ($row = $result->fetch_assoc()) {
+            $partners[] = $row;
+        }
+
+        ?>
+
 
         <div class="BPContainer">
+            <?php if (!empty($partners)):
+                foreach ($partners as $partner): ?>
+                    <div class="card bp-card" id="bp1">
+                        <img src="../Assets/Images/no-picture.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= ucwords($partner['companyName']) ?></h5>
+                            <h6 class="card-subtitle">Photography</h6>
+                            <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi, ea aliquid.
+                            </p>
+                        </div>
+                    </div>
+            <?php endforeach;
+            endif; ?>
 
             <div class="card bp-card" id="bp1">
                 <img src="../Assets/Images/no-picture.jpg" class="card-img-top" alt="...">
