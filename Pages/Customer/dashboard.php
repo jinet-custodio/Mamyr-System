@@ -250,8 +250,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <section class="middle-container">
             <div class="embed-responsive embed-responsive-16by9">
                 <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
-                    poster="../../Assets/Videos/thumbnail2.jpg">
-                    <source src="../../Assets/Videos/mamyrVideo3.mp4" type="video/mp4">
+                    poster="../../Assets/videos/thumbnail2.jpg">
+                    <source src="../../Assets/videos/mamyrVideo3.mp4" type="video/mp4">
 
                 </video>
             </div>
@@ -541,40 +541,40 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </script>
 
     <script>
-    async function getRatings() {
-        const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
-        const data = await response.json();
+        async function getRatings() {
+            const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
+            const data = await response.json();
 
-        const resortBar = document.getElementById('resort-bar');
-        resortBar.style.width = data.resortPercent + '%';
-        resortBar.setAttribute('ari-valuenow', data.resortPercent)
-        document.getElementById('resort-rating-value').textContent = data.resortRating;
+            const resortBar = document.getElementById('resort-bar');
+            resortBar.style.width = data.resortPercent + '%';
+            resortBar.setAttribute('ari-valuenow', data.resortPercent)
+            document.getElementById('resort-rating-value').textContent = data.resortRating;
 
-        const hotelBar = document.getElementById('hotel-bar');
-        hotelBar.style.width = data.hotelPercent + '%';
-        hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
-        document.getElementById('hotel-rating-value').textContent = data.hotelRating;
+            const hotelBar = document.getElementById('hotel-bar');
+            hotelBar.style.width = data.hotelPercent + '%';
+            hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
+            document.getElementById('hotel-rating-value').textContent = data.hotelRating;
 
-        const eventBar = document.getElementById('event-bar');
-        eventBar.style.width = data.eventPercent + '%';
-        eventBar.setAttribute('ari-valuenow', data.eventPercent)
-        document.getElementById('event-rating-value').textContent = data.eventRating;
+            const eventBar = document.getElementById('event-bar');
+            eventBar.style.width = data.eventPercent + '%';
+            eventBar.setAttribute('ari-valuenow', data.eventPercent)
+            document.getElementById('event-rating-value').textContent = data.eventRating;
 
-        document.getElementById('overall-rating-value').textContent = data.overAllRating;
-        const starContainer = document.getElementById('star-container');
-        starContainer.innerHTML = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= Math.floor(data.overAllRating)) {
-                starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
-            } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
-                starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
-            } else {
-                starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
+            document.getElementById('overall-rating-value').textContent = data.overAllRating;
+            const starContainer = document.getElementById('star-container');
+            starContainer.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(data.overAllRating)) {
+                    starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
+                } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
+                    starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
+                } else {
+                    starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
+                }
             }
         }
-    }
-    getRatings();
-    setInterval(getRatings, 300000);
+        getRatings();
+        setInterval(getRatings, 300000);
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

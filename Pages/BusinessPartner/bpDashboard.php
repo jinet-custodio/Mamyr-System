@@ -149,9 +149,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -162,33 +162,40 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                <li class="nav-item">
+                    <?php if ($userRole !== 2): ?>
+                        <a class="nav-link" href="dashboard.php"> Home</a>
+                    <?php else: ?>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                    <?php endif; ?>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        AMENITIES
+                        Amenities
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="../Customer/amenities.php">RESORT AMENITIES</a></li>
-                        <li><a class="dropdown-item" href="../Customer/ratesAndHotelRooms.php">RATES AND HOTEL ROOMS</a>
+                        <li><a class="dropdown-item" href="../Customer/amenities.php">Resort Amenities</a></li>
+                        <li><a class="dropdown-item" href="../Customer/ratesAndHotelRooms.php">Rates and Hotel Rooms</a>
                         </li>
-                        <li><a class="dropdown-item" href="../Customer/events.php">EVENTS</a>
+                        <li><a class="dropdown-item" href="../Customer/events.php">Events</a>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../Customer/blog.php">BLOG</a>
+                    <a class="nav-link" href="../Customer/blog.php">Blog</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="../Customer/about.php">ABOUT</a>
+                    <a class="nav-link" href="../Customer/about.php">About</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="../Customer/bookNow.php">BOOK NOW</a>
+                    <a class="nav-link" href="../Customer/bookNow.php">Book Now</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">LOG OUT</a>
+                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">Log Out</a>
                 </li>
 
             </ul>
@@ -336,34 +343,34 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             <div class="services-container">
                                 <ul>
                                     <?php
-                                // Get Services
-                                $getServicesQuery = $conn->prepare('SELECT ps.`PBName`, ps.`PBPrice` FROM `partnershipservice` ps 
+                                    // Get Services
+                                    $getServicesQuery = $conn->prepare('SELECT ps.`PBName`, ps.`PBPrice` FROM `partnershipservice` ps 
                                 WHERE  partnershipID = ?');
-                                $getServicesQuery->bind_param('i', $partnershipID);
-                                if (!$getServicesQuery->execute()) {
-                                    error_log('Failed executing services query: ' . $getServicesQuery->error());
-                                }
+                                    $getServicesQuery->bind_param('i', $partnershipID);
+                                    if (!$getServicesQuery->execute()) {
+                                        error_log('Failed executing services query: ' . $getServicesQuery->error());
+                                    }
 
-                                $result = $getServicesQuery->get_result();
+                                    $result = $getServicesQuery->get_result();
 
 
-                                if (!$result->num_rows === 0) {
-                                ?>
-                                    <li>No Services</li>
+                                    if (!$result->num_rows === 0) {
+                                    ?>
+                                        <li>No Services</li>
                                     <?php
-                                }
+                                    }
 
-                                while ($service = $result->fetch_assoc()) {
-                                    // echo '<pre>';
-                                    // print_r("ID: " . $partnershipID);
-                                    // echo '</pre>';
-                                ?>
-                                    <li class="serviceNamePrice"><?= htmlspecialchars(ucfirst($service['PBName'])) ?>
-                                        &mdash; ₱<?= number_format($service['PBPrice']) ?></li>
+                                    while ($service = $result->fetch_assoc()) {
+                                        // echo '<pre>';
+                                        // print_r("ID: " . $partnershipID);
+                                        // echo '</pre>';
+                                    ?>
+                                        <li class="serviceNamePrice"><?= htmlspecialchars(ucfirst($service['PBName'])) ?>
+                                            &mdash; ₱<?= number_format($service['PBPrice']) ?></li>
                                     <?php
-                                }
+                                    }
 
-                                ?>
+                                    ?>
                                 </ul>
 
                             </div>
@@ -380,25 +387,25 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <section class="middle-container">
             <div class="embed-responsive embed-responsive-16by9">
                 <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
-                    poster="Assets/Videos/thumbnail2.jpg">
-                    <source src="../../Assets/Videos/mamyrVideo3.mp4" type="video/mp4">
+                    poster="../../Assets/videos/thumbnail2.jpg">
+                    <source src="../../Assets/videos/mamyrVideo3.mp4" type="video/mp4">
 
                 </video>
             </div>
             <div class="videoText-container">
                 <?php if ($editMode): ?>
-                <input type="text" class="editable-input videoTitle form-control" data-title="Heading2"
-                    value="<?= htmlspecialchars($contentMap['Heading2'] ?? 'Title Not Found') ?>">
-                <textarea cols="20" rows="5" type="text" class="editable-input form-control subtext"
-                    data-title="Subheading2"><?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?></textarea>
+                    <input type="text" class="editable-input videoTitle form-control" data-title="Heading2"
+                        value="<?= htmlspecialchars($contentMap['Heading2'] ?? 'Title Not Found') ?>">
+                    <textarea cols="20" rows="5" type="text" class="editable-input form-control subtext"
+                        data-title="Subheading2"><?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?></textarea>
                 <?php else: ?>
-                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Heading2'] ?? 'Name Not Found') ?> </h3>
-                <p class="videoDescription indent">
-                    <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
-                <div class="middle-btn-container">
-                    <a href="../Customer/bookNow.php" class="btn btn-primary">Book Now</a>
-                    <a href="../amenities.php" class="btn btn-primary">View our Amenities</a>
-                </div>
+                    <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Heading2'] ?? 'Name Not Found') ?> </h3>
+                    <p class="videoDescription indent">
+                        <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
+                    <div class="middle-btn-container">
+                        <a href="../Customer/bookNow.php" class="btn btn-primary bookNowBtn">Book Now</a>
+                        <a href="../amenities.php" class="btn btn-primary viewBtn">View our Amenities</a>
+                    </div>
                 <?php endif; ?>
             </div>
         </section>
@@ -407,38 +414,38 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             <div class="bottom-text-container">
                 <?php if ($editMode): ?>
-                <input type="text" class="editable-input bottom-header form-control" data-title="BookNow"
-                    value="<?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?>">
-                <textarea cols="20" rows="5" type="text" class="editable-input form-control bottom-subtext"
-                    data-title="BookNowDesc"><?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?></textarea>
+                    <input type="text" class="editable-input bottom-header form-control" data-title="BookNow"
+                        value="<?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?>">
+                    <textarea cols="20" rows="5" type="text" class="editable-input form-control bottom-subtext"
+                        data-title="BookNowDesc"><?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?></textarea>
                 <?php else: ?>
-                <h3 class="bottom-header"><?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?> </h3>
-                <p class="bottom-subtext indent">
-                    <?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?> </p>
+                    <h3 class="bottom-header"><?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?> </h3>
+                    <p class="bottom-subtext indent">
+                        <?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?> </p>
                 <?php endif; ?>
             </div>
 
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
                     <?php if (isset($imageMap['BookNow'])): ?>
-                    <?php foreach ($imageMap['BookNow'] as $index => $img):
-                        $imagePath = "../../Assets/Images/landingPage/" . $img['imageData'];
-                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-                    ?>
-                    <div class="swiper-slide">
-                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                            class="editable-img d-block w-100" style="cursor: pointer;" <?php if ($editMode): ?>
-                            data-bs-toggle="modal" data-bs-target="#editImageModal"
-                            data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
-                            data-folder="<?= $folder ?? '' ?>"
-                            data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
-                            data-alttext="<?= htmlspecialchars($img['altText'] ?? '') ?>" <?php endif; ?>>
-                    </div>
-                    <?php endforeach; ?>
+                        <?php foreach ($imageMap['BookNow'] as $index => $img):
+                            $imagePath = "../../Assets/Images/landingPage/" . $img['imageData'];
+                            $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                        ?>
+                            <div class="swiper-slide">
+                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                    class="editable-img d-block w-100" style="cursor: pointer;" <?php if ($editMode): ?>
+                                    data-bs-toggle="modal" data-bs-target="#editImageModal"
+                                    data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
+                                    data-folder="<?= $folder ?? '' ?>"
+                                    data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
+                                    data-alttext="<?= htmlspecialchars($img['altText'] ?? '') ?>" <?php endif; ?>>
+                            </div>
+                        <?php endforeach; ?>
                     <?php else: ?>
-                    <div class="card-img">
-                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                    </div>
+                        <div class="card-img">
+                            <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
+                        </div>
                     <?php endif; ?>
 
                 </div>
@@ -449,14 +456,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <section class="rating-container">
             <div class="locationText-container">
                 <?php if ($editMode): ?>
-                <input type="text" class="editable-input videoTitle form-control" data-title="Reviews"
-                    value="<?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?>">
-                <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
-                    data-title="ReviewsDesc"><?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?></textarea>
+                    <input type="text" class="editable-input videoTitle form-control" data-title="Reviews"
+                        value="<?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?>">
+                    <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
+                        data-title="ReviewsDesc"><?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?></textarea>
                 <?php else: ?>
-                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
-                <p class="videoDescription indent">
-                    <?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?> </p>
+                    <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                    <p class="videoDescription indent">
+                        <?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?> </p>
                 <?php endif; ?>
             </div>
 
@@ -526,26 +533,26 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <section class="location-container">
             <div class="locationText-container">
                 <?php if ($editMode): ?>
-                <input type="text" class="editable-input videoTitle form-control" data-title="Map"
-                    value="<?= htmlspecialchars($contentMap['Map'] ?? 'Title Not Found') ?>">
-                <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
-                    data-title="MapDesc"><?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?></textarea>
+                    <input type="text" class="editable-input videoTitle form-control" data-title="Map"
+                        value="<?= htmlspecialchars($contentMap['Map'] ?? 'Title Not Found') ?>">
+                    <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
+                        data-title="MapDesc"><?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?></textarea>
                 <?php else: ?>
-                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
-                <p class="videoDescription indent">
-                    <?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?> </p>
+                    <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                    <p class="videoDescription indent">
+                        <?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?> </p>
                 <?php endif; ?>
             </div>
 
             <div id="map"></div>
         </section>
         <?php if ($editMode) {
-        include 'Pages/editImageModal.php';
-    } else {
-        include '../../Pages/Customer/footer.php';
-        include '../../Pages/loader.php';
-    }
-    ?>
+            include 'Pages/editImageModal.php';
+        } else {
+            include '../../Pages/Customer/footer.php';
+            include '../../Pages/Customer/loader.php';
+        }
+        ?>
     </main>
 
 
@@ -617,39 +624,39 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <!-- Initialize Swiper -->
     <script>
-    var swiper = new Swiper(".mySwiper", {
-        loop: true,
-        loopedSlides: 3,
-        spaceBetween: 30,
+        var swiper = new Swiper(".mySwiper", {
+            loop: true,
+            loopedSlides: 3,
+            spaceBetween: 30,
 
-        slidesPerView: 3,
+            slidesPerView: 3,
 
-        breakpoints: {
-            0: {
-                slidesPerView: 1,
-                spaceBetween: 10,
+            breakpoints: {
+                0: {
+                    slidesPerView: 1,
+                    spaceBetween: 10,
+                },
+                600: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                }
             },
-            600: {
-                slidesPerView: 2,
-                spaceBetween: 20,
+
+
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
             },
-            1024: {
-                slidesPerView: 3,
-                spaceBetween: 30,
+
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
             }
-        },
-
-
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        }
-    });
+        });
     </script>
 
 
@@ -657,139 +664,66 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-    const lat = 15.05073200154005;
-    const lon = 121.0218658098424;
+        const lat = 15.05073200154005;
+        const lon = 121.0218658098424;
 
-    const map = L.map('map').setView([lat, lon], 13);
+        const map = L.map('map').setView([lat, lon], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-
-    const customIcon = L.icon({
-        iconUrl: '../../Assets/Images/MamyrLogo.png',
-        iconSize: [100, 25], // Size of the logo 
-        iconAnchor: [25, 50], // Anchor point of the icon 
-        popupAnchor: [0, -50] // Popup anchor point 
-    });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
 
-    L.marker([lat, lon], {
-            icon: customIcon
-        }).addTo(map)
-        .bindPopup('Mamyr Resort and Events Place is Located Here!')
-        .openPopup();
-    </script>
-
-    <script>
-    async function getRatings() {
-        const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
-        const data = await response.json();
-
-        const resortBar = document.getElementById('resort-bar');
-        resortBar.style.width = data.resortPercent + '%';
-        resortBar.setAttribute('ari-valuenow', data.resortPercent)
-        document.getElementById('resort-rating-value').textContent = data.resortRating;
-
-        const hotelBar = document.getElementById('hotel-bar');
-        hotelBar.style.width = data.hotelPercent + '%';
-        hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
-        document.getElementById('hotel-rating-value').textContent = data.hotelRating;
-
-        const eventBar = document.getElementById('event-bar');
-        eventBar.style.width = data.eventPercent + '%';
-        eventBar.setAttribute('ari-valuenow', data.eventPercent)
-        document.getElementById('event-rating-value').textContent = data.eventRating;
-
-        document.getElementById('overall-rating-value').textContent = data.overAllRating;
-        const starContainer = document.getElementById('star-container');
-        starContainer.innerHTML = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= Math.floor(data.overAllRating)) {
-                starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
-            } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
-                starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
-            } else {
-                starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
-            }
-        }
-    }
-    getRatings();
-    setInterval(getRatings, 300000);
-    </script>
-
-    <script>
-    //Handle sidebar for responsiveness
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('toggle-btn');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const items = document.querySelectorAll('.list-group-item');
-        const toggleCont = document.getElementById('toggle-container')
-
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-
-            if (sidebar.classList.contains('collapsed')) {
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                });
-                toggleCont.style.justifyContent = "center"
-            } else {
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                toggleCont.style.justifyContent = "flex-end"
-            }
+        const customIcon = L.icon({
+            iconUrl: '../../Assets/Images/MamyrLogo.png',
+            iconSize: [100, 25], // Size of the logo 
+            iconAnchor: [25, 50], // Anchor point of the icon 
+            popupAnchor: [0, -50] // Popup anchor point 
         });
 
-        function handleResponsiveSidebar() {
-            if (window.innerWidth <= 600) {
-                sidebar.classList.add('collapsed');
-                toggleBtn.style.display = "flex";
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                })
 
-            } else {
-                toggleBtn.style.display = "none";
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                })
-                sidebar.classList.remove('collapsed');
-            }
-        }
-
-        // Run on load and when window resizes
-        handleResponsiveSidebar();
-        window.addEventListener('resize', handleResponsiveSidebar);
-    });
+        L.marker([lat, lon], {
+                icon: customIcon
+            }).addTo(map)
+            .bindPopup('Mamyr Resort and Events Place is Located Here!')
+            .openPopup();
     </script>
 
     <script>
-    const logoutBtn = document.getElementById('logoutBtn');
-    const logoutModal = document.getElementById('logoutModal');
+        async function getRatings() {
+            const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
+            const data = await response.json();
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
+            const resortBar = document.getElementById('resort-bar');
+            resortBar.style.width = data.resortPercent + '%';
+            resortBar.setAttribute('ari-valuenow', data.resortPercent)
+            document.getElementById('resort-rating-value').textContent = data.resortRating;
+
+            const hotelBar = document.getElementById('hotel-bar');
+            hotelBar.style.width = data.hotelPercent + '%';
+            hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
+            document.getElementById('hotel-rating-value').textContent = data.hotelRating;
+
+            const eventBar = document.getElementById('event-bar');
+            eventBar.style.width = data.eventPercent + '%';
+            eventBar.setAttribute('ari-valuenow', data.eventPercent)
+            document.getElementById('event-rating-value').textContent = data.eventRating;
+
+            document.getElementById('overall-rating-value').textContent = data.overAllRating;
+            const starContainer = document.getElementById('star-container');
+            starContainer.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(data.overAllRating)) {
+                    starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
+                } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
+                    starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
+                } else {
+                    starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
+                }
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/logout.php";
-            }
-        });
-    })
+        }
+        getRatings();
+        setInterval(getRatings, 300000);
     </script>
 
     <!-- This is shown if no data to display -->
@@ -797,33 +731,33 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <!-- Line Chart for sales  -->
     <script>
-    const salesGraph = document.getElementById('salesGraph').getContext('2d');
-    const labels = <?= json_encode($months) ?>;
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: "Monthly Sales Report — <?= !empty($year) ? json_encode($year) : DATE('Y') ?>",
-            data: <?= json_encode($sales) ?>,
-            fill: false,
-            backgroundColor: 'rgb(33, 148, 209, .5)',
-            borderColor: 'rgb(33, 148, 209, 1)',
-            tension: 0.1
-        }]
-    };
+        const salesGraph = document.getElementById('salesGraph').getContext('2d');
+        const labels = <?= json_encode($months) ?>;
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: "Monthly Sales Report — <?= !empty($year) ? json_encode($year) : DATE('Y') ?>",
+                data: <?= json_encode($sales) ?>,
+                fill: false,
+                backgroundColor: 'rgb(33, 148, 209, .5)',
+                borderColor: 'rgb(33, 148, 209, 1)',
+                tension: 0.1
+            }]
+        };
 
-    const lineSalesChart = new Chart(salesGraph, {
-        type: 'bar',
-        data: data,
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+        const lineSalesChart = new Chart(salesGraph, {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
-            }
-        },
-        plugins: ['noDataPlugin']
-    })
+            },
+            plugins: ['noDataPlugin']
+        })
     </script>
 </body>
 

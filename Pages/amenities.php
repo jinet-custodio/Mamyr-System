@@ -65,7 +65,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <?php endif; ?>
     <?php if (!$editMode): ?>
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+            <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
             <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

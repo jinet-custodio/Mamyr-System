@@ -250,8 +250,8 @@ require '../../Function/notification.php';
 
         <div class="embed-responsive embed-responsive-16by9">
             <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
-                poster="../../Assets/Videos/thumbnail2.jpg">
-                <source src="../../Assets/Videos/mamyrVideo2.mp4" type="video/mp4">
+                poster="../../Assets/videos/thumbnail2.jpg">
+                <source src="../../Assets/videos/mamyrVideo2.mp4" type="video/mp4">
 
             </video>
         </div>

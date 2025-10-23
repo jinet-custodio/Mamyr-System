@@ -34,7 +34,7 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
     <div class="wrapper">
         <?php if (!$editMode): ?>
             <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: white;">
-                <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+                <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
                 <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -186,7 +186,8 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
                                         <button class="btn btn-primary"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
+                                            data-bs-target="#modal<?= htmlspecialchars($postID) ?>"
+                                            id="featuredReadmore">
                                             Read More
                                         </button>
                                     </div>

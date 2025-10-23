@@ -81,7 +81,7 @@ while ($row = $getEventsResult->fetch_assoc()) {
 <body>
     <?php if (!$editMode): ?>
         <nav class="navbar navbar-expand-lg fixed-top white-text" id="navbar-half">
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+            <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
             <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>

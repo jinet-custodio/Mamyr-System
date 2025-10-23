@@ -293,7 +293,11 @@
   }
 
   .sidebar-icon {
-    font-size: clamp(2.6vw, 2.3vw, 2vw);
+    font-size: clamp(
+      var(--font-size-xl),
+      var(--font-size-md),
+      var(--font-size-lg)
+    );
   }
 
   .sidebar-header h5 {
@@ -306,11 +310,16 @@
   }
 
   .profileImage img {
-    height: clamp(13vw, 11vw, 10vw);
+    height: clamp(8vw, 6vw, 7vw);
   }
 
   .homeIcon {
     font-size: 25px;
+  }
+
+  .home {
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -335,7 +344,7 @@
   }
 
   .profileImage img {
-    height: clamp(13vw, 11vw, 10vw);
+    height: clamp(8vw, 6vw, 7vw);
   }
   .list-group {
     font-size: clamp(2.5vw, 2.2vw, 2vw);

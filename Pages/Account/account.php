@@ -513,8 +513,9 @@ $userRole = $_SESSION['userRole'];
             });
 
             function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
+                if (window.innerWidth <= 1240) {
                     sidebar.classList.add('collapsed');
+                    mainContent.style.marginLeft = "15vw";
                     toggleBtn.style.display = "flex";
                     items.forEach(item => {
                         item.style.justifyContent = "center";
@@ -525,6 +526,7 @@ $userRole = $_SESSION['userRole'];
                     items.forEach(item => {
                         item.style.justifyContent = "flex-start";
                     })
+                    mainContent.style.marginLeft = "290px"
                     sidebar.classList.remove('collapsed');
                 }
             }

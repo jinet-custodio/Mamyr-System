@@ -99,7 +99,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
 
         $partnershipID = $data['partnershipID'];
-        $encodedPartnershipID = base64_encode($partnershipID);
+        $encodedPartnershipID = base64_encode($partnershipID ?? '');
     }
 
     ?>
@@ -113,17 +113,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
             <div class="home text-center">
                 <?php if ($role === 'Customer') { ?>
-                <a href="../Customer/dashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../Customer/dashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../Admin/adminDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                <a href="../BusinessPartner/bpDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } ?>
             </div>
             <div class="sidebar-header text-center">
@@ -143,39 +143,39 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                        <i class="bi bi-calendar2-check sidebar-icon"></i>
-                        <span class="sidebar-text">Payment & Booking History</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                            <i class="bi bi-calendar2-check sidebar-icon"></i>
+                            <span class="sidebar-text">Payment & Booking History</span>
+                        </a>
+                    </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                <li class="sidebar-item">
-                    <a href="userManagement.php" class="list-group-item">
-                        <i class="bi bi-person-gear sidebar-icon"></i>
-                        <span class="sidebar-text">Manage Users</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="bi bi-person-gear sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bpBookings.php" class="list-group-item">
-                        <i class="bi bi-calendar-week sidebar-icon"></i>
-                        <span class="sidebar-text">Bookings</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpServices.php" class="list-group-item">
-                        <i class="bi bi-bell sidebar-icon"></i>
-                        <span class="sidebar-text">Services</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpSales.php" class="list-group-item active">
-                        <i class="bi bi-tags sidebar-icon"></i>
-                        <span class="sidebar-text">Sales</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bpBookings.php" class="list-group-item">
+                            <i class="bi bi-calendar-week sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpServices.php" class="list-group-item">
+                            <i class="bi bi-bell sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpSales.php" class="list-group-item active">
+                            <i class="bi bi-tags sidebar-icon"></i>
+                            <span class="sidebar-text">Sales</span>
+                        </a>
+                    </li>
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -285,18 +285,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="../../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#booking').DataTable({
-            language: {
-                emptyTable: "No Services"
-            },
-            columnDefs: [{
-                width: '15%',
-                target: 0
+        $(document).ready(function() {
+            $('#booking').DataTable({
+                language: {
+                    emptyTable: "No Services"
+                },
+                columnDefs: [{
+                    width: '15%',
+                    target: 0
 
-            }]
+                }]
+            });
         });
-    });
     </script>
 
     <!-- Bootstrap Link -->
@@ -308,77 +308,79 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    //Handle sidebar for responsiveness
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('toggle-btn');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const items = document.querySelectorAll('.list-group-item');
-        const toggleCont = document.getElementById('toggle-container');
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container');
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
 
-            if (sidebar.classList.contains('collapsed')) {
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                });
-                toggleCont.style.justifyContent = "center";
-            } else {
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                toggleCont.style.justifyContent = "flex-end"
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center";
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 1240) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    mainContent.style.marginLeft = "15vw";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    mainContent.style.marginLeft = "290px";
+                    sidebar.classList.remove('collapsed');
+                }
             }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
         });
-
-        function handleResponsiveSidebar() {
-            if (window.innerWidth <= 600) {
-                sidebar.classList.add('collapsed');
-                toggleBtn.style.display = "flex";
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                })
-
-            } else {
-                toggleBtn.style.display = "none";
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                })
-                sidebar.classList.remove('collapsed');
-            }
-        }
-
-        // Run on load and when window resizes
-        handleResponsiveSidebar();
-        window.addEventListener('resize', handleResponsiveSidebar);
-    });
     </script>
 
     <!-- Show  -->
     <script>
-    const logoutBtn = document.getElementById('logoutBtn');
-    const logoutModal = document.getElementById('logoutModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/logout.php";
-            }
-        });
-    })
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/logout.php";
+                }
+            });
+        })
     </script>
 
     <!-- Chart JS -->
@@ -389,30 +391,30 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- <script src="../../Assets/JS/ChartNoData.js"></script> -->
 
     <script>
-    const bar = document.getElementById("revenueBar").getContext('2d');
+        const bar = document.getElementById("revenueBar").getContext('2d');
 
-    const myBarChart = new Chart(bar, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($years) ?>,
-            datasets: [{
-                label: "Yearly Sales Report",
-                data: <?= json_encode($sales) ?>,
-                backgroundColor: 'rgba(14, 194, 194, 1)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+        const myBarChart = new Chart(bar, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode($years) ?>,
+                datasets: [{
+                    label: "Yearly Sales Report",
+                    data: <?= json_encode($sales) ?>,
+                    backgroundColor: 'rgba(14, 194, 194, 1)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
-            }
-        },
-        plugins: ['noDataPlugin']
-    });
+            },
+            plugins: ['noDataPlugin']
+        });
     </script>
 </body>
 

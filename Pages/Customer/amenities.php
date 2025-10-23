@@ -202,7 +202,7 @@ require '../../Function/notification.php';
 
                 <div class="embed-responsive embed-responsive-16by9">
                     <video id="mamyrVideo" autoplay muted loop controls class="embed-responsive-item">
-                        <source src="../../Assets/Videos/mamyrVideo1.mp4" type="video/mp4">
+                        <source src="../../Assets/videos/mamyrVideo1.mp4" type="video/mp4">
                     </video>
 
                 </div>
