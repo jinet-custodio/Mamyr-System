@@ -141,7 +141,7 @@ main {
 
 #featuredReadmore,
 .othersReadmore {
-  font-size: clamp(1.5vw, calc(1.2vw + 2px), 1vw) !important;
+  font-size: clamp(1.1vw, calc(1.2vw + 2px), 1vw) !important;
 }
 
 .othersEventType p {
@@ -388,7 +388,7 @@ input.headerEdit {
   }
 
   #featuredReadmore {
-    font-size: 2vw !important;
+    font-size: 1.4vw !important;
   }
 
   .others {
@@ -403,7 +403,7 @@ input.headerEdit {
 
   .othersEventType p,
   .othersReadmore {
-    font-size: clamp(1.7vw, calc(1.4vw + 2px), 1.2vw) !important;
+    font-size: clamp(1.4vw, calc(1.4vw + 2px), 1.2vw) !important;
   }
 
   .othersHeading h4,
@@ -516,7 +516,7 @@ input.headerEdit {
     width: 50% !important;
   }
 
-  .othersEventType p,
+  p.othersEventType,
   .othersReadmore {
     font-size: clamp(2.1vw, calc(1.7vw + 2px), 1.5vw) !important;
   }

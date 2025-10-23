@@ -506,9 +506,10 @@ require_once '../../Function/Partner/getBookings.php';
             });
 
             function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
+                if (window.innerWidth <= 1240) {
                     sidebar.classList.add('collapsed');
                     toggleBtn.style.display = "flex";
+                    mainContent.style.marginLeft = "15vw";
                     items.forEach(item => {
                         item.style.justifyContent = "center";
                     })
@@ -517,7 +518,8 @@ require_once '../../Function/Partner/getBookings.php';
                     toggleBtn.style.display = "none";
                     items.forEach(item => {
                         item.style.justifyContent = "flex-start";
-                    })
+                    });
+                    mainContent.style.marginLeft = "290px"
                     sidebar.classList.remove('collapsed');
                 }
             }

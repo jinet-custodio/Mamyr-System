@@ -17,7 +17,7 @@
 
 .main-content {
   /* border: 1px solid red; */
-  margin-left: 20vw;
+  margin-left: 290px;
   margin-top: 5rem;
   padding: 1rem;
   overflow-y: auto;
@@ -406,7 +406,6 @@ input[type="password"]::-webkit-search-cancel-button {
 
   .input-box label {
     width: 25%;
-    font-size: clamp(20px, 2vw, 1.9vw);
     text-align: center;
   }
 

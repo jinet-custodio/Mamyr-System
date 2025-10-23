@@ -105,6 +105,11 @@ unset($_SESSION['tempImage']) ?>
 <body>
     <div class="wrapper d-flex">
         <aside class="sidebar" id="sidebar">
+            <div class="d-flex justify-content-center" id="toggle-container">
+                <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
+            </div>
             <div class="home">
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
                     <a href="../Customer/dashboard.php">
@@ -120,14 +125,7 @@ unset($_SESSION['tempImage']) ?>
                     </a>
                 <?php } ?>
             </div>
-
             <div class="sidebar-header text-center">
-                <div class="d-flex justify-content-center" id="toggle-container">
-                    <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </button>
-                </div>
-
                 <h5 class="sidebar-text">User Account</h5>
 
                 <?php

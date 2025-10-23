@@ -62,7 +62,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <div class="wrapper">
         <nav class="navbar navbar-expand-lg fixed-top white-text" id="navbar-half2">
             <!-- Account Icon on the Left -->
-            <ul class="navbar-nav">
+            <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
                 <?php
                 $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);

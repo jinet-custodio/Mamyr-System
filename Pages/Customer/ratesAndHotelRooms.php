@@ -149,8 +149,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
-                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
-                            <li><a class="dropdown-item active" href="events.php">Events</a></li>
+                            <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                            <li><a class="dropdown-item" href="events.php">Events</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

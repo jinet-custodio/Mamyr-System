@@ -98,24 +98,24 @@ switch ($userRole) {
     ?>
     <div class="wrapper d-flex">
         <aside class="sidebar" id="sidebar">
-            <div class="d-flex" id="toggle-container">
+            <div class="d-flex justify-content-center" id="toggle-container">
                 <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </button>
             </div>
             <div class="home">
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
-                <a href="../Customer/dashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../Customer/dashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../Admin/adminDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                <a href="../BusinessPartner/bpDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } ?>
 
             </div>
@@ -153,42 +153,48 @@ switch ($userRole) {
 
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner' || $role === 'Partnership Applicant') { ?>
-                <li>
-                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                        <i class="bi bi-calendar2-check sidebar-icon"></i>
-                        <span class="sidebar-text">Payment & Booking History</span>
-                    </a>
-                </li>
+                    <li>
+                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                            <i class="bi bi-calendar2-check sidebar-icon"></i>
+                            <span class="sidebar-text">Payment & Booking History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                            <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                            <span class="sidebar-text">Payment</span>
+                        </a>
+                    </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                <li>
-                    <a href="userManagement.php" class="list-group-item">
-                        <i class="bi bi-person-gear sidebar-icon"></i>
-                        <span class="sidebar-text">Manage Users</span>
-                    </a>
-                </li>
+                    <li>
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="bi bi-person-gear sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php
                 //* For business partner nav
                 if ($role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bpBookings.php" class="list-group-item">
-                        <i class="bi bi-calendar2-check sidebar-icon"></i>
-                        <span class="sidebar-text">Bookings</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpServices.php" class="list-group-item">
-                        <i class="bi bi-bell sidebar-icon"></i>
-                        <span class="sidebar-text">Services</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpSales.php" class="list-group-item">
-                        <i class="bi bi-bell sidebar-icon"></i>
-                        <i class="bi bi-tags sidebar-icon"></i>
-                        <span class="sidebar-text">Sales</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bpBookings.php" class="list-group-item">
+                            <i class="bi bi-calendar2-check sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpServices.php" class="list-group-item">
+                            <i class="bi bi-bell sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpSales.php" class="list-group-item">
+                            <i class="bi bi-bell sidebar-icon"></i>
+                            <i class="bi bi-tags sidebar-icon"></i>
+                            <span class="sidebar-text">Sales</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <li>
                     <a href="loginSecurity.php" class="list-group-item">
@@ -334,99 +340,101 @@ switch ($userRole) {
     </script>
 
     <script>
-    //Handle sidebar for responsiveness
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('toggle-btn');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const items = document.querySelectorAll('.list-group-item');
-        const toggleCont = document.getElementById('toggle-container')
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container')
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
 
-            if (sidebar.classList.contains('collapsed')) {
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                });
-                toggleCont.style.justifyContent = "center"
-            } else {
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                toggleCont.style.justifyContent = "flex-end"
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 1024) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    mainContent.style.marginLeft = "16vw"
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    mainContent.style.marginLeft = "290px";
+                    sidebar.classList.remove('collapsed');
+                }
             }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
         });
-
-        function handleResponsiveSidebar() {
-            if (window.innerWidth <= 600) {
-                sidebar.classList.add('collapsed');
-                toggleBtn.style.display = "flex";
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                })
-
-            } else {
-                toggleBtn.style.display = "none";
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                })
-                sidebar.classList.remove('collapsed');
-            }
-        }
-
-        // Run on load and when window resizes
-        handleResponsiveSidebar();
-        window.addEventListener('resize', handleResponsiveSidebar);
-    });
     </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Show -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramsValue = params.get('action')
-    const confirmationBtn = document.getElementById("confirmationBtn");
-    const confirmationModal = document.getElementById("confirmationModal");
-    const deleteModal = document.getElementById('deleteModal');
-    const logoutBtn = document.getElementById('logoutBtn');
+        const params = new URLSearchParams(window.location.search);
+        const paramsValue = params.get('action')
+        const confirmationBtn = document.getElementById("confirmationBtn");
+        const confirmationModal = document.getElementById("confirmationModal");
+        const deleteModal = document.getElementById('deleteModal');
+        const logoutBtn = document.getElementById('logoutBtn');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../Function/logout.php";
-            }
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../Function/logout.php";
+                }
+            });
         });
-    });
 
-    confirmationBtn.addEventListener("click", function() {
-        const myconfirmationModal = new bootstrap.Modal(confirmationModal);
-        myconfirmationModal.show();
-    });
+        confirmationBtn.addEventListener("click", function() {
+            const myconfirmationModal = new bootstrap.Modal(confirmationModal);
+            myconfirmationModal.show();
+        });
 
-    if (paramsValue === 'success') {
-        const myModal = new bootstrap.Modal(deleteModal);
-        myModal.show();
-    };
+        if (paramsValue === 'success') {
+            const myModal = new bootstrap.Modal(deleteModal);
+            myModal.show();
+        };
 
-    if (paramsValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    };
+        if (paramsValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 </body>
 

@@ -63,7 +63,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <?php endif; ?>
     <?php if (!$editMode): ?>
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
+            <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -290,8 +290,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="embed-responsive embed-responsive-16by9">
             <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
-                poster="../Assets/Videos/thumbnail2.jpg">
-                <source src="../../Assets/Videos/mamyrVideo2.mp4" type="video/mp4">
+                poster="../Assets/videos/thumbnail2.jpg">
+                <source src="../../Assets/videos/mamyrVideo2.mp4" type="video/mp4">
 
             </video>
         </div>
