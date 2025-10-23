@@ -323,6 +323,12 @@ option {
   font-weight: var(--font-weight-bold);
 }
 
+.graph-header i,
+.graph-header h6 {
+  font-size: var(--font-size-lg);
+  color: #0d6dfc;
+}
+
 /* .graph {
   width: 403.86px;
   height: 244.21px;

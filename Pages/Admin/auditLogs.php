@@ -348,7 +348,7 @@ if (isset($_SESSION['error'])) {
         });
     </script>
 
-
+    <?php include '../Customer/loader.php'; ?>
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->

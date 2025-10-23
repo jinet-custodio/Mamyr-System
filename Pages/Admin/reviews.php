@@ -235,6 +235,7 @@ require '../../Function/notification.php';
         });
     </script>
 
+    <?php include '../Customer/loader.php'; ?>
 
     <!-- Responsive sidebar -->
     <script src="../../Assets/JS/adminSidebar.js"> </script>

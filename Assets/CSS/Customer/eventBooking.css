@@ -55,8 +55,6 @@
 }
 
 .card {
-  /* margin-top: 1rem; */
-  height: 90vh !important;
   padding: 2rem;
 }
 
@@ -150,11 +148,10 @@
 
 #calendar {
   width: 80%;
-  height: 70vh;
   margin: auto;
   margin-top: 0.5rem !important;
   background-color: #fffefe;
-  border-radius: 2.5rem;
+  border-radius: 3vw;
 }
 
 .fc table {
@@ -452,7 +449,7 @@ input[type="checkbox"],
   }
 
   .secondColumn {
-    width: 100%;
+    width: 98%;
   }
   #calendar {
     width: 100%;

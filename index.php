@@ -75,10 +75,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 <body>
     <?php if (!$editMode): ?>
         <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
@@ -169,8 +169,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <section class="middle-container">
         <div class="embed-responsive embed-responsive-16by9">
             <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
-                poster="Assets/Videos/thumbnail2.jpg">
-                <source src="Assets/Videos/mamyrVideo3.mp4" type="video/mp4">
+                poster="Assets/videos/thumbnail2.jpg">
+                <source src="Assets/videos/Mamyrvideo3.mp4" type="video/mp4">
 
             </video>
         </div>
@@ -481,19 +481,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             document.getElementById('overall-rating-value').textContent = data.overAllRating;
             const starContainer = document.getElementById('star-container');
+            starContainer.innerHTML = '';
             for (let i = 1; i <= 5; i++) {
                 if (i <= Math.floor(data.overAllRating)) {
-                    starContainer.innerHTML += '<i class="bi bi-star-fill text-warning"></i>';
+                    starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
                 } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
-                    starContainer.innerHTML += '<i class="bi bi-star-half text-warning"></i>';
+                    starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
                 } else {
-                    starContainer.innerHTML += '<i class="bi bi-star text-warning"></i>';
+                    starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
                 }
             }
         }
-
-
-
         getRatings();
         setInterval(getRatings, 300000);
     </script>

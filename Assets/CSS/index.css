@@ -602,15 +602,89 @@ a.categoryLink {
 
 @media screen and (max-width: 570px) {
   .modal-dialog {
-    width: 90% !important;
-    max-width: 90% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1rem;
     margin: auto !important;
+  }
+
+  #usertype-modal-content {
+    width: 100% !important;
+  }
+
+  /* .user-category {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  } */
+
+  #userType-modal-label {
+    font-size: 18px;
+  }
+
+  .category-card {
+    width: 10rem !important;
+    height: 18rem !important;
+  }
+
+  .card-img-top {
+    width: 8rem !important;
+    height: auto !important;
+  }
+
+  .category-title {
+    font-size: 16px;
+  }
+
+  .card-text {
+    font-size: 14px;
   }
 }
 
 @media screen and (max-width: 500px) {
   .container {
     height: calc(120vh - 40px);
+  }
+
+  .modal-dialog {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1rem;
+    margin: auto !important;
+  }
+
+  #usertype-modal-content {
+    width: 100% !important;
+  }
+
+  /* .user-category {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  } */
+
+  #userType-modal-label {
+    font-size: 18px;
+  }
+
+  .category-card {
+    width: 10rem !important;
+    height: 18rem !important;
+  }
+
+  .card-img-top {
+    width: 8rem !important;
+    height: auto !important;
+  }
+
+  .category-title {
+    font-size: 16px;
+  }
+
+  .card-text {
+    font-size: 14px;
   }
 }
 
@@ -705,5 +779,45 @@ a.categoryLink {
   #signUp {
     margin-top: 6vw !important;
     margin-bottom: 1rem;
+  }
+
+  .modal-dialog {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1rem;
+    margin: auto !important;
+  }
+
+  #usertype-modal-content {
+    width: 100% !important;
+  }
+
+  /* .user-category {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  } */
+
+  #userType-modal-label {
+    font-size: 18px;
+  }
+
+  .category-card {
+    width: 10rem !important;
+    height: 18rem !important;
+  }
+
+  .card-img-top {
+    width: 8rem !important;
+    height: auto !important;
+  }
+
+  .category-title {
+    font-size: 16px;
+  }
+
+  .card-text {
+    font-size: 14px;
   }
 }

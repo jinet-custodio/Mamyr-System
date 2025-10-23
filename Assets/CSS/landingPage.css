@@ -27,7 +27,6 @@
 
 .topSec {
   width: 98%;
-  height: 80vh;
   margin-top: 5rem !important;
   border-radius: 20px;
   margin: 0 auto;
@@ -35,7 +34,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 5rem 2rem;
 }
 
 .topLeft {
@@ -291,7 +290,7 @@
 
 .ratings-card {
   width: 20rem !important;
-  height: 25rem !important;
+  height: 30rem !important;
   border: none !important;
   background-color: oklch(1 0 0 / 0.4) !important;
   /* display: block;
@@ -342,6 +341,21 @@
 
 .overall-rating-label,
 .overall-rating-stars {
+  text-align: center;
+}
+
+.overall-rating-stars {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 220px;
+  margin: 5px auto;
+}
+
+.star {
+  /* border: 1px solid red; */
+  font-size: 30px !important;
+  width: 25%;
   text-align: center;
 }
 
