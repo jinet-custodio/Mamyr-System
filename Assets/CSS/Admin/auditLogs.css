@@ -173,3 +173,444 @@ button.dt-paging-button {
   background-color: rgba(12, 202, 240, 0.3) !important;
   color: rgb(28, 155, 180);
 }
+
+/* PHONE SIZE */
+@media only screen and (max-width: 599px) {
+
+  .page-title {
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+  .notification-toggler-container {
+    margin-left: 2rem;
+    margin-top: 1rem;
+  }
+  .card {
+    margin-top: 2rem;
+    padding: 1.5vw !important;
+    overflow-x: auto;
+    margin-left: 2.5rem;
+  }
+  .dt-search {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .dt-length {
+    display: flex;
+    gap: 10px;
+    margin-left: 5px;
+  }
+  .dt-layout-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .table>thead {
+    white-space: nowrap;
+  }
+  #sidebar {
+    position: sticky;
+    height: 100vh;
+    overflow-y: auto !important;
+    top: 0;
+    left: 0;
+    width: 18%;
+    background-color: #f5f5f5;
+    padding-top: 20px;
+  }
+  .sidebar-custom {
+    width: 70px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden; 
+    transition: width 0.3s ease;
+  }
+
+
+  .sidebar-custom .nav {
+    flex-grow: 1;
+    width: 100%;
+  }
+
+  .sidebar-custom .nav-link .linkText,
+  .sidebar-custom .admin-name,
+  .sidebar-custom .logoutText {
+    display: none; 
+  }
+
+  .nav-item {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+    position: relative;
+  }
+
+  .nav-item .nav-link {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-item .nav-link i {
+    font-size: 1.8rem;
+  }
+
+  .sidebar-custom section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .sidebar-custom .profileContainer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 10px;
+  }
+
+  .profileContainer .profilePic {
+    width: 45px;
+    height: 45px;
+    margin-right: 6px;
+  }
+
+  .logOutContainer {
+    margin-left:5px ;
+    margin-top: 10px; 
+    margin-bottom: 20px;
+  }
+
+  .logOutContainer a.btn {
+    padding: 10px;
+    font-size: 1.8rem; 
+    display: flex;
+    justify-content: center;
+  }
+
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait){
+
+
+   main {
+        flex-grow: 1; 
+        max-width: unset;
+        margin: 0;
+    }
+  .auditLog-container {
+        max-width: unset;
+        width: 100%;
+    }
+
+    .card {
+      margin-right: 2rem;
+      overflow-x: auto;
+      padding-left: 1px;
+      padding-right: 4rem;
+    }
+
+    .auditLog-table {
+        display: block; 
+        margin: 0;
+        width: calc(100vw - 120px);
+    }
+    .dt-container {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    table#auditLogTable {
+        width: 100% !important;
+        min-width: 800px; 
+    }
+
+    thead th {
+        width: 15% !important; 
+        min-width: 100px;
+    }
+    
+    thead th:nth-child(5) { 
+        width: 25% !important; 
+        min-width: 150px;
+    }
+
+    td, th {
+        font-size: 0.85rem !important;
+        padding: 0.75rem 0.5rem !important;
+        white-space: nowrap;
+    }
+    
+    #auditLogTable_filter,
+    #auditLogTable_length {
+        margin-bottom: 1rem !important;
+        margin-left: 0 !important;
+    }
+
+   .dt-layout-row {
+        display: block;
+        margin-left: 1rem;
+        margin-bottom: 2px !important;
+  }
+  table#auditLogTable {
+    width: 100% !important;
+     min-width: 800px;
+    }
+    .dt-layout-start{
+      margin-left: 9px !important;
+    }
+    .dt-paging {
+      margin-left: 10px;
+    }
+    .dt-layout-row.dt-layout-table {
+        display: unset;
+    }
+    .dt-search {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 5px;
+      margin-left: 3px;
+    }
+
+
+  .toggle-button {
+    align-items: center;
+  }
+  #sidebar {
+    width: 10% !important;
+  }
+
+  .sidebar-custom {
+    width: 70px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden; 
+    transition: width 0.3s ease;
+  }
+
+
+  .sidebar-custom .nav {
+    flex-grow: 1;
+    
+  }
+
+  .sidebar-custom .nav-link .linkText,
+  .sidebar-custom .admin-name,
+  .sidebar-custom .logoutText {
+    display: none; 
+  }
+    .sidebar-custom .logo,
+  .sidebar-custom .sbToggle-container {
+    display: none; 
+  }
+
+  .nav-item {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+    position: relative;
+  }
+
+  .nav-item .nav-link {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-item .nav-link i {
+    font-size: 1.8rem;
+  }
+
+  .sidebar-custom section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .sidebar-custom .profileContainer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 10px;
+  }
+
+  .profileContainer .profilePic {
+    width: 45px;
+    height: 45px;
+    margin-right: 5px;
+  }
+
+  .logOutContainer {
+    margin-left:5px ;
+    margin-top: 10px; 
+    margin-bottom: 20px;
+  }
+
+  .logOutContainer a.btn {
+    padding: 10px;
+    font-size: 1.8rem; 
+    display: flex;
+    justify-content: center;
+  }
+
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: landscape){
+
+    .card {
+      margin-right: 2rem;
+      overflow-x: auto;
+      padding-left: 1px;
+      padding-right: 4rem;
+    }
+    .auditLog-container {
+    margin-bottom: 10rem;
+    margin-right: 1rem;
+  }
+  .page-title {
+    margin-bottom: 2rem;
+  }
+  .dt-search {
+    display: flex;
+    gap: 1rem;
+  }
+  .table>thead {
+    white-space: nowrap;
+  }
+  .dt-layout-row {
+    display: block;
+    margin-left: 1rem;
+    margin-bottom: 2px !important;
+  }
+  table#auditLogTable {
+    width: 100% !important;
+     min-width: 800px;
+    }
+    .dt-layout-start{
+      margin-left: 9px !important;
+    }
+    .dt-paging {
+      margin-left: 10px;
+    }
+     #sidebar {
+    width: 10% !important;
+  }
+
+  .sidebar-custom {
+    width: 70px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden; 
+    transition: width 0.3s ease;
+  }
+
+
+  .sidebar-custom .nav {
+    flex-grow: 1;
+    
+  }
+
+  .sidebar-custom .nav-link .linkText,
+  .sidebar-custom .admin-name,
+  .sidebar-custom .logoutText {
+    display: none; 
+  }
+    .sidebar-custom .logo,
+  .sidebar-custom .sbToggle-container {
+    display: none; 
+  }
+
+  .nav-item {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+    position: relative;
+  }
+
+  .nav-item .nav-link {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-item .nav-link i {
+    font-size: 1.8rem;
+  }
+
+  .sidebar-custom section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .sidebar-custom .profileContainer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 10px;
+  }
+
+  .profileContainer .profilePic {
+    width: 45px;
+    height: 45px;
+    margin-right: 5px;
+  }
+
+  .logOutContainer {
+    margin-left:5px ;
+    margin-top: 10px; 
+    margin-bottom: 20px;
+  }
+
+  .logOutContainer a.btn {
+    padding: 10px;
+    font-size: 1.8rem; 
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1440px) {
+
+  .auditLog-container {
+    margin-bottom: 20rem;
+    margin-right: 1rem;
+  }
+  .page-title {
+    margin-bottom: 2rem;
+  }
+  .dt-search {
+    display: flex;
+    gap: 1rem;
+  }
+}

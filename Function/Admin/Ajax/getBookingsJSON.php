@@ -9,7 +9,7 @@ try {
     $getBookingInfo = $conn->prepare("SELECT LPAD(b.bookingID, 4, 0) AS formattedBookingID,  
                             b.bookingID, b.bookingType, b.userID, b.startDate, b.endDate, b.bookingStatus,
                             u.firstName, u.middleInitial, u.lastName, 
-                            b.customPackageID, 
+                            b.customPackageID, b.createdAt,
                             cb.paymentApprovalStatus, cb.confirmedBookingID, cb.paymentStatus
                         FROM booking b
                         INNER JOIN user u ON b.userID = u.userID
@@ -31,7 +31,7 @@ try {
         $paymentApprovalStatus = getStatuses($conn, $bookings['paymentApprovalStatus'] ?? null);
         $bookingStatus = getStatuses($conn, $bookings['bookingStatus'] ?? null);
         // $paymentStatus = getPaymentStatus($conn, $bookings['paymentStatus']) ?? null;
-
+        $createdOn = date('M. d, Y', strtotime($bookings['createdAt']));
         $status = '';
         $class = '';
         if (!empty($bookings['confirmedBookingID'])) {
@@ -112,6 +112,7 @@ try {
             'status' => $status,
             'statusClass' => $class,
             'bookingStatus' => $bookings['bookingStatus'],
+            'createdOn' => $createdOn
         ];
     }
     echo json_encode(

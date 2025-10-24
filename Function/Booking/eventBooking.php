@@ -76,13 +76,15 @@ if (isset($_POST['eventBook'])) {
     }
 
 
-
+    $partnershipIDs = [];
     $partnerService = [];
     if (!empty($partnerIDs)) {
-        $getServiceID = $conn->prepare("SELECT s.* FROM `service` s 
+        $getServiceID = $conn->prepare("SELECT s.*, ps.PBName, ps.PBPrice, p.partnershipID FROM `service` s 
         LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
+        LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
         WHERE ps.partnershipServiceID = ?");
         foreach ($partnerIDs as $partershipServiceID) {
+            error_log('PSID: ' . $partershipServiceID);
             $partershipServiceID = intval($partershipServiceID);
             $getServiceID->bind_param('i', $partershipServiceID);
 
@@ -91,11 +93,13 @@ if (isset($_POST['eventBook'])) {
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
                     $serviceType = strtolower($row['serviceType']);
-                    $serviceIDs[$serviceType] = $row['partnerServiceID'];
+                    $serviceIDs[$serviceType] = $row['partnershipServiceID'];
                     $serviceID = $row['serviceID'];
                     $price =  $row['PBPrice'];
                     $services[$serviceID] = $price;
                     $partnerService[$partershipServiceID] = $price;
+                    $partnershipID = $row['partnershipID'];
+                    $partnershipIDs[$partnershipID] = $row['PBName'];
                 } else {
                     error_log("No matching service found for partnershipServiceID: $partershipServiceID");
                 }
@@ -144,7 +148,7 @@ if (isset($_POST['eventBook'])) {
         $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `foodItemID`, `servicePrice`) VALUES (?,?,?)");
 
         foreach ($foodList as $foodItemID => $name) {
-            error_log('Food ID: ' . $foodItemID . 'CustomID: ' .  $customPackageID);
+            // error_log('Food ID: ' . $foodItemID . 'CustomID: ' .  $customPackageID);
             $foodItemID = (int) $foodItemID;
             $foodItemPrice = 0.0;
 
@@ -212,8 +216,30 @@ if (isset($_POST['eventBook'])) {
 
             if (!$insertIntoUnavailableService->execute()) {
                 $conn->rollback();
-                error_log("Error: " . $insertIntoUnavailableService->error);
+                error_log("Error: $type -> $id" . $insertIntoUnavailableService->error);
             }
+        }
+
+        if (!empty($partnershipIDs)) {
+            foreach ($partnershipIDs as $id => $name):
+                $receiver = 'Partner';
+                $message = "You have received a new customer booking request for your <strong>" . strtolower($name) . "</strong> service.";
+                $insertPartnerNotification = $conn->prepare("INSERT INTO `notification`(`bookingID`, `senderID`, `receiverID` , `message`, `receiver`) VALUES (?,?,?,?,?)");
+                $insertPartnerNotification->bind_param("iiiss", $bookingID, $userID, $id, $message, $receiver);
+                if (!$insertPartnerNotification->execute()) {
+                    $conn->rollback();
+                    throw new Exception("Failed inserting notification" . $insertPartnerNotification->error);
+                }
+            endforeach;
+        }
+
+        $receiver = 'Admin';
+        $message = "A customer has submitted a new " . strtolower($bookingType) . " booking request.";
+        $insertNotification = $conn->prepare("INSERT INTO `notification`(`bookingID`, `senderID`,  `message`, `receiver`) VALUES (?,?,?,?)");
+        $insertNotification->bind_param("iiss", $bookingID, $userID, $message, $receiver);
+        if (!$insertNotification->execute()) {
+            $conn->rollback();
+            throw new Exception("Failed inserting notification" . $insertNotification->error);
         }
 
         $conn->commit();

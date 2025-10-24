@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout($timeout = 900);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -35,9 +35,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 $data = $_SESSION['account-form'] ?? [];
-// echo '<pre>';
-// print_r($data);
-// echo '</pre>';
+
+
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,10 +61,7 @@ $data = $_SESSION['account-form'] ?? [];
         href="../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Account/addAccount.css" />
 

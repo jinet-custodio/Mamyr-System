@@ -36,6 +36,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
+
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -159,7 +170,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <div class="headerContainer">
                 <div class="backArrowContainer" id="backArrowContainer" style="display: none;">
-                    <img src="../../Assets/Images/icon/arrowBtnBlack.png" alt="Back Arrow" class="backArrow">
+                    <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="Back Arrow" class="backArrow">
                 </div>
                 <!-- <h2 class="header text-center" id="headerText">Services</h2> -->
             </div>

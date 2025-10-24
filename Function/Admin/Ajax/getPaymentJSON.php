@@ -77,7 +77,7 @@ try {
                     $paymentClass = 'danger';
                     break;
                 case 5:
-                    $paymentStatusName = 'Awaiting review';
+                    $paymentStatusName = 'Review Payment';
                     $paymentClass = 'primary';
                     break;
             }

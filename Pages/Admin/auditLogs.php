@@ -52,6 +52,18 @@ if (isset($_SESSION['error'])) {
     $status = 'success';
     unset($_SESSION['success']);
 }
+
+
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +79,6 @@ if (isset($_SESSION['error'])) {
     <!-- CSS Links -->
     <!-- Bootstrap Links -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
-    <!-- Bootstrap Links -->
     <!-- Icon Links -->
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"

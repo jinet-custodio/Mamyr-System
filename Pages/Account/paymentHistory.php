@@ -58,9 +58,6 @@ switch ($userRole) {
     case 2:
         $role = "Business Partner";
         break;
-    case 3:
-        $role = "Admin";
-        break;
     case 4:
         $role = "Partnership Applicant";
         break;
@@ -253,7 +250,7 @@ switch ($userRole) {
                             <div class="paymentListContainer" id="paymentListContainer">
                             </div>
                             <hr class="dp-hr">
-                            <h6 class="payment-container-title">Final Payment</h6>
+                            <h6 class="payment-container-title text-start ms-3">Summary</h6>
                             <div class="payment-container">
                                 <div class="dp-left-side">
                                     <h6 class="dp-title" id="booking-type-payment">Total Amount:</h6>
@@ -381,9 +378,6 @@ switch ($userRole) {
                     viewPaymentModal.querySelector('#dp-date').textContent = booking.paymentDueDate;
                     viewPaymentModal.querySelector('#remaining-balance').textContent = booking.userBalance;
                     viewPaymentModal.querySelector('#total-amount').textContent = booking.totalBill;
-                    viewImage.querySelector('#payment-preview').src = '../../Assets/Images/PaymentProof/receipt-sample.jpg';
-
-
                     const paymentListContainer = document.getElementById('paymentListContainer');
                     paymentListContainer.innerHTML = '';
                     const payments = booking.payments || [];
@@ -444,6 +438,8 @@ switch ($userRole) {
                                 downpaymentContainer.appendChild(divChild3);
                                 divChild3.appendChild(button);
                             }
+
+                            viewImage.querySelector('#payment-preview').src = '../../Assets/Images/PaymentProof/' + payment.image;
                         });
                     } else {
                         const downpaymentContainer = document.createElement('downpayment-container');
