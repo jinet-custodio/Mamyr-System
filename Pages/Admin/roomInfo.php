@@ -67,6 +67,17 @@ if (isset($_SESSION['error'])) {
     unset($_SESSION['success']);
 }
 
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
+
 
 //php for unsetting the roomID variable every time the user leaves the page
 

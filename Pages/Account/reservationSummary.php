@@ -43,6 +43,23 @@ if (isset($_POST['bookingID'])) {
 
 require_once '../../Function/Helpers/statusFunctions.php';
 
+switch ($userRole) {
+    case 1: //customer
+        $role = "Customer";
+        break;
+    case 2:
+        $role = "Business Partner";
+        break;
+    case 4:
+        $role = "Partnership Applicant";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
+
 
 ?>
 

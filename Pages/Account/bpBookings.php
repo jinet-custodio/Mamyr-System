@@ -39,6 +39,19 @@ $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
 
+
+switch ($userRole) {
+    case 2:
+        $role = "Business Partner";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,18 +80,6 @@ $userRole = $_SESSION['userRole'];
 <body>
     <!-- Get the information to the database -->
     <?php
-    if ($userRole == 1) {
-        $role = "Customer";
-    } elseif ($userRole == 2) {
-        $role = "Business Partner";
-    } elseif ($userRole == 3) {
-        $role = "Admin";
-    } else {
-        $_SESSION['error'] = "Unauthorized Access eh!";
-        session_destroy();
-        header("Location: ../register.php");
-        exit();
-    }
 
     $getData = $conn->prepare("SELECT u.*, ut.typeName as roleName FROM user u
             INNER JOIN usertype ut ON u.userRole = ut.userTypeID

@@ -58,9 +58,6 @@ switch ($userRole) {
     case 2:
         $role = "Business Partner";
         break;
-    case 3:
-        $role = "Admin";
-        break;
     case 4:
         $role = "Partnership Applicant";
         break;
