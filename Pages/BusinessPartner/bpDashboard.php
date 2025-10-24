@@ -12,6 +12,16 @@ resetExpiredOTPs($conn);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+switch ($userRole) {
+    case 2:
+        $role = "Business Partner";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -40,9 +50,6 @@ require '../../Function/notification.php';
 require '../../Function/Partner/sales.php';
 // require '../../Function/Partner/getBookings.php';
 
-//for edit website, this will enable edit mode from the iframe
-$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
-//SQL statement for retrieving data for website content from DB\
 $folder = 'landingPage';
 $sectionName = 'Landing';
 $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
