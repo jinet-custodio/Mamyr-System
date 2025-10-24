@@ -159,7 +159,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <div class="headerContainer">
                 <div class="backArrowContainer" id="backArrowContainer" style="display: none;">
-                    <img src="../../Assets/Images/icon/arrowBtnBlack.png" alt="Back Arrow" class="backArrow">
+                    <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="Back Arrow" class="backArrow">
                 </div>
                 <!-- <h2 class="header text-center" id="headerText">Services</h2> -->
             </div>

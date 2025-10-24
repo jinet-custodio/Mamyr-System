@@ -45,9 +45,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- CSS Link -->
@@ -143,9 +141,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
                             <i class="bi bi-calendar2-check sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
+                            <span class="sidebar-text">Booking History</span>
                         </a>
                     </li>
                     <li class="sidebar-item">

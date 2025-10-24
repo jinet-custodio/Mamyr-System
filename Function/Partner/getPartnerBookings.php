@@ -89,7 +89,7 @@ if (isset($_GET['userID'])) {
             $approvalTimeRange = (clone $availedDate)->modify('+24 hours');
             $approvalTimeUntil = $approvalTimeRange->format('M. d,Y g:i A');
 
-            $profile = $data['userProfile'];
+            $profile = $row['userProfile'];
             if (!empty($profile)) {
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $profile);

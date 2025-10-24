@@ -125,52 +125,14 @@ if (isset($_POST['approveBtn'])) {
         $today = new DateTime();
         $expiresAt = $today->modify('+24 hours')->format('Y-m-d H:i:s');
 
-        $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
-        //* Insert this to unavailable dates
-        foreach ($serviceIDs as $serviceID) {
-            $getServicesQuery->bind_param("i", $serviceID);
-            if (!$getServicesQuery->execute()) {
-                $conn->rollback();
-                throw new Exception("Failed to fetch service for ID: $serviceID");
-            }
-
-            $getServicesQueryResult = $getServicesQuery->get_result();
-            if ($getServicesQueryResult->num_rows === 0) {
-                $conn->rollback();
-                throw new Exception("No service found for ID: $serviceID");
-            }
-
-            $row = $getServicesQueryResult->fetch_assoc();
-            $serviceType = $row['serviceType'];
-
-            switch ($serviceType) {
-                case 'Resort':
-                    $resortServiceID = $row['resortServiceID'];
-                    $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(resortServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?, ?, ?, ?)");
-                    $insertToUnavailableDates->bind_param('isss', $resortServiceID, $startDate, $endDate, $expiresAt);
-                    if (!$insertToUnavailableDates->execute()) {
-                        $conn->rollback();
-                        throw new Exception("Failed to insert unavailable date for resort service ID: $resortServiceID");
-                    }
-                    $insertToUnavailableDates->close();
-                    break;
-
-                case 'Partner':
-                    $partnershipServiceID = $row['partnershipServiceID'];
-                    $insertToUnavailableDates = $conn->prepare("INSERT INTO serviceunavailabledate(partnershipServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?, ?, ?,?)");
-                    $insertToUnavailableDates->bind_param('isss', $partnershipServiceID, $startDate, $endDate, $expiresAt);
-                    if (!$insertToUnavailableDates->execute()) {
-                        $conn->rollback();
-                        throw new Exception("Failed to insert unavailable date for partner service ID: $partnershipServiceID");
-                    }
-                    $insertToUnavailableDates->close();
-                    break;
-
-                default:
-                    $conn->rollback();
-                    throw new Exception("Unknown service type: $serviceType for service ID: $serviceID");
-            }
+        $updateUnavailableDates = $conn->prepare("UPDATE `serviceunavailabledate` SET `expiresAt`= ? WHERE `bookingID`= ?");
+        $updateUnavailableDates->bind_param('si', $expiresAt,  $bookingID);
+        if (!$updateUnavailableDates->execute()) {
+            $conn->rollback();
+            throw new Exception("Failed to update unavailable date for booking ID: $bookingID");
         }
+        $updateUnavailableDates->close();
+
 
         //Update customer package
         if (!empty($customPackageID)) {
@@ -315,6 +277,7 @@ if (isset($_POST['approveBtn'])) {
         exit();
     } catch (Exception $e) {
         $conn->rollback();
+        $_SESSION['bookingID'] = $bookingID;
         error_log("Error " . $e->getMessage());
         header("Location: ../../Pages/Admin/viewBooking.php?action=approvalFailed");
         exit();
@@ -337,6 +300,7 @@ if (isset($_POST['rejectBtn'])) {
     // error_log("AdminID: " . $adminID);
 
     if (empty($reason) && empty($otherReason)) {
+        $_SESSION['bookingID'] = $bookingID;
         header('Location: ../../Pages/Admin/viewBooking.php?action=rejectionEmpty');
         exit();
     }
@@ -449,10 +413,76 @@ if (isset($_POST['rejectBtn'])) {
         } else {
             $friendlyMessage = 'An unexpected error occurred during approval.';
         }
-
+        $_SESSION['bookingID'] = $bookingID;
         $_SESSION['approvalError'] = $friendlyMessage;
         error_log("Error " . $errorMsg);
         header("Location: ../../Pages/Admin/viewBooking.php?action=approvalFailed");
+        exit();
+    }
+}
+
+if (isset($_POST['submitCharges'])) {
+
+    $bookingID = (int) $_POST['bookingID'];
+    $finalBill = (float) $_POST['new-bill'];
+    $additionalCharge = (float) $_POST['additional-charge'];
+    $confirmedBookingID = (int) $_POST['confirmedBookingID'];
+
+    //Service charge
+    $additionalCharges = $_POST['additionalCharges'];
+
+    $downpayment = $finalBill * .3;
+
+    $conn->begin_transaction();
+    try {
+
+        $insertCharges = $conn->prepare("INSERT INTO `additionalcharge`( `bookingID`, `chargeDescription`, `amount`) VALUES (?,?,?)");
+        foreach ($additionalCharges as $name => $items) {
+            $name = strtolower($name);
+            if ($name === 'others') {
+                $description = $items['quantity'] . ' — ' . $items['name'];
+            } else {
+                $description = $items['quantity'] . ' — ' . ucfirst($name);
+            }
+
+            $amount = $items['amount'];
+            $insertCharges->bind_param('isd', $bookingID, $description, $amount);
+            if (!$insertCharges->execute()) {
+                $conn->rollback();
+                throw new Exception('Failed Inserting charges' . $insertCharges->error);
+            }
+        }
+
+
+
+
+        if (!empty($confirmedBookingID)) {
+            $updateConfirmedBooking = $conn->prepare("UPDATE confirmedbooking SET additionalCharge = ?, finalBill = ? WHERE bookingID = ? ");
+            $updateConfirmedBooking->bind_param('ddi', $additionalCharge, $finalBill,  $bookingID);
+            if (!$updateConfirmedBooking->execute()) {
+                $conn->rollback();
+                throw new Exception('Failed Updating: ' . $updateConfirmedBooking->error);
+            }
+        } else {
+            $updateBooking = $conn->prepare("UPDATE booking SET additionalCharge = ?, totalCost = ?, downpayment = ? WHERE bookingID = ? ");
+            $updateBooking->bind_param('dddi', $additionalCharge, $finalBill, $downpayment, $bookingID);
+            if (!$updateBooking->execute()) {
+                $conn->rollback();
+                throw new Exception('Failed Updating: ' . $updateBooking->error);
+            }
+        }
+
+
+
+        $conn->commit();
+        $_SESSION['bookingID'] = $bookingID;
+        header('Location: ../../Pages/Admin/viewBooking.php?action=chargesAdded');
+        exit();
+    } catch (Exception $e) {
+        $conn->rollback();
+        $_SESSION['bookingID'] = $bookingID;
+        error_log('Exception Error: ' . $e->getMessage());
+        header('Location: ../../Pages/Admin/viewBooking.php?action=chargesError');
         exit();
     }
 }

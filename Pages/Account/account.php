@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout($timeout = 900);
 
 
 if (isset($_SESSION['userID'])) {

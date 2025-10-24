@@ -20,9 +20,7 @@ session_start();
     <link rel="stylesheet" href="../Assets/CSS/bpRegister.css">
 
     <!-- Bootstrap Link -->
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -170,7 +168,7 @@ session_start();
                             required>
 
                         <a href="#moreDetailsModal" class="moreDetails" data-bs-toggle="modal"
-                            data-bs-target="#openModal">More Details</a>
+                            data-bs-target="#documentModal">More Details</a>
 
                         <h6 class="label">Upload a Valid ID</h6>
                         <input type="file" class="form-control validIDFIle" id="validID" name="validID">
@@ -233,8 +231,8 @@ session_start();
 
     <!-- modal -->
 
-    <div class="modal fade modal-lg m-auto" id="termsModal" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade modal-lg m-auto" id="documentModal" tabindex="-1" role="dialog"
+        aria-labelledby="documentModalLabel" aria-hidden="true">
 
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -317,11 +315,8 @@ session_start();
                 </div>
                 <div class="modal-footer">
                     <div class="declineBtnContainer">
-                        <button type="button" class="btn btn-secondary" id="declineTermsBtn" data-bs-dismiss="modal"
-                            aria-label="Close">Decline</button>
-                    </div>
-                    <div class="acceptBtnContainer">
-                        <button type="button" class="btn btn-primary" id="acceptTermsBtn" onclick="AcceptTerms()">Accept</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            aria-label="Close">Close</button>
                     </div>
                 </div>
             </div>
@@ -330,7 +325,7 @@ session_start();
 
 
     <!-- terms and conditions modal -->
-    <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">

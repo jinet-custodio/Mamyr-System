@@ -27,7 +27,8 @@ if (isset($_GET['userID'])) {
                                             GROUP_CONCAT(p.paymentID ORDER BY p.paymentID) AS paymentIDs,
                                             GROUP_CONCAT(p.amount ORDER BY p.paymentID) AS paymentAmounts,
                                             GROUP_CONCAT(p.paymentMethod ORDER BY p.paymentID) AS paymentMethods,
-                                            GROUP_CONCAT(p.paymentDate ORDER BY p.paymentID) AS paymentDates
+                                            GROUP_CONCAT(p.paymentDate ORDER BY p.paymentID) AS paymentDates,
+                                            GROUP_CONCAT(p.downpaymentImage ORDER BY p.paymentID) AS dpImages
                                         FROM confirmedbooking cb
                                         LEFT JOIN booking b ON cb.bookingID = b.bookingID
                                         LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
@@ -51,6 +52,7 @@ if (isset($_GET['userID'])) {
             $paymentAmounts = !empty($bookings['paymentAmounts']) ? explode(',', $bookings['paymentAmounts']) : [];
             $paymentMethods = !empty($bookings['paymentMethods']) ? explode(',', $bookings['paymentMethods']) : [];
             $paymentDates = !empty($bookings['paymentDates']) ? explode(',', $bookings['paymentDates']) : [];
+            $dpImages = !empty($bookings['dpImages']) ? explode(',', $bookings['dpImages']) : [];
 
             $payments = [];
             foreach ($paymentIDs as $i => $pid) {
@@ -65,7 +67,8 @@ if (isset($_GET['userID'])) {
                     'paymentID' => $pid,
                     'amount' => isset($paymentAmounts[$i]) ? number_format((float)$paymentAmounts[$i], 2) : null,
                     'method' => $paymentMethods[$i] ?? null,
-                    'date' => $formattedDate
+                    'date' => $formattedDate,
+                    'image' => $dpImages[$i] ?? null
                 ];
             }
 
@@ -119,7 +122,7 @@ if (isset($_GET['userID'])) {
                     break;
                 case 5:
                     $paymentStatusName = 'Payment Sent';
-                    $paymentClass = 'green';
+                    $paymentClass = 'primary';
                     break;
             }
 

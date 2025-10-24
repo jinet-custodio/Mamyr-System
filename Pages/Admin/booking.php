@@ -250,6 +250,7 @@ if (isset($_SESSION['error'])) {
                             <th scope="col">Check-in</th>
                             <th scope="col">Check-out</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Booking Created</th>
                             <th scope="col">Action</th>
                         </thead>
                         <tbody id='booking-display-body'></tbody>
@@ -342,6 +343,7 @@ if (isset($_SESSION['error'])) {
                             booking.checkIn,
                             booking.checkOut,
                             getStatusBadge(booking.statusClass, booking.status),
+                            booking.createdOn,
                             `<form action="viewBooking.php" method="POST">
                                     <input type="hidden" name="button" value="booking">
                                     <input type="hidden" name="bookingType" value="${booking.bookingType}">

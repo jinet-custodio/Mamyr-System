@@ -11,129 +11,110 @@ $userID = (int) $_SESSION['userID'];
 if (isset($_POST['submitDownpaymentImage'])) {
 
     $bookingID = (int) $_POST['bookingID'];
-    $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
-    $imageMaxSize = 5 * 1024 * 1024;
-    // $imageData = null;
-    $storeProofPath = __DIR__ . '/../../../Assets/Images/PaymentProof/';
     $confirmedBookingID = (int) $_POST['confirmedBookingID'];
-
+    $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     $paymentAmount = (float) $_POST['payment-amount'];
     $downpayment = (float) $_POST['downpayment'];
 
-    $imageFileName = mysqli_real_escape_string($conn, $_POST['imageFileName']) ?? '';
+    $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
+    $allowedExt = ['jpg', 'jpeg', 'png'];
 
-    $ext = ['jpg', 'jpeg', 'png'];
+    $storeProofPath = __DIR__ . '/../../../Assets/Images/PaymentProof/';
+    $tempUploadPath = __DIR__ . '/../../../Assets/Images/TempUploads/';
+
+    if (!is_dir($storeProofPath)) mkdir($storeProofPath, 0755, true);
+    if (!is_dir($tempUploadPath)) mkdir($tempUploadPath, 0755, true);
 
     $_SESSION['bookingID'] = $bookingID;
     $_SESSION['payment-amount'] = $paymentAmount;
     $_SESSION['bookingType'] = $bookingType;
 
-    if (empty($imageFileName)) {
-        if (isset($_FILES['downpaymentPic']) && is_uploaded_file($_FILES['downpaymentPic']['tmp_name'])) {
-            if ($_FILES['downpaymentPic']['size'] <= $imageMaxSize) {
-                $imagePath = $_FILES['downpaymentPic']['tmp_name'];
-                $randomNum =  str_pad($bookingID, 4, '0', STR_PAD_LEFT);
-                $imageFileName = $randomNum . $_FILES['downpaymentPic']['name'];
-                $storeImage = $storeProofPath . $imageFileName;
-                move_uploaded_file($imagePath,  $storeImage);
-                $imageExt = pathinfo($imagePath, PATHINFO_EXTENSION);
+    if (isset($_FILES['downpaymentPic']) && is_uploaded_file($_FILES['downpaymentPic']['tmp_name'])) {
 
-                if (!in_array($imageExt, $ext)) {
-                    $_SESSION['tempImage'] = $imageFileName;
-                    header("Location: ../../../Pages/Account/reservationSummary.php?action=extError");
-                    exit();
-                }
-            } else {
-                $_SESSION['tempImage'] = $imageFileName;
-                header("Location: ../../../Pages/Account/reservationSummary.php?action=imageSize");
-                exit();
-            }
-        } else {
-            $_SESSION['tempImage'] = $imageFileName;
+        $originalName = $_FILES['downpaymentPic']['name'];
+        $imageExt = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        $imageSize = $_FILES['downpaymentPic']['size'];
+
+        if (!in_array($imageExt, $allowedExt)) {
+            unset($_SESSION['tempImage']);
+            header("Location: ../../../Pages/Account/reservationSummary.php?action=extError");
+            exit();
+        }
+
+        if ($imageSize > $imageMaxSize) {
+            header("Location: ../../../Pages/Account/reservationSummary.php?action=imageSize");
+            exit();
+        }
+
+        $tempFileName = 'temp_' . uniqid() . '_' . $bookingID . '.' . $imageExt;
+        $tempFilePath = $tempUploadPath . $tempFileName;
+
+        if (!move_uploaded_file($_FILES['downpaymentPic']['tmp_name'], $tempFilePath)) {
             header("Location: ../../../Pages/Account/reservationSummary.php?action=imageFailed");
             exit();
         }
-    }
 
-
-    if ($paymentAmount < $downpayment) {
-        $_SESSION['tempImage'] = $imageFileName;
-        header('Location: ../../../../../Pages/Account/reservationSummary.php?action=lessAmount');
+        $_SESSION['tempImage'] = $tempFileName;
+    } else if (!empty($_SESSION['tempImage'])) {
+        $tempFileName = $_SESSION['tempImage'];
+    } else {
+        header("Location: ../../../Pages/Account/reservationSummary.php?action=imageFailed");
         exit();
     }
 
-    if (!is_dir($storeProofPath)) {
-        mkdir($storeProofPath, 0755, true);
+    if ($paymentAmount < $downpayment) {
+        $_SESSION['uploadError'] = 'Amount is less than required downpayment.';
+        header('Location: ../../../Pages/Account/reservationSummary.php?action=lessAmount');
+        exit();
     }
+
+    $finalFileName = str_pad($bookingID, 4, '0', STR_PAD_LEFT) . '_' . basename($_SESSION['tempImage']);
+    $finalFilePath = $storeProofPath . $finalFileName;
+
+    rename($tempUploadPath . $_SESSION['tempImage'], $finalFilePath);
+
+    unset($_SESSION['tempImage']);
 
 
     $paymentSentID = 5;
+    $userID = $_SESSION['userID'] ?? null;
+    if (!$userID) {
+        header("Location: ../../../Pages/Account/reservationSummary.php?action=noUser");
+        exit();
+    }
 
     $conn->begin_transaction();
     try {
         $downpaymentImageQuery = $conn->prepare("UPDATE confirmedbooking
-            SET downpaymentImage = ?, paymentStatus = ?
-            WHERE bookingID = ? ");
-        $downpaymentImageQuery->bind_param("sii", $imageFileName, $paymentSentID,  $bookingID);
+                                                    SET downpaymentImage = ?, paymentStatus = ?
+                                                    WHERE bookingID = ?
+                                                ");
+        $downpaymentImageQuery->bind_param("sii", $finalFileName, $paymentSentID, $bookingID);
+        $downpaymentImageQuery->execute();
 
-        if (!$downpaymentImageQuery->execute()) {
-            $conn->rollback();
-            $_SESSION['bookingID'] = $bookingID;
-            throw new Exception('Error executing the downpayment query');
-            error_log('Error: ' . $downpaymentImageQuery->error);
-            header('Location: ../../../../../Pages/Account/reservationSummary.php?action=error');
-            exit();
-        }
-
-        $today = Date('Y-m-d h:i:s');
-
-        $insertPaymentQuery = $conn->prepare("INSERT INTO `payment`(`amount`, `downpaymentImage`, `paymentDate`,  confirmedBookingID) VALUES (?,?,?,?)");
-        $insertPaymentQuery->bind_param('dssi', $paymentAmount, $imageFileName, $today, $confirmedBookingID);
-        if (!$insertPaymentQuery->execute()) {
-            $conn->rollback();
-            throw new Exception('Failed Inserting payment');
-            error_log('Payment Insertion: ' . $insertPaymentQuery->error);
-            header('Location: ../../../../../Pages/Account/reservationSummary.php?action=error');
-            exit();
-        }
+        $today = date('Y-m-d H:i:s');
+        $insertPaymentQuery = $conn->prepare("INSERT INTO payment (amount, downpaymentImage, paymentDate, confirmedBookingID) VALUES (?, ?, ?, ?)");
+        $insertPaymentQuery->bind_param('dssi', $paymentAmount, $finalFileName, $today, $confirmedBookingID);
+        $insertPaymentQuery->execute();
 
         $receiver = 'Admin';
-        $message = 'A payment proof has been uploaded for Booking ID:' . $bookingID . '. Please review and verify the payment.';
-        $insertNotificationQuery = $conn->prepare("INSERT INTO notification(receiver, senderID, bookingID, message) VALUES(?,?,?,?)");
+        $message = 'A payment proof has been uploaded for Booking ID: ' . $bookingID . '. Please verify.';
+        $insertNotificationQuery = $conn->prepare("INSERT INTO notification (receiver, senderID, bookingID, message) VALUES (?, ?, ?, ?) ");
         $insertNotificationQuery->bind_param('siis', $receiver, $userID, $bookingID, $message);
+        $insertNotificationQuery->execute();
 
-        if (!$insertNotificationQuery->execute()) {
-            $conn->rollback();
-            throw new Exception('Error executing the notification query');
-            error_log('Error: ' . $insertNotificationQuery->error);
-            header('Location: ../../../../../Pages/Account/reservationSummary.php?action=error');
-            exit();
-        }
-
-        $updateUnavailableService = $conn->prepare("UPDATE `serviceunavailabledate` SET `expiresAt`= NULL WHERE `bookingID`= ?");
+        $updateUnavailableService = $conn->prepare("UPDATE serviceunavailabledate SET expiresAt = NULL WHERE bookingID = ?");
         $updateUnavailableService->bind_param('i', $bookingID);
-
-        if (!$updateUnavailableService->execute()) {
-            $conn->rollback();
-            throw new Exception('Error updating service expiration');
-            error_log('Error: ' . $updateUnavailableService->error);
-            header('Location: ../../../../../Pages/Account/reservationSummary.php?action=error');
-            exit();
-        }
+        $updateUnavailableService->execute();
 
         $conn->commit();
-        unset($_SESSION['payment-amount']);
-        unset($_SESSION['bookingType']);
-        unset($_SESSION['bookingID']);
-        $insertNotificationQuery->close();
 
+        unset($_SESSION['payment-amount'], $_SESSION['bookingType'], $_SESSION['bookingID']);
         header("Location: ../../../Pages/Account/bookingHistory.php?action=paymentSuccess");
         exit();
     } catch (Exception $e) {
         $conn->rollback();
-        $_SESSION['bookingType'] = $bookingType;
-        $_SESSION['bookingID'] = $bookingID;
-        error_log("Error " . $e->getMessage());
+        error_log("Error: " . $e->getMessage());
         header("Location: ../../../Pages/Account/reservationSummary.php?action=error");
         exit();
     }
