@@ -142,9 +142,15 @@ $userRole = $_SESSION['userRole'];
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
                             <i class="bi bi-calendar2-check sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
+                            <span class="sidebar-text">Booking History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                            <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                            <span class="sidebar-text">Payment</span>
                         </a>
                     </li>
                 <?php } elseif ($role === 'Admin') { ?>

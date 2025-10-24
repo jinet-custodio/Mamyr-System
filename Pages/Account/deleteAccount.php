@@ -152,11 +152,11 @@ switch ($userRole) {
                 </li>
 
 
-                <?php if ($role === 'Customer' || $role === 'Business Partner' || $role === 'Partnership Applicant') { ?>
-                    <li>
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
                             <i class="bi bi-calendar2-check sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
+                            <span class="sidebar-text">Booking History</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -166,7 +166,7 @@ switch ($userRole) {
                         </a>
                     </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li>
+                    <li class="sidebar-item">
                         <a href="userManagement.php" class="list-group-item">
                             <i class="bi bi-person-gear sidebar-icon"></i>
                             <span class="sidebar-text">Manage Users</span>

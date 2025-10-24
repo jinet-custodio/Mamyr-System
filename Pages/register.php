@@ -105,14 +105,14 @@ resetExpiredOTPs($conn);
                 <h1 id="signUpTitle">Sign Up</h1>
                 <div class="fullName">
                     <div class="input-box">
-                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                             maxlength="30"
                             value="<?php echo isset($_SESSION['registerFormData']['firstName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['firstName'])) : ''; ?>"
                             required>
                         <i class='bx bxs-user-circle'></i>
                     </div>
                     <div class="input-box">
-                        <input type="text" class="form-control" id="middleInitial" name="middleInitial" maxlength="2"
+                        <input type="text" class="form-control" id="middleInitial" name="middleInitial" maxlength="2" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                             placeholder="M.I. (Optional)"
                             value="<?php echo isset($_SESSION['registerFormData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['registerFormData']['middleInitial'])) : ''; ?>">
                         <i class='bx bxs-user-circle'></i>
@@ -121,7 +121,7 @@ resetExpiredOTPs($conn);
                 </div>
                 <div class="userInfo">
                     <div class="input-box">
-                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
+                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                             maxlength="30"
                             value="<?php echo isset($_SESSION['registerFormData']['lastName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['lastName'])) : ''; ?>"
                             required>

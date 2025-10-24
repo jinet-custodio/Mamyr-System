@@ -312,6 +312,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
                     switch ($bookingStatus['statusID']) {
                         case 1: //Pending
                             $statusTitle = 'Reservation Pending Approval';
+                            $statusIcon = '<i class="bi bi-hourglass-split"></i>';
                             $statusSubtitle = 'Your request has been sent to the admin. You will be notified once it is approved.';
                             break;
                         case 2: //Approved
@@ -319,6 +320,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
                             switch ($paymentApprovalStatus['statusID']) {
                                 case 1: // Payment Pending Review
                                     $statusTitle = 'Booking Approved – Not Yet Reserved';
+                                    $statusIcon = '<i class="bi bi-check-circle"></i>';
                                     if ($paymentMethod === 'GCash') {
                                         $statusSubtitle = 'Your booking is approved. Please proceed with the down payment via GCash. The service will be reserved once your payment is reviewed.';
                                     } elseif ($paymentMethod === 'Cash' && $bookingType === 'Resort') {
@@ -330,27 +332,40 @@ require_once '../../Function/Helpers/statusFunctions.php';
 
                                 case 3: // Payment Rejected
                                     $statusTitle = 'Payment Declined';
+                                    $statusIcon = '<i class="bi bi-x-circle"></i>';
                                     $statusSubtitle = 'Please check the payment details and try again, or contact the admin for assistance.';
                                     break;
                             }
+                            switch ($paymentStatus['paymentStatusID']) {
+                                case 5: // Payment Sent
+                                    $statusTitle = 'Payment submitted!';
+                                    $statusIcon = '<i class="bi bi-cash-stack"></i>';
+                                    $statusSubtitle = 'Thank you for your payment. Please wait for the admin’s review and approval.';
+                                    break;
+                            }
+                            break;
                         case 3: //Reserved
                             switch ($paymentStatus['paymentStatusID']) {
                                 case 2: //Partially Paid
                                     $statusTitle = "Payment Reviewed – Service Reserved";
+                                    $statusIcon = '<i class="bi bi-card-checklist"></i>';
                                     $statusSubtitle = "We have received and reviewed your payment. Your service is now confirmed and reserved. Thank you!";
                                     break;
                                 case 3: //Fully Paid
                                     $statusTitle = "Payment Completed – Service Confirmed";
+                                    $statusIcon = '<i class="bi bi-check-circle-fill"></i>';
                                     $statusSubtitle = 'Thank you! Your full payment has been received and reviewed. Your service is now confirmed.';
                                     break;
                             }
                             break;
                         case 4: //Rejected
                             $statusTitle = 'Booking Rejected';
+                            $statusIcon = '<i class="bi bi-x-circle-fill"></i>';
                             $statusSubtitle = 'We regret to inform you that your reservation has been rejected. Please contact us for more details.';
                             break;
                         case 5: //Cancelled
                             $statusTitle = 'Booking Cancelled';
+                            $statusIcon = '<i class="bi bi-slash-circle"></i>';
                             $statusSubtitle = 'You have cancelled your reservation. If this was a mistake or you wish to rebook, please contact us.';
                             break;
                         case 6: //Done
@@ -358,12 +373,14 @@ require_once '../../Function/Helpers/statusFunctions.php';
                             switch ($paymentStatus['statusID']) {
                                 case 3: //Fully Paid
                                     $statusTitle = 'Booking Completed';
+                                    $statusIcon = '<i class="bi bi-flag-checkered"></i>';
                                     $statusSubtitle = 'Thank you for staying with us! Your booking is fully paid and successfully completed. We hope you had a wonderful time.';
                                     break;
                             }
                             break;
                         case 7: //Expired
                             $statusTitle = "Expired Booking";
+                            $statusIcon = '<i class="bi bi-clock-history"></i>';
                             $statusSubtitle = "Sorry. The scheduled time for this booking has passed.";
                             break;
                     }
@@ -474,8 +491,11 @@ require_once '../../Function/Helpers/statusFunctions.php';
                 <input type="hidden" name="paymentMethod" id="paymentMethod"
                     value="<?= htmlspecialchars($paymentMethod) ?>">
 
-                <img src="../../Assets/Images/Icon/StatusIcon/<?= htmlspecialchars(ucfirst($status)) ?>.png"
-                    alt="<?= ucfirst(htmlspecialchars($status)) ?> Icon" class="statusIcon">
+                <div class="status-image-container m-2">
+                    <img src="../../Assets/Images/Icon/StatusIcon/<?= htmlspecialchars(ucfirst($status)) ?>.png"
+                        alt="<?= ucfirst(htmlspecialchars($status)) ?> Icon" class="statusIcon">
+                </div>
+
 
                 <h4 class="statusTitle"><?= htmlspecialchars($statusTitle) ?></h4>
                 <h6 class="statusSubtitle"><?= htmlspecialchars($statusSubtitle) ?></h6>
@@ -850,17 +870,29 @@ require_once '../../Function/Helpers/statusFunctions.php';
                         </div>
 
                         <div class="mt-2 text-center upload-photo-container">
-                            <img src="../../Assets/Images/PaymentProof/<?= isset($_SESSION['tempImage']) ? $_SESSION['tempImage'] : 'defaultDownpayment.png'; ?>"
-                                alt="Downpayment Image" id="preview" class="downpaymentPic mb-3">
-                            <input type="hidden" name="bookingID" id="bookingID" value="<?= $bookingID ?>">
-                            <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
-                            <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
-                            <input type="hidden" name="imageFileName" value="<?= $_SESSION['tempImage'] ?? '' ?>">
+                            <?php
+                            if (isset($_SESSION['tempImage']) && file_exists(__DIR__ . '/../../Assets/Images/TempUploads/' . $_SESSION['tempImage'])) {
+                                $imageSrc = '../../Assets/Images/TempUploads/' . $_SESSION['tempImage'];
+                            } else {
+                                $imageSrc = '../../Assets/Images/PaymentProof/' . ($_SESSION['savedDownpaymentImage'] ?? 'defaultDownpayment.png');
+                            }
+                            ?>
+                            <img src="<?= htmlspecialchars($imageSrc) ?>"
+                                alt="Downpayment Image"
+                                id="preview"
+                                class="downpaymentPic mb-3">
+
+                            <input type="hidden" name="bookingID" id="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
+                            <input type="hidden" name="bookingType" id="bookingType" value="<?= htmlspecialchars($bookingType) ?>">
+                            <input type="hidden" name="confirmedBookingID" value="<?= htmlspecialchars($confirmedBookingID) ?>">
+
+                            <!-- You can drop imageFileName from the form now — it’s managed by PHP -->
                             <input type="file" name="downpaymentPic" id="downpaymentPic" hidden>
                             <label for="downpaymentPic" class="custom-file-button btn btn-primary mt-2">
                                 Upload Payment Receipt
                             </label>
                         </div>
+
 
                         <div class="payment-details-container d-flex gap-3">
                             <div class="input-container mt-3">
@@ -905,14 +937,14 @@ require_once '../../Function/Helpers/statusFunctions.php';
         // console.log("Booking Stat: " + bookingStatus);
         // console.log("payment App Stat" + paymentApprovalStatus);
         if ((bookingStatus === "Pending" && paymentApprovalStatus === '') || (bookingStatus === 'Cancelled') || (
-                bookingStatus === 'Rejected')) {
+                bookingStatus === 'Rejected') || paymentStatus === 'Payment Sent') {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
             downloadReceiptBtn.style.display = 'none';
         } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && paymentStatus === "Unpaid") {
             document.getElementById("makeDownpaymentBtn").style.display = "block";
             downloadReceiptBtn.style.display = 'none';
-        } else if (paymentApprovalStatus === "Approved" && paymentStatus === "Partially Paid") {
-            document.getElementById("makeDownpaymentBtn").style.display = "block";
+        } else if (paymentApprovalStatus === "Approved" && bookingStatus === 'Reserved' && paymentStatus === "Partially Paid") {
+            document.getElementById("makeDownpaymentBtn").style.display = "none";
         } else if (paymentApprovalStatus === "Done" && paymentStatus === "Fully Paid") {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
         } else if (paymentMethod === 'Cash') {
@@ -1026,7 +1058,7 @@ require_once '../../Function/Helpers/statusFunctions.php';
         } else if (paramValue === 'extError') {
             Swal.fire({
                 title: 'Oops',
-                text: `Invalid file type. Please upload an image (JPG, JPEG, PNG, GIF)`,
+                text: `Invalid file type. Please upload JPG, JPEG, or PNG.`,
                 icon: 'warning',
                 confirmButtonText: 'Okay'
             }).then((result) => {

@@ -67,15 +67,6 @@ if (isset($_POST['createAccount'])) {
                             <table align="center" width="100%" cellpadding="0" cellspacing="0"
                                 style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
 
-                                <tr>
-                                    <td style="display: flex; justify-content:center; align-items:center; gap: 15px; margin: 10px 0 10px 0"><img
-                                            src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" style="height:29.76px; width:130.56px; ">
-
-                                        <h4>Mamyr Resort and
-                                            Events Place</h4>
-                                    </td>
-                                </tr>
-
                                 <tr style="background-color:#365CCE;">
                                     <td style="text-align:center;">
                                         <h4 style="font-family:Poppins Light; color:#ffffff; font-size: 18px; margin-top: 25px;">

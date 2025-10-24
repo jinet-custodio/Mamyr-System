@@ -38,7 +38,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
-require_once '../../Function/Partner/getBookings.php';
 
 ?>
 <!DOCTYPE html>
@@ -140,11 +139,17 @@ require_once '../../Function/Partner/getBookings.php';
                     </a>
                 </li>
 
-                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
                             <i class="bi bi-calendar2-check sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
+                            <span class="sidebar-text">Booking History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                            <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                            <span class="sidebar-text">Payment</span>
                         </a>
                     </li>
                 <?php } elseif ($role === 'Admin') { ?>
@@ -197,10 +202,6 @@ require_once '../../Function/Partner/getBookings.php';
             </div>
         </aside>
         <!-- End Side Bar -->
-        <!-- Get number of booking — approved, pending -->
-        <?php
-        $row = getBookingsCount($conn, $userID);
-        ?>
 
         <main class="main-content" id="main-content">
             <div class="container">
@@ -210,7 +211,7 @@ require_once '../../Function/Partner/getBookings.php';
                     <div class="card">
                         <div class="card-header fw-bold fs-5" style=" background-color:#cee4f2;">Bookings</div>
                         <div class="card-body">
-                            <h2 class="bookingNumber"><?= $row['allBookingStatus'] ?></h2>
+                            <h2 class="bookingNumber" id="bookingNumber">0</h2>
                         </div>
                     </div>
 
@@ -218,14 +219,14 @@ require_once '../../Function/Partner/getBookings.php';
                         <div class="card-header fw-bold fs-5" style="background-color: #1a8754; color:#ffff">Approved
                         </div>
                         <div class="card-body">
-                            <h2 class="approvedNumber"><?= $row['approvedBookings'] ?></h2>
+                            <h2 class="approvedNumber" id="approvedBooking">0</h2>
                         </div>
                     </div>
 
                     <div class="card">
                         <div class="card-header fw-bold fs-5" style="background-color: #ffc108;">Pending</div>
                         <div class="card-body">
-                            <h2 class="pendingNumber"><?= $row['totalPendingBooking'] ?></h2>
+                            <h2 class="pendingNumber" id="pendingBooking">0</h2>
                         </div>
                     </div>
 
@@ -233,7 +234,7 @@ require_once '../../Function/Partner/getBookings.php';
                         <div class="card-header fw-bold fs-5" style="background-color: #db3545; color:#ffff">Cancelled
                         </div>
                         <div class="card-body">
-                            <h2 class="cancelledNumber"><?= $row['cancelledBooking'] ?></h2>
+                            <h2 class="cancelledNumber" id="cancelledBooking"> 0</h2>
                         </div>
                     </div>
                 </div>
@@ -395,6 +396,50 @@ require_once '../../Function/Partner/getBookings.php';
                     },
                 ],
             });
+        });
+    </script>
+
+    <!-- Fetch cards -->
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const userID = document.getElementById('userID').value;
+            console.log(userID)
+            fetch(`../../Function/Partner/getBookings.php?id=${encodeURIComponent(userID)}`)
+                .then(result => {
+                    if (!result.ok) throw new Error("Network Error");
+                    return result.json();
+                })
+                .then(data => {
+                    if (!data.success) {
+                        Toast.fire({
+                            icon: "error",
+                            title: data.message || "An error occurred"
+                        });
+                        return;
+                    }
+
+                    const totalBookings = data.allBookingStatus || 0;
+                    const totalPendings = data.totalPendingBooking || 0;
+                    const totalCancelled = data.cancelledBooking || 0;
+                    const totalApproved = data.approvedBookings || 0;
+
+                    document.getElementById('bookingNumber').textContent = totalBookings;
+                    document.getElementById('approvedBooking').textContent = totalApproved;
+                    document.getElementById('pendingBooking').textContent = totalPendings;
+                    document.getElementById('cancelledBooking').textContent = totalCancelled;
+                })
+                .catch(err => console.error(err));
         });
     </script>
 
