@@ -38,6 +38,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
+
 ?>
 
 
@@ -54,6 +65,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
     <!-- Data Table Link -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css">
 
@@ -61,7 +73,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">

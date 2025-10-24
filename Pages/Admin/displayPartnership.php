@@ -48,6 +48,18 @@ if (isset($_SESSION['error-partnership'])) {
     unset($_SESSION['success-partnership']);
 }
 require '../../Function/notification.php';
+
+
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 ?>
 
 

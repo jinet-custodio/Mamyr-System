@@ -45,11 +45,16 @@ if (isset($_POST['view-partner'])) {
 
 $partnerID = $_SESSION['partnerID']  ?? null;
 
-// if (!$partnerID) {
-//     echo "<script>console.log('PHP says: " . addslashes($partnerID) . "'); </script>";
-// }
-
-// print_r($partnerID);
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 
 ?>
 
@@ -369,7 +374,6 @@ $partnerID = $_SESSION['partnerID']  ?? null;
 
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Sweetalert Link -->

@@ -49,6 +49,16 @@ if (isset($_POST['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_SESSION['bookingID']);
 }
 
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

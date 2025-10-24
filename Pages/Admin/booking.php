@@ -52,6 +52,18 @@ if (isset($_SESSION['error'])) {
     $status = 'success';
     unset($_SESSION['success']);
 }
+
+
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

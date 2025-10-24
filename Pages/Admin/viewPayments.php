@@ -45,13 +45,15 @@ if (isset($_POST['bookingID'])) {
 }
 
 
-if ($userRole == 3) {
-    $admin = "Admin";
-} else {
-    $_SESSION['error'] = "Unauthorized Access!";
-    session_destroy();
-    header("Location: ../register.php");
-    exit();
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
 }
 
 if ($admin === "Admin") {
