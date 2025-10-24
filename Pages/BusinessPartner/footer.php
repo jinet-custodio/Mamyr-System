@@ -1,39 +1,6 @@
-<!-- this is temporary, please remove this page 
- and replace bpDashboard.php's include footer statement after 
- the logo has been established in resort information -->
-
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
-$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
-//SQL statement for retrieving data for website content from DB
-$sectionName = 'BusinessInformation';
-$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
-$getWebContent->bind_param("s", $sectionName);
-$getWebContent->execute();
-$getWebContentResult = $getWebContent->get_result();
-$contentMap = [];
-
-$imageMap = [];
-
-while ($row = $getWebContentResult->fetch_assoc()) {
-    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
-    $contentID = $row['contentID'];
-    $contentMap[$cleanTitle] = $row['content'];
-
-    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
-    $getImages->bind_param("i", $contentID);
-    $getImages->execute();
-    $imageResult = $getImages->get_result();
-
-    $images = [];
-    while ($imageRow = $imageResult->fetch_assoc()) {
-        $images[] = $imageRow;
-    }
-
-    $imageMap[$cleanTitle] = $images;
-}
 
 ?>
 
@@ -59,10 +26,25 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 </head>
 
 <body>
-    <footer class="py-1 ">
-        <div class=" pb-1 d-flex align-items-center justify-content-start" id="nameAndLogo">
-
-            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+    <footer class="py-1 " id="footer">
+        <div class=" py-1 d-flex justify-content-start" id="nameAndLogo">
+            <?php
+            foreach ($logoInfo as $id => $logo) {
+                foreach ($logo as $fileName => $altText) {
+                    $imagePath = "../../Assets/Images/" . $fileName;
+                    $indexPath = "Assets/Images/" .  $fileName;
+                    $finalImage = file_exists($imagePath)
+                        ? $imagePath
+                        : (file_exists($indexPath)
+                            ? $indexPath
+                            : $defaultPath);
+            ?>
+                    <img src="<?= htmlspecialchars($finalImage) ?>"
+                        alt="<?= htmlspecialchars($altText) ?>" class="logo">
+            <?php
+                }
+            }
+            ?>
 
             <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>
             </h3>
@@ -70,7 +52,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <div class="info">
             <div class="reservation">
-                <h4 class="reservationTitle">Reservation</h4>
+                <h4 class="reservationTitle mb-1">Reservation</h4>
                 <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>
                 </h4>
                 <h4 class="emailAddressTextFooter">
@@ -78,7 +60,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 </h4>
             </div>
             <div class="locationFooter">
-                <h4 class="locationTitle">Location</h4>
+                <h4 class="locationTitle mb-1">Location</h4>
                 <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>
                 </h4>
             </div>
@@ -92,7 +74,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
                 <i class='bx bxs-phone'></i>
             </a>
-
         </div>
     </footer>
 </body>

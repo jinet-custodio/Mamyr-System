@@ -149,6 +149,8 @@
 .nav-item,
 #logOutBtn {
   font-size: var(--font-size-md);
+  margin-left: var(--margin-xs);
+  margin-right: var(--margin-xs);
 }
 
 #navbar-half.scrolled.dropdown-menu a {

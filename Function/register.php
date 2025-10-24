@@ -131,7 +131,7 @@ if (isset($_POST['signUp'])) {
 
                                 <tr>
                                     <td style="display: flex; justify-content:center; align-items:center; gap: 15px; margin: 10px 0 10px 0"><img
-                                           src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" style="height:29.76px; width:130.56px; ">
+                                        src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" style="height:29.76px; width:130.56px; ">
 
                                         <h4>Mamyr Resort and
                                             Events Place</h4>
