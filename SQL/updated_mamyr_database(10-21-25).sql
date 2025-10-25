@@ -362,22 +362,24 @@ INSERT INTO `entrancetimerange` (`timeRangeID`, `session_type`, `time_range`) VA
 
 CREATE TABLE `eventcategory` (
   `categoryID` int(11) NOT NULL,
-  `categoryName` varchar(200) NOT NULL
+  `categoryName` varchar(200) NOT NULL,
+  `eventDescription` text DEFAULT NULL,
+  `imagePath` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `eventcategory`
 --
 
-INSERT INTO `eventcategory` (`categoryID`, `categoryName`) VALUES
-(1, 'Birthday'),
-(2, 'Wedding'),
-(3, 'Team Building'),
-(4, 'Christening/Dedication'),
-(5, 'Thanksgiving Party'),
-(6, 'Christmas Party'),
-(7, 'Kids Party'),
-(8, 'Debut');
+INSERT INTO `eventcategory` (`categoryID`, `categoryName`, `eventDescription`, `imagePath`) VALUES
+(1, 'Birthday', 'Celebrating the joy of life at Mamyr Resort and Events Place—where every year brings new moments to cherish!', 'birthday.jpg'),
+(2, 'Wedding', 'Celebrating love and lifelong memories at Mamyr Resort—where every wedding is a dream come true!', 'pav4.jpg'),
+(3, 'Team Building', 'Creating great ideas and strong bonds at Mamyr Resort—where teamwork and leadership thrive in inspiring surroundings!', 'teamBuilding.jpg'),
+(4, 'Christening/Dedication', 'Make lasting memories at Mamyr Resort where every celebration, from christenings to dedications, is a moment to treasure.', 'christening.jpg'),
+(5, 'Thanksgiving Party', 'Celebrating gratitude and togetherness at Mamyr Resort—where good food and great company make every moment unforgettable!', 'thanksgiving.jpg'),
+(6, 'Christmas Party', 'Embracing the magic of the holidays at Mamyr Resort—where grand feasts and unforgettable moments bring joy to all!', 'xmas.jpg'),
+(7, 'Kids Party', 'Creating magical moments at Mamyr Resort and Events Place—where every kids\\\' party is filled with joy, laughter, and unforgettable memories!', 'kidsParty.jpg'),
+(8, 'Debut', 'Celebrating a milestone at Mamyr Resort and Events Place—where every debut marks a new chapter of unforgettable memories', 'debut.jpg');
 
 -- --------------------------------------------------------
 
