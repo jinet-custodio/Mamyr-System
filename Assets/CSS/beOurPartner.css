@@ -55,6 +55,12 @@ main {
   margin-top: 10vw !important;
 }
 
+.backButton-container {
+  position: absolute;
+  left: 7%;
+  top: 17%;
+}
+
 .title {
   margin-top: 1vw;
   font-size: 2.5vw;
@@ -247,6 +253,12 @@ button.close {
     color: #fff;
     font-weight: bold;
     text-align: center;
+    margin-top: 8rem;
+  }
+
+  .backButton-container {
+    left: 7%;
+    top: 17%;
   }
 
   .titleDescription {
@@ -285,8 +297,20 @@ button.close {
   }
 }
 
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  .title {
+    margin-top: 8rem !important;
+    font-size: 20px;
+  }
+
+  .backButton-container {
+    left: 7%;
+    top: 9.5%;
+  }
+}
+
 /* Tablet Landscape */
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
   .title {
     margin-top: 7rem;
     font-size: clamp(18px, 3vw, 26px);
@@ -317,12 +341,17 @@ button.close {
     width: 90%;
   }
 
+  .backButton-container {
+    left: 7%;
+    top: 9.5%;
+  }
+
   .defaultDiv h2 {
     font-size: clamp(20px, 18px, 19px);
   }
   .title {
-    margin-top: 5rem !important;
-    font-size: 5vw;
+    margin-top: 8rem !important;
+    font-size: clamp(18px, 20px, 22px);
   }
   .titleDescription {
     width: 100% !important;
@@ -434,8 +463,13 @@ button.close {
 @media screen and (max-width: 599px) {
   .titleContainer {
     width: 90%;
+    margin-top: 5rem !important;
   }
 
+  .backButton-container {
+    left: 7%;
+    top: 12%;
+  }
   .title {
     margin-top: clamp(2rem, 6vw, 4rem);
     font-size: clamp(25px, calc(3.3vh + 4px), 29px);
