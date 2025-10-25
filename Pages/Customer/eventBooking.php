@@ -148,138 +148,137 @@ $formData = $_SESSION['eventFormData'] ?? [];
             </div>
 
             <div class="container-fluid event-container" id="eventContainer">
-                <div class="card event-card" id="eventBookingCard">
-
-                    <!-- For Event Types -->
-                    <div class="eventTypeContainer">
-                        <label for="eventType" class="eventInfoLabel">Type of Event</label>
-                        <select class="form-select" name="eventType" id="eventType" required>
-                            <option value="" disabled <?= empty($formData['eventType'] ?? '') ? 'selected' : '' ?>>
-                                Choose here..</option>
-                            <?php
-                            $eventCategory = getEventCategory($conn);
-                            foreach ($eventCategory as $category) {
-                                $eventType =  isset($formData['eventType']) ?  $formData['eventType'] : '';
-                                $isSelected = (htmlspecialchars($category['categoryName']) === $eventType) ? 'selected' : '';
-                            ?>
-                                <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
-                                    <?= htmlspecialchars($category['categoryName']) ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <!-- Payment Method -->
-                    <div class="paymentMethod">
-                        <label for="paymentMethod" class="eventInfoLabel">Payment Method</label>
-                        <select class="form-select" name="paymentMethod" id="paymentMethod" required>
-                            <option value="" disabled <?= empty($formData['paymentMethod'] ?? '') ? 'selected' : '' ?>>
-                                Choose...</option>
-                            <option value="GCash"
-                                <?= (isset($formData['paymentMethod']) && $formData['paymentMethod'] === 'GCash') ? 'selected' : '' ?>>
-                                Gcash</option>
-                            <option value="Cash"
-                                <?= (isset($formData['paymentMethod']) && $formData['paymentMethod'] === 'Cash') ? 'selected' : '' ?>>
-                                Cash (Onsite Payment)</option>
-                        </select>
-                    </div>
-
-
-                    <div class="eventSched">
-                        <label for="eventDate" class="eventInfoLabel">Event Schedule</label>
-                        <div class="eventBox">
-                            <input type="date" class="form-control" name="eventDate" id="eventDate"
-                                value="<?= !empty($formData['eventDate']) ? $formData['eventDate'] : '' ?>">
-                            <i class=" fa-solid fa-calendar-days" style="color: #333333; "></i>
+                <div class="upperRow" id="upperRow">
+                    <div class="card event-card" id="eventBookingCard">
+                        <!-- For Event Types -->
+                        <div class="eventTypeContainer">
+                            <label for="eventType" class="eventInfoLabel">Type of Event</label>
+                            <select class="form-select" name="eventType" id="eventType" required>
+                                <option value="" disabled <?= empty($formData['eventType'] ?? '') ? 'selected' : '' ?>>
+                                    Choose here..</option>
+                                <?php
+                                $eventCategory = getEventCategory($conn);
+                                foreach ($eventCategory as $category) {
+                                    $eventType =  isset($formData['eventType']) ?  $formData['eventType'] : '';
+                                    $isSelected = (htmlspecialchars($category['categoryName']) === $eventType) ? 'selected' : '';
+                                ?>
+                                    <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
+                                        <?= htmlspecialchars($category['categoryName']) ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
                         </div>
-                    </div>
 
-                    <div class="eventStartTime">
-                        <label for="eventStartTime" class="eventInfoLabel">Start Time</label>
-                        <input type="time" class="form-control" name="eventStartTime" id="eventStartTime" required
-                            value="<?= !empty($formData['eventStartTime']) ? $formData['eventStartTime'] : '' ?>">
-                    </div>
+                        <!-- Payment Method -->
+                        <div class="paymentMethod">
+                            <label for="paymentMethod" class="eventInfoLabel">Payment Method</label>
+                            <select class="form-select" name="paymentMethod" id="paymentMethod" required>
+                                <option value="" disabled <?= empty($formData['paymentMethod'] ?? '') ? 'selected' : '' ?>>
+                                    Choose...</option>
+                                <option value="GCash"
+                                    <?= (isset($formData['paymentMethod']) && $formData['paymentMethod'] === 'GCash') ? 'selected' : '' ?>>
+                                    Gcash</option>
+                                <option value="Cash"
+                                    <?= (isset($formData['paymentMethod']) && $formData['paymentMethod'] === 'Cash') ? 'selected' : '' ?>>
+                                    Cash (Onsite Payment)</option>
+                            </select>
+                        </div>
 
-                    <!-- <div class="eventEndTime">
+
+                        <div class="eventSched">
+                            <label for="eventDate" class="eventInfoLabel">Event Schedule</label>
+                            <div class="eventBox">
+                                <input type="date" class="form-control" name="eventDate" id="eventDate"
+                                    value="<?= !empty($formData['eventDate']) ? $formData['eventDate'] : '' ?>">
+                                <i class=" fa-solid fa-calendar-days" style="color: #333333; "></i>
+                            </div>
+                        </div>
+
+                        <div class="eventStartTime">
+                            <label for="eventStartTime" class="eventInfoLabel">Start Time</label>
+                            <input type="time" class="form-control" name="eventStartTime" id="eventStartTime" required
+                                value="<?= !empty($formData['eventStartTime']) ? $formData['eventStartTime'] : '' ?>">
+                        </div>
+
+                        <!-- <div class="eventEndTime">
                         <label for="eventEndTime" class="eventInfoLabel">End Time</label>
                         <input type="time" class="form-control" name="eventEndTime" id="eventEndTime" required>
                     </div> -->
 
-                    <div class="eventVenue">
-                        <label for="eventVenue" class="eventInfoLabel" id="venueInfoLabel">Venue</label>
-                        <select class="form-select" name="eventVenue" id="eventVenue" required>
-                        </select>
+                        <div class="eventVenue">
+                            <label for="eventVenue" class="eventInfoLabel" id="venueInfoLabel">Venue</label>
+                            <select class="form-select" name="eventVenue" id="eventVenue" required>
+                            </select>
+                        </div>
+
+                        <div class="guestInfo">
+                            <label for="guestNo" class="eventInfoLabel">Number of Guests</label>
+                            <input type="number" min="1" step="1" class="form-control" name="guestNo" id="guestNo"
+                                value="<?= isset($formData['guestNo']) ? htmlspecialchars($formData['guestNo']) : '' ?>"
+                                placeholder="Estimated Number of Guests" required>
+
+                        </div>
+
+                        <div class="eventInfo">
+                            <label for="additionalRequest" class="eventInfoLabel">Additional Request</label>
+                            <textarea class="form-control w-100" id="purpose-additionalNotes" name="additionalRequest"
+                                rows="2" placeholder="Optional"></textarea>
+                        </div>
+
+                        <div class="noteContainer">
+                            <h6 class="eventInfoLabel">Note:</h6>
+                            <ul>
+                                <li> <i class="bi bi-info-circle-fill"></i> &nbsp;For any concerns or details regarding food and other services, contact us
+                                    at <?= $contactNumber ?>.</li>
+                                <li> <i class="bi bi-info-circle-fill"></i> &nbsp;If you already have a catering service in mind, you don’t need to select a dish.</li>
+                                <li><i class="bi bi-info-circle-fill"></i> &nbsp;Kindly contact us first to confirm your food preference before adding it in the request field. </li>
+                                <li> <i class="bi bi-info-circle-fill"></i> &nbsp;You can contact us on <a href="https://www.facebook.com/messages/t/100888189251567" target="_blank">Facebook</a>.</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="guestInfo">
-                        <label for="guestNo" class="eventInfoLabel">Number of Guests</label>
-                        <input type="number" min="1" step="1" class="form-control" name="guestNo" id="guestNo"
-                            value="<?= isset($formData['guestNo']) ? htmlspecialchars($formData['guestNo']) : '' ?>"
-                            placeholder="Estimated Number of Guests" required>
 
-                    </div>
-
-                    <div class="eventInfo">
-                        <label for="additionalRequest" class="eventInfoLabel">Additional Request</label>
-                        <textarea class="form-control w-100" id="purpose-additionalNotes" name="additionalRequest"
-                            rows="2" placeholder="Optional"></textarea>
-                    </div>
-
-                    <div class="noteContainer">
-                        <h6 class="eventInfoLabel">Note:</h6>
-                        <ul>
-                            <li> <i class="bi bi-info-circle-fill"></i> &nbsp;For any concerns or details regarding food and other services, contact us
-                                at <?= $contactNumber ?>.</li>
-                            <li> <i class="bi bi-info-circle-fill"></i> &nbsp;If you already have a catering service in mind, you don’t need to select a dish.</li>
-                            <li><i class="bi bi-info-circle-fill"></i> &nbsp;Kindly contact us first to confirm your food preference before adding it in the request field. </li>
-                            <li> <i class="bi bi-info-circle-fill"></i> &nbsp;You can contact us on <a href="https://www.facebook.com/messages/t/100888189251567" target="_blank">Facebook</a>.</li>
-                        </ul>
-                    </div>
-                </div>
-
-
-                <div class="secondColumn">
-                    <div id="calendar"></div>
-                    <div class="packageDisplay" style="display: none;">
-                        <div id="packageCardsContainer" class="container d-flex flex-wrap gap-3">
+                    <div class="secondColumn">
+                        <div id="calendar"></div>
+                        <div class="packageDisplay" style="display: none;">
+                            <div id="packageCardsContainer" class="container d-flex flex-wrap gap-3">
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="lowerRow" id="lowerRow">
 
-                <!-- <div class="card foodSelection-card" id="foodSelectionCard">
-                    <h1>testing</h1>
-                </div> -->
+                    <div class="card foodSelection-card" id="foodSelectionCard">
 
-                <div class="card foodSelection-card" id="foodSelectionCard" style="width:40rem;">
+                        <img src="../../Assets/Images/BookNowPhotos/foodCoverImg.jpg" class="card-img-top"
+                            id="foodSelectionCover" alt="Food Selection Cover">
 
-                    <img src="../../Assets/Images/BookNowPhotos/foodCoverImg.jpg" class="card-img-top"
-                        id="foodSelectionCover" alt="Food Selection Cover">
-
-                    <div class="card-body ">
-                        <h5 class="card-title fw-bold text-center">Dish Selection</h5>
-                        <p class="card-text mt-3 text-center">Choose from a variety of catering options to suit your
-                            event’s needs.
-                            Select dishes that will delight your guests and complement your celebration.</p>
-                        <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal"
-                            data-bs-target="#dishModal">Open Menu</button>
+                        <div class="card-body ">
+                            <h5 class="card-title fw-bold text-center">Dish Selection</h5>
+                            <p class="card-text mt-3 text-center">Choose from a variety of catering options to suit your
+                                event’s needs.
+                                Select dishes that will delight your guests and complement your celebration.</p>
+                            <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal"
+                                data-bs-target="#dishModal">Open Menu</button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="card additionalServices-card" id="additionalServicesCard" style="width:40rem;">
+                    <div class="card additionalServices-card" id="additionalServicesCard">
 
-                    <img src="../../Assets/Images/BookNowPhotos/additionalServiceImg.jpg" class="card-img-top"
-                        id="additionalServicesCover" alt="Additional Services Cover">
+                        <img src="../../Assets/Images/BookNowPhotos/additionalServiceImg.jpg" class="card-img-top"
+                            id="additionalServicesCover" alt="Additional Services Cover">
 
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold text-center">Additional Services</h5>
-                        <p class="card-text mt-3 text-center">Explore our range of additional services to elevate your
-                            event. From
-                            photography to hosting, choose what best suits your needs and adds a special touch to
-                            your celebration.</p>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-center">Additional Services</h5>
+                            <p class="card-text mt-3 text-center">Explore our range of additional services to elevate your
+                                event. From
+                                photography to hosting, choose what best suits your needs and adds a special touch to
+                                your celebration.</p>
 
-                        <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal"
-                            data-bs-target="#additionalServicesModal">View Services</button>
+                            <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal"
+                                data-bs-target="#additionalServicesModal">View Services</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -598,11 +597,6 @@ $formData = $_SESSION['eventFormData'] ?? [];
         minDate.setDate(minDate.getDate() + 8);
 
         //event calendar
-        flatpickr('#eventDate', {
-            minDate: minDate,
-            dateFormat: "Y-m-d",
-            disableMobile: true,
-        });
 
         flatpickr('#eventStartTime', {
             enableTime: true,
@@ -943,6 +937,63 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
         });
     </script>
+
+    <!-- Fetching events for calendar  -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var disabledDates = []; // store dates to disable in Flatpickr
+
+            // Initialize FullCalendar
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '../../Function/fetchUserBookings.php',
+
+                eventsSet: function(events) {
+                    console.log('Fetched events:', events);
+
+                    // Extract only the start dates (or adjust if you have ranges)
+                    disabledDates = events.map(event => event.startStr);
+                    console.log('Disabled dates:', disabledDates);
+
+                    // Once we have the dates, initialize Flatpickr
+                    initFlatpickr(disabledDates);
+                },
+
+                eventClick: function(info) {
+                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+                },
+
+                eventDidMount: function(info) {
+                    if (info.event.allDay) {
+                        const dateStr = info.event.startStr;
+                        const dayCell = document.querySelector(`.fc-daygrid-day[data-date="${dateStr}"]`);
+                        if (dayCell) {
+                            let baseColor = info.event.backgroundColor || info.event.extendedProps.color || '#dc3545';
+                            dayCell.style.backgroundColor = baseColor;
+                            dayCell.style.color = '#000';
+                        }
+                        if (info.el) {
+                            info.el.style.display = 'none';
+                        }
+                    }
+                }
+            });
+
+            calendar.render();
+
+            // Initialize Flatpickr after fetching disabled dates
+            function initFlatpickr(dates) {
+                flatpickr("#eventDate", {
+                    dateFormat: "Y-m-d",
+                    disable: dates,
+                    minDate: "today",
+                });
+            }
+        });
+    </script>
+
+
 
     <!-- Sweetalert Message  -->
     <script>
