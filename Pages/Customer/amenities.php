@@ -11,6 +11,8 @@ checkSessionTimeout($timeout = 3600);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 switch ($userRole) {
     case 1: //customer
@@ -220,7 +222,7 @@ require '../../Function/notification.php';
                 <h1 class="title">OUR AMENITIES</h1>
 
                 <div class="embed-responsive embed-responsive-16by9">
-                    <video id="mamyrVideo" autoplay muted loop controls class="embed-responsive-item">
+                    <video id="mamyrVideo" muted loop controls class="embed-responsive-item">
                         <source src="../../Assets/videos/mamyrVideo1.mp4" type="video/mp4">
                     </video>
 
@@ -492,16 +494,6 @@ require '../../Function/notification.php';
             });
         });
     });
-    </script>
-
-
-
-    <script>
-    var video = document.getElementById("mamyrVideo");
-
-    video.onplay = function() {
-        video.muted = false;
-    };
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

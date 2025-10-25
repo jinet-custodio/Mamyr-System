@@ -1,6 +1,7 @@
 :root {
   --blue-50: oklch(0.9 0.15 210);
   --blue-100: oklch(0.8 0.2 210);
+  --blue-150: oklch(0.64 0.65 220 / 0.1);
   --blue-200: oklch(0.7 0.25 210);
   --blue-300: oklch(0.6 0.3 210);
   --blue-350: oklch(0.5848 0.129 246.27); /* #3e849e */
@@ -19,7 +20,7 @@
   --bg-light: oklch(0.9702 0 0);
   --bg-dark: oklch(0.05 0.05 50);
 
-  --text-light: oklch(0.2 0.02 50);
+  --text-light: oklch(0.1822 0 0);
   --text-dark: oklch(96.715% 0.00011 0.2);
 
   --border-light: oklch(95% 0.01523 49);
@@ -119,10 +120,6 @@
   src: url(../Fonts/Poppins/Poppins-Regular.ttf);
 }
 @font-face {
-  font-family: "Lora";
-  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
-}
-@font-face {
   font-family: "Alkatra";
   src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
@@ -130,16 +127,12 @@
 footer {
   /* border: 1px solid black; */
   margin-top: 3vw;
-  background: linear-gradient(
-    to top,
-    rgba(241, 241, 241, 0.445) -50%,
-    var(--blue-450)
-  );
+  background: var(--blue-150);
   width: 100%;
 }
 
 #nameAndLogo {
-  gap: 2vw;
+  gap: 1vw;
   padding: 0.1vw;
   margin-top: var(--margin-xs);
 }
@@ -149,26 +142,38 @@ footer {
   height: auto;
 }
 .mb-0 {
-  font-family: "Lora";
+  font-family: "Poppins";
   font-size: var(--font-size-lg);
   font-weight: bold;
-  color: var(--text-dark);
+  color: var(--text-light);
 }
 
 .footerLine {
-  width: 80%;
   margin: var(--margin-xs) auto;
   color: var(--text-dark);
   opacity: 1;
+}
+
+.locationFooter,
+.reservation {
+  width: 40%;
+}
+
+#map {
+  height: 90%; /* Set the height to 300px */
+  width: 80%; /* Set the width to 500px (or any other desired value) */
+  margin: 0 auto; /* Center the map horizontally in its container */
 }
 
 .info {
   display: flex;
   justify-content: center;
   gap: 5vw;
+  width: 40%;
 }
-.locationFooter {
-  width: 30%;
+
+.mapContainer {
+  width: 35%;
 }
 
 .reservationTitle,
@@ -176,14 +181,14 @@ footer {
   font-family: "Poppins";
   font-weight: bold;
   font-size: 19px;
-  color: var(--bg-light);
+  color: var(--text-light);
 }
 
 .numberFooter,
 .emailAddressTextFooter,
 .addressTextFooter {
-  font-family: "Poppins ExtraLight";
-  color: var(--text-dark);
+  font-family: "Poppins";
+  color: var(--text-light);
   font-size: clamp(18px, calc(2.1vh + 2px), 16px);
   margin-bottom: 0 !important;
 }
@@ -234,17 +239,27 @@ footer {
   border: 1px solid rgb(255, 13, 13) !important;
   padding: 2px;
 }
-@media (min-width: 1440px) {
+
+#copyrightText {
+  color: var(--text-light) !important;
+}
+
+@media (min-width: 1900px) {
   .numberFooter,
   .emailAddressTextFooter,
   .addressTextFooter {
-    font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+    font-size: clamp(1vw, 1.1vw, 1.2vw);
+  }
+
+  #copyrightText {
+    font-size: clamp(1vw, 1.1vw, 1.2vw);
   }
 
   .reservationTitle,
   .locationTitle,
-  .mb-0 {
-    font-size: clamp(1.4vw, 1.3vw, 1.2vw);
+  .mb-0,
+  .socialIcons a i {
+    font-size: clamp(1vw, 1.3vw, 1.2vw);
   }
 }
 

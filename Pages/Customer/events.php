@@ -9,25 +9,6 @@ require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 require '../../Function/notification.php';
 
-switch ($userRole) {
-    case 1: //customer
-        $role = "Customer";
-        break;
-    case 2:
-        $role = "Business Partner";
-        break;
-    case 3:
-        $role = "Admin";
-        break;
-    case 4:
-        $role = "Partnership Applicant";
-        break;
-    default:
-        $_SESSION['error'] = "Unauthorized Access!";
-        session_destroy();
-        header("Location: ../register.php");
-        exit();
-}
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -50,6 +31,26 @@ if (isset($_SESSION['userID'])) {
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+
+switch ($userRole) {
+    case 1: //customer
+        $role = "Customer";
+        break;
+    case 2:
+        $role = "Business Partner";
+        break;
+    case 4:
+        $role = "Partnership Applicant";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
+
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");

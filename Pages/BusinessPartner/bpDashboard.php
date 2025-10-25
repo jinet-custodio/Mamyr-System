@@ -11,6 +11,7 @@ require_once '../../Function/Helpers/userFunctions.php';
 resetExpiredOTPs($conn);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+$baseURL = '../..';
 
 switch ($userRole) {
     case 2:

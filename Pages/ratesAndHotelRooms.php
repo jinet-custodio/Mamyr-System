@@ -3,6 +3,8 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require '../Config/dbcon.php';
+//for setting image paths in 'include' statements
+$baseURL = '..';
 
 //for edit website, this will enable edit mode from the iframe
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
@@ -483,17 +485,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     </div>
                 </div>
             </div>
-            <!-- Back to Top Button -->
-            <a href="#" id="backToTopBtn" title="Back to Top">
-                <i class="fas fa-chevron-up"></i>
-            </a>
         </main>
         <?php if (!$editMode) {
             include 'footer.php';
-            include 'loader.php';
+            include '../Pages/Customer/loader.php';
         } else {
             include 'editImageModal.php';
-            include 'loader.php';
+            include '../Pages/Customer/loader.php';
         }
         ?>
     </div>
@@ -541,24 +539,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         flatpickr('#hotelDate', {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
-        });
-
-        window.onscroll = function() {
-            const btn = document.getElementById("backToTopBtn");
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                btn.style.display = "block";
-            } else {
-                btn.style.display = "none";
-            }
-        };
-
-        // Scroll to top
-        document.getElementById("backToTopBtn").addEventListener("click", function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
         });
 
         document.addEventListener('DOMContentLoaded', () => {

@@ -586,10 +586,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
 
-            <!-- Back to Top Button -->
-            <a href="#" id="backToTopBtn" title="Back to Top">
-                <i class="fas fa-chevron-up"></i>
-            </a>
         </main>
         <?php include 'footer.php';
         include 'loader.php'; ?>
@@ -619,51 +615,33 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             hotelTitle.classList.remove('selected')
         }
     }
-
-    function showHotels(event) {
-        event.preventDefault();
-        document.getElementById('hotelRooms').style.display = 'block';
-        document.getElementById('rates').style.display = 'none';
-        if (!hotelTitle.classList.contains('selected')) {
-            hotelTitle.classList.add('selected');
-        };
-        if (ratesTitle.classList.contains('selected')) {
-            ratesTitle.classList.remove('selected')
-        }
-    }
-
-    flatpickr('#hotelDate', {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-    });
-
-    window.onscroll = function() {
-        const btn = document.getElementById("backToTopBtn");
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            btn.style.display = "block";
-        } else {
-            btn.style.display = "none";
-        }
-    };
-
-    // Scroll to top
-    document.getElementById("backToTopBtn").addEventListener("click", function(e) {
-        e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-        if (ratesTitle.classList.contains('selected')) {
-            document.getElementById('hotelRooms').style.display = 'none';
-            document.getElementById('rates').style.display = 'block';
-        } else if (hotelTitle.classList.contains('selected')) {
-            document.getElementById('rates').style.display = 'none';
+      
+        function showHotels(event) {
+            event.preventDefault();
             document.getElementById('hotelRooms').style.display = 'block';
-        }
-    });
+            document.getElementById('rates').style.display = 'none';
+            if (!hotelTitle.classList.contains('selected')) {
+                hotelTitle.classList.add('selected');
+            };
+            if (ratesTitle.classList.contains('selected')) {
+                ratesTitle.classList.remove('selected')
+            }
+        }      
+
+        flatpickr('#hotelDate', {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (ratesTitle.classList.contains('selected')) {
+                document.getElementById('hotelRooms').style.display = 'none';
+                document.getElementById('rates').style.display = 'block';
+            } else if (hotelTitle.classList.contains('selected')) {
+                document.getElementById('rates').style.display = 'none';
+                document.getElementById('hotelRooms').style.display = 'block';
+            }
+        });
     </script>
     <!-- filters hotel rooms by the hour -->
     <script>

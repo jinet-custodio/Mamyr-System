@@ -14,16 +14,12 @@ addToAdminTable($conn);
 autoChangeStatus($conn);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 switch ($userRole) {
     case 1: //customer
         $role = "Customer";
-        break;
-    case 2:
-        $role = "Business Partner";
-        break;
-    case 3:
-        $role = "Admin";
         break;
     case 4:
         $role = "Partnership Applicant";

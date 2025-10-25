@@ -4,7 +4,8 @@ error_reporting(E_ALL);
 session_start();
 ini_set('display_errors', 1);
 require '../Config/dbcon.php';
-
+//for setting image paths in 'include' statements
+$baseURL = '..';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -425,7 +426,7 @@ require '../Config/dbcon.php';
 
 
     <?php include 'footer.php';
-    include 'loader.php'; ?>
+    include '../Pages/Customer/loader.php'; ?>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>

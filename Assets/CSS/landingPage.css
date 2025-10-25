@@ -71,7 +71,7 @@
   font-family: "Poppins Light";
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-xl);
-  margin-top: 2vw;
+  margin-top: var(--margin-xs);
 }
 .subtext {
   font-family: "Poppins Light";
@@ -390,12 +390,6 @@
 .locationText-container {
   width: 50%;
   margin-top: 0;
-}
-
-#map {
-  height: 300px; /* Set the height to 300px */
-  width: 500px; /* Set the width to 500px (or any other desired value) */
-  margin: 0 auto; /* Center the map horizontally in its container */
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {

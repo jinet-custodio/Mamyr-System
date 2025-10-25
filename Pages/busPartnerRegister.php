@@ -4,6 +4,8 @@ ini_set('display_errors', 1);
 
 require '../Config/dbcon.php';
 session_start();
+//for setting image paths in 'include' statements
+$baseURL = '..';
 ?>
 
 
@@ -536,7 +538,7 @@ session_start();
     </div>
     <!-- terms and conditions modal -->
 
-    <?php include 'loader.php' ?>
+    <?php include '../Pages/Customer/loader.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
