@@ -697,7 +697,7 @@ option {
 
   /* Optional: smaller font inside day cells */
   .fc .fc-daygrid-day-number {
-    font-size: 0.75rem;
+    font-size: clamp(1.5vw, 1.6vw, 1.4vw);
   }
 
   .fc .fc-view-harness {
@@ -708,7 +708,11 @@ option {
   .fc-daygrid-day-number,
   .fc-col-header-cell-cushion,
   .fc-daygrid-day-events {
-    font-size: var(--font-size-sm);
+    font-size: clamp(
+      var(--font-size-md),
+      calc(1.2vh + 2px),
+      var(--font-size-base)
+    );
     text-decoration: none;
   }
 
@@ -767,6 +771,10 @@ option {
     font-size: 25px !important;
     width: 25%;
     text-align: center;
+  }
+
+  #calendar {
+    height: clamp(400px, 380px, 420px) !important;
   }
 }
 
@@ -888,10 +896,15 @@ option {
     gap: 0.5rem;
   }
 
-  .fc .fc-toolbar-title,
-  .fc-today-button.fc-button.fc-button-primary,
-  .fc .fc-button .fc-icon {
-    font-size: var(--font-size-sm);
+  .fc-daygrid-day-number,
+  .fc-col-header-cell-cushion,
+  .fc-daygrid-day-events {
+    font-size: clamp(
+      var(--font-size-md),
+      calc(1.2vh + 2px),
+      var(--font-size-base)
+    );
+    text-decoration: none;
   }
 
   .fc-toolbar .fc-button-group {
@@ -974,6 +987,10 @@ option {
     font-size: 25px !important;
     width: 25%;
     text-align: center;
+  }
+
+  #calendar {
+    height: clamp(400px, 380px, 360px) !important;
   }
 }
 
@@ -1182,6 +1199,10 @@ option {
     width: 25%;
     text-align: center;
   }
+
+  #calendar {
+    height: clamp(340px, 325px, 360px) !important;
+  }
 }
 
 /* Phone size */
@@ -1229,6 +1250,26 @@ option {
   .graph-header {
     flex-direction: column;
     align-items: center;
+  }
+
+  #calendarHeader {
+    flex-direction: row;
+  }
+
+  #calendarFilter {
+    width: 100%;
+  }
+
+  #calendarFilterCont {
+    margin-top: 0 !important;
+  }
+
+  #calendar {
+    height: clamp(340px, 325px, 360px) !important;
+  }
+
+  .moreBtn {
+    margin-top: 0 !important;
   }
 
   .filter-btn-container {

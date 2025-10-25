@@ -24,7 +24,7 @@
             });
 
             function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
+                if (window.innerWidth <= 700) {
                     sidebar.classList.add('collapsed');
                     toggleBtn.style.display = "flex";
                     items.forEach(item => {
