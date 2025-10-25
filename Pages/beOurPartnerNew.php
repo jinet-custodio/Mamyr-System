@@ -18,7 +18,7 @@ $baseURL = '..';
     <link rel="stylesheet" href="../Assets/CSS/beOurPartnerNew.css">
     <link rel="stylesheet" href="../Assets/CSS/navbar.css">
     <!-- Link to Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -177,77 +177,275 @@ $baseURL = '..';
 
 
         <div class="BPContainer">
-            <?php if (!empty($partners)):
+            <!-- <?php if (!empty($partners)):
                 foreach ($partners as $partner): ?>
-                    <div class="card bp-card" id="bp1">
-                        <img src="../Assets/Images/no-picture.jpg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= ucwords($partner['companyName']) ?></h5>
-                            <h6 class="card-subtitle">Photography</h6>
-                            <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi, ea aliquid.
-                            </p>
-                        </div>
+            <div class="card bp-card" id="bp1">
+
+                <div class="card-body">
+                    <h5 class="card-title"><?= ucwords($partner['companyName']) ?></h5>
+                    <h6 class="card-subtitle">Photography</h6>
+                    <div class="availability-container">
+                        <span class="badge bg-danger text-capitalize">Not Available</span>
+
                     </div>
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In odit deleniti,
+                        dolore quo officia mollitia minus modi sunt laborum labore distinctio nam asperiores optio
+                        aperiam dolorum voluptate? Molestias, nihil optio!</p>
+
+
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary moreInfo-btn" id="bp-moreInfo"
+                        data-bs-target="bp-moreInfo-modal">More
+                        Details</button>
+                </div>
+            </div>
             <?php endforeach;
-            endif; ?>
+            endif; ?> -->
+
+
 
             <div class="card bp-card" id="bp1">
-                <img src="../Assets/Images/no-picture.jpg" class="card-img-top" alt="...">
+                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Singko Marias</h5>
                     <h6 class="card-subtitle">Photography</h6>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi, ea aliquid.
-                    </p>
+                    <div class="button-container">
+                        <span class="badge bg-green text-capitalize">Available</span>
+                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
+                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
+                            data-bs-target="#moreInfo-modal">More
+                            Details</button>
+                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
+                            data-bs-target="#contact-modal">Contact
+                            Us</button>
+                    </div>
+
+                    <div class="description-container">
+                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
+                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
+                    </div>
                 </div>
             </div>
 
             <div class="card bp-card" id="bp1">
-                <img src="../Assets/Images/no-picture.jpg" class="card-img-top" alt="...">
+                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Singko Marias</h5>
                     <h6 class="card-subtitle">Photography</h6>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi, ea aliquid.
-                    </p>
+                    <div class="button-container">
+                        <span class="badge bg-warning text-capitalize">Maintenance</span>
+                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
+                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
+                            data-bs-target="#moreInfo-modal">More
+                            Details</button>
+                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
+                            data-bs-target="#contact-modal">Contact
+                            Us</button>
+                    </div>
+
+                    <div class="description-container">
+                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
+                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
+                    </div>
                 </div>
             </div>
 
             <div class="card bp-card" id="bp1">
-                <img src="../Assets/Images/no-picture.jpg" class="card-img-top" alt="...">
+                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Singko Marias</h5>
                     <h6 class="card-subtitle">Photography</h6>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi, ea aliquid.
-                    </p>
+                    <div class="button-container">
+                        <span class="badge bg-danger text-capitalize">Not Available</span>
+                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
+                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
+                            data-bs-target="#moreInfo-modal">More
+                            Details</button>
+                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
+                            data-bs-target="#contact-modal">Contact
+                            Us</button>
+                    </div>
+
+                    <div class="description-container">
+                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
+                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
+                    </div>
                 </div>
             </div>
 
+            <div class="card bp-card" id="bp1">
+                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Singko Marias</h5>
+                    <h6 class="card-subtitle">Photography</h6>
+                    <div class="button-container">
+                        <span class="badge bg-warning text-capitalize">Maintenance</span>
+                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
+                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
+                            data-bs-target="#moreInfo-modal">More
+                            Details</button>
+                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
+                            data-bs-target="#contact-modal">Contact
+                            Us</button>
+                    </div>
 
+                    <div class="description-container">
+                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
+                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
+                    </div>
+                </div>
+            </div>
 
+            <div class="card bp-card" id="bp1">
+                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Singko Marias</h5>
+                    <h6 class="card-subtitle">Photography</h6>
+                    <div class="button-container">
+                        <span class="badge bg-green text-capitalize">Available</span>
+                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
+                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
+                            data-bs-target="#moreInfo-modal">More
+                            Details</button>
+                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
+                            data-bs-target="#contact-modal">Contact
+                            Us</button>
+                    </div>
+
+                    <div class="description-container">
+                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
+                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bp-card" id="bp1">
+                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Singko Marias</h5>
+                    <h6 class="card-subtitle">Photography</h6>
+                    <div class="button-container">
+                        <span class="badge bg-green text-capitalize">Available</span>
+                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
+                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
+                            data-bs-target="#moreInfo-modal">More
+                            Details</button>
+                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
+                            data-bs-target="#contact-modal">Contact
+                            Us</button>
+                    </div>
+
+                    <div class="description-container">
+                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
+                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
+
+        <!-- modal for more info -->
+        <div class="modal fade" id="moreInfo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bpName">Singko Marias</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="md-container">
+                            <label class="mdlabel">Partner Type</label>
+                            <h5 class="partnerType">Photography</h5>
+                        </div>
+                        <div class="md-container">
+                            <label class="mdlabel">Business Address:</label>
+                            <h5 class="partnerAddress">Poblacion, San Ildefonso, Bulacan</h5>
+                        </div>
+                        <div class="md-container">
+                            <label class="mdlabel">Duration</label>
+                            <h5 class="partnerDuration">5 hours</h5>
+                        </div>
+                        <div class="md-container">
+                            <label class="mdlabel">View Our Work</label>
+                            <a class="partnerLink" href="https://www.example.com"
+                                target="_blank">https://www.example.com</a>
+                        </div>
+
+                        <div class="md-container">
+                            <label class="mdlabel">Price</label>
+                            <h5 class="partnerPrice">₱ 2000</h5>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal for more info -->
+
+        <!-- modal for contact -->
+        <div class="modal fade" id="contact-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Contact Us</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="md-container">
+                            <label class="mdlabel">Email Address</label>
+                            <h5 class="partnerEmail"> <a href="example@example.com">singkomarias@gmail.com</a></h5>
+                        </div>
+                        <div class="md-container">
+                            <label class="mdlabel">Business Address:</label>
+                            <h5 class="partnerNumber"> <a href="tel:09237641541">
+                                    09237641541
+                                </a></h5>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal for contact -->
+
     </section>
+
 
     <?php include 'footer.php';
     include '../Pages/Customer/loader.php'; ?>
     <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
+
     </script>
     <script src="../Assets/JS/scrollNavbg.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Redirects User to Book Now -->
     <script>
-        const bookNowBtns = document.querySelectorAll('.bookNowBtn');
+    const bookNowBtns = document.querySelectorAll('.bookNowBtn');
 
-        bookNowBtns.forEach(bookNowBtn => {
-            bookNowBtn.addEventListener("click", function(e) {
-                window.location.href = "/Pages/register.php"
-            });
+    bookNowBtns.forEach(bookNowBtn => {
+        bookNowBtn.addEventListener("click", function(e) {
+            window.location.href = "/Pages/register.php"
         });
+    });
     </script>
 
 </body>
