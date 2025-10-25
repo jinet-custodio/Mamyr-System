@@ -4,7 +4,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout($timeout = 900);
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -237,7 +237,8 @@ switch ($userRole) {
                             messages will also be deleted.
                         </p>
                         <div class="delete-button">
-                            <button type="button" class="btn btn-danger" name="confirmationBtn"
+
+                            <button type="button" class="btn btn-danger" name="confirmationBtn" data-bs-target="#warningModal" data-bs-toggle="modal"
                                 id="confirmationBtn">Delete
                                 Account</button>
                         </div>
@@ -250,6 +251,26 @@ switch ($userRole) {
 
                         <!-- Confirmation Modal -->
                         <form action="../../Function/Account/deleteAccount.php" method="POST">
+                            <div class="modal fade" id="warningModal" aria-hidden="true" aria-labelledby="warningModalLabel" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title fw-bold" id="warningModalLabel">Account Deletion</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-center">
+                                                If you wish to delete your account, all <strong> existing booking(s) will be automatically cancelled </strong>.
+                                                Please note that we have a <strong>no-refund policy</strong>.
+                                            </p>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-bs-target="#confirmationModal" data-bs-toggle="modal" data-bs-dismiss="modal">Okay, next</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="modal fade" id="confirmationModal" tabindex="-1"
                                 aria-labelledby="confirmationModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
@@ -391,8 +412,8 @@ switch ($userRole) {
     <script>
         const params = new URLSearchParams(window.location.search);
         const paramsValue = params.get('action')
-        const confirmationBtn = document.getElementById("confirmationBtn");
-        const confirmationModal = document.getElementById("confirmationModal");
+        // const confirmationBtn = document.getElementById("confirmationBtn");
+        // const confirmationModal = document.getElementById("confirmationModal");
         const deleteModal = document.getElementById('deleteModal');
         const logoutBtn = document.getElementById('logoutBtn');
 
@@ -416,10 +437,10 @@ switch ($userRole) {
             });
         });
 
-        confirmationBtn.addEventListener("click", function() {
-            const myconfirmationModal = new bootstrap.Modal(confirmationModal);
-            myconfirmationModal.show();
-        });
+        // confirmationBtn.addEventListener("click", function() {
+        //     const myconfirmationModal = new bootstrap.Modal(confirmationModal);
+        //     myconfirmationModal.show();
+        // });
 
         if (paramsValue === 'success') {
             const myModal = new bootstrap.Modal(deleteModal);

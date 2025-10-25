@@ -80,7 +80,10 @@ if (isset($_POST['approveBtn'])) {
     //*Date and Time
     $startDate = mysqli_real_escape_string($conn, $_POST['startDate']);
     $endDate = mysqli_real_escape_string($conn, $_POST['endDate']);
+    $discountAmount = (float) $_POST['discountAmount'];
 
+    $finalBill = mysqli_real_escape_string($conn, $_POST['finalBill']);
+    $downpayment = $finalBill * .3;
 
     $bookingCode = mysqli_real_escape_string($conn, $_POST['bookingCode']);
     // strtoupper($type) . date('ymd') . generateCode(5)
@@ -115,10 +118,7 @@ if (isset($_POST['approveBtn'])) {
         }
     }
 
-    $discountAmount = (float) $_POST['discountAmount'];
 
-    $finalBill = mysqli_real_escape_string($conn, $_POST['finalBill']);
-    $downpayment = $finalBill * .3;
 
     $conn->begin_transaction();
     try {
