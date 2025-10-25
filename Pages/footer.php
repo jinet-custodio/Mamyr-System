@@ -62,9 +62,9 @@ while ($row = $getLogoResult->fetch_assoc()) {
     <?php if ($editMode): ?>
         <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
-    <footer class="py-1 px-4" id="footer">
+    <footer class="py-1 px-3" id="footer">
         <div class="upperFooter d-flex pt-2">
-            <div class=" py-1 d-flex justify-content-start flex-column w-25" id="nameAndLogo">
+            <div class=" py-1 d-flex justify-content-start flex-column" id="nameAndLogo">
                 <?php
                 foreach ($logoInfo as $id => $logo) {
                     foreach ($logo as $fileName => $altText) {
@@ -74,7 +74,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
 
                         <img src="<?= htmlspecialchars($finalImage) ?>"
                             alt="<?= htmlspecialchars($altText) ?>"
-                            class="editable-img logo" style="cursor: pointer;"
+                            class="editable-img logo mx-auto" style="cursor: pointer;"
                             data-bs-toggle="modal"
                             data-bs-target="#editImageModal"
                             data-wcimageid="<?= htmlspecialchars($id) ?>"
@@ -90,7 +90,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
                     <input type="text" class="mb-0 editable-input form-control" id="fullName"
                         data-title="FullName" value="<?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>">
                 <?php else: ?>
-                    <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
+                    <h3 class="mb-0 text-center"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
                 <?php endif; ?>
                 <div class="socialIcons">
                     <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i

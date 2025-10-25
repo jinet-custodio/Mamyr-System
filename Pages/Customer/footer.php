@@ -54,9 +54,9 @@ while ($row = $getLogoResult->fetch_assoc()) {
 </head>
 
 <body>
-    <footer class="py-1 px-4" id="footer">
+    <footer class="py-1 px-3" id="footer">
         <div class="upperFooter d-flex pt-2">
-            <div class=" py-1 d-flex justify-content-start flex-column w-25" id="nameAndLogo">
+            <div class=" py-1 d-flex justify-content-start flex-column" id="nameAndLogo">
                 <?php
                 foreach ($logoInfo as $id => $logo) {
                     foreach ($logo as $fileName => $altText) {
@@ -109,7 +109,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
             </div>
         </div>
         <hr class="footerLine w-100">
-        <div class="copyrightContainer">
+        <div class="copyrightContainer w-100">
             <h5 class="text-white text-center" id="copyrightText">© 2025 <?= htmlspecialchars($contentMap['FullName']) ?? 'Name Not Found' ?>. All Rights Reserved.</h5>
         </div>
     </footer>
