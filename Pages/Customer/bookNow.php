@@ -147,9 +147,9 @@ unset($_SESSION['eventFormData']);
                         data-bs-target="#notificationModal">
                         <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                         <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= htmlspecialchars($counter) ?>
+                            </span>
                         <?php endif; ?>
                     </button>
                 </div>
@@ -163,9 +163,9 @@ unset($_SESSION['eventFormData']);
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <?php if ($userRole !== 2): ?>
-                        <a class="nav-link" href="dashboard.php"> Home</a>
+                            <a class="nav-link" href="dashboard.php"> Home</a>
                         <?php else: ?>
-                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                            <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                         <?php endif; ?>
                     </li>
                     <li class="nav-item dropdown">
@@ -183,15 +183,15 @@ unset($_SESSION['eventFormData']);
                         <a class="nav-link" href="blog.php">Blog</a>
                     </li>
                     <?php if ($userRole !== 2): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
+                        </li>
                     <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="about.php">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="bookNow.php">Book Now</a>
+                        <a class="nav-link active" href="bookNow.php">Book Now</a>
                     </li>
                     <li class="nav-item">
                         <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">Log Out</a>
@@ -280,48 +280,45 @@ unset($_SESSION['eventFormData']);
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
     <!-- Sweetalert Link -->
@@ -329,51 +326,68 @@ unset($_SESSION['eventFormData']);
 
     <!-- Sweetalert Popup -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('action');
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
 
-    if (paramValue === 'success') {
-        Swal.fire({
-            title: "Successful Booking!",
-            text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info. Thank You!",
-            icon: "success",
-            confirmButtonText: 'View',
-            showCloseButton: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '../Account/bookingHistory.php';
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
             }
         });
-    }
-    if (paramValue === 'bookNow') {
-        Swal.fire({
-            title: "Success!",
-            text: "Your phone number has been submitted successfully. You may now proceed with booking.",
-            icon: "success",
-            confirmButtonText: "Okay"
-        })
-    }
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    };
+        if (paramValue === 'success') {
+            Swal.fire({
+                title: "Successful Booking!",
+                text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info. Thank You!",
+                icon: "success",
+                confirmButtonText: 'View',
+                showCloseButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '../Account/bookingHistory.php';
+                }
+            });
+        }
+
+        if (paramValue === 'bookNow') {
+            Toast.fire({
+                text: "Your phone number has been submitted successfully. You may now proceed with booking.",
+                icon: "success"
+            })
+        }
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 
 
     <!-- For checking the phone Number -->
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const phoneNumber = document.getElementById("phoneNumber").value;
+        document.addEventListener("DOMContentLoaded", function() {
+            const phoneNumber = document.getElementById("phoneNumber");
 
-        if (phoneNumber === '') {
-            const phoneNumberModal = new bootstrap.Modal(document.getElementById('phoneNumberModal'));
-            phoneNumberModal.show();
-        }
+            if (phoneNumber.value === '') {
+                const phoneNumberModal = new bootstrap.Modal(document.getElementById('phoneNumberModal'));
+                phoneNumberModal.show();
+            }
+
+            phoneNumber.addEventListener('keypress', function(e) {
+                if (!/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                }
+            })
 
 
-    });
+        });
     </script>
 
 </body>

@@ -242,6 +242,7 @@ if (isset($_POST['eventBook'])) {
             throw new Exception("Failed inserting notification" . $insertNotification->error);
         }
 
+
         $conn->commit();
         unset($_SESSION['eventFormData']);
         header("Location: ../../../../Pages/Customer/bookNow.php?action=success");

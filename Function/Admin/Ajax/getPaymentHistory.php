@@ -6,7 +6,9 @@ header('Content-Type: application/json');
 
 if (isset($_GET['userID'])) {
     $userID = (int) $_GET['userID'];
-
+    $rejectedID = 5;
+    $cancelledID = 4;
+    $expiredID = 7;
     try {
         $getBookingInfo = $conn->prepare("SELECT 
                                             b.bookingCode,
@@ -32,12 +34,13 @@ if (isset($_GET['userID'])) {
                                         FROM confirmedbooking cb
                                         LEFT JOIN booking b ON cb.bookingID = b.bookingID
                                         LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                                        WHERE b.userID = ?
+                                        WHERE b.userID = ? AND b.bookingStatus NOT IN (?,?)
                                         GROUP BY b.bookingID
                                         ORDER BY b.createdAt
+                                        
                                     ");
 
-        $getBookingInfo->bind_param("i", $userID);
+        $getBookingInfo->bind_param("iii", $userID, $cancelledID, $expiredID);
         $getBookingInfo->execute();
         $result = $getBookingInfo->get_result();
 

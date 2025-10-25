@@ -127,6 +127,7 @@ function getStatuses($conn, $statusID)
     }
 }
 
+//?Function for getting all the status (Ginagamit ko s`ya for display)
 function getAllStatuses($conn)
 {
     $status = [];

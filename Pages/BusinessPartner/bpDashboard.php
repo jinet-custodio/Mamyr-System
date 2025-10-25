@@ -228,6 +228,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <main class="main-content" id="main-content">
         <section class="topSec">
             <input type="hidden" name="userID" id="userID" value="<?= $userID ?>">
+            <input type="hidden" name="partnershipID " id="partnershipID" value="<?= $partnershipID ?>">
             <div class="container">
                 <h3 class="welcomeText">Hello there, <?= ucfirst($firstName) ?>! Welcome to Mamyr Resort and Events
                     Place</h3>
@@ -286,7 +287,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     </div>
                 </section>
 
-
+                <?php $monthToday = date('F'); ?>
                 <section class="container secondRow-graph">
 
                     <div class="card graph-card" id="salesPerformance">
@@ -299,8 +300,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <div class="filter-select-wrapper">
                                         <select class="filter-select" name="sales-filter-select"
                                             id="sales-filter-select">
-                                            <option selected disabled>Filters</option>
-                                            <!-- <option value="month"><?= $monthToday ?></option> -->
+                                            <!-- <option selected disabled>Filters</option> -->
+                                            <option value="month"><?= $monthToday ?></option>
                                             <option value="w1">Week 1</option>
                                             <option value="w2">Week 2</option>
                                             <option value="w3">Week 3</option>
@@ -313,10 +314,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
 
                             <div class="sales-chart" id="pieGraph">
-                                <!-- <img src="../../Assets/Images/adminTemporary/bookingsGraph.jpg" alt="Bookings Graph"
-                            class="graph" id="salesBar"> -->
                                 <canvas id="salesGraph" class="graph"></canvas>
-                                <!-- <canvas class="graph" id="salesBar"></canvas> -->
                             </div>
 
                         </div>
@@ -327,20 +325,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             <div class="graph-header">
                                 <i class="bi bi-bell"></i>
                                 <h6 class="graph-header-text">Services</h6>
-
-                                <!-- <div class="filter-btn-container">
-                                <div class="filter-select-wrapper">
-                                    <select class="filter-select" name="sales-filter-select" id="sales-filter-select">
-                                        <option value="month"><?= $monthToday ?></option>
-                                        <option value="w1">Week 1</option>
-                                        <option value="w2">Week 2</option>
-                                        <option value="w3">Week 3</option>
-                                        <option value="w4">Week 4</option>
-                                        <option value="w5">Week 5</option>
-                                    </select>
-                                    <i class="bi bi-filter"></i>
-                                </div>
-                            </div> -->
                             </div>
 
                             <div class="services-container">
@@ -396,36 +380,22 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 </video>
             </div>
             <div class="videoText-container">
-                <?php if ($editMode): ?>
-                    <input type="text" class="editable-input videoTitle form-control" data-title="Heading2"
-                        value="<?= htmlspecialchars($contentMap['Heading2'] ?? 'Title Not Found') ?>">
-                    <textarea cols="20" rows="5" type="text" class="editable-input form-control subtext"
-                        data-title="Subheading2"><?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?></textarea>
-                <?php else: ?>
-                    <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Heading2'] ?? 'Name Not Found') ?> </h3>
-                    <p class="videoDescription indent">
-                        <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
-                    <div class="middle-btn-container">
-                        <a href="../Customer/bookNow.php" class="btn btn-primary bookNowBtn">Book Now</a>
-                        <a href="../amenities.php" class="btn btn-primary viewBtn">View our Amenities</a>
-                    </div>
-                <?php endif; ?>
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Heading2'] ?? 'Name Not Found') ?> </h3>
+                <p class="videoDescription indent">
+                    <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
+                <div class="middle-btn-container">
+                    <a href="../Customer/bookNow.php" class="btn btn-primary bookNowBtn">Book Now</a>
+                    <a href="../amenities.php" class="btn btn-primary viewBtn">View our Amenities</a>
+                </div>
             </div>
         </section>
 
         <section class="bottom-section">
 
             <div class="bottom-text-container">
-                <?php if ($editMode): ?>
-                    <input type="text" class="editable-input bottom-header form-control" data-title="BookNow"
-                        value="<?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?>">
-                    <textarea cols="20" rows="5" type="text" class="editable-input form-control bottom-subtext"
-                        data-title="BookNowDesc"><?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?></textarea>
-                <?php else: ?>
-                    <h3 class="bottom-header"><?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?> </h3>
-                    <p class="bottom-subtext indent">
-                        <?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?> </p>
-                <?php endif; ?>
+                <h3 class="bottom-header"><?= htmlspecialchars($contentMap['BookNow'] ?? 'Title Not Found') ?> </h3>
+                <p class="bottom-subtext indent">
+                    <?= htmlspecialchars($contentMap['BookNowDesc'] ?? 'Description Not Found') ?> </p>
             </div>
 
             <div class="swiper mySwiper">
@@ -437,12 +407,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         ?>
                             <div class="swiper-slide">
                                 <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class="editable-img d-block w-100" style="cursor: pointer;" <?php if ($editMode): ?>
-                                    data-bs-toggle="modal" data-bs-target="#editImageModal"
-                                    data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
-                                    data-folder="<?= $folder ?? '' ?>"
-                                    data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
-                                    data-alttext="<?= htmlspecialchars($img['altText'] ?? '') ?>" <?php endif; ?>>
+                                    class="editable-img d-block w-100" style="cursor: pointer;">
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -458,16 +423,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <section class="rating-container">
             <div class="locationText-container">
-                <?php if ($editMode): ?>
-                    <input type="text" class="editable-input videoTitle form-control" data-title="Reviews"
-                        value="<?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?>">
-                    <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
-                        data-title="ReviewsDesc"><?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?></textarea>
-                <?php else: ?>
-                    <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
-                    <p class="videoDescription indent">
-                        <?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?> </p>
-                <?php endif; ?>
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                <p class="videoDescription indent">
+                    <?= htmlspecialchars($contentMap['ReviewsDesc'] ?? 'Description Not Found') ?> </p>
             </div>
 
             <div class="card ratings-card">
@@ -535,75 +493,19 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <section class="location-container">
             <div class="locationText-container">
-                <?php if ($editMode): ?>
-                    <input type="text" class="editable-input videoTitle form-control" data-title="Map"
-                        value="<?= htmlspecialchars($contentMap['Map'] ?? 'Title Not Found') ?>">
-                    <textarea cols="20" rows="5" type="text" class="editable-input form-control videoDescription"
-                        data-title="MapDesc"><?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?></textarea>
-                <?php else: ?>
-                    <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
-                    <p class="videoDescription indent">
-                        <?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?> </p>
-                <?php endif; ?>
+
+                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
+                <p class="videoDescription indent">
+                    <?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?> </p>
             </div>
 
             <div id="map"></div>
         </section>
-        <?php if ($editMode) {
-            include 'Pages/editImageModal.php';
-        } else {
-            include '../../Pages/Customer/footer.php';
-            include '../../Pages/Customer/loader.php';
-        }
+        <?php
+        include '../../Pages/Customer/footer.php';
+        include '../../Pages/Customer/loader.php';
         ?>
     </main>
-
-
-
-
-    <!-- Monthly Sales Graph -->
-    <?php
-    $paymentStatusID = 3; //Fully Paid
-    $paymentApprovalID = 5; //Done
-
-    $getMonthlySalesQuery = $conn->prepare("SELECT MONTHNAME(b.startDate) AS month,
-                    YEAR(b.startDate) AS year,
-                    SUM(IFNULL(bs.bookingServicePrice, 0) + IFNULL(cpi.ServicePrice, 0)) AS monthlyRevenue,
-                    ps.partnershipID, ps.partnershipServiceID
-                    FROM booking b
-                    LEFT JOIN  confirmedbooking cb ON b.bookingID = cb.bookingID
-                    LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
-                    LEFT JOIN custompackageitem cpi ON b.customPackageID = cpi.customPackageID
-                    LEFT JOIN service s ON (cpi.serviceID = s.serviceID  OR bs.serviceID = s.serviceID)
-                    LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
-                    LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                    -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                    WHERE cb.paymentApprovalStatus = ?
-                    AND cb.paymentStatus = ?
-                    AND YEAR(b.startDate) = YEAR(CURDATE()) 
-                    AND DATE(b.endDate) < CURDATE()
-                    AND ps.partnershipID = ?
-                    AND bpas.approvalStatus = 2
-                    GROUP BY 
-                        month
-                    ORDER BY 
-                        month");
-    $getMonthlySalesQuery->bind_param("iii", $paymentApprovalID, $paymentStatusID, $partnershipID);
-    if (!$getMonthlySalesQuery->execute()) {
-        error_log("Failed executing monthly sales in a year. Error: " . $getMonthlySalesQuery->error);
-    }
-    $months = [];
-    $sales = [];
-    $year = '';
-    $result = $getMonthlySalesQuery->get_result();
-    if ($result->num_rows > 0) {
-        while ($data = $result->fetch_assoc()) {
-            $months[] = $data['month'];
-            $sales[] = (float) $data['monthlyRevenue'];
-            $year = $data['year'] ?? DATE('Y');
-        }
-    }
-    ?>
 
     <!-- Bootstrap Link -->
     <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script>
@@ -621,6 +523,37 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Sweetalert Popup -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        if (paramValue === 'successLogin') {
+            Toast.fire({
+                icon: "success",
+                title: "Signed in successfully"
+            });
+        };
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
+    </script>
 
     <!-- Initialize Swiper -->
     <script>
@@ -661,17 +594,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
     <script>
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
         document.addEventListener('DOMContentLoaded', function() {
             const userID = document.getElementById('userID').value;
             console.log(userID)
@@ -691,13 +613,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                     const totalBookings = data.allBookingStatus || 0;
                     const totalPendings = data.totalPendingBooking || 0;
-                    const totalCancelled = data.cancelledBooking || 0;
+                    // const totalCancelled = data.cancelledBooking || 0;
                     const totalApproved = data.approvedBookings || 0;
 
                     document.getElementById('bookingNumber').textContent = totalBookings;
                     document.getElementById('approvedBooking').textContent = totalApproved;
                     document.getElementById('pendingBooking').textContent = totalPendings;
-                    document.getElementById('cancelledBooking').textContent = totalCancelled;
+                    // document.getElementById('cancelledBooking').textContent = totalCancelled;
                 })
                 .catch(err => console.error(err));
         });
@@ -731,6 +653,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             .openPopup();
     </script>
 
+    <!-- Get ratings -->
     <script>
         async function getRatings() {
             const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
@@ -771,35 +694,234 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- This is shown if no data to display -->
     <script src="../../Assets/JS/ChartNoData.js"></script>
 
-    <!-- Line Chart for sales  -->
+    <!--  Chart for sales  -->
     <script>
-        const salesGraph = document.getElementById('salesGraph').getContext('2d');
-        const labels = <?= json_encode($months) ?>;
-        const data = {
-            labels: labels,
-            datasets: [{
-                label: "Monthly Sales Report — <?= !empty($year) ? json_encode($year) : DATE('Y') ?>",
-                data: <?= json_encode($sales) ?>,
-                fill: false,
-                backgroundColor: 'rgb(33, 148, 209, .5)',
-                borderColor: 'rgb(33, 148, 209, 1)',
-                tension: 0.1
-            }]
+        const colors = {
+            unpaid: {
+                bg: "rgba(219, 53, 69, .6)",
+                border: "rgb(219, 53, 69)"
+            },
+            "partially paid": {
+                bg: "rgba(255, 193, 8, .6)",
+                border: "rgb(255, 193, 8)"
+            },
+            "fully paid": {
+                bg: "rgba(26, 135, 84,.6)",
+                border: "rgb(26, 135, 84)"
+            },
+            "payment sent": {
+                bg: "rgba(13, 109, 252, .6)",
+                border: "rgb(13, 109, 252)"
+            },
+            default: {
+                bg: "rgba(255, 205, 86, 0.7)",
+                border: "rgb(255, 205, 86)"
+            }
         };
 
-        const lineSalesChart = new Chart(salesGraph, {
-            type: 'bar',
-            data: data,
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+        const selectedFilter = document.getElementById('sales-filter-select');
+        const partnerID = document.getElementById('partnershipID');
+
+        if (selectedFilter) {
+            selectedFilter.addEventListener('change', () => {
+                filteredSales(selectedFilter.value, partnerID.value);
+            });
+
+            filteredSales(selectedFilter.value, partnerID.value);
+        };
+
+        let salesChart = null;
+
+        const noDataPlugin = {
+            id: 'noDataPlugin',
+            afterDraw(chart) {
+                const datasets = chart.data.datasets;
+                const hasData = datasets.some(ds => ds.data.length > 0);
+
+                if (!hasData) {
+                    const ctx = chart.ctx;
+                    const width = chart.width;
+                    const height = chart.height;
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = '16px Arial';
+                    ctx.fillStyle = 'gray';
+                    ctx.restore();
                 }
-            },
-            plugins: ['noDataPlugin']
-        })
+            }
+        };
+
+
+        function filteredSales(selectedFilterValue, partnerID) {
+            fetch(
+                    `../../Function/Partner/getPartnerFilterSales.php?selectedFilter=${encodeURIComponent(selectedFilterValue)}&id=${encodeURIComponent(partnerID)}`
+                )
+                .then((response) => {
+                    if (!response.ok) throw new Error("Network error");
+                    return response.json();
+                })
+                .then((data) => {
+                    const ctx = document.getElementById("salesGraph").getContext("2d");
+
+                    if (!data.success || !data.sales || data.sales.length === 0) {
+                        if (salesChart) {
+                            salesChart.destroy();
+                        }
+                        salesChart = new Chart(ctx, {
+                            type: "bar",
+                            data: {
+                                labels: [],
+                                datasets: [],
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: selectedFilterValue === "month" ?
+                                                "Weeks of the Month" : "Days of the Week",
+                                        },
+                                    },
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                    },
+                                    tooltip: {
+                                        enabled: false,
+                                    },
+                                },
+                            },
+                            plugins: [noDataPlugin],
+                        });
+                        return;
+                    }
+
+                    const sales = data.sales;
+                    let labels = [];
+                    let dataset = [];
+                    // let title = "";
+
+                    if (selectedFilterValue === "month") {
+                        const dayLabels = [...new Set(sales.map((item) => item.weekOfMonth))];
+                        labels = dayLabels;
+
+                        const groupedByType = {};
+                        sales.forEach((item) => {
+                            const type = item.paymentStatus || "Unknown";
+                            if (!groupedByType[type]) groupedByType[type] = {};
+
+                            groupedByType[type][item.weekOfMonth] =
+                                parseFloat(item.monthlyRevenue) || 0;
+                        });
+
+                        dataset = Object.keys(groupedByType).map((type) => {
+                            const color = colors[type.toLowerCase()] || colors.default;
+
+                            const data = labels.map((week) => groupedByType[type][week] || 0);
+
+                            return {
+                                label: type.charAt(0).toUpperCase() + type.slice(1),
+                                data: data,
+                                backgroundColor: color.bg,
+                                borderColor: color.border,
+                                borderWidth: 2,
+                            };
+                        });
+                    } else {
+                        const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+                        labels = dayLabels;
+                        title = sales[0]?.weekLabels || "";
+
+                        const groupedByType = {};
+                        sales.forEach((item) => {
+                            const type = item.paymentStatus || "Unknown";
+                            groupedByType[type] = dayLabels.map(
+                                (day) => parseFloat(item[day]) || 0
+                            );
+                        });
+
+                        dataset = Object.keys(groupedByType).map((type) => {
+                            const color = colors[type.toLowerCase()] || colors.default;
+                            return {
+                                label: type.charAt(0).toUpperCase() + type.slice(1),
+                                data: groupedByType[type],
+                                backgroundColor: color.bg,
+                                borderColor: color.border,
+                                borderWidth: 2,
+                            };
+                        });
+                    }
+
+                    if (salesChart) {
+                        salesChart.destroy();
+                    }
+
+                    salesChart = new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: labels,
+                            datasets: dataset,
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                    },
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: selectedFilterValue === "month" ?
+                                            "Weeks of the Month" : "Days of the Week",
+                                    },
+                                    barThickness: 20,
+                                    maxBarThickness: 30,
+                                    categoryPercentage: 0.7,
+                                    barPercentage: 0.8,
+                                },
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: (ctx) => `₱${ctx.parsed.y.toLocaleString()}`,
+                                    },
+                                },
+                            },
+                        },
+                        plugins: [noDataPlugin],
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error fetching sales data:", error);
+                    if (salesChart) {
+                        salesChart.destroy();
+                    }
+                    const ctx = document.getElementById("salesChart").getContext("2d");
+                    salesChart = new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: [],
+                            datasets: [],
+                        },
+                        options: {
+                            responsive: true,
+                        },
+                        plugins: [noDataPlugin],
+                    });
+                });
+        }
     </script>
 </body>
 

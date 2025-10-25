@@ -130,8 +130,8 @@ th:nth-child(7) {
 .badge {
   font-weight: initial;
   line-height: normal;
-  font-size: 14px;
-  padding: 0.3rem 0.1rem !important;
+  font-size: 12px;
+  padding: 0.2rem !important;
   width: 10rem;
   border-radius: 5rem !important;
 }
