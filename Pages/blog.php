@@ -3,7 +3,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require '../Config/dbcon.php';
-
+//for setting image paths in 'include' statements
+$baseURL = '..';
 session_start();
 
 //for edit website, this will enable edit mode from the iframe
@@ -280,9 +281,9 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
         <?php if (!$editMode) {
             include 'footer.php';
-            include 'loader.php';
+            include '../Pages/Customer/loader.php';
         } else {
-            include 'loader.php';
+            include '../Pages/Customer/loader.php';
         } ?>
     </div>
     <!-- Bootstrap JS -->

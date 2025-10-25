@@ -1,3 +1,22 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+//fetch Business Logo
+$sectionName = 'Logo';
+$getLogo = $conn->prepare("SELECT resortInfoName FROM resortinfo WHERE resortInfoTitle = ? LIMIT 1");
+$getLogo->bind_param("s", $sectionName);
+$getLogo->execute();
+$getLogoResult = $getLogo->get_result();
+
+if ($row = $getLogoResult->fetch_assoc()) {
+    $logoFileName = $row['resortInfoName'];
+} else {
+    $logoFileName = 'no-picture.jpg';
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -86,7 +105,7 @@
 <body>
     <div id="loaderOverlay">
         <div class="loader">
-            <img src="../../Assets/Images/MamyrLogo.png" alt="" class="w-25 mx-auto mb-1">
+            <img src="<?= $baseURL ?>/Assets/Images/<?= htmlspecialchars($logoFileName) ?>" alt="Business Logo" class="w-25 mx-auto mb-1">
             <section class="dots-container">
                 <div class="dot"></div>
                 <div class="dot"></div>

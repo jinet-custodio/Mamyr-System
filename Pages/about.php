@@ -4,7 +4,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 require '../Config/dbcon.php';
-
+//for setting image paths in 'include' statements
+$baseURL = '..';
 //for edit website, this will enable edit mode from the iframe
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
@@ -388,9 +389,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <?php if (!$editMode) {
         include 'footer.php';
-        include 'loader.php';
+        include '../Pages/Customer/loader.php';
     } else {
         include 'editImageModal.php';
+        include '../Pages/Customer/loader.php';
     }
     ?>
 

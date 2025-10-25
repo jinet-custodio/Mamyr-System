@@ -4,7 +4,8 @@ ini_set('display_errors', 1);
 
 require '../Config/dbcon.php';
 session_start();
-
+//for setting image paths in 'include' statements
+$baseURL = '..';
 require_once '../Function/Helpers/userFunctions.php';
 resetExpiredOTPs($conn);
 ?>
@@ -224,8 +225,7 @@ resetExpiredOTPs($conn);
             </div>
         </div>
     </div>
-    <div id="loaderOverlay" style="display: none;">
-        <div class="loader" id="loader"></div>
+    <?php include '../Pages/Customer/loader.php'; ?>
     </div>
 
 

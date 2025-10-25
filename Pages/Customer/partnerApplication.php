@@ -8,6 +8,9 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 
+//for setting image paths in 'include' statements
+$baseURL = '../..';
+
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
@@ -17,9 +20,6 @@ switch ($userRole) {
         break;
     case 2:
         $role = "Business Partner";
-        break;
-    case 3:
-        $role = "Admin";
         break;
     case 4:
         $role = "Partnership Applicant";

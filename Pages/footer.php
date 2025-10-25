@@ -53,6 +53,8 @@ while ($row = $getLogoResult->fetch_assoc()) {
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
 </head>
 
@@ -60,77 +62,111 @@ while ($row = $getLogoResult->fetch_assoc()) {
     <?php if ($editMode): ?>
         <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
-    <footer class="py-1 " id="footer">
-        <div class=" py-1 d-flex justify-content-start" id="nameAndLogo">
-            <?php
-            foreach ($logoInfo as $id => $logo) {
-                foreach ($logo as $fileName => $altText) {
-                    $imagePath = "../Assets/Images/" . $fileName;
-                    $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
-            ?>
+    <footer class="py-1 px-4" id="footer">
+        <div class="upperFooter d-flex pt-2">
+            <div class=" py-1 d-flex justify-content-start flex-column w-25" id="nameAndLogo">
+                <?php
+                foreach ($logoInfo as $id => $logo) {
+                    foreach ($logo as $fileName => $altText) {
+                        $imagePath = "../Assets/Images/" . $fileName;
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
+                ?>
 
-                    <img src="<?= htmlspecialchars($finalImage) ?>"
-                        alt="<?= htmlspecialchars($altText) ?>"
-                        class="editable-img logo" style="cursor: pointer;"
-                        data-bs-toggle="modal"
-                        data-bs-target="#editImageModal"
-                        data-wcimageid="<?= htmlspecialchars($id) ?>"
-                        data-folder=""
-                        data-imagepath="<?= htmlspecialchars($fileName) ?>"
-                        data-alttext="<?= htmlspecialchars($altText) ?>">
+                        <img src="<?= htmlspecialchars($finalImage) ?>"
+                            alt="<?= htmlspecialchars($altText) ?>"
+                            class="editable-img logo" style="cursor: pointer;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editImageModal"
+                            data-wcimageid="<?= htmlspecialchars($id) ?>"
+                            data-folder=""
+                            data-imagepath="<?= htmlspecialchars($fileName) ?>"
+                            data-alttext="<?= htmlspecialchars($altText) ?>">
 
-            <?php
+                <?php
+                    }
                 }
-            }
-            ?>
-            <?php if ($editMode): ?>
-                <input type="text" class="mb-0 editable-input form-control" id="fullName"
-                    data-title="FullName" value="<?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>">
-            <?php else: ?>
-                <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
-            <?php endif; ?>
-
-        </div>
-
-        <div class="info">
-            <div class="reservation">
-                <h4 class="reservationTitle mb-1">Reservation</h4>
+                ?>
                 <?php if ($editMode): ?>
-                    <input type="text" class="numberFooter editable-input form-control"
-                        data-title="ContactNum" value="<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
-                    <input type="text" class="emailAddressTextFooter editable-input form-control"
-                        data-title="Email" value="<?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>">
+                    <input type="text" class="mb-0 editable-input form-control" id="fullName"
+                        data-title="FullName" value="<?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?>">
                 <?php else: ?>
-                    <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h4>
-                    <h4 class="emailAddressTextFooter">
-                        <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h4>
+                    <h3 class="mb-0"><?= htmlspecialchars(strtoupper($contentMap['FullName']) ?? 'Name Not Found') ?></h3>
                 <?php endif; ?>
+                <div class="socialIcons">
+                    <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
+                            class='bx bxl-facebook-circle'></i></a>
+                    <a href="mailto: <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>"><i
+                            class='bx bxl-gmail'></i></a>
+                    <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
+                        <i class='bx bxs-phone'></i>
+                    </a>
 
-
+                </div>
             </div>
-            <div class="locationFooter">
-                <h4 class="locationTitle mb-1">Location</h4>
-                <?php if ($editMode): ?>
-                    <input type="text" class="addressTextFooter editable-input form-control"
-                        data-title="ContactNum" value="<?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>">
-                <?php else: ?>
-                    <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?> </h4>
-                <?php endif; ?>
 
+            <div class="info d-flex align-items-center">
+                <div class="reservation">
+                    <h4 class="reservationTitle mb-1">Reservation</h4>
+                    <?php if ($editMode): ?>
+                        <input type="text" class="numberFooter editable-input form-control"
+                            data-title="ContactNum" value="<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
+                        <input type="text" class="emailAddressTextFooter editable-input form-control"
+                            data-title="Email" value="<?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>">
+                    <?php else: ?>
+                        <h4 class="numberFooter"><?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?></h4>
+                        <h4 class="emailAddressTextFooter">
+                            <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?></h4>
+                    <?php endif; ?>
+
+
+                </div>
+                <div class="locationFooter">
+                    <h4 class="locationTitle mb-1">Location</h4>
+                    <?php if ($editMode): ?>
+                        <input type="text" class="addressTextFooter editable-input form-control"
+                            data-title="ContactNum" value="<?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>">
+                    <?php else: ?>
+                        <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?> </h4>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="mapContainer d-flex align-items-center">
+                <div id="map"></div>
             </div>
         </div>
         <hr class="footerLine">
-        <div class="socialIcons">
-            <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
-                    class='bx bxl-facebook-circle'></i></a>
-            <a href="mailto: <?= htmlspecialchars($contentMap['Email'] ?? 'None Provided') ?>"><i
-                    class='bx bxl-gmail'></i></a>
-            <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
-                <i class='bx bxs-phone'></i>
-            </a>
-
+        <div class="copyrightContainer">
+            <h5 class="text-white text-center" id="copyrightText">© 2025 <?= htmlspecialchars($contentMap['FullName']) ?? 'Name Not Found' ?>. All Rights Reserved.</h5>
         </div>
     </footer>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const lat = 15.05073200154005;
+        const lon = 121.0218658098424;
+
+        const map = L.map('map').setView([lat, lon], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+
+        const customIcon = L.icon({
+            iconUrl: '../Assets/Images/MamyrLogo.png',
+            iconSize: [100, 25], // Size of the logo 
+            iconAnchor: [25, 50], // Anchor point of the icon 
+            popupAnchor: [0, -50] // Popup anchor point 
+        });
+
+
+        L.marker([lat, lon], {
+                icon: customIcon
+            }).addTo(map)
+            .bindPopup('Mamyr Resort and Events Place is Located Here!')
+            .openPopup();
+    </script>
+
+
 
     <?php if ($editMode): ?>
         <!-- Edit Image Modal -->
