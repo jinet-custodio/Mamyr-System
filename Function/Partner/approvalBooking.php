@@ -95,7 +95,7 @@ if (isset($_POST['approveBtn'])) {
     $guestRoleID = (int) $_POST['guestRole'];
     $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
     try {
-        $rejectStatusID = 3;
+        $rejectStatusID = 5;
         $updateStatusBooking = $conn->prepare("UPDATE `businesspartneravailedservice` SET `approvalStatus`= ? WHERE `bookingID`= ?");
         $updateStatusBooking->bind_param("ii", $rejectStatusID, $bookingID);
 

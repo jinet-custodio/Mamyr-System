@@ -45,12 +45,12 @@ while ($row = $result->fetch_assoc()) {
         continue;
     }
 
-    $color = '#dc3545';
+    $color = 'rgb(255, 153, 153)';
 
     if ($type == 'Hotel') {
-        $color = '#ffc107'; // Yellow
+        $color = '#f7c42cff'; // Yellow
     } elseif ($type == 'Resort') {
-        $color = '#5dccf5'; // Blue
+        $color = 'rgba(148, 217, 245, 1)'; // Blue
     }
 
     $eventsByDate[$date] = [

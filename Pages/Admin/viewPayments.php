@@ -45,13 +45,15 @@ if (isset($_POST['bookingID'])) {
 }
 
 
-if ($userRole == 3) {
-    $admin = "Admin";
-} else {
-    $_SESSION['error'] = "Unauthorized Access!";
-    session_destroy();
-    header("Location: ../register.php");
-    exit();
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
 }
 
 if ($admin === "Admin") {
@@ -736,9 +738,7 @@ if ($admin === "Admin") {
 
 
     <!-- Bootstrap JS -->
-    <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script>
         const paymentMethod = document.getElementById("paymentMethod").value;

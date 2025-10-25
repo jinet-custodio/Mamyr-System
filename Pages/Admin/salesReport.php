@@ -28,16 +28,29 @@ if (isset($_SESSION['userID'])) {
         $_SESSION['error'] = 'Account no longer exists';
         session_unset();
         session_destroy();
-        header("Location: ../../../register.php");
+        header("Location: ../register.php");
         exit();
     }
 }
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
-    header("Location: ../../../register.php");
+    header("Location: ../register.php");
     exit();
 }
 
+switch ($userRole) {
+    case 2:
+        $role = "Business Partner";
+        break;
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 
 ?>
 <!DOCTYPE html>
@@ -53,14 +66,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="stylesheet" href="../../Assets/CSS/Admin/salesReport.css">
 
     <!-- BOOTSTRAP LINK -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -274,10 +285,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     </main>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
+    <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
     <!-- Flatpickr Link -->

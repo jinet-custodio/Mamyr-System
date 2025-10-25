@@ -37,6 +37,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+switch ($userRole) {
+    case 2:
+        $role = "Business Partner";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,16 +78,6 @@ $userRole = $_SESSION['userRole'];
 <body>
     <!-- Get the information to the database -->
     <?php
-    if ($userRole == 2) {
-        $role = "Business Partner";
-    } else {
-        $_SESSION['error'] = "Unauthorized Access eh!";
-        session_destroy();
-        header("Location: ../register.php");
-        exit();
-    }
-
-
     $getData = $conn->prepare("SELECT u.firstName, u.lastName, u.middleInitial, u.userProfile, ut.typeName as roleName , p.partnershipID FROM user u
             INNER JOIN usertype ut ON u.userRole = ut.userTypeID
             LEFT JOIN partnership p ON u.userID = p.userID
@@ -142,9 +143,15 @@ $userRole = $_SESSION['userRole'];
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
                             <i class="bi bi-calendar2-check sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
+                            <span class="sidebar-text">Booking History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                            <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                            <span class="sidebar-text">Payment</span>
                         </a>
                     </li>
                 <?php } elseif ($role === 'Admin') { ?>

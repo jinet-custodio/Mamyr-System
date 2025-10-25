@@ -12,6 +12,16 @@ resetExpiredOTPs($conn);
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
+switch ($userRole) {
+    case 2:
+        $role = "Business Partner";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -27,7 +37,7 @@ if (isset($_SESSION['userID'])) {
         $_SESSION['error'] = 'Account no longer exists';
         session_unset();
         session_destroy();
-        header("Location: .../../../../index.php");
+        header("Location: .../../index.php");
         exit();
     }
 }
@@ -38,11 +48,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 }
 require '../../Function/notification.php';
 require '../../Function/Partner/sales.php';
-require '../../Function/Partner/getBookings.php';
+// require '../../Function/Partner/getBookings.php';
 
-//for edit website, this will enable edit mode from the iframe
-$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
-//SQL statement for retrieving data for website content from DB\
 $folder = 'landingPage';
 $sectionName = 'Landing';
 $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
@@ -218,13 +225,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- Get Sales -->
     <?php $totalSales = getSales($conn, $userID); ?>
 
-    <!-- Get number of booking — approved, pending -->
-    <?php
-    $row = getBookingsCount($conn, $userID);
-    ?>
-
     <main class="main-content" id="main-content">
         <section class="topSec">
+            <input type="hidden" name="userID" id="userID" value="<?= $userID ?>">
             <div class="container">
                 <h3 class="welcomeText">Hello there, <?= ucfirst($firstName) ?>! Welcome to Mamyr Resort and Events
                     Place</h3>
@@ -237,7 +240,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
 
                             <div class="data-container customer">
-                                <h5 class="card-data bookingNumber"><?= $row['allBookingStatus'] ?></h5>
+                                <h5 class="card-data bookingNumber" id="bookingNumber">0</h5>
                             </div>
                         </div>
                     </div>
@@ -250,7 +253,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
 
                             <div class="data-container ">
-                                <h5 class="card-data approvedNumber"><?= $row['approvedBookings']  ?></h5>
+                                <h5 class="card-data approvedNumber" id="approvedBooking">0</h5>
                             </div>
                         </div>
                     </div>
@@ -263,7 +266,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
 
                             <div class="data-container">
-                                <h5 class="card-data pendingNumber"><?= $row['totalPendingBooking']  ?></h5>
+                                <h5 class="card-data pendingNumber" id="pendingBooking">0</h5>
                             </div>
                         </div>
                     </div>
@@ -603,10 +606,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     ?>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
+    <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Chart Js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -660,6 +660,48 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </script>
 
 
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const userID = document.getElementById('userID').value;
+            console.log(userID)
+            fetch(`../../Function/Partner/getBookings.php?id=${encodeURIComponent(userID)}`)
+                .then(result => {
+                    if (!result.ok) throw new Error("Network Error");
+                    return result.json();
+                })
+                .then(data => {
+                    if (!data.success) {
+                        Toast.fire({
+                            icon: "error",
+                            title: data.message || "An error occurred"
+                        });
+                        return;
+                    }
+
+                    const totalBookings = data.allBookingStatus || 0;
+                    const totalPendings = data.totalPendingBooking || 0;
+                    const totalCancelled = data.cancelledBooking || 0;
+                    const totalApproved = data.approvedBookings || 0;
+
+                    document.getElementById('bookingNumber').textContent = totalBookings;
+                    document.getElementById('approvedBooking').textContent = totalApproved;
+                    document.getElementById('pendingBooking').textContent = totalPendings;
+                    document.getElementById('cancelledBooking').textContent = totalCancelled;
+                })
+                .catch(err => console.error(err));
+        });
+    </script>
 
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

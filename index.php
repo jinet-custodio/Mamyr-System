@@ -429,9 +429,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         });
     </script>
 
-
-
-
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         const lat = 15.05073200154005;

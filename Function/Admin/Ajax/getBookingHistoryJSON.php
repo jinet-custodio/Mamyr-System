@@ -66,9 +66,9 @@ if (isset($_GET['userID'])) {
                         $status = 'Reserved';
                         $class = 'success';
                         switch ($paymentStatus['paymentStatusID']) {
-                            case 2:
-                                $class = 'light-blue';
-                                break;
+                            // case 2:
+                            //     $class = 'light-blue';
+                            //     break;
                             case 3:
                                 $class = 'bright-green';
                                 $status =  $paymentStatus['paymentStatusName'];

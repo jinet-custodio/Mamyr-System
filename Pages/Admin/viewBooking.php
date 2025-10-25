@@ -49,6 +49,16 @@ if (isset($_POST['bookingID'])) {
     $bookingID = mysqli_real_escape_string($conn, $_SESSION['bookingID']);
 }
 
+switch ($userRole) {
+    case 3:
+        $role = "Admin";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,9 +70,7 @@ if (isset($_POST['bookingID'])) {
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png " />
 
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
     <!-- icon library from font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -144,11 +152,16 @@ if (isset($_POST['bookingID'])) {
                         </div>
                     </div>
 
-                    <div class="button-container" id="button-container">
-                        <button type="button" class="btn btn-primary approveReject" data-bs-toggle="modal"
-                            data-bs-target="#finalizedModal">Approve</button>
-                        <button type="button" class="btn btn-danger approveReject" data-bs-toggle="modal"
-                            data-bs-target="#rejectionModal">Reject</button>
+                    <div class="button-container">
+                        <button type="button" class="btn btn-success approveReject" data-bs-toggle="modal"
+                            data-bs-target="#chargesModal">Add Charges</button>
+                        <div id="button-approval-container">
+                            <button type="button" class="btn btn-primary approveReject" data-bs-toggle="modal"
+                                data-bs-target="#finalizedModal">Approve</button>
+                            <button type="button" class="btn btn-danger approveReject" data-bs-toggle="modal"
+                                data-bs-target="#rejectionModal">Reject</button>
+                        </div>
+
                     </div>
                 </div>
 
@@ -176,6 +189,7 @@ if (isset($_POST['bookingID'])) {
                                                     b.bookingStatus, 
                                                     b.createdAt,
                                                     b.customerChoice,  
+                                                    b.additionalCharge as charges,
 
                                                     cp.eventTypeID, 
                                                     cp.customPackageTotalPrice, 
@@ -223,7 +237,11 @@ if (isset($_POST['bookingID'])) {
                                                     cb.additionalCharge,
 
                                                     bpas.approvalStatus,
-                                                    bpas.availedDate
+                                                    bpas.availedDate,
+
+                                                    ac.chargeDescription,
+                                                    ac.amount,
+                                                    ac.additionalChargeID
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb 
                                                     ON b.bookingID = cb.bookingID
@@ -237,6 +255,9 @@ if (isset($_POST['bookingID'])) {
                                                     ON cp.customPackageID = cpi.customPackageID
                                                 LEFT JOIN eventcategory ec 
                                                     ON cp.eventTypeID = ec.categoryID
+
+                                                LEFT JOIN additionalcharge ac 
+                                                    ON b.bookingID = ac.bookingID
                                                 -- LEFT JOIN payment p 
                                                 --     ON cb.confirmedBookingID = p.confirmedBookingID
                                                 LEFT JOIN businesspartneravailedservice bpas 
@@ -284,6 +305,7 @@ if (isset($_POST['bookingID'])) {
                     $foodPriceTotal = 0;
                     $partnerServices = [];
                     $pricePerHead = 0;
+                    $additionalChargesInfo = [];
                     // $businessApproval = '';
                     while ($row = $getBookingInfoResult->fetch_assoc()) {
 
@@ -363,8 +385,8 @@ if (isset($_POST['bookingID'])) {
                         $discount =  (float) $row['discountAmount'] ?? 0;
                         $originalBill =  (float) $row['originalBill'];
                         $downpayment =  (float) $row['downpayment'];
-                        $additionalCharge =  (float) $row['additionalCharge'];
-
+                        $additionalCharge = !empty($confirmedBookingID) ? (float) $row['additionalCharge'] : (float) $row['charges'];
+                        error_log('Additional Charge: ' .  $row['charges']);
                         //Pax Details
                         $toddlerCount = (int) $row['toddlerCount'];
                         $kidCount = (int) $row['kidCount'];
@@ -374,6 +396,19 @@ if (isset($_POST['bookingID'])) {
                         //Additionals
                         $additionalReq = $row['additionalRequest'];
                         $additionalServices = $row['addOns'] ?? 'None';
+
+                        $additionalChargeID = $row['additionalChargeID'] ?? null;
+
+                        if (!empty($additionalChargeID)) {
+                            $alreadyAdded = array_column($additionalChargesInfo ?? [], 'id');
+                            if (!in_array($additionalChargeID, $alreadyAdded)) {
+                                $additionalChargesInfo[] = [
+                                    'id' => $additionalChargeID,
+                                    'desc' => $row['chargeDescription'],
+                                    'amount' => $row['amount']
+                                ];
+                            }
+                        }
 
                         if (!empty($customPackageID)) {
                             $eventType = $row['eventType'] ?? null;
@@ -535,7 +570,6 @@ if (isset($_POST['bookingID'])) {
                     </div>
                 </div>
 
-
                 <!-- Finalization Modal -->
                 <div class="modal fade" id="finalizedModal" tabindex="-1" aria-labelledby="finalizedModalLabel"
                     aria-hidden="true">
@@ -545,7 +579,6 @@ if (isset($_POST['bookingID'])) {
                             <div class="modal-header">
                                 <h5 class="modal-title" id="finalizedModalLabel">Finalize Booking</h5>
                             </div>
-
                             <div class="modal-body finalized-booking-modal-body">
                                 <div class="original-price-container">
                                     <?php if (!empty($foodList)) { ?>
@@ -624,8 +657,6 @@ if (isset($_POST['bookingID'])) {
                     </div>
                 </div>
 
-
-
                 <!-- Approval Modal -->
                 <div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="approvalModalLabel"
                     aria-hidden="true">
@@ -647,8 +678,177 @@ if (isset($_POST['bookingID'])) {
                     </div>
                 </div>
 
+                <!--  Charges Modal -->
+                <div class="modal fade" id="chargesModal" tabindex="-1" aria-labelledby="chargesModal" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="chargesModalLabel">Additional Charges</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body" id="chargesModalBody">
+                                <div class="original-info-container">
+                                    <div class="input-container">
+                                        <label for="finalBillValue">Total Amount:</label>
+                                        <input type="text" id="finalBillValue" value="<?= $finalBill ?>" readonly class="form-control">
+                                    </div>
+                                    <div class="input-container">
+                                        <label for="finalBillValue">Original:</label>
+                                        <input type="text" id="additionalChargeValue" value="<?= $additionalCharge ?>" readonly class="form-control">
+                                    </div>
+                                </div>
+                                <div class="additionalCharge-container mt-3">
+                                    <label for="additional-charge">Additionals</label>
+                                    <div class="form-group mt-3">
+                                        <div class="checkbox-group">
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="additional-bed"
+                                                    data-input="additional-bed-input"
+                                                    onchange="toggleAdditionalInput()">
+                                                <label for="additional-bed">Additional Bed</label>
+                                                <!-- Additional Input for Quality and Charge -->
+                                                <div class="additional-input gap-1" id="additional-bed-input"
+                                                    style="display: none;">
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="bed-quantity" name="additionalCharges[bed][quantity]" value="" data-role="quantity">
+                                                        <label for="bed-quantity">Quantity</label>
+                                                    </div>
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="bed-amount" data-role="amount" name="additionalCharges[bed][amount]">
+                                                        <label for="bed-amount">Amount</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="additional-kitchenware"
+                                                    data-input="additional-kitchenware-input"
+                                                    onchange="toggleAdditionalInput()">
+                                                <label for="additional-kitchenware">Kitchenware</label>
+                                                <!-- Additional Input for Quality and Charge -->
+                                                <div class="additional-input  gap-1" id="additional-kitchenware-input"
+                                                    style="display: none;">
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="kitchenware-quantity" name="additionalCharges[kitchenware][quantity]" data-role="quantity">
+                                                        <label for="kitchenware-quantity">Quantity</label>
+                                                    </div>
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="kitchenware-amount" name="additionalCharges[kitchenware][amount]" data-role="amount">
+                                                        <label for="kitchenware-amount">Amount</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="electric-fan"
+                                                    data-input="electric-fan-input" onchange="toggleAdditionalInput()">
+                                                <label for="electric-fan">Electric Fan</label>
+                                                <!-- Additional Input for Quantity and Charge -->
+
+                                                <div class="additional-input efan  gap-1" id="electric-fan-input"
+                                                    style="display: none;">
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="electricFan-quantity" name="additionalCharges[fan][quantity]" data-role="quantity">
+                                                        <label for="electric-fan-quantity">Quantity</label>
+                                                    </div>
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="electricFan-amount" name="additionalCharges[fan][amount]" data-role="amount">
+                                                        <label for="electric-fan-amount">Amount</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="table"
+                                                    data-input="table-input" onchange="toggleAdditionalInput()">
+                                                <label for="table">Table</label>
+                                                <!-- Additional Input for Quality and Charge -->
+                                                <div class="additional-input  gap-1" id="table-input" style="display: none;">
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="table-quantity" name="additionalCharges[table][quantity]" data-role="quantity">
+                                                        <label for="table-quantity">Quantity</label>
+                                                    </div>
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="table-amount" name="additionalCharges[table][amount]" data-role="amount">
+                                                        <label for="table-amount">Amount</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="additional-person"
+                                                    data-input="additional-person-input"
+                                                    onchange="toggleAdditionalInput()">
+                                                <label for="additional-person">Additional Person</label>
+                                                <!-- Additional Input for Quantity and Charge -->
+                                                <div class="additional-input  gap-1" id="additional-person-input"
+                                                    style="display: none;">
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="person-quantity" name="additionalCharges[person][quantity]" data-role="quantity">
+                                                        <label for="kitchenware-quantity">Quantity</label>
+                                                    </div>
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number"" class=" form-control" id="person-amount" name="additionalCharges[person][amount]" data-role="amount">
+                                                        <label for="kitchenware-amount">Amount</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="others"
+                                                    data-input="others-input" onchange="toggleAdditionalInput()">
+                                                <label for="others">Others</label>
+                                                <!-- Additional Input for Description and Charge -->
+                                                <div class="additional-input" id="others-input" style="display: none;">
+                                                    <div class="form-floating mb-1">
+                                                        <input type="text" class="form-control" id="other-desc" name="additionalCharges[others][name]" data-role="name">
+                                                        <label for="other-name">Description</label>
+                                                    </div>
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="other-quantity" name="additionalCharges[others][quantity]" data-role="quantity">
+                                                        <label for="other-quantity">Quantity</label>
+                                                    </div>
+                                                    <div class="form-floating mb-1">
+                                                        <input type="number" class="form-control" id="other-amount" name="additionalCharges[others][amount]" data-role="amount">
+                                                        <label for="other-amount">Amount</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Summary Section -->
+                                <div id="summaryContainer" class="border-top pt-3">
+                                    <h6 class="fw-bold mb-1">Summary</h6>
+                                    <div id="additionalSummary" class="mt-2">
+                                        <h6 class="fw-semibold">Additional Charges</h6>
+                                        <ul class="list-group mb-1" id="additional-charges-list">
+                                        </ul>
+                                        <p>Total Additional Charges: ₱<span id="total-additional-charges">0.00</span></p>
+                                    </div>
+
+                                    <hr>
+                                    <p><strong>Final Bill: ₱<span id="summary-total-amount">0.00</span></strong></p>
+                                    <input type="hidden" id="new-bill" name="new-bill" value="">
+                                    <input type="hidden" id="additional-charge" name="additional-charge" value="">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="submit" class="btn btn-primary" name="submitCharges"
+                                    id="submitCharges">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Display the information -->
                 <input type="hidden" name="customPackageID" id="customPackageID" value="<?= $customPackageID ?>">
+                <input type="hidden" name="confirmedBookingID" value="<?= $confirmedBookingID ?>">
                 <div class="card" id="info-card">
                     <div class="bookingInfoLeft" id="bookingInformation">
                         <div class="row1">
@@ -674,6 +874,11 @@ if (isset($_POST['bookingID'])) {
                                         readonly value="<?= $eventType ?>">
                                 </div>
                             <?php } ?>
+                            <div class="info-container" id="booking-info-container">
+                                <label for="paxNum" class="info-label mb-2">Number of People:</label>
+                                <input type="text" class="form-control inputDetail" name="paxNum" id="paxNum"
+                                    value="<?= $totalPax ?>" readonly>
+                            </div>
                         </div>
 
 
@@ -751,7 +956,7 @@ if (isset($_POST['bookingID'])) {
                                 </div>
 
                                 <div class="partnerService">
-                                    <h1 class="card-title text-center">Additional Service</h1>
+                                    <h1 class="card-title text-center">Additional Service/s</h1>
                                     <?php if (!empty($partnerServices)) { ?>
                                         <?php foreach ($partnerServices as $partnerID => $services) { ?>
                                             <ul>
@@ -796,16 +1001,28 @@ if (isset($_POST['bookingID'])) {
                             <div class="row3 mt-4">
                                 <?php if ($bookingType !== 'Event') { ?>
                                     <div class="additionalServices" id="booking-info-container">
-                                        <label for="addOns" class="info-label mb-2">Additional Services</label>
+                                        <label for="addOns" class="info-label mb-2">Additional Service/s</label>
                                         <input type="text" class="form-control inputDetail" name="addOns" id="addOns"
                                             value="<?= $additionalServices ?>" readonly>
                                     </div>
                                 <?php  } ?>
-                                <div class="peopleCountContainer" id="booking-info-container">
-                                    <label for="paxNum" class="info-label mb-2">Number of People:</label>
-                                    <input type="text" class="form-control inputDetail" name="paxNum" id="paxNum"
-                                        value="<?= $totalPax ?>" readonly>
-                                </div>
+                            </div>
+
+                            <div class="additional-charges-container">
+                                <h6 class="fw-bold">Additional Charge/s Info</h6>
+                                <?php if (!empty($additionalChargesInfo)) { ?>
+                                    <ul>
+                                        <?php foreach ($additionalChargesInfo as $charge): ?>
+                                            <li>
+                                                <p><?= ucfirst($charge['desc']) ?> &mdash; ₱<?= number_format($charge['amount'], 2) ?></p>
+                                            </li>
+
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php     } else { ?>
+                                    <p class="text-center defaultMess">No Additional Charge/s!</p>
+                                <?php  } ?>
+
                             </div>
                         </div>
 
@@ -851,7 +1068,7 @@ if (isset($_POST['bookingID'])) {
                                 </div>
 
                                 <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="additionalServicePrice" class="mt-2">Additional Services Price</label>
+                                    <label for="additionalServicePrice" class="mt-2">Additional Service/s Price</label>
                                     <input type="text" class="form-control inputDetail w-50" name="additionalServicePrice"
                                         id="additionalServicePrice"
                                         value="₱<?= number_format($additionalServicePrice, 2) ?>" readonly>
@@ -859,7 +1076,7 @@ if (isset($_POST['bookingID'])) {
                             <?php } ?>
 
                             <div class="info-container paymentInfo" id="payment-info">
-                                <label for="additionalCharge" class="mt-2">Additional Charge</label>
+                                <label for="additionalCharge" class="mt-2">Additional Charge/s</label>
                                 <input type="text" class="form-control inputDetail w-50"
                                     value="₱<?= number_format($additionalCharge, 2) ?>" readonly>
                             </div>
@@ -1040,12 +1257,127 @@ if (isset($_POST['bookingID'])) {
         });
     </script>
 
+    <script>
+        function toggleAdditionalInput() {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var additionalInputs = document.querySelectorAll('.additional-input');
+
+            additionalInputs.forEach(function(input) {
+                input.style.display = 'none';
+                input.querySelectorAll('input').forEach(i => i.disabled = true);
+            });
+
+            checkboxes.forEach(function(checkbox) {
+                const inputId = checkbox.getAttribute('data-input');
+                const container = document.getElementById(inputId);
+                const inputs = container.querySelectorAll('input');
+
+                if (checkbox.checked) {
+                    if (inputId === 'others-input') {
+                        document.getElementById(inputId).style.display = 'block';
+                    } else {
+                        document.getElementById(inputId).style.display = 'flex';
+                    }
+                    inputs.forEach(input => input.disabled = false);
+                } else {
+                    container.style.display = 'none';
+                    inputs.forEach(input => {
+                        input.value = '';
+                        input.disabled = true;
+                    });
+
+                    const name = inputId.split('-')[1] || inputId.replace('-input', '');
+
+                    const index = data.findIndex(item => Object.keys(item)[0] === name);
+                    if (index !== -1) {
+                        data.splice(index, 1);
+                    }
+                }
+            });
+
+            updateAddPaymentSummary();
+        }
+
+
+        const finalBill = document.getElementById('finalBillValue');
+        const originalCharge = document.getElementById('additionalChargeValue');
+        const finalBillInput = document.getElementById('new-bill');
+        const additionalChargeInput = document.getElementById('additional-charge');
+        const chargesList = document.getElementById("additional-charges-list");
+        const additionalChargeContainer = document.querySelectorAll('.additionalCharge-container .form-control');
+        const data = [];
+
+        additionalChargeContainer.forEach(form => {
+            form.addEventListener('input', () => {
+                const parts = form.id.split('-');
+                const name = parts[0];
+                const property = parts[1];
+
+                let entry = data.find(item => item[name]);
+                if (!entry) {
+                    entry = {
+                        [name]: {}
+                    };
+                    data.push(entry);
+                }
+                entry[name][property] = isNaN(form.value) ? form.value : Number(form.value);
+                updateAddPaymentSummary();
+                // console.log(data);
+            });
+        });
+
+
+        function updateAddPaymentSummary() {
+            const finalBillValue = parseFloat(finalBill.value) || 0;
+            const originalChargeValue = parseFloat(originalCharge.value) || 0;
+            let additionalChargesTotal = 0;
+            chargesList.innerHTML = '';
+
+            data.forEach(item => {
+                const name = Object.keys(item)[0];
+                const properties = item[name];
+
+                if (name === 'other') {
+                    displayName = properties.desc;
+                } else if (name === 'electricFan') {
+                    displayName = 'Electric Fan';
+                } else {
+                    displayName = name;
+                }
+
+                const li = document.createElement('li');
+
+                li.textContent = `${displayName.charAt(0).toUpperCase() + displayName.slice(1)} — Quantity: ${parseInt(properties.quantity) || 0}, Amount: ${parseFloat(properties.amount) || 0}`;
+                additionalChargesTotal += parseFloat(properties.amount) || 0;
+
+                chargesList.appendChild(li);
+            });
+
+            const chargesTotal = originalChargeValue + additionalChargesTotal;
+            const totalBill = finalBillValue + chargesTotal;
+            //Summary display
+            document.getElementById('total-additional-charges').textContent = chargesTotal.toFixed(2);
+            document.getElementById('summary-total-amount').textContent = totalBill.toFixed(2);
+
+            finalBillInput.value = totalBill;
+            additionalChargeInput.value = chargesTotal;
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const checkboxGroups = document.querySelectorAll('.checkbox-group .form-control');
+            checkboxGroups.forEach((input) => {
+                input.disabled = true;
+            })
+            updateAddPaymentSummary();
+        });
+    </script>
+
     <!--//* Hiding buttons -->
     <script>
         const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
         const bookingStatus = document.getElementById('bookingStatusName').value;
 
-        const buttonContainer = document.getElementById('button-container');
+        const buttonContainer = document.getElementById('button-approval-container');
 
         if (paymentApprovalStatus === 'Done' ||
             bookingStatus === 'Expired' ||
@@ -1053,7 +1385,8 @@ if (isset($_POST['bookingID'])) {
             bookingStatus === 'Cancelled' ||
             paymentApprovalStatus === 'Rejected' ||
             paymentApprovalStatus === 'Cancelled' ||
-            bookingStatus === 'Approved') {
+            bookingStatus === 'Approved' ||
+            bookingStatus === 'Reserved') {
             buttonContainer.style.display = "none";
         }
     </script>
@@ -1063,11 +1396,22 @@ if (isset($_POST['bookingID'])) {
     <!-- Sweetalert Popup -->
     <script>
         const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
+        const action = param.get('action');
+        // const urlParams = new URLSearchParams(window.location.search);
+        // const action = urlParams.get('action');
 
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const action = urlParams.get('action');
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
 
         if (action === 'approvalFailed') {
             const errorMessage = window.approvalErrorMessage ||
@@ -1076,6 +1420,17 @@ if (isset($_POST['bookingID'])) {
             Swal.fire({
                 title: "Failed!",
                 text: errorMessage,
+                icon: 'error',
+            });
+        } else if (action === 'chargesAdded') {
+            Toast.fire({
+                title: "Applied Charges Successfully",
+                icon: 'success',
+            });
+        } else if (action === 'chargesError') {
+            Swal.fire({
+                title: "Failed!",
+                text: 'Server Error: An error occured in database. Please try again later!',
                 icon: 'error',
             });
         }
@@ -1115,7 +1470,7 @@ if (isset($_POST['bookingID'])) {
 
         // }
 
-        if (paramValue) {
+        if (action) {
             const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url);

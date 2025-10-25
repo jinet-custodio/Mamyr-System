@@ -9,6 +9,26 @@ require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
 require '../../Function/notification.php';
 
+switch ($userRole) {
+    case 1: //customer
+        $role = "Customer";
+        break;
+    case 2:
+        $role = "Business Partner";
+        break;
+    case 3:
+        $role = "Admin";
+        break;
+    case 4:
+        $role = "Partnership Applicant";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
+
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
     $stmt->bind_param('i', $_SESSION['userID']);

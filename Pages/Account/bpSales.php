@@ -38,6 +38,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+switch ($userRole) {
+    case 2:
+        $role = "Business Partner";
+        break;
+    default:
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,19 +77,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 <body>
     <!-- Get the information to the database -->
     <?php
-    if ($userRole == 1) {
-        $role = "Customer";
-    } elseif ($userRole == 2) {
-        $role = "Business Partner";
-    } elseif ($userRole == 3) {
-        $role = "Admin";
-    } else {
-        $_SESSION['error'] = "Unauthorized Access eh!";
-        session_destroy();
-        header("Location: ../register.php");
-        exit();
-    }
-
     $getData = $conn->prepare("SELECT u.firstName, u.lastName, u.middleInitial, u.userProfile, ut.typeName as roleName , p.partnershipID FROM user u
             INNER JOIN usertype ut ON u.userRole = ut.userTypeID
             LEFT JOIN partnership p ON u.userID = p.userID
@@ -142,11 +140,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </li>
 
 
-                <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
+                <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
                     <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
                             <i class="bi bi-calendar2-check sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
+                            <span class="sidebar-text">Booking History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                            <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                            <span class="sidebar-text">Payment</span>
                         </a>
                     </li>
                 <?php } elseif ($role === 'Admin') { ?>
@@ -300,10 +304,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     </script>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
+    <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

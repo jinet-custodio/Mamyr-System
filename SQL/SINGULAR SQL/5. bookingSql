@@ -215,3 +215,6 @@ ALTER TABLE `serviceunavailabledate` ADD `bookingID` INT NOT NULL AFTER `service
 ALTER TABLE walkin_sales_summary ADD bookingCount INT(50) NOT NULL DEFAULT 0 AFTER bookingType;
 ALTER TABLE walkin_sales_summary CHANGE salesDate startDate DATE NOT NULL;
 ALTER TABLE walkin_sales_summary ADD endDate DATE NULL AFTER startDate;
+
+
+ALTER TABLE `booking` ADD `additionalCharge` DECIMAL(10,2) NOT NULL DEFAULT '0.00' AFTER `totalCost`;
