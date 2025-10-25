@@ -1,11 +1,59 @@
 <?php
 
 error_reporting(E_ALL);
-session_start();
 ini_set('display_errors', 1);
-require '../Config/dbcon.php';
+require '../../Config/dbcon.php';
+date_default_timezone_set('Asia/Manila');
+
+session_start();
+require_once '../../Function/sessionFunction.php';
+checkSessionTimeout($timeout = 3600);
+
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
+if (isset($_SESSION['userID'])) {
+    $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
+    $stmt->bind_param('i', $_SESSION['userID']);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        $_SESSION['userRole'] = $user['userRole'];
+    }
+
+    if (!$user) {
+        $_SESSION['error'] = 'Account no longer exists';
+        session_unset();
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+}
+
+if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
+    header("Location: ../register.php");
+    exit();
+}
+
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'About';
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+
+    $contentMap[$cleanTitle] = $row['content'];
+}
+require '../../Function/notification.php';
 
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,11 +61,11 @@ require '../Config/dbcon.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mamyr Resort And Events Place - Be Our Partner</title>
-    <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
-    <link rel="stylesheet" href="../Assets/CSS/beOurPartnerNew.css">
-    <link rel="stylesheet" href="../Assets/CSS/navbar.css">
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
+    <link rel="stylesheet" href="../../Assets/CSS/beOurPartnerNew.css">
+    <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
     <!-- Link to Bootstrap CSS -->
-    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -26,20 +74,79 @@ require '../Config/dbcon.php';
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
-
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-        <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: white;">
+        <!-- Account Icon on the Left -->
+        <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
+            <?php
+
+            $getProfile = $conn->prepare("SELECT userProfile FROM user WHERE userID = ? AND userRole = ?");
+            $getProfile->bind_param("ii", $userID, $userRole);
+            $getProfile->execute();
+            $getProfileResult = $getProfile->get_result();
+            if ($getProfileResult->num_rows > 0) {
+                $data = $getProfileResult->fetch_assoc();
+                $imageData = $data['userProfile'];
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $imageData);
+                finfo_close($finfo);
+                $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+            }
+            ?>
+
+            <li class="nav-item account-nav">
+                <a href="../Account/account.php">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
+                </a>
+            </li>
+
+
+            <!-- Get notification -->
+            <?php
+
+            if ($userRole === 1 || $userRole === 4) {
+                $receiver = 'Customer';
+            } elseif ($userRole === 2) {
+                $receiver = 'Partner';
+            }
+
+            $notifications = getNotification($conn, $userID, $receiver);
+            $counter = $notifications['count'];
+            $notificationsArray = $notifications['messages'];
+            $color = $notifications['colors'];
+            $notificationIDs = $notifications['ids'];
+            ?>
+
+
+            <div class="notification-container position-relative">
+                <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                    data-bs-target="#notificationModal">
+                    <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
+                    <?php if (!empty($counter)): ?>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <?= htmlspecialchars($counter) ?>
+                    </span>
+                    <?php endif; ?>
+                </button>
+            </div>
+
+        </ul>
+
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
-                    <a class="nav-link" href="../index.php"> Home</a>
+                    <?php if ($userRole !== 2): ?>
+                    <a class="nav-link" href="dashboard.php"> Home</a>
+                    <?php else: ?>
+                    <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                    <?php endif; ?>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Amenities
                     </a>
@@ -52,21 +159,27 @@ require '../Config/dbcon.php';
                 <li class="nav-item">
                     <a class="nav-link" href="blog.php">Blog</a>
                 </li>
+                <?php if ($userRole !== 2): ?>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#" id="bopNav">Be Our Partner</a>
+                    <a class="nav-link active" href="beOurPartner.php">Be Our Partner</a>
                 </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="register.php">Book Now</a>
+                    <a class="nav-link" href="bookNow.php">Book Now</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
+                    <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">Log Out</a>
                 </li>
             </ul>
         </div>
     </nav>
+
+
+    <!-- Notification Modal -->
+    <?php include '../notificationModal.php' ?>
 
     <section class="topSec">
         <div class="topLeft">
@@ -77,11 +190,11 @@ require '../Config/dbcon.php';
             <h5 class="subtext">Let's work together. Collaborate with us to grow your business and to better serve
                 mutual customers.</h5>
 
-            <a href="busPartnerRegister.php" class="btn btn-primary" id="applyasPartner">Apply as Partner</a>
+            <a href="partnerApplication.php" class="btn btn-primary" id="applyasPartner">Apply as Partner</a>
         </div>
 
         <div class="topRight">
-            <img src="../Assets/Images/beOurPartnerPhotos/bpIcon.png" alt="BP Icon" class="bpIcon">
+            <img src="../../Assets/Images/beOurPartnerPhotos/bpIcon.png" alt="BP Icon" class="bpIcon">
         </div>
     </section>
 
@@ -100,34 +213,35 @@ require '../Config/dbcon.php';
             <div class="partnerIconContainer">
 
                 <div class="partnerServiceContainer">
-                    <img src="../Assets/Images/beOurPartnerPhotos/photog.png" alt="Photography Icon"
+                    <img src="../../Assets/Images/beOurPartnerPhotos/photog.png" alt="Photography Icon"
                         class="partnerIcon">
                     <h4 class="partnerTitle">Photography/Videography</h4>
                 </div>
 
                 <div class="partnerServiceContainer">
-                    <img src="../Assets/Images/beOurPartnerPhotos/sound.png" alt="Sound/Light Icon" class="partnerIcon">
+                    <img src="../../Assets/Images/beOurPartnerPhotos/sound.png" alt="Sound/Light Icon"
+                        class="partnerIcon">
                     <h4 class="partnerTitle">Sound and Lighting</h4>
                 </div>
 
                 <div class="partnerServiceContainer">
-                    <img src="../Assets/Images/beOurPartnerPhotos/host.png" alt="Host Icon" class="partnerIcon">
+                    <img src="../../Assets/Images/beOurPartnerPhotos/host.png" alt="Host Icon" class="partnerIcon">
                     <h4 class="partnerTitle">Event Hosting</h4>
                 </div>
 
                 <div class="partnerServiceContainer">
-                    <img src="../Assets/Images/beOurPartnerPhotos/photoBooth.png" alt="Photo Booth Icon"
+                    <img src="../../Assets/Images/beOurPartnerPhotos/photoBooth.png" alt="Photo Booth Icon"
                         class="partnerIcon">
                     <h4 class="partnerTitle">Photo Booth</h4>
                 </div>
 
                 <div class="partnerServiceContainer">
-                    <img src="../Assets/Images/beOurPartnerPhotos/perf.png" alt="Performer Icon" class="partnerIcon">
+                    <img src="../../Assets/Images/beOurPartnerPhotos/perf.png" alt="Performer Icon" class="partnerIcon">
                     <h4 class="partnerTitle">Performer</h4>
                 </div>
 
                 <div class="partnerServiceContainer">
-                    <img src="../Assets/Images/beOurPartnerPhotos/foodCart.png" alt="Food Cart Icon"
+                    <img src="../../Assets/Images/beOurPartnerPhotos/foodCart.png" alt="Food Cart Icon"
                         class="partnerIcon">
                     <h4 class="partnerTitle">Food Cart</h4>
                 </div>
@@ -205,7 +319,8 @@ require '../Config/dbcon.php';
 
 
             <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
+                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
+                    alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Singko Marias</h5>
                     <h6 class="card-subtitle">Photography</h6>
@@ -229,7 +344,8 @@ require '../Config/dbcon.php';
             </div>
 
             <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
+                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
+                    alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Singko Marias</h5>
                     <h6 class="card-subtitle">Photography</h6>
@@ -253,7 +369,8 @@ require '../Config/dbcon.php';
             </div>
 
             <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
+                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
+                    alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Singko Marias</h5>
                     <h6 class="card-subtitle">Photography</h6>
@@ -277,7 +394,8 @@ require '../Config/dbcon.php';
             </div>
 
             <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
+                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
+                    alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Singko Marias</h5>
                     <h6 class="card-subtitle">Photography</h6>
@@ -301,7 +419,8 @@ require '../Config/dbcon.php';
             </div>
 
             <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
+                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
+                    alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Singko Marias</h5>
                     <h6 class="card-subtitle">Photography</h6>
@@ -325,7 +444,8 @@ require '../Config/dbcon.php';
             </div>
 
             <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Card image cap">
+                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
+                    alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Singko Marias</h5>
                     <h6 class="card-subtitle">Photography</h6>
@@ -424,28 +544,94 @@ require '../Config/dbcon.php';
     </section>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <?php include 'footer.php';
     include 'loader.php'; ?>
-    <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <!-- Bootstrap JS -->
-    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 
+    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
     </script>
-    <script src="../Assets/JS/scrollNavbg.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Sweetalert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Redirects User to Book Now -->
+    <!-- Notification Ajax -->
     <script>
-    const bookNowBtns = document.querySelectorAll('.bookNowBtn');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-    bookNowBtns.forEach(bookNowBtn => {
-        bookNowBtn.addEventListener("click", function(e) {
-            window.location.href = "/Pages/register.php"
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
+
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
+
+
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
+
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
+                            }
+                        }
+                    });
+            });
         });
     });
     </script>
+
+
+
+
+
+
+    <!-- Bootstrap Link -->
+    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
+
+
+    <script src="../../Assets/JS/scrollNavbg.js"></script>
+
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </body>
 

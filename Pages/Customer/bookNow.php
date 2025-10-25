@@ -116,7 +116,8 @@ unset($_SESSION['eventFormData']);
 
         <input type="hidden" name="phoneNumber" id="phoneNumber" value="<?= $phoneNumber ?>">
 
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar" style="background-color: rgba(255, 255, 255, 0.562);">
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar"
+            style="background-color: rgba(255, 255, 255, 0.562);">
             <!-- Account Icon on the Left -->
             <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
                 <li class="nav-item account-nav">
@@ -146,9 +147,9 @@ unset($_SESSION['eventFormData']);
                         data-bs-target="#notificationModal">
                         <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                         <?php if (!empty($counter)): ?>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?= htmlspecialchars($counter) ?>
-                            </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                         <?php endif; ?>
                     </button>
                 </div>
@@ -162,9 +163,9 @@ unset($_SESSION['eventFormData']);
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <?php if ($userRole !== 2): ?>
-                            <a class="nav-link" href="dashboard.php"> Home</a>
+                        <a class="nav-link" href="dashboard.php"> Home</a>
                         <?php else: ?>
-                            <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                         <?php endif; ?>
                     </li>
                     <li class="nav-item dropdown">
@@ -182,9 +183,9 @@ unset($_SESSION['eventFormData']);
                         <a class="nav-link" href="blog.php">Blog</a>
                     </li>
                     <?php if ($userRole !== 2): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="partnerApplication.php">Be Our Partner</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
+                    </li>
                     <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="about.php">About</a>
@@ -211,9 +212,9 @@ unset($_SESSION['eventFormData']);
                 </div>
                 <div class="categories">
                     <a href="resortBooking.php" id="resort-link" class="categoryLink">
-                        <div class="card category-card resort-category"
-                            style="display: flex; flex-direction: column;">
-                            <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Resort">
+                        <div class="card category-card resort-category" style="display: flex; flex-direction: column;">
+                            <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic3.jpg"
+                                alt="Resort">
 
                             <div class="category-body">
                                 <h5 class="category-title">RESORT</h5>
@@ -221,18 +222,18 @@ unset($_SESSION['eventFormData']);
                         </div>
                     </a>
                     <a href="hotelBooking.php" id="hotel-link" class="categoryLink">
-                        <div class="card category-card hotel-category"
-                            style="display: flex; flex-direction: column;">
-                            <img class="card-img-top" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg" alt="Hotel">
+                        <div class="card category-card hotel-category" style="display: flex; flex-direction: column;">
+                            <img class="card-img-top" src="../../Assets/Images/amenities/hotelPics/hotel1.jpg"
+                                alt="Hotel">
                             <div class="category-body">
                                 <h5 class="category-title">HOTEL</h5>
                             </div>
                         </div>
                     </a>
                     <a href="eventBooking.php" id="event-link" class="categoryLink">
-                        <div class="card category-card event-category"
-                            style="display: flex; flex-direction: column;">
-                            <img class="card-img-top" src="../../Assets/Images/amenities/pavilionPics/pav4.jpg" alt="Event">
+                        <div class="card category-card event-category" style="display: flex; flex-direction: column;">
+                            <img class="card-img-top" src="../../Assets/Images/amenities/pavilionPics/pav4.jpg"
+                                alt="Event">
                             <div class="category-body">
                                 <h5 class="category-title">EVENT</h5>
                             </div>
@@ -252,7 +253,8 @@ unset($_SESSION['eventFormData']);
                                 <h5 class="modal-title" id="phoneNumberModalLabel">Required Phone Number</h5>
                             </div>
                             <div class="modal-body">
-                                <p class="text-center">Phone number is required before booking please enter your phone number
+                                <p class="text-center">Phone number is required before booking please enter your phone
+                                    number
                                 </p>
                                 <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control w-100 mt-2"
                                     placeholder="+63 9XX XXX XXXX" pattern="^(?:\+63|0)9\d{9}$"
@@ -286,40 +288,40 @@ unset($_SESSION['eventFormData']);
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
     <!-- Sweetalert Link -->
@@ -327,51 +329,51 @@ unset($_SESSION['eventFormData']);
 
     <!-- Sweetalert Popup -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('action');
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('action');
 
-        if (paramValue === 'success') {
-            Swal.fire({
-                title: "Successful Booking!",
-                text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info. Thank You!",
-                icon: "success",
-                confirmButtonText: 'View',
-                showCloseButton: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '../Account/bookingHistory.php';
-                }
-            });
-        }
-        if (paramValue === 'bookNow') {
-            Swal.fire({
-                title: "Success!",
-                text: "Your phone number has been submitted successfully. You may now proceed with booking.",
-                icon: "success",
-                confirmButtonText: "Okay"
-            })
-        }
+    if (paramValue === 'success') {
+        Swal.fire({
+            title: "Successful Booking!",
+            text: "Your request has been sent, please wait for the admin 's approval. Please check your account for more info. Thank You!",
+            icon: "success",
+            confirmButtonText: 'View',
+            showCloseButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '../Account/bookingHistory.php';
+            }
+        });
+    }
+    if (paramValue === 'bookNow') {
+        Swal.fire({
+            title: "Success!",
+            text: "Your phone number has been submitted successfully. You may now proceed with booking.",
+            icon: "success",
+            confirmButtonText: "Okay"
+        })
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 
 
     <!-- For checking the phone Number -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const phoneNumber = document.getElementById("phoneNumber").value;
+    document.addEventListener("DOMContentLoaded", function() {
+        const phoneNumber = document.getElementById("phoneNumber").value;
 
-            if (phoneNumber === '') {
-                const phoneNumberModal = new bootstrap.Modal(document.getElementById('phoneNumberModal'));
-                phoneNumberModal.show();
-            }
+        if (phoneNumber === '') {
+            const phoneNumberModal = new bootstrap.Modal(document.getElementById('phoneNumberModal'));
+            phoneNumberModal.show();
+        }
 
 
-        });
+    });
     </script>
 
 </body>

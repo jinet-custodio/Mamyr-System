@@ -16,7 +16,7 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
   text-decoration: none;
-  list-style: none;
+  /* list-style: none; */
 }
 
 .topSec {
@@ -136,27 +136,426 @@
 
 .BPContainer {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 3vw;
+  gap: 2rem;
   margin-top: 1vw;
   padding: 2vw;
 }
 
-.bp-card {
-  width: 18rem;
+.card.bp-card {
+  width: 22rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.281);
+}
+
+.card.bp-card img.card-img-top {
+  width: 100%;
+  height: 11rem;
+  object-position: 90% 60%; /* optional, depending on the pictures. baka kasi maputol pag hindi na pool pic nakalagay*/
+  object-fit: cover;
+  display: block;
 }
 
 .card-title {
   font-weight: bold;
-  text-align: center;
 }
 
 .card-subtitle {
-  text-align: center;
   font-family: "Poppins Light";
 }
 
 .card-text {
   text-align: justify;
   margin-top: 1vw;
+}
+
+.availability-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.bp-card .badge {
+  font-weight: initial;
+  line-height: normal;
+  font-size: 14px;
+  padding: 0.3rem 0.5rem !important;
+  width: 7rem;
+  border-radius: 5rem !important;
+}
+
+.card-footer {
+  text-align: center;
+  margin-top: var(--margin-md);
+}
+
+.button-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.description-container {
+  margin-top: 1.5rem;
+  text-align: justify;
+}
+
+.card-description {
+  font-family: "Poppins";
+  font-size: 16px;
+}
+/* Available */
+.badge.bg-green {
+  background-color: rgba(40, 167, 70, 0.699) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Maintenance */
+.bp-card .badge.bg-warning {
+  background-color: rgba(245, 189, 6, 0.795) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+/* More Details */
+.bp-card .badge.bg-light-blue {
+  border: 1px solid rgba(54, 163, 235, 0.74) !important;
+  background-color: rgba(37, 157, 238, 0.822) !important;
+  color: rgb(255, 255, 255) !important;
+}
+.bp-card .badge.bg-light-blue:hover {
+  background-color: rgba(29, 120, 180, 0.815) !important;
+  color: #ffff !important;
+}
+
+/* Not Available */
+.bp-card .badge.bg-danger {
+  background-color: rgba(219, 53, 70, 0.719) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Contact */
+.bp-card .badge.btn.btn-outline-info {
+  color: #16a1c7 !important;
+}
+
+.bp-card .badge.btn.btn-outline-info:hover {
+  color: #ffff !important;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.md-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.md-container label {
+  font-family: "Poppins";
+  font-size: 18px;
+  font-weight: bold;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.md-container h5 {
+  font-family: "Poppins";
+  font-size: 17px;
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  .topSec {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .topLeft,
+  .subtext {
+    width: 100%;
+  }
+  .topText {
+    font-size: 18px;
+  }
+
+  .headerText {
+    font-size: 22px;
+  }
+
+  .subtext,
+  #applyasPartner {
+    font-size: 20px;
+  }
+
+  .bpIcon {
+    width: 320px;
+    height: auto;
+  }
+
+  .partnershipTitleContainer {
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .partnershipTitle {
+    font-size: 22px;
+  }
+
+  .partnershipDescription {
+    font-size: 20px;
+    text-align: justify;
+  }
+
+  .partnerIconContainer {
+    margin-top: 1vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .partnerIcon {
+    width: 90px;
+    height: auto;
+  }
+
+  .partnerTitle {
+    font-size: 20px;
+  }
+
+  .card.bp-card {
+    width: 20rem;
+  }
+
+  .card.bp-card img.card-img-top {
+    width: 100%;
+    height: 10rem;
+    object-position: 90% 60%; /* optional, depending on the pictures. baka kasi maputol pag hindi na pool pic nakalagay*/
+    object-fit: cover;
+    display: block;
+  }
+
+  .md-container label {
+    font-size: 18px;
+  }
+
+  .md-container h5 {
+    font-size: 17px;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  .topText {
+    font-size: 18px;
+  }
+
+  .headerText {
+    font-size: 22px;
+  }
+
+  .subtext,
+  #applyasPartner {
+    font-size: 20px;
+  }
+
+  .bpIcon {
+    width: 320px;
+    height: auto;
+  }
+
+  .partnershipTitle {
+    font-size: 22px;
+  }
+
+  .partnershipDescription {
+    font-size: 20px;
+    text-align: justify;
+  }
+
+  .md-container label {
+    font-size: 18px;
+  }
+
+  .md-container h5 {
+    font-size: 17px;
+  }
+}
+
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .topSec {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .topLeft,
+  .subtext {
+    width: 100%;
+  }
+  .topText {
+    font-size: 18px;
+  }
+
+  .headerText {
+    font-size: 22px;
+  }
+
+  .subtext,
+  #applyasPartner {
+    font-size: 20px;
+  }
+
+  .bpIcon {
+    width: 320px;
+    height: auto;
+  }
+
+  .partnershipTitleContainer {
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .partnershipTitle {
+    font-size: 22px;
+  }
+
+  .partnershipDescription {
+    font-size: 20px;
+    text-align: justify;
+  }
+
+  .partnerIconContainer {
+    margin-top: 1vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .partnerIcon {
+    width: 90px;
+    height: auto;
+  }
+
+  .partnerTitle {
+    font-size: 20px;
+  }
+
+  .card.bp-card {
+    width: 20rem;
+  }
+
+  .card.bp-card img.card-img-top {
+    width: 100%;
+    height: 10rem;
+    object-position: 90% 60%; /* optional, depending on the pictures. baka kasi maputol pag hindi na pool pic nakalagay*/
+    object-fit: cover;
+    display: block;
+  }
+
+  .md-container label {
+    font-size: 18px;
+  }
+
+  .md-container h5 {
+    font-size: 17px;
+  }
+}
+
+/* Phone size */
+@media screen and (max-width: 599px) {
+  .topSec {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .topLeft,
+  .subtext {
+    width: 100%;
+  }
+  .topText {
+    font-size: 16px;
+  }
+
+  .headerText {
+    font-size: 20px;
+  }
+
+  .subtext,
+  #applyasPartner {
+    font-size: 18px;
+  }
+
+  .bpIcon {
+    width: 220px;
+    height: auto;
+  }
+
+  .partnershipTitleContainer {
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .partnershipTitle {
+    font-size: 20px;
+  }
+
+  .partnershipDescription {
+    font-size: 18px;
+    text-align: justify;
+  }
+
+  .partnerIconContainer {
+    margin-top: 1vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .partnerIcon {
+    width: 80px;
+    height: auto;
+  }
+
+  .partnerTitle {
+    font-size: 18px;
+  }
+
+  .card.bp-card {
+    width: 20rem;
+  }
+
+  .card.bp-card img.card-img-top {
+    width: 100%;
+    height: 10rem;
+    object-position: 90% 60%; /* optional, depending on the pictures. baka kasi maputol pag hindi na pool pic nakalagay*/
+    object-fit: cover;
+    display: block;
+  }
+
+  .md-container label {
+    font-size: 16px;
+  }
+
+  .md-container h5 {
+    font-size: 15px;
+  }
 }
