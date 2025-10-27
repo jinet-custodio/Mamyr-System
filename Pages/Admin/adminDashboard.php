@@ -568,15 +568,19 @@ switch ($userRole) {
             const filterSelect = document.getElementById('calendar-filter-select');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
+                displayEventTime: false,
                 events: '../../Function/Admin/fetchBookings.php',
+                dateClick: function(info) {
+                    window.location.href = `schedule.php`;
+                },
+                eventClick: function(info) {
+                    window.location.href = `schedule.php`;
+                },
                 eventsSet: function(events) {
                     // console.log('Fetched events:', events);
                     events.forEach(event => {
                         console.log(`Title: ${event.title}, Start: ${event.startStr}`);
                     });
-                },
-                eventClick: function(info) {
-                    window.location.href = "/Pages/Admin/schedule.php";
                 },
             });
             calendar.render();

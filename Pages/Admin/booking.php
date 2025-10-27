@@ -289,6 +289,9 @@ switch ($userRole) {
         $('#bookingTable').DataTable({
             responsive: false,
             scrollX: true,
+            order: [
+                [6, 'desc']
+            ],
             columnDefs: [{
                     width: '10%',
                     targets: 0

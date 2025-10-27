@@ -253,6 +253,9 @@ switch ($userRole) {
         $(document).ready(function() {
             $('#transactionTable').DataTable({
                 scrollX: true,
+                order: [
+                    [0, 'desc']
+                ],
                 columnDefs: [{
                         width: '9%',
                         target: 0,

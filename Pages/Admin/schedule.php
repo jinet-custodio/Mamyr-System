@@ -198,7 +198,6 @@ switch ($userRole) {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="calendarInfoModalLabel">Date Information</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="calendarModalBody">
                         <!-- Info goes here -->
@@ -236,6 +235,7 @@ switch ($userRole) {
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
+                displayEventTime: false,
                 height: 'auto', // make it responsive
                 contentHeight: 'auto',
                 aspectRatio: 1.35,
@@ -269,17 +269,23 @@ switch ($userRole) {
                         content += `<div class="list-group">`;
 
                         eventsOnDate.forEach(event => {
-                            const formattedStart = new Date(event.start).toLocaleDateString('en-US', {
+                            const formattedStart = new Date(event.start).toLocaleString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
-                                day: 'numeric'
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
                             });
 
                             const formattedEnd = event.end ?
-                                new Date(event.end).toLocaleDateString('en-US', {
+                                new Date(event.end).toLocaleString('en-US', {
                                     year: 'numeric',
                                     month: 'long',
-                                    day: 'numeric'
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    hour12: true
                                 }) :
                                 null;
 
@@ -305,19 +311,26 @@ switch ($userRole) {
                 eventClick: function(info) {
                     const event = info.event;
 
-                    const formattedStart = new Date(event.start).toLocaleDateString('en-US', {
+                    const formattedStart = new Date(event.start).toLocaleString('en-US', {
                         year: 'numeric',
                         month: 'long',
-                        day: 'numeric'
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
                     });
 
                     const formattedEnd = event.end ?
-                        new Date(event.end).toLocaleDateString('en-US', {
+                        new Date(event.end).toLocaleString('en-US', {
                             year: 'numeric',
                             month: 'long',
-                            day: 'numeric'
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true
                         }) :
                         null;
+
 
                     let content = `
                     <h5>${event.title}</h5>
