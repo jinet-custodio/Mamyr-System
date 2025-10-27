@@ -4,7 +4,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 900);
+checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -266,7 +266,7 @@ switch ($userRole) {
 
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-bs-target="#confirmationModal" data-bs-toggle="modal" data-bs-dismiss="modal">Okay, next</button>
+                                            <button type="button" class="btn btn-danger" data-bs-target="#confirmationModal" data-bs-toggle="modal" data-bs-dismiss="modal">Proceed</button>
                                         </div>
                                     </div>
                                 </div>
@@ -288,7 +288,7 @@ switch ($userRole) {
                                             <div class="button-container">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">No</button>
-                                                <button type="submit" class="btn btn-primary" name="yesDelete"
+                                                <button type="submit" class="btn btn-danger" name="yesDelete"
                                                     id="yesDelete">Yes</button>
                                             </div>
                                         </div>

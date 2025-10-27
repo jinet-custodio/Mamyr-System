@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 session_start();
@@ -82,34 +84,53 @@ elseif (isset($_POST['verifyCode'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $enteredOTP = mysqli_real_escape_string($conn, $_POST['enteredOTP']);
 
-    if ($enteredOTP !== "") {
+    if (!empty($enteredOTP)) {
         $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
         $emailQuery->bind_param('s', $email);
         $emailQuery->execute();
         $result = $emailQuery->get_result();
+
         if ($result->num_rows > 0) {
             $storedData = $result->fetch_assoc();
             $storedOTP = $storedData['userOTP'];
             $storedTime = $storedData['OTP_expiration_at'];
+            $userID = $storedData['userID']; // ✅ FIX
+
             date_default_timezone_set('Asia/Manila');
-            $timeNow = date('Y-m-d H:i:s', strtotime('+5 minutes'));
-            if ($timeNow > strtotime($storedTime)) {
-                if ($enteredOTP ===  $storedOTP) {
-                    $today = date('Y-m-d h:i:s');
-                    $isDeleted = true;
+            $timeNow = time();
+            $otpExpiration = strtotime($storedTime);
+
+            if ($timeNow <= $otpExpiration) {
+                if ($enteredOTP === $storedOTP) {
+                    $today = date('Y-m-d H:i:s');
+                    $isDeleted = 1;
                     $anonymousEmail = 'deletedAt_' . bin2hex(random_bytes(4)) . '@gmail.com';
-                    $deleteQuery = $conn->prepare("UPDATE user SET email = ?, isDeleted = ?, dateDeleted = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE userID = ? and email = ?");
+
+                    $deleteQuery = $conn->prepare("UPDATE user SET email = ?, isDeleted = ?, dateDeleted = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE userID = ? AND email = ?");
                     $deleteQuery->bind_param("sisis", $anonymousEmail, $isDeleted, $today, $userID, $email);
+
                     if ($deleteQuery->execute()) {
                         header("Location: ../../Pages/register.php?action=deleted");
                         exit;
+                    } else {
+                        echo "Error deleting account: " . $deleteQuery->error;
                     }
+                } else {
+                    $_SESSION['deleteAccountMessage'] = 'Invalid OTP.';
+                    header("Location: ../../Pages/Account/deleteAccount.php");
+                    exit;
                 }
             } else {
                 $_SESSION['deleteAccountMessage'] = 'Expired OTP.';
                 header("Location: ../../Pages/Account/deleteAccount.php");
                 exit;
             }
+        } else {
+            echo 'Email not found.';
         }
+    } else {
+        echo 'OTP is empty.';
     }
+} else {
+    echo 'Form not submitted properly.';
 }

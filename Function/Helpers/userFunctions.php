@@ -96,7 +96,7 @@ function addToAdminTable($conn)
         while ($row = $adminQueryResult->fetch_assoc()) {
             $storedUserID = intval($row['userID']);
             $firstName = ucfirst($row['firstName']);
-            $middleInitial = ucfirst($row['middleInitial']) . '.' ?? ' ';
+            $middleInitial = ucfirst($row['middleInitial'] ?? '') . '.' ?? ' ';
             $lastName = ucfirst($row['lastName']);
             $fullName = $firstName . ' ' . $middleInitial . ' ' . $lastName;
 

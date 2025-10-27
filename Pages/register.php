@@ -23,9 +23,6 @@ resetExpiredOTPs($conn);
 
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -81,10 +78,6 @@ resetExpiredOTPs($conn);
                         if (isset($_SESSION['loginError'])) {
                             echo htmlspecialchars(strip_tags($_SESSION['loginError']));
                             unset($_SESSION['loginError']);
-                        }
-                        //Alert Message 
-                        if (isset($_GET['session']) && $_GET['session'] === 'expired') {
-                            echo '<div class="alert alert-warning" >Session Expired</div>';
                         }
                         ?>
                     </p>
@@ -433,6 +426,7 @@ resetExpiredOTPs($conn);
         const urlParams = new URLSearchParams(window.location.search);
         const page = urlParams.get('page');
         const action = urlParams.get('action');
+        const session = urlParams.get('session');
 
         if (page === 'register') {
             container.classList.add('active');
@@ -444,9 +438,32 @@ resetExpiredOTPs($conn);
             container.classList.remove('active');
         }
 
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        // Alert Message 
+        if (session === 'expired') {
+            Toast.fire({
+                timer: 4000,
+                position: "center",
+                text: "Session Expired",
+                icon: "warning"
+            });
+        }
+
+
+
         if (action === "deleted") {
-            Swal.fire({
-                title: "Success",
+            Toast.fire({
                 text: "Your account has been deleted successfully.",
                 icon: "success"
             });
@@ -478,23 +495,18 @@ resetExpiredOTPs($conn);
                 icon: "warning"
             })
         } else if (action === "successVerification") {
-            Swal.fire({
-                title: "Verified Successfully",
-                text: "Your account has been verified. You may now log in to your account.",
+            Toast.fire({
+                text: "Verified Successfully",
                 icon: "success"
             })
         } else if (action === 'partner-registered') {
-            Swal.fire({
-                position: 'center',
-                title: 'Verified Successfully',
-                text: 'Partner has been successfully registered and verified.',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1500
+            Toast.fire({
+                text: "Partner has been successfully registered and verified.",
+                icon: "success"
             })
         }
 
-        if (page || action) {
+        if (urlParams) {
             const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url.toString());

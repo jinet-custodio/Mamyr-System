@@ -8,7 +8,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -341,12 +341,14 @@ switch ($userRole) {
                     data-bs-target="#addResortRatesModal" id="addResortRatesBtn">Add Rates</button>
                 <table class=" table table-striped" id="resortRates">
                     <thead>
-                        <th scope="col">Tour Type</th>
-                        <th scope="col">Time Range</th>
-                        <th scope="col">Visitor Type</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Availability</th>
-                        <th scope="col">Action</th>
+                        <tr>
+                            <th scope="col">Tour Type</th>
+                            <th scope="col">Time Range</th>
+                            <th scope="col">Visitor Type</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Availability</th>
+                            <th scope="col">Action</th>
+                        </tr>
 
                     </thead>
 
@@ -447,12 +449,15 @@ switch ($userRole) {
                     data-bs-target="#addServicePricingModal" id="eventAdd">Add Service Pricing</button>
                 <table class=" table table-striped" id="servicePricing">
                     <thead>
-                        <th scope="col">Pricing Type</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Charge Type</th>
-                        <th scope="col">Age Group</th>
-                        <th scope="col">Notes</th>
-                        <th scope="col">Action</th>
+                        <tr>
+                            <th scope="col">Pricing Type</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Charge Type</th>
+                            <th scope="col">Age Group</th>
+                            <th scope="col">Notes</th>
+                            <th scope="col">Action</th>
+                        </tr>
+
                     </thead>
 
                     <tbody>
@@ -561,16 +566,16 @@ switch ($userRole) {
                         <th scope="col">Availability</th>
                         <th scope="col">Action</th>
                     </thead>
+                    <tbody>
+                        <?php
+                        $getFoodQuery = $conn->prepare("SELECT mi.*, sa.availabilityName FROM menuitem mi
+                                LEFT JOIN  serviceavailability sa ON mi.availabilityID = sa.availabilityID");
+                        if ($getFoodQuery->execute()) {
+                            $foodResult = $getFoodQuery->get_result();
+                            if ($foodResult->num_rows > 0) {
+                                while ($row = $foodResult->fetch_assoc()) {
+                        ?>
 
-                    <?php
-                    $getFoodQuery = $conn->prepare("SELECT mi.*, sa.availabilityName FROM menuitem mi
-                LEFT JOIN  serviceavailability sa ON mi.availabilityID = sa.availabilityID");
-                    if ($getFoodQuery->execute()) {
-                        $foodResult = $getFoodQuery->get_result();
-                        if ($foodResult->num_rows > 0) {
-                            while ($row = $foodResult->fetch_assoc()) {
-                    ?>
-                                <tbody>
                                     <tr id="menuData">
                                         <input type="hidden" name="foodID" id="foodID" class="form-control foodID"
                                             value="<?= htmlspecialchars($row['foodItemID']) ?>">
@@ -632,13 +637,13 @@ switch ($userRole) {
                                         </td>
                                     </tr>
                         <?php
+                                }
                             }
+                        } else {
+                            error_log("Error executing " . $getFoodQuery->error);
                         }
-                    } else {
-                        error_log("Error executing " . $getFoodQuery->error);
-                    }
                         ?>
-                                </tbody>
+                    </tbody>
                 </table>
             </div>
 

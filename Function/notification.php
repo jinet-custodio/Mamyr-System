@@ -3,11 +3,11 @@ function getNotification($conn, $userID, $receiver)
 {
     // $getNotifications = $conn->prepare("SELECT * FROM notification WHERE (receiverID = ? OR receiver = ?) AND is_read = 0");
     if (strtolower($receiver) === 'admin') {
-        $getNotifications = $conn->prepare("
-            SELECT * FROM notification 
+        $getNotifications = $conn->prepare("SELECT * FROM notification 
             WHERE receiverID IS NULL 
             AND receiver = ? 
             AND is_read = 0
+            ORDER BY created_at DESC
         ");
         $getNotifications->bind_param("s", $receiver);
     } else {

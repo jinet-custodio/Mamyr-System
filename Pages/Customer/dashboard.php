@@ -4,7 +4,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 require_once '../../Function/Helpers/statusFunctions.php';
 require_once '../../Function/Helpers/userFunctions.php';

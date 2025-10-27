@@ -5,7 +5,7 @@ require '../../Config/dbcon.php';
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 require_once '../../Function/Helpers/statusFunctions.php';
 require_once '../../Function/Helpers/userFunctions.php';
@@ -171,6 +171,8 @@ switch ($userRole) {
                     data-bs-target="#notificationModal">
                     <i class="bi bi-bell" id="notification-icon"></i>
                     <?php if (!empty($counter)): ?>
+                        <?= htmlspecialchars($counter) ?>
+                        </span>
                         <?= htmlspecialchars($counter) ?>
                         </span>
                     <?php endif; ?>
