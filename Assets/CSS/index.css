@@ -173,7 +173,7 @@ input[type="password"]::-webkit-search-cancel-button {
   width: 100%;
   display: flex !important;
   gap: 2vw;
-  margin-top: -1vw;
+  margin-top: -1.5rem;
 }
 
 .userInfo {
@@ -326,7 +326,6 @@ input[type="password"]::-webkit-search-cancel-button {
 
 .confirmErrorMsg {
   width: 88%;
-
   font-size: 15px;
   position: absolute;
   color: red;
@@ -341,13 +340,17 @@ input[type="password"]::-webkit-search-cancel-button {
   margin-top: 1.5rem;
 }
 
+.termsSection {
+  margin-top: 1rem;
+}
+
 #termsError {
   position: absolute;
   color: red;
   text-align: center !important;
   width: 85%;
   font-size: 15px;
-  margin-top: -0.5rem;
+  margin-top: -0.2rem;
 }
 
 #signUp {
@@ -581,6 +584,10 @@ a.categoryLink {
     width: 80%;
   }
 
+  #passwordMatch {
+    margin-top: 6.5rem !important;
+  }
+
   .termsSection {
     margin-top: 5vw;
   }
@@ -591,7 +598,6 @@ a.categoryLink {
     text-align: center !important;
     width: 90%;
     font-size: 15px;
-    margin-top: -0.5rem;
     width: 80%;
   }
   #signUp {
@@ -639,6 +645,10 @@ a.categoryLink {
 
   .card-text {
     font-size: 14px;
+  }
+
+  #termsError {
+    margin-top: 0.1rem;
   }
 }
 
