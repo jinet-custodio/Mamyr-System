@@ -42,6 +42,10 @@ main {
   flex: 1;
 }
 
+footer {
+  background-color: oklch(95.93% 0.022 239.42) !important;
+}
+
 /* category section */
 
 .titleContainer {
