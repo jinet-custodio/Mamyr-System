@@ -15,7 +15,7 @@ $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName 
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
-$contentMap = [];
+$contentMap = []; 
 $imageMap = [];
 $defaultImage = "../Assets/Images/no-picture.png";
 while ($row = $getWebContentResult->fetch_assoc()) {
