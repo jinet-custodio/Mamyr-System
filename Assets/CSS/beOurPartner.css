@@ -238,6 +238,10 @@ button.close {
   opacity: 1;
 }
 
+footer {
+  background-color: oklch(95.93% 0.022 239.42) !important;
+}
+
 @media screen and (max-width: 600px) {
   .column {
     width: 100%;

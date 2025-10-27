@@ -8,6 +8,7 @@ date_default_timezone_set('Asia/Manila');
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout($timeout = 3600);
+$baseURL = '../..';
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -123,9 +124,9 @@ require '../../Function/notification.php';
                     data-bs-target="#notificationModal">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                     <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                     <?php endif; ?>
                 </button>
             </div>
@@ -140,9 +141,9 @@ require '../../Function/notification.php';
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <?php if ($userRole !== 2): ?>
-                    <a class="nav-link" href="dashboard.php"> Home</a>
+                        <a class="nav-link" href="dashboard.php"> Home</a>
                     <?php else: ?>
-                    <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                     <?php endif; ?>
                 </li>
                 <li class="nav-item dropdown">
@@ -160,9 +161,9 @@ require '../../Function/notification.php';
                     <a class="nav-link" href="blog.php">Blog</a>
                 </li>
                 <?php if ($userRole !== 2): ?>
-                <li class="nav-item">
-                    <a class="nav-link active" href="beOurPartner.php">Be Our Partner</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="beOurPartner.php">Be Our Partner</a>
+                    </li>
                 <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">About</a>
@@ -291,7 +292,7 @@ require '../../Function/notification.php';
 
         <div class="BPContainer">
             <!-- <?php if (!empty($partners)):
-                foreach ($partners as $partner): ?>
+                        foreach ($partners as $partner): ?>
             <div class="card bp-card" id="bp1">
 
                 <div class="card-body">
@@ -314,7 +315,7 @@ require '../../Function/notification.php';
                 </div>
             </div>
             <?php endforeach;
-            endif; ?> -->
+                    endif; ?> -->
 
 
 
@@ -582,40 +583,40 @@ require '../../Function/notification.php';
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
+                        });
+                });
             });
         });
-    });
     </script>
 
 
