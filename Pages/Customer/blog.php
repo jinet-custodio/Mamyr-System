@@ -7,7 +7,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -125,9 +125,9 @@ require '../../Function/notification.php';
                         data-bs-target="#notificationModal">
                         <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                         <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= htmlspecialchars($counter) ?>
+                            </span>
                         <?php endif; ?>
                     </button>
                 </div>
@@ -141,9 +141,9 @@ require '../../Function/notification.php';
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <?php if ($userRole !== 2): ?>
-                        <a class="nav-link" href="dashboard.php"> Home</a>
+                            <a class="nav-link" href="dashboard.php"> Home</a>
                         <?php else: ?>
-                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                            <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                         <?php endif; ?>
                     </li>
                     <li class="nav-item dropdown">
@@ -161,9 +161,9 @@ require '../../Function/notification.php';
                         <a class="nav-link active" href="#">Blog</a>
                     </li>
                     <?php if ($userRole !== 2): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
+                        </li>
                     <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="about.php">About</a>
@@ -242,7 +242,7 @@ require '../../Function/notification.php';
                     ?>
 
                     <?php foreach ($blogPosts as $postID => $post): ?>
-                    <?php
+                        <?php
                         $contentID = $post['contentID'] ?? null;
                         $imagePath = $defaultImage;
                         $altText = 'Blog image';
@@ -264,110 +264,110 @@ require '../../Function/notification.php';
                         }
                         ?>
 
-                    <?php if ($index === 0): ?>
-                    <div class="featured">
-                        <div class="featuredpost">
-                            <img src="<?= htmlspecialchars($imagePath) ?>" alt="<?= htmlspecialchars($altText) ?>"
-                                class="img-fluid" />
+                        <?php if ($index === 0): ?>
+                            <div class="featured">
+                                <div class="featuredpost">
+                                    <img src="<?= htmlspecialchars($imagePath) ?>" alt="<?= htmlspecialchars($altText) ?>"
+                                        class="img-fluid" />
 
-                            <div class="desc">
-                                <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
-                                <p class="eventType text-muted">
-                                    <?= htmlspecialchars($post['EventType']) ?> •
-                                    <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
-                                </p>
+                                    <div class="desc">
+                                        <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
+                                            <p class="eventType text-muted">
+                                                <?= htmlspecialchars($post['EventType']) ?> •
+                                                <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                            </p>
+                                        <?php endif; ?>
+
+                                        <div class="blogHeading">
+                                            <h4><?= htmlspecialchars($post['EventHeader'] ?? '') ?></h4>
+                                        </div>
+                                        <div class="blogDescription">
+                                            <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
+                                        </div>
+
+                                        <button class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
+                                            Read More
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <?php if ($index === 1): ?>
+                                <div class="others">
                                 <?php endif; ?>
 
-                                <div class="blogHeading">
-                                    <h4><?= htmlspecialchars($post['EventHeader'] ?? '') ?></h4>
-                                </div>
-                                <div class="blogDescription">
-                                    <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
-                                </div>
+                                <div class="post row align-items-start mb-3">
+                                    <div class="col-md-5 othersImg">
+                                        <img src="<?= htmlspecialchars($imagePath) ?>" alt="<?= htmlspecialchars($altText) ?>"
+                                            class="img-fluid" />
+                                    </div>
+                                    <div class="col-md-7 othersDesc">
+                                        <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
+                                            <p class="othersEventType text-muted">
+                                                <?= htmlspecialchars($post['EventType']) ?> •
+                                                <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                            </p>
+                                        <?php endif; ?>
 
-                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
-                                    Read More
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <?php else: ?>
-                    <?php if ($index === 1): ?>
-                    <div class="others">
-                        <?php endif; ?>
+                                        <div class="othersHeading">
+                                            <h4><?= htmlspecialchars($post['EventHeader'] ?? '') ?></h4>
+                                        </div>
+                                        <div class="othersDescription">
+                                            <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
+                                        </div>
 
-                        <div class="post row align-items-start mb-3">
-                            <div class="col-md-5 othersImg">
-                                <img src="<?= htmlspecialchars($imagePath) ?>" alt="<?= htmlspecialchars($altText) ?>"
-                                    class="img-fluid" />
-                            </div>
-                            <div class="col-md-7 othersDesc">
-                                <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
-                                <p class="othersEventType text-muted">
-                                    <?= htmlspecialchars($post['EventType']) ?> •
-                                    <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
-                                </p>
-                                <?php endif; ?>
-
-                                <div class="othersHeading">
-                                    <h4><?= htmlspecialchars($post['EventHeader'] ?? '') ?></h4>
-                                </div>
-                                <div class="othersDescription">
-                                    <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
-                                </div>
-
-                                <button class="btn btn-primary mb-3 othersReadmore" data-bs-toggle="modal"
-                                    data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
-                                    Read More
-                                </button>
-                            </div>
-                        </div>
-
-                        <?php if ($index === count($blogPosts) - 1): ?>
-                    </div>
-                    <?php endif; ?>
-                    <?php endif; ?>
-
-                    <!-- MODAL for each post -->
-                    <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1"
-                        aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalLabel<?= htmlspecialchars($postID) ?>">
-                                        <?= htmlspecialchars($post['EventHeader'] ?? 'Blog Post') ?>
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <img src="<?= htmlspecialchars($imagePath) ?>"
-                                        alt="<?= htmlspecialchars($altText) ?>" class="img-fluid mb-3" />
-
-                                    <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
-                                    <p class="text-muted">
-                                        <?= htmlspecialchars($post['EventType']) ?> •
-                                        <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
-                                    </p>
-                                    <?php endif; ?>
-
-                                    <div class="blog-full-content">
-                                        <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
+                                        <button class="btn btn-primary mb-3 othersReadmore" data-bs-toggle="modal"
+                                            data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
+                                            Read More
+                                        </button>
                                     </div>
                                 </div>
 
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
+                                <?php if ($index === count($blogPosts) - 1): ?>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <!-- MODAL for each post -->
+                        <div class="modal fade" id="modal<?= htmlspecialchars($postID) ?>" tabindex="-1"
+                            aria-labelledby="modalLabel<?= htmlspecialchars($postID) ?>" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalLabel<?= htmlspecialchars($postID) ?>">
+                                            <?= htmlspecialchars($post['EventHeader'] ?? 'Blog Post') ?>
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <img src="<?= htmlspecialchars($imagePath) ?>"
+                                            alt="<?= htmlspecialchars($altText) ?>" class="img-fluid mb-3" />
+
+                                        <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
+                                            <p class="text-muted">
+                                                <?= htmlspecialchars($post['EventType']) ?> •
+                                                <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                            </p>
+                                        <?php endif; ?>
+
+                                        <div class="blog-full-content">
+                                            <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <?php $index++; ?>
+                        <?php $index++; ?>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -386,48 +386,38 @@ require '../../Function/notification.php';
 
     <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener('DOMContentLoaded', function() {
+            const badge = document.querySelector('.notification-container .badge');
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationID = this.dataset.id;
 
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
+                    fetch('../../Function/notificationFunction.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'notificationID=' + encodeURIComponent(notificationID)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
 
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
+                            this.style.transition = 'background-color 0.3s ease';
+                            this.style.backgroundColor = 'white';
 
 
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
+                            if (badge) {
+                                let currentCount = parseInt(badge.textContent, 10);
 
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
+                                if (currentCount > 1) {
+                                    badge.textContent = currentCount - 1;
+                                } else {
+                                    badge.remove();
+                                }
                             }
-                        }
-                    });
-            });
-        });
-    });
-    </script>
-
-    <script>
-        const bookNowBtns = document.querySelectorAll('.bookNowBtn');
-
-        bookNowBtns.forEach(bookNowBtn => {
-            bookNowBtn.addEventListener("click", function(e) {
-                window.location.href = "bookNow.php"
+                        });
+                });
             });
         });
     </script>
@@ -441,7 +431,6 @@ require '../../Function/notification.php';
             });
         });
     </script>
-
 
 </body>
 

@@ -1,6 +1,9 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-
+date_default_timezone_set('Asia/Manila');
 require '../../Config/dbcon.php';
 require '../Helpers/userFunctions.php';
 $env = parse_ini_file(__DIR__ . '/../../.env');
@@ -36,6 +39,9 @@ if ($result->num_rows > 0) {
 }
 
 if (isset($_POST['bookRates'])) {
+    // echo '<pre>';
+    // print_r($_POST);
+    // echo '</pre>';
     $serviceIDs = [];
     $servicePrices = [];
     $serviceCapacity = [];
@@ -45,6 +51,7 @@ if (isset($_POST['bookRates'])) {
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
     $tourType = mysqli_real_escape_string($conn, $_POST['tourType']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
     $resortBookingDate = mysqli_real_escape_string($conn, $_POST['resortBookingDate']);
     $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['scheduledStartDate']);
     $scheduledEndDate = mysqli_real_escape_string($conn, $_POST['scheduledEndDate']);
@@ -74,6 +81,11 @@ if (isset($_POST['bookRates'])) {
     $cottageChoices = !empty($_POST['cottageOptions']) ? $_POST['cottageOptions'] : [];
     $roomChoices = !empty($_POST['roomOptions']) ?  $_POST['roomOptions'] : [];
     $addOnsServices = !empty($_POST['addOnsServices']) ?  $_POST['addOnsServices'] : [];
+
+    if (empty($phoneNumber)) {
+        header('Location: ../../Pages/Customer/resortBooking.php?action=phoneNumber');
+        exit;
+    }
 
 
 
@@ -190,8 +202,6 @@ if (isset($_POST['bookRates'])) {
     $addOns = is_array($addOnsServices) ? implode(', ', $addOnsServices) : $addOnsServices;
 
 
-    date_default_timezone_set('Asia/Manila');
-
     $scheduledStartDateObj = new DateTime($scheduledStartDate);
     $dateScheduled = $scheduledStartDateObj->format('F');
     $arrivalTime = $scheduledStartDateObj->format('h:i:s');
@@ -275,7 +285,7 @@ if (isset($_POST['bookRates'])) {
         }
 
         $receiver = 'Admin';
-        $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking request.';
+        $message = 'A customer has submitted a new ' . strtolower($bookingType) . ' booking request. <a href="booking.php">View here.</a>';
         $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, senderID, message, receiver)
             VALUES(?,?,?,?)");
         $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
@@ -320,7 +330,7 @@ if (isset($_POST['bookRates'])) {
             $confirmedBookingID = $conn->insert_id;
 
             $receiver = 'Customer';
-            $message = 'Your booking has been approved. Please complete your payment within 24 hours to confirm your reservation. Kindly check your email for more details.';
+            $message = 'Your booking has been approved (#' . $bookingCode  . '). Please complete your payment within 24 hours to confirm your reservation. Kindly check your email for more details.';
             $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, receiverID, message, receiver)
             VALUES(?,?,?,?)");
             $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
@@ -365,7 +375,7 @@ if (isset($_POST['bookRates'])) {
                                         <p style="font-size: 14px; margin: 8px 0;">Booking Reference: <strong>' . $bookingCode . '</strong></p>
                                         <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' . $bookingDate . '</strong>
                                         </p>
-                                        <p style="font-size: 14px; margin: 8px 0;">Booking Type: <strong>' . $bookingType . ' Booking $mdash; '
+                                        <p style="font-size: 14px; margin: 8px 0;">Booking Type: <strong>' . $bookingType . ' Booking &mdash; '
                 . $tourType . '</strong></p>
                                                                                         <p style="font-size: 14px; margin: 8px 0;">Grand Total: <strong>₱' . number_format($totalCost, 2) .
                 '</strong></p>
@@ -437,5 +447,6 @@ if (isset($_POST['bookRates'])) {
         error_log('Error: ' . $e->getMessage());
         $_SESSION['resortFormData'] = $_POST;
         header('Location: ../../../../Pages/Customer/resortBooking.php?action=errorBooking');
+        exit;
     }
 }

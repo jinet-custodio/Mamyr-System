@@ -5,7 +5,7 @@ require '../../Config/dbcon.php';
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 require_once '../../Function/Helpers/statusFunctions.php';
 require_once '../../Function/Helpers/userFunctions.php';

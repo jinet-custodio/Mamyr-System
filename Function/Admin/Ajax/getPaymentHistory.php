@@ -36,7 +36,7 @@ if (isset($_GET['userID'])) {
                                         LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                                         WHERE b.userID = ? AND b.bookingStatus NOT IN (?,?)
                                         GROUP BY b.bookingID
-                                        ORDER BY b.createdAt
+                                        ORDER BY b.createdAt DESC
                                         
                                     ");
 

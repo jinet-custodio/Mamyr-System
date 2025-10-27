@@ -64,6 +64,9 @@ if (isset($_POST['saveChanges'])) {
         $birthDate = NULL;
     }
 
+    if (empty($phoneNumber)) {
+    }
+
 
 
     $updateUser = $conn->prepare("UPDATE user SET 

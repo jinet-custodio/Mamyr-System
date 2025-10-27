@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 900);
+checkSessionTimeout();
 
 
 if (isset($_SESSION['userID'])) {
@@ -145,7 +145,7 @@ $userRole = $_SESSION['userRole'];
                 }
 
                 $companyName = $data['companyName'] ?? 'N/A';
-                $validID = $data['validID'] ?? 'defaultValidID.png';
+                $validID = !empty($data['validID']) ? $data['validID'] : 'defaultValidID.png';
 
                 $imageSrc = '../../Assets/Images/BusinessPartnerIDs/' . $validID;
 
@@ -322,16 +322,14 @@ $userRole = $_SESSION['userRole'];
                     <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
                     <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
                     <div class="info form-floating">
-                        <input type="text" class="form-control editable" name="fullName" id="fullName"
+                        <input type="text" class="form-control editable" name="fullName" id="fullName" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                             value="<?= htmlspecialchars($name) ?>" readonly required>
                         <label for="fullName">Full Name</label>
                     </div>
                     <div class="info form-floating">
                         <?php if (!empty($birthday)) : ?>
-                            <input type="text" class="form-control editable" name="birthday" id="birthday"
+                            <input type="text" class="form-control editable" name="birthday" id="birthday" readonly
                                 value="<?= htmlspecialchars($birthday) ?>">
-                        <?php else : ?>
-                            <input type="text" class="form-control" name="birthday" id="birthday" value="--" readonly>
                         <?php endif; ?>
                         <label for="birthday">Birthday</label>
                     </div>
@@ -443,7 +441,6 @@ $userRole = $_SESSION['userRole'];
     </div>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Jquery Link -->
@@ -541,6 +538,11 @@ $userRole = $_SESSION['userRole'];
         const input = document.getElementById('phoneNumber');
         const tooltip = document.getElementById('tooltip');
         input.addEventListener('keypress', function(e) {
+
+            if (input.hasAttribute('readonly')) {
+                e.preventDefault();
+                return;
+            }
             if (!/[0-9]/.test(e.key)) {
                 e.preventDefault();
             }
@@ -588,7 +590,7 @@ $userRole = $_SESSION['userRole'];
             document.getElementById("fullName").setAttribute('readonly', true);
             document.getElementById("address").setAttribute('readonly', true);
             document.getElementById("phoneNumber").setAttribute('readonly', true);
-            document.getElementById("birthday").setAttribute('readonly', true);
+
 
             editable.forEach((input) => {
                 input.style.border = '1px solid rgb(223, 226, 230)';
@@ -598,6 +600,8 @@ $userRole = $_SESSION['userRole'];
                 birthdayPicker.destroy();
                 birthdayPicker = null;
             }
+
+            document.getElementById("birthday").setAttribute('readonly', true);
 
             document.getElementById("saveBtn").style.display = "none";
             document.getElementById("cancelBtn").style.display = "none";

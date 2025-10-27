@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -234,7 +234,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <div class="hotelRooms">
                         <h5 class="hotelRooms-title">Room Number</h5>
                         <button type="button" class="btn btn-info text-black w-100" name="hotelSelectionBtn"
-                            id="hotelSelectionBtn" data-bs-toggle="modal" data-bs-target="#hotelRoomModal" disabled>
+                            id="hotelSelectionBtn" data-bs-toggle="modal" data-bs-target="#hotelRoomModal">
                             Choose your room</button>
 
                         <!-- Modal for hotel rooms -->
@@ -247,6 +247,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" id="hotelDisplaySelection">
+                                        <p class="text-center">Choose date and time</p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary"
@@ -315,6 +316,32 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
 
+        </div>
+    </form>
+
+    <!-- Phone Number Modal -->
+    <form action="../../Function/getPhoneNumber.php" method="POST">
+        <div class="modal fade" id="phoneNumberModal" tabindex=" -1"
+            aria-labelledby="phoneNumberModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="phoneNumberModalLabel">Required Phone Number</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center">Phone number is required before booking please enter your phone
+                            number
+                        </p>
+                        <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control w-100 mt-2"
+                            placeholder="+63 9XX XXX XXXX" pattern="^(?:\+63|0)9\d{9}$"
+                            title="e.g., +639123456789 or 09123456789" required>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" name="submitPhoneNumber">Submit</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 
@@ -399,12 +426,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                 const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
                 checkOutInput.value = formattedDate;
-                // document.getElementById('checkOutDateHidden').value = formattedDate;
-                // diffTime = Math.abs(checkOutDate - checkInDate);
-                // daysCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                // daysCountInput.value = daysCount;
-                // console.log(daysCount);
             }
         });
     </script>
@@ -520,7 +541,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         document.addEventListener("DOMContentLoaded", () => {
             if (checkInDate && checkInDate.value) {
                 fetchAvailableRooms();
-                hotelSelectionBtn.disabled = false;
                 checkInDate.style.border = '1px solid rgb(223, 226, 230)';
             }
         });
@@ -529,7 +549,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             checkInDate.addEventListener("change", () => {
                 fetchAvailableRooms();
                 checkInDate.style.border = checkInDate.value ? '' : '2px solid red';
-                hotelSelectionBtn.disabled = false;
             });
         }
         if (checkOutDate) {
@@ -556,6 +575,55 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 hotelBookingBtn.type = 'button';
             } else {
                 hotelBookingBtn.type = 'submit';
+            }
+        });
+    </script>
+
+
+    <script>
+        //* For not allowing letters
+        const phoneNumber = document.getElementById('phoneNumber');
+
+        phoneNumber.addEventListener('keypress', function(e) {
+            if (!/[0-9+]/.test(e.key)) {
+                e.preventDefault();
+            }
+        })
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const param = new URLSearchParams(window.location.search);
+            const paramValue = param.get('action');
+
+            switch (paramValue) {
+                case 'errorBooking':
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'An error occurred. Please try again.',
+                        title: 'Oops'
+                    })
+                    break;
+                case 'phoneNumber':
+                    Swal.fire({
+                        icon: 'info',
+                        text: 'Phone number is required!',
+                        title: 'Oops',
+                        confirmButtonText: 'Okay'
+                    }).then((result) => {
+                        const phoneNumberModal = document.getElementById('phoneNumberModal');
+                        const modal = new bootstrap.Modal(phoneNumberModal);
+                        modal.show();
+                    });
+                    break;
+                default:
+                    const cleanUrl = window.location.origin + window.location.pathname;
+                    history.replaceState({}, document.title, cleanUrl);
+                    break;
+            }
+
+            if (paramValue) {
+                const cleanUrl = window.location.origin + window.location.pathname;
+                history.replaceState({}, document.title, cleanUrl);
+
             }
         });
     </script>

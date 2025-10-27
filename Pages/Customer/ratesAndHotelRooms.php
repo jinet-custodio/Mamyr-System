@@ -8,7 +8,7 @@ $baseURL = '../..';
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 require '../../Function/notification.php';
 $userID = $_SESSION['userID'];

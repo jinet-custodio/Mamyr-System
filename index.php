@@ -333,7 +333,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         include 'Pages/editImageModal.php';
     } else {
         include 'Pages/Customer/footer.php';
-        include './Pages/loader.php';
+        include 'Pages/Customer/loader.php';
     }
     ?>
 
@@ -432,31 +432,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </script>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // const lat = 15.05073200154005;
-        // const lon = 121.0218658098424;
-
-        // const map = L.map('map').setView([lat, lon], 13);
-
-        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        // }).addTo(map);
-
-
-        // const customIcon = L.icon({
-        //     iconUrl: 'Assets/Images/MamyrLogo.png',
-        //     iconSize: [100, 25], // Size of the logo 
-        //     iconAnchor: [25, 50], // Anchor point of the icon 
-        //     popupAnchor: [0, -50] // Popup anchor point 
-        // });
-
-
-        // L.marker([lat, lon], {
-        //         icon: customIcon
-        //     }).addTo(map)
-        //     .bindPopup('Mamyr Resort and Events Place is Located Here!')
-        //     .openPopup();
-    </script>
 
     <script>
         async function getRatings() {

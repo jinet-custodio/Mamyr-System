@@ -7,7 +7,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 
 $userID = $_SESSION['userID'];
@@ -91,7 +91,7 @@ unset($_SESSION['formData']);
 
     <?php
     $name = '';
-    $getUserInfo = $conn->prepare("SELECT firstName, lastName, middleInitial, email FROM user WHERE userID = ? AND userRole = ?");
+    $getUserInfo = $conn->prepare("SELECT firstName, lastName, middleInitial, email, phoneNumber FROM user WHERE userID = ? AND userRole = ?");
     $getUserInfo->bind_param("ii", $userID, $userRole);
     $getUserInfo->execute();
     $getUserInfoResult = $getUserInfo->get_result();
@@ -101,6 +101,7 @@ unset($_SESSION['formData']);
         $middleInitial = trim($data['middleInitial']  ?? "");
         $name = ucfirst($firstName)  . " " . ucfirst($middleInitial) . ". "  . ucfirst($data['lastName'] ?? "");
         $email = $data['email'] ?? '';
+        $phoneNumber = $data['phoneNumber'] ?? null;
     }
     ?>
 
@@ -581,6 +582,7 @@ unset($_SESSION['formData']);
         <div class="container">
             <input type="hidden" name="firstName" value="<?= ucfirst($firstName ?? '') ?>">
             <input type="hidden" name="email" value="<?= $email ?? '' ?>">
+            <input type="hidden" name="phoneNumber" value="<?= $phoneNumber ?? null ?>">
 
             <div class="card booking-summary" style="width: 50%;">
                 <div class="card-info">

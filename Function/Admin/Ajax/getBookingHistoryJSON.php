@@ -19,7 +19,7 @@ if (isset($_GET['userID'])) {
                         GROUP BY
                             b.bookingID
                         ORDER BY 
-                            b.createdAt");
+                            b.createdAt  DESC");
         $getBookingInfo->bind_param("i", $userID);
         $getBookingInfo->execute();
         $result = $getBookingInfo->get_result();

@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 
 if (isset($_SESSION['userID'])) {
@@ -330,13 +330,13 @@ switch ($userRole) {
                                 <section class="additionalNotesContainer">
                                     <label for="eventVenue">Additional Notes</label>
                                     <textarea name="additionalNotes" class="form-control"
-                                        id="additionalNotes"></textarea>
+                                        id="additionalNotes" readonly></textarea>
                                 </section>
                             </div>
                             <div class="note-section-approval">
                                 <p class="text-primary text-center" id="note-approval-time"></p>
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer" id="btnContainer-footer">
                                 <div class="btnContainer">
                                     <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
                                     <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
@@ -517,6 +517,10 @@ switch ($userRole) {
                     viewModal.querySelector('#note-approval-time').innerHTML = `Please note that this booking must be approved by <strong> ${booking.approvalTimeUntil} </strong>. After this time, it will be automatically rejected.`;
 
                     viewModal.querySelector('#additionalNotes').value = booking.notes || '';
+
+                    if (booking.statusName === 'Approved') {
+                        document.getElementById('btnContainer-footer').style.display = 'none';
+                    }
 
                     const modal = new bootstrap.Modal(viewModal);
                     modal.show();

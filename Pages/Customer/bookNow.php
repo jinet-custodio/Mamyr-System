@@ -8,7 +8,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -247,7 +247,7 @@ unset($_SESSION['eventFormData']);
 
             <!-- Phone Number Modal -->
             <form action="../../Function/getPhoneNumber.php" method="POST">
-                <div class="modal fade" id="phoneNumberModal" data-bs-backdrop="static" tabindex=" -1"
+                <div class="modal fade" id="phoneNumberModal" tabindex=" -1"
                     aria-labelledby="phoneNumberModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -383,7 +383,7 @@ unset($_SESSION['eventFormData']);
             }
 
             phoneNumber.addEventListener('keypress', function(e) {
-                if (!/[0-9]/.test(e.key)) {
+                if (!/[0-9+]/.test(e.key)) {
                     e.preventDefault();
                 }
             })

@@ -13,7 +13,7 @@ if (isset($_POST['approveBtn'])) {
     $_SESSION['partnerID'] = (int) $_POST['partnerID'];
     $partnerStatusID = intval($_POST['partnerStatus']);
     $partnerUserID = intval($_POST['partnerUserID']);
-    $startDate = date('Y-m-d');
+    $startDate = date('Y-m-d H:i:s');
 
     $partnerID = $_SESSION['partnerID'];
 

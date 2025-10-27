@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
-checkSessionTimeout($timeout = 3600);
+checkSessionTimeout();
 
 require_once '../../Function/Helpers/statusFunctions.php';
 changeToDoneStatus($conn);
@@ -289,9 +289,7 @@ switch ($userRole) {
         $('#bookingTable').DataTable({
             responsive: false,
             scrollX: true,
-            order: [
-                [6, 'desc']
-            ],
+            "order": [],
             columnDefs: [{
                     width: '10%',
                     targets: 0
