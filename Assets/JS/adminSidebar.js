@@ -24,7 +24,7 @@
             });
 
             function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
+                if (window.innerWidth <= 700) {
                     sidebar.classList.add('collapsed');
                     toggleBtn.style.display = "flex";
                     items.forEach(item => {
@@ -46,3 +46,14 @@
             window.addEventListener("load", handleResponsiveSidebar);
             window.addEventListener('resize', handleResponsiveSidebar);
         });
+
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Ignore clicks that originated from the <a> itself
+                if (e.target.tagName.toLowerCase() === 'a') return;
+                const link = this.querySelector('a.nav-link');
+                if (link) link.click();
+            });
+        });
+
