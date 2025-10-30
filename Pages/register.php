@@ -386,22 +386,41 @@ resetExpiredOTPs($conn);
     <!-- Loader function -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const signUpBtn = document.getElementById('signUp');
             const loginBtn = document.getElementById('login');
             const loginEmail = document.getElementById('login_email');
             const loginPassword = document.getElementById('login_password');
-            const loader = document.getElementById('loader');
+            const loaderOverlay = document.getElementById('loaderOverlay');
 
-
-            // Click event on the button
-            signUpBtn.addEventListener('click', function(e) {
-                document.getElementById('loaderOverlay').style.display = 'flex';
-            });
             loginBtn.addEventListener('click', function(e) {
-                document.getElementById('loaderOverlay').style.display = 'flex';
+                const email = loginEmail.value.trim();
+                const password = loginPassword.value.trim();
+
+                // Basic validation
+                if (email === '' || password === '') {
+                    e.preventDefault();
+                    Swal.fire({
+                        text: "Please fill in the required information.",
+                        icon: "info"
+                    });
+                    return;
+                }
+
+                // Check for valid email (simple validation)
+                if (!email.includes('@')) {
+                    e.preventDefault();
+                    Swal.fire({
+                        text: "Please enter a valid email adrress.",
+                        icon: "info"
+                    });
+                    return;
+                }
+
+                // Show loader only if validation passes
+                loaderOverlay.style.display = 'flex';
             });
         });
     </script>
+
 
 
     <script>

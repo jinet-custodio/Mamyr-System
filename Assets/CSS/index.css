@@ -207,6 +207,10 @@ input[type="password"]::-webkit-search-cancel-button {
   font-weight: 600;
 }
 
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
+  background-color: #0865b1 !important;
+}
+
 .signUpSection {
   margin-top: 2vw;
 }
