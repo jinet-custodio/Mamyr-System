@@ -26,7 +26,6 @@ if (isset($_SESSION['action'])) {
     <title>Forgot Password</title>
     <link rel="stylesheet" href="../Assets/CSS/enterEmail.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
@@ -55,7 +54,7 @@ if (isset($_SESSION['action'])) {
                     <input type="email" class="form-control" id="email" name="email"
                         placeholder="Enter your email" required>
                 </div>
-                <button type="submit" class="btn" id="verify_email" name="verify_email">Verify Email</button>
+                <button type="submit" class="btn btn-primary" id="verify_email" name="verify_email">Verify Email</button>
 
             </form>
         </div>

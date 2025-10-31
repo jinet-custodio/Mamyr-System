@@ -357,7 +357,7 @@ unset($_SESSION['eventFormData']);
             });
         }
 
-        if (paramValue === 'bookNow') {
+        if (paramValue === 'phoneAdded') {
             Toast.fire({
                 text: "Your phone number has been submitted successfully. You may now proceed with booking.",
                 icon: "success"

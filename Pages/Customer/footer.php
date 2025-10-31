@@ -79,11 +79,11 @@ while ($row = $getLogoResult->fetch_assoc()) {
                 </h3>
 
                 <div class="socialIcons">
-                    <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>"><i
+                    <a href="<?= htmlspecialchars($contentMap['FBLink'] ?? 'None Provided') ?>" target="_blank"><i
                             class='bx bxl-facebook-circle'></i></a>
-                    <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>"><i
+                    <a href="mailto: <?= htmlspecialchars($contentMap['GmailAdd'] ?? 'None Provided') ?>" target="_blank"><i
                             class='bx bxl-gmail'></i></a>
-                    <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
+                    <a href="tel:<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>" target="_blank">
                         <i class='bx bxs-phone'></i>
                     </a>
                 </div>

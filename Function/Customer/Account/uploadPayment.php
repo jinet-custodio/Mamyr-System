@@ -9,12 +9,17 @@ $userID = (int) $_SESSION['userID'];
 
 
 if (isset($_POST['submitDownpaymentImage'])) {
-
+    error_log(print_r($_POST, true));
     $bookingID = (int) $_POST['bookingID'];
     $confirmedBookingID = (int) $_POST['confirmedBookingID'];
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     $paymentAmount = (float) $_POST['payment-amount'];
     $downpayment = (float) $_POST['downpayment'];
+
+    $startDate = mysqli_real_escape_string($conn, $_POST['startDate']);
+    $endDate = mysqli_real_escape_string($conn, $_POST['endDate']);
+
+    $serviceIDs = $_POST['serviceIDs'];
 
     $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
     $allowedExt = ['jpg', 'jpeg', 'png'];
@@ -73,7 +78,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
 
     rename($tempUploadPath . $_SESSION['tempImage'], $finalFilePath);
 
-    unset($_SESSION['tempImage']);
+
 
 
     $paymentSentID = 5;
@@ -85,6 +90,133 @@ if (isset($_POST['submitDownpaymentImage'])) {
 
     $conn->begin_transaction();
     try {
+        // $today = new DateTime();
+        // $expiresAt = $today->modify('+24 hours')->format('Y-m-d H:i:s');
+        $expiresAt = null;
+        $searchBookingID = $conn->prepare("SELECT bookingID FROM serviceunavailabledate WHERE bookingID = ? AND expiresAt IS NOT NULL");
+        $searchBookingID->bind_param('i', $bookingID);
+        if (!$searchBookingID->execute()) {
+            $conn->rollback();
+            throw new Exception("Failed executing (searchBookingID) booking ID: $bookingID");
+        }
+
+        $searchID = $searchBookingID->get_result();
+        $hold = 'hold';
+        $availableServices = [];
+        if ($searchID->num_rows > 0) {
+            $updateUnavailableDates = $conn->prepare("UPDATE `serviceunavailabledate` SET `expiresAt`= ? WHERE `bookingID`= ?");
+            $updateUnavailableDates->bind_param('si', $expiresAt,  $bookingID);
+            if (!$updateUnavailableDates->execute()) {
+                $conn->rollback();
+                throw new Exception("Failed to update unavailable date for booking ID: $bookingID");
+            }
+            $updateUnavailableDates->close();
+        } else {
+            foreach ($serviceIDs as $type => $ids) {
+                $type = strtolower(trim($type));
+                foreach ($ids as $id) {
+                    $id = (int) $id;
+
+                    if ($type === 'resort') {
+
+                        $searchAmenity = $conn->prepare("SELECT RServiceName FROM resortamenity WHERE resortServiceID = ?");
+                        $searchAmenity->bind_param('i', $id);
+
+                        if (!$searchAmenity->execute()) {
+                            $conn->rollback();
+                            throw new Exception("Failed to search for resort service. Error: " . $searchAmenity->error);
+                        }
+
+                        $amenity = $searchAmenity->get_result();
+
+                        if ($amenity->num_rows > 0) {
+                            $row = $amenity->fetch_assoc();
+                            $serviceName = $row['RServiceName'];
+
+                            if (strpos($serviceName, 'Room') !== false) {
+                                $getSameServiceName = $conn->prepare("SELECT resortServiceID  FROM resortamenity WHERE RServiceName = ? AND resortServiceID != ?");
+
+                                $getSameServiceName->bind_param('si', $serviceName, $id);
+                                $getSameServiceName->execute();
+                                $getSameServiceResult = $getSameServiceName->get_result();
+
+                                if ($getSameServiceResult->num_rows > 0) {
+                                    $data = $getSameServiceResult->fetch_assoc();
+                                    $resortServiceID = $data['resortServiceID'];
+
+                                    $searchService = $conn->prepare("SELECT resortServiceID FROM serviceunavailabledate WHERE resortServiceID = ? AND `unavailableStartDate` <= ?  AND `unavailableEndDate` >= ?");
+                                    $searchService->bind_param("iss", $resortServiceID, $endDate, $startDate);
+                                    if (!$searchService->execute()) {
+                                        $conn->rollback();
+                                        throw new Exception("Failed to search for unavailable service. Error: " . $searchService->error);
+                                    }
+
+                                    $result = $searchService->get_result();
+                                    if ($result->num_rows > 0) {
+                                        header("Location: ../../../../../Pages/Account/reservationSummary.php?action=serviceUnavailable");
+                                        exit();
+                                    } else {
+                                        $availableServices['resort'][] = $resortServiceID;
+                                    }
+                                }
+                            }
+
+                            $searchService = $conn->prepare("SELECT resortServiceID FROM serviceunavailabledate WHERE resortServiceID = ? AND `unavailableStartDate` <= ?  AND `unavailableEndDate` >= ?");
+                            $searchService->bind_param("iss", $id, $endDate, $startDate);
+                            if (!$searchService->execute()) {
+                                $conn->rollback();
+                                throw new Exception("Failed to search for unavailable service. Error: " . $searchService->error);
+                            }
+
+                            $result = $searchService->get_result();
+                            if ($result->num_rows > 0) {
+                                header("Location: ../../../../../Pages/Account/reservationSummary.php?action=serviceUnavailable");
+                                exit();
+                            } else {
+                                $availableServices['resort'][] = $id;
+                            }
+                        }
+                    } elseif ($type === 'partner') {
+                        $searchService = $conn->prepare("SELECT partnershipServiceID FROM serviceunavailabledate WHERE partnershipServiceID = ? AND status = ? AND `unavailableStartDate` <= ?  AND `unavailableEndDate` >= ?");
+                        $searchService->bind_param("isss", $id, $hold, $endDate, $startDate);
+                        if (!$searchService->execute()) {
+                            $conn->rollback();
+                            throw new Exception("Failed to search for unavailable partner service. Error: " . $searchService->error);
+                        }
+
+                        $result = $searchService->get_result();
+                        if ($result->num_rows > 0) {
+                            header("Location: ../../../../../Pages/Account/reservationSummary.php?action=serviceUnavailable");
+                            exit();
+                        } else {
+                            $availableServices['partner'][] = $id;
+                        }
+                        $searchService->close();
+                    }
+                }
+            }
+        }
+
+        if (!empty($availableServices)) {
+            foreach ($availableServices as $type => $ids) {
+                foreach ($ids as $id) {
+                    if ($type === 'resort') {
+                        $sql = "INSERT INTO `serviceunavailabledate`(`bookingID`, `resortServiceID`, `unavailableStartDate`, `unavailableEndDate`, `expiresAt`) VALUES (?,?,?,?,?)";
+                    } elseif ($type === 'partner') {
+                        $sql = "INSERT INTO `serviceunavailabledate`(`bookingID`, `partnershipServiceID`, `unavailableStartDate`, `unavailableEndDate`, `expiresAt`) VALUES (?,?,?,?,?)";
+                    }
+
+                    $insertService = $conn->prepare($sql);
+                    $insertService->bind_param('iisss', $bookingID, $id, $startDate, $endDate, $expiresAt);
+                    if (!$insertService->execute()) {
+                        $conn->rollback();
+                        throw new Exception("Error inserting services into unavailable" . $insertService->error);
+                    }
+                }
+            }
+        }
+
+
         $downpaymentImageQuery = $conn->prepare("UPDATE confirmedbooking
                                                     SET downpaymentImage = ?, paymentStatus = ?
                                                     WHERE bookingID = ?
@@ -98,7 +230,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
         $insertPaymentQuery->execute();
 
         $receiver = 'Admin';
-        $message = 'A payment proof has been uploaded for Booking ID: ' . $bookingID . '. Please verify.';
+        $message = 'A payment proof has been uploaded for Booking ID: ' . $bookingID . '. Please verify if its exactly ₱' . number_format($paymentAmount, 2);
         $insertNotificationQuery = $conn->prepare("INSERT INTO notification (receiver, senderID, bookingID, message) VALUES (?, ?, ?, ?) ");
         $insertNotificationQuery->bind_param('siis', $receiver, $userID, $bookingID, $message);
         $insertNotificationQuery->execute();
@@ -108,7 +240,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
         $updateUnavailableService->execute();
 
         $conn->commit();
-
+        unset($_SESSION['tempImage']);
         unset($_SESSION['payment-amount'], $_SESSION['bookingType'], $_SESSION['bookingID']);
         header("Location: ../../../Pages/Account/bookingHistory.php?action=paymentSuccess");
         exit();

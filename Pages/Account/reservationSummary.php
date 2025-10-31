@@ -354,6 +354,16 @@ switch ($userRole) {
                                     break;
                             }
                             switch ($paymentStatus['paymentStatusID']) {
+                                case 2: //Partially Paid
+                                    $statusTitle = "Payment Reviewed – Service Reserved";
+                                    $statusIcon = '<i class="bi bi-card-checklist"></i>';
+                                    $statusSubtitle = "We have received and reviewed your payment. Your service is now confirmed and reserved. Thank you!";
+                                    break;
+                                case 3: //Fully Paid
+                                    $statusTitle = "Payment Completed – Service Confirmed";
+                                    $statusIcon = '<i class="bi bi-check-circle-fill"></i>';
+                                    $statusSubtitle = 'Thank you! Your full payment has been received and reviewed. Your service is now confirmed.';
+                                    break;
                                 case 5: // Payment Sent
                                     $statusTitle = 'Payment submitted!';
                                     $statusIcon = '<i class="bi bi-cash-stack"></i>';
@@ -375,12 +385,12 @@ switch ($userRole) {
                                     break;
                             }
                             break;
-                        case 4: //Rejected
+                        case 5: //Rejected
                             $statusTitle = 'Booking Rejected';
                             $statusIcon = '<i class="bi bi-x-circle-fill"></i>';
                             $statusSubtitle = 'We regret to inform you that your reservation has been rejected. Please contact us for more details.';
                             break;
-                        case 5: //Cancelled
+                        case 4: //Cancelled
                             $statusTitle = 'Booking Cancelled';
                             $statusIcon = '<i class="bi bi-slash-circle"></i>';
                             $statusSubtitle = 'You have cancelled your reservation. If this was a mistake or you wish to rebook, please contact us.';
@@ -418,12 +428,13 @@ switch ($userRole) {
                             if ($serviceType === 'Resort') {
                                 $services[] = $venue = $row['RServiceName'] ?? 'none';
                                 $venuePrice = $row['venuePricing'] ?? 0;
-                                $serviceIDs[] = $row['resortServiceID'];
+                                $serviceIDs['resort'][] = $row['resortServiceID'];
                             } elseif ($serviceType === 'Partnership') {
                                 $partnerServicePrice = isset($row['PBPrice']) ? floatval($row['PBPrice']) : null;
                                 $services[]  = $serviceName = $row['PBName'] ?? 'N/A';
                                 $partnerServiceID = $row['partnershipServiceID'] ?? null;
                                 $category = $row['category'] ?? null;
+                                $serviceIDs['partner'][] = $row['partnershipServiceID'] ?? null;
 
                                 if ($partnerServiceID !== null) {
                                     $partnerServiceList[$category][$serviceName] = $partnerServicePrice;
@@ -451,7 +462,7 @@ switch ($userRole) {
                         }
                         if ($serviceType === 'Resort') {
                             $services[] = $row['RServiceName'];
-                            $serviceIDs[] = $row['resortServiceID'];
+                            $serviceIDs['resort'][] = $row['resortServiceID'];
                         }
                         if ($serviceType === 'Entrance') {
                             $cardHeader = "Type of Tour";
@@ -507,7 +518,6 @@ switch ($userRole) {
                     value="<?= !empty($paymentStatus['paymentStatusName']) ?  htmlspecialchars($paymentStatus['paymentStatusName']) : '' ?>">
                 <input type="hidden" name="paymentMethod" id="paymentMethod"
                     value="<?= htmlspecialchars($paymentMethod) ?>">
-
                 <div class="status-image-container m-2">
                     <img src="../../Assets/Images/Icon/StatusIcon/<?= htmlspecialchars(ucfirst($status)) ?>.png"
                         alt="<?= ucfirst(htmlspecialchars($status)) ?> Icon" class="statusIcon">
@@ -823,6 +833,15 @@ switch ($userRole) {
     <!-- Form for payment -->
     <form action="../../Function/Customer/Account/uploadPayment.php" method="POST" enctype="multipart/form-data">
 
+        <?php foreach ($serviceIDs as $type => $ids):
+            foreach ($ids as $id): ?>
+                <input type="hidden" name="serviceIDs[<?= $type ?>][]" value="<?= $id ?>">
+        <?php endforeach;
+        endforeach; ?>
+
+        <input type="hidden" name="startDate" value="<?= $rawStartDate ?>">
+        <input type="hidden" name="endDate" value="<?= $rawEndDate ?>">
+
         <div class="modal fade" id="gcashPayment1stModal" aria-hidden="true" aria-labelledby="gcashPayment1stModalLabel"
             tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
@@ -1082,6 +1101,13 @@ switch ($userRole) {
                 const paymentModal = document.getElementById('gcashPaymentModal');
                 const modal = new bootstrap.Modal(paymentModal);
                 modal.show();
+            })
+        } else if (paramValue === 'serviceUnavailable') {
+            Swal.fire({
+                title: 'Booking Unavailable',
+                text: `We regret to inform you that the service you booked is no longer available, as payment was not completed within 24 hours.`,
+                icon: 'warning',
+                confirmButtonText: 'Okay'
             })
         }
 

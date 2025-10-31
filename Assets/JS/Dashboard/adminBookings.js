@@ -24,6 +24,7 @@ function filteredBookings(selectedFilterValue) {
           },
           options: {
             responsive: true,
+            indexAxis: "y",
             scales: {
               y: {
                 beginAtZero: true,
@@ -125,6 +126,7 @@ function filteredBookings(selectedFilterValue) {
           datasets: dataset,
         },
         options: {
+          indexAxis: "y",
           responsive: true,
           scales: {
             y: {
@@ -170,6 +172,7 @@ function filteredBookings(selectedFilterValue) {
           datasets: [],
         },
         options: {
+          indexAxis: "y",
           responsive: true,
           devicePixelRatio: window.devicePixelRatio,
         },

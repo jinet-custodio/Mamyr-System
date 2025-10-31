@@ -69,7 +69,7 @@ if (isset($_POST['approveBtn'])) {
     $userRoleID = (int) $_POST['userRoleID'];
     $customerID = (int) $_POST['customerID'];
     $customPackageID = (int) $_POST['customPackageID'];
-    $serviceIDs = $_POST['serviceIDs'];
+    // $serviceIDs = $_POST['serviceIDs'];
     $tourType = isset($_POST['tourType'])
         ? '&mdash; ' . mysqli_real_escape_string($conn, $_POST['tourType'])
         : '';
@@ -125,14 +125,24 @@ if (isset($_POST['approveBtn'])) {
         $today = new DateTime();
         $expiresAt = $today->modify('+24 hours')->format('Y-m-d H:i:s');
 
-        $updateUnavailableDates = $conn->prepare("UPDATE `serviceunavailabledate` SET `expiresAt`= ? WHERE `bookingID`= ?");
-        $updateUnavailableDates->bind_param('si', $expiresAt,  $bookingID);
-        if (!$updateUnavailableDates->execute()) {
+        $searchBookingID = $conn->prepare("SELECT bookingID FROM serviceunavailabledate WHERE bookingID = ?");
+        $searchBookingID->bind_param('i', $bookingID);
+        if (!$searchBookingID->execute()) {
             $conn->rollback();
-            throw new Exception("Failed to update unavailable date for booking ID: $bookingID");
+            throw new Exception("Failed executing (searchBookingID) booking ID: $bookingID");
         }
-        $updateUnavailableDates->close();
 
+        $searchID = $searchBookingID->get_result();
+        $hold = 'hold';
+        if ($searchID->num_rows > 0) {
+            $updateUnavailableDates = $conn->prepare("UPDATE `serviceunavailabledate` SET `expiresAt`= ? WHERE `bookingID`= ? AND `status` = ?");
+            $updateUnavailableDates->bind_param('sis', $expiresAt,  $bookingID, $hold);
+            if (!$updateUnavailableDates->execute()) {
+                $conn->rollback();
+                throw new Exception("Failed to update unavailable date for booking ID: $bookingID");
+            }
+            $updateUnavailableDates->close();
+        }
 
         //Update customer package
         if (!empty($customPackageID)) {

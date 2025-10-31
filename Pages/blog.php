@@ -242,7 +242,6 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                                         <h5 class="modal-title" id="modalLabel<?= htmlspecialchars($postID) ?>">
                                             <?= htmlspecialchars($post['EventHeader'] ?? 'Blog Post') ?>
                                         </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
 
                                     <div class="modal-body">
@@ -263,8 +262,8 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary bookNowBtn">Book Now</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary bookNowBtn w-25">Book Now</button>
+                                        <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>

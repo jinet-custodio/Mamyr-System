@@ -50,6 +50,30 @@ switch ($userRole) {
         header("Location: ../register.php");
         exit();
 }
+
+$getUserData = $conn->prepare("SELECT firstName, lastName, userProfile FROM user WHERE userID = ?");
+$getUserData->bind_param('i', $userID);
+if (!$getUserData->execute()) {
+    error_log('Failed getting user data: userID' . $userID);
+}
+
+$result = $getUserData->get_result();
+if ($result->num_rows > 0) {
+    $data = $result->fetch_assoc();
+    $adminName = ($data['firstName'] ?? '') . ' ' . ($data['lastName'] ?? '');
+    $profile = $data['userProfile'];
+    if (!empty($profile)) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_buffer($finfo, $profile);
+        finfo_close($finfo);
+        $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+    }
+} else {
+    $_SESSION['error'] = "Unauthorized Access eh!";
+    session_destroy();
+    header("Location: ../register.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -138,9 +162,9 @@ switch ($userRole) {
 
         <section>
             <a href="../Account/account.php" class="profileContainer" id="pfpContainer">
-                <img src=" ../../Assets/Images/defaultProfile.png" alt="Admin Profile"
+                <img src="<?= $image ?>" alt="Admin Profile"
                     class="rounded-circle profilePic">
-                <h5 class="admin-name" id="adminName">Diane Dela Cruz</h5>
+                <h5 class="admin-name" id="adminName"><?= htmlspecialchars($adminName) ?></h5>
             </a>
         </section>
 
@@ -171,8 +195,6 @@ switch ($userRole) {
                     data-bs-target="#notificationModal">
                     <i class="bi bi-bell" id="notification-icon"></i>
                     <?php if (!empty($counter)): ?>
-                        <?= htmlspecialchars($counter) ?>
-                        </span>
                         <?= htmlspecialchars($counter) ?>
                         </span>
                     <?php endif; ?>
@@ -720,36 +742,36 @@ switch ($userRole) {
     <script>
         const colors = {
             unpaid: {
-                bg: "rgba(219, 53, 69, .6)",
-                border: "rgb(219, 53, 69)"
+                bg: "rgba(219, 53, 69, .4)",
+                border: "rgba(219, 53, 69, .7)"
             },
             event: {
-                bg: "rgb(79, 76, 207, .6)",
-                border: "rgb(79, 76, 207)"
+                bg: "rgba(79, 76, 207, .4)",
+                border: "rgba(79, 76, 207, .7)"
             },
             "partially paid": {
-                bg: "rgba(255, 193, 8, .6)",
-                border: "rgb(255, 193, 8)"
+                bg: "rgba(255, 193, 8, .4)",
+                border: "rgba(255, 193, 8, .7)"
             },
             hotel: {
-                bg: "rgb(211, 120, 250, .6)",
-                border: "rgb(211, 120, 250)"
+                bg: "rgba(211, 120, 250, .4)",
+                border: "rgba(211, 120, 250, .7)"
             },
             "fully paid": {
-                bg: "rgba(26, 135, 84,.6)",
-                border: "rgb(26, 135, 84)"
+                bg: "rgba(26, 135, 84,.4)",
+                border: "rgba(26, 135, 84, .7)"
             },
             resort: {
-                bg: "rgb(65, 138, 240, .6)",
-                border: "rgb(65, 138, 240)"
+                bg: "rgba(65, 138, 240, .4)",
+                border: "rgba(65, 138, 240, .7)"
             },
             "payment sent": {
-                bg: "rgba(13, 109, 252, .6)",
-                border: "rgb(13, 109, 252)"
+                bg: "rgba(13, 109, 252, .4)",
+                border: "rgba(13, 109, 252, .7)"
             },
             default: {
-                bg: "rgba(255, 205, 86, 0.7)",
-                border: "rgb(255, 205, 86)"
+                bg: "rgba(255, 205, 86, 0.4)",
+                border: "rgba(255, 205, 86, .7)"
             }
         };
 

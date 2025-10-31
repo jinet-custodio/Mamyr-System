@@ -185,8 +185,9 @@ main {
   text-align: center;
 }
 
-button.btn-primary {
-  font-size: 1.3vw;
+button.btn-primary,
+button.btn-secondary {
+  font-size: 14px !important;
 }
 /* end of code for body */
 
@@ -207,9 +208,10 @@ input.headerEdit {
   width: 30vw;
 }
 
-.btn-close {
+/* .btn-close {
   margin-left: -1vw;
-}
+  font-size: 14px !important;
+} */
 
 .bookNowBtn {
   width: 15vw;

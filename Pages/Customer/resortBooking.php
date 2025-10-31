@@ -484,7 +484,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control w-100 mt-2"
                             placeholder="+63 9XX XXX XXXX" pattern="^(?:\+63|0)9\d{9}$"
                             title="e.g., +639123456789 or 09123456789" required>
-
+                        <input type="hidden" name="page" value="resortBooking.php">
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" name="submitPhoneNumber">Submit</button>
@@ -811,7 +811,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         const param = new URLSearchParams(window.location.search);
         const paramValue = param.get('action');
-
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
         switch (paramValue) {
             case 'errorBooking':
                 Swal.fire({
@@ -830,6 +840,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     const phoneNumberModal = document.getElementById('phoneNumberModal');
                     const modal = new bootstrap.Modal(phoneNumberModal);
                     modal.show();
+                });
+                break;
+            case 'phoneAdded':
+                Toast.fire({
+                    text: "Your phone number has been submitted successfully. You may now proceed with booking.",
+                    icon: "success"
                 });
                 break;
             default:

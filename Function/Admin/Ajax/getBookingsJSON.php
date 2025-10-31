@@ -26,8 +26,16 @@ try {
     while ($bookings = $result->fetch_assoc()) {
         $middleInitial = trim($bookings['middleInitial'] ?? '');
         $name = ucfirst($bookings['firstName']) . " " . ucfirst($middleInitial) . " " . ucfirst($bookings['lastName']);
-        $checkIn = date("F d, Y", strtotime($bookings['startDate']));
-        $checkOut = date("F d, Y", strtotime($bookings['endDate']));
+        $checkIn = date("M. d, Y", strtotime($bookings['startDate']));
+        $checkOut = date("M. d, Y", strtotime($bookings['endDate']));
+
+        if (date("md", strtotime($bookings['startDate'])) == date("md", strtotime($bookings['endDate']))) {
+            $bookingDate = $checkIn = date("F d, Y", strtotime($bookings['startDate']));;
+        } else {
+            $bookingDate = $checkIn . " - " . $checkOut;
+        }
+
+
         $paymentApprovalStatus = getStatuses($conn, $bookings['paymentApprovalStatus'] ?? null);
         $bookingStatus = getStatuses($conn, $bookings['bookingStatus'] ?? null);
         // $paymentStatus = getPaymentStatus($conn, $bookings['paymentStatus']) ?? null;
@@ -107,8 +115,9 @@ try {
             'formattedBookingID' => $bookings['formattedBookingID'],
             'name' => $name,
             'bookingType' => $bookings['bookingType'],
-            'checkIn' => $checkIn,
-            'checkOut' => $checkOut,
+            // 'checkIn' => $checkIn,
+            // 'checkOut' => $checkOut,
+            'bookingDate' => $bookingDate,
             'status' => $status,
             'statusClass' => $class,
             'bookingStatus' => $bookings['bookingStatus'],

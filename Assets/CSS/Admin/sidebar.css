@@ -290,10 +290,11 @@ main {
 
 .profilePic {
   width: 37px;
-  height: auto;
+  height: 37px;
 }
 
 .admin-name {
+  margin-top: var(--margin-xs);
   font-size: var(--font-size-base);
 }
 

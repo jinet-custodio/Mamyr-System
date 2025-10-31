@@ -408,14 +408,14 @@
     font-family: "Alkatra";
     font-size: var(--font-size-md);
     text-transform: uppercase;
-    margin-top: 8rem;
+    margin-top: var(--font-size-md);
   }
 
   .headerText {
     font-family: "Poppins Light";
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-xl);
-    margin-top: 1rem;
+    /* margin-top: 1rem; */
   }
 
   .subtext {
