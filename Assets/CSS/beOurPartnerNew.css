@@ -34,7 +34,7 @@
 }
 
 .topText {
-  font-family: "Poppins Light";
+  font-family: "Poppins";
   font-size: 1vw;
   text-transform: uppercase;
   margin-top: 5vw;
@@ -44,7 +44,7 @@
   font-family: "Poppins";
   font-weight: bold;
   font-size: 2vw;
-  margin-top: 2vw;
+  /* margin-top: 2vw; */
 }
 
 .subtext {

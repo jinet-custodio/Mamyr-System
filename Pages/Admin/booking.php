@@ -94,55 +94,49 @@ switch ($userRole) {
 
 
     <!-- Get notification -->
-    <!-- <div class="menus">
 
-            <?php
+    <?php
 
-            $receiver = 'Admin';
-            $notifications = getNotification($conn, $userID, $receiver);
-            $counter = $notifications['count'];
-            $notificationsArray = $notifications['messages'];
-            $color = $notifications['colors'];
-            $notificationIDs = $notifications['ids'];
-            ?>
+    $receiver = 'Admin';
+    $notifications = getNotification($conn, $userID, $receiver);
+    $counter = $notifications['count'];
+    $notificationsArray = $notifications['messages'];
+    $color = $notifications['colors'];
+    $notificationIDs = $notifications['ids'];
+    ?>
 
-            <?php
-            if ($userRole == 3) {
-                $admin = "Admin";
-            } else {
-                $_SESSION['error'] = "Unauthorized Access!";
-                session_destroy();
-                header("Location: ../register.php");
-                exit();
-            }
+    <?php
+    if ($userRole == 3) {
+        $admin = "Admin";
+    } else {
+        $_SESSION['error'] = "Unauthorized Access!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
 
-            if ($admin === "Admin") {
-                $getProfile = $conn->prepare("SELECT firstName,userProfile FROM user WHERE userID = ? AND userRole = ?");
-                $getProfile->bind_param("ii", $userID, $userRole);
-                $getProfile->execute();
-                $getProfileResult = $getProfile->get_result();
-                if ($getProfileResult->num_rows > 0) {
-                    $data = $getProfileResult->fetch_assoc();
-                    $firstName = $data['firstName'];
-                    $imageData = $data['userProfile'];
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $imageData);
-                    finfo_close($finfo);
-                    $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-                }
-            } else {
-                $_SESSION['error'] = "Unauthorized Access!";
-                session_destroy();
-                header("Location: ../register.php");
-                exit();
-            }
-            ?>
-            <h5 class="adminTitle"><?= ucfirst($firstName) ?></h5>
-            <a href="../Account/account.php" class="admin">
-                <img src="<?= htmlspecialchars($image) ?>" alt="home icon">
-            </a>
-        </div>
-    </div> -->
+    if ($admin === "Admin") {
+        $getProfile = $conn->prepare("SELECT firstName,lastName, userProfile FROM user WHERE userID = ? AND userRole = ?");
+        $getProfile->bind_param("ii", $userID, $userRole);
+        $getProfile->execute();
+        $getProfileResult = $getProfile->get_result();
+        if ($getProfileResult->num_rows > 0) {
+            $data = $getProfileResult->fetch_assoc();
+            $adminName = ($data['firstName'] ?? '') . ' ' . ($data['lastName'] ?? '');
+
+            $imageData = $data['userProfile'];
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_buffer($finfo, $imageData);
+            finfo_close($finfo);
+            $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+        }
+    } else {
+        $_SESSION['error'] = "Unauthorized Access!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+    ?>
 
 
     <!-- Notification Modal -->
@@ -209,13 +203,11 @@ switch ($userRole) {
             </li>
         </ul>
 
-
-
         <section>
             <a href="../Account/account.php" class="profileContainer" id="pfpContainer">
-                <img src=" ../../Assets/Images/defaultProfile.png" alt="Admin Profile"
+                <img src="<?= $image ?>" alt="Admin Profile"
                     class="rounded-circle profilePic">
-                <h5 class="admin-name" id="adminName">Diane Dela Cruz</h5>
+                <h5 class="admin-name" id="adminName"><?= htmlspecialchars($adminName) ?></h5>
             </a>
         </section>
 
@@ -259,10 +251,10 @@ switch ($userRole) {
                             <th scope="col">Booking ID</th>
                             <th scope="col">Guest</th>
                             <th scope="col">Booking Type</th>
-                            <th scope="col">Check-in</th>
-                            <th scope="col">Check-out</th>
+                            <th scope="col">Reservation Date</th>
+                            <th scope="col">Booking Creation</th>
+                            <!-- <th scope="col">Check-out</th> -->
                             <th scope="col">Status</th>
-                            <th scope="col">Booking Created</th>
                             <th scope="col">Action</th>
                         </thead>
                         <tbody id='booking-display-body'></tbody>
@@ -353,10 +345,10 @@ switch ($userRole) {
                             booking.formattedBookingID,
                             booking.name,
                             booking.bookingType + ` Booking`,
-                            booking.checkIn,
-                            booking.checkOut,
-                            getStatusBadge(booking.statusClass, booking.status),
+                            booking.bookingDate,
                             booking.createdOn,
+                            // booking.checkOut,
+                            getStatusBadge(booking.statusClass, booking.status),
                             `<form action="viewBooking.php" method="POST">
                                     <input type="hidden" name="button" value="booking">
                                     <input type="hidden" name="bookingType" value="${booking.bookingType}">

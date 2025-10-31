@@ -88,11 +88,15 @@ if (isset($_POST['hotelBooking'])) {
     $arrivalTime = $arrivalTimeObj->format('H:i:s');
 
     if (empty($selectedHotels)) {
+        $_SESSION['hotelFormData'] = $_POST;
         header("Location: ../../Pages/Customer/hotelBooking.php");
+        exit();
     }
 
     if (empty($phoneNumber)) {
+        $_SESSION['hotelFormData'] = $_POST;
         header("Location: ../../Pages/Customer/hotelBooking.php?action=phoneNumber");
+        exit();
     }
 
     $selectedHotelQuery = $conn->prepare("SELECT * FROM service s
@@ -133,29 +137,6 @@ if (isset($_POST['hotelBooking'])) {
     }
 
 
-
-
-    $getSameServiceName = $conn->prepare("SELECT s.serviceID, rs.resortServiceID FROM service s
-            INNER JOIN resortamenity rs ON s.resortServiceID = rs.resortServiceID 
-            WHERE rs.RServiceName = ? AND rs.RSduration = '11 hours'");
-    foreach ($selectedHotels as $selectedRoom) {
-        $selectedRoom = trim($selectedRoom);
-        $getSameServiceName->bind_param('s', $selectedRoom);
-        $getSameServiceName->execute();
-        $getSameServiceResult = $getSameServiceName->get_result();
-
-        if ($getSameServiceResult->num_rows > 0) {
-            while ($data = $getSameServiceResult->fetch_assoc()) {
-                $resortServiceIDs[] = $data['resortServiceID'];
-            }
-        } else {
-            echo "Service not found for: " . htmlspecialchars($selectedRoom);
-            exit();
-        }
-    }
-
-
-
     $hoursNum = str_replace(" hours", "", $hoursSelected);
 
     $bookingCode = 'HTL' . date('ymd') . generateCode(5);
@@ -166,10 +147,10 @@ if (isset($_POST['hotelBooking'])) {
         $approvedStatus = 2;
         //Insert Booking
         $insertBooking = $conn->prepare("INSERT INTO booking(userID, toddlerCount, adultCount, kidCount, guestCount, durationCount, startDate, endDate, 
-                    paymentMethod,  totalCost, downpayment, bookingStatus, bookingType, arrivalTime, bookingCode, approvedBy, bookingStatus) 
-                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                    paymentMethod,  totalCost, downpayment, bookingStatus, bookingType, arrivalTime, bookingCode, approvedBy) 
+                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $insertBooking->bind_param(
-            "iiiiiisssddisss",
+            "iiiiiisssddissss",
             $userID,
             $toddlerCount,
             $adultCount,
@@ -182,13 +163,11 @@ if (isset($_POST['hotelBooking'])) {
             // $additionalCharge,
             $totalCost,
             $downpayment,
-            $bookingStatus,
+            $approvedStatus,
             $bookingType,
             $arrivalTime,
             $bookingCode,
             $approvedBy,
-            $approvedStatus
-
         );
         if (!$insertBooking->execute()) {
             $conn->rollback();

@@ -55,7 +55,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
-
+// echo '<pre>';
+// print_r($_SESSION['hotelFormData']);
+// echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -165,7 +167,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <div class="input-group">
                                 <input type="time" name="arrivalTime" id="arrivalTime" class="form-control"
                                     placeholder="Select Arrival Time"
-                                    value="<?php echo isset($_SESSION['hotelFormData']['arrivalTime']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['arrivalTime'])) : ''; ?>">
+                                    value="<?php echo isset($_SESSION['hotelFormData']['arrivalTime']) ? date('H:i', strtotime($_SESSION['hotelFormData']['arrivalTime'])) : ''; ?>">
                             </div>
                         </div>
                         <!-- <div class="days-count">
@@ -335,7 +337,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control w-100 mt-2"
                             placeholder="+63 9XX XXX XXXX" pattern="^(?:\+63|0)9\d{9}$"
                             title="e.g., +639123456789 or 09123456789" required>
-
+                        <input type="hidden" name="page" value="hotelBooking.php">
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" name="submitPhoneNumber">Submit</button>
@@ -590,6 +592,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
         })
 
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             const param = new URLSearchParams(window.location.search);
             const paramValue = param.get('action');
@@ -613,6 +627,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         const modal = new bootstrap.Modal(phoneNumberModal);
                         modal.show();
                     });
+                    break;
+                case 'phoneAdded':
+                    Toast.fire({
+                        text: "Your phone number has been submitted successfully. You may now proceed with booking.",
+                        icon: "success"
+                    })
                     break;
                 default:
                     const cleanUrl = window.location.origin + window.location.pathname;

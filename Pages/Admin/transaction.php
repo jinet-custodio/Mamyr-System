@@ -48,6 +48,29 @@ switch ($userRole) {
         exit();
 }
 
+$getUserData = $conn->prepare("SELECT firstName, lastName, userProfile FROM user WHERE userID = ?");
+$getUserData->bind_param('i', $userID);
+if (!$getUserData->execute()) {
+    error_log('Failed getting user data: userID' . $userID);
+}
+
+$result = $getUserData->get_result();
+if ($result->num_rows > 0) {
+    $data = $result->fetch_assoc();
+    $adminName = ($data['firstName'] ?? '') . ' ' . ($data['lastName'] ?? '');
+    $profile = $data['userProfile'];
+    if (!empty($profile)) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_buffer($finfo, $profile);
+        finfo_close($finfo);
+        $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
+    }
+} else {
+    $_SESSION['error'] = "Unauthorized Access eh!";
+    session_destroy();
+    header("Location: ../register.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -142,9 +165,9 @@ switch ($userRole) {
 
         <section>
             <a href="../Account/account.php" class="profileContainer" id="pfpContainer">
-                <img src=" ../../Assets/Images/defaultProfile.png" alt="Admin Profile"
+                <img src="<?= $image ?>" alt="Admin Profile"
                     class="rounded-circle profilePic">
-                <h5 class="admin-name" id="adminName">Diane Dela Cruz</h5>
+                <h5 class="admin-name" id="adminName"><?= htmlspecialchars($adminName) ?></h5>
             </a>
         </section>
 

@@ -386,7 +386,7 @@ switch ($userRole) {
                         $originalBill =  (float) $row['originalBill'];
                         $downpayment =  (float) $row['downpayment'];
                         $additionalCharge = !empty($confirmedBookingID) ? (float) $row['additionalCharge'] : (float) $row['charges'];
-                        error_log('Additional Charge: ' .  $row['charges']);
+
                         //Pax Details
                         $toddlerCount = (int) $row['toddlerCount'];
                         $kidCount = (int) $row['kidCount'];
@@ -466,12 +466,13 @@ switch ($userRole) {
                                 if ($serviceType === 'Resort') {
                                     $venue = $row['RServiceName'] ?? 'none';
                                     $venuePrice = $row['venuePricing'] ?? 0;
-                                    $serviceIDs[] = $row['resortServiceID'];
+                                    $serviceIDs['resort'] = $row['resortServiceID'];
                                 } elseif ($serviceType === 'Partnership') {
                                     $partnerServicePrice = isset($row['PBPrice']) ? floatval($row['PBPrice']) : null;
                                     $serviceName = $row['PBName'] ?? 'N/A';
                                     $partnerServiceID = $row['partnershipServiceID'] ?? null;
                                     $partnerID = $row['partnershipID'] ?? null;
+                                    $serviceIDs['partner'] = $row['partnershipServiceID'];
 
 
                                     if ($partnerServiceID !== null) {
@@ -496,14 +497,14 @@ switch ($userRole) {
                                 $pricePerHead = (int) $row['price'];
                             }
                         } else {
-                            if ($serviceType !== 'Event') {
+                            if ($bookingType !== 'Event') {
                                 $totalPax =  ($adultCount > 0 ? "{$adultCount}" . ($adultCount === 1 ? ' adult' : ' adults') : '') .
                                     ($kidCount > 0 ? ($adultCount > 0 ? ' & ' : '') . "{$kidCount}" . ($kidCount === 1 ? ' child' : ' childs') : '') .
                                     ($toddlerCount > 0 ? (($adultCount > 0 || $kidCount > 0) ? ' & ' : '') . "{$toddlerCount}" . ($toddlerCount === 1 ? ' toddler' : 'toddlers') : '');
                             }
                             if ($serviceType === 'Resort') {
                                 $services[] = $row['RServiceName'] . " - ₱"  . number_format($row['RSprice'], 2);
-                                $serviceIDs[] = $row['resortServiceID'];
+                                $serviceIDs['resort'] = $row['resortServiceID'];
                             }
                             if ($serviceType === 'Entrance') {
                                 $tourType = $row['tourType'];

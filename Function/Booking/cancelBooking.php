@@ -14,6 +14,25 @@ if (isset($_POST['cancelBooking'])) {
     $otherReason = !empty($_POST['other-cancellation-reason']) ? mysqli_real_escape_string($conn, $_POST['other-cancellation-reason']) : 'N/A';
     try {
 
+        $expiresAt = null;
+        $searchBookingID = $conn->prepare("SELECT bookingID FROM serviceunavailabledate WHERE bookingID = ?");
+        $searchBookingID->bind_param('i', $bookingID);
+        if (!$searchBookingID->execute()) {
+            $conn->rollback();
+            throw new Exception("Failed executing (searchBookingID) booking ID: $bookingID");
+        }
+
+        $searchID = $searchBookingID->get_result();
+        if ($searchID->num_rows > 0) {
+            $deleteService = $conn->prepare("DELETE FROM `serviceunavailabledate` WHERE `bookingID`= ?");
+            $deleteService->bind_param('i', $bookingID);
+            if (!$deleteService->execute()) {
+                $conn->rollback();
+                throw new Exception("Failed to deleting unavailable date for booking ID: $bookingID");
+            }
+            $deleteService->close();
+        }
+
         //Check if booking exist
         $checkBooking = $conn->prepare("SELECT *  FROM booking  WHERE bookingID = ? AND userID = ?");
         $checkBooking->bind_param("ii", $bookingID,  $userID);

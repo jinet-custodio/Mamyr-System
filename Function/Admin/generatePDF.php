@@ -35,6 +35,8 @@ if (isset($_POST['generatePDF'])) {
     }
 
     $reportData = $_SESSION['reportData'] ?? [];
+
+    error_log(print_r($reportData, true));
     ob_start();
 ?>
 
@@ -150,7 +152,7 @@ if (isset($_POST['generatePDF'])) {
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Booking ID</th>
+                                <th>Booking Code</th>
                                 <th>Customer Name</th>
                                 <th>Booking Type</th>
                                 <?php if ($userRole === 3) { ?>
@@ -167,7 +169,7 @@ if (isset($_POST['generatePDF'])) {
                         <tbody>
                             <?php
                             $totalBookings = 0;
-                            $totalCost = 0;
+                            $confirmedFinalBill = 0;
                             $resortTotalSales = 0;
                             $eventTotalSales = 0;
                             $hotelTotalSales = 0;
@@ -176,25 +178,25 @@ if (isset($_POST['generatePDF'])) {
                                 foreach ($reportData as $row):
                                     $totalBookings++;
 
-                                    $totalCost += $row['finalBill'];
+                                    $confirmedFinalBill += $row['confirmedFinalBill'];
                                     $bookingType = $row['bookingType'];
 
                                     switch ($bookingType) {
                                         case 'Resort':
-                                            $resortTotalSales += $row['finalBill'];
+                                            $resortTotalSales += $row['confirmedFinalBill'];
                                             break;
                                         case 'Event':
-                                            $eventTotalSales += $row['finalBill'];
+                                            $eventTotalSales += $row['confirmedFinalBill'];
                                             break;
                                         case 'Hotel':
-                                            $hotelTotalSales += $row['finalBill'];
+                                            $hotelTotalSales += $row['confirmedFinalBill'];
                                             break;
                                         default:
                                             break;
                                     }
                             ?>
                                     <tr>
-                                        <td><?= htmlspecialchars($row['formattedBookingID']) ?></td>
+                                        <td><?= htmlspecialchars($row['bookingCode']) ?></td>
                                         <td><?= ucfirst($row['firstName']) . ' ' . ucfirst($row['lastName']) ?></td>
                                         <td><?= htmlspecialchars($bookingType) ?> Booking</td>
                                         <?php if ($userRole === 3) { ?>
@@ -202,10 +204,10 @@ if (isset($_POST['generatePDF'])) {
                                         <?php } elseif ($userRole === 2) { ?>
                                             <td><?= htmlspecialchars($row['PBName']) ?></td>
                                         <?php   } ?>
-                                        <td><?= date('F d, Y', strtotime($row['startDate'])) ?></td>
-                                        <td><?= date('F d, Y', strtotime($row['endDate'])) ?></td>
+                                        <td><?= date('M. d, Y', strtotime($row['startDate'])) ?></td>
+                                        <td><?= date('M. d, Y', strtotime($row['endDate'])) ?></td>
                                         <td><?= htmlspecialchars($row['paymentMethod']) ?></td>
-                                        <td>₱<?= number_format($row['finalBill'], 2) ?></td>
+                                        <td>₱<?= number_format($row['confirmedFinalBill'], 2) ?></td>
                                     </tr>
                                 <?php
                                 endforeach;
@@ -231,7 +233,7 @@ if (isset($_POST['generatePDF'])) {
                     </p>
                     <p style="text-align: left; margin-top: 20px;"><strong>Total Event Sales:</strong> ₱<?= number_format($eventTotalSales, 2) ?>
                     </p>
-                    <p style="text-align: left;"><strong>Grand Total:</strong> ₱<?= number_format($totalCost, 2) ?></p>
+                    <p style="text-align: left;"><strong>Grand Total:</strong> ₱<?= number_format($confirmedFinalBill, 2) ?></p>
                 </section>
 
                 <section class="signatories">

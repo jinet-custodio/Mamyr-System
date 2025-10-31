@@ -119,7 +119,7 @@ switch ($userRole) {
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Booking ID</th>
+                            <th>Booking Code</th>
                             <th>Customer Name</th>
                             <th>Booking Type</th>
                             <?php if ($userRole === 3) { ?>
@@ -144,21 +144,19 @@ switch ($userRole) {
                             $reportDate = $_POST['reportDate'];
                             $reportDate = trim(preg_replace('/\s+/', ' ', $reportDate));
                             $dates = preg_split('/\s+to\s+/i', $reportDate);
-                            $approvedStatusID = 5; //Done
-                            $paymentStatusID = 3; //Fully Paid
-
-
-                            // print_r($reportDate);
-                            // print_r($selectedStartDate);
-                            // print_r($dates);
-
+                            $doneID = 6; //Done
+                            $paymentStatusID = $reservedID = 3; //Fully Paid, Reserved
+                            $approvedStatusID = $partiallyPaidID = 2; //approved, partially paid
                             if (count($dates) === 2) {
                                 $selectedStartDate = DateTime::createFromFormat('F d, Y', trim($dates[0]))->format('Y-m-d') . ' 00:00:00';
                                 $selectedEndDate = DateTime::createFromFormat('F d, Y', trim($dates[1]))->format('Y-m-d') . ' 23:59:59';
 
+                                // print_r($reportDate);
+                                // print_r($selectedStartDate);
+                                // print_r($dates);
 
                                 if ($userRole === 3) { //Admin
-                                    $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
+                                    $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, b.bookingCode,
                                             b.bookingType, u.firstName, u.lastName, b.guestCount AS guest, 
                                             b.startDate, b.endDate, b.paymentMethod, b.totalCost, 
                                             cb.paymentApprovalStatus, cb.paymentStatus, 
@@ -175,15 +173,15 @@ switch ($userRole) {
                                             LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID 
                                             LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
                                             LEFT JOIN partnershipservice ps  ON s.partnershipServiceID = ps.partnershipServiceID  
-                                            WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?
+                                            WHERE cb.paymentApprovalStatus IN (?,?) AND b.bookingStatus IN (?,?,?) AND b.startDate BETWEEN ? AND ? 
                                             GROUP BY 
                                             b.bookingID, b.bookingType, u.firstName, u.lastName, b.guestCount, 
                                             b.startDate, b.endDate, b.paymentMethod, b.totalCost, 
                                             cb.paymentApprovalStatus, cb.paymentStatus, cb.finalBill
                                             ");
-                                    $getReportData->bind_param("iss", $approvedStatusID, $selectedStartDate, $selectedEndDate);
+                                    $getReportData->bind_param("iiiiiss", $paymentStatusID, $partiallyPaidID, $reservedID,  $approvedStatusID, $doneID,  $selectedStartDate, $selectedEndDate);
                                 } elseif ($userRole === 2) { //Partner
-                                    $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, 
+                                    $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, b.bookingCode,
                                             cb.paymentApprovalStatus, cb.paymentStatus,
                                             b.bookingType, b.startDate, b.endDate, b.paymentMethod, cb.finalBill,
                                             bs.serviceID, bs.bookingServicePrice,
@@ -203,9 +201,9 @@ switch ($userRole) {
                                             LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID                     
                                             LEFT JOIN user u ON b.userID = u.userID
 
-                                            WHERE cb.paymentApprovalStatus = ? AND b.startDate BETWEEN ? AND ?  AND ps.partnershipID = ?  AND bpas.approvalStatus = ?                       
+                                            WHERE cb.paymentApprovalStatus IN (?,?) AND b.startDate BETWEEN ? AND ?  AND ps.partnershipID = ?  AND bpas.approvalStatus = ?                        
                                             ");
-                                    $getReportData->bind_param("issi", $approvedStatusID, $selectedStartDate, $selectedEndDate, $partnershipID, $approvedStatusID);
+                                    $getReportData->bind_param("iissi", $paymentStatusID, $partiallyPaidID, $selectedStartDate, $selectedEndDate, $partnershipID, $approvedStatusID);
                                 }
                                 $getReportData->execute();
                                 $getReportDataResult = $getReportData->get_result();
@@ -216,6 +214,7 @@ switch ($userRole) {
                                     $_SESSION['reportData'] = [];
                                     while ($row = $getReportDataResult->fetch_assoc()) {
                                         $_SESSION['reportData'][] = $row;
+                                        $bookingCode = $row['bookingCode'];
                                         $formattedBookingID = $row['formattedBookingID'];
                                         $bookingType = $row['bookingType'];
                                         $customerName = ucfirst($row['firstName']) . ' ' . ucfirst($row['lastName']);
@@ -229,7 +228,7 @@ switch ($userRole) {
                                         $partnerServiceName = $row['PBName'] ?? null;
                         ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($formattedBookingID) ?></td>
+                                            <td><?= htmlspecialchars($bookingCode) ?></td>
                                             <td><?= htmlspecialchars($customerName) ?></td>
                                             <td><?= htmlspecialchars($bookingType) ?></td>
                                             <?php if ($userRole === 3) { ?>

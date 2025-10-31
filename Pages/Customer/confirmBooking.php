@@ -528,8 +528,8 @@ unset($_SESSION['formData']);
         if ($numHours <= 24 && $numHours <= 22) {
             $fullBlocks = floor($numHours / 22);
         } else {
-            $remainingHours = $numHours % 24;
-            $fullBlocks = floor(($numHours - ($numHours % 24)) / 24);
+            $remainingHours = fmod($numHours, 24);
+            $fullBlocks = floor(($numHours - $remainingHours) / 24);
             if ($remainingHours == 22) {
                 $remainingHours = 0;
                 $fullBlocks += 1;
@@ -810,9 +810,11 @@ unset($_SESSION['formData']);
         </div>
 
         <div style="display: none;">
-            <input type="hidden" name="resortBookingDate" value="<?= $scheduledDate ?>">
+            <input type="hidden" name="resortBookingDate" value="<?= $scheduledDate ?? '' ?>">
             <input type="hidden" name="scheduledStartDate" value="<?= htmlspecialchars($scheduledStartDate ?? '') ?>">
             <input type="hidden" name="scheduledEndDate" value="<?= htmlspecialchars($scheduledEndDate ?? '') ?>">
+            <input type="hidden" name="checkInDate" value="<?= htmlspecialchars($scheduledStartDate ?? '') ?>">
+            <input type="hidden" name="checkOutDate" value="<?= htmlspecialchars($scheduledEndDate ?? '') ?>">
             <?php foreach ($cottageChoices as $choice): ?>
                 <input type="hidden" name="cottageOptions[]" value="<?= htmlspecialchars($choice) ?>">
             <?php endforeach; ?>

@@ -16,7 +16,7 @@ function filteredSales(selectedFilterValue) {
           salesChart.destroy();
         }
         salesChart = new Chart(ctx, {
-          type: "bar",
+          type: "line",
           data: {
             labels: [],
             datasets: [],
@@ -55,7 +55,7 @@ function filteredSales(selectedFilterValue) {
       let labels = [];
       let dataset = [];
       // let title = "";
-
+      let chartType = selectedFilterValue === "month" ? "bar" : "line";
       if (selectedFilterValue === "month") {
         const dayLabels = [...new Set(sales.map((item) => item.weekOfMonth))];
         labels = dayLabels;
@@ -112,7 +112,7 @@ function filteredSales(selectedFilterValue) {
       }
 
       salesChart = new Chart(ctx, {
-        type: "bar",
+        type: chartType,
         data: {
           labels: labels,
           datasets: dataset,
@@ -161,7 +161,7 @@ function filteredSales(selectedFilterValue) {
       }
       const ctx = document.getElementById("salesBar").getContext("2d");
       salesChart = new Chart(ctx, {
-        type: "bar",
+        type: "line",
         data: {
           labels: [],
           datasets: [],
