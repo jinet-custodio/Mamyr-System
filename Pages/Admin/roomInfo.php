@@ -95,11 +95,14 @@ switch ($userRole) {
     <!-- Bootstrap Link -->
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
     <div class="title">
-        <a href="roomList.php"><img src="../../Assets/Images/Icon/undo2.png" alt="Back Button"></a>
+        <a href="roomList.php"> <i class="fa-solid fa-arrow-left" style="color: #000000;"></i></a>
         <div class="adminTitle">
             Room Information
         </div>

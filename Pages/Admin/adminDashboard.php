@@ -6,6 +6,8 @@ require '../../Config/dbcon.php';
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 require_once '../../Function/Helpers/statusFunctions.php';
 require_once '../../Function/Helpers/userFunctions.php';

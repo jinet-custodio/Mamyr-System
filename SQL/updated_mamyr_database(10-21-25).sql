@@ -105,6 +105,7 @@ CREATE TABLE `booking` (
   `addOns` varchar(255) NOT NULL DEFAULT 'N/A',
   `customerChoice` enum('Proceed','Cancel') DEFAULT NULL,
   `totalCost` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `additionalCharge` DECIMAL(10,2) NOT NULL DEFAULT '0.00',
   `downpayment` decimal(10,2) NOT NULL DEFAULT 0.00,
   `bookingStatus` int(11) DEFAULT 1,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),

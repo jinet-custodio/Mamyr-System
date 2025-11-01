@@ -9,6 +9,8 @@ date_default_timezone_set('Asia/Manila');
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];

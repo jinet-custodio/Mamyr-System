@@ -37,7 +37,6 @@ body {
 }
 
 .booking-container {
-  width: 95% !important;
   max-width: 100%;
 }
 
@@ -89,16 +88,14 @@ body {
   margin-bottom: 2rem;
   width: 100% !important;
   max-width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(1, 1fr);
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .category-card {
-  width: 15rem !important;
-  height: 20rem !important;
-  /* padding: 0.5vw 0.5vw 4vw 0.5vw; */
   box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
 }
 
@@ -129,7 +126,7 @@ body {
 .category-title {
   font-family: "Poppins";
   font-weight: bold !important;
-  margin-top: var(--margin-md);
+  margin: var(--margin-md) auto;
   font-size: var(--font-size-lg);
 }
 
