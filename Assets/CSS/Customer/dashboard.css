@@ -39,12 +39,13 @@ body {
   margin-top: 5rem !important;
   border-radius: 20px;
   margin: 0 auto;
-  background-image: linear-gradient(
+  background-color: oklch(0.64 0.65 220 / 0.1) !important;
+  /* background-image: linear-gradient(
       to left,
       rgba(255, 255, 255, 0) 0%,
       #6592ccdc 73%
     ),
-    url(/Assets/Images/amenities/poolPics/poolPic2\ -\ Copy.jpg);
+    url(/Assets/Images/amenities/poolPics/poolPic2\ -\ Copy.jpg); */
   background-position: center;
   background-size: cover;
   /* background-color: oklch(0.64 0.65 220 / 0.5); */
@@ -65,7 +66,7 @@ body {
 }
 
 .welcome {
-  color: #ffff;
+  color: #2a394c;
   font-family: "Alkatra";
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-xxl);
@@ -73,26 +74,138 @@ body {
 
 .subtext {
   font-family: "Poppins Light";
-  color: #ffff;
+  color: #2a394c;
   text-align: justify;
   width: 80%;
   font-size: var(--font-size-md);
-  margin-top: 1.5vw;
+  margin-top: 0.5rem;
 }
 
 .topBtn-container {
+  position: relative !important;
+  min-height: 10rem !important;
   display: flex;
-  gap: 1rem;
+  /* flex-direction: column; */
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 4rem;
 }
 
-.topBtn-container a {
-  width: 25%;
-  margin-top: var(--margin-xl);
-  color: #0d6dfc !important;
+.resort-booking-btn-base {
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+  font-size: 20px !important;
+  font-weight: bold;
+  font-family: "Poppins" !important;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+  border: none;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  position: relative;
+  overflow: hidden;
+  width: 98%;
+  height: 6rem;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center;
+  box-sizing: border-box;
+  transform: scale(1);
+  text-decoration: none;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
 }
+
+.resort-booking-btn-base:hover {
+  color: #ffffff !important;
+  font-weight: bold;
+  height: 10rem;
+  transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+}
+
+.button-pool {
+  background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #427bc5dc 90%),
+    url("../../Images/amenities/poolPics/poolPic5.jpg");
+}
+.button-pool:hover {
+  background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #427bc5dc 90%),
+    url("../../Images/amenities/poolPics/poolPic5.jpg");
+}
+
+.button-hotel {
+  background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #427bc5dc 90%),
+    url("../../Images/amenities/hotelPics/hotel1.jpg");
+}
+.button-hotel:hover {
+  background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #427bc5dc 90%),
+    url("../../Images/amenities/hotelPics/hotel1.jpg");
+}
+
+.button-event {
+  background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #427bc5dc 90%),
+    url("../../Images/amenities/pavilionPics/pav1.jpg");
+}
+.button-event:hover {
+  background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #427bc5dc 90%),
+    url("../../Images/amenities/pavilionPics/pav1.jpg");
+}
+
+/* .resort-booking-btn-gradient {
+  background: linear-gradient(
+      to right,
+      rgba(0, 123, 255, 0.7),
+      rgba(0, 123, 255, 0)
+    ),
+    url("../../Images/amenities/poolPics/poolPic5.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #ffffff !important;
+  border-radius: 8px;
+  font-size: 20px !important;
+  font-weight: bold;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+  border: none;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  width: 75%;
+  height: 5rem;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center;
+  box-sizing: border-box;
+  transform: scale(1);
+}
+
+.resort-booking-btn-gradient:hover {
+  background: linear-gradient(
+      to right,
+      rgba(0, 123, 255, 0.8),
+      rgba(0, 123, 255, 0.1)
+    ),
+    url("../../Images/amenities/poolPics/poolPic5.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #ffffff !important;
+  border-radius: 8px;
+  font-size: 20px !important;
+  font-weight: bold;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+  border: none;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+} */
 
 .legends {
-  background-color: oklch(0.64 0.65 220 / 0.1);
+  background-color: #f5f5f5;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -1435,9 +1548,11 @@ a {
   }
 
   .middle-container {
+    border: 1px solid red;
     flex-direction: column;
     padding: var(--padding-md);
     gap: 2rem;
+    width: 100%;
   }
 
   .videoText-container,
@@ -1559,9 +1674,13 @@ a {
     font-weight: var(--font-weight-bold);
   }
 
+  .star {
+    width: 20%;
+  }
+
   .overall-rating-stars i {
     color: #fdcc0d;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-md) !important;
   }
 
   .locationText-container {
@@ -1601,6 +1720,17 @@ a {
   .leaflet-marker-pane img {
     width: 80px !important;
     height: 20px !important;
+  }
+
+  .topBtn-container {
+    position: relative !important;
+    min-height: 10rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 4rem;
   }
 }
 
