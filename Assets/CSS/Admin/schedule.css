@@ -97,7 +97,7 @@ body {
 .fc-daygrid-block-event .fc-event-time,
 .fc-daygrid-block-event .fc-event-title,
 .fc .fc-daygrid-event-harness {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-md);
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {

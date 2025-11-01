@@ -7,6 +7,8 @@ date_default_timezone_set('Asia/Manila');
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 require '../../Function/Helpers/statusFunctions.php';
 
@@ -603,14 +605,14 @@ switch ($userRole) {
                                             <label for="newFoodPrice" class="form-label">Enter Updated Food Price
                                                 (₱)</label>
                                             <input type="text" class="form-control" id="newFoodPrice" name="newFoodPrice"
-                                                placeholder="10000">
+                                                placeholder="e.g 10000">
                                         </div>
                                     <?php } else { ?>
                                         <div class="mb-3">
                                             <label for="newBaseAmount" class="form-label">Enter Updated Total Amount
                                                 (₱)</label>
                                             <input type="text" class="form-control" id="newBaseAmount" name="newFinalBill"
-                                                placeholder="10000">
+                                                placeholder="e.g 10000">
                                         </div>
                                     <?php  } ?>
                                 </div>

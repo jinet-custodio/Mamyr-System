@@ -8,6 +8,8 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
 require '../../Function/Helpers/statusFunctions.php';
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 $userID = $_SESSION['userID'] ?? '';
 $userRole = $_SESSION['userRole'] ?? '';

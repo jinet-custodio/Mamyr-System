@@ -6,6 +6,8 @@ require '../../Config/dbcon.php';
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 require_once '../../Function/Helpers/statusFunctions.php';
 require_once '../../Function/Helpers/userFunctions.php';
@@ -260,7 +262,7 @@ if ($result->num_rows > 0) {
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 displayEventTime: false,
-                height: 'auto', // make it responsive
+                height: 'auto',
                 contentHeight: 'auto',
                 aspectRatio: 1.35,
                 events: '../../Function/Admin/fetchBookings.php',

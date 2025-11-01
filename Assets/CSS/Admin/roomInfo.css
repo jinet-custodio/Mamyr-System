@@ -131,6 +131,9 @@
   text-decoration: none;
   list-style: none;
 }
+a {
+  text-decoration: none !important;
+}
 
 body {
   background: #a1c8c7 !important;
@@ -176,28 +179,24 @@ body {
 
 .title {
   display: flex;
-  width: 50%;
+  width: 100%;
   align-items: center;
-  margin-left: 3vw;
-  /* border: 1px solid black; */
   margin-top: 2vw;
 }
 .title a {
   display: flex;
   align-items: center;
-  /* border: 1px solid black; */
+  margin-left: 3vw;
 }
 
-.title img {
-  width: 5vw;
-  height: 5vw;
-  aspect-ratio: 1 !important;
-  margin-right: 3vw;
+.title a i {
+  font-size: var(--font-size-xl);
 }
 
 .adminTitle {
   font-family: "Lora" !important;
-  font-size: 3vw;
+  font-size: var(--font-size-xxl);
+  margin: 0 auto;
 }
 
 .bookInfobox {
@@ -235,18 +234,20 @@ form {
   /* border: 1px solid black; */
 }
 
-.info label {
-  font-family: "Poppins";
-  font-size: clamp(1.5vw, calc(1.2vw + 2px), 1vw);
-}
-.info input {
+.info label,
+.end label {
   font-family: "Poppins";
   font-size: clamp(1.2vw, calc(1vw + 2px), 0.8vw);
+}
+.info input,
+.end input {
+  font-family: "Poppins";
+  font-size: clamp(1vw, calc(0.5vw + 2px), 0.8vw);
 }
 
 .info input,
 .end input {
-  padding: 1vw;
+  padding: var(--padding-sm);
 }
 
 input,
@@ -260,11 +261,6 @@ textarea {
   display: flex;
   flex-direction: column;
   /* border: 1px solid black; */
-}
-.end label,
-.end input {
-  font-family: "Poppins";
-  font-size: clamp(1.5vw, calc(1.2vw + 2px), 1vw);
 }
 
 .room-image img {

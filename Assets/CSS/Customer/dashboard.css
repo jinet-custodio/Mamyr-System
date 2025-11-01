@@ -52,12 +52,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: 1rem;
   gap: 1rem;
 }
 
 .topLeft {
-  width: 70%;
+  width: 50%;
 }
 
 .mamyrTitle {
@@ -204,6 +204,11 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 } */
 
+.topRight {
+  height: 100%;
+  width: 39%;
+}
+
 .legends {
   background-color: #f5f5f5;
   width: 100%;
@@ -223,25 +228,31 @@ body {
 }
 
 .calendar-card {
-  width: 30rem;
   grid-column: span 4 / span 4;
   grid-row-start: 4;
-  height: 80vh !important;
-  /* padding: var(--padding-sm); */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.calendar-card-body {
-  width: 100%;
+.fc-bg-event {
+  opacity: 1 !important;
+}
+
+.fc-daygrid-block-event .fc-event-time,
+.fc-daygrid-block-event .fc-event-title {
+  color: transparent !important;
+}
+
+.fc-daygrid-day:hover {
+  filter: brightness(1.1);
+  cursor: pointer;
 }
 
 #calendar {
-  width: 100% !important;
-  height: 100% !important;
   margin-top: var(--margin-md);
   padding: 0 var(--padding-sm);
+  overflow: scroll;
 }
 
 /* Adjusting the Toolbar (Month/Year) title */
@@ -263,8 +274,9 @@ body {
 }
 
 .fc-today-button.fc-button.fc-button-primary {
-  background-color: #0d6dfc;
+  background-color: #b2e0b2;
   width: 100%;
+  color: var(--bg-dark);
 }
 
 .fc-toolbar .fc-button {
@@ -418,19 +430,15 @@ a {
 
 .swiper-slide img {
   width: 100%;
-  height: auto;
-  max-height: 350px;
+  height: 100%;
+  /* max-height: 350px; */
   object-fit: cover;
   border-radius: 10px;
 }
 
-.swiper-slide {
-  height: auto;
-}
-
 .swiper-slide img {
-  max-height: 400px !important; /* or whatever looks good */
-  object-fit: contain; /* change from cover if you don’t want zoom/crop */
+  max-height: 400px !important;
+  object-fit: contain;
 }
 
 .rating-container {
@@ -552,7 +560,6 @@ a {
   padding: var(--padding-xl);
   border-radius: 20px;
   width: 98%;
-  height: 30rem !important;
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -574,11 +581,10 @@ a {
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
   .topSec {
     flex-direction: column;
-    /* height: 90vh; */
   }
 
   .topLeft {
-    width: 100%;
+    width: 80%;
     text-align: center;
     margin-top: var(--margin-md);
   }
@@ -588,6 +594,11 @@ a {
     font-size: var(--font-size-md);
     text-transform: uppercase;
     margin-top: 8rem;
+  }
+
+  .swiper {
+    width: 100%;
+    max-width: 800px;
   }
 
   .headerText {
@@ -611,22 +622,8 @@ a {
   }
 
   .topRight {
-    width: 100%;
+    width: 70%;
     margin-top: var(--margin-md);
-  }
-
-  .carousel-container {
-    position: relative;
-    width: 50vw;
-    height: 48vw;
-    margin: 60px auto;
-    perspective: 1000px;
-  }
-
-  .card-stack {
-    position: relative;
-    width: 100%;
-    height: 100%;
   }
 
   .card-img {
@@ -661,36 +658,6 @@ a {
     opacity: 0.8;
     z-index: 1;
     transform: translateX(-20%) rotate(6deg) scale(0.85);
-  }
-
-  /* Buttons */
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    font-size: 3rem;
-    padding: 1px 14px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    z-index: 5;
-  }
-
-  .carousel-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-
-  .carousel-btn.prev {
-    left: -40px; /* moves button outside image stack */
-    height: 5rem;
-  }
-
-  .carousel-btn.next {
-    right: -40px;
-    height: 5rem;
   }
 
   .middle-container {
@@ -829,30 +796,14 @@ a {
   }
 
   .locationText-container {
-    width: 100%;
+    width: 70%;
     text-align: center;
   }
 
   .location-container {
     flex-direction: column;
-    height: 80vh !important;
     padding-top: var(--padding-md) !important;
     gap: 2rem;
-  }
-
-  #map {
-    height: 400px;
-    width: 100%;
-    margin: 0 auto !important;
-  }
-
-  .leaflet-popup-content-wrapper {
-    padding: 6px;
-  }
-
-  .leaflet-marker-pane img {
-    width: 150px !important;
-    height: auto !important;
   }
 }
 
@@ -896,20 +847,6 @@ a {
   .topRight {
     width: 100%;
     margin-top: var(--margin-md);
-  }
-
-  .carousel-container {
-    position: relative;
-    width: 30vw;
-    height: 28vw;
-    margin: 60px auto;
-    perspective: 1000px;
-  }
-
-  .card-stack {
-    position: relative;
-    width: 100%;
-    height: 100%;
   }
 
   .card-img {
@@ -1007,7 +944,6 @@ a {
 
   .bottom-section {
     padding: var(--padding-md);
-    height: 50vh;
   }
 
   .bottom-text-container {
@@ -1123,19 +1059,9 @@ a {
     gap: 2rem;
   }
 
-  #map {
-    height: 400px;
+  .swiper {
     width: 100%;
-    margin: 0 auto !important;
-  }
-
-  .leaflet-popup-content-wrapper {
-    padding: 6px;
-  }
-
-  .leaflet-marker-pane img {
-    width: 150px !important;
-    height: auto !important;
+    max-width: 800px;
   }
 }
 
@@ -1147,7 +1073,7 @@ a {
   }
 
   .topLeft {
-    width: 100%;
+    width: 80%;
     text-align: center;
     margin-top: var(--margin-md);
   }
@@ -1156,7 +1082,6 @@ a {
     font-family: "Alkatra";
     font-size: var(--font-size-md);
     text-transform: uppercase;
-    margin-top: 8rem;
   }
 
   .headerText {
@@ -1180,22 +1105,8 @@ a {
   }
 
   .topRight {
-    width: 100%;
+    width: 70%;
     margin-top: var(--margin-md);
-  }
-
-  .carousel-container {
-    position: relative;
-    width: 50vw;
-    height: 48vw;
-    margin: 60px auto;
-    perspective: 1000px;
-  }
-
-  .card-stack {
-    position: relative;
-    width: 100%;
-    height: 100%;
   }
 
   .card-img {
@@ -1230,36 +1141,6 @@ a {
     opacity: 0.8;
     z-index: 1;
     transform: translateX(-20%) rotate(6deg) scale(0.85);
-  }
-
-  /* Buttons */
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    font-size: 3rem;
-    padding: 1px 14px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    z-index: 5;
-  }
-
-  .carousel-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-
-  .carousel-btn.prev {
-    left: -40px; /* moves button outside image stack */
-    height: 5rem;
-  }
-
-  .carousel-btn.next {
-    right: -40px;
-    height: 5rem;
   }
 
   .middle-container {
@@ -1409,19 +1290,9 @@ a {
     gap: 2rem;
   }
 
-  #map {
-    height: 400px;
+  .swiper {
     width: 100%;
-    margin: 0 auto !important;
-  }
-
-  .leaflet-popup-content-wrapper {
-    padding: 6px;
-  }
-
-  .leaflet-marker-pane img {
-    width: 150px !important;
-    height: auto !important;
+    max-width: 601px;
   }
 }
 
@@ -1429,11 +1300,10 @@ a {
 @media screen and (max-width: 599px) {
   .topSec {
     flex-direction: column;
-    height: 90vh;
   }
 
   .topLeft {
-    width: 100%;
+    width: 90%;
     text-align: center;
     margin-top: var(--margin-md);
   }
@@ -1466,21 +1336,7 @@ a {
   }
 
   .topRight {
-    width: 100%;
-  }
-
-  .carousel-container {
-    position: relative;
-    width: 220px; /* smaller width */
-    height: 180px;
-    margin: 60px auto;
-    perspective: 1000px;
-  }
-
-  .card-stack {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    width: 85%;
   }
 
   .card-img {
@@ -1496,59 +1352,7 @@ a {
     z-index: 0;
   }
 
-  /* Center (active) */
-  .card-img.active {
-    opacity: 1;
-    z-index: 3;
-    transform: translateX(-50%) scale(1);
-  }
-
-  /* Peeking left */
-  .card-img.behind-left {
-    opacity: 0.8;
-    z-index: 2;
-    transform: translateX(-80%) rotate(-6deg) scale(0.85);
-  }
-
-  /* Peeking right */
-  .card-img.behind-right {
-    opacity: 0.8;
-    z-index: 1;
-    transform: translateX(-20%) rotate(6deg) scale(0.85);
-  }
-
-  /* Buttons */
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    font-size: 2rem;
-    padding: 1px 14px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    z-index: 5;
-  }
-
-  .carousel-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-
-  .carousel-btn.prev {
-    left: -40px; /* moves button outside image stack */
-    height: 3rem;
-  }
-
-  .carousel-btn.next {
-    right: -40px;
-    height: 3rem;
-  }
-
   .middle-container {
-    border: 1px solid red;
     flex-direction: column;
     padding: var(--padding-md);
     gap: 2rem;
@@ -1578,7 +1382,6 @@ a {
 
   .bottom-section {
     padding: var(--padding-md);
-    height: 70vh;
   }
 
   .bottom-text-container {
@@ -1695,33 +1498,6 @@ a {
     gap: 2rem;
   }
 
-  #map {
-    height: 200px;
-    width: 100%;
-    margin: 0 auto !important;
-  }
-
-  .leaflet-touch .leaflet-bar a {
-    width: 1.2rem !important;
-    height: 2rem !important;
-    font-size: 16px !important;
-    line-height: 30px !important;
-  }
-
-  .leaflet-popup-content {
-    font-size: 12px;
-    max-width: 150px;
-  }
-
-  .leaflet-popup-content-wrapper {
-    padding: 6px;
-  }
-
-  .leaflet-marker-pane img {
-    width: 80px !important;
-    height: 20px !important;
-  }
-
   .topBtn-container {
     position: relative !important;
     min-height: 10rem !important;
@@ -1732,10 +1508,21 @@ a {
     gap: 1.5rem;
     margin-top: 4rem;
   }
+
+  .swiper-slide {
+    aspect-ratio: 4 / 3;
+  }
+
+  .swiper {
+    width: 100%;
+    max-width: 401px;
+  }
 }
 
-@media (max-width: 991.98px) {
-  .rating-container {
-    margin-top: 8rem !important;
+/* Smaller phone size */
+@media screen and (max-width: 599px) {
+  .swiper {
+    width: 100%;
+    max-width: 350px;
   }
 }
