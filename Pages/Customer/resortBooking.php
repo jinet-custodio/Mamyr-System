@@ -157,7 +157,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <button type="button" class="btn btn-info text-white w-100" name="cottageBtn"
                                 id="cottageBtn" data-bs-toggle="modal" data-bs-target="#cottageModal"> Choose
                                 here</button>
-
+                            <div id="selectedCottagesContainer" class="selected-container mt-2"></div>
                             <!-- Modal for cottages -->
                             <div class="modal" id="cottageModal">
                                 <div class="modal-dialog">
@@ -189,6 +189,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <button type="button" class="btn btn-info text-white w-100" name="hotelBtn" id="hotelBtn"
                                 data-bs-toggle="modal" data-bs-target="#hotelRoomModal"> Choose
                                 here...</button>
+                            <div id="selectedRoomsContainer" class="selected-container mt-2"></div>
                             <!-- Modal for hotel rooms -->
                             <div class="modal" id="hotelRoomModal">
                                 <div class="modal-dialog">
@@ -222,6 +223,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <button type="button" class="btn btn-info text-white w-100" name="entertainmentBtn"
                             id="entertainmentBtn" data-bs-toggle="modal" data-bs-target="#entertainmentModal">
                             Choose here...</button>
+                        <div id="selectedEntertainmentContainer" class="selected-container mt-2"></div>
                         <!-- Modal for hotel rooms -->
                         <div class="modal modal-fullscreen-sm-down" id="entertainmentModal">
                             <div class="modal-dialog">
@@ -795,6 +797,65 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             bookRatesBTN.type = isValid ? 'submit' : 'button';
         });
     </script>
+
+    <!-- For displaying text for hotel and cottages -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            function renderSelectedItems(containerId, label, items) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                container.innerHTML = ""; // clear previous items
+                if (items.length === 0) return;
+
+                const wrapper = document.createElement("div");
+                wrapper.classList.add("selected-inline");
+
+                const labelEl = document.createElement("span");
+                labelEl.classList.add("selected-label-inline");
+                labelEl.textContent = label + " ";
+
+                wrapper.appendChild(labelEl);
+
+                items.forEach(item => {
+                    const tag = document.createElement("span");
+                    tag.classList.add("selected-tag");
+                    tag.textContent = item;
+                    wrapper.appendChild(tag);
+                });
+
+                container.appendChild(wrapper);
+            }
+
+            const cottageModal = document.getElementById('cottageModal');
+            const cottageOkayBtn = cottageModal.querySelector('.modal-footer .btn-primary');
+            cottageOkayBtn.addEventListener('click', () => {
+                const selectedCottages = Array.from(document.querySelectorAll('input[name="cottageOptions[]"]:checked'))
+                    .map(el => el.value);
+                renderSelectedItems('selectedCottagesContainer', 'Selected Cottages/:', selectedCottages);
+            });
+
+            const hotelModal = document.getElementById('hotelRoomModal');
+            const hotelOkayBtn = hotelModal.querySelector('.modal-footer .btn-primary');
+            hotelOkayBtn.addEventListener('click', () => {
+                const selectedRooms = Array.from(document.querySelectorAll('input[name="roomOptions[]"]:checked'))
+                    .map(el => el.value);
+                renderSelectedItems('selectedRoomsContainer', 'Selected Hotel Room/s:', selectedRooms);
+            });
+
+            const entertainmentModal = document.getElementById('entertainmentModal');
+            const entertainmentOkayBtn = entertainmentModal.querySelector('.modal-footer .btn-primary');
+            entertainmentOkayBtn.addEventListener('click', () => {
+                const selectedEntertainment = Array.from(document.querySelectorAll('input[name="entertainmentOptions[]"]:checked'))
+                    .map(el => el.value);
+                renderSelectedItems('selectedEntertainmentContainer', 'Selected Additional Service/s:', selectedEntertainment);
+            });
+
+        });
+    </script>
+
+
 
 
     <script>
