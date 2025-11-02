@@ -103,9 +103,9 @@ if ($result->num_rows > 0) {
 
 
 $formData = $_SESSION['eventFormData'] ?? [];
-// echo '<pre>';
-// print_r($formData);
-// echo '</pre>';
+echo '<pre>';
+print_r($formData);
+echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -837,6 +837,18 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                 inputServiceID.type = "hidden";
                                 inputServiceID.name = `additionalServiceSelected[${category.partnershipServiceID}][partnershipServiceID]`;
                                 inputServiceID.value = category.partnershipServiceID;
+
+                                checkbox.addEventListener("change", function() {
+                                    if (this.checked) {
+                                        partnerListContainer.appendChild(inputPBName);
+                                        partnerListContainer.appendChild(inputPBPrice);
+                                        partnerListContainer.appendChild(inputServiceID);
+                                    } else {
+                                        inputPBName.remove();
+                                        inputPBPrice.remove();
+                                        inputServiceID.remove();
+                                    }
+                                });
 
                                 const label = document.createElement("label");
                                 label.classList.add("form-check-label");

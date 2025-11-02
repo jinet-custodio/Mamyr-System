@@ -94,6 +94,15 @@ if (isset($_POST['approveBtn'])) {
     $guestID = (int) $_POST['guestID'];
     $guestRoleID = (int) $_POST['guestRole'];
     $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
+
+    $reason = (int) $_POST['rejection-reason'];
+    $otherReason = mysqli_real_escape_string($conn, $_POST['reasonDescription']) ?? NULL;
+
+    if (empty($reason) && empty($otherReason)) {
+        $_SESSION['bookingID'] = $bookingID;
+        header('Location: ../../Pages/Account/bpBookings.php?action=rejectionEmpty');
+        exit();
+    }
     try {
         $rejectStatusID = 5;
         $updateStatusBooking = $conn->prepare("UPDATE `businesspartneravailedservice` SET `approvalStatus`= ? WHERE `bookingID`= ?");
@@ -103,8 +112,25 @@ if (isset($_POST['approveBtn'])) {
             throw new Exception("Failed executing updating status query. Error => " . $updateStatusBooking->error);
         }
 
+        if (!empty($reason)) {
+            $getMessage = $conn->prepare("SELECT reasonDescription FROM `reason` WHERE `reasonID` = ?");
+            $getMessage->bind_param('i', $reason);
+            if (!$getMessage->execute()) {
+                $conn->rollback();
+                throw new Exception("Failed getting the reason" . $getMessage->error);
+            }
+
+            $result = $getMessage->get_result();
+
+            $row = $result->fetch_assoc();
+
+            $message =  $row['reasonDescription'];
+        } else {
+            $message =  $otherReason;
+        }
+
         $receiver = getMessageReceiver($guestRoleID);
-        $message = "We're sorry to inform you that your additional service has been rejected for your upcoming " . $eventType;
+        $message = "We're sorry to inform you that your additional service has been rejected for your upcoming " . $eventType . ". For the reason: " . $message;
         $notificationQuery = $conn->prepare("INSERT INTO `notification`(`bookingID`, `senderID`, `message`, `receiver`, `receiverID`) VALUES (?,?,?,?,?)");
         $notificationQuery->bind_param("iissi", $bookingID, $userID, $message, $receiver, $guestID);
 

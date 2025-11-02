@@ -84,7 +84,7 @@ if (isset($_POST['eventBook'])) {
         LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
         WHERE ps.partnershipServiceID = ?");
         foreach ($partnerIDs as $partershipServiceID) {
-            error_log('PSID: ' . $partershipServiceID);
+            // error_log('PSID: ' . $partershipServiceID);
             $partershipServiceID = intval($partershipServiceID);
             $getServiceID->bind_param('i', $partershipServiceID);
 
@@ -248,7 +248,7 @@ if (isset($_POST['eventBook'])) {
         header("Location: ../../../../Pages/Customer/bookNow.php?action=success");
     } catch (Exception $e) {
         $conn->rollback();
-        error_log("Error inserting: " . $e->getMessage());
+        error_log("Error:" . $e->getMessage());
         $_SESSION['eventFormData'] = $_POST;
         header("Location: ../../../../Pages/Customer/eventBooking.php?action=errorBooking");
         exit;

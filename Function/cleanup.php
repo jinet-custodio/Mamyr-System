@@ -9,7 +9,7 @@ require_once __DIR__ . '/Helpers/categoryFunctions.php';
 
 $affectedRows = resetExpiredOTPs($conn);
 
-echo $affectedRows;
+echo 'Deleted Otps' . $affectedRows;
 
 
 $conn->close();
