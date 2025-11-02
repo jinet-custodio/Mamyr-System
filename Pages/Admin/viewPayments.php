@@ -58,7 +58,7 @@ switch ($userRole) {
         exit();
 }
 
-if ($admin === "Admin") {
+if ($role === "Admin") {
     $getAdminName = $conn->prepare("SELECT firstName,middleInitial, lastName FROM user WHERE userID = ? AND userRole = ?");
     $getAdminName->bind_param("ii", $userID, $userRole);
     $getAdminName->execute();
@@ -658,6 +658,58 @@ if ($admin === "Admin") {
                                                 <div class="form-floating mb-1">
                                                     <input type="number" class="form-control" id="table-amount" name="additionalCharges[table][amount]" data-role="amount">
                                                     <label for="table-amount">Amount</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="massage"
+                                                data-input="massage-input" onchange="toggleAdditionalInput()">
+                                            <label for="massage">Massage Chair</label>
+                                            <!-- Additional Input for Quality and Charge -->
+                                            <div class="additional-input  gap-1" id="massage-input" style="display: none;">
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="massage-quantity" name="additionalCharges[massage][quantity]" data-role="quantity">
+                                                    <label for="massage-quantity">Quantity</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="massage-amount" name="additionalCharges[massage][amount]" data-role="amount">
+                                                    <label for="massage-amount">Amount</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="videoke"
+                                                data-input="videoke-input" onchange="toggleAdditionalInput()">
+                                            <label for="videoke">Videoke</label>
+                                            <!-- Additional Input for Quality and Charge -->
+                                            <div class="additional-input  gap-1" id="videoke-input" style="display: none;">
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="videoke-quantity" name="additionalCharges[videoke][quantity]" data-role="quantity">
+                                                    <label for="videoke-quantity">Quantity</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="videoke-amount" name="additionalCharges[videoke][amount]" data-role="amount">
+                                                    <label for="videoke-amount">Amount</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="billiard"
+                                                data-input="billiard-input" onchange="toggleAdditionalInput()">
+                                            <label for="billiard">Billiard</label>
+                                            <!-- Additional Input for Quality and Charge -->
+                                            <div class="additional-input  gap-1" id="billiard-input" style="display: none;">
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="billiard-quantity" name="additionalCharges[billiard][quantity]" data-role="quantity">
+                                                    <label for="billiard-quantity">Quantity</label>
+                                                </div>
+                                                <div class="form-floating mb-1">
+                                                    <input type="number" class="form-control" id="billiard-amount" name="additionalCharges[billiard][amount]" data-role="amount">
+                                                    <label for="billiard-amount">Amount</label>
                                                 </div>
                                             </div>
                                         </div>

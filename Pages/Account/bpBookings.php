@@ -339,14 +339,66 @@ switch ($userRole) {
                             <div class="modal-footer" id="btnContainer-footer">
                                 <div class="btnContainer">
                                     <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
-                                    <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
+                                    <button type="button" class="btn btn-danger" id="rejectBtn" data-bs-target="#rejectionModal" data-bs-toggle="modal">Reject</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+                <!--Rejection Modal -->
+                <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+
+                                <h6 class="reject-label fw-bold">Select a Reason for Rejection</h6>
+                                <div class="form-group mt-4">
+                                    <select class="form-select" id="select-reason" name="rejection-reason"
+                                        aria-label="rejection-reason" onchange="otherReason()">
+                                        <option value="" disabled selected>Select a reason</option>
+                                        <?php
+                                        $category = 'partnerServiceRejection';
+                                        $getRejectionReason = $conn->prepare("SELECT `reasonID`, `reasonDescription` FROM `reason` WHERE `category` = ?");
+                                        $getRejectionReason->bind_param('s', $category);
+                                        if (!$getRejectionReason->execute()) {
+                                            error_log('Failed getting rejection reason');
+                                        ?>
+                                            <option value="other">Other (Please specify)</option>
+                                        <?php
+                                        }
+
+                                        $result = $getRejectionReason->get_result();
+
+                                        while ($row = $result->fetch_assoc()):
+                                        ?>
+                                            <option value="<?= $row['reasonID'] ?>">
+                                                <?= htmlspecialchars($row['reasonDescription']) ?></option>
+                                        <?php
+                                        endwhile;
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-4" id="otherInputGroup" style="display: none;">
+                                    <h6 class="otherReason-label fw-bold">Please Specify</h6>
+                                    <input type="text" class="form-control" id="rejectReason-textBox"
+                                        placeholder="Enter your option">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Close</button>
+                                <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
-            <!-- bookingModal -->
+
 
         </main>
     </div>
@@ -518,7 +570,7 @@ switch ($userRole) {
 
                     viewModal.querySelector('#additionalNotes').value = booking.notes || '';
 
-                    if (booking.statusName === 'Approved') {
+                    if (booking.statusName === 'Approved' || booking.statusName === 'Rejected') {
                         document.getElementById('btnContainer-footer').style.display = 'none';
                     }
 
@@ -604,6 +656,49 @@ switch ($userRole) {
                 }
             });
         })
+    </script>
+
+    <script>
+        function otherReason() {
+            var selectBox = document.getElementById("select-reason");
+            var otherInputGroup = document.getElementById("otherInputGroup");
+
+            // Show or hide the text box when "Other (Please specify)" is selected
+            if (selectBox.value === "other" || selectBox.value === '38') {
+                otherInputGroup.style.display = "block"; // Show the text box
+            } else {
+                otherInputGroup.style.display = "none"; // Hide the text box
+            }
+        }
+    </script>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
+
+        if (paramValue === 'reject-success') {
+            Toast.fire({
+                title: 'Rejection Successful',
+                icon: 'success'
+            });
+        } else if (paramValue === 'approve-success') {
+            Toast.fire({
+                title: 'Approval Successful',
+                icon: 'success'
+            });
+        } else if (paramValue === 'reject-failed' || paramValue === 'approve-failed') {
+            Swal.fire({
+                title: 'Unexpected Error',
+                text: 'A server error occured. Please try again later',
+                icon: 'error'
+            })
+        }
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 </body>
 

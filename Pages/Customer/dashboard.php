@@ -301,7 +301,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <p class="videoDescription indent">
                     <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
                 <div class="middle-btn-container">
-                    <a href="Pages/amenities.php" class="btn btn-primary">View our Amenities</a>
+                    <a href="amenities.php" class="btn btn-primary">View our Amenities</a>
                 </div>
             </div>
         </section>

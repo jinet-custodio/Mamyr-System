@@ -386,7 +386,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
                 <div class="middle-btn-container">
                     <a href="../Customer/bookNow.php" class="btn btn-primary bookNowBtn">Book Now</a>
-                    <a href="../amenities.php" class="btn btn-primary viewBtn">View our Amenities</a>
+                    <a href="../Customer/amenities.php" class="btn btn-primary viewBtn">View our Amenities</a>
                 </div>
             </div>
         </section>

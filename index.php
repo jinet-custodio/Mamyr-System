@@ -132,7 +132,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <h6 class="topText"><?= htmlspecialchars($contentMap['Welcome'] ?? 'Name Not Found') ?> </h6>
                 <h2 class="headerText"> <?= htmlspecialchars($contentMap['Heading'] ?? 'Heading Not Found') ?> </h2>
                 <h5 class="subtext"><?= htmlspecialchars($contentMap['Subheading'] ?? 'Description Not Found') ?> </h5>
-                <a href="pages/register.php" class="btn btn-primary" id="topBookNow-btn">Book Now</a>
+                <a href="Pages/register.php" class="btn btn-primary" id="topBookNow-btn">Book Now</a>
             <?php endif; ?>
 
         </div>

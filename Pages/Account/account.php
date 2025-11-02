@@ -322,7 +322,7 @@ $userRole = $_SESSION['userRole'];
                     <input type="hidden" name="userID" value="<?= htmlspecialchars($userID) ?>">
                     <input type="hidden" name="userRole" value="<?= htmlspecialchars($userRole) ?>">
                     <div class="info form-floating">
-                        <input type="text" class="form-control editable" name="fullName" id="fullName" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
+                        <input type="text" class="form-control editable" name="fullName" id="fullName" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$" title="Please enter letters only"
                             value="<?= htmlspecialchars($name) ?>" readonly required>
                         <label for="fullName">Full Name</label>
                     </div>

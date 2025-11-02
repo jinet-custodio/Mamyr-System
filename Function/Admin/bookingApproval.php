@@ -124,7 +124,7 @@ if (isset($_POST['approveBtn'])) {
     try {
         $today = new DateTime();
         $expiresAt = $today->modify('+24 hours')->format('Y-m-d H:i:s');
-
+        //Update status and expiration of booking unavailable
         $searchBookingID = $conn->prepare("SELECT bookingID FROM serviceunavailabledate WHERE bookingID = ?");
         $searchBookingID->bind_param('i', $bookingID);
         if (!$searchBookingID->execute()) {

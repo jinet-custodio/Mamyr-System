@@ -152,6 +152,13 @@ INSERT INTO reason (category, reasonDescription) VALUES
 ('PartnerRejection', 'Failed validation or background check'),
 ('PartnerRejection', 'Non-compliance with policy requirements'),
 ('PartnerRejection', 'Other');
+('PartnerServiceRejection', 'Schedule conflict / fully booked'),
+('PartnerServiceRejection', 'Event type not supported'),
+('PartnerServiceRejection', 'Insufficient notice for preparation'),
+('PartnerServiceRejection', 'Unable to meet specific client customizations'),
+('PartnerServiceRejection', 'Required resources or equipment unavailable'),
+('PartnerServiceRejection', 'Other');
+
 
 -- INSERT INTO reason (category, reasonDescription) VALUES
 -- ('PartnerRejection', 'Incomplete or missing documents'),
