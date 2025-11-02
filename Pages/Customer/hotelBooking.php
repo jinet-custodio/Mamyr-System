@@ -238,7 +238,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <button type="button" class="btn btn-info text-black w-100" name="hotelSelectionBtn"
                             id="hotelSelectionBtn" data-bs-toggle="modal" data-bs-target="#hotelRoomModal">
                             Choose your room</button>
-
+                        <div id="selectedHotelRoomsContainer" class="selected-container mt-2"></div>
                         <!-- Modal for hotel rooms -->
                         <div class="modal modal-lg" id="hotelRoomModal" tabindex="-1">
                             <div class="modal-dialog">
@@ -313,8 +313,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             </li>
                         </ul>
                     </div>
-                    <button type="button" class="btn btn-success" name="hotelBooking" id="hotelBooking">Book
-                        Now</button>
+                    <button type="button" class="btn btn-primary btn-md w-100" name="hotelBooking" id="hotelBooking">Book Now</button>
                 </div>
             </div>
 
@@ -503,7 +502,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         checkbox.id = hotel.RServiceName;
                         checkbox.dataset.capacity = hotel.RScapacity;
 
-
                         const content = document.createElement('div');
                         content.classList.add('content');
                         const label = document.createElement('label');
@@ -515,20 +513,26 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         img.classList.add('hotel-image');
                         img.src = `../../Assets/Images/Services/Hotel/${hotel.RSimageData}`;
                         img.alt = `${hotel.RServiceName} image`;
-                        img.style.width = "200px";
+                        img.style.width = "50%";
 
-                        const hotelSelection = hotelSelectionSession.map(String);
-
+                        // Check if selected from session
                         if (hotelSelectionSession.includes(String(hotel.RServiceName))) {
                             checkbox.checked = true;
                         }
+
+                        // 🔹 Make entire div clickable
+                        wrapper.addEventListener("click", (e) => {
+                            if (e.target.tagName !== "INPUT") {
+                                checkbox.checked = !checkbox.checked;
+                            }
+                        });
 
                         content.appendChild(checkbox);
                         content.appendChild(label);
                         wrapper.appendChild(img);
                         wrapper.appendChild(content);
                         hotelRoomContainer.appendChild(wrapper);
-                    })
+                    });
 
                 }).catch(error => {
                     console.error(error);
@@ -578,6 +582,54 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             } else {
                 hotelBookingBtn.type = 'submit';
             }
+        });
+    </script>
+
+    <!-- Displays user's selected rooms -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            function renderSelectedRooms(containerId, label, items) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                container.innerHTML = ""; // Clear previous
+
+                if (items.length === 0) return;
+
+                const wrapper = document.createElement("div");
+                wrapper.classList.add("selected-inline");
+
+                const labelEl = document.createElement("span");
+                labelEl.classList.add("selected-label-inline");
+                labelEl.textContent = label + " ";
+
+                wrapper.appendChild(labelEl);
+
+                items.forEach(item => {
+                    const tag = document.createElement("span");
+                    tag.classList.add("selected-tag");
+                    tag.textContent = item;
+                    wrapper.appendChild(tag);
+                });
+
+                container.appendChild(wrapper);
+            }
+
+            function updateSelectedRooms() {
+                const selectedRooms = Array.from(document.querySelectorAll('input[name="hotelSelections[]"]:checked'))
+                    .map(el => el.value);
+                renderSelectedRooms('selectedHotelRoomsContainer', 'Selected Room/s:', selectedRooms);
+            }
+
+            const hotelModal = document.getElementById('hotelRoomModal');
+            const okBtn = hotelModal.querySelector('.modal-footer .btn-primary');
+
+            // When clicking "Okay"
+            okBtn.addEventListener('click', updateSelectedRooms);
+
+            // When modal closes (via X button or backdrop click)
+            hotelModal.addEventListener('hidden.bs.modal', updateSelectedRooms);
         });
     </script>
 

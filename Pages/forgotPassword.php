@@ -3,6 +3,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 require '../Config/dbcon.php';
+//for setting image paths in 'include' statements
+$baseURL = '..';
 
 if (isset($_SESSION['email'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
@@ -42,7 +44,7 @@ if (isset($_SESSION['action'])) {
             <form action="../Function/forgotPassword.php" method="POST">
                 <h1 class="container-title">Forgot Password</h1>
                 <div class="errorMessageBox">
-                    <div class="errorMsg">
+                    <div class="errorMsg" id="errorMsg">
                         <?php
                         if (isset($_SESSION['error'])) {
                             echo htmlspecialchars($_SESSION['error']);
@@ -112,6 +114,22 @@ if (isset($_SESSION['action'])) {
         });
     </script>
 
+
+    <script>
+        //*trigger loader
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorMessage = document.getElementById('errorMsg');
+
+            form.addEventListener('submit', function(e) {
+                if (!errorMessage === "") {
+                    e.preventDefault();
+                    loaderOverlay.style.display = 'none';
+                    return;
+                }
+                loaderOverlay.style.display = 'flex';
+            });
+        });
+    </script>
 </body>
 
 </html>

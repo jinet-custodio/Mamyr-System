@@ -154,8 +154,40 @@
   width: 40%;
 }
 .fw-bold {
-  /* margin-top: -2vw; */
   font-family: "Poppins";
+}
+
+.selected-container {
+  margin-top: 0.5rem;
+}
+
+.selected-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.selected-label-inline {
+  font-weight: 600;
+  color: black;
+  white-space: nowrap;
+}
+.selected-tag {
+  background-color: #e5f4ff;
+  border: 1px solid #b3daff;
+  border-radius: 5px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  transition: background 0.2s;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.selected-tag:hover {
+  background-color: #d0e9ff;
 }
 
 #calendar {

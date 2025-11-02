@@ -128,6 +128,39 @@ body {
   gap: 1rem;
 }
 
+.selected-container {
+  margin-top: 0.5rem;
+}
+
+.selected-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.selected-label-inline {
+  font-weight: 600;
+  color: black;
+  white-space: nowrap;
+}
+.selected-tag {
+  background-color: #e5f4ff;
+  border: 1px solid #b3daff;
+  border-radius: 5px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  transition: background 0.2s;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.selected-tag:hover {
+  background-color: #d0e9ff;
+}
+
 #entertainmentContainer,
 #cottagesContainer {
   /* border: 1px solid red; */
@@ -140,8 +173,11 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 1rem;
+}
+
+.checkbox-item label {
+  margin-left: 1vw;
 }
 
 #entertainmentContainer label,

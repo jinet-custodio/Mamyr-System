@@ -5,6 +5,8 @@ ini_set('display_errors', 1);
 
 session_start();
 require '../Config/dbcon.php';
+//for setting image paths in 'include' statements
+$baseURL = '..';
 
 if (isset($_SESSION['email'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
@@ -59,15 +61,12 @@ if (isset($_SESSION['action'])) {
             </form>
         </div>
     </div>
-    <!-- Div for loader -->
-    <div id="loaderOverlay" style="display: none;">
-        <div class="loader"></div>
-    </div>
+
+    <?php include 'Customer/loader.php'; ?>
 
     <!-- Script for loader -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const loaderOverlay = document.getElementById('loaderOverlay');
             const form = document.querySelector('form');
             const emailInput = document.getElementById('email');
             const submitBtn = document.getElementById('verify_email');
@@ -99,21 +98,7 @@ if (isset($_SESSION['action'])) {
                 }
                 loaderOverlay.style.display = 'flex';
             });
-        });
 
-        function hideLoader() {
-            const overlay = document.getElementById('loaderOverlay');
-            if (overlay) overlay.style.display = 'none';
-        }
-
-        // Hide loader on normal load
-        window.addEventListener('load', hideLoader);
-
-        // Hide loader on back/forward navigation (from browser cache)
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                hideLoader();
-            }
         });
     </script>
 

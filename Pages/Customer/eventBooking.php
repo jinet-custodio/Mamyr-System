@@ -103,9 +103,6 @@ if ($result->num_rows > 0) {
 
 
 $formData = $_SESSION['eventFormData'] ?? [];
-echo '<pre>';
-print_r($formData);
-echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -261,6 +258,7 @@ echo '</pre>';
                                 Select dishes that will delight your guests and complement your celebration.</p>
                             <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal"
                                 data-bs-target="#dishModal">Open Menu</button>
+                            <div id="selectedDishesContainer" class="selected-summary mt-2"></div>
                         </div>
                     </div>
 
@@ -278,6 +276,7 @@ echo '</pre>';
 
                             <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal"
                                 data-bs-target="#additionalServicesModal">View Services</button>
+                            <div id="selectedAdditionalServicesContainer" class="selected-summary mt-2"></div>
                         </div>
                     </div>
                 </div>
@@ -822,6 +821,7 @@ echo '</pre>';
                                 checkbox.classList.add("form-check-input");
                                 checkbox.name = `additionalServiceSelected[${category.partnershipServiceID}][selected]`;
                                 checkbox.value = category.partnershipServiceID;
+                                checkbox.id = `service-${category.partnershipServiceID}`;
 
                                 const inputPBName = document.createElement("input");
                                 inputPBName.type = "hidden";
@@ -852,6 +852,7 @@ echo '</pre>';
 
                                 const label = document.createElement("label");
                                 label.classList.add("form-check-label");
+                                label.setAttribute("for", checkbox.id);
                                 label.innerHTML = `${category.companyName} - ${
                                     category.PBName
                                 } &mdash; ₱ ${Number(category.PBPrice).toLocaleString(undefined, {
@@ -1052,6 +1053,81 @@ echo '</pre>';
             url.search = '';
             history.replaceState({}, document.title, url.toString());
         }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            document.querySelectorAll('.food-item-container').forEach(container => {
+                const checkbox = container.querySelector('input[type="checkbox"]');
+                container.addEventListener('click', (e) => {
+                    if (e.target.tagName.toLowerCase() !== 'input') {
+                        checkbox.checked = !checkbox.checked;
+                    }
+                });
+            });
+
+            function renderSelectedList(containerId, label, items) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                container.innerHTML = ""; // clear previous
+
+                const wrapper = document.createElement("div");
+                wrapper.classList.add("selected-inline");
+
+                const labelEl = document.createElement("span");
+                labelEl.classList.add("selected-label-inline");
+                labelEl.textContent = label + " ";
+
+                wrapper.appendChild(labelEl);
+
+                if (items.length === 0) {
+                    const none = document.createElement("span");
+                    none.textContent = "None selected";
+                    none.style.color = "#777";
+                    wrapper.appendChild(none);
+                } else {
+                    items.forEach(item => {
+                        const tag = document.createElement("span");
+                        tag.classList.add("selected-tag");
+                        tag.textContent = item;
+                        wrapper.appendChild(tag);
+                    });
+                }
+
+                container.appendChild(wrapper);
+            }
+
+            const dishModal = document.getElementById('dishModal');
+
+            function updateSelectedDishes() {
+                const selected = Array.from(document.querySelectorAll('#dishModal input[type="checkbox"]:checked'))
+                    .map(el => el.value);
+                renderSelectedList('selectedDishesContainer', 'Selected Dishes:', selected);
+            }
+
+            dishModal.addEventListener('hidden.bs.modal', updateSelectedDishes);
+
+            const additionalModal = document.getElementById('additionalServicesModal');
+
+            function updateSelectedServices() {
+                const selected = Array.from(additionalModal.querySelectorAll('input[type="checkbox"]:checked'))
+                    .map(el => {
+                        const wrapper = el.closest('.partnerListContainer');
+                        if (wrapper) {
+                            const labelText = wrapper.querySelector('label')?.textContent || '';
+                            const companyName = labelText.split('-')[0]?.trim() || el.value;
+                            return companyName;
+                        }
+                        return el.value;
+                    });
+                renderSelectedList('selectedAdditionalServicesContainer', 'Selected Services:', selected);
+            }
+
+            additionalModal.addEventListener('hidden.bs.modal', updateSelectedServices);
+
+        });
     </script>
 
 </body>
