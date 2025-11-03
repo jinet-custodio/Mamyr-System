@@ -1,0 +1,35 @@
+
+Added to admin table: 0
+Deleted OTPs: 0
+Expired Status: 
+Done Status: 
+Deleted rows in service unavailable: 0
+Added to admin table: 0
+Deleted OTPs: 0
+Expired Status: 
+Done Status: 
+Deleted rows in service unavailable: 0
+Added to admin table: 0
+Deleted OTPs: 0
+Expired Status: 
+Done Status: 
+Deleted rows in service unavailable: 0
+Reject partner booking request: 1
+Added to admin table: 0
+Deleted OTPs: 0
+Expired Status: 1 booking(s) marked as expired.
+Done Status: 
+Deleted rows in service unavailable: 0
+Reject partner booking request: 1
+Added to admin table: 0
+Deleted OTPs: 0
+Expired Status: 
+Done Status: 0 booking(s) marked as done.
+Deleted rows in service unavailable: 0
+Reject partner booking request: 1
+Added to admin table: 0
+Deleted OTPs: 0
+Expired Status: 
+Done Status: 0 booking(s) marked as done.
+Deleted rows in service unavailable: 0
+Reject partner booking request: 1

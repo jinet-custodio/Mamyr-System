@@ -2,7 +2,7 @@
 
 date_default_timezone_set('Asia/Manila');
 
-//? Function for everyday status change in resortamenities
+//? Function for everyday status change in resortamenities and partner services
 function autoChangeStatus($conn)
 {
     $occupiedStatusID = 2;
@@ -20,7 +20,6 @@ function autoChangeStatus($conn)
         $partnershipServiceID = intval($row['partnershipServiceID']);
 
         if ($resortServiceID > 0) {
-
             $updateStatus = $conn->prepare("UPDATE resortamenity
         SET RSAvailabilityID = ?
         WHERE resortServiceID = ? AND RSAvailabilityID = ?
@@ -173,11 +172,9 @@ function getAvailabilityStatus($conn, $availabilityID)
 //? Function for changing the status into expired when still pending and passed the booking date
 function changeToExpiredStatus($conn)
 {
-    date_default_timezone_set('Asia/Manila');
-
     $dateNow = date('Y-m-d H:i:s');
     $pendingStatusID = 1;
-    $expiredStatusID = 6;
+    $expiredStatusID = 7;
 
     // Select all bookings that have ended and are still pending
     $selectBookings = $conn->prepare("SELECT bookingID FROM booking WHERE endDate < ? AND bookingStatus = ?");
@@ -210,17 +207,17 @@ function changeToDoneStatus($conn)
 
     $dateNow = date('Y-m-d H:i:s');
     $approvedStatusID = 2;
-    $doneStatusID = 5;
+    $doneStatusID = 6;
     $fullyPaidID = 3;
 
     //Select all confirmed bookings that have ended and is fully paid
     $selectConfirmedBookings = $conn->prepare("SELECT cb.*, b.endDate, b.bookingID FROM confirmedbooking cb 
-                            JOIN booking b ON cb.bookingID = b.bookingID WHERE b.endDate < ?  AND paymentApprovalStatus = ?");
-    $selectConfirmedBookings->bind_param("si", $dateNow, $$approvedStatusID);
+                            JOIN booking b ON cb.bookingID = b.bookingID WHERE b.endDate < ?  AND paymentApprovalStatus = ? AND paymentStatus = ?");
+    $selectConfirmedBookings->bind_param("sii", $dateNow, $approvedStatusID, $fullyPaidID);
     $selectConfirmedBookings->execute();
     $result = $selectConfirmedBookings->get_result();
     if ($result->num_rows > 0) {
-        $updateQuery = $conn->prepare("UPDATE confirmedbooking SET paymentApprovalStatus = ? WHERE bookingID = ?");
+        $updateQuery = $conn->prepare("UPDATE booking SET bookingStatus = ? WHERE bookingID = ?");
         $counter = 0;
         while ($row = $result->fetch_assoc()) {
             $bookingID = (int)$row['bookingID'];
@@ -230,7 +227,7 @@ function changeToDoneStatus($conn)
             }
         }
         $updateQuery->close();
-        echo $counter . " booking(s) marked as done.";
+        return $counter . " booking(s) marked as done.";
     }
 
     $selectConfirmedBookings->close();
@@ -266,5 +263,24 @@ function noPayment24hrs($conn)
         error_log('Error removing query: ' . $removeToUnavailableService->error);
     }
     $deleted = $removeToUnavailableService->affected_rows;
-    error_log('Deleted rows: ' . $deleted);
+
+    return $deleted;
+}
+
+
+//? Function for rejecting a booked service of a partner when a request is still pending passed 24hrs
+function partnerAutoReject($conn)
+{
+    $rejectedStatus = 5;
+    $pendingStatus = 1;
+
+
+    $updatePendingStatus = $conn->prepare("UPDATE `businesspartneravailedservice` SET approvalStatus = ? WHERE approvalStatus = ? AND NOW() > DATE_ADD(availedDate, INTERVAL 24 HOUR) ");
+    $updatePendingStatus->bind_param("ii", $rejectedStatus, $pendingStatus);
+    $count = 0;
+    if ($updatePendingStatus->execute()) {
+        $count++;
+    }
+
+    return $count;
 }
