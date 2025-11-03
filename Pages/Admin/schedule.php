@@ -207,10 +207,10 @@ if ($result->num_rows > 0) {
         </section>
         <div class="card calendar-card">
             <div class="filter-btn-container m-2 p-2 d-flex justify-content-end">
-                <div class="filter-select-wrapper">
+                <div class="filter-select-wrapper py-2">
                     <select class="filter-select" name="calendar-filter-select" id="calendar-filter-select">
-                        <option selected value="events">Events</option>
-                        <option value="services">Available Services</option>
+                        <option selected value="events" class="fs-5">Events</option>
+                        <option value="services" class="fs-5">Available Services</option>
                     </select>
                     <i class="bi bi-funnel"></i>
                 </div>
@@ -220,16 +220,16 @@ if ($result->num_rows > 0) {
 
         <!-- Modal -->
         <div class="modal fade" id="calendarInfoModal" tabindex="-1" aria-labelledby="calendarInfoModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="calendarInfoModalLabel">Date Information</h5>
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="calendarInfoModalLabel">Details</h5>
                     </div>
                     <div class="modal-body" id="calendarModalBody">
                         <!-- Info goes here -->
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="modal-footer mt-5">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal-close">Close</button>
                     </div>
                 </div>
             </div>
@@ -265,12 +265,41 @@ if ($result->num_rows > 0) {
                 height: 'auto',
                 contentHeight: 'auto',
                 aspectRatio: 1.35,
+                eventDisplay: 'block',
                 events: '../../Function/Admin/fetchBookings.php',
+                eventContent: function(arg) {
+                    let iconClass = '';
+
+                    if (arg.event.title.toLowerCase().includes('resort')) {
+                        iconClass = 'fa-solid fa-umbrella-beach';
+                    } else if (arg.event.title.toLowerCase().includes('hotel')) {
+                        iconClass = 'fa-solid fa-hotel';
+                    } else if (arg.event.title.toLowerCase().includes('event')) {
+                        iconClass = 'fa-solid fa-calendar-check';
+                    } else {
+                        iconClass = 'fa-solid fa-circle-info';
+                    }
+
+                    const iconEl = `<i class="${iconClass}" style="margin-right:4px;"></i>`;
+                    const titleEl = `<span>${arg.event.title}</span>`;
+
+                    return {
+                        html: iconEl + titleEl
+                    };
+                },
+
+                eventDidMount: function(info) {
+                    if (info.event.extendedProps.backgroundColor) {
+                        info.el.style.backgroundColor = info.event.extendedProps.backgroundColor;
+                        info.el.style.borderColor = info.event.extendedProps.backgroundColor;
+                    }
+                },
+
 
                 // Show modal on date click
                 dateClick: function(info) {
                     const clickedDate = new Date(info.dateStr);
-                    clickedDate.setHours(0, 0, 0, 0); // Normalize
+                    clickedDate.setHours(0, 0, 0, 0);
 
                     const formattedClickedDate = clickedDate.toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -291,7 +320,7 @@ if ($result->num_rows > 0) {
                     if (eventsOnDate.length === 0) {
                         modalBody.innerHTML = `<p>No events found on ${formattedClickedDate}.</p>`;
                     } else {
-                        let content = `<h5>Events on ${formattedClickedDate}</h5>`;
+                        let content = `<p class="fw-bold">Events on ${formattedClickedDate}</p>`;
                         content += `<div class="list-group">`;
 
                         eventsOnDate.forEach(event => {
@@ -316,12 +345,11 @@ if ($result->num_rows > 0) {
                                 null;
 
                             content += `
-                            <div class="list-group-item">
-                                <h6 class="mb-1">${event.title}</h6>
-                                <p class="mb-1">
-                                    <strong>Start:</strong> ${formattedStart}<br>
-                                    ${formattedEnd ? `<strong>End:</strong> ${formattedEnd}<br>` : ''}
-                                </p>
+                            <div class="list-group-item d-flex align-items-center justify-content-between mt-2 rounded" style="border-left: 8px solid ${event.backgroundColor}">
+                                <div>
+                                    <strong>${event.title || 'Event'}</strong><br>
+                                    <small>${formattedStart}${formattedEnd ? ` - ${formattedEnd}` : ''}</small>
+                                </div>
                             </div>
                         `;
                         });
@@ -336,6 +364,7 @@ if ($result->num_rows > 0) {
                 // Show modal on event click
                 eventClick: function(info) {
                     const event = info.event;
+                    const modalFooter = document.getElementById('modal-close');
 
                     const formattedStart = new Date(event.start).toLocaleString('en-US', {
                         year: 'numeric',
@@ -359,14 +388,15 @@ if ($result->num_rows > 0) {
 
 
                     let content = `
-                    <h5>${event.title}</h5>
-                    <p>
+                    <h3 class="text-center fw-bolder text-primary">${event.title}</h3>
+                    <p class="text-center mt-4 mb-lg-5" style="letter-spacing: 1px; line-height: 35px">
                         <strong>Start:</strong> ${formattedStart}<br>
                         ${formattedEnd ? `<strong>End:</strong> ${formattedEnd}<br>` : ''}
                     </p>
                 `;
 
                     modalBody.innerHTML = content;
+                    modalFooter.classList.add('mx-auto');
                     modal.show();
                 },
 

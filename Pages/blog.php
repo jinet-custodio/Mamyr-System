@@ -163,7 +163,7 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                         ?>
 
                         <?php if ($index === 0): ?>
-                            <!-- ✅ FEATURED POST (LEFT SIDE) -->
+                            <!-- FEATURED POST (LEFT SIDE) -->
                             <div class="featured">
                                 <div class="featuredpost">
                                     <img src="<?= htmlspecialchars($imagePath) ?>"
