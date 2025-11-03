@@ -460,7 +460,11 @@ if ($result->num_rows > 0) {
                 columnDefs: [{
                     width: "30%",
                     target: 4
-                }]
+                }],
+                search: {
+                    regex: true,
+                    smart: false
+                }
 
             })
         });

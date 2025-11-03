@@ -93,6 +93,7 @@ function addToAdminTable($conn)
     $adminQueryResult = $getAdminQuery->get_result();
 
     if ($adminQueryResult->num_rows > 0) {
+        $counter = 0;
         while ($row = $adminQueryResult->fetch_assoc()) {
             $storedUserID = intval($row['userID']);
             $firstName = ucfirst($row['firstName']);
@@ -112,13 +113,14 @@ function addToAdminTable($conn)
                 if (!$insertAdminQuery->execute()) {
                     echo "Error inserting admin: " . $insertAdminQuery->error;
                 }
+                $counter++;
                 $insertAdminQuery->close();
             }
             $result->free();
             $selectUsers->close();
         }
     }
-
+    return $counter;
 
     $adminQueryResult->free();
     $getAdminQuery->close();
