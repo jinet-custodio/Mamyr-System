@@ -221,7 +221,7 @@ if ($result->num_rows > 0) {
         <!-- Modal -->
         <div class="modal fade" id="calendarInfoModal" tabindex="-1" aria-labelledby="calendarInfoModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content" id="modal-content">
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="calendarInfoModalLabel">Details</h5>
                     </div>
@@ -258,6 +258,8 @@ if ($result->num_rows > 0) {
             const filterSelect = document.getElementById('calendar-filter-select');
             const modal = new bootstrap.Modal(document.getElementById('calendarInfoModal'));
             const modalBody = document.getElementById('calendarModalBody');
+            const modalFooter = document.getElementById('modal-close');
+            const modalCont = document.getElementById('modal-content');
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -355,6 +357,12 @@ if ($result->num_rows > 0) {
                         });
 
                         content += `</div>`;
+                        if (modalCont.classList.contains('gradientBg')) {
+                            modalCont.classList.remove('gradientBg');
+                        };
+                        if (modalFooter.classList.contains('mx-auto')) {
+                            modalFooter.classList.remove('mx-auto');
+                        };
                         modalBody.innerHTML = content;
                     }
 
@@ -364,7 +372,6 @@ if ($result->num_rows > 0) {
                 // Show modal on event click
                 eventClick: function(info) {
                     const event = info.event;
-                    const modalFooter = document.getElementById('modal-close');
 
                     const formattedStart = new Date(event.start).toLocaleString('en-US', {
                         year: 'numeric',
@@ -389,13 +396,14 @@ if ($result->num_rows > 0) {
 
                     let content = `
                     <h3 class="text-center fw-bolder text-primary">${event.title}</h3>
-                    <p class="text-center mt-4 mb-lg-5" style="letter-spacing: 1px; line-height: 35px">
+                    <p class="text-center mt-5 mb-0" style="letter-spacing: 1px; line-height: 35px">
                         <strong>Start:</strong> ${formattedStart}<br>
                         ${formattedEnd ? `<strong>End:</strong> ${formattedEnd}<br>` : ''}
                     </p>
                 `;
 
                     modalBody.innerHTML = content;
+                    modalCont.classList.add('gradientBg');
                     modalFooter.classList.add('mx-auto');
                     modal.show();
                 },

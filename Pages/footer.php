@@ -55,6 +55,8 @@ while ($row = $getLogoResult->fetch_assoc()) {
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 </head>
 
@@ -106,7 +108,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
 
             <div class="info d-flex align-items-center">
                 <div class="reservation">
-                    <h4 class="reservationTitle mb-1">Reservation</h4>
+                    <h4 class="reservationTitle mb-1"><i class="bi bi-telephone-fill"></i></h4>
                     <?php if ($editMode): ?>
                         <input type="text" class="numberFooter editable-input form-control"
                             data-title="ContactNum" value="<?= htmlspecialchars($contentMap['ContactNum'] ?? 'None Provided') ?>">
@@ -121,7 +123,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
 
                 </div>
                 <div class="locationFooter">
-                    <h4 class="locationTitle mb-1">Location</h4>
+                    <h4 class="locationTitle mb-1"><i class="bi bi-geo-alt-fill"></i></h4>
                     <?php if ($editMode): ?>
                         <input type="text" class="addressTextFooter editable-input form-control"
                             data-title="ContactNum" value="<?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>">

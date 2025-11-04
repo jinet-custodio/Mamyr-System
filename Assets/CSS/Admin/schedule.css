@@ -104,6 +104,28 @@ body {
   padding: var(--padding-xs);
 }
 
+.gradientBg {
+  background: -webkit-linear-gradient(
+    -90deg,
+    rgba(255, 255, 255, 1) 0,
+    rgba(255, 255, 255, 1) 33%,
+    rgba(142, 210, 255, 1) 100%
+  );
+  background: -moz-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0,
+    rgba(255, 255, 255, 1) 33%,
+    rgba(142, 210, 255, 1) 100%
+  );
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0,
+    rgba(255, 255, 255, 1) 33%,
+    rgba(142, 210, 255, 1) 100%
+  );
+  background-position: 50% 50%;
+}
+
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
 }
 

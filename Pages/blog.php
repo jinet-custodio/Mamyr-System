@@ -76,9 +76,6 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
             </nav>
         <?php endif; ?>
         <main>
-            <?php if ($editMode): ?>
-                <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
-            <?php endif; ?>
 
             <?php
             $getWebContent = "SELECT * FROM websitecontent WHERE sectionName = 'Blog'";
@@ -262,7 +259,9 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary bookNowBtn w-25">Book Now</button>
+                                        <?php if (!$editMode): ?>
+                                            <button type="button" class="btn btn-primary bookNowBtn w-25">Book Now</button>
+                                        <?php endif; ?>
                                         <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>

@@ -70,8 +70,8 @@ while ($row = $getLogoResult->fetch_assoc()) {
                                 ? $indexPath
                                 : $defaultPath);
                 ?>
-                <img src="<?= $baseURL ?>/Assets/Images/<?= htmlspecialchars($fileName) ?>"
-                    alt="<?= htmlspecialchars($altText) ?>" class="logo mx-auto mb-0">
+                        <img src="<?= $baseURL ?>/Assets/Images/<?= htmlspecialchars($fileName) ?>"
+                            alt="<?= htmlspecialchars($altText) ?>" class="logo mx-auto mb-0">
                 <?php
                     }
                 }
@@ -102,7 +102,7 @@ while ($row = $getLogoResult->fetch_assoc()) {
                     </h4>
                 </div>
                 <div class="locationFooter">
-                    <h4 class="locationTitle mb-1"><i class="bi bi-geo-alt-fill"></i></i></h4>
+                    <h4 class="locationTitle mb-1"><i class="bi bi-geo-alt-fill"></i></h4>
                     <h4 class="addressTextFooter"><?= htmlspecialchars($contentMap['Address'] ?? 'None Provided') ?>
                     </h4>
                 </div>
@@ -119,32 +119,32 @@ while ($row = $getLogoResult->fetch_assoc()) {
     </footer>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-    const baseURL = "<?= $baseURL ?>";
-    const logoFile = "<?= htmlspecialchars($fileName) ?>";
-    const lat = 15.05073200154005;
-    const lon = 121.0218658098424;
+        const baseURL = "<?= $baseURL ?>";
+        const logoFile = "<?= htmlspecialchars($fileName) ?>";
+        const lat = 15.05073200154005;
+        const lon = 121.0218658098424;
 
-    const map = L.map('map').setView([lat, lon], 13);
+        const map = L.map('map').setView([lat, lon], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-
-    const customIcon = L.icon({
-        iconUrl: `${baseURL}/Assets/Images/${logoFile}`,
-        iconSize: [100, 25],
-        iconAnchor: [25, 50],
-        popupAnchor: [0, -50]
-    });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
 
-    L.marker([lat, lon], {
-            icon: customIcon
-        }).addTo(map)
-        .bindPopup('Mamyr Resort and Events Place is Located Here!')
-        .openPopup();
-    console.log(`${baseURL}/Assets/Images/${logoFile}`)
+        const customIcon = L.icon({
+            iconUrl: `${baseURL}/Assets/Images/${logoFile}`,
+            iconSize: [100, 25],
+            iconAnchor: [25, 50],
+            popupAnchor: [0, -50]
+        });
+
+
+        L.marker([lat, lon], {
+                icon: customIcon
+            }).addTo(map)
+            .bindPopup('Mamyr Resort and Events Place is Located Here!')
+            .openPopup();
+        console.log(`${baseURL}/Assets/Images/${logoFile}`)
     </script>
 
 </body>
