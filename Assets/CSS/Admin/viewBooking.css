@@ -204,6 +204,16 @@ label {
   border-radius: 1rem;
 }
 
+.addCharges-container {
+  text-align: center;
+  margin-top: 1.3rem;
+}
+
+.addCharges {
+  width: 50%;
+  margin-left: 0 !important;
+}
+
 .button-container {
   width: 50%;
   display: flex;

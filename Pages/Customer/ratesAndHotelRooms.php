@@ -141,9 +141,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         data-bs-target="#notificationModal">
                         <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
                         <?php if (!empty($counter)): ?>
-                            <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
-                                <?= htmlspecialchars($counter) ?>
-                            </span>
+                        <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
+                            <?= htmlspecialchars($counter) ?>
+                        </span>
                         <?php endif; ?>
                     </button>
                 </div>
@@ -158,9 +158,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
                         <?php if ($userRole !== 2): ?>
-                            <a class="nav-link" href="dashboard.php"> Home</a>
+                        <a class="nav-link" href="dashboard.php"> Home</a>
                         <?php else: ?>
-                            <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                         <?php endif; ?>
                     </li>
                     <li class="nav-item dropdown">
@@ -179,9 +179,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <a class="nav-link" href="blog.php">Blog</a>
                     </li>
                     <?php if ($userRole !== 2): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
+                    </li>
                     <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="about.php">About</a>
@@ -253,19 +253,19 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             // Display cards
                             foreach ($sessions as $session => $data) {
                         ?>
-                                <div class="entranceCard card mx-auto">
-                                    <div class="entrace-card-body">
-                                        <h5 class="entrance-card-title">
-                                            <span class="dayNight"><?= strtoupper($session) ?> TOUR</span><br>
-                                            <?= $data['time_range'] ?>
-                                        </h5>
-                                        <div class="entrance-card-content">
-                                            <span class="age">ADULT -
-                                                PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
-                                            <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
-                                        </div>
-                                    </div>
+                        <div class="entranceCard card mx-auto">
+                            <div class="entrace-card-body">
+                                <h5 class="entrance-card-title">
+                                    <span class="dayNight"><?= strtoupper($session) ?> TOUR</span><br>
+                                    <?= $data['time_range'] ?>
+                                </h5>
+                                <div class="entrance-card-content">
+                                    <span class="age">ADULT -
+                                        PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
+                                    <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
                                 </div>
+                            </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -292,17 +292,17 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     $imgSrc = '../../Assets/Images/Services/Cottage/';
                                     $img = !empty($cottage['RSimageData']) ? $imgSrc . $cottage['RSimageData'] : '';
                             ?>
-                                    <div class="swiper-slide">
-                                        <div class="card cottage">
-                                            <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top">
-                                            <div class="card-body description">
-                                                <h2 class="fw-bold"><?= $cottage['RServiceName'] ?></h2>
-                                                <p><?= $cottage['RSdescription'] ?></p>
-                                                <p class="font-weight-bold">Price: PHP <?= $cottage['RSprice'] ?></p>
-                                                <a href="resortBooking.php" class="btn btn-primary mt-auto">Book Now</a>
-                                            </div>
-                                        </div>
+                            <div class="swiper-slide">
+                                <div class="card cottage">
+                                    <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top">
+                                    <div class="card-body description">
+                                        <h2 class="fw-bold"><?= $cottage['RServiceName'] ?></h2>
+                                        <p><?= $cottage['RSdescription'] ?></p>
+                                        <p class="font-weight-bold">Price: PHP <?= $cottage['RSprice'] ?></p>
+                                        <a href="resortBooking.php" class="btn btn-primary mt-auto">Book Now</a>
                                     </div>
+                                </div>
+                            </div>
                             <?php
                                 }
                             } else {
@@ -331,28 +331,28 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         if ($vidresult->num_rows > 0) {
                             while ($data = $vidresult->fetch_assoc()) {
                         ?>
-                                <div class="section d-flex flex-column">
-                                    <div class="singleImg">
-                                        <?php
+                        <div class="section d-flex flex-column">
+                            <div class="singleImg">
+                                <?php
                                         $imgSrc = '../../Assets/Images/Services/Entertainment/';
                                         if (!empty($data['RSimageData'])) {
                                             $img = $imgSrc . $data['RSimageData'];
                                         }
                                         ?>
-                                        <img src="<?= $img ?>" alt="Videoke Image" class="rounded mx-auto"
-                                            id="videokeDisplayPhoto">
+                                <img src="<?= $img ?>" alt="Videoke Image" class="rounded mx-auto"
+                                    id="videokeDisplayPhoto">
 
-                                    </div>
-                                    <div class="Description" id="videokeDescContainer">
-                                        <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent
-                                        </h2>
-                                        <p class="videokeDesc">
-                                            <?= $data['RSdescription'] ?>
-                                        </p>
-                                    </div>
+                            </div>
+                            <div class="Description" id="videokeDescContainer">
+                                <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent
+                                </h2>
+                                <p class="videokeDesc">
+                                    <?= $data['RSdescription'] ?>
+                                </p>
+                            </div>
 
 
-                                </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -376,27 +376,27 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         if ($bilresult->num_rows > 0) {
                             while ($data = $bilresult->fetch_assoc()) {
                         ?>
-                                <div class="d-flex justify-content-center align-items-center" id="billiard-flex">
-                                    <div class="Description" id="videokeDescContainer">
-                                        <h2 class="text-center" id="videokePriceDesc">
-                                            Price: PHP<?= $data['RSprice'] ?> per Hour
-                                        </h2>
-                                        <p class="videokeDesc">
-                                            <?= $data['RSdescription'] ?>
-                                        </p>
-                                    </div>
-                                    <div class="singleImg">
-                                        <?php
+                        <div class="d-flex justify-content-center align-items-center" id="billiard-flex">
+                            <div class="Description" id="videokeDescContainer">
+                                <h2 class="text-center" id="videokePriceDesc">
+                                    Price: PHP<?= $data['RSprice'] ?> per Hour
+                                </h2>
+                                <p class="videokeDesc">
+                                    <?= $data['RSdescription'] ?>
+                                </p>
+                            </div>
+                            <div class="singleImg">
+                                <?php
                                         $imgSrc = '../../Assets/Images/Services/Entertainment/';
                                         if (isset($data['RSimageData'])) {
                                             $img = $imgSrc . $data['RSimageData'];
                                         }
                                         ?>
-                                        <img src=" <?= $img ?>" alt="Videoke Image" class="rounded mx-auto "
-                                            id="billardsDisplayPhoto">
+                                <img src=" <?= $img ?>" alt="Videoke Image" class="rounded mx-auto "
+                                    id="billardsDisplayPhoto">
 
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -417,27 +417,27 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         if ($massageresult->num_rows > 0) {
                             while ($data = $massageresult->fetch_assoc()) {
                         ?>
-                                <div class="d-flex flex-column align-items-center justify-content-center" id="massage">
-                                    <div class="singleImg">
-                                        <?php
+                        <div class="d-flex flex-column align-items-center justify-content-center" id="massage">
+                            <div class="singleImg">
+                                <?php
                                         $imgSrc = '../../Assets/Images/Services/Entertainment/';
                                         if (!empty($data['RSimageData'])) {
                                             $img = $imgSrc . $data['RSimageData'];
                                         }
                                         ?>
-                                        <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded"
-                                            id="massageChairDisplayPhoto">
+                                <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded"
+                                    id="massageChairDisplayPhoto">
 
-                                    </div>
-                                    <div class="Description" id="massageDesc">
-                                        <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
-                                            <?= $data['RSduration'] ?>
-                                        </h2>
-                                        <p class="text-center">
-                                            <?= $data['RSdescription'] ?>
-                                        </p>
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="Description" id="massageDesc">
+                                <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
+                                    <?= $data['RSduration'] ?>
+                                </h2>
+                                <p class="text-center">
+                                    <?= $data['RSdescription'] ?>
+                                </p>
+                            </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -557,24 +557,24 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                         }
                                 ?>
-                                        <div class="swiper-slide">
-                                            <div class="card hotel" id="<?= trim($hotel['RServiceName']) ?>">
-                                                <img src="<?= $imgSrc ?>" alt="Hotel Image" class="card-img-top rounded">
-                                                <div class="card-body description">
-                                                    <h2 class="text fw-bold bold roomNum"><?= $hotel['RServiceName'] ?></h2>
-                                                    <?php
+                                <div class="swiper-slide">
+                                    <div class="card hotel" id="<?= trim($hotel['RServiceName']) ?>">
+                                        <img src="<?= $imgSrc ?>" alt="Hotel Image" class="card-img-top rounded">
+                                        <div class="card-body description">
+                                            <h2 class="text fw-bold bold roomNum"><?= $hotel['RServiceName'] ?></h2>
+                                            <?php
                                                     $descriptions = explode(',', $hotel['RSdescription']);
                                                     foreach ($descriptions as $description) {
                                                     ?>
-                                                        <p><?= "- " . trim($description) ?><br></p>
-                                                    <?php } ?>
-                                                    <p class="font-weight-bold">
-                                                        Price: PHP <?= $hotel['RSprice'] ?>
-                                                    </p>
-                                                    <a href="hotelBooking.php" class="btn btn-primary">Book Now</a>
-                                                </div>
-                                            </div>
+                                            <p><?= "- " . trim($description) ?><br></p>
+                                            <?php } ?>
+                                            <p class="font-weight-bold">
+                                                Price: PHP <?= $hotel['RSprice'] ?>
+                                            </p>
+                                            <a href="hotelBooking.php" class="btn btn-primary">Book Now</a>
                                         </div>
+                                    </div>
+                                </div>
                                 <?php
                                     }
                                 } else {
@@ -586,6 +586,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         <div class="swiper-pagination hotel-pagination"></div>
                     </div>
                 </div>
+            </div>
+
+            <div id="popup-container" class="popup-container">
+                <img id="popup-image" class="popup-image" src="" alt="Popup Image" />
+                <button id="close-popup" class="btn btn-danger close-popup">Close</button>
             </div>
 
         </main>
@@ -603,148 +608,148 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script>
-        const ratesTitle = document.getElementById("ratesTitle");
-        const hotelTitle = document.getElementById("hotelTitle");
+    const ratesTitle = document.getElementById("ratesTitle");
+    const hotelTitle = document.getElementById("hotelTitle");
 
-        function showRates(event) {
-            event.preventDefault();
+    function showRates(event) {
+        event.preventDefault();
+        document.getElementById('hotelRooms').style.display = 'none';
+        document.getElementById('rates').style.display = 'block';
+        if (!ratesTitle.classList.contains('selected')) {
+            ratesTitle.classList.add('selected');
+        };
+        if (hotelTitle.classList.contains('selected')) {
+            hotelTitle.classList.remove('selected')
+        }
+    }
+
+    function showHotels(event) {
+        event.preventDefault();
+        document.getElementById('hotelRooms').style.display = 'block';
+        document.getElementById('rates').style.display = 'none';
+        if (!hotelTitle.classList.contains('selected')) {
+            hotelTitle.classList.add('selected');
+        };
+        if (ratesTitle.classList.contains('selected')) {
+            ratesTitle.classList.remove('selected')
+        }
+    }
+
+    flatpickr('#hotelDate', {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (ratesTitle.classList.contains('selected')) {
             document.getElementById('hotelRooms').style.display = 'none';
             document.getElementById('rates').style.display = 'block';
-            if (!ratesTitle.classList.contains('selected')) {
-                ratesTitle.classList.add('selected');
-            };
-            if (hotelTitle.classList.contains('selected')) {
-                hotelTitle.classList.remove('selected')
-            }
-        }
-
-        function showHotels(event) {
-            event.preventDefault();
-            document.getElementById('hotelRooms').style.display = 'block';
+        } else if (hotelTitle.classList.contains('selected')) {
             document.getElementById('rates').style.display = 'none';
-            if (!hotelTitle.classList.contains('selected')) {
-                hotelTitle.classList.add('selected');
-            };
-            if (ratesTitle.classList.contains('selected')) {
-                ratesTitle.classList.remove('selected')
-            }
+            document.getElementById('hotelRooms').style.display = 'block';
         }
-
-        flatpickr('#hotelDate', {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (ratesTitle.classList.contains('selected')) {
-                document.getElementById('hotelRooms').style.display = 'none';
-                document.getElementById('rates').style.display = 'block';
-            } else if (hotelTitle.classList.contains('selected')) {
-                document.getElementById('rates').style.display = 'none';
-                document.getElementById('hotelRooms').style.display = 'block';
-            }
-        });
+    });
     </script>
     <!-- filters hotel rooms by the hour -->
     <script>
-        // State variables
-        let currentAvailabilityFilter = 'all';
+    // State variables
+    let currentAvailabilityFilter = 'all';
 
-        // Initialize filters when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            // Default 
-            document.getElementById('allRooms').classList.add('selectedIcon');
+    // Initialize filters when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        // Default 
+        document.getElementById('allRooms').classList.add('selectedIcon');
 
-            // Apply filters 
-            applyFilters();
+        // Apply filters 
+        applyFilters();
 
-            // Click events
-            ['all', 'available', 'unavailable'].forEach(type => {
-                document.getElementById(`${type}Rooms`).addEventListener('click', function() {
-                    updateAvailability(type, this);
-                });
+        // Click events
+        ['all', 'available', 'unavailable'].forEach(type => {
+            document.getElementById(`${type}Rooms`).addEventListener('click', function() {
+                updateAvailability(type, this);
             });
         });
+    });
 
-        function updateAvailability(filterType, button) {
-            currentAvailabilityFilter = filterType;
-            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
-            button.classList.add('selectedIcon');
+    function updateAvailability(filterType, button) {
+        currentAvailabilityFilter = filterType;
+        document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
+        button.classList.add('selectedIcon');
 
-            applyFilters();
+        applyFilters();
+    }
+
+    function filterRooms(filterType) {
+        currentAvailabilityFilter = filterType;
+
+        // Update selected icon
+        document.querySelectorAll('.availabilityIcon').forEach(icon => {
+            icon.classList.remove('selectedIcon');
+        });
+
+        const selectedIcon = document.getElementById(`${filterType}Rooms`);
+        if (selectedIcon) {
+            selectedIcon.classList.add('selectedIcon');
         }
 
-        function filterRooms(filterType) {
-            currentAvailabilityFilter = filterType;
+        applyFilters(); // Call the filter logic
+    }
 
-            // Update selected icon
-            document.querySelectorAll('.availabilityIcon').forEach(icon => {
-                icon.classList.remove('selectedIcon');
-            });
+    function applyFilters() {
+        const allIcons = document.querySelectorAll('.hotelIconWithCaption');
+        const allRooms = document.querySelectorAll('.hotel');
 
-            const selectedIcon = document.getElementById(`${filterType}Rooms`);
-            if (selectedIcon) {
-                selectedIcon.classList.add('selectedIcon');
-            }
+        allIcons.forEach(icon => {
+            const availability = icon.getAttribute('data-availability');
+            const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
+                availability);
 
-            applyFilters(); // Call the filter logic
-        }
+            icon.classList.toggle('hidden', !matchesAvailability);
+        });
 
-        function applyFilters() {
-            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
-            const allRooms = document.querySelectorAll('.hotel');
-
-            allIcons.forEach(icon => {
-                const availability = icon.getAttribute('data-availability');
-                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
-                    availability);
-
-                icon.classList.toggle('hidden', !matchesAvailability);
-            });
-
-            allRooms.forEach(room => {
-                // No duration logic; just show all rooms
-                room.style.display = 'flex';
-            });
-        }
+        allRooms.forEach(room => {
+            // No duration logic; just show all rooms
+            room.style.display = 'flex';
+        });
+    }
     </script>
 
     <!-- Notification Ajax -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
+    document.addEventListener('DOMContentLoaded', function() {
+        const badge = document.querySelector('.notification-container .badge');
 
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationID = this.dataset.id;
 
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                fetch('../../Function/notificationFunction.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'notificationID=' + encodeURIComponent(notificationID)
+                    })
+                    .then(response => response.text())
+                    .then(data => {
 
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
+                        this.style.transition = 'background-color 0.3s ease';
+                        this.style.backgroundColor = 'white';
 
 
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
+                        if (badge) {
+                            let currentCount = parseInt(badge.textContent, 10);
 
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
+                            if (currentCount > 1) {
+                                badge.textContent = currentCount - 1;
+                            } else {
+                                badge.remove();
                             }
-                        });
-                });
+                        }
+                    });
             });
         });
+    });
     </script>
 
 
@@ -752,92 +757,128 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- AJAX for fetching real time availability -->
     <!-- to be further tested after availability is resolved -->
     <script>
-        function fetchAvailability() {
-            fetch('/Function/Customer/getAvailability.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        dateTime: document.getElementById('hotelDate').value
-                    })
+    function fetchAvailability() {
+        fetch('/Function/Customer/getAvailability.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    dateTime: document.getElementById('hotelDate').value
                 })
-                .then(res => res.json())
-                .then(json => {
-                    json.rooms.forEach(room => {
-                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
-                        icons.forEach(icon => {
-                            const name = icon.querySelector('.roomCaption').textContent.trim();
-                            if (name === room.service) {
-                                icon.setAttribute('data-availability', room.available ? 'available' :
-                                    'unavailable');
-                            }
-                        });
+            })
+            .then(res => res.json())
+            .then(json => {
+                json.rooms.forEach(room => {
+                    const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
+                    icons.forEach(icon => {
+                        const name = icon.querySelector('.roomCaption').textContent.trim();
+                        if (name === room.service) {
+                            icon.setAttribute('data-availability', room.available ? 'available' :
+                                'unavailable');
+                        }
                     });
-                    applyFilters(); // re-apply filtering based on updated availability
-                })
-                .catch(console.error);
-        }
+                });
+                applyFilters(); // re-apply filtering based on updated availability
+            })
+            .catch(console.error);
+    }
 
-        // Re-fetch availability whenever the date changes
-        document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
-        document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
+    // Re-fetch availability whenever the date changes
+    document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
+    document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
     </script>
 
     <!-- SwiperJS JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
     <script>
-        const cottageSwiper = new Swiper('.cottage-swiper-container', {
-            slidesPerView: 4,
-            spaceBetween: 30,
-            pagination: {
-                el: '.cottage-pagination',
-                clickable: true,
+    const cottageSwiper = new Swiper('.cottage-swiper-container', {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        pagination: {
+            el: '.cottage-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 1,
+                spaceBetween: 15,
             },
-            breakpoints: {
-                0: {
-                    slidesPerView: 1,
-                    spaceBetween: 15,
-                },
-                600: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                },
-                992: {
-                    slidesPerView: 3,
-                    spaceBetween: 25,
-                },
-                1200: {
-                    slidesPerView: 4,
-                    spaceBetween: 30,
-                }
+            600: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            992: {
+                slidesPerView: 3,
+                spaceBetween: 25,
+            },
+            1200: {
+                slidesPerView: 4,
+                spaceBetween: 30,
             }
-        });
+        }
+    });
 
 
-        const hotelSwiper = new Swiper('.hotel-swiper-container', {
-            slidesPerView: 3, // show 3 cards per view
-            spaceBetween: 30,
-            pagination: {
-                el: '.hotel-pagination',
-                clickable: true,
+    const hotelSwiper = new Swiper('.hotel-swiper-container', {
+        slidesPerView: 3, // show 3 cards per view
+        spaceBetween: 30,
+        pagination: {
+            el: '.hotel-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 1, // Mobile
+                spaceBetween: 20,
             },
-            breakpoints: {
-                0: {
-                    slidesPerView: 1, // Mobile
-                    spaceBetween: 20,
-                },
-                600: {
-                    slidesPerView: 2, // Tablet
-                    spaceBetween: 25,
-                },
-                992: {
-                    slidesPerView: 3, // Desktop
-                    spaceBetween: 30,
-                }
+            600: {
+                slidesPerView: 2, // Tablet
+                spaceBetween: 25,
+            },
+            992: {
+                slidesPerView: 3, // Desktop
+                spaceBetween: 30,
             }
+        }
+    });
+    </script>
+
+    <script>
+    const popupContainer = document.getElementById('popup-container');
+    const popupImage = document.getElementById('popup-image');
+    const closePopupBtn = document.getElementById('close-popup');
+
+
+    document.querySelectorAll('.rounded').forEach((image) => {
+        image.addEventListener('click', function() {
+            const imageSrc = image.src;
+            popupImage.src = imageSrc;
+            popupContainer.style.display = 'flex';
+            requestAnimationFrame(() => {
+                popupContainer.classList.add('show');
+            });
         });
+    });
+
+
+    closePopupBtn.addEventListener('click', function() {
+        popupContainer.classList.remove('show');
+        setTimeout(() => {
+            popupContainer.style.display =
+                'none';
+        }, 300);
+    });
+
+    popupContainer.addEventListener('click', (e) => {
+        if (e.target === popupContainer) {
+            popupContainer.classList.remove('show');
+            setTimeout(() => {
+                popupContainer.style.display = 'none';
+            }, 300);
+        }
+    });
     </script>
 </body>
 

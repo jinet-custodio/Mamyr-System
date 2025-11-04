@@ -50,55 +50,58 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 <body>
     <div class="wrapper">
         <?php if (!$editMode): ?>
-            <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
-                <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
-                <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        <nav class="navbar navbar-expand-lg fixed-top" id="navbar-half2">
+            <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo"
+                    class="logoNav"></a>
+            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
 
-                <div class="navbar-collapse collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto me-10" id="toggledNav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="../index.php"> Home</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Amenities
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
-                                <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
-                                <li><a class="dropdown-item" href="events.php">Events</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="blog.php">Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="about.php">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="register.php">Book Now</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+            <div class="navbar-collapse collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.php"> Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Amenities
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
+                            <li><a class="dropdown-item active" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a>
+                            </li>
+                            <li><a class="dropdown-item" href="events.php">Events</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.php">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="about.php">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">Book Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
         <?php endif; ?>
         <main>
             <?php if ($editMode): ?>
-                <div class="question m-2" id="help" style="cursor: pointer">
-                    <h3><i class="fa-sharp fa-regular fa-circle-question mx-2" style="color: #ff4c67ff;cursor: pointer;font-size:2vw;"
-                            id="help-circle"></i>Why can't I edit?</h3>
-                    <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
-                </div>
+            <div class="question m-2" id="help" style="cursor: pointer">
+                <h3><i class="fa-sharp fa-regular fa-circle-question mx-2"
+                        style="color: #ff4c67ff;cursor: pointer;font-size:2vw;" id="help-circle"></i>Why can't I edit?
+                </h3>
+                <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
+            </div>
             <?php endif; ?>
             <div class="selection" id="selection" style="display: block;">
                 <div class="categories mx-auto" id="categories">
@@ -152,19 +155,19 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             // Display cards
                             foreach ($sessions as $session => $data) {
                         ?>
-                                <div class="entranceCard card mx-auto">
-                                    <div class="entrace-card-body">
-                                        <h5 class="entrance-card-title">
-                                            <span class="dayNight"><?= strtoupper($session) ?> TOUR</span><br>
-                                            <?= $data['time_range'] ?>
-                                        </h5>
-                                        <div class="entrance-card-content">
-                                            <span class="age">ADULT -
-                                                PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
-                                            <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
-                                        </div>
-                                    </div>
+                        <div class="entranceCard card mx-auto">
+                            <div class="entrace-card-body">
+                                <h5 class="entrance-card-title">
+                                    <span class="dayNight"><?= strtoupper($session) ?> TOUR</span><br>
+                                    <?= $data['time_range'] ?>
+                                </h5>
+                                <div class="entrance-card-content">
+                                    <span class="age">ADULT -
+                                        PHP<?= number_format($data['ERprice']['Adult'], 2) ?></span>
+                                    <span class="age">KIDS - PHP<?= number_format($data['ERprice']['Kids'], 2) ?></span>
                                 </div>
+                            </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -192,17 +195,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     $imgSrc = '../../Assets/Images/Services/Cottage/';
                                     $img = !empty($cottage['RSimageData']) ? $imgSrc . $cottage['RSimageData'] : '';
                             ?>
-                                    <div class="swiper-slide">
-                                        <div class="card cottage">
-                                            <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top">
-                                            <div class="card-body description">
-                                                <h2 class="fw-bold"><?= $cottage['RServiceName'] ?></h2>
-                                                <p><?= $cottage['RSdescription'] ?></p>
-                                                <p class="font-weight-bold">Price: PHP <?= $cottage['RSprice'] ?></p>
-                                                <a href="register.php" class="btn btn-primary mt-auto">Book Now</a>
-                                            </div>
-                                        </div>
+                            <div class="swiper-slide">
+                                <div class="card cottage">
+                                    <img src="<?= $img ?>" alt="Cottage Image" class="card-img-top">
+                                    <div class="card-body description">
+                                        <h2 class="fw-bold"><?= $cottage['RServiceName'] ?></h2>
+                                        <p><?= $cottage['RSdescription'] ?></p>
+                                        <p class="font-weight-bold">Price: PHP <?= $cottage['RSprice'] ?></p>
+                                        <a href="register.php" class="btn btn-primary mt-auto">Book Now</a>
                                     </div>
+                                </div>
+                            </div>
                             <?php
                                 }
                             } else {
@@ -215,7 +218,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 </div>
 
 
-                <div class="videoke mx-auto" style="background-color: oklch(0.64 0.65 220 / 0.1); padding: 0vw 0 3vw 0 ">
+                <div class="videoke mx-auto"
+                    style="background-color: oklch(0.64 0.65 220 / 0.1); padding: 0vw 0 3vw 0 ">
                     <div class=" videokeTitleContainer">
                         <h4 class="entranceTitle pt-3">Videoke for Rent</h4>
                     </div>
@@ -229,26 +233,28 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         if ($vidresult->num_rows > 0) {
                             while ($data = $vidresult->fetch_assoc()) {
                         ?>
-                                <div class="section d-flex flex-column">
-                                    <div class="singleImg">
-                                        <?php
+                        <div class="section d-flex flex-column">
+                            <div class="singleImg">
+                                <?php
                                         $imgSrc = '../../Assets/Images/Services/Entertainment/';
                                         if (!empty($data['RSimageData'])) {
                                             $img = $imgSrc . $data['RSimageData'];
                                         }
                                         ?>
-                                        <img src="<?= $img ?>" alt="Videoke Image" class="rounded mx-auto" id="videokeDisplayPhoto">
+                                <img src="<?= $img ?>" alt="Videoke Image" class="rounded mx-auto"
+                                    id="videokeDisplayPhoto">
 
-                                    </div>
-                                    <div class="Description" id="videokeDescContainer">
-                                        <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent </h2>
-                                        <p class="videokeDesc">
-                                            <?= $data['RSdescription'] ?>
-                                        </p>
-                                    </div>
+                            </div>
+                            <div class="Description" id="videokeDescContainer">
+                                <h2 class="text-center" id="videokePriceDesc"> PHP <?= $data['RSprice'] ?> per Rent
+                                </h2>
+                                <p class="videokeDesc">
+                                    <?= $data['RSdescription'] ?>
+                                </p>
+                            </div>
 
 
-                                </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -271,26 +277,27 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         if ($bilresult->num_rows > 0) {
                             while ($data = $bilresult->fetch_assoc()) {
                         ?>
-                                <div class="d-flex justify-content-center align-items-center" id="billiard-flex">
-                                    <div class="Description" id="videokeDescContainer">
-                                        <h2 class="text-center" id="videokePriceDesc">
-                                            Price: PHP<?= $data['RSprice'] ?> per Hour
-                                        </h2>
-                                        <p class="videokeDesc">
-                                            <?= $data['RSdescription'] ?>
-                                        </p>
-                                    </div>
-                                    <div class="singleImg">
-                                        <?php
+                        <div class="d-flex justify-content-center align-items-center" id="billiard-flex">
+                            <div class="Description" id="videokeDescContainer">
+                                <h2 class="text-center" id="videokePriceDesc">
+                                    Price: PHP<?= $data['RSprice'] ?> per Hour
+                                </h2>
+                                <p class="videokeDesc">
+                                    <?= $data['RSdescription'] ?>
+                                </p>
+                            </div>
+                            <div class="singleImg">
+                                <?php
                                         $imgSrc = '../../Assets/Images/Services/Entertainment/';
                                         if (isset($data['RSimageData'])) {
                                             $img = $imgSrc . $data['RSimageData'];
                                         }
                                         ?>
-                                        <img src=" <?= $img ?>" alt="Videoke Image" class="rounded mx-auto" id="billardsDisplayPhoto">
+                                <img src=" <?= $img ?>" alt="Videoke Image" class="rounded mx-auto"
+                                    id="billardsDisplayPhoto">
 
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -312,27 +319,27 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         if ($massageresult->num_rows > 0) {
                             while ($data = $massageresult->fetch_assoc()) {
                         ?>
-                                <div class="d-flex flex-column align-items-center justify-content-center" id="massage">
-                                    <div class="singleImg">
-                                        <?php
+                        <div class="d-flex flex-column align-items-center justify-content-center" id="massage">
+                            <div class="singleImg">
+                                <?php
                                         $imgSrc = '../../Assets/Images/Services/Entertainment/';
                                         if (!empty($data['RSimageData'])) {
                                             $img = $imgSrc . $data['RSimageData'];
                                         }
                                         ?>
-                                        <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded"
-                                            id="massageChairDisplayPhoto">
+                                <img src="<?= $img ?>" alt="Massage Chair Image" class="rounded"
+                                    id="massageChairDisplayPhoto">
 
-                                    </div>
-                                    <div class="Description" id="massageDesc">
-                                        <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
-                                            <?= $data['RSduration'] ?>
-                                        </h2>
-                                        <p class="text-center">
-                                            <?= $data['RSdescription'] ?>
-                                        </p>
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="Description" id="massageDesc">
+                                <h2 class="text-center" id="videokePriceDesc"> <?= $data['RSprice'] ?> pesos for
+                                    <?= $data['RSduration'] ?>
+                                </h2>
+                                <p class="text-center">
+                                    <?= $data['RSdescription'] ?>
+                                </p>
+                            </div>
+                        </div>
                         <?php
                             }
                         } else {
@@ -347,11 +354,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <div class="titleContainer" id="hotelTitle">
                     <h4 class="title">Hotel Rooms</h4>
                     <?php if ($editMode): ?>
-                        <textarea rows="4"
-                            class="hotelDescription HotelDesc editable-input form-control text-center"
-                            data-title="HotelDesc"><?= htmlspecialchars($contentMap['HotelDesc'] ?? 'No description found') ?></textarea>
+                    <textarea rows="4" class="hotelDescription HotelDesc editable-input form-control text-center"
+                        data-title="HotelDesc"><?= htmlspecialchars($contentMap['HotelDesc'] ?? 'No description found') ?></textarea>
                     <?php else: ?>
-                        <p class="hotelDescription"><?= htmlspecialchars($contentMap['HotelDesc'] ?? 'No description found') ?></p>
+                    <p class="hotelDescription">
+                        <?= htmlspecialchars($contentMap['HotelDesc'] ?? 'No description found') ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="container-fluid">
@@ -455,24 +462,24 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                             // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                         }
                                 ?>
-                                        <div class="swiper-slide">
-                                            <div class="card hotel" id="<?= trim($hotel['RServiceName']) ?>">
-                                                <img src="<?= $imgSrc ?>" alt="Hotel Image" class="card-img-top rounded">
-                                                <div class="card-body description">
-                                                    <h2 class="text fw-bold bold roomNum"><?= $hotel['RServiceName'] ?></h2>
-                                                    <?php
+                                <div class="swiper-slide">
+                                    <div class="card hotel" id="<?= trim($hotel['RServiceName']) ?>">
+                                        <img src="<?= $imgSrc ?>" alt="Hotel Image" class="card-img-top rounded">
+                                        <div class="card-body description">
+                                            <h2 class="text fw-bold bold roomNum"><?= $hotel['RServiceName'] ?></h2>
+                                            <?php
                                                     $descriptions = explode(',', $hotel['RSdescription']);
                                                     foreach ($descriptions as $description) {
                                                     ?>
-                                                        <p><?= "- " . trim($description) ?><br></p>
-                                                    <?php } ?>
-                                                    <p class="font-weight-bold">
-                                                        Price: PHP <?= $hotel['RSprice'] ?>
-                                                    </p>
-                                                    <a href="register.php" class="btn btn-primary">Book Now</a>
-                                                </div>
-                                            </div>
+                                            <p><?= "- " . trim($description) ?><br></p>
+                                            <?php } ?>
+                                            <p class="font-weight-bold">
+                                                Price: PHP <?= $hotel['RSprice'] ?>
+                                            </p>
+                                            <a href="register.php" class="btn btn-primary">Book Now</a>
                                         </div>
+                                    </div>
+                                </div>
                                 <?php
                                     }
                                 } else {
@@ -485,6 +492,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     </div>
                 </div>
             </div>
+
+            <div id="popup-container" class="popup-container">
+                <img id="popup-image" class="popup-image" src="" alt="Popup Image" />
+                <button id="close-popup" class="btn btn-danger close-popup">Close</button>
+            </div>
+
         </main>
         <?php if (!$editMode) {
             include 'footer.php';
@@ -509,214 +522,250 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script>
-        const ratesTitle = document.getElementById("ratesTitle");
-        const hotelTitle = document.getElementById("hotelTitle");
+    const ratesTitle = document.getElementById("ratesTitle");
+    const hotelTitle = document.getElementById("hotelTitle");
 
-        function showRates(event) {
-            event.preventDefault();
+    function showRates(event) {
+        event.preventDefault();
+        document.getElementById('hotelRooms').style.display = 'none';
+        document.getElementById('rates').style.display = 'block';
+        if (!ratesTitle.classList.contains('selected')) {
+            ratesTitle.classList.add('selected');
+        };
+        if (hotelTitle.classList.contains('selected')) {
+            hotelTitle.classList.remove('selected')
+        }
+    }
+
+    function showHotels(event) {
+        event.preventDefault();
+        document.getElementById('hotelRooms').style.display = 'block';
+        document.getElementById('rates').style.display = 'none';
+        if (!hotelTitle.classList.contains('selected')) {
+            hotelTitle.classList.add('selected');
+        };
+        if (ratesTitle.classList.contains('selected')) {
+            ratesTitle.classList.remove('selected')
+        }
+    }
+
+    flatpickr('#hotelDate', {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (ratesTitle.classList.contains('selected')) {
             document.getElementById('hotelRooms').style.display = 'none';
             document.getElementById('rates').style.display = 'block';
-            if (!ratesTitle.classList.contains('selected')) {
-                ratesTitle.classList.add('selected');
-            };
-            if (hotelTitle.classList.contains('selected')) {
-                hotelTitle.classList.remove('selected')
-            }
-        }
-
-        function showHotels(event) {
-            event.preventDefault();
-            document.getElementById('hotelRooms').style.display = 'block';
+        } else if (hotelTitle.classList.contains('selected')) {
             document.getElementById('rates').style.display = 'none';
-            if (!hotelTitle.classList.contains('selected')) {
-                hotelTitle.classList.add('selected');
-            };
-            if (ratesTitle.classList.contains('selected')) {
-                ratesTitle.classList.remove('selected')
-            }
+            document.getElementById('hotelRooms').style.display = 'block';
         }
-
-        flatpickr('#hotelDate', {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (ratesTitle.classList.contains('selected')) {
-                document.getElementById('hotelRooms').style.display = 'none';
-                document.getElementById('rates').style.display = 'block';
-            } else if (hotelTitle.classList.contains('selected')) {
-                document.getElementById('rates').style.display = 'none';
-                document.getElementById('hotelRooms').style.display = 'block';
-            }
-        });
+    });
     </script>
     <?php if ($editMode): ?>
-        <script type="module">
-            import {
-                initWebsiteEditor
-            } from '../Assets/JS/EditWebsite/editWebsiteContent.js';
+    <script type="module">
+    import {
+        initWebsiteEditor
+    } from '../Assets/JS/EditWebsite/editWebsiteContent.js';
 
-            initWebsiteEditor('Rates  and Hotel Rooms', '../Function/Admin/editWebsite/editWebsiteContent.php');
-        </script>
+    initWebsiteEditor('Rates  and Hotel Rooms', '../Function/Admin/editWebsite/editWebsiteContent.php');
+    </script>
     <?php endif; ?>
     <!-- filters hotel rooms by the hour -->
     <script>
-        let currentAvailabilityFilter = 'all';
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('allRooms').classList.add('selectedIcon');
+    let currentAvailabilityFilter = 'all';
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('allRooms').classList.add('selectedIcon');
 
-            applyFilters();
+        applyFilters();
 
-            // Click events
-            ['all', 'available', 'unavailable'].forEach(type => {
-                document.getElementById(`${type}Rooms`).addEventListener('click', function() {
-                    updateAvailability(type, this);
-                });
+        // Click events
+        ['all', 'available', 'unavailable'].forEach(type => {
+            document.getElementById(`${type}Rooms`).addEventListener('click', function() {
+                updateAvailability(type, this);
             });
         });
+    });
 
-        function updateAvailability(filterType, button) {
-            currentAvailabilityFilter = filterType;
-            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
-            button.classList.add('selectedIcon');
+    function updateAvailability(filterType, button) {
+        currentAvailabilityFilter = filterType;
+        document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
+        button.classList.add('selectedIcon');
 
-            applyFilters();
+        applyFilters();
+    }
+
+    function filterRooms(filterType) {
+        currentAvailabilityFilter = filterType;
+
+        // Update selected icon
+        document.querySelectorAll('.availabilityIcon').forEach(icon => {
+            icon.classList.remove('selectedIcon');
+        });
+
+        const selectedIcon = document.getElementById(`${filterType}Rooms`);
+        if (selectedIcon) {
+            selectedIcon.classList.add('selectedIcon');
         }
 
-        function filterRooms(filterType) {
-            currentAvailabilityFilter = filterType;
+        applyFilters(); // Call the filter logic
+    }
 
-            // Update selected icon
-            document.querySelectorAll('.availabilityIcon').forEach(icon => {
-                icon.classList.remove('selectedIcon');
-            });
+    function applyFilters() {
+        const allIcons = document.querySelectorAll('.hotelIconWithCaption');
+        const allRooms = document.querySelectorAll('.hotel');
 
-            const selectedIcon = document.getElementById(`${filterType}Rooms`);
-            if (selectedIcon) {
-                selectedIcon.classList.add('selectedIcon');
-            }
+        allIcons.forEach(icon => {
+            const availability = icon.getAttribute('data-availability');
+            const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
+                availability);
 
-            applyFilters(); // Call the filter logic
-        }
+            icon.classList.toggle('hidden', !matchesAvailability);
+        });
 
-        function applyFilters() {
-            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
-            const allRooms = document.querySelectorAll('.hotel');
-
-            allIcons.forEach(icon => {
-                const availability = icon.getAttribute('data-availability');
-                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
-                    availability);
-
-                icon.classList.toggle('hidden', !matchesAvailability);
-            });
-
-            allRooms.forEach(room => {
-                // No duration logic; just show all rooms
-                room.style.display = 'flex';
-            });
-        }
+        allRooms.forEach(room => {
+            // No duration logic; just show all rooms
+            room.style.display = 'flex';
+        });
+    }
     </script>
     <script>
-        function fetchAvailability() {
-            fetch('/Function/Customer/getAvailability.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        dateTime: document.getElementById('hotelDate').value
-                    })
+    function fetchAvailability() {
+        fetch('/Function/Customer/getAvailability.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    dateTime: document.getElementById('hotelDate').value
                 })
-                .then(res => res.json())
-                .then(json => {
-                    json.rooms.forEach(room => {
-                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
-                        icons.forEach(icon => {
-                            const name = icon.querySelector('.roomCaption').textContent.trim();
-                            if (name === room.service) {
-                                icon.setAttribute('data-availability', room.available ? 'available' :
-                                    'unavailable');
-                            }
-                        });
+            })
+            .then(res => res.json())
+            .then(json => {
+                json.rooms.forEach(room => {
+                    const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
+                    icons.forEach(icon => {
+                        const name = icon.querySelector('.roomCaption').textContent.trim();
+                        if (name === room.service) {
+                            icon.setAttribute('data-availability', room.available ? 'available' :
+                                'unavailable');
+                        }
                     });
-                    applyFilters(); // re-apply filtering based on updated availability
-                })
-                .catch(console.error);
-        }
+                });
+                applyFilters(); // re-apply filtering based on updated availability
+            })
+            .catch(console.error);
+    }
 
-        document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
-        document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
+    document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
+    document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
     </script>
 
     <script>
-        const icon = document.getElementById("help");
-        icon.addEventListener("click", function() {
-            Swal.fire({
-                title: "Why can't I edit the majority of this?",
-                text: "Most of the contents of this page are already found at the services section. To edit, please head to the Services page to ensure consistency.",
-                icon: "info",
-                confirmButtonText: "Got it!"
-            });
+    const icon = document.getElementById("help");
+    icon.addEventListener("click", function() {
+        Swal.fire({
+            title: "Why can't I edit the majority of this?",
+            text: "Most of the contents of this page are already found at the services section. To edit, please head to the Services page to ensure consistency.",
+            icon: "info",
+            confirmButtonText: "Got it!"
         });
+    });
     </script>
     <!-- SwiperJS JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
     <script>
-        const cottageSwiper = new Swiper('.cottage-swiper-container', {
-            slidesPerView: 4,
-            spaceBetween: 30,
-            pagination: {
-                el: '.cottage-pagination',
-                clickable: true,
+    const cottageSwiper = new Swiper('.cottage-swiper-container', {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        pagination: {
+            el: '.cottage-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 1,
+                spaceBetween: 15,
             },
-            breakpoints: {
-                0: {
-                    slidesPerView: 1,
-                    spaceBetween: 15,
-                },
-                600: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                },
-                992: {
-                    slidesPerView: 3,
-                    spaceBetween: 25,
-                },
-                1200: {
-                    slidesPerView: 4,
-                    spaceBetween: 30,
-                }
+            600: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            992: {
+                slidesPerView: 3,
+                spaceBetween: 25,
+            },
+            1200: {
+                slidesPerView: 4,
+                spaceBetween: 30,
             }
-        });
+        }
+    });
 
 
-        const hotelSwiper = new Swiper('.hotel-swiper-container', {
-            slidesPerView: 3, // show 3 cards per view
-            spaceBetween: 30,
-            pagination: {
-                el: '.hotel-pagination',
-                clickable: true,
+    const hotelSwiper = new Swiper('.hotel-swiper-container', {
+        slidesPerView: 3, // show 3 cards per view
+        spaceBetween: 30,
+        pagination: {
+            el: '.hotel-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 1, // Mobile
+                spaceBetween: 20,
             },
-            breakpoints: {
-                0: {
-                    slidesPerView: 1, // Mobile
-                    spaceBetween: 20,
-                },
-                600: {
-                    slidesPerView: 2, // Tablet
-                    spaceBetween: 25,
-                },
-                992: {
-                    slidesPerView: 3, // Desktop
-                    spaceBetween: 30,
-                }
+            600: {
+                slidesPerView: 2, // Tablet
+                spaceBetween: 25,
+            },
+            992: {
+                slidesPerView: 3, // Desktop
+                spaceBetween: 30,
             }
-        });
+        }
+    });
     </script>
 
+
+    <script>
+    const popupContainer = document.getElementById('popup-container');
+    const popupImage = document.getElementById('popup-image');
+    const closePopupBtn = document.getElementById('close-popup');
+
+
+    document.querySelectorAll('.rounded').forEach((image) => {
+        image.addEventListener('click', function() {
+            const imageSrc = image.src;
+            popupImage.src = imageSrc;
+            popupContainer.style.display = 'flex';
+            requestAnimationFrame(() => {
+                popupContainer.classList.add('show');
+            });
+        });
+    });
+
+
+    closePopupBtn.addEventListener('click', function() {
+        popupContainer.classList.remove('show');
+        setTimeout(() => {
+            popupContainer.style.display =
+                'none';
+        }, 300);
+    });
+
+    popupContainer.addEventListener('click', (e) => {
+        if (e.target === popupContainer) {
+            popupContainer.classList.remove('show');
+            setTimeout(() => {
+                popupContainer.style.display = 'none';
+            }, 300);
+        }
+    });
+    </script>
 </body>
 
 </html>
