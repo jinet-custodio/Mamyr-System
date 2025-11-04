@@ -53,6 +53,37 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
+
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
+
+//SQL statement for retrieving data for website content from DB
+$sectionName = 'BookNowResort';
+$getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getWebContent->bind_param("s", $sectionName);
+$getWebContent->execute();
+$getWebContentResult = $getWebContent->get_result();
+$contentMap = [];
+$imageMap = [];
+$defaultImage = "../../Assets/Images/no-picture.png";
+while ($row = $getWebContentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
+
+    // Fetch images with this contentID
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages->bind_param("i", $contentID);
+    $getImages->execute();
+    $imageResult = $getImages->get_result();
+
+    $images = [];
+    while ($imageRow = $imageResult->fetch_assoc()) {
+        $images[] = $imageRow;
+    }
+
+    $imageMap[$cleanTitle] = $images;
+}
 ?>
 
 <!DOCTYPE html>
@@ -372,96 +403,166 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 ?>
                             </div>
 
-                            <div class="card-body note">
-                                <h1 class="card-title">NOTE:</h1>
-                                <ul>
-                                    <li>Food is allowed except alcoholic drink and soft drinks. It`s available and
-                                        affordable in our convenience store inside.</li>
-                                    <li>Appropriate swimming attire is required.</li>
-                                    <li>3ft below are free in entrance fee</li>
-                                </ul>
+                            <div class="card-body note d-flex flex-column align-items-center">
+                                <div class="card-body videoke">
+                                    <h1> Videoke</h1>
+                                    <?php
+                                    $entertainmentName = 'Videoke %';
+                                    $categoryID = 3;
+                                    $getVideoke = $conn->prepare("SELECT * FROM resortamenity WHERE  RScategoryID = ? AND  RServiceName LIKE ? LIMIT 1");
+                                    $getVideoke->bind_param("is",  $categoryID, $entertainmentName);
+                                    $getVideoke->execute();
+                                    $getVideokeResult =  $getVideoke->get_result();
+                                    if ($getVideokeResult->num_rows > 0) {
+                                        while ($row = $getVideokeResult->fetch_assoc()) {
+                                            $price = $row['RSprice'];
+                                    ?>
+
+                                            <p class="mb-0"><?= htmlspecialchars(number_format($price, 0)) ?> pesos per rent </p>
+                                        <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <p>None</p>
+                                    <?php
+                                    }
+                                    ?>
+
+                                </div>
+
+                                <div class="card-body massage">
+                                    <h1> Massage Chair</h1>
+                                    <?php
+                                    $entertainmentName = 'Massage Chair';
+                                    $categoryID = 3;
+                                    $getVideoke = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ? AND RScategoryID = ?");
+                                    $getVideoke->bind_param("si", $entertainmentName, $categoryID);
+                                    $getVideoke->execute();
+                                    $getVideokeResult =  $getVideoke->get_result();
+                                    if ($getVideokeResult->num_rows > 0) {
+                                        while ($row = $getVideokeResult->fetch_assoc()) {
+                                            $duration = $row['RSduration'];
+                                            $price = $row['RSprice'];
+                                    ?>
+
+                                            <p class="mb-0"><?= htmlspecialchars(number_format($price, 0)) ?> pesos for
+                                                <?= htmlspecialchars($duration) ?></p>
+                                        <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <p>None</p>
+                                    <?php
+                                    }
+                                    ?>
+
+                                </div>
+
+                                <div class="card-body billiard">
+                                    <h1> Billiard</h1>
+                                    <?php
+                                    $entertainmentName = 'Billiard';
+                                    $categoryID = 3;
+                                    $getVideoke = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ? AND RScategoryID = ?");
+                                    $getVideoke->bind_param("si", $entertainmentName, $categoryID);
+                                    $getVideoke->execute();
+                                    $getVideokeResult =  $getVideoke->get_result();
+                                    if ($getVideokeResult->num_rows > 0) {
+                                        while ($row = $getVideokeResult->fetch_assoc()) {
+                                            $duration = $row['RSduration'];
+                                            $price = $row['RSprice'];
+                                    ?>
+                                            <p class="mb-0"><?= htmlspecialchars(number_format($price, 0)) ?> pesos for
+                                                <?= htmlspecialchars($duration) ?> </p>
+                                        <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <p>None</p>
+                                    <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="rulesModal" tabindex="-1" aria-labelledby="rulesModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content" id="modal-content">
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title" id="rulesModalLabel">Our Rules</h5>
+                                        </div>
+                                        <div class="modal-body" id="rulesModalBody">
+                                            <?php
+                                            if ($contentMap['ResortRules']) {
+                                                $content = ($contentMap['ResortRules']);
+                                                $rules = explode('. , ', $content);
+                                            ?>
+                                                <?php if ($editMode): ?>
+                                                    <div class="resort-rules-edit">
+                                                        <?php foreach ($rules as $index => $rule): ?>
+                                                            <input type="text"
+                                                                class="form-control resort-rule-input set-editable mb-2"
+                                                                value="<?= htmlspecialchars($rule) ?>">
+                                                        <?php endforeach; ?>
+
+                                                        <button type="button" id="addRuleBtn" class="btn btn-sm btn-primary mt-2 set-editable">+ Add Rule</button>
+
+                                                        <input type="hidden"
+                                                            class="editable-input set-editable "
+                                                            data-title="ResortRules"
+                                                            id="combinedRulesInput"
+                                                            value="<?= htmlspecialchars($content) ?>">
+                                                    </div>
+
+                                                    <script>
+                                                        document.addEventListener('input', function(e) {
+                                                            if (e.target.classList.contains('resort-rule-input')) {
+                                                                const rules = Array.from(document.querySelectorAll('.resort-rule-input'))
+                                                                    .map(input => {
+                                                                        let text = input.value.trim();
+                                                                        text = text.replace(/\.+$/, '');
+                                                                        return text;
+                                                                    })
+                                                                    .filter(text => text.length > 0);
+
+                                                                document.getElementById('combinedRulesInput').value = rules.join('. , ');
+                                                            }
+                                                        });
+
+                                                        // Add rule dynamically
+                                                        document.getElementById('addRuleBtn').addEventListener('click', () => {
+                                                            const container = document.querySelector('.resort-rules-edit');
+                                                            const newInput = document.createElement('input');
+                                                            newInput.type = 'text';
+                                                            newInput.className = 'form-control set-editable resort-rule-input mb-2';
+                                                            newInput.placeholder = 'Enter new rule...';
+                                                            container.insertBefore(newInput, document.getElementById('addRuleBtn'));
+                                                            newInput.focus();
+                                                        });
+                                                    </script>
+
+                                                <?php else: ?>
+                                                    <ul class="resort-rules-list">
+                                                        <?php foreach ($rules as $rule): ?>
+                                                            <li><?= htmlspecialchars($rule) ?></li>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                            <?php endif;
+                                            } ?>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary set-editable " data-bs-dismiss="modal" id="modal-close">Close</button>
+                                            <button type="button" id="saveChangesBtn" class="btn btn-success set-editable ">Save Changes</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="entertainmentContainer">
-                            <div class="card-body videoke">
-                                <h1> Videoke</h1>
-                                <?php
-                                $entertainmentName = 'Videoke %';
-                                $categoryID = 3;
-                                $getVideoke = $conn->prepare("SELECT * FROM resortamenity WHERE  RScategoryID = ? AND  RServiceName LIKE ? LIMIT 1");
-                                $getVideoke->bind_param("is",  $categoryID, $entertainmentName);
-                                $getVideoke->execute();
-                                $getVideokeResult =  $getVideoke->get_result();
-                                if ($getVideokeResult->num_rows > 0) {
-                                    while ($row = $getVideokeResult->fetch_assoc()) {
-                                        $price = $row['RSprice'];
-                                ?>
-
-                                        <p><?= htmlspecialchars(number_format($price, 0)) ?> pesos per rent </p>
-                                    <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <p>None</p>
-                                <?php
-                                }
-                                ?>
-
-                            </div>
-
-                            <div class="card-body massage">
-                                <h1> Massage Chair</h1>
-                                <?php
-                                $entertainmentName = 'Massage Chair';
-                                $categoryID = 3;
-                                $getVideoke = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ? AND RScategoryID = ?");
-                                $getVideoke->bind_param("si", $entertainmentName, $categoryID);
-                                $getVideoke->execute();
-                                $getVideokeResult =  $getVideoke->get_result();
-                                if ($getVideokeResult->num_rows > 0) {
-                                    while ($row = $getVideokeResult->fetch_assoc()) {
-                                        $duration = $row['RSduration'];
-                                        $price = $row['RSprice'];
-                                ?>
-
-                                        <p><?= htmlspecialchars(number_format($price, 0)) ?> pesos for
-                                            <?= htmlspecialchars($duration) ?></p>
-                                    <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <p>None</p>
-                                <?php
-                                }
-                                ?>
-
-                            </div>
-
-                            <div class="card-body billiard">
-                                <h1> Billiard</h1>
-                                <?php
-                                $entertainmentName = 'Billiard';
-                                $categoryID = 3;
-                                $getVideoke = $conn->prepare("SELECT * FROM resortamenity WHERE RServiceName = ? AND RScategoryID = ?");
-                                $getVideoke->bind_param("si", $entertainmentName, $categoryID);
-                                $getVideoke->execute();
-                                $getVideokeResult =  $getVideoke->get_result();
-                                if ($getVideokeResult->num_rows > 0) {
-                                    while ($row = $getVideokeResult->fetch_assoc()) {
-                                        $duration = $row['RSduration'];
-                                        $price = $row['RSprice'];
-                                ?>
-                                        <p><?= htmlspecialchars(number_format($price, 0)) ?> pesos for
-                                            <?= htmlspecialchars($duration) ?> </p>
-                                    <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <p>None</p>
-                                <?php
-                                }
-                                ?>
+                        <div class="entertainmentContainer d-flex justify-content-center mb-4 px-2">
+                            <h1 class="card-title w-50 text-danger">Please read the following rules before entering the resort area:</h1>
+                            <div class="noteContainer d-flex align-items-center justify-content-center m-auto">
+                                <a href="#" data-bs-target="#rulesModal" data-bs-toggle="modal" class="m-auto fs-5" id="viewRulesBtn"> <i class="fa-solid fa-circle-info mx-1"></i>View Rules </a>
                             </div>
                         </div>
                     </div>
@@ -513,415 +614,432 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             window.location.href = "bookNow.php";
         });
     </script>
+    <?php if (!$editMode): ?>
+        <!-- Calendar -->
+        <script>
+            const calIcon = document.getElementById("calendarIcon");
+            //resort calendar
+            flatpickr('#resortBookingDate', {
+                // enableTime: true,
+                minDate: new Date().setDate(new Date().getDate() + 1),
+                dateFormat: "Y-m-d",
+            });
+        </script>
 
-    <!-- Calendar -->
-    <script>
-        const calIcon = document.getElementById("calendarIcon");
-        //resort calendar
-        flatpickr('#resortBookingDate', {
-            // enableTime: true,
-            minDate: new Date().setDate(new Date().getDate() + 1),
-            dateFormat: "Y-m-d",
-        });
-    </script>
+        <!-- Fetch Info -->
+        <script>
+            const cottageSelectionsSession = <?= isset($_SESSION['resortFormData']['cottageOptions'])
+                                                    ? json_encode($_SESSION['resortFormData']['cottageOptions'])
+                                                    : '[]'
+                                                ?>;
+            const addOnsServicesSession =
+                <?= isset($_SESSION['resortFormData']['addOnsServices']) ? json_encode($_SESSION['resortFormData']['addOnsServices']) : '[]' ?>;
 
-    <!-- Fetch Info -->
-    <script>
-        const cottageSelectionsSession = <?= isset($_SESSION['resortFormData']['cottageOptions'])
-                                                ? json_encode($_SESSION['resortFormData']['cottageOptions'])
-                                                : '[]'
-                                            ?>;
-        const addOnsServicesSession =
-            <?= isset($_SESSION['resortFormData']['addOnsServices']) ? json_encode($_SESSION['resortFormData']['addOnsServices']) : '[]' ?>;
+            const roomSelectionSession =
+                <?= isset($_SESSION['resortFormData']['roomOptions']) ? json_encode($_SESSION['resortFormData']['roomOptions']) : '[]' ?>;
+            // console.log(roomSelectionSession);
+            document.addEventListener("DOMContentLoaded", function() {
+                const dateInput = document.getElementById('resortBookingDate');
+                const tourInput = document.getElementById('tourSelections');
+                const form = document.querySelector('form');
+                if (dateInput && !dateInput.value) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Select your choice of date',
+                        text: 'Please pick a booking date to continue',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        tourInput.style.border = '2px solid red'
+                        dateInput.style.border = '2px solid red';
+                        form.removeAttribute('aria-hidden');
+                        dateInput.focus();
+                    })
+                };
+            });
 
-        const roomSelectionSession =
-            <?= isset($_SESSION['resortFormData']['roomOptions']) ? json_encode($_SESSION['resortFormData']['roomOptions']) : '[]' ?>;
-        // console.log(roomSelectionSession);
-        document.addEventListener("DOMContentLoaded", function() {
-            const dateInput = document.getElementById('resortBookingDate');
-            const tourInput = document.getElementById('tourSelections');
-            const form = document.querySelector('form');
-            if (dateInput && !dateInput.value) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Select your choice of date',
-                    text: 'Please pick a booking date to continue',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    tourInput.style.border = '2px solid red'
-                    dateInput.style.border = '2px solid red';
-                    form.removeAttribute('aria-hidden');
-                    dateInput.focus();
-                })
-            };
-        });
+            const startDate = document.getElementById('resortBookingDate');
+            const tourSelect = document.getElementById('tourSelections');
 
-        const startDate = document.getElementById('resortBookingDate');
-        const tourSelect = document.getElementById('tourSelections');
+            const adultCount = document.getElementById('adultCount');
+            const kidsCount = document.getElementById('childrenCount');
 
-        const adultCount = document.getElementById('adultCount');
-        const kidsCount = document.getElementById('childrenCount');
-
-        function getTotalPax() {
-            const kids = parseInt(kidsCount.value) || 0;
-            const adults = parseInt(adultCount.value) || 0;
-            return kids + adults;
-        }
+            function getTotalPax() {
+                const kids = parseInt(kidsCount.value) || 0;
+                const adults = parseInt(adultCount.value) || 0;
+                return kids + adults;
+            }
 
 
-        function fetchAmenities() {
-            const selectedDate = startDate.value;
-            const selectedTour = tourSelect.value;
+            function fetchAmenities() {
+                const selectedDate = startDate.value;
+                const selectedTour = tourSelect.value;
 
-            if (!selectedDate || !selectedTour) return;
+                if (!selectedDate || !selectedTour) return;
 
-            fetch(
-                    `../../Function/Booking/getAvailableAmenities.php?date=${encodeURIComponent(selectedDate)}&tour=${encodeURIComponent(selectedTour)}`
-                )
-                .then(response => {
-                    if (!response.ok) throw new Error("Network error");
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        alert("Error: " + data.error);
-                        return;
-                    }
-                    const cottageContainer = document.getElementById('cottagesContainer');
-                    const roomSection = document.getElementById('rooms');
-                    const roomsContainer = document.getElementById('roomsContainer');
-                    const entertainmentContainer = document.getElementById('entertainmentContainer');
+                fetch(
+                        `../../Function/Booking/getAvailableAmenities.php?date=${encodeURIComponent(selectedDate)}&tour=${encodeURIComponent(selectedTour)}`
+                    )
+                    .then(response => {
+                        if (!response.ok) throw new Error("Network error");
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            alert("Error: " + data.error);
+                            return;
+                        }
+                        const cottageContainer = document.getElementById('cottagesContainer');
+                        const roomSection = document.getElementById('rooms');
+                        const roomsContainer = document.getElementById('roomsContainer');
+                        const entertainmentContainer = document.getElementById('entertainmentContainer');
 
-                    cottageContainer.innerHTML = '';
-                    roomsContainer.innerHTML = '';
-                    entertainmentContainer.innerHTML = '';
-                    roomSection.style.display = 'none';
+                        cottageContainer.innerHTML = '';
+                        roomsContainer.innerHTML = '';
+                        entertainmentContainer.innerHTML = '';
+                        roomSection.style.display = 'none';
 
-                    function getCottages() {
-                        data.cottages.forEach(cottage => {
-                            const wrapper = document.createElement('div');
-                            wrapper.classList.add('checkbox-item');
+                        function getCottages() {
+                            data.cottages.forEach(cottage => {
+                                const wrapper = document.createElement('div');
+                                wrapper.classList.add('checkbox-item');
 
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.name = 'cottageOptions[]';
-                            checkbox.value = cottage.RServiceName;
-                            checkbox.id = `${cottage.RServiceName}`;
-                            checkbox.dataset.capacity = cottage.RScapacity;
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.name = 'cottageOptions[]';
+                                checkbox.value = cottage.RServiceName;
+                                checkbox.id = `${cottage.RServiceName}`;
+                                checkbox.dataset.capacity = cottage.RScapacity;
 
-                            const label = document.createElement('label');
-                            label.setAttribute('for', checkbox.id);
-                            label.textContent = `${cottage.RServiceName} - (${cottage.RScapacity} pax)`;
+                                const label = document.createElement('label');
+                                label.setAttribute('for', checkbox.id);
+                                label.textContent = `${cottage.RServiceName} - (${cottage.RScapacity} pax)`;
 
-                            const cottageSelections = cottageSelectionsSession.map(String);
-                            if (cottageSelections.includes(String(cottage.RServiceName))) {
-                                checkbox.checked = true;
-                            }
+                                const cottageSelections = cottageSelectionsSession.map(String);
+                                if (cottageSelections.includes(String(cottage.RServiceName))) {
+                                    checkbox.checked = true;
+                                }
 
-                            wrapper.appendChild(checkbox);
-                            wrapper.appendChild(label);
+                                wrapper.appendChild(checkbox);
+                                wrapper.appendChild(label);
 
-                            cottageContainer.appendChild(wrapper);
+                                cottageContainer.appendChild(wrapper);
+                            });
+                        };
+
+                        function getRooms() {
+                            roomSection.style.display = 'block';
+
+                            data.rooms.forEach(room => {
+                                const wrapper = document.createElement('div');
+                                wrapper.classList.add('checkbox-item');
+
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.name = 'roomOptions[]';
+                                checkbox.value = room.RServiceName;
+                                checkbox.id = `${room.RServiceName}`;
+                                checkbox.dataset.capacity = room.RScapacity;
+
+                                const label = document.createElement('label');
+                                label.setAttribute('for', checkbox.id);
+                                label.innerHTML =
+                                    `<strong>${room.RServiceName} </strong> for ₱${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
+
+                                const roomSelection = roomSelectionSession.map(String);
+                                if (roomSelection.includes(String(room.RServiceName))) {
+                                    checkbox.checked = true;
+                                }
+
+                                wrapper.appendChild(checkbox);
+                                wrapper.appendChild(label);
+                                roomsContainer.appendChild(wrapper);
+                            });
+                        }
+
+                        // Show cottages for Day/Night
+                        if (selectedTour === 'Day' || selectedTour === 'Night') {
+                            getCottages();
+                        }
+
+                        // Show rooms for Overnight
+                        if (selectedTour === 'Overnight') {
+                            getRooms();
+                            getCottages();
+                        }
+
+                        // Show entertainment for all
+                        if (data.entertainments && data.entertainments.length > 0) {
+                            //  entertainmentLabel.innerHTML = "Additional Services";
+                            data.entertainments.forEach(ent => {
+                                const wrapper = document.createElement('div');
+                                wrapper.classList.add('checkbox-item');
+
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.name = 'entertainmentOptions[]';
+                                checkbox.value = ent.RServiceName;
+                                checkbox.id = `ent-${ent.RServiceName}`;
+
+                                const label = document.createElement('label');
+                                label.setAttribute('for', checkbox.id);
+                                label.textContent =
+                                    `${ent.RServiceName} - ₱${Number(ent.RSprice).toLocaleString()}.00`;
+
+                                const addOnsServices = addOnsServicesSession.map(String);
+                                if (addOnsServices.includes(String(ent.RServiceName))) {
+                                    checkbox.checked = true;
+                                }
+
+                                wrapper.appendChild(checkbox);
+                                wrapper.appendChild(label);
+                                entertainmentContainer.appendChild(wrapper);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        // console.error(error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to fetch amenities. Please try again.',
                         });
-                    };
+                    });
+            }
 
-                    function getRooms() {
-                        roomSection.style.display = 'block';
 
-                        data.rooms.forEach(room => {
-                            const wrapper = document.createElement('div');
-                            wrapper.classList.add('checkbox-item');
+            document.addEventListener("DOMContentLoaded", () => {
+                if (startDate && startDate.value || tourSelect && tourSelect.value) {
+                    fetchAmenities();
+                    startDate.style.border = '1px solid rgb(223, 226, 230)';
+                    tourSelect.style.border = '1px solid rgb(223, 226, 230)';
+                }
 
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.name = 'roomOptions[]';
-                            checkbox.value = room.RServiceName;
-                            checkbox.id = `${room.RServiceName}`;
-                            checkbox.dataset.capacity = room.RScapacity;
+                // console.log("startDate.value at DOMContentLoaded:", startDate?.value);
 
-                            const label = document.createElement('label');
-                            label.setAttribute('for', checkbox.id);
-                            label.innerHTML =
-                                `<strong>${room.RServiceName} </strong> for ₱${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
+            });
 
-                            const roomSelection = roomSelectionSession.map(String);
-                            if (roomSelection.includes(String(room.RServiceName))) {
-                                checkbox.checked = true;
-                            }
+            if (startDate) {
+                startDate.addEventListener("change", () => {
+                    fetchAmenities();
+                    startDate.style.border = '1px solid rgb(223, 226, 230)';
+                });
+                fetchAmenities();
+                startDate.style.border = '1px solid rgb(223, 226, 230)';
 
-                            wrapper.appendChild(checkbox);
-                            wrapper.appendChild(label);
-                            roomsContainer.appendChild(wrapper);
+            }
+            if (tourSelect) {
+                tourSelect.addEventListener('change', function() {
+                    fetchAmenities();
+                    tourSelect.style.border = '1px solid rgb(223, 226, 230)';
+                });
+                tourSelect.style.border = '1px solid rgb(223, 226, 230)';
+                fetchAmenities();
+            }
+            const bookRatesBTN = document.getElementById('bookRatesBTN')
+
+
+            bookRatesBTN.addEventListener("click", function() {
+                // e.preventDefault();
+
+                let totalCapacity = 0;
+                const totalPax = getTotalPax();
+
+                const cottageSelected = document.querySelectorAll('input[name="cottageOptions[]"]:checked');
+                cottageSelected.forEach(item => {
+                    totalCapacity += parseInt(item.dataset.capacity) || 0;
+                });
+
+                let roomSelectedCount = 0;
+                let roomTotalCapacity = 0;
+                const roomSelected = document.querySelectorAll('input[name="roomOptions[]"]:checked');
+                roomSelected.forEach(item => {
+                    roomTotalCapacity += parseInt(item.dataset.capacity) || 0;
+                    roomSelectedCount++;
+                });
+
+                let isValid = true;
+                if (tourSelect.value === 'Overnight' && roomSelectedCount === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops!',
+                        text: 'Room is required. Please select a room(s).',
+                    });
+                    isValid = false;
+                }
+
+                if (totalPax === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops',
+                        text: 'Please enter the number of guests.',
+                    });
+                    isValid = false;
+                }
+
+                if (tourSelect.value === 'Night' || tourSelect.value === 'Day') {
+                    if (totalCapacity === 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops',
+                            text: 'Select a cottage(s) or room(s)',
                         });
+                        isValid = false;
                     }
-
-                    // Show cottages for Day/Night
-                    if (selectedTour === 'Day' || selectedTour === 'Night') {
-                        getCottages();
-                    }
-
-                    // Show rooms for Overnight
-                    if (selectedTour === 'Overnight') {
-                        getRooms();
-                        getCottages();
-                    }
-
-                    // Show entertainment for all
-                    if (data.entertainments && data.entertainments.length > 0) {
-                        //  entertainmentLabel.innerHTML = "Additional Services";
-                        data.entertainments.forEach(ent => {
-                            const wrapper = document.createElement('div');
-                            wrapper.classList.add('checkbox-item');
-
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.name = 'entertainmentOptions[]';
-                            checkbox.value = ent.RServiceName;
-                            checkbox.id = `ent-${ent.RServiceName}`;
-
-                            const label = document.createElement('label');
-                            label.setAttribute('for', checkbox.id);
-                            label.textContent =
-                                `${ent.RServiceName} - ₱${Number(ent.RSprice).toLocaleString()}.00`;
-
-                            const addOnsServices = addOnsServicesSession.map(String);
-                            if (addOnsServices.includes(String(ent.RServiceName))) {
-                                checkbox.checked = true;
-                            }
-
-                            wrapper.appendChild(checkbox);
-                            wrapper.appendChild(label);
-                            entertainmentContainer.appendChild(wrapper);
+                    if (totalPax > totalCapacity) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops',
+                            text: 'The number of guests exceeds the capacity of the selected cottage(s) or room(s). Please adjust your selection.',
                         });
+                        isValid = false;
                     }
-                })
-                .catch(error => {
-                    // console.error(error);
+                }
+
+                bookRatesBTN.type = isValid ? 'submit' : 'button';
+            });
+        </script>
+
+        <!-- For displaying text for hotel and cottages -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+
+                function renderSelectedItems(containerId, label, items) {
+                    const container = document.getElementById(containerId);
+                    if (!container) return;
+
+                    container.innerHTML = ""; // clear previous items
+                    if (items.length === 0) return;
+
+                    const wrapper = document.createElement("div");
+                    wrapper.classList.add("selected-inline");
+
+                    const labelEl = document.createElement("span");
+                    labelEl.classList.add("selected-label-inline");
+                    labelEl.textContent = label + " ";
+
+                    wrapper.appendChild(labelEl);
+
+                    items.forEach(item => {
+                        const tag = document.createElement("span");
+                        tag.classList.add("selected-tag");
+                        tag.textContent = item;
+                        wrapper.appendChild(tag);
+                    });
+
+                    container.appendChild(wrapper);
+                }
+
+                const cottageModal = document.getElementById('cottageModal');
+                const cottageOkayBtn = cottageModal.querySelector('.modal-footer .btn-primary');
+                cottageOkayBtn.addEventListener('click', () => {
+                    const selectedCottages = Array.from(document.querySelectorAll('input[name="cottageOptions[]"]:checked'))
+                        .map(el => el.value);
+                    renderSelectedItems('selectedCottagesContainer', 'Selected Cottages/:', selectedCottages);
+                });
+
+                const hotelModal = document.getElementById('hotelRoomModal');
+                const hotelOkayBtn = hotelModal.querySelector('.modal-footer .btn-primary');
+                hotelOkayBtn.addEventListener('click', () => {
+                    const selectedRooms = Array.from(document.querySelectorAll('input[name="roomOptions[]"]:checked'))
+                        .map(el => el.value);
+                    renderSelectedItems('selectedRoomsContainer', 'Selected Hotel Room/s:', selectedRooms);
+                });
+
+                const entertainmentModal = document.getElementById('entertainmentModal');
+                const entertainmentOkayBtn = entertainmentModal.querySelector('.modal-footer .btn-primary');
+                entertainmentOkayBtn.addEventListener('click', () => {
+                    const selectedEntertainment = Array.from(document.querySelectorAll('input[name="entertainmentOptions[]"]:checked'))
+                        .map(el => el.value);
+                    renderSelectedItems('selectedEntertainmentContainer', 'Selected Additional Service/s:', selectedEntertainment);
+                });
+
+            });
+        </script>
+
+        <script>
+            //* For not allowing letters
+            const phoneNumber = document.getElementById('phoneNumber');
+
+            phoneNumber.addEventListener('keypress', function(e) {
+                if (!/[0-9+]/.test(e.key)) {
+                    e.preventDefault();
+                }
+            })
+
+            // * For Messages Popup
+
+            const param = new URLSearchParams(window.location.search);
+            const paramValue = param.get('action');
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            switch (paramValue) {
+                case 'errorBooking':
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
-                        text: 'Failed to fetch amenities. Please try again.',
-                    });
-                });
-        }
-
-
-        document.addEventListener("DOMContentLoaded", () => {
-            if (startDate && startDate.value || tourSelect && tourSelect.value) {
-                fetchAmenities();
-                startDate.style.border = '1px solid rgb(223, 226, 230)';
-                tourSelect.style.border = '1px solid rgb(223, 226, 230)';
-            }
-
-            // console.log("startDate.value at DOMContentLoaded:", startDate?.value);
-
-        });
-
-        if (startDate) {
-            startDate.addEventListener("change", () => {
-                fetchAmenities();
-                startDate.style.border = '1px solid rgb(223, 226, 230)';
-            });
-            fetchAmenities();
-            startDate.style.border = '1px solid rgb(223, 226, 230)';
-
-        }
-        if (tourSelect) {
-            tourSelect.addEventListener('change', function() {
-                fetchAmenities();
-                tourSelect.style.border = '1px solid rgb(223, 226, 230)';
-            });
-            tourSelect.style.border = '1px solid rgb(223, 226, 230)';
-            fetchAmenities();
-        }
-        const bookRatesBTN = document.getElementById('bookRatesBTN')
-
-
-        bookRatesBTN.addEventListener("click", function() {
-            // e.preventDefault();
-
-            let totalCapacity = 0;
-            const totalPax = getTotalPax();
-
-            const cottageSelected = document.querySelectorAll('input[name="cottageOptions[]"]:checked');
-            cottageSelected.forEach(item => {
-                totalCapacity += parseInt(item.dataset.capacity) || 0;
-            });
-
-            let roomSelectedCount = 0;
-            let roomTotalCapacity = 0;
-            const roomSelected = document.querySelectorAll('input[name="roomOptions[]"]:checked');
-            roomSelected.forEach(item => {
-                roomTotalCapacity += parseInt(item.dataset.capacity) || 0;
-                roomSelectedCount++;
-            });
-
-            let isValid = true;
-            if (tourSelect.value === 'Overnight' && roomSelectedCount === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops!',
-                    text: 'Room is required. Please select a room(s).',
-                });
-                isValid = false;
-            }
-
-            if (totalPax === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops',
-                    text: 'Please enter the number of guests.',
-                });
-                isValid = false;
-            }
-
-            if (tourSelect.value === 'Night' || tourSelect.value === 'Day') {
-                if (totalCapacity === 0) {
+                        text: 'An error occurred. Please try again.',
+                        title: 'Oops'
+                    })
+                    break;
+                case 'phoneNumber':
                     Swal.fire({
-                        icon: 'warning',
+                        icon: 'info',
+                        text: 'Phone number is required!',
                         title: 'Oops',
-                        text: 'Select a cottage(s) or room(s)',
+                        confirmButtonText: 'Okay'
+                    }).then((result) => {
+                        const phoneNumberModal = document.getElementById('phoneNumberModal');
+                        const modal = new bootstrap.Modal(phoneNumberModal);
+                        modal.show();
                     });
-                    isValid = false;
-                }
-                if (totalPax > totalCapacity) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Oops',
-                        text: 'The number of guests exceeds the capacity of the selected cottage(s) or room(s). Please adjust your selection.',
+                    break;
+                case 'phoneAdded':
+                    Toast.fire({
+                        text: "Your phone number has been submitted successfully. You may now proceed with booking.",
+                        icon: "success"
                     });
-                    isValid = false;
-                }
+                    break;
+                default:
+                    const cleanUrl = window.location.origin + window.location.pathname;
+                    history.replaceState({}, document.title, cleanUrl);
+                    break;
             }
 
-            bookRatesBTN.type = isValid ? 'submit' : 'button';
-        });
-    </script>
-
-    <!-- For displaying text for hotel and cottages -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-
-            function renderSelectedItems(containerId, label, items) {
-                const container = document.getElementById(containerId);
-                if (!container) return;
-
-                container.innerHTML = ""; // clear previous items
-                if (items.length === 0) return;
-
-                const wrapper = document.createElement("div");
-                wrapper.classList.add("selected-inline");
-
-                const labelEl = document.createElement("span");
-                labelEl.classList.add("selected-label-inline");
-                labelEl.textContent = label + " ";
-
-                wrapper.appendChild(labelEl);
-
-                items.forEach(item => {
-                    const tag = document.createElement("span");
-                    tag.classList.add("selected-tag");
-                    tag.textContent = item;
-                    wrapper.appendChild(tag);
-                });
-
-                container.appendChild(wrapper);
-            }
-
-            const cottageModal = document.getElementById('cottageModal');
-            const cottageOkayBtn = cottageModal.querySelector('.modal-footer .btn-primary');
-            cottageOkayBtn.addEventListener('click', () => {
-                const selectedCottages = Array.from(document.querySelectorAll('input[name="cottageOptions[]"]:checked'))
-                    .map(el => el.value);
-                renderSelectedItems('selectedCottagesContainer', 'Selected Cottages/:', selectedCottages);
-            });
-
-            const hotelModal = document.getElementById('hotelRoomModal');
-            const hotelOkayBtn = hotelModal.querySelector('.modal-footer .btn-primary');
-            hotelOkayBtn.addEventListener('click', () => {
-                const selectedRooms = Array.from(document.querySelectorAll('input[name="roomOptions[]"]:checked'))
-                    .map(el => el.value);
-                renderSelectedItems('selectedRoomsContainer', 'Selected Hotel Room/s:', selectedRooms);
-            });
-
-            const entertainmentModal = document.getElementById('entertainmentModal');
-            const entertainmentOkayBtn = entertainmentModal.querySelector('.modal-footer .btn-primary');
-            entertainmentOkayBtn.addEventListener('click', () => {
-                const selectedEntertainment = Array.from(document.querySelectorAll('input[name="entertainmentOptions[]"]:checked'))
-                    .map(el => el.value);
-                renderSelectedItems('selectedEntertainmentContainer', 'Selected Additional Service/s:', selectedEntertainment);
-            });
-
-        });
-    </script>
-
-
-
-
-    <script>
-        //* For not allowing letters
-        const phoneNumber = document.getElementById('phoneNumber');
-
-        phoneNumber.addEventListener('keypress', function(e) {
-            if (!/[0-9+]/.test(e.key)) {
-                e.preventDefault();
-            }
-        })
-
-        // * For Messages Popup
-
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        switch (paramValue) {
-            case 'errorBooking':
-                Swal.fire({
-                    icon: 'error',
-                    text: 'An error occurred. Please try again.',
-                    title: 'Oops'
-                })
-                break;
-            case 'phoneNumber':
-                Swal.fire({
-                    icon: 'info',
-                    text: 'Phone number is required!',
-                    title: 'Oops',
-                    confirmButtonText: 'Okay'
-                }).then((result) => {
-                    const phoneNumberModal = document.getElementById('phoneNumberModal');
-                    const modal = new bootstrap.Modal(phoneNumberModal);
-                    modal.show();
-                });
-                break;
-            case 'phoneAdded':
-                Toast.fire({
-                    text: "Your phone number has been submitted successfully. You may now proceed with booking.",
-                    icon: "success"
-                });
-                break;
-            default:
+            if (paramValue) {
                 const cleanUrl = window.location.origin + window.location.pathname;
                 history.replaceState({}, document.title, cleanUrl);
-                break;
-        }
 
-        if (paramValue) {
-            const cleanUrl = window.location.origin + window.location.pathname;
-            history.replaceState({}, document.title, cleanUrl);
+            }
+        </script>
 
-        }
-    </script>
+    <?php else: ?>
+        <script>
+            const viewRulesBtn = document.getElementById("viewRulesBtn");
 
+            viewRulesBtn.innerHTML = '<i class="fa-solid fa-circle-info mx-1"></i>Edit Rules';
+            document.querySelectorAll('input, button, select, textarea').forEach(el => el.disabled = true);
+            document.querySelectorAll('.set-editable').forEach(el => el.disabled = false);
+        </script>
+
+        <!-- AJAX for editing website content -->
+        <?php if ($editMode): ?>
+            <script type="module">
+                import {
+                    initWebsiteEditor
+                } from '../../Assets/JS/EditWebsite/editWebsiteContent.js';
+
+                initWebsiteEditor('BookNowResort', '../../Function/Admin/editWebsite/editWebsiteContent.php');
+            </script>
+        <?php endif; ?>
+    <?php endif; ?>
 
 </body>
 

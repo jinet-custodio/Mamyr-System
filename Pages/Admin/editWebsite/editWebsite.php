@@ -119,8 +119,18 @@ switch ($userRole) {
             <button class="btn btn-info" id="about"><img src="../../../Assets/Images/Icon/about.png"
                     alt="About" class="buttonIcon">About</button>
 
-            <button class="btn btn-info" id="bookNow"><img
-                    src="../../../Assets/Images/Icon/bookNow.png" alt="Book Now" class="buttonIcon">Book Now</button>
+
+            <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" id="bookNowDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="../../../Assets/Images/Icon/bookNow.png" alt="Book Now" class="buttonIcon"> Book Now
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="amenitiesDropdown">
+                    <li><a class="dropdown-item" href="#" id="resortBtn">Book Now - Resort</a></li>
+                    <li><a class="dropdown-item" href="#" id="hotelBtn">Book Now - Hotel</a></li>
+                    <li><a class="dropdown-item" href="#" id="eventBtn">Book Now - Events</a></li>
+                </ul>
+            </div>
 
             <button class="btn btn-info" id="footer"><img
                     src="../../../Assets/Images/Icon/footer.png" alt="Footer" class="buttonIcon">Footer</button>
@@ -133,6 +143,11 @@ switch ($userRole) {
     <!-- //* About Page iFrame -->
     <div class="container-fluid aboutPage" id="aboutContainer">
         <iframe src="../../about.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
+    </div>
+
+    <!-- //* Resort Book Now Page iFrame -->
+    <div class="container-fluid resortPage" id="resortContainer">
+        <iframe src="../../Customer/resortBooking.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
     </div>
     <!-- //* Amenities Page iFrame -->
     <div class="container-fluid amenitiesPage" id="amenitiesContainer">
@@ -225,6 +240,10 @@ switch ($userRole) {
             const amenitiesPageBtn = document.getElementById("amenities");
             const ratesPageBtn = document.getElementById("rates");
             const eventsPageBtn = document.getElementById("events");
+            const resortPageBtn = document.getElementById("resortBtn");
+            const resortContainer = document.getElementById("resortContainer");
+            const hotelPageBtn = document.getElementById("hotelBtn");
+            const eventPageBtn = document.getElementById("eventBtn");
 
 
             landingPageBtn.addEventListener('click', function() {
@@ -232,7 +251,6 @@ switch ($userRole) {
                 landingPageContainer.style.display = "block";
                 landingPageContainer.querySelector("iframe").style.display = "block";
                 icon.style.display = "block";
-                pagesContainer.style.display = "none";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Landing Page";
             });
@@ -242,7 +260,6 @@ switch ($userRole) {
                 aboutContainer.style.display = "block";
                 aboutContainer.querySelector("iframe").style.display = "block";
                 icon.style.display = "block";
-                pagesContainer.style.display = "none";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "About Page";
             });
@@ -252,7 +269,6 @@ switch ($userRole) {
                 amenitiesContainer.style.display = "block";
                 amenitiesContainer.querySelector("iframe").style.display = "block";
                 icon.style.display = "block";
-                pagesContainer.style.display = "none";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Amenities Page";
             });
@@ -262,7 +278,6 @@ switch ($userRole) {
                 ratesAndHotelContainer.style.display = "block";
                 ratesAndHotelContainer.querySelector("iframe").style.display = "block";
                 icon.style.display = "block";
-                pagesContainer.style.display = "none";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Rates and Hotel Rooms Page";
             });
@@ -272,7 +287,6 @@ switch ($userRole) {
                 eventsContainer.style.display = "block";
                 eventsContainer.querySelector("iframe").style.display = "block";
                 icon.style.display = "block";
-                pagesContainer.style.display = "none";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Events Page";
             });
@@ -282,7 +296,6 @@ switch ($userRole) {
                 blogContainer.style.display = "block";
                 blogContainer.querySelector("iframe").style.display = "block";
                 icon.style.display = "block";
-                pagesContainer.style.display = "none";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Blog Page";
                 newBlogBtn.style.display = "block";
@@ -293,12 +306,17 @@ switch ($userRole) {
                 hideAllContainers();
                 footerContainer.style.display = "block";
                 footerContainer.querySelector("iframe").style.display = "block";
-                blogContainer.style.display = "none";
-                blogContainer.querySelector("iframe").style.display = "none";
                 icon.style.display = "block";
-                pagesContainer.style.display = "none";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Website Footer";
+            });
+            resortPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                resortContainer.style.display = "block";
+                resortContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Book Now - Resort";
                 newBlogBtn.style.position = "absolute";
             });
 
@@ -307,6 +325,8 @@ switch ($userRole) {
                 landingPageContainer.style.display = "none";
                 aboutContainer.style.display = "none";
                 amenitiesContainer.style.display = "none";
+                blogContainer.style.display = "none";
+                pagesContainer.style.display = "none";
             }
         });
     </script>
