@@ -503,7 +503,7 @@ if ($result->num_rows > 0) {
                 </div>
 
                 <div class="moreBtn">
-                    <a href="schedule.php" class="btn btn-primary">View More</a>
+                    <a href="schedule.php" class="btn btn-primary">View All</a>
                 </div>
             </div>
 
@@ -595,6 +595,7 @@ if ($result->num_rows > 0) {
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 displayEventTime: false,
+                eventDisplay: 'block',
                 events: '../../Function/Admin/fetchBookings.php',
                 dateClick: function(info) {
                     window.location.href = `schedule.php`;

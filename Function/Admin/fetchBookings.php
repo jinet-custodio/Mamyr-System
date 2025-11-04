@@ -72,13 +72,12 @@ while ($row = $result->fetch_assoc()) {
     $end   = date('c', strtotime($enddate));
 
 
-    $eventsByDate[$bookingID] = [
+    $eventsByDate[$startdate] = [
         'title' => $title,
         'start' => $start,
         'end' => $end,
         'allDay' => false,
-        'backgroundColor' => $color,
-        'opacity' => '1'
+        'color' => $color,
     ];
 }
 

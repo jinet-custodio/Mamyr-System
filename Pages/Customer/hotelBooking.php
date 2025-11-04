@@ -625,11 +625,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             const hotelModal = document.getElementById('hotelRoomModal');
             const okBtn = hotelModal.querySelector('.modal-footer .btn-primary');
 
-            // When clicking "Okay"
             okBtn.addEventListener('click', updateSelectedRooms);
 
-            // When modal closes (via X button or backdrop click)
             hotelModal.addEventListener('hidden.bs.modal', updateSelectedRooms);
+
+            updateSelectedRooms();
         });
     </script>
 

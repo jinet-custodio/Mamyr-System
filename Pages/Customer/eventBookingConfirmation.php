@@ -172,9 +172,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
         }
 
-        echo '<pre>';
-        print_r($_POST);
-        echo '</pre>';
+        // echo '<pre>';
+        // print_r($_POST);
+        // echo '</pre>';
 
         //Venue
         $eventVenue = mysqli_real_escape_string($conn, $_POST['eventVenue']);

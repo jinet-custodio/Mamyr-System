@@ -151,7 +151,7 @@ INSERT INTO reason (category, reasonDescription) VALUES
 ('PartnerRejection', 'Service not aligned with partnership criteria'),
 ('PartnerRejection', 'Failed validation or background check'),
 ('PartnerRejection', 'Non-compliance with policy requirements'),
-('PartnerRejection', 'Other');
+('PartnerRejection', 'Other'),
 ('PartnerServiceRejection', 'Schedule conflict / fully booked'),
 ('PartnerServiceRejection', 'Event type not supported'),
 ('PartnerServiceRejection', 'Insufficient notice for preparation'),
