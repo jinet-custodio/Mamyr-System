@@ -52,17 +52,66 @@ if (isset($_POST['yesDelete'])) {
             throw new Exception("Error inserting data: " . mysqli_error($conn));
         }
         $subject = "Account Deletion - OTP Verification";
-        $message = "
-                                <h2 style='color: #333;'>Account Deletion Verification</h2>
-                                <p>Hello,</p>
-                                <p>We received a request to delete your account. To confirm this action, please use the following One-Time Password (OTP):</p>
-                                <h2 style='color:rgb(12, 6, 5); font-size: 24px; margin-left:120px;'> $OTP </h2>
-                                <p>This OTP is valid for <strong>5 minutes</strong>. Do not share it with anyone.</p>
-                                <p>If you did not request this code, please ignore this email.</p>
-                                <br>
-                                <p>Thank you,</p>
-                                <p><strong>Mamyr Resort and Events Place</strong></p>
-                                ";
+        $message = '<body
+    style="
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+      margin: 0;
+    "
+  >
+    <table
+      align="center"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="
+        max-width: 600px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <tr style="background-color: #365cce">
+        <td style="text-align: center">
+          <h2
+            style="
+              font-family: Poppins Light;
+              color: #ffffff;
+              font-size: 18px;
+              margin-top: 25px;
+            "
+          >
+            Account Deletion Verification
+          </h2>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding: 30px; text-align: left; color: #333333">
+          <p style="font-size: 12px; margin: 10px 0 10px">
+            We received a request to delete your account. To confirm this
+            action, please use the following One-Time Password (OTP):
+          </p>
+
+          <h2 style="color: rgb(12, 6, 5); font-size: 24px; text-align: center">
+            $OTP
+          </h2>
+          <p style="font-size: 12px; margin: 8px 0">
+            This OTP is valid for <strong>5 minutes</strong>. Do not share it
+            with anyone. If you did not request this code, please ignore this
+            email.
+          </p>
+          <br />
+          <p style="font-size: 14px">Thank you,</p>
+          <p sstyle="font-size: 14px; font-weight:bold ">
+            Mamyr Resort and Events Place.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>';
         if (sendEmail($email,   $storedData['firstName'], $subject, $message, $env)) {
             header("Location: ../../Pages/Account/deleteAccount.php?action=success");
             exit;

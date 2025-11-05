@@ -73,7 +73,7 @@ body {
 }
 
 .categories {
-  margin-top: 12vw !important;
+  margin-top: 12rem !important;
   width: 98%;
   border-radius: 20px;
   background-color: #f5f5f5;
@@ -110,14 +110,14 @@ body {
 }
 
 .swiper {
-  width: 70%;
+  width: 80%;
   padding: 20px 0;
   margin: 3vw auto;
 }
 
 .swiper-slide {
   text-align: center;
-  display: flex;
+  display: flex !important;
   justify-content: center;
 }
 
@@ -127,7 +127,8 @@ body {
 }
 
 .event-card {
-  width: 70%;
+  width: 99%;
+  height: 33rem !important;
   margin: 1vw auto;
 }
 
@@ -226,15 +227,84 @@ body {
   color: #000000;
 }
 
-/* Tablet size */
-@media only screen and (min-width: 600px) and (max-width: 1024px) {
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  .categories {
+    margin-top: 8rem !important;
+  }
+
+  .swiper-wrapper {
+    height: 24rem !important;
+  }
+
+  .swiper {
+    width: 80% !important;
+    padding: 20px 0;
+    margin: 3vw auto;
+  }
+
+  .event-card {
+    width: 95%;
+    height: 22rem !important;
+    margin: 0 1vw;
+    img {
+      object-fit: cover;
+    }
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  .titleContainer {
+    margin-top: 2rem;
+  }
+
+  .categories {
+    margin-top: 5rem !important;
+  }
+
+  .title {
+    font-size: 22px !important;
+  }
+
+  .description {
+    font-size: 18px;
+  }
+
+  .swiper-wrapper {
+    height: 36rem !important;
+  }
+
+  .card-title {
+    font-size: 20px;
+  }
+
+  .eventDesc {
+    font-size: 18px;
+  }
+}
+
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  .description {
+    font-size: 12px !important;
+  }
+
+  .categories {
+    margin-top: 3rem !important;
+    padding-top: 2rem !important;
+  }
+
   .titleContainer {
     width: 80%;
-    margin-top: clamp(11vh, calc(1.25vh + 4px), 9.5vw);
+    margin-top: 5rem !important;
   }
 
   .carousel {
     width: 90%;
+  }
+
+  .swiper-wrapper {
+    height: 32rem !important;
   }
 
   .mainHallDescContainer,
@@ -246,8 +316,15 @@ body {
     width: 80%;
   }
 
+  .swiper {
+    width: 70% !important;
+    padding: 20px 0;
+    margin: 3vw auto;
+  }
+
   .event-card {
-    width: 90%;
+    width: 80%;
+    height: 1rem !important;
     margin: 0 1vw;
     img {
       object-fit: contain;
@@ -262,12 +339,10 @@ body {
     width: 55%;
   }
 
-  .title,
   .venueTitle {
     font-size: clamp(4vw, calc(3.8vw + 4px), 3.7vw) !important;
   }
 
-  .description,
   .venueDescription {
     font-size: clamp(1.8vw, calc(1.7vw + 4px), 2.5vw) !important;
   }
@@ -303,12 +378,25 @@ body {
 }
 
 @media (max-width: 600px) {
+  .categories {
+    margin-top: 2rem !important;
+  }
+
   body {
     background-size: auto;
   }
+
+  .swiper-wrapper {
+    height: 28rem !important;
+  }
+
   .title,
   .venueTitle {
-    font-size: 6vw;
+    font-size: 18px !important;
+  }
+
+  .description {
+    font-size: 14px !important;
   }
 
   .titleContainer {
@@ -344,11 +432,12 @@ body {
   }
 
   .event-card {
-    width: 48%;
+    width: 65%;
+    height: 25rem !important ;
   }
 
   img.card-img-top {
-    height: 15vh !important;
+    height: 18vh !important;
     object-fit: cover;
   }
 
@@ -382,11 +471,11 @@ body {
   }
 
   .card-title {
-    font-size: 3.5vw;
+    font-size: 16px;
   }
 
   .eventDesc {
-    font-size: 2vw;
+    font-size: 14px !important;
   }
 
   .card-body {
@@ -405,11 +494,13 @@ body {
   }
   .mainHall {
     flex-direction: column;
+    align-items: center;
   }
 
   .miniHall {
     margin-top: 3vw;
     flex-direction: column-reverse;
+    align-items: center;
   }
 
   .mainHallDescContainer,
@@ -426,12 +517,12 @@ body {
 
   .mainHallDescTitle,
   .miniHallDescTitle {
-    font-size: 3.8vw;
+    font-size: 18px !important;
   }
 
   .miniHallDescription,
   .mainHallDescription {
-    font-size: 3vw !important;
+    font-size: 16px !important;
   }
 
   img.d-block {
@@ -453,11 +544,15 @@ body {
     font-size: 3.5vw;
   }
   .card-title {
-    font-size: 5vw;
+    font-size: 4vw;
   }
 
   .eventDesc {
     font-size: 3vw;
+  }
+
+  .event-card {
+    height: 22rem !important ;
   }
 
   .card-body {
@@ -470,12 +565,12 @@ body {
 
   .mainHallDescTitle,
   .miniHallDescTitle {
-    font-size: 4.2vw;
+    font-size: 18px;
   }
 
   .miniHallDescription,
   .mainHallDescription {
-    font-size: 3.3vw !important;
+    font-size: 16px !important;
   }
 
   .mt-5 {

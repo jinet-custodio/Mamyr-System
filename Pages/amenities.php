@@ -111,14 +111,69 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <div class="amenities" id="amenities">
         <h1 class="title">OUR AMENITIES</h1>
 
-        <div class="embed-responsive embed-responsive-16by9">
+        <div class="amenity-wrapper">
+            <button class="scroll-btn left btn btn-light" id="scroll-left">&#10094;</button>
+
+            <div class="amenity-categories" id="amenity-categories">
+                <div class="all-category" id="all-amenities">
+                    <a href="#" onclick="showAmenity('all')"><img src="../Assets/Images/amenities/categories/all.png"
+                            alt="All Photos" class="category-image">All Photos</a>
+                </div>
+
+                <div class="pool-category" id="pool-amenity">
+                    <a href="#" onclick="showAmenity('pool')"><img src="../Assets/Images/amenities/categories/pool.png"
+                            alt="Swimming Pool" class="category-image">Swimming Pool</a>
+                </div>
+
+                <div class="cottage-category" id="cottage-amenity">
+                    <a href="#" onclick="showAmenity('cottage')"><img
+                            src="../Assets/Images/amenities/categories/cottage.png" alt=""
+                            class="category-image">Cottages</a>
+                </div>
+
+                <div class="videoke-category" id="videoke-amenity">
+                    <a href="#" onclick="showAmenity('videoke')"><img
+                            src="../Assets/Images/amenities/categories/videoke.png" alt="Videoke"
+                            class="category-image">Videoke Area</a>
+                </div>
+
+                <div class="pavilion-category" id="pavilion-amenity">
+                    <a href="#" onclick="showAmenity('pavilion')"><img
+                            src="../Assets/Images/amenities/categories/pav.png" alt="Pavilion Hall"
+                            class="category-image">Pavilion Hall</a>
+                </div>
+
+                <div class="minipav-category" id="minipav-amenity">
+                    <a href="#" onclick="showAmenity('minipav')"><img
+                            src="../Assets/Images/amenities/categories/minipav.png" alt="Mini Pavilion Hall"
+                            class="category-image">Mini Pavilion Hall</a>
+                </div>
+
+                <div class="hotel-category" id="hotel-amenity">
+                    <a href="#" onclick="showAmenity('hotel')"><img
+                            src="../Assets/Images/amenities/categories/hotel.png" alt="Mamyr Hotel"
+                            class="category-image">Mamyr Hotel</a>
+                </div>
+
+                <div class="parking-category" id="parking-amenity">
+                    <a href="#" onclick="showAmenity('parking')"><img
+                            src="../Assets/Images/amenities/categories/parking.png" alt="Parking Area"
+                            class="category-image">Parking Area</a>
+                </div>
+            </div>
+
+            <button class="scroll-btn right btn btn-light" id="scroll-right">&#10095;</button>
+        </div>
+
+
+        <div class="embed-responsive embed-responsive-16by9" id="videoContainer">
             <video id="mamyrVideo" muted loop controls class="embed-responsive-item">
                 <source src="../Assets/videos/mamyrVideo1.mp4" type="video/mp4">
             </video>
 
         </div>
 
-        <div class="pool">
+        <div class="pool" id="poolContainer">
             <div class="amenityTitleContainer">
                 <?php if ($editMode): ?>
                 <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
@@ -164,7 +219,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <div class="swiper-button-prev swiper-button-prev-1"></div>
             </div>
         </div>
-        <div class="cottage colored-bg">
+
+        <div class="cottage colored-bg" id="cottageContainer">
             <div class=" amenityTitleContainer">
                 <?php if ($editMode): ?>
                 <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
@@ -209,7 +265,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
         </div>
 
-        <div class="videoke">
+        <div class="videoke" id="videokeContainer">
             <div class=" amenityTitleContainer">
                 <?php if ($editMode): ?>
                 <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
@@ -255,7 +311,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
         </div>
 
-        <div class="pavilion colored-bg" style="background-color: #7dcbf2;">
+        <div class="pavilion colored-bg" id="pavilionContainer" style="background-color: #7dcbf2;">
             <div class="amenityTitleContainer">
                 <?php if ($editMode): ?>
                 <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
@@ -301,7 +357,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
         </div>
 
-        <div class="minipavilion">
+        <div class="minipavilion" id="minipavContainer">
             <div class="amenityTitleContainer">
                 <?php if ($editMode): ?>
                 <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
@@ -347,7 +403,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
         </div>
 
-        <div class="hotel colored-bg">
+        <div class="hotel colored-bg" id="hotelContainer">
             <div class="amenityTitleContainer">
                 <?php if ($editMode): ?>
                 <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"
@@ -392,7 +448,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
         </div>
 
-        <div class="parking">
+        <div class="parking" id="parkingContainer">
             <div class="amenityTitleContainer">
 
                 <?php if ($editMode): ?>
@@ -446,6 +502,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     </div>
 
+    <!-- Back to Top Button -->
+    <a href="#" id="backToTopBtn" title="Back to Top">
+        <i class="fas fa-chevron-up"></i>
+    </a>
 
 
     <?php if (!$editMode) {
@@ -493,6 +553,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script src="../Assets/JS/scrollNavbg.js"></script>
+
+    <script src="../Assets/JS/amenities.js"></script>
+
+
     <script>
     const swiperConfigs = [{
             selector: '.swiper-amenity1',
@@ -606,6 +670,49 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         }
     });
     </script>
+
+    <script>
+    const scrollContainer = document.getElementById('amenity-categories');
+    const scrollLeft = document.getElementById('scroll-left');
+    const scrollRight = document.getElementById('scroll-right');
+
+    const scrollAmount = 250;
+    scrollLeft.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+
+    scrollRight.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+    </script>
+
+    <script>
+    window.onscroll = function() {
+        const btn = document.getElementById("backToTopBtn");
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
+        }
+    };
+
+    // Scroll to top
+    document.getElementById("backToTopBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    </script>
+
+
 </body>
 
 </html>
