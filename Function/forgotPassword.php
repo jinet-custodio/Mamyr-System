@@ -32,17 +32,66 @@ if (isset($_POST['verify_email'])) {
             $updateOTP->bind_param("sss", $resetPasswordOTP, $time, $email);
 
             if ($updateOTP->execute()) {
-                $message = "
-                                <h2 style='color: #333;'>Your OTP Code for Changing your Password</h2>
-                                <p>Hello,</p>
-                                <p>Your One-Time Password (OTP) for Changing your Password is:</p>
-                                <h2 style='color:rgb(12, 6, 5); font-size: 24px; margin-left:120px;'> $resetPasswordOTP </h2>
-                                <p>This OTP is valid for <strong>5 minutes</strong>. Do not share it with anyone.</p>
-                                <p>If you did not request this code, please ignore this email.</p>
-                                <br>
-                                <p>Thank you,</p>
-                                <p><strong>Mamyr</strong></p>
-                                ";
+                $message = '<body>
+    <table
+      align="center"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="
+        max-width: 600px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <tr style="background-color: #365cce">
+        <td style="text-align: center">
+          <h2
+            style="
+              font-family: Poppins Light;
+              color: #ffffff;
+              font-size: 18px;
+              margin-top: 25px;
+            "
+          >
+            Your OTP Code for Changing your Password
+          </h2>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="
+            padding: 30px;
+            text-align: left;
+            color: #333333;
+            font-family: Arial;
+          "
+        >
+          <p style="font-size: 12px; margin: 10px 0 10px">Hello,</p>
+          <p style="font-size: 12px; margin: 8px 0">
+            Your One-Time Password (OTP) for Changing your Password is:
+          </p>
+          <h2 style="color: rgb(12, 6, 5); font-size: 20px; text-align: center">
+            $resetPasswordOTP
+          </h2>
+          <p style="font-size: 12px; margin: 8px 0">
+            This OTP is valid for <strong>5 minutes</strong>. Do not share it
+            with anyone.
+          </p>
+          <p style="font-size: 12px; margin: 8px 0">
+            If you did not request this code, please ignore this email.
+          </p>
+          <br />
+          <p style="font-size: 14px">Thank you,</p>
+          <p style="font-size: 14px; font-weight: bold">
+            <strong>Mamyr Resort and Events Place</strong>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>';
                 $subject = 'Changing of Password';
                 if (sendEmail($email, $firstName, $subject, $message, $env)) {
                     $_SESSION['email'] = $email;

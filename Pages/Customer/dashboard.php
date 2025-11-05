@@ -462,7 +462,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 </div>
             </div>
             <div class="bookNow-button-container">
-                <a href="Pages/Customer/bookNow.php" class="btn btn-primary">Book With Us Today!</a>
+                <a href="bookNow.php" class="btn btn-primary">Book With Us Today!</a>
             </div>
         </section>
         <?php include 'footer.php';
