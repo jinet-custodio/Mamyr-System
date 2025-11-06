@@ -989,4 +989,17 @@ input[type="password"]::-webkit-search-cancel-button {
     font-size: 2.6vw !important;
   }
   /* modal css */
+
+  .termsContainer {
+    text-align: center;
+  }
+
+  .passwordContainer {
+    margin-top: -1rem !important;
+  }
+
+  #termsError {
+    width: 100% !important;
+    margin-left: unset !important;
+  }
 }

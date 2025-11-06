@@ -475,11 +475,11 @@ input[type="password"]::-webkit-search-cancel-button {
 
   .input-box {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 0.5rem;
     width: 100%;
     flex-wrap: nowrap;
     height: auto;
-    gap: 10px;
   }
 
   .input-box label {
@@ -488,7 +488,7 @@ input[type="password"]::-webkit-search-cancel-button {
   }
 
   .input-box input {
-    width: 50%;
+    width: 100%;
     font-size: clamp(2.3vw, 2.1vw, 1.9vw);
   }
 

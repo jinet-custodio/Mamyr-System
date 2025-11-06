@@ -200,61 +200,61 @@ label {
 /* Fully Paid */
 .badge.bg-bright-green {
   background-color: rgba(75, 192, 75, 0.4) !important;
-  color: rgb(75, 192, 75) !important;
+  color: rgb(23, 95, 23) !important;
 }
 
 /* Partially Paid */
 .badge.bg-light-blue {
   background-color: rgba(54, 162, 235, 0.4) !important;
-  color: rgb(54, 162, 235) !important;
+  color: rgb(26, 90, 133) !important;
 }
 
 /* Payment Sent & Review Payment */
 .badge.bg-primary {
   background-color: rgba(54, 105, 255, 0.4) !important;
-  color: rgb(54, 105, 255) !important;
+  color: rgb(21, 50, 136) !important;
 }
 
 /* Awaiting Payment */
 .badge.bg-orange {
   background-color: rgba(255, 159, 64, 0.4) !important;
-  color: rgb(247, 127, 8) !important;
+  color: rgb(177, 88, 0) !important;
 }
 
 /* Pending */
 .badge.bg-warning {
   background-color: rgba(255, 193, 7, 0.4) !important;
-  color: rgb(190, 114, 0) !important;
+  color: rgb(163, 101, 7) !important;
 }
 
 /* Approved */
 .badge.bg-green {
   background-color: rgba(40, 167, 69, 0.4) !important;
-  color: rgb(40, 167, 69) !important;
+  color: rgb(8, 90, 27) !important;
 }
 
 /* Reserved */
 .badge.bg-success {
   background-color: rgba(83, 243, 169, 0.4) !important;
-  color: rgb(0, 129, 69) !important;
+  color: rgb(5, 88, 50) !important;
 }
 
 /* Cancelled */
 .badge.bg-danger {
   background-color: rgba(219, 53, 69, 0.4) !important;
-  color: rgb(219, 53, 69) !important;
+  color: rgb(180, 7, 7) !important;
 }
 
 /* Rejected */
 .badge.bg-red {
   background-color: rgba(204, 30, 20, 0.4) !important;
-  color: rgb(204, 30, 20) !important;
+  color: rgb(143, 12, 5) !important;
 }
 
 /* Expired */
 .badge.bg-muted {
   background-color: rgba(73, 80, 87, 0.4) !important;
-  color: rgb(73, 80, 87) !important;
+  color: rgb(59, 64, 68) !important;
 }
 
 /* Finished */

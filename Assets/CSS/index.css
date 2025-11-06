@@ -515,7 +515,7 @@ a.categoryLink {
   }
   .userInfo,
   .passwordContainer {
-    margin-top: -7vw !important;
+    margin-top: -5vw !important;
   }
 
   .errorContainer {
@@ -661,6 +661,10 @@ a.categoryLink {
     height: calc(120vh - 40px);
   }
 
+  .loginMessageBox {
+    bottom: 17rem !important;
+  }
+
   .modal-dialog {
     width: 100% !important;
     max-width: 100% !important;
@@ -720,6 +724,7 @@ a.categoryLink {
     img {
       width: 6vw;
       margin-bottom: -1vw;
+      margin-top: 1.5rem;
     }
   }
 
@@ -746,6 +751,10 @@ a.categoryLink {
   .errorContainer {
     padding: 19px;
     height: 87%;
+  }
+
+  .loginMessageBox {
+    bottom: 12rem !important;
   }
 
   .passwordContainerError {
