@@ -191,20 +191,432 @@ textarea {
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: portrait) {
   .main-content {
-    margin-left: 34vw;
+    padding: 0 !important;
+  }
+  .cardContainer {
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+  }
+  .card-header {
+    padding-left: 2.8px;
+    font-size: 18px !important;
+  }
+  .dt-length {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .dt-search {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .dt-layout-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: .75em 0 !important;
+    flex-wrap: wrap;
+  }
+  .dt-column-title {
+    white-space: nowrap;
+  }
+    #sidebar {
+    width: 10% !important;
+  }
+
+
+  .profileImage {
+    padding: 0 !important;
+  }
+  .profileImage img {
+    height: 40px !important;
+  }
+  .dt-search {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .dt-layout-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: .75em 0 !important;
+    flex-wrap: wrap;
+  }
+  .dt-column-title {
+    white-space: nowrap;
+  }
+  #sidebar {
+    width: 10% !important;
+  }
+
+  .list-group {
+    margin-top: 0 !important;
+    margin-left: 10px !important;
+  }
+
+  .sidebar-custom {
+    width: 70px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden; 
+    transition: width 0.3s ease;
+  }
+
+  .sidebar-custom .nav {
+    flex-grow: 1; 
+  }
+
+  .nav-item {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+    position: relative;
+  }
+
+  .nav-item .nav-link {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-item .nav-link i {
+    font-size: 1.8rem;
+  }
+
+  .sidebar-custom section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .sidebar-custom .profileContainer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 10px;
+  }
+
+  .profileContainer .profilePic {
+    width: 40px ;
+    height: 40px;
+    margin-right: 5px;
+  }
+
+  .logOutContainer {
+    margin-left:5px ;
+    margin-top: 10px; 
+    margin-bottom: 20px;
+  }
+
+  .logOutContainer a.btn {
+    padding: 10px;
+    font-size: 1.8rem; 
+    display: flex;
+    justify-content: center;
   }
 }
 
 /* Tablet landscape */
 @media only screen and (min-width: 600px) and (max-width: 1025px) and (orientation: landscape) {
-  .card-header {
-    margin-top: 2vw;
-    font-size: clamp(3.4vw, 3.2vw, 2.9vw);
+  body {
+    background-color: rgb(236, 131, 131);
+  }
+  .main-content {
+    margin-left: 21vw !important;
+    padding: 0 !important;
   }
 
-  .profile-image {
-    width: 30%;
+  .cardContainer {
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
   }
+
+  .card-header {
+    margin-top: 0;
+    padding-left: 2.8px;
+    font-size: 18px !important;
+  }
+
+  .dt-length {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  
+  .profileImage {
+    padding: 0 !important;
+  }
+  .profileImage img {
+    height: 40px !important;
+  }
+  .dt-search {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .dt-layout-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: .75em 0 !important;
+    flex-wrap: wrap;
+  }
+  .dt-column-title {
+    white-space: nowrap;
+  }
+  #sidebar {
+    width: 17% !important;
+  }
+
+  .list-group {
+    margin-top: 0 !important;
+    margin-left: 10px !important;
+  }
+
+  .sidebar-custom {
+    width: 70px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden; 
+    transition: width 0.3s ease;
+  }
+
+  .sidebar-custom .nav {
+    flex-grow: 1; 
+  }
+
+  .nav-item {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+    position: relative;
+  }
+
+  .nav-item .nav-link {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-item .nav-link i {
+    font-size: 1.8rem;
+  }
+
+  .sidebar-custom section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .sidebar-custom .profileContainer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 10px;
+  }
+
+  .profileContainer .profilePic {
+    width: 40px ;
+    height: 40px;
+    margin-right: 5px;
+  }
+
+  .logOutContainer {
+    margin-left:5px ;
+    margin-top: 10px; 
+    margin-bottom: 20px;
+  }
+
+  .logOutContainer a.btn {
+    padding: 10px;
+    font-size: 1.8rem; 
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 1026px) and (max-width: 1440px) {
+  .main-content {
+    margin-left: 17.5rem !important;
+    padding: 0 !important;
+  }
+
+  .cardContainer {
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    gap: 3.5rem;
+  }
+
+  .card-header {
+    margin-top: 0;
+    padding-left: 2.8px;
+    font-size: 18px !important;
+  }
+
+  .dt-length {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  
+  .profileImage {
+    padding: 0 !important;
+  }
+  .profileImage img {
+    height: 40px !important;
+  }
+  .dt-search {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .dt-layout-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: .75em 0 !important;
+    flex-wrap: wrap;
+  }
+  .dt-column-title {
+    white-space: nowrap;
+  }
+  #sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; 
+    height: 100vh;
+    overflow-y: auto;
+    padding: 20px 0;
+    width: 250px !important;
+  }
+  #sidebar i {
+    font-size: 30px;
+  }
+  .sidebar-header {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .list-group {
+    margin-top: 0 !important;
+    margin-left: 10px !important;
+  }
+
+  .sidebar-custom {
+    width: 70px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden; 
+    transition: width 0.3s ease;
+  }
+
+  .sidebar-custom .nav {
+    flex-grow: 1; 
+  }
+
+  .nav-item {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+    position: relative;
+  }
+
+  .nav-item .nav-link {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-item .nav-link i {
+    font-size: 1.8rem;
+  }
+
+  .sidebar-custom section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .sidebar-custom .profileContainer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 10px;
+  }
+
+  .profileContainer .profilePic {
+    width: 40px ;
+    height: 40px;
+    margin-right: 5px;
+  }
+
+  .logOutContainer {
+    margin-left:5px ;
+    margin-top: 10px; 
+    margin-bottom: 20px;
+  }
+
+  .logOutContainer a.btn {
+    padding: 10px;
+    font-size: 1.8rem; 
+    display: flex;
+    justify-content: center;
+  }
+
 }
 
 /* Phone size */
@@ -212,6 +624,35 @@ textarea {
   .main-content {
     margin-left: 16vw;
     width: 85%;
+  }
+  .dt-length {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  
+  .profileImage {
+    padding: 0 !important;
+  }
+  .dt-search {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .dt-layout-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: .75em 0 !important;
+    flex-wrap: wrap;
+  }
+  .dt-column-title {
+    white-space: nowrap;
   }
 
   .customer-details {
@@ -226,106 +667,22 @@ textarea {
   .profile-image {
     width: 35%;
   }
-}
-
-/* Tablet portrait */
-@media only screen and (min-width: 600px) and (max-width: 1025px) {
-  .main-content {
-    margin-left: 36vw;
-    padding: 1rem;
-  }
-
   .cardContainer {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-
-  .welcomeText {
-    font-size: 28px;
-  }
-
-  .tableContainer {
-    overflow-x: auto;
-  }
-  .dt-length {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 14px;
-  }
-  .dt-search {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 0.5rem;
+    gap: 10px;
+    justify-items: center;
     justify-content: center;
-    font-size: 14px;
+  }
+  .card {
+    width: 150px !important;
+  }
+  .card-header {
+    font-size: 15px !important;
   }
 }
 
-/* Phones */
-@media only screen and (max-width: 599px) {
-  .main-content {
-    margin-left: 16vw;
-    width: 85%;
-    padding: 1rem;
-  }
 
-  .sidebar-icon {
-    font-size: clamp(4.5vw, 4.2vw, 4vw);
-  }
-
-  .sidebar-text {
-    font-size: clamp(3vw, 2.8vw, 2.5vw);
-    margin-left: 2vw;
-  }
-
-  .welcomeText {
-    font-size: 24px;
-    text-align: center;
-  }
-
-  .cardContainer {
-    grid-template-columns: 1fr;
-    justify-items: center !important;
-    margin-left: 2.1rem;
-    width: 40%;
-    height: 10%;
-  }
-
-  .tableContainer {
-    overflow-x: auto;
-  }
-
-  th,
-  td {
-    font-size: 16px;
-  }
-  .dt-column-title {
-    text-align: center;
-    font-size: 1px !important;
-  }
-  .dt-type-numeric {
-    text-align: center !important;
-  }
-  .dt-length {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 1.5rem;
-  }
-  .dt-search {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 1.8rem;
-  }
-}
 
 @media only screen and (max-width: 400px) {
   .main-content {
@@ -338,8 +695,18 @@ textarea {
   }
 
   .cardContainer {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+    display: flex;
+    white-space: nowrap;
+    gap: 10px;
+    margin-top: 3rem;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .card-header {
+    font-size: 12px !important;
+    padding-left: 2.8px;
   }
 
   .btnContainer button {
