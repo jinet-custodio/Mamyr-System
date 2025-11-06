@@ -173,18 +173,18 @@ function getAvailabilityStatus($conn, $availabilityID)
 function changeToExpiredStatus($conn)
 {
     $dateNow = date('Y-m-d H:i:s');
-    $pendingStatusID = 1;
+    $pendingStatusID = $unpaidID = 1;
+    $approvedStatusID = 2;
     $expiredStatusID = 7;
 
-    // Select all bookings that have ended and are still pending
-    $selectBookings = $conn->prepare("SELECT bookingID FROM booking WHERE endDate < ? AND bookingStatus = ?");
-    $selectBookings->bind_param("si", $dateNow, $pendingStatusID);
+    // Select all bookings that have ended and are still pending or approved but not yet paid
+    $selectBookings = $conn->prepare("SELECT b.bookingID FROM booking b LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID WHERE b.endDate < ? AND (b.bookingStatus = ? OR (b.bookingStatus = ? AND cb.paymentStatus = ?))");
+    $selectBookings->bind_param("siii", $dateNow, $pendingStatusID, $approvedStatusID, $unpaidID);
     $selectBookings->execute();
     $result = $selectBookings->get_result();
-
+    $count = 0;
     if ($result->num_rows > 0) {
         $updateQuery = $conn->prepare("UPDATE booking SET bookingStatus = ? WHERE bookingID = ?");
-        $count = 0;
         while ($row = $result->fetch_assoc()) {
             $bookingID = (int)$row['bookingID'];
             $updateQuery->bind_param("ii", $expiredStatusID, $bookingID);
@@ -194,8 +194,8 @@ function changeToExpiredStatus($conn)
         }
 
         $updateQuery->close();
-        return $count . " booking(s) marked as expired.";
     }
+    return $count . " booking(s) marked as expired.";
     $result->free();
     $selectBookings->close();
 }
@@ -279,8 +279,46 @@ function partnerAutoReject($conn)
     $updatePendingStatus->bind_param("ii", $rejectedStatus, $pendingStatus);
     $count = 0;
     if ($updatePendingStatus->execute()) {
-        $count++;
+        $count += $updatePendingStatus->affected_rows;
     }
 
     return $count;
+    $updatePendingStatus->close();
+}
+
+//? Function for changing the partner availed service status to cancelled status when the booking is cancelled
+function partnerServiceChangeStatus($conn)
+{
+    $cancelledStatusID = 4;
+
+    $selectBookingID = $conn->prepare("SELECT `bookingID` FROM `booking` WHERE bookingStatus = ?");
+    $selectBookingID->bind_param("i", $cancelledStatusID);
+
+    if (!$selectBookingID->execute()) {
+        error_log('Failed executing selectBookingID query: ' . $selectBookingID->error);
+        exit();
+    }
+
+    $bookingResult = $selectBookingID->get_result();
+    $affectedRows = 0;
+
+    while ($row = $bookingResult->fetch_assoc()) {
+        $bookingID = intval($row['bookingID']);
+
+        $updateStatus = $conn->prepare(
+            "UPDATE `businesspartneravailedservice` SET `approvalStatus` = ? WHERE bookingID = ?"
+        );
+        $updateStatus->bind_param("ii", $cancelledStatusID, $bookingID);
+
+        if (!$updateStatus->execute()) {
+            error_log('Failed updating businesspartneravailedservice table: ' . $updateStatus->error);
+            exit();
+        }
+
+        $affectedRows += $updateStatus->affected_rows;
+        $updateStatus->close();
+    }
+
+    $selectBookingID->close();
+    return $affectedRows;
 }

@@ -36,3 +36,16 @@ CREATE TABLE userreview (
 ALTER TABLE `userreview`
 ADD dateReviewed TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
+
+CREATE TABLE pushsubscription (
+    subscriptionID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    endpoint VARCHAR(255) NOT NULL,
+    p256dh VARCHAR(255) NOT NULL,
+    auth VARCHAR(255) NOT NULL,
+	UNIQUE KEY unique_sub(userID, endpoint),
+    FOREIGN KEY (userID) REFERENCES user(userID) 
+);
+
+ALTER TABLE `pushsubscription` DROP FOREIGN KEY `pushsubscription_ibfk_1`; ALTER TABLE `pushsubscription` ADD CONSTRAINT `pushsubscription_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user`(`userID`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `notification` CHANGE `receiver` `receiver` ENUM('Admin','Business Partner','Customer') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;

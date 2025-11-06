@@ -17,6 +17,16 @@
   src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
+.notification-item {
+  font-weight: bold;
+  background-color: rgba(64, 185, 255, 0.548);
+}
+
+.notification-item.read {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-left: 4px solid rgba(0, 0, 0, 0.1);
+}
+
 * {
   margin: 0;
   padding: 0;

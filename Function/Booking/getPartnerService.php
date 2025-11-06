@@ -15,6 +15,7 @@
         try {
             $getPartnerService = $conn->prepare(
                 "SELECT 
+                    p.partnershipID,
                     u.phoneNumber,
                     p.businessEmail,
                     ppt.partnerTypeID, 
@@ -36,8 +37,7 @@
                     WHERE sud.partnershipServiceID = ps.partnershipServiceID
                     AND (? < sud.unavailableEndDate 
                     AND ? > sud.unavailableStartDate) AND sud.status IN ('confirmed', 'hold')
-                )
-                GROUP BY partnerTypeID "
+                )"
             );
             if (!$getPartnerService) {
                 throw new Exception("Error at query Partner Service: " . $getPartnerService->error);
@@ -67,6 +67,8 @@
                 'Message' => 'Successfull Fetching Services',
                 'Categories' => $serviceData['Category']
             ]);
+
+            // error_log(print_r($serviceData['Category'], true));
             exit;
         } catch (Exception $e) {
             error_log("Error: " . $e->getMessage());

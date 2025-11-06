@@ -16,6 +16,7 @@ $baseURL = '../..';
 switch ($userRole) {
     case 2:
         $role = "Business Partner";
+        $receiver = 'Partner';
         break;
     default:
         $_SESSION['error'] = "Unauthorized Access!";
@@ -47,7 +48,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-require '../../Function/notification.php';
 require '../../Function/Partner/sales.php';
 // require '../../Function/Partner/getBookings.php';
 
@@ -136,32 +136,16 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 </a>
             </li>
 
-            <!-- Get notification -->
-            <?php
-
-            if ($userRole === 1) {
-                $receiver = 'Customer';
-            } elseif ($userRole === 2) {
-                $receiver = 'Partner';
-            }
-
-            $notifications = getNotification($conn, $userID, $receiver);
-            $counter = $notifications['count'];
-            $notificationsArray = $notifications['messages'];
-            $color = $notifications['colors'];
-            $notificationIDs = $notifications['ids'];
-            ?>
-
             <div class="notification-container position-relative">
                 <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
+                    data-bs-target="#notificationModal" id="notificationButton">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                    <?php if (!empty($counter)): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?= htmlspecialchars($counter) ?>
-                        </span>
-                    <?php endif; ?>
                 </button>
+            </div>
+
+            <div class="hidden-inputs" style="display: none;">
+                <input type="hidden" id="receiver" value="<?= $role ?>">
+                <input type="hidden" id="userID" value="<?= $userID ?>">
             </div>
         </ul>
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -210,10 +194,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
     </nav>
 
-
-    <!-- Notification Modal -->
     <?php
-    include '../notificationModal.php';
     $getPartnershipID = $conn->prepare('SELECT partnershipID FROM `partnership` WHERE userID = ?');
     $getPartnershipID->bind_param('i', $userID);
     $getPartnershipID->execute();
@@ -223,6 +204,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         $partnershipID = $data['partnershipID'];
     }
     ?>
+    <!-- Notification Modal -->
+    <?php include '../Notification/notification.php' ?>
+
     <!-- Get Sales -->
     <?php $totalSales = getSales($conn, $userID); ?>
 
@@ -508,6 +492,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         ?>
     </main>
 
+
     <!-- Bootstrap Link -->
     <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script>
 
@@ -517,10 +502,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
-
-    <!-- Sweetalert Link -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

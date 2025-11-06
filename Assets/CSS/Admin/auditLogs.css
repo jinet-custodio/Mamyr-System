@@ -34,21 +34,21 @@ body {
   justify-content: end;
   align-items: center;
   width: 100%;
-}
-
-.auditLog-container {
-  max-width: 100%;
+  margin-top: 1rem;
 }
 
 .notification-container {
   text-align: right !important;
-  margin-top: 0.59rem;
+  margin-top: 0.5rem;
   margin-right: 0.85rem;
 }
 
 #notification-icon {
   font-size: 2rem;
   color: #0d6dfc;
+}
+.auditLog-container {
+  max-width: 100%;
 }
 
 .page-title-container {
@@ -149,7 +149,7 @@ button.dt-paging-button {
   color: rgb(71, 139, 10) !important;
 }
 
-.badge.badge.bg-success {
+.badge.bg-success {
   background-color: rgba(83, 243, 169, 0.5) !important;
   color: rgb(0, 129, 69) !important;
 }
@@ -174,9 +174,33 @@ button.dt-paging-button {
   color: rgb(28, 155, 180);
 }
 
+#notification-count.badge {
+  --bs-badge-padding-x: 0.6em;
+  --bs-badge-padding-y: 0.55em;
+  --bs-badge-font-size: 0.75em;
+  --bs-badge-font-weight: 700;
+  --bs-badge-color: #fff;
+  --bs-badge-border-radius: var(--bs-border-radius);
+  display: inline-block;
+  padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x) !important;
+  font-size: var(--bs-badge-font-size);
+  font-weight: var(--bs-badge-font-weight);
+  line-height: 0.5;
+  color: var(--bs-badge-color);
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--bs-badge-border-radius);
+  width: initial;
+}
+
+#notification-count.bg-danger {
+  background-color: rgb(219, 53, 69) !important;
+  color: #fff !important;
+}
+
 /* PHONE SIZE */
 @media only screen and (max-width: 599px) {
-
   .page-title {
     margin-top: 10px;
     margin-left: 10px;
@@ -207,8 +231,8 @@ button.dt-paging-button {
     gap: 1rem;
     align-items: flex-start;
   }
-  
-  .table>thead {
+
+  .table > thead {
     white-space: nowrap;
   }
   #sidebar {
@@ -227,10 +251,9 @@ button.dt-paging-button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-x: hidden; 
+    overflow-x: hidden;
     transition: width 0.3s ease;
   }
-
 
   .sidebar-custom .nav {
     flex-grow: 1;
@@ -240,7 +263,7 @@ button.dt-paging-button {
   .sidebar-custom .nav-link .linkText,
   .sidebar-custom .admin-name,
   .sidebar-custom .logoutText {
-    display: none; 
+    display: none;
   }
 
   .nav-item {
@@ -287,103 +310,100 @@ button.dt-paging-button {
   }
 
   .logOutContainer {
-    margin-left:5px ;
-    margin-top: 10px; 
+    margin-left: 5px;
+    margin-top: 10px;
     margin-bottom: 20px;
   }
 
   .logOutContainer a.btn {
     padding: 10px;
-    font-size: 1.8rem; 
+    font-size: 1.8rem;
     display: flex;
     justify-content: center;
   }
-
 }
 
-@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait){
-
-
-   main {
-        flex-grow: 1; 
-        max-width: unset;
-        margin: 0;
-    }
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+  main {
+    flex-grow: 1;
+    max-width: unset;
+    margin: 0;
+  }
   .auditLog-container {
-        max-width: unset;
-        width: 100%;
-    }
+    max-width: unset;
+    width: 100%;
+  }
 
-    .card {
-      margin-right: 2rem;
-      overflow-x: auto;
-      padding-left: 1px;
-      padding-right: 4rem;
-    }
+  .card {
+    margin-right: 2rem;
+    overflow-x: auto;
+    padding-left: 1px;
+    padding-right: 4rem;
+  }
 
-    .auditLog-table {
-        display: block; 
-        margin: 0;
-        width: calc(100vw - 120px);
-    }
-    .dt-container {
-      width: 100%;
-      max-width: 100%;
-    }
+  .auditLog-table {
+    display: block;
+    margin: 0;
+    width: calc(100vw - 120px);
+  }
+  .dt-container {
+    width: 100%;
+    max-width: 100%;
+  }
 
-    table#auditLogTable {
-        width: 100% !important;
-        min-width: 800px; 
-    }
+  table#auditLogTable {
+    width: 100% !important;
+    min-width: 800px;
+  }
 
-    thead th {
-        width: 15% !important; 
-        min-width: 100px;
-    }
-    
-    thead th:nth-child(5) { 
-        width: 25% !important; 
-        min-width: 150px;
-    }
+  thead th {
+    width: 15% !important;
+    min-width: 100px;
+  }
 
-    td, th {
-        font-size: 0.85rem !important;
-        padding: 0.75rem 0.5rem !important;
-        white-space: nowrap;
-    }
-    
-    #auditLogTable_filter,
-    #auditLogTable_length {
-        margin-bottom: 1rem !important;
-        margin-left: 0 !important;
-    }
+  thead th:nth-child(5) {
+    width: 25% !important;
+    min-width: 150px;
+  }
 
-   .dt-layout-row {
-        display: block;
-        margin-left: 1rem;
-        margin-bottom: 2px !important;
+  td,
+  th {
+    font-size: 0.85rem !important;
+    padding: 0.75rem 0.5rem !important;
+    white-space: nowrap;
+  }
+
+  #auditLogTable_filter,
+  #auditLogTable_length {
+    margin-bottom: 1rem !important;
+    margin-left: 0 !important;
+  }
+
+  .dt-layout-row {
+    display: block;
+    margin-left: 1rem;
+    margin-bottom: 2px !important;
   }
   table#auditLogTable {
     width: 100% !important;
-     min-width: 800px;
-    }
-    .dt-layout-start{
-      margin-left: 9px !important;
-    }
-    .dt-paging {
-      margin-left: 10px;
-    }
-    .dt-layout-row.dt-layout-table {
-        display: unset;
-    }
-    .dt-search {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      gap: 5px;
-      margin-left: 3px;
-    }
-
+    min-width: 800px;
+  }
+  .dt-layout-start {
+    margin-left: 9px !important;
+  }
+  .dt-paging {
+    margin-left: 10px;
+  }
+  .dt-layout-row.dt-layout-table {
+    display: unset;
+  }
+  .dt-search {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 5px;
+    margin-left: 3px;
+  }
 
   .toggle-button {
     align-items: center;
@@ -398,24 +418,22 @@ button.dt-paging-button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-x: hidden; 
+    overflow-x: hidden;
     transition: width 0.3s ease;
   }
 
-
   .sidebar-custom .nav {
     flex-grow: 1;
-    
   }
 
   .sidebar-custom .nav-link .linkText,
   .sidebar-custom .admin-name,
   .sidebar-custom .logoutText {
-    display: none; 
+    display: none;
   }
-    .sidebar-custom .logo,
+  .sidebar-custom .logo,
   .sidebar-custom .sbToggle-container {
-    display: none; 
+    display: none;
   }
 
   .nav-item {
@@ -462,29 +480,27 @@ button.dt-paging-button {
   }
 
   .logOutContainer {
-    margin-left:5px ;
-    margin-top: 10px; 
+    margin-left: 5px;
+    margin-top: 10px;
     margin-bottom: 20px;
   }
 
   .logOutContainer a.btn {
     padding: 10px;
-    font-size: 1.8rem; 
+    font-size: 1.8rem;
     display: flex;
     justify-content: center;
   }
-
 }
 
-@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: landscape){
-
-    .card {
-      margin-right: 2rem;
-      overflow-x: auto;
-      padding-left: 1px;
-      padding-right: 4rem;
-    }
-    .auditLog-container {
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: landscape) {
+  .card {
+    margin-right: 2rem;
+    overflow-x: auto;
+    padding-left: 1px;
+    padding-right: 4rem;
+  }
+  .auditLog-container {
     margin-bottom: 10rem;
     margin-right: 1rem;
   }
@@ -495,7 +511,7 @@ button.dt-paging-button {
     display: flex;
     gap: 1rem;
   }
-  .table>thead {
+  .table > thead {
     white-space: nowrap;
   }
   .dt-layout-row {
@@ -505,15 +521,15 @@ button.dt-paging-button {
   }
   table#auditLogTable {
     width: 100% !important;
-     min-width: 800px;
-    }
-    .dt-layout-start{
-      margin-left: 9px !important;
-    }
-    .dt-paging {
-      margin-left: 10px;
-    }
-     #sidebar {
+    min-width: 800px;
+  }
+  .dt-layout-start {
+    margin-left: 9px !important;
+  }
+  .dt-paging {
+    margin-left: 10px;
+  }
+  #sidebar {
     width: 10% !important;
   }
 
@@ -523,24 +539,22 @@ button.dt-paging-button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-x: hidden; 
+    overflow-x: hidden;
     transition: width 0.3s ease;
   }
 
-
   .sidebar-custom .nav {
     flex-grow: 1;
-    
   }
 
   .sidebar-custom .nav-link .linkText,
   .sidebar-custom .admin-name,
   .sidebar-custom .logoutText {
-    display: none; 
+    display: none;
   }
-    .sidebar-custom .logo,
+  .sidebar-custom .logo,
   .sidebar-custom .sbToggle-container {
-    display: none; 
+    display: none;
   }
 
   .nav-item {
@@ -587,21 +601,20 @@ button.dt-paging-button {
   }
 
   .logOutContainer {
-    margin-left:5px ;
-    margin-top: 10px; 
+    margin-left: 5px;
+    margin-top: 10px;
     margin-bottom: 20px;
   }
 
   .logOutContainer a.btn {
     padding: 10px;
-    font-size: 1.8rem; 
+    font-size: 1.8rem;
     display: flex;
     justify-content: center;
   }
 }
 
 @media screen and (min-width: 1025px) and (max-width: 1440px) {
-
   .auditLog-container {
     margin-bottom: 20rem;
     margin-right: 1rem;

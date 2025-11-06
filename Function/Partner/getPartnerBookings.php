@@ -46,7 +46,7 @@ if (isset($_GET['userID'])) {
                                             LEFT JOIN eventcategory ec ON cp.eventTypeID = ec.categoryID
                                             WHERE p.userID = ?
                                             GROUP BY b.bookingID
-                                            ORDER BY MAX(b.createdAt)
+                                            ORDER BY b.createdAt DESC
                                             ");
         $getAvailedService->bind_param('i', $userID);
         if (!$getAvailedService->execute()) {

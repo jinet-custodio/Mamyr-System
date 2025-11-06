@@ -224,6 +224,7 @@ unset($_SESSION['tempImage']) ?>
                 <div class="tableContainer">
                     <table class=" table table-striped" id="bookingHistory">
                         <thead>
+                            <th scope="col">ID</th>
                             <th scope="col">Booking Code</th>
                             <th scope="col">Check In</th>
                             <!-- <th scope="col">Total Cost</th>
@@ -442,6 +443,7 @@ unset($_SESSION['tempImage']) ?>
                             );
 
                             table.row.add([
+                                booking.bookingID,
                                 booking.bookingCode,
                                 booking.checkIn,
                                 // booking.totalBill,
@@ -811,6 +813,7 @@ unset($_SESSION['tempImage']) ?>
     <script>
         $(document).ready(function() {
             $('#bookingHistory').DataTable({
+                "order": [],
                 language: {
                     emptyTable: "You have not made any bookings yet"
                 }

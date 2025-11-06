@@ -396,8 +396,8 @@ switch ($userRole) {
                             $statusSubtitle = 'You have cancelled your reservation. If this was a mistake or you wish to rebook, please contact us.';
                             break;
                         case 6: //Done
-                            $status = strtolower($paymentStatus['statusName']);
-                            switch ($paymentStatus['statusID']) {
+                            $status = strtolower($bookingStatus['statusName']);
+                            switch ($paymentStatus['paymentStatusID']) {
                                 case 3: //Fully Paid
                                     $statusTitle = 'Booking Completed';
                                     $statusIcon = '<i class="bi bi-flag-checkered"></i>';
@@ -950,7 +950,7 @@ switch ($userRole) {
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                            data-bs-target="#gcashPaymentModal">Back</button>
+                            data-bs-target="#gcashPayment1stModal">Back</button>
                         <button type="submit" class="btn btn-success" name="submitDownpaymentImage">Submit</button>
                     </div>
                 </div>
@@ -981,7 +981,7 @@ switch ($userRole) {
             downloadReceiptBtn.style.display = 'none';
         } else if (paymentApprovalStatus === "Approved" && bookingStatus === 'Reserved' && paymentStatus === "Partially Paid") {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
-        } else if (paymentApprovalStatus === "Done" && paymentStatus === "Fully Paid") {
+        } else if ((bookingStatus === "Done" && paymentStatus === "Fully Paid") || bookingStatus === 'Expired') {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
         } else if (paymentMethod === 'Cash') {
             document.getElementById("makeDownpaymentBtn").style.display = "none";

@@ -29,20 +29,21 @@ body {
   gap: 1rem;
 }
 
+.booking-container {
+  max-width: 100%;
+}
+
 .notification-toggler-container {
   display: flex;
   justify-content: end;
   align-items: center;
   width: 100%;
-}
-
-.booking-container {
-  max-width: 100%;
+  margin-top: 1rem;
 }
 
 .notification-container {
   text-align: right !important;
-  margin-top: 0.59rem;
+  margin-top: 0.5rem;
   margin-right: 0.85rem;
 }
 
@@ -184,6 +185,31 @@ h4 {
 .badge.bg-warning {
   background-color: rgba(255, 193, 7, 0.4) !important;
   color: rgb(190, 114, 0) !important;
+}
+
+#notification-count.badge {
+  --bs-badge-padding-x: 0.6em;
+  --bs-badge-padding-y: 0.55em;
+  --bs-badge-font-size: 0.75em;
+  --bs-badge-font-weight: 700;
+  --bs-badge-color: #fff;
+  --bs-badge-border-radius: var(--bs-border-radius);
+  display: inline-block;
+  padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x) !important;
+  font-size: var(--bs-badge-font-size);
+  font-weight: var(--bs-badge-font-weight);
+  line-height: 0.5;
+  color: var(--bs-badge-color);
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--bs-badge-border-radius);
+  width: initial;
+}
+
+#notification-count.bg-danger {
+  background-color: rgb(219, 53, 69) !important;
+  color: #fff !important;
 }
 
 /* Tablet portrait */

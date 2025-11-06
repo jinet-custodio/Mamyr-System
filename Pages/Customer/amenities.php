@@ -85,7 +85,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     $imageMap[$cleanTitle] = $images;
 }
-require '../../Function/notification.php';
 ?>
 
 
@@ -137,32 +136,16 @@ require '../../Function/notification.php';
                 </li>
 
 
-                <!-- Get notification -->
-                <?php
-
-                if ($userRole === 1 || $userRole === 4) {
-                    $receiver = 'Customer';
-                } elseif ($userRole === 2) {
-                    $receiver = 'Partner';
-                }
-
-                $notifications = getNotification($conn, $userID, $receiver);
-                $counter = $notifications['count'];
-                $notificationsArray = $notifications['messages'];
-                $color = $notifications['colors'];
-                $notificationIDs = $notifications['ids'];
-                ?>
-
                 <div class="notification-container position-relative">
                     <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                        data-bs-target="#notificationModal">
+                        data-bs-target="#notificationModal" id="notificationButton">
                         <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                        <?php if (!empty($counter)): ?>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?= htmlspecialchars($counter) ?>
-                            </span>
-                        <?php endif; ?>
                     </button>
+                </div>
+
+                <div class="hidden-inputs" style="display: none;">
+                    <input type="hidden" id="receiver" value="<?= $role ?>">
+                    <input type="hidden" id="userID" value="<?= $userID ?>">
                 </div>
             </ul>
 
@@ -212,8 +195,7 @@ require '../../Function/notification.php';
                 </ul>
             </div>
         </nav>
-        <!-- Notification Modal -->
-        <?php include '../notificationModal.php' ?>
+
 
         <main>
 
@@ -518,51 +500,15 @@ require '../../Function/notification.php';
                 </a>
 
         </main>
-        <?php include 'footer.php';
-        include 'loader.php'; ?>
+        <?php
+        include 'footer.php';
+        include 'loader.php';
+        include '../Notification/notification.php';
+        ?>
     </div>
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js">
-    </script>
-
-
-    <!-- Notification Ajax -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
-
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
-
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
-
-
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
-
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
-                            }
-                        });
-                });
-            });
-        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

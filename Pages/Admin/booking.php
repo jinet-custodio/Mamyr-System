@@ -40,7 +40,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-require '../../Function/notification.php';
+
 
 $message = '';
 $status = '';
@@ -96,28 +96,8 @@ switch ($userRole) {
 
 
     <!-- Get notification -->
-
     <?php
-
-    $receiver = 'Admin';
-    $notifications = getNotification($conn, $userID, $receiver);
-    $counter = $notifications['count'];
-    $notificationsArray = $notifications['messages'];
-    $color = $notifications['colors'];
-    $notificationIDs = $notifications['ids'];
-    ?>
-
-    <?php
-    if ($userRole == 3) {
-        $admin = "Admin";
-    } else {
-        $_SESSION['error'] = "Unauthorized Access!";
-        session_destroy();
-        header("Location: ../register.php");
-        exit();
-    }
-
-    if ($admin === "Admin") {
+    if ($role === "Admin") {
         $getProfile = $conn->prepare("SELECT firstName,lastName, userProfile FROM user WHERE userID = ? AND userRole = ?");
         $getProfile->bind_param("ii", $userID, $userRole);
         $getProfile->execute();
@@ -140,9 +120,6 @@ switch ($userRole) {
     }
     ?>
 
-
-    <!-- Notification Modal -->
-    <?php include '../notificationModal.php' ?>
 
     <div id="sidebar" class="sidebar sidebar-custom">
         <div class="sbToggle-container d-flex justify-content-center" id="sidebar-toggle">
@@ -226,13 +203,14 @@ switch ($userRole) {
             <section class="notification-toggler-container">
                 <div class="notification-container position-relative">
                     <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                        data-bs-target="#notificationModal">
+                        data-bs-target="#notificationModal" id="notificationButton">
                         <i class="bi bi-bell" id="notification-icon"></i>
-                        <?php if (!empty($counter)): ?>
-                            <?= htmlspecialchars($counter) ?>
-                            </span>
-                        <?php endif; ?>
                     </button>
+                </div>
+
+                <div class="hidden-inputs" style="display: none;">
+                    <input type="hidden" id="receiver" value="<?= $role ?>">
+                    <input type="hidden" id="userID" value="<?= $userID ?>">
                 </div>
             </section>
 
@@ -265,6 +243,8 @@ switch ($userRole) {
             </div>
         </section>
     </main>
+
+    <?php include '../Notification/notification.php' ?>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -315,8 +295,6 @@ switch ($userRole) {
             ],
         });
     </script>
-
-
     <!-- Booking Ajax -->
     <script>
         function getStatusBadge(colorClass, status) {
@@ -376,47 +354,6 @@ switch ($userRole) {
         })
     </script>
 
-    <!-- Notification Ajax -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
-
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
-
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
-
-
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
-
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
-                            }
-                        });
-                });
-            });
-        });
-    </script>
-
-
-    <!-- Sweetalert Link -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
         const param = new URLSearchParams(window.location.search);

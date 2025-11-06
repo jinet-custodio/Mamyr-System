@@ -4,7 +4,23 @@ require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 session_start();
 
-require '../Helpers/userFunctions.php';
+function getMessageReceiver($userRoleID)
+{
+    switch ($userRoleID) {
+        case 1:
+            $receiver = 'Customer';
+            break;
+        case 2:
+            $receiver = 'Business Partner';
+            break;
+        case 3:
+            $receiver = 'Admin';
+            break;
+        default:
+            $receiver = 'Customer';
+    }
+    return $receiver;
+}
 
 $userID = (int)$_SESSION['userID'];
 $userRole = (int) $_SESSION['userRole'];
@@ -84,9 +100,7 @@ if (isset($_POST['approveBtn'])) {
             $conn->rollback();
             throw new Exception("Updating partner role failed: " .  $updateRole->error);
         }
-
-        $roles = getUserRole($conn, $partnerRoleID);
-        $receiver = $roles['userTypeName'];
+        $receiver = getMessageReceiver($partnerRoleID);
         $message = 'Your request for a business partner has been reviewed and approved. You can now proceed to add your services: <a href="../Account/bpServices.php">Click here.</a>';
         $insertNotification = $conn->prepare("INSERT INTO `notification`(`partnershipID`, `receiverID`, `senderID`, `message`, `receiver`) VALUES (?,?,?,?,?)");
         $insertNotification->bind_param('iiiss', $partnerID, $partnerUserID, $userID,  $message, $receiver);

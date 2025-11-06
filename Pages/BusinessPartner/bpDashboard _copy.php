@@ -36,7 +36,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-require '../../Function/notification.php';
 require '../../Function/Partner/sales.php';
 require '../../Function/Partner/getBookings.php';
 

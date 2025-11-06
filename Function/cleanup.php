@@ -15,6 +15,7 @@ $expiredStatus = changeToExpiredStatus($conn);
 $doneStatus = changeToDoneStatus($conn);
 $deleted = noPayment24hrs($conn);
 $rejectBookedRequest = partnerAutoReject($conn);
+$partnerCancelledBooking = partnerServiceChangeStatus($conn);
 
 
 $logMessage =
@@ -23,7 +24,8 @@ $logMessage =
     "Expired Status: $expiredStatus\n" .
     "Done Status: $doneStatus\n" .
     "Deleted rows in service unavailable: $deleted\n" .
-    "Reject partner booking request: $rejectBookedRequest\n";
+    "Reject partner booking request: $rejectBookedRequest\n" .
+    "Updated Cancel Status (partner): $partnerCancelledBooking \n \n";
 
 
 echo $logMessage;
