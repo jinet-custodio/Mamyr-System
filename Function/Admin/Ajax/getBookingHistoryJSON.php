@@ -36,86 +36,91 @@ if (isset($_GET['userID'])) {
             $status = '';
             $class = '';
 
-            if (!empty($bookings['confirmedBookingID'])) {
-                $status = $paymentApprovalStatus['statusName'];
-                switch ($paymentApprovalStatus['statusID']) {
-                    case 1:
-                        $status = 'Awaiting Payment';
-                        $class = 'orange';
-                        switch ($paymentStatus['paymentStatusID']) {
-                            case 1:
-                                $class = 'orange';
-                                break;
-                            case 5:
-                                $class = 'green';
-                                $status =  'Payment Sent';
-                                break;
-                        }
-                        switch ($bookingStatus['statusID']) {
-                            case 7:
-                                $class = 'muted';
-                                $status = $bookingStatus['statusName'];
-                                break;
-                            case 4:
-                                $class = 'danger';
-                                $status = $bookingStatus['statusName'];
-                                break;
-                        }
-                        break;
-                    case 2:
-                        $status = 'Reserved';
-                        $class = 'success';
-                        switch ($paymentStatus['paymentStatusID']) {
-                            // case 2:
-                            //     $class = 'light-blue';
-                            //     break;
-                            case 3:
-                                $class = 'bright-green';
-                                $status =  $paymentStatus['paymentStatusName'];
-                        }
-                        break;
-                    case 4:
-                        $class = 'danger';
-                        break;
-                    case 5:
-                        $class = 'red';
-                        break;
-                    default:
-                        $class = 'orange';
-                        break;
-                }
-            } else {
-                $status   = $bookingStatus['statusName'];
-                switch ($bookingStatus['statusID']) {
-                    case 1:
-                        $status = 'Awaiting Review';
-                        $class = 'warning';
-                        break;
-                    case 2:
-                        $status = 'Awaiting Payment';
-                        $class = 'orange';
-                        break;
-                    case 3:
-                        $status = 'Reserved';
-                        $class = 'success';
-                        break;
-                    case 5:
-                        $class = 'red';
-                        break;
-                    case 4:
-                        $class = 'danger';
-                        break;
-                    case 6:
-                        $class = 'light-green';
-                        break;
-                    case 7:
-                        $class = 'muted';
-                        break;
-                    default:
-                        $class = 'warning';
-                        break;
-                }
+
+            $status   = $bookingStatus['statusName'];
+            switch ($bookingStatus['statusID']) {
+                case 1: //Pending
+                    $status = 'Awaiting Review';
+                    $class = 'warning';
+                    break;
+                case 2: //Approved
+                    $status = 'Awaiting Payment';
+                    $class = 'orange';
+                    switch ($paymentApprovalStatus['statusID']) {
+                        case 1:
+                            $status = 'Awaiting Payment';
+                            $class = 'orange';
+                            switch ($paymentStatus['paymentStatusID']) {
+                                case 1:
+                                    $class = 'orange';
+                                    break;
+                                case 5:
+                                    $class = 'green';
+                                    $status =  'Payment Sent';
+                                    break;
+                            }
+                            switch ($bookingStatus['statusID']) {
+                                case 7:
+                                    $class = 'muted';
+                                    $status = $bookingStatus['statusName'];
+                                    break;
+                                case 4:
+                                    $class = 'danger';
+                                    $status = $bookingStatus['statusName'];
+                                    break;
+                            }
+                            break;
+                        case 2: //Approved
+                            $status = 'Reserved';
+                            $class = 'success';
+                            switch ($paymentStatus['paymentStatusID']) {
+                                case 2:
+                                    $class = 'light-blue';
+                                    break;
+                                case 3:
+                                    $class = 'bright-green';
+                                    break;
+                            }
+                            break;
+                        case 5: //Rejected
+                            $status =  'Payment Rejected';
+                            $class = 'red';
+                            break;
+                        default:
+                            $class = 'orange';
+                            break;
+                    }
+                case 3: //Reserved
+                    $status = 'Reserved';
+                    $class = 'success';
+                    switch ($paymentStatus['paymentStatusID']) {
+                        case 2:
+                            $class = 'light-blue';
+                            break;
+                        case 3:
+                            $class = 'bright-green';
+                            break;
+                    }
+                    $class = 'red';
+                    break;
+                case 4: //Cancelled
+                    $class = 'danger';
+                    break;
+                case 5: //Rejected
+                    $class = 'red';
+                    break;
+                case 6: //Done
+                    $class = 'light-green';
+                    break;
+
+                case 7: //Expired
+                    $class = 'muted';
+                    break;
+                default:
+                    $class = 'warning';
+                    break;
             }
+
 
 
             $rows[] = [
