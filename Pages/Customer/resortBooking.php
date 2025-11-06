@@ -623,6 +623,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 // enableTime: true,
                 minDate: new Date().setDate(new Date().getDate() + 1),
                 dateFormat: "Y-m-d",
+                disableMobile: true,
             });
         </script>
 

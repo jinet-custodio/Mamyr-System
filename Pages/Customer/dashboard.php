@@ -8,7 +8,7 @@ checkSessionTimeout();
 
 require_once '../../Function/Helpers/statusFunctions.php';
 require_once '../../Function/Helpers/userFunctions.php';
-require_once '../../Function/notification.php';
+
 resetExpiredOTPs($conn);
 addToAdminTable($conn);
 autoChangeStatus($conn);
@@ -146,35 +146,18 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 </a>
             </li>
 
-            <!-- Get notification -->
-            <?php
-
-            if ($userRole === 1 || $userRole === 4) {
-                $receiver = 'Customer';
-            } elseif ($userRole === 2) {
-                $receiver = 'Partner';
-            }
-
-            $notifications = getNotification($conn, $userID, $receiver);
-            $counter = $notifications['count'];
-            $notificationsArray = $notifications['messages'];
-            $color = $notifications['colors'];
-            $notificationIDs = $notifications['ids'];
-            ?>
 
             <div class="notification-container position-relative">
                 <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
+                    data-bs-target="#notificationModal" id="notificationButton">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                    <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
-                    <?php endif; ?>
                 </button>
             </div>
 
-
+            <div class="hidden-inputs" style="display: none;">
+                <input type="hidden" id="receiver" value="<?= $role ?>">
+                <input type="hidden" id="userID" value="<?= $userID ?>">
+            </div>
         </ul>
         <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -184,9 +167,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <?php if ($userRole !== 2): ?>
-                    <a class="nav-link active" href="dashboard.php"> Home</a>
+                        <a class="nav-link active" href="dashboard.php"> Home</a>
                     <?php else: ?>
-                    <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                     <?php endif; ?>
                 </li>
                 <li class="nav-item dropdown">
@@ -204,9 +187,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <a class="nav-link" href="blog.php">Blog</a>
                 </li>
                 <?php if ($userRole !== 2): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
+                    </li>
                 <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">About</a>
@@ -224,9 +207,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
     </nav>
 
-    <?php
-    include '../notificationModal.php';
-    ?>
+    <?php include '../Notification/notification.php' ?>
 
     <div class="custom-container">
         <section class="topSec">
@@ -296,7 +277,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="embed-responsive embed-responsive-16by9">
                 <video id="mamyrVideo" muted controls class="embed-responsive-item"
                     poster="../../Assets/videos/thumbnail2.jpg">
-                    <source src="../../Assets/videos/mamyrVideo3.mp4" type="video/mp4">
+                    <source src="../../Assets/videos/Mamyrvideo3.mp4" type="video/mp4">
 
                 </video>
             </div>
@@ -322,19 +303,19 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
                     <?php if (isset($imageMap['BookNow'])): ?>
-                    <?php foreach ($imageMap['BookNow'] as $index => $img):
+                        <?php foreach ($imageMap['BookNow'] as $index => $img):
                             $imagePath = "../../Assets/Images/landingPage/" . $img['imageData'];
                             $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                         ?>
-                    <div class="swiper-slide">
-                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                            class="editable-img d-block" style="cursor: pointer;">
-                    </div>
-                    <?php endforeach; ?>
+                            <div class="swiper-slide">
+                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                    class="editable-img d-block" style="cursor: pointer;">
+                            </div>
+                        <?php endforeach; ?>
                     <?php else: ?>
-                    <div class="card-img">
-                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                    </div>
+                        <div class="card-img">
+                            <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
+                        </div>
                     <?php endif; ?>
 
                 </div>
@@ -470,334 +451,335 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </div>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-
-    <script src="../../Assets/JS/scrollNavbg.js">
-    </script>
-    </script>
-
+    <script src="../../Assets/JS/scrollNavbg.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 
-
-    <!-- Notification Ajax -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
+        document.addEventListener("DOMContentLoaded", function() {
+            const businessPartnerNavLink = document.getElementById("businessPartnerNav");
+            const userRoleValue = document.getElementById("userRole").value;
 
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
-
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
-
-
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
-
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
-                            }
-                        }
-                    });
-            });
+            if (userRoleValue === "2") {
+                businessPartnerNavLink.style.display = "none";
+            }
         });
-    });
     </script>
-
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const businessPartnerNavLink = document.getElementById("businessPartnerNav");
-        const userRoleValue = document.getElementById("userRole").value;
-
-        if (userRoleValue === "2") {
-            businessPartnerNavLink.style.display = "none";
-        }
-    });
-    </script>
-
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('action');
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
 
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
-    });
-
-    if (paramValue === 'successLogin') {
-        Toast.fire({
-            icon: "success",
-            title: "Signed in successfully"
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
         });
-    };
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    };
+        if (paramValue === 'successLogin') {
+            Toast.fire({
+                icon: "success",
+                title: "Signed in successfully"
+            });
+        };
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
+
+    <!-- Service Worker -->
+    <!-- <script>
+        async function registerPush() {
+            if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+
+            try {
+                const permission = await Notification.requestPermission();
+                if (Notification.permission === "default") {
+                    console.log('Requesting permission now...');
+                    const permission = await Notification.requestPermission();
+                    console.log('User response:', permission);
+                    alert("Notification permission: " + permission);
+                } else if (permission !== 'granted') {
+                    console.error('Notification permission not granted');
+                    return;
+                }
+
+                const sw = await navigator.serviceWorker.register('/serviceWorker.js');
+                console.log('Service Worker registered:', sw);
+                const response = await fetch('/Function/Notification/getVapidPublicKey.php');
+                const vapidPublicKey = await response.text();
+                const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+
+                const subscription = await sw.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: convertedVapidKey
+                });
+
+                await fetch('/Function/savePushSubscription.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(subscription)
+                });
+
+                console.log('Push subscription successful');
+
+            } catch (err) {
+                console.error('Error registering push', err);
+            }
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+            return outputArray;
+        }
+    </script> -->
 
 
     <!-- Initialize Swiper -->
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        if (document.querySelector(".mySwiper")) {
+        document.addEventListener("DOMContentLoaded", function() {
+            if (document.querySelector(".mySwiper")) {
 
-            var swiper = new Swiper(".mySwiper", {
-                loop: false,
-                loopedSlides: 3,
-                spaceBetween: 30,
-                slidesPerView: 3,
-                breakpoints: {
-                    0: {
-                        slidesPerView: 1,
-                        spaceBetween: 10
+                var swiper = new Swiper(".mySwiper", {
+                    loop: false,
+                    loopedSlides: 3,
+                    spaceBetween: 30,
+                    slidesPerView: 3,
+                    breakpoints: {
+                        0: {
+                            slidesPerView: 1,
+                            spaceBetween: 10
+                        },
+                        600: {
+                            slidesPerView: 2,
+                            spaceBetween: 20
+                        },
+                        1024: {
+                            slidesPerView: 3,
+                            spaceBetween: 30
+                        }
                     },
-                    600: {
-                        slidesPerView: 2,
-                        spaceBetween: 20
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 30
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true
                     }
-                },
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true
-                }
-            });
-
-            window.addEventListener("load", () => {
-                swiper.update();
-            });
-        }
-    });
-    </script>
-
-    <script>
-    const popupContainer = document.getElementById('popup-container');
-    const popupImage = document.getElementById('popup-image');
-    const closePopupBtn = document.getElementById('close-popup');
-
-
-    document.querySelectorAll('.editable-img').forEach((image) => {
-        image.addEventListener('click', function() {
-            const imageSrc = image.src;
-            popupImage.src = imageSrc;
-            popupContainer.style.display = 'flex';
-            requestAnimationFrame(() => {
-                popupContainer.classList.add('show');
-            });
-        });
-    });
-
-
-    closePopupBtn.addEventListener('click', function() {
-        popupContainer.classList.remove('show');
-        setTimeout(() => {
-            popupContainer.style.display =
-                'none';
-        }, 300);
-    });
-
-    popupContainer.addEventListener('click', (e) => {
-        if (e.target === popupContainer) {
-            popupContainer.classList.remove('show');
-            setTimeout(() => {
-                popupContainer.style.display = 'none';
-            }, 300);
-        }
-    });
-    </script>
-
-
-
-    <script>
-    async function getRatings() {
-        const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
-        const data = await response.json();
-
-        const resortBar = document.getElementById('resort-bar');
-        resortBar.style.width = data.resortPercent + '%';
-        resortBar.setAttribute('ari-valuenow', data.resortPercent)
-        document.getElementById('resort-rating-value').textContent = data.resortRating;
-
-        const hotelBar = document.getElementById('hotel-bar');
-        hotelBar.style.width = data.hotelPercent + '%';
-        hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
-        document.getElementById('hotel-rating-value').textContent = data.hotelRating;
-
-        const eventBar = document.getElementById('event-bar');
-        eventBar.style.width = data.eventPercent + '%';
-        eventBar.setAttribute('ari-valuenow', data.eventPercent)
-        document.getElementById('event-rating-value').textContent = data.eventRating;
-
-        document.getElementById('overall-rating-value').textContent = data.overAllRating;
-        const starContainer = document.getElementById('star-container');
-        starContainer.innerHTML = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= Math.floor(data.overAllRating)) {
-                starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
-            } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
-                starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
-            } else {
-                starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
-            }
-        }
-    }
-    getRatings();
-    setInterval(getRatings, 300000);
-    </script>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const calendarEl = document.getElementById('calendar');
-        const modal = new bootstrap.Modal(document.getElementById('userEventModal'));
-        const modalBody = document.getElementById('userEventModalBody');
-
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            displayEventTime: false,
-            height: 'auto',
-            aspectRatio: 1.35,
-            events: '../../Function/Admin/fetchBookings.php',
-
-            // Make event blocks colored but textless
-            eventDidMount: function(info) {
-                info.el.style.backgroundColor = info.event.backgroundColor;
-                info.el.style.borderColor = info.event.backgroundColor;
-                info.el.style.color = 'transparent'; // hide title text
-            },
-
-            // Modal for clicking an event
-            eventClick: function(info) {
-                const event = info.event;
-
-                const formattedStart = new Date(event.start).toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: true
                 });
 
-                const formattedEnd = event.end ?
-                    new Date(event.end).toLocaleString('en-US', {
+                window.addEventListener("load", () => {
+                    swiper.update();
+                });
+            }
+        });
+    </script>
+
+    <script>
+        const popupContainer = document.getElementById('popup-container');
+        const popupImage = document.getElementById('popup-image');
+        const closePopupBtn = document.getElementById('close-popup');
+
+
+        document.querySelectorAll('.editable-img').forEach((image) => {
+            image.addEventListener('click', function() {
+                const imageSrc = image.src;
+                popupImage.src = imageSrc;
+                popupContainer.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    popupContainer.classList.add('show');
+                });
+            });
+        });
+
+
+        closePopupBtn.addEventListener('click', function() {
+            popupContainer.classList.remove('show');
+            setTimeout(() => {
+                popupContainer.style.display =
+                    'none';
+            }, 300);
+        });
+
+        popupContainer.addEventListener('click', (e) => {
+            if (e.target === popupContainer) {
+                popupContainer.classList.remove('show');
+                setTimeout(() => {
+                    popupContainer.style.display = 'none';
+                }, 300);
+            }
+        });
+    </script>
+
+    <script>
+        async function getRatings() {
+            const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
+            const data = await response.json();
+
+            const resortBar = document.getElementById('resort-bar');
+            resortBar.style.width = data.resortPercent + '%';
+            resortBar.setAttribute('ari-valuenow', data.resortPercent)
+            document.getElementById('resort-rating-value').textContent = data.resortRating;
+
+            const hotelBar = document.getElementById('hotel-bar');
+            hotelBar.style.width = data.hotelPercent + '%';
+            hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
+            document.getElementById('hotel-rating-value').textContent = data.hotelRating;
+
+            const eventBar = document.getElementById('event-bar');
+            eventBar.style.width = data.eventPercent + '%';
+            eventBar.setAttribute('ari-valuenow', data.eventPercent)
+            document.getElementById('event-rating-value').textContent = data.eventRating;
+
+            document.getElementById('overall-rating-value').textContent = data.overAllRating;
+            const starContainer = document.getElementById('star-container');
+            starContainer.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(data.overAllRating)) {
+                    starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
+                } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
+                    starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
+                } else {
+                    starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
+                }
+            }
+        }
+        getRatings();
+        setInterval(getRatings, 300000);
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const modal = new bootstrap.Modal(document.getElementById('userEventModal'));
+            const modalBody = document.getElementById('userEventModalBody');
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                displayEventTime: false,
+                height: 'auto',
+                aspectRatio: 1.35,
+                events: '../../Function/Admin/fetchBookings.php',
+
+                // Make event blocks colored but textless
+                eventDidMount: function(info) {
+                    info.el.style.backgroundColor = info.event.backgroundColor;
+                    info.el.style.borderColor = info.event.backgroundColor;
+                    info.el.style.color = 'transparent'; // hide title text
+                },
+
+                // Modal for clicking an event
+                eventClick: function(info) {
+                    const event = info.event;
+
+                    const formattedStart = new Date(event.start).toLocaleString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
                         hour: 'numeric',
                         minute: '2-digit',
                         hour12: true
-                    }) :
-                    null;
+                    });
 
-                // Match header color with event
-                const header = document.querySelector('#userEventModal .modal-header');
-                header.style.backgroundColor = event.backgroundColor;
+                    const formattedEnd = event.end ?
+                        new Date(event.end).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true
+                        }) :
+                        null;
 
-                modalBody.innerHTML = `
+                    // Match header color with event
+                    const header = document.querySelector('#userEventModal .modal-header');
+                    header.style.backgroundColor = event.backgroundColor;
+
+                    modalBody.innerHTML = `
                 <div class="text-center">
                     <p class="fs-5 mb-2"><strong>Booking Type:</strong> ${event.title || 'N/A'}</p>
                     <p class="mb-1"><strong>Start:</strong> ${formattedStart}</p>
                     ${formattedEnd ? `<p><strong>End:</strong> ${formattedEnd}</p>` : ''}
                 </div>
             `;
-                modal.show();
-            },
+                    modal.show();
+                },
 
-            // Modal for clicking a date cell (list all events)
-            dateClick: function(info) {
-                const clickedDate = new Date(info.dateStr);
-                clickedDate.setHours(0, 0, 0, 0);
+                // Modal for clicking a date cell (list all events)
+                dateClick: function(info) {
+                    const clickedDate = new Date(info.dateStr);
+                    clickedDate.setHours(0, 0, 0, 0);
 
-                const formattedClickedDate = clickedDate.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+                    const formattedClickedDate = clickedDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
 
-                // Find all events that fall on that date
-                const eventsOnDate = calendar.getEvents().filter(event => {
-                    const start = new Date(event.start);
-                    const end = new Date(event.end || event.start);
+                    // Find all events that fall on that date
+                    const eventsOnDate = calendar.getEvents().filter(event => {
+                        const start = new Date(event.start);
+                        const end = new Date(event.end || event.start);
 
-                    start.setHours(0, 0, 0, 0);
-                    end.setHours(0, 0, 0, 0);
+                        start.setHours(0, 0, 0, 0);
+                        end.setHours(0, 0, 0, 0);
 
-                    return clickedDate >= start && clickedDate <= end && event.display !==
-                        'background';
-                });
+                        return clickedDate >= start && clickedDate <= end && event.display !==
+                            'background';
+                    });
 
-                if (eventsOnDate.length === 0) {
-                    modalBody.innerHTML =
-                        `<p class="text-center mb-0">No events found on ${formattedClickedDate}.</p>`;
-                } else {
-                    let content = `
+                    if (eventsOnDate.length === 0) {
+                        modalBody.innerHTML =
+                            `<p class="text-center mb-0">No events found on ${formattedClickedDate}.</p>`;
+                    } else {
+                        let content = `
                     <h5 class="text-center mb-3">Events on ${formattedClickedDate}</h5>
                     <div class="list-group">
                 `;
 
-                    eventsOnDate.forEach(event => {
-                        const formattedStart = new Date(event.start).toLocaleString(
-                            'en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                hour12: true
-                            });
+                        eventsOnDate.forEach(event => {
+                            const formattedStart = new Date(event.start).toLocaleString(
+                                'en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    hour12: true
+                                });
 
-                        const formattedEnd = event.end ?
-                            new Date(event.end).toLocaleString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                hour12: true
-                            }) :
-                            null;
+                            const formattedEnd = event.end ?
+                                new Date(event.end).toLocaleString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    hour12: true
+                                }) :
+                                null;
 
-                        content += `
+                            content += `
                         <div class="list-group-item d-flex align-items-center justify-content-between" style="border-left: 8px solid ${event.backgroundColor}">
                             <div>
                                 <strong>${event.title || 'Event'}</strong><br>
@@ -805,49 +787,49 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
                         </div>
                     `;
+                        });
+
+                        content += `</div>`;
+                        modalBody.innerHTML = content;
+                    }
+
+                    // Make header neutral color for date clicks
+                    const header = document.querySelector('#userEventModal .modal-header');
+                    header.style.backgroundColor = '#0d6efd';
+
+                    modal.show();
+                },
+
+                // Create solid full-cell color if only 1 event that day
+                eventsSet: function(events) {
+                    const eventCountByDate = {};
+
+                    // Count how many events per date
+                    events.forEach(event => {
+                        const startDate = event.startStr.split('T')[0];
+                        if (!eventCountByDate[startDate]) eventCountByDate[startDate] = 0;
+                        eventCountByDate[startDate]++;
                     });
 
-                    content += `</div>`;
-                    modalBody.innerHTML = content;
+                    // Add solid background event for single-event days
+                    events.forEach(event => {
+                        const startDate = event.startStr.split('T')[0];
+                        if (eventCountByDate[startDate] === 1) {
+                            calendar.addEvent({
+                                start: event.startStr,
+                                end: event.endStr || event.startStr,
+                                display: 'background',
+                                allDay: true,
+                                backgroundColor: event.backgroundColor,
+                                borderColor: event.backgroundColor
+                            });
+                        }
+                    });
                 }
+            });
 
-                // Make header neutral color for date clicks
-                const header = document.querySelector('#userEventModal .modal-header');
-                header.style.backgroundColor = '#0d6efd';
-
-                modal.show();
-            },
-
-            // Create solid full-cell color if only 1 event that day
-            eventsSet: function(events) {
-                const eventCountByDate = {};
-
-                // Count how many events per date
-                events.forEach(event => {
-                    const startDate = event.startStr.split('T')[0];
-                    if (!eventCountByDate[startDate]) eventCountByDate[startDate] = 0;
-                    eventCountByDate[startDate]++;
-                });
-
-                // Add solid background event for single-event days
-                events.forEach(event => {
-                    const startDate = event.startStr.split('T')[0];
-                    if (eventCountByDate[startDate] === 1) {
-                        calendar.addEvent({
-                            start: event.startStr,
-                            end: event.endStr || event.startStr,
-                            display: 'background',
-                            allDay: true,
-                            backgroundColor: event.backgroundColor,
-                            borderColor: event.backgroundColor
-                        });
-                    }
-                });
-            }
+            calendar.render();
         });
-
-        calendar.render();
-    });
     </script>
 
 </body>

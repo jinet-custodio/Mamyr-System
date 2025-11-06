@@ -138,7 +138,7 @@ if (isset($_GET['userID'])) {
                 'paymentClass' => $paymentClass,
                 'approvalStatus' => $approvalStatusName,
                 'paymentStatus' => $paymentStatusName,
-                'userBalance' => '₱ ' . number_format($bookings['userBalance'] ?? $bookings['totalCost'], 2),
+                'userBalance' => !empty($bookings['confirmedBookingID']) ? '₱ ' . number_format($bookings['userBalance']) : '₱ ' . number_format($bookings['totalCost'], 2),
                 'totalBill' => '₱ ' . number_format($bookings['finalBill'] ?? $bookings['totalCost'], 2),
                 'payments' => $payments,
                 'paymentMethod' => $bookings['bookingPaymentMethod'],

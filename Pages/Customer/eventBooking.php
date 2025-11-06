@@ -186,7 +186,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         <div class="eventSched">
                             <label for="eventDate" class="eventInfoLabel">Event Schedule</label>
                             <div class="eventBox">
-                                <input type="date" class="form-control" name="eventDate" id="eventDate"
+                                <input type="text" class="form-control" name="eventDate" id="eventDate"
                                     value="<?= !empty($formData['eventDate']) ? $formData['eventDate'] : '' ?>">
                                 <i class=" fa-solid fa-calendar-days" style="color: #333333; "></i>
                             </div>
@@ -419,7 +419,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                 </div>
                             </div>
                         </div>
-                        <div class="kid-category container" id="kidMeal" style="display: none;">
+                        <!-- <div class="kid-category container" id="kidMeal" style="display: none;">
                             <h3 class="mealLabel">Kiddie Meal</h3>
                             <div class="foodContainer">
                                 <div id="kidChickenContainer">
@@ -484,7 +484,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     endforeach; ?>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
 
                         <div class="drink-dessert-category container" id="drinkDessert">
@@ -578,9 +578,6 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
     <!-- Format the date to Y-M-D h:i:s -->
     <script src="../../Assets/JS/formatDateTime.js" type="text/javascript"> </script>
-
-    <!-- <script src="../../Assets/JS/EventJS/getFoodByCategory.js"></script> -->
-    <!-- Guest Count & Food Count to enable the button for booknow-->
     <script src="../../Assets/JS/EventJS/countingGuestFood.js"> </script>
 
     <!--Back Functions -->
@@ -592,10 +589,16 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
     <!-- Calendar -->
     <script>
+        const today = new Date();
         const minDate = new Date();
-        minDate.setDate(minDate.getDate() + 8);
+        minDate.setDate(today.getDate() + 8);
+        minDate.setHours(0, 0, 0, 0);
 
-        //event calendar
+        flatpickr('#eventDate', {
+            minDate: minDate,
+            dateFormat: "Y-m-d",
+            disableMobile: true
+        });
 
         flatpickr('#eventStartTime', {
             enableTime: true,
@@ -603,9 +606,10 @@ $formData = $_SESSION['eventFormData'] ?? [];
             minTime: "06:00",
             maxTime: "17:00",
             dateFormat: "H:i",
-            disableMobile: true,
-        })
+            disableMobile: true
+        });
     </script>
+
 
     <!-- Event Hall-->
     <script>
@@ -819,23 +823,23 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                 const checkbox = document.createElement("input");
                                 checkbox.type = "checkbox";
                                 checkbox.classList.add("form-check-input");
-                                checkbox.name = `additionalServiceSelected[${category.partnershipServiceID}][selected]`;
+                                checkbox.name = `additionalServiceSelected[${category.partnershipID}][selected]`;
                                 checkbox.value = category.partnershipServiceID;
                                 checkbox.id = `service-${category.partnershipServiceID}`;
 
                                 const inputPBName = document.createElement("input");
                                 inputPBName.type = "hidden";
-                                inputPBName.name = `additionalServiceSelected[${category.partnershipServiceID}][PBName]`;
+                                inputPBName.name = `additionalServiceSelected[${category.partnershipID}][PBName]`;
                                 inputPBName.value = category.PBName;
 
                                 const inputPBPrice = document.createElement("input");
                                 inputPBPrice.type = "hidden";
-                                inputPBPrice.name = `additionalServiceSelected[${category.partnershipServiceID}][PBPrice]`;
+                                inputPBPrice.name = `additionalServiceSelected[${category.partnershipID}][PBPrice]`;
                                 inputPBPrice.value = category.PBPrice;
 
                                 const inputServiceID = document.createElement("input");
                                 inputServiceID.type = "hidden";
-                                inputServiceID.name = `additionalServiceSelected[${category.partnershipServiceID}][partnershipServiceID]`;
+                                inputServiceID.name = `additionalServiceSelected[${category.partnershipID}][partnershipServiceID]`;
                                 inputServiceID.value = category.partnershipServiceID;
 
                                 checkbox.addEventListener("change", function() {
@@ -926,27 +930,27 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 url.search = '';
                 history.replaceState({}, document.title, url.toString());
             }
-            const kidsMeal = document.getElementById('kidMeal');
-            const foodItem = document.querySelectorAll('.food-item');
-            if (select.value) {
-                if (select.value === 'Kids Party') {
-                    kidsMeal.style.display = 'block';
+            // // const kidsMeal = document.getElementById('kidMeal');
+            // const foodItem = document.querySelectorAll('.food-item');
+            // if (select.value) {
+            //     if (select.value === 'Kids Party') {
+            //         // kidsMeal.style.display = 'block';
 
-                    foodItem.forEach((food) => {
-                        if (foodItem.value === 'Chocolate fountain machine') {
-                            foodItem.checked = true;
-                        }
-                    })
-                }
-                select.addEventListener('change', () => {
-                    if (select.value === 'Kids Party') {
-                        kidsMeal.style.display = 'block';
-                    } else {
-                        kidsMeal.style.display = 'none';
-                    }
-                    console.log(select.value);
-                })
-            }
+            //         foodItem.forEach((food) => {
+            //             if (foodItem.value === 'Chocolate fountain machine') {
+            //                 foodItem.checked = true;
+            //             }
+            //         })
+            //     }
+            //     select.addEventListener('change', () => {
+            //         if (select.value === 'Kids Party') {
+            //             kidsMeal.style.display = 'block';
+            //         } else {
+            //             kidsMeal.style.display = 'none';
+            //         }
+            //         console.log(select.value);
+            //     })
+            // }
 
         });
     </script>
@@ -1000,13 +1004,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 flatpickr("#eventDate", {
                     dateFormat: "Y-m-d",
                     disable: dates,
-                    minDate: "today",
+                    minDate: minDate,
                 });
             }
         });
     </script>
-
-
 
     <!-- Sweetalert Message  -->
     <script>
@@ -1034,19 +1036,42 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 // container.style.setProperty("border", "1px solid red", "important");
 
             })
+        } else if (action === 'exceedFoodCount') {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'You can select a maximum of 4 dishes.',
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+            }).then(() => {
+                const dishModal = document.getElementById('dishModal');
+                const modal = new bootstrap.Modal(dishModal);
+                modal.show();
+            });
+        } else if (action === 'noSelectedVegie') {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'You must include at least one vegetable dish in your selection.',
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+            }).then(() => {
+                const dishModal = document.getElementById('dishModal');
+                const modal = new bootstrap.Modal(dishModal);
+                document.getElementById('adultVeggieContainer').style.border = '1px solid red';
+                modal.show();
+            });
+        } else if (action === 'noDrinkOrDessert') {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'If you selected 6 dishes, at least one must be a drink and one must be a dessert.',
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+            }).then(() => {
+                const dishModal = document.getElementById('dishModal');
+                const modal = new bootstrap.Modal(dishModal);
+                modal.show();
+            });
         }
-        // else if (action === 'exceedFoodCount') {
-        //     Swal.fire({
-        //         title: 'Oops',
-        //         text: 'You can select a maximum of 4 dishes.',
-        //         icon: 'warning',
-        //         confirmButtonText: 'Okay',
-        //     }).then((result) => {
-        //         const dishModal = document.getElementById('dishModal');
-        //         const modal = new bootstrap.Modal(dishModal);
-        //         modal.show();
-        //     })
-        // }
+
 
         if (action) {
             const url = new URL(window.location);
@@ -1071,7 +1096,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 const container = document.getElementById(containerId);
                 if (!container) return;
 
-                container.innerHTML = ""; // clear previous
+                container.innerHTML = "";
 
                 const wrapper = document.createElement("div");
                 wrapper.classList.add("selected-inline");

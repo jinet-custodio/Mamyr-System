@@ -79,11 +79,12 @@ if (isset($_POST['eventBook'])) {
     $partnershipIDs = [];
     $partnerService = [];
     if (!empty($partnerIDs)) {
-        $getServiceID = $conn->prepare("SELECT s.*, ps.PBName, ps.PBPrice, p.partnershipID FROM `service` s 
+        $getServiceID = $conn->prepare("SELECT u.userID, s.*, ps.PBName, ps.PBPrice, p.partnershipID FROM `service` s
         LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
         LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
+        LEFT JOIN user u ON p.userID = u.userID
         WHERE ps.partnershipServiceID = ?");
-        foreach ($partnerIDs as $partershipServiceID) {
+        foreach ($partnerIDs as $id => $partershipServiceID) {
             // error_log('PSID: ' . $partershipServiceID);
             $partershipServiceID = intval($partershipServiceID);
             $getServiceID->bind_param('i', $partershipServiceID);
@@ -98,8 +99,8 @@ if (isset($_POST['eventBook'])) {
                     $price =  $row['PBPrice'];
                     $services[$serviceID] = $price;
                     $partnerService[$partershipServiceID] = $price;
-                    $partnershipID = $row['partnershipID'];
-                    $partnershipIDs[$partnershipID] = $row['PBName'];
+                    $partnershipUserID = $row['userID'];
+                    $partnershipIDs[$partnershipUserID] = $row['PBName'];
                 } else {
                     error_log("No matching service found for partnershipServiceID: $partershipServiceID");
                 }

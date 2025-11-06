@@ -35,11 +35,12 @@ body {
   justify-content: end;
   align-items: center;
   width: 100%;
+  margin-top: 1rem;
 }
 
 .notification-container {
   text-align: right !important;
-  margin-top: 0.59rem;
+  margin-top: 0.5rem;
   margin-right: 0.85rem;
 }
 
@@ -187,3 +188,28 @@ td .sorting_1 {
   color: rgb(28, 155, 180);
 }
 /* Status */
+
+#notification-count.badge {
+  --bs-badge-padding-x: 0.6em;
+  --bs-badge-padding-y: 0.55em;
+  --bs-badge-font-size: 0.75em;
+  --bs-badge-font-weight: 700;
+  --bs-badge-color: #fff;
+  --bs-badge-border-radius: var(--bs-border-radius);
+  display: inline-block;
+  padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x) !important;
+  font-size: var(--bs-badge-font-size);
+  font-weight: var(--bs-badge-font-weight);
+  line-height: 0.7;
+  color: var(--bs-badge-color);
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--bs-badge-border-radius);
+  width: initial;
+}
+
+#notification-count.bg-danger {
+  background-color: rgb(219, 53, 69) !important;
+  color: #fff !important;
+}

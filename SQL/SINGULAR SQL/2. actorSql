@@ -67,14 +67,5 @@ CREATE TABLE partnership (
     FOREIGN KEY (partnerStatusID) REFERENCES partnerstatus(partnerStatusID)
 );
 
-CREATE TABLE partnership_partnertype(
-    partnershipID INT NOT NULL,
-    partnerTypeID INT NOT NULL,
-    isApproved Boolean DEFAULT false,   
-    PRIMARY KEY (partnershipID, partnerTypeID),
-    
-    FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID) ON DELETE CASCADE,
-    FOREIGN KEY (partnerTypeID) REFERENCES partnershiptype(partnerTypeID)
-);
 
 

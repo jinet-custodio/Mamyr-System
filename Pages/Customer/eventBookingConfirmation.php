@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -128,7 +128,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     }
 
     if (isset($_POST['eventBN'])) {
-
+        $_SESSION['eventFormData'] = $_POST;
         $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
         $guestNo = intval($_POST['guestNo']);
         $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
@@ -156,22 +156,52 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $formattedEventDate = $startDateObj->format('F d, Y');
         $formattedEventTime = $startDateObj->format('g:i A') . " to " . $endDateObj->format('g:i A');
 
-        //Food 
-        $foodSelections = !empty($_POST['foodSelections']) ? ($_POST['foodSelections']) : [];
+        // Food 
+        $foodSelections = $_POST['foodSelections'] ?? [];
+        $targetCategory = 'Vegetables';
+        $drinkCategory = 'Drink';
+        $dessertCategory = 'Dessert';
+        $drinkCount = 0;
+        $dessertCount = 0;
+        $totalFoodCount = count($foodSelections);
 
+        // error_log(print_r($_POST['foodSelections'], true));
+        // error_log('Total count: ' . count($_POST['foodSelections']));
 
-        if (count($foodSelections) <= 2) {
+        if ($totalFoodCount <= 6 && $totalFoodCount != 0) {
+            $foundVeggie = false;
+
             foreach ($foodSelections as $foodID => $items) {
                 foreach ($items as $category => $name) {
-                    $name = strtolower(trim($name));
-
-                    if (strpos($name, 'lemonade') !== false || strpos($name, 'buko salad') !== false) {
-                        $foodSelections = [];
+                    switch ($category) {
+                        case $targetCategory:
+                            $foundVeggie = true;
+                            break;
+                        case $drinkCategory:
+                            $drinkCount++;
+                            break;
+                        case $dessertCategory:
+                            $dessertCount++;
+                            break;
                     }
                 }
             }
-        }
 
+            if (!$foundVeggie) {
+                header("Location: eventBooking.php?action=noSelectedVegie");
+                exit();
+            }
+
+            if ($drinkCount == 0 || $dessertCount == 0) {
+                header("Location: eventBooking.php?action=noDrinkOrDessert");
+                exit();
+            }
+        } elseif ($totalFoodCount == 0) {
+            $foodSelections = [];
+        } else {
+            header("Location: eventBooking.php?action=exceedFoodCount");
+            exit();
+        }
         // echo '<pre>';
         // print_r($_POST);
         // echo '</pre>';
@@ -221,8 +251,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $customerChoiceMessage = 'You decided to cancel the event booking if the partner service you availed declines.';
             }
         }
-
-        $_SESSION['eventFormData'] = $_POST;
 
         // $getFreeServiceQuery = $conn->prepare("SELECT RServiceName, resortServiceID FROM resortamenity WHERE RSavailabilityID = 4");
         // $getFreeServiceQuery->execute();
@@ -359,12 +387,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 if (!empty($additionalServiceSelected)) { ?>
 
 
-                    <?php foreach ($additionalServiceSelected as $serviceID => $service) {
+                    <?php foreach ($additionalServiceSelected as $id => $service) {
                         $additionalServicePrice += $service['PBPrice'] ?>
                         <div class="form-group">
-                            <label><?= htmlspecialchars($service['PBName']) ?> &mdash;
+                            <label><?= htmlspecialchars(ucfirst($service['PBName'])) ?> &mdash;
                                 ₱<?= number_format($service['PBPrice'], 2) ?></label>
-                            <input type="hidden" name="additionalServiceSelected[]" value="<?= htmlspecialchars($serviceID) ?>"
+                            <input type="hidden" name="additionalServiceSelected[<?= $id ?>]" value="<?= htmlspecialchars($service['partnershipServiceID']) ?>"
                                 class="form-control">
                         </div>
                         <div class="customer-chocie-container">

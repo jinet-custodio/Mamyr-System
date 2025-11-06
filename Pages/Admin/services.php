@@ -33,7 +33,7 @@ if (isset($_SESSION['userID'])) {
         exit();
     }
 }
-require '../../Function/notification.php';
+
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
@@ -183,13 +183,14 @@ if ($result->num_rows > 0) {
             <section class="notification-toggler-container">
                 <div class="notification-container position-relative">
                     <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                        data-bs-target="#notificationModal">
+                        data-bs-target="#notificationModal" id="notificationButton">
                         <i class="bi bi-bell" id="notification-icon"></i>
-                        <?php if (!empty($counter)): ?>
-                            <?= htmlspecialchars($counter) ?>
-                            </span>
-                        <?php endif; ?>
                     </button>
+                </div>
+
+                <div class="hidden-inputs" style="display: none;">
+                    <input type="hidden" id="receiver" value="<?= $role ?>">
+                    <input type="hidden" id="userID" value="<?= $userID ?>">
                 </div>
             </section>
 
@@ -1004,14 +1005,10 @@ if ($result->num_rows > 0) {
 
 
     <!-- Notification Modal -->
-    <?php include '../notificationModal.php' ?>
+    <?php include '../Notification/notification.php' ?>
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
-
-
-    <!-- Sweetalert Link -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"

@@ -22,7 +22,7 @@ function getMessageReceiver($userRoleID)
             $receiver = 'Customer';
             break;
         case 2:
-            $receiver = 'Partner';
+            $receiver = 'Business Partner';
             break;
         case 3:
             $receiver = 'Admin';

@@ -221,7 +221,8 @@ switch ($userRole) {
                 <div class="tableContainer">
                     <table class=" table table-striped" id="paymentHistory">
                         <thead>
-                            <th scope="col">Booking ID</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Booking Code</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Balance</th>
                             <th scope="col">Payment Method</th>
@@ -337,7 +338,8 @@ switch ($userRole) {
                         bookings.forEach(booking => {
                             bookingMap[booking.bookingID] = booking;
                             table.row.add([
-                                booking.bookingID.toString().padStart(4, '0'),
+                                booking.bookingID,
+                                booking.bookingCode,
                                 booking.totalBill,
                                 booking.userBalance,
                                 booking.paymentMethod,

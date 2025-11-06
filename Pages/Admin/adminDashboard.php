@@ -39,7 +39,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
     exit();
 }
-require '../../Function/notification.php';
 
 
 switch ($userRole) {
@@ -179,28 +178,18 @@ if ($result->num_rows > 0) {
     </div>
 
     <main class="dashboard-container" id="main">
-        <?php
-
-        $receiver = 'Admin';
-        $notifications = getNotification($conn, $userID, $receiver);
-        $counter = $notifications['count'];
-        $notificationsArray = $notifications['messages'];
-        $color = $notifications['colors'];
-        $notificationIDs = $notifications['ids'];
-        ?>
-
-
 
         <section class="notification-toggler-container">
             <div class="notification-container position-relative">
                 <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
+                    data-bs-target="#notificationModal" id="notificationButton">
                     <i class="bi bi-bell" id="notification-icon"></i>
-                    <?php if (!empty($counter)): ?>
-                        <?= htmlspecialchars($counter) ?>
-                        </span>
-                    <?php endif; ?>
                 </button>
+            </div>
+
+            <div class="hidden-inputs" style="display: none;">
+                <input type="hidden" id="receiver" value="<?= $role ?>">
+                <input type="hidden" id="userID" value="<?= $userID ?>">
             </div>
         </section>
 
@@ -574,7 +563,7 @@ if ($result->num_rows > 0) {
     </main>
 
     <!-- Notification Modal -->
-    <?php include '../notificationModal.php' ?>
+    <?php include '../Notification/notification.php' ?>
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
@@ -625,44 +614,6 @@ if ($result->num_rows > 0) {
                 } else if (selectedValue === 'services') {
                     changeEventSource('../../Function/Admin/fetchUnavailableServices.php');
                 }
-            });
-        });
-    </script>
-
-    <!-- Notification Ajax -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.querySelector('.notification-container .badge');
-
-            document.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const notificationID = this.dataset.id;
-
-                    fetch('../../Function/notificationFunction.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'notificationID=' + encodeURIComponent(notificationID)
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-
-                            this.style.transition = 'background-color 0.3s ease';
-                            this.style.backgroundColor = 'white';
-
-
-                            if (badge) {
-                                let currentCount = parseInt(badge.textContent, 10);
-
-                                if (currentCount > 1) {
-                                    badge.textContent = currentCount - 1;
-                                } else {
-                                    badge.remove();
-                                }
-                            }
-                        });
-                });
             });
         });
     </script>

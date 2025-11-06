@@ -7,8 +7,6 @@ date_default_timezone_set('Asia/Manila');
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
-require '../../Function/notification.php';
-
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -146,31 +144,16 @@ while ($row = $getEventsResult->fetch_assoc()) {
             </li>
 
 
-            <!-- Get notification -->
-            <?php
-
-            if ($userRole === 1 || $userRole === 4) {
-                $receiver = 'Customer';
-            } elseif ($userRole === 2) {
-                $receiver = 'Partner';
-            }
-
-            $notifications = getNotification($conn, $userID, $receiver);
-            $counter = $notifications['count'];
-            $notificationsArray = $notifications['messages'];
-            $color = $notifications['colors'];
-            $notificationIDs = $notifications['ids'];
-            ?>
             <div class="notification-container position-relative">
                 <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
+                    data-bs-target="#notificationModal" id="notificationButton">
                     <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                    <?php if (!empty($counter)): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?= htmlspecialchars($counter) ?>
-                    </span>
-                    <?php endif; ?>
                 </button>
+            </div>
+
+            <div class="hidden-inputs" style="display: none;">
+                <input type="hidden" id="receiver" value="<?= $role ?>">
+                <input type="hidden" id="userID" value="<?= $userID ?>">
             </div>
 
         </ul>
@@ -183,9 +166,9 @@ while ($row = $getEventsResult->fetch_assoc()) {
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <?php if ($userRole !== 2): ?>
-                    <a class="nav-link" href="dashboard.php"> Home</a>
+                        <a class="nav-link" href="dashboard.php"> Home</a>
                     <?php else: ?>
-                    <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                     <?php endif; ?>
                 </li>
                 <li class="nav-item dropdown">
@@ -203,9 +186,9 @@ while ($row = $getEventsResult->fetch_assoc()) {
                     <a class="nav-link" href="blog.php">Blog</a>
                 </li>
                 <?php if ($userRole !== 2): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
+                    </li>
                 <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">About</a>
@@ -219,10 +202,6 @@ while ($row = $getEventsResult->fetch_assoc()) {
             </ul>
         </div>
     </nav>
-
-
-    <!-- Notification Modal -->
-    <?php include '../notificationModal.php' ?>
 
     <div class="titleContainer">
         <h4 class="title"><?= htmlspecialchars($contentMap['EventTitle'] ?? 'No Title found') ?></h4>
@@ -244,21 +223,21 @@ while ($row = $getEventsResult->fetch_assoc()) {
                     // Sanitize alt text
                     $altText = htmlspecialchars($eventName);
                 ?>
-                <div class="swiper-slide">
-                    <div class="card event-card">
-                        <img class="card-img-top" src="<?= htmlspecialchars($imagePath) ?>" alt="<?= $altText ?>">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title"><?= htmlspecialchars($eventName) ?></h5>
-                            <div class="eventDescription">
-                                <p class="eventDesc"><?= htmlspecialchars($eventDesc) ?></p>
+                    <div class="swiper-slide">
+                        <div class="card event-card">
+                            <img class="card-img-top" src="<?= htmlspecialchars($imagePath) ?>" alt="<?= $altText ?>">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><?= htmlspecialchars($eventName) ?></h5>
+                                <div class="eventDescription">
+                                    <p class="eventDesc"><?= htmlspecialchars($eventDesc) ?></p>
+                                </div>
+                                <button type="button" class="btn btn-primary" style="margin-top: auto;"
+                                    onclick="window.location.href='eventbooking.php?event=<?= $eventName ?>'">
+                                    BOOK NOW
+                                </button>
                             </div>
-                            <button type="button" class="btn btn-primary" style="margin-top: auto;"
-                                onclick="window.location.href='eventbooking.php?event=<?= $eventName ?>'">
-                                BOOK NOW
-                            </button>
                         </div>
                     </div>
-                </div>
                 <?php endforeach; ?>
             </div>
 
@@ -337,21 +316,21 @@ while ($row = $getEventsResult->fetch_assoc()) {
 
         <div class="mainHallDescContainer">
             <?php if ($mainHall) { ?>
-            <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
+                <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
 
-            <ul class="mainHallDescription" id="mainHallDesc">
-                <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour
-                    extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
-                <li>One (1) air-conditioned private room.</li>
-                <li>Separate powder rooms/restrooms for males and females.</li>
-            </ul>
+                <ul class="mainHallDescription" id="mainHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour
+                        extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
+                    <li>One (1) air-conditioned private room.</li>
+                    <li>Separate powder rooms/restrooms for males and females.</li>
+                </ul>
 
-            <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱
-                <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
+                <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱
+                    <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
             <?php } else { ?>
-            <h3 class="mainHallDescTitle">No Information to Display</h3>
+                <h3 class="mainHallDescTitle">No Information to Display</h3>
             <?php } ?>
         </div>
 
@@ -361,19 +340,19 @@ while ($row = $getEventsResult->fetch_assoc()) {
     <div class="miniHall">
         <div class="miniHallDescContainer">
             <?php if ($miniHall) { ?>
-            <h3 class="miniHallDescTitle">Mini Function Hall</h3>
+                <h3 class="miniHallDescTitle">Mini Function Hall</h3>
 
-            <ul class="miniHallDescription" id="miniHallDesc">
-                <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour
-                    extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
-            </ul>
+                <ul class="miniHallDescription" id="miniHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour
+                        extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
+                </ul>
 
-            <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱
-                <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
+                <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱
+                    <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
             <?php } else { ?>
-            <h3 class="miniHallDescTitle">No Information to Display</h3>
+                <h3 class="miniHallDescTitle">No Information to Display</h3>
             <?php } ?>
         </div>
 
@@ -412,8 +391,11 @@ while ($row = $getEventsResult->fetch_assoc()) {
         </div>
     </div>
 
-    <?php include 'footer.php';
-    include 'loader.php'; ?>
+    <?php
+    include 'footer.php';
+    include 'loader.php';
+    include '../Notification/notification.php';
+    ?>
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js">
@@ -423,73 +405,36 @@ while ($row = $getEventsResult->fetch_assoc()) {
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-    <!-- Notification Ajax -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const badge = document.querySelector('.notification-container .badge');
-
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationID = this.dataset.id;
-
-                fetch('../../Function/notificationFunction.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'notificationID=' + encodeURIComponent(notificationID)
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-
-                        this.style.transition = 'background-color 0.3s ease';
-                        this.style.backgroundColor = 'white';
-
-
-                        if (badge) {
-                            let currentCount = parseInt(badge.textContent, 10);
-
-                            if (currentCount > 1) {
-                                badge.textContent = currentCount - 1;
-                            } else {
-                                badge.remove();
-                            }
-                        }
-                    });
-            });
-        });
-    });
-    </script>
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
-    const swiper = new Swiper('.swiper', {
-        slidesPerView: 1,
-        spaceBetween: 30,
-        loop: true,
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        breakpoints: {
-            599: {
-                slidesPerView: 1,
+        const swiper = new Swiper('.swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
             },
-            768: {
-                slidesPerView: 1,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
             },
-            769: {
-                slidesPerView: 2,
-            },
-            1024: {
-                slidesPerView: 3,
+            breakpoints: {
+                599: {
+                    slidesPerView: 1,
+                },
+                768: {
+                    slidesPerView: 1,
+                },
+                769: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                }
             }
-        }
-    });
+        });
     </script>
     <!-- Scroll Nav BG -->
     <script src="../../Assets/JS/scrollNavbg.js"></script>
