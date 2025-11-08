@@ -250,7 +250,8 @@ body {
 }
 
 .fc-daygrid-block-event .fc-event-time,
-.fc-daygrid-block-event .fc-event-title {
+.fc-daygrid-block-event .fc-event-title,
+.fc-event-title {
   color: transparent !important;
 }
 

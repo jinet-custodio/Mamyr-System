@@ -76,35 +76,36 @@ main {
 }
 
 .container {
-  /* border: 1px solid black !important; */
   background-color: #ffff;
-  width: 1289px;
-  height: 436px;
+  width: 90%;
   border-radius: 40px;
   display: block;
   margin: 0 auto !important;
   margin-top: 4vw !important;
 }
 
+.row {
+  height: 100% !important;
+}
+
+.col {
+  padding: 1rem;
+}
+
 #busInfoContainer {
   background-color: #78aeff;
-  height: 436px;
 }
 
 .repInfoLabel,
-.busProofLabel {
-  font-family: "Poppins";
-  font-weight: bold;
-  font-size: 25.5px;
-  text-align: center;
-  margin-top: 1.5vw;
-}
+.busProofLabel,
 .busInfoLabel {
   font-family: "Poppins";
   font-weight: bold;
   font-size: 25.5px;
   text-align: center;
-  margin-top: 1.5vw;
+  margin-top: 1rem;
+}
+.busInfoLabel {
   color: #ffff;
 }
 
@@ -266,9 +267,9 @@ footer {
   }
 
   .titleDescription {
-    max-width: 1200px !important;
+    max-width: 95% !important;
     margin: 2vw auto 0 auto !important;
-    font-size: 1.4vw;
+    font-size: 1.2vw;
     color: #fff;
   }
 
@@ -282,20 +283,6 @@ footer {
     gap: 2px;
     margin-top: 30px !important;
   }
-  .busInfoLabel {
-    margin-top: 1rem !important;
-    padding-top: 1rem;
-  }
-  .busInfoFormContainer {
-    margin-top: 59px !important;
-  }
-  .busProofLabel {
-    margin-top: 2rem !important;
-  }
-  .busProofFormContainer {
-    margin-top: 1.5rem !important;
-  }
-
   #submit-request {
     margin-top: 2rem !important;
   }
