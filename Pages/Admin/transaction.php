@@ -207,7 +207,7 @@ if ($result->num_rows > 0) {
                         <thead>
                             <th scope="col">Booking ID</th>
                             <th scope="col">Guest</th>
-                            <th scope="col">Total Payment</th>
+                            <th scope="col">Total Amount</th>
                             <th scope="col">Balance</th>
                             <th scope="col">Payment Method</th>
                             <th scope="col">Payment Approval</th>

@@ -26,26 +26,52 @@ if (isset($_POST['signUp'])) {
 
         //For validID
 
-        $partnerFilePath = __DIR__ . '../../Assets/Images/BusinessPartnerIDs/';
+        $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
+        $allowedExt = ['jpg', 'jpeg', 'png'];
 
-        if (!is_dir($partnerFilePath)) {
-            mkdir($partnerFilePath, 0755, true);
-        }
-        $imageMaxSize = 10 * 1024 * 1024; //10mb
-        if (isset($_FILES['validID']) && $_FILES['validID']['error'] === UPLOAD_ERR_OK) {
-            if ($_FILES['validID']['size'] <= $imageMaxSize) {
-                $filePath = $_FILES['validID']['tmp_name'];
-                $fileName = $_FILES['validID']['name'];
-                $imageName = $firstName . '_' . $fileName;
-                $image = $partnerFilePath . $imageName;
-                move_uploaded_file($filePath, $image);
-            } else {
-                $_SESSION['registerFormData'] = $_POST;
-                $_SESSION['partnerData'] = $_POST;
-                // error_log(print_r($_POST, true));
-                header('Location: ../../../Pages/busPartnerRegister.php?action=exceedImageSize');
+        $storeProofPath = __DIR__ . '/Assets/Images/BusinessPartnerIDs/';
+        $tempUploadPath = __DIR__ . '/Assets/Images/TempUploads/';
+
+        if (!is_dir($storeProofPath)) mkdir($storeProofPath, 0755, true);
+        if (!is_dir($tempUploadPath)) mkdir($tempUploadPath, 0755, true);
+
+        if (isset($_FILES['validID']) && is_uploaded_file($_FILES['validID']['tmp_name'])) {
+
+            $originalName = $_FILES['validID']['name'];
+            $imageExt = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+            $imageSize = $_FILES['validID']['size'];
+
+            if (!in_array($imageExt, $allowedExt)) {
+                unset($_SESSION['tempImage']);
+                header("Location: ../../../Pages/busPartnerRegister.php?result=extError");
+                exit();
             }
+
+            if ($imageSize > $imageMaxSize) {
+                header("Location: ../../../Pages/busPartnerRegister.php?result=imageSize");
+                exit();
+            }
+
+            $tempFileName = 'temp_' . uniqid() . '_' . $imageExt;
+            $tempFilePath = $tempUploadPath . $tempFileName;
+
+            if (!move_uploaded_file($_FILES['validID']['tmp_name'], $tempFilePath)) {
+                header("Location: ../../../Pages/busPartnerRegister.php?result=imageFailed");
+                exit();
+            }
+
+            $_SESSION['tempImage'] = $tempFileName;
+        } else if (!empty($_SESSION['tempImage'])) {
+            $tempFileName = $_SESSION['tempImage'];
+        } else {
+            header("Location: ../../../Pages/busPartnerRegister.php?result=imageFailed");
+            exit();
         }
+
+        $imageName = $firstName . '_' . basename($_SESSION['tempImage']);
+        $finalFilePath = $storeProofPath . $finalFileName;
+
+        rename($tempUploadPath . $_SESSION['tempImage'], $finalFilePath);
     } else {
         $userAddress = mysqli_real_escape_string($conn, $_POST['userAddress']);
         $imageName = null;

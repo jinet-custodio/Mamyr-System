@@ -6,18 +6,43 @@ session_start();
 
 $userRole = (int) $_SESSION['userRole'];
 $userID = (int) $_SESSION['userID'];
+$env = parse_ini_file(__DIR__ . '/../../../.env');
+require __DIR__ . '/../../../vendor/autoload.php';
+require '../../emailSenderFunction.php';
+
+// $gcashDetails = '';
+// $resortInfoName = 'gcashNumber';
+// $getPaymentDetails = $conn->prepare("SELECT resortInfoDetail FROM resortinfo WHERE resortInfoName = ?");
+// $getPaymentDetails->bind_param('s', $resortInfoName);
+// $getPaymentDetails->execute();
+// $result = $getPaymentDetails->get_result();
+
+// if ($result->num_rows > 0) {
+//     $row = $result->fetch_assoc();
+//     $gcashDetails = 'Here is our gcash details where you can send the downpayment. <br> <strong>' . $row['resortInfoDetail'] . '</strong>';
+// }
+
+$email = 'jeanette.arkurus@gmail.com';
 
 
 if (isset($_POST['submitDownpaymentImage'])) {
-    error_log(print_r($_POST, true));
+    // error_log(print_r($_POST, true));
     $bookingID = (int) $_POST['bookingID'];
     $confirmedBookingID = (int) $_POST['confirmedBookingID'];
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     $paymentAmount = (float) $_POST['payment-amount'];
     $downpayment = (float) $_POST['downpayment'];
+    $finalBill = (float) $_POST['finalBill'];
+    $customerName = mysqli_real_escape_string($conn, $_POST['fullName']);
+    $bookingCode = mysqli_real_escape_string($conn, $_POST['bookingCode']);
 
     $startDate = mysqli_real_escape_string($conn, $_POST['startDate']);
     $endDate = mysqli_real_escape_string($conn, $_POST['endDate']);
+
+
+    $startDateObj = new DateTime($startDate);
+
+    $bookingDate = $startDateObj->format('F d, Y g:i A');
 
     $serviceIDs = $_POST['serviceIDs'];
 
@@ -79,8 +104,6 @@ if (isset($_POST['submitDownpaymentImage'])) {
     rename($tempUploadPath . $_SESSION['tempImage'], $finalFilePath);
 
 
-
-
     $paymentSentID = 5;
     $userID = $_SESSION['userID'] ?? null;
     if (!$userID) {
@@ -90,8 +113,6 @@ if (isset($_POST['submitDownpaymentImage'])) {
 
     $conn->begin_transaction();
     try {
-        // $today = new DateTime();
-        // $expiresAt = $today->modify('+24 hours')->format('Y-m-d H:i:s');
         $expiresAt = null;
         $searchBookingID = $conn->prepare("SELECT bookingID FROM serviceunavailabledate WHERE bookingID = ? AND expiresAt IS NOT NULL");
         $searchBookingID->bind_param('i', $bookingID);
@@ -230,10 +251,78 @@ if (isset($_POST['submitDownpaymentImage'])) {
         $insertPaymentQuery->execute();
 
         $receiver = 'Admin';
-        $message = 'A payment proof has been uploaded for Booking ID: ' . $bookingID . '. Please verify if its exactly ₱' . number_format($paymentAmount, 2);
+        $message = 'A payment proof has been uploaded for Booking ID: ' . $bookingID . '. Please verify if its exactly ₱' . number_format($paymentAmount, 2) . '. Click  <a href="transaction.php">here</a> to view';
         $insertNotificationQuery = $conn->prepare("INSERT INTO notification (receiver, senderID, bookingID, message) VALUES (?, ?, ?, ?) ");
         $insertNotificationQuery->bind_param('siis', $receiver, $userID, $bookingID, $message);
         $insertNotificationQuery->execute();
+
+        $today = new DateTime();
+        $dateCreated = $today->format("d M Y");
+        $paymentDate = $today->format('F. d, Y g:i A');
+        $paymentCheck = $today->modify('+24 hours')->format('F. d, Y g:i A');
+
+        $email_message = '
+                    <body style="font-family: Poppins, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
+                        <table align="center" width="100%" cellpadding="0" cellspacing="0"
+                            style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+
+                            <!-- Header -->
+                            <tr style="background-color: #365CCE;">
+                                <td style="text-align:center; padding: 30px;">
+                                    <h4
+                                        style="font-family: Poppins, sans-serif;  font-weight: 700; font-size: 18px; color: #ffffff; font-size: 18px; margin: 0;">
+                                        CUSTOMER PAYMENT!
+                                    </h4>
+                                    <h2
+                                        style="font-family: Poppins, sans-serif; font-weight: 200; font-size: 16px;  color: #ffffff; margin: 10px 0 0;">
+                                        A customer has submitted a payment for their booking
+                                    </h2>
+                                </td>
+                            </tr>
+
+                            <!-- Body -->
+                            <tr>
+                                <td style="padding: 30px; text-align: left; color: #333333;">
+                                    <p style="font-size: 12px; margin: -20PX 0 20px; font-style: italic;">
+                                        Booking Reference: <strong>' . $bookingCode . '</strong> &nbsp;|&nbsp; Created on ' . $dateCreated .
+            '
+                                    </p>
+
+                                    <p style="font-size: 14px; margin: 20px 0 10px;">Hello <strong> Admin </strong>, </p>
+
+                                    <p style="font-size: 14px; margin: 20px 0 10px;">A customer has successfully submitted a payment for their booking. Below are the details: </p>
+                                    <p style="font-size: 14px; margin: 8px 0;">Booking ID: <strong>' . $bookingID . '</strong></p>
+                                    <p style="font-size: 14px; margin: 8px 0;">Customer Name: <strong>' . $customerName . '</strong></p>
+                                    <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' .  $bookingDate . '</strong></p>
+                                    <p style="font-size: 14px; margin: 8px 0;">Grand Total: <strong>₱' . number_format($finalBill, 2) . '</strong></p>
+                                    <p style="font-size: 14px; margin: 8px 0;">Required Downpayment: <strong>₱' . number_format($downpayment, 2) . '</strong></p>
+                                    <p style="font-size: 14px; margin: 8px 0;">Total Payment Sent: <strong>₱' . number_format($paymentAmount, 2) . '</strong></p>
+
+                                    <p style="font-size: 14px;">
+                                        The customer has uploaded their payment receipt through the website. <br> 
+                                        Kindly verify the payment and then approve or reject the booking in the admin payment page. 
+                                        <a href="https://mintcream-parrot-792763.hostingersite.com/Pages/Admin/transaction.php" style="color: #007bff; text-decoration: none;">Click here.</a>
+                                    </p>
+
+                                    <p style="font-size: 16px; margin: 30px 0 0;">Regards,</p>
+                                    <p style="font-size: 16px; font-weight: bold; margin: 8px 0 0;">Mamyr Resort and Events Place System Notification</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </body>
+            ';
+
+        $subject = "New Payment Received – Booking Reference: $bookingCode";
+
+        $isSend =  false;
+        if (sendEmail($email, 'Mamyr Admin', $subject, $email_message, $env)) {
+            $isSend = true;
+        }
+
+        if (!$isSend) {
+            $conn->rollback();
+            throw new Exception('Failed Sending Email');
+        }
 
         $updateUnavailableService = $conn->prepare("UPDATE serviceunavailabledate SET expiresAt = NULL WHERE bookingID = ?");
         $updateUnavailableService->bind_param('i', $bookingID);

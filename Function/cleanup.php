@@ -19,7 +19,8 @@ $partnerCancelledBooking = partnerServiceChangeStatus($conn);
 
 
 $logMessage =
-    "Added to admin table: $addedUser\n" .
+    "Scheduled Date & Time: " . date('F. d, Y g:i A') .
+    "\nAdded to admin table: $addedUser\n" .
     "Deleted OTPs: $affectedRows\n" .
     "Expired Status: $expiredStatus\n" .
     "Done Status: $doneStatus\n" .
@@ -27,7 +28,8 @@ $logMessage =
     "Reject partner booking request: $rejectBookedRequest\n" .
     "Updated Cancel Status (partner): $partnerCancelledBooking \n \n";
 
-
-echo $logMessage;
+echo '<pre>';
+print_r($logMessage);
+echo '</pre>';
 file_put_contents(__DIR__ . '/cron_log.txt', $logMessage, FILE_APPEND);
 $conn->close();
