@@ -214,59 +214,71 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <section class="topSec">
             <input type="hidden" name="userID" id="userID" value="<?= $userID ?>">
             <input type="hidden" name="partnershipID " id="partnershipID" value="<?= $partnershipID ?>">
-            <div class="container">
+            <div class="container" id="mainContainer">
                 <h3 class="welcomeText">Hello there, <?= ucfirst($firstName) ?>! Welcome to Mamyr Resort and Events
                     Place</h3>
                 <section class="container topSection">
                     <div class="card statCard customer-card">
-                        <div class="card-body">
-                            <div class="header">
-                                <i class="bi bi-calendar-week"></i>
-                                <h6 class="header-text">All Bookings</h6>
+                        <div class="card-body  d-flex justify-content-between">
+                            <div class="leftSide">
+                                <div class="header">
+                                    <h6 class="header-text">All Bookings</h6>
+                                </div>
+                                <div class="data-container ">
+                                    <h5 class="card-data bookingNumber" id="bookingNumber">0</h5>
+                                </div>
                             </div>
-
-                            <div class="data-container customer">
-                                <h5 class="card-data bookingNumber" id="bookingNumber">0</h5>
+                            <div class="rightSide text-center d-flex justify-content-end">
+                                <i class="bi bi-calendar-week"></i>
                             </div>
                         </div>
                     </div>
 
                     <div class="card statCard total-bookings">
-                        <div class="card-body">
-                            <div class="header">
-                                <i class="bi bi-calendar-check"></i>
-                                <h6 class="header-text">Approved</h6>
+                        <div class="card-body d-flex justify-content-between">
+                            <div class="leftSide">
+                                <div class="header">
+                                    <h6 class="header-text">Approved</h6>
+                                </div>
+                                <div class="data-container ">
+                                    <h5 class="card-data approvedNumber" id="approvedBooking">0</h5>
+                                </div>
                             </div>
-
-                            <div class="data-container ">
-                                <h5 class="card-data approvedNumber" id="approvedBooking">0</h5>
+                            <div class="rightSide text-center d-flex justify-content-end">
+                                <i class="bi bi-calendar-check"></i>
                             </div>
                         </div>
                     </div>
 
                     <div class="card statCard total-sales">
-                        <div class="card-body">
-                            <div class="header">
-                                <i class="bi bi-hourglass-top"></i>
-                                <h6 class="header-text">Pending</h6>
+                        <div class="card-body  d-flex justify-content-between">
+                            <div class="leftSide">
+                                <div class="header">
+                                    <h6 class="header-text">Pending</h6>
+                                </div>
+                                <div class="data-container ">
+                                    <h5 class="card-data pendingNumber" id="pendingBooking">0</h5>
+                                </div>
                             </div>
-
-                            <div class="data-container">
-                                <h5 class="card-data pendingNumber" id="pendingBooking">0</h5>
+                            <div class="rightSide text-center d-flex justify-content-end">
+                                <i class="bi bi-hourglass-top"></i>
                             </div>
                         </div>
                     </div>
 
                     <div class="card statCard mostUsedSrvice-card">
-                        <div class="card-body">
-                            <div class="header">
-                                <i class="bi bi-tags"></i>
-                                <h6 class="header-text">Total Monthly Sales</h6>
+                        <div class="card-body  d-flex justify-content-between">
+                            <div class="leftSide">
+                                <div class="header">
+                                    <h6 class="header-text">Total Monthly Sales</h6>
+                                </div>
+                                <div class="data-container ">
+                                    <h5 class="card-data revenueNumber">
+                                        <?= ($totalSales !== 0) ? number_format($totalSales, 2) : '₱0.00' ?></h5>
+                                </div>
                             </div>
-
-                            <div class="data-container">
-                                <h5 class="card-data revenueNumber">
-                                    <?= ($totalSales !== 0) ? number_format($totalSales, 2) : '₱0.00' ?></h5>
+                            <div class="rightSide text-center d-flex justify-content-end">
+                                <i class="bi bi-tags"></i>
                             </div>
                         </div>
                     </div>
@@ -358,7 +370,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <section class="middle-container">
             <div class="embed-responsive embed-responsive-16by9">
-                <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
+                <video id="mamyrVideo" muted controls class="embed-responsive-item"
                     poster="../../Assets/videos/thumbnail2.jpg">
                     <source src="../../Assets/videos/mamyrVideo3.mp4" type="video/mp4">
 

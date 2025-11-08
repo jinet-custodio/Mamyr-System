@@ -25,9 +25,17 @@
   flex: 1;
 }
 
+#mainContainer {
+  max-width: 90% !important;
+}
+
+.topSection,
+.secondRow-graph {
+  max-width: 90% !important;
+}
+
 .topSec {
   width: 98%;
-  height: 85vh;
   margin-top: 5rem !important;
   border-radius: 20px;
   margin: 0 auto;
@@ -35,7 +43,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem !important;
+  padding: 3rem 1rem !important;
 }
 .welcomeText {
   font-family: "Alkatra";
@@ -43,6 +51,7 @@
   font-size: var(--font-size-xxl);
   color: #ffff;
   margin-top: var(--margin-md);
+  text-shadow: 1px 2px 4px rgba(0, 6, 10, 0.91);
 }
 .topSection {
   display: grid;
@@ -62,14 +71,25 @@
   gap: 0.3rem;
 }
 
-.header i,
 .header h6 {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: #a5a5a5;
 }
 
 .header h6 {
   margin-top: 0.1rem;
+}
+
+.rightSide i {
+  font-size: 1.1vw;
+}
+
+.leftSide {
+  width: 75%;
+}
+
+.rightSide {
+  width: 20%;
 }
 
 .data-container {
