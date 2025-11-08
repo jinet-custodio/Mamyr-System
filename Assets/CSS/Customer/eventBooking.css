@@ -127,6 +127,11 @@
   margin: auto !important;
 }
 
+#selectedDishesContainer {
+  overflow-y: scroll;
+  height: 30%;
+}
+
 #foodSelectionCard,
 #additionalServicesCard {
   display: flex !important;

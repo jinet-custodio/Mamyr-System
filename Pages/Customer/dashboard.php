@@ -684,7 +684,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 eventDidMount: function(info) {
                     info.el.style.backgroundColor = info.event.backgroundColor;
                     info.el.style.borderColor = info.event.backgroundColor;
-                    info.el.style.color = 'transparent'; // hide title text
+                    info.el.style.color = 'transparent !important';
                 },
 
                 // Modal for clicking an event
