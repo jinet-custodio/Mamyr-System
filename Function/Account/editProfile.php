@@ -8,17 +8,28 @@ session_start();
 if (isset($_POST['changePfpBtn'])) {
     $userRole = (int) $_SESSION['userRole'];
     $userID = (int) $_SESSION['userID'];
+    $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
+    $allowedExt = ['jpg', 'jpeg', 'png'];
 
-
-    if (isset($_FILES['profilePic']) && $_FILES['profilePic']['size'] > 0) {
+    $_SESSION['userID'] = $userID;
+    $_SESSION['userRole'] = $userRole;
+    if (isset($_FILES['profilePic']) && is_uploaded_file($_FILES['profilePic']['tmp_name'])) {
         $imageData = file_get_contents($_FILES['profilePic']['tmp_name']);
-    } else {
-        $defaultImage = '../../Assets/Images/defaultProfile.png';
-        if (file_exists($defaultImage)) {
-            $imageData = file_get_contents('../../Assets/Images/defaultProfile.png');
-        } else {
-            $imageData = NULL;
+        $imageName = $_FILES['profilePic']['name'];
+        $imageExt = strtolower(pathinfo($imageName, PATHINFO_EXTENSION));
+        $imageSize - $_FILES['profilePic']['size'];
+        if (!in_array($imageExt, $allowedExt)) {
+            header("Location: ../../../../Pages/Account/account.php?message=extNotAllowed");
+            exit();
         }
+
+        if ($imageSize > $imageMaxSize) {
+            header("Location: ../../../../Pages/Account/account.php?message=sizeExceed");
+            exit();
+        }
+    } else {
+        header("Location: ../../../../Pages/Account/account.php?message=noUploadedImage");
+        exit();
     }
 
     if ($imageData !== NULL) {

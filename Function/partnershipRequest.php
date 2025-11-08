@@ -6,6 +6,9 @@ session_start();
 
 
 if (isset($_POST['submit_request'])) {
+
+    error_log(print_r($_POST, true));
+    $_SESSION['partnerData'] = $_POST;
     $userID = mysqli_real_escape_string($conn, $_POST['userID']);
     $userRole = mysqli_real_escape_string($conn, $_POST['userRole']);
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
@@ -21,11 +24,65 @@ if (isset($_POST['submit_request'])) {
     $city = mysqli_real_escape_string($conn, $_POST['city']) ?? '';
     $province = mysqli_real_escape_string($conn, $_POST['province']) ?? '';
     $zip = mysqli_real_escape_string($conn, $_POST['zip']) ?? '';
+    if (!is_numeric($zip)) {
+        header("Location: ../../../Pages/Customer/partnerApplication.php?result=zipCode");
+        exit();
+    }
     if ($streetAddress === '') {
         $partnerAddress = $barangay . ", " . $city . ", " . $province . ", " . $zip;
     } else {
         $partnerAddress = $streetAddress . " " . $barangay . ", " . $city . ", " . $province . ", " . $zip;
     }
+
+
+    $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
+    $allowedExt = ['jpg', 'jpeg', 'png'];
+
+    $storeProofPath = __DIR__ . '/../../../Assets/Images/BusinessPartnerIDs/';
+    $tempUploadPath = __DIR__ . '/../../../Assets/Images/TempUploads/';
+
+    if (!is_dir($storeProofPath)) mkdir($storeProofPath, 0755, true);
+    if (!is_dir($tempUploadPath)) mkdir($tempUploadPath, 0755, true);
+
+    if (isset($_FILES['validID']) && is_uploaded_file($_FILES['validID']['tmp_name'])) {
+
+        $originalName = $_FILES['validID']['name'];
+        $imageExt = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        $imageSize = $_FILES['validID']['size'];
+
+        if (!in_array($imageExt, $allowedExt)) {
+            unset($_SESSION['tempImage']);
+            header("Location: ../../../Pages/Customer/partnerApplication.php?result=extError");
+            exit();
+        }
+
+        if ($imageSize > $imageMaxSize) {
+            header("Location: ../../../Pages/Customer/partnerApplication.php?result=imageSize");
+            exit();
+        }
+
+        $tempFileName = 'temp_' . uniqid() . '_' . $imageExt;
+        $tempFilePath = $tempUploadPath . $tempFileName;
+
+        if (!move_uploaded_file($_FILES['validID']['tmp_name'], $tempFilePath)) {
+            header("Location: ../../../Pages/Customer/partnerApplication.php?result=imageFailed");
+            exit();
+        }
+
+        $_SESSION['tempImage'] = $tempFileName;
+    } else if (!empty($_SESSION['tempImage'])) {
+        $tempFileName = $_SESSION['tempImage'];
+    } else {
+        header("Location: ../../../Pages/Customer/partnerApplication.php?result=imageFailed");
+        exit();
+    }
+
+    $finalFileName = $firstName . '_' . basename($_SESSION['tempImage']);
+    $finalFilePath = $storeProofPath . $finalFileName;
+
+    rename($tempUploadPath . $_SESSION['tempImage'], $finalFilePath);
+
+
 
     $proofLink = mysqli_real_escape_string($conn, $_POST['proofLink']);
 
@@ -54,8 +111,8 @@ if (isset($_POST['submit_request'])) {
             }
 
             if ($userRole ==  1) {
-                $insertQuery = $conn->prepare("INSERT INTO partnership(userID, partnerAddress, companyName,  businessEmail, documentLink) VALUES (?,?,?,?,?)");
-                $insertQuery->bind_param("issss", $userID, $partnerAddress, $companyName, $businessEmail, $proofLink);
+                $insertQuery = $conn->prepare("INSERT INTO partnership(userID, partnerAddress, companyName,  businessEmail, documentLink, validID) VALUES (?,?,?,?,?,?)");
+                $insertQuery->bind_param("isssss", $userID, $partnerAddress, $companyName, $businessEmail, $proofLink, $finalFileName);
                 if (!$insertQuery->execute()) {
                     $conn->rollback();
                     $_SESSION['message'] = 'Partnership Request Failed';
@@ -64,15 +121,22 @@ if (isset($_POST['submit_request'])) {
 
                 $partnershipID = $conn->insert_id;
                 $insertPartnerTypes = $conn->prepare("INSERT INTO `partnership_partnertype`(`partnershipID`, `partnerTypeID`) VALUES (?,?)");
-                foreach ($partnerTypes as $id):
-                    $insertPartnerTypes->bind_param("ii", $partnershipID, $id);
+                if (!empty($partnerTypes)) {
 
-                    if (!$insertPartnerTypes->execute()) {
-                        $conn->rollback();
-                        $_SESSION['message'] = 'Server problem. An error occured, try again later!';
-                        throw new Exception('Error inserting partnership types. ' . $insertPartnerTypes->error);
-                    }
-                endforeach;
+
+                    foreach ($partnerTypes as $id):
+                        $insertPartnerTypes->bind_param("ii", $partnershipID, $id);
+
+                        if (!$insertPartnerTypes->execute()) {
+                            $conn->rollback();
+                            $_SESSION['message'] = 'Server problem. An error occured, try again later!';
+                            throw new Exception('Error inserting partnership types. ' . $insertPartnerTypes->error);
+                        }
+                    endforeach;
+                } else {
+                    header("Location: ../Pages/Customer/partnerApplication.php?result=selectPartner");
+                    exit;
+                }
 
                 $_SESSION['success'] = 'Partnership Request Sent Successfully';
                 $conn->commit();

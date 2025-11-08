@@ -59,25 +59,16 @@ if (isset($_GET['userID'])) {
                                     $status =  'Payment Sent';
                                     break;
                             }
-                            switch ($bookingStatus['statusID']) {
-                                case 7:
-                                    $class = 'muted';
-                                    $status = $bookingStatus['statusName'];
-                                    break;
-                                case 4:
-                                    $class = 'danger';
-                                    $status = $bookingStatus['statusName'];
-                                    break;
-                            }
                             break;
                         case 2: //Approved
-                            $status = 'Reserved';
                             $class = 'success';
                             switch ($paymentStatus['paymentStatusID']) {
                                 case 2:
+                                    $status = 'Reserved - ' . $paymentStatus['paymentStatusName'];
                                     $class = 'light-blue';
                                     break;
                                 case 3:
+                                    $status = 'Reserved - ' . $paymentStatus['paymentStatusName'];
                                     $class = 'bright-green';
                                     break;
                             }
@@ -90,18 +81,19 @@ if (isset($_GET['userID'])) {
                             $class = 'orange';
                             break;
                     }
+                    break;
                 case 3: //Reserved
-                    $status = 'Reserved';
                     $class = 'success';
                     switch ($paymentStatus['paymentStatusID']) {
                         case 2:
+                            $status = 'Reserved - ' . $paymentStatus['paymentStatusName'];
                             $class = 'light-blue';
                             break;
                         case 3:
+                            $status = 'Reserved - ' . $paymentStatus['paymentStatusName'];
                             $class = 'bright-green';
                             break;
                     }
-                    $class = 'red';
                     break;
                 case 4: //Cancelled
                     $class = 'danger';

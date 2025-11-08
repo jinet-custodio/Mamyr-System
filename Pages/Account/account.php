@@ -617,44 +617,78 @@ $userRole = $_SESSION['userRole'];
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('message');
 
-        if (paramValue === 'success-image') {
-            Swal.fire({
-                title: "Success!",
-                text: "Profile Change Successfully!",
-                icon: "success"
-            });
-        } else if (paramValue === 'error-image') {
-            Swal.fire({
-                title: "Info!",
-                text: "No Image Selected",
-                icon: "info"
-            });
-        } else if (paramValue === 'success-change') {
-            Swal.fire({
-                title: "Success!",
-                text: "Updated Successfully!",
-                icon: "success"
-            });
-        } else if (paramValue === 'error-change') {
-            Swal.fire({
-                title: "Error!",
-                text: "Updating Information Failed!",
-                icon: "error"
-            });
-        } else if (paramValue === 'emptyPhoneNumber') {
-            Swal.fire({
-                title: "Oops!",
-                text: "Empty Phone Number!",
-                icon: "warning",
-                confirmButtonText: 'Okay',
-            });
+
+        switch (paramValue) {
+            case 'success-image':
+                Swal.fire({
+                    title: "Success!",
+                    text: "Profile Change Successfully!",
+                    icon: "success"
+                });
+                break;
+            case 'error-image':
+                Swal.fire({
+                    title: "Info!",
+                    text: "No Image Selected",
+                    icon: "info"
+                });
+                break;
+            case 'sizeExceed':
+                Swal.fire({
+                    title: "Oops!",
+                    text: "File is too large. Maximum allowed size is 5MB.",
+                    icon: "warning",
+                    confirmButtonText: "Okay",
+                });
+                break;
+            case 'noUploadedImage':
+                Swal.fire({
+                    title: 'Oops',
+                    text: `Make sure you uploaded an image`,
+                    icon: 'warning',
+                });
+                break;
+            case 'extNotAllowed':
+                Swal.fire({
+                    title: 'Oops',
+                    text: `Invalid file type. Please upload JPG, JPEG, or PNG.`,
+                    icon: 'warning',
+                });
+                break;
+            case 'success-change':
+                Swal.fire({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    icon: "success"
+                });
+                break;
+            case 'error-change':
+                Swal.fire({
+                    title: "Error!",
+                    text: "Updating Information Failed!",
+                    icon: "error"
+                });
+                break;
+            case 'emptyPhoneNumber':
+                Swal.fire({
+                    title: "Oops!",
+                    text: "Empty Phone Number!",
+                    icon: "warning",
+                    confirmButtonText: 'Okay',
+                });
+                break;
+            default:
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+                break;
         }
 
         if (paramValue) {
             const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url.toString());
-        };
+        }
     </script>
 
     <script>

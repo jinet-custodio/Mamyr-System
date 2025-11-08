@@ -563,7 +563,7 @@ if ($result->num_rows > 0) {
     </main>
 
     <!-- Notification Modal -->
-    <?php include '../Notification/notification.php' ?>
+    <?php include '../Notification/notification.php'; ?>
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>

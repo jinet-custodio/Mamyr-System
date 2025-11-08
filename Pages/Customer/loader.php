@@ -8,7 +8,7 @@ $getLogo = $conn->prepare("SELECT resortInfoName FROM resortinfo WHERE resortInf
 $getLogo->bind_param("s", $sectionName);
 $getLogo->execute();
 $getLogoResult = $getLogo->get_result();
-
+$baseURL = '';
 if ($row = $getLogoResult->fetch_assoc()) {
     $logoFileName = $row['resortInfoName'];
 } else {

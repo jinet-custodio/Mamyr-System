@@ -127,7 +127,7 @@ $baseURL = '..';
                                         ?>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" id="selectPartnerBtn" data-bs-dismiss="modal">Okay</button>
+                                        <button type="button" class="btn btn-primary" id="selectedPartnerTypes" data-bs-dismiss="modal">Select</button>
                                     </div>
                                 </div>
                             </div>
@@ -579,16 +579,7 @@ $baseURL = '..';
             // Validate business type selection
             const checkboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
             if (checkboxes.length < 1 || checkboxes.length > 2) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops!',
-                    text: 'You must select 1 or 2 business types.',
-                });
                 allValid = false;
-
-                const typeModal = document.getElementById('busTypenModal');
-                const modal = new bootstrap.Modal(typeModal);
-                modal.show();
             }
 
             if (!allValid) {
@@ -602,6 +593,52 @@ $baseURL = '..';
             emailPassContainer.style.display = "block";
             basicInfo.style.display = "none";
         }
+
+        document.getElementById('selectedPartnerTypes').addEventListener('click', function() {
+            // Get all checked checkboxes
+            const selectedCheckboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
+            const displayDiv = document.getElementById('selectedBusinessTypes');
+
+            // Clear previous content
+            displayDiv.innerHTML = '';
+
+            if (selectedCheckboxes.length === 0) {
+                displayDiv.innerHTML = '<em>No business type selected</em>';
+                return;
+            }
+
+            selectedCheckboxes.forEach(checkbox => {
+                const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                if (label) {
+                    const span = document.createElement('span');
+                    span.textContent = label.textContent.trim();
+                    span.className = 'badge bg-info me-1 text-black';
+                    displayDiv.appendChild(span);
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const displayDiv = document.getElementById('selectedBusinessTypes');
+            displayDiv.innerHTML = '';
+
+            const checkedCheckboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
+
+            if (checkedCheckboxes.length === 0) {
+                displayDiv.innerHTML = '<em>No business type selected</em>';
+                return;
+            }
+
+            checkedCheckboxes.forEach(checkbox => {
+                const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                if (label) {
+                    const span = document.createElement('span');
+                    span.textContent = label.textContent.trim();
+                    span.className = 'badge bg-info me-1 text-black';
+                    displayDiv.appendChild(span);
+                }
+            });
+        });
     </script>
 
     <!-- For Messages -->
@@ -615,14 +652,45 @@ $baseURL = '..';
                 title: 'Email Already Exist!',
                 text: 'The email address you entered is already registered.'
             })
-        }
-        if (paramValue === 'exceedImageSize') {
+        } else if (paramValue === 'extError') {
             Swal.fire({
+                title: 'Oops',
+                text: `Invalid file type. Please upload JPG, JPEG, or PNG.`,
                 icon: 'warning',
-                title: 'Exceed Image Size!',
-                text: 'The image you uploaded exceeds the allowed size limit. Please upload an image smaller than 15 MB.'
+                confirmButtonText: 'Okay'
+            });
+        } else if (paramValue === 'imageSize') {
+            Swal.fire({
+                title: "Oops!",
+                text: "File is too large. Maximum allowed size is 5MB.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === 'selectPartner') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                text: 'You must select 1 or 2 business types.',
+                showConfirmButton: 'Okay',
+            }).then(() => {
+                const typeModal = document.getElementById('busTypenModal');
+                const modal = new bootstrap.Modal(typeModal);
+                modal.show();
+            });
+        } else if (paramValue === 'zipCode') {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter a valid ZIP code.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            }).then(() => {
+                document.getElementById('zip').style.border = '1px solid red';
             });
         }
+
+        document.getElementById('zip').addEventListener('input', () => {
+            document.getElementById('zip').style.border = '1px solid rgb(223, 226, 230)';
+        });
 
 
         if (paramValue) {

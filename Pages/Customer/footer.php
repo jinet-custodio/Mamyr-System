@@ -16,7 +16,7 @@ while ($row = $getContentResult->fetch_assoc()) {
     $contentID = $row['resortInfoID'];
     $contentMap[$cleanTitle] = $row['resortInfoDetail'];
 }
-
+$baseURL = '';
 //fetch Business Logo
 $sectionName = 'Logo';
 $getLogo = $conn->prepare("SELECT * FROM resortinfo WHERE resortInfoTitle = ?");

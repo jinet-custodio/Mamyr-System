@@ -1,5 +1,5 @@
 <?php
-function checkSessionTimeout($timeout = 3600, $redirectUrl = '', $errorMessage = 'Session Expired')
+function checkSessionTimeout($timeout = 900, $redirectUrl = '', $errorMessage = 'Session Expired')
 {
 
     if (empty($redirectUrl)) {

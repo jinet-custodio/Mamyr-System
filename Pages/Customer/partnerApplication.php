@@ -69,10 +69,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
@@ -223,7 +219,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                 <div class="repInfoFormContainer">
                                     <input type="email" class="form-control" id="businessEmail" name="businessEmail"
-                                        placeholder="Business Email" required>
+                                        placeholder="Business Email" value="<?php echo isset($_SESSION['partnerData']['businessEmail']) ? htmlspecialchars(trim($_SESSION['partnerData']['businessEmail'])) : ''; ?>" required>
 
                                     <input type="text" class="form-control" id="firstName" name="firstName"
                                         value="<?= htmlspecialchars($firstName) ?>" placeholder="First Name" required>
@@ -249,56 +245,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
                                         data-bs-target="#busTypenModal">Type of Business</button>
-
-
-                                    <!-- modal for type of business -->
-                                    <div class="modal fade" id="busTypenModal" tabindex="-1"
-                                        aria-labelledby="busTypeModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-scrollable">
-                                            <div class="modal-content">
-
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Type of Business</h5>
-                                                    <button type="button" class="close" data-bs-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body busTypeBody">
-                                                    <?php
-                                                    $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
-                                                    $serviceType->execute();
-                                                    $serviceTypeResult = $serviceType->get_result();
-                                                    if ($serviceTypeResult->num_rows > 0) {
-                                                        while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
-                                                            $partnerType = $serviceTypes['partnerTypeID'];
-                                                            $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
-                                                    ?>
-
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" name="partnerType[]"
-                                                                    id="partnerType<?= htmlspecialchars($partnerType) ?>"
-                                                                    value="<?= htmlspecialchars($partnerType) ?>">
-                                                                <label class="form-check-label"
-                                                                    for="partnerType<?= htmlspecialchars($partnerType) ?>">
-                                                                    <?= htmlspecialchars($partnerTypeDescription) ?>
-                                                                </label>
-                                                            </div>
-                                                    <?php
-                                                        }
-                                                    }
-                                                    ?>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary"
-                                                        data-bs-dismiss="modal">Select</button>
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- modal for type of business -->
+                                    <div id="selectedBusinessTypes" class="mt-2 text-black"></div>
 
                                     <input type="text" class="form-control" id="streetAddress" name="streetAddress"
                                         placeholder="Street Address(optional)"
@@ -354,6 +301,52 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     </div>
 
                     <!-- modal -->
+
+                    <!-- modal for type of business -->
+                    <div class="modal fade" id="busTypenModal" tabindex="-1"
+                        aria-labelledby="busTypeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Type of Business</h5>
+                                </div>
+                                <div class="modal-body busTypeBody">
+                                    <?php
+                                    $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
+                                    $serviceType->execute();
+                                    $serviceTypeResult = $serviceType->get_result();
+                                    $selectedTypes = $_SESSION['partnerData']['partnerType'] ?? [];
+                                    if ($serviceTypeResult->num_rows > 0) {
+                                        while ($serviceTypes = $serviceTypeResult->fetch_assoc()) {
+                                            $partnerType = $serviceTypes['partnerTypeID'];
+                                            $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
+                                    ?>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="partnerType[]"
+                                                    id="partnerType<?= htmlspecialchars($partnerType) ?>"
+                                                    value="<?= htmlspecialchars($partnerType) ?>" <?php echo in_array($partnerType, $selectedTypes) ? 'checked' : ''; ?>>
+                                                <label class="form-check-label"
+                                                    for="partnerType<?= htmlspecialchars($partnerType) ?>">
+                                                    <?= htmlspecialchars($partnerTypeDescription) ?>
+                                                </label>
+                                            </div>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="selectedPartnerTypes"
+                                        data-bs-dismiss="modal">Select</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- modal for type of business -->
 
                     <div class="modal fade modal-lg m-auto" id="openModal" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -488,9 +481,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- Scroll Nav BG -->
     <script src="../../Assets/JS/scrollNavbg.js"></script>
 
-
-    <!-- Sweetalert Link -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const submitRequest = () => {
             const requiredFields = [
@@ -513,19 +503,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             // Validate business type selection
             const checkboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
             if (checkboxes.length < 1 || checkboxes.length > 2) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops!',
-                    text: 'You must select 1 or 2 business types.',
-                });
-
                 allValid = false;
-
-                // Reopen the modal if selection is invalid
-                const typeModal = document.getElementById('busTypenModal');
-                const modal = new bootstrap.Modal(typeModal);
-                modal.show();
-            }
+            };
 
             if (!allValid) {
                 Swal.fire({
@@ -536,8 +515,56 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 return false;
             }
             return true;
-        }
+        };
+
+
+        document.getElementById('selectedPartnerTypes').addEventListener('click', function() {
+            // Get all checked checkboxes
+            const selectedCheckboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
+            const displayDiv = document.getElementById('selectedBusinessTypes');
+
+            // Clear previous content
+            displayDiv.innerHTML = '';
+
+            if (selectedCheckboxes.length === 0) {
+                displayDiv.innerHTML = '<em>No business type selected</em>';
+                return;
+            }
+
+            selectedCheckboxes.forEach(checkbox => {
+                const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                if (label) {
+                    const span = document.createElement('span');
+                    span.textContent = label.textContent.trim();
+                    span.className = 'badge bg-info me-1 text-black';
+                    displayDiv.appendChild(span);
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const displayDiv = document.getElementById('selectedBusinessTypes');
+            displayDiv.innerHTML = '';
+
+            const checkedCheckboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
+
+            if (checkedCheckboxes.length === 0) {
+                displayDiv.innerHTML = '<em>No business type selected</em>';
+                return;
+            }
+
+            checkedCheckboxes.forEach(checkbox => {
+                const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                if (label) {
+                    const span = document.createElement('span');
+                    span.textContent = label.textContent.trim();
+                    span.className = 'badge bg-info me-1 text-black';
+                    displayDiv.appendChild(span);
+                }
+            });
+        });
     </script>
+
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -548,8 +575,59 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 icon: 'warning',
                 title: 'Email Already Exist!',
                 text: 'The email address you entered is already registered.'
-            })
-        };
+            });
+        } else if (paramValue === 'imageFailed') {
+            Swal.fire({
+                title: 'Oops',
+                text: `Make sure you uploaded an image`,
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            });
+        } else if (paramValue === 'extError') {
+            Swal.fire({
+                title: 'Oops',
+                text: `Invalid file type. Please upload JPG, JPEG, or PNG.`,
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            });
+        } else if (paramValue === 'imageSize') {
+            Swal.fire({
+                title: "Oops!",
+                text: "File is too large. Maximum allowed size is 5MB.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            });
+        } else if (paramValue === 'selectPartner') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                text: 'You must select 1 or 2 business types.',
+                showConfirmButton: 'Okay',
+            }).then(() => {
+                const typeModal = document.getElementById('busTypenModal');
+                const modal = new bootstrap.Modal(typeModal);
+                modal.show();
+            });
+        } else if (paramValue === 'zipCode') {
+            Swal.fire({
+                title: "Oops!",
+                text: "Please enter a valid ZIP code.",
+                icon: "warning",
+                confirmButtonText: "Okay",
+            }).then(() => {
+                document.getElementById('zip').style.border = '1px solid red';
+            });
+        }
+
+        document.getElementById('zip').addEventListener('input', () => {
+            document.getElementById('zip').style.border = '1px solid rgb(223, 226, 230)';
+        });
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
     <?php if (isset($_SESSION['message']) || isset($_SESSION['success'])): ?>

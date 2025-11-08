@@ -103,7 +103,7 @@ switch ($userRole) {
                 $clientInfo = $resultData->fetch_assoc();
                 $middleInitial = trim($clientInfo['middleInitial'] ?? '');
                 $firstName = $clientInfo['firstName'] ?? '';
-                $clientName = ucfirst($firstName) ?? '' . " " . ucfirst($clientInfo['middleInitial'] ?? '') . " "  . ucfirst($clientInfo['lastName'] ?? '');
+                $clientName = (ucfirst($firstName) ?? '') . " " . ucfirst($clientInfo['middleInitial'] ?? '') . " "  . ucfirst($clientInfo['lastName'] ?? '');
             }
             ?>
 
@@ -127,7 +127,8 @@ switch ($userRole) {
                                                     b.totalCost AS originalBill, 
                                                     b.downpayment, 
                                                     b.bookingStatus, 
-                                                    b.createdAt,  
+                                                    b.createdAt,
+                                                    b.bookingCode,
 
                                                     cp.eventTypeID, 
                                                     cp.customPackageTotalPrice, 
@@ -282,6 +283,7 @@ switch ($userRole) {
                     $customPackageID =  (int) $row['customPackageID'];
                     $confirmedBookingID = (int) $row['confirmedBookingID'] ?? null;
                     $serviceID = isset($row['serviceID']) ? $row['serviceID'] : '';
+                    $bookingCode = $row['bookingCode'];
 
                     //Types
                     $bookingType = $row['bookingType'] ?? null;
@@ -550,7 +552,7 @@ switch ($userRole) {
             </div>
 
             <div class="rightStatusContainer">
-                <h3 class="rightContainerTitle">Reservation Summary</h3>
+                <h3 class="rightContainerTitle">Reservation Summary <small class="fst-italic fw-lighter"> &mdash; <?= $bookingCode ?></small></h3>
 
                 <div class="firstRow">
                     <div class="clientContainer">
@@ -841,6 +843,13 @@ switch ($userRole) {
 
         <input type="hidden" name="startDate" value="<?= $rawStartDate ?>">
         <input type="hidden" name="endDate" value="<?= $rawEndDate ?>">
+        <input type="hidden" name="bookingID" id="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
+        <input type="hidden" name="bookingType" id="bookingType" value="<?= htmlspecialchars($bookingType) ?>">
+        <input type="hidden" name="confirmedBookingID" value="<?= htmlspecialchars($confirmedBookingID) ?>">
+        <input type="hidden" name="fullName" value="<?= $clientName ?>">
+        <input type="hidden" name="bookingCode" value="<?= $bookingCode ?>">
+        <input type="hidden" name="phoneNumber" value="<?= $clientInfo['phoneNumber'] ?? '' ?>">
+        <input type="hidden" name="finalBill" value="<?= $finalBill ?>">
 
         <div class="modal fade" id="gcashPayment1stModal" aria-hidden="true" aria-labelledby="gcashPayment1stModalLabel"
             tabindex="-1">
@@ -918,10 +927,6 @@ switch ($userRole) {
                                 id="preview"
                                 class="downpaymentPic mb-3">
 
-                            <input type="hidden" name="bookingID" id="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
-                            <input type="hidden" name="bookingType" id="bookingType" value="<?= htmlspecialchars($bookingType) ?>">
-                            <input type="hidden" name="confirmedBookingID" value="<?= htmlspecialchars($confirmedBookingID) ?>">
-
                             <!-- You can drop imageFileName from the form now — it’s managed by PHP -->
                             <input type="file" name="downpaymentPic" id="downpaymentPic" hidden>
                             <label for="downpaymentPic" class="custom-file-button btn btn-primary mt-2">
@@ -970,19 +975,25 @@ switch ($userRole) {
         const paymentApprovalStatus = document.getElementById("paymentApprovalStatus").value;
         const paymentMethod = document.getElementById("paymentMethod").value;
         const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
+        const viewTransactionBtn = document.getElementById('viewTransaction');
         // console.log("Booking Stat: " + bookingStatus);
         // console.log("payment App Stat" + paymentApprovalStatus);
-        if ((bookingStatus === "Pending" && paymentApprovalStatus === '') || (bookingStatus === 'Cancelled') || (
-                bookingStatus === 'Rejected') || paymentStatus === 'Payment Sent') {
+        if ((bookingStatus === "Pending" && (paymentApprovalStatus === 'Pending' ||
+                paymentApprovalStatus === '')) || (bookingStatus === 'Cancelled') || (
+                bookingStatus === 'Rejected')) {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
             downloadReceiptBtn.style.display = 'none';
-        } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && paymentStatus === "Unpaid") {
+            viewTransactionBtn.style.display = 'none';
+        } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && (paymentStatus === "Unpaid" || paymentStatus === "Payment Sent")) {
             document.getElementById("makeDownpaymentBtn").style.display = "block";
             downloadReceiptBtn.style.display = 'none';
+            viewTransactionBtn.style.display = 'block';
         } else if (paymentApprovalStatus === "Approved" && bookingStatus === 'Reserved' && paymentStatus === "Partially Paid") {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
+            viewTransactionBtn.style.display = 'block';
         } else if ((bookingStatus === "Done" && paymentStatus === "Fully Paid") || bookingStatus === 'Expired') {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
+            viewTransactionBtn.style.display = 'block';
         } else if (paymentMethod === 'Cash') {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
         } else if (paymentMethod === 'GCash') {
@@ -1090,7 +1101,7 @@ switch ($userRole) {
                 modal.show();
 
                 document.querySelector('.custom-file-button').style.border = '2px solid red';
-            })
+            });
         } else if (paramValue === 'extError') {
             Swal.fire({
                 title: 'Oops',
@@ -1109,6 +1120,12 @@ switch ($userRole) {
                 icon: 'warning',
                 confirmButtonText: 'Okay'
             })
+        };
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
         }
 
         document.getElementById('payment-amount').addEventListener('input', () => {
