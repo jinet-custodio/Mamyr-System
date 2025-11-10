@@ -7,6 +7,7 @@ date_default_timezone_set('Asia/Manila');
 
 session_start();
 require_once '../../Function/sessionFunction.php';
+require '../../Function/Helpers/statusFunctions.php';
 checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
@@ -255,8 +256,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <?php
         $approvedPartnerID = 2;
-        $getPartnersQuery = $conn->prepare("SELECT p.companyName, pt.partnerTypeDescription, ppt.isApproved
+        $getPartnersQuery = $conn->prepare("SELECT  u.phoneNumber, p.partnershipID, p.businessEmail,  p.companyName, p.partnerAddress, p.documentLink, pt.partnerTypeDescription, ppt.isApproved, ps.partnershipServiceID, ps.PSAvailabilityID, ps.PBDescription, ps.serviceImage, ps.PBPrice, ps.PBName, ps.PBduration, ps.PBcapacity
                                             FROM partnership p 
+                                            LEFT JOIN 
+                                                user u ON p.userID = u.userID
+                                            LEFT JOIN 
+                                                partnershipservice ps ON p.partnershipID = ps.partnershipID
                                             LEFT JOIN 
                                                 partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID 
                                             LEFT JOIN
@@ -277,168 +282,143 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             $partners = [];
         }
 
+
         while ($row = $result->fetch_assoc()) {
-            $partners[] = $row;
+            $availability = getAvailabilityStatus($conn, $row['PSAvailabilityID']);
+            $availabilityName = $availability['availabilityName'];
+
+            switch (strtolower($availabilityName)) {
+                case 'available':
+                    $color = 'green';
+                    break;
+                case 'occupied':
+                    $color = 'info';
+                    break;
+                case 'danger':
+                    $color = 'danger';
+                    break;
+            };
+            $partners[] = [
+                'availabilityName' => $availabilityName,
+                'color' => $color,
+                'partnershipID' => (int) $row['partnershipID'],
+                'partnerTypeDescription' => $row['partnerTypeDescription'],
+                'companyName' => ucfirst($row['companyName'] ?? ''),
+                'serviceName' => ucfirst($row['PBName'] ?? ''),
+                'serviceDescription' => !empty($row['PBDescription']) ? $row['PBDescription'] : 'No Description Provided',
+                'partnershipServiceID' => (int) $row['partnershipServiceID'],
+                'duration' => $row['PBduration'] ?? 'Not Stated',
+                'capacity' => $row['PBcapacity'] ?? 'Not Stated',
+                'documentLink' => $row['documentLink'],
+                'price' => '₱' . number_format(($row['PBPrice'] ?? 0), 2),
+                'partnerAddress' => $row['partnerAddress'] ?? 'Not Address Provided',
+                'contactNumber' => $row['phoneNumber'],
+                'businessEmail' => $row['businessEmail'],
+                'serviceImage' => $row['serviceImage']
+            ];
         }
 
         ?>
 
 
         <div class="BPContainer">
-            <?php if (!empty($partners)):
+
+            <?php
+            // error_log(print_r($partners, true));
+            if (!empty($partners)):
                 foreach ($partners as $partner): ?>
                     <div class="card bp-card" id="bp1">
-                        <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
-                            alt="Card image cap">
+                        <img class="card-img-top" src="../../Assets/Images/PartnerServiceImage/<?= $partner['serviceImage'] ?>" alt="Card image cap">
                         <div class="card-body">
-                            <h5 class="card-title">Singko Marias</h5>
-                            <h6 class="card-subtitle">Photography</h6>
+                            <h5 class="card-title"><?= $partner['companyName'] ?></h5>
+                            <h6 class="card-subtitle"><?= $partner['partnerTypeDescription'] ?> &mdash; <small><?= $partner['serviceName'] ?></small> </h6>
                             <div class="button-container">
-                                <span class="badge bg-green text-capitalize">Available</span>
-                                <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
+                                <span class="badge bg-<?= $partner['color'] ?> text-capitalize"><?= $partner['availabilityName'] ?></span>
+
                                 <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
-                                    data-bs-target="#moreInfo-modal">More
+                                    data-bs-target="#moreInfo-modal<?= $partner['partnershipServiceID'] ?>">More
                                     Details</button>
                                 <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
-                                    data-bs-target="#contact-modal">Contact
+                                    data-bs-target="#contact-modal<?= $partner['partnershipID'] ?>">Contact
                                     Us</button>
                             </div>
 
                             <div class="description-container">
-                                <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                                    Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
-                                    reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
+                                <p class="card-description"><?= $partner['serviceDescription'] ?></p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- modal for more info -->
+                    <div class="modal fade" id="moreInfo-modal<?= $partner['partnershipServiceID'] ?>" tabindex="-1" role="dialog" aria-labelledby="moreInfo-modal<?= $partner['partnershipServiceID'] ?>Label"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="bpName">Singko Marias</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="md-container">
+                                        <label class="mdlabel">Service Name</label>
+                                        <h5 class="serviceName"><?= $partner['serviceName'] ?></h5>
+                                    </div>
+                                    <div class="md-container">
+                                        <label class="mdlabel">Business Address:</label>
+                                        <h5 class="partnerAddress"><?= $partner['partnerAddress'] ?></h5>
+                                    </div>
+                                    <div class="md-container">
+                                        <label class="mdlabel">Duration</label>
+                                        <h5 class="partnerDuration"><?= $partner['duration'] ?></h5>
+                                    </div>
+                                    <div class="md-container">
+                                        <label class="mdlabel">View Our Work</label>
+                                        <a class="partnerLink" href="<?= $partner['documentLink'] ?>" onclick="return warnExternalLink('<?= $partner['documentLink'] ?>', event)"
+                                            target="_blank"><?= $partner['documentLink'] ?></a>
+                                    </div>
+
+                                    <div class="md-container">
+                                        <label class="mdlabel">Price</label>
+                                        <h5 class="partnerPrice"><?= $partner['price'] ?></h5>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- modal for more info -->
+
+                    <!-- modal for contact -->
+                    <div class="modal fade" id="contact-modal<?= $partner['partnershipID'] ?>" tabindex="-1" role="dialog" aria-labelledby="contact-modal<?= $partner['partnershipID'] ?>Label"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Contact Us</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="md-container">
+                                        <label class="mdlabel">Email Address</label>
+                                        <h5 class="partnerEmail"><?= $partner['businessEmail'] ?></h5>
+                                    </div>
+                                    <div class="md-container">
+                                        <label class="mdlabel">Business Address:</label>
+                                        <h5 class="partnerNumber"> <?= $partner['contactNumber'] ?></h5>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- modal for contact -->
             <?php endforeach;
             endif; ?>
-
-
-            <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
-                    alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Singko Marias</h5>
-                    <h6 class="card-subtitle">Photography</h6>
-                    <div class="button-container">
-                        <span class="badge bg-warning text-capitalize">Maintenance</span>
-                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
-                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
-                            data-bs-target="#moreInfo-modal">More
-                            Details</button>
-                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#contact-modal">Contact
-                            Us</button>
-                    </div>
-
-                    <div class="description-container">
-                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
-                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
-                    alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Singko Marias</h5>
-                    <h6 class="card-subtitle">Photography</h6>
-                    <div class="button-container">
-                        <span class="badge bg-danger text-capitalize">Not Available</span>
-                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
-                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
-                            data-bs-target="#moreInfo-modal">More
-                            Details</button>
-                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#contact-modal">Contact
-                            Us</button>
-                    </div>
-
-                    <div class="description-container">
-                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
-                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
-                    alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Singko Marias</h5>
-                    <h6 class="card-subtitle">Photography</h6>
-                    <div class="button-container">
-                        <span class="badge bg-warning text-capitalize">Maintenance</span>
-                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
-                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
-                            data-bs-target="#moreInfo-modal">More
-                            Details</button>
-                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#contact-modal">Contact
-                            Us</button>
-                    </div>
-
-                    <div class="description-container">
-                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
-                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
-                    alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Singko Marias</h5>
-                    <h6 class="card-subtitle">Photography</h6>
-                    <div class="button-container">
-                        <span class="badge bg-green text-capitalize">Available</span>
-                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
-                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
-                            data-bs-target="#moreInfo-modal">More
-                            Details</button>
-                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#contact-modal">Contact
-                            Us</button>
-                    </div>
-
-                    <div class="description-container">
-                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
-                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
-                    alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Singko Marias</h5>
-                    <h6 class="card-subtitle">Photography</h6>
-                    <div class="button-container">
-                        <span class="badge bg-green text-capitalize">Available</span>
-                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
-                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
-                            data-bs-target="#moreInfo-modal">More
-                            Details</button>
-                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#contact-modal">Contact
-                            Us</button>
-                    </div>
-
-                    <div class="description-container">
-                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
-                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
-                    </div>
-                </div>
-            </div>
         </div>
 
 
@@ -528,6 +508,35 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- To show warning when clicking the link -->
+    <script>
+        function warnExternalLink(url, e) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: '⚠️ External Link Warning',
+                html: `
+            <p class="fs-6 mb-2">You are about to visit an external site.</p>
+            <p class="fs-6 mb-3"><b>This link may be unsafe, unverified, or contain spam.</b></p>
+            <p class="fs-6 mb-2">Do you still want to continue to:</p>
+            <code style="display:block; color: #1a73e8; margin-bottom: 15px;">${url}</code>
+        `,
+                showCancelButton: true,
+                confirmButtonText: 'Yes, open link',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                width: '500px',
+                padding: '2rem'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.open(url, '_blank');
+                }
+            });
+
+            return false;
+        }
+    </script>
 
 </body>
 
