@@ -437,23 +437,26 @@ switch ($userRole) {
     </script>
 
 
+    <!-- To show warning when clicking the link -->
     <script>
         function warnExternalLink(url, e) {
             e.preventDefault();
             Swal.fire({
                 icon: 'warning',
-                title: 'External Link Warning',
+                title: '⚠️ External Link Warning',
                 html: `
-                <p class="fs-6">This link leads to an external site.</p>
-                <p><b>It may be unsafe, unverified, or contain spam.</b></p>
-                <p>Do you still want to continue to:</p>
-                <code style="color: blue;">${url}</code>
-                `,
+            <p class="fs-6 mb-2">You are about to visit an external site.</p>
+            <p class="fs-6 mb-3"><b>This link may be unsafe, unverified, or contain spam.</b></p>
+            <p class="fs-6 mb-2">Do you still want to continue to:</p>
+            <code style="display:block; color: #1a73e8; margin-bottom: 15px;">${url}</code>
+        `,
                 showCancelButton: true,
                 confirmButtonText: 'Yes, open link',
                 cancelButtonText: 'Cancel',
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
+                width: '500px',
+                padding: '2rem'
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.open(url, '_blank');
@@ -463,6 +466,7 @@ switch ($userRole) {
             return false;
         }
     </script>
+
 </body>
 
 </html>
