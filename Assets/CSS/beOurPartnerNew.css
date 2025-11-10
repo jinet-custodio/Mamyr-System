@@ -150,8 +150,8 @@
 
 .card.bp-card img.card-img-top {
   width: 100%;
-  height: 11rem;
-  object-position: 90% 60%; /* optional, depending on the pictures. baka kasi maputol pag hindi na pool pic nakalagay*/
+  max-height: 225px;
+  /*  object-position: 90% 60%; optional, depending on the pictures. baka kasi maputol pag hindi na pool pic nakalagay*/
   object-fit: cover;
   display: block;
 }

@@ -1,0 +1,92 @@
+@font-face {
+  font-family: "Poppins";
+  src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins";
+}
+
+.main-content {
+  margin-left: 20vw;
+  padding: 1rem;
+  margin-top: 5rem;
+  width: 80%;
+}
+
+.backBtn-container {
+  position: absolute;
+  top: 3%;
+  /* left: 22%; */
+}
+
+.title {
+  text-align: center;
+  font-size: 30px;
+  font-family: "Poppins";
+  font-weight: bold;
+  margin-top: -3rem;
+}
+
+.serviceInfo-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.infoContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.serviceDesc {
+  resize: none;
+}
+
+.servicePic-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.editService-btn-container {
+  text-align: center;
+  margin-top: 2rem !important;
+}
+
+.service-pic {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  max-height: 225px;
+  overflow: hidden;
+}
+
+.service-image {
+  width: 100%;
+  height: auto !important;
+  max-height: 225px;
+  object-fit: contain;
+  padding: 0.5rem;
+}
+
+.note {
+  color: red;
+  font-size: 12px;
+  font-family: "Poppins";
+  text-align: center;
+}

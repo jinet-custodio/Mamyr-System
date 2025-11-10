@@ -8,11 +8,7 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
 
-require '../../Function/Partner/sales.php';
-
-$userID = $_SESSION['userID'];
-$userRole = $_SESSION['userRole'];
-
+require_once '../../Function/Helpers/statusFunctions.php';
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -38,6 +34,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+$userID = $_SESSION['userID'];
+$userRole = $_SESSION['userRole'];
+
 switch ($userRole) {
     case 2:
         $role = "Business Partner";
@@ -50,28 +49,31 @@ switch ($userRole) {
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Partner Sales - Mamyr Resort and Events Place</title>
+    <title>Business Partner Services - Mamyr Resort and Events Place</title>
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <!-- CSS Link -->
-    <link rel="stylesheet" href="../../Assets/CSS/Account/bpSales.css">
+    <link rel=" stylesheet" href="../../Assets/CSS/Account/bpViewService.css">
     <link rel="stylesheet" href="../../Assets/CSS/Account/account-sidebar.css" />
-    <!-- DataTables Link -->
+    <!-- DataTables Link 
+        -->
     <link rel="stylesheet" href="../../Assets/CSS/datatables.min.css" />
+
     <!-- icon libraries for font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
-
 </head>
 
 <body>
@@ -86,9 +88,10 @@ switch ($userRole) {
     $getDataResult = $getData->get_result();
     if ($getDataResult->num_rows > 0) {
         $data =  $getDataResult->fetch_assoc();
+        $firstName = $data['firstName'] ?? '';
         $middleInitial = trim($data['middleInitial'] ?? '');
-        $name = ucfirst($data['firstName'] ?? '') . " " .
-            ucfirst($data['middleInitial'] ?? '') . " " .
+        $name = ucfirst($firstName) . " " .
+            ucfirst($middleInitial) . " " .
             ucfirst($data['lastName'] ?? '');
         $profile = $data['userProfile'];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -97,20 +100,20 @@ switch ($userRole) {
         $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
 
         $partnershipID = $data['partnershipID'];
-        $encodedPartnershipID = base64_encode($partnershipID ?? '');
     }
 
     ?>
     <div class="wrapper d-flex">
+
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="d-flex" id="toggle-container">
+            <div class="d-flex justify-content-center" id="toggle-container">
                 <button id="toggle-btn" type="button" class="btn toggle-button" style="display: none;">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </button>
             </div>
-            <div class="home text-center">
-                <?php if ($role === 'Customer') { ?>
+            <div class="home">
+                <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
                 <a href="../Customer/dashboard.php">
                     <i class="bi bi-house homeIcon"></i>
                 </a>
@@ -124,11 +127,11 @@ switch ($userRole) {
                 </a>
                 <?php } ?>
             </div>
+
             <div class="sidebar-header text-center">
                 <h5 class="sidebar-text">User Account</h5>
                 <div class="profileImage">
-                    <img src="<?= htmlspecialchars($image) ?>"
-                        alt="<?= htmlspecialchars($data['firstName']) ?> Picture">
+                    <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($firstName) ?> Picture">
                 </div>
             </div>
             <ul class="list-group sidebar-nav">
@@ -138,7 +141,6 @@ switch ($userRole) {
                         <span class="sidebar-text">Profile Information</span>
                     </a>
                 </li>
-
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
                 <li class="sidebar-item">
@@ -169,13 +171,13 @@ switch ($userRole) {
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="bpServices.php" class="list-group-item">
+                    <a href="bpServices.php" class="list-group-item active">
                         <i class="bi bi-bell sidebar-icon"></i>
                         <span class="sidebar-text">Services</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="bpSales.php" class="list-group-item active">
+                    <a href="bpSales.php" class="list-group-item">
                         <i class="bi bi-tags sidebar-icon"></i>
                         <span class="sidebar-text">Sales</span>
                     </a>
@@ -194,122 +196,120 @@ switch ($userRole) {
                         <span class="sidebar-text">Delete Account</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
-                        style="margin: 3vw auto;">
-                        <i class="bi bi-box-arrow-right logout-icon"></i>
-                        <span class="sidebar-text ms-2">Logout</span>
-                    </button>
-                </li>
             </ul>
-        </aside> <!-- End Side Bar -->
-
-
+            <div class="logout">
+                <button type="button" class="btn btn-outline-danger d-flex align-items-center" id="logoutBtn"
+                    style="margin: 3vw auto;">
+                    <i class="bi bi-box-arrow-right logout-icon"></i>
+                    <span class="sidebar-text ms-2">Logout</span>
+            </div>
+        </aside>
+        <!-- End Side Bar -->
         <main class="main-content" id="main-content">
             <div class="container">
-                <div class="titleContainer">
-                    <h2 class="page-title" id="title">Sales</h2>
+                <div class="backBtn-container">
+                    <a href="bpServices.php"><img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="Back Button"
+                            class="backBtn"></a>
                 </div>
-                <?php $totalSales = getSales($conn, $userID); ?>
-                <div class="cardContainer">
-                    <div class="card">
-                        <div class="card-header fw-bold fs-5">Total Sales</div>
-                        <div class="card-body">
-                            <h2 class="totalSales">
-                                <?= ($totalSales !== 0) ? number_format($totalSales, 2) : 'No sales to display' ?></h2>
-                            <a href="../Admin/salesReport.php?id=<?= $encodedPartnershipID ?>"
-                                class="btn btn-primary">Sales Report</a>
+
+                <div class="titleContainer">
+                    <h2 class="title">Service Information</h2>
+                </div>
+
+
+                <input type="hidden" name="partnershipID" id="partnershipID" value="<?= $partnershipID ?>">
+
+                <section class="serviceInfo-container">
+                    <div class="servicePic-container">
+                        <img src="../../Assets/Images/no-picture.jpg" alt="" class="service-image" id="preview">
+                        <input type="file" name="serviceImage" id="service-image" hidden>
+                        <label for="service-image" class="uploadPfpBtn btn btn-primary">Upload Service Image</label>
+
+                        <p class="note">Adding a service image in <strong>Landscape Orientation</strong> is
+                            advisable.</p>
+                    </div>
+
+                    <div class="infoContainer">
+                        <div class="info-container">
+                            <label for="serviceName">Service Name</label>
+                            <input type="text" class="form-control" name="serviceName" id="serviceName"
+                                placeholder="(eg. Snapshot Photography)" readonly="">
+                        </div>
+                        <div class="info-container">
+                            <label for="servicePrice">Service Price</label>
+                            <input type="text" class="form-control" name="servicePrice" id="servicePrice"
+                                placeholder="(eg. ₱2000)" readonly="">
+                        </div>
+                        <div class="info-container">
+                            <label for="serviceCapacity">Service Capacity</label>
+                            <input type="text" class="form-control" name="serviceCapacity" placeholder="(eg. N/A)"
+                                id="serviceCapacity" readonly="">
+                        </div>
+                        <div class="info-container">
+                            <label for="serviceDuration">Service Duration</label>
+                            <input type="text" class="form-control" name="serviceDuration" id="serviceDuration"
+                                placeholder="(eg. 7 hours)" readonly="">
+                        </div>
+                        <div class="info-container">
+                            <label for="serviceAvailability">Availability</label>
+                            <select class="form-select" name="serviceAvailability" id="serviceAvailability" disabled="">
+                                <option value="">Select Availability</option>
+                                <option value="available">Available</option>
+                                <option value="occupied">Booked</option>
+                                <option value="not available">Unavailable</option>
+                            </select>
+                        </div>
+                        <div class="descContainer">
+                            <div class="form-group">
+                                <label for="serviceDescription">Service Description</label>
+                                <textarea name="serviceDescription" class="form-control serviceDesc"
+                                    placeholder="(eg. Lorem Ipsum)" readonly=""></textarea>
+                            </div>
                         </div>
                     </div>
 
-                </div>
+                </section>
+                <div class="editService-btn-container">
+                    <button type="button" class="btn btn-danger w-25 cancel-info-button" onclick="canEditInfo(this)"
+                        style="display: none;"><i class="fa-solid fa-xmark"></i>
+                        Cancel</button>
 
-                <div class="revenue-chart">
-                    <canvas id="revenueBar"></canvas>
+                    <button type="button" class="btn btn-primary w-25 edit-info-button"
+                        onclick="editServiceInfo(this)"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                 </div>
             </div>
         </main>
     </div>
 
-    <?php
-    $getPartnershipID = $conn->prepare('SELECT partnershipID FROM `partnership` WHERE userID = ?');
-    $getPartnershipID->bind_param('i', $userID);
-    $getPartnershipID->execute();
-    $result = $getPartnershipID->get_result();
-    if ($result->num_rows > 0) {
-        $data = $result->fetch_assoc();
-        $partnershipID = $data['partnershipID'];
-    }
-    ?>
 
-    <?php
-    $paymentStatusID = 3; //Fully Paid
-    $paymentApprovalID = 5; //Done
-    $getYearlySales = $conn->prepare("SELECT 
-                    YEAR(b.startDate) AS year,
-                    SUM(IFNULL(bs.bookingServicePrice, 0) + IFNULL(cpi.ServicePrice, 0)) AS yearlySales,
-                    ps.partnershipID
-                     
-                    FROM booking b
-                    LEFT JOIN  confirmedbooking cb ON b.bookingID = cb.bookingID
-                    LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
-                    LEFT JOIN custompackageitem cpi ON b.customPackageID = cpi.customPackageID
-                    LEFT JOIN service s ON (cpi.serviceID = s.serviceID  OR bs.serviceID = s.serviceID)
-                    LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
-                     
-                    WHERE cb.paymentApprovalStatus = ?
-                    AND cb.paymentStatus = ?
-                    AND YEAR(b.startDate) = YEAR(CURDATE()) 
-                    AND DATE(b.endDate) < CURDATE()
-                    AND ps.partnershipID = ?
-                    GROUP BY 
-                     year
-                    ORDER BY 
-                     year
-        ");
-    $getYearlySales->bind_param("iii", $paymentApprovalID, $paymentStatusID,  $partnershipID);
-    if (!$getYearlySales->execute()) {
-        error_log("Failed executing monthly sales in a year. Error: " . $getYearlySales->error);
-    }
-    $sales = [];
-    $years = [];
-    $result = $getYearlySales->get_result();
-    if ($result->num_rows > 0) {
-        while ($data = $result->fetch_assoc()) {
-            $sales[] = (float) $data['yearlySales'];
-            $years[] = 'Year —' . $data['year'] ?? 'Year —' . DATE('Y');
-        }
-    } else {
-        error_log("No data " . $getYearlySales->error);
-    }
-    ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Bootstrap Link -->
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- DataTables Link -->
     <script src="../../../Assets/JS/datatables.min.js"></script>
-    <!-- Table JS -->
-    <script>
-    $(document).ready(function() {
-        $('#booking').DataTable({
-            language: {
-                emptyTable: "No Services"
-            },
-            columnDefs: [{
-                width: '15%',
-                target: 0
-
-            }]
-        });
-    });
-    </script>
-
-    <!-- Bootstrap Link -->
-    <script src="../../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <script>
     //Handle sidebar for responsiveness
     document.addEventListener("DOMContentLoaded", function() {
@@ -317,7 +317,7 @@ switch ($userRole) {
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('main-content');
         const items = document.querySelectorAll('.list-group-item');
-        const toggleCont = document.getElementById('toggle-container');
+        const toggleCont = document.getElementById('toggle-container')
 
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
@@ -326,7 +326,7 @@ switch ($userRole) {
                 items.forEach(item => {
                     item.style.justifyContent = "center";
                 });
-                toggleCont.style.justifyContent = "center";
+                toggleCont.style.justifyContent = "center"
             } else {
                 items.forEach(item => {
                     item.style.justifyContent = "flex-start";
@@ -360,7 +360,7 @@ switch ($userRole) {
     });
     </script>
 
-    <!-- Show  -->
+    <!-- Show when want to logout-->
     <script>
     const logoutBtn = document.getElementById('logoutBtn');
     const logoutModal = document.getElementById('logoutModal');
@@ -386,37 +386,16 @@ switch ($userRole) {
     })
     </script>
 
-    <!-- Chart JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- <script src="path/to/chartjs/dist/chart.umd.js"></script> -->
-
-    <!-- This is shown if no data to display -->
-    <!-- <script src="../../Assets/JS/ChartNoData.js"></script> -->
-
+    <!-- Preview Image -->
     <script>
-    const bar = document.getElementById("revenueBar").getContext('2d');
-
-    const myBarChart = new Chart(bar, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($years) ?>,
-            datasets: [{
-                label: "Yearly Sales Report",
-                data: <?= json_encode($sales) ?>,
-                backgroundColor: 'rgba(14, 194, 194, 1)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        },
-        plugins: ['noDataPlugin']
+    document.querySelector("input[type='file']").addEventListener("change", function(event) {
+        let reader = new FileReader();
+        reader.onload = function() {
+            let preview = document.getElementById("preview");
+            preview.src = reader.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(event.target.files[0]);
     });
     </script>
 </body>
