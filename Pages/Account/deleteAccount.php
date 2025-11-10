@@ -104,17 +104,17 @@ switch ($userRole) {
             </div>
             <div class="home">
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <i class="bi bi-house homeIcon"></i>
-                    </a>
+                <a href="../Customer/dashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <i class="bi bi-house homeIcon"></i>
-                    </a>
+                <a href="../Admin/adminDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../BusinessPartner/bpDashboard.php">
-                        <i class="bi bi-house homeIcon"></i>
-                    </a>
+                <a href="../BusinessPartner/bpDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } ?>
 
             </div>
@@ -152,48 +152,47 @@ switch ($userRole) {
 
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
-                            <i class="bi bi-calendar2-check sidebar-icon"></i>
-                            <span class="sidebar-text">Booking History</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
-                            <i class="bi bi-credit-card-2-front sidebar-icon"></i>
-                            <span class="sidebar-text">Payment</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
+                        <i class="bi bi-calendar2-check sidebar-icon"></i>
+                        <span class="sidebar-text">Booking History</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                        <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                        <span class="sidebar-text">Payment</span>
+                    </a>
+                </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li class="sidebar-item">
-                        <a href="userManagement.php" class="list-group-item">
-                            <i class="bi bi-person-gear sidebar-icon"></i>
-                            <span class="sidebar-text">Manage Users</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="userManagement.php" class="list-group-item">
+                        <i class="bi bi-person-gear sidebar-icon"></i>
+                        <span class="sidebar-text">Manage Users</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <?php
                 //* For business partner nav
                 if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpBookings.php" class="list-group-item">
-                            <i class="bi bi-calendar2-check sidebar-icon"></i>
-                            <span class="sidebar-text">Bookings</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpServices.php" class="list-group-item">
-                            <i class="bi bi-bell sidebar-icon"></i>
-                            <span class="sidebar-text">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="bi bi-bell sidebar-icon"></i>
-                            <i class="bi bi-tags sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bpBookings.php" class="list-group-item">
+                        <i class="bi bi-calendar2-check sidebar-icon"></i>
+                        <span class="sidebar-text">Bookings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpServices.php" class="list-group-item">
+                        <i class="bi bi-bell sidebar-icon"></i>
+                        <span class="sidebar-text">Services</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpSales.php" class="list-group-item">
+                        <i class="bi bi-tags sidebar-icon"></i>
+                        <span class="sidebar-text">Sales</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <li>
                     <a href="loginSecurity.php" class="list-group-item">
@@ -238,8 +237,8 @@ switch ($userRole) {
                         </p>
                         <div class="delete-button">
 
-                            <button type="button" class="btn btn-danger" name="confirmationBtn" data-bs-target="#warningModal" data-bs-toggle="modal"
-                                id="confirmationBtn">Delete
+                            <button type="button" class="btn btn-danger" name="confirmationBtn"
+                                data-bs-target="#warningModal" data-bs-toggle="modal" id="confirmationBtn">Delete
                                 Account</button>
                         </div>
                         <?php
@@ -251,22 +250,27 @@ switch ($userRole) {
 
                         <!-- Confirmation Modal -->
                         <form action="../../Function/Account/deleteAccount.php" method="POST">
-                            <div class="modal fade" id="warningModal" aria-hidden="true" aria-labelledby="warningModalLabel" tabindex="-1">
+                            <div class="modal fade" id="warningModal" aria-hidden="true"
+                                aria-labelledby="warningModalLabel" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title fw-bold" id="warningModalLabel">Account Deletion</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <p class="text-center">
-                                                If you wish to delete your account, all <strong> existing booking(s) will be automatically cancelled </strong>.
+                                                If you wish to delete your account, all <strong> existing booking(s)
+                                                    will be automatically cancelled </strong>.
                                                 Please note that we have a <strong>no-refund policy</strong>.
                                             </p>
 
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-bs-target="#confirmationModal" data-bs-toggle="modal" data-bs-dismiss="modal">Proceed</button>
+                                            <button type="button" class="btn btn-danger"
+                                                data-bs-target="#confirmationModal" data-bs-toggle="modal"
+                                                data-bs-dismiss="modal">Proceed</button>
                                         </div>
                                     </div>
                                 </div>
@@ -357,101 +361,101 @@ switch ($userRole) {
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <script>
-        //Handle sidebar for responsiveness
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.getElementById('toggle-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container')
+    //Handle sidebar for responsiveness
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const items = document.querySelectorAll('.list-group-item');
+        const toggleCont = document.getElementById('toggle-container')
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    });
-                    toggleCont.style.justifyContent = "center"
-                } else {
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    toggleCont.style.justifyContent = "flex-end"
-                }
-            });
-
-            function handleResponsiveSidebar() {
-                if (window.innerWidth <= 1024) {
-                    sidebar.classList.add('collapsed');
-                    toggleBtn.style.display = "flex";
-                    mainContent.style.marginLeft = "16vw"
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    })
-
-                } else {
-                    toggleBtn.style.display = "none";
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    mainContent.style.marginLeft = "290px";
-                    sidebar.classList.remove('collapsed');
-                }
+            if (sidebar.classList.contains('collapsed')) {
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                });
+                toggleCont.style.justifyContent = "center"
+            } else {
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                toggleCont.style.justifyContent = "flex-end"
             }
-
-            // Run on load and when window resizes
-            handleResponsiveSidebar();
-            window.addEventListener('resize', handleResponsiveSidebar);
         });
+
+        function handleResponsiveSidebar() {
+            if (window.innerWidth <= 1024) {
+                sidebar.classList.add('collapsed');
+                toggleBtn.style.display = "flex";
+                mainContent.style.marginLeft = "16vw"
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                })
+
+            } else {
+                toggleBtn.style.display = "none";
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                mainContent.style.marginLeft = "290px";
+                sidebar.classList.remove('collapsed');
+            }
+        }
+
+        // Run on load and when window resizes
+        handleResponsiveSidebar();
+        window.addEventListener('resize', handleResponsiveSidebar);
+    });
     </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Show -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramsValue = params.get('action')
-        // const confirmationBtn = document.getElementById("confirmationBtn");
-        // const confirmationModal = document.getElementById("confirmationModal");
-        const deleteModal = document.getElementById('deleteModal');
-        const logoutBtn = document.getElementById('logoutBtn');
+    const params = new URLSearchParams(window.location.search);
+    const paramsValue = params.get('action')
+    // const confirmationBtn = document.getElementById("confirmationBtn");
+    // const confirmationModal = document.getElementById("confirmationModal");
+    const deleteModal = document.getElementById('deleteModal');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-        logoutBtn.addEventListener("click", function() {
-            Swal.fire({
-                title: "Are you sure you want to log out?",
-                text: "You will need to log in again to access your account.",
-                icon: "warning",
-                showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, logout!",
-                customClass: {
-                    title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "../../Function/logout.php";
-                }
-            });
+    logoutBtn.addEventListener("click", function() {
+        Swal.fire({
+            title: "Are you sure you want to log out?",
+            text: "You will need to log in again to access your account.",
+            icon: "warning",
+            showCancelButton: true,
+            // confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout!",
+            customClass: {
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "../../Function/logout.php";
+            }
         });
+    });
 
-        // confirmationBtn.addEventListener("click", function() {
-        //     const myconfirmationModal = new bootstrap.Modal(confirmationModal);
-        //     myconfirmationModal.show();
-        // });
+    // confirmationBtn.addEventListener("click", function() {
+    //     const myconfirmationModal = new bootstrap.Modal(confirmationModal);
+    //     myconfirmationModal.show();
+    // });
 
-        if (paramsValue === 'success') {
-            const myModal = new bootstrap.Modal(deleteModal);
-            myModal.show();
-        };
+    if (paramsValue === 'success') {
+        const myModal = new bootstrap.Modal(deleteModal);
+        myModal.show();
+    };
 
-        if (paramsValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramsValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 </body>
 
