@@ -325,7 +325,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             <?php
             // error_log(print_r($partners, true));
-            if (!empty($partners)):
+            if (!empty($partners)) {
                 foreach ($partners as $partner): ?>
                     <div class="card bp-card" id="bp1">
                         <img class="card-img-top" src="../../Assets/Images/PartnerServiceImage/<?= $partner['serviceImage'] ?>" alt="Card image cap">
@@ -388,7 +388,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
                         </div>
                     </div>
-                    <!-- modal for more info -->
 
                     <!-- modal for contact -->
                     <div class="modal fade" id="contact-modal<?= $partner['partnershipID'] ?>" tabindex="-1" role="dialog" aria-labelledby="contact-modal<?= $partner['partnershipID'] ?>Label"
@@ -416,9 +415,33 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
                         </div>
                     </div>
-                    <!-- modal for contact -->
-            <?php endforeach;
-            endif; ?>
+
+                <?php endforeach;
+            } else { ?>
+                <div class="card bp-card" id="bp1">
+                    <img class="card-img-top" src="../Assets/Images/PartnerServiceImage/noImage.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <div style="border: 1.5px solid gray; width: 30%"></div>
+                        </h5>
+                        <h6 class="card-subtitle mt-3">
+                            <div style="border: 1.5px solid gray; width: 40%"></div>
+                        </h6>
+                        <div class=" button-container">
+                            <span class="badge bg-secondary text-capitalize">No Available</span>
+
+                            <button type="button" class="badge btn bg-secondary text-capitalize">No details</button>
+                            <button type="button" class="badge btn bg-secondary">Contact
+                                Us</button>
+                        </div>
+
+                        <div class="description-container">
+                            <p class="text-center text-primary fw-bold">No Services Found</p>
+                            <p class="card-description text-center">We don`t have any services or partner listings to show right now.</p>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
 
 

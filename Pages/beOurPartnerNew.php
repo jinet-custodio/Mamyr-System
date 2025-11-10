@@ -218,7 +218,7 @@ require '../Function/Helpers/statusFunctions.php';
 
             <?php
             // error_log(print_r($partners, true));
-            if (empty($partners)) {
+            if (!empty($partners)) {
                 foreach ($partners as $partner): ?>
                     <div class="card bp-card" id="bp1">
                         <img class="card-img-top" src="../Assets/Images/PartnerServiceImage/<?= $partner['serviceImage'] ?>" alt="Card image cap">
@@ -281,7 +281,6 @@ require '../Function/Helpers/statusFunctions.php';
                             </div>
                         </div>
                     </div>
-                    <!-- modal for more info -->
 
                     <!-- modal for contact -->
                     <div class="modal fade" id="contact-modal<?= $partner['partnershipID'] ?>" tabindex="-1" role="dialog" aria-labelledby="contact-modal<?= $partner['partnershipID'] ?>Label"
@@ -309,7 +308,6 @@ require '../Function/Helpers/statusFunctions.php';
                             </div>
                         </div>
                     </div>
-                    <!-- modal for contact -->
                 <?php endforeach;
             } else { ?>
                 <div class="card bp-card" id="bp1">
