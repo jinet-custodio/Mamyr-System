@@ -15,25 +15,25 @@ $partiallyPaid = 2;
 $fullyPaid = 3;
 
 $fetchUserBookingQuery = $conn->prepare("
-    SELECT 
-        cb.bookingID,
-        b.startDate,
-        b.endDate,
-        b.bookingType,
-        s.resortServiceID,
-        s.entranceRateID,
-        cp.customPackageID,
-        cp.eventTypeID,
-        ec.categoryID,
-        ec.categoryName,
-        s.partnershipServiceID
-    FROM confirmedbooking cb
-    INNER JOIN booking b ON cb.bookingID = b.bookingID
-    LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
-    LEFT JOIN eventcategory ec ON cp.eventTypeID = ec.categoryID
-    LEFT JOIN bookingservice bs ON bs.bookingID = b.bookingID
-    LEFT JOIN service s ON bs.serviceID = s.serviceID
-    WHERE cb.paymentStatus = ? OR cb.paymentStatus = ?
+                    SELECT 
+                        cb.bookingID,
+                        b.startDate,
+                        b.endDate,
+                        b.bookingType,
+                        s.resortServiceID,
+                        s.entranceRateID,
+                        cp.customPackageID,
+                        cp.eventTypeID,
+                        ec.categoryID,
+                        ec.categoryName,
+                        s.partnershipServiceID
+                    FROM confirmedbooking cb
+                    INNER JOIN booking b ON cb.bookingID = b.bookingID
+                    LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+                    LEFT JOIN eventcategory ec ON cp.eventTypeID = ec.categoryID
+                    LEFT JOIN bookingservice bs ON bs.bookingID = b.bookingID
+                    LEFT JOIN service s ON bs.serviceID = s.serviceID
+                    WHERE cb.paymentStatus = ? OR cb.paymentStatus = ?
 ");
 $fetchUserBookingQuery->bind_param("ii", $fullyPaid, $partiallyPaid);
 $fetchUserBookingQuery->execute();
@@ -53,13 +53,13 @@ while ($row = $result->fetch_assoc()) {
     }
 
     // Default color
-    $color = '#dc3545';
+    $color = 'rgb(255, 153, 153)';
 
     // Set color based on booking type
     if ($type === 'Hotel') {
-        $color = '#ffc107';
+        $color = '#f7c42cff';
     } elseif ($type === 'Resort') {
-        $color = '#5dccf5';
+        $color = 'rgba(148, 217, 245, 1)';
     }
 
     // Add category if Event

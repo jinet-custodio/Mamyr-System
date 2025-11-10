@@ -277,9 +277,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
     </header>
     <form action="../../Function/Booking/eventBooking.php" method="POST">
-        <main class="card">
+        <main class="card mainCard mb-4">
             <section class="event-details-container">
-                <h4>Event Details</h4>
+                <h4 id="top-title">Event Details</h4>
                 <div class="event-details">
                     <div class="input-container">
                         <label for="customerName">Customer Name: </label>
@@ -298,28 +298,25 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             value="<?= htmlspecialchars($guestNo) ?> people">
                         <input type="hidden" name="guestNo" value="<?= $guestNo ?>">
                     </div>
+                    <div class="input-container">
+                        <label for="eventVenue">Venue of Event</label>
+                        <input type="text" class="form-control" name="eventVenue"
+                            value="<?= htmlspecialchars($eventVenue) ?>">
+                    </div>
                 </div>
             </section>
 
             <section class="venue-details">
-
-                <div class="input-container">
-                    <label for="eventVenue">Venue of Event</label>
-                    <input type="text" class="form-control" name="eventVenue"
-                        value="<?= htmlspecialchars($eventVenue) ?>">
-                </div>
-
-
                 <div class="textareaContainer">
                     <div class="input-container">
                         <p>Venue Description</p>
-                        <textarea rows="5" class="form-control" name="venueDescription" id="venueDescription"
+                        <textarea rows="3" class="form-control" name="venueDescription" id="venueDescription"
                             readonly><?= !empty($venueDescription) ? htmlspecialchars(ucwords(implode("\n", $venueDescription))) : 'N/A' ?></textarea>
                     </div>
 
                     <div class="input-container additionalRequestPart">
                         <p>Additional Request</p>
-                        <textarea rows="5" class="form-control" name="additionalRequest"
+                        <textarea rows="3" class="form-control" name="additionalRequest"
                             id="additionalRequest"><?= !empty($additionalRequest) ?  htmlspecialchars(ucfirst($additionalRequest)) : '' ?></textarea>
                     </div>
                 </div>
@@ -361,7 +358,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         }
 
                         foreach ($groupedFoods as $category => $foods) { ?>
-                            <div class="food-info">
+                            <div class="card p-2 food-info">
                                 <h5 class="foodCategory"><?= htmlspecialchars(ucfirst($category)) ?></h5>
                                 <?php foreach ($foods as $food) {
                                     $selectedFoodCount++; ?>
@@ -382,24 +379,25 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             <section class="additional-container">
                 <h4>Additional Services</h4>
-                <?php
-                $additionalServicePrice = 0;
-                if (!empty($additionalServiceSelected)) { ?>
+                <div id="additionals">
+                    <?php
+                    $additionalServicePrice = 0;
+                    if (!empty($additionalServiceSelected)) { ?>
 
-
-                    <?php foreach ($additionalServiceSelected as $id => $service) {
-                        $additionalServicePrice += $service['PBPrice'] ?>
-                        <div class="form-group">
-                            <label><?= htmlspecialchars(ucfirst($service['PBName'])) ?> &mdash;
-                                ₱<?= number_format($service['PBPrice'], 2) ?></label>
-                            <input type="hidden" name="additionalServiceSelected[<?= $id ?>]" value="<?= htmlspecialchars($service['partnershipServiceID']) ?>"
-                                class="form-control">
-                        </div>
-                        <div class="customer-chocie-container">
-                            <p style="color: rgba(2, 10, 20, 0.6);"><?= $customerChoiceMessage ?> </p>
-                            <input type="hidden" name="customer-choice" value="<?= $customerChoice ?>">
-                        </div>
-                    <?php } ?>
+                        <?php foreach ($additionalServiceSelected as $id => $service) {
+                            $additionalServicePrice += $service['PBPrice'] ?>
+                            <div class="form-group">
+                                <label><?= htmlspecialchars(ucfirst($service['PBName'])) ?> &mdash;
+                                    ₱<?= number_format($service['PBPrice'], 2) ?></label>
+                                <input type="hidden" name="additionalServiceSelected[<?= $id ?>]" value="<?= htmlspecialchars($service['partnershipServiceID']) ?>"
+                                    class="form-control">
+                            </div>
+                            <div class="customer-chocie-container">
+                                <p style="color: rgba(2, 10, 20, 0.6);"><?= $customerChoiceMessage ?> </p>
+                                <input type="hidden" name="customer-choice" value="<?= $customerChoice ?>">
+                            </div>
+                        <?php } ?>
+                </div>
             </section>
         <?php } else { ?>
             <p class="text-center">No additional service selected.</p>
@@ -496,7 +494,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <input type="hidden" name="pricingID" value="<?= $pricingID ?>">
         </div>
 
-        <div class="button-container">
+        <div class="button-container my-3">
             <button type="submit" class="btn btn-primary loaderTrigger" name="eventBook">Book Now</button>
         </div>
         </main>

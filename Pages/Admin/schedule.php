@@ -392,11 +392,13 @@ if ($result->num_rows > 0) {
 
 
                     let content = `
-                    <h3 class="text-center fw-bolder text-primary">${event.title}</h3>
-                    <p class="text-center mt-5 mb-0" style="letter-spacing: 1px; line-height: 35px">
-                        <strong>Start:</strong> ${formattedStart}<br>
-                        ${formattedEnd ? `<strong>End:</strong> ${formattedEnd}<br>` : ''}
-                    </p>
+                     <div class="text-center">
+                        <h3 class="text-center fw-bolder text-primary">${event.title}</h3>
+                        <p class="text-center mt-5 mb-0" style="letter-spacing: 1px; line-height: 35px">
+                                <strong>Start:</strong> ${formattedStart}<br>
+                                ${formattedEnd ? `<strong>End:</strong> ${formattedEnd}<br>` : ''}
+                        </p>
+                    </div>
                 `;
 
                     modalBody.innerHTML = content;
