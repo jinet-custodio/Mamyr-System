@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
     $partnershipID = (int) $_GET['id'];
     $getPartnerService = $conn->prepare("SELECT * FROM `partnershipservice` WHERE partnershipID = ?");
     $getPartnerService->bind_param('i', $partnershipID);
-    error_log("PID: $partnershipID");
+    // error_log("PID: $partnershipID");
     if (!$getPartnerService->execute()) {
         error_log("Error: $partnershipID" . $getPartnerService->error);
         echo json_encode(['error' => 'Database execution failed']);
@@ -76,7 +76,8 @@ if (isset($_GET['id'])) {
             'serviceCapacity' => $row['PBCapacity'] ?? 'N/A',
             'serviceDuration' => $row['PBduration'] ?? 'N/A',
             'modalID' => 'serviceModal' . $row['partnershipServiceID'],
-            'partnershipServiceID' => $row['partnershipServiceID']
+            'partnershipServiceID' => $row['partnershipServiceID'],
+            'serviceImage' => $row['serviceImage'] ?? ''
         ];
     }
 
