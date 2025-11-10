@@ -6,10 +6,6 @@
   font-family: "Poppins Black";
   src: url(../../Fonts/Poppins/Poppins-Black.ttf);
 }
-@font-face {
-  font-family: "Lora";
-  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
-}
 
 @font-face {
   font-family: "Alkatra";
@@ -38,7 +34,6 @@ body {
 
 .resortTitle {
   font-size: 35px;
-  font-family: "Lora";
   color: #000000;
   font-weight: bold;
 }
@@ -60,9 +55,8 @@ body {
   /* background-color: transparent !important; */
 }
 
-.backToSelection img {
-  width: 30px;
-  height: 30px;
+.backToSelection i {
+  font-size: 30px;
 }
 
 .resort-card {
@@ -525,5 +519,9 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+  }
+
+  .backToSelection i {
+    font-size: 20px;
   }
 }

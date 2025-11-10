@@ -14,25 +14,26 @@ $userID = intval($_SESSION['userID']);
 $partiallyPaid = 2;
 $fullyPaid = 3;
 $fetchUserBookingQuery = $conn->prepare("SELECT 
-                                    cb.bookingID,
-                                    b.startDate,
-                                    b.bookingType,
-                                    u.firstName,
-                                    u.lastName,
-                                    s.resortServiceID,
-                                    s.entranceRateID,
-                                    cp.customPackageID,
-                                    s.partnershipServiceID
-                                FROM confirmedbooking cb
-                                INNER JOIN booking b ON cb.bookingID = b.bookingID
-                                INNER JOIN user u ON b.userID = u.userID
-                                LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
-                                LEFT JOIN bookingservice bs ON bs.bookingID = b.bookingID
-                                LEFT JOIN service s ON bs.serviceID = s.serviceID
-                                -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                                WHERE cb.paymentStatus IN (?,?) AND u.userID = ?
+                                            cb.bookingID,
+                                            b.startDate,
+                                            b.endDate,
+                                            b.bookingType,
+                                            s.resortServiceID,
+                                            s.entranceRateID,
+                                            cp.customPackageID,
+                                            cp.eventTypeID,
+                                            ec.categoryID,
+                                            ec.categoryName,
+                                            s.partnershipServiceID
+                                        FROM confirmedbooking cb
+                                        INNER JOIN booking b ON cb.bookingID = b.bookingID
+                                        LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
+                                        LEFT JOIN eventcategory ec ON cp.eventTypeID = ec.categoryID
+                                        LEFT JOIN bookingservice bs ON bs.bookingID = b.bookingID
+                                        LEFT JOIN service s ON bs.serviceID = s.serviceID
+                                        WHERE cb.paymentStatus = ? OR cb.paymentStatus = ?
                             ");
-$fetchUserBookingQuery->bind_param("iii", $fullyPaid, $partiallyPaid, $userID);
+$fetchUserBookingQuery->bind_param("ii", $fullyPaid, $partiallyPaid);
 $fetchUserBookingQuery->execute();
 $result = $fetchUserBookingQuery->get_result();
 $eventsByDate = [];
@@ -58,7 +59,8 @@ while ($row = $result->fetch_assoc()) {
         'start' => $date,
         'allDay' => true,
         'backgroundColor' => $color,
-        'opacity' => '1'
+        'opacity' => '1',
+        'type' => $row['bookingType']
     ];
 }
 

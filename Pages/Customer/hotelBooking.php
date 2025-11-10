@@ -92,10 +92,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <!-- Hotel Booking -->
     <form action="confirmBooking.php" method="POST">
         <div class="hotel" id="hotel">
-            <div class="backToSelection" id="backToSelection">
-                <img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="back button" onclick="backToSelection()">
+            <div class="backToSelection" id="backToSelection" onclick="backToSelection()">
+                <i class="fa-solid fa-arrow-left" style="color: #178FEB;"></i>
             </div>
-            <div class="titleContainer">
+            <div class=" titleContainer">
                 <h4 class="hotelTitle text-center" id="hotelTitle">HOTEL BOOKING</h4>
             </div>
             <div class="container-fluid" id="hotelContainerFluid">
@@ -163,7 +163,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <div class="card hotel-card" id="hotelBookingCard" style="width: 40rem; flex-shrink: 0; ">
                     <div class="days-time-container">
                         <div class="arrivalTime">
-                            <h5 class="arrivalTimeLabel">Time arrival</h5>
+                            <h5 class="arrivalTimeLabel">Time of Arrival</h5>
                             <div class="input-group">
                                 <input type="time" name="arrivalTime" id="arrivalTime" class="form-control"
                                     placeholder="Select Arrival Time"

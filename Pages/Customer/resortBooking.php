@@ -108,9 +108,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Boxicons -->
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 </head>
 
 <body id="resort-page">
@@ -119,7 +116,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <form action="confirmBooking.php" method="POST" id="resortBookingForm">
         <div class="resort" id="resort">
             <button type="button" class="backToSelection btn btn-info" id="backToSelection">
-                <img src="../../Assets/Images/Icon/arrowBtnWhite.png" alt="back button" />
+                <i class="fa-solid fa-arrow-left" style="color: #fafdff;"></i>
             </button>
             <div class="titleContainer">
                 <h4 class="resortTitle text-center" id="resortTitle">RESORT BOOKING</h4>
@@ -559,7 +556,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
                         </div>
 
-                        <div class="entertainmentContainer d-flex justify-content-center mb-4 px-2">
+                        <div class="entertainmentContainer d-flex justify-content-center align-items-center mb-4 px-2">
                             <h1 class="card-title w-50 text-danger">Please read the following rules before entering the resort area:</h1>
                             <div class="noteContainer d-flex align-items-center justify-content-center m-auto">
                                 <a href="#" data-bs-target="#rulesModal" data-bs-toggle="modal" class="m-auto fs-5" id="viewRulesBtn"> <i class="fa-solid fa-circle-info mx-1"></i>View Rules </a>

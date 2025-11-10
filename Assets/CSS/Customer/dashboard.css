@@ -3,13 +3,9 @@
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
 
-/* @font-face {
-  font-family: "Galada";
-  src: url(../../Fonts/Galada/Galada-Regular.ttf);
-} */
 @font-face {
-  font-family: "Lora";
-  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+  font-family: "Poppins Black";
+  src: url(../../Fonts/Poppins/Poppins-Black.ttf);
 }
 
 @font-face {
@@ -164,56 +160,6 @@ body {
     url("../../Images/amenities/pavilionPics/pav1.jpg");
 }
 
-/* .resort-booking-btn-gradient {
-  background: linear-gradient(
-      to right,
-      rgba(0, 123, 255, 0.7),
-      rgba(0, 123, 255, 0)
-    ),
-    url("../../Images/amenities/poolPics/poolPic5.jpg");
-  background-size: cover;
-  background-position: center;
-  color: #ffffff !important;
-  border-radius: 8px;
-  font-size: 20px !important;
-  font-weight: bold;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-  border: none;
-  transition: all 0.3s ease-in-out;
-  position: relative;
-  overflow: hidden;
-  width: 75%;
-  height: 5rem;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center;
-  box-sizing: border-box;
-  transform: scale(1);
-}
-
-.resort-booking-btn-gradient:hover {
-  background: linear-gradient(
-      to right,
-      rgba(0, 123, 255, 0.8),
-      rgba(0, 123, 255, 0.1)
-    ),
-    url("../../Images/amenities/poolPics/poolPic5.jpg");
-  background-size: cover;
-  background-position: center;
-  color: #ffffff !important;
-  border-radius: 8px;
-  font-size: 20px !important;
-  font-weight: bold;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-  border: none;
-  transition: all 0.3s ease-in-out;
-  position: relative;
-  overflow: hidden;
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-} */
-
 .topRight {
   height: 100%;
   width: 39%;
@@ -349,6 +295,28 @@ body {
 a {
   color: #141414 !important;
   text-decoration: none !important;
+}
+
+.gradientBg {
+  background: -webkit-linear-gradient(
+    -90deg,
+    rgba(255, 255, 255, 1) 0,
+    rgba(255, 255, 255, 1) 33%,
+    rgba(142, 210, 255, 1) 100%
+  );
+  background: -moz-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0,
+    rgba(255, 255, 255, 1) 33%,
+    rgba(142, 210, 255, 1) 100%
+  );
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0,
+    rgba(255, 255, 255, 1) 33%,
+    rgba(142, 210, 255, 1) 100%
+  );
+  background-position: 50% 50%;
 }
 
 .middle-container {

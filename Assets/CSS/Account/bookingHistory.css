@@ -549,7 +549,7 @@ div.action-button-container {
   }
 
   th {
-    font-size: clamp(1.9vw, 1.7vw, 1.5vw);
+    font-size: 14px;
   }
 
   .dt-column-order {
@@ -559,7 +559,7 @@ div.action-button-container {
   td,
   #bookingHistory_info,
   .btn {
-    font-size: clamp(2vw, 1.9vw, 1.8vw);
+    font-size: 12px;
   }
 
   .dt-input {
@@ -577,6 +577,12 @@ div.action-button-container {
 
   .table-striped {
     text-align: left;
+  }
+
+  .viewBooking,
+  .cancelBooking,
+  .rateBtn {
+    width: 100%;
   }
 
   div.dt-container .dt-paging .dt-paging-button {
@@ -605,10 +611,6 @@ div.action-button-container {
     width: 80%;
   }
 
-  .btn {
-    font-size: clamp(2.5vw, 2.3vw, 2.1vw);
-  }
-
   .form-container {
     margin-top: 1.5rem;
   }
@@ -626,7 +628,7 @@ div.action-button-container {
   }
 
   th {
-    font-size: clamp(1.5vw, 1.4vw, 1.3vw);
+    font-size: 12px;
   }
 
   .current {
