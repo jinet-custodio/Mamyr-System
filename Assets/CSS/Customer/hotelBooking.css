@@ -7,11 +7,6 @@
   src: url(../../Fonts/Poppins/Poppins-Black.ttf);
 }
 @font-face {
-  font-family: "Lora";
-  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
-}
-
-@font-face {
   font-family: "Alkatra";
   src: url(../../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
@@ -31,8 +26,7 @@
 }
 
 .hotelTitle {
-  font-size: clamp(3.5vw, 3.2vw, 3vw);
-  font-family: "Lora";
+  font-size: 35px;
   color: #000000;
   font-weight: bold;
   margin-top: 2rem;
@@ -43,6 +37,11 @@
   margin: 0 0 0 2.5rem;
 }
 
+.backToSelection i {
+  font-size: 45px;
+  font-weight: 900 !important;
+}
+
 .container-fluid {
   /* border: 2px solid pink; */
   display: flex;
@@ -50,6 +49,8 @@
   align-items: center;
   gap: 2rem;
   padding: 1rem;
+  width: 90% !important;
+  margin: 0 auto !important;
 }
 
 .hotelIconsContainer {
@@ -314,9 +315,20 @@ h5 {
 
 /* Phone size */
 @media screen and (max-width: 599px) {
-  /* body {
-    outline: 5px solid rgb(0, 26, 255) !important;
-  } */
+  .backToSelection i {
+    font-size: 30px;
+  }
+
+  .backToSelection {
+    margin-left: 1rem !important;
+  }
+  .hotelTitle {
+    font-size: 30px;
+    margin-top: 2rem;
+  }
+  .hotelIconContainer img {
+    width: 100%;
+  }
   .container-fluid {
     display: flex;
     flex-direction: column;
@@ -324,14 +336,29 @@ h5 {
     justify-content: center;
     align-items: center;
   }
-  .hotelIconContainer {
-    justify-content: center;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 3rem;
-    row-gap: 0;
-    justify-items: center;
+
+  #hotelContainerFluid,
+  #hotelBookingCard {
+    width: 100% !important;
   }
+
+  .hotelIconsContainer {
+    width: 96%;
+  }
+
+  .hotelIconContainer {
+    gap: 1rem;
+    flex-wrap: wrap;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hotelIconWithCaption {
+    width: 20%;
+    flex: unset;
+  }
+
   #amenitiesHR {
     width: 100% !important;
   }
@@ -359,7 +386,11 @@ h5 {
   .payment-title {
     font-size: 16px !important;
   }
-  .arrivalTimeLabel {
+
+  .label,
+  .arrivalTimeLabel,
+  h5.containerLabel,
+  h5.noOfPeopleHotelLabel {
     font-size: 16px !important;
   }
 }

@@ -137,8 +137,8 @@ $formData = $_SESSION['eventFormData'] ?? [];
     <!-- Event Booking -->
     <form action="eventBookingConfirmation.php" method="POST">
         <div class="event" id="event">
-            <div class="backToSelection" id="backToSelection">
-                <img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="back button" onclick="backToSelection()">
+            <div class="backToSelection" id="backToSelection" onclick="backToSelection()">
+                <i class="fa-solid fa-arrow-left" style="color: #178FEB;"></i>
             </div>
             <div class="titleContainer">
                 <h4 class="eventTitle text-center" id="eventTitle">EVENT BOOKING</h4>
@@ -237,10 +237,19 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
 
                     <div class="secondColumn">
-                        <div id="calendar"></div>
-                        <div class="packageDisplay" style="display: none;">
-                            <div id="packageCardsContainer" class="container d-flex flex-wrap gap-3">
+                        <div class="calContainer mx-auto">
+                            <div class="legends">
+                                <div class="legend ">
+                                    <i class="fa-solid fa-circle" style="color: #FF9999"></i> Event
+                                </div>
+                                <div class="legend ">
+                                    <i class="fa-solid fa-circle" style="color: #ffdb6d;"></i> Resort/Hotel
+                                </div>
+                                <div class="legend ">
+                                    <i class="fa-solid fa-circle" style="color: #b3e0f2 ;"></i> Resort Entrance
+                                </div>
                             </div>
+                            <div id="calendar"></div>
                         </div>
                     </div>
                 </div>
@@ -902,8 +911,10 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 eventsSet: function(events) {
                     console.log('Fetched events:', events);
 
-                    // Extract only the start dates (or adjust if you have ranges)
-                    disabledDates = events.map(event => event.startStr);
+                    disabledDates = events
+                        .filter(e => e.extendedProps.type && e.extendedProps.type.toLowerCase() === 'event')
+                        .map(e => e.startStr.split('T')[0]); // only keep date part
+
                     console.log('Disabled dates:', disabledDates);
 
                     // Once we have the dates, initialize Flatpickr

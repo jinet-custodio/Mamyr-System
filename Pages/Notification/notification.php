@@ -3,7 +3,7 @@
     <!-- Notification Modal -->
     <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content px-2">
 
                 <div class="modal-header d-flex justify-content-between align-items-center">
                     <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
