@@ -145,3 +145,5 @@ CREATE TABLE serviceunavailabledate (
     FOREIGN KEY(partnershipServiceID) REFERENCES partnershipservice(partnershipServiceID)
 );
 
+
+ALTER TABLE `partnershipservice` ADD `serviceImage` VARCHAR(255) NULL DEFAULT 'noImage.png' AFTER `PBPrice`;

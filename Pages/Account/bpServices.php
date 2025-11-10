@@ -214,7 +214,6 @@ switch ($userRole) {
                     <button class="btn btn-primary  add-service-btn" id="addServiceButton" onclick="addService()"><i
                             class="fas fa-plus-circle"></i> Add Service</button>
                 </div>
-
                 <div class="serviceContainer" id="service-card-container"></div>
                 <div class="no-data-container" id="no-data-container"></div>
 
@@ -225,7 +224,7 @@ switch ($userRole) {
                                 class="backArrow">
                         </a>
                     </div>
-                    <form action="../../Function/Partner/addService.php" method="POST">
+                    <form action="../../Function/Partner/addService.php" method="POST" enctype="multipart/form-data">
                         <div class="serviceInputContainer">
                             <div class="serviceNameContainer">
                                 <label for="serviceName" class="addServiceLabel">Service Name</label>
@@ -267,7 +266,7 @@ switch ($userRole) {
                                 <select class="form-select" name="serviceAvailability" id="serviceAvailability">
                                     <option value="" disabled <?= empty($_SESSION['addServiceForm']['serviceAvailability']) ? 'selected' : '' ?>>Select Availability</option>
                                     <?php
-                                    $getAvailability = $conn->prepare("SELECT * FROM serviceavailability WHERE availabilityName  NOT IN ('Occupied', 'Private')");
+                                    $getAvailability = $conn->prepare("SELECT * FROM serviceavailability WHERE availabilityName  NOT IN ('Maintenance', 'Private')");
                                     if ($getAvailability->execute()) {
                                         $result = $getAvailability->get_result();
                                         if ($result->num_rows > 0) {
@@ -307,6 +306,14 @@ switch ($userRole) {
                                     placeholder="Service information/description (Optional)"><?= isset($_SESSION['addServiceForm']['serviceDesc']) ? $_SESSION['addServiceForm']['serviceDesc'] : '' ?></textarea>
                             </div>
                         </div>
+
+                        <div class="service-image mt-2">
+                            <div class="input-container">
+                                <label for="service-image">Service Image</label>
+                                <input type="file" name="serviceImage" id="service-image">
+                            </div>
+                        </div>
+
                         <div class="submitBtnContainer">
                             <input type="hidden" name="partnershipID" value="<?= (int) $partnershipID ?>">
                             <button type="submit" class="btn btn-success w-25" name="addService"><i
@@ -329,6 +336,10 @@ switch ($userRole) {
     <!-- DataTables Link -->
     <script src="../../../Assets/JS/datatables.min.js"></script>
 
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Hiding and showing container -->
     <script>
         const serviceCardContainer = document.getElementById("service-card-container");
         const addServiceContainer = document.getElementById("addServiceContainer");
@@ -353,8 +364,6 @@ switch ($userRole) {
         }
     </script>
 
-    <!-- Sweetalert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         //Handle sidebar for responsiveness
         document.addEventListener("DOMContentLoaded", function() {
@@ -467,8 +476,8 @@ switch ($userRole) {
                             const card = document.createElement('div');
                             card.classList.add('card', 'service-card');
 
-                            const cardHeader = document.createElement('div');
-                            cardHeader.classList.add('card-header');
+                            // const cardHeader = document.createElement('div');
+                            // cardHeader.classList.add('card-header');
 
                             const pHeader = document.createElement('p');
                             pHeader.classList.add('card-text');
@@ -476,6 +485,13 @@ switch ($userRole) {
 
                             const cardBody = document.createElement('div');
                             cardBody.classList.add('card-body');
+
+                            // const imageContainer = document.createElement('div');
+                            // imageContainer.classList.add('image-container', );
+
+                            const img = document.createElement('img');
+                            img.classList.add('service-image-display', 'card-img-top');
+                            img.src = `../../Assets/Images/PartnerServiceImage/${service.serviceImage}`;
 
                             const h5 = document.createElement('h5');
                             h5.classList.add('card-title');
@@ -495,12 +511,14 @@ switch ($userRole) {
                             viewModalBtn.innerHTML = 'View';
 
                             // Assemble card
-                            cardHeader.appendChild(pHeader);
+                            cardBody.appendChild(pHeader);
+                            card.appendChild(img);
+                            // card.appendChild(imageContainer);
                             cardBody.appendChild(h5);
                             cardBody.appendChild(pBody);
                             cardFooter.appendChild(viewModalBtn);
 
-                            card.appendChild(cardHeader);
+                            // card.appendChild(cardHeader);
                             card.appendChild(cardBody);
                             card.appendChild(cardFooter);
 
@@ -736,11 +754,11 @@ switch ($userRole) {
             })
         }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+        // if (paramValue) {
+        //     const url = new URL(window.location);
+        //     url.search = '';
+        //     history.replaceState({}, document.title, url.toString());
+        // }
     </script>
 
 

@@ -61,7 +61,7 @@ if (isset($_POST['submit_request'])) {
             exit();
         }
 
-        $tempFileName = 'temp_' . uniqid() . '_' . $imageExt;
+        $tempFileName = 'temp_' . uniqid() . '.' . $imageExt;
         $tempFilePath = $tempUploadPath . $tempFileName;
 
         if (!move_uploaded_file($_FILES['validID']['tmp_name'], $tempFilePath)) {

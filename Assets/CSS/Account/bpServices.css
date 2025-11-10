@@ -241,9 +241,13 @@ select:disabled:hover {
   color: rgb(107, 117, 125);
 }
 
+/* .service-image-display {
+  height: 120px;
+  width: auto;
+} */
+
 /* Phone size */
 @media screen and (max-width: 767px) {
-
   .add-service-btn {
     white-space: nowrap;
     width: 50%;
@@ -298,20 +302,20 @@ select:disabled:hover {
   }
 
   .profileContainer .profilePic {
-    width: 40px ;
+    width: 40px;
     height: 40px;
     margin-right: 5px;
   }
 
   .logOutContainer {
-    margin-left:5px ;
-    margin-top: 10px; 
+    margin-left: 5px;
+    margin-top: 10px;
     margin-bottom: 20px;
   }
 
   .logOutContainer a.btn {
     padding: 10px;
-    font-size: 1.8rem; 
+    font-size: 1.8rem;
     display: flex;
     justify-content: center;
   }
@@ -324,7 +328,6 @@ select:disabled:hover {
   .serviceInputContainer {
     margin-left: 3rem;
   }
-  
 
   .sidebar {
     width: 45vw;
@@ -347,20 +350,20 @@ select:disabled:hover {
   }
 
   .profileContainer .profilePic {
-    width: 40px ;
+    width: 40px;
     height: 40px;
     margin-right: 5px;
   }
 
   .logOutContainer {
-    margin-left:5px ;
-    margin-top: 10px; 
+    margin-left: 5px;
+    margin-top: 10px;
     margin-bottom: 20px;
   }
 
   .logOutContainer a.btn {
     padding: 10px;
-    font-size: 1.8rem; 
+    font-size: 1.8rem;
     display: flex;
     justify-content: center;
   }

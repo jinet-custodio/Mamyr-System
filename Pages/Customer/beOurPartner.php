@@ -285,58 +285,35 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
         <div class="BPContainer">
-            <!-- <?php if (!empty($partners)):
-                        foreach ($partners as $partner): ?>
-            <div class="card bp-card" id="bp1">
+            <?php if (!empty($partners)):
+                foreach ($partners as $partner): ?>
+                    <div class="card bp-card" id="bp1">
+                        <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
+                            alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Singko Marias</h5>
+                            <h6 class="card-subtitle">Photography</h6>
+                            <div class="button-container">
+                                <span class="badge bg-green text-capitalize">Available</span>
+                                <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
+                                <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
+                                    data-bs-target="#moreInfo-modal">More
+                                    Details</button>
+                                <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
+                                    data-bs-target="#contact-modal">Contact
+                                    Us</button>
+                            </div>
 
-                <div class="card-body">
-                    <h5 class="card-title"><?= ucwords($partner['companyName']) ?></h5>
-                    <h6 class="card-subtitle">Photography</h6>
-                    <div class="availability-container">
-                        <span class="badge bg-danger text-capitalize">Not Available</span>
-
+                            <div class="description-container">
+                                <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                                    Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
+                                    reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
+                            </div>
+                        </div>
                     </div>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In odit deleniti,
-                        dolore quo officia mollitia minus modi sunt laborum labore distinctio nam asperiores optio
-                        aperiam dolorum voluptate? Molestias, nihil optio!</p>
-
-
-                </div>
-                <div class="card-footer">
-                    <button type="button" class="btn btn-primary moreInfo-btn" id="bp-moreInfo"
-                        data-bs-target="bp-moreInfo-modal">More
-                        Details</button>
-                </div>
-            </div>
             <?php endforeach;
-                    endif; ?> -->
+            endif; ?>
 
-
-
-            <div class="card bp-card" id="bp1">
-                <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
-                    alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Singko Marias</h5>
-                    <h6 class="card-subtitle">Photography</h6>
-                    <div class="button-container">
-                        <span class="badge bg-green text-capitalize">Available</span>
-                        <!-- <span class="badge bg-${colorClass} text-capitalize">${status}</span> -->
-                        <button type="button" class="badge btn bg-light-blue text-capitalize" data-bs-toggle="modal"
-                            data-bs-target="#moreInfo-modal">More
-                            Details</button>
-                        <button type="button" class="badge btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#contact-modal">Contact
-                            Us</button>
-                    </div>
-
-                    <div class="description-container">
-                        <p class="card-description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                            Similique nam quo aspernatur corrupti nemo cumque dolore molestiae illo! Quod deleniti
-                            reiciendis animi odio alias, et cum nobis voluptas porro illum.</p>
-                    </div>
-                </div>
-            </div>
 
             <div class="card bp-card" id="bp1">
                 <img class="card-img-top" src="../../Assets/Images/amenities/poolPics/poolPic2.jpg"
