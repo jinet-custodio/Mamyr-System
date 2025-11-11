@@ -455,14 +455,13 @@ resetExpiredOTPs($conn);
                 strength = 'too weak';
             }
 
-            // console.log(color);
-            // console.log(number);
 
             passwordBar.classList.add(color, `w-${number}`);
             passwordBar.setAttribute("aria-valuenow", number);
             passwordBar.textContent = strength;
         });
     </script>
+
 
 
     <script>
