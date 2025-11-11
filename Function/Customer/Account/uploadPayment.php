@@ -47,7 +47,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
     $serviceIDs = $_POST['serviceIDs'];
 
     $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
-    $allowedExt = ['jpg', 'jpeg', 'png'];
+    $allowedExt = ['jpg', 'jpeg', 'png', 'webp'];
 
     $storeProofPath = __DIR__ . '/../../../Assets/Images/PaymentProof/';
     $tempUploadPath = __DIR__ . '/../../../Assets/Images/TempUploads/';

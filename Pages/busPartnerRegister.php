@@ -6,6 +6,11 @@ require '../Config/dbcon.php';
 session_start();
 //for setting image paths in 'include' statements
 $baseURL = '..';
+
+
+// echo '<pre>';
+// print_r($_SESSION['partnerData']);
+// echo '</pre>';
 ?>
 
 
@@ -89,7 +94,7 @@ $baseURL = '..';
 
                         <button type="button" class="btn btn-light" data-bs-toggle="modal"
                             data-bs-target="#busTypenModal" id="partnerTypeButton" require>Type of your Business</button>
-
+                        <div id="selectedBusinessTypes" class="mt-2 text-black"></div>
 
                         <!-- modal for type of business -->
                         <div class="modal fade" id="busTypenModal" tabindex="-1" aria-labelledby="busTypeModalLabel" aria-hidden="true">
@@ -143,11 +148,11 @@ $baseURL = '..';
                             required>
 
                         <input type="text" class="form-control" id="city" name="city" placeholder="Town/City"
-                            value="<?php echo isset($_SESSION['partnerData']['city']) ? htmlspecialchars(trim($_SESSION['partnerData']['city'])) : ''; ?>">
+                            value="<?php echo isset($_SESSION['partnerData']['city']) ? htmlspecialchars(trim($_SESSION['partnerData']['city'])) : ''; ?>" required>
 
                         <div class="row1">
                             <input type="text" class="form-control" id="province" name="province" placeholder="Province"
-                                value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>">
+                                value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>" required>
                             <div class="zip-code">
                                 <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code" pattern="^\d{4}$"
                                     value="<?php echo isset($_SESSION['partnerData']['zip']) ? htmlspecialchars(trim($_SESSION['partnerData']['zip'])) : ''; ?>">
@@ -175,7 +180,7 @@ $baseURL = '..';
                         <h6 class="label">Upload a Valid ID</h6>
                         <input type="file" class="form-control validIDFIle" id="validID" name="validID">
 
-                        <button class="btn btn-primary w-75" id="nextBtn" onclick="openEmailPass(event)">Next</button>
+                        <button type="button" class="btn btn-primary w-75" id="nextBtn" onclick="openEmailPass(event)">Next</button>
                     </div>
                 </div>
             </div>
@@ -184,15 +189,18 @@ $baseURL = '..';
         <div class="container" id="emailPassContainer">
             <div class="labelAndArrow">
                 <div class="back-icon-container-login">
-                    <a href="busPartnerRegister.php?page=basicInfo">
-                        <i class="fa-solid fa-arrow-left backArrow" style="color: #121212;" id="emailBackArrow"></i>
-                    </a>
+                    <div class="back-icon-container-login">
+                        <button type="button" class="backArrowBtn" id="emailBackArrow">
+                            <i class="fa-solid fa-arrow-left backArrow" style="color: #121212;"></i>
+                        </button>
+                    </div>
+
                 </div>
                 <h5 class="accountCreationLabel m-6">Create an Account</h5>
             </div>
             <div class="emailPassForm">
                 <div class="input-box">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?php echo isset($_SESSION['partnerData']['email']) ? htmlspecialchars(trim($_SESSION['partnerData']['email'])) : ''; ?>" required>
                     <i class='bx bxs-envelope'></i>
                 </div>
 
@@ -201,6 +209,9 @@ $baseURL = '..';
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password"
                             oninput="validateSignUpForm();" required>
                         <i id="togglePassword1" class='bx bxs-hide'></i>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" id="password-strength" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="confirmErrorMsg" id="passwordValidation"></div>
                     <div class="input-box">
@@ -224,7 +235,7 @@ $baseURL = '..';
                             </label><br>
                             <div class="confirmErrorMsg text-center" id="termsError"></div>
                         </div>
-                        <button class="btn btn-primary w-75 m-auto" id="signUp" name="signUp" disabled>Sign Up</button>
+                        <button type="submit" class="btn btn-primary w-75 m-auto" id="signUp" name="signUp" onclick="isValid(event);">Sign Up</button>
                     </div>
                 </div>
             </div>
@@ -557,11 +568,11 @@ $baseURL = '..';
         emailPassContainer.style.display = "none";
 
         function openEmailPass(event) {
-            event.preventDefault(); // Prevent form from submitting
+            event.preventDefault();
 
             const requiredFields = [
                 'firstName', 'lastName', 'phoneNumber',
-                'companyName', 'barangay', 'proofLink', 'validID'
+                'companyName', 'barangay', 'proofLink', 'validID', 'province', 'city'
             ];
 
             let allValid = true;
@@ -603,7 +614,7 @@ $baseURL = '..';
             displayDiv.innerHTML = '';
 
             if (selectedCheckboxes.length === 0) {
-                displayDiv.innerHTML = '<em>No business type selected</em>';
+                displayDiv.innerHTML = '<em>No business type selected! Required!</em>';
                 return;
             }
 
@@ -625,7 +636,7 @@ $baseURL = '..';
             const checkedCheckboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
 
             if (checkedCheckboxes.length === 0) {
-                displayDiv.innerHTML = '<em>No business type selected</em>';
+                displayDiv.innerHTML = '<em>No business type selected! Required!</em>';
                 return;
             }
 
@@ -639,6 +650,13 @@ $baseURL = '..';
                 }
             });
         });
+
+
+        document.getElementById('emailBackArrow').addEventListener('click', function(e) {
+            e.preventDefault();
+            emailPassContainer.style.display = "none";
+            basicInfo.style.display = "block";
+        });
     </script>
 
     <!-- For Messages -->
@@ -650,12 +668,18 @@ $baseURL = '..';
             Swal.fire({
                 icon: 'warning',
                 title: 'Email Already Exist!',
-                text: 'The email address you entered is already registered.'
-            })
+                text: 'The email address you entered is already registered. Please use a different email or log in if you already have an account.',
+                confirmButtonText: 'Okay'
+            }).then(() => {
+                emailPassContainer.style.display = "block";
+                basicInfo.style.display = "none";
+
+                emailPassContainer.style.border = '1px solid red';
+            });
         } else if (paramValue === 'extError') {
             Swal.fire({
                 title: 'Oops',
-                text: `Invalid file type. Please upload JPG, JPEG, or PNG.`,
+                text: `Invalid file type. Please upload JPG, JPEG, WEBP or PNG.`,
                 icon: 'warning',
                 confirmButtonText: 'Okay'
             });
@@ -692,6 +716,9 @@ $baseURL = '..';
             document.getElementById('zip').style.border = '1px solid rgb(223, 226, 230)';
         });
 
+        emailPassContainer.addEventListener('input', () => {
+            emailPassContainer.style.border = '1px solid rgb(223, 226, 230)';
+        });
 
         if (paramValue) {
             const url = new URL(window.location);
@@ -700,7 +727,48 @@ $baseURL = '..';
         }
     </script>
 
+    <!-- For password — weak, medium, strong -->
+    <script>
+        document.getElementById('password').addEventListener('input', function() {
+            const password = document.getElementById("password").value;
+            const weakPattern = /^.{0,5}$/;
+            const mediumPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+            const strongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+            const passwordBar = document.getElementById("password-strength");
+            // console.log(password);
 
+            passwordBar.className = "progress-bar";
+            let color = "";
+            let number = "";
+            let strength = 'too  weak';
+            if (strongPattern.test(password)) {
+                color = "bg-success";
+                number = "100";
+                strength = 'strong';
+            } else if (mediumPattern.test(password)) {
+                color = "bg-warning";
+                number = "75";
+                strength = 'moderate';
+            } else if (weakPattern.test(password)) {
+                color = "bg-danger";
+                number = "50";
+                strength = 'weak';
+            } else {
+                color = "bg-danger";
+                number = "25";
+                strength = 'too weak';
+            }
+
+            // console.log(color);
+            // console.log(number);
+
+            passwordBar.classList.add(color, `w-${number}`);
+            passwordBar.setAttribute("aria-valuenow", number);
+            passwordBar.textContent = strength;
+        });
+    </script>
+
+    <!-- For numbers input only -->
     <script>
         const input = document.getElementById('phoneNumber');
         const tooltipPhone = document.getElementById('tooltip-phone');
@@ -735,8 +803,6 @@ $baseURL = '..';
             }
         });
     </script>
-
-
 
     <!-- Eye icon of password show and hide -->
     <script>
