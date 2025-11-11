@@ -114,43 +114,57 @@ function validateSignUpForm() {
 
 function isValid(event) {
   const validated = validateSignUpForm();
-  // console.log(validated);
+  // ! added this because it still shows pw validation even though all fields are empty
+  const firstName = document.getElementById("firstName");
+  const lastName = document.getElementById("lastName");
+  const userAddress = document.getElementById("userAddress");
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
 
-  switch (validated) {
-    case "password":
-      event.preventDefault();
+  if (
+    (firstName !== "" ||
+      lastName !== "" ||
+      userAddress !== "" ||
+      email !== "") &&
+    password !== ""
+  ) {
+    console.log("Trulalu");
+    switch (validated) {
+      case "password":
+        event.preventDefault();
 
-      Swal.fire({
-        icon: "warning",
-        title: "Oops!",
-        text: "Your password must include at least one uppercase letter, one lowercase letter, one number, and one special character.!",
-        confirmButtonText: "OK",
-      });
-      break;
-    case "confirm":
-      event.preventDefault();
+        Swal.fire({
+          icon: "warning",
+          title: "Oops!",
+          text: "Your password must include at least one uppercase letter, one lowercase letter, one number, and one special character!",
+          confirmButtonText: "OK",
+        });
+        break;
+      case "confirm":
+        event.preventDefault();
 
-      Swal.fire({
-        icon: "warning",
-        title: "Oops!",
-        text: "Your passwords don’t match. Please make sure both fields are the same!",
-        confirmButtonText: "OK",
-      });
-      break;
-    case "terms":
-      event.preventDefault();
+        Swal.fire({
+          icon: "warning",
+          title: "Oops!",
+          text: "Your passwords don’t match. Please make sure both fields are the same!",
+          confirmButtonText: "OK",
+        });
+        break;
+      case "terms":
+        event.preventDefault();
 
-      Swal.fire({
-        icon: "warning",
-        title: "Oops!",
-        text: "You must agree to the terms and conditions before continuing!",
-        confirmButtonText: "OK",
-      }).then(() => {
-        const termsModal = document.getElementById("termsModal");
-        const modal = new bootstrap.Modal(termsModal);
-        modal.show();
-      });
-      break;
+        Swal.fire({
+          icon: "warning",
+          title: "Oops!",
+          text: "You must agree to the terms and conditions before continuing!",
+          confirmButtonText: "OK",
+        }).then(() => {
+          const termsModal = document.getElementById("termsModal");
+          const modal = new bootstrap.Modal(termsModal);
+          modal.show();
+        });
+        break;
+    }
   }
 }
 
