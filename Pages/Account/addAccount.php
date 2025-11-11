@@ -178,8 +178,8 @@ switch ($userRole) {
 
         if (paramValue === 'emailExist') {
             Swal.fire({
-                title: "Error",
-                text: "Please Select a Role.",
+                title: "Email Already Registered",
+                text: "This email is already in use. Please use a different email or log in if you already have an account.",
                 icon: "error",
                 confirmButtonText: '<i class="fa-solid fa-thumbs-up"></i> Okay'
             }).then((result) => {
@@ -187,10 +187,10 @@ switch ($userRole) {
             })
         } else if (paramValue === 'errorAccountCreation') {
             Swal.fire({
-                title: "Error",
-                text: "An error occured. Please try again later!",
+                title: "Something Went Wrong",
+                text: "We couldn’t create your account at the moment. Please try again in a few minutes.",
                 icon: "error",
-
+                confirmButtonText: "Okay"
             })
         }
 

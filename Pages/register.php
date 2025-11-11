@@ -33,7 +33,7 @@ resetExpiredOTPs($conn);
         <div class="form-box login">
             <form action="../Function/register.php" id="login-form" method="POST">
                 <h1>Login</h1>
-                <div class="input-box">
+                <div class=" input-box">
                     <input type="text" class="form-control" id="login_email" name="login_email" autocomplete="username"
                         value="<?php echo isset($_SESSION['loginFormData']['email']) ? htmlspecialchars(trim($_SESSION['loginFormData']['email'])) : ''; ?>"
                         placeholder="Email" required>
@@ -159,6 +159,9 @@ resetExpiredOTPs($conn);
                         <div class="confirmErrorMsg" id="passwordMatch"></div>
                     </div>
                 </div>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" id="password-strength" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
 
                 <label for="terms" class="termsSection">
                     <input type="checkbox" id="terms-condition" name="terms" class="terms-checkbox" value=""
@@ -169,7 +172,7 @@ resetExpiredOTPs($conn);
                 </label><br>
 
                 <div id="termsError"></div>
-                <button type="submit" class="btn btn-primary" id="signUp" name="signUp" disabled>Sign Up</button>
+                <button type="submit" class="btn btn-primary" id="signUp" name="signUp" onclick="isValid(event);">Sign Up</button>
             </form>
 
 
@@ -377,7 +380,6 @@ resetExpiredOTPs($conn);
     <!-- Bootstrap Link -->
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 
-
     <!--Password Validation JS & terms and condition-->
     <script src="../Assets/JS/passwordValidation.js"></script>
 
@@ -421,6 +423,46 @@ resetExpiredOTPs($conn);
         });
     </script>
 
+    <!-- For password — weak, medium, strong -->
+    <script>
+        document.getElementById('password').addEventListener('input', function() {
+            const password = document.getElementById("password").value;
+            const weakPattern = /^.{0,5}$/;
+            const mediumPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+            const strongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+            const passwordBar = document.getElementById("password-strength");
+            // console.log(password);
+
+            passwordBar.className = "progress-bar";
+            let color = "";
+            let number = "";
+            let strength = 'too  weak';
+            if (strongPattern.test(password)) {
+                color = "bg-success";
+                number = "100";
+                strength = 'strong';
+            } else if (mediumPattern.test(password)) {
+                color = "bg-warning";
+                number = "75";
+                strength = 'moderate';
+            } else if (weakPattern.test(password)) {
+                color = "bg-danger";
+                number = "50";
+                strength = 'weak';
+            } else {
+                color = "bg-danger";
+                number = "25";
+                strength = 'too weak';
+            }
+
+            // console.log(color);
+            // console.log(number);
+
+            passwordBar.classList.add(color, `w-${number}`);
+            passwordBar.setAttribute("aria-valuenow", number);
+            passwordBar.textContent = strength;
+        });
+    </script>
 
 
     <script>

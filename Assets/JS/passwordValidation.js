@@ -1,6 +1,7 @@
 //Password Validation
 function passwordValidation(password, passwordMessage) {
-  const passwordLetter = /[a-zA-Z]/;
+  const passwordLower = /[a-z]/;
+  const passwordUpper = /[A-Z]/;
   const passwordNumber = /[0-9]/;
   const passwordSpecial = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
 
@@ -8,14 +9,17 @@ function passwordValidation(password, passwordMessage) {
   if (password === "") {
     passwordMessage.textContent = "";
     passwordIsValid = false;
-  } else if (!password.match(passwordLetter)) {
-    passwordMessage.textContent = "Must contain letters";
+  } else if (!password.match(passwordLower)) {
+    passwordMessage.textContent = "Must contain at least one lowercase letter";
     passwordIsValid = false;
-  } else if (!password.match(passwordSpecial)) {
-    passwordMessage.textContent = "Must contain at least one special character";
+  } else if (!password.match(passwordUpper)) {
+    passwordMessage.textContent = "Must contain at least one uppercase letter";
     passwordIsValid = false;
   } else if (!password.match(passwordNumber)) {
     passwordMessage.textContent = "Must contain at least one number";
+    passwordIsValid = false;
+  } else if (!password.match(passwordSpecial)) {
+    passwordMessage.textContent = "Must contain at least one special character";
     passwordIsValid = false;
   } else if (password.length < 8 || password.length > 20) {
     passwordMessage.textContent = "Must be 8 to 20 characters";
@@ -65,17 +69,17 @@ function checkboxChecker(checkbox, message) {
   }
 }
 
-function checkLoginPassword() {
-  const password = document.getElementById("login_password").value;
-  const passwordMessage = document.getElementById("passwordLValidation");
-  const loginButton = document.getElementById("login");
+// function checkLoginPassword() {
+//   const password = document.getElementById("login_password").value;
+//   const passwordMessage = document.getElementById("passwordLValidation");
+//   const loginButton = document.getElementById("login");
 
-  const isValid = passwordValidation(password, passwordMessage);
+//   const isValid = passwordValidation(password, passwordMessage);
 
-  if (isValid) {
-    loginButton.disabled = false;
-  }
-}
+//   if (isValid) {
+//     loginButton.disabled = false;
+//   }
+// }
 
 function validateSignUpForm() {
   const password = document.getElementById("password").value;
@@ -87,7 +91,6 @@ function validateSignUpForm() {
   const termsErrorMessage = document.getElementById("termsError");
 
   const checkbox = document.getElementById("terms-condition");
-  const signUpButton = document.getElementById("signUp");
 
   const isPasswordValid = passwordValidation(
     password,
@@ -100,25 +103,54 @@ function validateSignUpForm() {
   );
   const isCheckboxChecked = checkboxChecker(checkbox, termsErrorMessage);
 
-  if (
-    isCheckboxChecked === false &&
-    isPasswordValid === true &&
-    isPasswordMatch === true
-  ) {
-    termsErrorMessage.innerHTML = "Please agree to the terms and conditions!";
-    signUpButton.disabled = true;
-  } else {
-    signUpButton.disabled = !(
-      isPasswordValid &&
-      isPasswordMatch &&
-      isCheckboxChecked
-    );
+  if (isPasswordValid !== true) {
+    return "password";
+  } else if (isPasswordMatch !== true) {
+    return "confirm";
+  } else if (isCheckboxChecked === false) {
+    return "terms";
+  }
+}
 
-    // console.log(
-    //   "checkBox " + isCheckboxChecked,
-    //   "match " + isPasswordMatch,
-    //   "pass " + isPasswordValid
-    // );
+function isValid(event) {
+  const validated = validateSignUpForm();
+  // console.log(validated);
+
+  switch (validated) {
+    case "password":
+      event.preventDefault();
+
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Your password must include at least one uppercase letter, one lowercase letter, one number, and one special character.!",
+        confirmButtonText: "OK",
+      });
+      break;
+    case "confirm":
+      event.preventDefault();
+
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Your passwords don’t match. Please make sure both fields are the same!",
+        confirmButtonText: "OK",
+      });
+      break;
+    case "terms":
+      event.preventDefault();
+
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "You must agree to the terms and conditions before continuing!",
+        confirmButtonText: "OK",
+      }).then(() => {
+        const termsModal = document.getElementById("termsModal");
+        const modal = new bootstrap.Modal(termsModal);
+        modal.show();
+      });
+      break;
   }
 }
 
@@ -160,25 +192,18 @@ function handleTerms(accepted) {
   if (termsCheckbox) {
     termsCheckbox.checked = accepted;
   }
-
-  // Get or create a Bootstrap modal instance
   const modalInstance =
     bootstrap.Modal.getInstance(termsModal) || new bootstrap.Modal(termsModal);
 
-  // 🔹 Move focus out of modal before hiding to avoid aria-hidden warnings
   document.activeElement?.blur();
 
-  // 🔹 Hide modal normally — don't dispose yet
   modalInstance.hide();
 
-  // 🔹 Wait until Bootstrap fully hides the modal
   termsModal.addEventListener(
     "hidden.bs.modal",
     () => {
-      // Revalidate form after modal is truly hidden
       validateSignUpForm?.();
 
-      // Return focus somewhere meaningful
       document.querySelector("#terms-condition")?.focus();
     },
     { once: true }

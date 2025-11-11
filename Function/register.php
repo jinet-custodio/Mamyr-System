@@ -27,10 +27,10 @@ if (isset($_POST['signUp'])) {
         //For validID
 
         $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
-        $allowedExt = ['jpg', 'jpeg', 'png'];
+        $allowedExt = ['jpg', 'jpeg', 'png', 'webp'];
 
-        $storeProofPath = __DIR__ . '/Assets/Images/BusinessPartnerIDs/';
-        $tempUploadPath = __DIR__ . '/Assets/Images/TempUploads/';
+        $storeProofPath =  '../Assets/Images/BusinessPartnerIDs/';
+        $tempUploadPath = '../Assets/Images/TempUploads/';
 
         if (!is_dir($storeProofPath)) mkdir($storeProofPath, 0755, true);
         if (!is_dir($tempUploadPath)) mkdir($tempUploadPath, 0755, true);
@@ -86,20 +86,21 @@ if (isset($_POST['signUp'])) {
 
     $partnerData = [
         'imageName' => $imageName,
+        'email' => $email,
         'partnerType' => $_POST['partnerType'] ?? [],
-        'companyName'    => trim($_POST['companyName']),
-        'phoneNumber'    => trim($_POST['phoneNumber']),
-        'barangay'       => trim($_POST['barangay']),
-        'streetAddress'  => trim($_POST['streetAddress']),
-        'city'           => trim($_POST['city']),
-        'province'       => trim($_POST['province']),
-        'zip'            => trim($_POST['zip']),
-        'partnerAddress' => trim($_POST['barangay']) . ' ' .
-            trim($_POST['streetAddress']) . ', ' .
-            trim($_POST['city']) . ', ' .
-            trim($_POST['province']) . ', ' .
-            trim($_POST['zip']),
-        'proofLink'      => trim($_POST['proofLink'])
+        'companyName'    => trim($_POST['companyName'] ?? ''),
+        'phoneNumber'    => trim($_POST['phoneNumber'] ?? ''),
+        'barangay'       => trim($_POST['barangay'] ?? ''),
+        'streetAddress'  => trim($_POST['streetAddress'] ?? ''),
+        'city'           => trim($_POST['city'] ?? ''),
+        'province'       => trim($_POST['province'] ?? ''),
+        'zip'            => trim($_POST['zip'] ?? ''),
+        'partnerAddress' => trim($_POST['barangay'] ?? '') . ' ' .
+            trim($_POST['streetAddress'] ?? '') . ', ' .
+            trim($_POST['city'] ?? '') . ', ' .
+            trim($_POST['province'] ?? '') . ', ' .
+            trim($_POST['zip'] ?? ''),
+        'proofLink'      => trim($_POST['proofLink'] ?? '')
     ];
 
 

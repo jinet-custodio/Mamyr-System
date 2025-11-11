@@ -187,6 +187,11 @@ body {
   animation: spin 2s linear infinite;
 }
 
+.progress {
+  height: 0.8rem !important;
+  text-transform: capitalize;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

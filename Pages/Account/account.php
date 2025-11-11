@@ -651,7 +651,7 @@ $userRole = $_SESSION['userRole'];
             case 'extNotAllowed':
                 Swal.fire({
                     title: 'Oops',
-                    text: `Invalid file type. Please upload JPG, JPEG, or PNG.`,
+                    text: `Invalid file type. Please upload JPG, JPEG, WEBP, or PNG.`,
                     icon: 'warning',
                 });
                 break;

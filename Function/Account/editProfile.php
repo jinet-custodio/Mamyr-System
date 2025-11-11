@@ -9,7 +9,7 @@ if (isset($_POST['changePfpBtn'])) {
     $userRole = (int) $_SESSION['userRole'];
     $userID = (int) $_SESSION['userID'];
     $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
-    $allowedExt = ['jpg', 'jpeg', 'png'];
+    $allowedExt = ['jpg', 'jpeg', 'png', 'webp'];
 
     $_SESSION['userID'] = $userID;
     $_SESSION['userRole'] = $userRole;

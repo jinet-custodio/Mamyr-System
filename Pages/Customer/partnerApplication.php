@@ -574,7 +574,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Email Already Exist!',
-                text: 'The email address you entered is already registered.'
+                text: 'The email address you entered is already registered. Please use a different email or log in if you already have an account.'
             });
         } else if (paramValue === 'imageFailed') {
             Swal.fire({
@@ -586,7 +586,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         } else if (paramValue === 'extError') {
             Swal.fire({
                 title: 'Oops',
-                text: `Invalid file type. Please upload JPG, JPEG, or PNG.`,
+                text: `Invalid file type. Please upload JPG, JPEG, WEBP, or PNG.`,
                 icon: 'warning',
                 confirmButtonText: 'Okay'
             });

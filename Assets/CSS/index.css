@@ -176,6 +176,11 @@ input[type="password"]::-webkit-search-cancel-button {
   margin-top: -1.5rem;
 }
 
+.progress {
+  height: 0.8rem !important;
+  text-transform: capitalize;
+}
+
 .userInfo {
   margin-top: -1.5vw;
   /* border: 1px solid red; */
