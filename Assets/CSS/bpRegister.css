@@ -8,11 +8,6 @@
   src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
-@font-face {
-  font-family: "Lora";
-  src: url(../Fonts/Lora/Lora-VariableFont_wght.ttf);
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -29,15 +24,15 @@ body {
   background-blend-mode: darken !important;
   background-position: center;
   min-height: 100vh;
+  font-family: "Poppins";
 }
 
 .title {
   text-align: center;
   margin-top: 4vw;
   margin-bottom: 3vw;
-  font-family: "Lora";
   font-weight: bold;
-  font-size: clamp(3vw, 3.5vw, 3.3vw);
+  font-size: 45px;
 }
 
 /* .column {
@@ -72,7 +67,7 @@ body {
 }
 
 .col {
-  padding: 1vw 0;
+  padding-bottom: 2vw;
 }
 
 #busInfoContainer {
@@ -87,6 +82,10 @@ body {
   font-size: clamp(1.7vw, 1.6vw, 1.8vw);
   text-align: center;
   margin-top: 1.5vw;
+}
+
+.accountCreationLabel {
+  margin-top: 0;
 }
 .busInfoLabel {
   color: #ffff;
@@ -259,6 +258,7 @@ button#selectPartnerBtn {
 
 #emailPassContainer {
   width: 50%;
+  padding-bottom: 1vw;
 }
 
 .accountCreationLabel {
@@ -279,7 +279,7 @@ button#selectPartnerBtn {
 }
 .input-box {
   position: relative;
-  margin: 30px 0;
+  margin: 20px 0;
 }
 
 .back-icon-container {
@@ -382,9 +382,13 @@ input[type="password"]::-webkit-search-cancel-button {
 .back-icon-container-login {
   margin: 1px solid black;
   position: absolute;
-  left: 26.5vw;
-  font-family: "Lora";
+  margin-left: 2%;
   margin-top: 1vh;
+}
+
+.back-icon-container-login button {
+  border: none;
+  background-color: transparent;
 }
 
 .back-icon-container-login i {
@@ -393,7 +397,7 @@ input[type="password"]::-webkit-search-cancel-button {
 
 .confirmErrorMsg {
   color: red;
-  margin-top: -1.7rem;
+  margin-top: 0.7rem;
   text-align: center;
 }
 
@@ -458,7 +462,6 @@ input[type="password"]::-webkit-search-cancel-button {
 @media screen and (min-width: 1025px) and (max-width: 1280px) {
   h2.title {
     margin-top: 10vh;
-    font-family: "Lora";
     font-weight: bold;
     text-align: center;
   }
