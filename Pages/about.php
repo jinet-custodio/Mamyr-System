@@ -15,7 +15,7 @@ $getWebContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName 
 $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
-$contentMap = []; 
+$contentMap = [];
 $imageMap = [];
 $defaultImage = "../Assets/Images/no-picture.png";
 while ($row = $getWebContentResult->fetch_assoc()) {
@@ -99,7 +99,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <a class="nav-link" href="register.php">Book Now</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
+                        <a class="nav-link" id="signUpBtn" href="register.php">Log In</a>
                     </li>
                 </ul>
             </div>

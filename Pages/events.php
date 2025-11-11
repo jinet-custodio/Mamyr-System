@@ -81,61 +81,61 @@ while ($row = $getEventsResult->fetch_assoc()) {
 
 <body>
     <?php if (!$editMode): ?>
-    <nav class="navbar navbar-expand-lg fixed-top white-text" id="navbar-half">
-        <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
-        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <nav class="navbar navbar-expand-lg fixed-top white-text" id="navbar-half">
+            <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto me-10" id="toggledNav">
-                <li class="nav-item">
-                    <a class="nav-link" href="../index.php">Home</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Amenities
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
-                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
-                        <li><a class="dropdown-item active" href="events.php">Events</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog.php">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="about.php">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Book Now</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.php">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Amenities
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
+                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                            <li><a class="dropdown-item active" href="events.php">Events</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.php">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.php">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">Book Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signUpBtn" href="register.php">Log In</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     <?php else: ?>
-    <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
+        <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
 
     <div class="titleContainer">
         <?php if ($editMode): ?>
-        <input type="text" class="title editable-input form-control text-center mx-auto text-white"
-            data-title="EventTitle" value="<?= htmlspecialchars($contentMap['EventTitle'] ?? 'No Title found') ?>">
-        <textarea type="text" rows="5"
-            class="amenityDescription EventDesc indent editable-input form-control text-white text-center"
-            data-title="EventDesc"><?= htmlspecialchars($contentMap['EventDesc'] ?? 'No description found') ?></textarea>
+            <input type="text" class="title editable-input form-control text-center mx-auto text-white"
+                data-title="EventTitle" value="<?= htmlspecialchars($contentMap['EventTitle'] ?? 'No Title found') ?>">
+            <textarea type="text" rows="5"
+                class="amenityDescription EventDesc indent editable-input form-control text-white text-center"
+                data-title="EventDesc"><?= htmlspecialchars($contentMap['EventDesc'] ?? 'No description found') ?></textarea>
         <?php else: ?>
-        <h4 class="title"><?= htmlspecialchars($contentMap['EventTitle'] ?? 'No Title found') ?></h4>
-        <p class="description"><?= htmlspecialchars($contentMap['EventDesc'] ?? 'No description found') ?></p>
+            <h4 class="title"><?= htmlspecialchars($contentMap['EventTitle'] ?? 'No Title found') ?></h4>
+            <p class="description"><?= htmlspecialchars($contentMap['EventDesc'] ?? 'No description found') ?></p>
         <?php endif; ?>
     </div>
 
@@ -154,18 +154,18 @@ while ($row = $getEventsResult->fetch_assoc()) {
                     // Sanitize alt text
                     $altText = htmlspecialchars($eventName);
                 ?>
-                <div class="swiper-slide">
-                    <div class="card event-card">
-                        <img class="card-img-top" src="<?= htmlspecialchars($imagePath) ?>" alt="<?= $altText ?>">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title"><?= htmlspecialchars($eventName) ?></h5>
-                            <div class="eventDescription">
-                                <p class="eventDesc"><?= htmlspecialchars($eventDesc) ?></p>
+                    <div class="swiper-slide">
+                        <div class="card event-card">
+                            <img class="card-img-top" src="<?= htmlspecialchars($imagePath) ?>" alt="<?= $altText ?>">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><?= htmlspecialchars($eventName) ?></h5>
+                                <div class="eventDescription">
+                                    <p class="eventDesc"><?= htmlspecialchars($eventDesc) ?></p>
+                                </div>
+                                <button type="button" class="btn btn-primary mt-auto bookBtn">BOOK NOW</button>
                             </div>
-                            <button type="button" class="btn btn-primary mt-auto bookBtn">BOOK NOW</button>
                         </div>
                     </div>
-                </div>
                 <?php endforeach; ?>
             </div>
 
@@ -181,16 +181,16 @@ while ($row = $getEventsResult->fetch_assoc()) {
 
     <div class="venueTitleContainer">
         <?php if ($editMode): ?>
-        <input type="text" class="venueTitle OurEventsTitle editable-input form-control text-center mx-auto"
-            data-title="OurEventsTitle"
-            value="<?= htmlspecialchars($contentMap['OurEventsTitle'] ?? 'No Title found') ?>">
-        <textarea type="text" rows="5"
-            class="venueDescription OurEventsDesc indent editable-input form-control  text-center"
-            data-title="OurEventsDesc"><?= htmlspecialchars($contentMap['OurEventsDesc'] ?? 'No description found') ?></textarea>
+            <input type="text" class="venueTitle OurEventsTitle editable-input form-control text-center mx-auto"
+                data-title="OurEventsTitle"
+                value="<?= htmlspecialchars($contentMap['OurEventsTitle'] ?? 'No Title found') ?>">
+            <textarea type="text" rows="5"
+                class="venueDescription OurEventsDesc indent editable-input form-control  text-center"
+                data-title="OurEventsDesc"><?= htmlspecialchars($contentMap['OurEventsDesc'] ?? 'No description found') ?></textarea>
         <?php else: ?>
-        <h3 class="venueTitle"><?= htmlspecialchars($contentMap['OurEventsTitle'] ?? 'No Title found') ?></h3>
-        <p class="venueDescription indent">
-            <?= htmlspecialchars($contentMap['OurEventsDesc'] ?? 'No description found') ?></p>
+            <h3 class="venueTitle"><?= htmlspecialchars($contentMap['OurEventsTitle'] ?? 'No Title found') ?></h3>
+            <p class="venueDescription indent">
+                <?= htmlspecialchars($contentMap['OurEventsDesc'] ?? 'No description found') ?></p>
         <?php endif; ?>
     </div>
 
@@ -251,26 +251,26 @@ while ($row = $getEventsResult->fetch_assoc()) {
 
         <div class="mainHallDescContainer">
             <?php if ($mainHall) { ?>
-            <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
+                <h3 class="mainHallDescTitle"><?= htmlspecialchars($mainHall['RServiceName']) ?></h3>
 
-            <ul class="mainHallDescription" id="mainHallDesc">
-                <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour
-                    extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
-                <li>One (1) air-conditioned private room.</li>
-                <li>Separate powder rooms/restrooms for males and females.</li>
-            </ul>
+                <ul class="mainHallDescription" id="mainHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($mainHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour
+                        extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($mainHall['RSmaxCapacity']) ?> guests.</li>
+                    <li>One (1) air-conditioned private room.</li>
+                    <li>Separate powder rooms/restrooms for males and females.</li>
+                </ul>
 
-            <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱
-                <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
+                <h2 class="mainHallPrice text-center mt-5 fw-bold" style="color: #ffff;">₱
+                    <?= htmlspecialchars(number_format($mainHall['RSprice'], 2)) ?></h2>
             <?php } else { ?>
-            <h3 class="mainHallDescTitle">No Information to Display</h3>
-            <ul class="mainHallDescription" id="mainHallDesc">
-                <li>Maximum usage of ???; ₱2,000 per hour extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to ??? guests.</li>
-            </ul>
+                <h3 class="mainHallDescTitle">No Information to Display</h3>
+                <ul class="mainHallDescription" id="mainHallDesc">
+                    <li>Maximum usage of ???; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to ??? guests.</li>
+                </ul>
             <?php } ?>
         </div>
 
@@ -279,24 +279,24 @@ while ($row = $getEventsResult->fetch_assoc()) {
     <div class="miniHall mb-5 nonEditable">
         <div class="miniHallDescContainer">
             <?php if ($miniHall) { ?>
-            <h3 class="miniHallDescTitle">Mini Function Hall</h3>
+                <h3 class="miniHallDescTitle">Mini Function Hall</h3>
 
-            <ul class="miniHallDescription" id="miniHallDesc">
-                <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour
-                    extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
-            </ul>
+                <ul class="miniHallDescription" id="miniHallDesc">
+                    <li>Maximum usage of <?= htmlspecialchars($miniHall['RSduration']) ?? '1 hour' ?>; ₱2,000 per hour
+                        extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to <?= htmlspecialchars($miniHall['RSmaxCapacity']) ?> guests.</li>
+                </ul>
 
-            <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱
-                <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
+                <h2 class="miniHallPrice text-center mt-5 fw-bold" style="color: black;">₱
+                    <?= htmlspecialchars(number_format($miniHall['RSprice'], 2)) ?></h2>
             <?php } else { ?>
-            <h3 class="miniHallDescTitle">No Information to Display</h3>
-            <ul class="miniHallDescription" id="miniHallDesc">
-                <li>Maximum usage of ???; ₱2,000 per hour extension fee.
-                <li>Elegant, fully air-conditioned function room.</li>
-                <li>Capacity of up to ??? guests.</li>
-            </ul>
+                <h3 class="miniHallDescTitle">No Information to Display</h3>
+                <ul class="miniHallDescription" id="miniHallDesc">
+                    <li>Maximum usage of ???; ₱2,000 per hour extension fee.
+                    <li>Elegant, fully air-conditioned function room.</li>
+                    <li>Capacity of up to ??? guests.</li>
+                </ul>
             <?php } ?>
         </div>
 
@@ -356,88 +356,88 @@ while ($row = $getEventsResult->fetch_assoc()) {
 
     <!-- Function for book now button -->
     <script>
-    const bookButtons = document.querySelectorAll('.bookBtn');
+        const bookButtons = document.querySelectorAll('.bookBtn');
 
-    bookButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            Swal.fire({
-                title: 'Login or Create an Account to Book',
-                text: 'To proceed with a booking, please log in or create an account.',
-                icon: 'info',
-                confirmButtonText: 'Okay',
-                showCancelButton: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'register.php';
-                }
+        bookButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Login or Create an Account to Book',
+                    text: 'To proceed with a booking, please log in or create an account.',
+                    icon: 'info',
+                    confirmButtonText: 'Okay',
+                    showCancelButton: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'register.php';
+                    }
+                });
             });
         });
-    });
     </script>
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
     <script>
-    const swiper = new Swiper('.swiper', {
-        slidesPerView: 1,
-        spaceBetween: 30,
-        loop: true,
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        breakpoints: {
-            599: {
-                slidesPerView: 1,
+        const swiper = new Swiper('.swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
             },
-            768: {
-                slidesPerView: 1,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
             },
-            769: {
-                slidesPerView: 2,
-            },
-            1024: {
-                slidesPerView: 3,
-            }
+            breakpoints: {
+                599: {
+                    slidesPerView: 1,
+                },
+                768: {
+                    slidesPerView: 1,
+                },
+                769: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                }
 
-        }
-    });
+            }
+        });
     </script>
 
     <!-- AJAX for editing website content -->
     <?php if ($editMode): ?>
-    <script>
-    const editableImgs = document.querySelectorAll('.editable-img')
-    document.addEventListener("DOMContentLoaded", function() {
-        editableImgs.forEach(editable => {
-            editable.style.border = '2px solid red';
-        })
-    });
-    </script>
-    <script type="module">
-    import {
-        initWebsiteEditor
-    } from '../Assets/JS/EditWebsite/editWebsiteContent.js';
-
-    initWebsiteEditor('Events', '../Function/Admin/editWebsite/editWebsiteContent.php');
-    </script>
-    <script>
-    const nonEditables = document.querySelectorAll(".nonEditable");
-    nonEditables.forEach(nonEditable => {
-        nonEditable.addEventListener("click", function() {
-            Swal.fire({
-                title: "Why can't I this?",
-                text: "Most of the contents of this page are already found at the services and amenities section. To edit, please head to the Services page to ensure consistency.",
-                icon: "info",
-                confirmButtonText: "Got it!"
+        <script>
+            const editableImgs = document.querySelectorAll('.editable-img')
+            document.addEventListener("DOMContentLoaded", function() {
+                editableImgs.forEach(editable => {
+                    editable.style.border = '2px solid red';
+                })
             });
-        });
-    });
-    </script>
+        </script>
+        <script type="module">
+            import {
+                initWebsiteEditor
+            } from '../Assets/JS/EditWebsite/editWebsiteContent.js';
+
+            initWebsiteEditor('Events', '../Function/Admin/editWebsite/editWebsiteContent.php');
+        </script>
+        <script>
+            const nonEditables = document.querySelectorAll(".nonEditable");
+            nonEditables.forEach(nonEditable => {
+                nonEditable.addEventListener("click", function() {
+                    Swal.fire({
+                        title: "Why can't I this?",
+                        text: "Most of the contents of this page are already found at the services and amenities section. To edit, please head to the Services page to ensure consistency.",
+                        icon: "info",
+                        confirmButtonText: "Got it!"
+                    });
+                });
+            });
+        </script>
     <?php endif; ?>
 </body>
 

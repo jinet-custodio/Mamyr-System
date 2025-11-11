@@ -101,7 +101,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         <a class="nav-link" href="register.php">Book Now</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="signUpBtn" href="register.php">Sign Up</a>
+                        <a class="nav-link" id="signUpBtn" href="register.php">Log In</a>
                     </li>
                 </ul>
             </div>
@@ -672,44 +672,44 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     </script>
 
     <script>
-    const scrollContainer = document.getElementById('amenity-categories');
-    const scrollLeft = document.getElementById('scroll-left');
-    const scrollRight = document.getElementById('scroll-right');
+        const scrollContainer = document.getElementById('amenity-categories');
+        const scrollLeft = document.getElementById('scroll-left');
+        const scrollRight = document.getElementById('scroll-right');
 
-    const scrollAmount = 250;
-    scrollLeft.addEventListener('click', () => {
-        scrollContainer.scrollBy({
-            left: -scrollAmount,
-            behavior: 'smooth'
+        const scrollAmount = 250;
+        scrollLeft.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
         });
-    });
 
-    scrollRight.addEventListener('click', () => {
-        scrollContainer.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth'
+        scrollRight.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
         });
-    });
     </script>
 
     <script>
-    window.onscroll = function() {
-        const btn = document.getElementById("backToTopBtn");
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            btn.style.display = "block";
-        } else {
-            btn.style.display = "none";
-        }
-    };
+        window.onscroll = function() {
+            const btn = document.getElementById("backToTopBtn");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
 
-    // Scroll to top
-    document.getElementById("backToTopBtn").addEventListener("click", function(e) {
-        e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+        // Scroll to top
+        document.getElementById("backToTopBtn").addEventListener("click", function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
-    });
     </script>
 
 
