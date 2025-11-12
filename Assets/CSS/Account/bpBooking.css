@@ -55,22 +55,35 @@
   text-align: center;
   width: 100%;
   margin: auto;
+  /* margin-top: 3vw !important; */
 }
 
 th {
   background-color: #cee4f2 !important;
+  font-size: 14px;
 }
 
-th,
-td {
-  font-size: 18px;
+td,
+#bookingHistory_info,
+#paymentHistory,
+table .btn {
+  font-size: 13px;
 }
 
+table.dataTable > tbody > tr > th,
+table.dataTable > tbody > tr > td {
+  padding: 0.5vw 0.6vw !important;
+}
+
+/* .btn {
+  padding: 0.5vw 0.8vw;
+} */
+
+td.dt-type-numeric {
+  text-align: center !important;
+}
 .dt-column-title {
   text-align: center;
-}
-.dt-type-numeric {
-  text-align: center !important;
 }
 
 .badge.bg-red {
