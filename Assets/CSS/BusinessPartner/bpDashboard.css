@@ -82,6 +82,7 @@
 
 .rightSide i {
   font-size: 1.1vw;
+  color: #a5a5a5;
 }
 
 .leftSide {
@@ -111,6 +112,12 @@
   display: flex;
   gap: 0.3rem;
   color: #0d6dfc;
+}
+
+.headerText-container {
+  display: flex;
+  width: 100%;
+  gap: 0.3rem;
 }
 
 .graph-header i {
@@ -350,7 +357,7 @@
 
 .middle-btn-container a {
   margin-top: var(--margin-md);
-  width: 30%;
+  color: white !important;
 }
 
 .bottom-section {
@@ -375,26 +382,71 @@
 }
 
 .swiper {
-  width: 90%;
+  width: 100%; /* Let it fill the section */
+  max-width: 1000px; /* Optional: cap its max width */
+  margin: 2rem auto; /* Center horizontally */
   height: auto;
-  margin-top: var(--margin-sm);
 }
 
 .swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #444;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #444;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .swiper-slide img {
-  display: block;
   width: 100%;
   height: 100%;
+  /* max-height: 350px; */
   object-fit: cover;
-  aspect-ratio: 1.33/1;
+  border-radius: 10px;
+}
+
+.swiper-slide img {
+  max-height: 400px !important;
+  object-fit: contain;
+}
+
+.popup-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.popup-container.show {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.popup-image {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+.close-popup {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 10000;
 }
 
 .rating-container {
@@ -510,18 +562,90 @@
   font-size: var(--font-size-xl);
 }
 
-.location-container {
-  /* background-color: oklch(0.64 0.65 220 / 0.5); */
+.bookNow-button-container {
+  text-align: center;
+  margin-top: var(--margin-lg);
+  color: #ffffff !important;
+}
+
+.bookNow-button-container a {
+  color: #ffffff !important;
+}
+
+.ctaContainer {
   margin-top: var(--margin-md) !important;
   padding: var(--padding-xl);
-  border-radius: 20px;
   width: 98%;
-  height: 30rem !important;
   margin: 0 auto;
+}
+
+.servicesIconContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  row-gap: 2.5rem;
+  margin-top: var(--margin-lg) !important;
+  width: 80%;
+  margin: auto;
+}
+
+.resortContainer,
+.eventContainer,
+.hotelContainer {
+  width: 90%;
+  height: 20rem;
+  padding: 1.5rem;
+  margin: auto;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  /* display: flex;
+  flex-wrap: wrap; */
+}
+
+.numbering {
+  font-size: var(--font-size-xxl);
+  font-family: "Poppins Black";
+  color: #0c8ce8;
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.resortIcon,
+.eventIcon,
+.hotelIcon {
+  width: 8vw;
+  margin: auto;
+  margin-top: -3.5rem !important;
+}
+
+.resortIconTitle,
+.eventIconTitle,
+.hotelIconTitle {
+  font-weight: bold;
+  text-align: center;
+  font-family: "Poppins";
+  font-size: var(--font-size-md);
+  margin-top: 0.5vw;
+}
+
+.resortIconDescription,
+.eventIconDescription,
+.hotelIconDescription {
+  text-align: justify;
+  text-align-last: center;
+  font-size: var(--font-size-base);
+  margin-top: 1vw;
+}
+
+.firstParagraphtextContainer,
+.topTextContainer,
+.videoTextContainer {
   display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  gap: 3rem;
+  align-items: start;
 }
 
 .locationText-container {
@@ -534,8 +658,73 @@
   width: 500px; /* Set the width to 500px (or any other desired value) */
   margin: 0 auto; /* Center the map horizontally in its container */
 }
-
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  #mainContainer {
+    max-width: 100% !important;
+  }
+
+  .topSec {
+    padding: 0.5rem !important;
+  }
+
+  .topSection {
+    width: 100% !important;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(2, 1fr) !important;
+  }
+
+  .secondRow-graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .welcomeText {
+    font-size: 25px !important;
+    text-align: center;
+  }
+  .statCard {
+    width: 100% !important;
+    height: 8rem !important;
+  }
+
+  .header-text {
+    font-size: 15px !important;
+  }
+
+  .rightSide i {
+    font-size: var(--font-size-md) !important;
+  }
+
+  .headerText {
+    font-family: "Poppins Light";
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    margin-top: 1rem;
+  }
+
+  .graph-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter-btn-container {
+    width: 100%;
+    justify-content: center !important;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .filter-select-wrapper {
+    width: 50%;
+    height: 35px;
+  }
+
+  .filter-select {
+    font-size: var(--font-size-md);
+  }
+
   .topSec {
     flex-direction: column;
     /* height: 90vh; */
@@ -709,6 +898,15 @@
     gap: 2rem;
   }
 
+  .star {
+    width: 20%;
+  }
+
+  .overall-rating-stars i {
+    color: #fdcc0d;
+    font-size: var(--font-size-xl) !important;
+  }
+
   .graph-header {
     display: flex;
     gap: 0.3rem;
@@ -793,35 +991,100 @@
   }
 
   .locationText-container {
-    width: 100%;
+    width: 70%;
     text-align: center;
   }
 
   .location-container {
     flex-direction: column;
-    height: 80vh !important;
     padding-top: var(--padding-md) !important;
     gap: 2rem;
   }
 
-  #map {
-    height: 400px;
+  .ctaContainer {
+    margin-top: var(--margin-md) !important;
+    padding: var(--padding-xl);
     width: 100%;
-    margin: 0 auto !important;
+    margin: 0 auto;
   }
 
-  .leaflet-popup-content-wrapper {
-    padding: 6px;
+  .servicesIconContainer {
+    gap: 1rem !important;
   }
 
-  .leaflet-marker-pane img {
-    width: 150px !important;
-    height: auto !important;
+  .resortContainer,
+  .eventContainer,
+  .hotelContainer {
+    width: 100%;
+    height: 23rem;
+    padding: 1.5rem;
+    margin: auto;
+    text-align: center;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+  }
+
+  .numbering {
+    font-size: var(--font-size-xl);
+    font-family: "Poppins Black";
+    color: #0c8ce8;
+    text-align: left;
+    margin-top: 0.5rem;
+  }
+
+  .resortIcon,
+  .eventIcon,
+  .hotelIcon {
+    width: 4.5rem;
+    margin: auto;
+    margin-top: -2rem !important;
+  }
+
+  .resortIconTitle,
+  .eventIconTitle,
+  .hotelIconTitle {
+    font-weight: bold;
+    text-align: center;
+    font-family: "Poppins";
+    font-size: var(--font-size-md);
+    margin-top: 1rem;
+  }
+
+  .resortIconDescription,
+  .eventIconDescription,
+  .hotelIconDescription {
+    text-align: justify;
+    text-align-last: center;
+    font-size: var(--font-size-base);
+    margin-top: 1vw;
   }
 }
 
 /* Tablet Landscape */
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  .welcomeText {
+    text-align: center;
+  }
+
+  .statCard {
+    width: 100% !important;
+    height: 8rem !important;
+  }
+
+  .header-text {
+    font-size: 12px !important;
+  }
+
+  .rightSide i {
+    font-size: var(--font-size-md) !important;
+  }
+
+  .secondRow-graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .topSec {
     gap: 3rem;
   }
@@ -971,7 +1234,6 @@
 
   .bottom-section {
     padding: var(--padding-md);
-    height: 50vh;
   }
 
   .bottom-text-container {
@@ -990,6 +1252,15 @@
     /* flex-direction: column-reverse; */
     margin-top: 20rem !important;
     gap: 2rem;
+  }
+
+  .star {
+    width: 20%;
+  }
+
+  .overall-rating-stars i {
+    color: #fdcc0d;
+    font-size: var(--font-size-xl) !important;
   }
 
   .graph-header {
@@ -1087,27 +1358,77 @@
     gap: 2rem;
   }
 
-  #map {
-    height: 400px;
+  .swiper {
     width: 100%;
-    margin: 0 auto !important;
-  }
-
-  .leaflet-popup-content-wrapper {
-    padding: 6px;
-  }
-
-  .leaflet-marker-pane img {
-    width: 150px !important;
-    height: auto !important;
+    max-width: 800px;
   }
 }
-
 /* Tablet portrait only */
 @media only screen and (min-width: 600px) and (max-width: 768px) {
+  #mainContainer {
+    max-width: 100% !important;
+  }
+
   .topSec {
+    padding: 0.5rem !important;
+  }
+
+  .topSection {
+    width: 100% !important;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(2, 1fr) !important;
+  }
+
+  .secondRow-graph {
+    display: flex;
     flex-direction: column;
-    /* height: 90vh; */
+    align-items: center;
+  }
+
+  .welcomeText {
+    font-size: 25px !important;
+    text-align: center;
+  }
+  .statCard {
+    width: 100% !important;
+    height: 8rem !important;
+  }
+
+  .header-text {
+    font-size: 15px !important;
+  }
+
+  .rightSide i {
+    font-size: var(--font-size-md) !important;
+  }
+
+  .headerText {
+    font-family: "Poppins Light";
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    margin-top: 1rem;
+  }
+
+  .graph-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter-btn-container {
+    width: 100%;
+    justify-content: center !important;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .filter-select-wrapper {
+    width: 50%;
+    height: 35px;
+  }
+
+  .filter-select {
+    font-size: var(--font-size-md);
   }
 
   .topLeft {
@@ -1278,6 +1599,15 @@
     gap: 2rem;
   }
 
+  .star {
+    width: 20%;
+  }
+
+  .overall-rating-stars i {
+    color: #fdcc0d;
+    font-size: var(--font-size-xl) !important;
+  }
+
   .graph-header {
     display: flex;
     gap: 0.3rem;
@@ -1373,27 +1703,96 @@
     gap: 2rem;
   }
 
-  #map {
-    height: 400px;
+  .swiper {
     width: 100%;
-    margin: 0 auto !important;
+    max-width: 601px;
   }
 
-  .leaflet-popup-content-wrapper {
-    padding: 6px;
+  .servicesIconContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
   }
 
-  .leaflet-marker-pane img {
-    width: 150px !important;
-    height: auto !important;
+  .ctaContainer {
+    margin-top: var(--margin-md) !important;
+    padding: var(--padding-xl);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .resortContainer,
+  .eventContainer,
+  .hotelContainer {
+    width: 90%;
+    height: auto;
+    padding: 1.5rem;
+    margin: auto;
+    text-align: center;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+  }
+
+  .numbering {
+    font-size: var(--font-size-xl);
+    font-family: "Poppins Black";
+    color: #0c8ce8;
+    text-align: left;
+    margin-top: 0.5rem;
+  }
+
+  .resortIcon,
+  .eventIcon,
+  .hotelIcon {
+    width: 4.5rem;
+    margin: auto;
+    margin-top: -2rem !important;
+  }
+
+  .resortIconTitle,
+  .eventIconTitle,
+  .hotelIconTitle {
+    font-weight: bold;
+    text-align: center;
+    font-family: "Poppins";
+    font-size: var(--font-size-base);
+    margin-top: 1rem;
+  }
+
+  .resortIconDescription,
+  .eventIconDescription,
+  .hotelIconDescription {
+    text-align: justify;
+    text-align-last: center;
+    font-size: var(--font-size-sm);
+    margin-top: 1vw;
   }
 }
 
 /* Phone size */
 @media screen and (max-width: 599px) {
+  #mainContainer {
+    max-width: 100% !important;
+  }
+
   .topSec {
+    padding: 0.5rem !important;
+  }
+
+  .topSection {
+    width: 100% !important;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(2, 1fr) !important;
+  }
+
+  .secondRow-graph {
+    display: flex;
     flex-direction: column;
-    height: 90vh;
+    align-items: center;
   }
 
   .topLeft {
@@ -1402,11 +1801,21 @@
     margin-top: var(--margin-md);
   }
 
-  .topText {
-    font-family: "Alkatra";
-    font-size: var(--font-size-sm);
-    text-transform: uppercase;
-    margin-top: var(--margin-md);
+  .welcomeText {
+    font-size: var(--font-size-md);
+    text-align: center;
+  }
+  .statCard {
+    width: 100% !important;
+    height: 8rem !important;
+  }
+
+  .header-text {
+    font-size: 10px !important;
+  }
+
+  .rightSide i {
+    font-size: var(--font-size-xs) !important;
   }
 
   .headerText {
@@ -1414,6 +1823,27 @@
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-lg);
     margin-top: 1rem;
+  }
+
+  .graph-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter-btn-container {
+    width: 100%;
+    justify-content: center !important;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .filter-select-wrapper {
+    width: 50%;
+    height: 25px;
+  }
+
+  .filter-select {
+    font-size: var(--font-size-xs);
   }
 
   .subtext {
@@ -1515,6 +1945,7 @@
     flex-direction: column;
     padding: var(--padding-md);
     gap: 2rem;
+    width: 100%;
   }
 
   .videoText-container,
@@ -1540,7 +1971,6 @@
 
   .bottom-section {
     padding: var(--padding-md);
-    height: 70vh;
   }
 
   .bottom-text-container {
@@ -1556,11 +1986,6 @@
     flex-direction: column-reverse;
     margin-top: 2rem !important;
     gap: 2rem;
-  }
-
-  .graph-header {
-    display: flex;
-    gap: 0.3rem;
   }
 
   .graph-header i,
@@ -1583,6 +2008,15 @@
 
   .rating-categories {
     margin-top: var(--margin-xl);
+  }
+
+  .star {
+    width: 20%;
+  }
+
+  .overall-rating-stars i {
+    color: #fdcc0d;
+    font-size: var(--font-size-md) !important;
   }
 
   .progress-bar {
@@ -1636,9 +2070,13 @@
     font-weight: var(--font-weight-bold);
   }
 
+  .star {
+    width: 20%;
+  }
+
   .overall-rating-stars i {
     color: #fdcc0d;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-md) !important;
   }
 
   .locationText-container {
@@ -1653,31 +2091,87 @@
     gap: 2rem;
   }
 
-  #map {
-    height: 200px;
+  .topBtn-container {
+    position: relative !important;
+    min-height: 10rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+
+  .swiper-slide {
+    aspect-ratio: 4 / 3;
+  }
+
+  .swiper {
     width: 100%;
-    margin: 0 auto !important;
+    max-width: 401px;
   }
 
-  .leaflet-touch .leaflet-bar a {
-    width: 1.2rem !important;
-    height: 2rem !important;
-    font-size: 16px !important;
-    line-height: 30px !important;
+  .servicesIconContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
   }
 
-  .leaflet-popup-content {
-    font-size: 12px;
-    max-width: 150px;
+  .ctaContainer {
+    margin-top: var(--margin-md) !important;
+    padding: var(--padding-xl);
+    width: 100%;
+    margin: 0 auto;
   }
 
-  .leaflet-popup-content-wrapper {
-    padding: 6px;
+  .resortContainer,
+  .eventContainer,
+  .hotelContainer {
+    width: 90%;
+    height: auto;
+    padding: 1.5rem;
+    margin: auto;
+    text-align: center;
+    background-color: #f5f5f5;
+    border-radius: 20px;
   }
 
-  .leaflet-marker-pane img {
-    width: 80px !important;
-    height: 20px !important;
+  .numbering {
+    font-size: var(--font-size-xl);
+    font-family: "Poppins Black";
+    color: #0c8ce8;
+    text-align: left;
+    margin-top: 0.5rem;
+  }
+
+  .resortIcon,
+  .eventIcon,
+  .hotelIcon {
+    width: 4.5rem;
+    margin: auto;
+    margin-top: -2rem !important;
+  }
+
+  .resortIconTitle,
+  .eventIconTitle,
+  .hotelIconTitle {
+    font-weight: bold;
+    text-align: center;
+    font-family: "Poppins";
+    font-size: var(--font-size-base);
+    margin-top: 1rem;
+  }
+
+  .resortIconDescription,
+  .eventIconDescription,
+  .hotelIconDescription {
+    text-align: justify;
+    text-align-last: center;
+    font-size: var(--font-size-sm);
+    margin-top: 1vw;
   }
 }
 

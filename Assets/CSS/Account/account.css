@@ -98,9 +98,17 @@
   font-size: 18px;
 }
 
-.customer-details,
+/* .customer-details,
 .partner-details-container,
 .partner-type {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+} */
+
+.customer-details,
+.partner-details-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
@@ -128,9 +136,9 @@
   font-size: 16px;
 }
 
-.partner-type-container {
+/* .partner-type-container {
   padding-top: 1rem;
-}
+} */
 
 /* #validIDInfo {
   position: relative;

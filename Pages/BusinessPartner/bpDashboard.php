@@ -156,9 +156,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <?php if ($userRole !== 2): ?>
-                        <a class="nav-link" href="dashboard.php"> Home</a>
+                    <a class="nav-link" href="dashboard.php"> Home</a>
                     <?php else: ?>
-                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                    <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                     <?php endif; ?>
                 </li>
                 <li class="nav-item dropdown">
@@ -290,9 +290,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <div class="card graph-card" id="salesPerformance">
                         <div class="card-body graph-card-body">
                             <div class="graph-header">
-                                <i class="bi bi-tags"></i>
-                                <h6 class="graph-header-text">Monthly Sales</h6>
-
+                                <div class="headerText-container">
+                                    <i class="bi bi-tags"></i>
+                                    <h6 class="graph-header-text">Monthly Sales</h6>
+                                </div>
                                 <div class="filter-btn-container">
                                     <div class="filter-select-wrapper">
                                         <select class="filter-select" name="sales-filter-select"
@@ -320,8 +321,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <div class="card graph-card">
                         <div class="card-body graph-card-body services-card">
                             <div class="graph-header">
-                                <i class="bi bi-bell"></i>
-                                <h6 class="graph-header-text">Services</h6>
+                                <div class="headerText-container">
+                                    <i class="bi bi-bell"></i>
+                                    <h6 class="graph-header-text">Services</h6>
+                                </div>
                             </div>
 
                             <div class="services-container">
@@ -340,7 +343,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                                     if (!$result->num_rows === 0) {
                                     ?>
-                                        <li>No Services</li>
+                                    <li>No Services</li>
                                     <?php
                                     }
 
@@ -349,8 +352,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                         // print_r("ID: " . $partnershipID);
                                         // echo '</pre>';
                                     ?>
-                                        <li class="serviceNamePrice"><?= htmlspecialchars(ucfirst($service['PBName'])) ?>
-                                            &mdash; ₱<?= number_format($service['PBPrice']) ?></li>
+                                    <li class="serviceNamePrice"><?= htmlspecialchars(ucfirst($service['PBName'])) ?>
+                                        &mdash; ₱<?= number_format($service['PBPrice']) ?></li>
                                     <?php
                                     }
 
@@ -372,7 +375,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="embed-responsive embed-responsive-16by9">
                 <video id="mamyrVideo" muted controls class="embed-responsive-item"
                     poster="../../Assets/videos/thumbnail2.jpg">
-                    <source src="../../Assets/videos/mamyrVideo3.mp4" type="video/mp4">
+                    <source src="../../Assets/videos/Mamyrvideo3.mp4" type="video/mp4">
 
                 </video>
             </div>
@@ -381,11 +384,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <p class="videoDescription indent">
                     <?= htmlspecialchars($contentMap['Subheading2'] ?? 'Description Not Found') ?> </p>
                 <div class="middle-btn-container">
-                    <a href="../Customer/bookNow.php" class="btn btn-primary bookNowBtn">Book Now</a>
-                    <a href="../Customer/amenities.php" class="btn btn-primary viewBtn">View our Amenities</a>
+                    <a href="amenities.php" class="btn btn-primary">View our Amenities</a>
                 </div>
             </div>
         </section>
+
 
         <section class="bottom-section">
 
@@ -398,23 +401,28 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
                     <?php if (isset($imageMap['BookNow'])): ?>
-                        <?php foreach ($imageMap['BookNow'] as $index => $img):
+                    <?php foreach ($imageMap['BookNow'] as $index => $img):
                             $imagePath = "../../Assets/Images/landingPage/" . $img['imageData'];
                             $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                         ?>
-                            <div class="swiper-slide">
-                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                                    class="editable-img d-block w-100" style="cursor: pointer;">
-                            </div>
-                        <?php endforeach; ?>
+                    <div class="swiper-slide">
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="editable-img d-block" style="cursor: pointer;">
+                    </div>
+                    <?php endforeach; ?>
                     <?php else: ?>
-                        <div class="card-img">
-                            <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                        </div>
+                    <div class="card-img">
+                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
+                    </div>
                     <?php endif; ?>
 
                 </div>
                 <div class="swiper-pagination"></div>
+            </div>
+
+            <div id="popup-container" class="popup-container">
+                <img id="popup-image" class="popup-image" src="" alt="Popup Image" />
+                <button id="close-popup" class="btn btn-danger close-popup">Close</button>
             </div>
         </section>
 
@@ -428,8 +436,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="card ratings-card">
                 <div class="card-body graph-card-body">
                     <div class="graph-header">
-                        <i class="bi bi-star"></i>
-                        <h6 class="graph-header-text">Ratings</h6>
+                        <div class="headerText-container">
+                            <i class="bi bi-star"></i>
+                            <h6 class="graph-header-text">Ratings</h6>
+                        </div>
                     </div>
 
                     <div class="rating-categories">
@@ -487,16 +497,54 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 </div>
             </div>
         </section>
+        <section class="ctaContainer" id="ourServicesContainer">
 
-        <section class="location-container">
-            <div class="locationText-container">
-
-                <h3 class="videoTitle"><?= htmlspecialchars($contentMap['Reviews'] ?? 'Title Not Found') ?> </h3>
-                <p class="videoDescription indent">
-                    <?= htmlspecialchars($contentMap['MapDesc'] ?? 'Description Not Found') ?> </p>
+            <div class="bottom-text-container">
+                <h3 class="bottom-header">How to Book at Mamyr Resorts and Events Place?</h3>
             </div>
 
-            <div id="map"></div>
+            <div class="servicesIconContainer">
+                <div class="eventContainer">
+                    <h2 class="numbering">1</h2>
+                    <img src="../../Assets/Images/landingPage/choose.png" alt="Choose Booking Type" class="eventIcon">
+                    <h4 class="eventIconTitle">Select Booking Type</h4>
+                    <p class="eventIconDescription">Select the booking type that suits your needs—resort stay, hotel
+                        room,
+                        or event reservation—and then complete the required details to complete your reservation.</p>
+                </div>
+
+                <div class="resortContainer">
+                    <h2 class="numbering">2</h2>
+                    <img src="../../Assets/Images/landingPage/check.png" alt="Check for Availability"
+                        class="resortIcon">
+                    <h4 class="resortIconTitle">Check Availability by Date and Time</h4>
+                    <p class="resortIconDescription">Please enter your preferred date and time so the system can check
+                        the
+                        availability of services for your selected schedule.</p>
+                </div>
+
+                <div class="hotelContainer">
+                    <h2 class="numbering">3</h2>
+                    <img src="../../Assets/Images/landingPage/confirm.png" alt="Hotel Icon" class="hotelIcon">
+                    <h4 class="hotelIconTitle">Confirm Your Booking Details</h4>
+                    <p class="hotelIconDescription">Kindly review your booking details carefully and confirm all
+                        information
+                        is
+                        correct before finalizing your reservation to ensure accuracy and avoid any issues.</p>
+                </div>
+
+                <div class="hotelContainer">
+                    <h2 class="numbering">4</h2>
+                    <img src="../../Assets/Images/landingPage/bookNow.png" alt="Book Now" class="hotelIcon">
+                    <h4 class="hotelIconTitle">Finalize Your Reservation</h4>
+                    <p class="hotelIconDescription">Once you click 'Book Now,' your reservation will be successfully
+                        confirmed, and a confirmation email, including the next steps that you will need to do,
+                        will be sent to you shortly.</p>
+                </div>
+            </div>
+            <div class="bookNow-button-container">
+                <a href="bookNow.php" class="btn btn-primary">Book With Us Today!</a>
+            </div>
         </section>
         <?php
         include '../../Pages/Customer/footer.php';
@@ -520,169 +568,169 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <!-- Sweetalert Popup -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('action');
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('action');
 
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+
+    if (paramValue === 'successLogin') {
+        Toast.fire({
+            icon: "success",
+            title: "Signed in successfully"
         });
+    };
 
-        if (paramValue === 'successLogin') {
-            Toast.fire({
-                icon: "success",
-                title: "Signed in successfully"
-            });
-        };
-
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    };
     </script>
 
     <!-- Initialize Swiper -->
     <script>
-        var swiper = new Swiper(".mySwiper", {
-            loop: true,
-            loopedSlides: 3,
-            spaceBetween: 30,
+    var swiper = new Swiper(".mySwiper", {
+        loop: true,
+        loopedSlides: 3,
+        spaceBetween: 30,
 
-            slidesPerView: 3,
+        slidesPerView: 3,
 
-            breakpoints: {
-                0: {
-                    slidesPerView: 1,
-                    spaceBetween: 10,
-                },
-                600: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                },
-                1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 30,
-                }
+        breakpoints: {
+            0: {
+                slidesPerView: 1,
+                spaceBetween: 10,
             },
-
-
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
+            600: {
+                slidesPerView: 2,
+                spaceBetween: 20,
             },
-
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
             }
-        });
+        },
+
+
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        }
+    });
     </script>
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const userID = document.getElementById('userID').value;
-            console.log(userID)
-            fetch(`../../Function/Partner/getBookings.php?id=${encodeURIComponent(userID)}`)
-                .then(result => {
-                    if (!result.ok) throw new Error("Network Error");
-                    return result.json();
-                })
-                .then(data => {
-                    if (!data.success) {
-                        Toast.fire({
-                            icon: "error",
-                            title: data.message || "An error occurred"
-                        });
-                        return;
-                    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const userID = document.getElementById('userID').value;
+        console.log(userID)
+        fetch(`../../Function/Partner/getBookings.php?id=${encodeURIComponent(userID)}`)
+            .then(result => {
+                if (!result.ok) throw new Error("Network Error");
+                return result.json();
+            })
+            .then(data => {
+                if (!data.success) {
+                    Toast.fire({
+                        icon: "error",
+                        title: data.message || "An error occurred"
+                    });
+                    return;
+                }
 
-                    const totalBookings = data.allBookingStatus || 0;
-                    const totalPendings = data.totalPendingBooking || 0;
-                    // const totalCancelled = data.cancelledBooking || 0;
-                    const totalApproved = data.approvedBookings || 0;
+                const totalBookings = data.allBookingStatus || 0;
+                const totalPendings = data.totalPendingBooking || 0;
+                // const totalCancelled = data.cancelledBooking || 0;
+                const totalApproved = data.approvedBookings || 0;
 
-                    document.getElementById('bookingNumber').textContent = totalBookings;
-                    document.getElementById('approvedBooking').textContent = totalApproved;
-                    document.getElementById('pendingBooking').textContent = totalPendings;
-                    // document.getElementById('cancelledBooking').textContent = totalCancelled;
-                })
-                .catch(err => console.error(err));
-        });
+                document.getElementById('bookingNumber').textContent = totalBookings;
+                document.getElementById('approvedBooking').textContent = totalApproved;
+                document.getElementById('pendingBooking').textContent = totalPendings;
+                // document.getElementById('cancelledBooking').textContent = totalCancelled;
+            })
+            .catch(err => console.error(err));
+    });
     </script>
 
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        const lat = 15.05073200154005;
-        const lon = 121.0218658098424;
+    const lat = 15.05073200154005;
+    const lon = 121.0218658098424;
 
-        const map = L.map('map').setView([lat, lon], 13);
+    const map = L.map('map').setView([lat, lon], 13);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-
-        const customIcon = L.icon({
-            iconUrl: '../../Assets/Images/MamyrLogo.png',
-            iconSize: [100, 25], // Size of the logo 
-            iconAnchor: [25, 50], // Anchor point of the icon 
-            popupAnchor: [0, -50] // Popup anchor point 
-        });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
 
-        L.marker([lat, lon], {
-                icon: customIcon
-            }).addTo(map)
-            .bindPopup('Mamyr Resort and Events Place is Located Here!')
-            .openPopup();
+    const customIcon = L.icon({
+        iconUrl: '../../Assets/Images/MamyrLogo.png',
+        iconSize: [100, 25], // Size of the logo 
+        iconAnchor: [25, 50], // Anchor point of the icon 
+        popupAnchor: [0, -50] // Popup anchor point 
+    });
+
+
+    L.marker([lat, lon], {
+            icon: customIcon
+        }).addTo(map)
+        .bindPopup('Mamyr Resort and Events Place is Located Here!')
+        .openPopup();
     </script>
 
     <!-- Get ratings -->
     <script>
-        async function getRatings() {
-            const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
-            const data = await response.json();
+    async function getRatings() {
+        const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
+        const data = await response.json();
 
-            const resortBar = document.getElementById('resort-bar');
-            resortBar.style.width = data.resortPercent + '%';
-            resortBar.setAttribute('ari-valuenow', data.resortPercent)
-            document.getElementById('resort-rating-value').textContent = data.resortRating;
+        const resortBar = document.getElementById('resort-bar');
+        resortBar.style.width = data.resortPercent + '%';
+        resortBar.setAttribute('ari-valuenow', data.resortPercent)
+        document.getElementById('resort-rating-value').textContent = data.resortRating;
 
-            const hotelBar = document.getElementById('hotel-bar');
-            hotelBar.style.width = data.hotelPercent + '%';
-            hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
-            document.getElementById('hotel-rating-value').textContent = data.hotelRating;
+        const hotelBar = document.getElementById('hotel-bar');
+        hotelBar.style.width = data.hotelPercent + '%';
+        hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
+        document.getElementById('hotel-rating-value').textContent = data.hotelRating;
 
-            const eventBar = document.getElementById('event-bar');
-            eventBar.style.width = data.eventPercent + '%';
-            eventBar.setAttribute('ari-valuenow', data.eventPercent)
-            document.getElementById('event-rating-value').textContent = data.eventRating;
+        const eventBar = document.getElementById('event-bar');
+        eventBar.style.width = data.eventPercent + '%';
+        eventBar.setAttribute('ari-valuenow', data.eventPercent)
+        document.getElementById('event-rating-value').textContent = data.eventRating;
 
-            document.getElementById('overall-rating-value').textContent = data.overAllRating;
-            const starContainer = document.getElementById('star-container');
-            starContainer.innerHTML = '';
-            for (let i = 1; i <= 5; i++) {
-                if (i <= Math.floor(data.overAllRating)) {
-                    starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
-                } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
-                    starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
-                } else {
-                    starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
-                }
+        document.getElementById('overall-rating-value').textContent = data.overAllRating;
+        const starContainer = document.getElementById('star-container');
+        starContainer.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= Math.floor(data.overAllRating)) {
+                starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
+            } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
+                starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
+            } else {
+                starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
             }
         }
-        getRatings();
-        setInterval(getRatings, 300000);
+    }
+    getRatings();
+    setInterval(getRatings, 300000);
     </script>
 
     <!-- This is shown if no data to display -->
@@ -690,219 +738,78 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <!--  Chart for sales  -->
     <script>
-        const colors = {
-            unpaid: {
-                bg: "rgba(219, 53, 69, .6)",
-                border: "rgb(219, 53, 69)"
-            },
-            "partially paid": {
-                bg: "rgba(255, 193, 8, .6)",
-                border: "rgb(255, 193, 8)"
-            },
-            "fully paid": {
-                bg: "rgba(26, 135, 84,.6)",
-                border: "rgb(26, 135, 84)"
-            },
-            "payment sent": {
-                bg: "rgba(13, 109, 252, .6)",
-                border: "rgb(13, 109, 252)"
-            },
-            default: {
-                bg: "rgba(255, 205, 86, 0.7)",
-                border: "rgb(255, 205, 86)"
-            }
-        };
+    const colors = {
+        unpaid: {
+            bg: "rgba(219, 53, 69, .6)",
+            border: "rgb(219, 53, 69)"
+        },
+        "partially paid": {
+            bg: "rgba(255, 193, 8, .6)",
+            border: "rgb(255, 193, 8)"
+        },
+        "fully paid": {
+            bg: "rgba(26, 135, 84,.6)",
+            border: "rgb(26, 135, 84)"
+        },
+        "payment sent": {
+            bg: "rgba(13, 109, 252, .6)",
+            border: "rgb(13, 109, 252)"
+        },
+        default: {
+            bg: "rgba(255, 205, 86, 0.7)",
+            border: "rgb(255, 205, 86)"
+        }
+    };
 
-        const selectedFilter = document.getElementById('sales-filter-select');
-        const partnerID = document.getElementById('partnershipID');
+    const selectedFilter = document.getElementById('sales-filter-select');
+    const partnerID = document.getElementById('partnershipID');
 
-        if (selectedFilter) {
-            selectedFilter.addEventListener('change', () => {
-                filteredSales(selectedFilter.value, partnerID.value);
-            });
-
+    if (selectedFilter) {
+        selectedFilter.addEventListener('change', () => {
             filteredSales(selectedFilter.value, partnerID.value);
-        };
+        });
 
-        let salesChart = null;
+        filteredSales(selectedFilter.value, partnerID.value);
+    };
 
-        const noDataPlugin = {
-            id: 'noDataPlugin',
-            afterDraw(chart) {
-                const datasets = chart.data.datasets;
-                const hasData = datasets.some(ds => ds.data.length > 0);
+    let salesChart = null;
 
-                if (!hasData) {
-                    const ctx = chart.ctx;
-                    const width = chart.width;
-                    const height = chart.height;
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.font = '16px Arial';
-                    ctx.fillStyle = 'gray';
-                    ctx.restore();
-                }
+    const noDataPlugin = {
+        id: 'noDataPlugin',
+        afterDraw(chart) {
+            const datasets = chart.data.datasets;
+            const hasData = datasets.some(ds => ds.data.length > 0);
+
+            if (!hasData) {
+                const ctx = chart.ctx;
+                const width = chart.width;
+                const height = chart.height;
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = '16px Arial';
+                ctx.fillStyle = 'gray';
+                ctx.restore();
             }
-        };
+        }
+    };
 
 
-        function filteredSales(selectedFilterValue, partnerID) {
-            fetch(
-                    `../../Function/Partner/getPartnerFilterSales.php?selectedFilter=${encodeURIComponent(selectedFilterValue)}&id=${encodeURIComponent(partnerID)}`
-                )
-                .then((response) => {
-                    if (!response.ok) throw new Error("Network error");
-                    return response.json();
-                })
-                .then((data) => {
-                    const ctx = document.getElementById("salesGraph").getContext("2d");
+    function filteredSales(selectedFilterValue, partnerID) {
+        fetch(
+                `../../Function/Partner/getPartnerFilterSales.php?selectedFilter=${encodeURIComponent(selectedFilterValue)}&id=${encodeURIComponent(partnerID)}`
+            )
+            .then((response) => {
+                if (!response.ok) throw new Error("Network error");
+                return response.json();
+            })
+            .then((data) => {
+                const ctx = document.getElementById("salesGraph").getContext("2d");
 
-                    if (!data.success || !data.sales || data.sales.length === 0) {
-                        if (salesChart) {
-                            salesChart.destroy();
-                        }
-                        salesChart = new Chart(ctx, {
-                            type: "bar",
-                            data: {
-                                labels: [],
-                                datasets: [],
-                            },
-                            options: {
-                                responsive: true,
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                    },
-                                    x: {
-                                        title: {
-                                            display: true,
-                                            text: selectedFilterValue === "month" ?
-                                                "Weeks of the Month" : "Days of the Week",
-                                        },
-                                    },
-                                },
-                                plugins: {
-                                    legend: {
-                                        display: false,
-                                    },
-                                    tooltip: {
-                                        enabled: false,
-                                    },
-                                },
-                            },
-                            plugins: [noDataPlugin],
-                        });
-                        return;
-                    }
-
-                    const sales = data.sales;
-                    let labels = [];
-                    let dataset = [];
-                    // let title = "";
-
-                    if (selectedFilterValue === "month") {
-                        const dayLabels = [...new Set(sales.map((item) => item.weekOfMonth))];
-                        labels = dayLabels;
-
-                        const groupedByType = {};
-                        sales.forEach((item) => {
-                            const type = item.paymentStatus || "Unknown";
-                            if (!groupedByType[type]) groupedByType[type] = {};
-
-                            groupedByType[type][item.weekOfMonth] =
-                                parseFloat(item.monthlyRevenue) || 0;
-                        });
-
-                        dataset = Object.keys(groupedByType).map((type) => {
-                            const color = colors[type.toLowerCase()] || colors.default;
-
-                            const data = labels.map((week) => groupedByType[type][week] || 0);
-
-                            return {
-                                label: type.charAt(0).toUpperCase() + type.slice(1),
-                                data: data,
-                                backgroundColor: color.bg,
-                                borderColor: color.border,
-                                borderWidth: 2,
-                            };
-                        });
-                    } else {
-                        const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-                        labels = dayLabels;
-                        title = sales[0]?.weekLabels || "";
-
-                        const groupedByType = {};
-                        sales.forEach((item) => {
-                            const type = item.paymentStatus || "Unknown";
-                            groupedByType[type] = dayLabels.map(
-                                (day) => parseFloat(item[day]) || 0
-                            );
-                        });
-
-                        dataset = Object.keys(groupedByType).map((type) => {
-                            const color = colors[type.toLowerCase()] || colors.default;
-                            return {
-                                label: type.charAt(0).toUpperCase() + type.slice(1),
-                                data: groupedByType[type],
-                                backgroundColor: color.bg,
-                                borderColor: color.border,
-                                borderWidth: 2,
-                            };
-                        });
-                    }
-
+                if (!data.success || !data.sales || data.sales.length === 0) {
                     if (salesChart) {
                         salesChart.destroy();
                     }
-
-                    salesChart = new Chart(ctx, {
-                        type: "bar",
-                        data: {
-                            labels: labels,
-                            datasets: dataset,
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                    },
-                                },
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: selectedFilterValue === "month" ?
-                                            "Weeks of the Month" : "Days of the Week",
-                                    },
-                                    barThickness: 20,
-                                    maxBarThickness: 30,
-                                    categoryPercentage: 0.7,
-                                    barPercentage: 0.8,
-                                },
-                            },
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: (ctx) => `₱${ctx.parsed.y.toLocaleString()}`,
-                                    },
-                                },
-                            },
-                        },
-                        plugins: [noDataPlugin],
-                    });
-                })
-                .catch((error) => {
-                    console.error("Error fetching sales data:", error);
-                    if (salesChart) {
-                        salesChart.destroy();
-                    }
-                    const ctx = document.getElementById("salesChart").getContext("2d");
                     salesChart = new Chart(ctx, {
                         type: "bar",
                         data: {
@@ -911,11 +818,152 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         },
                         options: {
                             responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: selectedFilterValue === "month" ?
+                                            "Weeks of the Month" : "Days of the Week",
+                                    },
+                                },
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                },
+                                tooltip: {
+                                    enabled: false,
+                                },
+                            },
                         },
                         plugins: [noDataPlugin],
                     });
+                    return;
+                }
+
+                const sales = data.sales;
+                let labels = [];
+                let dataset = [];
+                // let title = "";
+
+                if (selectedFilterValue === "month") {
+                    const dayLabels = [...new Set(sales.map((item) => item.weekOfMonth))];
+                    labels = dayLabels;
+
+                    const groupedByType = {};
+                    sales.forEach((item) => {
+                        const type = item.paymentStatus || "Unknown";
+                        if (!groupedByType[type]) groupedByType[type] = {};
+
+                        groupedByType[type][item.weekOfMonth] =
+                            parseFloat(item.monthlyRevenue) || 0;
+                    });
+
+                    dataset = Object.keys(groupedByType).map((type) => {
+                        const color = colors[type.toLowerCase()] || colors.default;
+
+                        const data = labels.map((week) => groupedByType[type][week] || 0);
+
+                        return {
+                            label: type.charAt(0).toUpperCase() + type.slice(1),
+                            data: data,
+                            backgroundColor: color.bg,
+                            borderColor: color.border,
+                            borderWidth: 2,
+                        };
+                    });
+                } else {
+                    const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+                    labels = dayLabels;
+                    title = sales[0]?.weekLabels || "";
+
+                    const groupedByType = {};
+                    sales.forEach((item) => {
+                        const type = item.paymentStatus || "Unknown";
+                        groupedByType[type] = dayLabels.map(
+                            (day) => parseFloat(item[day]) || 0
+                        );
+                    });
+
+                    dataset = Object.keys(groupedByType).map((type) => {
+                        const color = colors[type.toLowerCase()] || colors.default;
+                        return {
+                            label: type.charAt(0).toUpperCase() + type.slice(1),
+                            data: groupedByType[type],
+                            backgroundColor: color.bg,
+                            borderColor: color.border,
+                            borderWidth: 2,
+                        };
+                    });
+                }
+
+                if (salesChart) {
+                    salesChart.destroy();
+                }
+
+                salesChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: labels,
+                        datasets: dataset,
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                },
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: selectedFilterValue === "month" ?
+                                        "Weeks of the Month" : "Days of the Week",
+                                },
+                                barThickness: 20,
+                                maxBarThickness: 30,
+                                categoryPercentage: 0.7,
+                                barPercentage: 0.8,
+                            },
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `₱${ctx.parsed.y.toLocaleString()}`,
+                                },
+                            },
+                        },
+                    },
+                    plugins: [noDataPlugin],
                 });
-        }
+            })
+            .catch((error) => {
+                console.error("Error fetching sales data:", error);
+                if (salesChart) {
+                    salesChart.destroy();
+                }
+                const ctx = document.getElementById("salesChart").getContext("2d");
+                salesChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: [],
+                        datasets: [],
+                    },
+                    options: {
+                        responsive: true,
+                    },
+                    plugins: [noDataPlugin],
+                });
+            });
+    }
     </script>
 </body>
 
