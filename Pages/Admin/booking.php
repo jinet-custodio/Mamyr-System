@@ -228,14 +228,16 @@ switch ($userRole) {
 
                     <table class="table table-striped display nowrap" id="bookingTable">
                         <thead>
-                            <th scope="col">Booking ID</th>
-                            <th scope="col">Guest</th>
-                            <th scope="col">Booking Type</th>
-                            <th scope="col">Reservation Date</th>
-                            <th scope="col">Booking Creation</th>
-                            <!-- <th scope="col">Check-out</th> -->
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <tr>
+                                <th>ID</th>
+                                <th>Booking Code</th>
+                                <th>Guest</th>
+                                <th>Type</th>
+                                <th>Reserved On</th>
+                                <th>Created On</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody id='booking-display-body'></tbody>
                     </table>
@@ -265,7 +267,7 @@ switch ($userRole) {
             scrollX: true,
             "order": [],
             columnDefs: [{
-                    width: '10%',
+                    width: '5%',
                     targets: 0
                 },
                 {
@@ -322,7 +324,8 @@ switch ($userRole) {
 
                     bookings.forEach(booking => {
                         table.row.add([
-                            booking.formattedBookingID,
+                            booking.bookingID,
+                            booking.bookingCode,
                             booking.name,
                             booking.bookingType + ` Booking`,
                             booking.bookingDate,

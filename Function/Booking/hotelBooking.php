@@ -22,7 +22,7 @@ $result = $getPaymentDetails->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $gcashDetails = 'Here is our gcash details where you can send the downpayment. <br> <strong>' . $row['resortInfoDetail'] . '</strong>';
+    $gcashDetails = 'For GCASH payment, here is our gcash details where you can send the downpayment. <br> <strong>' . $row['resortInfoDetail'] . '</strong>';
 }
 
 
@@ -284,7 +284,8 @@ if (isset($_POST['hotelBooking'])) {
                                         <p style="font-size: 14px;">If we do not receive the payment within this timeframe, your booking may be
                                             given to other customers. Make sure to upload the receipt in the website.</p>
 
-                                        <p><strong> ' . $gcashDetails . '. </strong></p>
+                                        <p>' . $gcashDetails . '</p>
+                                        <p> While for cash payment, please proceed to the resort to settle your downpayment with the admin/staff. </p>
                                         <p style="margin: 10px 0 0;"> You can contact us directly here: <a
                                                 href="https://www.facebook.com/messages/t/100888189251567"
                                                 style="color: #007bff; text-decoration: none;"> Message us on Facebook</a> </p>

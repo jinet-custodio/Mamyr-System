@@ -988,7 +988,7 @@ switch ($userRole) {
             document.getElementById("makeDownpaymentBtn").style.display = "block";
             downloadReceiptBtn.style.display = 'none';
             viewTransactionBtn.style.display = 'block';
-        } else if (paymentApprovalStatus === "Approved" && bookingStatus === 'Reserved' && paymentStatus === "Partially Paid") {
+        } else if (paymentApprovalStatus === "Approved" && bookingStatus === 'Reserved' && (paymentStatus === "Partially Paid" || paymentStatus === "Fully Paid")) {
             document.getElementById("makeDownpaymentBtn").style.display = "none";
             viewTransactionBtn.style.display = 'block';
         } else if ((bookingStatus === "Done" && paymentStatus === "Fully Paid") || bookingStatus === 'Expired') {

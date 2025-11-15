@@ -16,6 +16,16 @@
   background-color: #e9ecef !important;
   margin-top: 0.5rem;
   padding: 1rem;
+  font-weight: 200;
+}
+
+.notification-item strong {
+  font-weight: bold !important;
+}
+
+.notification-item a {
+  text-decoration: underline !important;
+  color: blue !important;
 }
 
 .notification-item.read {

@@ -65,12 +65,15 @@
 
                                                     
                                                     -- Guests last month
-                                                    SUM(CASE 
-                                                        WHEN YEAR(b.startDate) = YEAR(CURRENT_DATE() - INTERVAL 1 MONTH)
-                                                        AND MONTH(b.startDate) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH) 
-                                                        THEN b.guestCount 
-                                                        ELSE 0 
-                                                    END) AS guestsLastMonth
+                                                    SUM(
+                                                        CASE 
+                                                            WHEN DATE(b.startDate) >= DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01') - INTERVAL 1 MONTH
+                                                            AND DATE(b.startDate) <  DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')
+                                                            THEN b.guestCount
+                                                            ELSE 0
+                                                        END
+                                                    ) AS guestsLastMonth
+
                                                     
                                                     -- Total guests overall
                                                     -- SUM(b.guestCount) AS totalGuests,
@@ -81,8 +84,8 @@
                                                 WHERE 
                                                     b.bookingStatus IN (?, ?, ?) 
                                                     AND cb.paymentStatus IN (?,?) 
-                                                    AND MONTH(b.startDate) = MONTH(CURDATE())
-                                                    AND YEAR(b.startDate) = YEAR(CURDATE())
+                                                    -- AND MONTH(b.startDate) = MONTH(CURDATE())
+                                                    -- AND YEAR(b.startDate) = YEAR(CURDATE())
                                                 ");
             $getCardData->bind_param('iiiii',  $approvedStatusID, $doneStatusID, $reservedStatusID,  $partiallyPaid, $fullyPaid);
 

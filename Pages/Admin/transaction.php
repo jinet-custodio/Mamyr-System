@@ -205,15 +205,20 @@ if ($result->num_rows > 0) {
 
                     <table class="table table-striped display nowrap" id="transactionTable">
                         <thead>
-                            <th scope="col">Booking ID</th>
-                            <th scope="col">Guest</th>
-                            <th scope="col">Total Amount</th>
-                            <th scope="col">Balance</th>
-                            <th scope="col">Payment Method</th>
-                            <th scope="col">Payment Approval</th>
-                            <th scope="col">Payment Status</th>
-                            <th scope="col">Action</th>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Code</th>
+                                <th scope="col">Guest</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Payment</th>
+                                <th scope="col">Balance</th>
+                                <th scope="col">Payment Method</th>
+                                <th scope="col">Status</th>
+                                <!-- <th scope="col">Status</th> -->
+                                <th scope="col">Action</th>
+                            </tr>
                         </thead>
+
                         <!-- Get data and isplay Transaction -->
                         <tbody id="payment-display-body"></tbody>
                     </table>
@@ -243,7 +248,7 @@ if ($result->num_rows > 0) {
                     [0, 'desc']
                 ],
                 columnDefs: [{
-                        width: '9%',
+                        width: '5%',
                         target: 0,
                     },
                     {
@@ -303,13 +308,15 @@ if ($result->num_rows > 0) {
                     payments.forEach(payment => {
                         // const row = document.createElement("tr");
                         table.row.add([
-                            payment.formattedBookingID,
+                            payment.bookingID,
+                            payment.bookingCode,
                             payment.name,
                             payment.totalBill,
+                            payment.paymentAmount,
                             payment.userBalance,
                             payment.paymentMethod,
                             getStatusBadge(payment.statusClass, payment.status),
-                            getStatusBadge(payment.paymentClass, payment.paymentStatusName),
+                            // getStatusBadge(payment.paymentClass, payment.paymentStatusName),
                             ` <form action = "viewPayments.php"
                                         method = "POST" >
                                             <input type = "hidden"
@@ -324,7 +331,7 @@ if ($result->num_rows > 0) {
                                             <input type ="hidden"
                                         name="bookingID"
                                         value="${payment.bookingID}">
-                                            <button type="submit" class="btn btn-primary"> View </button> </form>`
+                                            <button type="submit" class="btn btn-primary viewBtn"> View </button> </form>`
                         ]);
                     });
                     table.draw();

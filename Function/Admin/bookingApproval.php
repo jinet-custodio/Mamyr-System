@@ -60,7 +60,7 @@ $result = $getPaymentDetails->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $gcashDetails = 'Here is our gcash details where you can send the downpayment. <br> <strong>' . $row['resortInfoDetail'] . '</strong>';
+    $gcashDetails = 'For GCASH payment, here is our gcash details where you can send the downpayment. <br> <strong>' . $row['resortInfoDetail'] . '</strong>';
 }
 
 //Approve Button is Click
@@ -89,7 +89,7 @@ if (isset($_POST['approveBtn'])) {
     // strtoupper($type) . date('ymd') . generateCode(5)
     if ($bookingType === 'Event') {
         $rawVenuePrice = mysqli_real_escape_string($conn, $_POST['venuePrice']);
-        $totalFoodPrice = mysqli_real_escape_string($conn, $_POST['foodPrice']) ?? 0;
+        $totalFoodPrice = !empty($_POST['foodPrice']) ? mysqli_real_escape_string($conn, $_POST['foodPrice']) : 0;
         $newFoodPrice = !empty($_POST['newFoodPrice']) ? (float) $_POST['newFoodPrice'] : $totalFoodPrice;
         $venuePrice = (float) str_replace(['₱', ','], '', $rawVenuePrice) ?? 0;
 
@@ -97,7 +97,7 @@ if (isset($_POST['approveBtn'])) {
         $customerChoice = mysqli_real_escape_string($conn, $_POST['customerChoice']);
 
         if (!empty($_POST['partnerServices'])) {
-            $businessApprovalStatus = mysqli_real_escape_string($conn, $_POST['businessApprovalStatus']) ?? '';
+            // $businessApprovalStatus = mysqli_real_escape_string($conn, $_POST['businessApprovalStatus']) ?? '';
 
             foreach ($_POST['partnerServices'] as $partnerID => $services) {
                 foreach ($services as $service) {
@@ -189,7 +189,7 @@ if (isset($_POST['approveBtn'])) {
         }
 
         $receiver = getMessageReceiver($userRoleID);
-        $message = 'Your ' . $bookingType . ' booking has been approved successfully. Please complete your payment within 24 hours to confirm your reservation. Kindly check your email for more details.';
+        $message = '<strong> #' . $bookingCode . '</strong><br>Your ' . $bookingType . ' booking has been approved successfully. Please complete your payment within 24 hours to confirm your reservation. Kindly check your email for more details.';
         $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, senderID, receiverID, message, receiver) VALUES(?,?,?,?,?)");
         $insertNotification->bind_param('iiiss', $bookingID, $userID, $customerID, $message, $receiver);
 
@@ -247,14 +247,16 @@ if (isset($_POST['approveBtn'])) {
 
                                     <p style="font-size: 14px;">If we do not receive the payment within this timeframe, your booking may be
                                         given to other customers. Make sure to upload the receipt in the website.</p>
-
-                                    <p><strong> ' . $gcashDetails . '. </strong></p>
+                                    <p style="margin: 10px 0 0;"> Website Link: <a
+                                            href=""
+                                            style="color: #007bff; text-decoration: none;"> Mamyr Resort & Event Place</a> </p>
+                                    <p>' . $gcashDetails . '</p>
+                                    <p> While for cash payment, please proceed to the resort to settle your downpayment with the admin/staff. </p>
                                     <p style="margin: 10px 0 0;"> You can contact us directly here: <a
                                             href="https://www.facebook.com/messages/t/100888189251567"
                                             style="color: #007bff; text-decoration: none;"> Message us on Facebook</a> </p>
 
                                     <p style=" font-size: 14px; margin: 20px 0 0;">We look forward to welcoming you soon!</p>
-
 
 
                                     <p style="font-size: 16px; margin: 30px 0 0;">Thank you,</p>

@@ -251,7 +251,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
         $insertPaymentQuery->execute();
 
         $receiver = 'Admin';
-        $message = 'A payment proof has been uploaded for Booking ID: ' . $bookingID . '. Please verify if its exactly ₱' . number_format($paymentAmount, 2) . '. Click  <a href="transaction.php">here</a> to view';
+        $message = '<strong> #' . $bookingCode . '</strong><br>A payment proof has been uploaded for Booking ID: ' . $bookingID . '. Please verify if its exactly ₱' . number_format($paymentAmount, 2) . '. Click  <a href="transaction.php">here</a> to view';
         $insertNotificationQuery = $conn->prepare("INSERT INTO notification (receiver, senderID, bookingID, message) VALUES (?, ?, ?, ?) ");
         $insertNotificationQuery->bind_param('siis', $receiver, $userID, $bookingID, $message);
         $insertNotificationQuery->execute();
