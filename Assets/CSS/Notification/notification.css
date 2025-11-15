@@ -1,0 +1,23 @@
+.bi-check2-all {
+  font-size: 18px;
+}
+
+.btn-link {
+  display: flex !important;
+  gap: 0.2rem;
+  justify-content: center;
+}
+.btn-link:hover {
+  color: #0d50b4 !important;
+}
+
+.notification-item {
+  border-radius: 10px;
+  background-color: #e9ecef !important;
+  margin-top: 0.5rem;
+  padding: 1rem;
+}
+
+.notification-item.read {
+  background-color: transparent !important;
+}

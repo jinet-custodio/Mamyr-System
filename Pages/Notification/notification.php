@@ -1,33 +1,52 @@
-<!-- Notification Modal Form -->
-<form action="../../Function/Notification/updateNotification.php" method="POST">
-    <!-- Notification Modal -->
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content px-2">
+<!DOCTYPE html>
+<html lang="en">
 
-                <div class="modal-header d-flex justify-content-between align-items-center">
-                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
-                    <button id="markAllRead" type="button" class="btn btn-link text-decoration-none mark-read-btn">Mark all as read</button>
-                </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../Assets/CSS/Notification/notification.css">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
 
-                <div class="modal-body p-0">
-                    <div class="notification-list" id="notificationList">
+<body>
+
+    <!-- Notification Modal Form -->
+    <form action="../../Function/Notification/updateNotification.php" method="POST">
+        <!-- Notification Modal -->
+        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content px-2">
+
+                    <div class="modal-header d-flex justify-content-between align-items-center">
+                        <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                        <button id="markAllRead" type="button" class="btn btn-link text-decoration-none mark-read-btn">
+                            <i class="bi bi-check2-all"></i>Mark all as read</button>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="modal-body p-0">
+                        <div class="notification-list" id="notificationList">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 
-<!-- Sweetalert Link -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Notification Script -->
-<script>
+    <!-- Bootstrap Link -->
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+
+    <!-- Notification Script -->
+    <script>
     const alert = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -52,7 +71,9 @@
         const receiver = receiverInput.value;
         const userID = userIDInput.value;
 
-        fetch(`../../Function/Notification/getNotification.php?id=${encodeURIComponent(userID)}&role=${encodeURIComponent(receiver)}`)
+        fetch(
+                `../../Function/Notification/getNotification.php?id=${encodeURIComponent(userID)}&role=${encodeURIComponent(receiver)}`
+            )
             .then(response => {
                 if (!response.ok) throw new Error('Network Error');
                 return response.json();
@@ -69,7 +90,8 @@
                 notificationList.innerHTML = "";
                 const notificationButton = document.getElementById('notificationButton');
                 if (notifications.length === 0) {
-                    notificationList.innerHTML = "<p class='text-center p-3 text-muted'>No unread notifications</p>";
+                    notificationList.innerHTML =
+                        "<p class='text-center p-3 text-muted'>No unread notifications</p>";
                     return;
                 }
 
@@ -97,7 +119,8 @@
 
                 if (count > 0) {
                     const span = document.createElement('span');
-                    span.classList.add('position-absolute', 'top-0', 'start-100', 'translate-middle', 'badge', 'rounded-pill', 'bg-danger');
+                    span.classList.add('position-absolute', 'top-0', 'start-100', 'translate-middle',
+                        'badge', 'rounded-pill', 'bg-danger');
                     span.id = 'notification-count'
                     span.innerHTML = count;
 
@@ -124,7 +147,9 @@
             const notificationID = item.dataset.id;
             // console.log('Clicked notification:', notificationID);
 
-            fetch(`../../Function/Notification/readNotification.php?id=${encodeURIComponent(notificationID)}`)
+            fetch(
+                    `../../Function/Notification/readNotification.php?id=${encodeURIComponent(notificationID)}`
+                )
                 .then(response => {
                     if (!response.ok) throw new Error("Network Error");
                     return response.json();
@@ -153,7 +178,8 @@
     const userIDInput = document.getElementById('userID');
     const userID = userIDInput.value;
     document.getElementById('markAllRead').addEventListener('click', () => {
-        fetch(`../../Function/Notification/updateNotification.php?id=${encodeURIComponent(userID)}`).then(response => response.json())
+        fetch(`../../Function/Notification/updateNotification.php?id=${encodeURIComponent(userID)}`).then(
+                response => response.json())
             .then(data => {
                 if (data.success) {
                     console.log(data.message);
@@ -164,4 +190,7 @@
             })
             .catch(err => console.error('Fetch error:', err));
     });
-</script>
+    </script>
+</body>
+
+</html>
