@@ -27,7 +27,7 @@ body {
 main {
   display: flex;
   padding: 2vw;
-  gap: 5vw;
+  gap: 2rem;
   justify-content: center;
 }
 
@@ -41,7 +41,7 @@ section {
   display: flex;
   flex-direction: column;
   padding: 1vw;
-  gap: 5vw;
+  gap: 5rem;
   margin-top: 5vw;
 }
 
@@ -51,8 +51,10 @@ section {
 } */
 
 .image-container {
-  position: relative;
-  display: inline-block;
+  /* border: 1px solid red; */
+  width: 30vw;
+  /* position: relative; */
+  /* display: inline-block; */
   p {
     font-family: "Poppins";
   }
@@ -61,7 +63,6 @@ section {
 .preview-image {
   width: 30vw !important;
   height: 100vh;
-  width: auto;
   cursor: zoom-in;
 }
 

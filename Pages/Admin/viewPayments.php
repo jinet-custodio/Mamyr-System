@@ -252,7 +252,10 @@ if ($role === "Admin") {
                     <input type="hidden" name="firstName" value="<?= $firstName ?>">
                     <input type="hidden" name="email" value="<?= $userEmail ?>">
                     <?php foreach ($serviceIDs as $id): ?>
-                        <input type="hidden" name="services[]" value="<?= $id ?>">
+                        <input type="hidden" name="servicesIDs[]" value="<?= $id ?>">
+                    <?php endforeach; ?>
+                    <?php foreach ($services as $name): ?>
+                        <input type="hidden" name="services[]" value="<?= $name ?>">
                     <?php endforeach; ?>
                     <div class="firstRow">
                         <div class="input-container">

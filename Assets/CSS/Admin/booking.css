@@ -8,8 +8,8 @@
 } */
 
 @font-face {
-  font-family: "Lora";
-  src: url(../../Fonts/Lora/Lora-VariableFont_wght.ttf);
+  font-family: "Poppins Light";
+  src: url(../../Fonts/Poppins/Poppins-Light.ttf);
 }
 
 * {
@@ -66,7 +66,7 @@ main {
 }
 .card {
   border: none !important;
-  padding: var(--padding-lg);
+  /* padding: var(--padding-md); */
   margin-top: var(--margin-mdl);
   margin-bottom: 2rem;
   width: 100% !important;
@@ -95,7 +95,7 @@ label {
 }
 
 thead {
-  font-family: "Lora";
+  font-family: "Poppins Light";
   overflow: auto;
 }
 
@@ -106,7 +106,7 @@ tbody {
 td,
 th {
   text-align: center !important;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
 }
 
 th {
@@ -121,8 +121,9 @@ th {
 
 .dt-info,
 .dt-layout-row {
-  font-family: "Lora";
+  font-family: "Poppins Light";
   text-transform: capitalize;
+  font-size: var(--font-size-sm);
 }
 
 .btnContainer {
@@ -137,67 +138,81 @@ th {
 
 /* Colors */
 
-.badge {
+/* .badge {
   font-weight: initial;
   line-height: normal;
   font-size: var(--font-size-base);
-  padding: var(--padding-md);
-  width: 8rem;
+  padding: var(--padding-xs) !important;
+  width: 10rem;
+  border-radius: 3rem !important;
+} */
+
+.badge {
+  font-weight: initial !important;
+  line-height: normal !important;
+  padding: 0.2rem !important;
+  width: 10rem;
   border-radius: 3rem !important;
 }
 
 /* Fully Paid */
 .badge.bg-bright-green {
   background-color: rgba(75, 192, 75, 0.4) !important;
-  color: rgb(75, 192, 75) !important;
+  color: rgb(23, 95, 23) !important;
 }
 
 /* Partially Paid */
 .badge.bg-light-blue {
   background-color: rgba(54, 162, 235, 0.4) !important;
-  color: rgb(54, 162, 235) !important;
+  color: rgb(26, 90, 133) !important;
+}
+
+/* Payment Sent & Review Payment */
+.badge.bg-primary {
+  background-color: rgba(54, 105, 255, 0.4) !important;
+  color: rgb(21, 50, 136) !important;
 }
 
 /* Awaiting Payment */
 .badge.bg-orange {
   background-color: rgba(255, 159, 64, 0.4) !important;
-  color: rgb(247, 127, 8) !important;
+  color: rgb(177, 88, 0) !important;
 }
 
 /* Pending */
 .badge.bg-warning {
   background-color: rgba(255, 193, 7, 0.4) !important;
-  color: rgb(190, 114, 0) !important;
+  color: rgb(163, 101, 7) !important;
 }
 
 /* Approved */
 .badge.bg-green {
   background-color: rgba(40, 167, 69, 0.4) !important;
-  color: rgb(40, 167, 69) !important;
+  color: rgb(8, 90, 27) !important;
 }
 
 /* Reserved */
 .badge.bg-success {
   background-color: rgba(83, 243, 169, 0.4) !important;
-  color: rgb(0, 129, 69) !important;
+  color: rgb(5, 88, 50) !important;
 }
 
 /* Cancelled */
 .badge.bg-danger {
   background-color: rgba(219, 53, 69, 0.4) !important;
-  color: rgb(219, 53, 69) !important;
+  color: rgb(180, 7, 7) !important;
 }
 
 /* Rejected */
 .badge.bg-red {
   background-color: rgba(204, 30, 20, 0.4) !important;
-  color: rgb(204, 30, 20) !important;
+  color: rgb(143, 12, 5) !important;
 }
 
 /* Expired */
 .badge.bg-muted {
   background-color: rgba(73, 80, 87, 0.4) !important;
-  color: rgb(73, 80, 87) !important;
+  color: rgb(59, 64, 68) !important;
 }
 
 /* Finished */
@@ -205,10 +220,14 @@ th {
   background-color: rgba(99, 201, 9, 0.4) !important;
   color: rgb(71, 139, 10) !important;
 }
-/* Status */
 
 .viewBooking {
-  font-size: 12px;
+  padding: 0.4rem !important;
+  font-size: 12px !important;
+  /* background-color: transparent !important;
+  color: blue !important;
+  text-decoration: underline !important;
+  border: none !important; */
 }
 
 #notification-count.badge {

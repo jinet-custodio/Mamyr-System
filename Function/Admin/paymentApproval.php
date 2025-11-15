@@ -265,7 +265,7 @@ if (isset($_POST['approvePaymentBtn'])) {
         }
 
         $receiver = getMessageReceiver($userRoleID);
-        $message = 'Payment approved successfully. We have received ₱' . $amount . ' and reviewed your payment. The service you booked is now reserved. Thank you';
+        $message = 'Payment approved successfully. We have received ₱' . $amount . ' and reviewed your payment for booking <strong> ' . $bookingCode . '</strong><br>. The service you booked is now reserved. Thank you. <a href="../Account/paymentHistory.php">Check here</a>';
         $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, receiverID, senderID, message, receiver) VALUES(?,?,?,?,?)");
         $insertNotification->bind_param("iiiss", $bookingID, $customerID, $userID, $message, $receiver);
         if (! $insertNotification->execute()) {
@@ -477,7 +477,7 @@ if (isset($_POST['approvePaymentBtn'])) {
             if (empty($additionalCharges)) {
                 $additionalChargesRow = '
                 <tr>
-                    <td style="border: 1px solid #ccc; padding: 6px; text-align: center;"> No Additional Charges </td>
+                    <td colspan="2" style="border: 1px solid #ccc; padding: 6px; text-align: center;"> No Additional Charges </td>
                 </tr>
                 ';
             }
@@ -593,9 +593,9 @@ if (isset($_POST['approvePaymentBtn'])) {
 
             $receiver = getMessageReceiver($userRoleID);
 
-            $message = "We have successfully deducted your payment of " . $customerPayment .
-                " from your balance. Please check your payment history in your account for more details. " .
-                "Your current balance is: " . ($totalBalance > 0 ? "₱" . number_format($totalBalance, 2) : "0.00") . ".";
+            $message = '<strong> ' . $bookingCode . '</strong><br> We have successfully deducted your payment of ₱' . number_format($customerPayment, 2) .
+                ' from your balance. Please check your <a href="../Account/paymentHistory.php"> payment history </a> in your account for more details. ' .
+                'Your current balance is: ' . ($totalBalance > 0 ? "₱" . number_format($totalBalance, 2) : "0.00") . '.';
             $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, receiverID, senderID, message, receiver) VALUES(?,?,?,?,?)");
             $insertNotification->bind_param("iiiss", $bookingID, $customerID, $userID, $message, $receiver);
 

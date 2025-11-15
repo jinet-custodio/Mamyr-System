@@ -235,7 +235,7 @@ if (isset($_POST['eventBook'])) {
         }
 
         $receiver = 'Admin';
-        $message = "A customer has submitted a new " . strtolower($bookingType) . " booking request. <a href='booking.php'>View here.</a>";
+        $message = '<strong> #' . $bookingCode . '</strong><br>A customer has submitted a new ' . strtolower($bookingType) . ' booking request. <a href="booking.php">View here.</a>';
         $insertNotification = $conn->prepare("INSERT INTO `notification`(`bookingID`, `senderID`,  `message`, `receiver`) VALUES (?,?,?,?)");
         $insertNotification->bind_param("iiss", $bookingID, $userID, $message, $receiver);
         if (!$insertNotification->execute()) {
