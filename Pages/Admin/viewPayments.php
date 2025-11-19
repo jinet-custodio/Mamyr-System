@@ -116,7 +116,12 @@ if ($role === "Admin") {
                     s.serviceID, s.resortServiceID, s.partnershipServiceID, s.entranceRateID, s.serviceType,
                     ra.RServiceName,sp.price,
                     er.sessionType as tourType,
-                    ps.PBName
+                    ps.PBName,              
+                    GROUP_CONCAT(p.paymentID ORDER BY p.paymentID) AS paymentIDs,
+                    GROUP_CONCAT(p.amount ORDER BY p.paymentID) AS paymentAmounts,
+                    GROUP_CONCAT(p.paymentMethod ORDER BY p.paymentID) AS paymentMethods,
+                    GROUP_CONCAT(p.paymentDate ORDER BY p.paymentID) AS paymentDates,
+                    GROUP_CONCAT(p.downpaymentImage ORDER BY p.paymentID) AS dpImages
                 FROM confirmedbooking cb
                 LEFT JOIN booking b ON cb.bookingID = b.bookingID
                 LEFT JOIN user u ON b.userID = u.userID
@@ -143,6 +148,7 @@ if ($role === "Admin") {
         $venuePrice = 0;
         $partnerServices = [];
         $serviceIDs = [];
+        $payments = [];
         while ($row = $resultPayments->fetch_assoc()) {
             //user info
             $userEmail = $row['email'];
@@ -152,6 +158,7 @@ if ($role === "Admin") {
             $phoneNumber = $row['phoneNumber'] ?? '--';
             $userRoleID = $row['userRole'];
 
+            $confirmedBookingID = $row['confirmedBookingID'] ?? null;
 
             //Payment Details
             $originalBill = floatval($row['originalBill']);
@@ -171,6 +178,8 @@ if ($role === "Admin") {
             } else {
                 $paymentMethod = $paymentMethod;
             }
+
+            $paymentDueDate = date('M. d, Y h:i A', strtotime($row['paymentDueDate'] ?? ''));
 
             $finalBill = !empty($finalBill) ? $finalBill : $originalBill;
             //Downpayment Image
@@ -232,6 +241,35 @@ if ($role === "Admin") {
 
             $paymentStatus = getPaymentStatus($conn, $paymentStatusID);
             $paymentStatusName = $paymentStatus['paymentStatusName'];
+
+
+            $paymentIDs = !empty($row['paymentIDs']) ? explode(',', $row['paymentIDs']) : [];
+            $paymentAmounts = !empty($row['paymentAmounts']) ? explode(',', $row['paymentAmounts']) : [];
+            $paymentMethods = !empty($row['paymentMethods']) ? explode(',', $row['paymentMethods']) : [];
+            $paymentDates = !empty($row['paymentDates']) ? explode(',', $row['paymentDates']) : [];
+            $dpImages = !empty($row['dpImages']) ? explode(',', $row['dpImages']) : [];
+
+
+            foreach ($paymentIDs as $i => $pid) {
+                // error_log($pid);
+                $rawDate = $paymentDates[$i] ?? null;
+                $formattedDate = null;
+
+                if (!empty($rawDate)) {
+                    $formattedDate = date("M. d, Y — l", strtotime($rawDate));
+                }
+                $existingIDs = array_column($payments, 'paymentID');
+
+                if (!in_array($pid, $existingIDs)) {
+                    $payments[] = [
+                        'paymentID' => $pid,
+                        'amount' => isset($paymentAmounts[$i]) ? number_format((float)$paymentAmounts[$i], 2) : null,
+                        'method' => $paymentMethods[$i] ?? null,
+                        'date' => $formattedDate,
+                        'image' => $dpImages[$i] ?? null
+                    ];
+                }
+            }
         }
     }
     // var_dump($paymentStatusID);
@@ -381,6 +419,9 @@ if ($role === "Admin") {
                     <button type="submit" name="downloadReceiptBtn" id="genReceipt"
                         class="btn btn-primary w-100 mt-4">Generate
                         Receipt</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookingModal">
+                        View Payment History
+                    </button>
                 </div>
 
             </section>
@@ -400,6 +441,102 @@ if ($role === "Admin") {
                 </div>
             </section>
         </main>
+
+        <div class="viewModal">
+            <!-- View Payment Modal -->
+            <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+
+                    <div class="modal-content">
+                        <div class="modal-header" id="rate-modal-header">
+                            <h4 class="modal-title fw-b">Payment History</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h5 class="payment-container-title" id="booking-type"><?= $bookingType ?> Booking</h5>
+                            <div class="paymentListContainer" id="paymentListContainer">
+                                <?php
+                                $length = count($payments);
+                                if ($length < 3) {
+                                    $terms = ['Initial', 'Final'];
+                                } else {
+                                    $terms = ['Initial', 'Second', 'Final'];
+                                }
+                                $count = 0;
+                                if ($length > 0):
+                                    foreach ($payments as $payment):
+
+                                ?>
+                                        <div class="downpayment-container">
+                                            <div class="dp-left-side">
+                                                <h6 class="dp-title fw-bold"><?= $terms[$count] ?> Payment</h6>
+                                                <p class="dp-date"><?= $payment['date'] ?></p>
+                                            </div>
+                                            <div class="dp-right-side">
+                                                <h6 class="dp-amount fw-bold">₱<?= $payment['amount'] ?></h6>
+                                                <p class="mode">via <?= strtoupper($payment['method']) ?></p>
+                                            </div>
+
+                                            <?php if (strtolower($payment['method']) === 'gcash') { ?>
+                                                <div class="view-dp">
+                                                    <button type="button" class="btn btn-primary view-dp-btn" data-bs-target="#view-receipt<?= $payment['paymentID'] ?>" data-bs-toggle="modal">View Receipt</button>
+                                                </div>
+                                            <?php  } ?>
+                                        </div>
+                                    <?php
+                                        $count++;
+                                    endforeach;
+                                else: ?>
+                                    <div class="downpayment-container">
+                                        <div class="dp-left-side">
+                                            <h6 class="dp-title">
+                                                No Payment Information
+                                            </h6>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <hr class="dp-hr">
+                            <h6 class="payment-container-title text-start ms-3">Summary</h6>
+                            <div class="payment-container">
+                                <div class="dp-left-side">
+                                    <h6 class="dp-title" id="booking-type-payment">Total Amount:</h6>
+                                    <h6 class="dp-title" id="booking-type-paymenent">Remaining Balance: </h6>
+                                    <h6 class="date">Due Date:</h6>
+                                </div>
+                                <div class="dp-right-side">
+                                    <h6 class="dp-amount" id="total-amount">₱<?= number_format($finalBill, 2) ?></h6>
+                                    <h6 class="dp-amount" id="remaining-balance">₱<?= number_format($userBalance, 2) ?></h6>
+                                    <h6 class="date" id="dp-date"><?= $paymentDueDate ?? 'None' ?></h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary w-25"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <?php foreach ($payments as $payment):  ?>
+                <div class="modal fade" id="view-receipt<?= $payment['paymentID'] ?>" aria-hidden="true" aria-labelledby="view-receiptLabel"
+                    tabindex="-1">
+                    <div class="modal-dialog  modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="../../Assets/Images/PaymentProof/<?= $payment['image'] ?>" alt="Downpayment Image" id="payment-preview" class="downpaymentPic mb-3">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach;  ?>
+        </div>
 
         <div class="modals-container">
             <!-- //* Approve Modal -->
@@ -797,6 +934,8 @@ if ($role === "Admin") {
     <!-- Bootstrap JS -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
+
+    <!-- Hiding Buttons -->
     <script>
         const paymentMethod = document.getElementById("paymentMethod").value;
         const paymentStatus = document.getElementById("paymentStatus").value;
@@ -813,7 +952,7 @@ if ($role === "Admin") {
         } else if (paymentStatus === 'Partially Paid') {
             document.getElementById("addPayment").style.display = "block";
             document.querySelector("#form-button").style.display = "none";
-        } else if (paymentStatus === 'No Payment' || paymentStatus === 'Payment Sent') {
+        } else if (paymentStatus === 'Unpaid' || paymentStatus === 'Payment Sent') {
             document.getElementById("addPayment").style.display = "none";
         }
     </script>

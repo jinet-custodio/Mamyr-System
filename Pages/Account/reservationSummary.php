@@ -778,7 +778,7 @@ switch ($userRole) {
                             </tfoot>
                         </table>
                     <?php else : ?>
-                        <p class="text-muted mb-0">No additional charges found.</p>
+                        <p class="text-muted mb-0">No additional services found.</p>
                     <?php endif; ?>
                 </div>
             </div>
