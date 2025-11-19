@@ -389,7 +389,7 @@ switch ($userRole) {
                     if (payments.length > 0) {
                         const length = payments.length;
                         if (length < 3) {
-                            terms = ['Inital', 'Final'];
+                            terms = ['Initial', 'Final'];
                         } else {
                             terms = ['Initial', 'Second', 'Final'];
                         }
@@ -451,7 +451,7 @@ switch ($userRole) {
 
                         const h61 = document.createElement('h6');
                         h61.classList.add('dp-title');
-                        h61.textContent = 'No Payment made';
+                        h61.textContent = 'No Payment Information';
 
                         paymentListContainer.appendChild(downpaymentContainer);
                         downpaymentContainer.appendChild(divChild1);

@@ -284,6 +284,70 @@ label {
   font-size: 14px !important;
 }
 
+/* View Payment Modal */
+.paymentListContainer {
+  margin-top: 1rem;
+}
+
+.downpayment-container,
+.payment-container {
+  display: flex;
+  justify-content: space-around;
+  font-family: "Poppins";
+  margin-top: 0.5rem;
+}
+
+.payment-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.3rem 0 1.3rem;
+  font-family: "Poppins";
+  margin-top: 0.5rem;
+}
+
+.payment-container-title {
+  text-align: center;
+  font-weight: bold;
+}
+
+.dp-title,
+.dp-amount {
+  font-size: 16px;
+}
+
+.date,
+.mode {
+  color: #575656;
+  font-size: 12px;
+}
+
+.view-dp-btn {
+  border-radius: 3rem !important;
+  width: 5rem;
+}
+
+.dp-hr {
+  width: 90%;
+  margin: 1rem auto;
+}
+
+#view-dp .modal-body {
+  display: block;
+  margin: auto;
+}
+
+#view-dp .modal-content {
+  width: auto !important;
+  margin: auto;
+}
+
+.downpaymentPic {
+  width: 300px;
+  height: auto;
+}
+
+/* View Payment Modal */
+
 /* .checkbox-group .form-check {
   border: 1px solid red;
 } */
