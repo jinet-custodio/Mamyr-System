@@ -40,134 +40,147 @@ if (isset($_POST['generatePDF'])) {
     ob_start();
 ?>
 
-    <!DOCTYPE html>
-    <html>
+<!DOCTYPE html>
+<html>
 
-    <head>
-        <title>Sales Report - Mamyr Resort and Events Place</title>
-        <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
+<head>
+    <title>Sales Report - Mamyr Resort and Events Place</title>
+    <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
 
-        <style>
-            .logo {
-                height: 35px;
-                margin-top: -5px;
+    <style>
+    .logo {
+        height: 35px;
+        margin-top: -5px;
 
-            }
+    }
 
-            .header-title {
-                font-size: 20px;
-                margin-top: -55px;
+    .header-title {
+        font-size: 20px;
+        margin-top: -55px;
 
-            }
+    }
 
-            .headerTextContainer {
-                margin-top: 37px;
-            }
+    .headerTextContainer {
+        margin-top: 37px;
+    }
 
-            h4 {
-                font-family: "Poppins Light";
-                font-size: 12px;
-                margin-top: -30px;
-            }
+    h4 {
+        font-family: "Poppins Light";
+        font-size: 12px;
+        margin-top: -30px;
+    }
 
-            .section-title {
-                text-align: center;
-                font-size: 18px;
-            }
+    .section-title {
+        text-align: center;
+        font-size: 18px;
+    }
 
-            hr {
-                width: 95%;
-                height: 2px;
-                margin-top: -15px;
-                background-color: black;
-            }
+    hr {
+        width: 95%;
+        height: 2px;
+        margin-top: -15px;
+        background-color: black;
+    }
 
-            p {
-                font-size: 12px;
-            }
+    p {
+        font-size: 12px;
+    }
 
-            .request {
-                text-align: right;
-            }
+    .request {
+        text-align: right;
+    }
 
-            .table {
-                width: 100%;
-                margin-top: 75px;
-                border: 1px solid black;
-                border-collapse: collapse;
-                text-align: center;
-                font-size: 12px;
+    .table-top {
+        width: 100%;
+        margin-top: 75px;
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 12px;
+    }
 
-            }
+    tr tr,
+    td,
+    th {
+        border: 1px solid black;
+        padding: 10px;
 
-            tr tr,
-            td,
-            th {
-                border: 1px solid black;
-                padding: 10px;
+    }
 
-            }
+    .no-data-text {
+        font-weight: bold;
+        color: red;
+    }
 
-            .no-data-text {
-                font-weight: bold;
-                color: red;
-            }
+    .signatories {
+        margin-top: 70px;
 
-            .signatories {
-                margin-top: 70px;
+    }
 
-            }
-        </style>
-    </head>
+    .separator-line {
+        margin-top: 40px;
+        width: 100%;
+        opacity: 0.35;
+    }
 
-    <body>
+    .bulkBooking-table {
+        width: 100%;
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 12px;
+    }
+    </style>
+</head>
 
-        <header>
-            <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
-            <h1 class="header-title" style="text-align: center;">Mamyr Resort & Events Place</h2>
+<body>
 
-                <div class="headerTextContainer">
-                    <h4 style="text-align:center;">Gabihan, San Ildefonso, Bulacan <br> mamyresort@gmail.com | (0998) 962
-                        4697
-                    </h4>
+    <header>
+        <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort and Events Place" class="logo">
+        <h1 class="header-title" style="text-align: center;">Mamyr Resort & Events Place</h2>
 
-                </div>
-        </header>
-        <hr>
-        <main>
-            <div class="background-image">
+            <div class="headerTextContainer">
+                <h4 style="text-align:center;">Gabihan, San Ildefonso, Bulacan <br> mamyresort@gmail.com | (0998) 962
+                    4697
+                </h4>
 
-                <section class="contents">
-                    <h2 class="section-title">Sales Report</h2>
-                    <p style="text-align: left; margin-top: 40px"><strong>Report Generated:</strong> <?= $dateToday ?></p>
-                    <p style="text-align: left;"><strong>Date Range:</strong>
-                        <?= date("F d, Y", strtotime($selectedStartDate)) ?> to
-                        <?= date("F d, Y", strtotime($selectedEndDate)) ?></p>
+            </div>
+    </header>
+    <hr>
+    <main>
+        <div class="background-image">
 
-                </section>
-                <p class="request" style="text-align: right; margin-top: -60px"><strong>Requested By:</strong>
-                    <?= htmlspecialchars($name) ?></p>
+            <section class="contents">
+                <h2 class="section-title">Sales Report</h2>
+                <p style="text-align: left; margin-top: 40px"><strong>Report Generated:</strong> <?= $dateToday ?></p>
+                <p style="text-align: left;"><strong>Date Range:</strong>
+                    <?= date("F d, Y", strtotime($selectedStartDate)) ?> to
+                    <?= date("F d, Y", strtotime($selectedEndDate)) ?></p>
 
-                <section class="contents">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Booking Code</th>
-                                <th>Customer Name</th>
-                                <th>Booking Type</th>
-                                <?php if ($userRole === 3) { ?>
-                                    <th>Total Guest</th>
-                                <?php } elseif ($userRole === 2) { ?>
-                                    <th>Service Name</th>
-                                <?php   } ?>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Payment Method</th>
-                                <th>Total Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
+            </section>
+            <p class="request" style="text-align: right; margin-top: -60px"><strong>Requested By:</strong>
+                <?= htmlspecialchars($name) ?></p>
+
+            <section class="contents">
+                <table class="table table-top">
+                    <thead>
+                        <tr>
+                            <th>Booking Code</th>
+                            <th>Customer Name</th>
+                            <th>Booking Type</th>
+                            <?php if ($userRole === 3) { ?>
+                            <th>Total Guest</th>
+                            <?php } elseif ($userRole === 2) { ?>
+                            <th>Service Name</th>
+                            <?php   } ?>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Payment Method</th>
+                            <th>Total Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
                             $totalBookings = 0;
                             $confirmedFinalBill = 0;
                             $resortTotalSales = 0;
@@ -195,58 +208,100 @@ if (isset($_POST['generatePDF'])) {
                                             break;
                                     }
                             ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($row['bookingCode']) ?></td>
-                                        <td><?= ucfirst($row['firstName']) . ' ' . ucfirst($row['lastName']) ?></td>
-                                        <td><?= htmlspecialchars($bookingType) ?> Booking</td>
-                                        <?php if ($userRole === 3) { ?>
-                                            <td><?= htmlspecialchars($row['guest']) ?></td>
-                                        <?php } elseif ($userRole === 2) { ?>
-                                            <td><?= htmlspecialchars($row['PBName']) ?></td>
-                                        <?php   } ?>
-                                        <td><?= date('M. d, Y', strtotime($row['startDate'])) ?></td>
-                                        <td><?= date('M. d, Y', strtotime($row['endDate'])) ?></td>
-                                        <td><?= htmlspecialchars($row['paymentMethod']) ?></td>
-                                        <td>₱<?= number_format($row['confirmedFinalBill'], 2) ?></td>
-                                    </tr>
-                                <?php
+                        <tr>
+                            <td><?= htmlspecialchars($row['bookingCode']) ?></td>
+                            <td><?= ucfirst($row['firstName']) . ' ' . ucfirst($row['lastName']) ?></td>
+                            <td><?= htmlspecialchars($bookingType) ?> Booking</td>
+                            <?php if ($userRole === 3) { ?>
+                            <td><?= htmlspecialchars($row['guest']) ?></td>
+                            <?php } elseif ($userRole === 2) { ?>
+                            <td><?= htmlspecialchars($row['PBName']) ?></td>
+                            <?php   } ?>
+                            <td><?= date('M. d, Y', strtotime($row['startDate'])) ?></td>
+                            <td><?= date('M. d, Y', strtotime($row['endDate'])) ?></td>
+                            <td><?= htmlspecialchars($row['paymentMethod']) ?></td>
+                            <td>₱<?= number_format($row['confirmedFinalBill'], 2) ?></td>
+                        </tr>
+                        <?php
                                 endforeach;
                             } else {
                                 ?>
-                                <tr>
-                                    <td colspan="8" class="no-data-text">No bookings found for selected dates</td>
-                                </tr>
-                            <?php
+                        <tr>
+                            <td colspan="8" class="no-data-text">No bookings found for selected dates</td>
+                        </tr>
+                        <?php
                             }
                             ?>
-                        </tbody>
-                    </table>
-                </section>
+                    </tbody>
+                </table>
+            </section>
 
-                <section class="contents">
-                    <h2 class="section-title" style="margin-top: 50px;">Report Summary</h2>
-                    <p style="text-align: left; margin-top: 20px;"><strong>Total Bookings:</strong> <?= $totalBookings ?>
-                    </p>
-                    <p style="text-align: left; margin-top: 20px;"><strong>Total Hotel Sales:</strong> ₱<?= number_format($hotelTotalSales, 2) ?>
-                    </p>
-                    <p style="text-align: left; margin-top: 20px;"><strong>Total Resort Sales:</strong> ₱<?= number_format($resortTotalSales, 2) ?>
-                    </p>
-                    <p style="text-align: left; margin-top: 20px;"><strong>Total Event Sales:</strong> ₱<?= number_format($eventTotalSales, 2) ?>
-                    </p>
-                    <p style="text-align: left;"><strong>Grand Total:</strong> ₱<?= number_format($confirmedFinalBill, 2) ?></p>
-                </section>
+            <section class="contents">
+                <hr class="separator-line">
 
-                <section class="signatories">
-                    <p style="text-align: left; margin-left:60px;"><strong>Signed By:</strong> ________________________</p>
-                </section>
-                <p style="text-align:right; margin-top: -25px; margin-right:60px;"><strong>Submitted By:</strong>
-                    ______________________</p>
-            </div>
-        </main>
+                <h5 class="bulkBooking-title">Bulk Booking Report</h5>
 
-    </body>
+                <table class="table table-striped bulkBooking-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Date Period</th>
+                            <th>Type of Booking</th>
+                            <th>Total Booking/s</th>
+                            <th>Total Sale/s</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2">Nov. 1, 2025 to Dec. 31, 2025</td>
+                            <td>Resort Booking</td>
+                            <td>10</td>
+                            <td>₱30,000.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Nov. 1, 2025 to 30, 2025</td>
+                            <td>Event Booking</td>
+                            <td>5</td>
+                            <td>₱80,000.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Nov. 1, 2025 to 30, 2025</td>
+                            <td>Hotel Booking</td>
+                            <td>3</td>
+                            <td>₱20,000.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
 
-    </html>
+
+            <section class="contents">
+                <h2 class="section-title" style="margin-top: 30px;">Report Summary</h2>
+                <p style="text-align: left; margin-top: 20px;"><strong>Total Bookings:</strong> <?= $totalBookings ?>
+                </p>
+                <p style="text-align: left; margin-top: 20px;"><strong>Total Hotel Sales:</strong>
+                    ₱<?= number_format($hotelTotalSales, 2) ?>
+                </p>
+                <p style="text-align: left; margin-top: 20px;"><strong>Total Resort Sales:</strong>
+                    ₱<?= number_format($resortTotalSales, 2) ?>
+                </p>
+                <p style="text-align: left; margin-top: 20px;"><strong>Total Event Sales:</strong>
+                    ₱<?= number_format($eventTotalSales, 2) ?>
+                </p>
+                <p style="text-align: left;"><strong>Grand Total:</strong> ₱<?= number_format($confirmedFinalBill, 2) ?>
+                </p>
+            </section>
+
+            <section class="signatories">
+                <p style="text-align: left; margin-left:60px;"><strong>Signed By:</strong> ________________________</p>
+            </section>
+            <p style="text-align:right; margin-top: -25px; margin-right:60px;"><strong>Submitted By:</strong>
+                ______________________</p>
+        </div>
+    </main>
+
+</body>
+
+</html>
 
 <?php
 

@@ -74,6 +74,17 @@ body {
   background-color: #78aeff;
 }
 
+div#selectedBusinessTypes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.bg-light {
+  color: #1f6ee6 !important;
+}
+
 .repInfoLabel,
 .busProofLabel,
 .busInfoLabel,
@@ -205,9 +216,10 @@ body {
 .busTypeBody {
   display: flex;
   flex-wrap: wrap;
-  gap: 2vw;
+  gap: 1rem;
+  column-gap: 1.3rem;
   justify-content: center;
-  width: 70%;
+
   margin: auto;
 }
 
@@ -227,7 +239,7 @@ body {
 
 .form-check-label,
 .form-check-input {
-  font-size: clamp(1.4vw, 1.1vw, 1vw);
+  font-size: clamp(1.2vw, 1.1vw, 1vw);
 }
 
 .modalSubtitle {
@@ -706,6 +718,10 @@ input[type="password"]::-webkit-search-cancel-button {
     font-size: 2.1vw !important;
   }
   /* modal css */
+
+  em {
+    text-align: center;
+  }
 }
 
 /* Tablet portrait only */
