@@ -63,6 +63,13 @@
   gap: 1rem;
 }
 
+.btn-note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
 .editService-btn-container {
   text-align: center;
   margin-top: 2rem !important;

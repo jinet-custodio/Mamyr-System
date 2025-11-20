@@ -70,12 +70,8 @@ if (isset($_GET['id'])) {
             'statusName' => strtolower($statusName),
             'availabilityID' => $availabilityID,
             'classColor' => $classcolor,
-            'description' => $descriptions,
             'serviceName' => ucwords($row['PBName']) ?? 'N/A',
             'servicePrice' => "₱" . number_format($row['PBPrice'], 2),
-            'serviceCapacity' => $row['PBCapacity'] ?? 'N/A',
-            'serviceDuration' => $row['PBduration'] ?? 'N/A',
-            'modalID' => 'serviceModal' . $row['partnershipServiceID'],
             'partnershipServiceID' => $row['partnershipServiceID'],
             'serviceImage' => $row['serviceImage'] ?? ''
         ];

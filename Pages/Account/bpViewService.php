@@ -103,6 +103,65 @@ switch ($userRole) {
     }
 
     ?>
+
+
+    <?php
+
+    if (isset($_POST['id']) || isset($_SESSION['id'])) {
+        $partnershipServiceID = !empty($_POST['id']) ? intval($_POST['id']) : intval($_SESSION['id']);
+
+
+        $getServiceData = $conn->prepare("SELECT * FROM partnershipservice WHERE partnershipServiceID = ?");
+        $getServiceData->bind_param("i", $partnershipServiceID);
+        if (!$getServiceData->execute()) {
+            error_log("An error occured: " . $getServiceData->error);
+        }
+
+        $result = $getServiceData->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+
+            $serviceName = $row['PBName'];
+            $servicePrice = $row['PBPrice'];
+            $serviceImage = $row['serviceImage'];
+            $serviceDesc = !empty($row['PBDescription']) ? $row['PBDescription'] : 'No Provided Description';
+            $serviceCapacity  = $row['PBcapacity'] ?? 'Not Stated';
+            $serviceDuration = $row['PBduration'] ?? 'Not Stated';
+            $createdAt = $row['createdAt'];
+
+            $storedAvailabilityID = intval($row['PSAvailabilityID']);
+            $availabilityStatus = getAvailabilityStatus($conn, $storedAvailabilityID);
+
+            $availabilityID = $availabilityStatus['availabilityID'];
+            $availabilityName = $availabilityStatus['availabilityName'];
+
+            switch ($availabilityID) {
+                case 1:
+                    $statusName =  $availabilityName;
+                    break;
+                case 2:
+                    $statusName =  'Booked';
+                    break;
+                case 3:
+                    $statusName =  $availabilityName;
+                    break;
+                case 4:
+                    $statusName =  $availabilityName;
+                    break;
+                case 5:
+                    $statusName =  $availabilityName;
+                    break;
+                default:
+                    $statusName =  $availabilityName;
+            }
+        }
+    } else {
+        header("Location: ./bpServices.php");
+        exit();
+    }
+
+    ?>
     <div class="wrapper d-flex">
 
         <!-- Sidebar -->
@@ -114,17 +173,17 @@ switch ($userRole) {
             </div>
             <div class="home">
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
-                <a href="../Customer/dashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../Customer/dashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../Admin/adminDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                <a href="../BusinessPartner/bpDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } ?>
             </div>
 
@@ -143,45 +202,45 @@ switch ($userRole) {
                 </li>
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
-                        <i class="bi bi-calendar2-check sidebar-icon"></i>
-                        <span class="sidebar-text">Booking History</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
-                        <i class="bi bi-credit-card-2-front sidebar-icon"></i>
-                        <span class="sidebar-text">Payment</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
+                            <i class="bi bi-calendar2-check sidebar-icon"></i>
+                            <span class="sidebar-text">Booking History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                            <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                            <span class="sidebar-text">Payment</span>
+                        </a>
+                    </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                <li class="sidebar-item">
-                    <a href="userManagement.php" class="list-group-item">
-                        <i class="bi bi-person-gear sidebar-icon"></i>
-                        <span class="sidebar-text">Manage Users</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="bi bi-person-gear sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bpBookings.php" class="list-group-item">
-                        <i class="bi bi-calendar-week sidebar-icon"></i>
-                        <span class="sidebar-text">Bookings</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpServices.php" class="list-group-item active">
-                        <i class="bi bi-bell sidebar-icon"></i>
-                        <span class="sidebar-text">Services</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpSales.php" class="list-group-item">
-                        <i class="bi bi-tags sidebar-icon"></i>
-                        <span class="sidebar-text">Sales</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bpBookings.php" class="list-group-item">
+                            <i class="bi bi-calendar-week sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpServices.php" class="list-group-item active">
+                            <i class="bi bi-bell sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpSales.php" class="list-group-item">
+                            <i class="bi bi-tags sidebar-icon"></i>
+                            <span class="sidebar-text">Sales</span>
+                        </a>
+                    </li>
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -205,96 +264,97 @@ switch ($userRole) {
             </div>
         </aside>
         <!-- End Side Bar -->
-        <main class="main-content" id="main-content">
-            <div class="container">
-                <div class="backBtn-container">
-                    <a href="bpServices.php"><img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="Back Button"
-                            class="backBtn"></a>
-                </div>
 
-                <div class="titleContainer">
-                    <h2 class="title">Service Information</h2>
-                </div>
-
-
-                <input type="hidden" name="partnershipID" id="partnershipID" value="<?= $partnershipID ?>">
-
-                <section class="serviceInfo-container">
-                    <div class="servicePic-container">
-                        <img src="../../Assets/Images/no-picture.jpg" alt="" class="service-image" id="preview">
-                        <input type="file" name="serviceImage" id="service-image" hidden>
-                        <label for="service-image" class="uploadPfpBtn btn btn-primary">Upload Service Image</label>
-
-                        <p class="note">Adding a service image in <strong>Landscape Orientation</strong> is
-                            advisable.</p>
+        <form action="../../Function/Partner/updatePartnerService.php" method="POST" enctype="multipart/form-data">
+            <main class="main-content" id="main-content">
+                <div class="container">
+                    <div class="backBtn-container">
+                        <a href="bpServices.php"><img src="../../Assets/Images/Icon/arrowBtnBlue.png" alt="Back Button"
+                                class="backBtn"></a>
                     </div>
 
-                    <div class="infoContainer">
-                        <div class="info-container">
-                            <label for="serviceName">Service Name</label>
-                            <input type="text" class="form-control" name="serviceName" id="serviceName"
-                                placeholder="(eg. Snapshot Photography)" readonly="">
+                    <div class="titleContainer">
+                        <h2 class="title">Service Information</h2>
+                    </div>
+
+
+                    <input type="hidden" name="partnershipServiceID" id="partnershipServiceID" value="<?= $partnershipServiceID ?>">
+
+                    <section class="serviceInfo-container">
+                        <div class="servicePic-container">
+                            <?php
+                            // error_log($_SESSION['tempImage']);
+                            if (isset($_SESSION['tempImage']) && file_exists(__DIR__ . '/../../Assets/Images/TempUploads/' . $_SESSION['tempImage'])) {
+                                $imageSrc = '../../Assets/Images/TempUploads/' . $_SESSION['tempImage'];
+                            } else {
+                                $imageSrc = '../../Assets/Images/PartnerServiceImage/' . $serviceImage;
+                            }
+                            ?>
+                            <input type="hidden" name="serviceImageName" id="serviceImageName" value="<?= $serviceImage ?>">
+                            <img src="<?= $imageSrc ?>" alt="" class="service-image" id="preview">
+                            <input type="file" name="serviceImage" id="service-image" hidden>
+                            <div class="btn-note" style="display: none;" id="changeImageContainer">
+                                <label for="service-image" class="changePfpBtn btn btn-primary">Change Service Image</label>
+                                <p class="note">Adding a service image in <strong>Landscape Orientation</strong> is advisable.</p>
+                            </div>
+
                         </div>
-                        <div class="info-container">
-                            <label for="servicePrice">Service Price</label>
-                            <input type="text" class="form-control" name="servicePrice" id="servicePrice"
-                                placeholder="(eg. ₱2000)" readonly="">
-                        </div>
-                        <div class="info-container">
-                            <label for="serviceCapacity">Service Capacity</label>
-                            <input type="text" class="form-control" name="serviceCapacity" placeholder="(eg. N/A)"
-                                id="serviceCapacity" readonly="">
-                        </div>
-                        <div class="info-container">
-                            <label for="serviceDuration">Service Duration</label>
-                            <input type="text" class="form-control" name="serviceDuration" id="serviceDuration"
-                                placeholder="(eg. 7 hours)" readonly="">
-                        </div>
-                        <div class="info-container">
-                            <label for="serviceAvailability">Availability</label>
-                            <select class="form-select" name="serviceAvailability" id="serviceAvailability" disabled="">
-                                <option value="">Select Availability</option>
-                                <option value="available">Available</option>
-                                <option value="occupied">Booked</option>
-                                <option value="not available">Unavailable</option>
-                            </select>
-                        </div>
-                        <div class="descContainer">
-                            <div class="form-group">
-                                <label for="serviceDescription">Service Description</label>
-                                <textarea name="serviceDescription" class="form-control serviceDesc"
-                                    placeholder="(eg. Lorem Ipsum)" readonly=""></textarea>
+
+                        <div class="infoContainer">
+                            <div class="info-container">
+                                <label for="serviceName">Service Name</label>
+                                <input type="text" class="form-control text-capitalize editable" name="serviceName" id="serviceName"
+                                    placeholder="eg. Snapshot Photography" readonly="" value="<?= $serviceName ?>">
+                            </div>
+                            <div class="info-container">
+                                <label for="servicePrice">Service Price</label>
+                                <input type="text" class="form-control editable" name="servicePrice" id="servicePrice"
+                                    placeholder="eg. ₱2000" readonly="" value="₱<?= number_format($servicePrice, 2) ?>">
+                            </div>
+                            <div class="info-container">
+                                <label for="serviceCapacity">Service Capacity</label>
+                                <input type="text" class="form-control editable" name="serviceCapacity" placeholder="(eg. N/A)"
+                                    id="serviceCapacity" readonly="" value="<?= $serviceCapacity ?>">
+                            </div>
+                            <div class="info-container">
+                                <label for="serviceDuration">Service Duration</label>
+                                <input type="text" class="form-control editable" name="serviceDuration" id="serviceDuration"
+                                    placeholder="eg. 7 hours" readonly="" value="<?= $serviceDuration ?>">
+                            </div>
+                            <div class="info-container">
+                                <label for="serviceAvailability">Availability</label>
+                                <select class="form-select editable" name="serviceAvailability" id="serviceAvailability" disabled>
+                                    <option value="">Select Availability</option>
+                                    <option value="1" <?= $availabilityID == 1 ? 'selected' : '' ?>>Available</option>
+                                    <option value="2" <?= $availabilityID == 2 ? 'selected' : '' ?>>Booked</option>
+                                    <option value="5" <?= $availabilityID == 3 ? 'selected' : '' ?>>Unavailable</option>
+                                </select>
+
+                            </div>
+                            <div class="descContainer">
+                                <div class="form-group">
+                                    <label for="serviceDescription">Service Description</label>
+                                    <textarea name="serviceDescription" class="form-control editable serviceDesc"
+                                        placeholder="Please provide for your service" readonly=""><?= $serviceDesc ?></textarea>
+                                </div>
                             </div>
                         </div>
+
+                    </section>
+                    <div class="editService-btn-container">
+                        <button type="button" class="btn btn-danger w-25 cancel-info-button" onclick="canEditInfo()"
+                            style="display: none;"><i class="fa-solid fa-xmark"></i>
+                            Cancel</button>
+
+                        <button type="button" class="btn btn-primary w-25 edit-info-button"
+                            onclick="editServiceInfo()"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+
+                        <button type="submit" class="btn btn-primary w-25 save-info-button" name="saveServiceInfo" style="display: none;"><i class="fa-solid fa-pen-to-square"></i> Save</button>
                     </div>
-
-                </section>
-                <div class="editService-btn-container">
-                    <button type="button" class="btn btn-danger w-25 cancel-info-button" onclick="canEditInfo(this)"
-                        style="display: none;"><i class="fa-solid fa-xmark"></i>
-                        Cancel</button>
-
-                    <button type="button" class="btn btn-primary w-25 edit-info-button"
-                        onclick="editServiceInfo(this)"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                 </div>
-            </div>
-        </main>
+            </main>
+        </form>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <!-- Bootstrap Link -->
@@ -303,100 +363,225 @@ switch ($userRole) {
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
     <!-- DataTables Link -->
     <script src="../../../Assets/JS/datatables.min.js"></script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
+    <!-- Edit Service Information -->
     <script>
-    //Handle sidebar for responsiveness
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('toggle-btn');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const items = document.querySelectorAll('.list-group-item');
-        const toggleCont = document.getElementById('toggle-container')
+        const originalValues = {};
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
+        function editServiceInfo() {
+            const formControl = document.querySelectorAll(".form-control");
+            const select = document.querySelector("#serviceAvailability");
+            const changeImageContainer = document.getElementById('changeImageContainer');
+            const editBtn = document.querySelector('.edit-info-button');
+            const saveBtn = document.querySelector('.save-info-button');
+            const cancelBtn = document.querySelector('.cancel-info-button');
 
-            if (sidebar.classList.contains('collapsed')) {
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                });
-                toggleCont.style.justifyContent = "center"
-            } else {
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                toggleCont.style.justifyContent = "flex-end"
-            }
-        });
+            formControl.forEach((input) => {
+                originalValues[input.name] = input.value;
+                input.style.border = "1px solid red";
+                input.removeAttribute("readonly");
+            });
+            select.style.border = "1px solid red";
+            select.disabled = false;
+            originalValues[select.name] = select.value;
 
-        function handleResponsiveSidebar() {
-            if (window.innerWidth <= 1240) {
-                sidebar.classList.add('collapsed');
-                toggleBtn.style.display = "flex";
-                mainContent.style.marginLeft = "15vw";
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                })
-
-            } else {
-                toggleBtn.style.display = "none";
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                mainContent.style.marginLeft = "290px";
-                sidebar.classList.remove('collapsed');
-            }
+            changeImageContainer.style.display = 'block';
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'block';
+            cancelBtn.style.display = 'block';
         }
 
-        // Run on load and when window resizes
-        handleResponsiveSidebar();
-        window.addEventListener('resize', handleResponsiveSidebar);
-    });
+        function canEditInfo() {
+            const formControl = document.querySelectorAll(".form-control");
+            const select = document.querySelector("#serviceAvailability");
+            const changeImageContainer = document.getElementById('changeImageContainer');
+            const editBtn = document.querySelector('.edit-info-button');
+            const saveBtn = document.querySelector('.save-info-button');
+            const cancelBtn = document.querySelector('.cancel-info-button');
+
+            formControl.forEach((input) => {
+                input.value = originalValues[input.name];
+                input.style.border = "1px solid  rgb(247, 247, 247)";
+                input.setAttribute("readonly", true);
+            });
+
+            select.style.border = "1px solid  rgb(247, 247, 247)";
+            select.disabled = true;
+            select.value = originalValues[select.name];
+            changeImageContainer.style.display = 'none';
+            editBtn.style.display = 'block';
+            cancelBtn.style.display = "none";
+            saveBtn.style.display = 'none';
+        }
+    </script>
+
+
+    <script>
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container')
+
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 1240) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    mainContent.style.marginLeft = "15vw";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    mainContent.style.marginLeft = "290px";
+                    sidebar.classList.remove('collapsed');
+                }
+            }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
+        });
     </script>
 
     <!-- Show when want to logout-->
     <script>
-    const logoutBtn = document.getElementById('logoutBtn');
-    const logoutModal = document.getElementById('logoutModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/logout.php";
-            }
-        });
-    })
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/logout.php";
+                }
+            });
+        })
     </script>
 
     <!-- Preview Image -->
     <script>
-    document.querySelector("input[type='file']").addEventListener("change", function(event) {
-        let reader = new FileReader();
-        reader.onload = function() {
-            let preview = document.getElementById("preview");
-            preview.src = reader.result;
-            preview.style.display = "block";
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    });
+        document.querySelector("input[type='file']").addEventListener("change", function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                let preview = document.getElementById("preview");
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
+
+    <!-- Sweet alert message pop up -->
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        switch (paramValue) {
+            case 'success-image':
+                Swal.fire({
+                    title: "Success!",
+                    text: "Profile Change Successfully!",
+                    icon: "success"
+                });
+                break;
+            case 'error-image':
+                Swal.fire({
+                    title: "Info!",
+                    text: "No Image Selected",
+                    icon: "info"
+                });
+                break;
+            case 'imageSize':
+                Swal.fire({
+                    title: "Oops!",
+                    text: "File is too large. Maximum allowed size is 5MB.",
+                    icon: "warning",
+                    confirmButtonText: "Okay",
+                });
+                break;
+            case 'imageFailed':
+                Swal.fire({
+                    title: 'Oops',
+                    text: `Make sure you uploaded an image`,
+                    icon: 'warning',
+                });
+                break;
+            case 'extError':
+                Swal.fire({
+                    title: 'Oops',
+                    text: `Invalid file type. Please upload JPG, JPEG, WEBP, or PNG.`,
+                    icon: 'warning',
+                });
+                break;
+            case 'serviceUpdateSuccess':
+                Toast.fire({
+                    title: 'Service Information Updated Successfully',
+                    icon: 'success',
+                });
+                break;
+            default:
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+                break;
+        }
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 </body>
 
